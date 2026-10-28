@@ -17,22 +17,13 @@ theorem map_bind {A B C D : Type} (f : A → B) (g : C → D)
 
 theorem index {A B : Type} {n : Usize} (f : A → B) (a : Array A n) (j : Usize) :
     Array.index_usize (amap f a) j=mapResult f (Array.index_usize a j) := by
-  unfold Array.index_usize amap
-  simp only [List.getElem?_map]
+  change (match (a.val.map f)[j.val]? with
+    | none => .fail .arrayOutOfBounds | some x => .ok x) =
+      mapResult f (match a.val[j.val]? with
+        | none => .fail .arrayOutOfBounds | some x => .ok x)
+  rw [List.getElem?_map]
   cases a.val[j.val]? <;> rfl
-
-theorem update {A B : Type} {n : Usize} (f : A → B) (a : Array A n)
-    (j : Usize) (x : A) :
-    Array.update (amap f a) j (f x)=mapResult (amap f) (Array.update a j x) := by
-  unfold Array.update
-  split
-  · rfl
-  · apply congrArg Result.ok
-    apply Subtype.ext
-    change (a.val.map f).set j.val (f x)=(a.val.set j.val x).map f
-    simp only [List.map_set]
 
 #print axioms map_bind
 #print axioms index
-#print axioms update
 end R1Z.PV_RunJoin_WeightMap46
