@@ -31,7 +31,7 @@ s=f'import PV_B3P_Canonical133\nimport PV_B3P_Sorted133\nnamespace {ns}\nopen PV
 los=[0]+[c[0] for c in outs[1:]]
 for i,chunk in enumerate(outs):
  hi=outs[i+1][0] if i+1<len(outs) else 1024
- s+=f'theorem block{i} : Block {chunk} {los[i]} {hi} := by decide\n#print axioms block{i}\n'
+ s+=f'theorem block{i} : Block {chunk} {los[i]} {hi} := by unfold Block; decide\n#print axioms block{i}\n'
 for i in range(len(outs)-1,-1,-1):
  suffix=v['rightappend']([str(c) for c in outs[i:]])
  s+=f'theorem tail{i} : Block ({suffix}) {los[i]} 1024 := '
