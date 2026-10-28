@@ -16,6 +16,7 @@ theorem length (p : Nat → W) (width start n : Nat) (hw : width≤32) :
   | zero => rfl
   | succ n ih =>
     rw [payload,List.length_append,PV_RunJoin_OpeningCell41.length _ _ hw,ih]
+    rw [Nat.mul_succ]
     omega
 
 /-- Complete actual base loop Result for every suffix, preserving lane order. -/
