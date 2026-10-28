@@ -6,15 +6,15 @@ open Aeneas Aeneas.Std Result
 open PV_L2C_NativeQ PV_L2C_QBalance PV_L2C_QFold PV_L2C_PaddingNative
 open PV_L2C_ExtractedRows PV_L2C_OwnedBalance PV_L2C_RowEnumeration
 
-theorem filtered_dense {I : Type} (rows : List I) (take : I → Bool) (value : I → Q)
+theorem filtered_dense {I : Type} (rows : List I) (sel : I → Bool) (value : I → Q)
     (hc : ∀ i∈rows,Canonical (value i)) (s : Q) (hs : Canonical s) :
-    foldQ (rows.filterMap (fun i => if take i then some (value i) else none)) s=
-      foldQ (rows.map (fun i => if take i then value i else zero)) s := by
+    foldQ (rows.filterMap (fun i => if sel i then some (value i) else none)) s=
+      foldQ (rows.map (fun i => if sel i then value i else zero)) s := by
   induction rows generalizing s with
   | nil => rfl
   | cons i is ih =>
     have ht : ∀ j∈is,Canonical (value j) := fun j hj => hc j (by simp [hj])
-    cases h : take i with
+    cases h : sel i with
     | false =>
       simp only [List.filterMap_cons,List.map_cons,h,Bool.false_eq_true,if_false,foldQ,
         native_add_zero s hs]
