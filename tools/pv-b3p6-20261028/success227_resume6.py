@@ -53,7 +53,7 @@ def emit(mod,source_mod,names,imports):
   assert not re.search(r'\b(if|match|loop|massert)\b',body),(name,'non-straightline')
   body='  '+body.lstrip()
   lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*',body,re.M))
-  proof=['  '+('delta' if name=='reference_poseidon.global_sums227' else 'unfold')+' '+name]
+  proof=[] if name=='reference_poseidon.global_sums227' else ['  unfold '+name]
   if ispack:proof += ['  have hb : Slice.len values ≤ 4#usize := by scalar_tac','  simp only [massert,hb,↓reduceIte,bind_tc_ok]']
   def rule(expr):
    call=expr.split()[0];assert call in mapping,(name,call,expr)
@@ -94,7 +94,8 @@ emit('PV_B3P_EqualitySuccess227','PV_B3P_P227_12',[
 emit('PV_B3P_AccumulateSuccess227','PV_B3P_P227_00',['reference_field.accumulate_prepared227'],['PV_B3P_P227_00'])
 emit('PV_B3P_DotSuccess227','PV_B3P_P227_01',['reference_field.qm31_sum_products3_prepared','reference_field.qm31_m31_dot'],['PV_B3P_P227_01','PV_B3P_RefFieldSuccess227','PV_B3P_AccumulateSuccess227'])
 emit('PV_B3P_PoseidonBaseSuccess227','PV_B3P_P227_02',[
- 'reference_poseidon.pow5','reference_poseidon.extension_limbs','reference_poseidon.extension_from_raw_limbs','reference_poseidon.add_global227','reference_poseidon.global_sums227'],['PV_B3P_P227_02'])
+ 'reference_poseidon.pow5','reference_poseidon.extension_limbs','reference_poseidon.extension_from_raw_limbs','reference_poseidon.add_global227'],['PV_B3P_P227_02'])
+emit('PV_B3P_GlobalSumsSuccess227','PV_B3P_P227_02',['reference_poseidon.global_sums227'],['PV_B3P_PoseidonBaseSuccess227'])
 emit('PV_B3P_HostPackSuccess227','PV_B3P_E227_10',['host_terminal_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_RefPackSuccess227','PV_B3P_E227_19',['reference_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_AbsorptionSuccess227','PV_B3P_P227_09',['reference_terminal.absorption_lanes_literal','reference_terminal.semantic_initial_and_absorption'],['PV_B3P_SemanticBasicsSuccess227'])
