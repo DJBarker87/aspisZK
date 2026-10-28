@@ -26,22 +26,28 @@ theorem source (ops : ExternalFuns) (n : Nat) (k : Usize) (left : U8)
   | succ n ih =>
     have kp : k>0#usize := by change 0<k.val;omega
     have ln : left≠0#u8 := by scalar_tac
-    have kd : (Usize.wrapping_sub k 1#usize).val=n := by scalar_tac
-    have ld : (U8.wrapping_sub left 1#u8).val=n := by scalar_tac
+    have kd : (Usize.wrapping_sub k 1#usize).val=n := by
+      rw [ProverCommitSampleBits49.sub_value k 1#usize (by omega)]
+      omega
+    have ld : (U8.wrapping_sub left 1#u8).val=n := by
+      rw [ProverCommitBasisCounter47.sub_one left (by omega)]
+      omega
     have same : UScalar.cast .Usize (U8.wrapping_sub left 1#u8)=
         Usize.wrapping_sub k 1#usize := by scalar_tac
     unfold host_sumcheck.interpolation_extend_loop
     rw [ProverRw19LoopBind.loop_bind,AspisR1ProducerRelease47.basis_mul]
     simp only [host_sumcheck.interpolation_extend_loop.body,kp,↓reduceIte,ln,lift,bind_tc_ok,same]
     rw [PV_RunJoin_BasisCell38.update]
-    change (do
-      let next ← cell basis (Usize.wrapping_sub k 1#usize) (UScalar.cast .U32 j)
-      @host_sumcheck.interpolation_extend_loop _ (ProverRwP6BodyCandidate.selected ops)
-        next j (Usize.wrapping_sub k 1#usize)) =
-      (do
-      let next ← cell basis (Usize.wrapping_sub k 1#usize) (UScalar.cast .U32 j)
-      AspisR1ProducerRelease47.basis_mul next (UScalar.cast .U32 j) (U8.wrapping_sub left 1#u8))
-    apply congrArg (Aeneas.Std.bind (cell basis (Usize.wrapping_sub k 1#usize) (UScalar.cast .U32 j)))
+    simp only [cell,bind_assoc_eq,bind_tc_ok]
+    apply congrArg (Aeneas.Std.bind (AspisR1ProducerRelease47.predecessor basis (Usize.wrapping_sub k 1#usize)))
+    funext shifted
+    apply congrArg (Aeneas.Std.bind (Array.index_usize basis (Usize.wrapping_sub k 1#usize)))
+    funext m
+    apply congrArg (Aeneas.Std.bind (AspisR1ProducerRelease47.field.M31.mul m (UScalar.cast .U32 j)))
+    funext product
+    apply congrArg (Aeneas.Std.bind (AspisR1ProducerRelease47.field.M31.sub shifted product))
+    funext value
+    apply congrArg (Aeneas.Std.bind (Array.update basis (Usize.wrapping_sub k 1#usize) value))
     funext next
     exact ih _ _ kd ld (by omega) next
 
