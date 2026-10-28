@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,sys,time
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rjdec-20261028'
-order=json.loads((E/'d420-staged.json').read_text())['order'];a=int(sys.argv[1]);limit=int(sys.argv[2]) if len(sys.argv)>2 else 61896
+order=json.loads((E/(sys.argv[3] if len(sys.argv)>3 else 'd420-staged.json')).read_text())['order'];a=int(sys.argv[1]);limit=int(sys.argv[2]) if len(sys.argv)>2 else 61896
 accepted={v['module'] for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
 for m in order:
  if m in accepted:continue
