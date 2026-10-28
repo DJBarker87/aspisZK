@@ -9,7 +9,7 @@ charged/ID exhaustion, checked counterexample, or a specifically applicable gate
 Native lane-root correspondence is checked through LaneCanonical31 (44658).
 Current stage: semantic input obligations; then append, recipient, sentinel,
 unconditional HonestInput, exact owner coverage, and only then V038/V045.
-Next unused ID44659. No host job active. Full cooldown remains mandatory after
+Next unused ID44670. Refusal44669 at06:25:54.635UTC, cooldown until06:28:54.636UTC. No host job active. Full cooldown remains mandatory after
 any refusal; use stock read-only inventory before admission during contention.
 Audit97–99 remain unused. Tally currently27 charged,18 accepted,9 rejected.
 
