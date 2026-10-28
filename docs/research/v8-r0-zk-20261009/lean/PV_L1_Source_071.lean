@@ -93,11 +93,11 @@ theorem complete_result
   (next_attempt : T0) (k : Std.Usize) :
   erase (produce (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k) = prover.retry_attempt (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k := by
   unfold produce prover.retry_attempt
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_070.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_070.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_070.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_070.complete_result]
 #print axioms complete_result
 end PV_L1_Source_071

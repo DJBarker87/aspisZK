@@ -37,11 +37,11 @@ theorem complete_result
   (column : Std.Usize) :
   erase (produce c1 masks c1_columns_inactive_balanced column) = prover.audit_masks_loop0.body c1 masks c1_columns_inactive_balanced column := by
   unfold produce prover.audit_masks_loop0.body
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_035

@@ -21,11 +21,11 @@ theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize) :
   erase (produce columns) = host_semantic.initial_mask_sum columns := by
   unfold produce host_semantic.initial_mask_sum
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_051

@@ -274,11 +274,11 @@ theorem complete_result
   (nonce_store : T0) :
   erase (produce (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store) = prover.prove_masked_with_attempt (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store := by
   unfold produce prover.prove_masked_with_attempt
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
 #print axioms complete_result
 end PV_L1_Source_069

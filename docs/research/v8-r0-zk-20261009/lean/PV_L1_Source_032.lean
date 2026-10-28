@@ -25,11 +25,11 @@ theorem complete_result
   (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) :
   erase (produce e) = prover.mask_error e := by
   unfold produce prover.mask_error
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_032

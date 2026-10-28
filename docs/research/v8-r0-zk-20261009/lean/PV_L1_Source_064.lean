@@ -41,11 +41,11 @@ theorem complete_result
   (point : Array aspis_core.field.QM31 10#usize) :
   erase (produce claims point) = host_semantic.claim_mask_value claims point := by
   unfold produce host_semantic.claim_mask_value
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_064

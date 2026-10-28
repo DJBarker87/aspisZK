@@ -23,11 +23,11 @@ theorem complete_result
   (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) :
   erase (produce columns variant z) = host_semantic.endpoint_bytes columns variant z := by
   unfold produce host_semantic.endpoint_bytes
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_045

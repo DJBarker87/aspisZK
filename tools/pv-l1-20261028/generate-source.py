@@ -22,6 +22,7 @@ selected=[n for n in selected if not (n.startswith('host_sumcheck.') and not n.s
 # Keep the generator's dependency/source order. Recursive and loop edges stay native.
 selected=sorted(set(selected),key=lambda n:list(all_defs).index(n))
 rows=[];known={}
+accepted={r['target']:r for q in E.glob('receipt-*.json') if (r:=json.loads(q.read_text())).get('accepted')}
 def binders(h):
  out=[];depth=0;begin=None
  for i,c in enumerate(h):
@@ -80,11 +81,14 @@ for k,n in enumerate(selected):
  code+='def produce'+params+result_sig+'\n  := do\n  let _ ← observe '+marker+' 0 (ok ())\n'+body+'\n\n'
  code+='theorem complete_result'+params.rstrip().removesuffix(':').rstrip()+' :\n  erase (produce '+applications+') = '+n+' '+applications+' := by\n'
  code+='  unfold produce '+n+'\n'
- lemmas=['erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
+ lemmas=['Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'
  code+='  '+simp+'\n  repeat\' first\n    | rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
  code+='#print axioms complete_result\nend '+mod+'\n'
- path=D/(mod+'.lean');path.write_text(code)
+ path=D/(mod+'.lean')
+ if mod in accepted:
+  assert hashlib.sha256(path.read_bytes()).hexdigest()==accepted[mod]['source_sha256'],('accepted source changed',mod)
+ else:path.write_text(code)
  rows.append(dict(module=mod,source_function=n,path=str(path.relative_to(R)),source_body_sha256=hashlib.sha256(raw.encode()).hexdigest(),source_module_sha256=hashlib.sha256(s.encode()).hexdigest(),dependencies=sorted(set(deps)),native_edges=sorted(set(re.findall(r'\b(?:prover|host_semantic|host_transcript|host_sumcheck)\.[\w.]+',body))),discarded_restoration_candidates=re.findall(r'^.*(?:let\s+\([^\n]*,\s*_\)|next_back.*_).*$' ,raw,re.M),evidence_class='emission/model complete-Result law only; native fidelity and loop payload frontier open'))
  known[n]=mod
 (E/'source-frontier.json').write_text(json.dumps(rows,indent=2)+'\n');print('Generated',len(rows),'source phase modules')

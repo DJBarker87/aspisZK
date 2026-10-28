@@ -36,11 +36,11 @@ theorem complete_result
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize) :
   erase (produce c1 lane) = host_semantic.check_base_columns_loop.body c1 lane := by
   unfold produce host_semantic.check_base_columns_loop.body
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_061

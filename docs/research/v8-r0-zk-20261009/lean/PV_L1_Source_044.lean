@@ -46,11 +46,11 @@ theorem complete_result
   (transcript : host_wire.SemanticTranscript H) (bytes : alloc.vec.Vec Std.U8) :
   erase (produce (H := H) aspis_coredigestDigest32Inst row payload transcript bytes) = host_semantic.semantic_row (H := H) aspis_coredigestDigest32Inst row payload transcript bytes := by
   unfold produce host_semantic.semantic_row
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_044

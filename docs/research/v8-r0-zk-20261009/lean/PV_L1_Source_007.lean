@@ -86,11 +86,11 @@ theorem complete_result
   (variant : transport.Variant) (p : prover.Publication) :
   erase (produce variant p) = prover.publish_compact variant p := by
   unfold produce prover.publish_compact
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_003.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_003.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_003.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_003.complete_result]
 #print axioms complete_result
 end PV_L1_Source_007

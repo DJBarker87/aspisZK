@@ -130,11 +130,11 @@ theorem complete_result
   (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8) :
   erase (produce (H := H) aspis_coredigestDigest32Inst self row payload) = host_transcript.Transcript.queries (H := H) aspis_coredigestDigest32Inst self row payload := by
   unfold produce host_transcript.Transcript.queries
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
 #print axioms complete_result
 end PV_L1_Source_016

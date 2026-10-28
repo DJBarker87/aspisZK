@@ -62,11 +62,11 @@ theorem complete_result
   (queries : Array Std.U32 22#usize) (batch : Std.Usize) (t : Std.Usize) :
   erase (produce out cc1 cc2 tree queries batch t) = prover.append_node_slot out cc1 cc2 tree queries batch t := by
   unfold produce prover.append_node_slot
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_005

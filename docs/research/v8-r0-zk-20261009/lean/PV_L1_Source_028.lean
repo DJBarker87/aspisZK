@@ -42,11 +42,11 @@ theorem complete_result
   (salts : alloc.vec.Vec (Array Std.U8 32#usize)) :
   erase (produce reserved context hash tag index salts) = prover.derive_private_salt_step reserved context hash tag index salts := by
   unfold produce prover.derive_private_salt_step
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_028

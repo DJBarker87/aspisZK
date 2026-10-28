@@ -56,11 +56,11 @@ theorem complete_result
   aspis_core.state_only_hiding.StateOnlyHidingContext)) :
   erase (produce public1 variant hash backend sem salts) = prover.prove_from_semantics public1 variant hash backend sem salts := by
   unfold produce prover.prove_from_semantics
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_007.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_007.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_007.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_007.complete_result]
 #print axioms complete_result
 end PV_L1_Source_031

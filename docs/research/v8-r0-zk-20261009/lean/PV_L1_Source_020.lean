@@ -116,11 +116,11 @@ theorem complete_result
   (folded_salts : host_commitment.PrivateSalts) :
   erase (produce variant hash prepared folded_salts) = prover.finish_opening variant hash prepared folded_salts := by
   unfold produce prover.finish_opening
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_008.complete_result,PV_L1_Source_016.complete_result,PV_L1_Source_018.complete_result,PV_L1_Source_019.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_008.complete_result,PV_L1_Source_016.complete_result,PV_L1_Source_018.complete_result,PV_L1_Source_019.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_008.complete_result,PV_L1_Source_016.complete_result,PV_L1_Source_018.complete_result,PV_L1_Source_019.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_008.complete_result,PV_L1_Source_016.complete_result,PV_L1_Source_018.complete_result,PV_L1_Source_019.complete_result]
 #print axioms complete_result
 end PV_L1_Source_020

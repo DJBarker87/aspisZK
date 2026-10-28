@@ -39,11 +39,11 @@ theorem complete_result
   (g : Array aspis_core.field.QM31 1024#usize) :
   erase (produce c1 d g) = host_semantic.check_semantic_columns c1 d g := by
   unfold produce host_semantic.check_semantic_columns
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_058.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_058.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_058.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_058.complete_result]
 #print axioms complete_result
 end PV_L1_Source_063

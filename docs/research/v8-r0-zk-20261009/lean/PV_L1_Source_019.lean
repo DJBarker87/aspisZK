@@ -34,11 +34,11 @@ theorem complete_result
   (nonzero : Bool) :
   erase (produce (H := H) aspis_coredigestDigest32Inst self row payload nonzero) = host_transcript.Transcript.scalar (H := H) aspis_coredigestDigest32Inst self row payload nonzero := by
   unfold produce host_transcript.Transcript.scalar
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]
 #print axioms complete_result
 end PV_L1_Source_019

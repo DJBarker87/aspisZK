@@ -25,11 +25,11 @@ theorem complete_result
   (advances : Array (Array Std.U8 32#usize) 8#usize) :
   erase (produce blocks advances) = host_transcript.queries_from_pairs blocks advances := by
   unfold produce host_transcript.queries_from_pairs
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_012.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_012.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_012.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_012.complete_result]
 #print axioms complete_result
 end PV_L1_Source_013

@@ -120,11 +120,11 @@ theorem complete_result
   (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) :
   erase (produce variant hash backend sem) = prover.prepare_opening variant hash backend sem := by
   unfold produce prover.prepare_opening
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
 #print axioms complete_result
 end PV_L1_Source_027

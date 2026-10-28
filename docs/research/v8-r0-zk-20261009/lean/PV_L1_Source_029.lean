@@ -43,11 +43,11 @@ theorem complete_result
   verifier.Error) (index : Std.Usize) :
   erase (produce reserved context hash tag count result index) = prover.derive_private_salts_loop.body reserved context hash tag count result index := by
   unfold produce prover.derive_private_salts_loop.body
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_028.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_028.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_028.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_028.complete_result]
 #print axioms complete_result
 end PV_L1_Source_029

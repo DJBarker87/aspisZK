@@ -25,11 +25,11 @@ theorem complete_result
   (mask_only : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize) :
   erase (produce noised mask_only) = host_semantic.clone_semantic_columns noised mask_only := by
   unfold produce host_semantic.clone_semantic_columns
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
 #print axioms complete_result
 end PV_L1_Source_039

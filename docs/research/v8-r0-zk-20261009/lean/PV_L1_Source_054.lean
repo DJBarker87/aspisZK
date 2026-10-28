@@ -22,11 +22,11 @@ theorem complete_result
   (dc : Array aspis_core.field.QM31 1024#usize) (offset : Std.Usize) :
   erase (produce dc offset) = host_semantic.d_tail_side dc offset := by
   unfold produce host_semantic.d_tail_side
-  simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_053.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_053.complete_result]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_053.complete_result]
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_053.complete_result]
 #print axioms complete_result
 end PV_L1_Source_054
