@@ -39,9 +39,11 @@ theorem complete (p : Array K 10#usize) (n : Nat) (out : Matrix)
       change left.val<256 at hb
       omega
     rw [AspisR1ProducerRelease47.point_rows.fill,remaining]
-    simp only [if_neg hn,lift,bind_tc_ok,PV_RunJoin_WeightResult46.shared_bind]
+    simp only [if_neg hn,lift,bind_tc_ok]
+    rw [PV_RunJoin_WeightResult46.shared_bind]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro t _
+    dsimp only
     rw [PV_RunJoin_WeightMap46.index]
     symm
     apply map_bind toQ (amap (amap toQ))
