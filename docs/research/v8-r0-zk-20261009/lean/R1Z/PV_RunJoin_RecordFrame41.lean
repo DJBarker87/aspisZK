@@ -43,6 +43,8 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
       .ok (.Ok (tag,size)) := rfl
   simp only [host_wire.record,shape,ho,core.result.Result.Insts.CoreOpsTry.branch,
     bind_tc_ok,lenword,bne_self_eq_false,Bool.false_eq_true,↓reduceIte,lift,h1,hh,hf]
+  dsimp only
+  simp only [bne_self_eq_false,Bool.false_eq_true,↓reduceIte,h1,hh,hf,bind_tc_ok]
   apply PV_RunJoin_ResultPost41.bind
   intro result
   cases result with
