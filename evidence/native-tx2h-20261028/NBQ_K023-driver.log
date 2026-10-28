@@ -1,0 +1,173 @@
+{"attempt": "NBQ_K023", "exit_status": 0, "wall_seconds": 1.0337348250322975, "peak_rss_kib": "208832", "swaps": "0"}
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: function `push_route` is never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:275:5
+    |
+275 |  fn push_route(d:&mut canonical::Dot,a:canonical::Q,b:canonical::Q){unsafe{
+    |     ^^^^^^^^^^
+
+warning: function `no_push` is never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:288:5
+    |
+288 |  fn no_push(_d:&mut canonical::Dot,_a:canonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}
+    |     ^^^^^^^
+
+warning: constant `P` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:407:8
+    |
+407 |  const P:u64=2147483647;
+    |        ^
+
+warning: function `add` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:408:5
+    |
+408 |  fn add(a:u32,b:u32)->u32{(u64::from(a).wrapping_add(u64::from(b))%P) as u32}
+    |     ^^^
+
+warning: function `sub` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:409:5
+    |
+409 |  fn sub(a:u32,b:u32)->u32{(u64::from(a).wrapping_add(P).wrapping_sub(u64::from(b))%P) as u32}
+    |     ^^^
+
+warning: function `cm` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:410:5
+    |
+410 |  fn cm(a:[u32;2],b:[u32;2])->[u32;2]{
+    |     ^^
+
+warning: function `ca` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:416:5
+    |
+416 |  fn ca(a:[u32;2],b:[u32;2])->[u32;2]{[add(a[0],b[0]),add(a[1],b[1])]}
+    |     ^^
+
+warning: function `cs` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:417:5
+    |
+417 |  fn cs(a:[u32;2],b:[u32;2])->[u32;2]{[sub(a[0],b[0]),sub(a[1],b[1])]}
+    |     ^^
+
+warning: function `cr` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:418:5
+    |
+418 |  fn cr(a:[u32;2])->[u32;2]{[sub(add(a[0],a[0]),a[1]),add(a[0],add(a[1],a[1]))]}
+    |     ^^
+
+warning: function `qm` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:419:5
+    |
+419 |  fn qm(a:[u32;4],b:[u32;4])->[u32;4]{
+    |     ^^
+
+warning: function `qa` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:424:5
+    |
+424 |  fn qa(a:[u32;4],b:[u32;4])->[u32;4]{[add(a[0],b[0]),add(a[1],b[1]),add(a[2],b[2]),add(a[3],b[3])]}
+    |     ^^
+
+warning: function `qs` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:425:5
+    |
+425 |  fn qs(a:[u32;4],b:[u32;4])->[u32;4]{[sub(a[0],b[0]),sub(a[1],b[1]),sub(a[2],b[2]),sub(a[3],b[3])]}
+    |     ^^
+
+warning: function `qu` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:426:5
+    |
+426 |  fn qu(a:[u32;4])->[u32;4]{let r=cr([a[2],a[3]]);[r[0],r[1],a[0],a[1]]}
+    |     ^^
+
+warning: function `spec` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:427:9
+    |
+427 |  pub fn spec(a:[u32;8],b:[u32;8])->[u32;8]{
+    |         ^^^^
+
+warning: function `replacement` is never used
+   --> crates/aspis-r1-cost-probe/src/weights.rs:433:9
+    |
+433 |  pub fn replacement(a:E,b:E)->E{
+    |         ^^^^^^^^^^^
+
+warning: module `NBQ_dots` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/fast_dots.rs:78:5
+   |
+78 | mod NBQ_dots {
+   |     ^^^^^^^^ help: convert the identifier to snake case: `nbq_dots`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NBQ_public` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:261:5
+    |
+261 | mod NBQ_public {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_public`
+
+warning: module `NBQ_more` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:300:5
+    |
+300 | mod NBQ_more {
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nbq_more`
+
+warning: function `NBQ_sums` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:125:32
+    |
+125 |     #[cfg(kani)] pub(super) fn NBQ_sums(d:&Dot)->[u64;4]{d.sums}
+    |                                ^^^^^^^^ help: convert the identifier to snake case: `nbq_sums`
+
+warning: function `NBQ_any_dot` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:126:32
+    |
+126 |     #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+    |                                ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_any_dot`
+
+warning: module `NBQ_private` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:128:9
+    |
+128 |     mod NBQ_private {
+    |         ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_private`
+
+warning: module `NBQ_powers` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:402:5
+    |
+402 | mod NBQ_powers {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_powers`
+
+warning: module `NBQ_field` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:464:5
+    |
+464 | mod NBQ_field {
+    |     ^^^^^^^^^ help: convert the identifier to snake case: `nbq_field`
+
+warning: module `NBQ_emul` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/weights.rs:405:5
+    |
+405 | mod NBQ_emul {
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nbq_emul`
+
+    Finished `dev` profile [optimized] target(s) in 0.58s
+Checking harness fast_dots::NBQ_dots::indices...
+
+VERIFICATION RESULT:
+ ** 0 of 18 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.0544085s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

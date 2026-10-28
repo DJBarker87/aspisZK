@@ -1,0 +1,23 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -270,9 +270,10 @@
+  #[kani::proof] #[kani::unwind(12)]
+  fn new(){let d=EbyKDot::new();assert!(d.count==0);assert!(same4(d.c0.finish().limbs(),[0;4]));assert!(same4(d.c1.finish().limbs(),[0;4]));}
+  static mut CALLS:usize=0;
++ static mut PTR0:*mut canonical::Dot=core::ptr::null_mut(); static mut PTR1:*mut canonical::Dot=core::ptr::null_mut();
+  static mut WANT0:[u32;4]=[0;4]; static mut WANT1:[u32;4]=[0;4]; static mut WANTK:[u32;4]=[0;4];
+  fn push_route(d:&mut canonical::Dot,a:canonical::Q,b:canonical::Q){unsafe{
+-   assert!(CALLS<2);assert!(same4(a.limbs(),if CALLS==0{WANT0}else{WANT1}));assert!(same4(b.limbs(),WANTK));
++   assert!(CALLS<2);assert!(core::ptr::eq(d,if CALLS==0{PTR0}else{PTR1}));assert!(same4(a.limbs(),if CALLS==0{WANT0}else{WANT1}));assert!(same4(b.limbs(),WANTK));
+    *d=canonical::NBQ_any_dot(); CALLS+=1;
+  }}
+  #[kani::proof] #[kani::unwind(12)]
+@@ -281,7 +282,7 @@
+   let v=any_e();let w=v.to_limbs();let kw:[u32;4]=kani::any();kani::assume(kw[0]<canonical::P&&kw[1]<canonical::P&&kw[2]<canonical::P&&kw[3]<canonical::P);
+   let n:usize=kani::any();kani::assume(n<4096);
+   let mut d=EbyKDot{c0:canonical::NBQ_any_dot(),c1:canonical::NBQ_any_dot(),count:n};
+-  unsafe{CALLS=0;WANT0=[w[0],w[1],w[2],w[3]];WANT1=[w[4],w[5],w[6],w[7]];WANTK=kw;}
++  unsafe{PTR0=&mut d.c0;PTR1=&mut d.c1;CALLS=0;WANT0=[w[0],w[1],w[2],w[3]];WANT1=[w[4],w[5],w[6],w[7]];WANTK=kw;}
+   assert!(d.push(v,k(kw)).is_ok());assert!(d.count==n+1);unsafe{assert!(CALLS==2);}
+  }
+  fn no_push(_d:&mut canonical::Dot,_a:canonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}

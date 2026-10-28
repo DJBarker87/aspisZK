@@ -1,0 +1,39 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,6 +122,7 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
++    #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+     #[cfg(kani)]
+     mod NBQ_private {
+         use super::*;
+@@ -269,24 +270,24 @@
+  static mut WANT0:[u32;4]=[0;4]; static mut WANT1:[u32;4]=[0;4]; static mut WANTK:[u32;4]=[0;4];
+  fn push_route(d:&mut canonical::Dot,a:canonical::Q,b:canonical::Q){unsafe{
+    assert!(CALLS<2);assert!(a.limbs()==if CALLS==0{WANT0}else{WANT1});assert!(b.limbs()==WANTK);
+-   *d=canonical::Dot::new(); CALLS+=1;
++   *d=canonical::NBQ_any_dot(); CALLS+=1;
+  }}
+  #[kani::proof] #[kani::unwind(12)]
+  #[kani::stub(canonical::Dot::push,push_route)]
+  fn push_success(){
+   let v=any_e();let w=v.to_limbs();let kw:[u32;4]=kani::any();kani::assume(kw[0]<canonical::P&&kw[1]<canonical::P&&kw[2]<canonical::P&&kw[3]<canonical::P);
+   let n:usize=kani::any();kani::assume(n<4096);
+-  let mut d=EbyKDot{c0:canonical::Dot::new(),c1:canonical::Dot::new(),count:n};
++  let mut d=EbyKDot{c0:canonical::NBQ_any_dot(),c1:canonical::NBQ_any_dot(),count:n};
+   unsafe{CALLS=0;WANT0=[w[0],w[1],w[2],w[3]];WANT1=[w[4],w[5],w[6],w[7]];WANTK=kw;}
+   assert!(d.push(v,k(kw)).is_ok());assert!(d.count==n+1);unsafe{assert!(CALLS==2);}
+  }
+  fn no_push(_d:&mut canonical::Dot,_a:canonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}
+  #[kani::proof] #[kani::unwind(12)]
+  #[kani::stub(canonical::Dot::push,no_push)]
+- fn push_limit(){let n:usize=kani::any();kani::assume(n>=4096);let mut d=EbyKDot{c0:canonical::Dot::new(),c1:canonical::Dot::new(),count:n};assert!(d.push(any_e(),k(kani::any())).is_err());assert!(d.count==n);}
++ fn push_limit(){let n:usize=kani::any();kani::assume(n>=4096);let mut d=EbyKDot{c0:canonical::NBQ_any_dot(),c1:canonical::NBQ_any_dot(),count:n};assert!(d.push(any_e(),k(kani::any())).is_err());assert!(d.count==n);}
+  #[kani::proof] #[kani::unwind(12)]
+  #[kani::stub(canonical::Dot::push,no_push)]
+- fn push_bad_scalar(){let w:[u32;4]=kani::any();kani::assume(w[0]>=canonical::P||w[1]>=canonical::P||w[2]>=canonical::P||w[3]>=canonical::P);let n:usize=kani::any();kani::assume(n<4096);let mut d=EbyKDot{c0:canonical::Dot::new(),c1:canonical::Dot::new(),count:n};assert!(d.push(any_e(),k(w)).is_err());assert!(d.count==n);}
++ fn push_bad_scalar(){let w:[u32;4]=kani::any();kani::assume(w[0]>=canonical::P||w[1]>=canonical::P||w[2]>=canonical::P||w[3]>=canonical::P);let n:usize=kani::any();kani::assume(n<4096);let mut d=EbyKDot{c0:canonical::NBQ_any_dot(),c1:canonical::NBQ_any_dot(),count:n};assert!(d.push(any_e(),k(w)).is_err());assert!(d.count==n);}
+  #[kani::proof] #[kani::unwind(12)]
+  fn finish(){let mut d=EbyKDot::new();let n:usize=kani::any();d.count=n;assert!(d.finish()==E::ZERO);}
+ }

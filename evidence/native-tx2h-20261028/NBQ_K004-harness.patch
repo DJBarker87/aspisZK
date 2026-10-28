@@ -1,0 +1,60 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -126,6 +126,7 @@
+     #[cfg(kani)]
+     mod NBQ_private {
+         use super::*;
++ fn same4<T:PartialEq>(a:[T;4],b:[T;4])->bool {a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]}
+         #[kani::proof] #[kani::unwind(8)]
+         fn reduce_all() {
+             let x:u64=kani::any();
+@@ -134,7 +135,7 @@
+             assert!(r<P);
+         }
+         #[kani::proof] #[kani::unwind(8)]
+-        fn new() {let d=Dot::new();assert!(d.sums==[0;4]);}
++        fn new() {let d=Dot::new();assert!(same4(d.sums,[0;4]));}
+         #[kani::proof] #[kani::unwind(8)]
+         fn finish() {
+             let s:[u64;4]=kani::any();let q=Dot{sums:s}.finish().limbs();
+@@ -148,10 +149,10 @@
+             let w:[u32;4]=kani::any();let q=Q::from_limbs(w);
+             let c=w[0]<P&&w[1]<P&&w[2]<P&&w[3]<P;
+             assert!(q.is_some()==c);
+-            if let Some(q)=q {assert!(q.limbs()==w);}
+-        }
+-        #[kani::proof] #[kani::unwind(8)]
+-        fn limbs() {let w:[u32;4]=kani::any();assert!(Q(w).limbs()==w);}
++            if let Some(q)=q {assert!(same4(q.limbs(),w));}
++        }
++        #[kani::proof] #[kani::unwind(8)]
++        fn limbs() {let w:[u32;4]=kani::any();assert!(same4(Q(w).limbs(),w));}
+     }
+ 
+ }
+@@ -258,18 +259,19 @@
+ #[cfg(kani)]
+ mod NBQ_public {
+  use super::*;
++ fn same4<T:PartialEq>(a:[T;4],b:[T;4])->bool {a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]}
+  fn k(w:[u32;4])->QM31 {QM31{c0:CM31{a:aspis_core::field::M31(w[0]),b:aspis_core::field::M31(w[1])},c1:CM31{a:aspis_core::field::M31(w[2]),b:aspis_core::field::M31(w[3])}}}
+  fn any_e()->E {let w:[u32;8]=kani::any();kani::assume(w[0]<canonical::P&&w[1]<canonical::P&&w[2]<canonical::P&&w[3]<canonical::P&&w[4]<canonical::P&&w[5]<canonical::P&&w[6]<canonical::P&&w[7]<canonical::P);E::from_limbs(w).unwrap()}
+  #[kani::proof] #[kani::unwind(12)]
+- fn from_wide(){let e=any_e();let w=e.to_limbs();let [a,b]=canonical::Q::from_wide(e);assert!(a.limbs()==[w[0],w[1],w[2],w[3]]);assert!(b.limbs()==[w[4],w[5],w[6],w[7]]);}
+- #[kani::proof] #[kani::unwind(12)]
+- fn checked(){let w:[u32;4]=kani::any();let scalar=k(w);assert!(limbs_of(scalar)==w);let c=w[0]<canonical::P&&w[1]<canonical::P&&w[2]<canonical::P&&w[3]<canonical::P;let r=checked_q(scalar);assert!(r.is_ok()==c);if let Ok(q)=r{assert!(q.limbs()==w);}}
+- #[kani::proof] #[kani::unwind(12)]
+- fn new(){let d=EbyKDot::new();assert!(d.count==0);assert!(d.c0.finish().limbs()==[0;4]);assert!(d.c1.finish().limbs()==[0;4]);}
++ fn from_wide(){let e=any_e();let w=e.to_limbs();let [a,b]=canonical::Q::from_wide(e);assert!(same4(a.limbs(),[w[0],w[1],w[2],w[3]]));assert!(same4(b.limbs(),[w[4],w[5],w[6],w[7]]));}
++ #[kani::proof] #[kani::unwind(12)]
++ fn checked(){let w:[u32;4]=kani::any();let scalar=k(w);assert!(same4(limbs_of(scalar),w));let c=w[0]<canonical::P&&w[1]<canonical::P&&w[2]<canonical::P&&w[3]<canonical::P;let r=checked_q(scalar);assert!(r.is_ok()==c);if let Ok(q)=r{assert!(same4(q.limbs(),w));}}
++ #[kani::proof] #[kani::unwind(12)]
++ fn new(){let d=EbyKDot::new();assert!(d.count==0);assert!(same4(d.c0.finish().limbs(),[0;4]));assert!(same4(d.c1.finish().limbs(),[0;4]));}
+  static mut CALLS:usize=0;
+  static mut WANT0:[u32;4]=[0;4]; static mut WANT1:[u32;4]=[0;4]; static mut WANTK:[u32;4]=[0;4];
+  fn push_route(d:&mut canonical::Dot,a:canonical::Q,b:canonical::Q){unsafe{
+-   assert!(CALLS<2);assert!(a.limbs()==if CALLS==0{WANT0}else{WANT1});assert!(b.limbs()==WANTK);
++   assert!(CALLS<2);assert!(same4(a.limbs(),if CALLS==0{WANT0}else{WANT1}));assert!(same4(b.limbs(),WANTK));
+    *d=canonical::NBQ_any_dot(); CALLS+=1;
+  }}
+  #[kani::proof] #[kani::unwind(12)]

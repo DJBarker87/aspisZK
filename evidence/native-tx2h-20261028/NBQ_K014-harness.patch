@@ -1,0 +1,27 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -122,6 +122,7 @@
+         }
+         pub fn finish(self)->Q {Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}
+     }
++    #[cfg(kani)] pub(super) fn NBQ_sums(d:&Dot)->[u64;4]{d.sums}
+     #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+     #[cfg(kani)]
+     mod NBQ_private {
+@@ -293,3 +294,16 @@
+  #[kani::proof] #[kani::unwind(12)]
+  fn finish(){let mut d=EbyKDot::new();let n:usize=kani::any();d.count=n;assert!(d.finish()==E::ZERO);}
+ }
++
++#[cfg(kani)]
++mod NBQ_more {
++ use super::*;
++ #[kani::proof] #[kani::unwind(12)]
++ fn finish_all(){
++  let a=canonical::NBQ_any_dot();let b=canonical::NBQ_any_dot();
++  let av=canonical::NBQ_sums(&a);let bv=canonical::NBQ_sums(&b);
++  let count:usize=kani::any();let out=EbyKDot{c0:a,c1:b,count}.finish().to_limbs();
++  let j:usize=kani::any();kani::assume(j<8);
++  assert!(u64::from(out[j])==(if j<4{av[j]}else{bv[j-4]})%u64::from(canonical::P));
++ }
++}

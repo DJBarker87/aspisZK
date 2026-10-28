@@ -1,0 +1,83 @@
+{"attempt": "NBQ_K016", "exit_status": 0, "wall_seconds": 51.19383303698851, "peak_rss_kib": "488896", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling syn v2.0.118
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling libc v0.2.186
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling serde_derive v1.0.228
+   Compiling subtle v2.6.1
+   Compiling equivalent v1.0.2
+   Compiling hashbrown v0.15.5
+   Compiling autocfg v1.5.1
+   Compiling indexmap v2.7.1
+   Compiling winnow v0.7.15
+   Compiling toml_write v0.1.2
+   Compiling toml_datetime v0.6.11
+   Compiling toml_e
+...
+ry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: function `private_format` is never used
+   --> programs/r1-cost-probe/src/lib.rs:177:5
+    |
+177 |  fn private_format(_args:core::fmt::Arguments<'_>)->String{String::new()}
+    |     ^^^^^^^^^^^^^^
+
+warning: function `private_log` is never used
+   --> programs/r1-cost-probe/src/lib.rs:178:5
+    |
+178 |  fn private_log(_s:&str){unsafe{CALLS+=1;}}
+    |     ^^^^^^^^^^^
+
+warning: module `NBQ_error_control` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:5
+    |
+173 | mod NBQ_error_control {
+    |     ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_error_control`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 50.57s
+Checking harness NBQ_error_control::rejects...
+
+VERIFICATION RESULT:
+ ** 0 of 186 failed (4 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.123366706s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r83c4c700df3b4886a4798d350342641c.scope; invocation ID: 6abf299235de4f28a459430faa9f85f3
