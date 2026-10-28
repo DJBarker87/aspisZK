@@ -1,0 +1,15 @@
+pub fn common_ref<K,D,L,C>(master:K,checkpoint:K,lane:K,output:u8,sequence:u64,anchor:D,live:L,candidate:C)->(K,K,K,u8,u64,D,L,C) {
+ (master,checkpoint,lane,output,sequence,anchor,live,candidate)
+}
+pub fn zero_tail_ref(byte:u8,empty:bool)->u8 { if empty {0} else if byte!=0 {1} else {2} }
+
+pub fn identity_ref<T>(value:T)->T {value}
+
+pub fn snapshot_select_ref(length:usize,limit1:usize,limit2:usize)->bool {length==limit1 || length==limit2}
+pub fn snapshot_value_ref<K,B>(metadata:(K,K,bool,bool,bool),length:usize,admitted:bool,bytes:B)->((K,K,bool,bool,bool),usize,Option<B>) {
+ (metadata,length,if admitted {Some(bytes)} else {None})
+}
+pub fn failed_snapshot_ref<T,E>(error:E)->Result<T,E> {Err(error)}
+pub fn validation_ref<C,P>(common:C,public:P,valid:bool)->Result<(C,P),u8> {
+ if valid {Ok((common,public))} else {Err(0)}
+}

@@ -2,16 +2,19 @@
 from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,os
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-front4b-20261028';H='dombarker@100.108.41.90'
-a,kind,target=sys.argv[1:];limit=80 if kind=='kani' else (20 if kind=='extract' else 80)
-assert int(a[-3:])<=limit
+a,kind,target=sys.argv[1:]
+limits={'kani':80,'lean':80,'extract':20}
+prior=[json.loads(line) for line in (E/'NDM_ATTEMPTS.jsonl').read_text().splitlines() if line.strip()]
+assert sum(r['kind']==kind for r in prior)<limits[kind], 'job run budget exhausted'
 assert not (E/a).exists()
 # A control of a timed-out property has the same solver shape. Never launch it.
-if kind=='kani' and os.environ.get('NDM_INVERT'):
+if kind=='kani' and any(os.environ.get(n) for n in ['NDM_INVERT','NDM_FIDELITY_INVERT','NDM_BAD_MODIFIES']):
  previous=f"NDM_K{int(a[-3:])-1:03d}"
  log=E/previous/'stdout.log'
  if log.exists():
   content=log.read_text().lower()
   assert not any(x in content for x in ['timed out','timeout after','time out','killed by signal','out of memory']), 'split timed-out shape before control'
+  assert not any(x in content for x in ['could not compile','aborting due to']), 'repair own compiler input before another control'
 
 while kind=='kani' and (E/'NDM_PAUSE_KANI').exists():time.sleep(1)
 active=E/'NDM_ACTIVE.json';assert not active.exists(),active
@@ -61,7 +64,7 @@ if kind=='lean':
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDM_SOURCE.json').read_text())['library'].items()}
  cfg['deps_fingerprint']['coherent_object_manifest_sha256']=__import__('hashlib').sha256((E/'NDM_COHERENT_OBJECT_PINS.json').read_bytes()).hexdigest()
  pins=json.loads((E/'NDM_COHERENT_OBJECT_PINS.json').read_text())
- for n in ['AdapterRwModel','AdapterRwTypes','AdapterRwScalar','AdapterRwSdkSnapshots','AdapterRwRuntimeAdmission','S2TrustedSdkBorrow']:
+ for n in ['AdapterRwModel','AdapterRwTypes','AdapterRwScalar','AdapterRwSdkSnapshots','AdapterRwRuntimeAdmission','S2TrustedSdkBorrow','S2W_D189Entry']:
   for root in ['/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/','/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/']:
    p=root+n+'.olean'
    if p in pins:cfg['deps_fingerprint']['selected_objects'][p]=pins[p];break
@@ -90,6 +93,17 @@ if xkind=='lean':
  for root in [b/'NDM_objects',b.parent/'codex-cx-native-front4-20261028/NDG_objects',b.parent/'codex-cx-front4-cache-20261028']:
   for p in root.rglob('*.olean'):
    cfg['deps_fingerprint']['selected_objects'][str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+ direct={{}}
+ source=b/'NDM_generated'/{(target+'.lean')!r}
+ for line in source.read_text().splitlines():
+  if not line.startswith('import '):continue
+  for name in line.split()[1:]:
+   for root in cfg['env']['LEAN_PATH'].split(':'):
+    p=Path(root)/(name.replace('.','/')+'.olean')
+    if p.exists():
+     record=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+     direct[name]=record;cfg['deps_fingerprint']['selected_objects'][str(p)]=record;break
+ cfg['deps_fingerprint']['resolved_direct_imports']=direct
  cpath.write_text(json.dumps(cfg,indent=2))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stdout+r.stderr
