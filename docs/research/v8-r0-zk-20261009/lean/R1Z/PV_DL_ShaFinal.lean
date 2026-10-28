@@ -40,6 +40,22 @@ theorem source_reference (compress : State → List U8 → Result State) (core :
   rw [PV_DL_ShaSerialize.total]
   rfl
 
+theorem identity_run (events : List (List U8)) (state : State) :
+    PV_DL_CompressionTrace.run (fun state _ => ok state) events state=ok state := by
+  induction events with
+  | nil => rfl
+  | cons block tail ih => simp only [PV_DL_CompressionTrace.run,bind_tc_ok,ih]
+
+theorem nonvacuous (core : Core) (buffer : Array U8 64#usize) (pos : Usize)
+    (h : pos.val<64) :
+    ∃ result, reference (fun state _ => ok state) core buffer pos=ok result := by
+  rw [source_reference _ core buffer pos h]
+  unfold value
+  rw [identity_run]
+  exact ⟨_,rfl⟩
+
+#print axioms identity_run
+#print axioms nonvacuous
 #print axioms reference
 #print axioms value
 #print axioms source_reference
