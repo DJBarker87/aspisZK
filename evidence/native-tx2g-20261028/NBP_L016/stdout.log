@@ -1,0 +1,74 @@
+def AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop : core.iter.adapters.enumerate.Enumerate
+    (core.slice.iter.Iter aspis_core.field.M31) →
+  Std.Array U8 32#usize → Result (Std.Array U8 32#usize) :=
+fun iter bytes =>
+  loop
+    (fun x =>
+      match x with
+      | (iter1, bytes1) => atomic_statement.encode_digest_canonical_loop.body iter1 bytes1)
+    (iter, bytes)
+def AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical_loop.body : core.iter.adapters.enumerate.Enumerate
+    (core.slice.iter.Iter aspis_core.field.M31) →
+  Std.Array U8 32#usize →
+    Result
+      (ControlFlow
+        (core.iter.adapters.enumerate.Enumerate (core.slice.iter.Iter aspis_core.field.M31) × Std.Array U8 32#usize)
+        (Std.Array U8 32#usize)) :=
+fun iter bytes => do
+  let (o, iter1) ←
+    core.iter.adapters.enumerate.IteratorEnumerate.next
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) iter
+  match o with
+    | none => ok (ControlFlow.done bytes)
+    | some p =>
+      let (index, value) := p
+      do
+      let i ← index * 4#usize
+      let i1 ← i + 4#usize
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+            { start := i, «end» := i1 }
+      let a ← value.to_le_bytes
+      let s1 ← lift a.to_slice
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      have bytes1 : Std.Array U8 32#usize := index_mut_back s2
+      ok (ControlFlow.cont (iter1, bytes1))
+def Aeneas.Std.core.iter.adapters.enumerate.IteratorEnumerate.next : {I Item : Type} →
+  core.iter.traits.iterator.Iterator I Item →
+    core.iter.adapters.enumerate.Enumerate I →
+      Result (Option (Usize × Item) × core.iter.adapters.enumerate.Enumerate I) :=
+fun {I Item} IteratorInst self => do
+  let __x ← IteratorInst.next self.iter
+  match __x with
+    | (opt, iter') =>
+      match opt with
+      | none => ok (none, { iter := iter', count := self.count })
+      | some a => do
+        let count' ← self.count + 1#usize
+        ok (some (self.count, a), { iter := iter', count := count' })
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    ok (some x, it)
+  else ok (none, it)
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorSliceIter : (T : Type) →
+  core.iter.traits.iterator.Iterator (core.slice.iter.Iter T) T :=
+fun T => { next := core.slice.iter.IteratorSliceIter.next }
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.Iter T
+structure Aeneas.Std.core.iter.adapters.enumerate.Enumerate.{u} (I : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.iter : I
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.count : Usize
+constructor:
+  Aeneas.Std.core.iter.adapters.enumerate.Enumerate.mk.{u} {I : Type u} (iter : I) (count : Usize) :
+    core.iter.adapters.enumerate.Enumerate I

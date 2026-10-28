@@ -1,0 +1,88 @@
+static mut NBP_INDEX: usize = 0;
+static mut NBP_CALLS: usize = 0;
+static mut NBP_EXPECT: &str = "";
+fn NBP_log(s: &str) {unsafe {
+ assert!(s.len()==NBP_EXPECT.len());
+ assert!(s.as_bytes()[NBP_INDEX]==NBP_EXPECT.as_bytes()[NBP_INDEX]);
+ NBP_CALLS+=1;
+}}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Parse() {
+ let i: usize=kani::any();kani::assume(i<14);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Parse";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Parse)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==13);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Semantic() {
+ let i: usize=kani::any();kani::assume(i<17);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Semantic";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Semantic)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==16);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Transcript() {
+ let i: usize=kani::any();kani::assume(i<19);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Transcript";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Transcript)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==18);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Relation() {
+ let i: usize=kani::any();kani::assume(i<17);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Relation";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Relation)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==16);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Merkle() {
+ let i: usize=kani::any();kani::assume(i<15);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Merkle";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Merkle)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==14);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Query() {
+ let i: usize=kani::any();kani::assume(i<14);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Query";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Query)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==13);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Checkpoint() {
+ let i: usize=kani::any();kani::assume(i<19);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Checkpoint";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Checkpoint)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==18);
+}
+#[kani::proof]
+#[kani::unwind(64)]
+#[kani::stub(solana_program::log::sol_log, NBP_log)]
+fn NBP_error_Allocation() {
+ let i: usize=kani::any();kani::assume(i<19);
+ unsafe {NBP_INDEX=i;NBP_CALLS=0;NBP_EXPECT="r1:error:Allocation";}
+ assert!(super::error(aspis_r1_cost_probe::verifier::Error::Allocation)==solana_program::program_error::ProgramError::InvalidInstructionData);
+ unsafe {assert!(NBP_CALLS==1);}
+ kani::cover!(i==18);
+}

@@ -1,0 +1,55 @@
+# NBP U02 atomic digest and payment codecs
+
+Status: nine of sixteen local members CLOSED; seven OPEN. No headline premise
+removed. RPx_Deployed.deployed, L154 statement parameter, narrowed D188,
+frozen3, RuntimePersistence and approved game fields unchanged. S2 and the
+100-bit deployed target remain unestablished.
+
+## Digest decoder — CLOSED local
+
+`NBP_DigestDecode.result` (NBP_L015) proves the exact selected
+`AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical` Result on
+EVERY32-byte array. `decoded` tests words in source order, returning the exact
+NonCanonicalDigest error or the complete eight little-endian words. There is
+no supplied success, canonicality or desired-output hypothesis. The replacement
+for NBG_L074 splits first rejection into eight independent fixed-prefix facts
+(NBP_DecodeWord.reject0, NBP_Decode1..7.result) and all-canonical success
+(NBP_DecodeSuccess.result), then composes by exhaustive ordered case analysis.
+No heartbeat/depth increase or unchanged failed shape replay.
+
+Native association reuses NBG_K019 unchanged: every32-byte native input, exact
+full Result/error, each output coordinate and all-word canonicality. The Rust
+function is the same unrolled eight-word decoder, frozen revision
+4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. `word` is exactly U32::from_le_bytes
+of offsets4i..4i+3; `limbs` orders0..7. The native body has no source loop,
+allocator, syscall or field multiplication. Existing Kani credit remains subject
+to the lead's KDX exposure review. No new Kani pass is claimed here.
+
+Every new theorem has its own printed axiom audit; accepted results use only
+propext, Classical.choice, Quot.sound. Rejected diagnostics are retained and
+carry no proof credit. NBP_L015: exit0, wall1.7752974109607749s,
+peakRSS3869632KiB, swap0; exact target/command/source revision/hashes/direct
+objects/cgroup and axiom lines are in NBP_L015/receipt.json. All scopes serial,
+admitted exit0 AND allowed:true; high6G/max8G/swap0/tasks64, Lean-M7000.
+Coherent SInt2 objects and own persistent cache/Aeneas pins recorded at start.
+
+## Reused and remaining members
+
+Reused CLOSED from NBG_U02_BRIDGE.md without re-proving: unwrap_fixed_slice,
+digest_is_canonical, transfer_common, withdrawal_common, require_header,
+validate_common, validate_pool_v1_private_transfer_public_v1,
+validate_pool_v1_withdrawal_public_v1. Their domains and exact references remain
+those in that handoff.
+
+OPEN: encode_digest_canonical (model induction/enumerator association);
+decode_common and encode_common (full bytes/error/frame association);
+decode_pool_v1_private_transfer_public_v1 and encoder;
+decode_pool_v1_withdrawal_public_v1 and encoder (compose exact common/digest
+callees and full native/model caller Results). U01 remains reused CLOSED.
+
+Retained caller dictionary installation, runtime/allocator/SDK/ABI/compiler/P6
+and source-to-ELF boundaries are not removed. No repository crates/programs
+change, no ELF rebuild trigger; release pins inherited, not reproduced:
+default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.

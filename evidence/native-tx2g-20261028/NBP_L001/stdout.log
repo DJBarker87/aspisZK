@@ -1,0 +1,265 @@
+def AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical : Std.Array U8 32#usize →
+  Result (core.result.Result (Std.Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError) :=
+fun bytes => do
+  let i ← bytes.index_usize 0#usize
+  let i1 ← bytes.index_usize 1#usize
+  let i2 ← bytes.index_usize 2#usize
+  let i3 ← bytes.index_usize 3#usize
+  let o ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯)
+  let r ← core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let i4 ← bytes.index_usize 4#usize
+      let i5 ← bytes.index_usize 5#usize
+      let i6 ← bytes.index_usize 6#usize
+      let i7 ← bytes.index_usize 7#usize
+      let o1 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i4, i5, i6, i7] ⋯)
+      let r1 ← core.option.Option.ok_or o1 atomic_statement.AtomicStatementError.NonCanonicalDigest
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let i8 ← bytes.index_usize 8#usize
+          let i9 ← bytes.index_usize 9#usize
+          let i10 ← bytes.index_usize 10#usize
+          let i11 ← bytes.index_usize 11#usize
+          let o2 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i8, i9, i10, i11] ⋯)
+          let r2 ← core.option.Option.ok_or o2 atomic_statement.AtomicStatementError.NonCanonicalDigest
+          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue val2 => do
+              let i12 ← bytes.index_usize 12#usize
+              let i13 ← bytes.index_usize 13#usize
+              let i14 ← bytes.index_usize 14#usize
+              let i15 ← bytes.index_usize 15#usize
+              let o3 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i12, i13, i14, i15] ⋯)
+              let r3 ← core.option.Option.ok_or o3 atomic_statement.AtomicStatementError.NonCanonicalDigest
+              let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val3 => do
+                  let i16 ← bytes.index_usize 16#usize
+                  let i17 ← bytes.index_usize 17#usize
+                  let i18 ← bytes.index_usize 18#usize
+                  let i19 ← bytes.index_usize 19#usize
+                  let o4 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i16, i17, i18, i19] ⋯)
+                  let r4 ← core.option.Option.ok_or o4 atomic_statement.AtomicStatementError.NonCanonicalDigest
+                  let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val4 => do
+                      let i20 ← bytes.index_usize 20#usize
+                      let i21 ← bytes.index_usize 21#usize
+                      let i22 ← bytes.index_usize 22#usize
+                      let i23 ← bytes.index_usize 23#usize
+                      let o5 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i20, i21, i22, i23] ⋯)
+                      let r5 ← core.option.Option.ok_or o5 atomic_statement.AtomicStatementError.NonCanonicalDigest
+                      let cf5 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val5 => do
+                          let i24 ← bytes.index_usize 24#usize
+                          let i25 ← bytes.index_usize 25#usize
+                          let i26 ← bytes.index_usize 26#usize
+                          let i27 ← bytes.index_usize 27#usize
+                          let o6 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i24, i25, i26, i27] ⋯)
+                          let r6 ← core.option.Option.ok_or o6 atomic_statement.AtomicStatementError.NonCanonicalDigest
+                          let cf6 ← core.result.Result.Insts.CoreOpsTry.branch r6
+                          match cf6 with
+                            | core.ops.control_flow.ControlFlow.Continue val6 => do
+                              let i28 ← bytes.index_usize 28#usize
+                              let i29 ← bytes.index_usize 29#usize
+                              let i30 ← bytes.index_usize 30#usize
+                              let i31 ← bytes.index_usize 31#usize
+                              let o7 ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i28, i29, i30, i31] ⋯)
+                              let r7 ←
+                                core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest
+                              let cf7 ← core.result.Result.Insts.CoreOpsTry.branch r7
+                              match cf7 with
+                                | core.ops.control_flow.ControlFlow.Continue val7 =>
+                                  ok
+                                    (core.result.Result.Ok
+                                      (Array.make 8#usize [val, val1, val2, val3, val4, val5, val6, val7] ⋯))
+                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (Std.Array aspis_core.field.M31 8#usize)
+                                    (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (Std.Array aspis_core.field.M31 8#usize)
+                                (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (Std.Array aspis_core.field.M31 8#usize)
+                            (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Std.Array aspis_core.field.M31 8#usize)
+                        (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array aspis_core.field.M31 8#usize)
+                    (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError)
+                residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            (Std.Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError)
+            residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (Std.Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual
+def AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical : Std.Array aspis_core.field.M31 8#usize →
+  Result (Std.Array U8 32#usize) :=
+fun digest =>
+  have bytes := Array.repeat 32#usize 0#u8;
+  do
+  let s ← lift digest.to_slice
+  let i ← core.slice.Slice.iter s
+  let iter ←
+    core.iter.traits.iterator.Iterator.enumerate.trait_default
+        (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+  atomic_statement.encode_digest_canonical_loop iter bytes
+def AspisR1TerminalDecoder.pool_v1.payment_relation.decode_common : Std.Array U8 216#usize →
+  Result
+    (core.result.Result pool_v1.payment_relation.CommonPublicV1
+      pool_v1.payment_relation.PoolV1PaymentStatementFormatError) :=
+fun bytes => do
+  let s ←
+    core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+        { start := pool_v1.payment_relation.ASSET_ID_OFFSET,
+          «end» := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }
+  let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+  let a ← atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r
+  let asset ← lift (core.num.U32.from_le_bytes a)
+  if asset ≥ aspis_core.field.P then
+      ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+    else do
+      let s1 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+            { start := pool_v1.payment_relation.POOL_OFFSET,
+              «end» := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }
+      let r1 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+      let a1 ← atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r1
+      let s2 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+            { start := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET,
+              «end» := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET }
+      let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2
+      let a2 ← atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r2
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+            { start := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET,
+              «end» := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET }
+      let r3 ← core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s3
+      let a3 ← atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 8#usize core.marker.CopyU8) r3
+      let i ← lift (core.num.U64.from_le_bytes a3)
+      let s4 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+            { start := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET, «end» := pool_v1.payment_relation.NULLIFIER_OFFSET }
+      let r4 ← core.array.TryFromSharedArraySlice.try_from 32#usize s4
+      let a4 ← atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize)) r4
+      let r5 ← atomic_statement.decode_digest_canonical a4
+      let r6 ←
+        core.result.Result.map_err
+            pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+            r5 ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r6
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s5 ←
+            core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) bytes
+                { start := pool_v1.payment_relation.NULLIFIER_OFFSET,
+                  «end» := pool_v1.payment_relation.ASSET_ID_OFFSET }
+          let r7 ← core.array.TryFromSharedArraySlice.try_from 32#usize s5
+          let a5 ← atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Std.Array U8 32#usize)) r7
+          let r8 ← atomic_statement.decode_digest_canonical a5
+          let r9 ←
+            core.result.Result.map_err
+                pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+                r8 ()
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r9
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r10 ←
+                pool_v1.payment_relation.validate_common
+                    { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val, nullifier := val1,
+                      asset_id := asset }
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r10
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  ok
+                    (core.result.Result.Ok
+                      { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val,
+                        nullifier := val1, asset_id := asset })
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    pool_v1.payment_relation.CommonPublicV1
+                    (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.payment_relation.CommonPublicV1
+                (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            pool_v1.payment_relation.CommonPublicV1
+            (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual
+def AspisR1TerminalDecoder.pool_v1.payment_relation.encode_common : Std.Array U8 216#usize →
+  Std.Array U8 4#usize →
+    pool_v1.historical_anchor.PoolV1TransitionKind →
+      pool_v1.payment_relation.CommonPublicV1 → Result (Std.Array U8 216#usize) :=
+fun output magic kind common => do
+  let (s, index_mut_back) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) output
+        { «end» := 4#usize }
+  let s1 ← lift magic.to_slice
+  let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+  have output1 : Std.Array U8 216#usize := index_mut_back s2
+  let output2 ← output1.update 4#usize pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION
+  have kind1 : U8 := read_discriminant kind
+  let i ← lift (UScalar.cast UScalarTy.U8 kind1)
+  let output3 ← output2.update 5#usize i
+  let output4 ← output3.update 6#usize pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+  let (s3, index_mut_back1) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output4
+        { start := pool_v1.payment_relation.POOL_OFFSET, «end» := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }
+  let s4 ← lift common.pool.to_slice
+  let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+  have output5 : Std.Array U8 216#usize := index_mut_back1 s5
+  let (s6, index_mut_back2) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output5
+        { start := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET,
+          «end» := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET }
+  let s7 ← lift common.deployment_domain.to_slice
+  let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7
+  have output6 : Std.Array U8 216#usize := index_mut_back2 s8
+  let (s9, index_mut_back3) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output6
+        { start := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET,
+          «end» := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET }
+  let a ← lift (core.num.U64.to_le_bytes common.anchor_sequence)
+  let s10 ← lift a.to_slice
+  let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10
+  have output7 : Std.Array U8 216#usize := index_mut_back3 s11
+  let (s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output7
+        { start := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET, «end» := pool_v1.payment_relation.NULLIFIER_OFFSET }
+  let a1 ← atomic_statement.encode_digest_canonical common.anchor_root
+  let s13 ← lift a1.to_slice
+  let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13
+  have output8 : Std.Array U8 216#usize := index_mut_back4 s14
+  let (s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output8
+        { start := pool_v1.payment_relation.NULLIFIER_OFFSET, «end» := pool_v1.payment_relation.ASSET_ID_OFFSET }
+  let a2 ← atomic_statement.encode_digest_canonical common.nullifier
+  let s16 ← lift a2.to_slice
+  let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16
+  have output9 : Std.Array U8 216#usize := index_mut_back5 s17
+  let (s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output9
+        { start := pool_v1.payment_relation.ASSET_ID_OFFSET,
+          «end» := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }
+  let a3 ← common.asset_id.to_le_bytes
+  let s19 ← lift a3.to_slice
+  let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19
+  ok (index_mut_back6 s20)
+NBP_generated/NBP_Inspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `atomic_statement.encode_digest_canonical.loop`

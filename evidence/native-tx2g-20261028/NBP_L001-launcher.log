@@ -1,0 +1,44 @@
+{"attempt": "NBP_L001", "exit_status": 1, "wall_seconds": 3.1690737759927288, "peak_rss_kib": "5071680", "swaps": "0", "print_axioms": []}
+def AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical : Std.Array U8 32#usize →
+  Result (core.result.Result (Std.Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError) :=
+fun bytes => do
+  let i ← bytes.index_usize 0#usize
+  let i1 ← bytes.index_usize 1#usize
+  let i2 ← bytes.index_usize 2#usize
+  let i3 ← bytes.index_usize 3#usize
+  let o ← aspis_core.field.M31.from_le_bytes (Array.make 4#usize [i, i1, i2, i3] ⋯)
+  let r ← core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let i4 ← bytes.i
+...
+ a ← lift (core.num.U64.to_le_bytes common.anchor_sequence)
+  let s10 ← lift a.to_slice
+  let s11 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 s10
+  have output7 : Std.Array U8 216#usize := index_mut_back3 s11
+  let (s12, index_mut_back4) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output7
+        { start := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET, «end» := pool_v1.payment_relation.NULLIFIER_OFFSET }
+  let a1 ← atomic_statement.encode_digest_canonical common.anchor_root
+  let s13 ← lift a1.to_slice
+  let s14 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 s13
+  have output8 : Std.Array U8 216#usize := index_mut_back4 s14
+  let (s15, index_mut_back5) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output8
+        { start := pool_v1.payment_relation.NULLIFIER_OFFSET, «end» := pool_v1.payment_relation.ASSET_ID_OFFSET }
+  let a2 ← atomic_statement.encode_digest_canonical common.nullifier
+  let s16 ← lift a2.to_slice
+  let s17 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 s16
+  have output9 : Std.Array U8 216#usize := index_mut_back5 s17
+  let (s18, index_mut_back6) ←
+    core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output9
+        { start := pool_v1.payment_relation.ASSET_ID_OFFSET,
+          «end» := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }
+  let a3 ← common.asset_id.to_le_bytes
+  let s19 ← lift a3.to_slice
+  let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 s19
+  ok (index_mut_back6 s20)
+NBP_generated/NBP_Inspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `atomic_statement.encode_digest_canonical.loop`
+
+Running as unit: run-r2c65ca7db2254b63a632d8444843d058.scope; invocation ID: a3ee00167ac04643bddb326f93144f90
