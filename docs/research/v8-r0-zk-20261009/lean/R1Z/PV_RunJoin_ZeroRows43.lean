@@ -50,11 +50,11 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
       obtain ⟨header,hlen,hbytes,olen⟩ := hp
       have hprefix : Ext out.val o.val 5 := by
         refine ⟨header,hlen,?_⟩
+        change o.val=out.val++header++[] at hbytes
         simpa only [List.append_nil] using hbytes
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
       apply PV_RunJoin_ResultPost41.bind
       intro zc1
-      simp only [lift,bind_tc_ok]
       have next := ih (Usize.wrapping_add i 1#usize) t o zc1
         (by rw [inc];omega) (by rw [olen];change out.length+5+0+5*n≤Usize.max;omega)
       have transformed := PV_RunJoin_PostMap43.mono next (q := Good out (n+1)) (by
