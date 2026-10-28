@@ -53,5 +53,16 @@
     "wrapper_source": "tools/pv-cb-20261026/source-proof/lib.rs",
     "wrapper_source_sha256": "464da07c75836405d929a54fdab69f2dc51b10c570d3454c405d78c9cb237448",
     "historical_command": "evidence/pv-cb-20261026/charon-source-op109-resume3-p6-canon-003/target.json; first complete helper attempt has no opacity, historical opaque variant only after helper proof"
+  },
+  "V213REF": {
+    "wrapper": "pub mod owned_wide_new {\n//! Safe P6 fallback for the current canonicalizing WideExact constructor.\n//! The parent crate is cfg(kani)-only; no source correspondence is assumed.\nuse aspis_core::field::{ct, CM31, M31, QM31};\n\n#[derive(Clone, Copy)]\npub struct CanonicalWide {\n    pub c0: QM31,\n    pub c1: QM31,\n}\n\npub fn canonical_qm31(x: QM31) -> QM31 {\n    QM31 {\n        c0: CM31 {\n            a: M31(ct::reduce64(x.c0.a.0 as u64)),\n            b: M31(ct::reduce64(x.c0.b.0 as u64)),\n        },\n        c1: CM31 {\n            a: M31(ct::reduce64(x.c1.a.0 as u64)),\n            b: M31(ct::reduce64(x.c1.b.0 as u64)),\n        },\n    }\n}\n\npub fn new(c0: QM31, c1: QM31) -> CanonicalWide {\n    CanonicalWide { c0: canonical_qm31(c0), c1: canonical_qm31(c1) }\n}\n\n}\n",
+    "root": "owned_wide_new::new",
+    "includes": [
+      "aspis_core::field",
+      "crate::owned_wide_new"
+    ],
+    "wrapper_source": "tools/pv-cb-20261026/step-proof/owned_wide_new.rs",
+    "wrapper_source_sha256": "7e1af7c472e0880dd29dfb4dd210f2bd9629004bef547b0a7e480154d22adbbf",
+    "historical_command": "evidence/pv-cb-20261026/charon-source-op109Ref-resume3-p6-001/target.json"
   }
 }
