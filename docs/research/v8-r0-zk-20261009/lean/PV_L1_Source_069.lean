@@ -276,7 +276,7 @@ theorem complete_result
   unfold produce prover.prove_masked_with_attempt
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
   repeat' first
-    | rfl
+    | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
     | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]

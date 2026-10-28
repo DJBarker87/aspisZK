@@ -65,7 +65,7 @@ theorem complete_result
   unfold produce host_sumcheck.prove_sumcheck_rounds
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_041.complete_result]
   repeat' first
-    | rfl
+    | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
     | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_041.complete_result]

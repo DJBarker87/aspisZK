@@ -414,7 +414,7 @@ theorem complete_result
   unfold produce host_semantic.build_with_helper_mode
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_043.complete_result,PV_L1_Source_044.complete_result,PV_L1_Source_045.complete_result,PV_L1_Source_047.complete_result,PV_L1_Source_049.complete_result,PV_L1_Source_051.complete_result,PV_L1_Source_052.complete_result,PV_L1_Source_055.complete_result,PV_L1_Source_056.complete_result,PV_L1_Source_066.complete_result]
   repeat' first
-    | rfl
+    | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
     | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_043.complete_result,PV_L1_Source_044.complete_result,PV_L1_Source_045.complete_result,PV_L1_Source_047.complete_result,PV_L1_Source_049.complete_result,PV_L1_Source_051.complete_result,PV_L1_Source_052.complete_result,PV_L1_Source_055.complete_result,PV_L1_Source_056.complete_result,PV_L1_Source_066.complete_result]

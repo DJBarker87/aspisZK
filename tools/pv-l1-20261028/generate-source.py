@@ -83,7 +83,7 @@ for k,n in enumerate(selected):
  code+='  unfold produce '+n+'\n'
  lemmas=['Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'
- code+='  '+simp+'\n  repeat\' first\n    | rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
+ code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
  code+='#print axioms complete_result\nend '+mod+'\n'
  path=D/(mod+'.lean')
  if mod in accepted:
