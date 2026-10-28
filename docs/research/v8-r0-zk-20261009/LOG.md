@@ -13815,3 +13815,24 @@ that cone, and an elaboration failure is a finding. runjoin37 (IDs 54400-54499) 
 SelectedMaskProbe modules and R1Z.ProverCommitOracle55, then continues the semantic-oracle Result
 identification, interpolation, rounds, commitments and serialization, and the runtime and decoder
 installation. Rows removed outright: 0. Privacy target not yet established.
+
+## D383 (Stream B) 2026-10-28 17:16 UTC: the historical selected-mask extraction cannot be reproduced; the semantic-oracle bridge is rebuilt on the closed V217 law instead
+
+runjoin37 (no Lean attempts used; no Kani; no source change) ran (h7) step 4: Charon succeeded on the
+frozen shipped source under the deployed features and release profile, but the retained pinned Aeneas
+(562e1f51…) exited before emission ("escaping reference output requires loan validation; structured
+Drop requires destructor semantics"), and a narrower extraction failed the same way. The historical
+AspisR1SelectedMaskProbe modules were produced by an older Aeneas binary (959659a6…) whose executable
+paths are gone; the lead searched the host and no executable with that hash survives. The historical
+ProverCommitOracle55 cone therefore cannot be rebuilt as it was, and no other extractor is to be
+promoted.
+
+New route (lead ruling for runjoin38): the prover candidate already closes V217 / op117
+state_only_selected_mask_value at its selected callback by the structural route (batch 3). runjoin38
+first identifies exactly which shipped function SelectedMaskProbe models; if it is op117 or another
+callback already closed on the candidate, it writes a new semantic-oracle bridge on that closed law,
+which is new proof work that replaces the historical cone rather than reconstructing it; otherwise it
+reports the function and proposes a route (P6 with a structural link, or a prover-local Drop-free copy
+under D187, which needs the ELF gate and a cost check) without changing crates. It then continues the
+semantic-oracle Result identification and the remaining body, runtime and decoder work. Rows removed
+outright: 0. Privacy target not yet established.
