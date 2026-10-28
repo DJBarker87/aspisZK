@@ -51,6 +51,7 @@ theorem complete {S F : Type} (step : Request → S → Option Nat × S)
     refine ⟨out,after,?_,?_,?_,?_,?_,?_,?_⟩
     · rw [fill,PV_RDEA_AppendNoGrowth.complete step shape b hi w hf]
       simp only [PV_RDEA_StatefulPath.bind]
+      change PV_RDEA_StatefulPath.bind (PV_RDEA_AppendExecution.append step shape b1 lo w1) (fun b w => fill step shape rest b w) = _
       rw [PV_RDEA_AppendNoGrowth.complete step shape b1 lo w1 hl]
       simp only [PV_RDEA_StatefulPath.bind]
       exact run
