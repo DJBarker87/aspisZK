@@ -4,7 +4,7 @@ namespace PV_L2C_RowEnumeration
 open Aeneas Aeneas.Std Result PV_L2C_VecRead
 open R1Z.ProverCommitBalanceRecursion PV_L2C_OwnedBalance
 
-def index (i : Fin 1024) : Usize := Usize.ofNatCore i.val (by have := i.isLt; have := bound1024; omega)
+def index (i : Fin 1024) : Usize := Usize.ofNatCore i.val (by have := i.isLt; scalar_tac)
 
 theorem index_val (i : Fin 1024) : (index i).val=i.val := by rfl
 #print axioms index_val
