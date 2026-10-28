@@ -52,6 +52,23 @@ theorem erase_bind {A B : Type} (ops : ExternalFuns)
 theorem erase_pure {A : Type} (ops : ExternalFuns) (a : A) :
     erase ops (Program.pure a : P A) = .ok a := rfl
 
+theorem erase_coreResult {A X Y : Type} (ops : ExternalFuns)
+    (r : core.result.Result X Y) (onOk : X → P A) (onErr : Y → P A) :
+    erase ops (match r with | .Ok x => onOk x | .Err e => onErr e) =
+      match r with | .Ok x => erase ops (onOk x) | .Err e => erase ops (onErr e) := by
+  cases r <;> rfl
+
+theorem erase_controlFlow {A X Y : Type} (ops : ExternalFuns)
+    (r : core.ops.control_flow.ControlFlow X Y) (onBreak : X → P A) (onContinue : Y → P A) :
+    erase ops (match r with | .Break x => onBreak x | .Continue y => onContinue y) =
+      match r with | .Break x => erase ops (onBreak x) | .Continue y => erase ops (onContinue y) := by
+  cases r <;> rfl
+
+theorem erase_ite {A : Type} (ops : ExternalFuns) (p : Prop) [Decidable p]
+    (yes no : P A) : erase ops (if p then yes else no) =
+      if p then erase ops yes else erase ops no := by
+  by_cases h : p <;> simp only [h,↓reduceIte]
+
 /-- The source-side dictionary is used at each syntactic call. This theorem
 asserts a faithful value erasure, never native purity of the call thunk. -/
 def resultOutcome {A : Type} : Aeneas.Std.Result A → Outcome Aeneas.Std.Error A
@@ -78,5 +95,8 @@ theorem source_value {A : Type} (ops : ExternalFuns) (p : P A) :
 #print axioms erase_thenDo
 #print axioms erase_bind
 #print axioms erase_pure
+#print axioms erase_coreResult
+#print axioms erase_controlFlow
+#print axioms erase_ite
 #print axioms source_value
 end R1Z.PV_W_SourceSyntax
