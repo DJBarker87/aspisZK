@@ -35,10 +35,7 @@ theorem transition (a b : Honest (K := K))
   have sa := PV_RunJoin_UniversalRecords22.snapshot a.val (success a)
   have sb := PV_RunJoin_UniversalRecords22.snapshot b.val (success b)
   have live := sa.trans (hs.trans sb.symm)
-  cases a.val.compiled.public_statement
-  cases b.val.compiled.public_statement
-  cases live
-  cases ha
-  rfl
+  exact congrArg₂ (fun s t =>
+    BuilderForestAdmissionPort.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.mk s t) live ha
 #print axioms transition
 end R1Z.PV_RunJoin_AfterstateAgreement32
