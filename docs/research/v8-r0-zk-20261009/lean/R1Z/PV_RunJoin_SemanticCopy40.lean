@@ -46,8 +46,7 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
       show ¬row≥14#u8 from (by change ¬row.val≥14;omega),decide_false,Bool.false_eq_true,↓reduceIte]
     change (do
       let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
-        logical {start:=Usize.wrapping_add at1 5#usize,
-          «end»:=Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size}
+        logical { start := (Usize.wrapping_add at1 5#usize), «end» := (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size) }
       let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 mid s1
       .ok (.Ok (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size),out2)) = _
     rw [hp]
