@@ -11,6 +11,7 @@ rel='crates/'+package+'/src/'+('NCH_query_core.rs' if core else 'NCH_sampler.rs'
 src='NCH_src/crates/aspis-r1-cost-probe/src/NCH_candidate.rs';local=Path('/private/tmp/NCH_candidate.rs');obj='/dev/null'
 
 import os
+if (E/'NCH_PAUSE').exists():raise SystemExit('paused before admission')
 active=E/'NCH_ACTIVE.json'
 try:
  fd=os.open(active,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
@@ -18,7 +19,6 @@ except FileExistsError:
  raise SystemExit('STOP own attempt active; recover its terminal receipt before launching: '+active.read_text())
 with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
 if (E/'NCH_BUDGET_STOP.json').exists() and json.loads((E/'NCH_BUDGET_STOP.json').read_text()).get('kani_exhausted',False):raise SystemExit('kani allocation exhausted: no kani launches')
-if (E/'NCH_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NCH_K[0-9][0-9][0-9].json')))<70
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False,stdin=None):

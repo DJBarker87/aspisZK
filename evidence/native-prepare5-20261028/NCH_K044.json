@@ -1,0 +1,64 @@
+{
+  "attempt": "NCH_K044",
+  "kind": "kani",
+  "module": "verifier::candidate::NCH_candidate::NCH_composed_value",
+  "sources": [
+    "NCH_src/crates/aspis-r1-cost-probe/src/NCH_candidate.rs",
+    "NCH_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NCH_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NCH_src/crates/aspis-core/src/r0_transcript.rs",
+    "NCH_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "NCH_src/Cargo.toml",
+    "NCH_src/Cargo.lock",
+    "NCH_src/KMX_stubs.rs",
+    "NCH_src/crates/aspis-r1-cost-probe/src/r1_wire.rs"
+  ],
+  "command": [
+    "python3",
+    "NCH_gate.py",
+    "NCH_K044.json"
+  ],
+  "timeout": 180,
+  "source_revision": "43fca8c2a1e355310308ecc7c66d080fc94bb41a",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-prepare5-20261028/NCH_tmp"
+  },
+  "deps_fingerprint": {
+    "scope": "frozen native source selected by NCH_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations"
+  },
+  "expected_time": "optimized Kani compilation then native call routing; no arithmetic elimination",
+  "reservation_retries": 0,
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare5-20261028/NCH_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare5-20261028/NCH_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NCH_candidate::NCH_composed_value",
+    "--output-format",
+    "terse"
+  ]
+}

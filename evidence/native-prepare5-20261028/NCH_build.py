@@ -6,6 +6,7 @@ import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-prepare5-20261028';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
 a,local,module=sys.argv[1:];local=Path(local);src='NCH_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-prepare-cache-20261028/'+module.replace('.','/')+'.olean'
 import os
+if (E/'NCH_PAUSE').exists():raise SystemExit('paused before admission')
 active=E/'NCH_ACTIVE.json'
 try:
  fd=os.open(active,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
@@ -13,7 +14,6 @@ except FileExistsError:
  raise SystemExit('STOP own attempt active; recover its terminal receipt before launching: '+active.read_text())
 with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
 if (E/'NCH_BUDGET_STOP.json').exists() and json.loads((E/'NCH_BUDGET_STOP.json').read_text()).get('lean_exhausted',False):raise SystemExit('lean allocation exhausted: no lean launches')
-if (E/'NCH_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NCH_L[0-9][0-9][0-9].json')))<60
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False):
