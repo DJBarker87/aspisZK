@@ -204,3 +204,19 @@ cgroup peak6696042496bytes,swap0;15480KiB is timeout-parent RSS, not aggregate.
 Native op133 association remains OPEN. The final Kani slot is reserved for
 both serializer variants after v3 extraction/finite preflights are green.
 No changes under crates/ or programs/ relative to5fa2cc6781; no keys touched.
+
+V3 source packet now checked:42569 retains the final opaque-width draft;
+42570 accepts complete_word after fixed U32 modulus/width unfolding.
+42571 accepts exact projection and source reduction;42572 accepts symbolic
+zero-word laws.42573 retains callback-lambda parse failure;42574 retains the
+262-field executable IR limit;42575 retains the missing section terminator.
+42576 accepts proof-only original-carrier installation, complete Result tags
+and all261 other-field frames.42577 executes all4 emission fixtures; byte-exact
+native comparison passes for1455/1427 bytes and both Error::Public cases.
+This is finite validation only, in fidelity226v3.json.51 Lean attempts charged.
+A transient SSH255 after staging did not launch the final Kani command;
+recovered counters/log absence and native source/gate hashes were checked.
+The paired final invocation is now submitted: same Source domain, same
+bounds/profile/array model and exact KMX definitions for positive and wrong-byte
+control. It selects two harnesses sequentially(-j1) within one invocation/scope.
+No PASS/native-link credit claimed.11 completed Kani invocations before it.
