@@ -85,477 +85,165 @@ theorem no_outer_failure (p : reference226.OwnedPublic) (i : Usize) :
       c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
     by_cases h0 : i ≥ 1455#usize
     · simp only [h0,↓reduceIte]
-      first
-        | exact ⟨_,rfl⟩
-        | apply PV_B3P_FieldResult226V3.no_outer_failure
-        | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-          · repeat first
-              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-            scalar_tac
-        | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-          · repeat first
-              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-            scalar_tac
-        | exfalso; scalar_tac
+      exact ⟨_,rfl⟩
     · simp only [h0,↓reduceIte]
       by_cases h1 : i = 0#usize
       · simp only [h1,↓reduceIte]
-        first
-          | exact ⟨_,rfl⟩
-          | apply PV_B3P_FieldResult226V3.no_outer_failure
-          | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-            · repeat first
-                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-              scalar_tac
-          | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-            · repeat first
-                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-              scalar_tac
-          | exfalso; scalar_tac
+        exact ⟨_,rfl⟩
       · simp only [h1,↓reduceIte]
         by_cases h2 : i < 33#usize
         · simp only [h2,↓reduceIte]
-          first
-            | exact ⟨_,rfl⟩
-            | apply PV_B3P_FieldResult226V3.no_outer_failure
-            | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-              · repeat first
-                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                scalar_tac
-            | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-              · repeat first
-                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                scalar_tac
-            | exfalso; scalar_tac
+          apply PV_B3P_DigestOutcome226V3.no_outer_failure
+          · repeat first
+              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+            scalar_tac
         · simp only [h2,↓reduceIte]
           by_cases h3 : i < 65#usize
           · simp only [h3,↓reduceIte]
-            first
-              | exact ⟨_,rfl⟩
-              | apply PV_B3P_FieldResult226V3.no_outer_failure
-              | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                · repeat first
-                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                  scalar_tac
-              | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                · repeat first
-                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                  scalar_tac
-              | exfalso; scalar_tac
+            apply PV_B3P_DigestOutcome226V3.no_outer_failure
+            · repeat first
+                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+              scalar_tac
           · simp only [h3,↓reduceIte]
             by_cases h4 : i < 69#usize
             · simp only [h4,↓reduceIte]
-              first
-                | exact ⟨_,rfl⟩
-                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                  · repeat first
-                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                    scalar_tac
-                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                  · repeat first
-                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                    scalar_tac
-                | exfalso; scalar_tac
+              exact PV_B3P_FieldResult226V3.no_outer_failure _ _
             · simp only [h4,↓reduceIte]
               by_cases h5 : i = 69#usize
               · simp only [h5,↓reduceIte]
-                first
-                  | exact ⟨_,rfl⟩
-                  | apply PV_B3P_FieldResult226V3.no_outer_failure
-                  | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                    · repeat first
-                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                      scalar_tac
-                  | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                    · repeat first
-                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                      scalar_tac
-                  | exfalso; scalar_tac
+                exact ⟨_,rfl⟩
               · simp only [h5,↓reduceIte]
                 by_cases h6 : i < 102#usize
                 · simp only [h6,↓reduceIte]
-                  first
-                    | exact ⟨_,rfl⟩
-                    | apply PV_B3P_FieldResult226V3.no_outer_failure
-                    | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                      · repeat first
-                          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                        scalar_tac
-                    | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                      · repeat first
-                          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                        scalar_tac
-                    | exfalso; scalar_tac
+                  apply PV_B3P_DigestOutcome226V3.no_outer_failure
+                  · repeat first
+                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                    scalar_tac
                 · simp only [h6,↓reduceIte]
                   by_cases h7 : i < 134#usize
                   · simp only [h7,↓reduceIte]
-                    first
-                      | exact ⟨_,rfl⟩
-                      | apply PV_B3P_FieldResult226V3.no_outer_failure
-                      | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                        · repeat first
-                            | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                            | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                          scalar_tac
-                      | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                        · repeat first
-                            | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                            | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                          scalar_tac
-                      | exfalso; scalar_tac
+                    apply PV_B3P_DigestOutcome226V3.no_outer_failure
+                    · repeat first
+                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                      scalar_tac
                   · simp only [h7,↓reduceIte]
                     by_cases h8 : i = 134#usize
                     · simp only [h8,↓reduceIte]
-                      first
-                        | exact ⟨_,rfl⟩
-                        | apply PV_B3P_FieldResult226V3.no_outer_failure
-                        | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                          · repeat first
-                              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                            scalar_tac
-                        | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                          · repeat first
-                              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                            scalar_tac
-                        | exfalso; scalar_tac
+                      exact ⟨_,rfl⟩
                     · simp only [h8,↓reduceIte]
                       by_cases h9 : i < 135#usize
                       · simp only [h9,↓reduceIte]
-                        first
-                          | exact ⟨_,rfl⟩
-                          | apply PV_B3P_FieldResult226V3.no_outer_failure
-                          | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                            · repeat first
-                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                              scalar_tac
-                          | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                            · repeat first
-                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                              scalar_tac
-                          | exfalso; scalar_tac
+                        exfalso; scalar_tac
                       · simp only [h9,↓reduceIte]
                         by_cases h10 : i < 143#usize
                         · simp only [h10,↓reduceIte]
-                          first
-                            | exact ⟨_,rfl⟩
-                            | apply PV_B3P_FieldResult226V3.no_outer_failure
-                            | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                              · repeat first
-                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                scalar_tac
-                            | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                              · repeat first
-                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                scalar_tac
-                            | exfalso; scalar_tac
+                          exact ⟨_,rfl⟩
                         · simp only [h10,↓reduceIte]
                           by_cases h11 : i < 783#usize
                           · simp only [h11,↓reduceIte]
-                            first
-                              | exact ⟨_,rfl⟩
-                              | apply PV_B3P_FieldResult226V3.no_outer_failure
-                              | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                · repeat first
-                                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                  scalar_tac
-                              | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                · repeat first
-                                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                  scalar_tac
-                              | exfalso; scalar_tac
+                            apply PV_B3P_FrontierOutcome226V3.no_outer_failure
+                            · repeat first
+                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                              scalar_tac
                           · simp only [h11,↓reduceIte]
                             by_cases h12 : i < 815#usize
                             · simp only [h12,↓reduceIte]
-                              first
-                                | exact ⟨_,rfl⟩
-                                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | exfalso; scalar_tac
+                              apply PV_B3P_DigestOutcome226V3.no_outer_failure
+                              · repeat first
+                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                                scalar_tac
                             · simp only [h12,↓reduceIte]
-                              first
-                                | exact ⟨_,rfl⟩
-                                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | exfalso; scalar_tac
+                              apply PV_B3P_FrontierOutcome226V3.no_outer_failure
+                              · repeat first
+                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                                scalar_tac
   | true =>
     simp only [hp,Bool.false_eq_true,↓reduceIte,lift,bind_tc_ok,
       c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
     by_cases h0 : i ≥ 1427#usize
     · simp only [h0,↓reduceIte]
-      first
-        | exact ⟨_,rfl⟩
-        | apply PV_B3P_FieldResult226V3.no_outer_failure
-        | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-          · repeat first
-              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-            scalar_tac
-        | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-          · repeat first
-              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-            scalar_tac
-        | exfalso; scalar_tac
+      exact ⟨_,rfl⟩
     · simp only [h0,↓reduceIte]
       by_cases h1 : i = 0#usize
       · simp only [h1,↓reduceIte]
-        first
-          | exact ⟨_,rfl⟩
-          | apply PV_B3P_FieldResult226V3.no_outer_failure
-          | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-            · repeat first
-                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-              scalar_tac
-          | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-            · repeat first
-                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-              scalar_tac
-          | exfalso; scalar_tac
+        exact ⟨_,rfl⟩
       · simp only [h1,↓reduceIte]
         by_cases h2 : i < 33#usize
         · simp only [h2,↓reduceIte]
-          first
-            | exact ⟨_,rfl⟩
-            | apply PV_B3P_FieldResult226V3.no_outer_failure
-            | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-              · repeat first
-                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                scalar_tac
-            | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-              · repeat first
-                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                scalar_tac
-            | exfalso; scalar_tac
+          apply PV_B3P_DigestOutcome226V3.no_outer_failure
+          · repeat first
+              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+            scalar_tac
         · simp only [h2,↓reduceIte]
           by_cases h3 : i < 65#usize
           · simp only [h3,↓reduceIte]
-            first
-              | exact ⟨_,rfl⟩
-              | apply PV_B3P_FieldResult226V3.no_outer_failure
-              | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                · repeat first
-                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                  scalar_tac
-              | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                · repeat first
-                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                  scalar_tac
-              | exfalso; scalar_tac
+            apply PV_B3P_DigestOutcome226V3.no_outer_failure
+            · repeat first
+                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+              scalar_tac
           · simp only [h3,↓reduceIte]
             by_cases h4 : i < 69#usize
             · simp only [h4,↓reduceIte]
-              first
-                | exact ⟨_,rfl⟩
-                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                  · repeat first
-                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                    scalar_tac
-                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                  · repeat first
-                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                    scalar_tac
-                | exfalso; scalar_tac
+              exact PV_B3P_FieldResult226V3.no_outer_failure _ _
             · simp only [h4,↓reduceIte]
               by_cases h5 : i = 69#usize
               · simp only [h5,↓reduceIte]
-                first
-                  | exact ⟨_,rfl⟩
-                  | apply PV_B3P_FieldResult226V3.no_outer_failure
-                  | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                    · repeat first
-                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                      scalar_tac
-                  | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                    · repeat first
-                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                      scalar_tac
-                  | exfalso; scalar_tac
+                exact ⟨_,rfl⟩
               · simp only [h5,↓reduceIte]
                 by_cases h6 : i < 70#usize
                 · simp only [h6,↓reduceIte]
-                  first
-                    | exact ⟨_,rfl⟩
-                    | apply PV_B3P_FieldResult226V3.no_outer_failure
-                    | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                      · repeat first
-                          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                        scalar_tac
-                    | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                      · repeat first
-                          | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                          | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                        scalar_tac
-                    | exfalso; scalar_tac
+                  exfalso; scalar_tac
                 · simp only [h6,↓reduceIte]
                   by_cases h7 : i < 102#usize
                   · simp only [h7,↓reduceIte]
-                    first
-                      | exact ⟨_,rfl⟩
-                      | apply PV_B3P_FieldResult226V3.no_outer_failure
-                      | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                        · repeat first
-                            | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                            | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                          scalar_tac
-                      | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                        · repeat first
-                            | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                            | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                          scalar_tac
-                      | exfalso; scalar_tac
+                    apply PV_B3P_DigestOutcome226V3.no_outer_failure
+                    · repeat first
+                        | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                        | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                      scalar_tac
                   · simp only [h7,↓reduceIte]
                     by_cases h8 : i = 102#usize
                     · simp only [h8,↓reduceIte]
-                      first
-                        | exact ⟨_,rfl⟩
-                        | apply PV_B3P_FieldResult226V3.no_outer_failure
-                        | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                          · repeat first
-                              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                            scalar_tac
-                        | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                          · repeat first
-                              | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                              | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                            scalar_tac
-                        | exfalso; scalar_tac
+                      exact ⟨_,rfl⟩
                     · simp only [h8,↓reduceIte]
                       by_cases h9 : i < 107#usize
                       · simp only [h9,↓reduceIte]
-                        first
-                          | exact ⟨_,rfl⟩
-                          | apply PV_B3P_FieldResult226V3.no_outer_failure
-                          | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                            · repeat first
-                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                              scalar_tac
-                          | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                            · repeat first
-                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                              scalar_tac
-                          | exfalso; scalar_tac
+                        exact PV_B3P_FieldResult226V3.no_outer_failure _ _
                       · simp only [h9,↓reduceIte]
                         by_cases h10 : i < 115#usize
                         · simp only [h10,↓reduceIte]
-                          first
-                            | exact ⟨_,rfl⟩
-                            | apply PV_B3P_FieldResult226V3.no_outer_failure
-                            | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                              · repeat first
-                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                scalar_tac
-                            | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                              · repeat first
-                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                scalar_tac
-                            | exfalso; scalar_tac
+                          exact ⟨_,rfl⟩
                         · simp only [h10,↓reduceIte]
                           by_cases h11 : i < 755#usize
                           · simp only [h11,↓reduceIte]
-                            first
-                              | exact ⟨_,rfl⟩
-                              | apply PV_B3P_FieldResult226V3.no_outer_failure
-                              | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                · repeat first
-                                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                  scalar_tac
-                              | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                · repeat first
-                                    | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                    | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                  scalar_tac
-                              | exfalso; scalar_tac
+                            apply PV_B3P_FrontierOutcome226V3.no_outer_failure
+                            · repeat first
+                                | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                              scalar_tac
                           · simp only [h11,↓reduceIte]
                             by_cases h12 : i < 787#usize
                             · simp only [h12,↓reduceIte]
-                              first
-                                | exact ⟨_,rfl⟩
-                                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | exfalso; scalar_tac
+                              apply PV_B3P_DigestOutcome226V3.no_outer_failure
+                              · repeat first
+                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                                scalar_tac
                             · simp only [h12,↓reduceIte]
-                              first
-                                | exact ⟨_,rfl⟩
-                                | apply PV_B3P_FieldResult226V3.no_outer_failure
-                                | apply PV_B3P_DigestOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | apply PV_B3P_FrontierOutcome226V3.no_outer_failure
-                                  · repeat first
-                                      | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
-                                      | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
-                                    scalar_tac
-                                | exfalso; scalar_tac
+                              apply PV_B3P_FrontierOutcome226V3.no_outer_failure
+                              · repeat first
+                                  | rw [PV_B3P_NestedOffset226V3.sub_sub_value _ _ _ (by scalar_tac)]
+                                  | rw [PV_B3P_Offset226V3.sub_value _ _ (by scalar_tac)]
+                                scalar_tac
 
 #print axioms no_outer_failure
 end PV_B3P_ByteOutcome226V3
