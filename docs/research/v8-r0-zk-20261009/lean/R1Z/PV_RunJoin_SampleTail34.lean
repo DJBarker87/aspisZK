@@ -28,6 +28,7 @@ theorem exact_tail (ops : ExternalFuns) (n : Nat) (p : Nat → Raw)
     have inc := increment off (by omega)
     unfold host_sumcheck.evaluate_assignment_loop
     rw [ProverRw19LoopBind.loop_bind]
+    dsimp only
     rw [step ops p r rem a off hr hrem ho]
     simp only [bind_tc_ok]
     change @host_sumcheck.evaluate_assignment_loop _ (ProverRwDictionaryScalar.selected ops)
