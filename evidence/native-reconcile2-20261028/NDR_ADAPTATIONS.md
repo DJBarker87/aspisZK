@@ -50,3 +50,17 @@ No theorem conclusion or non-observer quantifier is deliberately changed.
 - `S1SemanticPhaseV1` → `RPz7_S1SemanticPhaseV1`: Historical alias `verifier.Phase := FirstCaller.Phase` moves to retained `RPz7_PhaseIso.Phase`; no producer carrier equality.
 - `S1SemanticPrefixModelV1` → `RPz7_S1SemanticPrefixModelV1`: Observer annotation: `Option (verifier.Phase → Result Unit)` → `Option (RPz7_PhaseIso.Phase → Result Unit)`; other bodies as inventoried by NDO_SOURCE_DIFFS.txt.
 - `S1SemanticVerifyReachabilityV1` → `RPz7_S1SemanticVerifyReachabilityV1`: Observer annotation: `Option (verifier.Phase → Result Unit)` → `Option (RPz7_PhaseIso.Phase → Result Unit)`; other bodies as inventoried by NDO_SOURCE_DIFFS.txt.
+
+## NDO_JGi_ClaimArrays.source and NDO_JHm_SemanticOperands.source
+
+Both theorem statements remain byte-identical. In each proof's application of
+JGi_FinishFields.source, the inferred/explicit `none` observer becomes
+`RPz7_PhaseIso.observerToFirst none`; the existing finish premise is supplied by
+`by simpa only [NDO_PhaseIdentity.noneToFirst] using finish` (respectively
+`finished`). This is the release None specialization, without a producer
+execution transport assumption. These edits await dependency-ordered compilation.
+
+NDO_JHk_QueryPowerStep's observer remains the emitted producer carrier: its
+query-values theorem calls the producer API directly. NDO_JGy_QueryFrontier and
+NDO_JHc_WriterContinuation use producer marks and None directly; no semantic
+FinishModel boundary occurs there and their statements/bodies remain unchanged.

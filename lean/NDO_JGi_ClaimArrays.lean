@@ -38,7 +38,9 @@ theorem source {H : Type} (D : aspis_core.Digest32 H) (expanded : Slice U8) (pre
     (∀ p : Fin 3,RowCanonical (sem.claims.val[p.val]'(by have h:=sem.claims.property;change sem.claims.val.length=3 at h;omega))) ∧
       RowCanonical sem.extra ∧ RowCanonical sem.before_z1 := by
   obtain ⟨r25,r26,claim,read25,extra,read26,before⟩ := JGi_FinishFields.source
-    AspisS1ExtractedRoundChildren.children JGe_Boundaries.value D JFs_PublicSerialization.value pre _ _ none sem finish
+    AspisS1ExtractedRoundChildren.children JGe_Boundaries.value D JFs_PublicSerialization.value pre _ _
+      (RPz7_PhaseIso.observerToFirst none) sem
+      (by simpa only [NDO_PhaseIdentity.noneToFirst] using finish)
   have concrete := JFu_Claims.source expanded pre expand parse
   have same : sem.claims=JFu_ClaimsData.claims := core.result.Result.Ok.inj (Result.ok.inj (claim.symm.trans concrete))
   refine ⟨?_,decoded _ _ _ extra,decoded _ _ _ before⟩
