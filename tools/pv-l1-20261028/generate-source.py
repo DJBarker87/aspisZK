@@ -85,6 +85,9 @@ for k,n in enumerate(selected):
  simp='simp only ['+','.join(lemmas)+']'
  code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
  code+="  all_goals\n    cases value\n    rfl\n"
+ if n=='host_semantic.zc_rows':
+  proof_start=code.index(' := by\n',code.index('theorem complete_result'))
+  code=code[:proof_start]+" := by\n  unfold produce\n  conv_rhs => unfold host_semantic.zc_rows\n  simp only [erase_bind,erase_observe,erase_lift,Aeneas.Std.bind_tc_ok]\n  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n  intro zero hz\n  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n  rintro ⟨tr1,bs1,zc1,pending⟩ hr\n  cases pending <;> rfl\n"
  code+='#print axioms complete_result\nend '+mod+'\n'
  path=D/(mod+'.lean')
  if mod in accepted:

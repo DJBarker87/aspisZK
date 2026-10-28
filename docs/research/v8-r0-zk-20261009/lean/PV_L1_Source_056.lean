@@ -32,14 +32,11 @@ theorem complete_result
   erase (produce (H := H) aspis_coredigestDigest32Inst transcript bytes) = host_semantic.zc_rows (H := H) aspis_coredigestDigest32Inst transcript bytes := by
   unfold produce
   conv_rhs => unfold host_semantic.zc_rows
-  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
-  repeat' first
-    | with_reducible rfl
-    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-      intro value called
-    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
-  all_goals
-    cases value
-    rfl
+  simp only [erase_bind,erase_observe,erase_lift,Aeneas.Std.bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro zero hz
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨tr1,bs1,zc1,pending⟩ hr
+  cases pending <;> rfl
 #print axioms complete_result
 end PV_L1_Source_056
