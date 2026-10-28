@@ -1,0 +1,24 @@
+START 54031 R1Z.PV_RunJoin_MergeLoop35
+DONE 54031 R1Z.PV_RunJoin_MergeLoop35 exit 1 wall 1.63 RSS 4403781632
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MergeLoop35.lean:12:53: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+inst✝ : ExternalTypes
+i : Usize
+small : ↑i < 14336
+⊢ ↑(i.wrapping_add 1#usize) = ↑i + 1
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MergeLoop35.lean:39:6: error: Application type mismatch: The argument
+  slice_values count ?m.149 i hi
+has type
+  (ProverCommitArray49.array count ?m.149).to_slice.index_usize i = ok (?m.149 ↑i)
+but is expected to have type
+  Slice.index_usize ?m.144 i = ok (core.result.Result.Ok (es ↑i))
+in the application
+  PV_RunJoin_MergeStep35.success ops ?m.144 a count i p hi positive (samples (↑i) hi) (es ↑i)
+    (slice_values count ?m.149 i hi)
+'R1Z.PV_RunJoin_MergeLoop35.increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MergeLoop35.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

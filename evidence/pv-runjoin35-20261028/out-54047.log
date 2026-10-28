@@ -1,0 +1,86 @@
+START 54047 R1Z.PV_RunJoin_WorkCallback35
+DONE 54047 R1Z.PV_RunJoin_WorkCallback35 exit 1 wall 1.64 RSS 4393152512
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WorkCallback35.lean:26:87: error: unsolved goals
+case ok
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracle : host_sumcheck.Oracle F
+i : Usize
+f : F
+p : Std.Array aspis_core.field.QM31 10#usize
+r a : Usize
+v✝ : core.result.Result aspis_core.field.QM31 r1_wire.Error
+h : host_sumcheck.evaluate_assignment oracle f p r a i = ok v✝
+⊢ (do
+      let x ←
+        let (t, a, i, i1) := (f, p, r, a)
+          host_sumcheck.evaluate_assignment oracle t a i i1 i
+      let (r, _) := (x, f, p, r, a)
+        ok r) =
+    ok v✝
+
+case fail
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracle : host_sumcheck.Oracle F
+i : Usize
+f : F
+p : Std.Array aspis_core.field.QM31 10#usize
+r a : Usize
+e✝ : Error
+h : host_sumcheck.evaluate_assignment oracle f p r a i = fail e✝
+⊢ (do
+      let x ←
+        let (t, a, i, i1) := (f, p, r, a)
+          host_sumcheck.evaluate_assignment oracle t a i i1 i
+      let (r, _) := (x, f, p, r, a)
+        ok r) =
+    fail e✝
+
+case div
+inst✝ : ExternalTypes
+ops : ExternalFuns
+H F : Type
+digest : aspis_core.digest.Digest32 H
+oracle : host_sumcheck.Oracle F
+i : Usize
+f : F
+p : Std.Array aspis_core.field.QM31 10#usize
+r a : Usize
+h : host_sumcheck.evaluate_assignment oracle f p r a i = div
+⊢ (do
+      let x ←
+        let (t, a, i, i1) := (f, p, r, a)
+          host_sumcheck.evaluate_assignment oracle t a i i1 i
+      let (r, _) := (x, f, p, r, a)
+        ok r) =
+    div
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WorkCallback35.lean:35:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok, ̲bind_tc_fail, ̲bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WorkCallback35.lean:35:28: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WorkCallback35.lean:35:41: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵[̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_WorkCallback35.call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WorkCallback35.call_mut' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WorkCallback35.call_once' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,31 @@
+START 54042 R1Z.PV_RunJoin_MergeComplete35
+DONE 54042 R1Z.PV_RunJoin_MergeComplete35 exit 1 wall 1.64 RSS 4396171264
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MergeComplete35.lean:9:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_MergeComplete35.repeat_constant`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MergeComplete35.lean:41:98: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+count a : Usize
+es : ℕ → Q
+small : ↑count ≤ 14336
+positive : ↑a ≠ 0
+samples : ∀ j < ↑count, j / ↑a < 28
+he : ∀ j < ↑count, canonical (es j)
+out : ℕ → Q
+hout :
+  host_sumcheck.merge_evaluations_loop (ProverCommitArray49.array count fun j => core.result.Result.Ok (es j)).to_slice
+      a (array fun x => source ProverCommitSubfieldOps47.zero) count 0#usize =
+    ok (array out, none)
+hc : ∀ k < 28, canonical (out k)
+hm :
+  (fun k => value (out k)) =
+    fold (↑count) (fun k => value (source ProverCommitSubfieldOps47.zero)) (fun j => value (es j)) ↑a ↑0#usize
+⊢ ↑(Usize.ofNatCore ↑count ⋯) = ↑count
+'R1Z.PV_RunJoin_MergeComplete35.repeat_constant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MergeComplete35.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MergeComplete35.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
