@@ -89,7 +89,7 @@ theorem active_zero {n : Nat} (active : Fin n → Bool) (d : Fin n) (random : Fi
 /-- N2's two native rejection predicates, with no zero-sum hypothesis. -/
 theorem guard_outcomes {n : Nat} (active : Fin n → Bool) (d : Fin n) (random : Fin n → Q)
     (hc : ∀ i, Canonical (random i)) (hd : active d=false) :
-    (∀ i, active i && decide (rebalance active d (sample active d random) i≠zero)=false) ∧
+    (∀ i, (active i && decide (rebalance active d (sample active d random) i≠zero))=false) ∧
     decide (tableSum (inactiveTable active (rebalance active d (sample active d random)))≠zero)=false := by
   constructor
   · intro i
