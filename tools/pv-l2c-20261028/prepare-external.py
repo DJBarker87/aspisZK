@@ -12,13 +12,15 @@ for r in rows:
  assert p.is_file(),(r['module'],str(p))
  assert hashlib.sha256(p.read_bytes()).hexdigest()==r['object_sha256'],r['module']
  companions=[]
- if added:
-  for suffix in ['.olean','.olean.private','.olean.server','.ilean']:
+ if True:
+  for suffix in ['.olean','.olean.private','.olean.server','.ilean','.ir']:
    q=pathlib.Path(str(p)[:-6]+suffix)
    if not q.is_file():continue
    dest=H/'objects'/(rel[:-6]+suffix);dest.parent.mkdir(parents=True,exist_ok=True)
-   assert not dest.exists() and not dest.is_symlink(),str(dest)
-   dest.symlink_to(q.resolve());companions.append(dict(path=str(dest),retained=str(q.resolve()),sha256=hashlib.sha256(q.read_bytes()).hexdigest()))
+   if dest.exists() or dest.is_symlink():
+    assert dest.is_file() and hashlib.sha256(dest.read_bytes()).digest()==hashlib.sha256(q.read_bytes()).digest(),str(dest)
+   else:dest.symlink_to(q.resolve())
+   companions.append(dict(path=str(dest),retained=str(q.resolve()),sha256=hashlib.sha256(q.read_bytes()).hexdigest()))
  out.append(dict(module=r['module'],added=added,object_sha256=r['object_sha256'],path=str(p),companions=companions))
 # A second selection pass has NO fallback. Every manifest module is now selectable.
 for r in rows:
