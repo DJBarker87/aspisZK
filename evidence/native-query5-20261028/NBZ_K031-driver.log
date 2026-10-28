@@ -1,0 +1,71 @@
+{"attempt": "NBZ_G031", "exit_status": 0, "wall_seconds": 0.39462271402589977, "peak_rss_kib": "100460", "swaps": "0"}
+{"attempt": "NBZ_K031", "exit_status": 1, "wall_seconds": 16.252671517955605, "peak_rss_kib": "295488", "swaps": "0"}
+assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: value assigned to `power` is never read
+   --> crates/aspis-r1-cost-probe/src/NBO_native.rs:136:16
+    |
+136 |  let mut power=K::ZERO;let returned_power=NBO_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
+    |                ^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `power` is never read
+   --> crates/aspis-r1-cost-probe/src/NBW_native.rs:166:16
+    |
+166 |  let mut power=K::ZERO;let returned_power=NBW_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
+    |                ^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `raw` is never read
+    --> crates/aspis-r1-cost-probe/src/NBW_native.rs:1113:40
+     |
+1113 |  let q=NBW_any_q();let mut raw:[u64;4]=kani::any();let k:usize=kani::any();kani::assume(k<4);
+     |                                        ^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: value assigned to `power` is never read
+   --> crates/aspis-r1-cost-probe/src/NBZ_native.rs:166:16
+    |
+166 |  let mut power=K::ZERO;let returned_power=NBZ_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
+    |                ^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `raw` is never read
+    --> crates/aspis-r1-cost-probe/src/NBZ_native.rs:1113:40
+     |
+1113 |  let q=NBZ_any_q();let mut raw:[u64;4]=kani::any();let k:usize=kani::any();kani::assume(k<4);
+     |                                        ^^^^^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+warning: value assigned to `power` is never read
+    --> crates/aspis-r1-cost-probe/src/NBZ_native.rs:1306:16
+     |
+1306 |  let mut power=K::ZERO;let returned_power=NBZ_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
+     |                ^^^^^^^
+     |
+     = help: maybe it is overwritten before being read?
+
+For more information about this error, try `rustc --explain E0428`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 16 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
