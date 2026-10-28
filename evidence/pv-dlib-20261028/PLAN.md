@@ -138,3 +138,10 @@ ROWS6 statement. The active padding-05 gate checks compression events/count/
 cursor only; it does not credit retained-buffer equality. Corrected owned
 reference is padding-retained-reference.rs, aligned with
 PV_CBL_PadContentSource.source and PV_CBL_PaddingModel.retained.
+
+Kani padding-05 passed: 0/495 failed, five unreachable, wall 2:41.72,
+peak GNU-time RSS 2,498,496 KiB, swap 0. Scope: event bytes/count and cursor
+reset only. Final planned Kani run combines corrected retained-buffer equality,
+Digest/FixedOutput forwarding and left/right 28/32-byte Ct truncation with
+arbitrary output seeds. All callbacks are real generic trait implementations,
+not stubs; no SHA compression or field chain is executed.
