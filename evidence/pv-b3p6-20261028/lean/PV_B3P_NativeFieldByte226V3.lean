@@ -32,19 +32,23 @@ theorem complete_result (v : U32) (j : Usize) (hj : j.val < 4) :
     rcases hcases with hj0 | hj1 | hj2 | hj3
     · have hje : j = 0#usize := by apply UScalar.eq_of_val_eq; exact hj0
       subst j
-      simpa only [← PV_B3P_EndianVerified226V3.word_bytes,← he,
+      have hv : (0#usize).val = 0 := rfl
+      simpa only [hv,← PV_B3P_EndianVerified226V3.word_bytes,← he,
         List.getElem_cons_zero,List.getElem_cons_succ] using h0
     · have hje : j = 1#usize := by apply UScalar.eq_of_val_eq; exact hj1
       subst j
-      simpa only [← PV_B3P_EndianVerified226V3.word_bytes,← he,
+      have hv : (1#usize).val = 1 := rfl
+      simpa only [hv,← PV_B3P_EndianVerified226V3.word_bytes,← he,
         List.getElem_cons_zero,List.getElem_cons_succ] using h1
     · have hje : j = 2#usize := by apply UScalar.eq_of_val_eq; exact hj2
       subst j
-      simpa only [← PV_B3P_EndianVerified226V3.word_bytes,← he,
+      have hv : (2#usize).val = 2 := rfl
+      simpa only [hv,← PV_B3P_EndianVerified226V3.word_bytes,← he,
         List.getElem_cons_zero,List.getElem_cons_succ] using h2
     · have hje : j = 3#usize := by apply UScalar.eq_of_val_eq; exact hj3
       subst j
-      simpa only [← PV_B3P_EndianVerified226V3.word_bytes,← he,
+      have hv : (3#usize).val = 3 := rfl
+      simpa only [hv,← PV_B3P_EndianVerified226V3.word_bytes,← he,
         List.getElem_cons_zero,List.getElem_cons_succ] using h3
   · rw [if_neg h]
     exact PV_B3P_ByteScalar226V3.field_reject v j h
