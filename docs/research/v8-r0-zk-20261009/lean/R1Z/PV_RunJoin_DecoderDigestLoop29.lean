@@ -5,6 +5,7 @@ namespace R1Z.PV_RunJoin_DecoderDigestLoop29
 open Aeneas Aeneas.Std Result ControlFlow R0Z.WriterRefine
 open PV_RunJoin_DecoderDigest29
 open AspisR1TerminalDecoder.pool_v1.pair_tree_profile
+local instance (p : Prop) : Decidable p := Classical.propDecidable p
 
 def Tail (d : Array U32 8#usize) (n : Nat) : Prop :=
   ∀ j, n ≤ j → j < 8 → d.val[j]!.val < 2147483647
