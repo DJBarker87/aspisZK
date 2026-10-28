@@ -17,17 +17,17 @@ theorem array_point (p : Nat → Raw) :
     PV_RunJoin_FieldData34.value_source]
 
 /-- The actual caller's constructed nominal point decodes to the existing
-security-model roundPoint, at the same challenge prefix and assignment.
-The challenge-prefix equation remains explicit; no source-oracle equation
+security-model roundPoint, at the same challenge hprefix and assignment.
+The challenge-hprefix equation remains explicit; no source-oracle equation
 is introduced as a hidden model assumption. -/
 theorem round_point (ch : R0Z.HonestView.Challenges QM31Exact) (p : Nat → Raw) (r : Fin 10)
-    (prefix : ∀ k : Fin 10, k.val<r.val → decode (p k.val)=R0Z.HonestView.alpha ch k)
+    (hprefix : ∀ k : Fin 10, k.val<r.val → decode (p k.val)=R0Z.HonestView.alpha ch k)
     (a : Fin (2^(9-r.val))) (word : Usize) (hw : word.val=a.val) (sample : U32) :
     point (PV_RunJoin_PointArray34.array (ProverCommitSamplePoint49.point p r.val word sample)) =
       R0Z.HonestView.roundPoint ch r (sample.val : QM31Exact)
         (ProverCommitBooleanEnum49.tail (9-r.val) a) := by
   rw [array_point]
-  exact ProverCommitSampleModel49.point_model ch p r prefix a word hw sample
+  exact ProverCommitSampleModel49.point_model ch p r hprefix a word hw sample
 
 variable [ExternalTypes]
 /-- Actual complete oracle invocation plus its decoded coordinates. The
@@ -36,7 +36,7 @@ theorem evaluated_point (ops : ExternalFuns) {F : Type} (oracleInst : host_sumch
     (oracle : F) (ch : R0Z.HonestView.Challenges QM31Exact) (p : Nat → Raw)
     (r : Fin 10) (rw : Usize) (hrw : rw.val=r.val)
     (assignments i : Usize) (positive : assignments.val≠0)
-    (prefix : ∀ k : Fin 10, k.val<r.val → decode (p k.val)=R0Z.HonestView.alpha ch k)
+    (hprefix : ∀ k : Fin 10, k.val<r.val → decode (p k.val)=R0Z.HonestView.alpha ch k)
     (assignment_bound : i.val%assignments.val<2^(9-r.val)) :
     ∃ (sample assignment : Usize) (a : Fin (2^(9-r.val))),
       sample.val=i.val/assignments.val ∧ assignment.val=i.val%assignments.val ∧ assignment.val=a.val ∧
@@ -51,7 +51,7 @@ theorem evaluated_point (ops : ExternalFuns) {F : Type} (oracleInst : host_sumch
   obtain ⟨sample,assignment,hs,ha,he⟩ := PV_RunJoin_SampleSource34.evaluate ops oracleInst oracle p rw
     assignments i (by rw [hrw];exact r.isLt) positive
   let a : Fin (2^(9-r.val)) := ⟨assignment.val,by rw [ha];exact assignment_bound⟩
-  refine ⟨sample,assignment,a,hs,ha,rfl,?_,round_point ch p r prefix a assignment rfl _⟩
+  refine ⟨sample,assignment,a,hs,ha,rfl,?_,round_point ch p r hprefix a assignment rfl _⟩
   simpa only [hrw] using he
 
 #print axioms point
