@@ -24,6 +24,7 @@ theorem canonical_result {S : Type} (next : S → Result (word × S)) (fuel : Na
     rw [scalar] at h
     pv_peel h with pair hp
     rcases pair with ⟨raw,after⟩
+    dsimp only at h
     split at h
     · cases h;assumption
     · exact ih after h
