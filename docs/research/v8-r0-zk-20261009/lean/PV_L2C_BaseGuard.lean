@@ -2,18 +2,18 @@ import PV_L2C_DecodeRange
 set_option autoImplicit false
 namespace PV_L2C_BaseGuard
 open Aeneas Aeneas.Std Result
-inductive Error where
-  | public
+inductive Failure where
+  | publicError
 
 /-- Ascending native row scan; every first error is retained. `fuel` is the
 remaining known row bound, not an added random or semantic assumption. -/
-def loop : Nat → Nat → List U32 → Except Error Unit
+def loop : Nat → Nat → List U32 → Except Failure Unit
   | 0,_,_ => .ok ()
   | n+1,start,values =>
-    if 2147483647 ≤ values[start]!.val then .error .public else loop n (start+1) values
+    if 2147483647 ≤ values[start]!.val then .error .publicError else loop n (start+1) values
 
-def check (values : List U32) : Except Error Unit :=
-  if values.length ≠ 1024 then .error .public else loop 1024 0 values
+def check (values : List U32) : Except Failure Unit :=
+  if values.length ≠ 1024 then .error .publicError else loop 1024 0 values
 
 theorem loop_ok (n start : Nat) (values : List U32)
     (hc : ∀ j, start ≤ j → j < start+n → values[j]!.val < 2147483647) :
@@ -32,6 +32,6 @@ theorem expected (values : List U32) (hl : values.length = 1024)
 #print axioms expected
 
 theorem rejects (values : List U32) (hl : values.length ≠ 1024) :
-    check values = .error .public := by rw [check,if_pos hl]
+    check values = .error .publicError := by rw [check,if_pos hl]
 #print axioms rejects
 end PV_L2C_BaseGuard
