@@ -15,6 +15,7 @@ for version in ['nightly-2026-06-01','1.94.1']:
   'iter/range.rs':[('trusted_back','fn spec_next_back(&mut self) -> Option<T>','impl<T: TrustedStep> RangeIteratorImpl'),('unsigned_back','unsafe fn backward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods'),('unsigned_forward','unsafe fn forward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods')],
   'iter/adapters/rev.rs':[('rev_next','fn next(&mut self) -> Option<I::Item>',''),('rev_new','fn new(iter: T) -> Rev<T>','')],
   'iter/traits/iterator.rs':[('rev','fn rev(self) -> Rev<Self>','')],
+  'iter/traits/collect.rs':[('identity_into_iter','fn into_iter(self) -> I','IntoIterator for I')],
  }.items():
   p=root/file;s=p.read_text();r['files'][file]=dict(path=str(p),sha256=sha(p.read_bytes()))
   for key,marker,after in items:
