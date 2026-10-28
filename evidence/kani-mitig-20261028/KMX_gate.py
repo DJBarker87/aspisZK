@@ -25,7 +25,7 @@ for p in m['packages']:
 out=dict(lock_before=before,new_packages=new,edge_errors=edges,metadata_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),resolved_packages=len(actual),frozen_packages=len(frozen),allowed=not new and not edges)
 (b/(a+'-graph.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out),flush=True)
 assert out['allowed']
-cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(s/'crates/aspis-r1-cost-probe/Cargo.toml'),'--target-dir',str(b/'KMX_target'),'--lib','-j','1','-Z','unstable-options','--harness-timeout','90s','--harness',harness,'--output-format','regular']+sys.argv[3:]
+cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(s/'crates/aspis-r1-cost-probe/Cargo.toml'),'--target-dir',str(b/'KMX_target'),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular']+sys.argv[3:]
 print(json.dumps(dict(command=cmd)),flush=True)
 r=subprocess.run(cmd,env=os.environ)
 after=hashlib.sha256(lock.read_bytes()).hexdigest();out.update(lock_after=after,unchanged=before==after,kani_exit=r.returncode)
