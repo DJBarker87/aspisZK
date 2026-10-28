@@ -27,16 +27,35 @@ theorem path_block (c b : Nat) (hb : b < 6) :
   simp only [number]
   simp (disch := omega) only [pick_path,decide_eq_true_eq]
   simp [PV_B3P_MaskShape132.localUsed,Nat.add_mod,Nat.mul_mod]
-  by_cases h : c ≤ 8 <;> simp_all
+  by_cases h : c ≤ 8 <;> simp_all (disch := omega)
 
 theorem value_block (c : Nat) :
     number pick c 1008 16 =
       if c < 2 then 3 else if c < 3 then 4 else if c < 10 then 5 else if c ≤ 10 then 6 else 16 := by
-  simp only [number]
-  simp (disch := omega) only [pick_value,decide_eq_true_eq]
-  simp [PV_B3P_MaskModel132.valueUsed]
-  by_cases h0 : c < 2 <;> by_cases h1 : c < 3 <;>
-    by_cases h2 : c < 10 <;> by_cases h3 : c ≤ 10 <;> simp_all <;> omega
+  by_cases h0 : c < 2
+  · simp only [if_pos h0]
+    simp only [number]
+    simp (disch := omega) only [pick_value,decide_eq_true_eq]
+    simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
+  · by_cases h1 : c < 3
+    · simp only [if_neg h0,if_pos h1]
+      simp only [number]
+      simp (disch := omega) only [pick_value,decide_eq_true_eq]
+      simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
+    · by_cases h2 : c < 10
+      · simp only [if_neg h0,if_neg h1,if_pos h2]
+        simp only [number]
+        simp (disch := omega) only [pick_value,decide_eq_true_eq]
+        simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
+      · by_cases h3 : c ≤ 10
+        · simp only [if_neg h0,if_neg h1,if_neg h2,if_pos h3]
+          simp only [number]
+          simp (disch := omega) only [pick_value,decide_eq_true_eq]
+          simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
+        · simp only [if_neg h0,if_neg h1,if_neg h2,if_neg h3]
+          simp only [number]
+          simp (disch := omega) only [pick_value,decide_eq_true_eq]
+          simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
 
 theorem per_column (c : Nat) :
     (rows pick c 0 1024).length =
