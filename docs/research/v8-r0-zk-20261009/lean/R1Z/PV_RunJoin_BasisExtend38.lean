@@ -22,7 +22,7 @@ theorem source (ops : ExternalFuns) (basis : MA) (degree j : Usize)
     omega
   have castval : (UScalar.cast .U8 degree).val=degree.val := by scalar_tac
   have hl : (U8.wrapping_add (UScalar.cast .U8 degree) 2#u8).val=degree.val+2 := by
-    rw [U8.wrapping_add_val_eq,castval]
+    rw [U8.wrapping_add_val_eq,castval,ProverCommitInterpolationIndices48.size_u8]
     change (degree.val+2)%256=degree.val+2
     exact Nat.mod_eq_of_lt (by omega)
   unfold host_sumcheck.interpolation_extend

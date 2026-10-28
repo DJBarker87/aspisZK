@@ -19,7 +19,7 @@ theorem increment (i : Usize) (hi : i.val<28) :
         (Usize.wrapping_add i 1#usize).val := by scalar_tac
     rw [castval,inc]
   apply UScalar.eq_of_val_eq
-  rw [ci,U8.wrapping_add_val_eq,cv]
+  rw [ci,U8.wrapping_add_val_eq,cv,ProverCommitInterpolationIndices48.size_u8]
   change i.val+1=(i.val+1)%256
   exact (Nat.mod_eq_of_lt (by omega)).symm
 
