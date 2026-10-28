@@ -1,0 +1,113 @@
+JHu_MasterIdentity.lean:59:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let b1 ←
+      NCV_Reference.equal (JHg_FieldRead.segment window 0 ↑4#usize)
+          (Array.make 4#usize [65#u8, 83#u8, 80#u8, 73#u8] NCV_Reference.identity._proof_2).to_slice
+    if b1 = true then do
+        let b2 ← NCV_Reference.zero (JHg_FieldRead.segment window (↑5#usize) (↑8#usize - ↑5#usize))
+        if b2 = true then do
+            let b3 ← NCV_Reference.zero (JHg_FieldRead.segment window (↑108#usize) (↑112#usize - ↑108#usize))
+            if b3 = true then
+                ok
+                  (core.result.Result.Ok
+                    { pool := JHg_AccountValues.master.identity.pool,
+                      asset_mint := JHg_AccountValues.master.identity.asset_mint,
+                      token_program := JHg_AccountValues.master.identity.token_program, asset_id := 77#u32,
+                      deployment_domain := JHg_AccountValues.master.identity.deployment_domain })
+              else ok (core.result.Result.Err ())
+          else ok (core.result.Result.Err ())
+      else ok (core.result.Result.Err ())
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok (NCV_Carrier.fromIdentity JHg_AccountValues.master.identity))
+
+len : (↑JHg_DataMaster.value).length = 384
+wl : (↑window).length = 144
+size : window.len = 144#usize
+start :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) window { «end» := 4#usize } =
+    ok (JHg_FieldRead.segment window 0 ↑4#usize)
+magic :
+  NCV_Reference.equal (JHg_FieldRead.segment window 0 4) (Array.make 4#usize [65#u8, 83#u8, 80#u8, 73#u8] ⋯).to_slice =
+    ok true
+version : window.index_usize 4#usize = ok 1#u8
+reserved0 :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) window
+      { start := 5#usize, «end» := 8#usize } =
+    ok (JHg_FieldRead.segment window (↑5#usize) (↑8#usize - ↑5#usize))
+zero0 : NCV_Reference.zero (JHg_FieldRead.segment window 5 3) = ok true
+reserved1 :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) window
+      { start := 108#usize, «end» := 112#usize } =
+    ok (JHg_FieldRead.segment window (↑108#usize) (↑112#usize - ↑108#usize))
+zero1 : NCV_Reference.zero (JHg_FieldRead.segment window 108 4) = ok true
+asset : Std.Array U8 4#usize := Array.make 4#usize [77#u8, 0#u8, 0#u8, 0#u8] ⋯
+readAsset : NCV_Reference.word32 window 104#usize = ok 77#u32
+pool : NCV_Reference.bytes32 window 8#usize = ok JHg_AccountValues.master.identity.pool
+mint : NCV_Reference.bytes32 window 40#usize = ok JHg_AccountValues.master.identity.asset_mint
+token : NCV_Reference.bytes32 window 72#usize = ok JHg_AccountValues.master.identity.token_program
+domain : NCV_Reference.bytes32 window 112#usize = ok JHg_AccountValues.master.identity.deployment_domain
+assetValid : ¬77#u32 ≥ 2147483647#u32
+⊢ (do
+      let b1 ←
+        NCV_Reference.equal (JHg_FieldRead.segment window 0 ↑4#usize)
+            (Array.make 4#usize [65#u8, 83#u8, 80#u8, 73#u8] NCV_Reference.identity._proof_2).to_slice
+      if b1 = true then do
+          let b2 ← NCV_Reference.zero (JHg_FieldRead.segment window (↑5#usize) (↑8#usize - ↑5#usize))
+          if b2 = true then do
+              let b3 ← NCV_Reference.zero (JHg_FieldRead.segment window (↑108#usize) (↑112#usize - ↑108#usize))
+              if b3 = true then
+                  ok
+                    (core.result.Result.Ok
+                      { pool := JHg_AccountValues.master.identity.pool,
+                        asset_mint := JHg_AccountValues.master.identity.asset_mint,
+                        token_program := JHg_AccountValues.master.identity.token_program, asset_id := 77#u32,
+                        deployment_domain := JHg_AccountValues.master.identity.deployment_domain })
+                else ok (core.result.Result.Err ())
+            else ok (core.result.Result.Err ())
+        else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Ok (NCV_Carrier.fromIdentity JHg_AccountValues.master.identity))
+JHu_MasterIdentity.lean:56:55: warning: This simp argument is unused:
+  magic
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.identity, ̲size, ̲show (144#usize != 144#usize) ̲= ̲false from rfl,
+      Bool.false_eq_true, ̲ite_false, ̲start, ̲lift, ̲bind_tc_ok,m̵a̵g̵ ̲ic̵,̵i̵te_true, ̲version,
+      show (1#u8 != 1#u8) ̲= ̲false from rfl, ̲reserved0, ̲zero0, ̲reserved1, ̲zero1,
+  ̵  ̵ ̵ ̵readAsset, ̲assetValid,
+  ̲ ̲ ̲ ̲ ̲pool, ̲mint, ̲token, ̲domain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHu_MasterIdentity.lean:56:61: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.identity, ̲size, ̲show (144#usize != 144#usize) ̲= ̲false from rfl,
+      Bool.false_eq_true, ̲ite_false, ̲start, ̲lift, ̲bind_tc_ok, ̲magic,i̵t̵e̵_̵t̵r̵u̵e̵,̵ ̲version,
+      show (1#u8 != 1#u8) ̲= ̲false from rfl, ̲reserved0, ̲zero0, ̲reserved1, ̲zero1,
+  ̵  ̵ ̵ ̵readAsset, ̲assetValid,
+  ̲ ̲ ̲ ̲ ̲pool, ̲mint, ̲token, ̲domain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHu_MasterIdentity.lean:57:49: warning: This simp argument is unused:
+  zero0
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.identity, ̲size, ̲show (144#usize != 144#usize) ̲= ̲false from rfl,
+      Bool.false_eq_true, ̲ite_false, ̲start, ̲lift, ̲bind_tc_ok, ̲magic, ̲ite_true, ̲version,
+      show (1#u8 != 1#u8) ̲= ̲false from rfl, ̲reserved0,z̵e̵ ̲ro̵0̵,̵r̵eserved1, ̲zero1,
+  ̵  ̵ ̵ ̵readAsset, ̲assetValid, ̲pool,
+  ̲ ̲ ̲ ̲ ̲mint, ̲token, ̲domain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+JHu_MasterIdentity.lean:57:65: warning: This simp argument is unused:
+  zero1
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.identity, ̲size, ̲show (144#usize != 144#usize) ̲= ̲false from rfl,
+      Bool.false_eq_true, ̲ite_false, ̲start, ̲lift, ̲bind_tc_ok, ̲magic, ̲ite_true, ̲version,
+      show (1#u8 != 1#u8) ̲= ̲false from rfl, ̲reserved0, ̲zero0, ̲reserved1,z̵e̵r̵o̵1̵,̵
+  ̵  ̵ ̵ ̵readAsset, ̲assetValid, ̲pool,
+  ̲ ̲ ̲ ̲ ̲mint, ̲token, ̲domain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHu_MasterIdentity.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
