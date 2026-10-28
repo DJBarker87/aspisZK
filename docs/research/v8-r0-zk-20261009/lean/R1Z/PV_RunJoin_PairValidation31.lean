@@ -94,6 +94,10 @@ theorem valid (p : pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1)
   rw [he3,hsent] at hv3
   rw [he4] at hv4
   simp only [liftU,UScalar.ofNatCore_val_eq,Nat.cast_one,Nat.cast_zero] at homv hmov hv1 hv4
+  change liftU (K := K) om = 1-liftU p.second_occupied at homv
+  change liftU (K := K) mo = liftU p.second_occupied-1 at hmov
+  change (0 : K) = liftU p.second_occupied * liftU mo at hv1
+  change (0 : K) = liftU om * liftU p.second_occupancy_inverse at hv4
   refine ⟨?_,?_,?_,?_⟩
   · change liftU p.second_occupied * (liftU p.second_occupied-1)=0
     rw [← hmov]
