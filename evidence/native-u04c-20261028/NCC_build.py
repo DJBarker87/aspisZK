@@ -65,7 +65,11 @@ for n in ['S2W_lean_host.py','S2W_run_host.py','lakefile.toml','lean-toolchain',
  else:p.write_text(s)
 for n in [x['src'],x['obj']]: (b/n).parent.mkdir(parents=True,exist_ok=True)
 (b/x['src']).write_text(x['source']);(b/{(a+'.json')!r}).write_text(json.dumps(x['cfg'],indent=2)+'\\n')
-c=Path({C!r})/'objects';paths=[c/'Aeneas.olean']+list((c/'Aeneas').rglob('*.olean'))
+roots=[Path('/home/dombarker/project-offloads/codex-cx-tx2codec-cache-20261028'),Path({C!r}),Path({(C+'/objects')!r}),Path('/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean')]
+names={{'Aeneas.olean'}}
+for root in roots:
+ names.update(str(p.relative_to(root)) for p in (root/'Aeneas').rglob('*.olean'))
+paths=[next(root/name for root in roots if (root/name).is_file()) for name in sorted(names)]
 pins={{str(p):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in paths}}
 p=b/'NCC_LIBRARY_PIN.json'
 if p.exists(): assert json.loads(p.read_text())==pins,'library pin changed'
