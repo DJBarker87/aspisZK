@@ -16,7 +16,7 @@ theorem drop_cons (xs : List T) (i : Nat) (h : i < xs.length) :
 
 theorem drop_nil (xs : List T) (i : Nat) (h : xs.length ≤ i) : xs.drop i = [] := by
   induction xs generalizing i with
-  | nil => rfl
+  | nil => simp
   | cons x xs ih =>
     cases i with
     | zero => simp at h
@@ -30,14 +30,16 @@ theorem slice_trace (s : Slice T) (i : Nat) :
   | h remaining ih =>
     by_cases hi : i < s.val.length
     · rw [drop_cons s.val i hi]
-      apply FiniteTrace.step ⟨s,i⟩ ⟨s,i+1⟩ s.val[i] (s.val.drop (i+1))
+      refine @FiniteTrace.step (core.slice.iter.Iter T) T
+        (core.iter.traits.iterator.IteratorSliceIter T) ⟨s,i⟩ ⟨s,i+1⟩ s.val[i] (s.val.drop (i+1)) ?_ ?_
       · change core.slice.iter.IteratorSliceIter.next ⟨s,i⟩ = _
         simp only [core.slice.iter.IteratorSliceIter.next,Slice.len_val]
         rw [dif_pos hi]
         rfl
       · exact ih (s.val.length-(i+1)) (by omega) (i+1) rfl
     · rw [drop_nil s.val i (by omega)]
-      apply FiniteTrace.done ⟨s,i⟩ ⟨s,i⟩
+      refine @FiniteTrace.done (core.slice.iter.Iter T) T
+        (core.iter.traits.iterator.IteratorSliceIter T) ⟨s,i⟩ ⟨s,i⟩ ?_
       change core.slice.iter.IteratorSliceIter.next ⟨s,i⟩ = _
       simp only [core.slice.iter.IteratorSliceIter.next,Slice.len_val]
       rw [dif_neg hi]
