@@ -32,7 +32,7 @@ theorem shape (i : Honest (K := K)) :
   have inside : lane.val < i.val.compiled.semantic_c1.c1.val.length := by
     rw [i.val.compiled.semantic_c1.c1.property]
     exact lane.isLt
-  simpa only [rawColumn,PV_RunJoin_NominalLeafData.foundation,getElem!_pos _ _ inside] using h
+  simpa only [rawColumn,PV_RunJoin_NominalLeafData.foundation,getElem!_pos i.val.compiled.semantic_c1.c1.val lane.val inside] using h
 
 /-- Full decoder success for the ORIGINAL semantic foundation; no new
 prepared payload is chosen and no source/model equation is assumed. -/
