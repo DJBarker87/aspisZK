@@ -12,7 +12,13 @@ theorem cast32 (i : Usize) (hi : i.val≤28) :
 theorem increment (i : Usize) (hi : i.val<28) :
     UScalar.cast .U8 (Usize.wrapping_add i 1#usize)=
       U8.wrapping_add (UScalar.cast .U8 i) 1#u8 := by
-  have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
+  have inc : (Usize.wrapping_add i 1#usize).val=i.val+1 := by
+    rw [Usize.wrapping_add_val_eq]
+    change (i.val+1)%UScalar.size .Usize=i.val+1
+    apply Nat.mod_eq_of_lt
+    have big := (28#usize).hSize
+    change 28<UScalar.size .Usize at big
+    omega
   have cv : (UScalar.cast .U8 i).val=i.val := by scalar_tac
   have ci : (UScalar.cast .U8 (Usize.wrapping_add i 1#usize)).val=i.val+1 := by
     have small : (Usize.wrapping_add i 1#usize).val<256 := by rw [inc];omega
