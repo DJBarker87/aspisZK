@@ -14,6 +14,7 @@ theorem output {T A Out : Type}
     (h : finish self.core self.buffer initial=ok (core,buffer,produced)) :
     PV_CBL_WrapperReference.finalize finish self initial=ok produced := by
   simp only [PV_CBL_WrapperReference.finalize,h,bind_tc_ok]
+  rfl
 
 theorem failure {T A Out : Type}
     (finish : T → Buffer A → Out → Result (T × Buffer A × Out))
@@ -36,6 +37,7 @@ theorem ct_restoration {S B : Type} (finish : S → B → Result (S × B × List
     (h : finish state buffer=ok (changed,restored,full)) :
     ct finish side n state buffer=ok (changed,restored,PV_DL_Truncation.value side n full) := by
   simp only [ct,h,bind_tc_ok]
+  rfl
 
 theorem ct_length {S B : Type} (finish : S → B → Result (S × B × List U8))
     (side : ProverRwFull.digest.core_api.TruncSide) (n : Nat)
