@@ -12,20 +12,21 @@ theorem lane_nat {w : Nat} (v : BitVec w) (i : Nat) (h : 8*i+8 ≤ w)
 
 theorem word_bytes (v : U32) : wordBytes v = (core.num.U32.to_le_bytes v).val := by
   apply List.ext_getElem
-  · simp only [wordBytes,List.length_cons,List.length_nil,core.num.U32.to_le_bytes,
-      List.length_map,BitVec.toLEBytes_length]
+  · change (wordBytes v).length = (List.map (@UScalar.mk .U8) v.bv.toLEBytes).length
+    rw [List.length_map,BitVec.toLEBytes_length]
+    rfl
   · intro i hi hj
     have hn : i < 4 := by simpa only [wordBytes,List.length_cons,List.length_nil] using hi
     have hc : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 := by omega
     rcases hc with rfl | rfl | rfl | rfl
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 v).val = (v.bv.toLEBytes[0]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 v).val = (v.bv.toLEBytes[0]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change v.bv.toNat % 256 = _
       simpa only [Nat.mul_zero,Nat.shiftRight_zero] using
         (lane_nat v.bv 0 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U32.wrapping_shr v 8#u32)).val = (v.bv.toLEBytes[1]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U32.wrapping_shr v 8#u32)).val = (v.bv.toLEBytes[1]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U32.wrapping_shr v 8#u32).bv.toNat % 256 = _
       rw [U32.wrapping_shr_bv_eq]
@@ -33,7 +34,7 @@ theorem word_bytes (v : U32) : wordBytes v = (core.num.U32.to_le_bytes v).val :=
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 1 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U32.wrapping_shr v 16#u32)).val = (v.bv.toLEBytes[2]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U32.wrapping_shr v 16#u32)).val = (v.bv.toLEBytes[2]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U32.wrapping_shr v 16#u32).bv.toNat % 256 = _
       rw [U32.wrapping_shr_bv_eq]
@@ -41,7 +42,7 @@ theorem word_bytes (v : U32) : wordBytes v = (core.num.U32.to_le_bytes v).val :=
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 2 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U32.wrapping_shr v 24#u32)).val = (v.bv.toLEBytes[3]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U32.wrapping_shr v 24#u32)).val = (v.bv.toLEBytes[3]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U32.wrapping_shr v 24#u32).bv.toNat % 256 = _
       rw [U32.wrapping_shr_bv_eq]
@@ -53,20 +54,21 @@ theorem word_bytes (v : U32) : wordBytes v = (core.num.U32.to_le_bytes v).val :=
 
 theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val := by
   apply List.ext_getElem
-  · simp only [indexBytes,List.length_cons,List.length_nil,core.num.U64.to_le_bytes,
-      List.length_map,BitVec.toLEBytes_length]
+  · change (indexBytes v).length = (List.map (@UScalar.mk .U8) v.bv.toLEBytes).length
+    rw [List.length_map,BitVec.toLEBytes_length]
+    rfl
   · intro i hi hj
     have hn : i < 8 := by simpa only [indexBytes,List.length_cons,List.length_nil] using hi
     have hc : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 ∨ i = 4 ∨ i = 5 ∨ i = 6 ∨ i = 7 := by omega
     rcases hc with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 v).val = (v.bv.toLEBytes[0]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 v).val = (v.bv.toLEBytes[0]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change v.bv.toNat % 256 = _
       simpa only [Nat.mul_zero,Nat.shiftRight_zero] using
         (lane_nat v.bv 0 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 8#u32)).val = (v.bv.toLEBytes[1]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 8#u32)).val = (v.bv.toLEBytes[1]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 8#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -74,7 +76,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 1 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 16#u32)).val = (v.bv.toLEBytes[2]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 16#u32)).val = (v.bv.toLEBytes[2]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 16#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -82,7 +84,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 2 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 24#u32)).val = (v.bv.toLEBytes[3]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 24#u32)).val = (v.bv.toLEBytes[3]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 24#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -90,7 +92,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 3 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 32#u32)).val = (v.bv.toLEBytes[4]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 32#u32)).val = (v.bv.toLEBytes[4]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 32#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -98,7 +100,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 4 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 40#u32)).val = (v.bv.toLEBytes[5]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 40#u32)).val = (v.bv.toLEBytes[5]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 40#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -106,7 +108,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 5 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 48#u32)).val = (v.bv.toLEBytes[6]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 48#u32)).val = (v.bv.toLEBytes[6]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 48#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
@@ -114,7 +116,7 @@ theorem index_bytes (v : U64) : indexBytes v = (core.num.U64.to_le_bytes v).val 
       rw [BitVec.toNat_ushiftRight]
       exact (lane_nat v.bv 6 (by decide) (by rw [BitVec.toLEBytes_length]; decide)).symm
     · apply UScalar.eq_of_val_eq
-      change (UScalar.cast .U8 (U64.wrapping_shr v 56#u32)).val = (v.bv.toLEBytes[7]'by rw [BitVec.toLEBytes_length]; decide).toNat
+      change (UScalar.cast .U8 (U64.wrapping_shr v 56#u32)).val = (v.bv.toLEBytes[7]'(by rw [BitVec.toLEBytes_length]; decide)).toNat
       rw [UScalar.cast_val_eq]
       change (U64.wrapping_shr v 56#u32).bv.toNat % 256 = _
       rw [U64.wrapping_shr_bv_eq]
