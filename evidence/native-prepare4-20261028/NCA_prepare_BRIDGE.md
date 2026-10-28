@@ -23,3 +23,9 @@ Retained dependencies: wide_view's merged mitigated native bridge; scalar's esta
 ## Statement4: accepted scan
 
 Model association checked by NCA_AcceptedScan.source (L007): SAME accepted cut -> exact compactInput LPt check_values success; NCA_BytePort and NCA_CheckPort connect the nominal word/chunk models. No independent successful check is supplied. Native statement4 remains OPEN: K008..K012 expose missing definitions on actual mark/generic prefix calls, and historical Op4P whole-loop native evidence is not refreshed automatically under current copy/one-iteration rules. No deployed/native closure from model success.
+
+## Statement6: full semantic carrier
+
+Model same-carrier restoration and induction are checked by NCA_SemanticRestore.source, NCA_FullCarrierRow.source and NCA_FullCarrierLoop.source; arbitrary logical14759 pre-state, exact mutable-borrow restoration, unchanged y1 suffix, all27 rows. The existing NBR/JFw model steps are imported unchanged. NCA_SemanticFrames supplies generic full-allocation local/effect/frame laws. These do not identify the native heap post-state by themselves.
+
+Native root values pass K013 with failing K015 control. Full exterior associations K014/K016/K019 time out at90s, even after product/one-write isolation; no native frame credit. Restricted ordinary-prefix K007 replay is being split, not promoted to full-carrier credit. Compact returned-buffer association remains conditional on merged KMZ expand_values controls. Statement6 stays OPEN.

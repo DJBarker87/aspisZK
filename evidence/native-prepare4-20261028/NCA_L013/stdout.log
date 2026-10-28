@@ -1,0 +1,74 @@
+NCA_generated/NCA_FullCarrierLoop.lean:59:6: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ←
+      compact.expand_semantic_loop.body nativeValues input { start := s.row, «end» := compact.SEMANTIC_ROWS }
+          (NBR_ProducerBuffers.semanticInitial s.logical) s.src s.dst
+    match result with
+      | cont (it, semantic, src, dst) =>
+        ok { logical := NCA_FullCarrierRow.restore s.logical semantic, row := it.start, src := src, dst := dst }
+      | done v => fail Error.panic
+is not definitionally equal to the right-hand side
+  ok after
+
+input : Slice U8
+inputLength : (↑input).length = 7015
+fuel : ℕ
+ih :
+  ∀ (s : State),
+    ↑s.row + fuel = 27 →
+      (↑s.logical).length = 14759 →
+        ↑s.src = JFw_Geometry.sourcePos ↑s.row →
+          ↑s.dst = JFw_Geometry.destPos ↑s.row →
+            ∃ final,
+              run input fuel s = ok final ∧
+                ↑final.row = 27 ∧
+                  (↑final.logical).length = 14759 ∧
+                    ↑final.src = 7015 ∧ ↑final.dst = 13831 ∧ List.drop 13831 ↑final.logical = List.drop 13831 ↑s.logical
+s : State
+count : ↑s.row + (fuel + 1) = 27
+full : (↑s.logical).length = 14759
+sourcePos : ↑s.src = JFw_Geometry.sourcePos ↑s.row
+destPos : ↑s.dst = JFw_Geometry.destPos ↑s.row
+bound : ↑s.row < 27
+nextRow : U8
+next : ↑nextRow = ↑s.row + 1
+tag : U8
+size : Usize
+shape : r1_wire.row_shape s.row = ok (some (tag, size))
+semantic : Slice U8
+nextSrc nextDst : Usize
+call :
+  compact.expand_semantic_loop.body nativeValues input (iter s.row) (NBR_ProducerBuffers.semanticInitial s.logical)
+      s.src s.dst =
+    ok (cont (iter nextRow, semantic, nextSrc, nextDst))
+src : ↑nextSrc = JFw_Geometry.sourcePos ↑nextRow
+dst : ↑nextDst = JFw_Geometry.destPos ↑nextRow
+restored : ↑(NCA_FullCarrierRow.restore s.logical semantic) = ↑semantic ++ List.drop 13831 ↑s.logical
+len : (↑(NCA_FullCarrierRow.restore s.logical semantic)).length = 14759
+frame : List.drop 13831 ↑(NCA_FullCarrierRow.restore s.logical semantic) = List.drop 13831 ↑s.logical
+after : State :=
+  { logical := NCA_FullCarrierRow.restore s.logical semantic, row := nextRow, src := nextSrc, dst := nextDst }
+⊢ (do
+      let result ←
+        compact.expand_semantic_loop.body nativeValues input { start := s.row, «end» := compact.SEMANTIC_ROWS }
+            (NBR_ProducerBuffers.semanticInitial s.logical) s.src s.dst
+      match result with
+        | cont (it, semantic, src, dst) =>
+          ok { logical := NCA_FullCarrierRow.restore s.logical semantic, row := it.start, src := src, dst := dst }
+        | done v => fail Error.panic) =
+    ok after
+NCA_generated/NCA_FullCarrierLoop.lean:58:22: warning: This simp argument is unused:
+  call
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵t̵e̵r̵]̵[̲b̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCA_generated/NCA_FullCarrierLoop.lean:58:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵c̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵t̵e̵r̵]̵[̲b̲o̲d̲y̲,̲ ̲c̲a̲l̲l̲,̲ ̲i̲t̲e̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCA_FullCarrierLoop.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

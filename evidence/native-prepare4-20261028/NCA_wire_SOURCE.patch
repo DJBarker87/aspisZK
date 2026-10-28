@@ -1,0 +1,10 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCA_wire.rs
+@@ -0,0 +1,7 @@
++// Scratch-only constructors for valid typed return carriers; no field arithmetic.
++use super::*;
++pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
++pub(crate) fn row<'a>(prefix:&Prefix<'a>,i:usize)->&'a[u8]{prefix.records[i]}
++pub(crate) fn transcript<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
++pub(crate) fn update<H:Digest32>(t:&mut SemanticTranscript<H>,state:[u8;32],next_row:u8){t.state=state;t.next_row=next_row;}
++pub(crate) fn into_hash<H:Digest32>(t:SemanticTranscript<H>)->H{t.hash}

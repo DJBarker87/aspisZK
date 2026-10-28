@@ -1,0 +1,356 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCA_candidate.rs
+@@ -0,0 +1,353 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[repr(C)]struct NCA_Input14{prefix:[u8;134],header:[u8;5],tail:[u8;6876]}
++#[repr(C)]struct NCA_Output14{prefix:[u8;134],header:[u8;5],tail:[u8;14620]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header14(){
++ let mut input=NCA_Input14{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output14{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<134&&q<14620);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input14>(),7015);assert_eq!(core::mem::size_of::<NCA_Output14>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input14,header),134);assert_eq!(core::mem::offset_of!(NCA_Output14,header),134);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input14).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output14).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=134;let mut dst=134;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,139);assert_eq!(dst,139);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==14619,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header14_wrong(){
++ let mut input=NCA_Input14{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output14{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input14).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output14).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=134;let mut dst=134;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input15{prefix:[u8;155],header:[u8;5],tail:[u8;6855]}
++#[repr(C)]struct NCA_Output15{prefix:[u8;171],header:[u8;5],tail:[u8;14583]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header15(){
++ let mut input=NCA_Input15{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output15{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<171&&q<14583);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input15>(),7015);assert_eq!(core::mem::size_of::<NCA_Output15>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input15,header),155);assert_eq!(core::mem::offset_of!(NCA_Output15,header),171);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input15).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output15).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=155;let mut dst=171;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,160);assert_eq!(dst,176);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==14582,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header15_wrong(){
++ let mut input=NCA_Input15{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output15{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input15).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output15).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=155;let mut dst=171;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input16{prefix:[u8;608],header:[u8;5],tail:[u8;6402]}
++#[repr(C)]struct NCA_Output16{prefix:[u8;1072],header:[u8;5],tail:[u8;13682]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header16(){
++ let mut input=NCA_Input16{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output16{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<1072&&q<13682);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input16>(),7015);assert_eq!(core::mem::size_of::<NCA_Output16>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input16,header),608);assert_eq!(core::mem::offset_of!(NCA_Output16,header),1072);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input16).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output16).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=608;let mut dst=1072;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,613);assert_eq!(dst,1077);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==13681,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header16_wrong(){
++ let mut input=NCA_Input16{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output16{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input16).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output16).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=608;let mut dst=1072;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input17{prefix:[u8;1061],header:[u8;5],tail:[u8;5949]}
++#[repr(C)]struct NCA_Output17{prefix:[u8;1973],header:[u8;5],tail:[u8;12781]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header17(){
++ let mut input=NCA_Input17{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output17{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<1973&&q<12781);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input17>(),7015);assert_eq!(core::mem::size_of::<NCA_Output17>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input17,header),1061);assert_eq!(core::mem::offset_of!(NCA_Output17,header),1973);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input17).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output17).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1061;let mut dst=1973;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,1066);assert_eq!(dst,1978);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==12780,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header17_wrong(){
++ let mut input=NCA_Input17{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output17{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input17).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output17).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1061;let mut dst=1973;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input18{prefix:[u8;1514],header:[u8;5],tail:[u8;5496]}
++#[repr(C)]struct NCA_Output18{prefix:[u8;2874],header:[u8;5],tail:[u8;11880]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header18(){
++ let mut input=NCA_Input18{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output18{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<2874&&q<11880);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input18>(),7015);assert_eq!(core::mem::size_of::<NCA_Output18>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input18,header),1514);assert_eq!(core::mem::offset_of!(NCA_Output18,header),2874);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input18).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output18).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1514;let mut dst=2874;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,1519);assert_eq!(dst,2879);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==11879,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header18_wrong(){
++ let mut input=NCA_Input18{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output18{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input18).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output18).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1514;let mut dst=2874;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input19{prefix:[u8;1967],header:[u8;5],tail:[u8;5043]}
++#[repr(C)]struct NCA_Output19{prefix:[u8;3775],header:[u8;5],tail:[u8;10979]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header19(){
++ let mut input=NCA_Input19{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output19{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<3775&&q<10979);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input19>(),7015);assert_eq!(core::mem::size_of::<NCA_Output19>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input19,header),1967);assert_eq!(core::mem::offset_of!(NCA_Output19,header),3775);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input19).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output19).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1967;let mut dst=3775;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,1972);assert_eq!(dst,3780);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==10978,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header19_wrong(){
++ let mut input=NCA_Input19{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output19{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input19).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output19).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=1967;let mut dst=3775;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input20{prefix:[u8;2420],header:[u8;5],tail:[u8;4590]}
++#[repr(C)]struct NCA_Output20{prefix:[u8;4676],header:[u8;5],tail:[u8;10078]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header20(){
++ let mut input=NCA_Input20{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output20{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<4676&&q<10078);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input20>(),7015);assert_eq!(core::mem::size_of::<NCA_Output20>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input20,header),2420);assert_eq!(core::mem::offset_of!(NCA_Output20,header),4676);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input20).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output20).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=2420;let mut dst=4676;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,2425);assert_eq!(dst,4681);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==10077,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header20_wrong(){
++ let mut input=NCA_Input20{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output20{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input20).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output20).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=2420;let mut dst=4676;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input21{prefix:[u8;2873],header:[u8;5],tail:[u8;4137]}
++#[repr(C)]struct NCA_Output21{prefix:[u8;5577],header:[u8;5],tail:[u8;9177]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header21(){
++ let mut input=NCA_Input21{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output21{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<5577&&q<9177);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input21>(),7015);assert_eq!(core::mem::size_of::<NCA_Output21>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input21,header),2873);assert_eq!(core::mem::offset_of!(NCA_Output21,header),5577);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input21).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output21).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=2873;let mut dst=5577;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,2878);assert_eq!(dst,5582);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==9176,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header21_wrong(){
++ let mut input=NCA_Input21{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output21{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input21).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output21).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=2873;let mut dst=5577;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input22{prefix:[u8;3326],header:[u8;5],tail:[u8;3684]}
++#[repr(C)]struct NCA_Output22{prefix:[u8;6478],header:[u8;5],tail:[u8;8276]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header22(){
++ let mut input=NCA_Input22{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output22{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<6478&&q<8276);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input22>(),7015);assert_eq!(core::mem::size_of::<NCA_Output22>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input22,header),3326);assert_eq!(core::mem::offset_of!(NCA_Output22,header),6478);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input22).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output22).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=3326;let mut dst=6478;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,3331);assert_eq!(dst,6483);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==8275,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header22_wrong(){
++ let mut input=NCA_Input22{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output22{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input22).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output22).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=3326;let mut dst=6478;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input23{prefix:[u8;3779],header:[u8;5],tail:[u8;3231]}
++#[repr(C)]struct NCA_Output23{prefix:[u8;7379],header:[u8;5],tail:[u8;7375]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header23(){
++ let mut input=NCA_Input23{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output23{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<7379&&q<7375);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input23>(),7015);assert_eq!(core::mem::size_of::<NCA_Output23>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input23,header),3779);assert_eq!(core::mem::offset_of!(NCA_Output23,header),7379);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input23).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output23).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=3779;let mut dst=7379;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,3784);assert_eq!(dst,7384);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==7374,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header23_wrong(){
++ let mut input=NCA_Input23{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output23{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input23).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output23).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=3779;let mut dst=7379;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input24{prefix:[u8;4232],header:[u8;5],tail:[u8;2778]}
++#[repr(C)]struct NCA_Output24{prefix:[u8;8280],header:[u8;5],tail:[u8;6474]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header24(){
++ let mut input=NCA_Input24{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output24{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<8280&&q<6474);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input24>(),7015);assert_eq!(core::mem::size_of::<NCA_Output24>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input24,header),4232);assert_eq!(core::mem::offset_of!(NCA_Output24,header),8280);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input24).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output24).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=4232;let mut dst=8280;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,4237);assert_eq!(dst,8285);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==6473,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header24_wrong(){
++ let mut input=NCA_Input24{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output24{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input24).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output24).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=4232;let mut dst=8280;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input25{prefix:[u8;4685],header:[u8;5],tail:[u8;2325]}
++#[repr(C)]struct NCA_Output25{prefix:[u8;9181],header:[u8;5],tail:[u8;5573]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header25(){
++ let mut input=NCA_Input25{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output25{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<9181&&q<5573);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input25>(),7015);assert_eq!(core::mem::size_of::<NCA_Output25>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input25,header),4685);assert_eq!(core::mem::offset_of!(NCA_Output25,header),9181);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input25).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output25).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=4685;let mut dst=9181;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,4690);assert_eq!(dst,9186);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==5572,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header25_wrong(){
++ let mut input=NCA_Input25{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output25{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input25).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output25).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=4685;let mut dst=9181;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}
++#[repr(C)]struct NCA_Input26{prefix:[u8;6546],header:[u8;5],tail:[u8;464]}
++#[repr(C)]struct NCA_Output26{prefix:[u8;12898],header:[u8;5],tail:[u8;1856]}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header26(){
++ let mut input=NCA_Input26{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output26{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ let k:usize=kani::any();let p:usize=kani::any();let q:usize=kani::any();kani::assume(k<5&&p<12898&&q<1856);let before=out.prefix[p];let after=out.tail[q];
++ assert_eq!(core::mem::size_of::<NCA_Input26>(),7015);assert_eq!(core::mem::size_of::<NCA_Output26>(),14759);assert_eq!(core::mem::offset_of!(NCA_Input26,header),6546);assert_eq!(core::mem::offset_of!(NCA_Output26,header),12898);
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input26).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output26).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=6546;let mut dst=12898;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(src,6551);assert_eq!(dst,12903);assert_eq!(out.header[k],input.header[k]);assert_eq!(out.prefix[p],before);assert_eq!(out.tail[q],after);kani::cover!(k==4&&q==1855,"header and last full-carrier frame byte");
++}
++#[kani::proof]#[kani::unwind(7)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NCA_header26_wrong(){
++ let mut input=NCA_Input26{prefix:kani::any(),header:kani::any(),tail:kani::any()};let mut out=NCA_Output26{prefix:kani::any(),header:kani::any(),tail:kani::any()};
++ input.header[4]=1;out.header[4]=0;
++ let source=unsafe{core::slice::from_raw_parts((&input as *const NCA_Input26).cast::<u8>(),7015)};
++ let logical=unsafe{core::slice::from_raw_parts_mut((&mut out as *mut NCA_Output26).cast::<u8>(),14759)};
++ let compact=source;let semantic=&mut logical[..13831];let mut src=6546;let mut dst=12898;
++ semantic[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ assert_eq!(out.header[4],0,"negative row header copy");
++}

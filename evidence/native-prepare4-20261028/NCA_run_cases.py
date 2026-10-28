@@ -2,7 +2,7 @@
 Never repeats a terminal attempt, including failed/timeout attempts.
 """
 from pathlib import Path
-import sys,subprocess,json
+import sys,subprocess,json,os
 E=Path(__file__).resolve().parent
 for spec in sys.argv[1:]:
     attempt,source,harness=spec.split(':',2)
@@ -12,3 +12,6 @@ for spec in sys.argv[1:]:
     r=subprocess.run([sys.executable,str(E/'NCA_kani.py'),attempt,harness])
     if r.returncode:
         raise SystemExit('own wrapper failed; inspect before any further launch: '+attempt)
+
+    if os.environ.get('NCA_STOP_ON_TIMEOUT')=='1' and 'timed out' in (E/attempt/'stdout.log').read_text():
+        raise SystemExit('Stopped this same-shape case batch after timeout: '+attempt)

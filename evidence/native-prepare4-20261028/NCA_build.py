@@ -14,7 +14,7 @@ except FileExistsError:
 with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
 if (E/'NCA_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
 if (E/'NCA_PAUSE').exists():raise SystemExit('paused before admission')
-assert len(list(E.glob('NCA_L*/receipt.json')))<80
+assert len(list(E.glob('NCA_L[0-9][0-9][0-9].json')))<80
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False):
  argv=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]

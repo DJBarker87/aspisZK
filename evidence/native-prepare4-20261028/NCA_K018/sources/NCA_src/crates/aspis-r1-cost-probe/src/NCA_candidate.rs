@@ -1,0 +1,29 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]struct NCA_Digest;
+impl Digest32 for NCA_Digest{fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"no digest before prepare cut");[0;32]}}
+static mut NCA_PROOF:*const u8=core::ptr::null();static mut NCA_P:*const u8=core::ptr::null();static mut NCA_T:*const u8=core::ptr::null();
+static mut NCA_STAGE:u8=0;static mut NCA_SHAPE:bool=false;static mut NCA_SCAN:bool=false;static mut NCA_OBS:bool=false;
+fn NCA_shape(proof:&[u8])->Result<Variant,Error>{unsafe{assert_eq!(NCA_STAGE,0);assert_eq!(proof.as_ptr(),NCA_PROOF);assert_eq!(proof.len(),57607);NCA_STAGE=1;if NCA_SHAPE{Ok(Variant::S2)}else{Err(Error::Parse)}}}
+fn NCA_scan(proof:&[u8])->Result<(),Error>{unsafe{assert_eq!(NCA_STAGE,1);assert!(NCA_SHAPE);assert_eq!(proof.as_ptr(),NCA_PROOF);assert_eq!(proof.len(),57607);NCA_STAGE=2;if NCA_SCAN{Ok(())}else{Err(Error::Parse)}}}
+fn NCA_observe(phase:Phase){unsafe{assert!(NCA_OBS&&NCA_SCAN&&NCA_SHAPE);assert_eq!(phase,Phase::Parsed);assert_eq!(NCA_STAGE,2);NCA_STAGE=3;}}
+fn NCA_prepare_cut<H:Digest32>(public:Public<'_>,proof:&[u8],_:H,obs:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{unsafe{
+ assert!(NCA_SHAPE&&NCA_SCAN);assert_eq!(NCA_STAGE,if NCA_OBS{3}else{2});assert_eq!(obs.is_some(),NCA_OBS);assert_eq!(proof.as_ptr(),NCA_PROOF);assert_eq!(proof.len(),57607);
+ match public{Public::Transfer(p,t)=>{assert_eq!(p as *const _ as *const u8,NCA_P);assert_eq!(t as *const _ as *const u8,NCA_T);},_=>assert!(false,"same public variant")}
+ let j:usize=kani::any();kani::assume(j<29);assert_eq!(g[j],E::ZERO);
+ kani::cover!(NCA_OBS,"source Parsed callback before prepare");kani::cover!(!NCA_OBS,"source None before prepare");kani::assume(false);Err(Error::Parse)
+}}
+#[kani::proof]#[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(crate::verifier::candidate::parse_shape,NCA_shape)]
+#[kani::stub(crate::verifier::candidate::canonical_scan,NCA_scan)]
+fn NCA_tx1_inline_none(){
+ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};
+ let proof:[u8;57607]=kani::any();let k:usize=kani::any();
+ unsafe{NCA_PROOF=proof.as_ptr();NCA_P=&p as *const _ as *const u8;NCA_T=&t as *const _ as *const u8;NCA_STAGE=0;NCA_SHAPE=kani::any();NCA_SCAN=kani::any();NCA_OBS=false;}
+ if k!=SPLIT{return;}
+ match parse_shape(&proof){Ok(Variant::S2)=>(),Err(Error::Parse)=>{unsafe{assert!(!NCA_SHAPE);assert_eq!(NCA_STAGE,1);}return;},_=>assert!(false,"shape result")}
+ match canonical_scan(&proof){Ok(())=>(),Err(Error::Parse)=>{unsafe{assert!(NCA_SHAPE&&!NCA_SCAN);assert_eq!(NCA_STAGE,2);}return;},_=>assert!(false,"scan result")}
+ // Frozen mark(None,Parsed) has no callback. Scratch is the actual source initializer.
+ let mut g=[E::ZERO;29];let _=NCA_prepare_cut(Public::Transfer(&p,&t),&proof,NCA_Digest,None,&mut g);assert!(false,"prepare argument cut terminates");
+}
