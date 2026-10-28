@@ -1,3 +1,10 @@
+import PV_B3P_DotSuccess227
+import PV_B3P_EqualitySuccess227
+import PV_B3P_ReverseSuccess227
+import PV_B3P_GlobalSumsSuccess227
+import PV_B3P_HostPackSuccess227
+import PV_B3P_RefPackSuccess227
+import PV_B3P_AbsorptionSuccess227
 import PV_B3P_PublicWitness227
 import PV_B3P_SelectValue227
 import PV_B3P_C1Success227
