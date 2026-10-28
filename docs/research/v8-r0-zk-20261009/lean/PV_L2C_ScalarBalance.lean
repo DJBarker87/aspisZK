@@ -24,7 +24,7 @@ theorem row_source (s q : word) (a : Bool) (r d : Usize) :
     prover_commit_reference.balance_m31_step (wrap s) (wrap q) a r d=
       (if (!a) && (r != d) then ok (wrap (add s q)) else ok (wrap s)) := by
   cases a <;> by_cases h : r=d <;>
-    simp [prover_commit_reference.balance_m31_step,h,PV_L2C_ReferenceArithmetic.m31_add]
+    simp [prover_commit_reference.balance_m31_step,h,PV_L2C_ReferenceArithmetic.m31_add,wrap]
 #print axioms row_source
 
 theorem read_step (table : Fin 1024 → word) (active : Fin 1024 → Bool)
@@ -40,7 +40,7 @@ theorem read_step (table : Fin 1024 → word) (active : Fin 1024 → Bool)
   change prover_commit_reference.balance_m31_step (wrap s)
     (wrap (table ⟨r.val,hr⟩)) (active ⟨r.val,hr⟩) r d=_
   simp only [flag,lookup,dif_pos hr]
-  exact row_wrap s (table ⟨r.val,hr⟩) (active ⟨r.val,hr⟩) r d
+  exact row_source s (table ⟨r.val,hr⟩) (active ⟨r.val,hr⟩) r d
 #print axioms read_step
 
 theorem fold_source (table : Fin 1024 → word) (active : Fin 1024 → Bool)
@@ -76,7 +76,7 @@ theorem complete_result (table : Fin 1024 → word) (active : Fin 1024 → Bool)
   simp only [bne_self_eq_false,Bool.false_eq_true,if_false]
   rw [PV_L2C_VecShape.active_read active d hd]
   simp only [ha,bind_tc_ok,Bool.false_eq_true,if_false]
-  have hz : aspis_core.field.M31.ZERO=wrap (0 : word) := rfl
+  have hz : aspis_core.field.M31.ZERO=wrap (0 : word) := by unfold aspis_core.field.M31.ZERO wrap; rfl
   rw [hz,fold_source table active d (rowSequence 1024 0#usize) rows_bounded 0]
   simp only [bind_tc_ok,PV_L2C_ReferenceSub.m31_sub]
   rw [PV_L2C_VecBack.index_mut bound1024 _ d hd]
