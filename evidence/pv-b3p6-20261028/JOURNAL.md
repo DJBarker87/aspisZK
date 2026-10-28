@@ -230,3 +230,18 @@ Symbolic serializer continuation:69 FieldResult,70 DigestOutcome,71 FrontierOutc
 82 ByteTotal,83 Nonvacuity,84 ByteOutcome,85 ReferenceOutcome,86 EndianVerified,87 EncodeTag,88 Length all PASS. These establish formal successful witnesses for both variants in the extracted model and selected original carrier, every-input absence of outer failure/divergence, scalar endian equality and exact successful output lengths1427/1455. All accepted reports use only standard axioms. Native whole-function binding, complete layout value equality and row removal remain OPEN; finite fixture comparison is not promoted to proof. Native-field primitive bridge is queued under89th attempt after admission;12 Kani invocations remain spent. Solver-temp cleanup checked strict own CNF/SMT patterns:0 files.
 
 FINAL:90 native-endian-model field-byte bridge,92 DigestValue,94 GuardedWords,95 DigestRegionValue,96 AssetValue PASS.89/91/93 failed drafts retained, with replacements.97 Metadata draft parser failure retained;98 MetadataAudit(42597) PASS.99 CombinedAudit(42598) PASS23.513s;100 FocusedClosure(42599) PASS1.269s. All final axiom reports use only propext/Classical.choice/Quot.sound.100 unique charged Lean IDs and12 Kani invocations; budget exhausted.0/6 rows removed; no row-statement counterexample; no native or endpoint credit. Source/Vec binding gaps remain explicit. Own compiled caches removed at job end per local rule9; source, emissions, fingerprints and receipts retained; shared caches and keys untouched.
+
+## LOG D366 resume: structural route, 36400–36499
+
+Resume at 38218775096e7ef946453360f1e194a28af39b0b, same worktree and branch.
+Fresh budget 100 Lean attempts; zero Kani invocations. IDs 36400–36496 focused,
+36497–36499 audit. Prior attempts and refusals remain retained. No shared sources,
+shipped crates/programs or trust-list changes. All 5,673 external objects rechecked
+before this run's first compile, zero mismatches. Previous private object cache
+was intentionally cleaned at prior handoff, so missing-object rebuilds are needed.
+
+V229 first: seven exact native function copies preserve schedule construction,
+checks, flat-map/sort/dedup and calls in order. The deterministic specialization
+into the extracted literal reference is a separate Lean proof obligation; body
+copy equality alone does not close it. `structural133.json` stays candidate until
+all named laws and same-input native finite-validation receipt are checked.

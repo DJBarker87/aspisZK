@@ -33,3 +33,14 @@ fn finite_native133() {
 pub mod reference226;
 #[cfg(any(kani, test))]
 mod native226;
+pub mod owned133;
+#[test]
+fn finite_native133_structural() {
+ use aspis_statement::pool_v1::{pair_tree_hiding as t,pair_forest_hiding as f};
+ assert_eq!(owned133::tree::build_pool_v1_pair_copy_row_schedule_v1(),t::build_pool_v1_pair_copy_row_schedule_v1());
+ assert_eq!(owned133::forest::build_pool_v1_pair_forest_copy_row_schedule_v1(),f::build_pool_v1_pair_forest_copy_row_schedule_v1());
+ let original=f::pool_v1_pair_forest_copy_active_rows_v1();
+ let copied=owned133::forest::pool_v1_pair_forest_copy_active_rows_v1();
+ assert_eq!(original,copied);
+ assert_eq!(copied.unwrap().as_slice(),reference133::active_rows().as_slice());
+}
