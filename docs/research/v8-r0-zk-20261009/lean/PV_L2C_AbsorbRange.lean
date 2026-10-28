@@ -52,7 +52,7 @@ theorem labels_range (xs : List U32) (count : Usize)
     intro p hp
     rcases List.mem_cons.mp hp with he | ht
     · subst p
-      exact ⟨by simp only [List.length_cons] at hc;omega,hx x (by simp)⟩
+      exact ⟨by change count.val < 16; simp only [List.length_cons] at hc;omega,hx x (by simp)⟩
     · exact ih (Usize.wrapping_add count 1#usize) nextBound
         (fun v hv => hx v (by simp [hv])) p ht
 #print axioms labels_range
