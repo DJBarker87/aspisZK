@@ -28,7 +28,7 @@ def produce
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     let salts1 ← PV_L1_Logged.lift (alloc.vec.Vec.push salts val)
-    ok (core.result.Result.Ok salts1)
+    Pure.pure (core.result.Result.Ok salts1)
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       (alloc.vec.Vec (Array Std.U8 32#usize)) (core.convert.FromSame

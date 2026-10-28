@@ -23,8 +23,8 @@ def produce
   let (transcript1, bytes1, zc1, pending_return) ← PV_L1_Logged.lift (host_semantic.zc_rows_loop aspis_coredigestDigest32Inst transcript bytes zc
       0#usize)
   match pending_return with
-  | none => ok (core.result.Result.Ok zc1, transcript1, bytes1)
-  | some r => ok (r, transcript1, bytes1)
+  | none => Pure.pure (core.result.Result.Ok zc1, transcript1, bytes1)
+  | some r => Pure.pure (r, transcript1, bytes1)
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)

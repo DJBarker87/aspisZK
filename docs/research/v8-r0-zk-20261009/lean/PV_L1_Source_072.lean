@@ -31,7 +31,7 @@ def produce
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
       transport.Variant.S2)
   if b
-  then ok (core.result.Result.Err verifier.Error.Semantic, nonce_store)
+  then Pure.pure (core.result.Result.Err verifier.Error.Semantic, nonce_store)
   else
     PV_L1_Source_071.produce
       coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst

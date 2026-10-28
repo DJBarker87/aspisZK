@@ -29,7 +29,7 @@ def produce
   let _ ← observe .opening 0 (ok ())
   if k >= prover.ATTEMPT_CAP
   then
-    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
+    Pure.pure (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
   else
     let (r, next_attempt1) ← PV_L1_Logged.lift (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut
         next_attempt k)
@@ -43,40 +43,40 @@ def produce
       | core.result.Result.Ok p =>
         let (proof, audit) := p
         let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))
-        ok (core.result.Result.Ok { proof, audit, attempts := i },
+        Pure.pure (core.result.Result.Ok { proof, audit, attempts := i },
           nonce_store1)
       | core.result.Result.Err e =>
         match e with
         | verifier.Error.Parse =>
-          ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Parse, nonce_store1)
         | verifier.Error.Semantic =>
-          ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
         | verifier.Error.Transcript =>
-          ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
         | verifier.Error.Relation =>
-          ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Relation, nonce_store1)
         | verifier.Error.Merkle =>
-          ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
         | verifier.Error.Query =>
-          ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Query, nonce_store1)
         | verifier.Error.Checkpoint =>
-          ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
         | verifier.Error.Allocation =>
-          ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
         | verifier.Error.Rejected =>
           let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))
           prover.retry_attempt
             coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
             public1 compiled variant hash nonce_store1 next_attempt1 i
         | verifier.Error.AttemptsExhausted =>
-          ok (core.result.Result.Err verifier.Error.AttemptsExhausted,
+          Pure.pure (core.result.Result.Err verifier.Error.AttemptsExhausted,
             nonce_store1)
         | verifier.Error.Entropy =>
-          ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+          Pure.pure (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
     | core.ops.control_flow.ControlFlow.Break residual =>
       let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           prover.RetriedProof (core.convert.FromSame verifier.Error) residual)
-      ok (r1, nonce_store)
+      Pure.pure (r1, nonce_store)
 
 theorem complete_result
   {T0 : Type}

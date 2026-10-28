@@ -21,8 +21,8 @@ def produce
         i1)
     trace.value 5#u16 i we
     let i2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add i 1#usize))
-    ok (cont i2)
-  else ok (done ())
+    Pure.pure (cont i2)
+  else Pure.pure (done ())
 
 theorem complete_result
   (q : Array Std.U32 22#usize) (i : Std.Usize) :

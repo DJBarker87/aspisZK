@@ -25,12 +25,12 @@ def produce
     match cf with
     | core.ops.control_flow.ControlFlow.Continue _ =>
       let lane1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add lane 1#usize))
-      ok (cont lane1)
+      Pure.pure (cont lane1)
     | core.ops.control_flow.ControlFlow.Break residual =>
       let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           Unit (core.convert.FromSame r1_wire.Error) residual)
-      ok (done (some r1))
-  else ok (done none)
+      Pure.pure (done (some r1))
+  else Pure.pure (done none)
 
 theorem complete_result
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize) :

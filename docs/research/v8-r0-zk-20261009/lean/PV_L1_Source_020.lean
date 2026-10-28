@@ -84,7 +84,7 @@ def produce
       let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue _ =>
-        ok (core.result.Result.Ok
+        Pure.pure (core.result.Result.Ok
           {
             backend := prepared.backend,
             semantic_bytes := prepared.sem.bytes,

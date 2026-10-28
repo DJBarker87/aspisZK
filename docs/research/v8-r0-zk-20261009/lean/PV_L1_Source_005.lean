@@ -17,11 +17,11 @@ def produce
   := do
   let _ ← observe .publication 0 (ok ())
   let begin1 ← PV_L1_Logged.lift (if batch = 0#usize
-                 then ok 0#usize
-                 else ok compact.SPLIT)
+                 then Pure.pure 0#usize
+                 else Pure.pure compact.SPLIT)
   let end1 ← PV_L1_Logged.lift (if batch = 0#usize
-               then ok compact.SPLIT
-               else ok 22#usize)
+               then Pure.pure compact.SPLIT
+               else Pure.pure 22#usize)
   let idx ← PV_L1_Logged.lift (prover.publication_indices queries begin1 end1 (t = 2#usize))
   let o ← PV_L1_Logged.lift (match t.val with
     | 0 =>
@@ -51,7 +51,7 @@ def produce
     let i6 := alloc.vec.Vec.len val
     let padded ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_sub i5 i6))
     let out2 ← PV_L1_Logged.lift (alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8)
-    ok (core.result.Result.Ok out2)
+    Pure.pure (core.result.Result.Ok out2)
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual

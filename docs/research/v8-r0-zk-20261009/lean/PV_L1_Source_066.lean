@@ -32,7 +32,7 @@ def produce
       let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
-        ok (core.result.Result.Ok (Array.make 3#usize [ val, val1, val2 ]))
+        Pure.pure (core.result.Result.Ok (Array.make 3#usize [ val, val1, val2 ]))
       | core.ops.control_flow.ControlFlow.Break residual =>
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           (Array (Array aspis_core.field.QM31 29#usize) 3#usize)

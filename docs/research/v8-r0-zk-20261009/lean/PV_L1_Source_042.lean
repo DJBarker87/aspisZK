@@ -31,13 +31,13 @@ def produce
           aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running)
       if b
       then
-        ok (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
-      else ok (core.result.Result.Ok (point, running), transcript, output)
+        Pure.pure (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+      else Pure.pure (core.result.Result.Ok (point, running), transcript, output)
     | core.ops.control_flow.ControlFlow.Break residual =>
       let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
           (core.convert.FromSame r1_wire.Error) residual)
-      ok (r1, transcript, output)
+      Pure.pure (r1, transcript, output)
   else
     let (r, transcript1, output1) ←
       PV_L1_Source_041.produce aspis_coredigestDigest32Inst
@@ -53,7 +53,7 @@ def produce
       let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
           (core.convert.FromSame r1_wire.Error) residual)
-      ok (r1, transcript1, output1)
+      Pure.pure (r1, transcript1, output1)
 
 theorem complete_result
   {H : Type} {F : Type} (aspis_coredigestDigest32Inst :

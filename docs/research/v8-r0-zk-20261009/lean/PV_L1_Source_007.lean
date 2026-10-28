@@ -70,7 +70,7 @@ def produce
       | core.ops.control_flow.ControlFlow.Continue val =>
         let left_val2 := alloc.vec.Vec.len val
         massert (left_val2 = i)
-        ok (core.result.Result.Ok val)
+        Pure.pure (core.result.Result.Ok val)
       | core.ops.control_flow.ControlFlow.Break residual =>
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)

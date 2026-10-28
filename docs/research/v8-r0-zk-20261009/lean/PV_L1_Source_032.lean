@@ -18,8 +18,8 @@ def produce
       e
       aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted)
   if b
-  then ok verifier.Error.Rejected
-  else ok verifier.Error.Semantic
+  then Pure.pure verifier.Error.Rejected
+  else Pure.pure verifier.Error.Semantic
 
 theorem complete_result
   (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) :

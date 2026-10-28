@@ -20,8 +20,8 @@ def produce
   let claims := Array.repeat 29#usize q
   let (claims1, pending_return) ← PV_L1_Logged.lift (host_semantic.claims_at_point_loop columns point claims 0#usize)
   match pending_return with
-  | none => ok (core.result.Result.Ok claims1)
-  | some r => ok r
+  | none => Pure.pure (core.result.Result.Ok claims1)
+  | some r => Pure.pure r
 
 theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)

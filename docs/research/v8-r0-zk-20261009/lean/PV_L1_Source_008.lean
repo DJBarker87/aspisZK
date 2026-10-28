@@ -20,12 +20,12 @@ def produce
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
       transport.Variant.S2)
   if b
-  then ok (core.result.Result.Err verifier.Error.Semantic)
+  then Pure.pure (core.result.Result.Err verifier.Error.Semantic)
   else
     let (accepted, _) ← PV_L1_Logged.lift (aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.p_r1_check challenges)
     if accepted
-    then ok (core.result.Result.Ok ())
-    else ok (core.result.Result.Err verifier.Error.Rejected)
+    then Pure.pure (core.result.Result.Ok ())
+    else Pure.pure (core.result.Result.Err verifier.Error.Rejected)
 
 theorem complete_result
   (variant : transport.Variant)

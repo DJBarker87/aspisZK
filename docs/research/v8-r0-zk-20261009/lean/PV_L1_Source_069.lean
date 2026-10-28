@@ -75,12 +75,12 @@ def produce
             let i := alloc.vec.Vec.len val1.g
             if i != 1024#usize
             then
-              ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+              Pure.pure (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
             else
               let i1 := alloc.vec.Vec.len val1.h1_padding
               if i1 != 1024#usize
               then
-                ok (core.result.Result.Err verifier.Error.Semantic,
+                Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                   nonce_store1)
               else
                 let s := alloc.vec.Vec.deref val1.g
@@ -93,12 +93,12 @@ def produce
                     val2
                 if audit.c1_columns_inactive_balanced != 16#usize
                 then
-                  ok (core.result.Result.Err verifier.Error.Semantic,
+                  Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                     nonce_store1)
                 else
                   if audit.mask_only_columns_inactive_balanced != 10#usize
                   then
-                    ok (core.result.Result.Err verifier.Error.Semantic,
+                    Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                       nonce_store1)
                   else
                     if audit.d_inactive_balanced
@@ -181,7 +181,7 @@ def produce
                                     |
                                       core.ops.control_flow.ControlFlow.Continue
                                       val9 =>
-                                      ok (core.result.Result.Ok (val9,
+                                      Pure.pure (core.result.Result.Ok (val9,
                                         { audit with h1_total_balanced := true
                                         }), nonce_store1)
                                     | core.ops.control_flow.ControlFlow.Break
@@ -191,9 +191,9 @@ def produce
                                           prover.MaskedFixtureAudit)
                                           (core.convert.FromSame
                                           verifier.Error) residual)
-                                      ok (r17, nonce_store1)
+                                      Pure.pure (r17, nonce_store1)
                                   else
-                                    ok (core.result.Result.Err
+                                    Pure.pure (core.result.Result.Err
                                       verifier.Error.Semantic, nonce_store1)
                                 | core.ops.control_flow.ControlFlow.Break
                                   residual =>
@@ -202,7 +202,7 @@ def produce
                                       prover.MaskedFixtureAudit)
                                       (core.convert.FromSame verifier.Error)
                                       residual)
-                                  ok (r16, nonce_store1)
+                                  Pure.pure (r16, nonce_store1)
                               | core.ops.control_flow.ControlFlow.Break
                                 residual =>
                                 let r14 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
@@ -210,7 +210,7 @@ def produce
                                     prover.MaskedFixtureAudit)
                                     (core.convert.FromSame verifier.Error)
                                     residual)
-                                ok (r14, nonce_store1)
+                                Pure.pure (r14, nonce_store1)
                             | core.ops.control_flow.ControlFlow.Break residual
                               =>
                               let r12 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
@@ -218,47 +218,47 @@ def produce
                                   prover.MaskedFixtureAudit)
                                   (core.convert.FromSame verifier.Error)
                                   residual)
-                              ok (r12, nonce_store1)
+                              Pure.pure (r12, nonce_store1)
                           | core.ops.control_flow.ControlFlow.Break residual =>
                             let r11 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                 ((alloc.vec.Vec Std.U8) ×
                                 prover.MaskedFixtureAudit)
                                 (core.convert.FromSame verifier.Error) residual)
-                            ok (r11, nonce_store1)
+                            Pure.pure (r11, nonce_store1)
                         else
-                          ok (core.result.Result.Err verifier.Error.Semantic,
+                          Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                             nonce_store1)
                       else
-                        ok (core.result.Result.Err verifier.Error.Semantic,
+                        Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                           nonce_store1)
                     else
-                      ok (core.result.Result.Err verifier.Error.Semantic,
+                      Pure.pure (core.result.Result.Err verifier.Error.Semantic,
                         nonce_store1)
           | core.ops.control_flow.ControlFlow.Break residual =>
             let r10 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                 ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
                 (core.convert.FromSame verifier.Error) residual)
-            ok (r10, nonce_store1)
+            Pure.pure (r10, nonce_store1)
         | core.ops.control_flow.ControlFlow.Break residual =>
           let r8 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
               ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
               (core.convert.FromSame verifier.Error) residual)
-          ok (r8, nonce_store1)
+          Pure.pure (r8, nonce_store1)
       | core.ops.control_flow.ControlFlow.Break residual =>
         let r6 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
             (core.convert.FromSame verifier.Error) residual)
-        ok (r6, nonce_store1)
+        Pure.pure (r6, nonce_store1)
     | core.ops.control_flow.ControlFlow.Break residual =>
       let r4 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
           (core.convert.FromSame verifier.Error) residual)
-      ok (r4, nonce_store1)
+      Pure.pure (r4, nonce_store1)
   | core.ops.control_flow.ControlFlow.Break residual =>
     let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
         (core.convert.FromSame verifier.Error) residual)
-    ok (r2, nonce_store1)
+    Pure.pure (r2, nonce_store1)
 
 theorem complete_result
   {T0 : Type} (aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst :

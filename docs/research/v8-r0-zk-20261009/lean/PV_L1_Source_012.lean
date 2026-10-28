@@ -22,14 +22,14 @@ def produce
     if n = 22#usize
     then
       let a ← PV_L1_Logged.lift (Array.index_usize advances 7#usize)
-      ok (core.result.Result.Ok (accepted, a))
-    else ok (core.result.Result.Err verifier.Error.Transcript)
+      Pure.pure (core.result.Result.Ok (accepted, a))
+    else Pure.pure (core.result.Result.Err verifier.Error.Transcript)
   else
     let k ← PV_L1_Logged.lift (draws / 8#usize)
     if n = 22#usize
     then
       let a ← PV_L1_Logged.lift (Array.index_usize advances k)
-      ok (core.result.Result.Ok (accepted, a))
+      Pure.pure (core.result.Result.Ok (accepted, a))
     else
       let i ← PV_L1_Logged.lift (draws % 8#usize)
       let at1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 4#usize i))

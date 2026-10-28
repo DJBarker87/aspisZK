@@ -31,12 +31,12 @@ def produce
   let s ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
   let i := Slice.len s
   if i != 16#usize
-  then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+  then Pure.pure (core.result.Result.Err r1_wire.Error.Public, commitments)
   else
     let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice compiled.semantic_c1.c1))
     let i1 := Slice.len s1
     if i1 != 16#usize
-    then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+    then Pure.pure (core.result.Result.Err r1_wire.Error.Public, commitments)
     else
       let pvplpsv ← PV_L1_Logged.lift (aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition
           public1)
@@ -44,7 +44,7 @@ def produce
           aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1
           compiled.public_statement pvplpsv)
       if b
-      then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
+      then Pure.pure (core.result.Result.Err r1_wire.Error.Public, commitments)
       else
         let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
         let c1 ← PV_L1_Logged.lift (host_semantic.clone_semantic_columns s2 mask_only)

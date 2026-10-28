@@ -26,7 +26,7 @@ def produce
     else sampler.ordinary_sample block)
   let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .Usize row))
   trace.value 4#u16 i out
-  ok (out, self1)
+  Pure.pure (out, self1)
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)

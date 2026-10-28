@@ -16,7 +16,7 @@ def produce
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
   if j = 28#usize
-  then ok sum
+  then Pure.pure sum
   else
     let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add offset j))
     let q ← PV_L1_Logged.lift (Array.index_usize dc i)

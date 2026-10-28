@@ -24,7 +24,7 @@ def produce
   let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .Usize row))
   let we ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 out)
   trace.value 4#u16 i we
-  ok (out, self1)
+  Pure.pure (out, self1)
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)

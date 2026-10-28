@@ -69,6 +69,7 @@ for k,n in enumerate(selected):
   if re.match(r'PV_L1_Source_\d+\.produce\b',expr):continue
   lines[at:end]=[(prefix+'← PV_L1_Logged.lift ('+expr+')')]
  body='\n'.join(lines)
+ body=re.sub(r'(?<![A-Za-z0-9_.])ok(?=\s|\()', 'Pure.pure', body)
  applications=' '.join(('('+x+' := '+x+')') if kind=='{' else x for x,kind in args)
  result_sig=ret.replace('\n  Result','\n  Logged',1)
  # Parenthesize the parameterized Call.boundary constructor.

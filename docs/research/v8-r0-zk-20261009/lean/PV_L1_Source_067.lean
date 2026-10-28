@@ -97,7 +97,7 @@ def produce
                   let i := alloc.vec.Vec.len val8
                   if i != 1024#usize
                   then
-                    ok (core.result.Result.Err r1_wire.Error.Public,
+                    Pure.pure (core.result.Result.Err r1_wire.Error.Public,
                       commitments1)
                   else
                     let s7 := alloc.vec.Vec.deref val8
@@ -110,7 +110,7 @@ def produce
                         (some q))
                     if b
                     then
-                      ok (core.result.Result.Err r1_wire.Error.Public,
+                      Pure.pure (core.result.Result.Err r1_wire.Error.Public,
                         commitments1)
                     else
                       let s8 := alloc.vec.Vec.deref val8
@@ -254,11 +254,11 @@ def produce
                                                 val23 val26)
                                             if b1
                                             then
-                                              ok (core.result.Result.Err
+                                              Pure.pure (core.result.Result.Err
                                                 r1_wire.Error.EqualCirclePoints,
                                                 commitments2)
                                             else
-                                              ok (core.result.Result.Ok
+                                              Pure.pure (core.result.Result.Ok
                                                 {
                                                   bytes := bytes9,
                                                   transcript := val25,
@@ -290,7 +290,7 @@ def produce
                                                 (host_semantic.BuiltSemantics
                                                 H) (core.convert.FromSame
                                                 r1_wire.Error) residual)
-                                            ok (r21, commitments2)
+                                            Pure.pure (r21, commitments2)
                                         |
                                           core.ops.control_flow.ControlFlow.Break
                                           residual =>
@@ -298,104 +298,104 @@ def produce
                                               (host_semantic.BuiltSemantics H)
                                               (core.convert.FromSame
                                               r1_wire.Error) residual)
-                                          ok (r20, commitments2)
+                                          Pure.pure (r20, commitments2)
                                       | core.ops.control_flow.ControlFlow.Break
                                         residual =>
                                         let r19 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                             (host_semantic.BuiltSemantics H)
                                             (core.convert.FromSame
                                             r1_wire.Error) residual)
-                                        ok (r19, commitments2)
+                                        Pure.pure (r19, commitments2)
                                     | core.ops.control_flow.ControlFlow.Break
                                       residual =>
                                       let r18 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                           (host_semantic.BuiltSemantics H)
                                           (core.convert.FromSame r1_wire.Error)
                                           residual)
-                                      ok (r18, commitments2)
+                                      Pure.pure (r18, commitments2)
                                   | core.ops.control_flow.ControlFlow.Break
                                     residual =>
                                     let r17 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                         (host_semantic.BuiltSemantics H)
                                         (core.convert.FromSame r1_wire.Error)
                                         residual)
-                                    ok (r17, commitments2)
+                                    Pure.pure (r17, commitments2)
                                 | core.ops.control_flow.ControlFlow.Break
                                   residual =>
                                   let r16 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                       (host_semantic.BuiltSemantics H)
                                       (core.convert.FromSame r1_wire.Error)
                                       residual)
-                                  ok (r16, commitments2)
+                                  Pure.pure (r16, commitments2)
                               | core.ops.control_flow.ControlFlow.Break
                                 residual =>
                                 let r15 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                     (host_semantic.BuiltSemantics H)
                                     (core.convert.FromSame r1_wire.Error)
                                     residual)
-                                ok (r15, commitments2)
+                                Pure.pure (r15, commitments2)
                             | core.ops.control_flow.ControlFlow.Break residual
                               =>
                               let r14 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                   (host_semantic.BuiltSemantics H)
                                   (core.convert.FromSame r1_wire.Error)
                                   residual)
-                              ok (r14, commitments2)
+                              Pure.pure (r14, commitments2)
                           | core.ops.control_flow.ControlFlow.Break residual =>
                             let r13 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                                 (host_semantic.BuiltSemantics H)
                                 (core.convert.FromSame r1_wire.Error) residual)
-                            ok (r13, commitments2)
+                            Pure.pure (r13, commitments2)
                         | core.ops.control_flow.ControlFlow.Break residual =>
                           let r12 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                               (host_semantic.BuiltSemantics H)
                               (core.convert.FromSame r1_wire.Error) residual)
-                          ok (r12, commitments2)
+                          Pure.pure (r12, commitments2)
                       | core.ops.control_flow.ControlFlow.Break residual =>
                         let r11 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                             (host_semantic.BuiltSemantics H)
                             (core.convert.FromSame r1_wire.Error) residual)
-                        ok (r11, commitments2)
+                        Pure.pure (r11, commitments2)
                 | core.ops.control_flow.ControlFlow.Break residual =>
                   let r10 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                       (host_semantic.BuiltSemantics H) (core.convert.FromSame
                       r1_wire.Error) residual)
-                  ok (r10, commitments1)
+                  Pure.pure (r10, commitments1)
               | core.ops.control_flow.ControlFlow.Break residual =>
                 let r8 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                     (host_semantic.BuiltSemantics H) (core.convert.FromSame
                     r1_wire.Error) residual)
-                ok (r8, commitments1)
+                Pure.pure (r8, commitments1)
             | core.ops.control_flow.ControlFlow.Break residual =>
               let r7 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                   (host_semantic.BuiltSemantics H) (core.convert.FromSame
                   r1_wire.Error) residual)
-              ok (r7, commitments1)
+              Pure.pure (r7, commitments1)
           | core.ops.control_flow.ControlFlow.Break residual =>
             let r6 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                 (host_semantic.BuiltSemantics H) (core.convert.FromSame
                 r1_wire.Error) residual)
-            ok (r6, commitments1)
+            Pure.pure (r6, commitments1)
         | core.ops.control_flow.ControlFlow.Break residual =>
           let r5 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
               (host_semantic.BuiltSemantics H) (core.convert.FromSame
               r1_wire.Error) residual)
-          ok (r5, commitments1)
+          Pure.pure (r5, commitments1)
       | core.ops.control_flow.ControlFlow.Break residual =>
         let r4 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             (host_semantic.BuiltSemantics H) (core.convert.FromSame
             r1_wire.Error) residual)
-        ok (r4, commitments1)
+        Pure.pure (r4, commitments1)
     | core.ops.control_flow.ControlFlow.Break residual =>
       let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           (host_semantic.BuiltSemantics H) (core.convert.FromSame
           r1_wire.Error) residual)
-      ok (r2, commitments1)
+      Pure.pure (r2, commitments1)
   | core.ops.control_flow.ControlFlow.Break residual =>
     let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
         residual)
-    ok (r1, commitments)
+    Pure.pure (r1, commitments)
 
 theorem complete_result
   {H : Type} {T1 : Type} {T2 : Type} (aspis_coredigestDigest32Inst :

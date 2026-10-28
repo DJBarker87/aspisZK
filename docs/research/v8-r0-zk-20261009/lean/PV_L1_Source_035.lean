@@ -25,11 +25,11 @@ def produce
     let m1 ← PV_L1_Logged.lift (aspis_core.field.M31.ZERO)
     let b ← PV_L1_Logged.lift (aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m m1)
     let c1_columns_inactive_balanced1 ← PV_L1_Logged.lift (if b
-      then ok (Std.Usize.wrapping_add c1_columns_inactive_balanced 1#usize)
-      else ok c1_columns_inactive_balanced)
+      then Pure.pure (Std.Usize.wrapping_add c1_columns_inactive_balanced 1#usize)
+      else Pure.pure c1_columns_inactive_balanced)
     let column1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add column 1#usize))
-    ok (cont (c1_columns_inactive_balanced1, column1))
-  else ok (done c1_columns_inactive_balanced)
+    Pure.pure (cont (c1_columns_inactive_balanced1, column1))
+  else Pure.pure (done c1_columns_inactive_balanced)
 
 theorem complete_result
   (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))

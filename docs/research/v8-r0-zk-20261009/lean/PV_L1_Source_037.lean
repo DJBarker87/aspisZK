@@ -31,7 +31,7 @@ def produce
   let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice h1_padding))
   let q3 ← PV_L1_Logged.lift (prover.inactive_sum_k s2 masks)
   let b2 ← PV_L1_Logged.lift (aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q3 q1)
-  ok
+  Pure.pure
     {
       c1_columns_inactive_balanced,
       mask_only_columns_inactive_balanced,

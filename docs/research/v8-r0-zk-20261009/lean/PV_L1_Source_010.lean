@@ -19,10 +19,10 @@ def produce
   then
     let i1 ← PV_L1_Logged.lift (Array.index_usize accepted i)
     if i1 = candidate
-    then ok (done (some true))
+    then Pure.pure (done (some true))
     else let i2 ← Aeneas.Std.lift (Std.Usize.wrapping_add i 1#usize)
-         ok (cont i2)
-  else ok (done none)
+         Pure.pure (cont i2)
+  else Pure.pure (done none)
 
 theorem complete_result
   (accepted : Array Std.U32 22#usize) (n : Std.Usize) (candidate : Std.U32)

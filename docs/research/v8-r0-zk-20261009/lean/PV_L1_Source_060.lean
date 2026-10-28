@@ -16,12 +16,12 @@ def produce
   let _ ← observe .semanticCanonical 0 (ok ())
   let i := Slice.len column
   if i != 1024#usize
-  then ok (core.result.Result.Err r1_wire.Error.Public)
+  then Pure.pure (core.result.Result.Err r1_wire.Error.Public)
   else
     let pending_return ← PV_L1_Logged.lift (host_semantic.check_base_column_loop column 0#usize)
     match pending_return with
-    | none => ok (core.result.Result.Ok ())
-    | some r => ok r
+    | none => Pure.pure (core.result.Result.Ok ())
+    | some r => Pure.pure r
 
 theorem complete_result
   (column : Slice aspis_core.field.M31) :

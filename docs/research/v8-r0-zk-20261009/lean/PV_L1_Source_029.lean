@@ -29,10 +29,10 @@ def produce
         do
         let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .U32 index))
         PV_L1_Source_028.produce reserved context hash tag i salts
-      | core.result.Result.Err _ => ok result)
+      | core.result.Result.Err _ => Pure.pure result)
     let index1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add index 1#usize))
-    ok (cont (result1, index1))
-  else ok (done result)
+    Pure.pure (cont (result1, index1))
+  else Pure.pure (done result)
 
 theorem complete_result
   (reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)

@@ -118,12 +118,12 @@ def produce
   | core.ops.control_flow.ControlFlow.Continue val =>
     let (q, state7) := val
     host_transcript.trace_queries q
-    ok (core.result.Result.Ok q, { self1 with state := state7 })
+    Pure.pure (core.result.Result.Ok q, { self1 with state := state7 })
   | core.ops.control_flow.ControlFlow.Break residual =>
     let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         (Array Std.U32 22#usize) (core.convert.FromSame verifier.Error)
         residual)
-    ok (r1, self1)
+    Pure.pure (r1, self1)
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)

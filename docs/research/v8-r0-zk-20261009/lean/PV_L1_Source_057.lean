@@ -26,10 +26,10 @@ def produce
     let o ← PV_L1_Logged.lift (aspis_core.field.QM31.from_le_bytes s2)
     let b2 := core.option.Option.is_none o
     if b2
-    then ok (done (some (core.result.Result.Err r1_wire.Error.Public)))
+    then Pure.pure (done (some (core.result.Result.Err r1_wire.Error.Public)))
     else let row1 ← Aeneas.Std.lift (Std.Usize.wrapping_add row 1#usize)
-         ok (cont row1)
-  else ok (done none)
+         Pure.pure (cont row1)
+  else Pure.pure (done none)
 
 theorem complete_result
   (column : Array aspis_core.field.QM31 1024#usize) (row : Std.Usize) :

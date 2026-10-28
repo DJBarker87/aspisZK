@@ -16,8 +16,8 @@ def produce
   let _ ← observe .queryScan 0 (ok ())
   let pending_return ← PV_L1_Logged.lift (host_transcript.query_contains_loop accepted n candidate 0#usize)
   match pending_return with
-  | none => ok false
-  | some b => ok b
+  | none => Pure.pure false
+  | some b => Pure.pure b
 
 theorem complete_result
   (accepted : Array Std.U32 22#usize) (n : Std.Usize) (candidate : Std.U32) :

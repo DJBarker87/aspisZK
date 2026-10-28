@@ -40,7 +40,7 @@ def produce
         aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q running)
     if b
     then
-      ok (core.result.Result.Err (r1_wire.Error.Boundary round), transcript,
+      Pure.pure (core.result.Result.Err (r1_wire.Error.Boundary round), transcript,
         output)
     else
       let polynomial_bytes ← PV_L1_Logged.lift (host_sumcheck.encode_polynomial polynomial)
@@ -65,22 +65,22 @@ def produce
           let q1 ← PV_L1_Logged.lift (Array.index_usize point1 round)
           let running1 ← PV_L1_Logged.lift (aspis_core.state_only_sumcheck.evaluate_state_only_polynomial
               polynomial q1)
-          ok (core.result.Result.Ok (point1, running1), transcript1, output1)
+          Pure.pure (core.result.Result.Ok (point1, running1), transcript1, output1)
         | core.ops.control_flow.ControlFlow.Break residual =>
           let r3 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
               ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
               (core.convert.FromSame r1_wire.Error) residual)
-          ok (r3, transcript1, output)
+          Pure.pure (r3, transcript1, output)
       | core.ops.control_flow.ControlFlow.Break residual =>
         let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
             (core.convert.FromSame r1_wire.Error) residual)
-        ok (r2, transcript, output)
+        Pure.pure (r2, transcript, output)
   | core.ops.control_flow.ControlFlow.Break residual =>
     let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
         (core.convert.FromSame r1_wire.Error) residual)
-    ok (r1, transcript, output)
+    Pure.pure (r1, transcript, output)
 
 theorem complete_result
   {H : Type} {F : Type} (aspis_coredigestDigest32Inst :

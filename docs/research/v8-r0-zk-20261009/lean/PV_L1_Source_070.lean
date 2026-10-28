@@ -59,7 +59,7 @@ def produce
     let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
         (core.convert.FromSame verifier.Error) residual)
-    ok (r2, nonce_store)
+    Pure.pure (r2, nonce_store)
 
 theorem complete_result
   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)

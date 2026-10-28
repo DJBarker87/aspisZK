@@ -16,8 +16,8 @@ def produce
   let _ ← observe .semanticCanonical 0 (ok ())
   let pending_return ← PV_L1_Logged.lift (host_semantic.check_secure_column_loop column 0#usize)
   match pending_return with
-  | none => ok (core.result.Result.Ok ())
-  | some r => ok r
+  | none => Pure.pure (core.result.Result.Ok ())
+  | some r => Pure.pure r
 
 theorem complete_result
   (column : Array aspis_core.field.QM31 1024#usize) :

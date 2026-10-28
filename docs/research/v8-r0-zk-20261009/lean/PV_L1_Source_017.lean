@@ -28,7 +28,7 @@ def produce
   let s4 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ 2#u8 ])))
   let s5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 2#usize [ s3, s4 ])))
   let a ← PV_L1_Logged.lift (aspis_coredigestDigest32Inst.digest self1.hash s5)
-  ok (block, { self1 with state := a })
+  Pure.pure (block, { self1 with state := a })
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)

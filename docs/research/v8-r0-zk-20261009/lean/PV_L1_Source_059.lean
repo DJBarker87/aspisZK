@@ -19,10 +19,10 @@ def produce
   then
     let m ← PV_L1_Logged.lift (Slice.index_usize column row)
     if m >= aspis_core.field.P
-    then ok (done (some (core.result.Result.Err r1_wire.Error.Public)))
+    then Pure.pure (done (some (core.result.Result.Err r1_wire.Error.Public)))
     else let row1 ← Aeneas.Std.lift (Std.Usize.wrapping_add row 1#usize)
-         ok (cont row1)
-  else ok (done none)
+         Pure.pure (cont row1)
+  else Pure.pure (done none)
 
 theorem complete_result
   (column : Slice aspis_core.field.M31) (row : Std.Usize) :

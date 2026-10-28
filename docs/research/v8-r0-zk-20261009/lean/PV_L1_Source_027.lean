@@ -23,7 +23,7 @@ def produce
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
       transport.Variant.S2)
   if b
-  then ok (core.result.Result.Err verifier.Error.Semantic)
+  then Pure.pure (core.result.Result.Err verifier.Error.Semantic)
   else
     let s := alloc.vec.Vec.deref backend.messages
     let coefficients ← PV_L1_Logged.lift (prover.opening_coefficients variant s)
@@ -86,7 +86,7 @@ def produce
         let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r3)
         match cf2 with
         | core.ops.control_flow.ControlFlow.Continue val2 =>
-          ok (core.result.Result.Ok
+          Pure.pure (core.result.Result.Ok
             {
               backend,
               sem,

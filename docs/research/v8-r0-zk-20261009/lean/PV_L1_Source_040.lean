@@ -29,7 +29,7 @@ def produce
     | core.ops.control_flow.ControlFlow.Continue val1 =>
       let s := alloc.vec.Vec.deref val
       let b ← PV_L1_Logged.lift (ct_pole.all_slots_clear s val1 chi)
-      ok (core.result.Result.Ok b)
+      Pure.pure (core.result.Result.Ok b)
     | core.ops.control_flow.ControlFlow.Break residual =>
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         Bool (core.convert.FromSame r1_wire.Error) residual
