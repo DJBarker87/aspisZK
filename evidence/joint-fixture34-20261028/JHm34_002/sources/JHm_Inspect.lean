@@ -1,0 +1,14 @@
+import JHl_ClaimReached
+import JHl_ClaimKappa
+import CurrentClaimSourceAggregation
+#print AspisR1ClaimPreparedBridge.claimPublic
+#print AspisR1ClaimPreparedBridge.powersPublic_success
+#print AspisR1CurrentPreparedClaim.ClaimParts.kappaTerm
+#print AspisR1CurrentPreparedClaim.ClaimParser.field_success
+#print AspisR1.JGi_CurrentSemantic.source
+#print AspisR1CurrentCaller.InstalledPreparation.sourceView_semantic
+#check List.sum_ofFn
+#check List.sum_eq_sum_range
+#check List.ofFn_getElem
+#check List.ext_getElem
+#print AspisR1CurrentPreparedClaim.ClaimParts.successful_claim_gamma_kappa_aggregation

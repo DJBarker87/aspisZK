@@ -1,0 +1,58 @@
+{"attempt": "JHm34_002", "exit_status": 1, "wall_seconds": 3.472962706000544, "peak_rss_kib": "6248604", "swaps": "0", "print_axioms": []}
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpda
+...
+               AspisR1CurrentPreparedClaim.Concrete.decode out =
+                      AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial kappa final :=
+fun {H} inst sem y1 inactive gamma kappa out g hgamma hkappa hinactive hg h =>
+  have hweights := fun i value hr =>
+    (AspisR1CurrentPreparedClaim.ClaimPowers.powers_success_read gamma g hgamma hg i value hr).left;
+  let ⟨final, h✝⟩ :=
+    AspisR1CurrentPreparedClaim.ClaimParts.successful_concrete_claim_kappa_polynomial
+      AspisR1EbyKPushDecodedProductUpdate.QRaw inst sem y1 inactive kappa out g hkappa hinactive h
+  let ⟨hzero, right✝⟩ := h✝
+  let ⟨hvalues, right✝¹⟩ := right✝
+  let ⟨hout, he⟩ := right✝¹
+  Exists.intro final
+    ⟨hzero,
+      ⟨fun point hp =>
+        let ⟨i, h✝¹⟩ := hvalues point hp
+        let ⟨value, h✝²⟩ := h✝¹
+        let ⟨hi, h✝³⟩ := h✝²
+        let ⟨hinc, right✝²⟩ := h✝³
+        let ⟨hcall, hcell⟩ := right✝²
+        let ⟨xs, h✝⁴⟩ :=
+          AspisR1S5ClaimScalarConcreteQRawTrace.successful_concrete_claim_dot_decoded_product_sum inst sem y1 g point
+            value hweights hcall
+        let ⟨hlen, right✝³⟩ := h✝⁴
+        let ⟨horder, right✝⁴⟩ := right✝³
+        let ⟨hreads, hdecode⟩ := right✝⁴
+        Exists.intro i
+          (Exists.intro value
+            (Exists.intro hi
+              (Exists.intro xs
+                ⟨hinc,
+                  ⟨hcell,
+                    ⟨hlen,
+                      ⟨horder,
+                        ⟨fun t ht =>
+                          let ⟨hr, hw⟩ := hreads t ht
+                          ⟨hr,
+                            ⟨hw,
+                              (AspisR1CurrentPreparedClaim.ClaimPowers.powers_success_read gamma g hgamma hg t.1 t.2.1
+                                  hw).right⟩⟩,
+                          hdecode⟩⟩⟩⟩⟩))),
+        ⟨hout, he⟩⟩⟩
+
+Running as unit: run-r8dbbb8b9a09f4dc38f0ad63b360f5b35.scope; invocation ID: fa78e4a0bcf1411d9871136721238622

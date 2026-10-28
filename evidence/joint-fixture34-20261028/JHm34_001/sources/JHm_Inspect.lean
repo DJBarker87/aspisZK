@@ -1,0 +1,13 @@
+import JHl_ClaimReached
+import JHl_ClaimKappa
+import CurrentClaimSourceAggregation
+#print AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial
+#print AspisR1CurrentPreparedClaim.ClaimScalar.SelectedSource
+#check AspisR1CurrentPreparedClaim.ClaimParts.successful_claim_source_gamma_kappa_sum
+#check AspisR1CurrentPreparedClaim.ClaimParts.successful_claim_gamma_kappa_scalar_sum
+#print AspisR1PublicPreparation.claimPublic
+#print AspisR1ClaimPreparedBridge.toClaimE
+#print AspisR1CurrentPreparedClaim.Concrete.decode
+#check AspisR1.JHa_CurrentFields.source
+#check AspisR1ClaimPreparedBridge.toClaimSem
+#print AspisR1CurrentPreparedClaim.ClaimScalar.selectedScalar
