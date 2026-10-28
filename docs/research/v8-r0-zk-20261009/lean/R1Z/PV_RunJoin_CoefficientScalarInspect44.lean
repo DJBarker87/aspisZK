@@ -5,5 +5,5 @@ open Aeneas Aeneas.Std
 #synth HShiftRight Usize Usize (Result Usize)
 #synth HShiftLeft Usize Usize (Result Usize)
 #print core.iter.range.UScalarStep
-#print UScalar.hShiftRight
-#print UScalar.hShiftLeft
+#print Aeneas.Std.instHShiftRightUScalarResult
+#print Aeneas.Std.instHShiftLeftUScalarResult
