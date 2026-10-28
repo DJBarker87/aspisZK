@@ -21,8 +21,9 @@ for cohort in ['evidence','deployed']:
  checks.append(dict(family='typed RawVec<T,A>::new_in',cohort=cohort,body=b,source_sha256=files[k]['sha256'],proof='R1Z.PV_RDB2C_TypedRawVec.complete; no_allocation; zst_capacity; non_zst_capacity',calls=['RawVecInner::new_in(alloc, Alignment::of::<T>())'],allocations=[],marker='PhantomData has no runtime contents',constant_assertion='Rust real-type layout padded to its alignment; compile-time assertion, no runtime allocation'))
 for cohort in ['evidence','deployed']:
  k=cohort+'/library/alloc/src/boxed.rs';s=get(k);b=body(s,'pub fn new(x: T)')
- assert tokens(b)==tokens('{return box_new(x);}')
- checks.append(dict(family='Box::new',cohort=cohort,source_sha256=files[k]['sha256'],body=b,calls=['box_new(x)'],intrinsic_lowering='NOT inferred from this source body; requires pinned compiler MIR association',proof='R1Z.PV_RDB2C_Box.complete applies only once lowering is associated'))
+ expected = ('{let ptr=box_new_uninit(<T as SizedTypeProperties>::LAYOUT) as *mut T;unsafe {core::intrinsics::write_via_move(ptr,x)};unsafe {mem::transmute(ptr)}}' if cohort=='evidence' else '{return box_new(x);}')
+ assert tokens(b)==tokens(expected),(cohort,b)
+ checks.append(dict(family='Box::new',cohort=cohort,source_sha256=files[k]['sha256'],body=b,calls=(['box_new_uninit(Layout::new::<T>())','write_via_move(ptr,x)','transmute(ptr)'] if cohort=='evidence' else ['box_new(x)']),intrinsic_lowering='NOT inferred from this source body; requires pinned compiler MIR association',proof='R1Z.PV_RDB2C_Box.complete applies only once lowering is associated'))
 pins=json.loads((D/'project-pins.json').read_text());S=OLD/'src'
 for p,h in pins.items():
  raw=(S/p).read_bytes();assert hashlib.sha256(raw).hexdigest()==h
