@@ -24,6 +24,8 @@ table[dependent]=aspis_core::field::QM31::ZERO.sub(sum);(Ok(()),table)''',
 (r,'balance_qm31_rows'):'''if row<1024 {let after=balance_qm31_step(sum,table[row],active[row],row,dependent);
 balance_qm31_rows(table,dependent,active,row+1,after)}else{sum}''',
 (r,'balance_qm31_step'):'''if !active && row!=dependent {sum.add(value)} else {sum}'''}
+for (p,f),body in list(expected.items()):
+ expected[p,f.replace('qm31','m31')]=body.replace('aspis_core::field::QM31','M31').replace('QM31','M31').replace('qm31','m31')
 checks=[]
 for (p,f),body in expected.items():
  actual=take(p,f);assert norm(actual)==norm(body),(p,f)
@@ -34,14 +36,14 @@ diff=R/'tools/pv-l2c-20261028/differential/balance_cut.rs'
 prior=json.loads((R/'evidence/pv-l2c-20261028/native-after-42695/receipt.json').read_text())
 assert hashlib.sha256(diff.read_bytes()).hexdigest()==prior['source_sha256']['balance_cut.rs']
 assert prior['exit']==0
-out=dict(evidence_class='structural (K-1 substitute)',scope='QM31 balancing cut only; length=1024, dependent<1024, dependent inactive; no honest sampler/caller association',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),checks=checks,
+out=dict(evidence_class='structural (K-1 substitute)',scope='M31 and QM31 balancing cuts only; length=1024, dependent<1024, dependent inactive; no honest sampler/caller association',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),checks=checks,
  differences=[
  dict(change='Borrowed slice vs owned Vec and Result/table pair',law='PV_L2C_VecRead.read; PV_L2C_VecBack.index_mut/write; PV_L2C_OwnedBalance.complete_result'),
  dict(change='While loop vs ascending tail recursion',law='R1Z.ProverCommitBalanceRecursion.qm31_all_rows/sequence_ascending; PV_L2C_RowEnumeration.enumeration; PV_L2C_SelectedDense.selected_sum'),
  dict(change='Reference eagerly reads table[row] before the active test; native reads it only on the addition arm',law='PV_L2C_VecRead.read and PV_L2C_ExtractedRows.read_step on rows<1024: pure successful reads, no output/state change; no observation-trace equivalence asserted'),
  dict(change='Dead rows local and intermediate value binding',law='No calls, state effects or error paths; let substitution'),
  dict(change='QM31 qualified name and trace-row constant',law='Same aspis_core field type, constant checked =1024')],
- complete_Result_law='PV_L2C_OwnedBalance.complete_result',guard_law='PV_L2C_ExtractedGuard.padding_result',
+ complete_Result_law=['PV_L2C_OwnedBalance.complete_result','PV_L2C_ScalarBalance.complete_result'],guard_law='PV_L2C_ExtractedGuard.padding_result',
  finite_validation=dict(receipt='evidence/pv-l2c-20261028/native-after-42695/receipt.json',cases=128,changed_writes=128,classification='same-input native differential, finite validation; reused unchanged source cut'),
  limitations=['Does not bind native sampler randomness to this table','Does not bind HonestInput native caller geometry or guard consumer','Does not prove an observation-trace refinement','Does not subtract V352/V354/V357/V360'])
-(E/'balance-structural.json').write_text(json.dumps(out,indent=2)+'\n');print('Checked six bodies and constant; retained finite differential; no whole-site closure')
+(E/'balance-structural.json').write_text(json.dumps(out,indent=2)+'\n');print('Checked twelve bodies and constant; retained finite differential; no whole-site closure')

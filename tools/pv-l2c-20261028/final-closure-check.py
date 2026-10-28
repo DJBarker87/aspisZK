@@ -6,7 +6,7 @@ res=json.loads((E/'focused-resolution.json').read_text())['resolved']
 cache=json.loads(gzip.decompress((E/'restored-cache.json.gz').read_bytes()))['source_and_complete_fingerprints']
 receipts=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-*.json'))]
 accepted={x['module']:x for x in receipts if x['accepted'] and x['source_sha256']==res.get(x['module'],{}).get('sha256')}
-roots=['PV_L2C_FocusedReplay','PV_L2C_HonestCaller','PV_L2C_HonestHelper','PV_L2C_HonestValidity','PV_L2C_HonestSumcheck','PV_L2C_ExtractedGuard','PV_L2C_ScalarBalance','PV_L2C_ComplexParser']
+roots=['PV_L2C_FocusedReplay','PV_L2C_HonestCaller','PV_L2C_HonestHelper','PV_L2C_HonestValidity','PV_L2C_HonestSumcheck','PV_L2C_ExtractedGuard','PV_L2C_ScalarBalance','PV_L2C_ComplexParser','PV_L2C_QParser','PV_L2C_ScalarCanonical']
 seen=set()
 def visit(m):
  if m in seen:return
