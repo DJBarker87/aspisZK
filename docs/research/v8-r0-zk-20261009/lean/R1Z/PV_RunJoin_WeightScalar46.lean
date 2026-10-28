@@ -3,6 +3,7 @@ import R1Z.PV_B2_D_ScalarOperations
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightScalar46
 open Aeneas Aeneas.Std Result
+set_option allowUnsafeReducibility true in
 attribute [local irreducible] U32.wrapping_add U32.wrapping_sub
 
 theorem add (a b : U32) : AspisR1ProducerRelease47.field.M31.add a b=ok (PV_B2_C_251FieldValue.aspis_core.field.M31.add a b) := by
