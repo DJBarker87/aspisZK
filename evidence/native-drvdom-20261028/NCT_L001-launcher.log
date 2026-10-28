@@ -1,0 +1,42 @@
+{"attempt": "NCT_L001", "exit_status": 0, "wall_seconds": 2.221831215894781, "peak_rss_kib": "5347848", "swaps": "0", "print_axioms": ["'AspisR1.NCL_DriverCuts.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NCL_DriverForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.KNE_Caller.DriverEstablishedDomain : (AspisR1.CheckpointBytes5Writer.Prepared →
+    AspisR1.CheckpointBytes5Writer.Accumulator → Prop) →
+  Prop :=
+fun Reached =>
+  ∀ (p : AspisR1.CheckpointBytes5Writer.Prepared) (a : AspisR1.CheckpointBytes5Writer.Accumulator),
+    Reached p a → ∃ pm am, AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance p a pm am
+structure AspisR1.CheckpointBytes5Join.S1S7S8StateProvenance (p : AspisR1.CheckpointBytes5Writer.Prepared)
+  (a : AspisR1.CheckpointBytes5Writer.Accumulator) (pm : AspisR1.OraclePortCheckpointAbiC5.Prepared)
+  (am : AspisR1.QueryAccumulator.State AspisR1.OraclePortCheckpointAbiC5.K AspisR1.OraclePortCheckpointAbiC5.E) : Prop
+number of p
+...
+un.initial)
+      (AspisR1.Tx1Q_Carriers.accumulator run.out) (AspisR1.Tx1Q_Carriers.arr AspisR1.Tx1Q_Carriers.e run.scratch) none
+      (AspisR1.Tx1Q_Carriers.geometry run.geometry) (AspisR1.Tx1Q_Carriers.pending run.pending)
+      (AspisR1.Tx1Q_Carriers.pending run.after) 10#usize init.left pend.right.right.right
+      (Eq.mpr (id (congrArg (fun _a => _a ≤ ↑10#usize) init.right.left)) (of_decide_eq_true (id (Eq.refl true))))
+      native;
+  have size := Eq.mpr (id (congrArg (fun _a => (↑_a).length = 64) frame.left)) init.left;
+  have lengths :=
+    id
+      (Eq.mpr (id (congrArg (fun _a => _a ≤ (↑(AspisR1.Tx1Q_Carriers.pending run.after).raw).length) size))
+        (Eq.mpr (id (congrArg (fun _a => 64 ≤ _a) frame.right.left)) (le_refl 64)));
+  have contents :=
+    AspisR1.Port3_FlushInstall.accepted_contents (AspisR1.Tx1Q_Carriers.pending run.after)
+      (AspisR1.Tx1Q_Carriers.accumulator run.out).weights.deref
+      (AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k run.flushed) lengths run.flush_call;
+  have canonical :=
+    AspisR1.Port3_FlushInstall.accepted_canonical (AspisR1.Tx1Q_Carriers.pending run.after)
+      (AspisR1.Tx1Q_Carriers.accumulator run.out).weights.deref
+      (AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k run.flushed) lengths run.flush_call;
+  ⟨pend.left,
+    ⟨run.split_eq,
+      ⟨frame.right.right,
+        ⟨have len := Eq.trans contents.right size;
+          Eq.mp (congrFun' (congrArg Eq (List.length_map AspisR1.Tx1Q_Carriers.k)) 64) len,
+          canonical⟩⟩⟩⟩
+'AspisR1.NCL_DriverCuts.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCL_DriverForward.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.KNE_Leaf.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rd5ba2f94e1aa4c3ba65dbad0b70694fc.scope; invocation ID: 109dc9ba072b451bb9e2033ee894127e
