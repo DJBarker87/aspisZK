@@ -145,10 +145,10 @@ fn NCF_op49_iterator_step(){
  let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
   assert_eq!(i,lane);let start=112+8*i;
   *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
-  *sequence<=262144 };
+  *sequence<=crate::pool_v1::POOL_V1_PAIR_CAPACITY };
  assert_eq!(rows[lane],expected);
  assert_eq!(rows[j],if j==lane{expected}else{before});
- assert_eq!(got,expected<=262144);
+ assert_eq!(got,expected<=1048576);
 }
 #[kani::proof]
 #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
@@ -166,8 +166,325 @@ fn NCF_op49_iterator_step_negative(){
  let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
   assert_eq!(i,lane);let start=112+8*i;
   *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
-  *sequence<=262144 };
+  *sequence<=crate::pool_v1::POOL_V1_PAIR_CAPACITY };
  assert_ne!(rows[lane],expected);
  assert_eq!(rows[j],if j==lane{expected}else{before});
- assert_eq!(got,expected<=262144);
+ assert_eq!(got,expected<=1048576);
 }
+// Valid byte generation via a deliberately weak *verified* no-op contract.
+// This helper is harness input generation, never an implementation replacement.
+#[kani::requires(!input.is_empty())]
+#[kani::modifies(input)]
+#[kani::ensures(|_: &()| true)]
+fn NCF_payload(input:&mut [u8]) {}
+#[kani::requires(!input.is_empty())]
+#[kani::modifies(input)]
+#[kani::ensures(|_: &()| false)]
+fn NCF_payload_bad(input:&mut [u8]) {}
+#[kani::proof_for_contract(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_payload_contract(){let n:usize=kani::any();kani::assume(n>0 && n<=isize::MAX as usize);unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);alloc::alloc::dealloc(p,layout);}}
+#[kani::proof_for_contract(NCF_payload_bad)]
+#[kani::unwind(3)]
+fn NCF_payload_contract_negative(){let n:usize=kani::any();kani::assume(n>0 && n<=isize::MAX as usize);unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());let input=core::slice::from_raw_parts_mut(p,n);NCF_payload_bad(input);alloc::alloc::dealloc(p,layout);}}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_payload_use_negative(){let mut data:[u8;2]=kani::any();let old=data[0];NCF_payload(&mut data);assert_eq!(old,data[0]);}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op23_arbitrary_long(){
+ let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=crate::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(input);assert_eq!(got,Err(crate::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op23_arbitrary_long_negative(){
+ let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=crate::pool_v1::decode_pool_v1_pair_forest_terminal_request_v1(input);assert_ne!(got,Err(crate::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op31_arbitrary_long(){
+ let n:usize=kani::any();kani::assume(n>129 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_v1(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op31_arbitrary_long_negative(){
+ let n:usize=kani::any();kani::assume(n>129 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_v1(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op32_arbitrary_long(){
+ let n:usize=kani::any();kani::assume(n>193 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_entry_v1(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op32_arbitrary_long_negative(){
+ let n:usize=kani::any();kani::assume(n>193 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_entry_v1(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op33_arbitrary_long(){
+ let n:usize=kani::any();kani::assume(n>257 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_v2(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op33_arbitrary_long_negative(){
+ let n:usize=kani::any();kani::assume(n>257 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_v2(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op34_arbitrary_long(){
+ let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_entry_v2(input);assert_eq!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+#[kani::proof]
+#[kani::stub_verified(NCF_payload)]
+#[kani::unwind(3)]
+fn NCF_op34_arbitrary_long_negative(){
+ let n:usize=kani::any();kani::assume(n>321 && n<=isize::MAX as usize);
+ unsafe{let layout=core::alloc::Layout::array::<u8>(n).unwrap();let p=alloc::alloc::alloc_zeroed(layout);kani::assume(!p.is_null());
+ let input=core::slice::from_raw_parts_mut(p,n);NCF_payload(input);
+ let got=decode_verifier_registry_entry_v2(input);assert_ne!(got,Err(PoolV1VerifierRegistryFormatError::WrongLength));alloc::alloc::dealloc(p,layout);}
+}
+use alloc::boxed::Box;
+use crate::pool_v1::{PoolV1PairForestMasterV1,PoolV1PairForestCheckpointV1,PoolIdentityV1,VerifierPolicyV1};
+fn NCF_master()->PoolV1PairForestMasterV1{PoolV1PairForestMasterV1{
+ bump:kani::any(),identity:PoolIdentityV1{pool:kani::any(),asset_mint:kani::any(),token_program:kani::any(),asset_id:aspis_core::field::M31(kani::any()),deployment_domain:kani::any()},
+ verifier_policy:VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()},
+ initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()}}
+fn NCF_checkpoint()->PoolV1PairForestCheckpointV1{PoolV1PairForestCheckpointV1{
+ bump:kani::any(),master:kani::any(),deployment_domain:kani::any(),checkpoint_sequence:kani::any(),
+ global_root:[aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any())],lane_sequences:kani::any()}}
+fn NCF_master_observe(r:&PoolV1PairForestMasterV1,f:usize,j:usize,k:usize)->u64{match f{
+ 0=>r.bump as u64,1=>r.identity.pool[j] as u64,2=>r.identity.asset_mint[j] as u64,3=>r.identity.token_program[j] as u64,4=>r.identity.asset_id.0 as u64,5=>r.identity.deployment_domain[j] as u64,
+ 6=>r.verifier_policy.flags as u64,7=>r.verifier_policy.registry_program[j] as u64,8=>r.verifier_policy.registry_authority[j] as u64,9=>r.verifier_policy.policy_binding[j] as u64,
+ 10=>r.initialized_lane_mask as u64,11=>r.has_checkpoint as u64,12=>r.next_checkpoint_sequence,13=>r.last_checkpoint_lane_sequences[k],_=>unreachable!()}}
+fn NCF_checkpoint_observe(r:&PoolV1PairForestCheckpointV1,f:usize,j:usize,k:usize)->u64{match f{
+ 0=>r.bump as u64,1=>r.master[j] as u64,2=>r.deployment_domain[j] as u64,3=>r.checkpoint_sequence,4=>r.global_root[k].0 as u64,5=>r.lane_sequences[k],_=>unreachable!()}}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_value(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(NCF_master_observe(&x,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_value_negative(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(NCF_master_observe(&x,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_two_run(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(NCF_master_observe(&x,f,j,k),NCF_master_observe(&y,f,j,k));assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_two_run_negative(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(NCF_master_observe(&x,f,j,k),NCF_master_observe(&y,f,j,k));assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_distinct(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(core::ptr::eq::<_>(&*x,&*y),false);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_distinct_negative(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(core::ptr::eq::<_>(&*x,&*y),false);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_drop_frame(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);drop(x);assert_eq!(NCF_master_observe(&y,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op48_box_drop_frame_negative(){let a=NCF_master();let b=NCF_master();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<14);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_master_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);drop(x);assert_ne!(NCF_master_observe(&y,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_value(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(NCF_checkpoint_observe(&x,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_value_negative(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(NCF_checkpoint_observe(&x,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_two_run(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(NCF_checkpoint_observe(&x,f,j,k),NCF_checkpoint_observe(&y,f,j,k));assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_two_run_negative(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(NCF_checkpoint_observe(&x,f,j,k),NCF_checkpoint_observe(&y,f,j,k));assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_distinct(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_eq!(core::ptr::eq::<_>(&*x,&*y),false);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_distinct_negative(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);assert_ne!(core::ptr::eq::<_>(&*x,&*y),false);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_drop_frame(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);drop(x);assert_eq!(NCF_checkpoint_observe(&y,f,j,k),before);assert_eq!(ambient[j],old);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(33)]
+fn NCF_op49_box_drop_frame_negative(){let a=NCF_checkpoint();let b=NCF_checkpoint();kani::assume(a==b);
+ let f:usize=kani::any();kani::assume(f<6);let j:usize=kani::any();kani::assume(j<32);let k:usize=kani::any();kani::assume(k<8);
+ let before=NCF_checkpoint_observe(&a,f,j,k);let ambient:[u8;32]=kani::any();let old=ambient[j];
+ let x=Box::new(a);let y=Box::new(b);drop(x);assert_ne!(NCF_checkpoint_observe(&y,f,j,k),before);assert_eq!(ambient[j],old);}

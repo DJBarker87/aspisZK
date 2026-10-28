@@ -62,10 +62,10 @@ fn NCF_op49_iterator_step(){
  let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
   assert_eq!(i,lane);let start=112+8*i;
   *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
-  *sequence<=262144 };
+  *sequence<=crate::pool_v1::POOL_V1_PAIR_CAPACITY };
  assert_eq!(rows[lane],expected);
  assert_eq!(rows[j],if j==lane{expected}else{before});
- assert_eq!(got,expected<=262144);
+ assert_eq!(got,expected<=1048576);
 }
 #[kani::proof]
 #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
@@ -83,8 +83,8 @@ fn NCF_op49_iterator_step_negative(){
  let got={let mut iter=rows.iter_mut().enumerate();let (i,sequence)=iter.nth(lane).unwrap();
   assert_eq!(i,lane);let start=112+8*i;
   *sequence=u64::from_le_bytes(input[start..start+8].try_into().unwrap());
-  *sequence<=262144 };
+  *sequence<=crate::pool_v1::POOL_V1_PAIR_CAPACITY };
  assert_ne!(rows[lane],expected);
  assert_eq!(rows[j],if j==lane{expected}else{before});
- assert_eq!(got,expected<=262144);
+ assert_eq!(got,expected<=1048576);
 }
