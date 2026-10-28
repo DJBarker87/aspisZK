@@ -1,0 +1,40 @@
+{
+  "attempt": "NBY_K017",
+  "kind": "kani",
+  "sources": [
+    "NBY_src/Cargo.lock",
+    "NBY_gate.py",
+    "NBY_src/KMX_stubs.rs",
+    "NBY_KMX_copy_stubs.patch",
+    "NBY_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_opening.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_count.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_row.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/multiproof.rs"
+  ],
+  "command": [
+    "python3",
+    "NBY_gate.py",
+    "NBY_K017",
+    "multiproof::NBY_row::NBY_supplied_left_frame",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NBY_K017-graph.json"
+  },
+  "expected_time": "optimized compilation then one native helper/atomic-step SAT gate, no SHA or multiplication",
+  "expected_negative": false
+}
