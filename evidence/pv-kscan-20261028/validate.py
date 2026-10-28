@@ -36,3 +36,10 @@ out,_=p.communicate('\n'.join(objects)+'\n');assert all(' blob ' in l for l in o
 checks.append(f'{len(objects)} exact historical evidence git blobs accessible')
 (E/'validation.json').write_text(json.dumps(dict(status='PASS',checks=checks,pass_observations=s['pass_count'],unresolved=len(s['unresolved']),suspended_rows=s['suspended_rows'],limits='Validation checks index/graph integrity and scope, not universal Kani fidelity or native/deployed correspondence.'),indent=2)+'\n')
 print('PASS',len(checks),'checks',graph_count,'graphs',len(s['unresolved']),'unresolved')
+
+# D347 completes the original census; retain the original-stage checks as well.
+if s.get("completed_audit"):
+ import sys
+ subprocess.run([sys.executable,str(E/"validate_d347.py")],check=True)
+ j=json.loads((E/"validation.json").read_text());j["completed_audit_validation"]="d347-validation.json";j["status"]="PASS"
+ (E/"validation.json").write_text(json.dumps(j,indent=2)+"\n")
