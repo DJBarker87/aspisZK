@@ -108,6 +108,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   intro digests1
   apply recipient_cps p.recipient digests1 openings.z selectors
   intro digests2
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply bind
@@ -125,6 +126,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level0
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -133,6 +135,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level1
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -141,6 +144,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level2
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -149,6 +153,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level3
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -157,6 +162,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level4
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -165,6 +171,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level5
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -173,6 +180,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level6
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -181,6 +189,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level7
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -189,6 +198,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level8
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -197,6 +207,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level9
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -205,6 +216,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level10
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -213,6 +225,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level11
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -221,6 +234,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level12
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -229,6 +243,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level13
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -237,6 +252,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level14
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -245,6 +261,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level15
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -253,6 +270,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level16
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -261,6 +279,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level17
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -269,6 +288,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level18
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply lift_total
@@ -277,6 +297,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   · apply wrap_add_bound
     scalar_tac
   intro level19
+  simp only [bind_tc_ok]
   apply lift_total
   apply lift_total
   apply bind
