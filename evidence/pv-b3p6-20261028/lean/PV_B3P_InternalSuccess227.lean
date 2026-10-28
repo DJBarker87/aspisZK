@@ -15,21 +15,25 @@ theorem total_reference_poseidon_external_local_packed (input : Array aspis_core
 
 theorem total_reference_poseidon_external_linear_packed (state : Array aspis_core.field.QM31 16#usize) :
     Success (reference_poseidon.external_linear_packed state) := by
+  have hsize : 16 < UScalar.size .Usize := by
+    have hm := Usize.cMax_bound_concrete.1
+    rw [UScalar.size_def]
+    scalar_tac
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q1
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q2
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q3
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -39,19 +43,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed1
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q5
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q6
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q7
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q8
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -61,19 +65,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed2
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q10
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q11
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q12
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q13
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -83,19 +87,19 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   intro local_packed3
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q15
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q16
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q17
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q18
   apply bind
   · apply total_reference_poseidon_external_local_packed
@@ -104,25 +108,25 @@ theorem total_reference_poseidon_external_linear_packed (state : Array aspis_cor
   · apply update <;> scalar_tac
   intro local_packed4
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q20
   apply bind
   · apply qadd
   intro q21
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q22
   apply bind
   · apply qadd
   intro q23
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q24
   apply bind
   · apply qadd
   intro q25
   apply bind
-  · apply index <;> scalar_tac
+  · apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)
   intro q26
   apply bind
   · apply qadd

@@ -36,9 +36,12 @@ def emit(mod,srcs,imports):
    theorem='total_'+name.replace('.','_');mapping[name]=theorem
    if name=='reference_poseidon.interpolate_column227':pass
    lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*','  '+body.lstrip(),re.M));body='  '+body.lstrip();proof=[]
+   if name=='reference_poseidon.external_linear_packed':
+    proof=['  have hsize : 16 < UScalar.size .Usize := by','    have hm := Usize.cMax_bound_concrete.1','    rw [UScalar.size_def]','    scalar_tac']
    def rule(expr):
     call=expr.split()[0];assert call in mapping,(name,call,expr)
     target=mapping[call]
+    if name=='reference_poseidon.external_linear_packed' and target=='index':return 'apply index <;> (simp only [Usize.wrapping_mul_val_eq,Usize.wrapping_add_val_eq]; scalar_tac)'
     if target in ['index','update','borrow','raw_limb_total','total_reference_field_qm31_pack_base4']:return 'apply '+target+' <;> scalar_tac'
     if target=='ok':return 'exact ok _'
     return 'apply '+target
