@@ -1,0 +1,26 @@
+[
+  {
+    "module": "NDO_JGi_FinishFields",
+    "before_revision": "fb1c552b1e38f32698f5abaee70574c3e375550a",
+    "before_sha256": "c1c39453a6a097a54e91342cbbe5e046e76219a7673bd5b700f15d8594db835e",
+    "after_sha256": "83729de83c2df72a296b27a3ab800869793d2048133c433cfac05379a9186576",
+    "statement_change": "observer carrier annotation only",
+    "diff": "diff --git a/lean/NDO_JGi_FinishFields.lean b/lean/NDO_JGi_FinishFields.lean\nindex 1095dc3468..0e4c76307a 100644\n--- a/lean/NDO_JGi_FinishFields.lean\n+++ b/lean/NDO_JGi_FinishFields.lean\n@@ -1,4 +1,5 @@\n import RPz7_S1SemanticFinishModelV1\n+import NDO_PhaseIdentity\n set_option autoImplicit false\n open Aeneas Aeneas.Std Result\n namespace AspisR1.JGi_FinishFields\n@@ -25,7 +26,7 @@ theorem source (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)\n     {H : Type} (D : aspis_core.Digest32 H)\n     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)\n     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)\n-    (obs : Option (verifier.Phase \u2192 Result Unit)) (out : r1_semantic.Verified H)\n+    (obs : Option (RPz7_PhaseIso.Phase \u2192 Result Unit)) (out : r1_semantic.Verified H)\n     (h : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :\n     \u2203 (record25 record26 : r1_wire.ValidatedRecord),\n       B.claims pre=ok (.Ok out.claims) \u2227\n"
+  },
+  {
+    "module": "NDO_JGi_ClaimArrays",
+    "before_revision": "fb1c552b1e38f32698f5abaee70574c3e375550a",
+    "before_sha256": "f86685efe03b067f6f0b6db27b9c5420bc58e6b351234c392af32e0037457f4d",
+    "after_sha256": "a02b4213d065b2e5aabf760cdcb42dc7733febf011db93cb22d785cb656ef175",
+    "statement_change": "none; explicit noneToFirst transport in proof",
+    "diff": "diff --git a/lean/NDO_JGi_ClaimArrays.lean b/lean/NDO_JGi_ClaimArrays.lean\nindex 925a3e5ab6..40f737d48e 100644\n--- a/lean/NDO_JGi_ClaimArrays.lean\n+++ b/lean/NDO_JGi_ClaimArrays.lean\n@@ -38,7 +38,9 @@ theorem source {H : Type} (D : aspis_core.Digest32 H) (expanded : Slice U8) (pre\n     (\u2200 p : Fin 3,RowCanonical (sem.claims.val[p.val]'(by have h:=sem.claims.property;change sem.claims.val.length=3 at h;omega))) \u2227\n       RowCanonical sem.extra \u2227 RowCanonical sem.before_z1 := by\n   obtain \u27e8r25,r26,claim,read25,extra,read26,before\u27e9 := JGi_FinishFields.source\n-    AspisS1ExtractedRoundChildren.children JGe_Boundaries.value D JFs_PublicSerialization.value pre _ _ none sem finish\n+    AspisS1ExtractedRoundChildren.children JGe_Boundaries.value D JFs_PublicSerialization.value pre _ _\n+      (RPz7_PhaseIso.observerToFirst none) sem\n+      (by simpa only [NDO_PhaseIdentity.noneToFirst] using finish)\n   have concrete := JFu_Claims.source expanded pre expand parse\n   have same : sem.claims=JFu_ClaimsData.claims := core.result.Result.Ok.inj (Result.ok.inj (claim.symm.trans concrete))\n   refine \u27e8?_,decoded _ _ _ extra,decoded _ _ _ before\u27e9\n"
+  },
+  {
+    "module": "NDO_JHm_SemanticOperands",
+    "before_revision": "fb1c552b1e38f32698f5abaee70574c3e375550a",
+    "before_sha256": "ea2371cad31b077ba38ba40507a02f56d968a7f3f2893e280b9b2b234549365b",
+    "after_sha256": "5f7b33a7b15c679271e9e99e12d6d968a104371454907797fd3133feb3c5f9de",
+    "statement_change": "none; explicit noneToFirst transport in proof",
+    "diff": "diff --git a/lean/NDO_JHm_SemanticOperands.lean b/lean/NDO_JHm_SemanticOperands.lean\nindex 053bce458a..c25bc68053 100644\n--- a/lean/NDO_JHm_SemanticOperands.lean\n+++ b/lean/NDO_JHm_SemanticOperands.lean\n@@ -27,7 +27,8 @@ theorem source {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)\n   have run := JGi_CurrentSemantic.source D hash expanded pre out otherExpand parse finished\n   have es : currentSem out=sem := core.result.Result.Ok.inj (Result.ok.inj (run.symm.trans verify))\n   obtain \u27e8r25,r26,claims,read25,extra,read26,before\u27e9 :=\n-    JGi_FinishFields.source _ _ _ _ _ _ _ _ out finished\n+    JGi_FinishFields.source _ _ _ _ _ _ _ (RPz7_PhaseIso.observerToFirst none) out\n+      (by simpa only [NDO_PhaseIdentity.noneToFirst] using finished)\n   have records := JFr_PrefixRecords.source expanded pre otherExpand parse\n   have rec25 := JFr_RecordsAt.source pre records 25#u8 (by change 25<27;omega) JFw_NativeRow25.record rfl\n   have rec26 := JFr_RecordsAt.source pre records 26#u8 (by change 26<27;omega) JFw_NativeRow26.record rfl\n"
+  }
+]
