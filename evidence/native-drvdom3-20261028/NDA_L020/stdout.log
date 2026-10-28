@@ -1,0 +1,85 @@
+'AspisR1.NDA_PowerDomain.canonical_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.of_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_PowerDomain.on_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_LaneDomains.wide_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_LaneDomains.of_bindings' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NDA_LaneDomains.line_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NDA_PowerDomain.of_binding : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  (∀ (x y : NBF_RowInstall.Q),
+      NBF_PowerStep.Canonical x → NBF_PowerStep.Canonical y → ops.op9 x y = NBO_FieldSemantics.power x y) →
+    AspisR1.NDA_PowerDomain.Law ops :=
+fun ops binding x y z hx hy call =>
+  let ⟨out, h✝⟩ :=
+    NBO_FieldSemantics.power_total x y ((AspisR1.NDA_PowerDomain.canonical_iff x).mpr hx)
+      ((AspisR1.NDA_PowerDomain.canonical_iff y).mpr hy)
+  let ⟨run, canon⟩ := h✝
+  have same :=
+    Aeneas.Std.Result.ok.inj
+      (Eq.trans (Eq.symm run)
+        (Eq.mp
+          (congrArg (fun _a => _a = Aeneas.Std.Result.ok z)
+            (binding x y ((AspisR1.NDA_PowerDomain.canonical_iff x).mpr hx)
+              ((AspisR1.NDA_PowerDomain.canonical_iff y).mpr hy)))
+          call));
+  (AspisR1.NDA_PowerDomain.canonical_iff z).mp (same ▸ canon)
+theorem AspisR1.NDA_LaneDomains.of_bindings : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  NBO_FieldSemantics.NBC_Bindings ops →
+    (∀ (alpha : AspisR1Stage2.aspis_core.field.wide_exact.WideExact)
+        (values : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.wide_exact.WideExact 4#usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)
+        (out : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op16 alpha values inverse = Aeneas.Std.Result.ok out → AspisR1.Port4C_QueryArithmetic.CanonE out) →
+      AspisR1.NDA_QueryCanonical.Laws ops :=
+fun ops bindings line =>
+  have facts := NBO_FieldSemantics.fields ops bindings;
+  {
+    mulE := fun x q out hx hq run =>
+      (AspisR1.NDA_LaneDomains.wide_iff out).mp
+        (facts.product x q out ((AspisR1.NDA_LaneDomains.wide_iff x).mpr hx)
+          ((AspisR1.NDA_PowerDomain.canonical_iff q).mpr hq) run),
+    addE := fun x y out hx hy run =>
+      (AspisR1.NDA_LaneDomains.wide_iff out).mp
+        (facts.sum x y out ((AspisR1.NDA_LaneDomains.wide_iff x).mpr hx) ((AspisR1.NDA_LaneDomains.wide_iff y).mpr hy)
+          run),
+    mulK := AspisR1.NDA_PowerDomain.of_binding ops bindings.power, line := line }
+theorem AspisR1.NDA_LaneDomains.line_result : ∀ (ops : AspisR1.Port3_NativeQueryBody.Ops)
+  (alpha a b c d : AspisR1Stage2.Stage2E) (inverse : Aeneas.Std.Array Aeneas.Std.U32 5#usize)
+  (quarter qiz hix hiy half hiz : Aeneas.Std.U32) (out : AspisR1Stage2.Stage2E),
+  AspisR1.Port4C_QueryArithmetic.CanonE alpha →
+    AspisR1.Port4C_QueryArithmetic.CanonE a →
+      AspisR1.Port4C_QueryArithmetic.CanonE b →
+        AspisR1.Port4C_QueryArithmetic.CanonE c →
+          AspisR1.Port4C_QueryArithmetic.CanonE d →
+            ops.op16 alpha (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯) inverse =
+                NBZ_Folds.line alpha a b c d quarter qiz hix hiy half hiz →
+              ops.op16 alpha (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯) inverse = Aeneas.Std.Result.ok out →
+                AspisR1.Port4C_QueryArithmetic.CanonE out :=
+fun ops alpha a b c d inverse quarter qiz hix hiy half hiz out halpha ha hb hc hd binding call =>
+  let ⟨value, h✝⟩ :=
+    NBZ_Folds.line_total alpha a b c d quarter qiz hix hiy half hiz
+      ((AspisR1.NDA_LaneDomains.wide_iff alpha).mpr halpha) ((AspisR1.NDA_LaneDomains.wide_iff a).mpr ha)
+      ((AspisR1.NDA_LaneDomains.wide_iff b).mpr hb) ((AspisR1.NDA_LaneDomains.wide_iff c).mpr hc)
+      ((AspisR1.NDA_LaneDomains.wide_iff d).mpr hd)
+  let ⟨run, canonical⟩ := h✝
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm run) (Eq.trans (Eq.symm binding) call));
+  (AspisR1.NDA_LaneDomains.wide_iff out).mp (same ▸ canonical)
+NBW_Horner.total (mul : NBW_Horner.Mul) (law : NBW_Horner.Total mul) (alpha tail : AspisR1Stage2.Stage2E)
+  (ha : NBO_TailDomain.WideCanonical alpha) (ht : NBO_TailDomain.WideCanonical tail)
+  (coefficients : List AspisR1Stage2.Stage2E) (hc : ∀ h ∈ coefficients, NBO_TailDomain.WideCanonical h) :
+  ∃ out, NBW_Horner.eval mul alpha coefficients tail = Aeneas.Std.Result.ok out ∧ NBO_TailDomain.WideCanonical out
+NBZ_Folds.line_total (alpha a b c d : AspisR1Stage2.Stage2E) (quarter qiz hix hiy half hiz : Aeneas.Std.U32)
+  (halpha : NBO_TailDomain.WideCanonical alpha) (ha : NBO_TailDomain.WideCanonical a)
+  (hb : NBO_TailDomain.WideCanonical b) (hc : NBO_TailDomain.WideCanonical c) (hd : NBO_TailDomain.WideCanonical d) :
+  ∃ out,
+    NBZ_Folds.line alpha a b c d quarter qiz hix hiy half hiz = Aeneas.Std.Result.ok out ∧
+      NBO_TailDomain.WideCanonical out
+NCG_HornerLog.three (alpha h0 h1 h2 h3 z0 z1 z2 t0 t1 out : AspisR1Stage2.Stage2E)
+  (p0 : NBZ_Wide.product alpha h3 = Aeneas.Std.Result.ok z0)
+  (a0 : NBO_FieldSemantics.add h2 z0 = Aeneas.Std.Result.ok t0)
+  (p1 : NBZ_Wide.product alpha t0 = Aeneas.Std.Result.ok z1)
+  (a1 : NBO_FieldSemantics.add h1 z1 = Aeneas.Std.Result.ok t1)
+  (p2 : NBZ_Wide.product alpha t1 = Aeneas.Std.Result.ok z2)
+  (a2 : NBO_FieldSemantics.add h0 z2 = Aeneas.Std.Result.ok out) :
+  NBW_Horner.eval NBZ_Wide.product alpha [h0, h1, h2] h3 = Aeneas.Std.Result.ok out

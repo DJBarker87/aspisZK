@@ -137,3 +137,59 @@ domain) is delivered. No impossibility theorem about every full Prefix is
 claimed. Further progress needs concrete retained-operation laws/instantiation,
 not an unchanged prover run or a higher resource cap. No Kani is required for
 the completed model implications; native association remains outside this lane.
+
+# Final validation and integration finding
+
+Budget used **21/50 Lean,0/0 Kani**:14 passed,7 rejected. Every assigned
+member was attempted; the residual-member audit above explains stopping below
+80% without pretending the arbitrary primitive slots are instantiated.
+The requested exact-residual fallback is established; unconditional model
+closure and the 100-bit release target are NOT established.
+
+L018 is a rejected broad co-import audit (zero credit): importing the two full
+lane audit roots NCH_Audit and NCG_Audit alongside the new closure tries to load
+XRn_Join_FunsExternal after AspisR1CircleSampleWrapper.FunsExternal, colliding on
+`core.result.Result.unwrap_or_else.match_1`. No existing module or infrastructure
+was edited to hide/repair it; no XRn join theorem is used by the new proofs.
+The audit was split, and then the smaller REAL integration was tested explicitly:
+- NDA_L019, NDA_FinalAudit: primary leaf/domain/obstruction statements and all
+  27 primary-root axioms pass; exit0,2.296512906s,RSS5371192KiB,swap0.
+- NDA_L020, NDA_LaneAudit: all8 optional bridge roots and their statements pass;
+  exit0,2.318969123s,RSS5354756KiB,swap0.
+- NDA_L021, NDA_CompositionAudit: NDA_DriverDomain AND NDA_LaneDomains co-import
+  together and re-audit both leaf roots and actual lane-binding lemmas;
+  exit0,2.489621362s,RSS5378464KiB,swap0.
+Thus the new proof roots ARE co-import compatible; the rejected broad audit
+closure is not a claimed integration result. No full frozen-manifest replay
+ran. Every successful new top theorem uses only propext/Classical.choice/Quot.sound.
+All final audits record revision8a8b0cc0aa with exact dirty-source SHA and
+selected-object hashes; full before/after leaf statements are retained in L019.
+
+NDA_VALIDATION.json checks every attempt's exact source snapshot, all9 current
+source hashes against passing receipts, admission allowed:true with exit0
+(enforced before launch by the runner), limits6G/8G/Swap0/Tasks64/-M7000,
+zero swaps, standard axioms and file sizes. NDA_HOST_VALIDATION.json rechecks
+all pinned Aeneas objects and final-audit objects against the actual host files,
+and proves the copied S2W backends byte-identical to NCU's. The own validator's
+initial keyword scan falsely matched the comment word "admit"; repaired to
+scan Lean code after stripping comments, with the same forbidden code tokens.
+No Lean attempt was used for this local script repair.
+No admission refusal, transport ambiguity, timeout, memory kill or cap increase
+occurred. All job scopes are terminal. Retained cache objects were reused;
+no dependency package rebuild or new seed copy occurred. Cache retained.
+
+Only NDA_ new modules and this evidence directory changed. Shipped crates/,
+programs/, release source, protocol, security game, privacy/two-transaction
+requirements, runtime/library/oracle/ABI/native association and trust items
+are unchanged. No keys or balances touched. No Rust/Kani/SBF run or push.
+ELF rebuild trigger did not fire; inherited pins, NOT newly reproduced:
+default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+Next lead deliverable: instantiate the retained circle and query primitives
+(or prove precisely the three remaining same-cut field facts) for the actual
+headline's configuration. Use domain_iff as the exact checklist. Preserve
+NBZ's canonical-input domains; a local conditional line arithmetic theorem
+does not silently become the unconditional op16 law. This work supplies no
+new native-contract transport or trust reclassification.
