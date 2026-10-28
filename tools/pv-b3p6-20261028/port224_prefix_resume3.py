@@ -6,6 +6,7 @@ for source,module in [('Types','PV_B3P_PrefixTypes224'),('Funs','PV_B3P_PrefixEm
  s=(raw/(source+'.lean')).read_text();p=s.replace('import Aeneas\n','import Aeneas.Std\nimport Aeneas.Tactic.RustAttributes\n')
  p=p.replace('namespace PV_B3P_224\n','namespace PV_B3P_224Prefix\n').replace('end PV_B3P_224\n','end PV_B3P_224Prefix\n')
  p=re.sub(r'@\[discriminant (?:isize|usize|u8|u16|u32)\]\n','',p)
+ p=re.sub(r'discriminant (?:isize|usize|u8|u16|u32),\s*','',p)
  if source=='Funs':
   p=p.replace('import PVB3P224Resume3ColumnRead.Types','import PV_B3P_PrefixTypes224')
   p=p.replace('31#i32','31#u32')

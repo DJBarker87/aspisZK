@@ -55,7 +55,7 @@ structure aspis_statement.logup.CopyLogUpRow where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/incremental_merkle.rs', lines 32:0-32:24
     Name pattern: [aspis_statement::pool_v1::incremental_merkle::PoolV1TreeError]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::incremental_merkle::PoolV1TreeError"]
 inductive aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError where
 | TreeFull : aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError
@@ -80,7 +80,7 @@ inductive aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/payment_relation.rs', lines 128:0-128:42
     Name pattern: [aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::payment_relation::PoolV1PaymentStatementFormatError"]
 inductive aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
   where
@@ -117,7 +117,7 @@ inductive aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatE
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 78:0-78:30
     Name pattern: [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1"]
 inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 where
 | NonCanonicalCommitment :
@@ -143,7 +143,7 @@ inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 136:0-136:31
     Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1"]
 inductive aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1 where
 | Statement :
@@ -192,7 +192,7 @@ inductive aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1 where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 967:0-967:30
     Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceBankV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_trace::PoolV1PairTraceBankV1"]
 inductive aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1 where
 | Stable : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceBankV1
@@ -220,7 +220,7 @@ structure aspis_statement.pool_v1.pair_trace.PoolV1PairTraceCellV1 where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 979:0-979:31
     Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairCopyWeightV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_trace::PoolV1PairCopyWeightV1"]
 inductive aspis_statement.pool_v1.pair_trace.PoolV1PairCopyWeightV1 where
 | One : aspis_statement.pool_v1.pair_trace.PoolV1PairCopyWeightV1
@@ -238,7 +238,7 @@ inductive aspis_statement.pool_v1.pair_trace.PoolV1PairCopyWeightV1 where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 988:0-988:30
     Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairTupleLimbV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_trace::PoolV1PairTupleLimbV1"]
 inductive aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1 where
 | Zero : aspis_statement.pool_v1.pair_trace.PoolV1PairTupleLimbV1
@@ -261,7 +261,7 @@ structure aspis_statement.pool_v1.pair_trace.PoolV1PairCopyTupleV1 where
     Source: '/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs', lines 32:0-32:36
     Name pattern: [aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairCopyRowLinkKindV1]
     Visibility: public -/
-@[discriminant isize, rust_type
+@[rust_type
   "aspis_statement::pool_v1::pair_tree_hiding::PoolV1PairCopyRowLinkKindV1"]
 inductive aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairCopyRowLinkKindV1
   where
