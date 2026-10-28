@@ -44,7 +44,7 @@ def resolve(m):
    candidates=[p for p in paths if p.endswith('/'+m+'.lean.txt')]
   if not candidates and m.startswith('R1Z.'):
    candidates=[p for p in paths if p.endswith('/'+m[4:]+'.lean') and '/lean/prover-rw-20261023/' in p]
-  if not candidates and m.startswith('PV_B3P_'):candidates=[str(D/'lean'/(m+'.lean'))]
+  if m.startswith('PV_B3P_'):candidates=[str(D/'lean'/(m+'.lean'))] # Explicit own module registry; resolved/ is a receipt snapshot, not a source root.
   if len(candidates)>1:
    hashes={p1:hashlib.sha256(gitobj('HEAD:'+p1)).hexdigest() for p1 in candidates}
    if len(set(hashes.values()))==1:candidates=[sorted(candidates,key=lambda p1:('/lean/' not in p1,p1))[0]]

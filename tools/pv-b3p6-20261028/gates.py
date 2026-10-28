@@ -5,7 +5,7 @@ kind=sys.argv[1]
 P=H/'source/tools/pv-b3p6-20261028'
 if kind=='kani133':
  cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']
- sys.exit(run('kani133-03',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, unwind1026, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3'}))
+ sys.exit(run('kani133-04',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, unwind273, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3'}))
 if kind=='native133':
  cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','finite_native133','--','--exact','--nocapture']
  sys.exit(run('native133-01',cmd,'optimized native same-input differential; finite validation, not symbolic proof'))

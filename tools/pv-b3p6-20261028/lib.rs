@@ -2,7 +2,7 @@ pub mod reference133;
 #[cfg(kani)]
 mod proofs {
     #[kani::proof]
-    #[kani::unwind(1026)]
+    #[kani::unwind(273)]
     fn shipped_equals_reference133() {
         let shipped = aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1();
         let expected = super::reference133::active_rows();

@@ -31,11 +31,11 @@ def rows : Array U16 214#usize := Array.make 214#usize [
       982#u16, 985#u16, 986#u16, 989#u16, 990#u16, 993#u16, 994#u16, 997#u16,
       998#u16, 1001#u16, 1002#u16, 1005#u16, 1006#u16, 1008#u16, 1010#u16,
       1012#u16, 1014#u16, 1015#u16, 1017#u16, 1018#u16
-      ])
+      ] (by rfl)
 
 theorem source : PV_B3P_133.reference133.active_rows = ok rows := rfl
 
-theorem length : rows.val.length = 214 := rfl
+theorem length : rows.val.length = 214 := Array.length_eq rows
 
 theorem nonvacuity : ∃ r : Array U16 214#usize,
     PV_B3P_133.reference133.active_rows = ok r ∧ r.val.length = 214 :=
