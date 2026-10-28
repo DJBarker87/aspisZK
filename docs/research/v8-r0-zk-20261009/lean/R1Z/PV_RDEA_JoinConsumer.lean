@@ -27,9 +27,8 @@ theorem endpoint {S F R : Type} (step : Request → S → Option Nat × S)
   dsimp only
   unfold consume
   split <;> rename_i h
-  · simp only [h]
-  · simp only [h]
-    rw [PV_RDEA_JoinValues.success_value step shape address absolute needSep base path w _ h]
+  · rfl
+  · rw [PV_RDEA_JoinValues.success_value step shape address absolute needSep base path w _ h]
 
 #print axioms endpoint
 end R1Z.PV_RDEA_JoinConsumer
