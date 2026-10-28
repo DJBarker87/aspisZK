@@ -13847,3 +13847,18 @@ rows stay OPEN, their next step being to bind the complete native observer and f
 CanonicalHonest31 RunJoin coupling. Merged into the prover candidate (pushed); the line is parked with
 its worktree, alongside the reachability, file-effects, world, level-2 guard and level-1 lines, all
 waiting on the runjoin line. Rows removed outright: 0. Privacy target not yet established.
+
+## D385 (Stream B) 2026-10-28 17:26 UTC: the semantic-oracle cone models Public::terminal_qm31 (V244); runjoin waits on V244 for that bridge and continues the rest
+
+runjoin38 (no Lean attempts used; no source or extractor change) identified the shipped function the
+historical AspisR1SelectedMaskProbe cone models: Public::terminal_qm31, row V244 / op227. The closed
+op117 law (V217) covers only its separate mask computation, so it cannot replace the cone. V244 is the
+last row on the batch-3 line (pv-b3p6d, structural route for field arithmetic under ruling (k)); the
+runjoin semantic-oracle bridge therefore depends on V244's closure. If b3p6d ends without closing
+V244, its next run takes V244 first.
+
+runjoin39 (its unspent 100 attempts; IDs 54400-54499) meanwhile installs pv-world's runtime and effect
+initialisation for the actual prover body, proves both ROMView decoder laws for CommonSample32 and
+CommonObserver32, finishes interpolation, rounds, commitments, openings and serialization, and states
+the semantic-oracle bridge as a theorem whose only remaining hypothesis is op227's callback law,
+uncredited until V244 lands. Rows removed outright: 0. Privacy target not yet established.
