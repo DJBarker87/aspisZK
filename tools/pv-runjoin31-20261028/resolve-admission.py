@@ -26,6 +26,7 @@ sp='docs/research/100bit-spend-path-20261013/evidence/prover-commit5-20261021/so
 sr5=json.loads(git(rev+':'+sp));frozen5={'R1Z.'+Path(p).stem:dict(path=p,sha256=h) for p,h in sr5['files'].items() if p.endswith('.lean')}
 done={};missing=set();sources={}
 head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+explicit=json.loads((R/'tools/pv-runjoin31-20261028/h5-explicit-sources.json').read_text())
 tracked=subprocess.check_output(['git','ls-tree','-r','--name-only',head],text=True).splitlines()
 ejs_path='evidence/envj-rebuild2-20261026/EJS_missing-payload.json'
 ejs={r['module'].replace('/','.'):r for r in json.loads(git(rev+':'+ejs_path))['rows']}
@@ -56,7 +57,10 @@ def visit(m):
   r=frozen[m];b=git(freeze['revision']+':'+r['path']);expected=r['sha256'];a=fp
  else:
   suffix=m.replace('.','/')+'.lean'
-  ps=[p for p in tracked if p.endswith('/lean/'+suffix)]
+  ps=[explicit[m]['path']] if m in explicit else [p for p in tracked if p.endswith('/lean/'+suffix)]
+  if m in explicit:
+   assert ps[0] in tracked
+   assert hashlib.sha256(git(head+':'+ps[0])).hexdigest()==explicit[m]['sha256'],m
   if not ps:ps=[p for p in tracked if p.endswith('/'+suffix+'.txt')]
   if not ps:
    ps=[p for p in tracked if p.endswith('/'+m.split('.')[-1]+'.lean.txt') and ('namespace '+m) in git(head+':'+p).decode()]
