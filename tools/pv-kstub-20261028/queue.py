@@ -1,12 +1,14 @@
 from pathlib import Path
 import subprocess,json,time,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-kstub-20261028';D='/home/dombarker/project-offloads/codex-pv-kstub-20261028';H='dombarker@100.108.41.90'
-p=json.loads((E/'plans.json').read_text());runid=0
+p=json.loads((E/'plans.json').read_text());runid=1
 for plan in p:
  if (E/(plan['row']+'-finding.json')).exists():continue
  for negative in [False,True]:
   runid+=1;name=f'K{runid:02}';h=plan['negative'] if negative else plan['harness']
-  cmd=['timeout','900','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',f'CARGO_TARGET_DIR={D}/target','cargo','kani','--manifest-path',D+'/'+plan['package']+'/Cargo.toml','--lib','--harness',h,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--slice-formula']
+  prefix=('checks::' if plan['package']=='cb' else {'join_one_byte':'join_split::','string_path':'split_checks::','string_push':'split_checks::','join_two':'resume8_links::','push_bytes':'resume8_links::','join_slices_two':'resume9_links::'}.get(plan['harness'],'') if plan['package']=='cblib' else 'field::wide_exact::pv_cb3_arbitrary_bytes::' if plan['package']=='native/core' else 'sealed::pv_alib_checks::' if plan['package']=='split' else '')
+  h=prefix+h
+  cmd=['timeout','900','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',f'CARGO_TARGET_DIR={D}/target','cargo','kani','--manifest-path',D+'/'+plan['package']+'/Cargo.toml','--lib','--exact','--harness',h,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--slice-formula']
   if (E/name/'receipt.json').exists():continue
   (E/(name+'-target.json')).write_text(json.dumps(dict(**plan,negative_control=negative,command=cmd),indent=2))
   for trial in range(11):
