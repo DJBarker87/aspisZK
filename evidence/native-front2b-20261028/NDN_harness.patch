@@ -1,0 +1,139 @@
+--- a/crates/aspis-statement/src/state_only_poseidon.rs
++++ b/crates/aspis-statement/src/state_only_poseidon.rs
+@@ -127,11 +127,14 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::reference::extension_limbs_ref(NDE_native::to_ref(value))) != cfg!(NDE_invert))) ]
+ fn extension_limbs(value: QM31) -> [u32; 4] {
+     [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(limbs[0] < (1u64<<62) && limbs[1] < (1u64<<62) && limbs[2] < (1u64<<62) && limbs[3] < (1u64<<62)))]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::to_native(NDE_native::reference::extension_raw_ref(limbs))) != cfg!(NDE_invert)))]
+ fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
+     QM31 {
+         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+@@ -218,28 +221,51 @@
+     let input = input.map(extension_limbs);
+     let local: [[u64; 4]; 4] = core::array::from_fn(|output| {
+         core::array::from_fn(|limb| {
++            #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]
++            return 0;
++            #[cfg(all(kani,NDE_matrix_step))]
++            if output!=unsafe{NDE_native::NDE_PACKED_ROW} || limb!=unsafe{NDE_native::NDE_PACKED_LIMB}{return 0;}
+             let a = u64::from(input[0][limb]);
+             let b = u64::from(input[1][limb]);
+             let c = u64::from(input[2][limb]);
+             let d = u64::from(input[3][limb]);
+-            match output {
++            let cell=match output {
+                 0 => 2 * a + 3 * b + c + d,
+                 1 => a + 2 * b + 3 * c + d,
+                 2 => a + b + 2 * c + 3 * d,
+                 3 => 3 * a + b + c + 2 * d,
+                 _ => unreachable!(),
+-            }
++            };
++            #[cfg(all(kani,NDE_matrix_step))]
++            unsafe{NDE_native::NDE_MATRIX_REPLY=cell;NDE_native::NDE_MATRIX_COUNT+=1;}
++            cell
+         })
+     });
++    #[cfg(all(kani,NDE_matrix_step))]
++    {unsafe{NDE_native::NDE_MATRIX_REPLY=local[NDE_native::NDE_PACKED_ROW][NDE_native::NDE_PACKED_LIMB];}return [0;4];}
++    #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]
++    let local=unsafe{NDE_native::NDE_PACKED_TABLE};
+     let mut all_local_limbs_bounded = true;
++    #[cfg(all(kani,NDE_scan_step))]
++    let mut all_local_limbs_bounded=unsafe{NDE_native::NDE_PACKED_FLAG};
+     let mut output = 0usize;
++    #[cfg(all(kani,NDE_scan_step))]
++    let mut output=unsafe{NDE_native::NDE_PACKED_ROW};
++    #[cfg(all(kani,NDE_packed_after))]
++    let mut output=4usize;
+     while output < 4 {
+         let mut limb = 0usize;
++        #[cfg(all(kani,NDE_scan_step))]
++        let mut limb=unsafe{NDE_native::NDE_PACKED_LIMB};
+         while limb < 4 {
+             all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+             limb += 1;
++            #[cfg(all(kani,NDE_scan_step))]
++            {unsafe{NDE_native::NDE_SCAN_REPLY=(all_local_limbs_bounded,output,limb,false);}return [0;4];}
+         }
+         output += 1;
++        #[cfg(all(kani,NDE_scan_step))]
++        {unsafe{NDE_native::NDE_SCAN_REPLY=(all_local_limbs_bounded,output,limb,true);}return [0;4];}
+     }
+     debug_assert!(all_local_limbs_bounded);
+ 
+@@ -1239,3 +1265,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDE_poseidon.rs"]
++mod NDE_native;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
+@@ -198,6 +198,7 @@
+         const MASKS: [u16; 7] = [6144, 6145, 4097, 2048, 2049, 26214, 1749];
+         let mut high_sums = [QM31::ZERO; MASKS.len()];
+         let mut block = 0usize;
++        #[cfg(all(kani,NDN_active_high))] {high_sums=unsafe{NDN_native::PRE};block=unsafe{NDN_native::BLOCK};}
+         while block < constants::ACTIVE_ROW_MASKS.len() {
+             let mask = constants::ACTIVE_ROW_MASKS[block];
+             let coordinate = match mask {
+@@ -212,6 +213,7 @@
+             };
+             high_sums[coordinate] = high_sums[coordinate].add(self.high[block]);
+             block += 1;
++            #[cfg(all(kani,NDN_active_high))] {unsafe{NDN_native::AFTER=high_sums;NDN_native::NEXT=block;}return QM31::ZERO;}
+         }
+         let mut sum = QM31::ZERO;
+         let mut coordinate = 0usize;
+@@ -1541,3 +1543,6 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDN_copy_native.rs"] mod NDN_native;
+--- a/crates/aspis-statement/src/pool_v1/NDN_copy_native.rs
++++ b/crates/aspis-statement/src/pool_v1/NDN_copy_native.rs
+@@ -0,0 +1,23 @@
++use super::*;
++#[path="NDN_reference.rs"] mod reference;
++fn canon(q:QM31)->bool {q.c0.a.0<0x7fff_ffff&&q.c0.b.0<0x7fff_ffff&&q.c1.a.0<0x7fff_ffff&&q.c1.b.0<0x7fff_ffff}
++fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
++pub(super) static mut PRE:[QM31;7]=[QM31::ZERO;7];
++pub(super) static mut BLOCK:usize=0;
++pub(super) static mut AFTER:[QM31;7]=[QM31::ZERO;7];
++pub(super) static mut NEXT:usize=0;
++#[cfg(NDN_active_high)]
++#[kani::proof]
++#[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn active_high_window(){
++ let selectors=Selectors{high:kani::any(),low:kani::any()};
++ let pre:[QM31;7]=kani::any();let block:usize=kani::any();let j:usize=kani::any();
++ kani::assume(block<64&&j<7);
++ let coordinate=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);
++ kani::assume(canon(pre[coordinate])&&canon(selectors.high[block]));
++ unsafe{PRE=pre;BLOCK=block;}
++ let _=selectors.active_mask_basis();
++ let expected=if j==coordinate{let a=words(pre[j]);let b=words(selectors.high[block]);core::array::from_fn(|i|reference::add_word(a[i],b[i]))}else{words(pre[j])};
++ assert!((unsafe{words(AFTER[j])==expected&&NEXT==block+1}) != cfg!(NDN_invert));
++}
+--- a/crates/aspis-statement/src/pool_v1/NDN_reference.rs
++++ b/crates/aspis-statement/src/pool_v1/NDN_reference.rs
+@@ -0,0 +1,6 @@
++pub fn active_coordinate(mask:u16)->usize{match mask{6144=>0,6145=>1,4097=>2,2048=>3,2049=>4,26214=>5,1749=>6,_=>panic!("outside active basis")}}
++pub fn add_word(a:u32,b:u32)->u32{let s=a+b;if s>=2147483647{s-2147483647}else{s}}
++pub fn active_high_word(old:u32,high:u32,selected:bool)->u32{if selected{add_word(old,high)}else{old}}
++pub fn pattern_word(old:u32,product:u32,selected:bool)->u32{if selected{add_word(old,product)}else{old}}
++pub fn eq_factor_word(a:u32,b:u32,ab:u32)->u32{let p=2147483647u64;let s=(1u64+p-u64::from(a))%p;let s=(s+p-u64::from(b))%p;((s+u64::from(ab)+u64::from(ab))%p)as u32}
++pub fn fields_word(value:u32)->Result<[u8;4],u8>{if value>=2147483647{Err(0)}else{Ok(value.to_le_bytes())}}

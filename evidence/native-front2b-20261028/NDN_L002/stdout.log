@@ -1,0 +1,528 @@
+NDN_generated/NDN_PackedReference.lean:36:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+    let x_1 ← 3#u64 * core.convert.num.FromU64U32.from b0
+    let x ← x + x_1
+    let x ← x + core.convert.num.FromU64U32.from c0
+    let out ← x + core.convert.num.FromU64U32.from d0
+    ok (out, input, row)
+is not definitionally equal to the right-hand side
+  let (a, i) := (input, row)
+  do
+  let a1 ← a.index_usize 0#usize
+  let i1 ← a1.index_usize limb
+  let a3 ← a.index_usize 1#usize
+  let i2 ← a3.index_usize limb
+  let a4 ← a.index_usize 2#usize
+  let i3 ← a4.index_usize limb
+  let a5 ← a.index_usize 3#usize
+  let i4 ← a5.index_usize limb
+  match ↑i with
+    | 0 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+      let i7 ← i5 + i6
+      let i8 ← i7 + core.convert.num.FromU64U32.from i3
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 1 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+      let i6 ← core.convert.num.FromU64U32.from i1 + i5
+      let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+      let i8 ← i6 + i7
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 2 => do
+      let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+      let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+      let i7 ← i5 + i6
+      let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | 3 => do
+      let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← i5 + core.convert.num.FromU64U32.from i2
+      let i7 ← i6 + core.convert.num.FromU64U32.from i3
+      let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | x => fail Error.panic
+
+case h_1
+input : FJb_RawRowCallbacks.Input
+row limb : Usize
+hl : ↑limb < 4
+a : Std.Array U32 4#usize
+ha : Array.index_usize input 0#usize = ok a
+right✝⁷ : (↑input)[↑0#usize]? = some a
+b : Std.Array U32 4#usize
+hb : Array.index_usize input 1#usize = ok b
+right✝⁶ : (↑input)[↑1#usize]? = some b
+c : Std.Array U32 4#usize
+hc : Array.index_usize input 2#usize = ok c
+right✝⁵ : (↑input)[↑2#usize]? = some c
+d : Std.Array U32 4#usize
+hd : Array.index_usize input 3#usize = ok d
+right✝⁴ : (↑input)[↑3#usize]? = some d
+a0 : U32
+ha0 : a.index_usize limb = ok a0
+right✝³ : (↑a)[↑limb]? = some a0
+b0 : U32
+hb0 : b.index_usize limb = ok b0
+right✝² : (↑b)[↑limb]? = some b0
+c0 : U32
+hc0 : c.index_usize limb = ok c0
+right✝¹ : (↑c)[↑limb]? = some c0
+d0 : U32
+hd0 : d.index_usize limb = ok d0
+right✝ : (↑d)[↑limb]? = some d0
+x✝ : ℕ
+heq✝ : ↑row = 0
+⊢ (do
+      let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+      let x_1 ← 3#u64 * core.convert.num.FromU64U32.from b0
+      let x ← x + x_1
+      let x ← x + core.convert.num.FromU64U32.from c0
+      let out ← x + core.convert.num.FromU64U32.from d0
+      ok (out, input, row)) =
+    let (a, i) := (input, row)
+    do
+    let a1 ← a.index_usize 0#usize
+    let i1 ← a1.index_usize limb
+    let a3 ← a.index_usize 1#usize
+    let i2 ← a3.index_usize limb
+    let a4 ← a.index_usize 2#usize
+    let i3 ← a4.index_usize limb
+    let a5 ← a.index_usize 3#usize
+    let i4 ← a5.index_usize limb
+    match ↑i with
+      | 0 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+        let i7 ← i5 + i6
+        let i8 ← i7 + core.convert.num.FromU64U32.from i3
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 1 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+        let i6 ← core.convert.num.FromU64U32.from i1 + i5
+        let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+        let i8 ← i6 + i7
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 2 => do
+        let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+        let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+        let i7 ← i5 + i6
+        let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | 3 => do
+        let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← i5 + core.convert.num.FromU64U32.from i2
+        let i7 ← i6 + core.convert.num.FromU64U32.from i3
+        let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:36:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 2#u64 * core.convert.num.FromU64U32.from b0
+    let x ← core.convert.num.FromU64U32.from a0 + x
+    let x_1 ← 3#u64 * core.convert.num.FromU64U32.from c0
+    let x ← x + x_1
+    let out ← x + core.convert.num.FromU64U32.from d0
+    ok (out, input, row)
+is not definitionally equal to the right-hand side
+  let (a, i) := (input, row)
+  do
+  let a1 ← a.index_usize 0#usize
+  let i1 ← a1.index_usize limb
+  let a3 ← a.index_usize 1#usize
+  let i2 ← a3.index_usize limb
+  let a4 ← a.index_usize 2#usize
+  let i3 ← a4.index_usize limb
+  let a5 ← a.index_usize 3#usize
+  let i4 ← a5.index_usize limb
+  match ↑i with
+    | 0 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+      let i7 ← i5 + i6
+      let i8 ← i7 + core.convert.num.FromU64U32.from i3
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 1 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+      let i6 ← core.convert.num.FromU64U32.from i1 + i5
+      let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+      let i8 ← i6 + i7
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 2 => do
+      let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+      let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+      let i7 ← i5 + i6
+      let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | 3 => do
+      let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← i5 + core.convert.num.FromU64U32.from i2
+      let i7 ← i6 + core.convert.num.FromU64U32.from i3
+      let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | x => fail Error.panic
+
+case h_2
+input : FJb_RawRowCallbacks.Input
+row limb : Usize
+hl : ↑limb < 4
+a : Std.Array U32 4#usize
+ha : Array.index_usize input 0#usize = ok a
+right✝⁷ : (↑input)[↑0#usize]? = some a
+b : Std.Array U32 4#usize
+hb : Array.index_usize input 1#usize = ok b
+right✝⁶ : (↑input)[↑1#usize]? = some b
+c : Std.Array U32 4#usize
+hc : Array.index_usize input 2#usize = ok c
+right✝⁵ : (↑input)[↑2#usize]? = some c
+d : Std.Array U32 4#usize
+hd : Array.index_usize input 3#usize = ok d
+right✝⁴ : (↑input)[↑3#usize]? = some d
+a0 : U32
+ha0 : a.index_usize limb = ok a0
+right✝³ : (↑a)[↑limb]? = some a0
+b0 : U32
+hb0 : b.index_usize limb = ok b0
+right✝² : (↑b)[↑limb]? = some b0
+c0 : U32
+hc0 : c.index_usize limb = ok c0
+right✝¹ : (↑c)[↑limb]? = some c0
+d0 : U32
+hd0 : d.index_usize limb = ok d0
+right✝ : (↑d)[↑limb]? = some d0
+x✝ : ℕ
+heq✝ : ↑row = 1
+⊢ (do
+      let x ← 2#u64 * core.convert.num.FromU64U32.from b0
+      let x ← core.convert.num.FromU64U32.from a0 + x
+      let x_1 ← 3#u64 * core.convert.num.FromU64U32.from c0
+      let x ← x + x_1
+      let out ← x + core.convert.num.FromU64U32.from d0
+      ok (out, input, row)) =
+    let (a, i) := (input, row)
+    do
+    let a1 ← a.index_usize 0#usize
+    let i1 ← a1.index_usize limb
+    let a3 ← a.index_usize 1#usize
+    let i2 ← a3.index_usize limb
+    let a4 ← a.index_usize 2#usize
+    let i3 ← a4.index_usize limb
+    let a5 ← a.index_usize 3#usize
+    let i4 ← a5.index_usize limb
+    match ↑i with
+      | 0 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+        let i7 ← i5 + i6
+        let i8 ← i7 + core.convert.num.FromU64U32.from i3
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 1 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+        let i6 ← core.convert.num.FromU64U32.from i1 + i5
+        let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+        let i8 ← i6 + i7
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 2 => do
+        let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+        let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+        let i7 ← i5 + i6
+        let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | 3 => do
+        let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← i5 + core.convert.num.FromU64U32.from i2
+        let i7 ← i6 + core.convert.num.FromU64U32.from i3
+        let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:36:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← core.convert.num.FromU64U32.from a0 + core.convert.num.FromU64U32.from b0
+    let x_1 ← 2#u64 * core.convert.num.FromU64U32.from c0
+    let x ← x + x_1
+    let x_2 ← 3#u64 * core.convert.num.FromU64U32.from d0
+    let out ← x + x_2
+    ok (out, input, row)
+is not definitionally equal to the right-hand side
+  let (a, i) := (input, row)
+  do
+  let a1 ← a.index_usize 0#usize
+  let i1 ← a1.index_usize limb
+  let a3 ← a.index_usize 1#usize
+  let i2 ← a3.index_usize limb
+  let a4 ← a.index_usize 2#usize
+  let i3 ← a4.index_usize limb
+  let a5 ← a.index_usize 3#usize
+  let i4 ← a5.index_usize limb
+  match ↑i with
+    | 0 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+      let i7 ← i5 + i6
+      let i8 ← i7 + core.convert.num.FromU64U32.from i3
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 1 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+      let i6 ← core.convert.num.FromU64U32.from i1 + i5
+      let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+      let i8 ← i6 + i7
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 2 => do
+      let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+      let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+      let i7 ← i5 + i6
+      let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | 3 => do
+      let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← i5 + core.convert.num.FromU64U32.from i2
+      let i7 ← i6 + core.convert.num.FromU64U32.from i3
+      let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | x => fail Error.panic
+
+case h_3
+input : FJb_RawRowCallbacks.Input
+row limb : Usize
+hl : ↑limb < 4
+a : Std.Array U32 4#usize
+ha : Array.index_usize input 0#usize = ok a
+right✝⁷ : (↑input)[↑0#usize]? = some a
+b : Std.Array U32 4#usize
+hb : Array.index_usize input 1#usize = ok b
+right✝⁶ : (↑input)[↑1#usize]? = some b
+c : Std.Array U32 4#usize
+hc : Array.index_usize input 2#usize = ok c
+right✝⁵ : (↑input)[↑2#usize]? = some c
+d : Std.Array U32 4#usize
+hd : Array.index_usize input 3#usize = ok d
+right✝⁴ : (↑input)[↑3#usize]? = some d
+a0 : U32
+ha0 : a.index_usize limb = ok a0
+right✝³ : (↑a)[↑limb]? = some a0
+b0 : U32
+hb0 : b.index_usize limb = ok b0
+right✝² : (↑b)[↑limb]? = some b0
+c0 : U32
+hc0 : c.index_usize limb = ok c0
+right✝¹ : (↑c)[↑limb]? = some c0
+d0 : U32
+hd0 : d.index_usize limb = ok d0
+right✝ : (↑d)[↑limb]? = some d0
+x✝ : ℕ
+heq✝ : ↑row = 2
+⊢ (do
+      let x ← core.convert.num.FromU64U32.from a0 + core.convert.num.FromU64U32.from b0
+      let x_1 ← 2#u64 * core.convert.num.FromU64U32.from c0
+      let x ← x + x_1
+      let x_2 ← 3#u64 * core.convert.num.FromU64U32.from d0
+      let out ← x + x_2
+      ok (out, input, row)) =
+    let (a, i) := (input, row)
+    do
+    let a1 ← a.index_usize 0#usize
+    let i1 ← a1.index_usize limb
+    let a3 ← a.index_usize 1#usize
+    let i2 ← a3.index_usize limb
+    let a4 ← a.index_usize 2#usize
+    let i3 ← a4.index_usize limb
+    let a5 ← a.index_usize 3#usize
+    let i4 ← a5.index_usize limb
+    match ↑i with
+      | 0 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+        let i7 ← i5 + i6
+        let i8 ← i7 + core.convert.num.FromU64U32.from i3
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 1 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+        let i6 ← core.convert.num.FromU64U32.from i1 + i5
+        let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+        let i8 ← i6 + i7
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 2 => do
+        let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+        let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+        let i7 ← i5 + i6
+        let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | 3 => do
+        let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← i5 + core.convert.num.FromU64U32.from i2
+        let i7 ← i6 + core.convert.num.FromU64U32.from i3
+        let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:36:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 3#u64 * core.convert.num.FromU64U32.from a0
+    let x ← x + core.convert.num.FromU64U32.from b0
+    let x ← x + core.convert.num.FromU64U32.from c0
+    let x_1 ← 2#u64 * core.convert.num.FromU64U32.from d0
+    let out ← x + x_1
+    ok (out, input, row)
+is not definitionally equal to the right-hand side
+  let (a, i) := (input, row)
+  do
+  let a1 ← a.index_usize 0#usize
+  let i1 ← a1.index_usize limb
+  let a3 ← a.index_usize 1#usize
+  let i2 ← a3.index_usize limb
+  let a4 ← a.index_usize 2#usize
+  let i3 ← a4.index_usize limb
+  let a5 ← a.index_usize 3#usize
+  let i4 ← a5.index_usize limb
+  match ↑i with
+    | 0 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+      let i7 ← i5 + i6
+      let i8 ← i7 + core.convert.num.FromU64U32.from i3
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 1 => do
+      let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+      let i6 ← core.convert.num.FromU64U32.from i1 + i5
+      let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+      let i8 ← i6 + i7
+      let i9 ← i8 + core.convert.num.FromU64U32.from i4
+      ok (i9, input, row)
+    | 2 => do
+      let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+      let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+      let i7 ← i5 + i6
+      let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | 3 => do
+      let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+      let i6 ← i5 + core.convert.num.FromU64U32.from i2
+      let i7 ← i6 + core.convert.num.FromU64U32.from i3
+      let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+      let i9 ← i7 + i8
+      ok (i9, input, row)
+    | x => fail Error.panic
+
+case h_4
+input : FJb_RawRowCallbacks.Input
+row limb : Usize
+hl : ↑limb < 4
+a : Std.Array U32 4#usize
+ha : Array.index_usize input 0#usize = ok a
+right✝⁷ : (↑input)[↑0#usize]? = some a
+b : Std.Array U32 4#usize
+hb : Array.index_usize input 1#usize = ok b
+right✝⁶ : (↑input)[↑1#usize]? = some b
+c : Std.Array U32 4#usize
+hc : Array.index_usize input 2#usize = ok c
+right✝⁵ : (↑input)[↑2#usize]? = some c
+d : Std.Array U32 4#usize
+hd : Array.index_usize input 3#usize = ok d
+right✝⁴ : (↑input)[↑3#usize]? = some d
+a0 : U32
+ha0 : a.index_usize limb = ok a0
+right✝³ : (↑a)[↑limb]? = some a0
+b0 : U32
+hb0 : b.index_usize limb = ok b0
+right✝² : (↑b)[↑limb]? = some b0
+c0 : U32
+hc0 : c.index_usize limb = ok c0
+right✝¹ : (↑c)[↑limb]? = some c0
+d0 : U32
+hd0 : d.index_usize limb = ok d0
+right✝ : (↑d)[↑limb]? = some d0
+x✝ : ℕ
+heq✝ : ↑row = 3
+⊢ (do
+      let x ← 3#u64 * core.convert.num.FromU64U32.from a0
+      let x ← x + core.convert.num.FromU64U32.from b0
+      let x ← x + core.convert.num.FromU64U32.from c0
+      let x_1 ← 2#u64 * core.convert.num.FromU64U32.from d0
+      let out ← x + x_1
+      ok (out, input, row)) =
+    let (a, i) := (input, row)
+    do
+    let a1 ← a.index_usize 0#usize
+    let i1 ← a1.index_usize limb
+    let a3 ← a.index_usize 1#usize
+    let i2 ← a3.index_usize limb
+    let a4 ← a.index_usize 2#usize
+    let i3 ← a4.index_usize limb
+    let a5 ← a.index_usize 3#usize
+    let i4 ← a5.index_usize limb
+    match ↑i with
+      | 0 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← 3#u64 * core.convert.num.FromU64U32.from i2
+        let i7 ← i5 + i6
+        let i8 ← i7 + core.convert.num.FromU64U32.from i3
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 1 => do
+        let i5 ← 2#u64 * core.convert.num.FromU64U32.from i2
+        let i6 ← core.convert.num.FromU64U32.from i1 + i5
+        let i7 ← 3#u64 * core.convert.num.FromU64U32.from i3
+        let i8 ← i6 + i7
+        let i9 ← i8 + core.convert.num.FromU64U32.from i4
+        ok (i9, input, row)
+      | 2 => do
+        let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+        let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+        let i7 ← i5 + i6
+        let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | 3 => do
+        let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← i5 + core.convert.num.FromU64U32.from i2
+        let i7 ← i6 + core.convert.num.FromU64U32.from i3
+        let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, row)
+      | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:36:27: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (input, row)
+  has type
+    Std.Array (Std.Array U32 4#usize) 4#usize × Usize
+  but is expected to have type
+    FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure
+  in the application
+    (out, input, row)
+NDN_generated/NDN_PackedReference.lean:36:38: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDN_PackedReference.matrix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -37,7 +37,7 @@ if kind=='kani':
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDN_src/crates/aspis-statement/Cargo.toml','--target-dir',B+'/NDN_target','--features','r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NDN_gate.py',a+'.json']
 elif kind=='extract':
- files['NDN_extract.py']=(E/'NDN_extract.py').read_text();files['NDN_reference.rs']=(E/'NDN_reference.rs').read_text();sources=['NDN_extract.py','NDN_reference.rs'];native=[];command=['python3','NDN_extract.py']
+ files['NDN_EXTRACT_JOBS.json']=(E/'NDN_EXTRACT_JOBS.json').read_text();files['NDN_extract.py']=(E/'NDN_extract.py').read_text();files['NDN_reference.rs']=(E/'NDN_reference.rs').read_text();sources=['NDN_extract.py','NDN_reference.rs','NDN_EXTRACT_JOBS.json'];native=[];command=['python3','NDN_extract.py']
 else:
  files['NDN_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDN_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDN_generated','-o','NDN_objects/'+target+'.olean',sources[0]]

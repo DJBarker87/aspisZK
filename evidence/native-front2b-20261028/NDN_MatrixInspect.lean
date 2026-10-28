@@ -1,0 +1,7 @@
+import NDE_Reference11.Funs
+import NDE_RowBridge
+import RPv_FJe_PackedRawCallbacks
+set_option pp.all true in
+#print FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut
+#print FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure
+#check Aeneas.Std.Array.index_usize
