@@ -1,0 +1,576 @@
+SELECT NDB_K049 r1_pool_adapter::NDB_native::NDB_master_box_projection inverse False
+{"attempt": "NDB_K049", "exit_status": 0, "wall_seconds": 8.48827638302464, "peak_rss_kib": "318480", "swaps": "0", "print_axioms": "N/A: kani"}
+fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.70s
+Checking harness r1_pool_adapter::NDB_native::NDB_master_box_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 172 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 6.998028s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K050 r1_pool_adapter::NDB_native::NDB_master_box_projection inverse True
+{"attempt": "NDB_K050", "exit_status": 1, "wall_seconds": 4.130096121923998, "peak_rss_kib": "332912", "swaps": "0", "print_axioms": "N/A: kani"}
+g: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.51s
+Checking harness r1_pool_adapter::NDB_native::NDB_master_box_projection...
+
+VERIFICATION RESULT:
+ ** 1 of 172 failed (2 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 312, in r1_pool_adapter::NDB_native::NDB_master_box_projection
+
+VERIFICATION:- FAILED
+Verification Time: 2.8112316s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_master_box_projection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+SELECT NDB_K051 r1_pool_adapter::NDB_native::NDB_master_map_error_projection inverse False
+{"attempt": "NDB_K051", "exit_status": 0, "wall_seconds": 12.476921868976206, "peak_rss_kib": "732776", "swaps": "0", "print_axioms": "N/A: kani"}
+extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.75s
+Checking harness r1_pool_adapter::NDB_native::NDB_master_map_error_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 318 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 10.846586s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K052 r1_pool_adapter::NDB_native::NDB_master_map_error_projection inverse True
+{"attempt": "NDB_K052", "exit_status": 1, "wall_seconds": 10.425634582992643, "peak_rss_kib": "771584", "swaps": "0", "print_axioms": "N/A: kani"}
+to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.57s
+Checking harness r1_pool_adapter::NDB_native::NDB_master_map_error_projection...
+
+VERIFICATION RESULT:
+ ** 1 of 318 failed (4 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 322, in r1_pool_adapter::NDB_native::NDB_master_map_error_projection
+
+VERIFICATION:- FAILED
+Verification Time: 8.894324s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_master_map_error_projection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+SELECT NDB_K053 r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection inverse False
+{"attempt": "NDB_K053", "exit_status": 0, "wall_seconds": 3.906630074023269, "peak_rss_kib": "266360", "swaps": "0", "print_axioms": "N/A: kani"}
+MX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.84s
+Checking harness r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 289 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.094902s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K054 r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection inverse True
+{"attempt": "NDB_K054", "exit_status": 1, "wall_seconds": 3.3039735700003803, "peak_rss_kib": "247252", "swaps": "0", "print_axioms": "N/A: kani"}
+`KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.57s
+Checking harness r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection...
+
+VERIFICATION RESULT:
+ ** 1 of 289 failed (4 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 332, in r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection
+
+VERIFICATION:- FAILED
+Verification Time: 1.8129568s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_checkpoint_box_projection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+SELECT NDB_K055 r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection inverse False
+{"attempt": "NDB_K055", "exit_status": 0, "wall_seconds": 5.938910168013535, "peak_rss_kib": "273800", "swaps": "0", "print_axioms": "N/A: kani"}
+end_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.84s
+Checking harness r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 424 failed (4 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.914553s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K056 r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection inverse True
+{"attempt": "NDB_K056", "exit_status": 1, "wall_seconds": 4.751177896047011, "peak_rss_kib": "255780", "swaps": "0", "print_axioms": "N/A: kani"}
+t` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.66s
+Checking harness r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection...
+
+VERIFICATION RESULT:
+ ** 1 of 424 failed (4 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 342, in r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection
+
+VERIFICATION:- FAILED
+Verification Time: 2.9450707s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_checkpoint_map_error_projection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+SELECT NDB_K057 r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection inverse False
+{"attempt": "NDB_K057", "exit_status": 0, "wall_seconds": 3.4435440169181675, "peak_rss_kib": "348452", "swaps": "0", "print_axioms": "N/A: kani"}
+_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.11s
+Checking harness r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection...
+
+VERIFICATION RESULT:
+ ** 0 of 154 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.75971717s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K058 r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection inverse True
+{"attempt": "NDB_K058", "exit_status": 1, "wall_seconds": 2.8540662029990926, "peak_rss_kib": "328816", "swaps": "0", "print_axioms": "N/A: kani"}
+ should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.73s
+Checking harness r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection...
+
+VERIFICATION RESULT:
+ ** 1 of 154 failed (3 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 372, in r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection
+
+VERIFICATION:- FAILED
+Verification Time: 0.727872s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_sequence_any_iterator_projection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+SELECT NDB_K059 r1_pool_adapter::NDB_native::NDB_frontier_selected_frame inverse False
+{"attempt": "NDB_K059", "exit_status": 0, "wall_seconds": 11.962626621010713, "peak_rss_kib": "711312", "swaps": "0", "print_axioms": "N/A: kani"}
+KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.82s
+Checking harness r1_pool_adapter::NDB_native::NDB_frontier_selected_frame...
+
+VERIFICATION RESULT:
+ ** 0 of 311 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 10.295165s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+SELECT NDB_K060 r1_pool_adapter::NDB_native::NDB_frontier_selected_frame inverse True
+{"attempt": "NDB_K060", "exit_status": 1, "wall_seconds": 10.135387739981525, "peak_rss_kib": "765520", "swaps": "0", "print_axioms": "N/A: kani"}
+nction `KMX_to_vec_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> programs/r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.53s
+Checking harness r1_pool_adapter::NDB_native::NDB_frontier_selected_frame...
+
+VERIFICATION RESULT:
+ ** 1 of 311 failed (8 unreachable)
+Failed Checks: "NDB semantic law"
+ File: "programs/r1-cost-probe/src/NDB_native.rs", line 282, in r1_pool_adapter::NDB_native::NDB_frontier_selected_frame
+
+VERIFICATION:- FAILED
+Verification Time: 8.722017s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::NDB_native::NDB_frontier_selected_frame
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

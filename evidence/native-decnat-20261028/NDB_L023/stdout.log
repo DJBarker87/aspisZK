@@ -1,0 +1,38 @@
+NDB_generated/NDB_FrontierReject.lean:16:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NDB_generated/NDB_FrontierReject.lean:19:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NDB_generated/NDB_FrontierReject.lean:32:82: error: unsolved goals
+tree : Slice U8
+next : U64
+a : Frontier
+i : Usize
+row : Row
+tag : U64
+index : ↑i < 20
+read : ∀ (addr : Usize), ↑addr = 48 + 32 * ↑i → NCV_Reference.digest tree addr = ok (core.result.Result.Ok row)
+shift : next >>> i = ok tag
+bit : tag &&& 1#u64 = 0#u64
+different : row ≠ NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i
+sm : 32#usize * i ⦃ x => ↑x = 32 * ↑i ⦄
+offset : UScalar UScalarTy.Usize
+mul : 32#usize * i = ok offset
+offval : ↑offset = 32 * ↑i
+sa : 48#usize + offset ⦃ x => ↑x = 48 + ↑offset ⦄
+addr : UScalar UScalarTy.Usize
+add : 48#usize + offset = ok addr
+addrval : ↑addr = 48 + ↑offset
+digest : NCV_Reference.digest tree addr = ok (core.result.Result.Ok row)
+rd : Array.index_usize a i = ok (NCV_ArrayFrame.coord a ↑i)
+back : Array.index_mut_usize a i = ok (NCV_ArrayFrame.coord a ↑i, Std.Array.set a i)
+re : NCV_Reference.EMPTY.index_usize i = ok (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i)
+eq : NCV_Reference.eq_digest row (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i) = ok false
+lt : i < 20#usize
+⊢ (let (_, index_mut_back) := (NCV_ArrayFrame.coord a ↑i, Std.Array.set a i)
+    ok (ControlFlow.done (core.result.Result.Err ()))) =
+    ok (ControlFlow.done (core.result.Result.Err ()))
+'NDB_FrontierReject.digest_error' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDB_FrontierReject.vacant_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDB_FrontierReject.rejected' depends on axioms: [propext, Classical.choice, Quot.sound]

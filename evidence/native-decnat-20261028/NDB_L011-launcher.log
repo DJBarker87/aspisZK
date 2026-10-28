@@ -1,0 +1,41 @@
+{"attempt": "NDB_L011", "exit_status": 1, "wall_seconds": 2.6971481000073254, "peak_rss_kib": "5385448", "swaps": "0", "print_axioms": ["'NDB_PrimaryWindow.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDB_PrimaryWindow.word32' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDB_PrimaryWindow.word64' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDB_PrimaryWindow.bytes32' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDB_generated/NDB_PrimaryWindow.lean:37:38: error: unsolved goals
+b : Slice U8
+s : Usize
+a : Std.Array U8 32#usize
+cap : (↑b).length ≤ 768
+fit : ↑s + 32 ≤ (↑b).length
+field : List.take 32 (List.drop ↑s ↑b) = ↑a
+same : NDB_PrimaryWords.window b (↑s) 32#usize = a
+k : ℕ
+hk : k < 32
+⊢ NCV_ZeroStep.byte b (↑s + k) =
+    [NCV_ZeroStep.byte b ↑s, NCV_ZeroStep.byte b (↑s + 1), NCV_ZeroStep.byte b (↑s + 2), NCV_ZeroStep.byte b (↑s + 3),
+            NCV_ZeroStep.byte b (↑s + 4), NCV_ZeroStep.byte b (↑s + 5), NCV_ZeroStep.byte b (↑s + 6),
+            NCV_ZeroStep.byte b (↑s + 7), NCV_ZeroStep.byte b (↑s + 8), NCV_ZeroStep.byte b (↑s + 9),
+            NCV_ZeroStep.byte b (↑s + 10), NCV_ZeroStep.byte b (
+...
+     NCV_ZeroStep.byte b (↑s + 10), NCV_ZeroStep.byte b (↑s + 11), NCV_ZeroStep.byte b (↑s + 12),
+            NCV_ZeroStep.byte b (↑s + 13), NCV_ZeroStep.byte b (↑s + 14), NCV_ZeroStep.byte b (↑s + 15),
+            NCV_ZeroStep.byte b (↑s + 16), NCV_ZeroStep.byte b (↑s + 17), NCV_ZeroStep.byte b (↑s + 18),
+            NCV_ZeroStep.byte b (↑s + 19), NCV_ZeroStep.byte b (↑s + 20), NCV_ZeroStep.byte b (↑s + 21),
+            NCV_ZeroStep.byte b (↑s + 22), NCV_ZeroStep.byte b (↑s + 23), NCV_ZeroStep.byte b (↑s + 24),
+            NCV_ZeroStep.byte b (↑s + 25), NCV_ZeroStep.byte b (↑s + 26), NCV_ZeroStep.byte b (↑s + 27),
+            NCV_ZeroStep.byte b (↑s + 28), NCV_ZeroStep.byte b (↑s + 29), NCV_ZeroStep.byte b (↑s + 30),
+            NCV_ZeroStep.byte b (↑s + 31)][k]?.getD
+      default
+NDB_generated/NDB_PrimaryWindow.lean:45:8: warning: This simp argument is unused:
+  List.getElem?_eq_getElem
+        (show k < (List.ofFn (fun i : Fin (32#usize).val => NCV_ZeroStep.byte b (s.val + i.val))).length by
+          simpa using hk)
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵(̵s̵h̵o̵w̵ ̵k̵<̵(̵L̵i̵s̵t̵.̵o̵f̵F̵n̵ ̵(̵f̵u̵n̵ ̵i̵ ̵:̵ ̵F̵i̵n̵ ̵(̵3̵2̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵ ̵=̵>̵ ̵N̵C̵V̵_̵Z̵e̵r̵o̵S̵t̵e̵p̵.̵b̵y̵t̵e̵ ̵b̵ ̵(̵s̵.̵v̵a̵l̵+̵i̵.̵v̵a̵l̵)̵)̵)̵.̵l̵e̵n̵g̵t̵h̵ ̵b̵y̵ ̵s̵i̵m̵p̵a̵ ̵u̵s̵i̵n̵g̵ ̵h̵k̵)̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDB_PrimaryWindow.bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDB_PrimaryWindow.word32' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDB_PrimaryWindow.word64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDB_PrimaryWindow.bytes32' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r55ddd0833bdd4954ae81dfb7df3ef61f.scope; invocation ID: f70b28315910485eaae853c44521044e

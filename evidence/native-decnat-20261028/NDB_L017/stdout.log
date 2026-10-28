@@ -1,0 +1,88 @@
+NDB_generated/NDB_SequenceDecision.lean:33:85: error: Application type mismatch: The argument
+  steps
+has type
+  ∀ (i : Usize),
+    ↑i < 8 →
+      ∃ next,
+        ↑next = ↑i + 1 ∧
+          NCV_Reference.valid_sequences_loop.body seq i =
+            ok
+              (@ite (ControlFlow Usize (Option Bool)) (↑(NCV_ArrayFrame.coord seq ↑i) ≤ 1048576)
+                ((↑(NCV_ArrayFrame.coord seq ↑i)).decLe 1048576) (ControlFlow.cont next)
+                (ControlFlow.done (some false)))
+but is expected to have type
+  ∀ (i : Usize),
+    ↑i < 8 →
+      ∃ next,
+        ↑next = ↑i + 1 ∧
+          NCV_Reference.valid_sequences_loop.body seq i =
+            ok
+              (@ite (ControlFlow Usize (Option Bool)) (↑(NCV_ArrayFrame.coord seq ↑i) ≤ 1048576)
+                (Classical.propDecidable (↑(NCV_ArrayFrame.coord seq ↑i) ≤ 1048576)) (ControlFlow.cont next)
+                (ControlFlow.done (some false)))
+in the application
+  NDB_ScanDecision.run (NCV_Reference.valid_sequences_loop.body seq) (fun j => ↑(NCV_ArrayFrame.coord seq j) ≤ 1048576)
+    8 steps
+'NDB_SequenceDecision.valid_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDB_SequenceDecision.valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+NDB_generated/NDB_SequenceDecision.lean:58:4: error: unsolved goals
+case pos
+seq : Std.Array U64 8#usize
+i✝ : Usize
+bound : ↑i✝ ≤ 8
+i : Usize
+hi : ↑i < 8
+next : Usize
+advance : i + 1#usize = ok next
+value : ↑next = ↑i + 1
+lt : i < 8#usize
+read : seq.index_usize i = ok (NCV_ArrayFrame.coord seq ↑i)
+test : NCV_ArrayFrame.coord seq ↑i = 0#u64
+guard : ¬(NCV_ArrayFrame.coord seq ↑i != 0#u64) = true
+⊢ (if (0#u64 != 0#u64) = true then ok (ControlFlow.done (some false)) else ok (ControlFlow.cont next)) =
+    ok (ControlFlow.cont next)
+NDB_generated/NDB_SequenceDecision.lean:69:75: error: Application type mismatch: The argument
+  steps
+has type
+  ∀ (i : Usize),
+    ↑i < 8 →
+      ∃ next,
+        ↑next = ↑i + 1 ∧
+          NCV_Reference.zero_sequences_loop.body seq i =
+            ok
+              (@ite (ControlFlow Usize (Option Bool)) (NCV_ArrayFrame.coord seq ↑i = 0#u64)
+                (instDecidableEqUScalar_1 UScalarTy.U64 (NCV_ArrayFrame.coord seq ↑i) 0#u64) (ControlFlow.cont next)
+                (ControlFlow.done (some false)))
+but is expected to have type
+  ∀ (i : Usize),
+    ↑i < 8 →
+      ∃ next,
+        ↑next = ↑i + 1 ∧
+          NCV_Reference.zero_sequences_loop.body seq i =
+            ok
+              (@ite (ControlFlow Usize (Option Bool)) (NCV_ArrayFrame.coord seq ↑i = 0#u64)
+                (Classical.propDecidable (NCV_ArrayFrame.coord seq ↑i = 0#u64)) (ControlFlow.cont next)
+                (ControlFlow.done (some false)))
+in the application
+  NDB_ScanDecision.run (NCV_Reference.zero_sequences_loop.body seq) (fun j => NCV_ArrayFrame.coord seq j = 0#u64) 8
+    steps
+NDB_generated/NDB_SequenceDecision.lean:60:8: warning: This simp argument is unused:
+  guard
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵C̵V̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵z̵e̵r̵o̵_̵s̵e̵q̵u̵e̵n̵c̵e̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵l̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵t̵e̵s̵t̵]̵[̲N̲C̲V̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲z̲e̲r̲o̲_̲s̲e̲q̲u̲e̲n̲c̲e̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲l̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲t̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDB_generated/NDB_SequenceDecision.lean:60:14: warning: This simp argument is unused:
+  ite_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵C̵V̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵z̵e̵r̵o̵_̵s̵e̵q̵u̵e̵n̵c̵e̵s̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵l̵t̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵r̵e̵a̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵g̵u̵a̵r̵d̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵a̵d̵v̵a̵n̵c̵e̵,̵t̵e̵s̵t̵]̵[̲N̲C̲V̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲z̲e̲r̲o̲_̲s̲e̲q̲u̲e̲n̲c̲e̲s̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲l̲t̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲r̲e̲a̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲g̲u̲a̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲a̲d̲v̲a̲n̲c̲e̲,̲ ̲t̲e̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDB_SequenceDecision.zero_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDB_SequenceDecision.zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
