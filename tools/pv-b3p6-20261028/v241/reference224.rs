@@ -5,33 +5,21 @@ use aspis_statement::logup::CopyLogUpRow;
 #[derive(Clone,Copy,Debug,PartialEq,Eq)]
 pub enum Error { CopyImbalance }
 
+pub fn endpoint(value: QM31, operand: QM31, weight: M31, chi: QM31, consumer: bool) -> Result<QM31,Error> {
+    if weight == M31::ZERO { return Ok(value); }
+    let inv = match chi.sub(operand).try_inv() {
+        Some(v) => v,
+        None => return Err(Error::CopyImbalance),
+    };
+    let term = inv.mul_m31(weight);
+    Ok(if consumer { value.sub(term) } else { value.add(term) })
+}
+
 pub fn one_row(row: CopyLogUpRow, chi: QM31) -> Result<QM31,Error> {
-let mut value = QM31::ZERO;
-let mut slot = 0usize;
-while slot < 2 {
-    let weight = row.producer_weights[slot];
-    if weight != M31::ZERO {
-        let inv = match chi.sub(row.producer_values[slot]).try_inv() {
-            Some(v) => v,
-            None => return Err(Error::CopyImbalance),
-        };
-        value = value.add(inv.mul_m31(weight));
-    }
-    slot += 1;
-}
-slot = 0;
-while slot < 2 {
-    let weight = row.consumer_weights[slot];
-    if weight != M31::ZERO {
-        let inv = match chi.sub(row.consumer_values[slot]).try_inv() {
-            Some(v) => v,
-            None => return Err(Error::CopyImbalance),
-        };
-        value = value.sub(inv.mul_m31(weight));
-    }
-    slot += 1;
-}
-    Ok(value)
+    let v0=endpoint(QM31::ZERO,row.producer_values[0],row.producer_weights[0],chi,false)?;
+    let v1=endpoint(v0,row.producer_values[1],row.producer_weights[1],chi,false)?;
+    let v2=endpoint(v1,row.consumer_values[0],row.consumer_weights[0],chi,true)?;
+    endpoint(v2,row.consumer_values[1],row.consumer_weights[1],chi,true)
 }
 
 #[inline(never)]
