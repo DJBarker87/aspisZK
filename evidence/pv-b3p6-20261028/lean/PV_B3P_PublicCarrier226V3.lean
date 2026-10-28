@@ -22,12 +22,14 @@ def unSnapshot (p : PV_B3P_226V3.aspis_statement.pool_v1.pair_tree_profile.PoolV
 def toSource (base : ExternalTypes)
     (p : @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base)) :
     PV_B3P_226V3.reference226.Source :=
+  letI : ExternalTypes := Types base
   match p with
   | .Transfer pub t => .Transfer pub ⟨snapshot t.live_snapshot,t.candidate_afterstate⟩
   | .Withdrawal pub t => .Withdrawal pub ⟨snapshot t.live_snapshot,t.candidate_afterstate⟩
 
 def fromSource (base : ExternalTypes) (p : PV_B3P_226V3.reference226.Source) :
     @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base) :=
+  letI : ExternalTypes := Types base
   match p with
   | .Transfer pub t => .Transfer pub ⟨unSnapshot t.live_snapshot,t.candidate_afterstate⟩
   | .Withdrawal pub t => .Withdrawal pub ⟨unSnapshot t.live_snapshot,t.candidate_afterstate⟩
@@ -41,12 +43,14 @@ theorem snapshot_reverse (p : PV_B3P_226V3.aspis_statement.pool_v1.pair_tree_pro
 theorem roundtrip (base : ExternalTypes)
     (p : @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base)) :
     fromSource base (toSource base p) = p := by
+  letI : ExternalTypes := Types base
   cases p with
   | Transfer pub t => cases t with | mk live after => cases live; rfl
   | Withdrawal pub t => cases t with | mk live after => cases live; rfl
 
 theorem reverse_roundtrip (base : ExternalTypes) (p : PV_B3P_226V3.reference226.Source) :
     toSource base (fromSource base p) = p := by
+  letI : ExternalTypes := Types base
   cases p with
   | Transfer pub t => cases t with | mk live after => cases live; rfl
   | Withdrawal pub t => cases t with | mk live after => cases live; rfl
