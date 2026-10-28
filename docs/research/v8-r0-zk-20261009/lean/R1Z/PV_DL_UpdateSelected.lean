@@ -81,7 +81,8 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
       T block_buffer.Eager (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6)
       N1 (Storage U8 6) O (bufferKind base ops T) uc less nz self input=
       PV_DL_UpdateCarrier.value (updater base uc) self input := by
-  change kindDispatch base ops _ _ _=_
+  change (kindDispatch base ops
+    (@block_buffer.Eager.Insts.Block_bufferBufferKind (Types base) ops) _ _) self input=_
   rw [native_kind]
   exact dispatch_source (updater base uc)
     (@ExternalFuns.op216 (Types base) ops T block_buffer.Eager
