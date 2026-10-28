@@ -1,7 +1,7 @@
 """Read deterministic source fixture words with a capped optimized native probe."""
 import pathlib,subprocess,sys,json,shlex,hashlib,datetime,time
 R=pathlib.Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin31-20261028';host='dombarker@100.108.41.90';H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026'
-assert json.loads((E/'pv31-lane-reference-charon-02.llbc').read_text())['has_errors'] is False
+assert json.loads((E/'pv31-lane-reference-charon-03.llbc').read_text())['has_errors'] is False
 name=sys.argv[1];assert not (E/(name+'.json')).exists()
 prior_refusals=[json.loads(p.read_text()) for p in E.glob('*refusal*.json')]
 if prior_refusals:
@@ -34,7 +34,7 @@ if r.returncode != 0 or not a['allowed']:
  (E/(name+'-refusal.json')).write_text(json.dumps(a,indent=2)+'\n');print(a);sys.exit(78)
 transport(['scp','-q',f'{host}:{H}/evidence/{name}-reservation.json',str(E)],check=True)
 probe='outer-aeneas'
-cmd=['/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/candidate-007/main.exe','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Lane31','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',H+'/evidence/pv31-lane-reference-charon-02.llbc']
+cmd=['/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/rng-extractor/candidate-007/main.exe','-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_RunJoin_Lane31','-dest',H+'/evidence/'+name+'-generated','-split-files','-emit-json',H+'/evidence/pv31-lane-reference-charon-03.llbc']
 paths=[]
 transport(['scp','-q',str(R/'tools/pv-runjoin12-20261027/kani-receipt.py'),f'{host}:{H}/evidence/pv31-native-receipt.py'],check=True)
 record=dict(target=cmd,worker_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),expected_time='Aeneas translation of the error-free pinned optimized LLBC; no Rust compilation or arithmetic gate',source_sha256={p:hashlib.sha256((R/p).read_bytes()).hexdigest() for p in paths})
