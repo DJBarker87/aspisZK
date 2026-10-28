@@ -1,0 +1,113 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -285,3 +285,110 @@
+ #[kani::stub(alloc::alloc::dealloc,free)]
+ fn copy_negative(){let a=[0u32,0,0,0,0,0,0,1,0,0,0,0,0,0,0,512];let mut b=[0u32;16];b.copy_from_slice(&a);assert!(b[15]==0);}
+ }
++
++#[cfg(kani)] mod NCD_fill_frame {
++ use super::*;
++ use alloc::boxed::Box;
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn byte_metadata(){
++let n:usize=kani::any();kani::assume(n<14759);let value:u8=kani::any();
++ let backing:Box<[u8;14759]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u8;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,14759)};
++ let j:usize=kani::any();kani::assume(j<14759);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++assert!(out.len()==n+1&&out.capacity()==14759&&out.as_ptr()==ptr);
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn byte_new_cell(){
++let n:usize=kani::any();kani::assume(n<14759);let value:u8=kani::any();
++ let backing:Box<[u8;14759]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u8;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,14759)};
++ let j:usize=kani::any();kani::assume(j<14759);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++assert!(out[n]==value);
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn byte_exterior(){
++let n:usize=kani::any();kani::assume(n<14759);let value:u8=kani::any();
++ let backing:Box<[u8;14759]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u8;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,14759)};
++ let j:usize=kani::any();kani::assume(j<14759);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++if j!=n{assert!(unsafe{*ptr.add(j)}==old);}
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn word_metadata(){
++let n:usize=kani::any();kani::assume(n<110);let value:u32=kani::any();
++ let backing:Box<[u32;110]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u32;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,110)};
++ let j:usize=kani::any();kani::assume(j<110);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++assert!(out.len()==n+1&&out.capacity()==110&&out.as_ptr()==ptr);
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn word_new_cell(){
++let n:usize=kani::any();kani::assume(n<110);let value:u32=kani::any();
++ let backing:Box<[u32;110]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u32;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,110)};
++ let j:usize=kani::any();kani::assume(j<110);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++assert!(out[n]==value);
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn word_exterior(){
++let n:usize=kani::any();kani::assume(n<110);let value:u32=kani::any();
++ let backing:Box<[u32;110]>=Box::new(kani::any());
++ let ptr=Box::into_raw(backing) as *mut u32;
++ let mut out=unsafe{Vec::from_raw_parts(ptr,n,110)};
++ let j:usize=kani::any();kani::assume(j<110);
++ let old=unsafe{*ptr.add(j)};
++ out.resize(n+1,value);
++if j!=n{assert!(unsafe{*ptr.add(j)}==old);}
++}
++}

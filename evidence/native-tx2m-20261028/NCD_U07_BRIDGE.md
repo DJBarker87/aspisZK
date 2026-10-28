@@ -1,3 +1,5 @@
 # NCD U07 — OPEN
 
 Inherited exact scope and outstanding members: ../native-tx2l-20261028/NCB_U07_BRIDGE.md. Existing results are imported, not reproved. NCD_STAGE0.md and NCD_ADAPTER_AUDIT.json withdraw deployed cohort credit for the17 old adapter-import modules; native/model local scope is unchanged. Retargeted inherited bodies are independently checked under NCD_R_ names before any credit is restored. No headline premise discharged.
+
+The first attempted selected-cohort DotTerm replay (L009) failed on a lower import-owner collision, not arithmetic: old FIo_ReduceBounds versus RPx's RPt_FIo_ReduceBounds. NCD_B_37 import-only lower replays repair that selection, without edits to original proved modules. No old native gate is rerun solely for this import repair. NCD_DotCutTrace is an unvalidated new association of ordered SAME range/scalar/coefficient/eight-cell cuts to the installed loop; no successful whole native loop result is assumed. Complete native trace existence, outer fold/tail association, accepted scalar scan and powers ownership remain OPEN.

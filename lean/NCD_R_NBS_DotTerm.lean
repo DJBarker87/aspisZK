@@ -1,7 +1,7 @@
 -- Retargeted inherited proof body; only module imports changed.
 import RPt_JFs_TX2_ArrayRead
 import RPt_FIo_ArrayCanon
-import NBQ_RawCell
+import NCD_B_NBQ_RawCell
 set_option autoImplicit false
 noncomputable section
 namespace NBS_DotTerm

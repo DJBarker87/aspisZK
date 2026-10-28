@@ -1,5 +1,5 @@
 -- Retargeted inherited proof body; only module imports changed.
-import NBQ_Powers29
+import NCD_B_NBQ_Powers29
 import RPt_FIo_ArrayCanon
 set_option autoImplicit false
 namespace NBS_PowersCanon

@@ -1,6 +1,6 @@
 -- Retargeted inherited proof body; only module imports changed.
 import NCD_R_JFs_TX2_WideAdd
-import NBQ_U06
+import NCD_B_NBQ_U06
 set_option autoImplicit false
 noncomputable section
 namespace NCB_TailFinal

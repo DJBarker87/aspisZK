@@ -9,10 +9,10 @@ if (E/'NCD_PAUSE').exists():raise SystemExit('paused before admission')
 assert int(a.rsplit('L',1)[1])<=120
 assert len(list(E.glob('NCD_L*/receipt.json')))<120
 assert not (E/a/'receipt.json').exists()
-def ssh(code,submitted=False):
+def ssh(code,submitted=False,stdin=None):
  argv=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]
  for n in range(11):
-  r=subprocess.run(argv,capture_output=True,text=True)
+  r=subprocess.run(argv,capture_output=True,text=True,input=stdin)
   with (E/'NCD_STEP_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,trial=n,exit=r.returncode,stdout=r.stdout,stderr=r.stderr,submitted=submitted,argv=argv))+'\n')
   if r.returncode!=255 or submitted:return r
   if n<10:print('prelaunch/read-only transport retry60s',flush=True);time.sleep(60)
@@ -58,7 +58,9 @@ if p.exists(): assert json.loads(p.read_text())==pins,'library pin changed'
 else:p.write_text(json.dumps(pins,indent=2)+'\\n')
 '''
 # Submission is never retried, including transport failures; recover read-only.
-cmd='cd '+shlex.quote(B)+' && python3 -c '+shlex.quote(setup)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py '+shlex.quote(a+'.json')
+r=ssh('python3',stdin=setup)
+assert r.returncode==0,r.stdout+r.stderr
+cmd='cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py '+shlex.quote(a+'.json')
 r=ssh(cmd,submitted=True);(E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 recover=f'''from pathlib import Path
 import json

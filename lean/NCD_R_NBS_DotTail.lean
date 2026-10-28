@@ -1,6 +1,6 @@
 -- Retargeted inherited proof body; only module imports changed.
 import NCD_R_NBS_DotTerm
-import NBQ_TailDomain
+import NCD_B_NBQ_TailDomain
 import NCD_R_JFs_TX2_TailStages
 import RPu_JFs_TX2_TailQM
 set_option autoImplicit false

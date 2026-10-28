@@ -23,7 +23,7 @@ t=r'''
 '''
 for mode in ['success','failure']:
  t+='#[kani::proof] #[kani::unwind(1024)]\n'+attrs+'#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,child)]\nfn '+mode+'(){\n'
- t+='''let before:[u8;32]=kani::any();let payload:[u8;64]=kani::any();let len:usize=kani::any();kani::assume(len<=64);let bytes=&payload[..len];let row:u8=kani::any();kani::assume(row<=95);let j:usize=kani::any();kani::assume(j<32);let pick:usize=kani::any();kani::assume(pick<8);
+ t+='''let before:[u8;32]=kani::any();let payload:[u8;57607]=kani::any();let len:usize=kani::any();kani::assume(len<=57607);let bytes=&payload[..len];let row:u8=kani::any();kani::assume(row<=95);let j:usize=kani::any();kani::assume(j<32);let pick:usize=kani::any();kani::assume(pick<8);
  let queries:[u32;22]=kani::any();for i in 0..22{kani::assume(queries[i]<262144);}
  unsafe{CALLS=0;J=j;ROW=row;INITIAL=before;REPLIES=kani::any();PTR=bytes.as_ptr();LEN=len;CHILD=0;PICK=pick;QUERY=queries;FAIL='''+str(mode=='failure').lower()+''';}
  let mut t=Transcript{state:before,hash:Spy};let result=t.queries(row,bytes);unsafe{assert!(CALLS==17&&CHILD==1);}
