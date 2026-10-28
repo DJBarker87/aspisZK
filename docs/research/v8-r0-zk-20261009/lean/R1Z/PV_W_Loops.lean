@@ -30,7 +30,7 @@ theorem finite_exact (body : S → M W C E (ControlFlow S A))
     ∃ n, fuel body n s w = r := by
   induction h with
   | done s w mid cs a first =>
-    exact ⟨1,by simp only [fuel,PV_W_Threading.bind,first,lift,List.append_nil]⟩
+    exact ⟨1,by simp only [fuel,PV_W_Threading.bind,first,PV_W_Threading.lift,List.append_nil]⟩
   | next s next w mid cs r first tail ih =>
     obtain ⟨n,eq⟩ := ih
     refine ⟨n+1,?_⟩
