@@ -22,12 +22,11 @@ theorem new_in_complete {Allocator World : Type} (alloc : Allocator)
     (ok (historical alloc align nonzero,world) : Result (Inner Allocator × World)) =
       ok (deployed alloc align nonzero,world) := rfl
 
-theorem new_in_no_allocation {Allocator World : Type} (alloc : Allocator)
-    (align : Nat) (nonzero : align ≠ 0) (world : World) :
+theorem new_in_no_allocation {Allocator : Type} (alloc : Allocator)
+    (align : Nat) (nonzero : align ≠ 0) :
     (deployed alloc align nonzero).cap = 0 ∧
       (deployed alloc align nonzero).ptr.pointer.allocation = none ∧
-      (deployed alloc align nonzero).alloc = alloc ∧
-      (ok world : Result World) = ok world := ⟨rfl,rfl,rfl,rfl⟩
+      (deployed alloc align nonzero).alloc = alloc := ⟨rfl,rfl,rfl⟩
 
 def capacity {Allocator : Type} (wordMax elemSize : Nat) (self : Inner Allocator) : Nat :=
   if elemSize = 0 then wordMax else self.cap
@@ -37,8 +36,12 @@ theorem empty_capacity {Allocator : Type} (wordMax elemSize : Nat)
     capacity wordMax elemSize (historical alloc align nonzero) =
       capacity wordMax elemSize (deployed alloc align nonzero) := rfl
 
-theorem allocator_projection {Allocator : Type} (self : Inner Allocator) :
-    (self.alloc,self.cap,self.ptr) = (self.alloc,self.cap,self.ptr) := rfl
+def oldAllocator {Allocator : Type} (self : Inner Allocator) : Allocator := self.alloc
+def deployedAllocator {Allocator : Type} (self : Inner Allocator) : Allocator := self.alloc
+
+theorem allocator_projection {Allocator World : Type} (self : Inner Allocator) (world : World) :
+    (ok (oldAllocator self,world) : Result (Allocator × World)) =
+      ok (deployedAllocator self,world) := rfl
 
 #print axioms new_in_complete
 #print axioms new_in_no_allocation
