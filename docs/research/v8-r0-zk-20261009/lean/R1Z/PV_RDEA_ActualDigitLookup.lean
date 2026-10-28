@@ -9,7 +9,7 @@ theorem index_length (i : Usize) (s : Str) (h : Array.index_usize table i=.ok s)
   · cases h
   · rename_i x hx
     cases h
-    change table.val[i.val]?=some x at hx
+    change table.val[i.val]?=some s at hx
     obtain ⟨bound,eq⟩ := List.getElem?_eq_some_iff.mp hx
     have hb : i.val<16 := by simpa only [table,Array.make,List.length_cons,List.length_nil] using bound
     rw [←eq]
