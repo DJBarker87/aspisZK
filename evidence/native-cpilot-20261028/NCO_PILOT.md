@@ -29,3 +29,14 @@ E003 extracts row_shape_ref/compact_row_ref successfully with Charon companion
 sha daad69be… and Aeneas c0cf4fcc… (b59d5188 extended); source and commands are
 in NCO_EXTRACTION_PINS.json and E003 receipts. E001/E002 are excluded failures.
 Generated Types/Funs compile L001/L002, no theorem axiom audit applicable.
+
+Stage 3 model-side result: L009 PASS, 1.377266791 s, 2642156 KiB RSS,
+swap0. NCO_ScalarBridge.row_shape and compact_row identify the ACTUAL
+Aeneas E004 reference extraction with the adopted S1NativeCompact cohort
+functions on ALL u8. Both printed axioms are exactly
+[propext, Classical.choice, Quot.sound]. No additional premise.
+Earlier L003–L008 failed drafts are excluded; L004/L006 hit the default
+heartbeat limit and were changed/split, never rerun unchanged or given
+higher limits. E004 changes the reference's if tree to a matching Rust match;
+K040 rechecks the native contract on that new reference. Its call-site and
+negative-control rechecks remain required before final scalar credit.

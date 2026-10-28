@@ -16,71 +16,36 @@ set_option maxRecDepth 2048
 namespace NCO_Reference
 
 /-- [nco_reference::row_shape_ref]:
-    Source: 'src/lib.rs', lines 2:0-9:1
+    Source: 'src/lib.rs', lines 2:0-7:1
     Visibility: public -/
 def row_shape_ref (row : Std.U8) : Result (Option (Std.U8 × Std.Usize)) := do
-  if row = 0#u8
-  then ok (some (0#u8, 0#usize))
-  else
-    if row = 1#u8
-    then ok (some (0#u8, 0#usize))
-    else
-      if row >= 3#u8
-      then
-        if row <= 13#u8
-        then ok (some (0#u8, 0#usize))
-        else
-          if row = 2#u8
-          then ok (some (1#u8, 32#usize))
-          else
-            if row = 14#u8
-            then ok (some (3#u8, 32#usize))
-            else
-              if row >= 15#u8
-              then
-                if row <= 24#u8
-                then ok (some (2#u8, 896#usize))
-                else
-                  if row = 25#u8
-                  then ok (some (4#u8, 3712#usize))
-                  else
-                    if row = 26#u8
-                    then ok (some (5#u8, 928#usize))
-                    else ok none
-              else
-                if row = 25#u8
-                then ok (some (4#u8, 3712#usize))
-                else
-                  if row = 26#u8
-                  then ok (some (5#u8, 928#usize))
-                  else ok none
+  match row with
+  | 0#uscalar => ok (some (0#u8, 0#usize))
+  | 1#uscalar => ok (some (0#u8, 0#usize))
+  | 2#uscalar => ok (some (1#u8, 32#usize))
+  | 14#uscalar => ok (some (3#u8, 32#usize))
+  | 25#uscalar => ok (some (4#u8, 3712#usize))
+  | 26#uscalar => ok (some (5#u8, 928#usize))
+  | _ =>
+    if 3#u8 <= row
+    then
+      if row <= 13#u8
+      then ok (some (0#u8, 0#usize))
       else
-        if row = 2#u8
-        then ok (some (1#u8, 32#usize))
-        else
-          if row = 14#u8
-          then ok (some (3#u8, 32#usize))
-          else
-            if row >= 15#u8
-            then
-              if row <= 24#u8
-              then ok (some (2#u8, 896#usize))
-              else
-                if row = 25#u8
-                then ok (some (4#u8, 3712#usize))
-                else
-                  if row = 26#u8
-                  then ok (some (5#u8, 928#usize))
-                  else ok none
-            else
-              if row = 25#u8
-              then ok (some (4#u8, 3712#usize))
-              else if row = 26#u8
-                   then ok (some (5#u8, 928#usize))
-                   else ok none
+        if 15#u8 <= row
+        then if row <= 24#u8
+             then ok (some (2#u8, 896#usize))
+             else ok none
+        else ok none
+    else
+      if 15#u8 <= row
+      then if row <= 24#u8
+           then ok (some (2#u8, 896#usize))
+           else ok none
+      else ok none
 
 /-- [nco_reference::compact_row_ref]:
-    Source: 'src/lib.rs', lines 10:0-10:45
+    Source: 'src/lib.rs', lines 8:0-8:45
     Visibility: public -/
 def compact_row_ref (row : Std.U8) : Result Bool := do
   ok (row >= 14#u8)

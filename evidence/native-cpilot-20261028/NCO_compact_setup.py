@@ -3,6 +3,7 @@ import subprocess,json,difflib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-cpilot-20261028';rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387';n='crates/aspis-r1-cost-probe/src/compact.rs'
 base=subprocess.check_output(['git','show',rev+':'+n],text=True)
 s=base.replace('fn compact_row(row: u8)', '#[cfg_attr(kani, kani::ensures(|r| (*r == NCO_compact::reference::compact_row_ref(row)) != cfg!(NCO_invert_compact)))]\nfn compact_row(row: u8)',1)+'\n#[cfg(kani)]\n#[path="NCO_compact.rs"]\nmod NCO_compact;\n'
+s=s.replace('pub fn expand_values(compact:', '#[cfg_attr(kani, kani::requires(compact.len()==16 && out.len()==32))]\n#[cfg_attr(kani, kani::modifies(out))]\n#[cfg_attr(kani, kani::ensures(|r| (r.is_ok() && NCO_compact::expanded_one(compact,out)) != cfg!(NCO_invert_expand)))]\npub fn expand_values(compact:',1)
 code=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});n={n!r};p=b/'NCO_src'/n

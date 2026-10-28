@@ -1,11 +1,9 @@
 // Safe references. No Kani, unsafe code, observer, or function pointer.
 pub fn row_shape_ref(row:u8)->Option<(u8,usize)>{
- if row==0 || row==1 || (row>=3 && row<=13){Some((0,0))}
- else if row==2 {Some((1,32))}
- else if row==14 {Some((3,32))}
- else if row>=15 && row<=24 {Some((2,896))}
- else if row==25 {Some((4,3712))}
- else if row==26 {Some((5,928))} else {None}
+ match row {
+  0|1|3..=13=>Some((0,0)),2=>Some((1,32)),14=>Some((3,32)),
+  15..=24=>Some((2,896)),25=>Some((4,3712)),26=>Some((5,928)),_=>None,
+ }
 }
 pub fn compact_row_ref(row:u8)->bool{row>=14}
 pub fn slot_offset_ref(slot:usize)->usize{

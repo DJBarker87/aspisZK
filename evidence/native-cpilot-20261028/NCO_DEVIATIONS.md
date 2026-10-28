@@ -20,3 +20,12 @@ K025 corrected body contract passes. No verdict renaming or increased cap.
 E002 with the matching XRa pair reaches an Aeneas internal borrow error at
 slot_offset_ref's array read (InterpBorrows.ml:2731). E003 isolates the two
 branch-only references and succeeds. No translator patch is made.
+
+K041 is an OWN repeated visibility-transform input error; fixed the parser
+setup transform to assert visibility rather than adding it again. No prover
+body ran. K038 TIMEOUT is not repeated unchanged: subsequent parser checks
+split the declared contract domain into header≤5 and row2/length37 cases.
+Those domains are diagnostic restrictions and do not cover every real caller.
+L004/L006 default-heartbeat failures are excluded. No limits were increased;
+L009 replaces broad simplification with the existing checked constant laws
+and the reference's matching pattern structure.
