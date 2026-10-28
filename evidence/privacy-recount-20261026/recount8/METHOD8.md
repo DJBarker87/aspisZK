@@ -51,3 +51,11 @@ rows8.json retains historical row fields verbatim. Its new definition_witnesses8
 field links into definition-audit8.json rather than duplicating the full new
 witness arrays, keeping the required JSON artifact below20MiB. The linked audit
 retains every ref/revision/path/blob/SHA/source snapshot/declaration.
+
+Automatic relaunch 1 recovered commits 717cc11f14, 1971408c05 and
+5a19a267b3 with a clean worktree and the completed PASS validation artifact.
+The interrupted run had completed the recount and owner-packet update. Across
+that run and this recovery, Lean remains 0/30, Kani 0/0, with no Env-J IDs
+consumed. Recovery checked deliverable presence and the saved manifest's
+source-object references, retained the immutable pins, and did not repeat the
+completed regression or introduce proofs.

@@ -1,14 +1,14 @@
 # Recount 8 report
 
 **Target not yet established.** All407 rows are re-derived under
-[METHOD8](../evidence/privacy-recount-20261026/recount8/METHOD8.md), retaining
+[METHOD8](METHOD8.md), retaining
 recount7's exact scopes and immutable-source method. The candidate is fixed
-at **de194795b3**. The [pins](../evidence/privacy-recount-20261026/recount8/pins.json)
+at **de194795b3**. The [pins](pins.json)
 record point-in-time live runjoin33–46, b3p6 through g/h work, rjdec, rdb2d and
 rdcd3 heads, research, and the unmerged fscan evidence branch. Later progress
-is excluded. [ROWS8](../evidence/privacy-recount-20261026/ROWS8.md) retains all
+is excluded. [ROWS8](../ROWS8.md) retains all
 columns and adds the fifth-amendment tool-trust tag per row;
-[rows8.json](../evidence/privacy-recount-20261026/recount8/rows8.json) preserves
+[rows8.json](rows8.json) preserves
 historical fields, definitions, hypotheses, evidence and residuals. The source
 manifest and closing-source index retain full statements, not theorem names
 alone. Endpoint premises removed/added/weakened: **0/0/0**. T remains exactly
@@ -96,8 +96,8 @@ Inherited60309 was recompiled compliantly by rdeac61101. Nevertheless V178/V181
 remain suspended: their all-handler physical law is qualified separately from
 returning publication-dictionary equality, diagnostic provenance is incomplete,
 and final endpoint replay61199 failed; its corrected text is uncompiled.
-[Admission finding](../evidence/privacy-recount-20261026/recount8/admission-finding8.json)
-and [corrections](../evidence/privacy-recount-20261026/recount8/CORRECTIONS8.md)
+[Admission finding](admission-finding8.json)
+and [corrections](CORRECTIONS8.md)
 record these distinctions and every D357–D417 disposition.
 
 Rdea-1 is applied to V258/V259: public32768/2116-byte alignment4 requests, order
@@ -181,12 +181,12 @@ reuse does not settle D359's all-throttled timing or owner adoption.
 Validation: **0/30 Lean,0 Kani**, no proof/module/host scope/ID, no release
 rebuild or unchanged regression. Exact targets, statuses, source revisions,
 wall/RSS/swap and full wrapped axioms outputs are retained in the
-[receipt audit](../evidence/privacy-recount-20261026/recount8/receipt-audit8.json).
+[receipt audit](receipt-audit8.json).
 Failed61199 output is retained without credit; successful scoped axiom outputs
 use only propext/Classical.choice/Quot.sound. Content-addressed source hashes,
 all407 historical fields, exclusive buckets, closing-source/import membership,
 restoration counts and unchanged shipped sources are checked in
-[validation8.json](../evidence/privacy-recount-20261026/recount8/validation8.json).
+[validation8.json](validation8.json).
 No Stream A/soundness file, simulator, observer, key or wallet was modified;
 no merge or push. Open owner choices are successful-user/zero-change domain,
 throttled timing, V242 cohort, complete log/error observer, release features/CT
