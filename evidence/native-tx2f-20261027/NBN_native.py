@@ -42,7 +42,8 @@ def launch(a,kind,command,sources,timeout=180):
  admit(a)
  preflight=py('from pathlib import Path; b=Path('+repr(B)+'); missing=[f for f in '+repr(sources)+' if not (b/f).is_file()]; assert not missing,missing')
  assert preflight.returncode==0,preflight.stdout+preflight.stderr
- cfg=dict(attempt=a,kind=kind,module=command[-1],sources=sources,command=command,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':B+'/NBN_target','TMPDIR':B+'/NBN_tmp'},deps_fingerprint={'frozen_source':REV},expected_time='Optimized native compilation then named solver gate; no field multiplication')
+ target=command[command.index('--harness')+1] if '--harness' in command else 'cargo metadata'
+ cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':B+'/NBN_target','TMPDIR':B+'/NBN_tmp'},deps_fingerprint={'frozen_source':REV},expected_time='Optimized compilation, then '+target+' solver gate; no field multiplication or protocol whole-buffer loop')
  (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
  r=py(f'from pathlib import Path; p=Path({(B+"/"+a+".json")!r}); p.write_text({json.dumps(cfg,indent=2)!r})');assert r.returncode==0
  r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+shlex.quote(a+'.json'),submitted=True)
@@ -69,7 +70,7 @@ elif sys.argv[1]=='run':
  a,harness=sys.argv[2:];assert len(list(E.glob('NBN_K*/receipt.json')))<40
  assert not harness.endswith(('::NBN_store688_gate','::NBN_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
- sources=['NBN_src/Cargo.lock','NBN_src/crates/aspis-statement/src/lib.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_codecs.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_more.rs']
+ sources=['NBN_src/Cargo.lock','NBN_src/crates/aspis-statement/src/lib.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_codecs.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_more.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_decode.rs']
  g=a.replace('_K','_G');rc=launch(g,'metadata',['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/NBN_src/Cargo.toml','--locked','--offline','--format-version','1'],sources,120);assert rc['exit_status']==0
  # Cargo diagnostics are not JSON; parse the complete JSON output line only.
  lines=(E/g/'stdout.log').read_text().splitlines();m=next(json.loads(s) for s in lines if s.startswith('{') and '"packages"' in s)
