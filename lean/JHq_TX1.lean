@@ -7,7 +7,7 @@ open Aeneas Aeneas.Std Result AspisR1CurrentCaller
 open InstalledPreparation FirstComposition JGr_Geometry
 variable [trees : JHe_SHARealization]
 
--- Prepared application: compilation blocked by the shared runner's fixed caps.
+-- Named application of the independently checked byte-identity proof.
 #print AspisR1.JHn_TX1Frontier.of_byte_identity
 #print AspisR1.JHn_ExactReturned.source
 
