@@ -63,6 +63,7 @@ def parse(lines,base=None):
  if base is None:base=indent(lines[0])
  assert indent(lines[0])==base,lines[:3]
  t=lines[0].strip()
+ if t=='do':return parse(lines[1:])
  if t.startswith('let '):
   i=1
   while i<len(lines) and indent(lines[i])>base:i+=1

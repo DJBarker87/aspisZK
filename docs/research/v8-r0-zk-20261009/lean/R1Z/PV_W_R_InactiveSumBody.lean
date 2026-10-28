@@ -31,9 +31,6 @@ def program
         Aeneas.Std.lift (i2 &&& i4))
     PV_W_StructuredBinds.join (do
       if i5 = 0#u16 then
-        let _ ← invoke "do" (fun ops =>
-            letI : ExternalFuns := ops
-            do)
         let q ← invoke "Slice.index_usize" (fun ops =>
             letI : ExternalFuns := ops
             Slice.index_usize values row)
@@ -100,14 +97,8 @@ theorem erase_program (ops : ExternalFuns)
                   apply PV_W_RecursiveLaws.bind_congr
                   ·
                     exact erase_invoke ops _ _
-                  · intro _
-                    try dsimp only
-                    rw [erase_bind]
-                    apply PV_W_RecursiveLaws.bind_congr
-                    ·
-                      exact erase_invoke ops _ _
-                    · intro q
-                      exact erase_invoke ops _ _
+                  · intro q
+                    exact erase_invoke ops _ _
                 ·
                   rfl
               · intro sum1
