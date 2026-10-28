@@ -67,9 +67,10 @@ theorem source0 (j out : Usize) :
   simp only [PV_RunJoin_CoefficientDigit044.body,bind_tc_ok]
   exact source1 j (out ||| PV_RunJoin_CoefficientDigit044.digit j)
 
-theorem shift_zero (x : Usize) : Usize.wrapping_shl x 0#u32 = x := by
+theorem shift_zero (x : Usize) (hx : x.val < 4) : Usize.wrapping_shl x 0#u32 = x := by
   apply UScalar.eq_of_val_eq
-  simp only [Usize.wrapping_shl,UScalar.wrapping_shl,show (0#u32).val=0 from rfl,Nat.zero_mod,BitVec.shiftLeft_zero]
+  rw [PV_CB3_WeightsMachine.shift_left x 0#u32 hx (by decide)]
+  simp only [show (0#u32).val=0 from rfl,Nat.pow_zero,Nat.mul_one]
 
 theorem shape (j : Usize) : suffix0 j 0#usize = PV_CB3_WeightsMachineRow.row j := by
   have z : 0#usize ||| PV_RunJoin_CoefficientDigit044.digit j = PV_RunJoin_CoefficientDigit044.digit j := by
@@ -81,7 +82,7 @@ theorem shape (j : Usize) : suffix0 j 0#usize = PV_CB3_WeightsMachineRow.row j :
   dsimp only [PV_RunJoin_CoefficientDigit044.digit,PV_RunJoin_CoefficientDigit144.digit,
     PV_RunJoin_CoefficientDigit244.digit,PV_RunJoin_CoefficientDigit344.digit,
     PV_RunJoin_CoefficientDigit444.digit,PV_CB3_WeightsMachineRow.row,PV_CB3_WeightsMachineRow.digit]
-  rw [shift_zero]
+  rw [shift_zero _ (PV_CB3_WeightsMachineRow.digit_bound j 6#u32 (by decide))]
 
 theorem row (v : transport.Variant) (j : Usize) :
     transport.Variant.row v j = .ok (PV_CB3_WeightsMachineRow.row j) := by
