@@ -1,5 +1,9 @@
 # NCP slice obligations
 
+Final status: LOCAL DigestDecode, canonicality and bounded exact8/32 contract/reference leaves checked. U03/U05 native caller chains remain OPEN/CLOSED-CONDITIONAL as recorded; no complete vertical slice or headline closure. Model-only lower-codec hypotheses are discharged. Encode-reference step/equality remains open after L060. The following stage notes retain their original observations; later named results supersede the initial scope labels.
+
+Initial scope:
+
 U02 digest canonical/raw encode and decode OPEN. U03 four codecs retain exact named digest conditions. U05 ASF8 validator and encoder additionally retain TransferEncode and WithdrawalEncode. No conditions discharged yet.
 
 Kani contracts refer to safe Rust references; extraction/reference-to-cohort equality must be proved separately. No XRn join. No changed trust assumptions or security statement.

@@ -27,3 +27,20 @@ Recommendation: retain the checked codec leaves and the model-side discharge; do
 No existing U03/U05 CLOSED-CONDITIONAL native row is relabelled unconditional by this pilot. The DigestDecode lower condition now has a complete local leaf witness once the final revised-reference quartet is checked; U03 parent contracts are still absent. U03 encoders retain DigestEncodeCanonical, U05 retains DigestEncodeRaw/Canonical plus TransferEncode and WithdrawalEncode, and their verified caller chains are not built. The cohort-only U03/U05 equations in NCP_ModelDischarge have no such model hypotheses; that distinction must remain visible.
 
 Actual frozen signatures: afterstate and ASF8 encoders return fixed arrays (688/1880 bytes) in Result; live/late encoders mutate caller slices and return Result<Unit,error>. The Vec shape probe is additional machinery coverage, not evidence that ASF8 itself returns Vec.
+
+## Final per-level native timings
+
+These totals include compilation, verification and matched controls; failures are not promoted to passes. Lean/extraction times remain separately in their receipts.
+
+| Level | Receipts | Total wall s | Peak RSS KiB | Status |
+|---|---|---:|---:|---|
+| DigestDecode | NCP_K038, NCP_K039, NCP_K040, NCP_K041 | 23.671 | 661960 | local checks with controls; exact scope in bridge report |
+| Canonicality | NCP_K042, NCP_K043, NCP_K044, NCP_K045 | 23.947 | 584704 | local checks with controls; exact scope in bridge report |
+| Exact8/32 | NCP_K058, NCP_K059, NCP_K060, NCP_K061, NCP_K062, NCP_K063, NCP_K064, NCP_K065 | 50.633 | 693336 | local checks with controls; exact scope in bridge report |
+| ValidatorTimeout | NCP_K066 | 98.878 | 6531304 | OPEN |
+| FrontierOneStep | NCP_K068, NCP_K069 | 34.024 | 984764 | local checks with controls; exact scope in bridge report |
+| DigestEncode | NCP_K070 | 4.673 | 531488 | OPEN |
+
+All listed swaps are0. Full target/argv, exit status, wall/RSS/swap, dirty source revision/hash, dependency fingerprint and axiom outputs are preserved in receipts and NCP_ATTEMPTS.jsonl. No full frozen-release replay or source-to-ELF claim.
+
+Final budget: **70/70 Kani,60/60 charged Lean slots (59 actual Lean invocations),4 extraction scopes**. No more proof launches. NCP_VALIDATION.json passes; all496 frozen source files match after removing only inserted cfg instrumentation; all586 imported cache files retain their hashes;219 resolved Aeneas objects are pinned. No own prover remains; private cache retained. Native source-to-ELF/runtime/SDK assumptions and the deployed security target remain unchanged and unestablished.
