@@ -79,7 +79,7 @@ emit('split\n· trivial\n·');indent+=2
 bind('helperSum');bind('zero');bind('sumDifferent')
 emit('cases sumDifferent with\n| true => trivial\n| false =>');indent+=2;simplify()
 pair('committed2','root2Result','commit2');good('root2Result','root2')
-row(2,1,32,'t2','b2','t3','b3','Array.to_slice root2','by rw [Array.length_to_slice];rfl')
+row(2,1,32,'t2','b2','t3','b3','Array.to_slice root2','by rw [Array.length_to_slice]')
 emit('''have zp := PV_RunJoin_ZeroComplete43.post ops hash t3 b3
   (by rw [lb3];scalar_tac)
 apply PV_RunJoin_RecordAppend41.bind_post zp
@@ -89,9 +89,14 @@ good('zeroResult','zc')
 emit('have lb4 : b4.length=129 := by\n  have h := PV_RunJoin_ByteExtension43.length hz\n  change b4.val.length=129\n  rw [show b3.val.length=79 from lb3] at h\n  exact h')
 row(13,0,0,'t4','b4','t5','b5','Array.to_slice (Std.Array.empty U8)','rfl')
 bind('columns');bind('dc');bind('maskSum');bind('maskSum1')
-emit('''rw [PV_RunJoin_PolyCell38.embed ops maskSum1]
+emit('''rw [show @aspis_core.field.wide_exact.WideExact.from_qm31 _
+  (ProverRwP6BodyCandidate.selected ops) maskSum1=
+    .ok (PV_RunJoin_PolyCell38.wide maskSum1) from PV_RunJoin_PolyCell38.embed ops maskSum1]
 try simp only [bind_tc_ok]
-rw [PV_RunJoin_FlatBytes35.installed ops (PV_RunJoin_PolyCell38.wide maskSum1)]
+rw [show @aspis_core.field.wide_exact.WideExact.to_le_bytes _
+  (ProverRwP6BodyCandidate.selected ops) (PV_RunJoin_PolyCell38.wide maskSum1)=
+    .ok (PV_RunJoin_FlatBytes35.wire (PV_RunJoin_PolyCell38.wide maskSum1)) from
+      PV_RunJoin_FlatBytes35.installed ops (PV_RunJoin_PolyCell38.wide maskSum1)]
 try simp only [bind_tc_ok,lift]
 have mp := PV_RunJoin_CanonicalAppend43.post ops hash 14#u8 3#u8 32#usize
   (Array.to_slice (PV_RunJoin_FlatBytes35.wire (PV_RunJoin_PolyCell38.wide maskSum1))) t5 b5

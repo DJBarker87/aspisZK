@@ -130,7 +130,7 @@ theorem post (ops : ExternalFuns) {H T1 T2 : Type}
                       | Ok root2 =>
                         try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift,Aeneas.Std.uncurry,bind_assoc_eq]
                         have rp := PV_RunJoin_RecordPost43.append ops hash 2#u8 1#u8 32#usize
-                          (Array.to_slice root2) t2 b2 (PV_RunJoin_RowShapes41.row2 ops) (by rw [Array.length_to_slice];rfl)
+                          (Array.to_slice root2) t2 b2 (PV_RunJoin_RowShapes41.row2 ops) (by rw [Array.length_to_slice])
                           (by change b2.length+5+32≤Usize.max;rw [lb2];scalar_tac)
                         apply PV_RunJoin_RecordAppend41.bind_post rp
                         intro triple2 hp2
@@ -179,9 +179,14 @@ theorem post (ops : ExternalFuns) {H T1 T2 : Type}
                               intro maskSum
                               apply PV_RunJoin_ResultPost41.bind
                               intro maskSum1
-                              rw [PV_RunJoin_PolyCell38.embed ops maskSum1]
+                              rw [show @aspis_core.field.wide_exact.WideExact.from_qm31 _
+                                (ProverRwP6BodyCandidate.selected ops) maskSum1=
+                                  .ok (PV_RunJoin_PolyCell38.wide maskSum1) from PV_RunJoin_PolyCell38.embed ops maskSum1]
                               try simp only [bind_tc_ok]
-                              rw [PV_RunJoin_FlatBytes35.installed ops (PV_RunJoin_PolyCell38.wide maskSum1)]
+                              rw [show @aspis_core.field.wide_exact.WideExact.to_le_bytes _
+                                (ProverRwP6BodyCandidate.selected ops) (PV_RunJoin_PolyCell38.wide maskSum1)=
+                                  .ok (PV_RunJoin_FlatBytes35.wire (PV_RunJoin_PolyCell38.wide maskSum1)) from
+                                    PV_RunJoin_FlatBytes35.installed ops (PV_RunJoin_PolyCell38.wide maskSum1)]
                               try simp only [bind_tc_ok,lift]
                               have mp := PV_RunJoin_CanonicalAppend43.post ops hash 14#u8 3#u8 32#usize
                                 (Array.to_slice (PV_RunJoin_FlatBytes35.wire (PV_RunJoin_PolyCell38.wide maskSum1))) t5 b5
