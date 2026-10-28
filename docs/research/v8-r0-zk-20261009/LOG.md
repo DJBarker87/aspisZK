@@ -13690,3 +13690,22 @@ privacy rows, devnet_spend with r1p-check and aspis-r1-cost-probe/ct-host-prover
 1.94.1), with resolved features recorded, or else pass a body-identity check. pv-fscan (no Kani; no
 source change) audits every native link behind Stream B's candidate closures that way and reports each
 row as STANDS or SUSPENDED. Rows removed outright: 0. Privacy target not yet established.
+
+## D376 (Stream B) 2026-10-28 15:24 UTC: runjoin33: coherent rebuild done and all three blocked audits pass; runjoin34 builds on pv-world for the runtime and effect association
+
+runjoin33 (100 attempts: 84 passed, 16 failures retained; no Kani; peak 5.02 GiB; no swap; no
+crates/ or programs/ change) rebuilt the endpoint and lane closures from current sources into a fresh
+object directory as a chunked dependency build, and the three audits that had been blocked by its
+stale cache now pass once each: the endpoint #print axioms audit, the lane audit importing
+LaneDenotation31, and NativeSnapshot31's preflight. It adds composition proofs for the canonical
+caller and payload, the full transition, the reservation, retry, and the common-sample observer.
+The deployed association (V045), common-sample ROMView and observer agreement (V038) and
+RustRealRefinement remain open, pending a complete-Result security-model simulation of the actual
+emitted prover body and the runtime/effect and ROMView decoder associations. Endpoint premises
+unchanged. Branch pushed (4d99d31c67).
+
+runjoin34 (IDs 51800-51899) proves the body simulation at the canonical caller inputs, then the
+runtime and effect initialisation and both ROMView decoder laws, merging and building on pv-world's
+state/error/trace calculus (codex/pv-world-20261028) instead of duplicating it, then composes into
+RustRealRefinement. The parked reachability, file-effects, world and level-2 lines wait on this.
+Rows removed outright: 0. Privacy target not yet established.
