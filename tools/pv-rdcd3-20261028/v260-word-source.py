@@ -44,6 +44,12 @@ for ty,actual,bits in [('u16','u16',16),('u32','u32',32),('u64','u64',64),('usiz
   assert tokens(text) in [tokens(body)[i:i+len(tokens(text))] for i in range(len(tokens(body)))],(ty,text)
  bindings.append(dict(type=ty,actual_type=actual,bits=bits,cfg='target_pointer_width=64' if ty=='usize' else 'unconditional',macro_invocation=body))
 assert 'pub const BITS: u32 = Self::MAX.count_ones();' in s
-result=dict(toolchain='1.94.1',uint_macro_file=dict(path=str(p),sha256=sha(p.read_bytes())),num_file=dict(path=str(pmod),sha256=sha(pmod.read_bytes())),methods=out,bindings=bindings,bits_definition='Self::MAX.count_ones(); integer intrinsic boundary retained',scope='Six exact uint method bodies and four concrete macro bindings; not a complete row checker',composition_trust='Reclassification within existing compiler/Aeneas tool trust; zero endpoint premise removal')
+pr=root/'result.rs';sr=pr.read_text()
+expected='pub fn unwrap(self) -> T where E: fmt::Debug, { match self { Ok(t) => t, Err(e) => unwrap_failed("called `Result::unwrap()` on an `Err` value", &e), } }'
+actual=span(sr,'pub fn unwrap(self) -> T','pub fn unwrap(self) -> T')
+assert tokens(actual)==tokens(expected)
+assert tokens(actual)!=tokens(expected.replace('Ok(t) => t','Ok(t) => changed(t)'))
+unwrap=dict(path=str(pr),sha256=sha(pr.read_bytes()),body=actual,law='V260RowResult.complete plus V260Exact.inactive_refactor: reached argument is Ok(bool); native Ok branch returns t with no Debug/fmt call',error_branch='Not discarded: D index error terminates first, and successful row is below 1024, so inactive Err/unwrap_failed is unreachable',negative_control='changed Ok return rejected')
+result=dict(result_unwrap=unwrap,toolchain='1.94.1',uint_macro_file=dict(path=str(p),sha256=sha(p.read_bytes())),num_file=dict(path=str(pmod),sha256=sha(pmod.read_bytes())),methods=out,bindings=bindings,bits_definition='Self::MAX.count_ones(); integer intrinsic boundary retained',scope='Six exact uint bodies, Result.unwrap body, and four concrete macro bindings; not a complete row checker',composition_trust='Reclassification within existing compiler/Aeneas tool trust; zero endpoint premise removal')
 (D/'v260-word-source-result.json').write_text(json.dumps(result,indent=2)+'\n')
-print('Six complete uint bodies, six rejecting semantic controls, and u16/u32/u64/64-bit-usize macro bindings matched')
+print('Six uint bodies, Result.unwrap and their rejecting controls, plus u16/u32/u64/64-bit-usize macro bindings matched')
