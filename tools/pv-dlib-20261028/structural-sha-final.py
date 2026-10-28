@@ -52,6 +52,8 @@ normalized=re.sub(r'\bcompress\b','compress256',normalized)
 assert tokens(normalized)==tokens(final),'parameterization changed native control'
 assert tokens(body(helper,'pub fn pv_dl_compress_slice'))==tokens('{compress256(state,blocks);}')
 owned=R/'tools/pv-dlib-20261028/sha-final-native.rs'
+expected_owned='{\n    let bits=8u64.wrapping_mul((pos as u64).wrapping_add(64u64.wrapping_mul(blocks)));\n    let (events,count,retained)=padding::padding_retained_reference(bytes,pos as usize,bits);\n    for b in events.iter().take(count) {\n        compress(&mut state,core::slice::from_ref(&Block::<Sha256VarCore>::clone_from_slice(b)));\n    }\n    let out=core::array::from_fn(|i| (state[i/4]>>(8*(3-i%4))) as u8);\n    (state,blocks,retained,0,out)\n}'
+assert tokens(body(owned.read_text(),'fn owned'))==tokens(expected_owned),'owned finalizer changed'
 j=dict(evidence_class='structural (K-1 substitute)',rulings=['r',"k'"],
  native_finalizer=dict(path=files['sha2-0.10.9/src/core_api.rs']['path'],body=final,tokens_match=True),
  native_padding=dict(path=files['block-buffer-0.10.4/src/lib.rs']['path'],body=pad,tokens_match=True),
