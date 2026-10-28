@@ -29,9 +29,10 @@ These laws do not assert every shipped guard is constant on the requested
 HonestInput/randomness family. Honest compiler/native table association,
 canonical C1/D caller facts, helper multiset/inverse boundary, native
 oracle/interpolation/running-claim provenance and E1/E2 stream/failed-prefix
-coupling remain P. FixtureAudit audits both original successful fixtures in
-precisely ConsumerBoundary25.HonestInput, including the concrete proof field;
-it does not add a guard-success assumption. The runjoin27 failed full withdrawal
+coupling remain P. The inherited ConsumerBoundary25 source provides both original fixture honesty
+theorems. This job prepared exact-carrier aliases, including the concrete field,
+but the final audit failed before checking them; the aliases are unverified
+audit fragments and no new fixture audit success is claimed. The runjoin27 failed full withdrawal
 is outside that carrier and is not used as an honest guard counterexample.
 
 Kani: six charged invocations; CLI failure, cfg(kani) dependency type failure,
@@ -41,8 +42,10 @@ also records the erroneous unchanged duplicate timeout. No row closure relies
 on any Kani run. The unrun scalar-lane draft carries zero proof credit.
 
 Native value binding checks the three literal straight-line ct.rs kernels.
-The native/owned balancing differential cut pins 14 verbatim declarations;
-if its native receipt is absent it is only prepared, not measured. A whole
+The native/owned balancing differential cut pins 14 verbatim declarations.
+native-after-42695/receipt.json and out.log record 128 successful full-vector
+comparisons, all with changed dependent writes: 30.654 seconds, 639696896 bytes
+sampled aggregate RSS, swap zero, optimized release build. A whole
 structural (K-1 substitute) link requires the complete Result law, all source
 control/representation differences, and finite same-input validation; source
 pinning alone is not such a link. Native workspace checks retain both matches

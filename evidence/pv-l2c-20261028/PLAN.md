@@ -22,16 +22,13 @@ RunJoin/simE coupling remain independently of any local guard result.
 Target not yet established. No row will be subtracted on the strength of a
 conditional algebra law or fixture run.
 
-## Current checkpoint
+## Final disposition
 
-Read common instructions through r-prime on 2026-10-28; copy-dependent Kani
-codec credit is suspended (KANI-COPY-REVIEW.md). No endpoint row removed.
-Next unspent ID 42661 after refused 42660; audits 42697–42699 untouched.
-Current focused arithmetic, canonical scalar parser, source subtraction/Q
-operations, vector reads, first-inactive scan, and extracted plain Q fold
-compile with standard axioms. Selected actual balance-row fold is next.
-95 preexisting bridge closure nodes needed rebuilding; the balance recursion
-and word codec nodes are now built privately. Source resolution remains EJR /
-freeze / tracked HEAD, with exact full dependency fingerprints for h6 reuse.
-One scope at a time. No changes under crates/ or programs/, no shared writes,
-no wallet/key creation. Budget and final outcome will be tallied from receipts.
+See STOP.md and RESULTS.json. All 100 allocated IDs consumed: 68 actual Lean
+compiles, 32 uncharged retired refusals. Six Kani invocations; copy-dependent
+PASS suspended. Native balancing finite differential: 128 passes with changed
+writes. Final audit 42699 failed on the project public-import omission; no
+combined replay/fixture audit credit. Four caller continuation drafts and the
+unverified audit fragments are outside the importable proof directory.
+No row removed. No target-established claim. No further compile authorized by
+the remaining original allocation. Cleanup receipts record only own caches.

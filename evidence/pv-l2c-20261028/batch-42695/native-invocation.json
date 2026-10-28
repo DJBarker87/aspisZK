@@ -1,0 +1,35 @@
+{
+  "command": [
+    "env",
+    "PV8_SOURCE_DIR=/home/dombarker/project-offloads/codex-pv-l2c-20261028/differential",
+    "PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-l2c-20261028/differential-target",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "PV_L2C_PIN_FILES=Cargo.toml:Cargo.lock:main.rs:balance_cut.rs",
+    "PV_L2C_EXPECTED_TIME=Optimized compilation then 128 same-input native balancing differential cases",
+    "PV_L2C_EVIDENCE_CLASS=N/A: finite native validation, not universal proof",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028/native-receipt.py",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028/evidence/native-after-42695",
+    "timeout",
+    "180",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "run",
+    "--release",
+    "--offline",
+    "-j",
+    "4"
+  ],
+  "source_revision": "cc6abd7bf28820a923a9afe54de25c2ddd3c7150",
+  "source_sha256": {
+    "Cargo.toml": "1138e4af81b928ecf30901f5d244b3dba92739b83e98e4258e7ea1afb9757ae5",
+    "main.rs": "97d6b905efbdcb45344ab9256245ce01843d25f1674b8326be6a80cbb5a000a5",
+    "balance_cut.rs": "7e5720e2251438aa30d17a85cd046e085af345ce7eb2fd55626f48271e197060"
+  },
+  "evidence_class": "finite native differential",
+  "cgroup_peak_note": "scope cumulative; aggregate RSS and wall time are native-stage measurements"
+}

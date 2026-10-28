@@ -3,7 +3,7 @@ from pathlib import Path
 import json,hashlib,re,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028';rows=[]
 for p in sorted(E.glob('receipt-*.json')):
- x=json.loads(p.read_text());rows.append({k:x.get(k) for k in ['attempt','module','exit','accepted','source_revision','source_sha256','wall_seconds','peak_rss_bytes','swaps','axioms']})
+ x=json.loads(p.read_text());x['module']=x.get('module',x.get('target','').replace('/','.'));rows.append({k:x.get(k) for k in ['attempt','module','exit','accepted','source_revision','source_sha256','wall_seconds','peak_rss_bytes','swaps','axioms']})
 used=sorted(int(p.stem.split('-')[1]) for p in E.glob('used-*.json'))
 assert all(42600<=x<=42699 for x in used) and len(set(used))==len(used)
 assert len(rows)<=100
