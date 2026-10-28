@@ -57,7 +57,7 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
       simp only [prover.opening_coefficients_loop.body,
         show lane < Slice.len (messages p) from (by change lane.val < (messages p).length;rw [messages,Array.length_to_slice];exact hi),↓reduceIte,read,bind_tc_ok,
         lift]
-      rw [installed ops (p lane.val)]
+      erw [installed ops (p lane.val)]
       simp only [bind_tc_ok,hm]
       exact hn
     · rw [hnv,hmv,inc,payload,List.append_assoc,List.singleton_append]
