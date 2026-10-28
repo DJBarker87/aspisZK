@@ -46,7 +46,8 @@ theorem wrong_length {K S F : Type} (ops : Ops K) (allocate : Allocator S)
     (isBoolean : K → Bool) (point column : List K) (build : List K → Result (List (Entry K)))
     (state : State S F) (h : column.length ≠ 1024) :
     source ops allocate deallocate handler isBoolean point column build state=ok (none,state) := by
-  simp only [source,runWith,h,ite_true]
+  unfold source runWith
+  exact if_pos h
 
 #print axioms arbitrary_column_world
 #print axioms wrong_length
