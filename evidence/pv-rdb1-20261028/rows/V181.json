@@ -1,14 +1,18 @@
 {
   "row": "V181",
   "name": "op30 alloc.string.String.with_capacity",
-  "status": "SUSPENDED",
-  "evidence_class": "no deployed-link credit",
+  "status": "FINDING",
+  "evidence_class": "checked native counterexample to unconditional complete-Result promotion; structural repaired law",
   "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
-  "structural": "Complete checker not recovered; source-association audit only",
+  "structural": "v181-deployed-binding.json",
   "native": [
     {
-      "receipt": "native-std-extra/receipt.json",
-      "classification": "finite validation only"
+      "receipt": "v181-capacity-native/receipt.json",
+      "classification": "1027 finite Result/header pairs against repaired reference"
+    },
+    {
+      "receipt": "result-effect-witness/receipt.json",
+      "classification": "checked counterexample against original reference"
     }
   ],
   "source_audit": "source-audit.json#V181",
@@ -16,9 +20,16 @@
   "toolchain": "1.94.1",
   "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
   "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
-  "after": "Suspension retained; no law weakened and no behavioural counterexample claimed",
-  "reason": "No complete original capacity structural checker was recovered/rebound. Deployed Layout::repeat and its layout-validation helpers differ; the all-Result allocation/capacity law has not been proved for those bodies. 29 unresolved conservative edges remain; successful capacities do not prove overflow/OOM branches.",
-  "findings": [],
+  "after": "Full Result association to old empty reference rejected; repaired stateful reference proved, original selected callback unchanged",
+  "reason": "At n=9223372036854775808 deployed String::with_capacity panics before allocation while original String::new reference returns. The all-Usize callback equation remains a model theorem, not an unqualified native law. Historical bounded/returning empty-value qualification is not refuted.",
+  "findings": [
+    {
+      "input": "n=2^63 on deployed64-bit Linux",
+      "native": "panic capacity overflow before allocation",
+      "old_reference": "returns empty String",
+      "receipt": "result-effect-witness/receipt.json"
+    }
+  ],
   "retained_premises": [
     "runtime/carrier relation at existing library boundary",
     "compiler and executable correspondence",
@@ -30,5 +41,12 @@
   "new_trust_items": [],
   "kani_credit": false,
   "original_closing_theorem": "R1Z.PV_CBL_AppendBundle.op30_source",
-  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim"
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim",
+  "lean": [
+    "54734-receipt.json",
+    "54736-receipt.json"
+  ],
+  "before_after_statement": "Before selected.op30(n)=ok empty for all Usize, with native allocation/domain qualifications residual. After deployed constructor equals String::new+reserve_exact(n), retaining overflow/OOM/world; empty live value on returning cases. No equality to unconditional ok-empty is claimed.",
+  "premise_removed": null,
+  "next_deliverable": "Repair the endpoint capacity adapter to retain panic/abort outcomes and allocator effects, or discharge the actual reachable-capacity and allocation-success obligations. No existing proof/dictionary edited."
 }
