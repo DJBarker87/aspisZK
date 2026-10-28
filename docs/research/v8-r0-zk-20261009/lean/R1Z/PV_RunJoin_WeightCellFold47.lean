@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_WeightCellIndices46
+import R1Z.PV_RunJoin_WeightResult46
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightCellFold47
 open Aeneas Aeneas.Std Result
@@ -29,6 +30,7 @@ theorem seven {A B C : Type} (mul : A → B → Result C) (add : C → C → Res
     PV_RunJoin_WeightCellIndices46.add4,PV_RunJoin_WeightCellIndices46.add5,
     bind_tc_ok,List.foldlM_cons,List.foldlM_nil,bind_assoc,
     PV_RunJoin_WeightResult46.ok_bind]
+  rfl
 
 #print axioms seven
 
