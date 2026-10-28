@@ -13302,3 +13302,20 @@ recovery prompts: reconstruct state from their own commits and host receipts, co
 uncollected results read-only, never rerun a completed compile or measurement, wait for running
 host drivers, and charge only launched attempts. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D357 (Stream B) 2026-10-28 07:13 UTC: l2c2 recovered and parked; recount 7 launched
+
+l2c2's recovery reconciled every attempt against its host receipts and reran nothing: its interrupted
+session had used all 72 attempts (55 passed, 17 failed); the final combined audit, fixture audit and
+focused replay pass with standard axioms; historical Kani artifacts were recovered read-only and stay
+suspended under K-1. V352, V354, V357 and V360 remain OPEN. Its next step, raw native compiler
+canonicality through the returned bank, overlaps runjoin32's "successful preparation yields
+HonestInput", so the level-2 line is parked (branch pushed, worktree kept) until runjoin delivers it,
+as the reachability line is.
+
+pv-recount7 (IDs 35200-35299; statement checks only) re-derives every row at immutable pins and
+independently confirms or rejects the candidate closures since recount 6 (V230, V239, V217, V220,
+V256-V260), records the five K-1 rows as suspended and re-linked structurally, V184 as standing,
+V152-V154 as unsatisfiable over the raw family and discharged at the honest family with the open
+coverage question, settles the D348 question on on-chain logs and error text, and updates the owner
+packet. Rows removed outright: 0. Privacy target not yet established.
