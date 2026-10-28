@@ -13622,3 +13622,17 @@ codecs, the RealR1_client caller) and proves canonicalisation, or reports the ra
 finding with the options (reject or canonicalise at decode, which changes frozen client code; or
 restrict the honest domain). The owner packet records the finding as pending that trace. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D372 (Stream B) 2026-10-28 13:29 UTC: pv-world2 result; world3 launched
+
+pv-world2 used its 100 attempts (no Kani; final focused audits with standard axioms). It built the
+enriched world carrier (process-local state reachable by destructors and callbacks), re-checked that
+W-CARRIER-1's drop witness is representable in it, and proved threading for the reservation and
+entry paths. The whole-prover threading theorem and the binding to the Observation producer of the
+trust field observation remain unproved; no row closed; O_EXCL atomicity and crash durability stay
+explicit owner findings. Its branch carries about 55 MB of new evidence (largest file 9.5 MB, within
+GitHub limits; pushed in the background). world3 (IDs 50400-50499) interprets prove_masked_with_attempt
+and its reached helpers recursively, reuses pv-fxmem's scoped drop, allocator and zeroize packages,
+connects the file-system and D159 payload sequence to the Observation producer without a new trust
+field, and closes the file rows that rest only on that; it is told to keep evidence compact. Rows
+removed outright: 0. Privacy target not yet established.
