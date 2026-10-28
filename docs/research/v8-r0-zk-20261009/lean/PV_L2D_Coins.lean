@@ -80,11 +80,14 @@ theorem complete_prefix (hash : State → Block) (m n : Nat) (s : State)
   induction m generalizing s with
   | zero => simp [run]
   | succ m ih =>
-    simp only [run,coin] at h
-    split at h
-    · have t:=ih {s with counter:=s.counter+1} h
-      simpa only [Nat.succ_add,run,coin,if_pos (by assumption),List.cons_append] using t
-    · simp at h
+    by_cases hz : hash s=(fun _=>0)
+    · have hp : (run hash m {s with counter:=s.counter+1}).value=none := by
+        simpa only [run,coin,dif_pos hz] using h
+      have t:=ih {s with counter:=s.counter+1} hp
+      simp only [Nat.succ_add,run,coin,dif_pos hz,List.cons_append]
+      exact ⟨t.1,t.2.1,congrArg (Event.hash s.attempt s.stream s.counter :: Event.test false :: ·) t.2.2⟩
+    · simp only [run,coin,dif_neg hz] at h
+      contradiction
 #print axioms complete_prefix
 
 theorem zero_continues (n : Nat) (s : State) :
