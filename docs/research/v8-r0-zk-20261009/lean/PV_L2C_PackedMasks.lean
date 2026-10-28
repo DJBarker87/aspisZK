@@ -8,11 +8,14 @@ theorem inserted_bit (s : BitVec 16) (p q : Fin 16) :
     (insert s p).getLsbD q.val=(s.getLsbD q.val || decide (p=q)) := by
   unfold insert
   rw [BitVec.getLsbD_or,BitVec.getLsbD_shiftLeft,BitVec.getLsbD_one]
-  simp only [q.isLt,decide_true,Bool.true_and]
-  congr 1
-  apply Bool.eq_iff_iff.mpr
-  simp only [Bool.and_eq_true,Bool.not_eq_true,decide_eq_true_eq,decide_eq_false_iff_not,Fin.ext_iff]
-  omega
+  by_cases he : p=q
+  · subst q
+    simp [p.isLt]
+  · have hv : p.val≠q.val := fun h => he (Fin.ext h)
+    by_cases hl : q.val<p.val
+    · simp [he,hl]
+    · have hs : q.val-p.val≠0 := by omega
+      simp [he,hl,hs]
 #print axioms inserted_bit
 
 abbrev Masks := Fin 64 → BitVec 16
