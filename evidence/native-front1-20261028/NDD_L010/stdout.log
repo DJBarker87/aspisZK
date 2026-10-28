@@ -1,0 +1,31 @@
+NDD_generated/NDD_Composite.lean:13:25: error: unsolved goals
+x : AspisR72Sampler.field.CM31
+⊢ (do
+      let i ← (Array.make 2#usize [x.a, x.b] ⋯).index_usize 0#usize
+      let i1 ← NDD_Reference.m31_neg_ref i
+      let i2 ← (Array.make 2#usize [x.a, x.b] ⋯).index_usize 1#usize
+      let i3 ← NDD_Reference.m31_neg_ref i2
+      ok (Array.make 2#usize [i1, i3] ⋯)) =
+    do
+    let x_1 ← NDD_Reference.m31_neg_ref x.a
+    let x ← NDD_Reference.m31_neg_ref x.b
+    ok (Array.make 2#usize [x_1, x] ⋯)
+NDD_generated/NDD_Composite.lean:19:46: error: unsolved goals
+x : AspisR72Sampler.field.QM31
+⊢ (do
+      let i ← (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯).index_usize 0#usize
+      if i = 0#u32 then do
+          let i1 ← (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯).index_usize 1#usize
+          if i1 = 0#u32 then do
+              let i2 ← (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯).index_usize 2#usize
+              if i2 = 0#u32 then do
+                  let i3 ← (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯).index_usize 3#usize
+                  ok (decide (i3 = 0#u32))
+                else ok false
+            else ok false
+        else ok false) =
+    do
+    let b ← if x.c0.a = 0#u32 then ok (decide (x.c0.b = 0#u32)) else ok false
+    if b = true then if x.c1.a = 0#u32 then ok (decide (x.c1.b = 0#u32)) else ok false else ok false
+'NDD_Composite.cm31_neg' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDD_Composite.qm31_zero' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
