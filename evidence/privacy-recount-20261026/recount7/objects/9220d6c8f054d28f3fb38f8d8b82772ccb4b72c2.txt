@@ -1,0 +1,49 @@
+{
+  "kind": "STRUCTURAL source argument under ruling (k), not machine proof",
+  "row": "V239",
+  "op": 222,
+  "files": {
+    "crates/aspis-statement/src/constraints_v4.rs": "264921454f5ddd97184944b149b7f41ed791230413ba80fe09eb9be7059d1ba5",
+    "crates/aspis-r1-cost-probe/src/host_multilinear.rs": "34b88b1b6bfa1975d769e714bfde5efe8587dd28ec44bbb99ce732f108a401fa",
+    "crates/aspis-core/src/field.rs": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+    "crates/aspis-statement/src/trace_v4.rs": "60e36ebb52b003de401c014eb6a139f1981b19b06f575dad5b87d8f59d0c8aa3"
+  },
+  "reviewed_tokens_sha256": "6e89de2af6b95de740f441083340621d9a2c98579060027995331e48d2094619",
+  "ordered_field_calls": [
+    "suffix test: raw QM31 ZERO/ONE equality, from the same field.rs",
+    "weight: ONE.sub(value) only on zero bit; weight.mul(factor), coordinate ascending",
+    "evaluation: weight.mul(column[row]), then sum.add(product), prefix ascending"
+  ],
+  "error_paths": "wrong length returns None before sparse construction; same row indices; bounded shifts prefix_len<=10; capacity 2^prefix_len<=1024; no input normalization",
+  "differences": [
+    {
+      "change": "rev/take_while/count replaced by prefix decrement",
+      "lean": [
+        "PV_B3_Structural222.scan_value",
+        "PV_B3_Structural222.prefix_bound"
+      ],
+      "argument": "same Boolean predicate on the same reversed coordinate sequence; stops before first non-Boolean"
+    },
+    {
+      "change": "owned Vec push replaced by indexed fixed storage",
+      "lean": [
+        "PV_B3_Structural222.take_set_next"
+      ],
+      "argument": "after k writes the populated prefix is exactly k pushed pairs; capacity 2^prefix_len<=1024; remaining initialized cells are never read"
+    },
+    {
+      "change": "into_iter fold replaced by index loop",
+      "lean": [
+        "PV_B3_EvalFold222.source"
+      ],
+      "argument": "same populated prefix consumed once in ascending order; same nested field call order"
+    }
+  ],
+  "copy_complete_result": "PV_B3_MultilinearFinite222.source",
+  "installation": "PV_B3_Install222.source",
+  "native_link_evidence_class": "structural argument + extraction",
+  "native_differential": "receipts/d324-fidelity222-native-01 (finite validation, same length-1024 seven column and zero point)",
+  "restoration": "direct output.data[prefix] write; returned array threaded into next loop; d324 source scan",
+  "machine_native_equality_claimed": false,
+  "XR_imports": false
+}

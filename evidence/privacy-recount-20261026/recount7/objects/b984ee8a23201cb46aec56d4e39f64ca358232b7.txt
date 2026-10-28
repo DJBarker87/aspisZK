@@ -1,0 +1,49 @@
+import R1Z.PV_RunJoin_FixtureRootWords
+import R1Z.PV_RunJoin_NodeValue17
+import R1Z.PV_RunJoin_BankRow17
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_ZeroTree17
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
+open BuilderForestAdmissionPort BuilderForestAdmissionPort.pool_v1
+abbrev Digest := Array U32 8#usize
+abbrev Frontier := Array Digest 20#usize
+abbrev Roots := Array Digest 21#usize
+
+def compare (p : U32 × U32) : Result Bool := do
+  let b ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne p.1 p.2
+  ok (decide (¬ b = true))
+
+theorem compare_self (x : U32) : compare (x,x) = ok true := by
+  change (do
+    let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 x x
+    ok (decide (¬ b = true))) = _
+  rw [PV_RunJoin_BankRow17.ne_self]
+  rfl
+#print axioms compare_self
+
+theorem diagonal (xs : List U32) : List.allM compare (xs.zip xs) = ok true := by
+  induction xs with
+  | nil => rfl
+  | cons x xs ih => simp [List.allM,compare_self,ih]
+#print axioms diagonal
+
+theorem eq_self (d : Digest) : core.array.equality.PartialEqArray.eq
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d d = ok true := by
+  rw [core.array.equality.PartialEqArray.eq,if_pos rfl]
+  exact diagonal d.val
+#print axioms eq_self
+
+theorem ne_self (d : Digest) : core.array.equality.PartialEqArray.ne
+    aspis_core.field.M31.Insts.CoreCmpPartialEqM31 d d = ok false := by
+  rw [core.array.equality.PartialEqArray.ne,eq_self]
+  rfl
+#print axioms ne_self
+
+/-- The zero-index fixture has exactly the retained frozen frontier; this is
+an input binding, not a reconstruction or compiler success theorem. -/
+theorem frontier (n : Usize) (hn : n.val < 20) :
+    PV_RunJoin_FixtureArguments.snapshot.frontier.val[n.val]! = PV_Src_CanonicalRoots.table.val[n.val]! := by
+  rw [← PV_RunJoin_FixtureRootWords.frontier]
+  rw [BuilderRecordsPublic.empty20,BuilderRecordsArray.tabulate_get _ _ _ (by simpa using hn)]
+#print axioms frontier
+end R1Z.PV_RunJoin_ZeroTree17

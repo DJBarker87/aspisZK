@@ -1,0 +1,74 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/43711/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/43711/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-objects/R1Z/PV_AL_BlockPrefix.olean",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-sources/R1Z/PV_AL_BlockPrefix.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall": "0:01.26",
+  "peak_rss_kib": "2623044",
+  "swap": "0",
+  "source_revision": "2c7dc7a2999e8ebe71c18201b5cb8aeee6d6f1c2",
+  "expected_phase": "Lean",
+  "axioms": [
+    "'R1Z.PV_AL_BlockPrefix.blocks' does not depend on any axioms",
+    "'R1Z.PV_AL_BlockPrefix.length' depends on axioms: [propext]",
+    "'R1Z.PV_AL_BlockPrefix.representation' depends on axioms: [propext]",
+    "'R1Z.PV_AL_BlockPrefix.concatenation' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 43711,
+  "module": "R1Z.PV_AL_BlockPrefix",
+  "sha256": "46bd74290cb621ca9686944c67c3972b9326df90be45359de30361da824b7222",
+  "revision": "2c7dc7a2999e8ebe71c18201b5cb8aeee6d6f1c2",
+  "imports": [
+    "R1Z.PV_CBL_SplitModel"
+  ],
+  "dependency_source_resolution": "../source-resolution.json",
+  "preflight": "../preflight.json",
+  "receipt_collected_at_revision": "2c7dc7a2999e8ebe71c18201b5cb8aeee6d6f1c2",
+  "dependency_objects": {
+    "R1Z.PV_CBL_SplitModel": {
+      "source_sha256": "eb2138e49857a75591480a10780cc852151b28f8b1044814b8152773dafded8c",
+      "object_sha256": "187742969c83d0631f5ae60e654adf4c1ec29370ee23fe8e4c9b4a9ce0d86fd9"
+    },
+    "R1Z.PV_CBL_SplitBounds": {
+      "source_sha256": "a6fcb71d25af16f9f8d0f2f80db0e138fee3e44d1108dc913b5a69f8e180d01f",
+      "object_sha256": "f3d3104bcbabd9310c357f6d4afebc0d6b5fd3d1bb14dc04badc3987f05dc5a4"
+    }
+  },
+  "external_dependency_manifest_fingerprint": "ab4063e4562f7320896e21195b8a3a37e758834f339e94a4211f20eabd32ff3f",
+  "deps_fingerprint": "af62cc28f14b24dfa93f90ba19315f9b716354d809e6d3ea181c53d690dac9bb",
+  "fingerprint_method": "Read-only final reconstruction: imported objects were never replaced during this job; closure-after-replay.json records the complete source/object cohort. Target itself is excluded."
+}

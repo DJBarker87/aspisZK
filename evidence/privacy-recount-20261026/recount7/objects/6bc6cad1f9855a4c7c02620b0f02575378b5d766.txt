@@ -1,0 +1,120 @@
+{
+  "baseline": {
+    "row": "V233",
+    "name": "op209 block_buffer.Eager.Insts.Block_bufferSealedSealed.split_blocks",
+    "before": "CLOSED-ON-CANDIDATE",
+    "consequence": "SUSPENDED",
+    "reason": "The scalar/coordinate gate builds flat reference byte vectors by push. Admitted lengths grow existing buffers, and the compared bytes depend on reallocation copies. The unbounded Lean law is for the explicit extracted reference/storage carrier; it does not independently justify the shipped unsafe pointer/slice association.",
+    "closure_theorem": "R1Z.PV_AL_SplitSelected.native_callback",
+    "baseline_evidence": [
+      "definition-audit6.json#V233",
+      "rw:docs/research/v8-r0-zk-20261009/lean/R1Z/PV_AL_SplitSelected.lean",
+      "closure-audit6.json#V233"
+    ],
+    "supporting_passes": [
+      117
+    ],
+    "reverify_when_validated_stub_available": true,
+    "exposed_supporting_passes": [
+      117
+    ],
+    "unresolved_supporting_passes": []
+  },
+  "observations": [
+    {
+      "harness": "sealed::pv_alib_checks::split64_coordinate",
+      "pass_output": "evidence/pv-alib-20261027/kani-split64-02/output.log",
+      "pass_output_blob": "49db6c5cb45ba1027e4bd46ac06d1bb185311968",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-alib-20261027/kani-split64-02/receipt.json",
+      "receipt_blob": "814d28f1c7995e2ac90077a9d811e27c14dcd20b",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "python3",
+        "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+        "/home/dombarker/project-offloads/codex-pv-alib-20261027/kani-split64-02/admission-barrier.json",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-alib-20261027/kani-split64-02/time.log",
+        "timeout",
+        "900",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-alib-20261027/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-alib-20261027/block-buffer-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "sealed::pv_alib_checks::split64_coordinate",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions",
+        "--slice-formula"
+      ],
+      "source_revision": "706a346aeb2f442232773a0672f4d2a7f56dce31",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V233"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "n<=129 includes rb>=16 and rt>=16. Repeated Vec::push grows an existing byte buffer. Arbitrary block/tail coordinate assertions inspect the preserved bytes after reallocation.",
+      "diagnostic": {
+        "run": "K04",
+        "harness": "sealed::pv_alib_checks::split64_coordinate",
+        "metadata_and_paths": "diagnostics/K04/goto-scan.json",
+        "graph": "diagnostics/K04/graphs/sealed__pv_alib_checks__split64_coordinate.txt",
+        "goto_sha256": "71f8105e93fbeb3219902ebaf1811eec743e179dfe1073ffb530d1f1f2ec4d97",
+        "graph_sha256": "09a12de9db4c8224305582216256db44caf81e1fbb8b1e16c999880b65f58c2e",
+        "bound": 132,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 117
+    }
+  ]
+}

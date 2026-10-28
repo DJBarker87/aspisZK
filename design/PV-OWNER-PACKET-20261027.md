@@ -1,7 +1,7 @@
 # Privacy owner decision packet — 2026-10-27 (B)
 
 Target not yet established. Evidence is frozen by the
-[recount 6 pins](../evidence/privacy-recount-20261026/recount6/pins.json).
+[recount 7 pins](../evidence/privacy-recount-20261026/recount7/pins.json).
 Approvals resolve the named choices; native proof, adoption and release binding
 remain separate obligations. D248 already adopted option B and the capped
 RunJoin trust list, exactly entropy_law, entropy_kernel and observation.
@@ -86,8 +86,8 @@ The following decisions/actions remain open.
    is caller-supplied; frozen RealR1_client receives public and compiled
    arguments and selects no deployment index, and its source callers are
    fixture tests. No deployment selector occurs in that frozen source. Fixture
-   results supply non-vacuity instances, not the universal V152–V154 source
-   identification or V038 common-sample law. Choosing scope unblocks a concrete
+   results supply non-vacuity instances. The later honest-family theorem supplies
+   V152–V154 on its explicit subtype; V038 common-sample agreement remains open. Choosing scope unblocks a concrete
    client/witness/caller interface and the required execution, custody and
    privacy bindings. Evidence: LOG D284/D301/D320, candidate
    `evidence/pv-n7-20261027/INVENTORY.md`, and pinned runjoin
@@ -110,7 +110,7 @@ cannot prepare it (native probe pv27-zero-change-03; a 250/750 withdrawal succee
 Evidence: codex/pv-runjoin-20261026, evidence/pv-runjoin27-20261027/FINDING.md and REPORT.md.
 
 **Options.** (A) State the privacy claim's honest-user domain as spends whose preparation succeeds,
-which today means positive change, and record separately that users cannot withdraw a full balance
+which today requires positive change, and record separately that users cannot withdraw a full balance
 through the shipped client (they must leave at least one unit as change). No implementation change.
 (B) Change the frozen compiler to accept zero change, which reopens the implementation freeze, the
 three ELF pins if the change reaches crates/ code compiled into release programs, and the affected
@@ -129,9 +129,71 @@ honest-family source identification (D337).
 admitted relation also contains a transfer with zero change (400 in, 400 to the recipient, 0 change),
 and native preparation rejects it with Err(Conservation) as well (codex/pv-runjoin-20261026,
 evidence/pv-runjoin28-20261027/). Option (A) therefore reads: the honest-user domain is spends whose
-preparation succeeds, which today means positive change for both transfers and withdrawals; users
+preparation succeeds, which today requires positive change for both transfers and withdrawals; users
 cannot spend a note's entire value in one transaction through the shipped client. The lead's
 recommendation is unchanged.
+
+
+Recount 7 scope update (D332–D345, D353). The honest source handoff covers every
+input carrying semantic Admission, a successful full compiler return equal to
+its cached compiled payload with both Result layers, Checked, and canonical
+frontier words. For every such input its native public and initial semantic
+trace equal those of the same canonical target with D18 transport. This is the
+source handoff for privacy of users whose prover inputs are produced by the
+compiler and satisfy those guards. The adversary, observer, simulator, bound
+and bad event retain their original scope. PV_RunJoin_HonestIdentification26
+proves these fields, and HonestConsumer26 applies the unchanged consumers;
+HonestFixtures26 provides transfer and withdrawal non-vacuity. The raw cached
+family still has identification_unsatisfiable; no universal raw-family claim
+is substituted. This is information about the discharge route, not an owner
+approval of a changed endpoint.
+
+The canonical honest pipeline decodes the snapshot through its codec before
+calling the wrapper (D342). The raw withdrawal wrapper can return success on
+noncanonical active frontier words, and those payloads fail HonestInput; the
+snapshot codec rejects them. Positive change alone is therefore not a sufficient
+honesty or preparation-domain characterisation. The exact successful canonical
+preparation implies HonestInput theorem is still open at the pinned runjoin32
+snapshot, after lane-root progress. Input, append, recipient and sentinel
+obligations remain. Neither the domain choice nor the client-scope choice
+converts that missing implication into trust. The lead's option A recommendation
+from D338/D342 stands; no later owner adoption is recorded in the audited LOG.
+Evidence: pinned runjoin evidence/pv-runjoin26-20261027/REPORT.md,
+evidence/pv-runjoin28-20261027/GUARDS.md and FINDING.md,
+evidence/pv-runjoin31-20261028/LANE-STATEMENT-AUDIT.md and
+recovery/RESUME32.md. This clarifies what the domain and client choices unblock:
+a precise successful-user coverage statement and a concrete caller/runtime
+binding toward V038/V045, rather than a new proof on arbitrary cached inputs.
+
+The D348 observer coverage decision is open. The question is how the deployed
+verifier's on-chain log and formatted error bytes on every reached path are
+represented in the endpoint observation. The audited endpoint exposes an abstract
+View/ROMView and observer_program; no selected total encoding/association ties
+all those bytes, including rejection-path bytes, to that observation. Abstract
+Aux capacity and forwarding a Boolean decision do not establish this association.
+This is a coverage gap against D159, not an extra trust item or a privacy proof
+inside the current statement. The options are to specify a total representation
+in the existing observation carrier and prove its deployed association, or to
+approve an explicit model extension with the affected theorem and simulation
+transport work. Omitting published logs would change the adopted observer and
+is not an approved option. D348 records the lead's expected route: prove logs
+and error text deterministic from public transaction bytes, without allocator
+addresses, timing or uninitialised bytes in the text; it records no selected
+representation or owner approval. The chosen route must account explicitly for
+any public execution context used by the program. This unblocks a complete
+observer specification and the subsequent verifier log/error determinism proof.
+Evidence: LOG D159/D348 and recount7/D348.md, with immutable endpoint,
+FsStatement, ZkStatement, RomObserverBin and RunJoin source witnesses in the
+recount 7 manifest. Owner: privacy lead and owner for the contract; deployed
+verifier/client association remains a P obligation after that choice.
+
+K-1 is an evidence correction, not an owner trust-list choice. The historical
+copy-dependent Kani links of V178, V179, V182, V195 and V233 remain suspended.
+Their independent replacements have class structural (K-1 substitute), with the
+same statements and residuals. Exact KMX-patched positive gates and failing
+matched negative controls are required before Kani re-credit; the pinned kstub
+progress does not yet supply all five. V184 stands on its structural proof.
+The capped RunJoin T remains exactly its three approved fields.
 
 ## Decision: prover timing evidence on a continuously throttled build host (LOG D359, 2026-10-28)
 

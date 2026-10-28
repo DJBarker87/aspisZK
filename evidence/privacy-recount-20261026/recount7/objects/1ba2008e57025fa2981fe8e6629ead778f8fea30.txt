@@ -1,0 +1,27 @@
+# Group 4 candidate: mask117 / polynomial121
+
+New module crates/aspis-prover/src/host_arithmetic.rs is behind `#[cfg(feature="prover")]` in that crate's lib.rs. It copies only the selected mask arithmetic, its exact private coefficient tables/linear/tower/power helpers, and the selected block polynomial evaluator. No core/statement function is changed. The same explicit prover feature was already forwarded by cost-probe.
+
+Changes to arithmetic shape are control-only: range iterators become index loops in the same order, including descending coefficient/Horner indices; the op121 block closure becomes an explicit function with polynomial and powers arguments. All field operations, grouped product3 operations, prepared multipliers, coefficients and error boundaries retain their original order. No naïve Horner substitution or raw-limb normalization is introduced.
+
+Redirected selected chains: host_semantic mask-value evaluations and copied terminal masked evaluation -> host_arithmetic::state_only_selected_mask_value; host_sumcheck round update -> host_arithmetic::evaluate_state_only_polynomial. In aspis-prover, state_only_hiding's selected mask consumers and state_only_zerocheck's selected round update use cfg-selected imports; non-prover builds retain the originals. Historical non-selected candidate/reference paths are retained.
+
+D234/V403 remains a required proof obligation: canonical coefficients/challenge must be derived from their actual reached producers, never inserted into T or disguised as a proved hypothesis. The copy preserves the selected block evaluation exactly, so arbitrary-raw-input source equality is a structural question; the polynomial row/model interpretation remains on PV_Canon's canonical carriers. No row/source/domain theorem is yet claimed. Kani0 throughout.
+
+Group 3 passed all pins and projects cumulative +1.64609% worst fixture, leaving 50,892.33us before the +2% stop threshold. Group 4 gates pending.
+
+Gates: optimized check02 passed after correcting the duplicate selected-mask import. group4-elf-01-default's outer admission was true but the inside barrier was false; no build ran. group4-elf-02's default/devnet/Pool all match the pins. The separate benchmark was admitted 107 seconds after the first barrier refusal, violating the required 180-second cadence; both admission checks and all caps remained enforced, with no overlapping scopes or bypass. This deviation is retained, and the job-local invocation wrapper now enforces a refusal cooldown. The shared admission tools were not modified.
+
+The mask/polynomial native comparisons pass on both fixture data sets and all 11 point shapes, including a retained D234 raw noncanonical challenge comparison against the selected original block evaluator (not against naïve Horner). Each proof calls op117 29,669 times and op121 ten times. Full cumulative projections are in group4-cost-projection.json. Proof bytes remain equal to the prior-stage commitments, but the separate base-37 fixture gate remains required. No source law or row-law closure is inferred from these measurements.
+
+## Drop-free dependency successor
+
+The op117 LLBC locates the remaining precise Drop blocks in the call_once wrappers for field.rs's noncapturing PreparedQm31Multiplier::new and ::mul closures (lines449/461). A prover-local prepared carrier and explicit component functions copy their field operation sequence. Op121 also needs the exact product3 channel accumulator/reconstructor; its small fixed three-product and 3×3 channel traversals are explicitly expanded, preserving product/add/reduce order and the frozen release overflow behavior. No original field declaration or caller outside the selected prover copies changes. All helper storage is Copy, with no stubs or special input restrictions. Complete source equality and canonical-domain row law remain proof obligations. New ELF/cost gates supersede only the affected 117/121 source.
+
+## Separate-traversal successor cb48c33fce
+
+The external-root117 emission omitted the root, and including the actual source file locally exposed Not_found in pinned loop collapse. Three original traversals are now explicit owned-array helper functions: selected coefficient scatter, mask-only scatter, and descending prepared Horner. No scalar operation, order, bound, input or panic condition changes. Native fixture/shape equality passes. All three mask-split-elf-01 pins match. mask-split-projection.json replaces only changed117 measurements;121 is unchanged. Cumulative transfer1.6427621%, withdrawal1.6466711%, below2%. Source/copy/row equality is still open.
+
+## Fixed-domain expansion successor26ce27b295
+
+The helper split still fails pinned loop collapse. The same16 selected scatter writes,10 mask-only writes and26 descending Horner steps are now explicitly expanded at their fixed declared dimensions; all inputs remain arbitrary. No arithmetic operation is regrouped, skipped or normalized. All mask-expanded-elf-01 pins match. Native fixture/point-shape comparisons and the D234 noncanonical original/copy comparison pass; mask-expanded-projection.json replaces only117 deltas and retains unchanged121 evidence. Transfer1.6365500%, withdrawal1.6420333%, below2%.

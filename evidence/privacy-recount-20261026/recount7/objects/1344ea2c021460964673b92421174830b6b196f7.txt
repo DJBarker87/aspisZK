@@ -1,0 +1,14 @@
+import R1Z.PV_RunJoin_PaddingCounterexample24
+#print R1Z.PV_RunJoin_PaddingCounterexample24.bad
+#print R1Z.PV_RunJoin_PaddingCounterexample24.build_eq_false
+#print R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable
+#print R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.admitted
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.public_eq
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.model_padding
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.canonical_padding
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.bad_cell
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.build_eq_false
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.universal_build_eq_false
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable

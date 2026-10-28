@@ -1,0 +1,1 @@
+Raw Aeneas output, retained as emission evidence. External templates contain unfilled axioms and are NEVER imported. Accepted modules live under docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_Outer*30.lean, with source-audit.py checking the exact transformations.
