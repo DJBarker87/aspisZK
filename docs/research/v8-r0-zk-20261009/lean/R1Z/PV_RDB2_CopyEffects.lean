@@ -66,7 +66,7 @@ theorem fill_complete {T : Type} (heap : Heap T) (dst n : Nat) (value : T)
 theorem fill_cell {T : Type} (heap : Heap T) (dst n i : Nat) (value : T)
     (active : i < n) :
     (write heap dst (List.replicate n value) dst)[i]? = some value := by
-  simp only [write,if_pos rfl,List.getElem?_replicate]
+  simp only [write,↓reduceIte,List.getElem?_replicate]
   exact if_pos active
 
 /-- Every MaybeUninit byte is initialized before the output is viewed as
