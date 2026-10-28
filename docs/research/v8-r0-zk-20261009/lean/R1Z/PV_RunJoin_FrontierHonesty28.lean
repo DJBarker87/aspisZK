@@ -28,9 +28,12 @@ def frontier : Array (Array U32 8#usize) 20#usize :=
     (fun l => if l = 0 then rawDigest else snapshot.frontier.val[l]!)
 
 theorem raw_word : frontier.val[0]!.val[0]!.val = 2147483647 := by
-  rw [frontier,BuilderRecordsArray.tabulate_get _ _ 0 (by decide)]
-  simp only [if_pos rfl]
-  rw [rawDigest,BuilderRecordsArray.tabulate_get _ _ 0 (by decide)]
+  have outer : frontier.val[0]! = rawDigest :=
+    BuilderRecordsArray.tabulate_get 20#usize _ 0 (by decide)
+  rw [outer]
+  have inner : rawDigest.val[0]! = 2147483647#u32 :=
+    BuilderRecordsArray.tabulate_get 8#usize _ 0 (by decide)
+  rw [inner]
   rfl
 #print axioms raw_word
 
@@ -39,8 +42,11 @@ payload are quantified: no hand-edited cached payload is used. -/
 def input (root : Array U32 8#usize)
     (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1) : Input :=
   ⟨withdrawalRequest,witness,withdrawalChange,laneAnchor,
-    {snapshot with sequence := 1#u64,next_pair_index := 1#u64,
-      current_root := root,frontier := frontier},compiled⟩
+    { snapshot with
+      sequence := 1#u64
+      next_pair_index := 1#u64
+      current_root := root
+      frontier := frontier },compiled⟩
 
 theorem every_payload_not_honest (root : Array U32 8#usize)
     (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1) :
