@@ -21,6 +21,6 @@ theorem digest (d : Array U32 8#usize) : pool_v1.pair_forest_copy_builder.digest
   unfold BuilderForestStd.arrayMap
   rw [map_loop]
   simp only [bind_tc_ok]
-  rw [if_pos d.property]
+  rw [dif_pos d.property]
 #print axioms digest
 end R1Z.PV_RunJoin_DigestIdentity30
