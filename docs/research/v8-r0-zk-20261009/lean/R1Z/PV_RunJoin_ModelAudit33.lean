@@ -1,0 +1,11 @@
+import R1Z.ProverRwBodyDataCriterion
+import R1Z.ProverCommitSemanticInterpolation55
+import R1Z.ProverCommitSemanticRounds55
+set_option autoImplicit false
+#print R1Z.ProverRwBodyDataCriterion.continuation
+#print R1Z.ProverCommitSemanticInterpolation55.exact_result
+#print R1Z.ProverCommitSemanticRounds55.payload_rounds
+#print axioms R1Z.ProverRwBodyDataCriterion.eq_of_data
+#print axioms R1Z.ProverRwBodyDataCriterion.continuation
+#print axioms R1Z.ProverCommitSemanticInterpolation55.exact_result
+#print axioms R1Z.ProverCommitSemanticRounds55.payload_rounds
