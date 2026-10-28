@@ -14,7 +14,7 @@ for p in files:
 for m,x in json.loads((R/'evidence/pv-cbmid-20261027/LEAN-IMPORT-PROVENANCE.json').read_text()).items():
  tracked['R1Z.'+m]=[x['local_source']]
 tracked['R1Z.ProverRwFullFuns']=['docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean']
-roots=['R1Z.PV_CBL_JoinAdapter','R1Z.PV_CBL_CallbackPublication','R1Z.PV_CBL_StringViewValue','R1Z.PV_CBL_StringByteObservation','R1Z.PV_CBL_AppendSource','R1Z.PV_CB3_Op51Arbitrary','R1Z.PV_AL_SplitSelected','R1Z.PV_AL_SplitBridge']
+roots=['R1Z.PV_CBL_PathJoinValue','R1Z.PV_CBL_JoinAdapter','R1Z.PV_CBL_CallbackPublication','R1Z.PV_CBL_StringViewValue','R1Z.PV_CBL_StringByteObservation','R1Z.PV_CBL_AppendSource','R1Z.PV_CB3_Op51Arbitrary','R1Z.PV_AL_SplitSelected','R1Z.PV_AL_SplitBridge']
 rows={}
 def visit(m):
  if m in rows or m in ex:return
@@ -46,7 +46,7 @@ D=Path(DIR);B=D.parent
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 e=json.loads((B/'r1-privacy-build-integration-20261019/env/J.json').read_text())
 # Preserve env-J order; read-only Stream B caches only for missing project modules.
-base_roots=[B/'aspis-joint-20261019/objects']+[Path(x) for x in e['LEAN_PATH'].split(':')]
+base_roots=[D/'lean-objects',B/'aspis-joint-20261019/objects']+[Path(x) for x in e['LEAN_PATH'].split(':')]
 cache=[B/'codex-pv-cblib-20261027/lean-objects',B/'codex-pv-alib-20261027/lean-objects',B/'codex-pv-cb3-20261026/lean-objects']
 source_roots=[B/'aspis-joint-20261019/sources',B/'codex-pv-cblib-20261027/lean-sources',B/'codex-pv-alib-20261027/lean-sources',B/'codex-pv-cb3-20261026/lean-sources']
 errors=[];er=[]
@@ -63,7 +63,7 @@ for m,x in PROJECT.items():
  pr[m]=dict(source_path=str(q),source_sha256=sha(q) if q else None,object_path=str(p),object_sha256=sha(p) if p else None)
 # Verify cache-prefix imports against our selected objects, including full transitive cone.
 for m,x in pr.items():
- if '/lean-objects/' not in x['object_path']:continue
+ if '/lean-objects/' not in x['object_path'] or x['object_path'].startswith(str(D)+'/'):continue
  origin=Path(x['object_path'].split('/lean-objects/')[0]);env=origin/'env-J.json'
  if not env.exists():errors.append(['cache env missing',m,str(env)]);continue
  ce=json.loads(env.read_text());cr=[origin/'lean-objects']+[Path(v) for v in ce['LEAN_PATH'].split(':')]
