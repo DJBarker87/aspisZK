@@ -16,7 +16,11 @@ theorem frame {World : Type} (n : Nat) (world : World) :
     repeated n world = ok (List.replicate n (⟨4#usize,0#usize⟩ : EmptyRaw),world) := by
   induction n with
   | zero => rfl
-  | succ n ih => simp only [repeated,raw_four,ih,bind_tc_ok,List.replicate_succ]
+  | succ n ih =>
+    simp only [repeated,raw_four,bind_tc_ok]
+    dsimp only
+    rw [ih]
+    rfl
 
 theorem array10 {World : Type} (world : World) :
     repeated 10 world = ok (List.replicate 10 (⟨4#usize,0#usize⟩ : EmptyRaw),world) := frame 10 world
