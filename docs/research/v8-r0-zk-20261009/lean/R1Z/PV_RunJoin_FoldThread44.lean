@@ -24,24 +24,28 @@ def phase (q : Slice W) (alpha : W) (dual : Bool) :
     phase q alpha dual n next (Usize.wrapping_add i 1#usize)
 
 theorem quotient (q : Slice W) :
-    Slice.len q / 4#usize=.ok (Usize.ofNat (q.length/4) (by have := q.property;omega)) := by
-  scalar_tac
+    ∃ k : Usize, (Slice.len q / 4#usize : Result Usize) = .ok k ∧ k.val = q.length / 4 := by
+  exact UScalar.div_spec (Slice.len q) (y := 4#usize) (by decide)
 
 theorem stop (q : Slice W) (alpha : W) (dual : Bool) (out : alloc.vec.Vec W)
-    (i : Usize) (bound : q.length/4≤i.val) :
+    (i : Usize) (bound : q.length / 4 ≤ i.val) :
     prover.fold_loop.body q alpha dual out i=.ok (.done out) := by
+  obtain ⟨k,hk,hkv⟩ := quotient q
   unfold prover.fold_loop.body
-  rw [quotient q]
-  simp only [bind_tc_ok,show ¬i<Usize.ofNat (q.length/4) (by have := q.property;omega) from bound,↓reduceIte]
+  dsimp only
+  rw [hk]
+  simp only [bind_tc_ok,show ¬i < k from (by change ¬i.val < k.val;omega),↓reduceIte]
 
 theorem one_step (q : Slice W) (alpha : W) (dual : Bool) (out : alloc.vec.Vec W)
-    (i : Usize) (bound : i.val<q.length/4) :
+    (i : Usize) (bound : i.val < q.length / 4) :
     prover.fold_loop.body q alpha dual out i=(do
       let next ← step q alpha dual out i
       .ok (.cont (next,Usize.wrapping_add i 1#usize))) := by
+  obtain ⟨k,hk,hkv⟩ := quotient q
   unfold prover.fold_loop.body
-  rw [quotient q]
-  simp only [bind_tc_ok,show i<Usize.ofNat (q.length/4) (by have := q.property;omega) from bound,
+  dsimp only
+  rw [hk]
+  simp only [bind_tc_ok,show i < k from (by change i.val < k.val;omega),
     ↓reduceIte,step,lift,bind_assoc_eq]
 
 theorem complete (q : Slice W) (alpha : W) (dual : Bool) (n : Nat)
@@ -65,13 +69,16 @@ theorem complete (q : Slice W) (alpha : W) (dual : Bool) (n : Nat)
     rw [PV_RunJoin_MergeLoop35.increment i (by omega)]
     omega
 
-theorem caller (q : Slice W) (alpha : W) (dual : Bool) (small : q.length/4≤256) :
-    prover.fold q alpha dual=phase q alpha dual (q.length/4)
-      (alloc.vec.Vec.with_capacity W (Usize.ofNat (q.length/4) (by have := q.property;omega))) 0#usize := by
+theorem caller (q : Slice W) (alpha : W) (dual : Bool) (small : q.length / 4 ≤ 256) :
+    prover.fold q alpha dual = (do
+      let count ← (Slice.len q / 4#usize : Result Usize)
+      phase q alpha dual (q.length / 4) (alloc.vec.Vec.with_capacity W count) 0#usize) := by
   unfold prover.fold
-  rw [quotient q]
+  obtain ⟨k,hk,hkv⟩ := quotient q
+  dsimp only
+  rw [hk]
   simp only [bind_tc_ok]
-  exact complete q alpha dual (q.length/4) _ 0#usize (by change 0+_= _;omega) small
+  exact complete q alpha dual (q.length / 4) _ 0#usize (by change 0 + _ = _;omega) small
 #print axioms quotient
 #print axioms stop
 #print axioms one_step
