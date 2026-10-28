@@ -13920,3 +13920,16 @@ standard library's pointer, allocation and source-association bodies are missing
 finding. rdb2b continues with the remaining budget and proves those laws against the pinned 1.94.1
 library sources before re-running the gates. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D389 (Stream B) 2026-10-28 18:00 UTC: rdb1 restores V186 under the deployed configuration; rdb1b continues with the missing 1.94.1 laws
+
+pv-rdb1 (4 of 100 Lean attempts; 20 native scopes; no Kani; combined audit and focused replay with
+standard axioms; no source change) restores V186's native/reference association as structural (K-1
+substitute) under the deployed configuration: the default value is bound to the shared deployed
+constructor and proved independent of the buffer representation. The other eleven class-B rows
+(V164, V170, V178, V181, V182, V183, V184, V187, V195, V198, V219) remain suspended with exact
+missing-law reasons; no behaviour counterexample. Like rdb2, it stopped early; rdb1b continues with
+the remaining budget and proves the missing deployed laws (pointer and slice operations, destructor
+and world binding for V170, and the rest) against the pinned 1.94.1 library sources before re-running
+the gates. V186 enters the ledger at the next recount. Rows removed outright: 0. Privacy target not
+yet established.
