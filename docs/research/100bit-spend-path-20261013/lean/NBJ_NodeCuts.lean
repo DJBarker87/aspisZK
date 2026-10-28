@@ -1,0 +1,130 @@
+import NBI_Window
+import NBJ_Opening
+
+set_option autoImplicit false
+namespace AspisR1.NBJ_NodeCuts
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConeNodeDomain
+
+/-- Exact same-array scalar read; neither value nor scratch carrier is chosen
+independently of the prestate. -/
+theorem array_read {α : Type} [Inhabited α] (a : Array α 16#usize)
+    (i : Usize) (bound : i.val < 16) :
+    Array.index_usize a i = ok a.val[i.val]! := by
+  have h : i.val < a.val.length := by rw [a.property]; exact bound
+  simp only [Array.index_usize,Array.getElem?_Usize_eq,
+    List.getElem!_eq_getElem?_getD,List.getElem?_eq_getElem h,Option.getD_some]
+
+/-- Native occupied-pair row selects both source cells before the write.
+All other scratch cells and the physical node buffer are arbitrary. -/
+theorem paired_program (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val < s.n.val)
+    (paired : i.val+1 < s.n.val ∧
+      s.idx.val[i.val+1]! = s.idx.val[i.val]! ^^^ 1#u32) :
+    ∃ (ni next : Usize),
+      ni.val = i.val+1 ∧ next.val = i.val+2 ∧
+      node s physical i w = writer s s.val.val[i.val]! s.val.val[i.val+1]!
+        next s.«at» s.idx.val[i.val]! w := by
+  have dom := domain
+  simp only [RowDomain] at dom
+  obtain ⟨ni,add,niVal⟩ := WP.spec_imp_exists
+    (UScalar.add_spec (x:=i) (y:=1#usize) (by scalar_tac))
+  obtain ⟨next,add2,nextVal⟩ := WP.spec_imp_exists
+    (UScalar.add_spec (x:=i) (y:=2#usize) (by scalar_tac))
+  have nv : ni.val = i.val+1 := by scalar_tac
+  have xv : next.val = i.val+2 := by scalar_tac
+  have ib : i.val < 16 := by omega
+  have nb : ni.val < 16 := by omega
+  have more : ni < s.n := by change ni.val < s.n.val; omega
+  have nextIndex : s.idx.val[ni.val]! = s.idx.val[i.val]! ^^^ 1#u32 := by
+    rw [nv];exact paired.2
+  refine ⟨ni,next,nv,xv,?_⟩
+  simp only [node,array_read s.idx i ib,array_read s.val i ib,add,checked,
+    if_pos more,array_read s.idx ni nb,array_read s.val ni nb,add2,nv,if_pos paired.2]
+
+/-- Supplied-child source suffix, retaining the physical carrier and write
+continuation without independently chosen reads or reply. -/
+def supplied (s : reference.Scratch) (physical : Slice U8) (ni w : Usize)
+    (index : U32) (value : MultiproofConePhysicalProgram.Digest) : Run reference.Row :=
+  checked (Slice.len physical-s.«at») fun remaining =>
+  if remaining<32#usize then .done (.ok (.Stop s)) else
+  checked (s.«at»+32#usize) fun cursor =>
+  checked (core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+    physical {start:=s.«at»,«end»:=cursor}) fun chunk =>
+  checked (reference.read32 chunk) fun sibling =>
+  if index &&& 1#u32=0#u32 then writer s value sibling ni cursor index w
+  else writer s sibling value ni cursor index w
+
+theorem unpaired_program (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val < s.n.val)
+    (unpaired : ¬(i.val+1 < s.n.val ∧
+      s.idx.val[i.val+1]! = s.idx.val[i.val]! ^^^ 1#u32)) :
+    ∃ ni, ni.val = i.val+1 ∧
+      node s physical i w = supplied s physical ni w s.idx.val[i.val]! s.val.val[i.val]! := by
+  have dom := domain
+  simp only [RowDomain] at dom
+  obtain ⟨ni,add,niVal⟩ := WP.spec_imp_exists
+    (UScalar.add_spec (x:=i) (y:=1#usize) (by scalar_tac))
+  have nv : ni.val = i.val+1 := by scalar_tac
+  have ib : i.val < 16 := by omega
+  refine ⟨ni,nv,?_⟩
+  simp only [node,array_read s.idx i ib,array_read s.val i ib,add,checked]
+  by_cases more : ni < s.n
+  · have small : ni.val < 16 := by change ni.val < s.n.val at more;omega
+    have neq : s.idx.val[ni.val]! ≠ s.idx.val[i.val]! ^^^ 1#u32 := by
+      intro eq
+      apply unpaired
+      exact ⟨by change ni.val < s.n.val at more;omega,by simpa only [nv] using eq⟩
+    simp only [if_pos more,array_read s.idx ni small,checked,if_neg neq]
+    rfl
+  · simp only [if_neg more]
+    rfl
+
+/-- A short physical sibling rejects before any oracle request or write. -/
+theorem short_program (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val < s.n.val)
+    (unpaired : ¬(i.val+1 < s.n.val ∧
+      s.idx.val[i.val+1]! = s.idx.val[i.val]! ^^^ 1#u32))
+    (short : physical.val.length-s.«at».val < 32) :
+    node s physical i w = .done (.ok (.Stop s)) := by
+  obtain ⟨ni,nv,eq⟩ := unpaired_program physical s i w domain active unpaired
+  rw [eq]
+  have dom := domain
+  simp only [RowDomain] at dom
+  obtain ⟨remaining,sub,rv⟩ := WP.spec_imp_exists
+    (UScalar.sub_spec (x:=Slice.len physical) (y:=s.«at») (by scalar_tac))
+  have small : remaining < 32#usize := by scalar_tac
+  simp only [supplied,sub,checked,if_pos small]
+
+/-- The supplied branch's physical read and index/value originate in the
+same arbitrary scratch. The returned reader chunk is identified byte for byte. -/
+theorem supplied_program (physical : Slice U8) (s : reference.Scratch)
+    (i w : Usize) (domain : RowDomain physical s i w) (active : i.val < s.n.val)
+    (unpaired : ¬(i.val+1 < s.n.val ∧
+      s.idx.val[i.val+1]! = s.idx.val[i.val]! ^^^ 1#u32))
+    (enough : s.«at».val+32 ≤ physical.val.length) :
+    ∃ ni cursor chunk,
+      ni.val = i.val+1 ∧ cursor.val = s.«at».val+32 ∧
+      chunk.val = (physical.val.drop s.«at».val).take 32 ∧
+      node s physical i w =
+        if s.idx.val[i.val]! &&& 1#u32 = 0#u32 then
+          writer s s.val.val[i.val]! chunk ni cursor s.idx.val[i.val]! w
+        else writer s chunk s.val.val[i.val]! ni cursor s.idx.val[i.val]! w := by
+  obtain ⟨ni,nv,eq⟩ := unpaired_program physical s i w domain active unpaired
+  obtain ⟨cursor,chunk,view,add,cv,range,read,bytes⟩ :=
+    MultiproofConeNodeWindow.physical_read physical s.«at» enough
+  have dom := domain
+  simp only [RowDomain] at dom
+  obtain ⟨remaining,sub,rv⟩ := WP.spec_imp_exists
+    (UScalar.sub_spec (x:=Slice.len physical) (y:=s.«at») (by scalar_tac))
+  have notsmall : ¬remaining < 32#usize := by scalar_tac
+  refine ⟨ni,cursor,chunk,nv,cv,bytes,?_⟩
+  rw [eq]
+  simp only [supplied,sub,checked,if_neg notsmall,add,range,read]
+
+#print axioms array_read
+#print axioms paired_program
+#print axioms unpaired_program
+#print axioms short_program
+#print axioms supplied_program
+end AspisR1.NBJ_NodeCuts

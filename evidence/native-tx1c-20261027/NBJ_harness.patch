@@ -1,0 +1,498 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBJ_keys.rs
+@@ -0,0 +1,412 @@
++
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_scalar(){
++ let i:usize=kani::any();kani::assume(i<22);
++ let at=compact::OFF_OPENINGS+i*OPENING;let end=at+OPENING;
++ assert_eq!(at,10055+832*i);assert_eq!(end,10055+832*(i+1));assert!(at<=end && end<=57607);assert_eq!(end-at,832);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_range_position(){
++ // One arbitrary observed byte; no fully symbolic 57607-byte allocation.
++ let i:usize=kani::any();let c:usize=kani::any();let byte:u8=kani::any();kani::assume(i<22 && c<832);
++ let mut proof=[0u8;57607];let at=10055+832*i;proof[at+c]=byte;
++ let q=&proof[at..at+832];assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[at..].as_ptr());assert_eq!(q[c],byte);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_range_window(){
++ let q:[u8;832]=kani::any();let c:usize=kani::any();kani::assume(c<832);
++ let view=&q[0..832];assert_eq!(view.len(),832);assert_eq!(view[c],q[c]);assert_eq!(view.as_ptr(),q.as_ptr());
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_key_iterator(){
++ let j:usize=kani::any();let batch:usize=kani::any();kani::assume(batch<2);let n=if batch==0{10}else{12};let lo=if batch==0{0}else{10};kani::assume(j<=n);
++ let mut it=j..n;let next=it.next();assert_eq!(next,if j<n{Some(j)}else{None});
++ if let Some(k)=next{assert_eq!(it.start,k+1);assert!(lo+k<22 && k<16)}else{assert_eq!(it.start,j)}
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_key_zero(){let k:usize=kani::any();kani::assume(k<16);let keys=[0u64;16];assert_eq!(keys[k],0);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_sort_iterator(){let n:usize=kani::any();let i:usize=kani::any();kani::assume((n==10||n==12)&&i>=1&&i<=n);let mut it=i..n;let next=it.next();assert_eq!(next,if i<n{Some(i)}else{None});if let Some(j)=next{assert!(j<16);assert_eq!(it.start,j+1);}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_padding_iterator(){
++ let bytes:[u8;5504]=kani::any();let count:usize=kani::any();let cap:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(count<=cap && cap<=172 && k<=4*(cap-count) && c<8);
++ let at=32*count+8*k;let suffix=&bytes[at..32*cap];let mut chunks=suffix.chunks_exact(8);let next=chunks.next();
++ if k<4*(cap-count){let q=next.unwrap();assert_eq!(q.len(),8);assert_eq!(q[c],bytes[at+c]);assert_eq!(chunks.len(),4*(cap-count)-k-1);}else{assert!(next.is_none());assert_eq!(chunks.len(),0)}
++ assert_eq!(chunks.remainder().len(),0);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_leaf_scratch_zero(){let k:usize=kani::any();let c:usize=kani::any();kani::assume(k<16&&c<32);let idx=[0u32;16];let val=[[0u8;32];16];assert_eq!(idx[k],0);assert_eq!(val[k][c],0);}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_00(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[10055+c]=b;
++ let q=opening(&proof,0);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_01(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[10887+c]=b;
++ let q=opening(&proof,1);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10887..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_02(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[11719+c]=b;
++ let q=opening(&proof,2);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[11719..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_03(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[12551+c]=b;
++ let q=opening(&proof,3);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[12551..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_04(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[13383+c]=b;
++ let q=opening(&proof,4);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[13383..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_05(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[14215+c]=b;
++ let q=opening(&proof,5);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[14215..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_06(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[15047+c]=b;
++ let q=opening(&proof,6);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[15047..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_07(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[15879+c]=b;
++ let q=opening(&proof,7);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[15879..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_08(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[16711+c]=b;
++ let q=opening(&proof,8);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[16711..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_09(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[17543+c]=b;
++ let q=opening(&proof,9);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[17543..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_10(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[18375+c]=b;
++ let q=opening(&proof,10);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[18375..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_11(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[19207+c]=b;
++ let q=opening(&proof,11);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[19207..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_12(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[20039+c]=b;
++ let q=opening(&proof,12);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[20039..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_13(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[20871+c]=b;
++ let q=opening(&proof,13);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[20871..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_14(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[21703+c]=b;
++ let q=opening(&proof,14);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[21703..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_15(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[22535+c]=b;
++ let q=opening(&proof,15);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[22535..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_16(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[23367+c]=b;
++ let q=opening(&proof,16);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[23367..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_17(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[24199+c]=b;
++ let q=opening(&proof,17);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[24199..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_18(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[25031+c]=b;
++ let q=opening(&proof,18);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[25031..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_19(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[25863+c]=b;
++ let q=opening(&proof,19);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[25863..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_20(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[26695+c]=b;
++ let q=opening(&proof,20);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[26695..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_fixed_21(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<832);
++ let mut proof=[0u8;57607];proof[27527+c]=b;
++ let q=opening(&proof,21);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[27527..].as_ptr());assert_eq!(q[c],b);
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_00(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10055+c]=b;
++ let q=opening(&proof,0);let selected=&q[0..32];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10055..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_01(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10087+c]=b;
++ let q=opening(&proof,0);let selected=&q[32..64];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10087..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_02(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10119+c]=b;
++ let q=opening(&proof,0);let selected=&q[64..96];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10119..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_03(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10151+c]=b;
++ let q=opening(&proof,0);let selected=&q[96..128];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10151..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_04(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10183+c]=b;
++ let q=opening(&proof,0);let selected=&q[128..160];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10183..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_05(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10215+c]=b;
++ let q=opening(&proof,0);let selected=&q[160..192];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10215..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_06(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10247+c]=b;
++ let q=opening(&proof,0);let selected=&q[192..224];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10247..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_07(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10279+c]=b;
++ let q=opening(&proof,0);let selected=&q[224..256];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10279..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_08(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10311+c]=b;
++ let q=opening(&proof,0);let selected=&q[256..288];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10311..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_09(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10343+c]=b;
++ let q=opening(&proof,0);let selected=&q[288..320];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10343..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_10(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10375+c]=b;
++ let q=opening(&proof,0);let selected=&q[320..352];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10375..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_11(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10407+c]=b;
++ let q=opening(&proof,0);let selected=&q[352..384];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10407..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_12(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10439+c]=b;
++ let q=opening(&proof,0);let selected=&q[384..416];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10439..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_13(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10471+c]=b;
++ let q=opening(&proof,0);let selected=&q[416..448];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10471..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_14(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10503+c]=b;
++ let q=opening(&proof,0);let selected=&q[448..480];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10503..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_15(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10535+c]=b;
++ let q=opening(&proof,0);let selected=&q[480..512];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10535..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_16(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10567+c]=b;
++ let q=opening(&proof,0);let selected=&q[512..544];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10567..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_17(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10599+c]=b;
++ let q=opening(&proof,0);let selected=&q[544..576];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10599..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_18(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10631+c]=b;
++ let q=opening(&proof,0);let selected=&q[576..608];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10631..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_19(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10663+c]=b;
++ let q=opening(&proof,0);let selected=&q[608..640];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10663..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_20(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10695+c]=b;
++ let q=opening(&proof,0);let selected=&q[640..672];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10695..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_21(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10727+c]=b;
++ let q=opening(&proof,0);let selected=&q[672..704];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10727..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_22(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10759+c]=b;
++ let q=opening(&proof,0);let selected=&q[704..736];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10759..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_23(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10791+c]=b;
++ let q=opening(&proof,0);let selected=&q[736..768];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10791..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_24(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10823+c]=b;
++ let q=opening(&proof,0);let selected=&q[768..800];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10823..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_word_25(){
++ let c:usize=kani::any();let b:u8=kani::any();kani::assume(c<32);
++ let mut proof=[0u8;57607];proof[10855+c]=b;
++ let q=opening(&proof,0);let selected=&q[800..832];
++ assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10855..].as_ptr());
++}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_padding_option_error(){let result:Option<usize>=kani::any();let actual=result.ok_or(Error::Merkle);match result{None=>assert!(matches!(actual,Err(Error::Merkle))),Some(c)=>assert!(matches!(actual,Ok(x) if x==c))}}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_roots_projection(){let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let t:usize=kani::any();let c:usize=kani::any();kani::assume(t<3&&c<32);let [root0,root1]=roots;let forwarded=[root0,root1,folded];assert_eq!(forwarded[t][c],if t==2{folded[c]}else{roots[t][c]});}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_slot_view_pointer(){let proof=[0u8;57607];let begin:usize=kani::any();let capacity:usize=kani::any();kani::assume(capacity<=172&&begin<=57607&&32*capacity<=57607-begin);let end=begin+32*capacity;let q=&proof[begin..end];assert_eq!(q.len(),end-begin);assert_eq!(q.len(),32*capacity);assert_eq!(q.as_ptr(),proof[begin..].as_ptr());}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_carrier(){let proof=[0u8;57607];let i:usize=kani::any();kani::assume(i<22);let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBJ_multiproof.rs
+@@ -0,0 +1,60 @@
++
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct Hash<'a>{answer:[u8;32],left:&'a[u8],right:&'a[u8],c:usize,calls:&'a Cell<usize>}
++impl Digest32 for Hash<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{
++ assert_eq!(p.len(),3);assert_eq!(p[0],&[0x12]);assert_eq!(p[1].len(),32);assert_eq!(p[2].len(),32);
++ assert_eq!(p[1][self.c],self.left[self.c]);assert_eq!(p[2][self.c],self.right[self.c]);
++ self.calls.set(self.calls.get()+1);self.answer
++}}
++fn NBJ_row<H:Digest32>(hash:H,idx:&mut[u32;16],val:&mut[[u8;32];16],n:usize,nodes:&[u8],mut at:usize,mut w:usize,mut i:usize)->(bool,usize,usize,usize){
++ let parent=index_at(idx,i)>>Arity::Two.bits();
++ let digest=if i+1<n && index_at(idx,i+1)==index_at(idx,i)^1{
++  let d=occupied_binary_parent(hash,val,i);i+=2;d
++ }else{
++  let Some(sibling)=nodes.get(at..at+32)else{return(false,at,w,i)};
++  at+=32;let d=sibling_binary_parent(hash,val,i,sibling,index_at(idx,i)&1==0);i+=1;d
++ };
++ idx[w]=parent;val[w]=digest;w+=1;(true,at,w,i)
++}
++
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_pair_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;idx[1]=a^1;val[0]=left;val[1]=right;let calls=Cell::new(0);
++ let out=NBJ_row(Hash{answer:reply,left:&left,right:&right,c,calls:&calls},&mut idx,&mut val,2,&[],0,0,0);
++ assert_eq!(out,(true,0,1,2));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_eq!(val[0][c],reply[c]);
++}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_supply_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let sibling:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;val[0]=value;let calls=Cell::new(0);let left=a&1==0;
++ let out=NBJ_row(Hash{answer:reply,left:if left{&value}else{&sibling},right:if left{&sibling}else{&value},c,calls:&calls},&mut idx,&mut val,1,&sibling,0,0,0);
++ assert_eq!(out,(true,32,1,1));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_eq!(val[0][c],reply[c]);
++}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_short_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let len:usize=kani::any();let c:usize=kani::any();kani::assume(c<32&&len<32);let nodes:[u8;32]=kani::any();let calls=Cell::new(0);
++ idx[0]=a;val[0]=value;let reply:[u8;32]=kani::any();
++ let out=NBJ_row(Hash{answer:reply,left:&value,right:&nodes,c,calls:&calls},&mut idx,&mut val,1,&nodes[..len],0,0,0);
++ assert_eq!(out,(false,0,0,0));assert_eq!(calls.get(),0);assert_eq!(idx[0],a);assert_eq!(val[0][c],value[c]);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_level_iterator(){let level:usize=kani::any();kani::assume(level<=18);let mut it=level..Arity::Two.levels() as usize;let next=it.next();assert_eq!(next,if level<18{Some(level)}else{None});if next.is_some(){assert_eq!(it.start,level+1);}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_admission_window_iterator(){
++ let indices:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<=n&&n<=16);
++ let mut it=indices[j..n].windows(2);let next=it.next();if n-j>=2{let pair=next.unwrap();assert_eq!(pair[0],indices[j]);assert_eq!(pair[1],indices[j+1]);assert_eq!(it.len(),n-j-2+1-1);}else{assert!(next.is_none());}
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_admission_value_iterator(){let indices:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<=n&&n<=16);let mut it=indices[j..n].iter();let next=it.next();if j<n{assert_eq!(*next.unwrap(),indices[j]);assert_eq!(it.len(),n-j-1)}else{assert!(next.is_none())}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_count_zero(){let level=[0u32;16];let k:usize=kani::any();kani::assume(k<16);assert_eq!(level[k],0);let count=0usize;assert_eq!(count,0);}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_level_terminal(){let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let at:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(n>0&&n<=16&&i==n&&w>0&&w<=i&&at<=5504&&k<16&&c<32);let mut next_n=n;let old_idx=idx[k];let old_val=val[k][c];if i>=n{next_n=w;}assert_eq!(next_n,w);assert_eq!(idx[k],old_idx);assert_eq!(val[k][c],old_val);assert_eq!(at,at);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_count_guard(){let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(n<=16&&w<=i&&i<=n);if i<n{assert!(i<16&&w<16);let j=i;assert!(j<=n);}else{assert_eq!(i,n);assert!(w<=16)}}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBJ_keys.rs"]
++mod NBJ_keys;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,7 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBJ_multiproof.rs"]
++mod NBJ_multiproof;

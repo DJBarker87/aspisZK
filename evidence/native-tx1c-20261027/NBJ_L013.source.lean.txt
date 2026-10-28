@@ -1,0 +1,37 @@
+import NBI_Padding
+import NBJ_Opening
+
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.NBJ_Padding
+open Aeneas Aeneas.Std Result
+
+/-- Native fixed-eight-byte predicate is total on exactly its chunk domain.
+No successful final scan, zero padding or accepted verifier is assumed. -/
+theorem word_exact (base : Port3_NativeBatchBody.Ops) {X : Type}
+    (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (word : Array U8 8#usize) :
+    Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+      (Port3_BatchStd.install base) D () word.to_slice =
+      ok (core.num.U64.from_le_bytes word != 0#u64, ()) := by
+  simp [Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut,
+    Port3_BatchStd.install,Port3_BatchStd.unwrap8,
+    core.array.TryFromArrayCopySlice.try_from,Array.to_slice,word.property]
+
+/-- Specialise the inherited total induction to the actual installed native
+predicate, preserving failures and the exact unvisited chunk suffix. -/
+theorem scan_exact (base : Port3_NativeBatchBody.Ops) {X : Type}
+    (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+    (chunks : List (Slice U8)) (remainder : Slice U8) :
+    (Port3_BatchStd.install base).op0 (core.iter.traits.iterator.IteratorChunksExact U8)
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install base) D)
+      {chunks := chunks,remainder := remainder} () =
+    NBI_Padding.scan
+      (Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool
+        (Port3_BatchStd.install base) D) remainder chunks := by
+  exact NBI_Padding.any_eq_scan _ chunks remainder
+
+#print axioms word_exact
+#print axioms scan_exact
+end AspisR1.NBJ_Padding
+end
