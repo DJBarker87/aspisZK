@@ -274,3 +274,17 @@ of propext/Classical.choice/Quot.sound. Source revision at these attempts:
 8270797d0c11f0831e9a97889f08dfe869b23b9e, dirty NCM sources pinned by sha256
 in each receipt. Exact commands/objects/limits are in those receipts.
 This is a focused cached closure audit, not a frozen release manifest replay.
+
+## Stage 2 status
+
+The tops above remain unchanged. All 18 native families remain OPEN; none
+is removed or replaced by a bundle. NCM_NATIVE_RESULTS.md records 25 actual
+frozen-helper shapes with per-shape matched failing controls. The source-step
+association gaps are listed individually in NCM_NATIVE_REMAINING.md.
+Kani50 was exhausted before the final Lean window/frame joins; no cryptographic
+assumption or model-only definition is substituted for a native instance.
+
+Final audit L080: exit0, wall1.8892393269343302s, peak4417376KiB,
+swaps0. All69 new theorem roots use standard axioms. Both budgets exhausted:
+80 Lean slots (one conservative preflight) and50 Kani runs. Full receipt and
+source/object pins retained. No release/headline replay or native closure claimed.

@@ -25,3 +25,9 @@ audits all 61 new theorem roots. No native/Rust/ELF gate ran in Stage 1.
 Next: instantiate the exact per-step domains on frozen Rust, with KMX and
 matching failing controls where copies are reached. Partial helper results
 must not be promoted to complete fragment closure.
+
+Stage 2: 25 frozen-helper shapes passed with 25 matched failing controls
+(NCM_NATIVE_AUDIT.json). Four new Lean window/frame modules supply conditional
+value/effect joins. No complete NCE fragment was discharged, and this top
+statement retains its original 18 native hypotheses unchanged. See
+NCM_NATIVE_REMAINING.md for every source-PC/caller/step obligation.

@@ -1,0 +1,44 @@
+{
+  "attempt": "NCM_K008",
+  "kind": "kani",
+  "sources": [
+    "NCM_src/Cargo.lock",
+    "NCM_gate.py",
+    "NCM_KMX_copy_stubs.patch",
+    "NCM_native.patch",
+    "NCM_src/KMX_stubs.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/multiproof.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_spy.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_candidate.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_multiproof.rs",
+    "NCM_src/crates/aspis-core/src/state_only_private_merkle.rs"
+  ],
+  "command": [
+    "python3",
+    "NCM_gate.py",
+    "NCM_K008",
+    "multiproof::NCM_multiproof::NCM_occupied_second_wrong",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-batchsk2-20261028/NCM_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NCM_K008-graph.json"
+  },
+  "expected_time": "optimized cold compilation for first run, then one named native helper byte window SAT step; no SHA or field multiplication",
+  "reservation_retries": 0,
+  "source_revision": "9506188fa83a33c5261720f7f037a7d2d293d4ab",
+  "source_tree_dirty": true
+}

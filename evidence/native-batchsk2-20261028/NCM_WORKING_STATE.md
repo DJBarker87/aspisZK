@@ -1,1 +1,3 @@
-Stage1 complete; L072 audit passed. 72/80 Lean,0/50 Kani. Stage2 next after commit.
+Terminal:80/80 Lean slots,50/50 Kani runs; L080 audit passed.
+Stage1 complete conditional tops; Stage2 partial,25 helper shapes with matched controls; all18 full fragments open.
+Read NCM_HANDOFF.md and NCM_NATIVE_REMAINING.md. No further job within this budget.

@@ -5,6 +5,8 @@ import NCM_BatchCore
 import NCM_BatchTypes
 import NCM_CountCarrier
 import NCM_CountCheck
+import NCM_DigestWindows
+import NCM_KMXWindows
 import NCM_KeyStream
 import NCM_KeyView
 import NCM_KeysLeaves
@@ -29,6 +31,8 @@ import NCM_PaddingPredicate
 import NCM_PaddingRun
 import NCM_PaddingScan
 import NCM_PaddingValue
+import NCM_PartsWindows
+import NCM_ReadWindows
 import NCM_RowProgress
 import NCM_Rows
 import NCM_RowsObservation
@@ -52,6 +56,12 @@ import NCM_WindowImage
 #print axioms AspisR1.NCM_BatchTypes.root_value
 #print axioms AspisR1.NCM_CountCarrier.valid
 #print axioms AspisR1.NCM_CountCheck.association
+#print axioms AspisR1.NCM_DigestWindows.parts
+#print axioms AspisR1.NCM_DigestWindows.request_reply
+#print axioms AspisR1.NCM_DigestWindows.slice
+#print axioms AspisR1.NCM_KMXWindows.adjacent
+#print axioms AspisR1.NCM_KMXWindows.disjoint
+#print axioms AspisR1.NCM_KMXWindows.window_frame
 #print axioms AspisR1.NCM_KeyStream.produced
 #print axioms AspisR1.NCM_KeyView.observation
 #print axioms AspisR1.NCM_KeysLeaves.observation
@@ -88,6 +98,8 @@ import NCM_WindowImage
 #print axioms AspisR1.NCM_PaddingScan.value
 #print axioms AspisR1.NCM_PaddingValue.chunks_zero
 #print axioms AspisR1.NCM_PaddingValue.observation
+#print axioms AspisR1.NCM_PartsWindows.exact
+#print axioms AspisR1.NCM_ReadWindows.observation
 #print axioms AspisR1.NCM_RowProgress.progress
 #print axioms AspisR1.NCM_Rows.association
 #print axioms AspisR1.NCM_RowsObservation.observation
