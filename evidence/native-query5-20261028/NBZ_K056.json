@@ -1,0 +1,59 @@
+{
+  "source_revision": "14860f4d09e2daefcf2a8db3978f1d5b6adad3a3",
+  "source_tree_dirty": true,
+  "sources": [
+    "NBZ_src/Cargo.lock",
+    "NBZ_src/Cargo.toml",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_native.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_windows.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_steps.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_decoders.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_dots.rs",
+    "NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_observer.rs"
+  ],
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-query5-20261028/NBZ_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "NBZ_K056",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-query5-20261028/NBZ_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-query5-20261028/NBZ_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NBZ_decoders::NBZ_base_reject_negative",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation then verifier::candidate::NBZ_decoders::NBZ_base_reject_negative native single-call gate",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_check": "NBZ_K056-graph-check.json"
+  },
+  "reservation_retries": 0
+}

@@ -6,7 +6,9 @@ fcntl.flock(_nbo_serial, fcntl.LOCK_EX)
 from NBZ_host import *
 import hashlib,tomllib,sys,os
 attempt,harness=sys.argv[1:]
-assert attempt.startswith('NBZ_K') and int(attempt[5:])<=90
+assert attempt.startswith('NBZ_K')
+assert len(list(E.glob('NBZ_K[0-9][0-9][0-9].json')))<90, 'Kani budget exhausted'
+assert not (E/(attempt+'.json')).exists(), 'submitted attempt must only be recovered, never resubmitted'
 assert not (E/attempt/'receipt.json').exists()
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 env={'TMPDIR':B+'/NBZ_tmp','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'}

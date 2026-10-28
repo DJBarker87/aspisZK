@@ -1,0 +1,135 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBZ_dictionary.rs
+@@ -0,0 +1,132 @@
++//! Actual primitive and geometry call sites. No native multiplication.
++extern crate alloc;
++include!("KMX_stubs.rs");
++use super::*;
++use aspis_core::{field::CM31,r0::CodeField};
++fn NBZ_e()->E {let w:[u32;8]=kani::any();for x in w{kani::assume(x<2147483647);}E::from_limbs(w).unwrap()}
++fn NBZ_q(w:[u32;4])->K {K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++fn NBZ_embed_case(base:bool,negative:bool){
++ let w:[u32;4]=kani::any();for x in w{kani::assume(x<2147483647);}let k:usize=kani::any();kani::assume(k<8);
++ let out=if base{E::from_m31(M31(w[0]))}else{E::from_qm31(NBZ_q(w))};
++ let expected=if base{if k==0{w[0]}else{0}}else{if k<4{w[k]}else{0}};
++ if negative{assert_ne!(out.to_limbs()[k],expected);}else{assert_eq!(out.to_limbs()[k],expected);}
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++fn NBZ_comparison_case(negative:bool){
++ let folded=NBZ_e();let values=[NBZ_e(),NBZ_e(),NBZ_e(),NBZ_e()];let u:u32=kani::any();kani::assume(u<262144);
++ let branch=folded!=values[(u%4)as usize];let a=folded.to_limbs();let b=values[(u%4)as usize].to_limbs();
++ let eq=a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7];
++ if negative{assert_eq!(branch,eq);}else{assert_eq!(branch,!eq);}
++ kani::cover!(branch);kani::cover!(!branch);kani::cover!(u%4==3);
++}
++fn NBZ_inverse_case(negative:bool){
++ let cap:usize=kani::any();kani::assume(cap>=10&&cap<=isize::MAX as usize/core::mem::size_of::<[M31;5]>());
++ let mut inv=Vec::<[M31;5]>::with_capacity(cap);
++ for i in 0..10 {for k in 0..5 {unsafe{core::ptr::addr_of_mut!((*inv.as_mut_ptr().add(i))[k].0).write(kani::any());}}}unsafe{inv.set_len(10);}
++ let i:usize=kani::any();let start:usize=kani::any();let k:usize=kani::any();kani::assume(i<10&&start<=i&&k<5);
++ let geometry=QueryGeometry{start,inverses:inv,line_z:Vec::new()};let expected=geometry.inverses[i-start][k].0;let ptr=geometry.inverses.as_ptr();
++ let row=geometry.for_query(i);
++ assert_eq!(row as *const _,unsafe{ptr.add(i-start)});
++ if negative{assert_ne!(row[k].0,expected);}else{assert_eq!(row[k].0,expected);}
++ assert_eq!(geometry.inverses.len(),10);assert_eq!(geometry.inverses.capacity(),cap);assert_eq!(geometry.inverses.as_ptr(),ptr);kani::cover!(i==9&&k==4);kani::cover!(start==i);kani::cover!(cap>10);
++}
++fn NBZ_line_case(negative:bool){
++ let cap:usize=kani::any();kani::assume(cap>=10&&cap<=isize::MAX as usize/core::mem::size_of::<M31>());
++ let mut line=Vec::<M31>::with_capacity(cap);
++ for i in 0..10 {unsafe{core::ptr::addr_of_mut!((*line.as_mut_ptr().add(i)).0).write(kani::any());}}unsafe{line.set_len(10);}
++ let i:usize=kani::any();let start:usize=kani::any();kani::assume(i<10&&start<=i);
++ let geometry=QueryGeometry{start,inverses:Vec::new(),line_z:line};let expected=geometry.line_z[i-start].0;let ptr=geometry.line_z.as_ptr();
++ let z=geometry.line_z[i-geometry.start];
++ if negative{assert_ne!(z.0,expected);}else{assert_eq!(z.0,expected);}
++ assert_eq!(geometry.line_z.len(),10);assert_eq!(geometry.line_z.capacity(),cap);assert_eq!(geometry.line_z.as_ptr(),ptr);kani::cover!(i==9);kani::cover!(start==i);kani::cover!(cap>10);
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_embed_base(){NBZ_embed_case(true,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_embed_base_negative(){NBZ_embed_case(true,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_embed_q(){NBZ_embed_case(false,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_embed_q_negative(){NBZ_embed_case(false,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_comparison(){NBZ_comparison_case(false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_comparison_negative(){NBZ_comparison_case(true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_inverse(){NBZ_inverse_case(false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_inverse_negative(){NBZ_inverse_case(true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_line(){NBZ_line_case(false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(65)]
++fn NBZ_line_negative(){NBZ_line_case(true);}
