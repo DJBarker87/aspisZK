@@ -53,8 +53,9 @@ and mismatches; other jobs' directories were read-only.
 Every host compilation uses private source/objects, unchanged run2.py, env J,
 Lean -M7000 and one scope at a time, MemoryHigh=6G/MemoryMax=8G/swap=0/TasksMax=64.
 External objects resolve through the 5,673-entry h4 replay manifest, project
-sources through EJR/freeze/tracked HEAD; h6 cache reuse is dependency-closed and
-fingerprinted. PREFLIGHT-NOTE.md candidly records the late path-selection check,
+sources through EJR/freeze/tracked HEAD; h6 cache reuse was fingerprinted on an incomplete parsed graph.
+The final audit exposed an omitted public import; the complete-closure claim
+is withdrawn (PUBLIC-IMPORT-FINDING.md). PREFLIGHT-NOTE.md candidly records the late path-selection check,
 dangling Aeneas alias and missing-IR corrections. No substituted external bytes
 were found and no failed inspection is accepted. No XR import or shared write.
 
@@ -72,5 +73,6 @@ creation or deletion. The next concrete deliverable is the universal native
 producer/caller transport on HonestInput, followed by helper/inverse and
 sumcheck provenance; local algebra and finite fixtures cannot replace it.
 
-This report is a checkpoint until the final RESULTS.json/STOP.md and audit
-receipts are committed. Any uncompiled draft is labelled and has no proof credit.
+Final disposition is recorded in RESULTS.json and STOP.md. The final audit
+failed before its declarations on the omitted project import; its source and
+all uncompiled continuations are archived with no proof credit.
