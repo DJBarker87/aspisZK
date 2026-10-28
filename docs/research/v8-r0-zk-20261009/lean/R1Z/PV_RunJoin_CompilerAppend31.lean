@@ -13,18 +13,20 @@ theorem afterstate [ExternalLinear] [Records]
       publicInput anchor snapshot = ok (.Ok compiled)) :
     ∃ records leaf,
       pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot publicInput.asset = ok records ∧
-      pair_forest_trace.late_append records snapshot leaf = ok (.Ok compiled.afterstate) := by
-  unfold pair_forest_trace.compile_forest_from_copies at h
-  pv_peel h with records hr
-  refine ⟨records,?_,hr,?_⟩
-  repeat' first
-    | assumption
-    | (pv_peel h with value hvalue)
-    | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
-    | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
-    | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true,↓reduceIte] at h)
-    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
-    | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩)
-    | (cases h; assumption)
+      pair_forest_trace.late_append records snapshot leaf = ok (.Ok compiled.public_statement.candidate_afterstate) := by
+  rcases publicInput with ⟨pa,pn,pr,pc,asset⟩
+  cases pr <;> unfold pair_forest_trace.compile_forest_from_copies at h
+  all_goals
+    pv_peel h with records hr
+    refine ⟨records,?_⟩
+    repeat' first
+      | (pv_peel h with value hvalue)
+      | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
+      | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
+      | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true,↓reduceIte] at h)
+      | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
+      | (have _test : _ × _ := value; rcases value with ⟨value,rest⟩)
+      | (cases h)
+    all_goals exact ⟨_,hr,by assumption⟩
 #print axioms afterstate
 end R1Z.PV_RunJoin_CompilerAppend31
