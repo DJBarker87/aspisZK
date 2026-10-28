@@ -42,7 +42,6 @@ theorem source_replay (nonce : Array U8 32#usize) (p after : Tape) (status : Sta
   refine ⟨states,path,?_,cursor,bound,available⟩
   have count : after.used.val-p.used.val = drawCount states := by omega
   simp only [produce,executed,bind_tc_ok]
-  dsimp only
   rw [count]
   simp only [drawEvents,replayEvents,history,List.flatMap_map]
   rfl
