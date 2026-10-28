@@ -1,9 +1,18 @@
 from pathlib import Path
-import base64,hashlib,json,subprocess,sys,re
+import base64,hashlib,json,subprocess,sys,re,time,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-world-20261028'
 D='/home/dombarker/project-offloads/codex-pv-world-20261028';H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 n=int(sys.argv[1]);m=sys.argv[2]
+# Any admission refusal imposes the full 180-second cooldown before any launch.
+for refusal in E.glob('refusal-504*-admission-barrier.json'):
+ a=json.loads(refusal.read_text())
+ if a.get('allowed') is False and a.get('utc'):
+  deadline=datetime.datetime.fromisoformat(a['utc']).timestamp()+180
+  if time.time()<deadline:
+   print('Full admission cooldown before retry',deadline-time.time(),flush=True)
+   time.sleep(deadline-time.time())
+
 dependencies = {'R1Z/ProverRwFull'+x: 'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFull'+x+'.lean' for x in ['ExternalTypes','Types','ExternalFuns','Funs']}
 resolution=json.loads((E/'observation-resolution.json').read_text())['modules'] if (E/'observation-resolution.json').exists() else {}
 pin=resolution.get(m.replace('/','.'))

@@ -322,7 +322,6 @@ theorem erase_program (ops : ExternalFuns)
                   ·
                     exact erase_invoke ops _ _
                   · intro b
-                    try dsimp only
                     rw [erase_bind]
                     apply PV_W_RecursiveLaws.bind_congr
                     ·

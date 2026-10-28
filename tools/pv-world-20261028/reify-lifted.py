@@ -73,7 +73,7 @@ def proof(node,n=2):
  if k=='let':return pad+'try dsimp only\n'+proof(node.next,n)
  if k=='bind':
   var=node.var;intro=('rintro ⟨'+var[1:-1]+'⟩') if var.startswith('(') else 'intro '+var
-  return pad+'try dsimp only\n'+pad+'rw [erase_bind]\n'+pad+'apply PV_W_RecursiveLaws.bind_congr\n'+pad+'·\n'+proof(node.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(node.next,n+2)
+  return (pad+'try dsimp only\n' if node.expr.kind in ['call','pure'] else '')+pad+'rw [erase_bind]\n'+pad+'apply PV_W_RecursiveLaws.bind_congr\n'+pad+'·\n'+proof(node.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(node.next,n+2)
  if k=='if':return pad+'try dsimp only\n'+pad+'apply PV_W_Callbacks.erase_if_congr\n'+pad+'·\n'+proof(node.yes,n+2)+'\n'+pad+'·\n'+proof(node.no,n+2)
  if k=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+node.discr+' with\n'
