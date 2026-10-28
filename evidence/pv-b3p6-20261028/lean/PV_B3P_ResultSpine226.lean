@@ -24,7 +24,6 @@ theorem collect_append {Î± E : Type} (xs ys : List (Result (core.result.Result Î
       | Err e => rfl
       | Ok a =>
         simp only [bindR,mapR]
-        rw [bindR_assoc]
         cases collect xs with
         | fail e => rfl
         | div => rfl
