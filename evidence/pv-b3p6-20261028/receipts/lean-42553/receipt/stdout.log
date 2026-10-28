@@ -1,0 +1,225 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ByteScalar226V3.lean:22:61: error: unsolved goals
+v : U32
+j : Usize
+h : v < 2147483647#u32
+⊢ (do
+      let i ← lift (UScalar.cast UScalarTy.U32 j)
+      let i1 ← lift (U32.wrapping_mul 8#u32 i)
+      let i2 ← lift (v.wrapping_shr i1)
+      let i3 ← lift (UScalar.cast UScalarTy.U8 i2)
+      Result.ok (core.result.Result.Ok i3)) =
+    Result.ok
+      (core.result.Result.Ok
+        (UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 j)))))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ByteScalar226V3.lean:26:72: error: unsolved goals
+case false
+p : reference226.OwnedPublic
+i : Usize
+h : i ≥ 1455#usize
+h1 : i ≥ 1427#usize
+hp : p.withdrawal = false
+⊢ ↑i < 1455 →
+    ¬↑i = 0 →
+      (if ↑i < 33 then do
+          let i1 ← lift (i.wrapping_sub 1#usize)
+          let i2 ← i1 / 4#usize
+          let m ← p.anchor.index_usize i2
+          let i3 ← lift (i.wrapping_sub 1#usize)
+          let i4 ← i3 % 4#usize
+          reference226.field_byte m i4
+        else
+          if ↑i < 65 then do
+            let i1 ← lift (i.wrapping_sub 33#usize)
+            let i2 ← i1 / 4#usize
+            let m ← p.nullifier.index_usize i2
+            let i3 ← lift (i.wrapping_sub 33#usize)
+            let i4 ← i3 % 4#usize
+            reference226.field_byte m i4
+          else
+            if ↑i < 69 then do
+              let i1 ← lift (i.wrapping_sub 65#usize)
+              reference226.field_byte p.asset_id i1
+            else
+              if i = 69#usize then Result.ok (core.result.Result.Ok 1#u8)
+              else
+                if ↑i < 102 then do
+                  let i1 ← lift (i.wrapping_sub 70#usize)
+                  let i2 ← i1 / 4#usize
+                  let m ← p.recipient.index_usize i2
+                  let i3 ← lift (i.wrapping_sub 70#usize)
+                  let i4 ← i3 % 4#usize
+                  reference226.field_byte m i4
+                else do
+                  let i1 ← lift (Usize.wrapping_add 102#usize 32#usize)
+                  if ↑i < ↑i1 then do
+                      let i2 ← lift (i.wrapping_sub 102#usize)
+                      let i3 ← i2 / 4#usize
+                      let m ← p.change.index_usize i3
+                      let i4 ← lift (i.wrapping_sub 102#usize)
+                      let i5 ← i4 % 4#usize
+                      reference226.field_byte m i5
+                    else do
+                      let i2 ← lift (Usize.wrapping_add 102#usize 32#usize)
+                      if i = i2 then Result.ok (core.result.Result.Ok 0#u8)
+                        else
+                          if ↑i < 135 then do
+                            let i3 ← lift (Usize.wrapping_add 102#usize 33#usize)
+                            let i4 ← lift (i.wrapping_sub i3)
+                            reference226.field_byte p.withdrawal_amount i4
+                          else do
+                            let i3 ← lift (Usize.wrapping_add 135#usize 8#usize)
+                            if ↑i < ↑i3 then do
+                                let i4 ← lift (i.wrapping_sub 135#usize)
+                                let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+                                let i6 ← lift (U32.wrapping_mul 8#u32 i5)
+                                let i7 ← lift (p.next_pair_index.wrapping_shr i6)
+                                let i8 ← lift (UScalar.cast UScalarTy.U8 i7)
+                                Result.ok (core.result.Result.Ok i8)
+                              else do
+                                let front ← lift (Usize.wrapping_add 135#usize 8#usize)
+                                let i4 ← lift (front.wrapping_add 640#usize)
+                                if ↑i < ↑i4 then do
+                                    let j ← lift (i.wrapping_sub front)
+                                    let i5 ← j / 32#usize
+                                    let i6 ← j % 32#usize
+                                    let i7 ← i6 / 4#usize
+                                    let a ← p.frontier.index_usize i5
+                                    let m ← a.index_usize i7
+                                    let i8 ← j % 4#usize
+                                    reference226.field_byte m i8
+                                  else do
+                                    let i5 ← lift (front.wrapping_add 672#usize)
+                                    if ↑i < ↑i5 then do
+                                        let i6 ← lift (i.wrapping_sub front)
+                                        let j ← lift (i6.wrapping_sub 640#usize)
+                                        let i7 ← j / 4#usize
+                                        let m ← p.next_root.index_usize i7
+                                        let i8 ← j % 4#usize
+                                        reference226.field_byte m i8
+                                      else do
+                                        let i6 ← lift (i.wrapping_sub front)
+                                        let j ← lift (i6.wrapping_sub 672#usize)
+                                        let i7 ← j / 32#usize
+                                        let i8 ← j % 32#usize
+                                        let i9 ← i8 / 4#usize
+                                        let a ← p.next_frontier.index_usize i7
+                                        let m ← a.index_usize i9
+                                        let i10 ← j % 4#usize
+                                        reference226.field_byte m i10) =
+        Result.ok (core.result.Result.Ok 0#u8)
+
+case true
+p : reference226.OwnedPublic
+i : Usize
+h : i ≥ 1455#usize
+h1 : i ≥ 1427#usize
+hp : p.withdrawal = true
+⊢ ↑i < 1427 →
+    (if i = 0#usize then Result.ok (core.result.Result.Ok 1#u8)
+      else
+        if ↑i < 33 then do
+          let i1 ← lift (i.wrapping_sub 1#usize)
+          let i2 ← i1 / 4#usize
+          let m ← p.anchor.index_usize i2
+          let i3 ← lift (i.wrapping_sub 1#usize)
+          let i4 ← i3 % 4#usize
+          reference226.field_byte m i4
+        else
+          if ↑i < 65 then do
+            let i1 ← lift (i.wrapping_sub 33#usize)
+            let i2 ← i1 / 4#usize
+            let m ← p.nullifier.index_usize i2
+            let i3 ← lift (i.wrapping_sub 33#usize)
+            let i4 ← i3 % 4#usize
+            reference226.field_byte m i4
+          else
+            if ↑i < 69 then do
+              let i1 ← lift (i.wrapping_sub 65#usize)
+              reference226.field_byte p.asset_id i1
+            else
+              if i = 69#usize then Result.ok (core.result.Result.Ok 0#u8)
+              else
+                if ↑i < 70 then do
+                  let i1 ← lift (i.wrapping_sub 70#usize)
+                  let i2 ← i1 / 4#usize
+                  let m ← p.recipient.index_usize i2
+                  let i3 ← lift (i.wrapping_sub 70#usize)
+                  let i4 ← i3 % 4#usize
+                  reference226.field_byte m i4
+                else do
+                  let i1 ← lift (Usize.wrapping_add 70#usize 32#usize)
+                  if ↑i < ↑i1 then do
+                      let i2 ← lift (i.wrapping_sub 70#usize)
+                      let i3 ← i2 / 4#usize
+                      let m ← p.change.index_usize i3
+                      let i3 ← lift (i.wrapping_sub 70#usize)
+                      let i4 ← i3 % 4#usize
+                      reference226.field_byte m i4
+                    else do
+                      let i2 ← lift (Usize.wrapping_add 70#usize 32#usize)
+                      if i = i2 then Result.ok (core.result.Result.Ok 1#u8)
+                        else
+                          if ↑i < 107 then do
+                            let i3 ← lift (Usize.wrapping_add 70#usize 33#usize)
+                            let i4 ← lift (i.wrapping_sub i3)
+                            reference226.field_byte p.withdrawal_amount i4
+                          else do
+                            let i3 ← lift (Usize.wrapping_add 107#usize 8#usize)
+                            if ↑i < ↑i3 then do
+                                let i4 ← lift (i.wrapping_sub 107#usize)
+                                let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+                                let i6 ← lift (U32.wrapping_mul 8#u32 i5)
+                                let i7 ← lift (p.next_pair_index.wrapping_shr i6)
+                                let i8 ← lift (UScalar.cast UScalarTy.U8 i7)
+                                Result.ok (core.result.Result.Ok i8)
+                              else do
+                                let front ← lift (Usize.wrapping_add 107#usize 8#usize)
+                                let i4 ← lift (front.wrapping_add 640#usize)
+                                if ↑i < ↑i4 then do
+                                    let j ← lift (i.wrapping_sub front)
+                                    let i5 ← j / 32#usize
+                                    let i6 ← j % 32#usize
+                                    let i7 ← i6 / 4#usize
+                                    let a ← p.frontier.index_usize i5
+                                    let m ← a.index_usize i7
+                                    let i8 ← j % 4#usize
+                                    reference226.field_byte m i8
+                                  else do
+                                    let i5 ← lift (front.wrapping_add 672#usize)
+                                    if ↑i < ↑i5 then do
+                                        let i6 ← lift (i.wrapping_sub front)
+                                        let j ← lift (i6.wrapping_sub 640#usize)
+                                        let i7 ← j / 4#usize
+                                        let m ← p.next_root.index_usize i7
+                                        let i8 ← j % 4#usize
+                                        reference226.field_byte m i8
+                                      else do
+                                        let i6 ← lift (i.wrapping_sub front)
+                                        let j ← lift (i6.wrapping_sub 672#usize)
+                                        let i7 ← j / 32#usize
+                                        let i8 ← j % 32#usize
+                                        let i9 ← i8 / 4#usize
+                                        let a ← p.next_frontier.index_usize i7
+                                        let m ← a.index_usize i9
+                                        let i10 ← j % 4#usize
+                                        reference226.field_byte m i10) =
+      Result.ok (core.result.Result.Ok 0#u8)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ByteScalar226V3.lean:28:62: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [reference226.byte_at, hp, h,̵ ̵h̵1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ByteScalar226V3.lean:28:65: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp [reference226.byte_at, hp, h,̵ ̵h̵1̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_ByteScalar226V3.canonical_yes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_ByteScalar226V3.canonical_no' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_ByteScalar226V3.field_reject' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_ByteScalar226V3.field_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_ByteScalar226V3.padding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

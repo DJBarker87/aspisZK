@@ -1,0 +1,26 @@
+theorem BitVec.getElem_toLEBytes_eq_getElem : ∀ {w : ℕ} (b : BitVec w) (i j : ℕ) (hi : i < b.toLEBytes.length)
+  (h : j < 8) (hij : 8 * i + j < w), b.toLEBytes[i][j] = b[8 * i + j] :=
+fun {w} b i j hi h hij =>
+  Eq.mpr (id (congrArg (fun _a => _a[j] = b[8 * i + j]) (List.Inhabited_getElem_eq_getElem! b.toLEBytes i hi)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = b[8 * i + j])
+          (Eq.symm ((fun x => BitVec.getElem!_eq_getElem x j h) b.toLEBytes[i]!))))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => b.toLEBytes[i]![j]! = _a)
+            (Eq.symm ((fun x => BitVec.getElem!_eq_getElem x (8 * i + j) hij) b))))
+        (BitVec.getElem!_toLEBytes b i j h)))
+theorem BitVec.testBit_getElem_toLEBytes_eq_getElem : ∀ {w : ℕ} (x : BitVec w) (i j : ℕ) (hi : i < x.toLEBytes.length)
+  (h : j < 8 ∧ 8 * i + j < w), x.toLEBytes[i].testBit j = x[8 * i + j] :=
+fun {w} x i j hi h =>
+  Eq.mpr (id (congrArg (fun _a => _a.testBit j = x[8 * i + j]) (List.Inhabited_getElem_eq_getElem! x.toLEBytes i hi)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => x.toLEBytes[i]!.testBit j = _a)
+          (Eq.symm ((fun x => BitVec.getElem!_eq_getElem x (8 * i + j) h.right) x))))
+      (BitVec.testBit_getElem!_toLEBytes x i j h.left))
+theorem BitVec.toLEBytes_length : ∀ {w : ℕ} (v : BitVec w), v.toLEBytes.length = (w + 7) / 8 :=
+fun {w} v => BitVec.toLEBytes_length._unary ⟨w, v⟩
+theorem BitVec.getElem!_toLEBytes : ∀ {w : ℕ} (b : BitVec w) (i j : ℕ), j < 8 → b.toLEBytes[i]![j]! = b[8 * i + j]! :=
+fun {w} b i j h => BitVec.getElem!_toLEBytes._unary j h ⟨w, ⟨b, i⟩⟩

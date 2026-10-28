@@ -1,0 +1,46 @@
+{
+  "revision": "61a4fea5aab3d272b00aad308317a76450652604",
+  "shipped_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "reference_sha256": "63003f0708b2b07b6f915675a15d27c91574f61d0eee5dc2541bfd2be946a151",
+  "native_declaration_order": [
+    "let p = self.semantic();",
+    "let mut out = Vec::new();",
+    "out.push(match p.variant",
+    "fields(&mut out, &p.anchor)?;",
+    "fields(&mut out, &p.nullifier)?;",
+    "fields(&mut out, &[p.asset_id])?;",
+    "out.push(u8::from(p.recipient.is_some()));",
+    "if let Some(value) = p.recipient",
+    "fields(&mut out, &value)?;",
+    "fields(&mut out, &p.change)?;",
+    "out.push(u8::from(p.withdrawal_amount.is_some()));",
+    "if let Some(value) = p.withdrawal_amount",
+    "fields(&mut out, &[M31(value)])?;",
+    "let source = p.transition.live_snapshot;",
+    "let after = p.transition.candidate_afterstate;",
+    "out.extend_from_slice(&source.next_pair_index.to_le_bytes());",
+    "frontier(&mut out, &source.frontier)?;",
+    "fields(&mut out, &after.next_root)?;",
+    "frontier(&mut out, &after.next_frontier)?;",
+    "Ok(out)"
+  ],
+  "frontier_levels": 20,
+  "chunk_width": 64,
+  "chunk_count": 23,
+  "lengths": {
+    "transfer": 1455,
+    "withdrawal": 1427
+  },
+  "padding_end": 1472,
+  "binding_complete": false,
+  "evidence_class": "structural preflight only; no native-link credit",
+  "unproved_differences": [
+    "native field check once versus reference check per byte: needs checked complete_word",
+    "native little-endian byte expansion versus wrapping shifts and casts",
+    "native append traversal versus indexed byte_at: needs every region and bound",
+    "reference projection writes versus native SemanticPublic projection",
+    "64-byte grouping and23 chunks versus append order: needs complete Result composition",
+    "padding/truncation and complete successful non-vacuity witness",
+    "same-input emitted/native differential for all projection writes remains pending"
+  ]
+}

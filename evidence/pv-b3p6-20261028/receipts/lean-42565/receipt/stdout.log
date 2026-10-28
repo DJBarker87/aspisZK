@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_WordLaw226V3.lean:19:19: error(lean.unknownIdentifier): Unknown constant `PV_B3P_WordLaw226V3.E.Public`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_WordLaw226V3.lean:23:44: error: Tactic `rfl` failed: The left-hand side
+  Result.ok
+    (core.result.Result.Ok
+      [UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 0#usize))),
+        UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 1#usize))),
+        UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 2#usize))),
+        UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 3#usize)))])
+is not definitionally equal to the right-hand side
+  Result.ok
+    (core.result.Result.Ok
+      [UScalar.cast UScalarTy.U8 v, UScalar.cast UScalarTy.U8 (v.wrapping_shr 8#u32),
+        UScalar.cast UScalarTy.U8 (v.wrapping_shr 16#u32), UScalar.cast UScalarTy.U8 (v.wrapping_shr 24#u32)])
+
+case pos
+v : U32
+h : v < 2147483647#u32
+⊢ Result.ok
+      (core.result.Result.Ok
+        [UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 0#usize))),
+          UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 1#usize))),
+          UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 2#usize))),
+          UScalar.cast UScalarTy.U8 (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 3#usize)))]) =
+    Result.ok
+      (core.result.Result.Ok
+        [UScalar.cast UScalarTy.U8 v, UScalar.cast UScalarTy.U8 (v.wrapping_shr 8#u32),
+          UScalar.cast UScalarTy.U8 (v.wrapping_shr 16#u32), UScalar.cast UScalarTy.U8 (v.wrapping_shr 24#u32)])
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_WordLaw226V3.lean:24:2: error: unsolved goals
+case neg
+v : U32
+h : ¬v < 2147483647#u32
+⊢ Result.ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public) =
+    Result.ok (core.result.Result.Err sorry)
+'PV_B3P_WordLaw226V3.complete_word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

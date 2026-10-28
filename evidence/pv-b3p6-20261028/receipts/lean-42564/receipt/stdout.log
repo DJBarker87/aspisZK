@@ -1,0 +1,9 @@
+def Aeneas.Std.core.num.U32.to_le_bytes : U32 → Std.Array U8 4#usize :=
+fun x => ⟨List.map UScalar.mk x.bv.toLEBytes, ⋯⟩
+def Aeneas.Std.core.num.U64.to_le_bytes : U64 → Std.Array U8 8#usize :=
+fun x => ⟨List.map UScalar.mk x.bv.toLEBytes, ⋯⟩
+@[irreducible] def BitVec.toLEBytes : {w : ℕ} → BitVec w → List Byte :=
+fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+'Aeneas.Std.core.num.U32.to_le_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Aeneas.Std.core.num.U64.to_le_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'BitVec.toLEBytes' depends on axioms: [propext, Classical.choice, Quot.sound]

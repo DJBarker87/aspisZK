@@ -6,6 +6,13 @@ use super::super::{
     payment_relation::PoolV1MembershipWitnessV1,
 };
 
+// P6 proof-only compatibility: shipped records now takes the empty-root table explicitly.
+// Preserve the historical proof helper convention without changing any shipped body.
+fn records(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
+           chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
+    super::records(input, out, rec, chg, snapshot, asset, pair_empty_roots())
+}
+
 fn records_reference(input: &PoolV1PairForestInputNoteWitnessV1, out: u32, rec: Option<&PoolV1OutputNoteWitnessV1>,
            chg: &PoolV1OutputNoteWitnessV1, snapshot: &PoolV1PairLiveSnapshotV1, asset: M31) -> (RW, RP) {
     super::records_reference::records_reference_with_roots(*input, out, rec.copied(), *chg, *snapshot, asset, pair_empty_roots())
