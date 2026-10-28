@@ -32,7 +32,9 @@ theorem reference (base : ExternalTypes) (ops : @ExternalFuns base) :
   rfl
 
 theorem value_law : value.val.map (fun x => (x.row.val,x.column.val)) = PV_B3P_MaskModel132.cells := by
-  simpa only [value,List.map_map,Function.comp_def,convert,PV_B3P_MaskPrefix132.decode] using raw_law.2
+  change (raw.val.map convert).map (fun x => (x.row.val,x.column.val)) = _
+  rw [List.map_map]
+  exact raw_law.2
 
 theorem count_law : value.val.length = 3803 := by
   simp only [value,List.length_map]
