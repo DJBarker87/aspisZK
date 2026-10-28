@@ -43,7 +43,7 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
   · simp only [host_compact.compact_semantic_row,shape,
       ho,core.result.Result.Insts.CoreOpsTry.branch,
       bind_tc_ok,lift,hh,hm,host_compact.compact_row,
-      show ¬row≥14#u8 from (by change ¬row.val≥14;omega),Bool.decide_false,↓reduceIte,hp,hn]
+      show ¬row≥14#u8 from (by change ¬row.val≥14;omega),decide_false,Bool.false_eq_true,↓reduceIte,hp,hn]
   · rw [hnext,hmid,inc,endval]
     simp only [Nat.add_sub_cancel_left]
 #print axioms row
