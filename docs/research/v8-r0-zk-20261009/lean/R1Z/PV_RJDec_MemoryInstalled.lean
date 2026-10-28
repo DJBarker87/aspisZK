@@ -6,7 +6,7 @@ noncomputable section
 namespace R1Z.PV_RJDec_MemoryInstalled
 open Aeneas Aeneas.Std ProverRwFull PV_W_Threading
 variable [ExternalTypes] {W S F D DF ZF AF C : Type}
-def selected (ops : ExternalFuns)
+@[reducible] def selected (ops : ExternalFuns)
     (m : PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF) (w : W) : ExternalFuns :=
   PV_RJDec_ZeroizingSelected.selected (PV_RunJoin_RuntimeMemorySource38.selected ops m w)
 def algebra (base : PV_W_TypedEffects.Algebra W (Option C) Aeneas.Std.Error)
@@ -41,8 +41,10 @@ theorem array_complete (ops : ExternalFuns)
         ((selected ops m w).op130 (@Array.Insts.ZeroizeZeroize _ (selected ops m w) U8 N
           (@zeroize.Zeroize.Blanket _ (selected ops m w) U8 U8.Insts.ZeroizeDefaultIsZeroes)) v),
         z.commit w (PV_RDCD_ZeroWorld.indexed (z.arrayAddress w v) 0 N.val (z.view w)),[(w,none)]⟩ := by
-  rw [show (selected ops m w).op130 _ v = .ok (Array.repeat N 0#u8) from
-    PV_RJDec_ZeroizingSelected.wrapper (PV_RunJoin_RuntimeMemorySource38.selected ops m w) N v]
+  change PV_RJDec_AsmMemory.array z N v w =
+    ⟨PV_W_SourceSyntax.resultOutcome (PV_RDCD_ZeroSelected.array PV_RDCD_ZeroSelected.byteZero v),
+      z.commit w (PV_RDCD_ZeroWorld.indexed (z.arrayAddress w v) 0 N.val (z.view w)),[(w,none)]⟩
+  rw [PV_RDCD_ZeroSelected.array_value]
   exact PV_RJDec_AsmMemory.array_complete z N v w
 
 #print axioms reserve
