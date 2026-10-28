@@ -27,11 +27,11 @@ theorem step (ops : ExternalFuns) (c : Nat → Nat → Raw) (p : Nat → Raw)
   obtain ⟨z,hz,hcz,hdz⟩ := add_exact s product hs hcprod
   refine ⟨z,?_,hcz,by rw [hdz,hdprod]⟩
   unfold PV_RunJoin_BatchRowThread44.step table array
-  rw [ProverCommitArray49.index _ _ lane hl]
+  rw [ProverCommitArray49.index 29#usize (fun i => current (source (p i))) lane hl]
   simp only [bind_tc_ok]
-  rw [PV_RunJoin_Vector44.read _ _ lane hl]
+  rw [PV_RunJoin_Vector44.read 29#usize (fun l => ProverCommitArray49.array 1024#usize (fun i => current (source (c l i)))) lane hl]
   simp only [bind_tc_ok]
-  rw [ProverCommitArray49.index _ _ row hr]
+  rw [ProverCommitArray49.index 1024#usize (fun i => current (source (c lane.val i))) row hr]
   simp only [bind_tc_ok,PV_RunJoin_WideArithmetic44.mul ops _ _ _ hprod,
     PV_RunJoin_WideArithmetic44.add ops _ _ _ hz]
 
