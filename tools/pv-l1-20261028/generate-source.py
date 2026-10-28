@@ -83,7 +83,7 @@ for k,n in enumerate(selected):
  code+='  unfold produce\n  conv_rhs => unfold '+n+'\n'
  lemmas=['PV_L1_EraseIf.erase_if','PV_L1_Projection.prod_case','Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'
- code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
+ code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | split <;> '+simp+'\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n'
  code+="  all_goals\n    cases value\n    repeat' first\n      | with_reducible rfl\n      | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n        intro value called\n      | split <;> "+simp+"\n    all_goals rfl\n"
  if n=='host_semantic.zc_rows':
   proof_start=code.index(' := by\n',code.index('theorem complete_result'))
