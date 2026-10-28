@@ -13,9 +13,9 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 theorem input (r : CopyRecords) (pub : R0P.Public K)
     (hw : WitnessOk (wordWitness r.w)) (hp : PubCorr (wordPublic r.p) pub)
     (d : Array U32 8#usize) (hd : CopyRecords.input_leaf r = ok d) :
-    digK d = R0P.noteCommitment (R0P.ownerKey (toModel (wordWitness r.w)).sk)
-      ((toModel (wordWitness r.w)).inputValue.val : K) pub.assetId
-      (toModel (wordWitness r.w)).salt := by
+    digK d = R0P.noteCommitment (R0P.ownerKey (toModel (K := K) (wordWitness r.w)).sk)
+      ((toModel (K := K) (wordWitness r.w)).inputValue.val : K) pub.assetId
+      (toModel (K := K) (wordWitness r.w)).salt := by
   unfold CopyRecords.input_leaf at hd
   pv_peel hd with raw hr
   rw [PV_RunJoin_DigestIdentity30.digest] at hd
@@ -30,8 +30,8 @@ theorem input (r : CopyRecords) (pub : R0P.Public K)
 theorem nullifier (r : CopyRecords) (pub : R0P.Public K)
     (hw : WitnessOk (wordWitness r.w)) (hp : PubCorr (wordPublic r.p) pub)
     (d : Array U32 8#usize) (hd : CopyRecords.nullifier r = ok d) :
-    digK d = R0P.nullifierHash (toModel (wordWitness r.w)).sk
-      (toModel (wordWitness r.w)).salt := by
+    digK d = R0P.nullifierHash (toModel (K := K) (wordWitness r.w)).sk
+      (toModel (K := K) (wordWitness r.w)).salt := by
   unfold CopyRecords.nullifier at hd
   pv_peel hd with raw hr
   rw [PV_RunJoin_DigestIdentity30.digest] at hd
@@ -47,10 +47,10 @@ theorem membership (r : CopyRecords) (pub : R0P.Public K)
     (hw : WitnessOk (wordWitness r.w)) (hp : PubCorr (wordPublic r.p) pub)
     (d : Array U32 8#usize) (hd : CopyRecords.path_digest r 24#usize = ok d) :
     digK d = R0P.merkleRoot
-      (R0P.noteCommitment (R0P.ownerKey (toModel (wordWitness r.w)).sk)
-        ((toModel (wordWitness r.w)).inputValue.val : K) pub.assetId
-        (toModel (wordWitness r.w)).salt)
-      (toModel (wordWitness r.w)).path := by
+      (R0P.noteCommitment (R0P.ownerKey (toModel (K := K) (wordWitness r.w)).sk)
+        ((toModel (K := K) (wordWitness r.w)).inputValue.val : K) pub.assetId
+        (toModel (K := K) (wordWitness r.w)).salt)
+      (toModel (K := K) (wordWitness r.w)).path := by
   unfold CopyRecords.path_digest at hd
   pv_peel hd with raw hr
   rw [PV_RunJoin_DigestIdentity30.digest] at hd
