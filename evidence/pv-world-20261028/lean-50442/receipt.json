@@ -1,0 +1,85 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50442/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50442/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_ReserveFallible.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_ReserveFallible.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.61",
+  "peak_rss_kib": "2652348",
+  "swap": "0",
+  "source_revision": "a51353c6aee4369e131d9fe5698f5679f5b4e958",
+  "expected_phase": "compilation of R1Z/PV_W_R_ReserveFallible",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_ReserveFallible.lean:326:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  erase ?dictionary (?p >>= ?k)\nin the target expression\n  erase ops\n      (if b = true then do\n        let r1 \u2190 pure (core.result.Result.Ok false)\n        pure (r1, { directory := self.directory, last_error := none })\n      else do\n        let r1 \u2190 pure (core.result.Result.Err error)\n        pure (r1, { directory := self.directory, last_error := none })) =\n    do\n    let r1 \u2190 if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)\n    Result.ok (r1, { directory := self.directory, last_error := none })\n\ncase next.next.next.next.next.next.Err.next.next\ninst\u271d : ExternalTypes\nops : ExternalFuns\nself : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore\nstatement_digest mask_nonce : Std.Array U8 32#usize\npath : std.path.PathBuf\noptions oo : std.fs.OpenOptions\nwrite_back : std.fs.OpenOptions \u2192 std.fs.OpenOptions\noo1 : std.fs.OpenOptions\ncreate_new_back : std.fs.OpenOptions \u2192 std.fs.OpenOptions\noo3 : std.fs.OpenOptions\nmode_back : std.fs.OpenOptions \u2192 std.fs.OpenOptions\nerror : std.io.error.Error\nek : core.io.error.ErrorKind\nb : Bool\n\u22a2 erase ops\n      (if b = true then do\n        let r1 \u2190 pure (core.result.Result.Ok false)\n        pure (r1, { directory := self.directory, last_error := none })\n      else do\n        let r1 \u2190 pure (core.result.Result.Err error)\n        pure (r1, { directory := self.directory, last_error := none })) =\n    do\n    let r1 \u2190 if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)\n    Result.ok (r1, { directory := self.directory, last_error := none })\n'R1Z.PV_W_R_ReserveFallible.erase_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 50442,
+  "module": "R1Z/PV_W_R_ReserveFallible",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_R_ReserveFallible.lean",
+  "source_blob": "09beeebcbccd56dc554ea52a21a88ec5af410a02",
+  "source_sha256": "c5f182845cbf19a7475cbb02e390fb82548c4f10e6d11c86863650ab57354b3e",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_Callbacks",
+    "R1Z.PV_W_RecursiveLaws",
+    "R1Z.PV_W_R_ReservationPath",
+    "R1Z.PV_W_R_SyncDirectory"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "c1b5c5a85ca99c476ce7d71a1e7343ec18b51781f51f203486368f9dcabd8284",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_Callbacks": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Callbacks.olean",
+      "sha256": "4d24791ad67fe5704c3dff5a319365c6b017cc5313960936ec02e70ebf44d11b",
+      "source_sha256": "a3dab6b620195b298689059848ca4f761254d3a657cc007483d97dac569d2ae4"
+    },
+    "R1Z.PV_W_RecursiveLaws": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_RecursiveLaws.olean",
+      "sha256": "a242f8228887beb4903bf69bad848182c8b988ca5d92d6e0d92511a63da797c7",
+      "source_sha256": "e009f1b0bc220e305187822e5b599fa30f74affe811d65196abdf1c2fb08736b"
+    },
+    "R1Z.PV_W_R_ReservationPath": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_ReservationPath.olean",
+      "sha256": "51dd8b2451bc0d5eab9080596da8d7bf516ac93cf7d8b46fd8e82fbe3c12beed",
+      "source_sha256": "58706193130327a7345fabb55758f62ceca6d1204f8a9cc58fa582baa9b88cec"
+    },
+    "R1Z.PV_W_R_SyncDirectory": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_SyncDirectory.olean",
+      "sha256": "75f4c7e8e32662bd481a45dd23e6ef4ea4b32294152495f2fa8f4228c1895b19",
+      "source_sha256": "4c90e16fe1b44920c64d167257ea2d24d2b49330ce0a5cde1acbba02d2db084b"
+    }
+  },
+  "transitive_cache_selection_sha256": null,
+  "external_selection_sha256": "adc40f5f1f598394e06c7c5d9d4c7cbf2821475560642fb465009285313187f3"
+}

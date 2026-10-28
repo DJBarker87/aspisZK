@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_ReserveFallible.lean:326:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase ?dictionary (?p >>= ?k)
+in the target expression
+  erase ops
+      (if b = true then do
+        let r1 ← pure (core.result.Result.Ok false)
+        pure (r1, { directory := self.directory, last_error := none })
+      else do
+        let r1 ← pure (core.result.Result.Err error)
+        pure (r1, { directory := self.directory, last_error := none })) =
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+
+case next.next.next.next.next.next.Err.next.next
+inst✝ : ExternalTypes
+ops : ExternalFuns
+self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+statement_digest mask_nonce : Std.Array U8 32#usize
+path : std.path.PathBuf
+options oo : std.fs.OpenOptions
+write_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo1 : std.fs.OpenOptions
+create_new_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo3 : std.fs.OpenOptions
+mode_back : std.fs.OpenOptions → std.fs.OpenOptions
+error : std.io.error.Error
+ek : core.io.error.ErrorKind
+b : Bool
+⊢ erase ops
+      (if b = true then do
+        let r1 ← pure (core.result.Result.Ok false)
+        pure (r1, { directory := self.directory, last_error := none })
+      else do
+        let r1 ← pure (core.result.Result.Err error)
+        pure (r1, { directory := self.directory, last_error := none })) =
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+'R1Z.PV_W_R_ReserveFallible.erase_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

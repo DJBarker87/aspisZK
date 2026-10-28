@@ -1,0 +1,64 @@
+{
+  "source_path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+  "source_blob": "43a49073e14747f1bc231d5b55fcd8b22e184098",
+  "bodies": [
+    {
+      "name": "aspis_prover.state_only_entropy.sync_directory",
+      "body_sha256": "262f33e5720754b7257ddf367f57d2d473533452dd2650d931ea001e67664d02",
+      "calls": [
+        "std.fs.File.open (Shared0T.Insts.CoreConvertAsRef\nstd.path.Path.Insts.CoreConvertAsRefPath) directory",
+        "core.result.Result.Insts.CoreOpsTry.branch r",
+        "std.fs.File.sync_all val",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nUnit (core.convert.FromSame std.io.error.Error) residual"
+      ],
+      "generated": "syncDirectory"
+    },
+    {
+      "name": "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible",
+      "body_sha256": "e700e626248fb871b6e0637561489833bbc1df39d5df83ad58cf92a614042b4e",
+      "calls": [
+        "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path\n{ self with last_error := none } mask_nonce",
+        "std.fs.OpenOptions.new",
+        "std.fs.OpenOptions.write options true",
+        "std.fs.OpenOptions.create_new oo true",
+        "std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode options1 384#u32",
+        "std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath\noptions2 path",
+        "Aeneas.Std.lift (Array.to_slice aspis_prover.state_only_entropy.RESERVATION_MAGIC)",
+        "std.fs.File.Insts.StdIoWrite.write_all file s",
+        "core.result.Result.Insts.CoreOpsTry.branch r1",
+        "Aeneas.Std.lift (Array.to_slice statement_digest)",
+        "std.fs.File.Insts.StdIoWrite.write_all file1 s1",
+        "core.result.Result.Insts.CoreOpsTry.branch r2",
+        "Aeneas.Std.lift (Array.to_slice mask_nonce)",
+        "std.fs.File.Insts.StdIoWrite.write_all file2 s2",
+        "core.result.Result.Insts.CoreOpsTry.branch r3",
+        "std.fs.File.sync_all file3",
+        "core.result.Result.Insts.CoreOpsTry.branch r4",
+        "std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref self.directory",
+        "aspis_prover.state_only_entropy.sync_directory p",
+        "core.result.Result.Insts.CoreOpsTry.branch r5",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+        "std.io.error.Error.kind error",
+        "core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek\ncore.io.error.ErrorKind.AlreadyExists",
+        "if b\nthen ok (core.result.Result.Ok false)\nelse ok (core.result.Result.Err error)"
+      ],
+      "generated": "reserveFallible"
+    },
+    {
+      "name": "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve",
+      "body_sha256": "66021d7062d2b0b3c897999fadc7c09a1c93a3e05268682656b7fbd9e60b04a8",
+      "calls": [
+        "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible\nself statement_digest mask_nonce",
+        "std.io.error.Error.kind error"
+      ],
+      "generated": "reserve"
+    }
+  ],
+  "check": true,
+  "scope": "control-flow reification and exact source erasure; native effect adequacy not asserted"
+}

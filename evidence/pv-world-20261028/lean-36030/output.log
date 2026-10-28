@@ -1,0 +1,198 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Reservation.lean:190:38: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+statement nonce : Aeneas.Std.Array U8 32#usize
+x✝² : std.path.PathBuf
+x✝¹ : std.fs.OpenOptions
+x✝ : std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)
+⊢ (Aeneas.Std.bind (x✝.1.create_new true) fun a =>
+      erase ops
+        (match a with
+        | (oo1, create_new_back) =>
+          have oo2 := create_new_back oo1;
+          have options1 := x✝.2 oo2;
+          do
+          let __x ←
+            invoke "std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode" fun ops =>
+                std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode options1 384#u32
+          match __x with
+            | (oo3, mode_back) =>
+              have options2 := mode_back oo3;
+              do
+              let r ←
+                invoke "std.fs.OpenOptions.open" fun ops =>
+                    std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath options2 x✝²
+              match r with
+                | core.result.Result.Ok file => do
+                  let s ←
+                    invoke "Aeneas.Std.lift" fun ops =>
+                        Aeneas.Std.lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+                  let __x ←
+                    invoke "std.fs.File.Insts.StdIoWrite.write_all" fun ops =>
+                        std.fs.File.Insts.StdIoWrite.write_all file s
+                  match __x with
+                    | (r1, file1) => do
+                      let cf ←
+                        invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+                            core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue a => do
+                          let s1 ← invoke "Aeneas.Std.lift" fun ops => Aeneas.Std.lift statement.to_slice
+                          let __x ←
+                            invoke "std.fs.File.Insts.StdIoWrite.write_all" fun ops =>
+                                std.fs.File.Insts.StdIoWrite.write_all file1 s1
+                          match __x with
+                            | (r2, file2) => do
+                              let cf1 ←
+                                invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+                                    core.result.Result.Insts.CoreOpsTry.branch r2
+                              match cf1 with
+                                | core.ops.control_flow.ControlFlow.Continue a => do
+                                  let s2 ← invoke "Aeneas.Std.lift" fun ops => Aeneas.Std.lift nonce.to_slice
+                                  let __x ←
+                                    invoke "std.fs.File.Insts.StdIoWrite.write_all" fun ops =>
+                                        std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                                  match __x with
+                                    | (r3, file3) => do
+                                      let cf2 ←
+                                        invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+                                            core.result.Result.Insts.CoreOpsTry.branch r3
+                                      match cf2 with
+                                        | core.ops.control_flow.ControlFlow.Continue a => do
+                                          let r4 ← invoke "std.fs.File.sync_all" fun ops => file3.sync_all
+                                          let cf3 ←
+                                            invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+                                                core.result.Result.Insts.CoreOpsTry.branch r4
+                                          match cf3 with
+                                            | core.ops.control_flow.ControlFlow.Continue a => do
+                                              let p ←
+                                                invoke "std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref" fun ops =>
+                                                    std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref self.directory
+                                              let r5 ← syncDirectory p
+                                              let cf4 ←
+                                                invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+                                                    core.result.Result.Insts.CoreOpsTry.branch r5
+                                              match cf4 with
+                                                | core.ops.control_flow.ControlFlow.Continue a =>
+                                                  pure
+                                                    (core.result.Result.Ok true,
+                                                      { directory := self.directory, last_error := none })
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r6 ←
+                                                    invoke
+                                                        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+                                                        fun ops =>
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          Bool (core.convert.FromSame std.io.error.Error) residual
+                                                  pure (r6, { directory := self.directory, last_error := none })
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r5 ←
+                                                invoke
+                                                    "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+                                                    fun ops =>
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      Bool (core.convert.FromSame std.io.error.Error) residual
+                                              pure (r5, { directory := self.directory, last_error := none })
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r4 ←
+                                            invoke
+                                                "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+                                                fun ops =>
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  Bool (core.convert.FromSame std.io.error.Error) residual
+                                          pure (r4, { directory := self.directory, last_error := none })
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r3 ←
+                                    invoke
+                                        "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+                                        fun ops =>
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          Bool (core.convert.FromSame std.io.error.Error) residual
+                                  pure (r3, { directory := self.directory, last_error := none })
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r2 ←
+                            invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+                                fun ops =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                  (core.convert.FromSame std.io.error.Error) residual
+                          pure (r2, { directory := self.directory, last_error := none })
+                | core.result.Result.Err error => do
+                  let ek ← invoke "std.io.error.Error.kind" fun ops => error.kind
+                  let b ←
+                    invoke "core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq" fun ops =>
+                        core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek
+                          core.io.error.ErrorKind.AlreadyExists
+                  let r1 ←
+                    invoke "if" fun ops =>
+                        if b = true then Result.ok (core.result.Result.Ok false)
+                        else Result.ok (core.result.Result.Err error)
+                  pure (r1, { directory := self.directory, last_error := none }))) =
+    let (oo, write_back) := x✝
+    do
+    let (oo1, create_new_back) ← oo.create_new true
+    have oo2 : std.fs.OpenOptions := create_new_back oo1
+    have options1 : std.fs.OpenOptions := write_back oo2
+    let (oo3, mode_back) ← std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode options1 384#u32
+    have options2 : std.fs.OpenOptions := mode_back oo3
+    let r ← std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath options2 x✝²
+    match r with
+      | core.result.Result.Ok file => do
+        let s ← Aeneas.Std.lift aspis_prover.state_only_entropy.RESERVATION_MAGIC.to_slice
+        let (r1, file1) ← std.fs.File.Insts.StdIoWrite.write_all file s
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let s1 ← Aeneas.Std.lift statement.to_slice
+            let (r2, file2) ← std.fs.File.Insts.StdIoWrite.write_all file1 s1
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => do
+                let s2 ← Aeneas.Std.lift nonce.to_slice
+                let (r3, file3) ← std.fs.File.Insts.StdIoWrite.write_all file2 s2
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue a => do
+                    let r4 ← file3.sync_all
+                    let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r4
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue a => do
+                        let p ← std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref self.directory
+                        let r5 ← aspis_prover.state_only_entropy.sync_directory p
+                        let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            Result.ok (core.result.Result.Ok true, { directory := self.directory, last_error := none })
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r6 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                                  (core.convert.FromSame std.io.error.Error) residual
+                            Result.ok (r6, { directory := self.directory, last_error := none })
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r5 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                              (core.convert.FromSame std.io.error.Error) residual
+                        Result.ok (r5, { directory := self.directory, last_error := none })
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r4 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                          (core.convert.FromSame std.io.error.Error) residual
+                    Result.ok (r4, { directory := self.directory, last_error := none })
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r3 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                      (core.convert.FromSame std.io.error.Error) residual
+                Result.ok (r3, { directory := self.directory, last_error := none })
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Bool
+                  (core.convert.FromSame std.io.error.Error) residual
+            Result.ok (r2, { directory := self.directory, last_error := none })
+      | core.result.Result.Err error => do
+        let ek ← error.kind
+        let b ← core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek core.io.error.ErrorKind.AlreadyExists
+        let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+        Result.ok (r1, { directory := self.directory, last_error := none })
+'R1Z.PV_W_Reservation.erase_syncDirectory' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_W_Reservation.erase_reserveFallible' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_W_Reservation.erase_reserve' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

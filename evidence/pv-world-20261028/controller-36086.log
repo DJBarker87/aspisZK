@@ -1,0 +1,45 @@
+structure R1Z.PV_RunJoin_OsWorld.Laws (E File Reply Time Worker : Type) : Type
+number of parameters: 5
+fields:
+  R1Z.PV_RunJoin_OsWorld.Laws.entropyDraw : World E File Reply Time Worker →
+      ℕ → PV_RunJoin_CallerWorld.RawReply E → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.open64 : World E File Reply Time Worker → List U8 → U32 → U32 → Reply → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.read : World E File Reply Time Worker → File → Usize → Reply → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.write : World E File Reply Time Worker → File → List U8 → Reply → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.sync : World E File Reply Time Worker → File → Reply → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.close : World E File Reply Time Worker → File → Reply → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.time : World E File Reply Time Worker → Time → Prop
+  R1Z.PV_RunJoin_OsWorld.Laws.worker : World E File Reply Time Worker → Worker → Prop
+constructor:
+  R1Z.PV_RunJoin_OsWorld.Laws.mk {E File Reply Time Worker : Type}
+    (entropyDraw : World E File Reply Time Worker → ℕ → PV_RunJoin_CallerWorld.RawReply E → Prop)
+    (open64 : World E File Reply Time Worker → List U8 → U32 → U32 → Reply → Prop)
+    (read : World E File Reply Time Worker → File → Usize → Reply → Prop)
+    (write : World E File Reply Time Worker → File → List U8 → Reply → Prop)
+    (sync close : World E File Reply Time Worker → File → Reply → Prop)
+    (time : World E File Reply Time Worker → Time → Prop) (worker : World E File Reply Time Worker → Worker → Prop) :
+    Laws E File Reply Time Worker
+def R1Z.PV_RunJoin_OsWorld.EntropyAllowed : {E File Reply Time Worker : Type} →
+  Laws E File Reply Time Worker → World E File Reply Time Worker → Fin 128 → PV_RunJoin_CallerWorld.RawReply E → Prop :=
+fun {E File Reply Time Worker} laws world i reply =>
+  world.entropyUsed = ↑i ∧ world.entropy i = reply ∧ laws.entropyDraw world (↑i) reply
+def R1Z.PV_RunJoin_OsWorld.FileAllowed : {E File Reply Time Worker : Type} →
+  [DecidableEq File] →
+    Laws E File Reply Time Worker →
+      World E File Reply Time Worker → Request File → Reply → World E File Reply Time Worker → Prop :=
+fun {E File Reply Time Worker} [DecidableEq File] laws world request reply next =>
+  fileStep request world = some (reply, next) ∧ permitted laws world request reply
+def R1Z.PV_RunJoin_OsWorld.TimeAllowed : {E File Reply Time Worker : Type} →
+  Laws E File Reply Time Worker → World E File Reply Time Worker → Time → World E File Reply Time Worker → Prop :=
+fun {E File Reply Time Worker} laws world outcome next =>
+  timeStep world = some (outcome, next) ∧ laws.time world outcome
+def R1Z.PV_RunJoin_OsWorld.WorkerAllowed : {E File Reply Time Worker : Type} →
+  Laws E File Reply Time Worker → World E File Reply Time Worker → Worker → World E File Reply Time Worker → Prop :=
+fun {E File Reply Time Worker} laws world outcome next =>
+  workerStep world = some (outcome, next) ∧ laws.worker world outcome
+'R1Z.PV_RunJoin_OsWorld.file_at' depends on axioms: [propext]
+'R1Z.PV_RunJoin_OsWorld.time_at' depends on axioms: [propext]
+'R1Z.PV_RunJoin_OsWorld.worker_at' depends on axioms: [propext]
+'R1Z.PV_RunJoin_OsWorld.flush_frame' does not depend on any axioms
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36086/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36086/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_RunJoin_OsWorld.olean", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_RunJoin_OsWorld.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.86", "peak_rss_kib": "3875424", "swap": "0", "source_revision": "90bbf0c4f925d9de18300db4cedfd7c5545569df", "expected_phase": "compilation of R1Z/PV_RunJoin_OsWorld", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

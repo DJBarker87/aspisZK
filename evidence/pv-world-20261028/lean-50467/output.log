@@ -1,0 +1,49 @@
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+inductive Aeneas.Std.ControlFlow.{u, v} : Type u → Type v → Type (max u v)
+number of parameters: 2
+constructors:
+Aeneas.Std.ControlFlow.cont : {α : Type u} → {β : Type v} → α → Aeneas.Std.ControlFlow α β
+Aeneas.Std.ControlFlow.done : {α : Type u} → {β : Type v} → β → Aeneas.Std.ControlFlow α β
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (Aeneas.Std.loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | Aeneas.Std.Result.ok r =>
+          match r with
+          | Aeneas.Std.ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | Aeneas.Std.Result.ok r =>
+                  match r with
+                  | Aeneas.Std.ControlFlow.cont x => f x
+                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+              (Aeneas.Std.loop._proof_1 body) x
+          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))
