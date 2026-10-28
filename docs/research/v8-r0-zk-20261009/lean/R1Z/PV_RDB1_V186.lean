@@ -20,6 +20,18 @@ theorem selected_result (T : Type) :
     defaultCall (ok (alloc.vec.Vec.new T)) =
     ok (alloc.vec.Vec.new T) := rfl
 
+/-- The changed dangling pointer/capacity representation cannot affect the
+value carrier of an empty native Vec: zero live length forces its list empty. -/
+theorem empty_from_zero_length {T : Type} (v : alloc.vec.Vec T)
+    (h : v.val.length = 0) : v = alloc.vec.Vec.new T := by
+  apply Subtype.ext
+  exact List.eq_nil_of_length_eq_zero h
+
+theorem constructor_value (T : Type) :
+    (alloc.vec.Vec.new T).val = [] := rfl
+
+#print axioms empty_from_zero_length
+#print axioms constructor_value
 #print axioms complete
 #print axioms selected_result
 end R1Z.PV_RDB1_V186
