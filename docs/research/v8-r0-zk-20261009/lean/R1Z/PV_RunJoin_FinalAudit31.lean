@@ -6,4 +6,3 @@ import R1Z.PV_RunJoin_SnapshotAudit31
 #print axioms R1Z.PV_RunJoin_CanonicalCoverage31.transfer_iff
 #print axioms R1Z.PV_RunJoin_CanonicalCoverage31.withdrawal_iff
 #print axioms R1Z.PV_RunJoin_SnapshotAgreement31.whole
-#print axioms R1Z.PV_RunJoin_NativeSnapshot31.caller
