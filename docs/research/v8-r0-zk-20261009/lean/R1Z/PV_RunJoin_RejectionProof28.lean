@@ -20,6 +20,14 @@ theorem ok_ne_err {α ε : Type} (a : α) (e : ε) :
   · exact False.elim
 #print axioms ok_ne_err
 
+theorem residual_eq_wp {α ε : Type}
+    (r : core.result.Result core.convert.Infallible ε) (e : ε) :
+    wp (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      α (core.convert.FromSame ε) r) (fun x => x = .Err e) ↔
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      α (core.convert.FromSame ε) r = ok (.Err e) := (eq_wp _ _).symm
+#print axioms residual_eq_wp
+
 /-- Both directions include all earlier guards: a later error is only
 observable if its complete successful prefix is witnessed by Path. -/
 theorem error_iff [ExternalLinear] [Records]
@@ -34,6 +42,6 @@ theorem error_iff [ExternalLinear] [Records]
       PV_RunJoin_CompilerRejections28.Path input out recipient change publicInput anchor snapshot e := by
   rw [eq_wp]
   unfold pair_forest_trace.compile_forest_from_copies PV_RunJoin_CompilerRejections28.Path
-  simp only [bind_wp,ok_wp,ok_ne_err,← eq_wp]
+  simp only [bind_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq]
 #print axioms error_iff
 end R1Z.PV_RunJoin_RejectionProof28
