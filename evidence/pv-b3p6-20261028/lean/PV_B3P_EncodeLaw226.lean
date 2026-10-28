@@ -31,14 +31,19 @@ def spec (p : reference226.OwnedPublic) :
                                             bindR (reference226.chunk p 1344#usize) (fun v21 =>
                                               bindR (reference226.chunk p 1408#usize) (fun v22 =>
                                                 .ok (.Ok (Array.make 23#usize [v0,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,v17,v18,v19,v20,v21,v22] (by rfl), if p.withdrawal then 1427#usize else 1455#usize)))))))))))))))))))))))))
+theorem update_eq (p : reference226.OwnedPublic) (b : Bool) (h : b = p.withdrawal) :
+    {p with withdrawal := b} = p := by
+  subst b
+  cases p
+  rfl
+#print axioms update_eq
 set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (p : reference226.OwnedPublic) :
     reference226.encode_owned p = spec p := by
   unfold reference226.encode_owned spec
   cases hw : p.withdrawal
   all_goals
-    have hu : { p with withdrawal := p.withdrawal } = p := by cases p; rfl
-    simp only [hw] at hu
+    have hu := update_eq p _ hw.symm
     simp only [hw,Bool.false_eq_true,↓reduceIte,bind_tc_ok] 
     rw [hu]
     generalize h0 : reference226.chunk p 0#usize = r0
