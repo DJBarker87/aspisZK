@@ -27,6 +27,12 @@ for x in t:
 for p in (R/'docs/research/v8-r0-zk-20261009/lean/R1Z').glob('PV_RL_*.lean'):
  s=re.sub(r'/\-.*?\-/|--[^\n]*','',p.read_text(),flags=re.S)
  if re.search(r'\b(sorry|admit|native_decide|implemented_by|axiom)\b|^import .*\bXR\w*',s,re.M):errors.append([str(p),'forbidden'])
+for audit_id in [43799,43731]:
+ q=json.loads((E/str(audit_id)/'receipt.json').read_text())
+ if q['exit']!=0:errors.append([audit_id,'final audit/replay failure'])
+for phase in ['before-audit','after-replay']:
+ q=json.loads((E/('closure-'+phase+'.json')).read_text())
+ if not q['ok']:errors.append([phase,'closure fingerprint'])
 diff=subprocess.check_output(['git','diff','--name-only','82566acdfb','HEAD'],cwd=R,text=True).splitlines()
 assert not any(p.startswith(('crates/','programs/')) for p in diff)
 checks.update(lean_charged=sum(x.get('charged',False) for x in t),kani=0,ids=ids,endpoint_premises_removed=0,trust_added=0,target='not yet established')
