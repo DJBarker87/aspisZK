@@ -25,7 +25,9 @@ theorem inner (p : Nat → Nat → Bool)
     have hd := PV_B3P_MaskStep132.inner_done out count r c (by omega)
     refine ⟨out,count,?_,by simp [rows],by simp [rows]⟩
     unfold reference132.cells_loop0_loop0
-    rw [loop.eq_1,hd]
+    rw [loop.eq_1]
+    dsimp only
+    rw [hd]
   | succ n ih =>
     have hrow : r.val < 1024 := by omega
     have hnext := (PV_B3P_MaskLoopBounds132.row_next r hrow).1
@@ -38,7 +40,9 @@ theorem inner (p : Nat → Nat → Bool)
       obtain ⟨o,k,hloop,hcount,hprefix⟩ := ih out count (Usize.wrapping_add r 1#usize) (by omega) hcap'
       refine ⟨o,k,?_,?_,?_⟩
       · unfold reference132.cells_loop0_loop0 at hloop ⊢
-        rw [loop.eq_1,hstep]
+        rw [loop.eq_1]
+        dsimp only
+        rw [hstep]
         exact hloop
       · simpa [rows,hb,hnext] using hcount
       · simpa [rows,hb,hnext] using hprefix
@@ -57,7 +61,9 @@ theorem inner (p : Nat → Nat → Bool)
         (Usize.wrapping_add r 1#usize) (by omega) hcap'
       refine ⟨o',k,?_,?_,?_⟩
       · unfold reference132.cells_loop0_loop0 at hloop ⊢
-        rw [loop.eq_1,hs]
+        rw [loop.eq_1]
+        dsimp only
+        rw [hs]
         exact hloop
       · simp only [rows,hb,↓reduceIte,List.length_append,List.length_singleton]
         rw [hk,hnext] at hcount
