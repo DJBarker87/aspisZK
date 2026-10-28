@@ -1,0 +1,93 @@
+{"attempt": "NDE_L031", "exit_status": 1, "wall_seconds": 2.2236766619607806, "peak_rss_kib": "2635052", "swaps": "0", "print_axioms": ["'NDE_LinkBridge.ok_right' does not depend on any axioms", "'NDE_LinkBridge.link_weight' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ndex : U64
+kind✝ : U8
+x✝⁴ : link.weight_kind = 0#8#uscalar → False
+x✝³ : link.weight_kind = 1#8#uscalar → False
+x✝² : link.weight_kind = 2#8#uscalar → False
+x✝¹ : link.weight_kind = 3#8#uscalar → False
+x✝ : link.weight_kind = 4#8#uscalar → False
+⊢ fail Error.panic =
+    match link.weight_kind with
+    | 0#8#uscalar => ok FIq_Native.field.M31.ONE
+    | 1#8#uscalar => do
+      let b ←
+        FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq
+            FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Withdrawal
+            FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.PrivateTransfer
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 2#8#uscalar => do
+      let b ←
+        FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Insts.CoreCmpPartialEqPoolV1PairForestCompiledVariantV1.eq
+            FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Withdrawal
+            FIq_Native.pool_v1.pair_forest_copy_terminal.PoolV1PairForestCompiledVariantV1.Withdrawal
+      let i ← lift (core.convert.num.FromU32Bool.from b)
+      ok i
+    | 3#8#uscalar => do
+      let i ← index >>> link.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i2 ← lift (UScalar.cast UScalarTy.U32 i1)
+      let i3 ← 1#u32 - i2
+      ok i3
+    | 4#8#uscalar => do
+      let i ← index >>> link.weight_level
+      let i1 ← lift (i &&& 1#u64)
+      let i3 ← lift (UScalar.cast UScalarTy.U32 i1)
+      ok i3
+    | x => fail Error.panic
+'NDE_LinkBridge.ok_right' does not depend on any axioms
+'NDE_LinkBridge.link_weight' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L032", "exit_status": 0, "wall_seconds": 1.3078351900912821, "peak_rss_kib": "2644840", "swaps": "0", "print_axioms": ["'NDE_ClaimBridge.index_transport' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_ClaimBridge.lean:11:23: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NDE_generated/NDE_ClaimBridge.lean:16:75: warning: This simp argument is unused:
+  toRef
+
+Hint: Omit it from the simp argument list.
+  simp [Array.index_usize, claimsToRef, NDE_LiftBridge.mapResult, fromRef,̵ ̵t̵o̵R̵e̵f̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDE_ClaimBridge.index_transport' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L033", "exit_status": 1, "wall_seconds": 1.2379959569079801, "peak_rss_kib": "2632412", "swaps": "0", "print_axioms": ["'NDE_ClaimResult.columns' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_ClaimResult.selected_claim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_ClaimResult.lean:13:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i ← 16#usize + 10#usize
+    i + 2#usize
+is not definitionally equal to the right-hand side
+  ok 28#usize
+
+⊢ (do
+      let i ← 16#usize + 10#usize
+      i + 2#usize) =
+    ok 28#usize
+'NDE_ClaimResult.columns' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_ClaimResult.selected_claim' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L034", "exit_status": 0, "wall_seconds": 1.346443559974432, "peak_rss_kib": "2629048", "swaps": "0", "print_axioms": ["'NDE_ArrayExt.words' depends on axioms: [propext]", "'NDE_ArrayExt.bounded_words' depends on axioms: [propext, Quot.sound]"]}
+'NDE_ArrayExt.words' depends on axioms: [propext]
+'NDE_ArrayExt.bounded_words' depends on axioms: [propext, Quot.sound]
+
+{"attempt": "NDE_L035", "exit_status": 0, "wall_seconds": 1.645999378990382, "peak_rss_kib": "2637964", "swaps": "0", "print_axioms": ["'NDE_PublicExt.option_digest' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_PublicExt.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NDE_PublicExt.option_digest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_PublicExt.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L036", "exit_status": 0, "wall_seconds": 2.0717199229402468, "peak_rss_kib": "3859988", "swaps": "0", "print_axioms": ["'NDE_CarryInduction.loop_done' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_CarryInduction.loop_continue' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_CarryInduction.paired' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_CarryInduction.carry_reference' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NDE_CarryInduction.loop_done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_CarryInduction.loop_continue' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_CarryInduction.paired' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_CarryInduction.carry_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+{"attempt": "NDE_L037", "exit_status": 0, "wall_seconds": 1.504772525979206, "peak_rss_kib": "3027888", "swaps": "0", "print_axioms": ["'NDE_EmptyBridge.table' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDE_EmptyBridge.empty_root' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_EmptyBridge.lean:21:15: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDE_EmptyBridge.table' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDE_EmptyBridge.empty_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+

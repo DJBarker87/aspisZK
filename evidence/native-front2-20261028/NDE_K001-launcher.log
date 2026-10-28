@@ -1,0 +1,48 @@
+{"attempt": "NDE_K001", "exit_status": 0, "wall_seconds": 11.428760556969792, "peak_rss_kib": "534172", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front2-20261028/NDE_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: module `NDE_native` should have a snake case name
+    --> crates/aspis-statement/src/state_only_poseidon.rs:1246:5
+     |
+1246 | mod NDE_native;
+     |     ^^^^^^^^^^ help: convert the identifier to snake case: `nde_native`
+
+warning: function `NDE_contract` should have a snake case name
+ --> crates/aspis-statement/src/NDE_poseidon.rs:6:4
+  |
+6 | fn NDE_contract(){let v:[u32;4]=kani::any();let _=super::extension_limbs(to_native(reference::Q{c0:reference::C{a:v[0],b:v[1]},c1:ref...
+  |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nde_contract`
+
+    Finished `dev` profile [optimized] target(s) in 9.95s
+Checking harness pool_v1::pair_forest_semantic_terminal::NDE_native::NDE_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 55 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.06635771s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r28fc6942a0604e07a2653555df156df6.scope; invocation ID: 17dadbe00d4845cc8b6f3597a745187d

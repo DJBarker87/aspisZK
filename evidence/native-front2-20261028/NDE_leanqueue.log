@@ -1,0 +1,41 @@
+{"attempt": "NDE_L004", "exit_status": 0, "wall_seconds": 1.2682665180182084, "peak_rss_kib": "2629804", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L005", "exit_status": 0, "wall_seconds": 1.2405269120354205, "peak_rss_kib": "2635672", "swaps": "0", "print_axioms": []}
+
+{"attempt": "NDE_L006", "exit_status": 1, "wall_seconds": 1.1900884780334309, "peak_rss_kib": "2633536", "swaps": "0", "print_axioms": ["'NDE_RawBridge.reduce_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_RawBridge.map_bind' does not depend on any axioms", "'NDE_RawBridge.extension_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDE_generated/NDE_RawBridge.lean:11:71: error: unsolved goals
+x : U64
+⊢ (do
+      let i ← lift (x &&& 2147483647#u64)
+      let i1 ← x >>> 31#u32
+      let x1 ← i + i1
+      let i2 ← lift (x1 &&& 2147483647#u64)
+      let i3 ← x1 >>> 31#u32
+      let x2 ← i2 + i3
+      let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+      if x3 ≥ 2147483647#u32 then x3 - 2147483647#u32 else ok x3) =
+    do
+    let i ←
+      do
+        let i ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+        let i1 ← lift (x &&& i)
+        let i2 ← x >>> 31#u32
+        let x1 ← i1 + i2
+        let i3 ← lift (UScalar.cast UScalarTy.U64 2147483647#u32)
+        let i4 ← lift (x1 &&& i3)
+        let i5 ← x1 >>> 31#u32
+        let x2 ← i4 + i5
+        let x3 ← lift (UScalar.cast UScalarTy.U32 x2)
+        if x3 ≥ 2147483647#u32 then x3 - 2147483647#u32 else ok x3
+    ok i
+NDE_generated/NDE_RawBridge.lean:13:33: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [FIq_Native.field.P,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDE_RawBridge.reduce_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_RawBridge.map_bind' does not depend on any axioms
+'NDE_RawBridge.extension_raw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
