@@ -78,7 +78,7 @@ theorem overwritten {F : Type} (address n : Nat) (w : World F) (i : Nat)
   | succ n ih =>
     cases i with
     | zero =>
-      rw [native,outside (address+1) n (byte address w) address (Or.inl (by omega))]
+      rw [Nat.add_zero,native,outside (address+1) n (byte address w) address (Or.inl (by omega))]
       simp only [Nat.add_zero,byte,ite_true]
     | succ i =>
       have hh : i<n := by omega
