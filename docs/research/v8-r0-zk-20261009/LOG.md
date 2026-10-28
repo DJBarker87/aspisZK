@@ -13667,3 +13667,26 @@ Two slots go to recount-7 OPEN rows that no job owned, both independent of the n
   D163 coupling model's event producer and simulatable by simE, with any native association kept as a
   named open hypothesis.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D375 (Stream B) 2026-10-28 14:56 UTC: noncanonical-limb finding confined to direct library callers; l2c merged; deployed feature set required for native evidence (ruling (x)); body-identity audit launched
+
+l2c5 (100 attempts; no new Kani; audits with standard axioms; no source change) traced every
+externally supplied field to the shipped client: the devnet_spend JSON request planner produces only
+canonical limbs (decoder and generator bounds proved, canonical compiler columns proved), and the
+owned N3 guard composition passes on that canonical domain. So D370's counterexample applies only
+to direct Rust callers that bypass the client's decoders; it is outside the honest route and needs no
+owner decision. The owner packet item is marked resolved, with the library-API behaviour recorded as
+an availability residual. The full native caller/domain association remains (runjoin line), so
+V352, V354, V357, V360 stay OPEN and the level-2 guard line is parked again on runjoin33. The l2c
+branch merged into the prover candidate (f849aef83e); it carries generated Aeneas FunsExternal and
+TypesExternal templates with axiom declarations under evidence/pv-runjoin30-20261028/, which no module
+imports (checked) and which are extraction evidence, not proof sources.
+
+Stream A's NCR_ audit found that direct cargo kani runs used default features and the dev profile,
+while deployed artifacts select other features (different bodies) and release disables debug
+assertions and overflow checks. Ruling (x) applies the same discipline to Stream B: native evidence
+must be built under the deployed feature set and profile of the artifact its row concerns (for most
+privacy rows, devnet_spend with r1p-check and aspis-r1-cost-probe/ct-host-prover, release, toolchain
+1.94.1), with resolved features recorded, or else pass a body-identity check. pv-fscan (no Kani; no
+source change) audits every native link behind Stream B's candidate closures that way and reports each
+row as STANDS or SUSPENDED. Rows removed outright: 0. Privacy target not yet established.

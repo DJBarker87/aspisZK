@@ -239,3 +239,5 @@ canonicalise or reject, this is outside the honest route and no decision is need
 options will be (A) reject or canonicalise noncanonical limbs at decode, which changes frozen client
 code and its gates, or (B) restrict the privacy claim's honest domain to canonical inputs. The lead's
 recommendation will follow the trace.
+
+**Resolved (LOG D375, 2026-10-28): the noncanonical-limb finding is outside the shipped client's honest route.** The trace (codex/pv-l2c-20261028, evidence/pv-l2c-20261028/resume-d371/REPORT.md) found no unchecked path by which a noncanonical limb reaches the compiler through the shipped JSON request planner; decoder and generator bounds and canonical compiler columns are proved, and guard N3 composes on that canonical domain. No owner decision is needed for privacy. Residual, for information: the Rust library API accepts raw noncanonical limbs from direct callers that bypass the client's decoders, which makes such a spend fail (availability only).
