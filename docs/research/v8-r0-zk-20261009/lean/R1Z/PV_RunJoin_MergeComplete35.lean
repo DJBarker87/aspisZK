@@ -26,7 +26,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
     (he : ∀ j, j<count.val → canonical (es j)) :
     ∃ out : Nat → Q,
       @host_sumcheck.merge_evaluations _ (ProverRwDictionaryTower.selected ops)
-        (Array.to_slice (ProverCommitArray49.array count (fun j => core.result.Result.Ok (es j)))) a =
+        (Array.to_slice (ProverCommitArray49.array count (fun j => (core.result.Result.Ok (es j) : core.result.Result Q r1_wire.Error)))) a =
         .ok (.Ok (array out)) ∧
       (∀ k, k<28 → canonical (out k)) ∧
       (fun k => value (out k))=fold count.val (fun _ => 0) (fun j => value (es j)) a.val 0 := by
@@ -38,7 +38,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
     rw [zero]
     simp only [bind_tc_ok,repeat_constant]
     have len : Slice.len (Array.to_slice (ProverCommitArray49.array count
-        (fun j => core.result.Result.Ok (es j))))=count := by
+        (fun j => (core.result.Result.Ok (es j) : core.result.Result Q r1_wire.Error))))=count := by
       apply UScalar.eq_of_val_eq
       simp only [Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn]
     rw [len,hout]
