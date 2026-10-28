@@ -24,7 +24,7 @@ theorem fold {E : Type} [Inhabited E] (inst : aspis_core.r0.scalar.CodeField E)
   induction fuel generalizing j p0 p1 with
   | zero =>
     have hj : j.val=512 := by omega
-    rw [hj,List.drop_eq_nil_of_le (by rw [PV_DL_EncoderZip.count];omega)]
+    rw [hj,List.drop_eq_nil_of_le (by rw [PV_DL_EncoderZip.count])]
     rfl
   | succ fuel ih =>
     have hj : j.val<512 := by omega
@@ -32,7 +32,9 @@ theorem fold {E : Type} [Inhabited E] (inst : aspis_core.r0.scalar.CodeField E)
     simp only [PV_DL_EncoderFold.finite,run,PV_DL_EncoderZip.step inst q b j p0 p1 hj]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro pair hp
-    rw [ih (PV_DL_EncoderRange.advance j) pair.1 pair.2 (by rw [PV_DL_EncoderRange.advance_val j hj];omega)]
+    rcases pair with ⟨a,c⟩
+    dsimp only
+    rw [ih (PV_DL_EncoderRange.advance j) a c (by rw [PV_DL_EncoderRange.advance_val j hj];omega)]
     rw [PV_DL_EncoderRange.advance_val j hj]
 
 /-- The native forward chunks/zip loop, including arbitrary field Result
