@@ -30,6 +30,7 @@ theorem step (index : Nat) (s : State N L C) :
     | Err e => rfl
     | Ok secret =>
       simp only [mapR,bind_tc_ok]
+      dsimp only
       rw [← body_step secret next]
       cases hb : bodyA secret next with
       | fail e => rfl
