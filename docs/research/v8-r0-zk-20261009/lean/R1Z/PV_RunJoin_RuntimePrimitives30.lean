@@ -80,7 +80,7 @@ theorem list_contains {n : Usize} (x : Array U32 n) (xs : List (Array U32 n)) :
   | nil => rfl
   | cons y ys ih =>
     by_cases h : x=y <;>
-      simp [List.anyM,Array.Insts.CoreCmpPartialEqArray,array_eq,h,ih]
+      simp [List.anyM,Array.Insts.CoreCmpPartialEqArray,array_eq,h,ih] <;> rfl
 #print axioms list_contains
 
 theorem contains {n : Usize} (s : Slice (Array U32 n)) (x : Array U32 n) :
