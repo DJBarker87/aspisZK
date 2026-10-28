@@ -1,0 +1,28 @@
+   Compiling pv-dlib-array-native v0.0.0 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/array-proof)
+warning: unexpected `cfg` condition name: `kani`
+ --> array-native.rs:4:7
+  |
+4 | #[cfg(kani)] mod empty_gate {
+  |       ^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: `pv-dlib-array-native` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.49s
+     Running array-owned-reference.rs (project-offloads/codex-pv-dlib-20261028/array-target/release/deps/owned_reference-c0eafd0288ad4534)
+
+running 2 tests
+99 paired ZST Drop-bearing cases; finite validation only
+test tests::zero_size_drop_native_differential ... ok
+606 same-input native/reference ownership cases, non-Copy Drop-bearing values; finite validation only
+test tests::populated_noncopy_native_differential ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

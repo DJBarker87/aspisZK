@@ -1,0 +1,34 @@
+{
+  "row": "V238",
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "source": {
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/ct_variable.rs",
+    "sha256": "703bd62fb693a437e319d1192988bd674f9127a6b76f73b4c58c71afc79bc013"
+  },
+  "native_body": "{\n        let mut full_res = Default::default();\n        self.inner.finalize_variable_core(buffer, &mut full_res);\n        let n = out.len();\n        let m = full_res.len() - n;\n        match T::TRUNC_SIDE {\n            TruncSide::Left => out.copy_from_slice(&full_res[..n]),\n            TruncSide::Right => out.copy_from_slice(&full_res[m..]),\n        }\n    }",
+  "owned_body": "{\n        let mut full_res = Default::default();\n        self.inner.finalize_variable_core(buffer, &mut full_res);\n        let n = out.len();\n        let m = full_res.len() - n;\n        match T::TRUNC_SIDE {\n            TruncSide::Left => out.copy_from_slice(&full_res[..n]),\n            TruncSide::Right => out.copy_from_slice(&full_res[m..]),\n        }\n    }",
+  "whole_body_token_equal": true,
+  "owned_helper_sha256": "17f7e856c76048e17e477dd330880d21980c972f22a6394788a02aa7dc8e1444",
+  "differences": [
+    {
+      "native": "trait implementation method",
+      "reference": "public inherent helper with renamed method and explicitly qualified OutputSize type; identical body",
+      "proof": "CtCarrier.complete, CtFinal.complete; original variable finalizer and truncation-side Result are parameters"
+    },
+    {
+      "native": "GenericArray output storage and copy_from_slice",
+      "reference": "binary even/odd carrier flattened to byte list, prefix or suffix followed by rebuilding same native carrier",
+      "proof": "ArrayShape.flatten_build/reconstruct/length, CtCarrier.decoded, Truncation.length/full; native compile-time size guard unchanged"
+    }
+  ],
+  "complete_result": "PV_DL_CtCarrier.complete",
+  "scope": "Original SHA-cohort full32 bytes; output native even/odd shape size <=32, both sides; original64-byte Eager buffer. Original finalizer failures/divergence preserved; all returned inner state and buffer retained. No compression semantics.",
+  "finite_validation": "../wrappers-native-combined-resume4/receipt.json",
+  "finite_scope": "1024 paired same-input native/identical-body Ct fixtures, left/right28/32, changed core/all64buffer bytes; finite validation only",
+  "v232_untouched": true,
+  "kani": false
+}

@@ -1,0 +1,73 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "native": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+    "source_sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+    "complete_body": "{\n        if vec.len() != N {\n            return Err(vec);\n        }\n\n        // SAFETY: `.set_len(0)` is always sound.\n        unsafe { vec.set_len(0) };\n\n        // SAFETY: A `Vec`'s pointer is always aligned properly, and\n        // the alignment the array needs is the same as the items.\n        // We checked earlier that we have sufficient items.\n        // The items will not double-drop as the `set_len`\n        // tells the `Vec` not to also drop them.\n        let array = unsafe { ptr::read(vec.as_ptr() as *const [T; N]) };\n        Ok(array)\n    }",
+    "tokens_match": true
+  },
+  "owned": {
+    "path": "tools/pv-dlib-20261028/array-owned-reference.rs",
+    "sha256": "1c7754557217eac663113065d3f6945c1581bcbfd6e3b620236bf88da50f5737",
+    "complete_body": "{\n    if v.len()!=N {return Err(v);}\n    let mut iter=v.into_iter();\n    Ok(core::array::from_fn(|_|iter.next().expect(\"length checked\")))\n}",
+    "tokens_match": true
+  },
+  "helper_bodies": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "body": "{\n        let ptr = if T::IS_ZST {\n            if self.ptr.as_ptr() == self.end as *mut T {\n                return None;\n            }\n            // `ptr` has to stay where it is to remain aligned, so we reduce the length by 1 by\n            // reducing the `end`.\n            self.end = self.end.wrapping_byte_sub(1);\n            self.ptr\n        } else {\n            if self.ptr == non_null!(self.end, T) {\n                return None;\n            }\n            let old = self.ptr;\n            self.ptr = unsafe { old.add(1) };\n            old\n        };\n        Some(unsafe { ptr.read() })\n    }",
+      "source_sha256": "7fef46007c1e9e2fbbcc1967f824f9eb8031b18d46984be4903325fa8bd21564"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+      "source_sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f"
+    }
+  ],
+  "differences": [
+    {
+      "native": "set_len(0), bulk ptr::read of [T;N]",
+      "owned": "N forward IntoIter::next reads into from_fn",
+      "proofs": [
+        "PV_DL_ArrayTransfer.exact_transfer",
+        "PV_DL_ArrayTransfer.complete"
+      ],
+      "meaning": "all N source elements transfer in original order; no unwrap failure and empty residual live region"
+    },
+    {
+      "native": "Vec drop has len0",
+      "owned": "IntoIter drop has no remaining elements",
+      "proofs": [
+        "PV_DL_ArrayTransfer.zero_live_drops"
+      ],
+      "meaning": "neither destructor visits any T; no Copy/Clone restriction"
+    },
+    {
+      "native": "length mismatch returns original Vec",
+      "owned": "same branch before creating iterator",
+      "proofs": [
+        "PV_DL_ArrayOwnership.rejection"
+      ],
+      "meaning": "allocation, capacity and live elements retained without reads"
+    },
+    {
+      "native": "ZST: bulk read has zero byte extent",
+      "owned": "ZST iterator decrements end byte count",
+      "proofs": [
+        "PV_DL_ArrayTransfer.exact_transfer"
+      ],
+      "meaning": "logical element count/order and later destructor ownership do not depend on sizeof(T)"
+    }
+  ],
+  "complete_result_laws": [
+    "R1Z.PV_DL_ArrayOwnership.complete",
+    "R1Z.PV_DL_ArrayTransfer.complete"
+  ],
+  "extraction": "Exact shipped generic entry Charon accepted; pinned Aeneas rejected structured Drop; unchanged refusal reused.",
+  "scope": "selected op36 value/ownership callback law; no whole-prover timing or allocator failure law claimed",
+  "kani": false
+}

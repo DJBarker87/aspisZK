@@ -1,0 +1,50 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "ruling": "k'",
+  "source_binding": "structural-binding.json",
+  "kernel_proofs": [
+    {
+      "module": "OwnershipEffects",
+      "receipt": "lean-43453/receipt.json",
+      "source_sha256": "9c7337d84d1604fb990d00501871f67d0118dd37d63dbca9010961f460c00095",
+      "axioms": [
+        "'R1Z.PV_DL_OwnershipEffects.Outcome' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.erase' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.unitEffect' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.sequence' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.left_identity' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.right_identity' depends on axioms: [Quot.sound]",
+        "'R1Z.PV_DL_OwnershipEffects.byte_buffer_drop_order' depends on axioms: [Quot.sound]",
+        "'R1Z.PV_DL_OwnershipEffects.controller' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.native' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.reference' does not depend on any axioms",
+        "'R1Z.PV_DL_OwnershipEffects.complete' depends on axioms: [Quot.sound]",
+        "'R1Z.PV_DL_OwnershipEffects.complete_result' depends on axioms: [Quot.sound]",
+        "'R1Z.PV_DL_OwnershipEffects.no_drop' does not depend on any axioms"
+      ]
+    },
+    {
+      "module": "FixedFinal",
+      "receipt": "lean-43457/receipt.json",
+      "source_sha256": "bf845c8994f0971681fe9f04ed04a1d3adee4d2e190f0808368a13bbdcc48665",
+      "axioms": [
+        "'R1Z.PV_DL_FixedFinal.value' does not depend on any axioms",
+        "'R1Z.PV_DL_FixedFinal.complete' does not depend on any axioms",
+        "'R1Z.PV_DL_FixedFinal.dispatch' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_FixedFinal.dispatch_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_FixedFinal.finisher' does not depend on any axioms",
+        "'R1Z.PV_DL_FixedFinal.selected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_FixedFinal.selected_native' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "finite_validation": "../wrappers-native-combined-resume4/receipt.json",
+  "finite_scope": "256 same-input non-Copy Drop-core FixedOutput native/identical-body pairs, exact changed-state destructor trace; finite validation only",
+  "complete_result_theorem": "R1Z.PV_DL_FixedFinal.complete",
+  "closing_theorem": "R1Z.PV_DL_FixedFinal.selected_native",
+  "cleanup_theorem": "R1Z.PV_DL_OwnershipEffects.complete_result",
+  "guard": "Native consumed-self field borrow body identical; frozen byte/word core value projection, generic destructor world/error/double-panic behavior separately preserved. Buffer byte storage Drop is identity.",
+  "compression": "original FixedOutputCore finalize callback is a complete-Result parameter; no backend semantics",
+  "reverify_kani": "Lead copy patch available r-prime; pending future exact-patch/negative-control run with fresh Kani budget",
+  "trust_fields_added": 0
+}

@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderMutation.lean:8:31: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+E : Type
+out : Std.Array E 512#usize
+j : Usize
+h : ↑j < 512
+⊢ ↑j < (↑out).length
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderMutation.lean:10:35: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LT.lt ℕ instLTNat (↑j) 512
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑j ↑512#usize
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderMutation.lean:17:19: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+E : Type
+inst : aspis_core.r0.scalar.CodeField E
+out : Std.Array E 512#usize
+width j : Usize
+factor product : E
+hr : ↑j < 512
+hw : ↑(width.wrapping_add j) < 512
+⊢ ↑j < (↑out).length
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderMutation.lean:30:51: error: Tactic `decide` failed for proposition
+  ↑(Usize.wrapping_add 1#usize 0#usize) < 512
+because its `Decidable` instance
+  (↑(Usize.wrapping_add 1#usize 0#usize)).decLt 512
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match (↑(Usize.wrapping_add 1#usize 0#usize)).succ.ble 512, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderMutation.lean:31:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.PV_DL_EncoderMutation.read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderMutation.restoration' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderMutation.changed_cell' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

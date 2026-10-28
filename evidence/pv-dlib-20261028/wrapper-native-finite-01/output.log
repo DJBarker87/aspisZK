@@ -1,0 +1,151 @@
+     Locking 10 packages to latest compatible versions
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling cpufeatures v0.2.17
+   Compiling generic-array v0.14.7
+   Compiling block-buffer v0.10.4 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4)
+   Compiling crypto-common v0.1.7
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:352:7
+    |
+352 | #[cfg(kani)] impl<BlockSize, Kind> BlockBuffer<BlockSize, Kind>
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:359:7
+    |
+359 | #[cfg(kani)] impl BlockBuffer<generic_array::typenum::U64,Eager> {
+    |       ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:357:4
+    |
+357 |  { pub fn pv_dl_bytes(&self)->&[u8] { &self.buffer } }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:7:9
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:360:5
+    |
+360 |     pub fn pv_dl_from_snapshot(bytes:[u8;64],pos:u8)->Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   Compiling digest v0.10.7 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7)
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/ct_variable.rs:206:7
+    |
+206 | #[cfg(kani)] impl<T, OutSize, O> CtVariableCoreWrapper<T, OutSize, O>
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: `block-buffer` (lib) generated 4 warnings
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/wrapper.rs:292:7
+    |
+292 | #[cfg(kani)] impl<T> CoreWrapper<T>
+    |       ^^^^
+    |
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/ct_variable.rs:213:4
+    |
+213 |  { pub fn pv_dl_inner(&self)->&T { &self.inner } }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/lib.rs:32:9
+    |
+ 32 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+warning: missing documentation for an associated function
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/wrapper.rs:294:5
+    |
+294 |     pub fn pv_dl_from_parts(core:T,buffer:Buffer<T>)->Self {Self{core,buffer}}
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   Compiling sha2 v0.10.9 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9)
+warning: `digest` (lib) generated 4 warnings
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/core_api.rs:159:7
+    |
+159 | #[cfg(kani)] impl Sha256VarCore { pub fn pv_dl_snapshot(&self)->([u32;8],u64) {(self.state,self.block_len)} }
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/core_api.rs:159:35
+    |
+159 | #[cfg(kani)] impl Sha256VarCore { pub fn pv_dl_snapshot(&self)->([u32;8],u64) {(self.state,self.block_len)} }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/lib.rs:67:9
+    |
+ 67 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+warning: `sha2` (lib) generated 2 warnings
+   Compiling pv-dlib-wrapper-finite v0.0.0 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/wrapper-proof)
+warning: unused import: `Update`
+ --> wrapper-native.rs:1:51
+  |
+1 | use digest::{Digest,FixedOutput,HashMarker,Output,Update};
+  |                                                   ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pv-dlib-wrapper-finite` (lib test) generated 1 warning (run `cargo fix --lib -p pv-dlib-wrapper-finite --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1.44s
+     Running unittests wrapper-native-entry.rs (project-offloads/codex-pv-dlib-20261028/wrapper-target/release/deps/pv_dlib_wrapper_finite-f9f7cdba0055c5b2)
+
+running 1 test
+131072 finite native padding/retained/finalize/truncation coordinate fixtures passed
+test wrapper::native_wrapper_fixtures ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+

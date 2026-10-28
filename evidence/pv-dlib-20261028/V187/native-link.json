@@ -1,0 +1,50 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "ruling": "k'",
+  "source_binding": "structural-binding.json",
+  "kernel_proofs": [
+    {
+      "module": "ArrayOwnership",
+      "receipt": "lean-43416/receipt.json",
+      "source_sha256": "db508cbe78f26ca9736715132754453be7435a81836393c1e2e8d6e7cc9238de",
+      "axioms": [
+        "'R1Z.PV_DL_ArrayOwnership.value' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayOwnership.rejection' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayOwnership.success' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayOwnership.complete' depends on axioms: [propext]"
+      ]
+    },
+    {
+      "module": "ArrayTransfer",
+      "receipt": "lean-43418/receipt.json",
+      "source_sha256": "1702c8b19db381e8dcadab7d410fca0931b5b11db5b629d146bdb864f949fada",
+      "axioms": [
+        "'R1Z.PV_DL_ArrayTransfer.drain' does not depend on any axioms",
+        "'R1Z.PV_DL_ArrayTransfer.exact_transfer' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayTransfer.zero_live_drops' does not depend on any axioms",
+        "'R1Z.PV_DL_ArrayTransfer.sequential' does not depend on any axioms",
+        "'R1Z.PV_DL_ArrayTransfer.bulk' does not depend on any axioms",
+        "'R1Z.PV_DL_ArrayTransfer.complete' depends on axioms: [propext]"
+      ]
+    },
+    {
+      "module": "ArrayNative",
+      "receipt": "lean-43420/receipt.json",
+      "source_sha256": "0ee8eb0bb7d58f1eac3cd70a29f18bcb4090c1798a5986dd195f7eeffb13f3f2",
+      "axioms": [
+        "'R1Z.PV_DL_ArrayNative.pack' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayNative.reference' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayNative.source_reference' depends on axioms: [propext]",
+        "'R1Z.PV_DL_ArrayNative.selected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_ArrayNative.selected_native' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'R1Z.PV_DL_ArrayNative.nonvacuous' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    }
+  ],
+  "finite_validation": "../array-native-finite-resume/receipt.json",
+  "finite_scope": "606 populated non-Copy Drop-bearing plus99 paired ZST cases; finite validation only",
+  "complete_result_theorem": "R1Z.PV_DL_ArrayNative.source_reference",
+  "closing_theorem": "R1Z.PV_DL_ArrayNative.selected_native",
+  "reverify_kani": "Lead patch available under r-prime (see ../r-prime-observation.json); future exact-patch and negative-control re-verification pending fresh Kani budget. No Kani link credited.",
+  "trust_fields_added": 0
+}
