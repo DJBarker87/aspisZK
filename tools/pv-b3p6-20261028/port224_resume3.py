@@ -7,8 +7,8 @@ for source,module in [('Types','PV_B3P_Types224'),('Funs','PV_B3P_Emission224')]
  p=p.replace('@[discriminant isize]\n','')
  if source=='Funs':
   p=p.replace('import PVB3P224Resume3FourSlots.Types','import PV_B3P_Types224')
-  assert p.count('wrapping_shr 31#i32')==2
-  p=p.replace('wrapping_shr 31#i32','wrapping_shr 31#u32')
+  assert p.count('31#i32')==2
+  p=p.replace('31#i32','31#u32')
   p+='\n'+''.join('#print axioms PV_B3P_224.'+n+'\n' for n in re.findall(r'^def (\S+)',s,re.M))
   assert 'Array.update helper r val' in p and 'cont (helper1, r2)' in p
  assert not re.search(r'\b(sorry|admit|native_decide|implemented_by|axiom)\b',p)
