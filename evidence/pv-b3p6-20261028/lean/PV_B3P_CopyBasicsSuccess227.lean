@@ -12,14 +12,19 @@ theorem widen_u16 (x : U16) : (core.convert.num.FromUsizeU16.from x).val=x.val :
 
 theorem row_high (row : Usize) (hr : row.val<1024) :
     (Usize.wrapping_shr row 4#u32).val<64 := by
-  simp only [UScalar.val,Usize.wrapping_shr_bv_eq,BitVec.toNat_ushiftRight,
-    UScalarTy.Usize_numBits_eq]
-  rcases System.Platform.numBits_eq with h | h <;> rw [h] <;>
-    change row.val / 16 < 64 <;> omega
+  change (row.bv.ushiftRight ((4#u32).val % UScalarTy.Usize.numBits)).toNat<64
+  rw [BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
+  have hmod : (4#u32).val % UScalarTy.Usize.numBits=4 := by
+    rw [UScalarTy.Usize_numBits_eq]
+    rcases System.Platform.numBits_eq with h | h <;> rw [h] <;> rfl
+  rw [hmod]
+  change row.val/16<64
+  omega
 
 theorem row_low (row : Usize) : (row &&& 15#usize).val<16 := by
   rw [UScalar.val_and]
-  exact lt_of_le_of_lt (Nat.and_le_right row.val 15) (by omega)
+  change row.val &&& 15 < 16
+  exact lt_of_le_of_lt (Nat.and_le_right (n:=row.val) (m:=15)) (by omega)
 
 theorem row_total (selectors : reference_copy_terminal.Selectors) (row : Usize)
     (hr : row.val<1024) : Success (reference_copy_terminal.Selectors.row selectors row) := by
