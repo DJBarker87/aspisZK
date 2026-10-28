@@ -9,6 +9,7 @@ a=int(sys.argv[1]);m=sys.argv[2];assert 51500<=a<=51599
 assert not (E/f'receipt-{a}.json').exists()
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 resolution=json.loads((E/'embedding-resolution.json').read_text())
+if (E/'sampler-resolution.json').exists():resolution['resolved'].update(json.loads((E/'sampler-resolution.json').read_text())['resolved'])
 if m.startswith('PV_L2D_'):
  s=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');b=s.read_bytes();authority='own git-tracked new module'
  assert b==subprocess.check_output(['git','show',rev+':'+str(s.relative_to(R))])
@@ -50,7 +51,7 @@ for kind in ['out','time']:
  r=ssh(f'cat {H}/evidence/{kind}-{a}.log');assert r.returncode==0,r.stderr;(E/f'{kind}-{a}.log').write_text(r.stdout)
 t=(E/f'time-{a}.log').read_text();out=(E/f'out-{a}.log').read_text();print(out[-7000:])
 v.update(exit=int(re.search(r'Exit status: (\d+)',t)[1]),wall=re.search(r'Elapsed.*: (\S+)',t)[1],peak_rss_kib=int(re.search(r'Maximum resident set size \(kbytes\): (\d+)',t)[1]),swaps=int(re.search(r'Swaps: (\d+)',t)[1]),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out),caps=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64,Lean_M=7000))
-if not m.startswith('PV_L2D_'):v['print_axioms']='N/A: unchanged SHA-frozen generated definitions; new laws audited in their consumer'
+if not v['axioms']:v['print_axioms']='N/A: unchanged SHA-frozen generated definitions; new laws audited in their consumer'
 (E/f'receipt-{a}.json').write_text(json.dumps(v,indent=2)+'\n')
 q=transport(['scp','-q',str(E/f'receipt-{a}.json'),f'{host}:{H}/evidence/receipt-{a}.json']);assert q.returncode==0,q.stderr
 print({k:v[k] for k in ['attempt','target','exit','wall','peak_rss_kib','swaps']});sys.exit(v['exit'])
