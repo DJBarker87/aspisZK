@@ -84,3 +84,6 @@ mod host_terminal;
 
 #[cfg(feature="prover")]
 pub mod host_public;
+
+#[cfg(feature = "prover")]
+mod host_terminal_field;

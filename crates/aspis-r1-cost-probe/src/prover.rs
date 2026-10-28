@@ -307,6 +307,17 @@ struct PreparedOpening {
     folded_word:Vec<E>,
 }
 
+// Match frozen weights::box_from_parts' allocation boundary. Keep Box/Drop
+// outside the owned extraction kernel and retain the caller's final drop.
+#[inline(never)]
+pub(crate) fn retain_weights_box(w:Weights)->alloc::boxed::Box<Weights> {
+    const _: () = {
+        assert!(core::mem::size_of::<Weights>() == core::mem::size_of::<crate::weights::Weights>());
+        assert!(core::mem::align_of::<Weights>() == core::mem::align_of::<crate::weights::Weights>());
+    };
+    alloc::boxed::Box::new(w)
+}
+
 fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantics<LegacyHashFn>)->Result<PreparedOpening,Error> {
     if variant!=Variant::S2 {return Err(Error::Semantic);}
     let coefficients=opening_coefficients(variant,&backend.messages);
@@ -315,7 +326,7 @@ fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantic
     let mut transcript=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
     let gamma=transcript.scalar(27,&y1,true);
     let q=opening_batch(&coefficients,gamma);
-    let w=Weights::new(variant,&sem.alpha,&sem.z)?;
+    let w=retain_weights_box(Weights::new(variant,&sem.alpha,&sem.z)?);
     let inactive=opening_inactive(&q,&w);
     let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
     let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };

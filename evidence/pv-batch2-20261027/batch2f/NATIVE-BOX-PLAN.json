@@ -1,0 +1,16 @@
+{
+  "source_revision": "763e429f184b932ca5c52633b7fa2a98a3b36b6f",
+  "expected_time": "Optimized Cargo test compilation, then finite native layout/allocation/drop/field/raw/materialization comparisons. No proof generation or elimination.",
+  "command": "native.py candidate batch2f-box-native-001 python3 rowcheck-batch2c.py --box-boundary 001",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "optimized": "cargo test --release --offline --locked -j4; taskset0-3; assert !debug_assertions",
+  "test_sha256": "73fc8552988277e2915c269f98f4c0bd4d1e70a61ce4afb56cf5f6d02eec3705",
+  "actual_factory": "crate::prover::retain_weights_box",
+  "modeled_failure": "Counterexample40838 plus universal Box request Result transport; no native fault injection or observed OOM",
+  "key_policy": "retain all keys; no transactions or cleanup"
+}

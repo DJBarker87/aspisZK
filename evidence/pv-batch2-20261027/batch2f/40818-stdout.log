@@ -1,0 +1,58 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_F_AllocationTransport.lean:32:8: warning: Possibly looping simp theorem: `zeros.eq_1`
+
+Note: Possibly caused by: `Array.repeat`, `UScalar.ofNatCore_val_eq`, and `List.reduceReplicate`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_F_AllocationTransport.lean:32:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_F_AllocationTransport.lean:45:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_B2_F_OriginalMutation.remaining w k (1024 - ↑0#usize) 0#usize zeros
+in the target expression
+  (do
+      let (_, updated) ←
+        do
+          let out ← PV_B2_F_MutationModel.remaining w k 1024 0#usize zeros
+          ok (core.result.Result.Ok (), out)
+      ok (core.result.Result.Ok updated)) =
+    do
+    let updated ← PV_B2_F_OriginalMutation.remaining w k 1024 0#usize zeros
+    ok (core.result.Result.Ok updated)
+
+case supplied
+w : host_weights.Weights
+kappa : E
+k :
+  aspis_core.field.wide_exact.WideExact ×
+    aspis_core.field.wide_exact.WideExact ×
+      aspis_core.field.wide_exact.WideExact ×
+        aspis_core.field.wide_exact.WideExact ×
+          aspis_core.field.wide_exact.WideExact ×
+            aspis_core.field.wide_exact.WideExact × aspis_core.field.wide_exact.WideExact
+hk : host_weights.powers7 kappa = ok k
+hm :
+  PV_B2_F_OriginalMutation.remaining w k (1024 - ↑0#usize) 0#usize zeros =
+    PV_B2_F_MutationModel.remaining w k (1024 - ↑0#usize) 0#usize zeros
+hc : host_weights.materialize_values w kappa zeros = PV_B2_F_MutationModel.values w kappa zeros
+⊢ (do
+      let (_, updated) ←
+        do
+          let out ← PV_B2_F_MutationModel.remaining w k 1024 0#usize zeros
+          ok (core.result.Result.Ok (), out)
+      ok (core.result.Result.Ok updated)) =
+    do
+    let updated ← PV_B2_F_OriginalMutation.remaining w k 1024 0#usize zeros
+    ok (core.result.Result.Ok updated)
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_F_AllocationTransport.lean:55:13: error: unsolved goals
+w : host_weights.Weights
+kappa : E
+out : Std.Array aspis_core.field.wide_exact.WideExact 1024#usize
+ho : pv_b2_materialize w kappa zeros = ok (core.result.Result.Ok (), out)
+⊢ (let (_, updated) := (core.result.Result.Ok (), out)
+    ok (core.result.Result.Ok updated)) =
+    ok (core.result.Result.Ok out)
+'PV_B2_F_AllocationTransport.zero_suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_F_AllocationTransport.equal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B2_F_AllocationTransport.denied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_F_AllocationTransport.supplied' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

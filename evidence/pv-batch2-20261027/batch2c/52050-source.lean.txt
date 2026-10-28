@@ -1,0 +1,42 @@
+import R1Z.PV_B2_C_ConstructorStage0
+set_option autoImplicit false
+namespace PV_B2_C_ConstructorSuccess
+open Aeneas Aeneas.Std Result PV_B2_C_ArrayTotal
+open PV_B2_C_WeightsNative PV_B2_C_ConstructorRows PV_B2_C_ConstructorStages
+
+def staged (variant : transport.Variant) (alpha : Array K 10#usize)
+    (z : Array Point 2#usize) : Result (core.result.Result host_weights.Weights verifier.Error) := do
+  let points ← host_weights.state_only_statement_points alpha
+  let q ← Array.index_usize alpha 8#usize
+  let q1 ← Array.index_usize alpha 9#usize
+  let factors := Array.repeat 5#usize (Array.repeat 5#usize
+    (Array.repeat 4#usize aspis_core.field.QM31.ZERO))
+  stage0 variant points (Array.make 2#usize [q,q1]) z factors
+
+/-- Only syntactic source cutting: every field call and restoration is unchanged. -/
+theorem new_eq_staged (variant : transport.Variant) (alpha : Array K 10#usize)
+    (z : Array Point 2#usize) : host_weights.Weights.new variant alpha z = staged variant alpha z := by
+  rfl
+
+theorem staged_total (variant : transport.Variant) (alpha : Array K 10#usize)
+    (z : Array Point 2#usize) : RustOk (staged variant alpha z) := by
+  unfold staged
+  apply bind_rust _ _ (PV_B2_C_WeightsTotal.points alpha)
+  intro points
+  apply bind_rust _ _ (read _ _ (by decide))
+  intro q
+  apply bind_rust _ _ (read _ _ (by decide))
+  intro q1
+  exact stage0_total variant points (Array.make 2#usize [q,q1]) z _
+
+/-- Complete Result success, arbitrary typed alpha/point carriers, with no
+canonicality or success precondition. Native allocation equivalence is separate. -/
+theorem new_total (variant : transport.Variant) (alpha : Array K 10#usize)
+    (z : Array Point 2#usize) : RustOk (host_weights.Weights.new variant alpha z) := by
+  rw [new_eq_staged]
+  exact staged_total variant alpha z
+
+#print axioms new_eq_staged
+#print axioms staged_total
+#print axioms new_total
+end PV_B2_C_ConstructorSuccess

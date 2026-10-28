@@ -1,0 +1,51 @@
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) → α → Aeneas.Std.Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Aeneas.Std.Result.ok r =>
+        match r with
+        | Aeneas.Std.ControlFlow.cont x => f x
+        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+    ⋯
+inductive Aeneas.Std.ControlFlow.{u, v} : Type u → Type v → Type (max u v)
+number of parameters: 2
+constructors:
+Aeneas.Std.ControlFlow.cont : {α : Type u} → {β : Type v} → α → Aeneas.Std.ControlFlow α β
+Aeneas.Std.ControlFlow.done : {α : Type u} → {β : Type v} → β → Aeneas.Std.ControlFlow α β
+theorem Aeneas.Std.loop.eq_def.{u, v} : ∀ {α : Type u} {β : Type v}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  Aeneas.Std.loop body x =
+    match body x with
+    | Aeneas.Std.Result.ok r =>
+      match r with
+      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x
+      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+    | Aeneas.Std.Result.div => Aeneas.Std.Result.div :=
+fun {α} {β} body x =>
+  id
+    (Eq.trans (congrFun (Lean.Order.fix_eq (Aeneas.Std.loop._proof_1 body)) x)
+      (Eq.refl
+        (match body x with
+        | Aeneas.Std.Result.ok r =>
+          match r with
+          | Aeneas.Std.ControlFlow.cont x =>
+            Lean.Order.fix
+              (fun f x =>
+                match body x with
+                | Aeneas.Std.Result.ok r =>
+                  match r with
+                  | Aeneas.Std.ControlFlow.cont x => f x
+                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+              (Aeneas.Std.loop._proof_1 body) x
+          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50467/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50467/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_LoopInspect.olean", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_LoopInspect.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.08", "peak_rss_kib": "2634164", "swap": "0", "source_revision": "16a979928fa8f1f4d5cd41daed833167c90d3e4e", "expected_phase": "compilation of R1Z/PV_W_LoopInspect", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

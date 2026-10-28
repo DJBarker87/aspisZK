@@ -1169,3 +1169,36 @@ Kani/proof/runtime/Rust/SBF build, full regression, key/fund operation, merge or
 push. Resource caps remain 6G/8G/no swap/-M7000, one scope at a time.
 Stop: every row re-derived and the statement budget exhausted. **Target not yet
 established.**
+
+### Batch2f / D340 selected candidate source bridges (2026-10-28)
+
+V256–V260 have audited selected candidate source/callback credit in this branch.
+This annotation records source-bridge progress; actual native RunJoin and
+physical observations retain their P obligations and the endpoint is unchanged.
+V261's shared powers credit is retained once. Full statements and non-vacuity:
+
+| Row | Operation | Exact row report | Final receipts |
+| --- | --- | --- | --- |
+| V256 | op249 gamma_sample | [V256.json](../evidence/pv-batch2-20261027/batch2f/V256.json) |40800;40897;40898|
+| V257 | op250 ordinary_sample | [V257.json](../evidence/pv-batch2-20261027/batch2f/V257.json) |40800;40897;40898|
+| V258 | op251 materialize | [V258.json](../evidence/pv-batch2-20261027/batch2f/V258.json) |40837;40844;40897;40898|
+| V259 | op252 new | [V259.json](../evidence/pv-batch2-20261027/batch2f/V259.json) |40842;40844;40897;40898|
+| V260 | op253 raw | [V260.json](../evidence/pv-batch2-20261027/batch2f/V260.json) |40845;40847;40897;40898|
+
+One dictionary installs all five source-associated callbacks with arbitrary
+input-dependent allocation contexts and complete Result equality. No success,
+canonicality, validity or failure-independence hypothesis is required for those
+equalities. The successful non-vacuity path shares the constructed native weight.
+Native-link evidence is reviewed frozen-source structural association, universal
+Lean equality and lossless carrier transport, supported by finite native
+comparisons; actual OS failure probability/independence is not inferred.
+The restored caller Box boundary passes all three frozen ELF pins at each of two
+source stages, and the ordered fixture-byte gate matches73070ddd51. The final
+combined axioms audit and separate focused closure replay pass with standard
+axioms only. [Premise delta](../evidence/pv-batch2-20261027/batch2f/PREMISE-DELTA.json)
+records exact before/after statements and retained native/deployment conditions.
+
+Direct endpoint premises removed:0; added/weakened/transferred toT:0. T remains
+entropy_law,entropy_kernel,observation. V165/V167 actual native RunJoin,
+optionB OS-failure witness independence, L1/L2/L3 and remaining deployment
+conditions remain substantive P obligations. Target not yet established.

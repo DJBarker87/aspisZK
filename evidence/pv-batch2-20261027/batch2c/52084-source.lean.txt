@@ -1,0 +1,24 @@
+import Aeneas
+set_option autoImplicit false
+namespace PV_B2_C_ShiftAdapter
+open Aeneas Aeneas.Std
+
+/-- Usize-to-U32 truncation preserves the four bits used by a U16 shift. -/
+theorem cast_low_bits (n : Usize) :
+    (UScalar.cast .U32 n).val % 16 = n.val % 16 := by
+  change (n.bv.zeroExtend 32).toNat % 16 = n.bv.toNat % 16
+  rw [BitVec.toNat_zeroExtend]
+  exact Nat.mod_mod_of_dvd _ (by decide)
+
+def sourceShr (x : U16) (n : Usize) : U16 :=
+  ⟨x.bv.ushiftRight (n.val % 16)⟩
+
+/-- Complete value association for the emitted U16 shift-count API adaptation. -/
+theorem shift_cast (x : U16) (n : Usize) :
+    U16.wrapping_shr x (UScalar.cast .U32 n) = sourceShr x n := by
+  unfold U16.wrapping_shr UScalar.wrapping_shr sourceShr
+  rw [cast_low_bits]
+
+#print axioms cast_low_bits
+#print axioms shift_cast
+end PV_B2_C_ShiftAdapter

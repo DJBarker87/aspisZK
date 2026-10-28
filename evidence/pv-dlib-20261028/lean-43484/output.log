@@ -1,0 +1,55 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_CtCarrier.lean:14:54: error: unsolved goals
+N : Type
+i : Fin 32
+⊢ (if h : ↑i < 2 ^ 5 then some 0#u8 else none) = some 0#u8
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_CtCarrier.lean:15:73: warning: This simp argument is unused:
+  dif_pos i.isLt
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵i̵t̵i̵a̵l̵,̵P̵V̵_̵D̵L̵_̵S̵t̵o̵r̵a̵g̵e̵B̵u̵i̵l̵d̵.̵f̵l̵a̵t̵t̵e̵n̵_̵b̵u̵i̵l̵d̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵o̵f̵F̵n̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵i̵.̵i̵s̵L̵t̵]̵[̲i̲n̲i̲t̲i̲a̲l̲,̲ ̲P̲V̲_̲D̲L̲_̲S̲t̲o̲r̲a̲g̲e̲B̲u̲i̲l̲d̲.̲f̲l̲a̲t̲t̲e̲n̲_̲b̲u̲i̲l̲d̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲o̲f̲F̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_CtCarrier.lean:47:78: error: unsolved goals
+T A N OutN : Type
+finish : T → Buffer A → Full N → Result (T × Buffer A × Full N)
+side : Result PV_DL_CtFinal.Side
+s : PV_DL_ArrayShape.Shape
+self : CtWrapper T
+buffer : Buffer A
+out : Output OutN s
+changed : T
+restored : Buffer A
+full : Full N
+hr : finish self.inner buffer (initial N) = ok (changed, restored, full)
+hl : (flatten 5 full.data).length = 32
+⊢ (do
+      let direction ← side
+      if PV_DL_ArrayShape.size s ≤ 32 then
+          ok
+            ({ inner := changed, marker := () }, restored,
+              {
+                data :=
+                  PV_DL_ArrayShape.build s fun i =>
+                    (PV_DL_Truncation.value direction (PV_DL_ArrayShape.size s) (flatten 5 full.data))[i]! })
+        else fail Error.panic) =
+    do
+    let x ← side
+    let (state, buffer, bytes) ←
+      if PV_DL_ArrayShape.size s ≤ 32 then
+          ok (changed, restored, PV_DL_Truncation.value x (PV_DL_ArrayShape.size s) (flatten 5 full.data))
+        else fail Error.panic
+    ok ({ inner := state, marker := () }, buffer, { data := PV_DL_ArrayShape.build s fun i => bytes[i]! })
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_CtCarrier.lean:53:32: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.uncurry,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_DL_CtCarrier.initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.initial_byte' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.adapted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_CtCarrier.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]

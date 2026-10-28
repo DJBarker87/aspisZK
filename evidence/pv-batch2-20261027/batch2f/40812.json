@@ -1,0 +1,82 @@
+{
+  "attempt": 40812,
+  "module": "R1Z/PV_B2_F_ArrayMutation",
+  "source_revision": "2044ada4bf78a355ac6da79012687247973bef58",
+  "worktree_source_dirty": false,
+  "source_sha256": "7723b979f75beac3ec096b9ee84aa95bb45aac958c9e3180fe8c8d66a8c13153",
+  "deps_fingerprint": "7f25365f5654fbfe9136500ed36d5fa97a0ed394b16397546a578f0f490e6a7c",
+  "dependency_objects": {
+    "R1Z.PV_B2_D_MaterializeTotal": {
+      "path": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_D_MaterializeTotal.olean",
+      "sha256": "417de08f5a2bcbfefab345fe88867bf59c00f4ff0bdd1d7681e22510380eb213"
+    }
+  },
+  "source_git_blob_at_head": "c8a631da638072d00e5066bdcba8150f37cc138b",
+  "source_worktree_git_blob": "c8a631da638072d00e5066bdcba8150f37cc138b",
+  "axiom_output": "'PV_B2_F_ArrayMutation.untouched' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_B2_F_ArrayMutation.update_shape' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_B2_F_ArrayMutation.suffix_step' depends on axioms: [propext, Classical.choice, Quot.sound]\ntheorem Aeneas.Std.Array.update_spec.{u} : \u2200 {\u03b1 : Type u} {n : Usize} (v : Std.Array \u03b1 n) (i : Usize) (x : \u03b1),\n  \u2191i < v.length \u2192 v.update i x \u2983 nv => nv = v.set i x \u2984 :=\nfun {\u03b1} {n} v i x hbound =>\n  id\n    (Eq.mpr\n      (id\n        (congrFun'\n          (congrArg WP.spec\n            (congrArg\n              (fun x_1 =>\n                match x_1 with\n                | none => fail Error.arrayOutOfBounds\n                | some val => ok \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9)\n              (Array.getElem?_Usize_eq v i)))\n          fun nv => nv = \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9))\n      (Aeneas.Std.Array.index_usize.match_1.splitter\u271d\n        (fun x_1 =>\n          (\u2191v)[\u2191i]? = x_1 \u2192\n            (match (\u2191v)[\u2191i]? with\n              | none => fail Error.arrayOutOfBounds\n              | some val => ok \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9) \u2983\n              nv => nv = \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9 \u2984)\n        (\u2191v)[\u2191i]?\n        (fun _ h =>\n          Eq.ndrec (motive := fun x_1 =>\n            (\u2191v)[\u2191i]? = x_1 \u2192\n              (match x_1 with\n                | none => fail Error.arrayOutOfBounds\n                | some val => ok \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9) \u2983\n                nv => nv = \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9 \u2984)\n            (fun heq =>\n              id\n                (False.elim\n                  (Eq.mp\n                    (Eq.trans\n                      (congrFun'\n                        (congrArg Eq\n                          (getElem?_pos (\u2191v) (\u2191i)\n                            (of_eq_true\n                              (Eq.trans (congrArg (LT.lt \u2191i) (List.Vector.length_val v))\n                                (eq_true (Eq.mp (congrArg (LT.lt \u2191i) (List.Vector.length_val v)) hbound))))))\n                        none)\n                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))\n                    heq)))\n            (Eq.symm h) (Eq.refl (\u2191v)[\u2191i]?))\n        (fun x_1 h =>\n          Eq.ndrec (motive := fun x_2 =>\n            (\u2191v)[\u2191i]? = x_2 \u2192\n              (match x_2 with\n                | none => fail Error.arrayOutOfBounds\n                | some val => ok \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9) \u2983\n                nv => nv = \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9 \u2984)\n            (fun heq =>\n              id\n                (of_eq_true\n                  (Eq.trans (WP.spec_ok._simp_1 \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9)\n                    (eq_self \u27e8(\u2191v).set (\u2191i) x, Array.set._proof_1 v i x\u27e9))))\n            (Eq.symm h) (Eq.refl (\u2191v)[\u2191i]?))\n        (Eq.refl (\u2191v)[\u2191i]?)))\ntheorem Aeneas.Std.Array.index_usize_spec.{u} : \u2200 {\u03b1 : Type u} {n : Usize} (v : Std.Array \u03b1 n) (i : Usize)\n  (hbound : \u2191i < v.length), v.index_usize i \u2983 x => x = (\u2191v)[\u2191i] \u2984 :=\nfun {\u03b1} {n} v i hbound => Array.index_usize_spec._proof_5 v i hbound\ndef Aeneas.Std.Array.repeat.{u} : {\u03b1 : Type u} \u2192 (n : Usize) \u2192 \u03b1 \u2192 Std.Array \u03b1 n :=\nfun {\u03b1} n x => \u27e8List.replicate (\u2191n) x, \u22ef\u27e9\n",
+  "command": [
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-objects/R1Z/PV_B2_F_ArrayMutation.olean",
+    "/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_F_ArrayMutation.lean",
+    "7000"
+  ],
+  "cwd": "/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src",
+  "expected_time": "Lean single-module formal check under env J, -M7000; no Rust arithmetic gate",
+  "exit_status": 0,
+  "wall_seconds": 4.033,
+  "peak_rss_kib": 2638664,
+  "swaps": 0,
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r6b73d73cf63d4ed1ba94aa9c01039ead.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": 297684992,
+  "env": {
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target",
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_NET_OFFLINE": "true",
+    "SBF_TRACE_DIR": null
+  },
+  "print_axioms": [
+    "'PV_B2_F_ArrayMutation.untouched' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_B2_F_ArrayMutation.update_shape' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_B2_F_ArrayMutation.suffix_step' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "native_wrapper_revision": "5b11c957a0c160467a90afdf23d3d4c25228c8d0",
+  "parsed_axioms": [
+    {
+      "declaration": "PV_B2_F_ArrayMutation.untouched",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_ArrayMutation.update_shape",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    },
+    {
+      "declaration": "PV_B2_F_ArrayMutation.suffix_step",
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  ],
+  "accepted_axioms": true
+}

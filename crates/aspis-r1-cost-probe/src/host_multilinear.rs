@@ -51,9 +51,12 @@ pub fn multilinear_evaluate_qm31(column: &[QM31], point: &[QM31; 10]) -> Option<
     let mut sum = QM31::ZERO;
     let mut i = 0usize;
     while i < weights.len {
-        let (row, weight) = weights.data[i];
+        let (row, weight) = sparse_weight_at(&weights, i);
         sum = sum.add(weight.mul(column[row]));
         i += 1;
     }
     Some(sum)
 }
+
+#[inline(never)]
+fn sparse_weight_at(weights: &SparseWeights, i: usize) -> (usize, QM31) { weights.data[i] }

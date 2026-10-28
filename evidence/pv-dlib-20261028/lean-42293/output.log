@@ -1,0 +1,28 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_Forwarding.lean:15:72: error: unsolved goals
+T A Out : Type
+finish : T → Buffer A → Out → Result (T × Buffer A × Out)
+self : Wrapper T A
+initial produced : Out
+core : T
+buffer : Buffer A
+h : finish self.core self.buffer initial = ok (core, buffer, produced)
+⊢ (let (_, _, output) := (core, buffer, produced)
+    ok output) =
+    ok produced
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_Forwarding.lean:37:94: error: unsolved goals
+S B : Type
+finish : S → B → Result (S × B × List U8)
+side : ProverRwFull.digest.core_api.TruncSide
+n : ℕ
+state changed : S
+buffer restored : B
+full : List U8
+h : finish state buffer = ok (changed, restored, full)
+⊢ (let (state, buffer, full) := (changed, restored, full)
+    ok (state, buffer, PV_DL_Truncation.value side n full)) =
+    ok (changed, restored, PV_DL_Truncation.value side n full)
+'R1Z.PV_DL_Forwarding.output' depends on axioms: [propext, sorryAx]
+'R1Z.PV_DL_Forwarding.failure' depends on axioms: [propext]
+'R1Z.PV_DL_Forwarding.ct' does not depend on any axioms
+'R1Z.PV_DL_Forwarding.ct_restoration' depends on axioms: [propext, sorryAx]
+'R1Z.PV_DL_Forwarding.ct_length' depends on axioms: [propext, sorryAx, Quot.sound]

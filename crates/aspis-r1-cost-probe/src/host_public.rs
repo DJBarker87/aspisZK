@@ -103,7 +103,7 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 p.recipient_commitment,
                 p.change_commitment,
                 0,
-                t,
+                *t,
             ),
             Public::Withdrawal(p, t) => (
                 true,
@@ -113,7 +113,7 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 [M31::ZERO; 8],
                 p.change_commitment,
                 p.amount,
-                t,
+                *t,
             ),
         };
     let mut out = OwnedPublic {
@@ -129,25 +129,66 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
         next_root: [0; 8],
         next_frontier: [[0; 8]; 20],
     };
-    let mut i = 0usize;
-    while i < 8 {
-        out.anchor[i] = anchor[i].0;
-        out.nullifier[i] = nullifier[i].0;
-        out.recipient[i] = recipient[i].0;
-        out.change[i] = change[i].0;
-        out.next_root[i] = transition.candidate_afterstate.next_root[i].0;
-        i += 1;
-    }
-    let mut level = 0usize;
-    while level < 20 {
-        let mut i = 0usize;
-        while i < 8 {
-            out.frontier[level][i] = transition.live_snapshot.frontier[level][i].0;
-            out.next_frontier[level][i] = transition.candidate_afterstate.next_frontier[level][i].0;
-            i += 1;
-        }
-        level += 1;
-    }
+    out.anchor[0] = anchor[0].0;
+    out.nullifier[0] = nullifier[0].0;
+    out.recipient[0] = recipient[0].0;
+    out.change[0] = change[0].0;
+    out.next_root[0] = transition.candidate_afterstate.next_root[0].0;
+    out.anchor[1] = anchor[1].0;
+    out.nullifier[1] = nullifier[1].0;
+    out.recipient[1] = recipient[1].0;
+    out.change[1] = change[1].0;
+    out.next_root[1] = transition.candidate_afterstate.next_root[1].0;
+    out.anchor[2] = anchor[2].0;
+    out.nullifier[2] = nullifier[2].0;
+    out.recipient[2] = recipient[2].0;
+    out.change[2] = change[2].0;
+    out.next_root[2] = transition.candidate_afterstate.next_root[2].0;
+    out.anchor[3] = anchor[3].0;
+    out.nullifier[3] = nullifier[3].0;
+    out.recipient[3] = recipient[3].0;
+    out.change[3] = change[3].0;
+    out.next_root[3] = transition.candidate_afterstate.next_root[3].0;
+    out.anchor[4] = anchor[4].0;
+    out.nullifier[4] = nullifier[4].0;
+    out.recipient[4] = recipient[4].0;
+    out.change[4] = change[4].0;
+    out.next_root[4] = transition.candidate_afterstate.next_root[4].0;
+    out.anchor[5] = anchor[5].0;
+    out.nullifier[5] = nullifier[5].0;
+    out.recipient[5] = recipient[5].0;
+    out.change[5] = change[5].0;
+    out.next_root[5] = transition.candidate_afterstate.next_root[5].0;
+    out.anchor[6] = anchor[6].0;
+    out.nullifier[6] = nullifier[6].0;
+    out.recipient[6] = recipient[6].0;
+    out.change[6] = change[6].0;
+    out.next_root[6] = transition.candidate_afterstate.next_root[6].0;
+    out.anchor[7] = anchor[7].0;
+    out.nullifier[7] = nullifier[7].0;
+    out.recipient[7] = recipient[7].0;
+    out.change[7] = change[7].0;
+    out.next_root[7] = transition.candidate_afterstate.next_root[7].0;
+    out = project_frontier_level(out, transition, 0);
+    out = project_frontier_level(out, transition, 1);
+    out = project_frontier_level(out, transition, 2);
+    out = project_frontier_level(out, transition, 3);
+    out = project_frontier_level(out, transition, 4);
+    out = project_frontier_level(out, transition, 5);
+    out = project_frontier_level(out, transition, 6);
+    out = project_frontier_level(out, transition, 7);
+    out = project_frontier_level(out, transition, 8);
+    out = project_frontier_level(out, transition, 9);
+    out = project_frontier_level(out, transition, 10);
+    out = project_frontier_level(out, transition, 11);
+    out = project_frontier_level(out, transition, 12);
+    out = project_frontier_level(out, transition, 13);
+    out = project_frontier_level(out, transition, 14);
+    out = project_frontier_level(out, transition, 15);
+    out = project_frontier_level(out, transition, 16);
+    out = project_frontier_level(out, transition, 17);
+    out = project_frontier_level(out, transition, 18);
+    out = project_frontier_level(out, transition, 19);
     out
 }
 pub fn public_bytes(public: Public<'_>) -> Result<([u8; 1455], usize), Error> {
@@ -168,4 +209,28 @@ pub fn terminal_qm31(
         Public::Withdrawal(p, t) => crate::host_terminal::r0::Public::Withdrawal(p, t),
     };
     p.terminal_qm31(claims, alpha, c)
+}
+
+#[inline(never)]
+fn frontier_word(frontier: &[[M31; 8]; 20], level: usize, i: usize) -> u32 { frontier[level][i].0 }
+
+#[inline(always)]
+fn project_frontier_level(mut out: OwnedPublic, transition: aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLatePublicStatementV1, level: usize) -> OwnedPublic {
+    out.frontier[level][0] = transition.live_snapshot.frontier[level][0].0;
+    out.next_frontier[level][0] = transition.candidate_afterstate.next_frontier[level][0].0;
+    out.frontier[level][1] = transition.live_snapshot.frontier[level][1].0;
+    out.next_frontier[level][1] = transition.candidate_afterstate.next_frontier[level][1].0;
+    out.frontier[level][2] = transition.live_snapshot.frontier[level][2].0;
+    out.next_frontier[level][2] = transition.candidate_afterstate.next_frontier[level][2].0;
+    out.frontier[level][3] = transition.live_snapshot.frontier[level][3].0;
+    out.next_frontier[level][3] = transition.candidate_afterstate.next_frontier[level][3].0;
+    out.frontier[level][4] = transition.live_snapshot.frontier[level][4].0;
+    out.next_frontier[level][4] = transition.candidate_afterstate.next_frontier[level][4].0;
+    out.frontier[level][5] = transition.live_snapshot.frontier[level][5].0;
+    out.next_frontier[level][5] = transition.candidate_afterstate.next_frontier[level][5].0;
+    out.frontier[level][6] = transition.live_snapshot.frontier[level][6].0;
+    out.next_frontier[level][6] = transition.candidate_afterstate.next_frontier[level][6].0;
+    out.frontier[level][7] = transition.live_snapshot.frontier[level][7].0;
+    out.next_frontier[level][7] = transition.candidate_afterstate.next_frontier[level][7].0;
+    out
 }

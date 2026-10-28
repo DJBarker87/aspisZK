@@ -1,0 +1,67 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_UpdateSelected.lean:90:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  kindDispatch ?base ?ops block_buffer.Eager.Insts.Block_bufferBufferKind ?accepted ?fallback
+in the target expression
+  ExternalFuns.op216
+      {
+        crypto_commonBlockSizeUserInst :=
+          {
+            generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst :=
+              PV_AL_SplitNativeShape.nativeTrait base ops 6 },
+        block_bufferBufferKindInst := block_buffer.Eager.Insts.Block_bufferBufferKind }
+      uc less nz self input =
+    PV_DL_UpdateCarrier.value (updater base uc) self input
+
+base : ExternalTypes
+ops : ExternalFuns
+T N1 O : Type
+uc : digest.core_api.UpdateCore T N1 (Storage U8 6)
+less : typenum.type_operators.IsLess (PV_AL_SplitNativeShape.Size base 6) (PV_DL_DefaultCallback.Limit base) O
+nz : typenum.marker_traits.NonZero O
+self : Wrapper T (Storage U8 6)
+input : Slice U8
+⊢ ExternalFuns.op216
+      {
+        crypto_commonBlockSizeUserInst :=
+          {
+            generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst :=
+              PV_AL_SplitNativeShape.nativeTrait base ops 6 },
+        block_bufferBufferKindInst := block_buffer.Eager.Insts.Block_bufferBufferKind }
+      uc less nz self input =
+    PV_DL_UpdateCarrier.value (updater base uc) self input
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    self
+  has type
+    Wrapper T (Storage U8 6)
+  but is expected to have type
+    digest.core_api.wrapper.CoreWrapper T block_buffer.Eager (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) O
+  in the application
+    ExternalFuns.op216
+      {
+        crypto_commonBlockSizeUserInst :=
+          {
+            generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst :=
+              PV_AL_SplitNativeShape.nativeTrait base ops 6 },
+        block_bufferBufferKindInst := block_buffer.Eager.Insts.Block_bufferBufferKind }
+      uc less nz self
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_UpdateSelected.lean:89:13: warning: This simp argument is unused:
+  selected
+
+Hint: Omit it from the simp argument list.
+  simp only [s̵e̵l̵e̵c̵t̵e̵d̵,̵bufferKind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_DL_UpdateSelected.Types' does not depend on any axioms
+'R1Z.PV_DL_UpdateSelected.dispatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.dispatch_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.updater' depends on axioms: [propext]
+'R1Z.PV_DL_UpdateSelected.kindDispatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.native_kind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.bufferKind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.retained_kind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_UpdateSelected.selected_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-43480/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-43480/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-objects/R1Z/PV_DL_UpdateSelected.olean", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_UpdateSelected.lean", "7000"], "exit": 1, "wall": "0:03.01", "peak_rss_kib": "2638068", "swap": "0", "source_revision": "b5858c729b792af47ec091ea9448fb86816342e1", "expected_phase": "focused Lean compilation; source/import fingerprints in submission receipt", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

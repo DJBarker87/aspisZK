@@ -1,0 +1,146 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if 1024#usize ≤ p then ?m.110 else ?m.111
+in the target expression
+  (do
+      let p1 ← lift p
+      let c ← lift c
+      if p1 ≥ 1024#usize then
+          ok
+            (done
+              (core.result.Result.Err
+                (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity a)))
+        else do
+          let i1 ← (array 1024#usize P).index_usize p1
+          let o ← host_forest.mask_endpoint_bump i1
+          match o with
+            | none =>
+              ok
+                (done
+                  (core.result.Result.Err
+                    (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity a)))
+            | some n => do
+              let __x ← (array 1024#usize P).index_mut_usize p1
+              if c ≥ 1024#usize then
+                  ok
+                    (done
+                      (core.result.Result.Err
+                        (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity b)))
+                else do
+                  let i2 ← (array 1024#usize C).index_usize c
+                  let o1 ← host_forest.mask_endpoint_bump i2
+                  match o1 with
+                    | none =>
+                      ok
+                        (done
+                          (core.result.Result.Err
+                            (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity
+                              b)))
+                    | some n1 => do
+                      let consumers1 ← (array 1024#usize C).update c n1
+                      let i3 ← lift (p1 &&& 15#usize)
+                      let i4 ← lift (UScalar.cast UScalarTy.U32 i3)
+                      let i5 ← lift (U16.wrapping_shl 1#u16 i4)
+                      let i6 ← lift (Usize.wrapping_shr p1 4#u32)
+                      let i7 ← (array 64#usize M).index_usize i6
+                      let i8 ← lift (i7 ||| i5)
+                      let masks1 ← (array 64#usize M).update i6 i8
+                      let i9 ← lift (c &&& 15#usize)
+                      let i10 ← lift (UScalar.cast UScalarTy.U32 i9)
+                      let i11 ← lift (U16.wrapping_shl 1#u16 i10)
+                      let i12 ← lift (Usize.wrapping_shr c 4#u32)
+                      let i13 ← masks1.index_usize i12
+                      let i14 ← lift (i13 ||| i11)
+                      let masks2 ← masks1.update i12 i14
+                      let i15 ← lift (i.wrapping_add 1#usize)
+                      ok (cont (__x.2 n, consumers1, masks2, i15))) =
+    ok
+      (cont
+        (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc),
+          array 64#usize (mark (mark M p) c), i.wrapping_add 1#usize))
+
+P C : ℕ → U8
+M : ℕ → U16
+i p c : Usize
+a b : U16
+np nc : U8
+hi : i < 136#usize
+hlink : host_forest.MASK_LINKS.index_usize i = ok (a, b)
+ha : UScalar.cast UScalarTy.Usize a = p
+hb : UScalar.cast UScalarTy.Usize b = c
+hp : p < 1024#usize
+hc : c < 1024#usize
+hbp : host_forest.mask_endpoint_bump (P ↑p) = ok (some np)
+hbc : host_forest.mask_endpoint_bump (C ↑c) = ok (some nc)
+hmp : ↑(block p) < 64
+hmc : ↑(block c) < 64
+⊢ (do
+      let p1 ← lift p
+      let c ← lift c
+      if p1 ≥ 1024#usize then
+          ok
+            (done
+              (core.result.Result.Err
+                (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity a)))
+        else do
+          let i1 ← (array 1024#usize P).index_usize p1
+          let o ← host_forest.mask_endpoint_bump i1
+          match o with
+            | none =>
+              ok
+                (done
+                  (core.result.Result.Err
+                    (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity a)))
+            | some n => do
+              let __x ← (array 1024#usize P).index_mut_usize p1
+              if c ≥ 1024#usize then
+                  ok
+                    (done
+                      (core.result.Result.Err
+                        (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity b)))
+                else do
+                  let i2 ← (array 1024#usize C).index_usize c
+                  let o1 ← host_forest.mask_endpoint_bump i2
+                  match o1 with
+                    | none =>
+                      ok
+                        (done
+                          (core.result.Result.Err
+                            (aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1.EndpointCapacity
+                              b)))
+                    | some n1 => do
+                      let consumers1 ← (array 1024#usize C).update c n1
+                      let i3 ← lift (p1 &&& 15#usize)
+                      let i4 ← lift (UScalar.cast UScalarTy.U32 i3)
+                      let i5 ← lift (U16.wrapping_shl 1#u16 i4)
+                      let i6 ← lift (Usize.wrapping_shr p1 4#u32)
+                      let i7 ← (array 64#usize M).index_usize i6
+                      let i8 ← lift (i7 ||| i5)
+                      let masks1 ← (array 64#usize M).update i6 i8
+                      let i9 ← lift (c &&& 15#usize)
+                      let i10 ← lift (UScalar.cast UScalarTy.U32 i9)
+                      let i11 ← lift (U16.wrapping_shl 1#u16 i10)
+                      let i12 ← lift (Usize.wrapping_shr c 4#u32)
+                      let i13 ← masks1.index_usize i12
+                      let i14 ← lift (i13 ||| i11)
+                      let masks2 ← masks1.update i12 i14
+                      let i15 ← lift (i.wrapping_add 1#usize)
+                      ok (cont (__x.2 n, consumers1, masks2, i15))) =
+    ok
+      (cont
+        (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc),
+          array 64#usize (mark (mark M p) c), i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3_MaskSparseStep.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

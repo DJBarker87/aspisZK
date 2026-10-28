@@ -1,0 +1,81 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_EvalList222.lean:60:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  match do
+    let (row, weight) ← read weights ↑i
+    let q ← column.index_usize row
+    let product ← aspis_core.field.QM31.mul weight q
+    let next ← aspis_core.field.QM31.add sum product
+    ok (cont (next, i.wrapping_add 1#usize)) with
+  | ok (done y) => ok y
+  | ok (cont y) => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y
+  | fail e => fail e
+  | div => div
+in the target expression
+  Result.casesOn
+      (do
+        let (row, weight) ← read weights ↑i
+        let q ← column.index_usize row
+        let q1 ← weight.mul q
+        let sum1 ← aspis_core.field.QM31.add sum q1
+        ok (cont (sum1, i.wrapping_add 1#usize)))
+      (fun v =>
+        ControlFlow.casesOn v
+          (fun v => (fun y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) v) fun v =>
+          (fun y => ok y) v)
+      (fun e => (fun e => fail e) e) ((fun _ => div) ()) =
+    do
+    let (row, weight) ← read weights ↑i
+    let q ← column.index_usize row
+    let product ← aspis_core.field.QM31.mul weight q
+    let next ← aspis_core.field.QM31.add sum product
+    steps column weights n (↑i + 1) next
+
+case succ
+column : Slice Q
+weights : host_multilinear.SparseWeights
+n : ℕ
+ih :
+  ∀ (sum : Q) (i : Usize),
+    ↑i ≤ ↑weights.len →
+      ↑weights.len - ↑i = n →
+        PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n (sum, i) = steps column weights n (↑i) sum
+sum : Q
+i : Usize
+hi : ↑i ≤ ↑weights.len
+hn : ↑weights.len - ↑i = n + 1
+go : i < weights.len
+inc : ↑(i.wrapping_add 1#usize) = ↑i + 1
+dispatch :
+  ∀ (r : Result (ControlFlow PV_B3_EvalCounter222.State Q)),
+    (match r with
+      | ok (done y) => ok y
+      | ok (cont y) => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y
+      | fail e => fail e
+      | div => div) =
+      do
+      let cf ← r
+      match cf with
+        | done y => ok y
+        | cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y
+⊢ Result.casesOn
+      (do
+        let (row, weight) ← read weights ↑i
+        let q ← column.index_usize row
+        let q1 ← weight.mul q
+        let sum1 ← aspis_core.field.QM31.add sum q1
+        ok (cont (sum1, i.wrapping_add 1#usize)))
+      (fun v =>
+        ControlFlow.casesOn v
+          (fun v => (fun y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) v) fun v =>
+          (fun y => ok y) v)
+      (fun e => (fun e => fail e) e) ((fun _ => div) ()) =
+    do
+    let (row, weight) ← read weights ↑i
+    let q ← column.index_usize row
+    let product ← aspis_core.field.QM31.mul weight q
+    let next ← aspis_core.field.QM31.add sum product
+    steps column weights n (↑i + 1) next
+'PV_B3_EvalList222.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.read_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

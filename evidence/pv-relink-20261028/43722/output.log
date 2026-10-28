@@ -1,0 +1,27 @@
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : U8 → U8 :=
+fun x => x
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+  else fail Error.maximumSizeExceeded
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x

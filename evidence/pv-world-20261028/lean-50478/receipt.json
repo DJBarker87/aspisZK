@@ -1,0 +1,85 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50478/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50478/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_Entry.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.43",
+  "peak_rss_kib": "2656804",
+  "swap": "0",
+  "source_revision": "4eb28304b4e1f3aa741a9e70ec4207d3cec62260",
+  "expected_phase": "compilation of R1Z/PV_W_R_Entry",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean:87:4: error: Type mismatch\n  PV_W_R_MaskedWithAttempt.program\nhas type\n  Store ?m.535 \u2192\n    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public \u2192\n      aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 \u2192\n        transport.Variant \u2192\n          Hash \u2192\n            aspis_core.state_only_hiding.StateOnlyHidingContext \u2192\n              Std.Array U8 32#usize \u2192\n                aspis_prover.state_only_entropy.StateOnlyAttemptSecrets \u2192\n                  ?m.535 \u2192 P (core.result.Result (alloc.vec.Vec U8 \u00d7 prover.MaskedFixtureAudit) verifier.Error \u00d7 ?m.535)\nbut is expected to have type\n  P Unit\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean:88:4: error: Type mismatch\n  PV_W_R_DurableReserve.store\nhas type\n  Store aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore\nbut is expected to have type\n  P Unit\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean:89:4: error: Function expected at\n  public1\nbut this term has type\n  aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public\n\nNote: Expected a function because this term is being applied to the argument\n  compiled\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean:99:8: warning: declaration uses `sorry`\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_Entry.lean:200:32: warning: 'rw [PV_W_R_MaskedWithAttempt.erase_program, PV_W_R_DurableReserve.store_source]' tactic does nothing\n\nNote: This linter can be disabled with `set_option linter.unusedTactic false`\n'R1Z.PV_W_R_Entry.erase_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 50478,
+  "module": "R1Z/PV_W_R_Entry",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_R_Entry.lean",
+  "source_blob": "42683f5d9483772c3b3aea25c7f2abc1a0cc7b06",
+  "source_sha256": "6dca3da7a7a67a40d991b2c6fd7163e71e856da824d8023df28701206ca06e40",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_StructuredBinds",
+    "R1Z.PV_W_RecursiveLaws",
+    "R1Z.PV_W_R_DurableReserve",
+    "R1Z.PV_W_R_MaskedWithAttempt"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "6dd29fa9b3a22d3f356fda2c0331e84b85f0a32b54a83f6412f6c8f9a762ff59",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_StructuredBinds": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_StructuredBinds.olean",
+      "sha256": "cd23ae77c5273a7172708a0135a9e43488d1c77e27575cca24a709039bac6f68",
+      "source_sha256": "f53e8486ae7a85f7d60677d9a40a4de6c5c44616b3ea543fddbdd37a35f938dd"
+    },
+    "R1Z.PV_W_RecursiveLaws": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_RecursiveLaws.olean",
+      "sha256": "a242f8228887beb4903bf69bad848182c8b988ca5d92d6e0d92511a63da797c7",
+      "source_sha256": "e009f1b0bc220e305187822e5b599fa30f74affe811d65196abdf1c2fb08736b"
+    },
+    "R1Z.PV_W_R_DurableReserve": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_DurableReserve.olean",
+      "sha256": "a147eba7b2939da0efced9ee81123dde3dbbf6b7a7e17dbcafebcab938c209ad",
+      "source_sha256": "a6c071730adbc30d53932b05353d4dda56b49dd6a2eaa180dc9fb42a57c6fbc7"
+    },
+    "R1Z.PV_W_R_MaskedWithAttempt": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_MaskedWithAttempt.olean",
+      "sha256": "92c73f1b48c7bd823bd82a11d804907cfdc4765696e77597302ae64c09cde672",
+      "source_sha256": "1d47ca0d93b54baa8b7235e9c1f279c1b68953d6ef939280e23be1b0ce7d9609"
+    }
+  },
+  "transitive_cache_selection_sha256": null,
+  "external_selection_sha256": "adc40f5f1f598394e06c7c5d9d4c7cbf2821475560642fb465009285313187f3"
+}

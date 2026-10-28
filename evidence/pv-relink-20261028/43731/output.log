@@ -1,0 +1,36 @@
+R1Z.PV_CBL_CallbackBundle.op26_source (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) {P : Type}
+  (inst : Aeneas.Std.core.convert.AsRef P String) (p : String) (q : P) :
+  ProverRwFull.ExternalFuns.op26 inst p q = do
+    let path ← inst.as_ref q
+    R1Z.PV_CBL_JoinAdapter.reference p path
+R1Z.PV_CBL_AppendBundle.op28_source (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) (s : String) :
+  ProverRwFull.ExternalFuns.op28 s = PV_CBL_StringOwnedReference.string_owned_reference s
+R1Z.PV_CBL_AppendBundle.op31_source (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) (s : String)
+  (t : Aeneas.Std.Str) : ProverRwFull.ExternalFuns.op31 s t = R1Z.PV_CBL_StringBytesAdapter.append s t
+R1Z.PV_CB3_Op51Arbitrary.op51_source [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  ProverRwFull.ExternalFuns.op51 x = R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x
+R1Z.PV_AL_SplitSelected.native_callback (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8) :
+  ProverRwFull.ExternalFuns.op209 (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    Aeneas.Std.Result.ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v, R1Z.PV_AL_SplitCarrier.tailSlice v)
+R1Z.PV_AL_SplitBridge.source_reference (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8) :
+  R1Z.PV_AL_SplitBridge.observe base ops v = R1Z.PV_AL_SplitObservation.observe v 64#usize
+R1Z.PV_RL_V178.complete (base path : List Aeneas.Std.U8) :
+  R1Z.PV_RL_V178.nativeResult base path = Aeneas.Std.Result.ok (R1Z.PV_CBL_PathJoinValue.join base path)
+R1Z.PV_RL_V179.complete (s : String) :
+  R1Z.PV_RL_V179.nativeView s = PV_CBL_StringOwnedReference.string_owned_reference s
+R1Z.PV_RL_V182.complete (s : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (t : Aeneas.Std.Slice Aeneas.Std.U8) :
+  R1Z.PV_RL_V182.nativeBytes s t = PV_CBL_StringPushBytes.push_bytes_reference s t
+R1Z.PV_RL_V195.complete [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  ProverRwFull.ExternalFuns.op51 x = R1Z.PV_CB3_Op51Source.Raw.wide_bytes_flat x
+R1Z.PV_RL_V233.complete (v : Aeneas.Std.Slice Aeneas.Std.U8) :
+  R1Z.PV_RL_V233.nativeViews v = R1Z.PV_AL_SplitObservation.observe v 64#usize
+'R1Z.PV_RL_V178.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V179.complete' does not depend on any axioms
+'R1Z.PV_RL_V182.complete' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RL_V195.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RL_V233.complete' depends on axioms: [propext, Classical.choice, Quot.sound]

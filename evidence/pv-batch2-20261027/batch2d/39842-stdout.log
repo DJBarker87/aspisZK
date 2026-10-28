@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:20:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  @LT.lt ℕ instLTNat
+    (if
+        (2147483647#32).toNat ≤
+          (BitVec.setWidth 32
+              (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+                ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31)).toNat then
+      (BitVec.setWidth 32
+            (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+              ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31) -
+          (2147483647#32 &&& 0#32 - 1#32)).toNat
+    else
+      (BitVec.setWidth 32
+            (((x.bv &&& 2147483647#64) + x.bv >>> 31 &&& 2147483647#64) +
+              ((x.bv &&& 2147483647#64) + x.bv >>> 31) >>> 31) -
+          (2147483647#32 &&& 0#32 - 0#32)).toNat)
+    2147483647
+but is expected to have type
+  @LT.lt ℕ instLTNat
+    (if
+        (2147483647#32).toNat ≤
+          (BitVec.setWidth 32
+              (((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64) &&&
+                  BitVec.setWidth 64 2147483647#32) +
+                ((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64)).ushiftRight
+                  ((31#32).toNat % 64))).toNat then
+      (BitVec.setWidth 32
+            (((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64) &&&
+                BitVec.setWidth 64 2147483647#32) +
+              ((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64)).ushiftRight
+                ((31#32).toNat % 64)) -
+          (2147483647#32 &&& 0#32 - 1#32)).toNat
+    else
+      (BitVec.setWidth 32
+            (((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64) &&&
+                BitVec.setWidth 64 2147483647#32) +
+              ((x.bv &&& BitVec.setWidth 64 2147483647#32) + x.bv.ushiftRight ((31#32).toNat % 64)).ushiftRight
+                ((31#32).toNat % 64)) -
+          (2147483647#32 &&& 0#32 - 0#32)).toNat)
+    (2147483647#32).toNat
+'PV_B2_D_ScalarCanonical.reduce_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

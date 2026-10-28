@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_ReserveFallible.lean:326:24: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  erase ?dictionary (?p >>= ?k)
+in the target expression
+  erase ops
+      (if b = true then do
+        let r1 ← pure (core.result.Result.Ok false)
+        pure (r1, { directory := self.directory, last_error := none })
+      else do
+        let r1 ← pure (core.result.Result.Err error)
+        pure (r1, { directory := self.directory, last_error := none })) =
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+
+case next.next.next.next.next.next.Err.next.next
+inst✝ : ExternalTypes
+ops : ExternalFuns
+self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+statement_digest mask_nonce : Std.Array U8 32#usize
+path : std.path.PathBuf
+options oo : std.fs.OpenOptions
+write_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo1 : std.fs.OpenOptions
+create_new_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo3 : std.fs.OpenOptions
+mode_back : std.fs.OpenOptions → std.fs.OpenOptions
+error : std.io.error.Error
+ek : core.io.error.ErrorKind
+b : Bool
+⊢ erase ops
+      (if b = true then do
+        let r1 ← pure (core.result.Result.Ok false)
+        pure (r1, { directory := self.directory, last_error := none })
+      else do
+        let r1 ← pure (core.result.Result.Err error)
+        pure (r1, { directory := self.directory, last_error := none })) =
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+'R1Z.PV_W_R_ReserveFallible.erase_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50442/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50442/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_R_ReserveFallible.olean", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_R_ReserveFallible.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.61", "peak_rss_kib": "2652348", "swap": "0", "source_revision": "a51353c6aee4369e131d9fe5698f5679f5b4e958", "expected_phase": "compilation of R1Z/PV_W_R_ReserveFallible", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

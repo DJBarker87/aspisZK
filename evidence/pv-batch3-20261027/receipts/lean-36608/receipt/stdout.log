@@ -1,0 +1,84 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:48:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (array ?m.261 (mark M p)).index_usize ?m.262
+in the target expression
+  (do
+      let w ← (array 64#usize (Function.update M (↑(block p)) (M ↑(block p) ||| bit p))).index_usize (block c)
+      let m2 ← (array 64#usize (Function.update M (↑(block p)) (M ↑(block p) ||| bit p))).update (block c) (w ||| bit c)
+      ok
+          (cont
+            (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc), m2,
+              i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc),
+          array 64#usize (mark (mark M p) c), i.wrapping_add 1#usize))
+
+P C : ℕ → U8
+M : ℕ → U16
+i p c : Usize
+a b : U16
+np nc : U8
+hi : i < 136#usize
+hlink : host_forest.MASK_LINKS.index_usize i = ok (a, b)
+ha : UScalar.cast UScalarTy.Usize a = p
+hb : UScalar.cast UScalarTy.Usize b = c
+hp : p < 1024#usize
+hc : c < 1024#usize
+hbp : host_forest.mask_endpoint_bump (P ↑p) = ok (some np)
+hbc : host_forest.mask_endpoint_bump (C ↑c) = ok (some nc)
+hmp : ↑(block p) < 64
+hmc : ↑(block c) < 64
+⊢ (do
+      let w ← (array 64#usize (Function.update M (↑(block p)) (M ↑(block p) ||| bit p))).index_usize (block c)
+      let m2 ← (array 64#usize (Function.update M (↑(block p)) (M ↑(block p) ||| bit p))).update (block c) (w ||| bit c)
+      ok
+          (cont
+            (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc), m2,
+              i.wrapping_add 1#usize))) =
+    ok
+      (cont
+        (array 1024#usize (Function.update P (↑p) np), array 1024#usize (Function.update C (↑c) nc),
+          array 64#usize (mark (mark M p) c), i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:32:13: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:35:13: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:45:13: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseStep.lean:47:13: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [l̵i̵f̵t̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3_MaskSparseStep.block' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.mark' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

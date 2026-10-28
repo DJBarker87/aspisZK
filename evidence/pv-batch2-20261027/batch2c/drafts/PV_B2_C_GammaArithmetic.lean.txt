@@ -1,0 +1,78 @@
+import Aeneas
+set_option autoImplicit false
+namespace PV_B2_C_GammaArithmetic
+
+/-- The numeric end-around-carry step used after low base-P digits. -/
+def endAround (b r q : Nat) : Nat :=
+  if b ≤ r + q + 1 then r + q + 1 - b + 1 else r + q + 1
+
+/-- One carry suffices under the explicit sum bound; no concrete recurrence
+or 256-bit numeral is evaluated. This is a numeric predecessor, not source equality. -/
+theorem endAround_eq (b r q : Nat) (hb : 2 ≤ b)
+    (hs : r + q < 2 * (b-1)) :
+    endAround b r q = (r+q) % (b-1) + 1 := by
+  unfold endAround
+  by_cases h : b ≤ r+q+1
+  · rw [if_pos h]
+    have hle : b-1 ≤ r+q := by omega
+    have hlt : r+q-(b-1) < b-1 := by omega
+    rw [Nat.mod_eq_sub_mod hle,Nat.mod_eq_of_lt hlt]
+    omega
+  · rw [if_neg h,Nat.mod_eq_of_lt (show r+q < b-1 by omega)]
+
+/-- Quotient/remainder recombination modulo b-1. -/
+theorem recombine (b q r : Nat) (hb : 1 ≤ b) :
+    (q*b+r) % (b-1) = (q+r) % (b-1) := by
+  have h : b = (b-1)+1 := by omega
+  conv_lhs => rw [h,Nat.mul_add,Nat.mul_one,Nat.add_assoc]
+  simp only [Nat.add_mod,Nat.mul_mod,Nat.mod_self,Nat.mul_zero,Nat.zero_add,Nat.mod_mod]
+
+/-- Conditional rank law exposing precisely the remaining source sum bound. -/
+theorem rank_law (b x : Nat) (hb : 2 ≤ b)
+    (hs : x % b + x / b < 2 * (b-1)) :
+    endAround b (x % b) (x / b) = x % (b-1)+1 := by
+  rw [endAround_eq b _ _ hb hs]
+  have h := recombine b (x/b) (x%b) (by omega)
+  rw [Nat.div_add_mod] at h
+  simpa only [Nat.add_comm] using congrArg (fun n => n+1) h.symm
+
+/-- A quotient/remainder source bound sufficient for the single-carry formula. -/
+theorem sum_bound (b x : Nat) (hb : 2 ≤ b) (hx : x < b*(b-1)) :
+    x % b + x / b < 2*(b-1) := by
+  have hq : x / b < b-1 := (Nat.div_lt_iff_lt_mul (by omega)).mpr (by
+    simpa only [Nat.mul_comm] using hx)
+  have hr := Nat.mod_lt x (show 0 < b by omega)
+  omega
+
+/-- Symbolic power bound; the 256-bit rank or its recurrence is never reduced. -/
+theorem product_bound (n b x : Nat) (hb : 2^n < b) (hx : x < 2^(n+n)) :
+    x < b*(b-1) := by
+  have hle : 2^n ≤ b-1 := by omega
+  have hp : 2^(n+n) ≤ b*(b-1) := by
+    rw [Nat.pow_add]
+    exact Nat.mul_le_mul (Nat.le_of_lt hb) hle
+  exact Nat.lt_of_lt_of_le hx hp
+
+/-- Numeric gamma law for the actual eight-limb radix and every 256-bit rank.
+Only the link from the emitted digit/carry loops remains a source obligation. -/
+theorem gammaP8_rank (x : Nat) (hx : x < 2^256) :
+    endAround (2147483647^8) (x % (2147483647^8)) (x / (2147483647^8)) =
+      x % (2147483647^8-1)+1 := by
+  have hp : 2^16 < (2147483647 : Nat) := by decide
+  have hb : 2^128 < (2147483647 : Nat)^8 := by
+    have h := Nat.pow_lt_pow_left hp (by decide : 8 ≠ 0)
+    simpa only [← Nat.pow_mul,show 16*8 = 128 from rfl] using h
+  have hb2 : 2 ≤ (2147483647 : Nat)^8 := by
+    have hpos : 0 < (2 : Nat)^128 := Nat.pow_pos (by decide)
+    omega
+  apply rank_law _ _ hb2
+  apply sum_bound _ _ hb2
+  exact product_bound 128 _ x hb hx
+
+#print axioms sum_bound
+#print axioms product_bound
+#print axioms gammaP8_rank
+#print axioms endAround_eq
+#print axioms recombine
+#print axioms rank_law
+end PV_B2_C_GammaArithmetic

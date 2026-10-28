@@ -1,0 +1,83 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_EvalList222.lean:69:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.253 ?m.254 ?m.255).mpr`
+  ?m.253 >>= ?m.254 = ?m.253 >>= ?m.255
+with the goal
+  (do
+      let cf ←
+        let (row, weight) := (row, weight)
+          do
+          let q ← column.index_usize row
+          let product ← aspis_core.field.QM31.mul weight q
+          let next ← aspis_core.field.QM31.add sum product
+          ok (cont (next, i.wrapping_add 1#usize))
+      match cf with
+        | done y => ok y
+        | cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) =
+    let (row, weight) := (row, weight)
+    do
+    let q ← column.index_usize row
+    let product ← aspis_core.field.QM31.mul weight q
+    let next ← aspis_core.field.QM31.add sum product
+    steps column weights n (↑i + 1) next
+
+Note: The full type of `(bind_eq_iff ?m.253 ?m.254 ?m.255).mpr` is
+  (∀ (v : ?m.251), ?m.253 = ok v → ?m.254 v = ?m.255 v) → ?m.253 >>= ?m.254 = ?m.253 >>= ?m.255
+
+case succ
+column : Slice Q
+weights : host_multilinear.SparseWeights
+n : ℕ
+ih :
+  ∀ (sum : Q) (i : Usize),
+    ↑i ≤ ↑weights.len →
+      ↑weights.len - ↑i = n →
+        PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n (sum, i) = steps column weights n (↑i) sum
+sum : Q
+i : Usize
+hi : ↑i ≤ ↑weights.len
+hn : ↑weights.len - ↑i = n + 1
+go : i < weights.len
+inc : ↑(i.wrapping_add 1#usize) = ↑i + 1
+dispatch :
+  ∀ (r : Result (ControlFlow PV_B3_EvalCounter222.State Q)),
+    Result.casesOn r
+        (fun cf =>
+          ControlFlow.casesOn cf (fun y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y)
+            fun y => ok y)
+        (fun e => fail e) div =
+      do
+      let cf ← r
+      match cf with
+        | done y => ok y
+        | cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y
+row : Usize
+weight : Q
+hr : read weights ↑i = ok (row, weight)
+⊢ (do
+      let cf ←
+        let (row, weight) := (row, weight)
+          do
+          let q ← column.index_usize row
+          let product ← aspis_core.field.QM31.mul weight q
+          let next ← aspis_core.field.QM31.add sum product
+          ok (cont (next, i.wrapping_add 1#usize))
+      match cf with
+        | done y => ok y
+        | cont y => PV_B3_BoundedLoop.bounded (PV_B3_EvalFinite222.body column weights) n y) =
+    let (row, weight) := (row, weight)
+    do
+    let q ← column.index_usize row
+    let product ← aspis_core.field.QM31.mul weight q
+    let next ← aspis_core.field.QM31.add sum product
+    steps column weights n (↑i + 1) next
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_EvalList222.lean:66:40: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_Result.bind_assoc,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3_EvalList222.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.steps' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.read_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.bounded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3_EvalList222.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

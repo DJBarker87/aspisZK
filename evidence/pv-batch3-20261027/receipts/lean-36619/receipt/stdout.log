@@ -1,0 +1,38 @@
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.Usize.wrapping_shr : Usize → U32 → Usize :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+theorem Aeneas.Std.UScalar.cast_val_eq : ∀ {src_ty : UScalarTy} (tgt_ty : UScalarTy) (x : UScalar src_ty),
+  ↑(UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits :=
+fun {src_ty} tgt_ty x =>
+  id
+    (of_eq_true
+      (Eq.trans
+        (congr
+          (congrArg Eq
+            (Eq.trans (BitVec.toNat_setWidth tgt_ty.numBits x.bv)
+              (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits))))
+          (congrFun' (congrArg HMod.hMod (UScalar.bv_toNat x)) (2 ^ tgt_ty.numBits)))
+        (eq_self (↑x % 2 ^ tgt_ty.numBits))))
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseScalar.lean:11:15: warning: Possibly looping simp theorem: `Usize.wrapping_shr.eq_1`
+
+Note: Possibly caused by: `UScalar.wrapping_shr`, `UScalarTy.Usize_numBits_eq`, `UScalar.val`, `UScalarTy.U32_numBits_eq`, and `UScalar.bv_toNat`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseScalar.lean:11:35: warning: Possibly looping simp theorem: `UScalar.wrapping_shr.eq_1`
+
+Note: Possibly caused by: `UScalar.val`, `UScalarTy.U32_numBits_eq`, and `UScalar.bv_toNat`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseScalar.lean:11:57: warning: Possibly looping simp theorem: `UScalar.val.eq_1`
+
+Note: Possibly caused by: `UScalar.bv_toNat` and `UScalar.val`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_MaskSparseScalar.lean:11:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'PV_B3_MaskSparseScalar.block_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

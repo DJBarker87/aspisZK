@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderNative.lean:27:66: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderNative.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) pair.1 pair.2
+in the target expression
+  (let (p0, p1) := pair
+    PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) p0 p1) =
+    let (p0, p1) := pair
+    run inst (List.drop (↑j + 1) (PV_DL_EncoderZip.entries q b)) p0 p1
+
+case succ
+E : Type
+inst✝ : Inhabited E
+inst : aspis_core.r0.scalar.CodeField E
+q : Std.Array E 1024#usize
+b : Std.Array E 512#usize
+fuel : ℕ
+ih :
+  ∀ (j : Usize) (p0 p1 : E),
+    ↑j + fuel = 512 →
+      PV_DL_EncoderFold.finite inst q b fuel j p0 p1 = run inst (List.drop (↑j) (PV_DL_EncoderZip.entries q b)) p0 p1
+j : Usize
+p0 p1 : E
+rank : ↑j + (fuel + 1) = 512
+hj : ↑j < 512
+pair : E × E
+hp : PV_DL_EncoderZip.applyEntry inst (((↑q)[2 * ↑j]!, (↑q)[2 * ↑j + 1]!), (↑b)[↑j]!) p0 p1 = ok pair
+⊢ (let (p0, p1) := pair
+    PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) p0 p1) =
+    let (p0, p1) := pair
+    run inst (List.drop (↑j + 1) (PV_DL_EncoderZip.entries q b)) p0 p1
+'R1Z.PV_DL_EncoderNative.selected_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.run' does not depend on any axioms
+'R1Z.PV_DL_EncoderNative.suffix' depends on axioms: [propext]
+'R1Z.PV_DL_EncoderNative.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.source_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

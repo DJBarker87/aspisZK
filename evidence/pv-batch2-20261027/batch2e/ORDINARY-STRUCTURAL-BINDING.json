@@ -1,0 +1,97 @@
+{
+  "original_source": {
+    "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+    "revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+    "git_blob": "50b7fca7d0809e147cf4965d1d4c479e944daf3c",
+    "sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+  },
+  "inputs": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "revision": "73070ddd512bc4e79edfc0db714fb64dc74e87b8",
+      "git_blob": "50b7fca7d0809e147cf4965d1d4c479e944daf3c",
+      "sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sampler.rs",
+      "revision": "HEAD",
+      "git_blob": "cc76579dbb35793ff7040a55df5570db7fccbcf8",
+      "sha256": "93ea9e14bafd8b54ae93e399c7ef7622940bb925218d86935b5aa940983817a2"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "revision": "HEAD",
+      "git_blob": "540ff5a7e8fcfd74ded7aa23ca8c9cdba03bb5a3",
+      "sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "revision": "HEAD",
+      "git_blob": "8df35586b1d6d6ac391a97b0d3aaf0a544917d64",
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_C_SamplerEnvironment.lean",
+      "revision": "HEAD",
+      "git_blob": "b9574a54c80a19c07bf4506f81b50754e218b69c",
+      "sha256": "db20652ea3e3a3a3b7ff82bab35dce87da1400af8a70edc1b0299b4341293a1b"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_E_OrdinaryOriginal.lean",
+      "revision": "HEAD",
+      "git_blob": "ff4df6ca0b8527b9c9cf6f3d89356e81f77cbe10",
+      "sha256": "632fe70ac67adb252a2f337fb78bae9006ad378d4f49b0bc6bbae688cd06735d"
+    }
+  ],
+  "operation": 250,
+  "representation": "PV_B2_E_OrdinaryOriginal.original",
+  "boundary": "Reviewed structural source argument; NOT a fresh faithful Aeneas extraction of the original mutable-iterator body; no XR sources/objects/models",
+  "source_correspondence": [
+    {
+      "rust": "low_base_p_digits initialization from_fn i=0..7",
+      "lean": "PV_B2_C_OrdinaryReference.sampler_owned.low_base_p_digits_loop0",
+      "justification": "Both build eight ordered little-endian words at offsets4i..4i+3. C_ByteWord.source plus C_Bytes.body prove emitted shift/or byte assembly equals the checked ordered u32::from_le_bytes model."
+    },
+    {
+      "rust": "eight ordered from_fn digits, quotient.iter_mut().rev()",
+      "lean": "PV_B2_C_OrdinaryReference.sampler_owned.low_base_p_digits_loop1 / qm31_div_pass_loop",
+      "justification": "from_fn consumes exactly eight iterations0..7; reversed full-array mutable iterator consumes indices7..0 once. The owned state records every quotient write before the next remainder step. No discarded mutable restoration or mixed front/back iterator model. C_Division.body/C_Digits.body identify the copy with that complete-state recurrence."
+    },
+    {
+      "rust": "debug_assert high quotient bounds",
+      "lean": "none in release semantic representation",
+      "justification": "Pinned extraction/release use optimized overflow/debug-assertion settings. C_LowDigits.source removes the copy's harmless eight-step check loop using C_ReleaseCheck.source."
+    },
+    {
+      "rust": "decode8: CM31::new builds fields, WideExact::new canonical_qm31 reduces all8 limbs modP",
+      "lean": "PV_B2_E_OrdinaryOriginal.decode",
+      "justification": "CM31::new is the direct field constructor. Non-ct canonical_qm31 uses x.0%P; ct-host-prover is extensionally the same reduction. Pure reduce uses bounded U32.ofNatCore of x.val%P, with no failure possible. decode_eq proves identity only on the proved canonical sampler outputs."
+    },
+    {
+      "rust": "ordinary_sample",
+      "lean": "PV_B2_E_OrdinaryOriginal.original",
+      "justification": "Same low-state call, discard quotient, decode eight digits. copy_equal_original is universal complete Result equality; no success, rank, canonicality or callback premise is assumed."
+    }
+  ],
+  "checked_by_lean": [
+    "PV_B2_E_OrdinaryOriginal.reduce_eq",
+    "PV_B2_E_OrdinaryOriginal.decode_eq",
+    "PV_B2_E_OrdinaryOriginal.digits_canonical",
+    "PV_B2_E_OrdinaryOriginal.copy_equal_original"
+  ],
+  "source_changes_under_crates_programs": false,
+  "allocation": "No allocation in op250; weights allocation transport not claimed",
+  "native_differential": "Reuse existing labelled finite frozen/copy gates only when their exact input source pins match; no universal inference from samples",
+  "unchanged_trust": [
+    "entropy_law",
+    "entropy_kernel",
+    "observation"
+  ],
+  "ct_source": {
+    "path": "crates/aspis-core/src/field/ct.rs",
+    "revision": "HEAD",
+    "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
+    "sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684"
+  },
+  "ct_canonical_input_correspondence": "For x<P, each reduce64 fold has x & (2^31-1)=x and x>>31=0; subtract_p sees x>=P false and mask0. Canonicality is proved for every sampler output. No arbitrary-input ct reducer equivalence is assumed."
+}

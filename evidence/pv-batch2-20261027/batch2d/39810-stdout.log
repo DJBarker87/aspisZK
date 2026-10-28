@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:14:2: error: 'change' tactic failed, pattern
+  (let y := x.bv &&& 2147483647#64 + x.bv >>> 31;
+      let z := y &&& 2147483647#64 + y >>> 31;
+      let w := BitVec.setWidth 32 z;
+      w - (2147483647#32 &&& 0#32 - if w ≥ 2147483647#32 then 1#32 else 0#32)).toNat <
+    2147483647
+is not definitionally equal to target
+  (have i := UScalar.cast UScalarTy.U64 2147483647#u32;
+    have i1 := x &&& i;
+    have i2 := x.wrapping_shr 31#u32;
+    have x1 := U64.wrapping_add i1 i2;
+    have i3 := UScalar.cast UScalarTy.U64 2147483647#u32;
+    have i4 := x1 &&& i3;
+    have i5 := x1.wrapping_shr 31#u32;
+    have x2 := U64.wrapping_add i4 i5;
+    have i6 := UScalar.cast UScalarTy.U32 x2;
+    have i := UScalar.cast_fromBool UScalarTy.U32 (decide (i6 ≥ 2147483647#u32));
+    have mask := core.num.U32.wrapping_sub 0#u32 i;
+    have i1 := 2147483647#u32 &&& mask;
+    core.num.U32.wrapping_sub i6 i1) <
+    2147483647#u32
+'PV_B2_D_ScalarCanonical.reduce_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

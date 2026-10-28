@@ -1,0 +1,396 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_ReserveBuild.lean:193:18: error: Tactic `apply` failed: could not unify the conclusion of `@PV_W_RecursiveLaws.bind_congr`
+  Std.bind ?left ?k = Std.bind ?right ?l
+with the goal
+  (Std.bind
+      (erase ops
+        (invoke "zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref" fun ops =>
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            self.field_mask_entropy))
+      fun a =>
+      erase ops do
+        let __x ←
+          invoke "aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref" fun ops =>
+              aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+                aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                hash precommit_binding context a
+                { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+        let cf ←
+          invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+              core.result.Result.Insts.CoreOpsTry.branch __x.1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            if __x.2.consumed = true then do
+              let s ← invoke "Aeneas.Std.lift" fun ops => lift precommit_binding.to_slice
+              let a1 ← invoke "aspis_core.state_only_hiding.StateOnlyHidingContext.encode" fun ops => context.encode
+              let s1 ← invoke "Aeneas.Std.lift" fun ops => lift a1.to_slice
+              let s2 ←
+                invoke "zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref" fun ops =>
+                    zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      self.field_mask_entropy
+              let s3 ←
+                invoke "Aeneas.Std.lift" fun ops =>
+                    lift
+                      (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                          ⋯).to_slice
+              let a2 ← invoke "hash" fun ops => hash s3
+              let source_mask_seed ←
+                invoke "zeroize.Zeroizing.new" fun ops =>
+                    zeroize.Zeroizing.new
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+              let _ ←
+                invoke "zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize" fun ops =>
+                    zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      self.field_mask_entropy
+              pure
+                  (core.result.Result.Ok
+                      ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                          reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                          source_mask_seed := source_mask_seed },
+                        val),
+                    nonce_store1)
+            else
+              pure
+                (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                  nonce_store1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" fun ops =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                    (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+            pure (r1, nonce_store1)) =
+    let (b1, nonce_store1) := (b1, nonce_store1)
+    if b1 = true then do
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            self.field_mask_entropy
+      let (r, pre_reserved) ←
+        aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+            aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            hash precommit_binding context a
+            { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if pre_reserved.consumed = true then do
+            let s ← lift precommit_binding.to_slice
+            let a1 ← context.encode
+            let s1 ← lift a1.to_slice
+            let s2 ←
+              zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            let s3 ←
+              lift
+                  (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                      ⋯).to_slice
+            let a2 ← hash s3
+            let source_mask_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+            let _ ←
+              zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            Result.ok
+                (core.result.Result.Ok
+                    ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                        reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                        source_mask_seed := source_mask_seed },
+                      val),
+                  nonce_store1)
+          else
+            Result.ok
+              (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+          Result.ok (r1, nonce_store1)
+    else
+      Result.ok
+        (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+
+Note: The full type of `@PV_W_RecursiveLaws.bind_congr` is
+  ∀ [ExternalTypes] {A B : Type} (left right : Result A) (k l : A → Result B),
+    left = right → (∀ (a : A), k a = l a) → Std.bind left k = Std.bind right l
+
+case next.isFalse.next.isFalse.next.isFalse.next.isTrue
+inst✝ : ExternalTypes
+ops : ExternalFuns
+T0 : Type
+state_only_hidingStateOnlyMaskNonceStoreInst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0
+self : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+precommit_binding : Std.Array U8 32#usize
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+nonce_store : T0
+b : Bool
+h✝³ : ¬b = true
+i : U64
+h✝² : ¬(context.mask_layout_fingerprint != i) = true
+i1 : U64
+h✝¹ : ¬(context.layout_factor_fingerprint != i1) = true
+b1 : Bool
+nonce_store1 : T0
+h✝ : b1 = true
+⊢ (Std.bind
+      (erase ops
+        (invoke "zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref" fun ops =>
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            self.field_mask_entropy))
+      fun a =>
+      erase ops do
+        let __x ←
+          invoke "aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref" fun ops =>
+              aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+                aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+                hash precommit_binding context a
+                { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+        let cf ←
+          invoke "core.result.Result.Insts.CoreOpsTry.branch" fun ops =>
+              core.result.Result.Insts.CoreOpsTry.branch __x.1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            if __x.2.consumed = true then do
+              let s ← invoke "Aeneas.Std.lift" fun ops => lift precommit_binding.to_slice
+              let a1 ← invoke "aspis_core.state_only_hiding.StateOnlyHidingContext.encode" fun ops => context.encode
+              let s1 ← invoke "Aeneas.Std.lift" fun ops => lift a1.to_slice
+              let s2 ←
+                invoke "zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref" fun ops =>
+                    zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      self.field_mask_entropy
+              let s3 ←
+                invoke "Aeneas.Std.lift" fun ops =>
+                    lift
+                      (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                          ⋯).to_slice
+              let a2 ← invoke "hash" fun ops => hash s3
+              let source_mask_seed ←
+                invoke "zeroize.Zeroizing.new" fun ops =>
+                    zeroize.Zeroizing.new
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+              let _ ←
+                invoke "zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize" fun ops =>
+                    zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                      self.field_mask_entropy
+              pure
+                  (core.result.Result.Ok
+                      ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                          reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                          source_mask_seed := source_mask_seed },
+                        val),
+                    nonce_store1)
+            else
+              pure
+                (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                  nonce_store1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" fun ops =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                      aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                    (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+            pure (r1, nonce_store1)) =
+    let (b1, nonce_store1) := (b1, nonce_store1)
+    if b1 = true then do
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            self.field_mask_entropy
+      let (r, pre_reserved) ←
+        aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+            aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            hash precommit_binding context a
+            { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if pre_reserved.consumed = true then do
+            let s ← lift precommit_binding.to_slice
+            let a1 ← context.encode
+            let s1 ← lift a1.to_slice
+            let s2 ←
+              zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            let s3 ←
+              lift
+                  (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                      ⋯).to_slice
+            let a2 ← hash s3
+            let source_mask_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+            let _ ←
+              zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            Result.ok
+                (core.result.Result.Ok
+                    ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                        reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                        source_mask_seed := source_mask_seed },
+                      val),
+                  nonce_store1)
+          else
+            Result.ok
+              (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+          Result.ok (r1, nonce_store1)
+    else
+      Result.ok
+        (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_ReserveBuild.lean:276:18: error: Tactic `rfl` failed: The left-hand side
+  erase ops
+    (pure (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1))
+is not definitionally equal to the right-hand side
+  let (b1, nonce_store1) := (b1, nonce_store1)
+  if b1 = true then do
+    let a ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          self.field_mask_entropy
+    let (r, pre_reserved) ←
+      aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+          aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+          hash precommit_binding context a
+          { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if pre_reserved.consumed = true then do
+          let s ← lift precommit_binding.to_slice
+          let a1 ← context.encode
+          let s1 ← lift a1.to_slice
+          let s2 ←
+            zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                self.field_mask_entropy
+          let s3 ←
+            lift (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2] ⋯).to_slice
+          let a2 ← hash s3
+          let source_mask_seed ←
+            zeroize.Zeroizing.new
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+          let _ ←
+            zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                self.field_mask_entropy
+          Result.ok
+              (core.result.Result.Ok
+                  ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding, reserved_context := context,
+                      leaf_salt_seed := self.leaf_salt_seed, source_mask_seed := source_mask_seed },
+                    val),
+                nonce_store1)
+        else
+          Result.ok
+            (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+              nonce_store1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+              (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+        Result.ok (r1, nonce_store1)
+  else
+    Result.ok
+      (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+
+case next.isFalse.next.isFalse.next.isFalse.next.isFalse
+inst✝ : ExternalTypes
+ops : ExternalFuns
+T0 : Type
+state_only_hidingStateOnlyMaskNonceStoreInst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0
+self : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+precommit_binding : Std.Array U8 32#usize
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+nonce_store : T0
+b : Bool
+h✝³ : ¬b = true
+i : U64
+h✝² : ¬(context.mask_layout_fingerprint != i) = true
+i1 : U64
+h✝¹ : ¬(context.layout_factor_fingerprint != i1) = true
+b1 : Bool
+nonce_store1 : T0
+h✝ : ¬b1 = true
+⊢ erase ops
+      (pure
+        (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)) =
+    let (b1, nonce_store1) := (b1, nonce_store1)
+    if b1 = true then do
+      let a ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            self.field_mask_entropy
+      let (r, pre_reserved) ←
+        aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
+            aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
+            hash precommit_binding context a
+            { statement_digest := context.statement_digest, mask_nonce := context.mask_nonce, consumed := false }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if pre_reserved.consumed = true then do
+            let s ← lift precommit_binding.to_slice
+            let a1 ← context.encode
+            let s1 ← lift a1.to_slice
+            let s2 ←
+              zeroize.Zeroizing.Insts.CoreConvertAsRef.as_ref (Array.Insts.CoreConvertAsRefSlice U8 32#usize)
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            let s3 ←
+              lift
+                  (Array.make 4#usize [aspis_prover.state_only_entropy.POOL_V1_SOURCE_SEED_DOMAIN, s, s1, s2]
+                      ⋯).to_slice
+            let a2 ← hash s3
+            let source_mask_seed ←
+              zeroize.Zeroizing.new
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2
+            let _ ←
+              zeroize.Zeroizing.Insts.ZeroizeZeroize.zeroize
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  self.field_mask_entropy
+            Result.ok
+                (core.result.Result.Ok
+                    ({ mask_nonce := self.mask_nonce, precommit_binding := precommit_binding,
+                        reserved_context := context, leaf_salt_seed := self.leaf_salt_seed,
+                        source_mask_seed := source_mask_seed },
+                      val),
+                  nonce_store1)
+          else
+            Result.ok
+              (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce,
+                nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+                  aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
+                (core.convert.FromSame aspis_prover.state_only_hiding.StateOnlyMaskBuildError) residual
+          Result.ok (r1, nonce_store1)
+    else
+      Result.ok
+        (core.result.Result.Err aspis_prover.state_only_hiding.StateOnlyMaskBuildError.ReusedMaskNonce, nonce_store1)
+'R1Z.PV_W_ReserveBuild.erase_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

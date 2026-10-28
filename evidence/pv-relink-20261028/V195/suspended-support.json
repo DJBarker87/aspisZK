@@ -1,0 +1,182 @@
+{
+  "baseline": {
+    "row": "V195",
+    "name": "op51 aspis_core.field.wide_exact.WideExact.to_le_bytes",
+    "before": "CLOSED-ON-CANDIDATE",
+    "consequence": "SUSPENDED",
+    "reason": "SUSPENDED: both wide_flat and exact-source all_carriers (D037) reach serializer memcpy and compare its result. Raw.wide_bytes_flat is an owned reference, not an independently proved native serializer association.",
+    "closure_theorem": "R1Z.PV_CB3_Op51Arbitrary.op51_source",
+    "baseline_evidence": [
+      "definition-audit6.json#V195",
+      "rw:evidence/pv-d188-20261027/rows.json#V195"
+    ],
+    "supporting_passes": [
+      151,
+      152
+    ],
+    "reverify_when_validated_stub_available": true,
+    "exposed_supporting_passes": [
+      151,
+      152
+    ],
+    "unresolved_supporting_passes": []
+  },
+  "observations": [
+    {
+      "harness": "field::wide_exact::pv_cb3_arbitrary_bytes::all_carriers",
+      "pass_output": "evidence/pv-cb3-20261026/kani-wide-arbitrary-001/output.log",
+      "pass_output_blob": "735dcec4242127a0cc77ea5e264e0e4ce318d7e6",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cb3-20261026/kani-wide-arbitrary-001/collected-receipt.json",
+      "receipt_blob": "e18ba74257799945996c189d5f8a855051db87db",
+      "command": [
+        "timeout",
+        "180",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cb3-20261026/source/crates/aspis-core/Cargo.toml",
+        "--features",
+        "r0,ct-host-prover",
+        "--lib",
+        "--exact",
+        "--harness",
+        "field::wide_exact::pv_cb3_arbitrary_bytes::all_carriers",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "source_revision": "857b02fb247b070132ea66aa0de96246977c4dbc",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V195"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "Unrestricted-carrier all_carriers calls the shipped WideExact::to_le_bytes and compares its 32 output bytes with the owned serializer reference. The reconstructed native file SHA256 exactly matches the original receipt (frozen prefix plus committed original harness); its serializer copy is reached and observed.",
+      "diagnostic": {
+        "run": "D037",
+        "harness": "field::wide_exact::pv_cb3_arbitrary_bytes::all_carriers",
+        "metadata_and_paths": "diagnostics/d347/D037/goto-scan.json",
+        "graph": "diagnostics/d347/D037/graphs/field__wide_exact__pv_cb3_arbitrary_bytes__all_carriers-7719ba53b382.txt",
+        "goto_sha256": "7719ba53b38268cc31badf85fce583cae3def49a8cccc1a9c13bc57ed2e57cf8",
+        "graph_sha256": "658be5e642063e7c929ff9cb8bae126467e6f5eb4c071bab20b23cf030f607a3",
+        "bound": 33,
+        "source_binding": "d347-source-bindings.json; d347-plans.json; original receipt/blob retained on this observation",
+        "candidate_goto_sha256s": [
+          "7719ba53b38268cc31badf85fce583cae3def49a8cccc1a9c13bc57ed2e57cf8"
+        ],
+        "candidate_consistency": "All matching metadata-root candidates in this scope have the same copy-path presence; all inventories retained, never a name-only clearance",
+        "identity_scope": "Original receipt source hashes or committed original per-run snapshots; original surviving goto artifacts in D001; no solver or native-credit restoration"
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 151
+    },
+    {
+      "harness": "checks::wide_flat",
+      "pass_output": "evidence/pv-cb3-20261026/kani-wide-flat-001/output.log",
+      "pass_output_blob": "56655bf0d92ea448260f9031c2601884d3585012",
+      "refs": [
+        "codex/cx-prover-rw-20261023",
+        "codex/pv-dlib-20261028",
+        "codex/pv-b3p6-20261028",
+        "codex/pv-batch2-20261027",
+        "codex/pv-runjoin-20261026",
+        "codex/pv-reach-20261027",
+        "codex/pv-l2c-20261028"
+      ],
+      "receipt": "evidence/pv-cb3-20261026/kani-wide-flat-001/collected-receipt.json",
+      "receipt_blob": "f9a6636b9b9c4044eeb594057a0c04ebf4d24d4d",
+      "command": [
+        "timeout",
+        "180",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_NET_OFFLINE=true",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "checks::wide_flat",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "source_revision": "593e8e331c9fab309af0e76db84ee5bee648573a",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V195"
+      ],
+      "ledger_relation": "Candidate/source or supporting native-association scopes. An OPEN row is not a claimed closure; exact closure consequences are recorded separately.",
+      "copy_builtin_reached": true,
+      "property_depends_on_copy": true,
+      "exemption": null,
+      "status": "SUSPENDED under K-1; retained historical evidence, supplies NO native-link credit",
+      "reason": "A nonzero content copy/clone or append is on an admitted source path and the assertion compares resulting contents. Goto root-to-builtin paths are retained. This suspends the native PASS link, not the mathematical reference theorem.",
+      "diagnostic": {
+        "run": "K06",
+        "harness": "checks::wide_flat",
+        "metadata_and_paths": "diagnostics/K06/goto-scan.json",
+        "graph": "diagnostics/K06/graphs/checks__wide_flat.txt",
+        "goto_sha256": "07a5fdc9959e8e17453c582763adc4b0a6f59c8396f3977dbb8f613208f06969",
+        "graph_sha256": "8dd70ce4ec84a881b9307155230f370705ff86280d5b867d6311f4992e45e428",
+        "bound": 65,
+        "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
+      },
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved.",
+      "observation_index": 152
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-batch2-20261027/lean-sources/R1Z/PV_B2_D_ScalarCanonical.lean:19:2: error: None of the hypotheses are in the supported BitVec fragment after applying preprocessing.
+There are three potential reasons for this:
+1. If you are using custom BitVec constructs simplify them to built-in ones.
+2. If your problem is using only built-in ones it might currently be out of reach.
+   Consider expressing it in terms of different operations that are better supported.
+3. The original goal was reduced to False and is thus invalid.
+x : U64
+⊢ (BitVec.zeroExtend UScalarTy.U32.numBits
+          ((((x &&& BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+                    x.bv.ushiftRight (31#u32.bv.toNat % UScalarTy.U64.numBits))#uscalar &&&
+                BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+            ((x &&& BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+                  x.bv.ushiftRight (31#u32.bv.toNat % UScalarTy.U64.numBits)).ushiftRight
+              (31#u32.bv.toNat % UScalarTy.U64.numBits)) -
+        (2147483647#u32 &&&
+            (0#u32.bv -
+                (if
+                      decide
+                          (2147483647#u32.bv.toNat ≤
+                            (BitVec.zeroExtend UScalarTy.U32.numBits
+                                ((((x &&& BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+                                          x.bv.ushiftRight (31#u32.bv.toNat % UScalarTy.U64.numBits))#uscalar &&&
+                                      BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+                                  ((x &&& BitVec.zeroExtend UScalarTy.U64.numBits 2147483647#u32.bv#uscalar).bv +
+                                        x.bv.ushiftRight (31#u32.bv.toNat % UScalarTy.U64.numBits)).ushiftRight
+                                    (31#u32.bv.toNat % UScalarTy.U64.numBits))).toNat) =
+                        true then
+                    1#UScalarTy.U32.numBits#uscalar
+                  else 0#UScalarTy.U32.numBits#uscalar).bv)#uscalar).bv).toNat <
+    2147483647#u32.bv.toNat
+'PV_B2_D_ScalarCanonical.reduce_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

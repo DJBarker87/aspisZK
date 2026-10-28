@@ -1,0 +1,33 @@
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => ok (o, { iter := it })
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:11:7: error(lean.unknownIdentifier): Unknown constant `core.iter.range.IteratorRange.next_back`
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:19:52: error(lean.unknownIdentifier): Unknown identifier `core.iter.range.IteratorRange.next_back`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:17:30: error: unsolved goals
+n : Usize
+⊢ (do
+      let __x ←
+        core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back
+            (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize)
+            { start := 0#usize, «end» := n }
+      ok (__x.1, { iter := __x.2 })) =
+    if 0#usize < n then
+      ok (some (n.wrapping_sub 1#usize), { iter := { start := 0#usize, «end» := n.wrapping_sub 1#usize } })
+    else ok (none, { iter := { start := 0#usize, «end» := n } })
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:19:4: warning: This simp argument is unused:
+  core.ops.range.Range.Insts.DoubleEndedIterator
+
+Hint: Omit it from the simp argument list.
+  simp only [next, iter, core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next,
+      c̵o̵r̵e̵.̵o̵p̵s̵.̵r̵a̵n̵g̵e̵.̵R̵a̵n̵g̵e̵.̵I̵n̵s̵t̵s̵.̵D̵o̵u̵b̵l̵e̵E̵n̵d̵e̵d̵I̵t̵e̵r̵a̵t̵o̵r̵,̵ ̵core.iter.range.IteratorRange.next_back, core.iter.range.StepUsize]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3_LinearsIterator.iter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_LinearsIterator.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_LinearsIterator.next_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

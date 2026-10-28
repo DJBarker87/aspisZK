@@ -82,28 +82,13 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
 {
     let mut links = Schedule::new();
 
-    let pairs = [
-        (1usize, 2usize),
-        (2, 3),
-        (25, 26),
-        (27, 28),
-        (28, 29),
-        (30, 31),
-        (31, 32),
-    ];
-    let mut pi = 0usize;
-    while pi < 7 {
-        let (from, to) = pairs[pi];
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::SpongeCarry {
-                from: from as u8,
-                to: to as u8,
-            },
-            from * 16 + 11,
-            to * 16,
-        ));
-        pi += 1;
-    }
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 1, to: 2 }, 1 * 16 + 11, 2 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 2, to: 3 }, 2 * 16 + 11, 3 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 25, to: 26 }, 25 * 16 + 11, 26 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 27, to: 28 }, 27 * 16 + 11, 28 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 28, to: 29 }, 28 * 16 + 11, 29 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 30, to: 31 }, 30 * 16 + 11, 31 * 16));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 31, to: 32 }, 31 * 16 + 11, 32 * 16));
     links.push(link(PoolV1PairCopyRowLinkKindV1::OwnerOutput, 11, 28));
     links.push(link(PoolV1PairCopyRowLinkKindV1::NullifierKey, 12, 412));
     links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltHead, 44, 428));
@@ -133,17 +118,9 @@ pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairH
         level += 1;
     }
 
-    let values = [(0u8, 44usize, 960usize), (1, 460, 962), (2, 508, 964)];
-    let mut vi = 0usize;
-    while vi < 3 {
-        let (value, source_row, destination_row) = values[vi];
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::ValueSource { value },
-            source_row,
-            destination_row,
-        ));
-        vi += 1;
-    }
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 0 }, 44, 960));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 1 }, 460, 962));
+    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 2 }, 508, 964));
     links.push(link(
         PoolV1PairCopyRowLinkKindV1::ConservationInput,
         960,
@@ -256,13 +233,8 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     let mut links = Schedule::new();
     let mut i = 0usize;
     while i < legacy.len {
-        let scheduled = legacy.data[i];
-        if !matches!(
-            scheduled.kind,
-            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. }
-                | PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. }
-                | PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. }
-        ) {
+        let scheduled = schedule_at(&legacy, i);
+        if !path_kind(scheduled.kind) {
             links.push(scheduled);
         }
         i += 1;
@@ -272,7 +244,7 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
     // leaving every existing Poseidon endpoint unchanged.
     let mut si = 0usize;
     while si < links.len {
-        let mut scheduled = links.data[si];
+        let mut scheduled = schedule_at(&links, si);
         if usize::from(scheduled.producer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {
             scheduled.producer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;
         }
@@ -283,35 +255,30 @@ pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(
         si += 1;
     }
 
-    let mut level = 0usize;
-    while level < POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {
-        let auxiliary = pool_v1_pair_forest_path_base_row_v1(level)
-            .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
-        let target_block = pool_v1_pair_forest_membership_hash_block_v1(level)
-            .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
-        let previous_block = if level == 0 {
-            3
-        } else {
-            pool_v1_pair_forest_membership_hash_block_v1(level - 1)
-                .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?
-        };
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
-            previous_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 11,
-            auxiliary,
-        ));
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
-            auxiliary + 1,
-            target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 12,
-        ));
-        links.push(link(
-            PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
-            auxiliary + 1,
-            target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,
-        ));
-        level += 1;
-    }
+    links = append_forest_level(links, 0)?;
+    links = append_forest_level(links, 1)?;
+    links = append_forest_level(links, 2)?;
+    links = append_forest_level(links, 3)?;
+    links = append_forest_level(links, 4)?;
+    links = append_forest_level(links, 5)?;
+    links = append_forest_level(links, 6)?;
+    links = append_forest_level(links, 7)?;
+    links = append_forest_level(links, 8)?;
+    links = append_forest_level(links, 9)?;
+    links = append_forest_level(links, 10)?;
+    links = append_forest_level(links, 11)?;
+    links = append_forest_level(links, 12)?;
+    links = append_forest_level(links, 13)?;
+    links = append_forest_level(links, 14)?;
+    links = append_forest_level(links, 15)?;
+    links = append_forest_level(links, 16)?;
+    links = append_forest_level(links, 17)?;
+    links = append_forest_level(links, 18)?;
+    links = append_forest_level(links, 19)?;
+    links = append_forest_level(links, 20)?;
+    links = append_forest_level(links, 21)?;
+    links = append_forest_level(links, 22)?;
+    links = append_forest_level(links, 23)?;
     if links.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {
         return Err(PoolV1PairHidingLayoutErrorV1::Shape);
     }
@@ -324,7 +291,7 @@ pub fn pool_v1_pair_forest_copy_active_rows_v1(
     let mut flags = [false; 1024];
     let mut i = 0usize;
     while i < schedule.len {
-        let link = schedule.data[i];
+        let link = schedule_at(&schedule, i);
         flags[link.producer_row as usize] = true;
         flags[link.consumer_row as usize] = true;
         i += 1;
@@ -333,7 +300,7 @@ pub fn pool_v1_pair_forest_copy_active_rows_v1(
     let mut len = 0usize;
     i = 0;
     while i < 1024 {
-        if flags[i] {
+        if flag_at(&flags, i) {
             rows[len] = i as u16;
             len += 1;
         }
@@ -569,12 +536,14 @@ fn aux_tuple(row: usize, start: usize, count: usize) -> PoolV1PairCopyTupleV1 {
     tuple_cells(row, start, count, false)
 }
 pub fn build_pool_v1_pair_copy_registry_v1() -> Result<Registry, PoolV1PairTraceErrorV1> {
-    let rows = build_pool_v1_pair_copy_row_schedule_v1()
-        .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+    let rows = match build_pool_v1_pair_copy_row_schedule_v1() {
+        Ok(rows) => rows,
+        Err(_) => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+    };
     let mut output = Registry::new();
     let mut ri = 0usize;
     while ri < rows.len {
-        let scheduled = rows.data[ri];
+        let scheduled = schedule_at(&rows, ri);
         let (producer, consumer, weight) = match scheduled.kind {
             PoolV1PairCopyRowLinkKindV1::SpongeCarry { from, .. } => (
                 tuple_cells(scheduled.producer_row as usize, 0, 16, false),
@@ -733,12 +702,14 @@ fn path_kind(kind: PoolV1PairCopyRowLinkKindV1) -> bool {
 }
 pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1PairTraceErrorV1> {
     let legacy = build_pool_v1_pair_copy_registry_v1()?;
-    let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()
-        .map_err(|_| PoolV1PairTraceErrorV1::CopyLayout)?;
+    let schedule = match build_pool_v1_pair_forest_copy_row_schedule_v1() {
+        Ok(schedule) => schedule,
+        Err(_) => return Err(PoolV1PairTraceErrorV1::CopyLayout),
+    };
     let mut output = Registry::new();
     let mut si = 0usize;
     while si < schedule.len {
-        let scheduled = schedule.data[si];
+        let scheduled = schedule_at(&schedule, si);
         let (producer, consumer, weight) = if path_kind(scheduled.kind) {
             match scheduled.kind {
                 PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. } => (
@@ -762,8 +733,8 @@ pub fn build_pool_v1_pair_forest_copy_registry_v1() -> Result<Registry, PoolV1Pa
             let mut found = None;
             let mut i = 0usize;
             while i < legacy.len && found.is_none() {
-                if legacy.data[i].kind == scheduled.kind {
-                    found = Some(legacy.data[i]);
+                if registry_at(&legacy, i).kind == scheduled.kind {
+                    found = Some(registry_at(&legacy, i));
                 }
                 i += 1;
             }
@@ -803,11 +774,11 @@ fn tuple_value(trace: &PoolV1PairForestTraceV1, tuple: PoolV1PairCopyTupleV1) ->
         out[i] = match tuple.limbs[i] {
             PoolV1PairTupleLimbV1::Zero => M31::ZERO,
             PoolV1PairTupleLimbV1::Cell { source, offset } => {
-                let columns = match source.bank {
-                    PoolV1PairTraceBankV1::Stable => &trace.stable.c1,
-                    PoolV1PairTraceBankV1::Late => &trace.late,
+                let value = match source.bank {
+                    PoolV1PairTraceBankV1::Stable => trace.stable.c1[source.cell.column as usize][source.cell.row as usize],
+                    PoolV1PairTraceBankV1::Late => trace.late[source.cell.column as usize][source.cell.row as usize],
                 };
-                columns[source.cell.column as usize][source.cell.row as usize].add(offset)
+                value.add(offset)
             }
         };
         i += 1;
@@ -863,7 +834,7 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
     let registry = build_pool_v1_pair_forest_copy_registry_v1()?;
     let mut i = 0usize;
     while i < registry.len {
-        let link = registry.data[i];
+        let link = registry_at(&registry, i);
         let weight = copy_weight(link.weight, append_index, trace.variant);
         let mut side = 0usize;
         while side < 2 {
@@ -872,12 +843,10 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
             } else {
                 link.consumer
             };
-            let row = &mut rows[tuple.row as usize];
-            let (values, weights) = if side == 0 {
-                (&mut row.producer_values, &mut row.producer_weights)
-            } else {
-                (&mut row.consumer_values, &mut row.consumer_weights)
-            };
+            let row_index = tuple.row as usize;
+            let mut row = rows[row_index];
+            let mut weights = if side == 0 { row.producer_weights } else { row.consumer_weights };
+            let mut values = if side == 0 { row.producer_values } else { row.consumer_values };
             let slot = if weights[0] == M31::ZERO {
                 0
             } else if weights[1] == M31::ZERO {
@@ -887,6 +856,14 @@ pub fn pool_v1_pair_forest_copy_rows_v1(
             };
             values[slot] = compress_tuple(link.tag, &tuple_value(trace, tuple), lambda);
             weights[slot] = weight;
+            if side == 0 {
+                row.producer_values = values;
+                row.producer_weights = weights;
+            } else {
+                row.consumer_values = values;
+                row.consumer_weights = weights;
+            }
+            rows[row_index] = row;
             side += 1;
         }
         i += 1;
@@ -1013,4 +990,47 @@ pub fn materialize_active_rows() -> Result<Vec<u16>, PoolV1PairHidingLayoutError
 pub fn materialize_mask_cells() -> Result<Vec<TraceCell>, PoolV1PairHidingLayoutErrorV1> {
     let (cells, len) = pool_v1_pair_forest_relation_free_mask_cells_v1()?;
     Ok(cells[..len].to_vec())
+}
+
+// Owned read boundaries keep array-element loans out of caller loop joins.
+#[inline(never)]
+fn schedule_at(schedule: &Schedule, i: usize) -> PoolV1PairCopyRowLinkV1 {
+    schedule.data[i]
+}
+#[inline(never)]
+fn registry_at(registry: &Registry, i: usize) -> PoolV1PairCopyLinkV1 {
+    registry.data[i]
+}
+
+#[inline(never)]
+fn flag_at(flags: &[bool; 1024], i: usize) -> bool { flags[i] }
+
+#[inline(never)]
+fn append_forest_level(mut links: Schedule, level: usize) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {
+    let auxiliary = pool_v1_pair_forest_path_base_row_v1(level)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
+    let target_block = pool_v1_pair_forest_membership_hash_block_v1(level)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;
+    let previous_block = if level == 0 {
+        3
+    } else {
+        pool_v1_pair_forest_membership_hash_block_v1(level - 1)
+        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?
+    };
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },
+        previous_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 11,
+        auxiliary,
+    ));
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },
+        auxiliary + 1,
+        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 12,
+    ));
+    links.push(link(
+        PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },
+        auxiliary + 1,
+        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,
+    ));
+    Ok(links)
 }

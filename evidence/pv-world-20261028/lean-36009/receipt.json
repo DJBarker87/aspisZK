@@ -1,0 +1,65 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36009/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36009/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Syntax.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.49",
+  "peak_rss_kib": "487876",
+  "swap": "0",
+  "source_revision": "d715ff61b3290d7c00099cd8149a07ab43b298a5",
+  "expected_phase": "compilation of R1Z/PV_W_Syntax",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:97:41: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:97:13: error: unsolved goals\ncase call.fail\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nB\u271d : Type\nop : Op B\u271d\nk : B\u271d \u2192 Program Op E A\nih : \u2200 (a : B\u271d) (w : W), Executes (fun {B} => ops) (k a) w (eval (fun {B} => ops) (k a) w)\nw : W\ne : E\nh : (ops op w).outcome = Outcome.fail e\n\u22a2 PV_W_Threading.bind (ops op) (fun a => eval (fun {B} => ops) (k a)) w =\n    { outcome := Outcome.fail e, world := (ops op w).world, calls := (ops op w).calls }\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:98:38: error: Ambiguous term\n  bind\nPossible interpretations:\n  PV_W_Threading.bind : M ?m.136 ?m.137 ?m.138 ?m.139 \u2192\n    (?m.139 \u2192 M ?m.136 ?m.137 ?m.138 ?m.140) \u2192 M ?m.136 ?m.137 ?m.138 ?m.140\n  \n  Bind.bind : ?m.136 ?m.138 \u2192 (?m.138 \u2192 ?m.136 ?m.139) \u2192 ?m.136 ?m.139\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:98:10: error: unsolved goals\ncase call.div\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nB\u271d : Type\nop : Op B\u271d\nk : B\u271d \u2192 Program Op E A\nih : \u2200 (a : B\u271d) (w : W), Executes (fun {B} => ops) (k a) w (eval (fun {B} => ops) (k a) w)\nw : W\nh : (ops op w).outcome = Outcome.div\n\u22a2 PV_W_Threading.bind (ops op) (fun a => eval (fun {B} => ops) (k a)) w =\n    { outcome := Outcome.div, world := (ops op w).world, calls := (ops op w).calls }\n'R1Z.PV_W_Syntax.eval_thenDo' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_W_Syntax.execution_sound' depends on axioms: [propext]\n'R1Z.PV_W_Syntax.execution_complete' depends on axioms: [propext, sorryAx]\n'R1Z.PV_W_Syntax.eval_valid' depends on axioms: [propext]\n'R1Z.PV_W_Syntax.execution_exact' depends on axioms: [propext]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 36009,
+  "module": "R1Z/PV_W_Syntax",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Syntax.lean",
+  "source_blob": "8a82074d2cf2cd01d0f52010fbb01d5900617506",
+  "source_sha256": "bf335e880f210324fd3608b3eb0cfaedcd8616a859f6a94d275660268098d5e3",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_Threading"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "4610e4304c3abe5c5d3d2989214b4e7a3669cb28b939e2c5768337c3ad51be6f",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_Threading": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Threading.olean",
+      "sha256": "3977b335d8d9fd736089a1eb5721f0e6d8f371387472d738d2274da3f1f60753",
+      "source_sha256": "a0c0fd9fcfad07d18597cae9106ae43d69298eea98218df4065be2e1fba0f8ea"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "source": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "body_sha256": "7e10cc39a8a9abc222c2c0ab7dfff818c28b588575d8ff2c2e9b8b86bfa4c0ad",
+  "name": "prover.prove_from_semantics",
+  "module": "R1Z.PV_W_R_FromSemantics",
+  "callbacks": [
+    [
+      "hash",
+      "Hash"
+    ]
+  ],
+  "recursive_imports": [
+    "FinishOpening",
+    "PrepareOpening",
+    "PrivateSalts",
+    "PublishCompact"
+  ],
+  "calls": [
+    {
+      "label": "prover.prepare_opening",
+      "expression": "prover.prepare_opening variant hash backend sem",
+      "classification": "recursive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.derive_private_salts",
+      "expression": "prover.derive_private_salts reserved context hash 114#u8",
+      "classification": "recursive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r1",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.finish_opening",
+      "expression": "prover.finish_opening variant hash val val1",
+      "classification": "recursive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r2",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.publish_compact",
+      "expression": "prover.publish_compact variant val2",
+      "classification": "recursive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n(alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)\nresidual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n(alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n(alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual",
+      "classification": "opaque obligation"
+    }
+  ],
+  "scope": "complete-Result source translation; remaining opaque leaves and native/deployment adequacy unproved"
+}

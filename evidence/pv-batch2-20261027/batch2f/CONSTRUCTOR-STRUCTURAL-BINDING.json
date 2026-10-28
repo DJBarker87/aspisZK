@@ -1,0 +1,100 @@
+{
+  "operation": 252,
+  "source_revision": "03b37df2aa2a0871fb574a320eae0c437f0b33b8",
+  "representation": "PV_B2_F_ConstructorEffect.original",
+  "inputs": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "git_blob": "ec753dfc47afb80ff1c4ab5864a9101ebe79bbb7",
+      "sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b",
+      "frozen_73070_identical": true
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "git_blob": "a042fb7011f588e52ed45fe27397c85c765bab1f",
+      "sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "frozen_73070_identical": null
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "git_blob": "db50b9d9dc195ae6275b83a674ea0666b53e74db",
+      "sha256": "e3430cc4ecf198800bc44e24096a5d4b5d096b7caa4cd6ad59b3c409f4315cab",
+      "frozen_73070_identical": false
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/transport.rs",
+      "git_blob": "676ff15ce2794c25abba47926a063e9ddc18420e",
+      "sha256": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "frozen_73070_identical": true
+    },
+    {
+      "path": "crates/aspis-core/src/state_only_prefix.rs",
+      "git_blob": "37155eba2b2c37b45642f444898de94e081a69ce",
+      "sha256": "31c2cd269efadc9b41d77bb841c7728e11e7494b443dbfea4b1e804795c11d0f",
+      "frozen_73070_identical": true
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "git_blob": "8df35586b1d6d6ac391a97b0d3aaf0a544917d64",
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "frozen_73070_identical": true
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "git_blob": "540ff5a7e8fcfd74ded7aa23ca8c9cdba03bb5a3",
+      "sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+      "frozen_73070_identical": true
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
+      "sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "frozen_73070_identical": true
+    }
+  ],
+  "source_correspondence": [
+    {
+      "rust": "state_only_prefix::r0::statement_points -> state_only_statement_points",
+      "lean": "PV_B2_C_WeightsNative.host_weights.state_only_statement_points",
+      "association": "Original ordered reverse indices9..0 are fully unrolled; every successor write and carry assignment is retained; absorption writes7 and6 then returns all3 arrays; exact identical field call order."
+    },
+    {
+      "rust": "factors k0..2, d0..4 with TAU=[3,4,2,0,1]",
+      "lean": "PV_B2_C_ConstructorStages.stage0..stage14",
+      "association": "Named fixed factor-row boundaries; point indices(3,2),(1,0),(5,4),(9,8),(7,6); ordered four products and every nested-array restoration retained."
+    },
+    {
+      "rust": "circle factor rows k3/k4, d0..4",
+      "lean": "remaining constructor stages through stage25",
+      "association": "First row[ONE,y,x,x*y]; four ordered double recurrences per point; no whole-constructor kernel normalization."
+    },
+    {
+      "rust": "frozen Box::new in #[inline(never)] weights::box_from_parts",
+      "lean": "PV_B2_F_ConstructorEffect.finish",
+      "association": "Current actual prover caller invokes #[inline(never)] retain_weights_box after the unchanged pure constructor. Same layout asserted by pinned Rust compiler and native9-pair allocation/drop gate; full Box Result context preserves outer failure/divergence; Rust errors bypass allocation."
+    },
+    {
+      "rust": "native inputs and four output fields",
+      "lean": "PV_B2_F_ConstructorCarrier and ConstructorCarrierLaws",
+      "association": "All limbs/coordinates and native variant tags retained. Array lengths preserved; alpha, points, and all three-dimensional factor arrays have checked roundtrips. All11 Rust error variants mapped separately."
+    }
+  ],
+  "universal_laws": [
+    "PV_B2_C_ConstructorSuccess.new_eq_staged",
+    "PV_B2_F_ConstructorEffect.complete_result",
+    "PV_B2_F_ConstructorNative.source",
+    "PV_B2_F_ConstructorCarrierLaws.weight_roundtrip"
+  ],
+  "counterexample": "BOX-DEFECT.json;40838 retained; actual caller allocation repaired; unboxed extraction kernel remains unchanged",
+  "elf_gate": "ELF-GATE.json; both source stages, all6 pins match",
+  "native_fidelity": "NATIVE-BOX-FIDELITY.json; actual allocation factory,9 pairs,64512 raw cells,9216 materialized cells; finite evidence, not universal inference",
+  "native_link_evidence_class": "Reviewed frozen-source fixed-row/caller-Box structural association, universal Lean complete Result equality for every Box request context, exact native carrier/dictionary composition, compiled layout assertion and finite native allocation/drop/value witnesses; not fresh extraction of original Box/Drop closure",
+  "scope": "Selected candidate source/callback row. Actual native execution/RunJoin installation, OS-failure witness independence and L1/L2/L3 remain P obligations.",
+  "trust_fields": [
+    "entropy_law",
+    "entropy_kernel",
+    "observation"
+  ],
+  "no_XR": true,
+  "no_mutable_iterator_borrow_in_copy": true
+}

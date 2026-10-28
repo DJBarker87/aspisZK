@@ -1,0 +1,15 @@
+import R1Z.PV_B2_C_EmissionProbe
+set_option autoImplicit false
+namespace PV_B2_C_FullEmissionProbe
+open Aeneas Aeneas.Std Result PV_B2_251c1 PV_B2_C_EmissionProbe
+/-- All 1024 updated values, retaining the complete success/failure Result. -/
+def probe (v : transport.Variant) : Result (List (List Nat)) := do
+  let out ← host_weights.materialize_values (weights v)
+    aspis_core.field.wide_exact.WideExact.ONE
+    (Array.repeat 1024#usize aspis_core.field.wide_exact.WideExact.ZERO)
+  ok (out.val.toList.map limbs)
+#eval probe .S1
+#eval probe .S2
+#eval probe .D
+#print axioms probe
+end PV_B2_C_FullEmissionProbe
