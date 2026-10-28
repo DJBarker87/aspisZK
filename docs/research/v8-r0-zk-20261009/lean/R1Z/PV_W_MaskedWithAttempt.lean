@@ -1,4 +1,4 @@
-import R1Z.PV_W_RecursiveLaws
+import R1Z.PV_W_IfLaws
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_MaskedWithAttempt
@@ -458,15 +458,13 @@ theorem erase_program (ops : ExternalFuns)
                                           | Continue val4 =>
                                             try dsimp only
                                             try dsimp only
-                                            rw [erase_ite]
-                                            split
+                                            apply PV_W_IfLaws.erase_if_congr
                                             ·
                                               rfl
                                             ·
                                               try dsimp only
                                               try dsimp only
-                                              rw [erase_ite]
-                                              split
+                                              apply PV_W_IfLaws.erase_if_congr
                                               ·
                                                 rfl
                                               ·
@@ -497,28 +495,23 @@ theorem erase_program (ops : ExternalFuns)
                                                         exact erase_invoke ops _ _
                                                       · intro audit
                                                         try dsimp only
-                                                        rw [erase_ite]
-                                                        split
+                                                        apply PV_W_IfLaws.erase_if_congr
                                                         ·
                                                           rfl
                                                         ·
                                                           try dsimp only
-                                                          rw [erase_ite]
-                                                          split
+                                                          apply PV_W_IfLaws.erase_if_congr
                                                           ·
                                                             rfl
                                                           ·
                                                             try dsimp only
-                                                            rw [erase_ite]
-                                                            split
+                                                            apply PV_W_IfLaws.erase_if_congr
                                                             ·
                                                               try dsimp only
-                                                              rw [erase_ite]
-                                                              split
+                                                              apply PV_W_IfLaws.erase_if_congr
                                                               ·
                                                                 try dsimp only
-                                                                rw [erase_ite]
-                                                                split
+                                                                apply PV_W_IfLaws.erase_if_congr
                                                                 ·
                                                                   try dsimp only
                                                                   rw [erase_bind]
@@ -643,8 +636,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                                                               exact erase_invoke ops _ _
                                                                                                             · intro h1_total_balanced
                                                                                                               try dsimp only
-                                                                                                              rw [erase_ite]
-                                                                                                              split
+                                                                                                              apply PV_W_IfLaws.erase_if_congr
                                                                                                               ·
                                                                                                                 try dsimp only
                                                                                                                 rw [erase_bind]

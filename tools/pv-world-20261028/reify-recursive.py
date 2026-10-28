@@ -120,7 +120,7 @@ def proof(node,n=2):
   var=node.var
   intro=('rintro ⟨'+var[1:-1]+'⟩') if var.startswith('(') else 'intro '+var
   return pad+'try dsimp only\n'+pad+'rw [erase_bind]\n'+pad+'apply PV_W_RecursiveLaws.bind_congr\n'+pad+'·\n'+proof(node.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(node.next,n+2)
- if k=='if':return pad+'try dsimp only\n'+pad+'rw [erase_ite]\n'+pad+'split\n'+pad+'·\n'+proof(node.yes,n+2)+'\n'+pad+'·\n'+proof(node.no,n+2)
+ if k=='if':return pad+'try dsimp only\n'+pad+'apply PV_W_IfLaws.erase_if_congr\n'+pad+'·\n'+proof(node.yes,n+2)+'\n'+pad+'·\n'+proof(node.no,n+2)
  if k=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+node.discr+' with\n'
   for ix,(p,c) in enumerate(node.branches):
@@ -133,7 +133,7 @@ selected=sys.argv[1] if len(sys.argv)>1 else None
 for name,short in CONFIG:
  if selected and short!=selected:continue
  header,result,body,args,explicit=get(name);node=parse(normalize(body));calls=[]
- out='import R1Z.PV_W_RecursiveLaws\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_'+short+'\nopen Aeneas Aeneas.Std ProverRwFull PV_W_TypedEffects\nopen PV_W_RecursiveLaws\nvariable [ExternalTypes]\n\n'
+ out='import R1Z.PV_W_IfLaws\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_'+short+'\nopen Aeneas Aeneas.Std ProverRwFull PV_W_TypedEffects\nopen PV_W_RecursiveLaws\nvariable [ExternalTypes]\n\n'
  out+='def program\n  '+header+' :\n  P '+result+' := do\n'+emit(node,calls=calls)+'\n\n'
  # implicit T0 is passed explicitly to source to remove ambiguity.
  actual='@'+name+' _ ops '+ ' '.join(args)

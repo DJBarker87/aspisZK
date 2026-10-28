@@ -1,4 +1,4 @@
-import R1Z.PV_W_RecursiveLaws
+import R1Z.PV_W_IfLaws
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_ReserveBuild
@@ -149,8 +149,7 @@ theorem erase_program (ops : ExternalFuns)
     exact erase_invoke ops _ _
   · intro b
     try dsimp only
-    rw [erase_ite]
-    split
+    apply PV_W_IfLaws.erase_if_congr
     ·
       rfl
     ·
@@ -161,8 +160,7 @@ theorem erase_program (ops : ExternalFuns)
         exact erase_invoke ops _ _
       · intro i
         try dsimp only
-        rw [erase_ite]
-        split
+        apply PV_W_IfLaws.erase_if_congr
         ·
           rfl
         ·
@@ -173,8 +171,7 @@ theorem erase_program (ops : ExternalFuns)
             exact erase_invoke ops _ _
           · intro i1
             try dsimp only
-            rw [erase_ite]
-            split
+            apply PV_W_IfLaws.erase_if_congr
             ·
               rfl
             ·
@@ -185,8 +182,7 @@ theorem erase_program (ops : ExternalFuns)
                 exact erase_invoke ops _ _
               · rintro ⟨b1, nonce_store1⟩
                 try dsimp only
-                rw [erase_ite]
-                split
+                apply PV_W_IfLaws.erase_if_congr
                 ·
                   try dsimp only
                   rw [erase_bind]
@@ -210,8 +206,7 @@ theorem erase_program (ops : ExternalFuns)
                         cases cf with
                         | Continue val =>
                           try dsimp only
-                          rw [erase_ite]
-                          split
+                          apply PV_W_IfLaws.erase_if_congr
                           ·
                             try dsimp only
                             rw [erase_bind]
