@@ -1,0 +1,1339 @@
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_borrowed_positive --harness KNH_borrowed_negative --exact -Z unstable-options -Z stubbing -Z loop-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --force-warn unstable_features --sysroot /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0 -L /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib --extern force:kani --extern noprelude,nounused:std=/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib/libstd.rlib -C opt-level=1 -C overflow-checks=on -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs --out-dir /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new --crate-name KNH_probe --crate-type lib`
+warning: type `KNH_Record` should have an upper camel case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:14:8
+   |
+14 | struct KNH_Record<'a> {bytes:&'a [u8]}
+   |        ^^^^^^^^^^ help: convert the identifier to upper camel case: `KnhRecord`
+   |
+   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: use of an unstable feature
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:1:12
+  |
+1 | #![feature(proc_macro_hygiene,stmt_expr_attributes)]
+  |            ^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `--force-warn unstable-features`
+
+warning: use of an unstable feature
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:1:31
+  |
+1 | #![feature(proc_macro_hygiene,stmt_expr_attributes)]
+  |                               ^^^^^^^^^^^^^^^^^^^^
+
+warning: use of an unstable feature
+ --> <crate attribute>:1:12
+  |
+1 | #![feature(register_tool)]
+  |            ^^^^^^^^^^^^^
+
+warning: crate `KNH_probe` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `knh_probe`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `KNH_for_positive` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:3:4
+  |
+3 | fn KNH_for_positive(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_positive`
+
+warning: function `KNH_for_negative` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:9:4
+  |
+9 | fn KNH_for_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_negative`
+
+warning: function `KNH_borrowed_positive` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:16:4
+   |
+16 | fn KNH_borrowed_positive(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_positive`
+
+warning: function `KNH_borrowed_negative` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:22:4
+   |
+22 | fn KNH_borrowed_negative(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_negative`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.001090592s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.052954584s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.001550146s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.045832276s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 1024
+Total # statements: 14724
+Total # expressions: 4014
+
+Reachable Items:
+  - function: 1022
+  - static item: 2
+
+Statements:
+  - Ignored: 6080
+  - SwitchInt: 556
+  - Intrinsic: 6
+  - Drop: 42
+  - Assign: 4014
+  - Goto: 834
+  - Assert: 248
+  - Return: 976
+  - Call: 1862
+  - Unreachable: 106
+
+Expressions:
+  - Discriminant: 168
+  - CheckedBinaryOp: 150
+  - AddressOf: 58
+  - Use: 1524
+  - Aggregate: 458
+  - UnaryOp: 150
+  - Repeat: 10
+  - Ref: 302
+  - Cast: 514
+  - BinaryOp: 680
+
+-------------------------------------------
+warning: 10 warnings emitted
+
+Finished /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler in 0.34013247s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.symtab.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Finished goto-cc in 0.14116725s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.symtab.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Finished goto-cc in 0.14651047s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out --function _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Finished goto-cc in 0.12997322s
+[Kani] Running: `goto-instrument --dfcc _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative --no-malloc-may-fail --apply-loop-contracts --loop-contracts-no-unwind --disable-loop-contracts-side-effect-check /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+**** WARNING: transformed loops will not be unwound after applying loop contracts. Note that transformed loops require at least unwinding bounds 2 to pass the unwinding assertions.
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Trying to force one backedge per target
+Loading CPROVER C library (x86_64)
+Adding the cprover_contracts library (x86_64)
+Instrumenting harness function '_RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails_8do_panic'
+Instrumenting '_RNvXs1_Cs7f35Cc4Kq59_4kaniAhj4_NtB5_9Arbitrary3anyCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj37_Kj2_EB8_'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3fmt2rtNtB3_8Argument11new_displayjEB7_'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails1_8do_panic'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partshuECs3GJ6w2eqr8A_3std'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh16with_metadata_ofhECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvXNtNtCs8xvirJzNMvV_4core5slice5indexShINtNtNtB6_3ops5index5IndexINtNtBI_5range7RangeTojEE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs4_NtNtCs8xvirJzNMvV_4core5slice5indexINtNtNtB9_3ops5range7RangeTojEINtB5_10SliceIndexShE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh15wrapping_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs3_NtCs8xvirJzNMvV_4core3numi15overflowing_mul'
+Instrumenting 'free'
+Instrumenting 'malloc'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails_8do_panic7runtime'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4casthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core5slice5index24get_offset_len_noubcheckhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail'
+Instrumenting '_RINvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB6_7NonNulljE4castuEBa_'
+Instrumenting '_RNvXNtCs7f35Cc4Kq59_4kani16rustc_intrinsicsPhINtB2_3PtrhE12to_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj28_Kj2_EB8_'
+Instrumenting '_RNvXs37_NtNtCs8xvirJzNMvV_4core7convert3numiINtB8_7TryFromjE8try_from'
+Instrumenting '_RNvXs2_NtNtCs8xvirJzNMvV_4core5slice5indexINtNtNtB9_3ops5range5RangejEINtB5_10SliceIndexShE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj11checked_sub'
+Instrumenting '_RINvXs8_Cs7f35Cc4Kq59_4kanihNtB6_9Arbitrary9any_arrayKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani13any_raw_arrayhKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyAhj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj39_Kj2_EB8_'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails1_8do_panic7runtime'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNulljE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani3mem24same_allocation_internalhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsjNtB5_7ToISize8to_isize'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata8metadatahECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvXs4_NtCs8xvirJzNMvV_4core7convertjINtB5_7TryIntoiE8try_intoCs7f35Cc4Kq59_4kani'
+Instrumenting '_RNvXsd_NtCs8xvirJzNMvV_4core5arrayAhj4_INtNtNtB7_3ops5index5IndexINtNtBG_5range7RangeTojEE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_add'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNulljE8from_refB9_'
+Instrumenting '_RNvNtNtCs7f35Cc4Kq59_4kani3mem4cbmc15same_allocation'
+Instrumenting '_RNvXNtCs7f35Cc4Kq59_4kani16rustc_intrinsicsPhINtB2_3PtrhE14from_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20wrapping_byte_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsd_Cs7f35Cc4Kq59_4kanijNtB5_9Arbitrary3any'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj19wrapping_add_signed'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail8do_panic'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem7size_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails0_8do_panic'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails0_8do_panic7runtime'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics6offsethPhjECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail8do_panic7runtime'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani16any_raw_internaljECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyjECsej4CisbYaIV_9KNH_probe'
+Specializing cprover_contracts functions for assigns clauses of at most 1 targets
+Removing unused functions
+Updating init function
+Setting entry point to _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Finished goto-instrument in 0.5812591s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Finished goto-instrument in 0.09040784s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::contract$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_add' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_frees_clause_inclusion' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_fresh' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains_exact' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_reset' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_equals' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_in_range_dfcc' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::function_pointer$object$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_allocated_deallocated_is_empty' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_deallocate_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_check_replace_ensures_was_freed_preconditions' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_make_invalid_pointer' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_deallocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_init' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_indexed_by_object_id' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_release' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_ptr_pred_ctx' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_free' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_insert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Finished goto-instrument in 0.06399581s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out'
+Finished goto-instrument in 0.07448537s
+Checking harness KNH_borrowed_negative...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out --verbosity 9 --json-ui`
+CBMC 6.11.0 (cbmc-6.11.0)
+CBMC version 6.11.0 (cbmc-6.11.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 50 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2641 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 177 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 69 column 5 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2641 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 177 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 413 column 13 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index thread 0
+Unwinding loop _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_negative.0 iteration 1 file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 23 column 2 function KNH_borrowed_negative thread 0
+aborting path on assume(false) at file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 23 column 2 function KNH_borrowed_negative thread 0
+Runtime Symex: 0.055513s
+size of program expression: 3388 steps
+slicing removed 2111 assignments
+Generated 139 VCC(s), 10 remaining after simplification
+Runtime Postprocess Equation: 0.000490832s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00315114s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 7.273e-06s
+Solving with CaDiCaL 3.0.0
+5029 variables, 7648 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000409635s
+Runtime decision procedure: 0.00367656s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+5030 variables, 7649 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000499869s
+Runtime decision procedure: 0.000545438s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+5031 variables, 7650 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.000763819s
+Runtime decision procedure: 0.000801902s
+Finished run_cbmc in 0.15967882s
+
+RESULTS:
+Check 1: <usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: library/kani_core/src/models.rs:203:17 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 2: <usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset value overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 3: <usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1
+	 - Status: SUCCESS
+	 - Description: "internal error: entered unreachable code"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 4: free.frees.1
+	 - Status: SUCCESS
+	 - Description: "Check that ptr is freeable"
+	 - Location: <builtin-library-free>:43 in function free
+
+Check 5: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:405:5 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 6: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:411:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 7: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:411:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 8: core::slice::index::slice_index_fail::do_panic::runtime.assertion.1
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:41:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 9: __CPROVER_contracts_write_set_record_deallocated.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:740 in function __CPROVER_contracts_write_set_record_deallocated
+
+Check 10: core::slice::index::slice_index_fail::do_panic::runtime.assertion.3
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:69:5 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 11: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset in bytes overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 12: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Offset result address must equal original pointer address plus offset"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 13: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer must point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 14: core::slice::index::slice_index_fail::do_panic::runtime.assertion.2
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:59:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 15: KNH_borrowed_negative.loop_invariant_base.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant before entry for loop KNH_borrowed_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 16: KNH_borrowed_negative.loop_assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check assigns clause inclusion for loop KNH_borrowed_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 17: KNH_borrowed_negative.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:24:31 in function KNH_borrowed_negative
+
+Check 18: KNH_borrowed_negative.assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check that i is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:24:31 in function KNH_borrowed_negative
+
+Check 19: KNH_borrowed_negative.loop_invariant_step.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant after step for loop KNH_borrowed_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 20: KNH_borrowed_negative.loop_step_unwinding.1
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_borrowed_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 21: KNH_borrowed_negative.loop_step_unwinding.2
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_borrowed_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 22: KNH_borrowed_negative.assertion.2
+	 - Status: FAILURE
+	 - Description: "assertion failed: i != borrowed.bytes.len()"
+	 - Location: KNH_scratch/KNH_probe.rs:25:2 in function KNH_borrowed_negative
+
+Check 23: __CPROVER_contracts_write_set_check_assignment.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:805 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 24: __CPROVER_contracts_write_set_check_assignment.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:822 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 25: __CPROVER_contracts_write_set_check_assignment.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:828 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 26: __CPROVER_contracts_write_set_check_assignment.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:837 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 27: __CPROVER_contracts_car_set_insert.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:174 in function __CPROVER_contracts_car_set_insert
+
+Check 28: __CPROVER_contracts_car_set_insert.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:177 in function __CPROVER_contracts_car_set_insert
+
+Check 29: __CPROVER_contracts_car_set_insert.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:181 in function __CPROVER_contracts_car_set_insert
+
+Check 30: kani::mem::cbmc::same_allocation.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "Kani does not support reasoning about pointer to unallocated memory"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::mem::cbmc::same_allocation
+
+Check 31: core::num::<impl usize>::checked_sub.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to compute `unchecked_sub` which would overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:1096:31 in function core::num::<impl usize>::checked_sub
+
+Check 32: core::slice::index::slice_index_fail::do_panic::runtime.assertion.4
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:50:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 33: KNH_borrowed_negative::{closure#0}.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 34: KNH_borrowed_negative::{closure#0}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 35: KNH_borrowed_negative::{closure#0}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 36: KNH_borrowed_negative::{closure#0}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 37: KNH_borrowed_negative::{closure#0}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 38: KNH_borrowed_negative::{closure#0}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 39: KNH_borrowed_negative::{closure#0}.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 40: KNH_borrowed_negative::{closure#0}.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 41: KNH_borrowed_negative::{closure#0}.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 42: KNH_borrowed_negative::{closure#0}.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 43: KNH_borrowed_negative::{closure#0}.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 44: KNH_borrowed_negative::{closure#0}.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:23:25 in function KNH_borrowed_negative::{closure#0}
+
+Check 45: KNH_borrowed_negative::{closure#0}.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 46: KNH_borrowed_negative::{closure#0}.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 47: KNH_borrowed_negative::{closure#0}.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 48: KNH_borrowed_negative::{closure#0}.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 49: KNH_borrowed_negative::{closure#0}.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 50: KNH_borrowed_negative::{closure#0}.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 51: KNH_borrowed_negative::{closure#0}.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 52: KNH_borrowed_negative::{closure#0}.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 53: KNH_borrowed_negative::{closure#0}.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 54: KNH_borrowed_negative::{closure#0}.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 55: KNH_borrowed_negative::{closure#0}.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 56: KNH_borrowed_negative::{closure#0}.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 57: KNH_borrowed_negative::{closure#0}.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 58: KNH_borrowed_negative::{closure#0}.pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 59: KNH_borrowed_negative::{closure#0}.pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 60: KNH_borrowed_negative::{closure#0}.pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 61: KNH_borrowed_negative::{closure#0}.pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 62: KNH_borrowed_negative::{closure#0}.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:23:28 in function KNH_borrowed_negative::{closure#0}
+
+Check 63: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 64: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 65: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 66: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 67: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 68: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 69: KNH_borrowed_negative.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "free argument must be NULL or valid pointer"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 70: KNH_borrowed_negative.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "free argument must be dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 71: KNH_borrowed_negative.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "free argument has offset zero"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 72: KNH_borrowed_negative.precondition_instance.4
+	 - Status: SUCCESS
+	 - Description: "double free"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 73: KNH_borrowed_negative.precondition_instance.5
+	 - Status: SUCCESS
+	 - Description: "free called for new[] object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 74: KNH_borrowed_negative.precondition_instance.6
+	 - Status: SUCCESS
+	 - Description: "free called for stack-allocated object"
+	 - Location: KNH_scratch/KNH_probe.rs:23:2 in function KNH_borrowed_negative
+
+Check 75: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 76: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 77: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 78: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 79: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 80: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 81: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.1
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 82: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.2
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 83: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.3
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+
+SUMMARY:
+ ** 1 of 83 failed
+Failed Checks: assertion failed: i != borrowed.bytes.len()
+ File: "/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs", line 25, in KNH_borrowed_negative
+
+VERIFICATION:- FAILED
+Verification Time: 0.15940873s
+
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out --function _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Finished goto-cc in 0.12456906s
+[Kani] Running: `goto-instrument --dfcc _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive --no-malloc-may-fail --apply-loop-contracts --loop-contracts-no-unwind --disable-loop-contracts-side-effect-check /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+**** WARNING: transformed loops will not be unwound after applying loop contracts. Note that transformed loops require at least unwinding bounds 2 to pass the unwinding assertions.
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Trying to force one backedge per target
+Loading CPROVER C library (x86_64)
+Adding the cprover_contracts library (x86_64)
+Instrumenting harness function '_RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani16any_raw_internaljECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail8do_panic'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails_8do_panic7runtime'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core5slice5index24get_offset_len_noubcheckhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj19wrapping_add_signed'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails1_8do_panic'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails1_8do_panic7runtime'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4casthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs4_NtNtCs8xvirJzNMvV_4core5slice5indexINtNtNtB9_3ops5range7RangeTojEINtB5_10SliceIndexShE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_add'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj28_Kj2_EB8_'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails0_8do_panic'
+Instrumenting 'malloc'
+Instrumenting '_RNvXNtNtCs8xvirJzNMvV_4core5slice5indexShINtNtNtB6_3ops5index5IndexINtNtBI_5range7RangeTojEE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNulljE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem7size_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB6_7NonNulljE4castuEBa_'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj11checked_sub'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3fmt2rtNtB3_8Argument11new_displayjEB7_'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj37_Kj2_EB8_'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyAhj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs3_NtCs8xvirJzNMvV_4core3numi15overflowing_mul'
+Instrumenting '_RNvXNtCs7f35Cc4Kq59_4kani16rustc_intrinsicsPhINtB2_3PtrhE12to_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1_Cs7f35Cc4Kq59_4kaniAhj4_NtB5_9Arbitrary3anyCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs37_NtNtCs8xvirJzNMvV_4core7convert3numiINtB8_7TryFromjE8try_from'
+Instrumenting '_RNvXsd_NtCs8xvirJzNMvV_4core5arrayAhj4_INtNtNtB7_3ops5index5IndexINtNtBG_5range7RangeTojEE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvXs8_Cs7f35Cc4Kq59_4kanihNtB6_9Arbitrary9any_arrayKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs2_NtCs8xvirJzNMvV_4core3fmtNtB6_9Arguments3newKj39_Kj2_EB8_'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh16with_metadata_ofhECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails0_8do_panic7runtime'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partshuECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNulljE8from_refB9_'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics6offsethPhjECsej4CisbYaIV_9KNH_probe'
+Instrumenting 'free'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyjECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsjNtB5_7ToISize8to_isize'
+Instrumenting '_RNvXs2_NtNtCs8xvirJzNMvV_4core5slice5indexINtNtNtB9_3ops5range5RangejEINtB5_10SliceIndexShE5indexCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani13any_raw_arrayhKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata8metadatahECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvNtNtCs7f35Cc4Kq59_4kani3mem4cbmc15same_allocation'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fails_8do_panic'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh15wrapping_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani3mem24same_allocation_internalhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNvNtNtCs8xvirJzNMvV_4core5slice5index16slice_index_fail8do_panic7runtime'
+Instrumenting '_RNvXNtCs7f35Cc4Kq59_4kani16rustc_intrinsicsPhINtB2_3PtrhE14from_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsd_Cs7f35Cc4Kq59_4kanijNtB5_9Arbitrary3any'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20wrapping_byte_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs4_NtCs8xvirJzNMvV_4core7convertjINtB5_7TryIntoiE8try_intoCs7f35Cc4Kq59_4kani'
+Specializing cprover_contracts functions for assigns clauses of at most 1 targets
+Removing unused functions
+Updating init function
+Setting entry point to _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Finished goto-instrument in 0.55450517s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Finished goto-instrument in 0.09001439s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+generate function bodies: matched function '__CPROVER_contracts_pointer_equals' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_insert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_fresh' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_release' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains_exact' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_init' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_frees_clause_inclusion' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_reset' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_allocated_deallocated_is_empty' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_deallocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_check_replace_ensures_was_freed_preconditions' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_deallocate_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_in_range_dfcc' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_make_invalid_pointer' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_add' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_free' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_indexed_by_object_id' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_ptr_pred_ctx' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::contract$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::function_pointer$object$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Finished goto-instrument in 0.06398804s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out'
+Finished goto-instrument in 0.07405204s
+Checking harness KNH_borrowed_positive...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out --verbosity 9 --json-ui`
+CBMC 6.11.0 (cbmc-6.11.0)
+CBMC version 6.11.0 (cbmc-6.11.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 50 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2641 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 177 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 69 column 5 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2641 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 177 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 413 column 13 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index thread 0
+Unwinding loop _RNvCsej4CisbYaIV_9KNH_probe21KNH_borrowed_positive.0 iteration 1 file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 17 column 2 function KNH_borrowed_positive thread 0
+aborting path on assume(false) at file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 17 column 2 function KNH_borrowed_positive thread 0
+Runtime Symex: 0.0522262s
+size of program expression: 3388 steps
+slicing removed 2111 assignments
+Generated 139 VCC(s), 10 remaining after simplification
+Runtime Postprocess Equation: 0.000304118s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00293174s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.724e-06s
+Solving with CaDiCaL 3.0.0
+5029 variables, 7648 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000172022s
+Runtime decision procedure: 0.00321035s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+5030 variables, 7649 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000473459s
+Runtime decision procedure: 0.000510293s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+5031 variables, 7650 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.000619505s
+Runtime decision procedure: 0.000642924s
+Finished run_cbmc in 0.14401343s
+
+RESULTS:
+Check 1: __CPROVER_contracts_write_set_check_assignment.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:805 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 2: __CPROVER_contracts_write_set_check_assignment.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:822 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 3: __CPROVER_contracts_write_set_check_assignment.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:828 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 4: __CPROVER_contracts_write_set_check_assignment.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:837 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 5: free.frees.1
+	 - Status: SUCCESS
+	 - Description: "Check that ptr is freeable"
+	 - Location: <builtin-library-free>:43 in function free
+
+Check 6: core::num::<impl usize>::checked_sub.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to compute `unchecked_sub` which would overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:1096:31 in function core::num::<impl usize>::checked_sub
+
+Check 7: KNH_borrowed_positive.loop_invariant_base.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant before entry for loop KNH_borrowed_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 8: KNH_borrowed_positive.loop_assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check assigns clause inclusion for loop KNH_borrowed_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 9: KNH_borrowed_positive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:18:31 in function KNH_borrowed_positive
+
+Check 10: KNH_borrowed_positive.assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check that i is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:18:31 in function KNH_borrowed_positive
+
+Check 11: KNH_borrowed_positive.loop_invariant_step.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant after step for loop KNH_borrowed_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 12: KNH_borrowed_positive.loop_step_unwinding.1
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_borrowed_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 13: KNH_borrowed_positive.loop_step_unwinding.2
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_borrowed_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 14: KNH_borrowed_positive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "assertion failed: i == borrowed.bytes.len()"
+	 - Location: KNH_scratch/KNH_probe.rs:19:2 in function KNH_borrowed_positive
+
+Check 15: core::slice::index::slice_index_fail::do_panic::runtime.assertion.1
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:41:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 16: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset in bytes overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 17: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Offset result address must equal original pointer address plus offset"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 18: kani::rustc_intrinsics::offset::<u8, *const u8, usize>.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer must point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *const u8, usize>
+
+Check 19: __CPROVER_contracts_car_set_insert.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:174 in function __CPROVER_contracts_car_set_insert
+
+Check 20: __CPROVER_contracts_car_set_insert.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:177 in function __CPROVER_contracts_car_set_insert
+
+Check 21: __CPROVER_contracts_car_set_insert.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:181 in function __CPROVER_contracts_car_set_insert
+
+Check 22: __CPROVER_contracts_write_set_record_deallocated.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:740 in function __CPROVER_contracts_write_set_record_deallocated
+
+Check 23: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:405:5 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 24: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:411:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 25: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:411:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index
+
+Check 26: kani::mem::cbmc::same_allocation.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "Kani does not support reasoning about pointer to unallocated memory"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::mem::cbmc::same_allocation
+
+Check 27: <usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: library/kani_core/src/models.rs:203:17 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 28: <usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset value overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 29: <usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1
+	 - Status: SUCCESS
+	 - Description: "internal error: entered unreachable code"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 30: core::slice::index::slice_index_fail::do_panic::runtime.assertion.4
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:50:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 31: core::slice::index::slice_index_fail::do_panic::runtime.assertion.3
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:69:5 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 32: core::slice::index::slice_index_fail::do_panic::runtime.assertion.2
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:59:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 33: KNH_borrowed_positive::{closure#0}.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 34: KNH_borrowed_positive::{closure#0}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 35: KNH_borrowed_positive::{closure#0}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 36: KNH_borrowed_positive::{closure#0}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 37: KNH_borrowed_positive::{closure#0}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 38: KNH_borrowed_positive::{closure#0}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 39: KNH_borrowed_positive::{closure#0}.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 40: KNH_borrowed_positive::{closure#0}.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 41: KNH_borrowed_positive::{closure#0}.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 42: KNH_borrowed_positive::{closure#0}.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 43: KNH_borrowed_positive::{closure#0}.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 44: KNH_borrowed_positive::{closure#0}.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:17:25 in function KNH_borrowed_positive::{closure#0}
+
+Check 45: KNH_borrowed_positive::{closure#0}.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 46: KNH_borrowed_positive::{closure#0}.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 47: KNH_borrowed_positive::{closure#0}.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 48: KNH_borrowed_positive::{closure#0}.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 49: KNH_borrowed_positive::{closure#0}.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 50: KNH_borrowed_positive::{closure#0}.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 51: KNH_borrowed_positive::{closure#0}.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 52: KNH_borrowed_positive::{closure#0}.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 53: KNH_borrowed_positive::{closure#0}.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 54: KNH_borrowed_positive::{closure#0}.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 55: KNH_borrowed_positive::{closure#0}.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 56: KNH_borrowed_positive::{closure#0}.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 57: KNH_borrowed_positive::{closure#0}.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 58: KNH_borrowed_positive::{closure#0}.pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 59: KNH_borrowed_positive::{closure#0}.pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 60: KNH_borrowed_positive::{closure#0}.pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 61: KNH_borrowed_positive::{closure#0}.pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 62: KNH_borrowed_positive::{closure#0}.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:17:28 in function KNH_borrowed_positive::{closure#0}
+
+Check 63: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 64: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 65: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 66: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 67: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 68: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 69: KNH_borrowed_positive.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "free argument must be NULL or valid pointer"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 70: KNH_borrowed_positive.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "free argument must be dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 71: KNH_borrowed_positive.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "free argument has offset zero"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 72: KNH_borrowed_positive.precondition_instance.4
+	 - Status: SUCCESS
+	 - Description: "double free"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 73: KNH_borrowed_positive.precondition_instance.5
+	 - Status: SUCCESS
+	 - Description: "free called for new[] object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 74: KNH_borrowed_positive.precondition_instance.6
+	 - Status: SUCCESS
+	 - Description: "free called for stack-allocated object"
+	 - Location: KNH_scratch/KNH_probe.rs:17:2 in function KNH_borrowed_positive
+
+Check 75: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 76: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 77: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 78: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 79: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 80: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 81: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.1
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 82: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.2
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 83: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.3
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+
+SUMMARY:
+ ** 0 of 83 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.14366443s
+
+Manual Harness Summary:
+Verification failed for - KNH_borrowed_negative
+Complete - 1 successfully verified harnesses, 1 failures, 2 total.

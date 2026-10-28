@@ -1,0 +1,709 @@
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_slice_frame_real --exact -Z unstable-options -Z stubbing -Z function-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --force-warn unstable_features --sysroot /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0 -L /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib --extern force:kani --extern noprelude,nounused:std=/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib/libstd.rlib -C opt-level=3 -C overflow-checks=on -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs --out-dir /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new --crate-name KNH_probe --crate-type lib`
+warning: unused imports: `boxed::Box` and `vec::Vec`
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:3:13
+  |
+3 | use alloc::{vec::Vec,boxed::Box};
+  |             ^^^^^^^^ ^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `KMX_copy_nonoverlapping` is never used
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `KMX_copy_from_slice` is never used
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:8:8
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  |        ^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_clone_from_slice` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_extend_from_slice` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_to_vec` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^
+
+warning: function `KMX_realloc` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^
+
+warning: use of an unstable feature
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:1:12
+  |
+1 | #![feature(allocator_api)]
+  |            ^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `--force-warn unstable-features`
+
+warning: use of an unstable feature
+ --> <crate attribute>:1:12
+  |
+1 | #![feature(register_tool)]
+  |            ^^^^^^^^^^^^^
+
+warning: crate `KNH_probe` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `knh_probe`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `KMX_stubs` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:4:18
+  |
+4 | #[cfg(kani)] mod KMX_stubs;
+  |                  ^^^^^^^^^ help: convert the identifier to snake case: `kmx_stubs`
+
+warning: function `KNH_weak` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:7:4
+  |
+7 | fn KNH_weak<'a>(input:&'a [u8])->&'a [u8]{input}
+  |    ^^^^^^^^ help: convert the identifier to snake case: `knh_weak`
+
+warning: function `KNH_inverted` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:10:4
+   |
+10 | fn KNH_inverted<'a>(input:&'a [u8])->&'a [u8]{input}
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_inverted`
+
+warning: function `KNH_frame` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:14:4
+   |
+14 | fn KNH_frame<'a>(input:&'a [u8],a:&mut [u8;1],b:&mut [u8;1])->&'a [u8]{a[0]=1;b[0]=2;input}
+   |    ^^^^^^^^^ help: convert the identifier to snake case: `knh_frame`
+
+warning: function `KNH_slice_weak` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:23:4
+   |
+23 | fn KNH_slice_weak(){let input:[u8;1]=kani::any();let _=KNH_weak(&input);}
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_weak`
+
+warning: function `KNH_slice_inverted` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:32:4
+   |
+32 | fn KNH_slice_inverted(){let input:[u8;1]=kani::any();let _=KNH_inverted(&input);}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_inverted`
+
+warning: function `KNH_slice_real` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:41:4
+   |
+41 | fn KNH_slice_real(){let input:[u8;1]=kani::any();let out=KNH_weak(&input);let r=&out;assert!((r.len()==1) && (r[0])==input[0]);}
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_real`
+
+warning: function `KNH_slice_stub` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:51:4
+   |
+51 | fn KNH_slice_stub(){let input:[u8;1]=kani::any();let out=KNH_weak(&input);let r=&out;assert!((r.len()==1) && (r[0])==input[0]);}
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_stub`
+
+warning: function `KNH_slice_frame` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:60:4
+   |
+60 | fn KNH_slice_frame(){let input:[u8;1]=kani::any();let mut a=[0u8];let mut b=[0u8];let _=KNH_frame(&input,&mut a,&mut b);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_frame`
+
+warning: function `KNH_slice_frame_real` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:69:4
+   |
+69 | fn KNH_slice_frame_real(){let input:[u8;1]=kani::any();let mut a=[0u8];let mut b=[0u8];let _=KNH_frame(&input,&mut a,&mut b);assert!...
+   |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_slice_frame_real`
+
+warning: function `KMX_copy_nonoverlapping` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_nonoverlapping`
+
+warning: function `KMX_copy_from_slice` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:8:8
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  |        ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_from_slice`
+
+warning: function `KMX_clone_from_slice` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_from_slice`
+
+warning: function `KMX_extend_from_slice` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: function `KMX_to_vec` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000605218s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.004314911s
+====== Reachability Analysis Result =======
+Total # items: 29
+Total # statements: 316
+Total # expressions: 92
+
+Reachable Items:
+  - function: 28
+  - static item: 1
+
+Statements:
+  - Assign: 92
+  - Call: 48
+  - Drop: 8
+  - SwitchInt: 3
+  - Ignored: 131
+  - Return: 23
+  - Goto: 11
+
+Expressions:
+  - BinaryOp: 8
+  - Use: 55
+  - UnaryOp: 8
+  - Ref: 8
+  - Cast: 1
+  - Aggregate: 10
+  - AddressOf: 2
+
+-------------------------------------------
+warning: 39 warnings emitted
+
+Finished /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler in 0.14099783s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.symtab.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out`
+Finished goto-cc in 0.037027545s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out --function _RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out`
+Finished goto-cc in 0.020786628s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+Finished goto-instrument in 0.024872309s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+Finished goto-instrument in 0.025514811s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out'
+Finished goto-instrument in 0.025866492s
+Checking harness KNH_slice_frame_real...
+  - Stub: alloc :: alloc :: realloc -> crate :: KMX_stubs :: KMX_realloc
+  - Stub: < [u8] > :: to_vec -> crate :: KMX_stubs :: KMX_to_vec
+  - Stub: alloc :: vec :: Vec :: < u8 > :: extend_from_slice -> crate :: KMX_stubs :: KMX_extend_from_slice
+  - Stub: < [u8] > :: clone_from_slice -> crate :: KMX_stubs :: KMX_clone_from_slice
+  - Stub: core :: ptr :: copy_nonoverlapping -> crate :: KMX_stubs :: KMX_copy_nonoverlapping
+  - Stub: < [u8] > :: copy_from_slice -> crate :: KMX_stubs :: KMX_copy_from_slice
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 8 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out --verbosity 9 --json-ui`
+CBMC 6.11.0 (cbmc-6.11.0)
+CBMC version 6.11.0 (cbmc-6.11.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe20KNH_slice_frame_real.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Runtime Symex: 0.00684802s
+size of program expression: 522 steps
+slicing removed 343 assignments
+Generated 80 VCC(s), 3 remaining after simplification
+Runtime Postprocess Equation: 3.6781e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.000537236s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.382e-06s
+Solving with CaDiCaL 3.0.0
+1419 variables, 1171 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 5.6549e-05s
+Runtime decision procedure: 0.000639393s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+1420 variables, 1172 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 1.9514e-05s
+Runtime decision procedure: 3.5043e-05s
+Finished run_cbmc in 0.03601437s
+
+RESULTS:
+Check 1: KNH_frame::{closure#3}.assertion.1
+	 - Status: SUCCESS
+	 - Description: "input.len()==1"
+	 - Location: KNH_scratch/KNH_probe.rs:11:1 in function KNH_frame::{closure#3}
+
+Check 2: KNH_frame::{closure#3}.assertion.2
+	 - Status: SUCCESS
+	 - Description: "|r: &&'a [u8]| r.len()==1"
+	 - Location: KNH_scratch/KNH_probe.rs:13:1 in function KNH_frame::{closure#3}
+
+Check 3: KNH_slice_frame_real.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: a[0]==1 && b[0]==2"
+	 - Location: KNH_scratch/KNH_probe.rs:69:126 in function KNH_slice_frame_real
+
+Check 4: KNH_frame::{closure#1}.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: KNH_scratch/KNH_probe.rs:11:1 in function KNH_frame::{closure#1}
+
+Check 5: KNH_frame::{closure#2}.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: KNH_scratch/KNH_probe.rs:11:1 in function KNH_frame::{closure#2}
+
+Check 6: KNH_frame::{closure#0}.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: KNH_scratch/KNH_probe.rs:11:1 in function KNH_frame::{closure#0}
+
+Check 7: KNH_frame::{closure#3}.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 8: KNH_frame::{closure#3}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 9: KNH_frame::{closure#3}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 10: KNH_frame::{closure#3}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 11: KNH_frame::{closure#3}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 12: KNH_frame::{closure#3}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 13: KNH_frame::{closure#3}.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame::{closure#3}
+
+Check 14: KNH_frame::{closure#3}.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 15: KNH_frame::{closure#3}.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 16: KNH_frame::{closure#3}.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 17: KNH_frame::{closure#3}.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 18: KNH_frame::{closure#3}.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 19: KNH_frame::{closure#3}.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 20: KNH_frame::{closure#3}.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame::{closure#3}
+
+Check 21: KNH_frame::{closure#3}.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 22: KNH_frame::{closure#3}.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 23: KNH_frame::{closure#3}.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 24: KNH_frame::{closure#3}.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 25: KNH_frame::{closure#3}.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 26: KNH_frame::{closure#3}.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:14:86 in function KNH_frame::{closure#3}
+
+Check 27: KNH_frame.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 28: KNH_frame.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 29: KNH_frame.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 30: KNH_frame.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 31: KNH_frame.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 32: KNH_frame.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 33: KNH_frame.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KNH_scratch/KNH_probe.rs:14:72 in function KNH_frame
+
+Check 34: KNH_frame.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 35: KNH_frame.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 36: KNH_frame.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 37: KNH_frame.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 38: KNH_frame.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 39: KNH_frame.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 40: KNH_frame.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KNH_scratch/KNH_probe.rs:14:79 in function KNH_frame
+
+Check 41: kani::internal::in_contract_clause.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 42: kani::internal::in_contract_clause.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 43: kani::internal::in_contract_clause.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 44: kani::internal::in_contract_clause.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 45: kani::internal::in_contract_clause.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 46: kani::internal::in_contract_clause.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:769:26 in function kani::internal::in_contract_clause
+
+Check 47: kani::internal::enter_contract_clause.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 48: kani::internal::enter_contract_clause.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 49: kani::internal::enter_contract_clause.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 50: kani::internal::enter_contract_clause.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 51: kani::internal::enter_contract_clause.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 52: kani::internal::enter_contract_clause.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:710:45 in function kani::internal::enter_contract_clause
+
+Check 53: kani::internal::enter_contract_clause.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 54: kani::internal::enter_contract_clause.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 55: kani::internal::enter_contract_clause.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 56: kani::internal::enter_contract_clause.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 57: kani::internal::enter_contract_clause.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 58: kani::internal::enter_contract_clause.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:710:21 in function kani::internal::enter_contract_clause
+
+Check 59: kani::internal::exit_contract_clause.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 60: kani::internal::exit_contract_clause.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 61: kani::internal::exit_contract_clause.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 62: kani::internal::exit_contract_clause.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 63: kani::internal::exit_contract_clause.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 64: kani::internal::exit_contract_clause.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 65: kani::internal::exit_contract_clause.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 66: kani::internal::exit_contract_clause.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 67: kani::internal::exit_contract_clause.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 68: kani::internal::exit_contract_clause.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 69: kani::internal::exit_contract_clause.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 70: kani::internal::exit_contract_clause.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+
+SUMMARY:
+ ** 0 of 70 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.035759717s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

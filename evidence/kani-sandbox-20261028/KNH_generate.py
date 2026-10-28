@@ -62,7 +62,7 @@ fn {name}(){{let record=KNH_Record{{bytes:kani::any()}};let borrowed=&record;let
 (E/'KNH_loops.rs.txt').write_text(s)
 # Preserve historical NBZ minimal symbols; only experimental module naming changes.
 base=Path('evidence/kani-diag2-20261028/KNB_MINIMAL.rs.txt').read_text().replace('use super::*;','')
-context='#[derive(Clone,Copy)]\nenum Phase {Query(usize),Other}\ntype Observer=Option<fn(Phase)>;\n'
+context='#[derive(Clone,Copy)]\nenum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWrite,Relation,Final }\ntype Observer=Option<fn(Phase)>;\n'
 for kind,module,body in [('baseline','NBZ_native',base),('some_false','NBZ_native',base.replace('obs.is_none()','obs.is_some()')),('payload_false','NBZ_native',base.replace('assert_eq!(i,NBZ_Q)','assert!(i >= 10)')),('module_only','KNC_native',base)]:
  name=f'KNH_k2_{kind}.rs.txt';(E/name).write_text(context+f'#[cfg(kani)] mod {module} {{ use super::*;\n'+body+'\n}\n')
  plan.append(dict(group='k2',harness=f'{module}::NBZ_return_carriers',source=name,expected='diagnostic'))

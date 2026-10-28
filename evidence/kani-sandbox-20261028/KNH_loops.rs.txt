@@ -11,16 +11,16 @@ fn KNH_for_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
  for _x in a.iter().enumerate(){count+=1;}
  assert_eq!(count,3);
 }
-struct KNH_Record {bytes:[u8;4]}
+struct KNH_Record<'a> {bytes:&'a [u8]}
 #[kani::proof]
-fn KNH_borrowed_positive(){let record=KNH_Record{bytes:kani::any()};let borrowed=&record;let mut i=0usize;
+fn KNH_borrowed_positive(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&bytes[..n]};let borrowed=&record;let mut i=0usize;
  #[kani::loop_invariant(i<=borrowed.bytes.len())]
  while i<borrowed.bytes.len(){i+=1;}
- assert_eq!(i,4);
+ assert_eq!(i,borrowed.bytes.len());
 }
 #[kani::proof]
-fn KNH_borrowed_negative(){let record=KNH_Record{bytes:kani::any()};let borrowed=&record;let mut i=0usize;
+fn KNH_borrowed_negative(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&bytes[..n]};let borrowed=&record;let mut i=0usize;
  #[kani::loop_invariant(i<=borrowed.bytes.len())]
  while i<borrowed.bytes.len(){i+=1;}
- assert_eq!(i,3);
+ assert_ne!(i,borrowed.bytes.len());
 }

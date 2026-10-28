@@ -1,0 +1,2886 @@
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_for_positive --harness KNH_for_negative --exact -Z unstable-options -Z stubbing -Z loop-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --force-warn unstable_features --sysroot /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0 -L /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib --extern force:kani --extern noprelude,nounused:std=/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/lib/libstd.rlib -C opt-level=1 -C overflow-checks=on -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs --out-dir /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new --crate-name KNH_probe --crate-type lib`
+warning: type `KNH_Record` should have an upper camel case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:14:8
+   |
+14 | struct KNH_Record<'a> {bytes:&'a [u8]}
+   |        ^^^^^^^^^^ help: convert the identifier to upper camel case: `KnhRecord`
+   |
+   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: use of an unstable feature
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:1:12
+  |
+1 | #![feature(proc_macro_hygiene,stmt_expr_attributes)]
+  |            ^^^^^^^^^^^^^^^^^^
+  |
+  = note: requested on the command line with `--force-warn unstable-features`
+
+warning: use of an unstable feature
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:1:31
+  |
+1 | #![feature(proc_macro_hygiene,stmt_expr_attributes)]
+  |                               ^^^^^^^^^^^^^^^^^^^^
+
+warning: use of an unstable feature
+ --> <crate attribute>:1:12
+  |
+1 | #![feature(register_tool)]
+  |            ^^^^^^^^^^^^^
+
+warning: crate `KNH_probe` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `knh_probe`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `KNH_for_positive` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:3:4
+  |
+3 | fn KNH_for_positive(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_positive`
+
+warning: function `KNH_for_negative` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:9:4
+  |
+9 | fn KNH_for_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_negative`
+
+warning: function `KNH_borrowed_positive` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:16:4
+   |
+16 | fn KNH_borrowed_positive(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_positive`
+
+warning: function `KNH_borrowed_negative` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:22:4
+   |
+22 | fn KNH_borrowed_negative(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_negative`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000150413s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.01098004s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000196692s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.006188864s
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+====== Reachability Analysis Result =======
+Total # items: 214
+Total # statements: 1794
+Total # expressions: 428
+
+Reachable Items:
+  - function: 214
+
+Statements:
+  - Ignored: 694
+  - SwitchInt: 60
+  - Call: 284
+  - Goto: 108
+  - Drop: 4
+  - Return: 196
+  - Assert: 18
+  - Unreachable: 2
+  - Assign: 428
+
+Expressions:
+  - BinaryOp: 84
+  - Ref: 46
+  - AddressOf: 8
+  - Cast: 100
+  - Aggregate: 42
+  - Discriminant: 2
+  - CheckedBinaryOp: 8
+  - Use: 126
+  - UnaryOp: 12
+
+-------------------------------------------
+warning: 10 warnings emitted
+
+Finished /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler in 0.095335886s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.symtab.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Finished goto-cc in 0.044047635s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.symtab.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Finished goto-cc in 0.044414144s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out --function _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Finished goto-cc in 0.028763356s
+[Kani] Running: `goto-instrument --dfcc _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative --no-malloc-may-fail --apply-loop-contracts --loop-contracts-no-unwind --disable-loop-contracts-side-effect-check /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+**** WARNING: transformed loops will not be unwound after applying loop contracts. Note that transformed loops require at least unwinding bounds 2 to pass the unwinding assertions.
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Trying to force one backedge per target
+Loading CPROVER C library (x86_64)
+Adding the cprover_contracts library (x86_64)
+Instrumenting harness function '_RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr22without_provenance_muthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partsShhEB6_'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core5slice3raw14from_raw_partshEB6_'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem8align_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj15is_power_of_two'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr7mut_ptrOh20offset_from_unsignedB6_'
+Instrumenting '_RINvXs8_Cs7f35Cc4Kq59_4kanihNtB6_9Arbitrary9any_arrayKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullhE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter3nthCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter5firstCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs3_NtCs8xvirJzNMvV_4core3numi15overflowing_mul'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_sub'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9ub_checks16maybe_is_aligned7runtime'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu13is_aligned_toB6_'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre8as_bytes'
+Instrumenting '_RNvMs4_NtCs8xvirJzNMvV_4core3fmtNtB5_9Arguments8from_str'
+Instrumenting '_RNvXs1_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsjNtB5_7ToISize8to_isize'
+Instrumenting 'free'
+Instrumenting '_RNvMsX_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhE3newCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre3len'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks24is_valid_allocation_size'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtNtCs7f35Cc4Kq59_4kani3mem4cbmc15same_allocation'
+Instrumenting '_RNvXs_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsOhINtB4_3PtrhE12to_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20wrapping_byte_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj19wrapping_add_signed'
+Instrumenting '_RNvXs_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsOhINtB4_3PtrhE14from_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyAhj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics6offsethOhjECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9ub_checks17check_language_ub7runtime'
+Instrumenting '_RNvNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned14runtime_ptr_ge7runtime'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr18without_provenancehECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned18precondition_check'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned14runtime_ptr_ge'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvYINtNtNtCs8xvirJzNMvV_4core5slice4iter4IterhENtNtNtNtB9_4iter6traits8iterator8Iterator9enumerateB9_'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh12wrapping_addCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr7mut_ptrOh3addCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9panicking18panic_nounwind_fmt7runtime'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9panicking18panic_nounwind_fmt'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr20slice_from_raw_partshEB4_'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core5panic10panic_infoNtB2_9PanicInfo3new'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks29maybe_is_aligned_and_not_null'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20offset_from_unsignedB6_'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core5sliceSh4iterB4_'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5panic8locationNtB5_8Location6caller'
+Instrumenting '_RNvXs1_Cs7f35Cc4Kq59_4kaniAhj4_NtB5_9Arbitrary3anyCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs4_NtCs8xvirJzNMvV_4core7convertjINtB5_7TryIntoiE8try_intoCs7f35Cc4Kq59_4kani'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks16maybe_is_aligned'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partshuECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhE3newB9_'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullShE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter10assumptionCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem7size_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtNtCs8xvirJzNMvV_4core4iter8adapters9enumerateINtB2_9EnumerateINtNtNtB8_5slice4iter4IterhEE3newB8_'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp7is_null7runtime'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics15ptr_offset_fromhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj10count_ones'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh16with_metadata_ofhECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core5sliceSh6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1g_Cs7f35Cc4Kq59_4kaniINtNtNtCs8xvirJzNMvV_4core5slice4iter4IterhENtB6_12KaniIntoIter14kani_into_iterCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter3nthCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata8metadatahECs3GJ6w2eqr8A_3std'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4casthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullShE8from_refB9_'
+Instrumenting '_RNvMs17_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEE3newCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani13any_raw_arrayhKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu7is_nullB6_'
+Instrumenting '_RNvCskSgPeDzUGbv_7___rustc17rust_begin_unwind_ffi_shim'
+Instrumenting '_RINvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB6_7NonNullShE4casthEBa_'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_add'
+Instrumenting '_RNvXs37_NtNtCs8xvirJzNMvV_4core7convert3numiINtB8_7TryFromjE8try_from'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter5firstCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre6as_ptr'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh15wrapping_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullhE20offset_from_unsignedB9_'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhE8as_sliceB9_'
+Instrumenting '_RNvMs2H_NtNtCs8xvirJzNMvV_4core5slice4iterINtB6_4IterhE10make_sliceCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice3raw14from_raw_parts18precondition_check'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks17check_language_ub'
+Instrumenting '_RNvXs2I_NtNtCs8xvirJzNMvV_4core5slice4iterINtB6_4IterhENtNtNtNtBa_4iter6traits10exact_size17ExactSizeIterator3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics24ptr_offset_from_unsignedhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter10assumptionCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani3mem24same_allocation_internalhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1l_Cs7f35Cc4Kq59_4kaniINtNtNtNtCs8xvirJzNMvV_4core4iter8adapters9enumerate9EnumerateINtNtNtBy_5slice4iter4IterhEENtB6_12KaniIntoIter14kani_into_iterCsej4CisbYaIV_9KNH_probe'
+Instrumenting 'malloc'
+Instrumenting '_RNvXs5_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhENtNtB9_5clone5Clone5cloneB9_'
+Specializing cprover_contracts functions for assigns clauses of at most 5 targets
+Removing unused functions
+Updating init function
+Setting entry point to _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Finished goto-instrument in 0.37379485s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Finished goto-instrument in 0.04562183s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+generate function bodies: matched function '__CPROVER_contracts_write_set_deallocate_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_insert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_frees_clause_inclusion' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_fresh' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_make_invalid_pointer' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_add' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_indexed_by_object_id' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_in_range_dfcc' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_deallocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains_exact' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_reset' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_ptr_pred_ctx' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_equals' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::contract$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_check_replace_ensures_was_freed_preconditions' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_free' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::function_pointer$object$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_init' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_release' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_allocated_deallocated_is_empty' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Finished goto-instrument in 0.04134683s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out'
+Finished goto-instrument in 0.04777753s
+Checking harness KNH_for_negative...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out --verbosity 9 --json-ui`
+CBMC 6.11.0 (cbmc-6.11.0)
+CBMC version 6.11.0 (cbmc-6.11.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Unwinding loop _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_negative.0 iteration 1 file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 10 column 2 function KNH_for_negative thread 0
+aborting path on assume(false) at file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 10 column 2 function KNH_for_negative thread 0
+Runtime Symex: 0.0924902s
+size of program expression: 3600 steps
+slicing removed 2444 assignments
+Generated 416 VCC(s), 21 remaining after simplification
+Runtime Postprocess Equation: 0.000653628s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00928528s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 0.000823524s
+Solving with CaDiCaL 3.0.0
+12077 variables, 14360 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000932164s
+Runtime decision procedure: 0.0103878s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+12078 variables, 14361 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 7.4823e-05s
+Runtime decision procedure: 0.000140207s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+12079 variables, 14362 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.00118711s
+Runtime decision procedure: 0.00121517s
+Finished run_cbmc in 0.20503977s
+
+RESULTS:
+Check 1: __CPROVER_contracts_car_set_insert.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:174 in function __CPROVER_contracts_car_set_insert
+
+Check 2: __CPROVER_contracts_car_set_insert.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:177 in function __CPROVER_contracts_car_set_insert
+
+Check 3: __CPROVER_contracts_car_set_insert.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:181 in function __CPROVER_contracts_car_set_insert
+
+Check 4: __CPROVER_contracts_write_set_record_deallocated.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:740 in function __CPROVER_contracts_write_set_record_deallocated
+
+Check 5: __CPROVER_contracts_write_set_check_assignment.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:805 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 6: __CPROVER_contracts_write_set_check_assignment.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:822 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 7: __CPROVER_contracts_write_set_check_assignment.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:828 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 8: __CPROVER_contracts_write_set_check_assignment.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:837 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 9: free.frees.1
+	 - Status: SUCCESS
+	 - Description: "Check that ptr is freeable"
+	 - Location: <builtin-library-free>:43 in function free
+
+Check 10: <usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: library/kani_core/src/models.rs:203:17 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 11: <usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset value overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 12: <usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1
+	 - Status: SUCCESS
+	 - Description: "internal error: entered unreachable code"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 13: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: library/kani_core/src/iter.rs:114:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 14: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:114:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 15: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 16: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 17: std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to subtract with overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:1360:23 in function std::ptr::const_ptr::<impl *const ()>::is_aligned_to
+
+Check 18: std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.2
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:1357:13 in function std::ptr::const_ptr::<impl *const ()>::is_aligned_to
+
+Check 19: KNH_for_negative.loop_invariant_base.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant before entry for loop KNH_for_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 20: KNH_for_negative.loop_assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check assigns clause inclusion for loop KNH_for_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 21: KNH_for_negative.assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check that var_29 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 22: KNH_for_negative.assigns.2
+	 - Status: SUCCESS
+	 - Description: "Check that var_30 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 23: KNH_for_negative.assigns.3
+	 - Status: SUCCESS
+	 - Description: "Check that _x is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 24: KNH_for_negative.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 25: KNH_for_negative.assigns.4
+	 - Status: SUCCESS
+	 - Description: "Check that kani_index_11_2_11_43 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 26: KNH_for_negative.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:11:33 in function KNH_for_negative
+
+Check 27: KNH_for_negative.assigns.5
+	 - Status: SUCCESS
+	 - Description: "Check that count is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:11:33 in function KNH_for_negative
+
+Check 28: KNH_for_negative.loop_invariant_step.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant after step for loop KNH_for_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 29: KNH_for_negative.loop_step_unwinding.1
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_for_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 30: KNH_for_negative.loop_step_unwinding.2
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_for_negative.0"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 31: KNH_for_negative.assertion.3
+	 - Status: FAILURE
+	 - Description: "assertion failed: count == 3"
+	 - Location: KNH_scratch/KNH_probe.rs:12:2 in function KNH_for_negative
+
+Check 32: std::ptr::const_ptr::<impl *const u8>::offset_from_unsigned.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: 0 < pointee_size && pointee_size <= isize::MAX as usize"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:731:9 in function std::ptr::const_ptr::<impl *const u8>::offset_from_unsigned
+
+Check 33: kani::mem::cbmc::same_allocation.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "Kani does not support reasoning about pointer to unallocated memory"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::mem::cbmc::same_allocation
+
+Check 34: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset in bytes overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 35: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Offset result address must equal original pointer address plus offset"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 36: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer must point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 37: std::panic::Location::<'_>::caller.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs:181:9 in function std::panic::Location::<'_>::caller
+
+Check 38: kani::rustc_intrinsics::ptr_offset_from_unsigned::<u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Expected non-negative distance between pointers"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from_unsigned::<u8>
+
+Check 39: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.1
+	 - Status: SUCCESS
+	 - Description: "Cannot compute offset of a ZST"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 40: kani::rustc_intrinsics::ptr_offset_from::<u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer should point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 41: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 42: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with overflow"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 43: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with overflow"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 44: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 45: kani::rustc_intrinsics::ptr_offset_from::<u8>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Expected the distance between the pointers, in bytes, to be a
+                        multiple of the size of `T`"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 46: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 47: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.5
+	 - Status: SUCCESS
+	 - Description: "attempt to divide with overflow"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 48: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.3
+	 - Status: SUCCESS
+	 - Description: "attempt to divide with overflow"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 49: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.4
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 50: std::slice::from_raw_parts::<'_, u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs:139:9 in function std::slice::from_raw_parts::<'_, u8>
+
+Check 51: std::slice::from_raw_parts::<'_, u8>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs:139:9 in function std::slice::from_raw_parts::<'_, u8>
+
+Check 52: std::fmt::Arguments::<'_>::from_str.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to shift left with overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs:820:38 in function std::fmt::Arguments::<'_>::from_str
+
+Check 53: core::ub_checks::is_valid_allocation_size.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to divide by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 54: core::ub_checks::is_valid_allocation_size.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 55: core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "call to foreign "Rust" function `_RNvCskSgPeDzUGbv_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:110:17 in function core::panicking::panic_nounwind_fmt::runtime
+
+Check 56: kani::rustc_intrinsics::ptr_offset_from::<u8>.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 57: kani::rustc_intrinsics::ptr_offset_from::<u8>.division-by-zero.2
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 58: KNH_for_negative::{closure#0}.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 59: KNH_for_negative::{closure#0}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 60: KNH_for_negative::{closure#0}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 61: KNH_for_negative::{closure#0}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 62: KNH_for_negative::{closure#0}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 63: KNH_for_negative::{closure#0}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 64: KNH_for_negative::{closure#0}.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 65: KNH_for_negative::{closure#0}.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 66: KNH_for_negative::{closure#0}.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 67: KNH_for_negative::{closure#0}.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 68: KNH_for_negative::{closure#0}.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 69: KNH_for_negative::{closure#0}.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 70: KNH_for_negative::{closure#0}.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 71: KNH_for_negative::{closure#0}.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 72: KNH_for_negative::{closure#0}.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 73: KNH_for_negative::{closure#0}.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 74: KNH_for_negative::{closure#0}.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 75: KNH_for_negative::{closure#0}.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 76: KNH_for_negative::{closure#0}.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 77: KNH_for_negative::{closure#0}.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 78: KNH_for_negative::{closure#0}.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 79: KNH_for_negative::{closure#0}.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 80: KNH_for_negative::{closure#0}.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 81: KNH_for_negative::{closure#0}.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 82: KNH_for_negative::{closure#0}.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 83: KNH_for_negative::{closure#0}.pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 84: KNH_for_negative::{closure#0}.pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 85: KNH_for_negative::{closure#0}.pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 86: KNH_for_negative::{closure#0}.pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 87: KNH_for_negative::{closure#0}.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 88: KNH_for_negative::{closure#0}.pointer_dereference.31
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 89: KNH_for_negative::{closure#0}.pointer_dereference.32
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 90: KNH_for_negative::{closure#0}.pointer_dereference.33
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 91: KNH_for_negative::{closure#0}.pointer_dereference.34
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 92: KNH_for_negative::{closure#0}.pointer_dereference.35
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 93: KNH_for_negative::{closure#0}.pointer_dereference.36
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:25 in function KNH_for_negative::{closure#0}
+
+Check 94: KNH_for_negative::{closure#0}.pointer_dereference.37
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 95: KNH_for_negative::{closure#0}.pointer_dereference.38
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 96: KNH_for_negative::{closure#0}.pointer_dereference.39
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 97: KNH_for_negative::{closure#0}.pointer_dereference.40
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 98: KNH_for_negative::{closure#0}.pointer_dereference.41
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 99: KNH_for_negative::{closure#0}.pointer_dereference.42
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative::{closure#0}
+
+Check 100: KNH_for_negative::{closure#0}.pointer_dereference.43
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 101: KNH_for_negative::{closure#0}.pointer_dereference.44
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 102: KNH_for_negative::{closure#0}.pointer_dereference.45
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 103: KNH_for_negative::{closure#0}.pointer_dereference.46
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 104: KNH_for_negative::{closure#0}.pointer_dereference.47
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 105: KNH_for_negative::{closure#0}.pointer_dereference.48
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:10:49 in function KNH_for_negative::{closure#0}
+
+Check 106: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 107: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 108: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 109: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 110: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 111: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 112: pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 113: pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 114: pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 115: pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 116: pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 117: pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 118: pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 119: pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 120: pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 121: pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 122: pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 123: pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 124: pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 125: pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 126: pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 127: pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 128: pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 129: pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 130: pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 131: pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 132: pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 133: pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 134: pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 135: pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 136: KNH_for_negative.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "free argument must be NULL or valid pointer"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 137: KNH_for_negative.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "free argument must be dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 138: KNH_for_negative.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "free argument has offset zero"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 139: KNH_for_negative.precondition_instance.4
+	 - Status: SUCCESS
+	 - Description: "double free"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 140: KNH_for_negative.precondition_instance.5
+	 - Status: SUCCESS
+	 - Description: "free called for new[] object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 141: KNH_for_negative.precondition_instance.6
+	 - Status: SUCCESS
+	 - Description: "free called for stack-allocated object"
+	 - Location: KNH_scratch/KNH_probe.rs:10:2 in function KNH_for_negative
+
+Check 142: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 143: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 144: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 145: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 146: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 147: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 148: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 149: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 150: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 151: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 152: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 153: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 154: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 155: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 156: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 157: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 158: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 159: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 160: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 161: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 162: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 163: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 164: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 165: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 166: core::ub_checks::is_valid_allocation_size.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 167: std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1
+	 - Status: SUCCESS
+	 - Description: "same object violation in this >= origin"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:716:21 in function std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+
+Check 168: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 169: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 170: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 171: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 172: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 173: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 174: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 175: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 176: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 177: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 178: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 179: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 180: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 181: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 182: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 183: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 184: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 185: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 186: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 187: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 188: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 189: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 190: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 191: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 192: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 193: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 194: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 195: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 196: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 197: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 198: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 199: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 200: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 201: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 202: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 203: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 204: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 205: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 206: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 207: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 208: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 209: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 210: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 211: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 212: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 213: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 214: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 215: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 216: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 217: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 218: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 219: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 220: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 221: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 222: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 223: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 224: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 225: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 226: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 227: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 228: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 229: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 230: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 231: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 232: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 233: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 234: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.1
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 235: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.2
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 236: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.3
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+
+SUMMARY:
+ ** 1 of 236 failed (3 unreachable)
+Failed Checks: assertion failed: count == 3
+ File: "/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs", line 12, in KNH_for_negative
+
+VERIFICATION:- FAILED
+Verification Time: 0.20478624s
+
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out --function _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Finished goto-cc in 0.030841224s
+[Kani] Running: `goto-instrument --dfcc _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive --no-malloc-may-fail --apply-loop-contracts --loop-contracts-no-unwind --disable-loop-contracts-side-effect-check /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+**** WARNING: transformed loops will not be unwound after applying loop contracts. Note that transformed loops require at least unwinding bounds 2 to pass the unwinding assertions.
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Trying to force one backedge per target
+Loading CPROVER C library (x86_64)
+Adding the cprover_contracts library (x86_64)
+Instrumenting harness function '_RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive'
+Instrumenting '_RNvNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned14runtime_ptr_ge7runtime'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj10count_ones'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics6offsethOhjECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj19wrapping_add_signed'
+Instrumenting '_RNvYINtNtNtCs8xvirJzNMvV_4core5slice4iter4IterhENtNtNtNtB9_4iter6traits8iterator8Iterator9enumerateB9_'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr20slice_from_raw_partshEB4_'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj15is_power_of_two'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr7mut_ptrOh20offset_from_unsignedB6_'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20offset_from_unsignedB6_'
+Instrumenting '_RINvXs8_Cs7f35Cc4Kq59_4kanihNtB6_9Arbitrary9any_arrayKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4casthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs4_NtCs8xvirJzNMvV_4core7convertjINtB5_7TryIntoiE8try_intoCs7f35Cc4Kq59_4kani'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter3nthCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter3nthCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1g_Cs7f35Cc4Kq59_4kaniINtNtNtCs8xvirJzNMvV_4core5slice4iter4IterhENtB6_12KaniIntoIter14kani_into_iterCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core5sliceSh6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter5firstCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs3_NtCs8xvirJzNMvV_4core3numi15overflowing_mul'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh16with_metadata_ofhECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_sub'
+Instrumenting '_RNvCskSgPeDzUGbv_7___rustc17rust_begin_unwind_ffi_shim'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu13is_aligned_toB6_'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter10assumptionCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter5firstCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs4_NtCs8xvirJzNMvV_4core3fmtNtB5_9Arguments8from_str'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9panicking18panic_nounwind_fmt7runtime'
+Instrumenting '_RNvXs1_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsjNtB5_7ToISize8to_isize'
+Instrumenting 'free'
+Instrumenting '_RNvMsX_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhE3newCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre3len'
+Instrumenting '_RNvNtNtCs7f35Cc4Kq59_4kani3mem4cbmc15same_allocation'
+Instrumenting 'malloc'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh12wrapping_addCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr7mut_ptrOh3addCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9ub_checks17check_language_ub7runtime'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5panic8locationNtB5_8Location6caller'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4addrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9panicking18panic_nounwind_fmt'
+Instrumenting '_RNvXs_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsOhINtB4_3PtrhE14from_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh20wrapping_byte_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs9_NtCs8xvirJzNMvV_4core3numj12wrapping_add'
+Instrumenting '_RNvXs_NtCs7f35Cc4Kq59_4kani16rustc_intrinsicsOhINtB4_3PtrhE12to_const_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtNtNtCs8xvirJzNMvV_4core4iter8adapters9enumerateINtB2_9EnumerateINtNtNtB8_5slice4iter4IterhEE3newB8_'
+Instrumenting '_RNvXs37_NtNtCs8xvirJzNMvV_4core7convert3numiINtB8_7TryFromjE8try_from'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp7is_null7runtime'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core5panic10panic_infoNtB2_9PanicInfo3new'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partsShhEB6_'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core5slice3raw14from_raw_partshEB6_'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu7is_nullB6_'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullhE20offset_from_unsignedB9_'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhE3newB9_'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics15ptr_offset_fromhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata8metadatahECs3GJ6w2eqr8A_3std'
+Instrumenting '_RNvNvNtCs8xvirJzNMvV_4core9ub_checks16maybe_is_aligned7runtime'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned14runtime_ptr_ge'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullhE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtNtCs8xvirJzNMvV_4core3ptr8metadata14from_raw_partshuECs3GJ6w2eqr8A_3std'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem7size_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks24is_valid_allocation_size'
+Instrumenting '_RNvNvNtNtCs8xvirJzNMvV_4core5slice3raw14from_raw_parts18precondition_check'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr22without_provenance_muthECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPp20offset_from_unsigned18precondition_check'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani3anyAhj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs17_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEE3newCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks17check_language_ub'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre8as_bytes'
+Instrumenting '_RINvCs7f35Cc4Kq59_4kani13any_raw_arrayhKj4_ECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3mem8align_ofhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core5sliceSh4iterB4_'
+Instrumenting '_RNvXs1_Cs7f35Cc4Kq59_4kaniAhj4_NtB5_9Arbitrary3anyCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB6_7NonNullShE4casthEBa_'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks16maybe_is_aligned'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani16rustc_intrinsics24ptr_offset_from_unsignedhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPu4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvNtCs8xvirJzNMvV_4core9ub_checks29maybe_is_aligned_and_not_null'
+Instrumenting '_RNvMs4_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhE8as_sliceB9_'
+Instrumenting '_RNvMs2H_NtNtCs8xvirJzNMvV_4core5slice4iterINtB6_4IterhE10make_sliceCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh4castuECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMNtCs8xvirJzNMvV_4core3stre6as_ptr'
+Instrumenting '_RNvMNtNtCs8xvirJzNMvV_4core3ptr9const_ptrPh15wrapping_offsetCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs18_Cs7f35Cc4Kq59_4kaniINtB6_17KaniEnumerateIterINtB6_11KaniRefIterhEENtB6_8KaniIter3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullShE8from_refB9_'
+Instrumenting '_RNvXs2I_NtNtCs8xvirJzNMvV_4core5slice4iterINtB6_4IterhENtNtNtNtBa_4iter6traits10exact_size17ExactSizeIterator3lenCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXsY_Cs7f35Cc4Kq59_4kaniINtB5_11KaniRefIterhENtB5_8KaniIter10assumptionCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs7f35Cc4Kq59_4kani3mem24same_allocation_internalhECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs1l_Cs7f35Cc4Kq59_4kaniINtNtNtNtCs8xvirJzNMvV_4core4iter8adapters9enumerate9EnumerateINtNtNtBy_5slice4iter4IterhEENtB6_12KaniIntoIter14kani_into_iterCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RINvNtCs8xvirJzNMvV_4core3ptr18without_provenancehECsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvMs1_NtNtCs8xvirJzNMvV_4core3ptr8non_nullINtB5_7NonNullShE6as_ptrCsej4CisbYaIV_9KNH_probe'
+Instrumenting '_RNvXs5_NtNtCs8xvirJzNMvV_4core5slice4iterINtB5_4IterhENtNtB9_5clone5Clone5cloneB9_'
+Specializing cprover_contracts functions for assigns clauses of at most 5 targets
+Removing unused functions
+Updating init function
+Setting entry point to _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Finished goto-instrument in 0.36463255s
+[Kani] Running: `goto-instrument --add-library --no-malloc-may-fail /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Adding CPROVER library (x86_64)
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Finished goto-instrument in 0.04003479s
+[Kani] Running: `goto-instrument --generate-function-body-options assert-false-assume-false --generate-function-body .* --drop-unused-functions /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+generate function bodies: matched function '__CPROVER_contracts_pointer_equals' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_make_invalid_pointer' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_is_fresh' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_contains' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_remove' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_pointer_in_range_dfcc' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_create' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_deallocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_frees_clause_inclusion' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_deallocate_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_add_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_create_indexed_by_object_id' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_allocated_deallocated_is_empty' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_replace' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_copy' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_allocated' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_reset' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_check_replace_ensures_was_freed_preconditions' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_ptr_pred_ctx_init' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_contains_exact' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assume' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_add' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assignable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_havoc_object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_car_set_insert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_link_ptr_pred_ctx' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_append' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_precondition' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_havoc_slice' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_assert' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_insert_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obj_set_release' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_write_set_check_array_set' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_from' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::contract$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_upto' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_object_whole' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_cover' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_obeys_contract::function_pointer$object$object' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_is_freeable' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_contracts_free' begins with __CPROVER the generated body for this function may interfere with analysis
+generate function bodies: matched function '__CPROVER_was_freed' begins with __CPROVER the generated body for this function may interfere with analysis
+Function Pointer Removal
+Virtual function removal
+Cleaning inline assembler statements
+Removing unused functions
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Finished goto-instrument in 0.037605595s
+[Kani] Running: `goto-instrument --ensure-one-backedge-per-target /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out`
+Reading GOTO program from '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Trying to force one backedge per target
+Writing GOTO program to '/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out'
+Finished goto-instrument in 0.046874844s
+Checking harness KNH_for_positive...
+[Kani] Running: `cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out --verbosity 9 --json-ui`
+CBMC 6.11.0 (cbmc-6.11.0)
+CBMC version 6.11.0 (cbmc-6.11.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_new/KNH_probe__RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Unwinding loop _RNvCsej4CisbYaIV_9KNH_probe16KNH_for_positive.0 iteration 1 file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 4 column 2 function KNH_for_positive thread 0
+aborting path on assume(false) at file /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs line 4 column 2 function KNH_for_positive thread 0
+Runtime Symex: 0.0876561s
+size of program expression: 3600 steps
+slicing removed 2444 assignments
+Generated 416 VCC(s), 21 remaining after simplification
+Runtime Postprocess Equation: 0.000483362s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.00505777s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 0.000797317s
+Solving with CaDiCaL 3.0.0
+12077 variables, 14360 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.000908586s
+Runtime decision procedure: 0.00614293s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+12078 variables, 14361 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 9.1373e-05s
+Runtime decision procedure: 0.000170056s
+Running propositional reduction
+Solving with CaDiCaL 3.0.0
+12079 variables, 14362 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.000795508s
+Runtime decision procedure: 0.000823951s
+Finished run_cbmc in 0.18701978s
+
+RESULTS:
+Check 1: kani::mem::cbmc::same_allocation.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "Kani does not support reasoning about pointer to unallocated memory"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::mem::cbmc::same_allocation
+
+Check 2: <usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: library/kani_core/src/models.rs:203:17 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 3: <usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset value overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 4: <usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1
+	 - Status: SUCCESS
+	 - Description: "internal error: entered unreachable code"
+	 - Location: library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 5: __CPROVER_contracts_car_set_insert.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:174 in function __CPROVER_contracts_car_set_insert
+
+Check 6: __CPROVER_contracts_car_set_insert.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:177 in function __CPROVER_contracts_car_set_insert
+
+Check 7: __CPROVER_contracts_car_set_insert.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:181 in function __CPROVER_contracts_car_set_insert
+
+Check 8: std::panic::Location::<'_>::caller.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "caller_location is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/374"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic/location.rs:181:9 in function std::panic::Location::<'_>::caller
+
+Check 9: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset in bytes overflows isize"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 10: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Offset result address must equal original pointer address plus offset"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 11: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.3
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer must point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 12: free.frees.1
+	 - Status: SUCCESS
+	 - Description: "Check that ptr is freeable"
+	 - Location: <builtin-library-free>:43 in function free
+
+Check 13: KNH_for_positive.loop_invariant_base.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant before entry for loop KNH_for_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 14: KNH_for_positive.loop_assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check assigns clause inclusion for loop KNH_for_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 15: KNH_for_positive.assigns.1
+	 - Status: SUCCESS
+	 - Description: "Check that var_29 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 16: KNH_for_positive.assigns.2
+	 - Status: SUCCESS
+	 - Description: "Check that var_30 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 17: KNH_for_positive.assigns.3
+	 - Status: SUCCESS
+	 - Description: "Check that _x is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 18: KNH_for_positive.assertion.1
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 19: KNH_for_positive.assigns.4
+	 - Status: SUCCESS
+	 - Description: "Check that kani_index_5_2_5_43 is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 20: KNH_for_positive.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KNH_scratch/KNH_probe.rs:5:33 in function KNH_for_positive
+
+Check 21: KNH_for_positive.assigns.5
+	 - Status: SUCCESS
+	 - Description: "Check that count is assignable"
+	 - Location: KNH_scratch/KNH_probe.rs:5:33 in function KNH_for_positive
+
+Check 22: KNH_for_positive.loop_invariant_step.1
+	 - Status: SUCCESS
+	 - Description: "Check invariant after step for loop KNH_for_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 23: KNH_for_positive.loop_step_unwinding.1
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_for_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 24: KNH_for_positive.loop_step_unwinding.2
+	 - Status: SUCCESS
+	 - Description: "Check step was unwound for loop KNH_for_positive.0"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 25: KNH_for_positive.assertion.3
+	 - Status: SUCCESS
+	 - Description: "assertion failed: count == 4"
+	 - Location: KNH_scratch/KNH_probe.rs:6:2 in function KNH_for_positive
+
+Check 26: __CPROVER_contracts_write_set_record_deallocated.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:740 in function __CPROVER_contracts_write_set_record_deallocated
+
+Check 27: __CPROVER_contracts_write_set_check_assignment.assertion.1
+	 - Status: SUCCESS
+	 - Description: "ptr NULL or writable up to size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:805 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 28: __CPROVER_contracts_write_set_check_assignment.assertion.2
+	 - Status: SUCCESS
+	 - Description: "CAR size is less than __CPROVER_max_malloc_size"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:822 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 29: __CPROVER_contracts_write_set_check_assignment.assertion.3
+	 - Status: SUCCESS
+	 - Description: "no offset bits overflow on CAR upper bound computation"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:828 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 30: __CPROVER_contracts_write_set_check_assignment.unwind.1
+	 - Status: SUCCESS
+	 - Description: "unwinding assertion loop 0"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:837 in function __CPROVER_contracts_write_set_check_assignment
+
+Check 31: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 32: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 33: std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to subtract with overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:1360:23 in function std::ptr::const_ptr::<impl *const ()>::is_aligned_to
+
+Check 34: std::ptr::const_ptr::<impl *const ()>::is_aligned_to.assertion.2
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:1357:13 in function std::ptr::const_ptr::<impl *const ()>::is_aligned_to
+
+Check 35: std::slice::from_raw_parts::<'_, u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs:139:9 in function std::slice::from_raw_parts::<'_, u8>
+
+Check 36: std::slice::from_raw_parts::<'_, u8>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs:139:9 in function std::slice::from_raw_parts::<'_, u8>
+
+Check 37: core::ub_checks::is_valid_allocation_size.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to divide by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 38: core::ub_checks::is_valid_allocation_size.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 39: std::fmt::Arguments::<'_>::from_str.assertion.1
+	 - Status: UNREACHABLE
+	 - Description: "attempt to shift left with overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs:820:38 in function std::fmt::Arguments::<'_>::from_str
+
+Check 40: std::ptr::const_ptr::<impl *const u8>::offset_from_unsigned.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: 0 < pointee_size && pointee_size <= isize::MAX as usize"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:731:9 in function std::ptr::const_ptr::<impl *const u8>::offset_from_unsigned
+
+Check 41: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: library/kani_core/src/iter.rs:114:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 42: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:114:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 43: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.1
+	 - Status: SUCCESS
+	 - Description: "Cannot compute offset of a ZST"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 44: kani::rustc_intrinsics::ptr_offset_from::<u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer should point to the same allocation"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 45: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 46: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.3
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with overflow"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 47: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with overflow"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 48: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.2
+	 - Status: SUCCESS
+	 - Description: "attempt to calculate the remainder with a divisor of zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 49: kani::rustc_intrinsics::ptr_offset_from::<u8>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Expected the distance between the pointers, in bytes, to be a
+                        multiple of the size of `T`"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 50: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 51: kani::rustc_intrinsics::ptr_offset_from::<u8>.assertion.5
+	 - Status: SUCCESS
+	 - Description: "attempt to divide with overflow"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 52: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.3
+	 - Status: SUCCESS
+	 - Description: "attempt to divide with overflow"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 53: kani::rustc_intrinsics::ptr_offset_from::<u8>.arithmetic_overflow.4
+	 - Status: SUCCESS
+	 - Description: "attempt to divide by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 54: core::panicking::panic_nounwind_fmt::runtime.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "call to foreign "Rust" function `_RNvCskSgPeDzUGbv_7___rustc17rust_begin_unwind` is not currently supported by Kani. Please post your example at https://github.com/model-checking/kani/issues/new/choose"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:110:17 in function core::panicking::panic_nounwind_fmt::runtime
+
+Check 55: kani::rustc_intrinsics::ptr_offset_from_unsigned::<u8>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Expected non-negative distance between pointers"
+	 - Location: library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::ptr_offset_from_unsigned::<u8>
+
+Check 56: kani::rustc_intrinsics::ptr_offset_from::<u8>.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: library/kani_core/src/models.rs:93:25 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 57: kani::rustc_intrinsics::ptr_offset_from::<u8>.division-by-zero.2
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: library/kani_core/src/models.rs:97:21 in function kani::rustc_intrinsics::ptr_offset_from::<u8>
+
+Check 58: KNH_for_positive::{closure#0}.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 59: KNH_for_positive::{closure#0}.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 60: KNH_for_positive::{closure#0}.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 61: KNH_for_positive::{closure#0}.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 62: KNH_for_positive::{closure#0}.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 63: KNH_for_positive::{closure#0}.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 64: KNH_for_positive::{closure#0}.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 65: KNH_for_positive::{closure#0}.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 66: KNH_for_positive::{closure#0}.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 67: KNH_for_positive::{closure#0}.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 68: KNH_for_positive::{closure#0}.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 69: KNH_for_positive::{closure#0}.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 70: KNH_for_positive::{closure#0}.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 71: KNH_for_positive::{closure#0}.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 72: KNH_for_positive::{closure#0}.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 73: KNH_for_positive::{closure#0}.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 74: KNH_for_positive::{closure#0}.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 75: KNH_for_positive::{closure#0}.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 76: KNH_for_positive::{closure#0}.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 77: KNH_for_positive::{closure#0}.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 78: KNH_for_positive::{closure#0}.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 79: KNH_for_positive::{closure#0}.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 80: KNH_for_positive::{closure#0}.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 81: KNH_for_positive::{closure#0}.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 82: KNH_for_positive::{closure#0}.pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 83: KNH_for_positive::{closure#0}.pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 84: KNH_for_positive::{closure#0}.pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 85: KNH_for_positive::{closure#0}.pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 86: KNH_for_positive::{closure#0}.pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 87: KNH_for_positive::{closure#0}.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 88: KNH_for_positive::{closure#0}.pointer_dereference.31
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 89: KNH_for_positive::{closure#0}.pointer_dereference.32
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 90: KNH_for_positive::{closure#0}.pointer_dereference.33
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 91: KNH_for_positive::{closure#0}.pointer_dereference.34
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 92: KNH_for_positive::{closure#0}.pointer_dereference.35
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 93: KNH_for_positive::{closure#0}.pointer_dereference.36
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:25 in function KNH_for_positive::{closure#0}
+
+Check 94: KNH_for_positive::{closure#0}.pointer_dereference.37
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 95: KNH_for_positive::{closure#0}.pointer_dereference.38
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 96: KNH_for_positive::{closure#0}.pointer_dereference.39
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 97: KNH_for_positive::{closure#0}.pointer_dereference.40
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 98: KNH_for_positive::{closure#0}.pointer_dereference.41
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 99: KNH_for_positive::{closure#0}.pointer_dereference.42
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive::{closure#0}
+
+Check 100: KNH_for_positive::{closure#0}.pointer_dereference.43
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 101: KNH_for_positive::{closure#0}.pointer_dereference.44
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 102: KNH_for_positive::{closure#0}.pointer_dereference.45
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 103: KNH_for_positive::{closure#0}.pointer_dereference.46
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 104: KNH_for_positive::{closure#0}.pointer_dereference.47
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 105: KNH_for_positive::{closure#0}.pointer_dereference.48
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:4:49 in function KNH_for_positive::{closure#0}
+
+Check 106: pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 107: pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 108: pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 109: pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 110: pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 111: pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 112: pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 113: pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 114: pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 115: pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 116: pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 117: pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 118: pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 119: pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 120: pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 121: pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 122: pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 123: pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 124: pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 125: pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 126: pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 127: pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 128: pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 129: pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 130: pointer_dereference.25
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+
+Check 131: pointer_dereference.26
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+
+Check 132: pointer_dereference.27
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+
+Check 133: pointer_dereference.28
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+
+Check 134: pointer_dereference.29
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+
+Check 135: pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+
+Check 136: KNH_for_positive.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "free argument must be NULL or valid pointer"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 137: KNH_for_positive.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "free argument must be dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 138: KNH_for_positive.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "free argument has offset zero"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 139: KNH_for_positive.precondition_instance.4
+	 - Status: SUCCESS
+	 - Description: "double free"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 140: KNH_for_positive.precondition_instance.5
+	 - Status: SUCCESS
+	 - Description: "free called for new[] object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 141: KNH_for_positive.precondition_instance.6
+	 - Status: SUCCESS
+	 - Description: "free called for stack-allocated object"
+	 - Location: KNH_scratch/KNH_probe.rs:4:2 in function KNH_for_positive
+
+Check 142: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 143: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 144: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 145: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 146: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 147: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:93:41 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 148: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 149: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 150: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 151: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 152: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 153: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 154: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 155: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 156: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 157: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 158: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 159: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 160: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 161: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.20
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 162: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.21
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 163: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 164: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 165: std::slice::Iter::<'_, u8>::make_slice.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function std::slice::Iter::<'_, u8>::make_slice
+
+Check 166: core::ub_checks::is_valid_allocation_size.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs:148:54 in function core::ub_checks::is_valid_allocation_size
+
+Check 167: std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime.pointer.1
+	 - Status: SUCCESS
+	 - Description: "same object violation in this >= origin"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs:716:21 in function std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime
+
+Check 168: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 169: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 170: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 171: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 172: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 173: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:29:24 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 174: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 175: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 176: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 177: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 178: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 179: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:33:72 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 180: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.13
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 181: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.14
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 182: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.15
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 183: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.16
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 184: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.17
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 185: <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs:57:51 in function <std::slice::Iter<'_, u8> as std::iter::ExactSizeIterator>::len
+
+Check 186: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 187: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 188: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 189: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 190: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 191: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:21 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 192: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 193: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 194: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 195: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 196: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 197: <std::slice::Iter<'_, u8> as std::clone::Clone>::clone.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:154:43 in function <std::slice::Iter<'_, u8> as std::clone::Clone>::clone
+
+Check 198: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 199: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 200: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 201: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 202: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 203: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:121:44 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 204: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 205: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 206: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 207: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 208: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 209: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:121:67 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::assumption
+
+Check 210: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 211: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 212: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 213: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 214: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 215: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:124:17 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::len
+
+Check 216: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 217: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 218: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 219: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 220: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 221: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:114:28 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::nth
+
+Check 222: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 223: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 224: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 225: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 226: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 227: <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/iter.rs:117:26 in function <kani::KaniRefIter<'_, u8> as kani::KaniIter>::first
+
+Check 228: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 229: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 230: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 231: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 232: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 233: __CPROVER_contracts_make_invalid_pointer.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:1186 in function __CPROVER_contracts_make_invalid_pointer
+
+Check 234: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.1
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 235: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.2
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+Check 236: __CPROVER_contracts_obj_set_create_indexed_by_object_id.bit_count.3
+	 - Status: SUCCESS
+	 - Description: "count leading zeros is undefined for value zero"
+	 - Location: <builtin-library-__CPROVER_contracts_library>:264 in function __CPROVER_contracts_obj_set_create_indexed_by_object_id
+
+
+SUMMARY:
+ ** 0 of 236 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.186639s
+
+Manual Harness Summary:
+Verification failed for - KNH_for_negative
+Complete - 1 successfully verified harnesses, 1 failures, 2 total.

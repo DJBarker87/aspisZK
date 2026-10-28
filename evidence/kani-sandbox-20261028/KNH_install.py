@@ -17,7 +17,7 @@ env.update(PATH=str(bundle/'bin')+':/home/dombarker/.cargo/bin:/usr/bin:/bin')
 ver=subprocess.check_output([str(bundle/'bin/kani-driver'),'--version'],env=env,text=True)
 files={str(p.relative_to(root)):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in root.rglob('*') if p.is_file() and not p.is_symlink()}
 (b/'KNH_INSTALL_FILES.json').write_text(json.dumps(files,indent=2)+'\n')
-out=dict(source_url=a['browser_download_url'],release_api=url,archive_sha256=sha,version=ver,toolchain=version,toolchain_source='https://static.rust-lang.org/dist/'+version.removeprefix('nightly-')+'/channel-rust-nightly.toml',env={k:env[k] for k in ['RUSTUP_HOME','RUSTUP_TOOLCHAIN','PATH']},driver=str(bundle/'bin/kani-driver'))
+out=dict(source_url=a['browser_download_url'],release_api=url,archive_sha256=sha,version=ver,toolchain=version,toolchain_source='https://static.rust-lang.org/dist/'+version.removeprefix('nightly-').split('-x86_64')[0]+'/channel-rust-nightly.toml',env={k:env[k] for k in ['RUSTUP_HOME','RUSTUP_TOOLCHAIN','PATH']},driver=str(bundle/'bin/kani-driver'))
 (b/'KNH_INSTALL.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
 # An independent retained cache is created by copying, never linking/mutating seed.
 seed=Path('/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027');cache=Path('/home/dombarker/project-offloads/codex-cx-kanisbx-cache-20261028')
