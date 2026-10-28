@@ -1,0 +1,49 @@
+#[kani::proof] #[kani::unwind(2)]
+fn NBJ_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
+
+/// Test generated for harness `multiproof::NBJ_multiproof::NBJ_count_copy_prefix` 
+///
+/// Check for `assertion`: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+
+#[test]
+fn kani_concrete_playback_NBJ_count_copy_prefix_8053088788365222636() {
+    let concrete_vals: Vec<Vec<u8>> = vec![
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 1
+        vec![1, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0],
+        // 512
+        vec![0, 2, 0, 0],
+        // 16ul
+        vec![16, 0, 0, 0, 0, 0, 0, 0],
+        // 15ul
+        vec![15, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    kani::concrete_playback_run(concrete_vals, NBJ_count_copy_prefix);
+}
