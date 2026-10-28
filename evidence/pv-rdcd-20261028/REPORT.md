@@ -1,6 +1,6 @@
 # PV_RDCD deployed-source disposition
 
-**D393 resume in progress:6 RESTORED at retained source-law/Result boundaries;11 SUSPENDED. Privacy target not established.**
+**D393 resume in progress:7 RESTORED at retained source-law/Result boundaries;10 SUSPENDED. Privacy target not established.**
 
 Branch `codex/pv-rdcd-20261028`, base `6273e62061`; assigned worktree unchanged. No crates/programs edits, pushes, SBF rebuilds, new trust fields, observer/simulator changes or key operations.
 
@@ -53,3 +53,5 @@ V216 restored/A by exact concrete bytewise source identity, unchanged deployed-f
 V212 is now restored/B through its existing committed adapter: exact fresh-output token relation, three arbitrary-input literal laws, Option/wrapping/cast/precondition laws and unchanged retained importer replay.41418 remains an uncredited raw-output failure; no cohort-gap authority was replaced and no regenerated file edited.
 
 V169 restored/B: four concrete Default instances, unmodified generic take extraction and original reference transport, complete deployed empty RawVec helper census/source metadata/frame laws, and new native layout/default/take validation. Refused41450/41457 admissions were retried with the same unlaunched IDs after180s. Cross-job full-block directory/file/sent audit finds no collision; used61 Lean attempts at this checkpoint,39 remain.
+
+V213 restored/B: captureless canonical helper source law41462, exact fresh-output/historical-adapter relation, unchanged whole Result importer41469, shared deployed1.94.1 Option/integer laws, and2401 raw constructor native pairs. Original Kani and failed structured-Drop extraction remain uncredited. Two worker cooldown/sequencing violations are explicitly recorded in RESUME-SEQUENCING.md; the local wrapper now enforces180s before submissions.

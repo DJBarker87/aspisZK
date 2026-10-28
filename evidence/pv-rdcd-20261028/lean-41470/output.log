@@ -1,0 +1,51 @@
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : Aeneas.Std.core.iter.range.Step
+  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) :=
+Aeneas.Std.core.iter.range.UScalarStep Aeneas.Std.UScalarTy.Usize Aeneas.Std.core.clone.CloneUsize
+  Aeneas.Std.core.cmp.PartialOrdUsize
+@[reducible] def Aeneas.Std.core.ops.range.Range.Insts.DoubleEndedIterator : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator (Aeneas.Std.core.ops.range.Range A) A :=
+fun {A} StepInst =>
+  { iteratorInst := Aeneas.Std.core.iter.traits.iterator.IteratorRange StepInst,
+    next_back := Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back StepInst }
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorRange : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.iter.traits.iterator.Iterator (Aeneas.Std.core.ops.range.Range A) A :=
+fun {A} StepInst => { next := Aeneas.Std.core.iter.range.IteratorRange.next StepInst }
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    Aeneas.Std.core.iter.adapters.rev.Rev I →
+      Aeneas.Std.Result (Option Item × Aeneas.Std.core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => Aeneas.Std.Result.ok (o, { iter := it })
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default : {Self Item0 Item1 : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Item0 →
+    Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator Self Item1 →
+      Self → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.rev.Rev Self) :=
+fun {Self Item0 Item1} _IteratorInst _DEInst => Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default
+structure Aeneas.Std.core.iter.range.Step (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.range.Step.cloneInst : Aeneas.Std.core.clone.Clone Self
+  Aeneas.Std.core.iter.range.Step.partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self
+  Aeneas.Std.core.iter.range.Step.steps_between : Self →
+      Self → Aeneas.Std.Result (Aeneas.Std.Usize × Option Aeneas.Std.Usize)
+  Aeneas.Std.core.iter.range.Step.forward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)
+  Aeneas.Std.core.iter.range.Step.backward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)
+constructor:
+  Aeneas.Std.core.iter.range.Step.mk {Self : Type} (cloneInst : Aeneas.Std.core.clone.Clone Self)
+    (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self)
+    (steps_between : Self → Self → Aeneas.Std.Result (Aeneas.Std.Usize × Option Aeneas.Std.Usize))
+    (forward_checked backward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)) :
+    Aeneas.Std.core.iter.range.Step Self
+structure Aeneas.Std.core.ops.range.Range.{u} (Idx : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.ops.range.Range.start : Idx
+  Aeneas.Std.core.ops.range.Range.end : Idx
+constructor:
+  Aeneas.Std.core.ops.range.Range.mk.{u} {Idx : Type u} (start «end» : Idx) : Aeneas.Std.core.ops.range.Range Idx
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_RangeInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.sub`
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_RangeInspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.add`

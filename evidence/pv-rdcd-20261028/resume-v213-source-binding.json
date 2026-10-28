@@ -1,0 +1,28 @@
+{
+  "row": "V213",
+  "source_path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/wide_exact.rs",
+  "source_sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+  "source_body": "fn canonical_qm31(value: QM31) -> QM31 {\n    let reduce = |x: M31| M31(super::ct::reduce64(x.0 as u64));\n    QM31 { c0: CM31 { a: reduce(value.c0.a), b: reduce(value.c0.b) }, c1: CM31 { a: reduce(value.c1.a), b: reduce(value.c1.b) } }\n}",
+  "constructor_body": "pub fn new(c0: QM31, c1: QM31) -> Self {\n        Self {\n            c0: canonical_qm31(c0),\n            c1: canonical_qm31(c1),\n        }\n    }",
+  "reference_body": "pub fn canonical_qm31(x: QM31) -> QM31 {\n    QM31 {\n        c0: CM31 {\n            a: M31(ct::reduce64(x.c0.a.0 as u64)),\n            b: M31(ct::reduce64(x.c0.b.0 as u64)),\n        },\n        c1: CM31 {\n            a: M31(ct::reduce64(x.c1.a.0 as u64)),\n            b: M31(ct::reduce64(x.c1.b.0 as u64)),\n        },\n    }\n}",
+  "reference_source_pin": "7e1af7c472e0880dd29dfb4dd210f2bd9629004bef547b0a7e480154d22adbbf",
+  "cfg": "ct-host-prover=true; release; assertions/overflow checks off",
+  "source_call_order": [
+    "c0.a",
+    "c0.b",
+    "c1.a",
+    "c1.b"
+  ],
+  "difference": "captureless scalar closure versus four direct identical ct::reduce64 calls; two helper applications in WideExact::new",
+  "laws": [
+    "PV_RDCD_CanonicalSource.environment_unique",
+    "PV_RDCD_CanonicalSource.drop_frame",
+    "PV_RDCD_CanonicalSource.reference"
+  ],
+  "primitive_boundary": "Rust captureless closure application/empty automatic drop, scalar cast/arithmetic and compiler cohort; global carrier/world and L1/L2/L3 retained",
+  "qualifications": [
+    "Supplemental explicit source proof, not a recovered standalone original structural checker.",
+    "No Kani result used or re-credited; no generated output is edited and no extractor guard disabled.",
+    "All raw QM31 field values admitted by the source proof; native cases alone remain finite validation."
+  ]
+}
