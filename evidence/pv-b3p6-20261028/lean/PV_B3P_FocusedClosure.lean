@@ -3,6 +3,11 @@ import PV_B3P_WordLaw226V3
 import PV_B3P_DigestRegions226V3
 import PV_B3P_FrontierTotal226V3
 import PV_B3P_EncodeSuccess226V3
+import PV_B3P_Nonvacuity226V3
+import PV_B3P_ReferenceOutcome226V3
+import PV_B3P_Length226V3
+import PV_B3P_EndianVerified226V3
+import PV_B3P_LayoutCells226V3
 namespace PV_B3P_FocusedClosure
 open Aeneas Aeneas.Std ProverRwFull
 set_option autoImplicit false
@@ -28,5 +33,11 @@ theorem reference_pair (base : ExternalTypes)
 #print axioms PV_B3P_DigestRegions226V3.nullifier_success
 #print axioms PV_B3P_FrontierTotal226V3.success
 #print axioms PV_B3P_EncodeSuccess226V3.success
+#print axioms PV_B3P_Nonvacuity226V3.installed_success
+#print axioms PV_B3P_ReferenceOutcome226V3.no_outer_failure
+#print axioms PV_B3P_Length226V3.installed_length
+#print axioms PV_B3P_EndianVerified226V3.word_bytes
+#print axioms PV_B3P_EndianVerified226V3.index_bytes
+#print axioms PV_B3P_LayoutCells226V3.flat_cell
 end
 end PV_B3P_FocusedClosure
