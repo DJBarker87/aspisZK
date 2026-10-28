@@ -13368,3 +13368,17 @@ a later unthrottled confirmation. Stage A remains PASS. Evidence 8d12f1e66e on c
 Research was 33 commits ahead (about 170 MB of Stream A evidence) and every push timed out with HTTP
 408; the lead pushed it in seven first-parent steps, and origin/research..research is empty. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D360 (Stream B) 2026-10-28 08:57 UTC: the eight bucket-(d) library rows closed on the candidate by structural links
+
+dlib2 (48 of 100 Lean attempts; no Kani; no crates/ or programs/ change; no forbidden tokens in its 57
+Lean files) gives all eight rows a candidate native link: V201 (op79 eval_message) by the structural
+route for chained field arithmetic (ruling (k)), and V187 (op36 Array TryFrom<Vec>) and the six
+digest-wrapper rows V231, V234, V235, V236, V237, V238 as "structural (K-1 substitute)" under ruling
+(k'), the wrappers with the block compression function as a parameter (V232, SHA-NI semantics, stays
+with the owner). The final combined audit and focused replay pass with standard axioms (1.36 s; 2.65
+GB; no swap); unchanged compiles were not repeated after its capacity relaunch. Merged into the prover
+candidate (10b8afe764, pushed); worktree and branch removed. Acceptance is the recount's: recount 7
+pinned this branch at an earlier head, so these closures are confirmed at the next recount, and the
+seven K-1 substitutes are re-verified by stubbed Kani when budgeted. Rows removed outright: 0. Privacy
+target not yet established.
