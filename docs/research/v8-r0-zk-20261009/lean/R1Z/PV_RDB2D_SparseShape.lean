@@ -23,7 +23,7 @@ theorem trailing_bound {K : Type} (isBoolean : K → Bool) (point : List K) :
     | nil => simp
     | cons x xs ih =>
       cases h : isBoolean x <;> simp [List.takeWhile,h] <;> omega
-  exact (bound point.reverse).trans_eq (List.length_reverse _)
+  exact (bound point.reverse).trans_eq List.length_reverse
 
 theorem split_length {K : Type} (isBoolean : K → Bool) (point : List K) :
     prefixLen isBoolean point+trailing isBoolean point=point.length := by
