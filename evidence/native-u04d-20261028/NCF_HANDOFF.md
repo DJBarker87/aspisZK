@@ -71,3 +71,109 @@ Cache retained: /home/dombarker/project-offloads/codex-cx-tx2codec-cache-2026102
 SInt2/library objects read-only; imported cache and 219 resolved Aeneas objects
 pinned in L003-object-pins.json. No wallet/key action, other worktree/candidate
 edit, binary/object/ELF commit, push or merge. Budget/final audit follows below.
+
+## Final contract/caller audit and stop
+
+Budget **70/70 Kani**, **3/60 Lean slots charged** (two actual compiles plus
+L001's unresolved submission). All70 native receipts are terminal. No further
+Kani launch is authorized. Raw audit:24 local positive components,30 intended
+single-failure semantic controls,4 provisional positive checks,12 excluded runs.
+NCF_AUDIT.json is mechanical and retains every failure, resource field and axiom
+line. None of the four provisional checks counts as a closed bridge.
+
+op25–28 individual postcondition inversions and local contract-use/assertion
+controls K046–057 were added around the unchanged native getter contracts;
+NCC K055–058 callee body proofs are reused. The actual SDK callers remain open.
+
+op15's exact conditional native policy contract K058 passes. K060 cannot compile
+until a cfg-only Arbitrary implementation enumerates all eight real error
+variants; corrected K061 passes, K062 fails its caller assertion. Program K063
+has a cfg-only KMX alloc-registration compile error; K064 then exposes that
+Kani does not recognize only the dependency crate's proof_for_contract harness.
+A program-local foreign-function proof is admitted and passes in K065. Actual
+unchanged SDK authentication K067 passes3143 checks (240 unreachable) in the
+restricted rejected/aliased account fixture, with the policy contract checking
+its expected-field pointer. K068 fails its intended Result assertion.
+
+**Controls K059 and K066 are INVALID:** each fails both the intended inverse
+postcondition AND the native policy's ghost pointer precondition. The inverse
+wrapper did not establish the callee's domain. All op15 conditional-policy and
+SDK pilot bridge credit is therefore withheld, including K058/K061/K065/K067.
+This corrects the earlier optimistic description of those control results.
+The ghost precondition is also not established for every upstream caller and
+is a finding, never a new release hypothesis. The fixture does not cover the
+parent's accepted unique/readonly-account domain. NCF_SDK_PILOT_SCOPE.md gives
+the exact limits. NCF_policy_control_fix.patch is prepared but UNEXECUTED;
+it requires a new authorized Kani allocation and its own controls.
+
+K069/K070 independently check the ACTUAL master Box decoder wrapper's exact
+wrong-length InvalidAccountData mapping on valid symbolic-length one-window
+inputs; positive passes, inverse fails. The remaining decoder/iterator/Box join
+is not inferred. Program checkpoint/ASQ8 rejection candidates and the wrong-
+pointer diagnostic were not run and receive no credit.
+
+## Member-by-member native blockers; no remaining independent Lean-only gate
+
+| Slot | Exact remaining obligation requiring new native/P6 evidence |
+|---|---|
+|15| Repair both policy postcondition controls; remove/establish the ghost precondition on every upstream caller; accepted-domain actual authentication association and extraction component. The rejected/aliased pilot is insufficient. |
+|23| All-payload arbitrary-length rejection transport and actual validate_asq8 child call on the same instruction suffix/returned request. Weak mutable-slice input generation failed; bounded/one-window checks cannot supply it. |
+|25| Same decoded V1 registry at actual authentication paused call; actual caller domain/return-use association through prior decode and PDA calls. |
+|26| Same V1 registry at authentication immutable call. NCC private-validator and NCF local use controls are not that point. |
+|27| Same decoded V2 registry in immutable-deployment authentication branch at paused call; prior PDA/decode domains. |
+|28| Same V2 registry at immutable call and same native continuation, not an independently chosen record. |
+|29| Actual V2 entry/current_slot authentication point after decode/PDA; exact native-to-cohort extraction component. Local full typed contract/value is already checked. |
+|30| Actual V1 entry/current_slot authentication point after decode/PDA; exact extraction component. Local full typed contract/value is already checked. |
+|31| All-payload larger-length rejection plus actual borrowed V1 registry bytes, Result/error mapping and SDK point. |
+|32| Same obligations for V1 entry account bytes. |
+|33| Same obligations for V2 registry account bytes. |
+|34| Same obligations for V2 entry account bytes. |
+|48| Original decoder representability on success, original iterator prestate/next and actual read/write association, validation, account/Box/error/allocator frame and authentication caller. Selected nth, typed Box and one-window wrong-length checks are separate components only. |
+|49| Original checkpoint decoder/iterator and canonical digest, successful/error paths, Box/allocator/account frame and same authentication caller. Typed Box/selected row components do not discharge these. |
+
+Every remaining fact above is a native execution/association boundary, not a
+missing pure induction/selection lemma. All independent NBX frame, sequence,
+capacity, result, candidate-installation and retention lemmas are imported
+unchanged by NCF_EntryContract through NCC_ReuseAudit; the new scalar contract
+value equations compiled with standard axioms. Re-proving those lemmas or
+assuming the missing native conclusion would not discharge a row. Thus Kani
+exhaustion leaves no independent Lean-only obligation to execute under this
+allocation. Next deliverable: corrected op15 controls followed by an actual
+accepted-domain call-point bridge with its callee domains proved; alternatively
+an input representation supporting all-payload symbolic-length rejection.
+
+## Final provenance, retention and resources
+
+L003 target NCF_EntryContract.lean: exit0, wall2.368627096s,
+peakRSS5,617,008KiB, swap0; source revision c8f2812dbff5041f3eda200c002b670ba6d8666c
+plus the exact dirty-source hash in its receipt. Both printed theorems use only
+propext/Classical.choice/Quot.sound. This is focused validation against the
+pinned inherited objects, not a full frozen-release manifest replay.
+
+NCF_HOST_FINAL.json verifies all585 imported private-cache files and all219
+resolved Aeneas objects unchanged; retained cache now has586 files, adding only
+NCF_EntryContract.olean. All70 native attempts and final batch are terminal.
+Own2,507,476,336-byte NCF_target and empty NCF_tmp were removed. The persistent
+lane cache, inherited sources, receipts and snapshots remain; no other job's
+output or cache was removed.
+
+The host compares498 frozen tracked source/manifest files:491 unchanged and
+seven expected cfg-instrumented parent files (four inherited parents plus
+three new parent locations). Removing only NCF's registrations/annotations
+reproduces the exact retained NCC_K060 parent bytes or frozen originals.
+NCF_final_harness.patch and NCF_final_sources reproduce all own executed
+instrumentation; NCF_FINAL_PATCH_PIN.json pins the patch and exact base.
+Tracked repository crates/programs/Cargo.toml/lock remain byte-identical to
+frozen source (NCF_FROZEN_SOURCE.json). No shipped implementation changed.
+
+Own final metadata command experienced five SSH255 resets at300732 inline
+bytes. The same validation was delivered through stdin and succeeded; no
+proof was resubmitted and no shared infrastructure was changed. The aborted
+metadata client and transport repair are recorded separately. All earlier
+proof transport recovery is preserved; L001 remains unresolved, never reused.
+
+No file exceeds20MB; no binaries, .olean, ELF, tarball or private keys are
+committed. No full unchanged regression, cap increase, solver timeout, memory
+kill, SHA unwinding, field multiplication gate, session-A worktree/candidate
+edit, push or merge occurred. Inherited release ELF hashes are not newly
+reproduced. The deployed100-bit target remains not yet established.

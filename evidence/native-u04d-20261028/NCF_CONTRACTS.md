@@ -26,3 +26,7 @@ NCF_L001 transport is unresolved and never resubmitted; NCF_L002 failed to
 elaborate a missing Decidable instance and receives no credit. L003 changes the
 source to fix that error. No timeout/memory kill/cap increase or unchanged
 regression rerun occurred. Cache and resolved Aeneas pins: L003-object-pins.json.
+
+Later policy pilots are separate and EXCLUDED from bridge credit: K059/K066
+fail an extra ghost precondition. They do not affect the valid op29/op30 pairs
+above. See NCF_SDK_PILOT_SCOPE.md and the final handoff audit.

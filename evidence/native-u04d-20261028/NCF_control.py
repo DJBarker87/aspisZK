@@ -33,7 +33,7 @@ elif args[0]=='batch':
  m.admit('NCF_BATCH'+str(start)+'_UPLOAD')
  base=json.loads((P/'NCC_K060.json').read_text());base.update(timeout=600,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
  base['sources']=[x for x in base['sources'] if x not in ['NCC_gate.py','NCC_frozen_graph.sha256']]+['NCF_gate.py','NCF_frozen_graph.sha256','NBU_src/crates/aspis-statement/src/pool_v1/NCF_slots.rs']
- 
+
  if (E/'NCF_POLICY_INSTALL.json').exists():base['sources']+=['NBU_src/crates/aspis-statement/src/NCF_policy.rs','NBU_src/crates/aspis-statement/src/pool_v1/format.rs','NBU_src/programs/r1-cost-probe/src/lib.rs','NBU_src/programs/r1-cost-probe/src/r1_pool_adapter.rs','NBU_src/programs/r1-cost-probe/src/NCF_sdk.rs']
  base['env']['CARGO_TARGET_DIR']=m.B+'/NCF_target';base['env']['TMPDIR']=m.B+'/NCF_tmp'
  targets=[dict(attempt=f'NCF_K{i:03}',module=h,command=['python3','NCF_gate.py',f'NCF_K{i:03}',h]) for i,h in enumerate(hs,start)]

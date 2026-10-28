@@ -59,3 +59,12 @@ fn NCF_op15_sdk_result_negative(){let mut master=NCF_master();master.verifier_po
 unsafe{aspis_statement::NCF_policy::NCF_expect(&master.verifier_policy);}
 let result=authenticate_invariant_release_registry(&verifier,&pool,&account,&master,&account,&account,kani::any());
 assert_eq!(result,Ok(()));}
+#[kani::proof_for_contract(aspis_statement::pool_v1::validate_verifier_policy_v1)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_contract(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};unsafe{aspis_statement::NCF_policy::NCF_expect(&p);}aspis_statement::pool_v1::validate_verifier_policy_v1(&p);}
+#[kani::requires(true)]
+#[kani::ensures(|r:&Result<(),aspis_statement::pool_v1::PoolV1FormatError>| *r != aspis_statement::NCF_policy::NCF_spec(p))]
+fn NCF_op15_sdk_inverse(p:&VerifierPolicyV1)->Result<(),aspis_statement::pool_v1::PoolV1FormatError>{aspis_statement::pool_v1::validate_verifier_policy_v1(p)}
+#[kani::proof_for_contract(NCF_op15_sdk_inverse)]
+#[kani::unwind(33)]
+fn NCF_op15_sdk_contract_negative(){let p=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};NCF_op15_sdk_inverse(&p);}
