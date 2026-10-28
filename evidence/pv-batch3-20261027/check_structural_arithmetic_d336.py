@@ -52,7 +52,7 @@ if op==117:
   assert table(h)==table(c)
  # Checked original root and each fixed expansion in the existing generator.
  subprocess.run([sys.executable,str(D/'check_range117_source.py')],check=True,stdout=subprocess.DEVNULL)
- proofs+=['PV_B3_Range117.selected','PV_B3_Range117.mask_only','PV_B3_Range117.prepared_horner','PV_B3_LinearsIterator.next_source','PV_B3_LinearsFinite.source','PV_B3_AuditSourceD324.Mask117.source']
+ proofs+=['PV_B3_Range117.selected','PV_B3_Range117.mask_only','PV_B3_Range117.prepared_horner','PV_B3_ReverseRangeD336.next_source','PV_B3_LinearsFinite.source','PV_B3_AuditSourceD324.Mask117.source']
  differences=['fixed 16/10 scatters and 26 descending Horner iterations expanded in original order; literal exponent arrays identical','reverse range loop becomes descending index loop; same selected_mask_linears calls','noncapturing prepared closures become explicit helpers; complete-Result transports above']
 else:
  # Scalar channel operations retain release wrapping behavior and lexical order.
