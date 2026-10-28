@@ -43,67 +43,67 @@ def afterFlat {S F : Type} (deallocate : Nat → Nat → Nat → S → Result S)
 Result checker, after source iterator destruction. No heap sort scratch exists
 in the deployed u16 unstable-sort source. -/
 def flat {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (linkAddress : Nat) (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨2,align2⟩ (empty Nat) 272 state fun rowAddress after =>
+  request allocate handler ⟨2,alignment2⟩ (empty Nat) 272 state fun rowAddress after =>
     match PV_B3P_SortedResult133.active with
     | .error e => ok (.error e,after)
     | .ok rows => afterFlat deallocate linkAddress rowAddress rows after
 
 def flatReference {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (linkAddress : Nat) (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨2,align2⟩ (empty Nat) 272 state fun rowAddress after =>
+  request allocate handler ⟨2,alignment2⟩ (empty Nat) 272 state fun rowAddress after =>
     afterFlat deallocate linkAddress rowAddress PV_B3P_Sorted133.expected after
 
 def reserve {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (address : Nat) (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨8,align2⟩ (retained address) 190 (filtered address state)
+  request allocate handler ⟨8,alignment2⟩ (retained address) 190 (filtered address state)
     fun grown after =>
-      flat allocate deallocate handler align2 grown
+      flat allocate deallocate handler grown
         (store grown (.links (forestLinks legacyLinks)) after)
 
 def reserveReference {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (address : Nat) (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨8,align2⟩ (retained address) 190 (filtered address state)
+  request allocate handler ⟨8,alignment2⟩ (retained address) 190 (filtered address state)
     fun grown after =>
-      flatReference allocate deallocate handler align2 grown
+      flatReference allocate deallocate handler grown
         (store grown (.links (forestLinks legacyLinks)) after)
 
 def source {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨8,align2⟩ (empty Link) 127 state fun address after =>
+  request allocate handler ⟨8,alignment2⟩ (empty Link) 127 state fun address after =>
     match PV_B3P_Schedule133.legacy with
     | .error e => ok (.error e,after)
     | .ok links =>
       match PV_B3P_Schedule133.forest with
       | .error e => ok (.error e,after)
-      | .ok _ => reserve allocate deallocate handler align2 address
+      | .ok _ => reserve allocate deallocate handler address
           (store address (.links links) after)
 
 def reference {S F : Type} (allocate : Allocator S) (deallocate : Nat → Nat → Nat → S → Result S)
-    (handler : Handler S F) (align2 : core.ptr.alignment.Alignment)
+    (handler : Handler S F)
     (state : State S F) : Result (Returned × State S F) :=
-  request allocate handler ⟨8,align2⟩ (empty Link) 127 state fun address after =>
-    reserveReference allocate deallocate handler align2 address
+  request allocate handler ⟨8,alignment2⟩ (empty Link) 127 state fun address after =>
+    reserveReference allocate deallocate handler address
       (store address (.links legacyLinks) after)
 
 theorem flat_complete {S F : Type} (allocate : Allocator S)
     (deallocate : Nat → Nat → Nat → S → Result S) (handler : Handler S F)
-    (align2 : core.ptr.alignment.Alignment) (address : Nat) (state : State S F) :
-    flat allocate deallocate handler align2 address state =
-      flatReference allocate deallocate handler align2 address state := by
+    (address : Nat) (state : State S F) :
+    flat allocate deallocate handler address state =
+      flatReference allocate deallocate handler address state := by
   unfold flat flatReference
   rw [PV_B3P_SortedResult133.complete_result]
 
 theorem reserve_complete {S F : Type} (allocate : Allocator S)
     (deallocate : Nat → Nat → Nat → S → Result S) (handler : Handler S F)
-    (align2 : core.ptr.alignment.Alignment) (address : Nat) (state : State S F) :
-    reserve allocate deallocate handler align2 address state =
-      reserveReference allocate deallocate handler align2 address state := by
+    (address : Nat) (state : State S F) :
+    reserve allocate deallocate handler address state =
+      reserveReference allocate deallocate handler address state := by
   simp only [reserve,reserveReference,flat_complete]
 
 /-- Complete Result/world equality: every primitive outcome and the actual
@@ -111,19 +111,19 @@ handler post-state is shared. Allocation success is not a premise. The source
 binding gate, not this theorem's name, must justify the resource program. -/
 theorem complete {S F : Type} (allocate : Allocator S)
     (deallocate : Nat → Nat → Nat → S → Result S) (handler : Handler S F)
-    (align2 : core.ptr.alignment.Alignment) (state : State S F) :
-    source allocate deallocate handler align2 state =
-      reference allocate deallocate handler align2 state := by
+    (state : State S F) :
+    source allocate deallocate handler state =
+      reference allocate deallocate handler state := by
   unfold source reference
   rw [PV_B3P_ScheduleResult133.legacy_success,PV_B3P_ScheduleResult133.forest_success]
   simp only [reserve_complete]
 
 theorem with_caller {S F A : Type} (allocate : Allocator S)
     (deallocate : Nat → Nat → Nat → S → Result S) (handler : Handler S F)
-    (align2 : core.ptr.alignment.Alignment) (state : State S F)
+    (state : State S F)
     (caller : Returned × State S F → Result A) :
-    (source allocate deallocate handler align2 state >>= caller) =
-      (reference allocate deallocate handler align2 state >>= caller) := by
+    (source allocate deallocate handler state >>= caller) =
+      (reference allocate deallocate handler state >>= caller) := by
   rw [complete]
 
 #print axioms flat_complete
