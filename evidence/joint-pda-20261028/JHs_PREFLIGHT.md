@@ -13,5 +13,13 @@ decoder/authentication composition remain outside these mathematical equations.
 
 The input proofs encountered opaque extracted constants and a simplifier loop
 in U64 byte conversion. Those are proof failures, not digest counterexamples.
-The replacement unfolds the conversion definitions once in sequence and uses
-the fixed array length property. No recursion/heartbeat limit is increased.
+The final replacement proves a standalone eight-byte serialization equality
+using the existing decoded-value theorem and uses the fixed array length property. No recursion/heartbeat limit is increased.
+
+Final generator specialization: entry's 173-byte input uses a named split into
+two 64-byte prefixes and a 45-byte tail; cons_append simplification proves that
+split, and length_append proves its length. All other raw lengths are small.
+All padding proofs name rawLength before reducing the small padding expression;
+all complete digests use JGz_HashTools.hash_chunks plus checked block theorems.
+The initial direct-padding and direct-entry-length depth failures are retained
+in attempts 013, 019 and 020. No unchanged failed job was rerun.

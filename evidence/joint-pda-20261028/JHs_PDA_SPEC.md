@@ -62,3 +62,36 @@ named per-call digest equations. Each expected output requires its own named
 OffCurve fact; there is no successful-op38 certificate field. The runtime
 syscall/model correspondence is not supplied by an opaque external SDK axiom.
 The mathematical guard/error theorems do not establish runtime equivalence.
+
+## Exact fixture certificates and checked status
+
+`lean/JHs_FixtureCertificates.lean` states every equation on the original
+seed/program/expected-key expressions. `lean/JHs_DigestEquations.lean` proves
+the seven named digest equations below and assembles `realization`.
+`lean/JHs_InstalledPDA.lean` consumes that proved realization and only the named
+off-curve facts. Each off-curve field means JHs_PDA.OffCurve (decodeState key)
+for that row's actual expected key, never a successful op38 observation.
+
+| Call | SHA input bytes / blocks | Proved digest equation | Retained off-curve field |
+|---|---:|---|---|
+| Master | 113 / 2 | JHs_DigestEquations.masterDigestEquation | OffCurveCertificates.masterOffCurve |
+| Checkpoint | 125 / 3 | JHs_DigestEquations.checkpointDigestEquation | OffCurveCertificates.checkpointOffCurve |
+| Lane | 112 / 2 | JHs_DigestEquations.laneDigestEquation | OffCurveCertificates.laneOffCurve |
+| Registry | 112 / 2 | JHs_DigestEquations.registryDigestEquation | OffCurveCertificates.registryOffCurve |
+| RegistryProgramdata | 86 / 2 | JHs_DigestEquations.registryProgramdataDigestEquation | OffCurveCertificates.registryProgramdataOffCurve |
+| Entry | 173 / 3 | JHs_DigestEquations.entryDigestEquation | OffCurveCertificates.entryOffCurve |
+| VerifierProgramdata | 86 / 2 | JHs_DigestEquations.verifierProgramdataDigestEquation | OffCurveCertificates.verifierProgramdataOffCurve |
+
+Full preimages, seed boundaries, program bytes, expected keys and SHA256 hex
+are in JHs_CALLS.json. The primitive predicate is defined without a free
+callback: for masked little-endian Y mod p, p=2^255-19 and Edwards25519 d,
+OnCurve means an x<p satisfies (dY²+1)x² = Y²-1 mod p. Its agreement with
+pinned dalek is retained separately, not smuggled into an axiom or certificate
+of successful authentication. The seven off-curve facts are not proved here.
+
+The SDK registry-source files were verified against their local crate archives;
+archive checksums for program/pubkey/sha256-hasher/dalek match Cargo.lock.
+See JHs_SDK_ARCHIVE_CHECK.json and JHs_SOURCE_PINS.json. A running validator's
+syscall implementation remains separately unpinned, so the model is a faithful
+specification candidate under the explicitly proposed runtime correspondence,
+not a completed source-to-deployed-runtime refinement.
