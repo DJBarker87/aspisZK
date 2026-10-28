@@ -19,8 +19,14 @@ capacity frees once. The world consumes the allocation identity; it does not
 return an empty live Vec or claim to wipe freed bytes.
 
 PV_FXM_DropWorld proves the source/reference equation, exact deallocation
-history/counters, no element-destructor calls, memory/frame preservation and
-caller composition in the post-drop world. The allocator's private state is
+history/counters, no element-destructor calls, logical snapshot/disjoint-frame preservation and
+caller composition in the post-drop world. PV_FXM_Physical additionally carries actual physical bytes and every allocator-
+accessible external effect in Runtime. Deallocation does not promise physical
+bytes or accessible external state unchanged. The old memory field is a
+logical allocation snapshot, invalid after live=false. This interpretation is
+explicit, not a physical memory-preservation assertion.
+
+The allocator's private state is
 an explicit parameter and transition, not discarded. Buffer address/capacity
 are runtime metadata, not inferred from the extracted list. The source law
 uses the returning System deallocation primitive; libc allocator internals,

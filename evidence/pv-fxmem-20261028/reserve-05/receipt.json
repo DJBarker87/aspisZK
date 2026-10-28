@@ -1,0 +1,42 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/reserve-05/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/reserve-05/time.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/run-reserve.sh"
+  ],
+  "exit": 0,
+  "wall": "0:00.39",
+  "peak_rss_kib": "135312",
+  "swap": "0",
+  "source_revision": "b97e9445e9cde507b024a19cee5ed67869d648c0",
+  "expected_phase": "optimized native/reference compile then allocator failure differential",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "source_files": {
+    "reserve-native.rs": "c93602947f052b30ce33050528e8de185aae92460844ae62a84c4307adb1fc41",
+    "run-reserve.sh": "6e1e49b7ed8632856a345a563fbc21f75c7008148640d85b156938aa3db94a76"
+  }
+}
