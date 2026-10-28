@@ -13,3 +13,8 @@ Shared S2W backends, reservation script, launcher, shim, workspace objects and c
 - Native display tail shortened only; complete raw stdout/time/metrics and errors remain in each receipt.
 
 No timeout/cap increase, dependency drift, library-model change, or field-multiplication proof is introduced. Unwinding35 for the semantic typed-carrier harness addresses fixed array generation/copy, not a semantic buffer loop. The proposed append gate's larger unwind bound is solely harness construction of an arbitrary valid initialized live Vec prefix with uninitialized spare capacity; exactly one native push is the claimed algorithm step.
+
+- Budget stop records are interpreted per prover, so Kani exhaustion does not block Lean.
+- Default observer correction is paired with L020; arbitrary public inputs replace zeroed wrapper fixtures for the final full-route gate.
+
+- Own SSH wrapper uses an NCA-only ControlMaster socket to reuse an authenticated connection after repeated prelaunch/recovery connection closures. Exit255 retry limits and never-resubmit semantics are unchanged; no host/lead scripts are modified.

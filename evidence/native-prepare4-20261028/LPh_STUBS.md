@@ -18,6 +18,8 @@ KMX_clone_from_slice/to_vec/realloc are present unchanged in the included suppli
 | NCA_public | same control theorems; actual public-transcript bridge OPEN | exact public variant/pointers, digest argument and parsed root; arbitrary child Result, no arithmetic identity assumed |
 | NCA_begin | same control theorems; actual begin bridge OPEN | same Prefix, transcript successor and every Challenges field checked; arbitrary child Result |
 | NCA_finish | NCA_ObservedControl.finish_result, NCA_ObserverErasure.finish/source; actual FinishModel bridge OPEN | exact public, Prefix, transcript/challenges; default no-detail-phases observer is irrelevant; complete Verified return fields retained |
-| NCA root/round append cuts | NBR_AppendInduction.root_bytes/round1_bytes and NCA_AppendDomain.source | returned producer lengths32/224 and live Vec capacity256; source-position overapproximation only until native step and lifetime association compose |
+| NCA root/round append cuts | NBR_AppendInduction.step/prefix_step/capacity and NCA_AppendDomain.source | returned producer lengths32/224 and live Vec capacity256; source-position overapproximation only until native step and lifetime association compose |
 
 These call-routing replacements are explicitly OPEN lower native obligations, rather than discharged semantic stubs. They never provide native credit for a callee. No field multiplication replacement was introduced. KMX source and natural-value laws remain unchanged. KMX allocation/reallocation correspondence and ownership are not implied by a byte-value proof.
+
+Native returned-claim constructor K065/K066 pairs with NBR_PrepareConstruct.source and the inherited complete Prepared field theorems, restricted to the same passed semantic/query/scalar/rho/claim/transcript carriers. Claim-result overapproximation is not a native prepared_claim bridge. Every actual callee use must compose its own established domain and mitigated bridge.
