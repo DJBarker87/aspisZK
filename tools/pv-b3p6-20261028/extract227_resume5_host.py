@@ -6,6 +6,12 @@ p=H/'source/tools/pv-b3p6-20261028/v244'
 charon=Path('/home/dombarker/project-offloads/codex-pv-extract-20261027/charon')
 aeneas=Path('/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/aeneas')
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def fresh_label(base):
+ label=base;retry=0
+ while (H/label).exists():
+  assert not (H/label/'receipt/receipt.json').exists(),'do not repeat an unchanged extraction'
+  retry+=1;label=base+'-r'+str(retry)
+ return label
 assert sha(charon)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(aeneas)=='562e1f51ef9bea84f62793f21b4d6b48f9ae65c61ec72588170b2c3abdc37f19'
 x=json.loads((H/'features227-resume4.json').read_text());assert x['feature_differences']==[]
@@ -25,8 +31,8 @@ if kind=='charon':
   i=cmd.index('--start-from');cmd[i+1]='crate::reference_terminal::select227'
  if variant=='std194':
   i=cmd.index('--start-from');cmd[i:i+2]=sum((['--start-from','crate::std194227::'+n]for n in ['from_u32_u64','from_bool_u32','from_u16_usize','from_u8_usize']),[])
- sys.exit(run('charon227-resume5-'+variant,cmd,'x-prime extraction on unchanged pinned nightly; deployed dependencies/features and release optimized MIR; expected time in compilation and translation',{'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_TARGET_DIR':str(H/'charon-target')}))
+ sys.exit(run(fresh_label('charon227-resume5-'+variant),cmd,'x-prime extraction on unchanged pinned nightly; deployed dependencies/features and release optimized MIR; expected time in compilation and translation',{'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_TARGET_DIR':str(H/'charon-target')}))
 if kind=='aeneas':
  out=H/('generated227-resume5-'+variant);out.mkdir(exist_ok=True)
- sys.exit(run('aeneas227-resume5-'+variant,['timeout','300',str(aeneas),'-log-debug','Translate','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace','PV_B3P_227','-dest',str(out),'-split-files','-emit-json',str(llbc)],'pinned fail-closed Aeneas extraction; strict joins, no bypass or body edits'))
+ sys.exit(run(fresh_label('aeneas227-resume5-'+variant),['timeout','300',str(aeneas),'-log-debug','Translate','-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace','PV_B3P_227','-dest',str(out),'-split-files','-emit-json',str(llbc)],'pinned fail-closed Aeneas extraction; strict joins, no bypass or body edits'))
 raise AssertionError(kind)

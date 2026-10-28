@@ -26,6 +26,6 @@ for p in labels:
   item['revision_correction']='Recorded source revision pins frozen deployed sources; owned proof-only inputs were edited between gates. Exact owned source bytes are in LLBC files.contents and identified above; no attribution of those edits to the recorded older commit.'
  index.append(item)
 (O/'receipt-index-resume5.json').write_text(json.dumps(index,indent=2)+'\n')
-for name in ['TALLY-resume5.json','external-verification-resume5.json','project-resolution-resume5.json','native227-resume5-features.json','fidelity227-resume5-features.json','native227-parts-features.json','native227-parts-features-original-revision-label.json','aeneas-root-preflight227.json']:
+for name in ['TALLY-resume5.json','external-verification-resume5.json','project-resolution-resume5.json','native227-resume5-features.json','fidelity227-resume5-features.json','native227-parts-features.json','native227-parts-features-original-revision-label.json','aeneas-root-preflight227.json','native227-composition-features.json','fidelity227-resume5-features-original-revision-label.json']:
  if (H/name).exists():shutil.copy2(H/name,O/name)
 print(json.dumps(dict(receipts=len(index),archive=str(O))))
