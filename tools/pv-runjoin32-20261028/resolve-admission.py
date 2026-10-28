@@ -74,7 +74,7 @@ def visit(m):
   r=dict(path=p,git_blob=hashlib.sha1(b'blob '+str(len(b)).encode()+b'\0'+b).hexdigest());a='h5 own git-tracked HEAD'
 
  assert hashlib.sha256(b).hexdigest()==expected,m
- imports=re.findall(r'^import\s+(\S+)',uncomment(b.decode()),re.M)
+ imports=re.findall(r'^(?:public )?import\s+(\S+)',uncomment(b.decode()),re.M)
  conflicts=[]
  if a != 'h5 own git-tracked HEAD':
   for p in tracked:

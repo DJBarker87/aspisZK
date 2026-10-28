@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_005.lean:63:113: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+tree : host_tree.BinaryTree
+queries : Std.Array U32 22#usize
+batch t : Usize
+⊢ (do
+      ok ()
+      let a ← if batch = 0#usize then Pure.pure 0#usize else Pure.pure compact.SPLIT
+      let a_1 ← if batch = 0#usize then Pure.pure compact.SPLIT else Pure.pure 22#usize
+      let a ← prover.publication_indices queries a a_1 (decide (t = 2#usize))
+      let a ←
+        match ↑t with
+          | 0 => cc1.multiproof a.deref
+          | 1 => cc2.multiproof a.deref
+          | x => tree.multiproof a.deref
+      let a ← core.option.Option.ok_or a verifier.Error.Allocation
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let a ← PV_L1_Logged.lift compact.SLOT_NODES
+            let i ← PV_L1_Logged.lift (Std.lift (Usize.wrapping_mul 3#usize batch))
+            let i1 ← PV_L1_Logged.lift (Std.lift (i.wrapping_add t))
+            let i2 ← PV_L1_Logged.lift (a.index_usize i1)
+            let cap ← PV_L1_Logged.lift (Std.lift (Usize.wrapping_mul 32#usize i2))
+            PV_L1_Logged.lift (massert (val.len ≤ cap))
+            let out1 ← PV_L1_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref)
+            let i5 ← PV_L1_Logged.lift (Std.lift (out1.len.wrapping_add cap))
+            let padded ← PV_L1_Logged.lift (Std.lift (i5.wrapping_sub val.len))
+            let out2 ← PV_L1_Logged.lift (alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8)
+            Pure.pure (core.result.Result.Ok out2)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            PV_L1_Logged.lift
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let begin1 ← if batch = 0#usize then ok 0#usize else ok compact.SPLIT
+    let end1 ← if batch = 0#usize then ok compact.SPLIT else ok 22#usize
+    let idx ← prover.publication_indices queries begin1 end1 (decide (t = 2#usize))
+    let o ←
+      match ↑t with
+        | 0 => cc1.multiproof idx.deref
+        | 1 => cc2.multiproof idx.deref
+        | x => tree.multiproof idx.deref
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a ← compact.SLOT_NODES
+        let i ← Std.lift (Usize.wrapping_mul 3#usize batch)
+        let i1 ← Std.lift (i.wrapping_add t)
+        let i2 ← a.index_usize i1
+        let cap ← Std.lift (Usize.wrapping_mul 32#usize i2)
+        massert (val.len ≤ cap)
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+        let i5 ← Std.lift (out1.len.wrapping_add cap)
+        let padded ← Std.lift (i5.wrapping_sub val.len)
+        let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_005.lean:65:49: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_005.lean:65:59: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1_Source_005.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

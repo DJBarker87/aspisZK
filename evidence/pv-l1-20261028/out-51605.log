@@ -1,0 +1,1319 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_NativeProducer.lean:67:24: error: Tactic `rfl` failed: The left-hand side
+  match ((before, Except.ok secret), after).1.2 with
+  | Except.error e =>
+    ({ attempts := [{ events := ((before, Except.ok secret), after).1.1, result := Step.stop e }],
+        result := Step.stop e },
+      ((before, Except.ok secret), after).2)
+  | Except.ok secret_1 =>
+    match (prover secret_1 ((before, Except.ok secret), after).2).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret_1 ((before, Except.ok secret), after).2).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            {
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 } ::
+              (native callback prover fuel (index + 1)
+                    (prover secret_1 ((before, Except.ok secret), after).2).2).1.attempts,
+          result :=
+            (native callback prover fuel (index + 1)
+                  (prover secret_1 ((before, Except.ok secret), after).2).2).1.result },
+        (native callback prover fuel (index + 1) (prover secret_1 ((before, Except.ok secret), after).2).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 }],
+          result := Step.stop e },
+        (prover secret_1 ((before, Except.ok secret), after).2).2)
+is not definitionally equal to the right-hand side
+  match
+    (match ((before, Except.ok secret), after).1.2 with
+        | Except.error e =>
+          ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+            ((before, Except.ok secret), after).2)
+        | Except.ok secret_1 =>
+          ({
+              events :=
+                ((before, Except.ok secret), after).1.1 ++ (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+              result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+            (prover secret_1 ((before, Except.ok secret), after).2).2)).1.result with
+  | Step.done proof =>
+    ({
+        attempts :=
+          [(match ((before, Except.ok secret), after).1.2 with
+              | Except.error e =>
+                ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                  ((before, Except.ok secret), after).2)
+              | Except.ok secret_1 =>
+                ({
+                    events :=
+                      ((before, Except.ok secret), after).1.1 ++
+                        (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                    result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                  (prover secret_1 ((before, Except.ok secret), after).2).2)).1],
+        result := Step.done { proof := proof, attempts := index + 1 } },
+      (match ((before, Except.ok secret), after).1.2 with
+        | Except.error e =>
+          ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+            ((before, Except.ok secret), after).2)
+        | Except.ok secret_1 =>
+          ({
+              events :=
+                ((before, Except.ok secret), after).1.1 ++ (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+              result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+            (prover secret_1 ((before, Except.ok secret), after).2).2)).2)
+  | Step.stop e =>
+    ({
+        attempts :=
+          [(match ((before, Except.ok secret), after).1.2 with
+              | Except.error e =>
+                ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                  ((before, Except.ok secret), after).2)
+              | Except.ok secret_1 =>
+                ({
+                    events :=
+                      ((before, Except.ok secret), after).1.1 ++
+                        (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                    result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                  (prover secret_1 ((before, Except.ok secret), after).2).2)).1],
+        result := Step.stop e },
+      (match ((before, Except.ok secret), after).1.2 with
+        | Except.error e =>
+          ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+            ((before, Except.ok secret), after).2)
+        | Except.ok secret_1 =>
+          ({
+              events :=
+                ((before, Except.ok secret), after).1.1 ++ (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+              result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+            (prover secret_1 ((before, Except.ok secret), after).2).2)).2)
+  | Step.retry =>
+    ({
+        attempts :=
+          (match ((before, Except.ok secret), after).1.2 with
+              | Except.error e =>
+                ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                  ((before, Except.ok secret), after).2)
+              | Except.ok secret_1 =>
+                ({
+                    events :=
+                      ((before, Except.ok secret), after).1.1 ++
+                        (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                    result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                  (prover secret_1 ((before, Except.ok secret), after).2).2)).1 ::
+            (run (producer callback prover) fuel (index + 1)
+                  (match ((before, Except.ok secret), after).1.2 with
+                    | Except.error e =>
+                      ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                        ((before, Except.ok secret), after).2)
+                    | Except.ok secret_1 =>
+                      ({
+                          events :=
+                            ((before, Except.ok secret), after).1.1 ++
+                              (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                          result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                        (prover secret_1 ((before, Except.ok secret), after).2).2)).2).1.attempts,
+        result :=
+          (run (producer callback prover) fuel (index + 1)
+                (match ((before, Except.ok secret), after).1.2 with
+                  | Except.error e =>
+                    ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                      ((before, Except.ok secret), after).2)
+                  | Except.ok secret_1 =>
+                    ({
+                        events :=
+                          ((before, Except.ok secret), after).1.1 ++
+                            (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                        result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                      (prover secret_1 ((before, Except.ok secret), after).2).2)).2).1.result },
+      (run (producer callback prover) fuel (index + 1)
+          (match ((before, Except.ok secret), after).1.2 with
+            | Except.error e =>
+              ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                ((before, Except.ok secret), after).2)
+            | Except.ok secret_1 =>
+              ({
+                  events :=
+                    ((before, Except.ok secret), after).1.1 ++
+                      (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                  result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                (prover secret_1 ((before, Except.ok secret), after).2).2)).2).2)
+
+case succ.mk.ok.mk.ok
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+proof : Proof
+hp : prover secret after = ((suffix, Except.ok proof), final)
+⊢ (match ((before, Except.ok secret), after).1.2 with
+    | Except.error e =>
+      ({ attempts := [{ events := ((before, Except.ok secret), after).1.1, result := Step.stop e }],
+          result := Step.stop e },
+        ((before, Except.ok secret), after).2)
+    | Except.ok secret_1 =>
+      match (prover secret_1 ((before, Except.ok secret), after).2).1.2 with
+      | Except.ok proof =>
+        ({
+            attempts :=
+              [{
+                  events :=
+                    ((before, Except.ok secret), after).1.1 ++
+                      (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                  result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 }],
+            result := Step.done { proof := proof, attempts := index + 1 } },
+          (prover secret_1 ((before, Except.ok secret), after).2).2)
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+        ({
+            attempts :=
+              {
+                  events :=
+                    ((before, Except.ok secret), after).1.1 ++
+                      (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                  result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 } ::
+                (native callback prover fuel (index + 1)
+                      (prover secret_1 ((before, Except.ok secret), after).2).2).1.attempts,
+            result :=
+              (native callback prover fuel (index + 1)
+                    (prover secret_1 ((before, Except.ok secret), after).2).2).1.result },
+          (native callback prover fuel (index + 1) (prover secret_1 ((before, Except.ok secret), after).2).2).2)
+      | Except.error e =>
+        ({
+            attempts :=
+              [{
+                  events :=
+                    ((before, Except.ok secret), after).1.1 ++
+                      (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                  result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 }],
+            result := Step.stop e },
+          (prover secret_1 ((before, Except.ok secret), after).2).2)) =
+    match
+      (match ((before, Except.ok secret), after).1.2 with
+          | Except.error e =>
+            ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+              ((before, Except.ok secret), after).2)
+          | Except.ok secret_1 =>
+            ({
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+              (prover secret_1 ((before, Except.ok secret), after).2).2)).1.result with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [(match ((before, Except.ok secret), after).1.2 with
+                | Except.error e =>
+                  ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                    ((before, Except.ok secret), after).2)
+                | Except.ok secret_1 =>
+                  ({
+                      events :=
+                        ((before, Except.ok secret), after).1.1 ++
+                          (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                      result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                    (prover secret_1 ((before, Except.ok secret), after).2).2)).1],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (match ((before, Except.ok secret), after).1.2 with
+          | Except.error e =>
+            ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+              ((before, Except.ok secret), after).2)
+          | Except.ok secret_1 =>
+            ({
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+              (prover secret_1 ((before, Except.ok secret), after).2).2)).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [(match ((before, Except.ok secret), after).1.2 with
+                | Except.error e =>
+                  ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                    ((before, Except.ok secret), after).2)
+                | Except.ok secret_1 =>
+                  ({
+                      events :=
+                        ((before, Except.ok secret), after).1.1 ++
+                          (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                      result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                    (prover secret_1 ((before, Except.ok secret), after).2).2)).1],
+          result := Step.stop e },
+        (match ((before, Except.ok secret), after).1.2 with
+          | Except.error e =>
+            ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+              ((before, Except.ok secret), after).2)
+          | Except.ok secret_1 =>
+            ({
+                events :=
+                  ((before, Except.ok secret), after).1.1 ++
+                    (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+              (prover secret_1 ((before, Except.ok secret), after).2).2)).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            (match ((before, Except.ok secret), after).1.2 with
+                | Except.error e =>
+                  ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                    ((before, Except.ok secret), after).2)
+                | Except.ok secret_1 =>
+                  ({
+                      events :=
+                        ((before, Except.ok secret), after).1.1 ++
+                          (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                      result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                    (prover secret_1 ((before, Except.ok secret), after).2).2)).1 ::
+              (run (producer callback prover) fuel (index + 1)
+                    (match ((before, Except.ok secret), after).1.2 with
+                      | Except.error e =>
+                        ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                          ((before, Except.ok secret), after).2)
+                      | Except.ok secret_1 =>
+                        ({
+                            events :=
+                              ((before, Except.ok secret), after).1.1 ++
+                                (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                            result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                          (prover secret_1 ((before, Except.ok secret), after).2).2)).2).1.attempts,
+          result :=
+            (run (producer callback prover) fuel (index + 1)
+                  (match ((before, Except.ok secret), after).1.2 with
+                    | Except.error e =>
+                      ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                        ((before, Except.ok secret), after).2)
+                    | Except.ok secret_1 =>
+                      ({
+                          events :=
+                            ((before, Except.ok secret), after).1.1 ++
+                              (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                          result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                        (prover secret_1 ((before, Except.ok secret), after).2).2)).2).1.result },
+        (run (producer callback prover) fuel (index + 1)
+            (match ((before, Except.ok secret), after).1.2 with
+              | Except.error e =>
+                ({ events := ((before, Except.ok secret), after).1.1, result := Step.stop e },
+                  ((before, Except.ok secret), after).2)
+              | Except.ok secret_1 =>
+                ({
+                    events :=
+                      ((before, Except.ok secret), after).1.1 ++
+                        (prover secret_1 ((before, Except.ok secret), after).2).1.1,
+                    result := classifyResult (prover secret_1 ((before, Except.ok secret), after).2).1.2 },
+                  (prover secret_1 ((before, Except.ok secret), after).2).2)).2).2)
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_NativeProducer.lean:68:20: error: unsolved goals
+case succ.mk.ok.mk.error.Parse
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Parse), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Semantic
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Semantic), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Transcript
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Transcript), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Relation
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Relation), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Merkle
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Merkle), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Query
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Query), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Checkpoint
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Checkpoint), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Allocation
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Allocation), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Rejected
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Rejected), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.AttemptsExhausted
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.AttemptsExhausted), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+
+case succ.mk.ok.mk.error.Entropy
+S Secret Proof : Type
+callback : Callback S Secret
+prover : Prover S Secret Proof
+fuel : ℕ
+ih :
+  ∀ (index : ℕ) (state : S), native callback prover fuel index state = run (producer callback prover) fuel index state
+index : ℕ
+state after : S
+before : List Event
+secret : Secret
+h : callback index state = ((before, Except.ok secret), after)
+final : S
+suffix : List Event
+hp : prover secret after = ((suffix, Except.error AspisR1SimControl21.verifier.Error.Entropy), final)
+⊢ (match (prover secret after).1.2 with
+    | Except.ok proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Except.error AspisR1SimControl21.verifier.Error.Rejected =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+    | Except.error e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)) =
+    match
+      match (prover secret after).1.2 with
+      | Except.ok p => Step.done p
+      | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+      | Except.error e => Step.stop e with
+    | Step.done proof =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.done { proof := proof, attempts := index + 1 } },
+        (prover secret after).2)
+    | Step.stop e =>
+      ({
+          attempts :=
+            [{ events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e }],
+          result := Step.stop e },
+        (prover secret after).2)
+    | Step.retry =>
+      ({
+          attempts :=
+            { events := before ++ (prover secret after).1.1,
+                result :=
+                  match (prover secret after).1.2 with
+                  | Except.ok p => Step.done p
+                  | Except.error AspisR1SimControl21.verifier.Error.Rejected => Step.retry
+                  | Except.error e => Step.stop e } ::
+              (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.attempts,
+          result := (run (producer callback prover) fuel (index + 1) (prover secret after).2).1.result },
+        (run (producer callback prover) fuel (index + 1) (prover secret after).2).2)
+'PV_L1_NativeProducer.native_eq_model' depends on axioms: [propext, sorryAx]

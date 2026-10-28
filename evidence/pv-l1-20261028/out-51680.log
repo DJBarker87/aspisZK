@@ -1,0 +1,41 @@
+R1Z.PV_RunJoin_CanonicalHonest31.transfer {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (w : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestPrivateTransferWitnessV1)
+  (context : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1)
+  (snapshot : R1Z.PV_RunJoin_CodecOuter30.Snapshot)
+  (c : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (h :
+    R1Z.PV_RunJoin_CodecOuter30.run bytes
+        (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 p w
+          context) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c))) :
+  ∃ root,
+    PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+      R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+        (R1Z.PV_RunJoin_OuterChecked30.transferInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c)
+R1Z.PV_RunJoin_CanonicalHonest31.withdrawal {K : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (w : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestWithdrawalWitnessV1)
+  (context : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1)
+  (snapshot : R1Z.PV_RunJoin_CodecOuter30.Snapshot)
+  (c : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (h :
+    R1Z.PV_RunJoin_CodecOuter30.run bytes
+        (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 p w context) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c))) :
+  ∃ root,
+    PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+      R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+        (R1Z.PV_RunJoin_OuterChecked30.withdrawalInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c)
+R1Z.PV_RunJoin_NativeSelectedInputs.inputs {N C : Type} (base : ProverRwFull.ExternalTypes)
+  (ops : R1Z.PV_RunJoin_NativeSelectedInputs.SourceState base N C → ProverRwFull.ExternalFuns)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (i : R1Z.PV_Src_NativeInput.Input) : R1Z.PV_RunJoin_PureSourceLift.Inputs N C
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_CanonicalInspect.lean:6:7: error(lean.unknownIdentifier): Unknown identifier `_root_.R1Z.PV_RunJoin_Outer30.LaneRoot`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_CanonicalInspect.lean:7:6: error: unexpected token 'prefix'; expected 'axioms', 'eqns', 'equations', 'sig', 'sorries', 'tactic', identifier or string literal
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_CanonicalInspect.lean:7:13: error: unexpected identifier; expected ':'

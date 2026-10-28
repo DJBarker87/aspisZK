@@ -20,7 +20,7 @@ for m in mods:
  wall=0
  if elapsed:
   for c in elapsed[1].split(':'):wall=wall*60+float(c)
- rec=dict(module=m,source=pin,source_revision=plan['source_revision'],source_sha256=sha(s),dependencies=deps,deps_fingerprint=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest(),exit=r.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1])*1024 if rss else None,swaps=int(swap[1]) if swap else None,object_sha256=sha(o) if o.is_file() else None,output_path=str(out),output_sha256=sha(out),time_path=str(tim),time_sha256=sha(tim),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",output),accepted=r.returncode==0 and 'error:' not in output and 'sorryAx' not in output)
+ rec=dict(module=m,source=pin,source_revision=pin.get('revision',plan['source_revision']),source_sha256=sha(s),dependencies=deps,deps_fingerprint=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest(),exit=r.returncode,wall_seconds=wall,peak_rss_bytes=int(rss[1])*1024 if rss else None,swaps=int(swap[1]) if swap else None,object_sha256=sha(o) if o.is_file() else None,output_path=str(out),output_sha256=sha(out),time_path=str(tim),time_sha256=sha(tim),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",output),accepted=r.returncode==0 and 'error:' not in output and 'sorryAx' not in output)
  records.append(rec);(p/'evidence'/f'results-{a}.json').write_text(json.dumps(records,indent=2)+'\n')
  print('DONE',a,m,'exit',r.returncode,'wall',wall,'RSS',rec['peak_rss_bytes'],flush=True)
  if not rec['accepted']:
