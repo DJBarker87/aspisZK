@@ -1,0 +1,31 @@
+import NDO_JFu_DigestSlice
+import JFz_CanonicalAppend
+import RPz8_JFx_NativeBytes
+set_option autoImplicit false
+namespace AspisR1.JFu_PublicDigest01
+open Aeneas Aeneas.Std Result
+open AspisV8R19.DuplexFrames OraclePortCompactDraft MultiproofConeCanonical
+
+def bytes : List U8 := [168#u8,25#u8,21#u8,63#u8,56#u8,87#u8,108#u8,72#u8,238#u8,16#u8,205#u8,42#u8,211#u8,24#u8,246#u8,120#u8,68#u8,197#u8,159#u8,70#u8,239#u8,139#u8,30#u8,125#u8,121#u8,73#u8,141#u8,36#u8,169#u8,71#u8,87#u8,98#u8]
+theorem length : bytes.length=32 := by simp only [bytes,List.length_cons,List.length_nil]
+
+theorem selected : (JFx_NativeBytes.publicInput.val.drop 304).take 32=bytes := by
+  change (JFx_DataPublic00.bytes.drop 304).take 32=bytes
+  simp only [JFx_DataPublic00.bytes,JFx_DataPublic00.c00_length,JFx_DataPublic00.c01_length,JFx_DataPublic00.c02_length,JFx_DataPublic00.c03_length,JFx_DataPublic00.c04_length,JFx_DataPublic00.c05_length,JFx_DataPublic00.c06_length,JFx_DataPublic00.c07_length,JFx_DataPublic00.c08_length,JFx_DataPublic00.c09_length,JFx_DataPublic00.c10_length,JFx_DataPublic00.c11_length,JFx_DataPublic00.c12_length,JFx_DataPublic00.c13_length,JFx_DataPublic00.c14_length,JFx_DataPublic00.c15_length,JFx_DataPublic00.c16_length,JFx_DataPublic00.c17_length,JFx_DataPublic00.c18_length,JFx_DataPublic00.c19_length,JFx_DataPublic00.c20_length,JFx_DataPublic00.c21_length,JFx_DataPublic00.c22_length,JFx_DataPublic00.c23_length,JFx_DataPublic00.c24_length,JFx_DataPublic00.c25_length,JFx_DataPublic00.c26_length,JFx_DataPublic00.c27_length,JFx_DataPublic00.c28_length,JFx_DataPublic00.c29_length,JFx_DataPublic00.c30_length,JFx_DataPublic00.c31_length,JFx_DataPublic00.c32_length,JFx_DataPublic00.c33_length,JFx_DataPublic00.c34_length,JFx_DataPublic00.c35_length,JFx_DataPublic00.c36_length,JFx_DataPublic00.c37_length,JFx_DataPublic00.c38_length,JFx_DataPublic00.c39_length,JFx_DataPublic00.c40_length,JFx_DataPublic00.c41_length,JFx_DataPublic00.c42_length,JFx_DataPublic00.c43_length,JFx_DataPublic00.c44_length,JFx_DataPublic00.c45_length,JFx_DataPublic00.c46_length,JFx_DataPublic00.c47_length,JFx_DataPublic00.c48_length,JFx_DataPublic00.c49_length,JFx_DataPublic00.c50_length,JFx_DataPublic00.c51_length,JFx_DataPublic00.c52_length,JFx_DataPublic00.c53_length,JFx_DataPublic00.c54_length,JFx_DataPublic00.c55_length,JFx_DataPublic00.c56_length,JFx_DataPublic00.c57_length,JFx_DataPublic00.c58_length,List.drop_append,List.take_append,List.length_append,Nat.reduceAdd,Nat.reduceSub,Nat.reduceLeDiff,List.length_drop,List.drop_eq_nil_of_le,List.take_of_length_le,List.drop_zero,List.take_zero,List.nil_append,List.append_nil]
+  rfl
+
+theorem canonical_bytes : canonical (bytesOf bytes) := by
+  change canonical [168,25,21,63,56,87,108,72,238,16,205,42,211,24,246,120,68,197,159,70,239,139,30,125,121,73,141,36,169,71,87,98]
+  simp only [canonical_four]
+  exact ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], ⟨by norm_num [little], JFz_Canonical.nil⟩⟩⟩⟩⟩⟩⟩⟩
+
+def window : Slice U8 := ⟨bytes,by rw [length];scalar_tac⟩
+
+theorem decoded : ∃ out,AspisS6NativeSnapshotReadDigest.read_digest window=ok (.Ok out) :=
+  JFu_DigestSlice.success window length canonical_bytes
+
+#print axioms length
+#print axioms selected
+#print axioms canonical_bytes
+#print axioms decoded
+end AspisR1.JFu_PublicDigest01
