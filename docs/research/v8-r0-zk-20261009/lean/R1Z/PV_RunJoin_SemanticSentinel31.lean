@@ -36,7 +36,8 @@ theorem sentinel (i : Input) (success : run i = ok (.Ok i.compiled))
       (by simp only [hreq,forestPublic]) success
     simp only [hreq,forestPublic] at hs
     have hn := field_nonzero (K := K) p.change_commitment.val[7]! hs.2 (hs.1 7 (by decide))
+    have lane : (7 : Fin 8).val = 7 := rfl
     simpa only [statement,publicInput,hreq,PV_Src_Public.canonicalPublic,
-      BuilderPublicProjection.transferPublic,mapPub,digK,liftU,map_natCast] using hn
+      BuilderPublicProjection.transferPublic,mapPub,digK,liftU,map_natCast,lane] using hn
 #print axioms sentinel
 end R1Z.PV_RunJoin_SemanticSentinel31
