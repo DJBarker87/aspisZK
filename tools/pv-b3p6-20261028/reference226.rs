@@ -2,7 +2,6 @@
 //! Root and chunks have no loops or mutable-borrow output continuations.
 use aspis_core::{state_only_prefix::r0::Error, field::M31};
 use aspis_statement::pool_v1::{
-    pair_forest_semantic_terminal::r0::Public,
     payment_relation::{PoolV1PrivateTransferPublicV1, PoolV1WithdrawalPublicV1},
     pair_tree_profile::PoolV1PairLatePublicStatementV1,
 };
@@ -190,10 +189,10 @@ pub fn encode_owned(p: OwnedPublic) -> Result<([[u8;64];23], usize), Error> {
     ], n))
 }
 
-pub fn project(public: Public<'_>) -> OwnedPublic {
+pub fn project(public: Source) -> OwnedPublic {
     let (withdrawal, anchor, nullifier, asset_id, recipient, change, withdrawal_amount, transition) =
         match public {
-            Public::Transfer(p, t) => (
+            Source::Transfer(p, t) => (
                 false,
                 p.anchor_root,
                 p.nullifier,
@@ -201,9 +200,9 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 p.recipient_commitment,
                 p.change_commitment,
                 0,
-                *t,
+                t,
             ),
-            Public::Withdrawal(p, t) => (
+            Source::Withdrawal(p, t) => (
                 true,
                 p.anchor_root,
                 p.nullifier,
@@ -211,7 +210,7 @@ pub fn project(public: Public<'_>) -> OwnedPublic {
                 [M31::ZERO; 8],
                 p.change_commitment,
                 p.amount,
-                *t,
+                t,
             ),
         };
     let mut out = OwnedPublic {
@@ -313,8 +312,5 @@ fn project_frontier_level(mut out: OwnedPublic, transition: aspis_statement::poo
 
 
 pub fn public_bytes(source: Source) -> Result<([[u8;64];23], usize), Error> {
-    match source {
-        Source::Transfer(p, t) => encode_owned(project(Public::Transfer(&p, &t))),
-        Source::Withdrawal(p, t) => encode_owned(project(Public::Withdrawal(&p, &t))),
-    }
+    encode_owned(project(source))
 }
