@@ -197,3 +197,17 @@ from local receipt; later refusals append cooldown-history.jsonl.
 The local batch source/HEAD guard caught an in-flight edit during preparation
 for proposed43471. It stopped before ID assignment, admission, upload or compiler.
 The committed source is used for the next submission; no attempt was charged.
+
+CAPACITY RELAUNCH 1 reconciliation: no new compile required. The surviving
+43499transport2 receipt is exit0 (1.36s,2648468KiB,swap0), with298 axioms
+lines within the standard set. All98 project closure source hashes match
+the frozen fingerprint and the final submission imports match recorded
+objects. Actual fresh-budget use48Lean/0Kani;52Lean remain. Historically
+marked93IDs include45 retired without a compile under the older refusal
+policy. New ruling(m-prime) was read; future refusals retain the same ID
+after the full cooldown unless the launcher rejects it as already used.
+All8candidate residuals are empty. Stop on completion of assigned candidate
+rows and final checks; lead recount acceptance remains pending. No deployed
+headline premise removed. Next: lead recount; separately budgeted exact-patch
+Kani re-verification with matched failing negative controls under(r-prime).
+No unchanged full regression or final audit was repeated after relaunch.

@@ -31,17 +31,20 @@ lines=['PV_DL D349 RESUME REPORT','Worktree EXACTLY '+str(R),'Branch '+subproces
  'PER ROW (all before/after statements, guards and scope in V*/status.json and native-link.json)']
 for r in rows:
  lines += [r['row']+': '+r['status'],'  closing theorem: '+str(r['closing_theorem']),'  evidence class: '+r['native_evidence_class'],'  residual before: '+str(r['before_residual'])+'; after: '+str(r['after_residual'])]
-lines += ['',f'Fresh budget:100 Lean /0 Kani; IDs43400–43499 only; usedIDs={len(t["used_ids"])}; chargedLean={len(t["lean_charged"])}; refusedIDs={len(t["used_ids"])-len(t["lean_charged"])}.',
+lines += ['',f'Fresh budget:100 Lean /0 Kani; IDs43400–43499 only; historically marked IDs={len(t["used_ids"])}; chargedLean={len(t["lean_charged"])}; historically retired without compile={len(t["used_ids"])-len(t["lean_charged"])}. Refusals do not consume IDs under subsequent ruling m-prime; no new launch is needed.',
  'No Kani verification run in the resume. RUSTFLAGS --cfg kani in native cargo test only enables the private snapshot accessors; it does not invoke cargo-kani/CBMC.',
  'Old copy-dependent Kani PASS credit stays suspended. Structural K-1 substitutes await re-verification with the lead-validated remedy when budget is authorized.',
  'All5673 authoritative and selected external objects matched before first compile; private existing caches reused, no external rebuild/substitution.',
  'Every actual host receipt: receipts-index.json (target,exit,wall,peakRSS,swap,revision,print_axioms). Caps6G/8G/swap0/Tasks64; Lean-M7000. Failed candidates/source snapshots retained, not credited.',
  'Final audit/replay and closure fingerprint: see successful current-source receipt entries and resume-final-closure-fingerprint.json; do not infer success for missing receipts.',
- 'Uncompiled drafts are explicitly listed in uncompiled-drafts.json; no draft credited.',
+ 'Uncompiled standalone files are listed in uncompiled-drafts.json. ResumeAudit and ResumeReplay bodies were checked in the consolidated ResumeAuditReplay invocation (see final-audit-consolidation.json); BatchBoundary remains an uncredited draft.',
  '', 'PROCESS DEVIATION',
  'Staging admission04:42:54.960463Z was167.062062s after43441 refusal04:40:07.898401Z (12.938s early). It refused; no upload/compiler ran.',
  'Recorded in PLAN.md. Replacement local input guard enforces180s after receipt of each refusal across all used admission paths; pre-admission hold does not consume an ID. See COOLDOWN.json and cooldown-history.jsonl. Shared host infrastructure/caps unchanged.',
  '', 'No production crates/programs, wallet/account keys, shared sources, other worktrees or release ELFs changed.',
- 'Stop reason and next deliverable must be supplied by the final handoff after reviewing the actual current receipts.']
+ 'Stop: all eight assigned candidate residuals removed and final combined audit/focused replay passed; no unchanged compile repeated after relaunch. Lead recount acceptance remains pending.',
+ 'Next deliverable: lead review/recount of the eight structural bindings and complete-Result laws; future exact-patch Kani re-verification with failing negative controls under r-prime requires a separately authorized Kani budget.',
+ 'Final target R1Z/PV_DL_ResumeAuditReplay, attempt43499 (transport2 recovery): exit0, wall0:01.36, peakRSS2648468KiB, swap0, revision0d429e1453bc3022f963f5da8af368c982b8cf50. All audited axioms are within propext/Classical.choice/Quot.sound. See lean-43499transport2/receipt.json.',
+ 'Relaunch reconciliation:48/100 charged Lean attempts,0Kani;52 Lean attempts remain unspent because all assigned candidate rows and the required final checks are complete. No production privacy headline closure is claimed.']
 (E/'REPORT.txt').write_text('\n'.join(lines)+'\n')
 print('report:',len(closed),'candidate links;',len(t['lean_charged']),'charged Lean;',len(drafts),'uncompiled drafts')
