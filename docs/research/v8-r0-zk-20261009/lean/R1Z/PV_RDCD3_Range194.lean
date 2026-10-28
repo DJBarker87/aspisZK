@@ -13,9 +13,7 @@ def source (r : Range) : Result (Option Usize × Range) :=
   else ok (none,r)
 
 theorem successor_bound (r : Range) (active : r.start.val < r.«end».val) :
-    r.start.val+1 ≤ UScalar.max .Usize := by
-  have := r.«end».hBounds
-  omega
+    r.start.val+1 ≤ UScalar.max .Usize := by scalar_tac
 
 /-- Checked extracted Step and deployed unchecked TrustedStep have the same
 complete result: no failed checked increment is reachable under the guard. -/
