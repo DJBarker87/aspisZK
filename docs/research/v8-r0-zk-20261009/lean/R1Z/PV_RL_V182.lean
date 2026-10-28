@@ -15,7 +15,7 @@ def nativeAdapter (s : String) (t : Str) : Result String := do
 theorem adapter (s : String) (t : Str) :
     nativeAdapter s t=PV_CBL_StringBytesAdapter.append s t := rfl
 theorem nonvacuous :
-    nativeBytes (alloc.vec.Vec.new U8) (Slice.new U8)=ok (alloc.vec.Vec.new U8) := by
+    nativeBytes (alloc.vec.Vec.new U8) (⟨[],by simp⟩ : Slice U8)=ok (alloc.vec.Vec.new U8) := by
   rfl
 #print axioms complete
 #print axioms adapter
