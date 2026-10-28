@@ -37,10 +37,10 @@ variable {Os Fs Allocator Extra C : Type}
 /-- Replays FXM's flag/counter shape: counter 0 increments exactly once;
 flag 1 determines the normal/panic result. This models the retained witness,
 not a proof of generic Rust drop or native memory-model adequacy. -/
-def dropWitness : M (World Os Fs Allocator Extra) C Unit Unit := fun w =>
+def dropWitness : M (World Os Fs Allocator Extra) (Option C) Unit Unit := fun w =>
   let p := w.process
   let p' := {p with atomics := fun a => if a = 0 then p.atomics 0 + 1 else p.atomics a}
-  ⟨if p.atomics 1 = 0 then .ok () else .fail (), {w with process := p'}, []⟩
+  ⟨if p.atomics 1 = 0 then .ok () else .fail (), {w with process := p'}, [(w,none)]⟩
 
 theorem drop_counter (w : World Os Fs Allocator Extra) :
     (dropWitness (C := C) w).world.process.atomics 0 = w.process.atomics 0 + 1 := by
@@ -63,6 +63,19 @@ theorem witness_representable (w : World Os Fs Allocator Extra) :
     (dropWitness (C := C) {w with process := {w.process with atomics := fun _ => 0}}).outcome = .ok () ∧
     (dropWitness (C := C) {w with process := {w.process with atomics := fun _ => 1}}).outcome = .fail () := by
   exact ⟨rfl,rfl⟩
+
+/-- The witness changes process state, so it has an explicit internal event.
+Its OS projection is silent; its full trace is never declared empty. -/
+def DropStep (w : World Os Fs Allocator Extra) (tag : Option C)
+    (next : World Os Fs Allocator Extra) : Prop :=
+  tag = none ∧ next.os = w.os ∧ next.filesystem = w.filesystem ∧
+    next.process.atomics 0 = w.process.atomics 0 + 1 ∧
+    next.process.atomics 1 = w.process.atomics 1
+
+theorem drop_valid : Valid (DropStep (C := C)) (dropWitness (C := C) :
+    M (World Os Fs Allocator Extra) (Option C) Unit Unit) := by
+  intro w
+  exact .cons ⟨rfl,drop_os_frame w,rfl,drop_counter w,drop_flag w⟩ (.nil _)
 
 variable {W O Tag E A : Type}
 
@@ -100,6 +113,7 @@ theorem project_threaded (project : W → O)
 #print axioms drop_counter
 #print axioms drop_flag
 #print axioms drop_os_frame
+#print axioms drop_valid
 #print axioms drop_result
 #print axioms witness_representable
 #print axioms project_append
