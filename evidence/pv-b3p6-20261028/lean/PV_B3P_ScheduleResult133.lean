@@ -24,6 +24,8 @@ theorem forest_capacity : checkEndpoints (forestLinks legacyLinks) [] [] = .ok (
   rw [PV_B3P_ForestValues133.forest_eval]
   exact PV_B3P_ForestCapacity133.success
 
+attribute [local irreducible] legacyLinks forestLinks checked
+
 theorem forest_success : forest = .ok (forestLinks legacyLinks) := by
   rw [forest,legacy_success]
   exact checked_success _ _ forest_length forest_capacity
