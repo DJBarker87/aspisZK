@@ -1,0 +1,59 @@
+{
+  "exit": 0,
+  "log": "{\"allowed\": true, \"bounded_reserved_bytes\": 25769803776, \"requested_bytes\": 8589934592}\n",
+  "reservation": {
+    "requested_bytes": 8589934592,
+    "allowed": true,
+    "utc": 1793160733.9373925,
+    "populated_scopes": [
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/l2c-batch-42658.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 -u -c import json,pathlib,subprocess,hashlib,re,sys,time H=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')] for x in json.load(open(H/('batch-'+start+'.json'))):  a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)  if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))  s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']  deps={}  for name in re.findall(r'^import\\s+(\\S+)',x['source'],re.M):   p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)   if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)   deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())  (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))  t=time.monotonic()  with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:   p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)   f.write('\\nexit='+str(p.returncode)+'\\n')  (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))  print(a,m,p.returncode,flush=True)  if p.returncode:break  /home/dombarker/project-offloads/codex-pv-l2c-20261028 42658",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-l2c-20261028/evidence/time-42659.log timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/J.json /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedFold.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ExtractedFold.lean 7000",
+          "timeout 900 python3 /home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/J.json /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedFold.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ExtractedFold.lean 7000",
+          "/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lean -j1 -M7000 -DElab.async=false -R /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources -o /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedFold.olean /home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ExtractedFold.lean"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 139841536
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rd87c55b75b22467aa8632643f5688aaf.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 S2W_run_host.py NBS_K012.json",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_K012/time.log timeout 180 /home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness verifier::NBS_geometry::prefix_step --output-format terse",
+          "timeout 180 /home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness verifier::NBS_geometry::prefix_step --output-format terse",
+          "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness verifier::NBS_geometry::prefix_step --output-format terse",
+          "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_src/crates/aspis-r1-cost-probe/Cargo.toml --target-dir /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_target --lib -j 1 -Z unstable-options -Z stubbing --harness-timeout 90s --exact --harness verifier::NBS_geometry::prefix_step --output-format terse",
+          "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 112 --sat-solver cadical --slice-formula /home/dombarker/project-offloads/codex-cx-native-tx2i-20261028/NBS_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe-f7810c8aecc34876__RNvNtNtCs1GU5KHMolKr_19aspis_r1_cost_probe8verifier12NBS_geometry11prefix_step.out --verbosity 9 --json-ui"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 1597710336
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r84c2d6a4395148269edab3487fdedb7b.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/combined-differential-001-retry-01/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/capped.py /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/combined-differential-001-retry-01/receipt combined-differential-001-retry-01 -- python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/capped.py /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/combined-differential-001-retry-01/receipt combined-differential-001-retry-01 -- python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus.py",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/combined-differential-001-retry-01/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus.py",
+          "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus-6000/6092-baseline 6092 1 0",
+          "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus-6000/6092-candidate 6092 1 0",
+          "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus-6000/6093-baseline 6093 1 0"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 6299934720
+      }
+    ],
+    "bounded_reserved_bytes": 25769803776,
+    "all_populated_scopes_bounded": true,
+    "safe_limit_bytes": 59055800320,
+    "print_axioms": "N/A: read-only resource preflight"
+  }
+}
