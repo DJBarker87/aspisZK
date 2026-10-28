@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_ResultMap31
 import R1Z.PV_RunJoin_DecoderReturn29
 import R1Z.PV_RunJoin_UniversalTreeFrame22
 set_option autoImplicit false
@@ -21,6 +22,7 @@ theorem returned [ExternalLinear]
   · cases h
   · repeat' first
       | (have he := PV_RunJoin_DecoderReturn29.branch_continue _ _ hvalue; clear hvalue; cases he)
+      | (have he := PV_RunJoin_ResultMap31.success _ _ _ _ hvalue; clear hvalue; cases he)
       | (have _result : core.result.Result _ _ := value; cases value <;> pv_head h)
       | (pv_peel h with value hvalue)
       | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)

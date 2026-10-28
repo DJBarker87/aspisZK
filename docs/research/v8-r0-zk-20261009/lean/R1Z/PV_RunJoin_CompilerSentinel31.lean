@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_ResultMap31
 import R1Z.PV_RunJoin_TwoOutputSentinel31
 import R1Z.PV_RunJoin_CompilerReads31
 set_option autoImplicit false
@@ -26,6 +27,7 @@ theorem sentinel [ExternalLinear] [Records]
     repeat' first
       | exact PV_RunJoin_TwoOutputSentinel31.source _ _ _ hvalue
       | (have he := PV_RunJoin_DecoderReturn29.branch_continue _ _ hvalue; clear hvalue; cases he)
+      | (have he := PV_RunJoin_ResultMap31.success _ _ _ _ hvalue; clear hvalue; cases he)
       | (have he := PV_RunJoin_ForestEquality30.equal _ _ hvalue; clear hvalue; cases he)
       | (have _result : core.result.Result _ _ := value; cases value <;> pv_head h)
       | (pv_peel h with value hvalue)
