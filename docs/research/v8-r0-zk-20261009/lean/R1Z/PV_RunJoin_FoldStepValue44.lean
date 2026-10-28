@@ -19,8 +19,10 @@ theorem cell (ops : ExternalFuns) (q : Nat → Raw) (a : Raw) (dual : Bool)
       (array 4#usize q) (current (source a)) dual = .ok (current (source z)) ∧
       canonical z ∧ value z = model q a dual 0 := by
   cases dual with
-  | false => exact PV_RunJoin_FoldCell44.cell ops q hc a ha
-  | true => exact PV_RunJoin_DualCell44.cell ops q hc a ha
+  | false => simpa only [model,↓reduceIte,Nat.mul_zero,Nat.zero_add] using
+      PV_RunJoin_FoldCell44.cell ops q hc a ha
+  | true => simpa only [model,↓reduceIte,Nat.mul_zero,Nat.zero_add] using
+      PV_RunJoin_DualCell44.cell ops q hc a ha
 
 theorem step (ops : ExternalFuns) (count : Usize) (q : Nat → Raw) (a : Raw) (dual : Bool)
     (hc : ∀ j, j < count.val → canonical (q j)) (ha : canonical a)
