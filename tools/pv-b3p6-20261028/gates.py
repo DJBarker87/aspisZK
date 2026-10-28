@@ -9,7 +9,7 @@ def admission_label(base):
   assert not (H/label/'receipt/receipt.json').exists(), 'charged gate cannot be rerun unchanged: '+label
   i+=1;label=base+'-r'+str(i)
  return label
-if kind in ('kani133','kmxcontrols','kani133_nofield','kmxcontrols_nofield'):
+if kind in ('kani133','kmxcontrols','kani133_nofield','kmxcontrols_nofield','kani226v3'):
  patch=H/'source/evidence/pv-b3p6-20261028/KMX_copy_stubs.patch'
  stubs=P/'kmx/KMX_stubs.rs'
  patch_sha=hashlib.sha256(patch.read_bytes()).hexdigest()
@@ -85,3 +85,8 @@ if kind=='fidelitynative226':
 if kind=='native226v3':
  cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','native226::','--','--nocapture']
  sys.exit(run('native226-v3-01',cmd,'optimized same-input native serializer checks and exact emission fixtures; finite validation of changed direct M31 projection and8-byte subchunks'))
+
+if kind=='kani226v3':
+ (H/'tmp').mkdir(exist_ok=True)
+ cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','native226::both_variants','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--symex-cache-dereferences','--reachability-slice-fb','--no-array-field-sensitivity']
+ sys.exit(run(admission_label('kani226-v3-both-01'),cmd,'optimized compilation then complete-Result original/reference serializer equality for both variants; universal auxiliary u16 index, unwind2049 covers reallocation byte prefixes; exact KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 with checked negative growth control under same array model; no business stubs or chained field arithmetic',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))

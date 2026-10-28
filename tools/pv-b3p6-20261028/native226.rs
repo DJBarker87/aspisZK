@@ -144,3 +144,14 @@ fn emission_fixture226() {
         println!("{}=ERR",if withdrawal {"BAD_WITHDRAWAL"} else {"BAD_TRANSFER"});
     }
 }
+
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(2049)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn both_variants() { check(arbitrary_source(kani::any())); }
