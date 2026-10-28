@@ -75,7 +75,7 @@ def run (ops : ExternalFuns) (c : host_commitment.Commitment)
     (u : aspis_core.r0.domain.FibreIndex) (out : aspis_core.r0.wire.FibreOpening) :
     Result aspis_core.r0.wire.FibreOpening := do
   let values ← phase ops c.lanes.length c u out.values 0#usize
-  let path ← @host_commitment.opening_path _ (ProverRwP6BodyCandidate.selected ops) c.time
+  let path ← host_commitment.opening_path c.time
   let zero := Array.repeat 32#usize 0#u8
   let paths ← Array.update out.paths path (Array.repeat 6#usize (Array.repeat 7#usize zero))
   .ok { values, paths }
