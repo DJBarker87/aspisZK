@@ -1,3 +1,7 @@
 # NCH TX1 prepare bridge
 
 OPEN. Continue NCA without re-proving its results. Statements1 and3 are named NCD lane dependencies; no unmerged result receives credit. Statement5 retains NCA locally CLOSED-CONDITIONAL scope. Work order4,6,2,7. Native association and exact lower domains remain obligations.
+
+Stage1 scan prefix: K001 PASS, K002/K003 assertion failures as intended. Actual frozen canonical_scan reaches compact::check_values on the SAME pointer7031/length464 before the first wide check; compact error maps to Parse and returns before that check. An overapproximated successful check reaches the first echeck cut in order. The cut stops with assume(false), so this is a prefix/call-argument law, not full accepted-loop or TX1/mark closure. No observer/function pointer or field product is reached. Statement4 stays OPEN for enclosing accepted TX1, reached scan children and observer behavior.
+
+Stage1 Method2 preflight: slice contract K004 and real-body K007 PASS, inverted K005 and modifies-violation K008 FAIL at the intended properties. K006 unimplied-caller control and K009 frame caller hit a Kani compiler ICE resolving IntoIterator for a mutable slice of slices. This is NOT a successful fidelity suite: no stub_verified slice credit is admitted, no frame conclusion follows. Next isolate a fixed-array modifies carrier rather than rerun this interface unchanged. Backend/infrastructure is unmodified.

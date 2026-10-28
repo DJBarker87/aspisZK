@@ -1,0 +1,36 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCH_candidate.rs
+@@ -0,0 +1,33 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++static mut NCH_PROOF:*const u8=core::ptr::null();
++static mut NCH_PASS:bool=false;
++static mut NCH_STAGE:u8=0;
++fn NCH_check(bytes:&[u8])->Result<(),CodecError>{unsafe{
++ assert_eq!(NCH_STAGE,0,"check first");assert_eq!(bytes.as_ptr(),NCH_PROOF.add(compact::OFF_Y1),"same y1 pointer");
++ assert_eq!(bytes.len(),compact::OFF_INACTIVE-compact::OFF_Y1,"same y1 length");NCH_STAGE=1;
++ if NCH_PASS {Ok(())}else{Err(CodecError::NonCanonical)}
++}}
++fn NCH_tail(bytes:&[u8],k:bool)->Result<(),Error>{unsafe{
++ assert!(NCH_PASS,"reached only after check success");assert_eq!(NCH_STAGE,1,"no intervening tail");
++ assert_eq!(bytes.as_ptr(),NCH_PROOF.add(compact::OFF_INACTIVE));assert_eq!(bytes.len(),32);assert!(!k);
++ kani::cover!(true,"first wide check reached after SAME compact success");kani::assume(false);Err(Error::Parse)
++}}
++#[kani::proof]#[kani::unwind(2)]
++#[kani::stub(crate::compact::check_values,NCH_check)]
++#[kani::stub(crate::verifier::echeck,NCH_tail)]
++fn NCH_scan_prefix(){
++ let proof:[u8;57607]=kani::any();unsafe{NCH_PROOF=proof.as_ptr();NCH_PASS=kani::any();NCH_STAGE=0;}
++ let r=canonical_scan(&proof);assert_eq!(r,Err(Error::Parse));unsafe{assert!(!NCH_PASS);assert_eq!(NCH_STAGE,1);}
++}
++#[kani::proof]#[kani::unwind(2)]
++#[kani::stub(crate::compact::check_values,NCH_check)]
++#[kani::stub(crate::verifier::echeck,NCH_tail)]
++fn NCH_scan_error_wrong(){
++ let proof:[u8;57607]=kani::any();unsafe{NCH_PROOF=proof.as_ptr();NCH_PASS=false;NCH_STAGE=0;}
++ assert!(canonical_scan(&proof).is_ok(),"forced compact error cannot accept");
++}
++fn NCH_check_wrong(bytes:&[u8])->Result<(),CodecError>{unsafe{assert_eq!(bytes.as_ptr(),NCH_PROOF.add(compact::OFF_Y1+1),"wrong y1 offset");}Err(CodecError::NonCanonical)}
++#[kani::proof]#[kani::unwind(2)]
++#[kani::stub(crate::compact::check_values,NCH_check_wrong)]
++fn NCH_scan_pointer_wrong(){let proof:[u8;57607]=kani::any();unsafe{NCH_PROOF=proof.as_ptr();}let _=canonical_scan(&proof);}
