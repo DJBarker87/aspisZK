@@ -27,7 +27,8 @@ theorem source (ops : ExternalFuns) (n : Nat) (k : Usize) (left : U8)
     have kp : k>0#usize := by change 0<k.val;omega
     have ln : left≠0#u8 := by scalar_tac
     have kd : (Usize.wrapping_sub k 1#usize).val=n := by
-      rw [ProverCommitSampleBits49.sub_value k 1#usize (by omega)]
+      rw [ProverCommitSampleBits49.sub_value k 1#usize (by change 1≤k.val;omega)]
+      change k.val-1=n
       omega
     have ld : (U8.wrapping_sub left 1#u8).val=n := by
       rw [ProverCommitBasisCounter47.sub_one left (by omega)]
