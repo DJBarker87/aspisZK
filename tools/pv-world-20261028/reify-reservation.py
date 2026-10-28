@@ -12,11 +12,17 @@ stem='aspis_prover.state_only_entropy.'
 names=[stem+'sync_directory',stem+'DurableStateOnlyMaskNonceStore.reserve_fallible',stem+'DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve']
 short=['syncDirectory','reserveFallible','reserve']
 headers=['(directory : std.path.Path) : P (core.result.Result Unit std.io.error.Error)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P ((core.result.Result Bool std.io.error.Error) × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)', '(self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :\n  P (Bool × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)']
+entry='--entry' in sys.argv
+entryargs='(public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n  (variant : transport.Variant)\n  (hash : Slice (Slice U8) → Aeneas.Std.Result (Array U8 32#usize))\n  (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)\n  (nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)'
+if entry:
+ names=['prover.prove_masked_attempt'];short=['maskedAttempt']
+ headers=[entryargs+' :\n  P ((core.result.Result ((alloc.vec.Vec U8) × prover.MaskedFixtureAudit) verifier.Error) × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)']
 output=['import R1Z.PV_W_SourceSyntax\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_Reservation\nopen ProverRwFull PV_W_SourceSyntax PV_W_Syntax PV_W_Threading\nopen Aeneas.Std\nvariable [ExternalTypes]\n']
-typed='--typed' in sys.argv
+typed='--typed' in sys.argv or entry
 constructors={'std.fs.File.open':'fileOpen','std.fs.File.sync_all':'fileSync','std.fs.OpenOptions.open':'optionsOpen','std.io.error.Error.kind':'errorKind','std.fs.File.Insts.StdIoWrite.write_all':'writeAll'}
 if typed:
  output=[output[0].replace('PV_W_SourceSyntax','PV_W_TypedEffects').replace('namespace R1Z.PV_W_Reservation','namespace R1Z.PV_W_TypedReservation')+'open PV_W_SourceSyntax (source_bind_congr)\n']
+if entry:output=[output[0].replace('PV_W_TypedReservation','PV_W_ProverEntry')]
 rows=[];proofs={}
 for name,new,header in zip(names,short,headers):
  mat=re.search(r'\ndef\s+'+re.escape(name)+r'\s*\(',s);assert mat,name
@@ -65,15 +71,18 @@ for name,new,header in zip(names,short,headers):
   out[-1]+=')'
  output+=['/-- Generated syntax; helpers retain unexecuted source-call thunks. -/\ndef '+new+'\n  '+header+' := do\n'+'\n'.join(out)+'\n']
  rows.append(dict(name=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),calls=calls,generated=new))
-proofheaders=[
-'(ops : ExternalFuns) (directory : std.path.Path) :\n    erase ops (syncDirectory directory) =\n      @'+names[0]+' _ ops directory',
-'(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserveFallible self statement_digest mask_nonce) =\n      @'+names[1]+' _ ops self statement_digest mask_nonce',
-'(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserve self statement_digest mask_nonce) =\n      @'+names[2]+' _ ops self statement_digest mask_nonce']
+if not entry:
+ proofheaders=[
+ '(ops : ExternalFuns) (directory : std.path.Path) :\n    erase ops (syncDirectory directory) =\n      @'+names[0]+' _ ops directory',
+ '(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserveFallible self statement_digest mask_nonce) =\n      @'+names[1]+' _ ops self statement_digest mask_nonce',
+ '(ops : ExternalFuns) (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n    (statement_digest mask_nonce : Array U8 32#usize) :\n    erase ops (reserve self statement_digest mask_nonce) =\n      @'+names[2]+' _ ops self statement_digest mask_nonce']
+else:
+ proofheaders=['(ops : ExternalFuns) '+entryargs+' :\n    erase ops (maskedAttempt public1 compiled variant hash attempt nonce_store) =\n      @prover.prove_masked_attempt _ ops public1 compiled variant hash attempt nonce_store']
 for old,new,h in zip(names,short,proofheaders):
  output.append('theorem erase_'+new+' '+h+' := by\n  unfold '+new+' '+old+'\n'+proofs[new]+'\n\n#print axioms erase_'+new+'\n')
-output.append('end R1Z.'+('PV_W_TypedReservation' if typed else 'PV_W_Reservation')+'\n')
-target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_W_TypedReservation.lean' if typed else 'PV_W_Reservation.lean');data='\n'.join(output)
+output.append('end R1Z.'+('PV_W_ProverEntry' if entry else 'PV_W_TypedReservation' if typed else 'PV_W_Reservation')+'\n')
+target=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_W_ProverEntry.lean' if entry else 'PV_W_TypedReservation.lean' if typed else 'PV_W_Reservation.lean');data='\n'.join(output)
 if '--check' in sys.argv:assert target.read_text()==data
 else:target.write_text(data)
-(E/('typed-reservation-reification.json' if typed else 'reservation-reification.json')).write_text(json.dumps(dict(source_path=p,source_sha256=hashlib.sha256(b).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+p],cwd=R,text=True).strip(),bodies=rows,check=True,scope='control-flow reification and exact source erasure; native effect adequacy not asserted'),indent=2)+'\n')
+(E/('entry-reification.json' if entry else 'typed-reservation-reification.json' if typed else 'reservation-reification.json')).write_text(json.dumps(dict(source_path=p,source_sha256=hashlib.sha256(b).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+p],cwd=R,text=True).strip(),bodies=rows,check=True,scope='control-flow reification and exact source erasure; native effect adequacy not asserted'),indent=2)+'\n')
 print('Exact reification check:',len(rows),'bodies;',sum(len(x['calls']) for x in rows),'call sites')
