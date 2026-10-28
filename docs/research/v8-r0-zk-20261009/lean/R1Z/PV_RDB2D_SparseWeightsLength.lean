@@ -27,6 +27,7 @@ theorem exact_capacity {K : Type} (ops : PV_RDB2D_SparseWeights.WeightOps K)
     (point : List K) (width trailing suffix : Nat) (entries : List (Nat × K))
     (h : PV_RDB2D_SparseWeights.build ops point width trailing suffix=ok entries) :
     entries.length=2^width := by
+  unfold PV_RDB2D_SparseWeights.build at h
   have hh := mapM_length _ (List.range (2^width)) entries h
   simpa only [List.length_range] using hh
 
