@@ -1,9 +1,9 @@
 import R1Z.ProverRwSuccessCoefficientsSource
 import R1Z.PV_CB3_WeightsMachineRow
 set_option autoImplicit false
-#print Aeneas.Std.UScalar.shr
-#print Aeneas.Std.UScalar.shl
-#print Aeneas.Std.core.iter.range.IteratorRange.next
-#print Aeneas.Std.core.iter.range.StepUsize
-#check Aeneas.Std.UScalar.shr_spec
-#check Aeneas.Std.UScalar.shl_spec
+open Aeneas Aeneas.Std
+#synth HShiftRight Usize Usize (Result Usize)
+#synth HShiftLeft Usize Usize (Result Usize)
+#print core.iter.range.UScalarStep
+#print UScalar.hShiftRight
+#print UScalar.hShiftLeft
