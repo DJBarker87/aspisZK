@@ -13,7 +13,8 @@ theorem read (size : Usize) (xs : Nat → A) (i : Usize) (bound : i.val < size.v
 theorem push (out : alloc.vec.Vec A) (a : A) (room : out.length + 1 ≤ Usize.max) :
     ∃ next, alloc.vec.Vec.push out a = .ok next ∧ next.val = out.val ++ [a] := by
   exact ⟨⟨out.val ++ [a],by simpa only [List.length_append,List.length_singleton] using room⟩,by
-    simp only [alloc.vec.Vec.push,dif_pos room],rfl⟩
+    simp only [alloc.vec.Vec.push,show out.val.length + 1 ≤ Usize.max from room,
+      decide_true,Bool.or_true,↓reduceDIte,List.concat_eq_append],rfl⟩
 
 #print axioms read
 #print axioms push
