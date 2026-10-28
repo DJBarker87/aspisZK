@@ -19,7 +19,8 @@ theorem columns_list (p : Nat → Nat → Bool) (c n : Nat) :
   induction n generalizing c with
   | zero => rfl
   | succ n ih =>
-    simp only [columns,List.range'_succ,List.flatMap_cons,ih,rows_list,List.range_eq_range']
+    rw [columns,List.range'_succ,List.flatMap_cons,ih,rows_list]
+    rw [List.range_eq_range']
 
 theorem model_eq : columns pick 0 16 = PV_B3P_MaskModel132.cells := by
   rw [columns_list]
@@ -33,18 +34,26 @@ theorem complete_result : ∃ out : Array reference132.Cell 3803#usize,
     intro r c _ _
     exact PV_B3P_MaskFreeLaw132.free_eq r c
   let initial : Array reference132.Cell 3803#usize := Array.repeat 3803#usize ⟨0#u16,0#u8⟩
+  have hcap : (0#usize).val + (columns pick (0#usize).val 16).length ≤ 3803 := by
+    change 0+(columns pick 0 16).length ≤ 3803
+    rw [PV_B3P_MaskCapacity132.full_count]
+    omega
   obtain ⟨out,k,hloop,hcount,hvalue⟩ := PV_B3P_MaskOuter132.outer pick hp 16 initial 0#usize 0#usize
-    (by simp) (by simpa only [PV_B3P_MaskCapacity132.full_count] using (show 0+3803 ≤ 3803 by omega))
+    (by simp) hcap
+  change k.val = 0+(columns pick 0 16).length at hcount
+  change PV_B3P_MaskPrefix132.written out k.val = [] ++ columns pick 0 16 at hvalue
   have hk : k = 3803#usize := by
     apply UScalar.val_eq_imp
-    simpa only [PV_B3P_MaskCapacity132.full_count] using hcount
+    rw [PV_B3P_MaskCapacity132.full_count] at hcount
+    exact hcount
   refine ⟨out,?_,?_⟩
   · simpa only [reference132.cells,hk] using hloop
   · rw [hk] at hvalue
     have hlen : out.val.length = 3803 := out.property
-    simpa only [PV_B3P_MaskPrefix132.written,show (3803#usize).val = 3803 from rfl,
-      show (0#usize).val = 0 from rfl,List.take_of_length_le (by omega : out.val.length ≤ 3803),
-      List.take_zero,List.map_nil,List.nil_append,model_eq] using hvalue
+    change (out.val.take 3803).map PV_B3P_MaskPrefix132.decode = [] ++ columns pick 0 16 at hvalue
+    rw [List.take_of_length_le (by omega : out.val.length ≤ 3803),List.nil_append,model_eq] at hvalue
+    exact hvalue
+
 
 #print axioms rows_list
 #print axioms columns_list
