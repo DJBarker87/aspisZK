@@ -28,7 +28,7 @@ CONFIG=[
  ('prover.prove_masked_with_attempt','MaskedWithAttempt'),
  ('prover.prove_masked_attempt','Entry'),
 ]
-M={name:short for name,short in CONFIG};meta={name:get(name) for name,_ in CONFIG}
+M={name:short for name,short in CONFIG if short!='HostBuild'};meta={name:get(name) for name,_ in CONFIG}
 DICT={
  'aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore':'DurableReserve',
  'aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore':'PreReservedReserve',
@@ -37,7 +37,7 @@ constructors={'std.fs.File.open':'fileOpen','std.fs.File.sync_all':'fileSync','s
 current=None;callbacks=[];imports=set();calls=[]
 def info(header):
  result=[]
- if '(hash :' in header:result.append(('hash','Hash'))
+ if re.search(r'\(hash : Slice \(Slice Std.U8\) → Result \(Array Std.U8 32#usize\)\)',header):result.append(('hash','Hash'))
  for name in re.findall(r'\((\w+)\s*:\s*aspis_prover\.state_only_hiding\.StateOnlyMaskNonceStore T0\)',header):result.append((name,'Store'))
  return result
 

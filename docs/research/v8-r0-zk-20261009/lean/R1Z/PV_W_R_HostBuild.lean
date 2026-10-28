@@ -24,7 +24,6 @@ def program
     × T1) := do
   let s ← invoke "Aeneas.Std.lift" (fun ops =>
       letI : ExternalFuns := ops
-      let hash := sourceHash ops hash
       Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
   let i := Slice.len s
   if i != 16#usize then
@@ -32,7 +31,6 @@ def program
   else
     let s1 ← invoke "Aeneas.Std.lift" (fun ops =>
         letI : ExternalFuns := ops
-        let hash := sourceHash ops hash
         Aeneas.Std.lift (Array.to_slice compiled.semantic_c1.c1))
     let i1 := Slice.len s1
     if i1 != 16#usize then
@@ -40,12 +38,10 @@ def program
     else
       let pvplpsv ← invoke "aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition" (fun ops =>
           letI : ExternalFuns := ops
-          let hash := sourceHash ops hash
           aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition
           public1)
       let b ← invoke "core.cmp.impls.PartialEqShared.ne" (fun ops =>
           letI : ExternalFuns := ops
-          let hash := sourceHash ops hash
           core.cmp.impls.PartialEqShared.ne
           aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1
           compiled.public_statement pvplpsv)
@@ -54,15 +50,12 @@ def program
       else
         let s2 ← invoke "Aeneas.Std.lift" (fun ops =>
             letI : ExternalFuns := ops
-            let hash := sourceHash ops hash
             Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
         let c1 ← invoke "host_semantic.clone_semantic_columns" (fun ops =>
             letI : ExternalFuns := ops
-            let hash := sourceHash ops hash
             host_semantic.clone_semantic_columns s2 mask_only)
         invoke "host_semantic.build_with_helper_mode" (fun ops =>
           letI : ExternalFuns := ops
-          let hash := sourceHash ops hash
           host_semantic.build_with_helper_mode aspis_coredigestDigest32Inst
           (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error
           aspis_coredigestDigest32Inst CommitmentsInst) CommitmentsInst public1
@@ -83,7 +76,7 @@ theorem erase_program (ops : ExternalFuns)
   (h1_padding : Array aspis_core.field.QM31 1024#usize) (commitments : T1)
   (hash : H) (variant : transport.Variant) :
   erase ops (program aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant) =
-    @host_semantic.build_with_material _ ops H T1 aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments (sourceHash ops hash) variant := by
+    @host_semantic.build_with_material _ ops H T1 aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant := by
   unfold program host_semantic.build_with_material
   try dsimp only
   rw [erase_bind]
