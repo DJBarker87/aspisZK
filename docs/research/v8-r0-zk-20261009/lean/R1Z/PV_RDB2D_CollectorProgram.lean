@@ -33,8 +33,10 @@ def sortedBuffer (address : Nat) : Buffer Nat :=
 def afterFlat {S F : Type} (deallocate : Nat → Nat → Nat → S → Result S)
     (linkAddress rowAddress : Nat) (rows : List Nat) (state : State S F) :
     Result (Returned × State S F) := do
-  let state := store rowAddress (.rows rows) state
+  let raw := (forestLinks legacyLinks).flatMap (fun link => [link.producer,link.consumer])
+  let state := store rowAddress (.rows raw) state
   let state ← release deallocate linkAddress 2032 state
+  let state := store rowAddress (.rows rows) state
   ok (.ok (sortedBuffer rowAddress),state)
 
 /-- Value reading of sort_unstable+dedup supplied by the original complete
