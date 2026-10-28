@@ -1,0 +1,133 @@
+NDI_generated/NDI_ParserBody.lean:17:44: error: Type mismatch: After simplification, term
+  wrongLength
+ has type
+  (↑frame).length = ↑total
+but is expected to have type
+  frame.len = total
+NDI_generated/NDI_ParserBody.lean:18:45: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+row tag : U8
+size total : Usize
+frame : Slice U8
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrongLength : ¬frame.len ≠ total
+length : frame.len = total
+⊢ ↑total = 5 + ↑size
+NDI_generated/NDI_ParserBody.lean:35:32: error: Application type mismatch: The argument
+  word
+has type
+  (do
+      let b1 ← UScalar.cast UScalarTy.Usize c <<< 8#i32
+      let c1 ← UScalar.cast UScalarTy.Usize d <<< 16#i32
+      let d1 ← UScalar.cast UScalarTy.Usize e <<< 24#i32
+      ok (UScalar.cast UScalarTy.Usize b ||| b1 ||| c1 ||| d1)) =
+    ok (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)))
+but is expected to have type
+  ok ?m.879 = ok ?m.880
+in the application
+  ok.inj word
+NDI_generated/NDI_ParserBody.lean:12:69: error: unsolved goals
+case neg
+row tag : U8
+size total : Usize
+frame : Slice U8
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrongLength : ¬frame.len ≠ total
+length : frame.len = total
+totalVal : ↑total = 5 + ↑size
+frameVal : (↑frame).length = 5 + ↑size
+five : 5 ≤ (↑frame).length
+bound : (↑frame).length ≤ 3717
+a : U8
+ha : frame.index_usize 0#usize = ok a
+right✝⁴ : a = (↑frame)[↑0#usize]
+b : U8
+hb : frame.index_usize 1#usize = ok b
+right✝³ : b = (↑frame)[↑1#usize]
+c : U8
+hc : frame.index_usize 2#usize = ok c
+right✝² : c = (↑frame)[↑2#usize]
+d : U8
+hd : frame.index_usize 3#usize = ok d
+right✝¹ : d = (↑frame)[↑3#usize]
+e : U8
+he : frame.index_usize 4#usize = ok e
+right✝ : e = (↑frame)[↑4#usize]
+h8 : 8 < System.Platform.numBits
+h16 : 16 < System.Platform.numBits
+h24 : 24 < System.Platform.numBits
+word :
+  (do
+      let b1 ← UScalar.cast UScalarTy.Usize c <<< 8#i32
+      let c1 ← UScalar.cast UScalarTy.Usize d <<< 16#i32
+      let d1 ← UScalar.cast UScalarTy.Usize e <<< 24#i32
+      ok (UScalar.cast UScalarTy.Usize b ||| b1 ||| c1 ||| d1)) =
+    ok (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)))
+⊢ (do
+      let r ← NCO_ParserRef.parse_record_ref row frame
+      ok (NCO_Framing.result r)) =
+    AspisR1PrefixAggregateParser.r1_wire.parse_record row frame
+NDI_generated/NDI_ParserBody.lean:34:33: warning: This simp argument is unused:
+  UScalar.shiftLeft_IScalar
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵D̵F̵_̵P̵a̵r̵s̵e̵r̵W̵o̵r̵d̵.̵w̵o̵r̵d̵,̵U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵_̵I̵S̵c̵a̵l̵a̵r̵,̵U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵h̵8̵,̵h̵1̵6̵,̵h̵2̵4̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲D̲F̲_̲P̲a̲r̲s̲e̲r̲W̲o̲r̲d̲.̲w̲o̲r̲d̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲s̲h̲i̲f̲t̲L̲e̲f̲t̲,̲ ̲h̲8̲,̲ ̲h̲1̲6̲,̲ ̲h̲2̲4̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:59: warning: This simp argument is unused:
+  UScalar.shiftLeft
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵D̵F̵_̵P̵a̵r̵s̵e̵r̵W̵o̵r̵d̵.̵w̵o̵r̵d̵,̵U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵_̵I̵S̵c̵a̵l̵a̵r̵,̵U̵S̵c̵a̵l̵a̵r̵.̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵h̵8̵,̵h̵1̵6̵,̵h̵2̵4̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲N̲D̲F̲_̲P̲a̲r̲s̲e̲r̲W̲o̲r̲d̲.̲w̲o̲r̲d̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲s̲h̲i̲f̲t̲L̲e̲f̲t̲_̲I̲S̲c̲a̲l̲a̲r̲,̲ ̲h̲8̲,̲ ̲h̲1̲6̲,̲ ̲h̲2̲4̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:77: warning: This simp argument is unused:
+  h8
+
+Hint: Omit it from the simp argument list.
+  simp only [NDF_ParserWord.word, ̲UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8̵,̵h̵16, ̲h24,
+  ̲ ̲ ̲ ̲ ̲↓reduceIte, ̲bind_tc_ok] at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:80: warning: This simp argument is unused:
+  h16
+
+Hint: Omit it from the simp argument list.
+  simp only [NDF_ParserWord.word, ̲UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h1̵6̵,̵h̵24, ̲↓reduceIte,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok] at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:84: warning: This simp argument is unused:
+  h24
+
+Hint: Omit it from the simp argument list.
+  simp only [NDF_ParserWord.word, ̲UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h16,h̵2̵4̵,̵ ̲↓reduceIte,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok] at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:88: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [NDF_ParserWord.word, ̲UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h16, ̲h24,↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok] at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:34:99: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NDF_ParserWord.word, ̲UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h16, ̲h24,
+  ̲ ̲ ̲ ̲ ̲↓reduceIte,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at word
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_ParserBody.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

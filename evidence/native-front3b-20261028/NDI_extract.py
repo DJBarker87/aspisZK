@@ -8,10 +8,9 @@ S=B/'NDI_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'src/lib.rs').write_bytes((B/'NDI_src/crates/aspis-r1-cost-probe/src/NDI_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 parser=os.environ.get('NDI_EXTRACT_PARSER')=='1'
-roots=['crate::batch_key_at_ref','crate::same_batch_index_ref','crate::same_batch_leaf_ref','crate::opening_ref','crate::validated_row_ref','crate::state_ref','crate::framed_ref']
-roots=['crate::record_ref','crate::raw_ref'] if parser else roots
-namespace='NDI_ReaderRef' if parser else 'NDI_Reference'
-dest=B/('NDI_reader_extracted' if parser else 'NDI_extracted')
+roots=['crate::geometry_ref']
+namespace='NDI_GeometryRef'
+dest=B/'NDI_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
 cmd+=['--dest-file',str(B/'NDI_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']

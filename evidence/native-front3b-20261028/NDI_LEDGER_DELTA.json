@@ -1,5 +1,5 @@
 {
-  "stage": 2,
+  "stage": 3,
   "new_local_closures": [
     {
       "function": "r1_wire::ValidatedRecord::row",
@@ -30,9 +30,34 @@
       "reference": "NDF_E001",
       "theorem": "NDF_ScalarBridge.state",
       "domain": "all state bytes and next_row; actual program-private SolanaDigest monomorph; getter invokes no digest"
+    },
+    {
+      "function": "verifier::QueryGeometry::for_query",
+      "status": "CLOSED-CONDITIONAL",
+      "native": [
+        "NDI_K016",
+        "NDI_K017"
+      ],
+      "reference": "NDI_E001",
+      "theorem": "NDI_GeometryBridge.reference",
+      "domain": "Vec length<=22; start<=index; index-start<Vec length; readonly borrowed row",
+      "caller": "NDI_GeometryBridge.caller",
+      "no_borrowed_return_substitution": true
     }
   ],
   "composed_closures": [],
   "inherited_local_conditional": 6,
-  "remaining_open": 16
+  "remaining_open": 15,
+  "lean_only_progress": [
+    "NDI_ParserTotal.reference: all rows/all slices, no lower-callee equality premise",
+    "NDI_ParserAt.reference: discharged NDF_AtCompose lower-parser premise",
+    "NDI_RawProjection.byte/kmx_window/kmx_disjoint: reuse NDF induction and KMX value laws"
+  ],
+  "failed_native_shapes": [
+    "NDI_K014 raw32 projection/1768-byte backing TIMEOUT",
+    "NDI_K015 raw1 projection/1768-byte backing TIMEOUT"
+  ],
+  "partial_native": [
+    "NDI_K018/K019/K020/K021: raw1 on backing1 only; no general reader closure"
+  ]
 }

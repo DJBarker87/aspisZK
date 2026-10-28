@@ -10,3 +10,6 @@ pub fn record_ref<'a>(records:&[&'a [u8];27],row:u8)->Option<&'a [u8]> {if row>=
 pub fn raw_ref<const N:usize>(bytes:&[u8],at:usize)->([u8;N],usize) {
  let mut out=[0u8;N];let mut j=0;while j<N {out[j]=bytes[at+j];j+=1;}(out,at+N)
 }
+pub fn geometry_ref<'a,T>(rows:&'a [T],start:usize,index:usize)->&'a T {&rows[index-start]}
+pub fn transcript_new_ref(reply:[u8;32])->([u8;32],u8,u8) {(reply,0,1)}
+pub fn transcript_sample_ref(block:[u8;32],advanced:[u8;32],row:u8)->([u8;32],[u8;32],u8,u8) {(block,advanced,row+1,3)}

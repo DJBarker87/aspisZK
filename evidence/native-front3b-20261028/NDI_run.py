@@ -39,7 +39,8 @@ if kind=='kani':
 elif kind=='extract':
  files['NDI_extract.py']=(E/'NDI_extract.py').read_text();sources=['NDI_extract.py','NDI_src/crates/aspis-r1-cost-probe/src/NDI_reference.rs'];native=[];command=['python3','NDI_extract.py']
 else:
- files['NDI_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDI_generated/'+target+'.lean']
+ source=Path(os.environ['NDI_DEP_SOURCE']) if os.environ.get('NDI_DEP_SOURCE') else E/(target+'.lean')
+ files['NDI_generated/'+target+'.lean']=source.read_text();sources=['NDI_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDI_generated','-o','NDI_objects/'+target+'.olean',sources[0]]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDI_tmp',LEAN_PATH=B+'/NDI_objects:/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
 if os.environ.get('NDI_EXTRACT_PARSER'):env['NDI_EXTRACT_PARSER']=os.environ['NDI_EXTRACT_PARSER']
