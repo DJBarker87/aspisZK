@@ -35,7 +35,7 @@ theorem post (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest3
   cases merged with
   | Err e => trivial
   | Ok values =>
-    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
     apply PV_RunJoin_ResultPost41.bind
     intro polynomial
     apply PV_RunJoin_ResultPost41.bind
@@ -67,7 +67,7 @@ theorem post (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest3
         cases r with
         | Err e => trivial
         | Ok q =>
-          simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+          simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
           apply PV_RunJoin_ResultPost41.bind
           intro nextPoint
           have flen : framed.length=901 := by
