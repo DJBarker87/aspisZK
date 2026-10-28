@@ -12,12 +12,18 @@ pub struct View {
 #[inline(never)]
 pub fn limb_at(tuple: PoolV1PairCopyTupleV1, i: usize) -> PoolV1PairTupleLimbV1 { tuple.limbs[i] }
 #[inline(never)]
+pub fn column_at(columns:[[Option<M31>;1024];16],c:usize) -> [Option<M31>;1024] {columns[c]}
+#[inline(never)]
+pub fn option_at(column:[Option<M31>;1024],r:usize) -> Option<M31> {column[r]}
+#[inline(never)]
 pub fn cell_at(view: View, source: PoolV1PairTraceCellV1) -> M31 {
-    let cell=match source.bank {
-        PoolV1PairTraceBankV1::Stable => view.stable[source.cell.column as usize][source.cell.row as usize],
-        PoolV1PairTraceBankV1::Late => view.late[source.cell.column as usize][source.cell.row as usize],
+    let column=match source.bank {
+        PoolV1PairTraceBankV1::Stable => column_at(view.stable,source.cell.column as usize),
+        PoolV1PairTraceBankV1::Late => column_at(view.late,source.cell.column as usize),
     };
-    match cell { Some(v)=>v, None=>panic!("source vector index out of bounds") }
+    match option_at(column,source.cell.row as usize) {
+        Some(v)=>v, None=>panic!("source vector index out of bounds")
+    }
 }
 #[inline(never)]
 pub fn value_at(values: [M31;16],i:usize) -> M31 {values[i]}
