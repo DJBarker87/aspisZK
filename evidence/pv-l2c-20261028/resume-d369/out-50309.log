@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ChunkStep.lean:18:2: error: 'change' tactic failed, pattern
+  (do
+      let __x ← BuilderForestStd.chunksNext i.iter
+      match __x with
+        | (o, it) =>
+          match o with
+          | none => ok (none, { iter := it, count := i.count })
+          | some x => do
+            let n ← i.count + 1#usize
+            ok (some (i.count, x), { iter := it, count := n })) =
+    ok (some p, j)
+is not definitionally equal to target
+  (do
+      let __x ← (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice U32).next i.iter
+      match __x with
+        | (opt, iter') =>
+          match opt with
+          | none => ok (none, { iter := iter', count := i.count })
+          | some a => do
+            let count' ← i.count + 1#usize
+            ok (some (i.count, a), { iter := iter', count := count' })) =
+    ok (some p, j)
+'PV_L2C_ChunkStep.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1
