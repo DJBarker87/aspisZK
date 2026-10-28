@@ -3,7 +3,7 @@ from pathlib import Path
 import json,hashlib,lzma,shutil
 from run import H
 O=H/'archive-resume5';O.mkdir(exist_ok=True);R=O/'receipts-resume5';R.mkdir(exist_ok=True);L=O/'llbc-resume5';L.mkdir(exist_ok=True);index=[]
-labels=sorted(set(H.glob('charon227-resume5*'))|set(H.glob('aeneas227-resume5*'))|set(H.glob('native227-resume5-owned'))|set(H.glob('lean-420[0-9][0-9]*')))
+labels=sorted(set(H.glob('charon227-resume5*'))|set(H.glob('aeneas227-resume5*'))|set(H.glob('native227-resume5-owned'))|set(H.glob('fidelity227-resume5-native'))|set(H.glob('lean-420[0-9][0-9]*')))
 for p in labels:
  if not p.is_dir():continue
  q=R/p.name;q.mkdir(exist_ok=True)
@@ -26,6 +26,6 @@ for p in labels:
   item['revision_correction']='Recorded source revision pins frozen deployed sources; owned proof-only inputs were edited between gates. Exact owned source bytes are in LLBC files.contents and identified above; no attribution of those edits to the recorded older commit.'
  index.append(item)
 (O/'receipt-index-resume5.json').write_text(json.dumps(index,indent=2)+'\n')
-for name in ['TALLY-resume5.json','external-verification-resume5.json','project-resolution-resume5.json','native227-resume5-features.json']:
+for name in ['TALLY-resume5.json','external-verification-resume5.json','project-resolution-resume5.json','native227-resume5-features.json','fidelity227-resume5-features.json']:
  if (H/name).exists():shutil.copy2(H/name,O/name)
 print(json.dumps(dict(receipts=len(index),archive=str(O))))
