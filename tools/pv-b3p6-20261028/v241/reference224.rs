@@ -34,11 +34,14 @@ while slot < 2 {
     Ok(value)
 }
 
+#[inline(never)]
+pub fn row_at(rows: [CopyLogUpRow;1024], r: usize) -> CopyLogUpRow { rows[r] }
+
 pub fn from_rows(rows: [CopyLogUpRow;1024], chi: QM31) -> Result<[QM31;1024],Error> {
     let mut helper = [QM31::ZERO;1024];
     let mut r = 0usize;
     while r < 1024 {
-        let row = rows[r];
+        let row = row_at(rows,r);
         let value = one_row(row,chi)?;
         helper[r] = value;
         r += 1;
