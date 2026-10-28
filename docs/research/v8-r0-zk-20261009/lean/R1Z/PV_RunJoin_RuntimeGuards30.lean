@@ -74,6 +74,7 @@ theorem source_result (pool domain : Array U8 32#usize) (seq : U64)
       | false => exact False.elim (hn (hb.mp rfl))
       | true => rfl
   simp only [hbad,bne_iff_ne,not_and_or,not_lt,Nat.le_zero,← errors_or,ite_not]
+  rfl
 
 #print axioms source_result
 end R1Z.PV_RunJoin_RuntimeGuards30
