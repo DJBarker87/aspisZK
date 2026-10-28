@@ -18,3 +18,8 @@ raw receipt records a charged 180-second timeout. The receipt tally prevails.
 The generic scope string in kani-6's raw receipt says reachable control cut;
 for that invocation the cut was unused: it called the actual aspis-core codec.
 This addendum clarifies the label without modifying the raw receipt.
+
+Receipt comparison also reveals kani-4 repeated kani-3 with identical source
+hashes, flags, bounds and timeout. That retry was contrary to the no-unchanged-
+rerun rule; it consumed one of the six runs and adds no evidence. Both failures
+remain archived. No further run will be justified from that duplicate.
