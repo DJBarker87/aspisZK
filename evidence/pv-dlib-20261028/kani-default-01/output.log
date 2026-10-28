@@ -1,0 +1,85 @@
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling cpufeatures v0.2.17
+   Compiling generic-array v0.14.7
+   Compiling block-buffer v0.10.4 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4)
+   Compiling crypto-common v0.1.7
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:357:4
+    |
+357 |  { pub fn pv_dl_bytes(&self)->&[u8] { &self.buffer } }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:7:9
+    |
+  7 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+   Compiling digest v0.10.7 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7)
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/ct_variable.rs:213:4
+    |
+213 |  { pub fn pv_dl_inner(&self)->&T { &self.inner } }
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/lib.rs:32:9
+    |
+ 32 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+   Compiling sha2 v0.10.9 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9)
+warning: missing documentation for a method
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/core_api.rs:159:35
+    |
+159 | #[cfg(kani)] impl Sha256VarCore { pub fn pv_dl_snapshot(&self)->([u32;8],u64) {(self.state,self.block_len)} }
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: the lint level is defined here
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/lib.rs:67:9
+    |
+ 67 | #![warn(missing_docs, rust_2018_idioms)]
+    |         ^^^^^^^^^^^^
+
+   Compiling pv-dlib-native-default v0.0.0 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native-proof)
+warning: trait `Compression` is never used
+ --> default-reference.rs:8:11
+  |
+8 | pub trait Compression {
+  |           ^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `update_reference` is never used
+  --> default-reference.rs:13:8
+   |
+13 | pub fn update_reference<C: Compression>(mut state: C::State, mut blocks: u64,
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `finalize_reference` is never used
+  --> default-reference.rs:29:8
+   |
+29 | pub fn finalize_reference<C: Compression<State=[u32;8]>>(mut state: [u32;8],blocks:u64,
+   |        ^^^^^^^^^^^^^^^^^^
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 3.73s
+Thread 0: Checking harness sha256_default_snapshot...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 188 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 23.960056s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.

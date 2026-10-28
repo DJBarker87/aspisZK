@@ -1,0 +1,101 @@
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling cfg-if v1.0.5
+   Compiling cpufeatures v0.2.17
+   Compiling generic-array v0.14.7
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4)
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/block-buffer-0.10.4/src/lib.rs:352:7
+    |
+352 | #[cfg(kani)] impl<BlockSize, Kind> BlockBuffer<BlockSize, Kind>
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+   Compiling digest v0.10.7 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7)
+warning: `block-buffer` (lib) generated 1 warning
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/digest-0.10.7/src/core_api/ct_variable.rs:206:7
+    |
+206 | #[cfg(kani)] impl<T, OutSize, O> CtVariableCoreWrapper<T, OutSize, O>
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+   Compiling sha2 v0.10.9 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9)
+warning: `digest` (lib) generated 1 warning
+warning: unexpected `cfg` condition name: `kani`
+   --> /home/dombarker/project-offloads/codex-pv-dlib-20261028/native/sha2-0.10.9/src/core_api.rs:159:7
+    |
+159 | #[cfg(kani)] impl Sha256VarCore { pub fn pv_dl_snapshot(&self)->([u32;8],u64) {(self.state,self.block_len)} }
+    |       ^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+    = note: `#[warn(unexpected_cfgs)]` on by default
+
+   Compiling pv-dlib-native-default v0.0.0 (/home/dombarker/project-offloads/codex-pv-dlib-20261028/native-proof)
+warning: unexpected `cfg` condition name: `kani`
+ --> native-default.rs:2:7
+  |
+2 | #[cfg(kani)]
+  |       ^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, and `test` and 32 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(kani)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: function `default_reference` is never used
+ --> default-reference.rs:2:8
+  |
+2 | pub fn default_reference() -> ([u32;8],u64,[u8;64],usize) {
+  |        ^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `Compression` is never used
+ --> default-reference.rs:8:11
+  |
+8 | pub trait Compression {
+  |           ^^^^^^^^^^^
+
+warning: function `update_reference` is never used
+  --> default-reference.rs:13:8
+   |
+13 | pub fn update_reference<C: Compression>(mut state: C::State, mut blocks: u64,
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `finalize_reference` is never used
+  --> default-reference.rs:29:8
+   |
+29 | pub fn finalize_reference<C: Compression<State=[u32;8]>>(mut state: [u32;8],blocks:u64,
+   |        ^^^^^^^^^^^^^^^^^^
+
+warning: `pv-dlib-native-default` (lib) generated 5 warnings
+warning: `sha2` (lib) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 4.39s

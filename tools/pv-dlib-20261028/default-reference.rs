@@ -48,3 +48,6 @@ pub fn finalize_reference<C: Compression<State=[u32;8]>>(mut state: [u32;8],bloc
     }
     (out,state,buffer)
 }
+
+// No destructor is invoked: core is moved into the returned owned snapshot.
+pub fn wrap_reference<T>(core:T) -> (T,[u8;64],usize) { (core,[0;64],0) }
