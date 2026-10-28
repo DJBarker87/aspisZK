@@ -26,6 +26,16 @@ print(json.dumps(deps))
 '''.replace('IMPORTS',repr(re.findall(r'^import (\S+)',s.decode(),re.M)))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stdout+r.stderr
 meta['imports']=json.loads(r.stdout);meta['deps_fingerprint']=hashlib.sha256(r.stdout.encode()).hexdigest()
+meta['environment_generation']='private pinned external overlay with same-authority IR companions'
+meta['external_manifest_sha256']=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest()
+meta['external_ir_manifest_sha256']=hashlib.sha256((E/'external-ir-companions.json').read_bytes()).hexdigest()
+for old_id in t['lean_charged']:
+ q=E/f'{old_id}-submission.json'
+ if q.exists():
+  old=json.loads(q.read_text())
+  old_generation=old.get('environment_generation',('partial Env-J namespace' if old_id==42200 else 'external overlay without IR companions' if old_id==42201 else meta['environment_generation']))
+  assert not(old.get('source_sha256')==sha and old.get('imports')==meta['imports'] and old_generation==meta['environment_generation']),('unchanged charged source/dependencies/environment',old_id,n,m)
+
 
 if n not in t['used_ids']:t['used_ids'].append(n)
 (E/'TALLY.json').write_text(json.dumps(t,indent=2)+'\n')

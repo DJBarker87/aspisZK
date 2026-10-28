@@ -87,3 +87,11 @@ a typed-carrier correction, not a source-law premise or a weakened success guard
 01:14:07.873518Z. 42226 launched after that time and caught an implicit
 projection instance in the draft size guard. Replace dot projection on
 BufferKindUser with an explicitly carrier-indexed projection helper.
+
+42227 upload admission refused 01:17:47.572720Z (aggregate reservation),
+no compiler. Next resource admission no earlier than 01:20:47.572720Z.
+Private wrapper now refuses an already charged source/import/environment
+input. The earlier Types loader repairs had three distinct environments:
+partial Env-J namespace; pinned external overlay without IR companions;
+pinned external overlay with same-authority hashed IR companions. No failed
+source was intentionally re-run against unchanged actual inputs.
