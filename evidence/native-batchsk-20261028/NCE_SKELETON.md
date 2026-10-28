@@ -1,0 +1,99 @@
+# NCE skeleton audit
+
+Stage 1 is NOT complete. No end-to-end native bridge is claimed.
+
+## Target and interpretation requiring resolution
+
+The requested exact accept/first-error result must distinguish an exact Rust
+`Result` from the adopted acceptance/rejected-prefix observation. They are
+not interchangeable. Frozen Rust `candidate.rs:198-204` returns `Err(Parse)`
+on capacity/padding failure, and `Err(Merkle)` on failed verification. The
+retained `Port3_NativeBatchBody` terminal body produces `done (...,none)`
+and its enclosing `batch_tree` converts `none` to `fail panic`.
+
+This is an existing, recorded extraction discrepancy, not a newly discovered
+implementation defect. C3-BIN “L166 finding and ruling; D188 fidelity note”
+adopts success-conditioned correspondence with every rejected digest prefix
+counted. It explicitly does not require equality of error kinds.
+
+`Port4B_Rejection.padding_result_differs` proves the local exact-return
+inequality. Checked `NCE_ErrorObstruction.exact_error_obstruction` consumes that
+existing theorem on arbitrary SAME idx/val, and
+`exact_error_and_prefix_obstruction` retains ANY chronological prefix.
+Neither assumes acceptance nor changes an error into success.
+
+A theorem asserting exact source/cohort Result equality on this branch
+cannot have simultaneously faithful, satisfiable per-step native hypotheses.
+Calling that hypothesis `NCE_Native_Padding` or `NCE_Native_ThreeTrees`
+would hide a false conclusion. No such hypothesis has been introduced.
+
+## Eight native interfaces to audit
+
+These are concrete remaining interfaces, NOT Lean declarations or discharged
+facts. The following list is deliberately not presented as a compiled skeleton.
+Every proposed interface quantifies over one arbitrary reached prestate of
+the same immutable Prepared/proof and mutable scratch, cursor and chronological
+log. No final count, final padding scan, accepted tree or final log is an input.
+
+1. **NCE_Native_Count**: one count microstep, selected by its source PC:
+   initialization window, equal-parent scan test/advance, row accumulator and
+   parent store, or height transition. Exact scalar poststate and arbitrary
+   coordinate frame. Associate these PCs to `NBI_CountScan.scan`,
+   `NBJ_CountRows.nativeRows`, and `NBY_CountCarry.carry`; initialization uses
+   `NBV_CountInitialization`. A single row does not establish its own inner
+   scan. Harness: one PC on symbolic level[16], cursor/count/height and one
+   arbitrary observed coordinate. No whole eighteen-level invocation.
+2. **NCE_Native_Row**: one binary node request/reply and write window:
+   paired versus supplied/short, exact request component pointers/bytes,
+   unchanged returned reply, cursor/i/w transitions, one index store and
+   selected byte write, all exterior coordinates framed. Consumers:
+   `NBJ_NodeObservation`, `NBY_RowCopy`, `NBY_RowCarrier`, `NBI_Frame`.
+   Harness: arbitrary scratch, symbolic i/w/at and offset, one byte/window;
+   symbolic runtime reply, no SHA. Compose byte windows only on the SAME reply.
+3. **NCE_Native_Verifier**: source PC for entry admission, exhausted-row n=w,
+   height increment or final n/index/root/cursor guard. Exact control/result,
+   scratch and log frame. The row transition uses item 2, not an opaque open
+   verifier stub. Consumer: `MultiproofConePhysicalLevels` and existing
+   node/level inductions. Harness: one selected control cut on arbitrary
+   prestate; never all levels.
+4. **NCE_Native_Opening**: one selected proof-byte read/reborrow at absolute
+   `10055+832*i+32*w+c`, with i<22,w<26,c<32, fixed SAME backing pointer,
+   and unchanged exterior. Consumers: `NBY_OpeningLocality.opening_loads`,
+   `NBJ_Address`, `NBV_WindowFrame`. Harness: one byte/window on arbitrary
+   backing, not 22 enumerated positions or an entire proof equality.
+5. **NCE_Native_Keys**: source PC for zero initialization, raw query read,
+   packed-word store, insertion-sort comparison/move or iterator return;
+   exact selected word and unchanged exterior. Canonical query provenance
+   comes from the named NBR_/NBS_ lower dependency, not a new headline law.
+   Consumers: `NBE_KeyLoop`, `NBI_Keys`, `NBI_Sort`, `NBJ_Keys`.
+   Harness: one PC on arbitrary key/query arrays, symbolic cursor/coordinate.
+6. **NCE_Native_Leaf**: one key iteration, with exact selected opening and
+   one leaf digest request BEFORE duplicate test, exact returned digest,
+   duplicate/new/error control and selected idx/val write frame. C1/C2/folded
+   request components use actual source tag/value/salt slices. Consumers:
+   `Port4B_NativeLeaf`, `Port4B_LeafStep`, existing leaf fold inductions.
+   Harness: one request or post-return window on arbitrary SAME prestate;
+   no assumed successful selected opening or duplicate continuation.
+7. **NCE_Native_Padding**: one physical 8-byte chunk predicate/iterator step
+   with exact first-stop continuation and unchanged scratch/log. Bind its
+   partition to the SAME count and nodes from preceding steps. Consumers:
+   `NBJ_PaddingPort.physical_scan`, `NBI_Padding.first_stop`.
+   Harness: symbolic chunk/iterator prestate; no final successful scan.
+   **Exact error equality is obstructed at its caller return**, as above.
+8. **NCE_Native_ThreeTrees**: one source outer control step dispatching tree
+   0/1/2 or returning at the first failed child; next tree consumes the
+   preceding scratch and log; SAME Prepared, proof, query/root projections.
+   Entry/exit uses actual TX1 or U09 return carrier and named NBR_/NBS_/U00
+   lower dependencies. Harness: one dispatch/return PC, not successful
+   independent tree calls. `Port3_NativeBatchCalls.values_calls` is only an
+   accepted-path inversion; `Port4B_BatchJoin.compose` assumes three model
+   successes and cannot itself supply this native association.
+
+## Composition audit
+
+The inherited NB*/Port4B results are mathematical/value or installed owned
+model results. `Port4B_StageRows.tx1/tx2` have explicit installed-operation,
+Prepared provenance, P6 and accepted-run boundaries; their statements do not
+establish these eight native interfaces. Merely importing them cannot prove
+exact arbitrary-error native execution correspondence. No XRn_Join kit,
+arbitrary whole-child stub or substituted headline is used here.
