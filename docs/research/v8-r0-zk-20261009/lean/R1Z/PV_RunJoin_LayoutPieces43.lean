@@ -7,8 +7,8 @@ namespace R1Z.PV_RunJoin_LayoutPieces43
 open Aeneas Aeneas.Std ProverRwFull PV_RunJoin_CanonicalRecord43 PV_RunJoin_RoundStream43
 variable [ExternalTypes]
 theorem domain (ops : ExternalFuns) (logical : Slice U8)
-    (prefix masked rounded claimed : List U8) (prefix_length : prefix.length=134)
-    (mask : Piece 32 prefix masked) (rounds : Stream masked 10 rounded)
+    (initial masked rounded claimed : List U8) (initial_length : initial.length=134)
+    (mask : Piece 32 initial masked) (rounds : Stream masked 10 rounded)
     (claim : Piece 3712 rounded claimed) (endpoint : Piece 928 claimed logical.val) :
     ∃ records, PV_RunJoin_SemanticDomain40.Domain ops logical 27#u8 32#usize 0#u8 records := by
   have ml : masked.length=171 := by have h := PV_RunJoin_CanonicalRecord43.length mask;omega
@@ -22,7 +22,7 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
   have ct := PV_RunJoin_ByteExtension43.trans (PV_RunJoin_CanonicalRecord43.extension claim) et
   have rt := PV_RunJoin_ByteExtension43.trans (PV_RunJoin_RoundStream43.extension rounds) ct
   have hm := PV_RunJoin_CanonicalRecord43.slot mask rt
-  rw [prefix_length] at hm
+  rw [initial_length] at hm
   have hr : ∀ k, k<10 → PV_RunJoin_HighDomain40.HighZero
       ((logical.val.drop (176+901*k)).take 896) := by
     intro k hk
