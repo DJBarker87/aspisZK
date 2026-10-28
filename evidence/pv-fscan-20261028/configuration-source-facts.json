@@ -1,0 +1,1396 @@
+[
+  {
+    "path": "tools/pv-cb-20261026/extract_source.py",
+    "sha256": "1b2130dc4fe4e01b7fb941a54fff078a3e02e8432cbe57b45d87d090772d4447",
+    "lines": [
+      {
+        "line": 29,
+        "text": "  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir',mir,*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof','step-proof'] else []),'--sysroot','default','--start-from',entry]"
+      },
+      {
+        "line": 33,
+        "text": "  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','ct-host-prover' if project.endswith('aspis-r1-cost-probe') else 'r0'] if project.startswith('source/crates/') else [])]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume4_cleanup_rust.py",
+    "sha256": "47c08694288a79ba2b71464973129c7fd493c7395d853c719e2980963af38a7c",
+    "lines": [
+      {
+        "line": 15,
+        "text": " # These exact directories were cargo target dirs, never wallet or source dirs."
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume5_kani.py",
+    "sha256": "c376791a0601b81caa5c2eba1e13e92b9a5c234165951e9fde9263b86fe6fa80",
+    "lines": [
+      {
+        "line": 27,
+        "text": "meta=dict(target=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A Kani; separate Lean source/axioms receipts',harness=harness,no_stubs=True,expected_time='cached optimized compilation, then CBMC proof generation for this one named harness',configuration_change=('Ruling (i): one retry after 180s timeout, now 900s, same harness and unwind bound; taskset CPU0-3 and unchanged caps' if timeout==900 else 'New explicitly partitioned harness after timeout; taskset CPU0-3 and unchanged caps'),profile='step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic')"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume4_handoff.py",
+    "sha256": "2fa462cd4eaf9d0c99aedbca14d76efc3cce5290b044fad16b16f5d0250ebb11",
+    "lines": [
+      {
+        "line": 37,
+        "text": "harness: rustc coordinator thread spawn WouldBlock/Os11. Four-CPU affinity"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume4_kani.py",
+    "sha256": "3fad007546c69151b18e67f133311540f48686edb7c619274877204203afc916",
+    "lines": [
+      {
+        "line": 19,
+        "text": "meta=dict(target=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A Kani; separate Lean source/axioms receipts',harness=harness,no_stubs=True,expected_time='cached optimized compilation, then CBMC proof generation for this one named harness',configuration_change='Restrict CPU affinity to four host CPUs to bound compiler thread fanout within TasksMax64; no cap increase',profile='step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic')"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume5_extract.py",
+    "sha256": "5ae7cd1f4e7c772d11ac503e61bd9aacf259671de67bf864eb3918c08340c37d",
+    "lines": [
+      {
+        "line": 34,
+        "text": "  args=['taskset','--cpu-list','0-3','timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract --cfg aeneas_ref'+((' -Zalways-encode-mir -Zcross-crate-inline-threshold=always -Zinline-mir=yes -Zinline-mir-threshold=100000 -Zmir-opt-level=4' if sys.argv[9]=='force' else ' -Zalways-encode-mir') if len(sys.argv)>9 and sys.argv[9] in ['mir4','force'] else ''),f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir',mir,*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--rustc-arg=--cfg=aeneas_ref'] if project in ['source-proof','proof','step-proof'] else []),'--sysroot','default','--start-from',entry]"
+      },
+      {
+        "line": 39,
+        "text": "   args+=['--rustc-arg=-Zinline-mir=yes','--rustc-arg=-Zinline-mir-threshold=100000','--rustc-arg=-Zcross-crate-inline-threshold=100000']"
+      },
+      {
+        "line": 40,
+        "text": "   if sys.argv[9] in ['mir4','force']:args+=['--rustc-arg=-Zmir-opt-level=4','--rustc-arg=-Zalways-encode-mir']"
+      },
+      {
+        "line": 41,
+        "text": "  if len(sys.argv)>9 and sys.argv[9]=='force':args+=['--rustc-arg=-Zcross-crate-inline-threshold=always']"
+      },
+      {
+        "line": 42,
+        "text": "  args+=['--dest-file',f'{base}/PV_CB_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','ct-host-prover' if project.endswith('aspis-r1-cost-probe') else 'r0'] if project.startswith('source/crates/') else [])]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/mask_kani.py",
+    "sha256": "f88ad958b28b61d9748013790f04d9284593c3d026afa1cd1dd1c96af5d1db86",
+    "lines": [
+      {
+        "line": 19,
+        "text": "meta=dict(target=cmd,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),print_axioms='N/A Kani; separate Lean source/axioms receipts',harness=harness,no_stubs=True,expected_time='cached optimized compilation, then CBMC proof generation for this one named harness',profile='step-proof profile.dev opt-level3, overflow-checks=false, debug-assertions=false; source uses explicit wrapping CT arithmetic')"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/resume4_config.py",
+    "sha256": "ed6700aab45f431ad6e1001a6fa13d5e88da2e3b116bf39ec5202dfa3da37257",
+    "lines": [
+      {
+        "line": 23,
+        "text": "meta=dict(target=cmd,classification='uncharged configuration diagnosis, within three-probe limit',expected_time='cold dependency compilation under the historical Cargo graph, then trivial arbitrary-u8 identity; no dense arithmetic proof',profile='config-probe profile.dev opt-level3',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),affinity4=affinity,limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/source-proof/Cargo.toml",
+    "sha256": "8db4105e09810781974fb288b000c887a85430ddb007268d751084f735f4d2a2",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-r1-cost-probe = { path = \"../source/crates/aspis-r1-cost-probe\", features = [\"ct-host-prover\"] }"
+      },
+      {
+        "line": 13,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 14,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 15,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 17,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 19,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 20,
+        "text": "debug-assertions = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/config-probe/Cargo.toml",
+    "sha256": "4eef9bb190907d82796d68069754d9cae2d601c263993c958d79209cc515d19f",
+    "lines": [
+      {
+        "line": 8,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 10,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 11,
+        "text": "debug-assertions = false"
+      },
+      {
+        "line": 13,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 14,
+        "text": "aspis-r1-cost-probe = { path = \"../source/crates/aspis-r1-cost-probe\", features = [\"ct-host-prover\"] }"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/step-proof/Cargo.toml",
+    "sha256": "d54fc4f7fad7c24e9d828a5e5dc0e933579f75d6e811999b028c1c9485d4fbef",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 10,
+        "text": "aspis-r1-cost-probe = { path = \"../source/crates/aspis-r1-cost-probe\", features = [\"ct-host-prover\"] }"
+      },
+      {
+        "line": 12,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 14,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 15,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 17,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 18,
+        "text": "debug-assertions = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb-20261026/shim-proof/Cargo.toml",
+    "sha256": "a091b9f2c83951e431463bdd5e240d98c34f41eed8dc26f47073a2f45a42ce0a",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 11,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 13,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/extract_source.py",
+    "sha256": "d3581ddb366df7f77fe975ca212e35a1db967975607a2cf2e53382eeeb1bdede",
+    "lines": [
+      {
+        "line": 23,
+        "text": "  args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',charon,'cargo','--preset','aeneas','--mir','built',*(['--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract'] if project in ['source-proof','proof','kani-proof'] else []),'--sysroot','default','--start-from',entry]"
+      },
+      {
+        "line": 26,
+        "text": "  args+=['--dest-file',f'{base}/PV_CB3_ShippedOp{op}.llbc','--','--manifest-path',f'{base}/{project}/Cargo.toml','--release','--offline','--lib','--jobs','4',*(['--features','r0'] if project.startswith('source/crates/') else [])]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/source-Cargo.toml",
+    "sha256": "582be0643a6862b09e9f9cd7d4b57c5035412ce04b0389399ef2a71f0593aeb3",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 11,
+        "text": "aspis-r1-cost-probe = { path = \"../source/crates/aspis-r1-cost-probe\", features = [\"ct-host-prover\"] }"
+      },
+      {
+        "line": 13,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 14,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/resume6_extract.py",
+    "sha256": "35815864fb9ed66e0f9547369c2d3004374b1ce34ba8fbd69eab9b1684f167af",
+    "lines": [
+      {
+        "line": 72,
+        "text": " args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if variant.startswith('op34-') or variant=='op35-default' else []),'--mir',('optimized' if variant in ('op249-opt','op258-opt') else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len'] if variant in ('op34-method','op35-default') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+('/kani-proof/Cargo.toml' if variant in ('op258-reference','op134-reference') else '/source-proof/Cargo.toml'),'--release','--offline','--lib','--jobs','4']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/resume6_gate.py",
+    "sha256": "21b58f430f4a70a27956e4bc2750169d225c163def1ae4f3cf990e1920729d8e",
+    "lines": [
+      {
+        "line": 39,
+        "text": "cmd=['timeout','180','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3','CARGO_PROFILE_DEV_DEBUG_ASSERTIONS=false','CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false','RUSTFLAGS=--cfg kani',f'CARGO_TARGET_DIR={base}/kani-target','cargo','kani','--manifest-path',f'{base}/source/crates/aspis-core/Cargo.toml' if project=='core' else f'{base}/{project}/Cargo.toml',*(['--features','r0,ct-host-prover'] if project=='core' else []),'--lib','--exact','--harness',harness,'--solver','kissat',*(['--no-overflow-checks'] if harness.endswith('mixed_kind') else []),'--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/resume_gate.py",
+    "sha256": "13d674cb99c8aea739f32b498e8af3b780a5cf2e8e7ae6e23b4b24457c7b3e95",
+    "lines": [
+      {
+        "line": 13,
+        "text": "cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',f'CARGO_TARGET_DIR={base}/kani-target','cargo','kani','--manifest-path',f'{base}/source/crates/aspis-core/Cargo.toml' if project=='core' else f'{base}/kani-proof/Cargo.toml',*(['--features','r0,ct-host-prover'] if project=='core' else []),'--lib','--exact','--harness',harness,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/resume6_native_batch.py",
+    "sha256": "9717a43eb71980fef63a73c277187a7a7fdb9ad27098a1a8a77494c7475cabaf",
+    "lines": [
+      {
+        "line": 23,
+        "text": "            args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas','--mir',('optimized' if variant in ('op249-opt','op258-opt') else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/kani-Cargo.toml",
+    "sha256": "0f024ff18a543551f99dd248c97d84d6d21190043a09966fa1f06ca3bd309249",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 11,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 13,
+        "text": "overflow-checks = false"
+      },
+      {
+        "line": 14,
+        "text": "debug-assertions = false"
+      },
+      {
+        "line": 15,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 16,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb3-20261026/resume_extract.py",
+    "sha256": "505c3640023054bb5d5e5af7899dd5b190e6c9c69c8cb8946c41d10397302b95",
+    "lines": [
+      {
+        "line": 23,
+        "text": " args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if variant.startswith('op34-') or variant=='op35-default' else []),'--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,'--include',include,*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len'] if variant in ('op34-method','op35-default') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cb9-20261027/extract.py",
+    "sha256": "2836d7b95d04fbac89221558605af39987f3c9824369e030afa9f33408405dc8",
+    "lines": [
+      {
+        "line": 34,
+        "text": " args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pins+'/charon','cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cbmid-20261027/run.py",
+    "sha256": "cc4822c0e86739a043b34e0481bffe34881de2d10083ff7c16fb16f5e50bdfc1",
+    "lines": [
+      {
+        "line": 41,
+        "text": " args=['timeout','120','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={BASE}/charon-target',PIN+'/charon','cargo','--preset','aeneas','--mir','built','--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,'--include',include,'--dest-file',BASE+'/'+namespace+'.llbc','--','--manifest-path',BASE+'/source-proof/Cargo.toml','--release','--offline','--lib','--jobs','4']"
+      },
+      {
+        "line": 55,
+        "text": " args=['timeout',str(timeout_s),'taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3','CARGO_PROFILE_DEV_DEBUG_ASSERTIONS=false','CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false','RUSTFLAGS=--cfg kani',f'CARGO_TARGET_DIR={BASE}/kani-target','cargo','kani','--manifest-path',BASE+'/source-proof/Cargo.toml','--lib','--exact','--harness',op,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cbmid-20261027/source-Cargo.toml",
+    "sha256": "96c2794125981b277beadf023ac45f540d270c51801ea35b6f474c8e946939a2",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../../codex-pv-cb3-20261026/source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 11,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 12,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/Cargo.toml",
+    "sha256": "61ed8ff03f5a6af74d430ebc2b4b9f225158b0db54091f86dcc79c2c2761c4de",
+    "lines": [
+      {
+        "line": 13,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 14,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/kani.py",
+    "sha256": "3dd58fa981b29ce17384629a010866569f5ff828ca196e02b69e8383f83babc9",
+    "lines": [
+      {
+        "line": 12,
+        "text": "cmd=['timeout','180','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',*(['CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false'] if project=='sha2' else []),'RUSTFLAGS=--cfg kani',f'CARGO_TARGET_DIR={base}/kani-target','cargo','kani','--manifest-path',base+('/source/crates/aspis-r1-cost-probe/Cargo.toml' if project=='probe' else '/sha2-vendor/Cargo.toml' if project=='sha2' else '/block-buffer-vendor/Cargo.toml' if project=='block-buffer' else '/kani-proof/Cargo.toml'),*(['--features','ct-host-prover'] if project=='probe' else []),'--lib','--exact','--harness',harness,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions',*(['--slice-formula'] if project=='standalone' else [])]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/release_report.py",
+    "sha256": "231a7100dcdb66d1e846a1ec1aca48df6c194fe76302770459219fba823a8a6f",
+    "lines": [
+      {
+        "line": 10,
+        "text": "lines+=['','The final manifest ran once: 73 accepted dependency modules, 185 printed declarations. With the manifest itself, 74 current-source active modules are accepted. This is the frozen own-module import/axioms manifest, not a repository-wide or deployed privacy replay. Exact targets, source snapshots, direct import hashes and metrics are in the numbered JSON/log receipts and manifest-source-pins.json.','','## Budget and native results','',f\"Lean: **100/100**, {sum(r['exit']==0 for r in records)} exit-zero compiles; all failed/recovery-sorry artifacts are rejected. Kani: **10/10**, three bounded passes, three non-verdict setup/selector failures and four timeouts. No checked ROW counterexample was obtained. Env-J IDs consumed: {t['used_ids'][0]}\u2013{t['used_ids'][-1]}; next unused: {t['next_id']}. Refusals are zero charged and IDs were not reused.\",'','KANI-SUMMARY.md records each native run. Exact command/revision/hash/cap/metric records are in collected-receipt.json. Timeout GNU-time wrapper RSS excludes killed descendants and is not asserted as aggregate solver peak RSS. Timeout cgroups were checked gone. No stubs or force-soft substitutions were used. Array, SHA2-vendor and block-buffer-vendor Kani harnesses remain prepared only.','','## Open source/native frontiers','','- Digest/block-buffer: DIGEST-FRONTIERS.json records the exact loan/destructor preflight failures. Op208 has a verified extracted body/outcome decomposition, while its compress256 binding remains open. The op215 monomorphized artifact has has_errors=true and is rejected.','- Pure Path/String ops 26/28/30/31 remain OPEN; they are not filesystem-effect deferrals. The joint bounded join/String native run timed out. Optimized owned byte-join extraction still requires destructor semantics.','- Op33 remains OPEN after two timed-out owned-reference native checks; its mathematical value specification is not an extracted-source certificate. Op36 retains loan/destructor and missing native gate frontiers.','- Op32 is DEFER(pv-runjoin): recoverable allocation/capacity outcomes require native allocator/world association; Err was not replaced by Ok.','','Std source extraction uses its recorded nightly-2026-06-01 rustc 1.98.0 source corpus; Kani uses bundled rustc 1.93.0. Their distinct source/native/deployed associations remain explicit. Cargo library versions and additional .crate archive checksums/file bytes are pinned in source-provenance.json and additional-library-sources.json.','','## Cache and implementation custody','','Requested cb3 lean-objects cache was absent after host deletion; no binary was copied from it. 74 accepted current-source own objects were retained from shared Env-J into the owned host lean-objects directory, with exact provenance in retained-own-cache.json. This does not certify the inherited dependency source closure. Imported ProverRw sources were read-only. Production Rust prefix is byte-identical to the base; Rust additions are confined to the cfg(kani) harness module. No production ELF change/rebuild is claimed. No shared infrastructure was modified.','','## Next deliverable','','pv-wire/recount 4 can consume the four stable bundle laws with the recorded P6 bounds and association caveats. Further source discharge requires validated loan/destructor extraction for the exact owned references, a closed compress256 definition and native gates split enough to obtain verdicts under the fixed caps. Retain allocator/world and all side-channel/client/deployment obligations until their separate joins are proved.','','## Committed stages','', '```text',subprocess.check_output(['git','log','--oneline','bd47052f039ae2d96060acb5607fe652ebe193d4..HEAD'],text=True).strip(),'```','','This report/receipt commit follows the listed source and audit freezes. Nothing was pushed or merged.']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/resume9_kani.py",
+    "sha256": "ac27640cf3ba08c2b2123bfc4320f1ad23098d5a6360efb94f9a8eb5073f898a",
+    "lines": [
+      {
+        "line": 12,
+        "text": "cmd=['timeout','180','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',*(['CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false'] if project=='sha2' else []),'RUSTFLAGS=--cfg kani',f'CARGO_TARGET_DIR={base}/kani-target','cargo','kani','--manifest-path',base+('/source/crates/aspis-r1-cost-probe/Cargo.toml' if project=='probe' else '/sha2-vendor/Cargo.toml' if project=='sha2' else '/block-buffer-vendor/Cargo.toml' if project=='block-buffer' else '/kani-proof/Cargo.toml'),*(['--features','ct-host-prover'] if project=='probe' else []),'--lib','--exact','--harness',harness,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions',*(['--slice-formula'] if project=='standalone' else [])]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/kani-Cargo.toml",
+    "sha256": "942ca89257a9ef58c3999ab94edce0134ca3a4f1365de752565fba9c24e4a8c2",
+    "lines": [
+      {
+        "line": 8,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 11,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/dispatch_measure.py",
+    "sha256": "15f4328e6c3fadeb6c8fc9d0b6d4f7c4ddf79334ae656bf8fe3ee18e3b31aee5",
+    "lines": [
+      {
+        "line": 18,
+        "text": " cmd=['timeout','900',*env,'cargo','build','--release','--offline','-j','4','--manifest-path',base+'/dispatch-bench/Cargo.toml','--features','count'+(',soft' if mode=='build-soft' else '')]"
+      },
+      {
+        "line": 29,
+        "text": "meta=ssh(f'sha256sum {base}/dispatch-target/release/dispatch-bench; stat -c %s {base}/dispatch-target/release/dispatch-bench; /home/dombarker/.cargo/bin/rustc -vV; uname -m')"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/extract.py",
+    "sha256": "bfdbd28fd2c31040325e4036fd48db8c00a02e45bce0c98a2160f122def1d95a",
+    "lines": [
+      {
+        "line": 91,
+        "text": " args=['timeout','120',*(['taskset','--cpu-list','0-3'] if variant=='op33-exact-opt' else []),'env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','RUSTFLAGS=--cfg pv_cb_extract',f'CARGO_TARGET_DIR={base}/charon-target',pinned+'/charon','cargo','--preset','aeneas',*(['--hide-allocator'] if True else []),*(['--monomorphize','--precise-drops','--desugar-drops'] if variant.endswith('-mono') else []),'--mir',('optimized' if variant.endswith(('-opt','-mono')) else 'built'),'--rustc-arg=--cfg=kani','--rustc-arg=--cfg=pv_cb_extract','--sysroot','default','--start-from',entry,*sum((['--include',x] for x in include.split('+')),[]),*(['--opaque','alloc::vec::Vec','--opaque','alloc::vec::_::new','--opaque','alloc::vec::_::len','--opaque','alloc::vec::_::remove'] if variant in ('op34','op35','op35-opt','op33','op36','op34-ref','op35-ref','op33-ref','op33-owned-opt') else []),'--dest-file',base+'/'+namespace+'.llbc','--','--manifest-path',base+('/source/crates/aspis-r1-cost-probe/Cargo.toml' if variant=='op33-exact-opt' else '/source-proof/Cargo.toml'),*(['--features','ct-host-prover'] if variant=='op33-exact-opt' else []),'--release','--offline','--lib','--jobs','4']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-cblib-20261027/dispatch-bench/Cargo.toml",
+    "sha256": "d1cc6ee9c3caf3c5ea53834f8039e520732f117f050de0ca4b33b6b961c3cba3",
+    "lines": [
+      {
+        "line": 12,
+        "text": "aspis-prover = { path = \"../source/crates/aspis-prover\", features = [\"r0\", \"insecure-spend-fixture\", \"ct-host-prover\"], optional = true }"
+      },
+      {
+        "line": 13,
+        "text": "aspis-r1-cost-probe = { path = \"../source/crates/aspis-r1-cost-probe\", features = [\"ct-host-prover\"], optional = true }"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 18,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-alib-20261027/Cargo.toml",
+    "sha256": "87c93f56cc41ae55d8de4801e9239b7853340a78624e622e3cb88ea0befea9e6",
+    "lines": [
+      {
+        "line": 8,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 9,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-alib-20261027/sampler-owned-Cargo.toml",
+    "sha256": "525d234182e3e7f572648956fe219f4644e5971e5eeb7ec557a2c96636cd7779",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../../codex-pv-cblib-20261027/source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 11,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-alib-20261027/sampler-Cargo.toml",
+    "sha256": "8ba07e8a1298d61d1546b8dfe4978cfadc762c219f9940276573a666e0a1ec85",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core = { path = \"../../codex-pv-cblib-20261027/source/crates/aspis-core\", features = [\"r0\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 11,
+        "text": "overflow-checks = false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-alib-20261027/run-pop-world-pinned.sh",
+    "sha256": "b53a08f0ea059f5d9ffd73a1438a085098b4514372c4132c25f052a41c486a11",
+    "lines": [
+      {
+        "line": 3,
+        "text": "/home/dombarker/.cargo/bin/rustc +nightly-2026-06-01 --version --verbose"
+      },
+      {
+        "line": 4,
+        "text": "/home/dombarker/.cargo/bin/rustc +nightly-2026-06-01 -O --edition=2021 /home/dombarker/project-offloads/codex-pv-alib-20261027/native-pop-world-pinned-02/main.rs -o /home/dombarker/project-offloads/codex-pv-alib-20261027/native-pop-world-pinned-02/pop-world"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch1-20261027/build.py",
+    "sha256": "a60d1d7e235aff79ba42d8d1fee0dae883100637179c043509bad53b0303aa2a",
+    "lines": [
+      {
+        "line": 17,
+        "text": "cmd=['/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(W/'src'/manifest/'Cargo.toml'),'--sbf-out-dir',str(out/'artifacts'),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']"
+      },
+      {
+        "line": 18,
+        "text": "env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_HOME='/home/dombarker/.cargo',CARGO_TARGET_DIR=str(target),CARGO_NET_OFFLINE='true',CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4',RUSTC_WRAPPER=str(H/'rustc-diagnostics.py'),S10_DIAGNOSTICS=str(out/'diagnostics'))"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch1-20261027/rustc-diagnostics.py",
+    "sha256": "fa74d69e097b6eab43809943614133081abb6beb19406018961402b86494ff84",
+    "lines": [
+      {
+        "line": 2,
+        "text": "\"\"\"Transparent frozen-rustc wrapper: retain mono items, MIR and LLVM IR."
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch1-20261027/gates.py",
+    "sha256": "a5c76bc88dfc40bfba8a3d4f43a1d723e21c9a5265c2b0f79eecff51cd377a5e",
+    "lines": [
+      {
+        "line": 21,
+        "text": " run('native.py','candidate','build-devnet','cargo','build','--manifest-path','tools/r1-cost-probe/Cargo.toml','--release','--offline','--locked','-j','4','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--bin','devnet_spend')"
+      },
+      {
+        "line": 26,
+        "text": "  run('native.py',who,'build-fixture','cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover')"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch1-20261027/native.py",
+    "sha256": "47a14897b4d7f82c1dc45dd1b7586238a3c88afccdb9ed7cbc71a7d647b7a9ee",
+    "lines": [
+      {
+        "line": 10,
+        "text": "toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','-Vv'],text=True,cwd=W/'src')"
+      },
+      {
+        "line": 11,
+        "text": "assert toolchain.startswith('rustc 1.94.1 '),toolchain"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch1-20261027/extract.py",
+    "sha256": "4b8587c122e8626163cddbb09208f1483c5910301c6dd195e5f46a6e97eca650",
+    "lines": [
+      {
+        "line": 41,
+        "text": "(p/'Cargo.toml').write_text('[package]\\nname=\"pv-b1-probe\"\\nversion=\"0.0.0\"\\nedition=\"2021\"\\n[workspace]\\n[lib]\\npath=\"lib.rs\"\\n[dependencies]\\naspis-core={path=\"'+str(H/'candidate/src/crates/aspis-core')+'\",features=[\"r0\",\"ct-host-prover\"]}\\n[profile.release]\\nopt-level=3\\noverflow-checks=false\\n')"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch1-20261027/probes/258/Cargo.toml",
+    "sha256": "0694094e2ce65a5376b15defdaae257ddd0c6e71a6c46d015bee5b492a7a2856",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core={path=\"/home/dombarker/project-offloads/codex-pv-batch1-20261027/candidate/src/crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 12,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch1-20261027/probes/254/Cargo.toml",
+    "sha256": "0694094e2ce65a5376b15defdaae257ddd0c6e71a6c46d015bee5b492a7a2856",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core={path=\"/home/dombarker/project-offloads/codex-pv-batch1-20261027/candidate/src/crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 12,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch1-20261027/probes/230/Cargo.toml",
+    "sha256": "0694094e2ce65a5376b15defdaae257ddd0c6e71a6c46d015bee5b492a7a2856",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core={path=\"/home/dombarker/project-offloads/codex-pv-batch1-20261027/candidate/src/crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 10,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 12,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/build.py",
+    "sha256": "9cff24ba2dc9369e96bf69b7860d89b9b9357c46e8453eac37c1d603d779ccff",
+    "lines": [
+      {
+        "line": 16,
+        "text": "cmd=['/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(W/'src'/manifest/'Cargo.toml'),'--sbf-out-dir',str(out/'artifacts'),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']"
+      },
+      {
+        "line": 17,
+        "text": "env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_HOME='/home/dombarker/.cargo',CARGO_TARGET_DIR=str(target),CARGO_NET_OFFLINE='true',CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4',RUSTC_WRAPPER=str(H/'rustc-diagnostics.py'),S10_DIAGNOSTICS=str(out/'diagnostics'))"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/function-cost.Cargo.toml",
+    "sha256": "675f3edf30d87691e2de3a0db376777f74258de41463653cfbca77ae9aa6cb3a",
+    "lines": [
+      {
+        "line": 11,
+        "text": "aspis-r1-cost-probe = { path = \"../candidate/src/crates/aspis-r1-cost-probe\", features = [\"optimized-terminal\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 12,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 15,
+        "text": "[profile.release.package.aspis-r1-cert-check]"
+      },
+      {
+        "line": 16,
+        "text": "overflow-checks = true"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release.package.aspis-r1-cert-build]"
+      },
+      {
+        "line": 18,
+        "text": "overflow-checks = true"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/extract-weights.py",
+    "sha256": "05be9f502537986579e32618b77deae2d24be9e79c08b6d266f042e64dcc1af5",
+    "lines": [
+      {
+        "line": 18,
+        "text": "  cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+fn,'--include','aspis_r1_cost_probe::'+fn,'--include','aspis_r1_cost_probe::host_weights::*','--include','aspis_core::field::*','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/extract-copies.py",
+    "sha256": "115ef818a91478379d31732ecf1cbc0c21fd24fbce859e1c5b7fa8a0692683af",
+    "lines": [
+      {
+        "line": 14,
+        "text": " cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+mod+'::'+fn,'--include','aspis_r1_cost_probe::'+mod+'::*','--include','aspis_core::field::*','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/sampler-native-batch2e.Cargo.toml",
+    "sha256": "dcc31a8683a20a07858325b938a6c54143bab8002d8c6069ebbd51616d7f30a7",
+    "lines": [
+      {
+        "line": 11,
+        "text": "aspis-r1-cost-probe = { path = \"../candidate/src/crates/aspis-r1-cost-probe\", features = [\"optimized-terminal\", \"ct-host-prover\"] }"
+      },
+      {
+        "line": 12,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 14,
+        "text": "[profile.release.package.aspis-r1-cert-check]"
+      },
+      {
+        "line": 15,
+        "text": "overflow-checks = true"
+      },
+      {
+        "line": 16,
+        "text": "[profile.release.package.aspis-r1-cert-build]"
+      },
+      {
+        "line": 17,
+        "text": "overflow-checks = true"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/rowcheck-full-batch2c.py",
+    "sha256": "210f2b4def43806853fcdc1ef6f7a3ed856e9c61ed3937016d93fedfb70a5520",
+    "lines": [
+      {
+        "line": 26,
+        "text": "cmd=['cargo','test','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--lib','--','pv_b2_full_checks','--test-threads=1','--nocapture']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/count-calls.py",
+    "sha256": "bf7db94fcc70b1c366db1bcc4bb7148b4916dc46c6925a80016f24a6e5db8f4f",
+    "lines": [
+      {
+        "line": 34,
+        "text": " cmd=['cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/isolate-batch2b.py",
+    "sha256": "9fc602d2f00036572ff1a52dffcba6340166213e1baa8609a10f0e254dfbf90f",
+    "lines": [
+      {
+        "line": 19,
+        "text": "  cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+fn,'--include','aspis_r1_cost_probe::'+fn,'--include','aspis_r1_cost_probe::host_weights::*','--include','aspis_r1_cost_probe::prover_powers::*','--include','aspis_core::field::*','--include','aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS','--include','aspis_core::r0::transport::COEFFICIENT_TO_ROW','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/extract-batch2b.py",
+    "sha256": "f3031969be2ae1a47c3ae1d0c78a168082054d72f97727617d9da8c74bc77639",
+    "lines": [
+      {
+        "line": 19,
+        "text": "  cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+fn,'--include','aspis_r1_cost_probe::'+fn,'--include','aspis_r1_cost_probe::host_weights::*','--include','aspis_r1_cost_probe::prover_powers::*','--include','aspis_core::field::*','--include','aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS','--include','aspis_core::r0::transport::*','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/rowcheck-batch2c.py",
+    "sha256": "95ea72a2cff8bdbc8c70d23e14c2f836e372759bb55fd2ae182d27d3bc73ebee",
+    "lines": [
+      {
+        "line": 53,
+        "text": "cmd=['cargo','test','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--lib','--','pv_b2_resume_checks','--test-threads=1','--nocapture']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/extract-batch2c.py",
+    "sha256": "3fc46e9e9c589e90c3425683d31a4b1ebf53446be8413ae55afd99e8b95b9351",
+    "lines": [
+      {
+        "line": 19,
+        "text": "  cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),str(P/'charon'),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::'+fn,'--include','aspis_r1_cost_probe::'+fn,'--include','aspis_r1_cost_probe::host_weights::*','--include','aspis_r1_cost_probe::prover_powers::*','--include','aspis_core::field::*','--include','aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS','--include','aspis_core::r0::transport::*','--dest-file',str(llbc),'--','--manifest-path',str(S/'crates/aspis-r1-cost-probe/Cargo.toml'),'--release','--offline','--lib','--jobs','4','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/bind-ordinary-batch2e.py",
+    "sha256": "b4fea749cef5dbd8a1f48ed1a9172376d10788cff3f437a521d20d4d58387b86",
+    "lines": [
+      {
+        "line": 9,
+        "text": "r=dict(original_source=rows[0],inputs=rows,operation=250,representation='PV_B2_E_OrdinaryOriginal.original',boundary='Reviewed structural source argument; NOT a fresh faithful Aeneas extraction of the original mutable-iterator body; no XR sources/objects/models',source_correspondence=[dict(rust='low_base_p_digits initialization from_fn i=0..7',lean='PV_B2_C_OrdinaryReference.sampler_owned.low_base_p_digits_loop0',justification='Both build eight ordered little-endian words at offsets4i..4i+3. C_ByteWord.source plus C_Bytes.body prove emitted shift/or byte assembly equals the checked ordered u32::from_le_bytes model.'),dict(rust='eight ordered from_fn digits, quotient.iter_mut().rev()',lean='PV_B2_C_OrdinaryReference.sampler_owned.low_base_p_digits_loop1 / qm31_div_pass_loop',justification='from_fn consumes exactly eight iterations0..7; reversed full-array mutable iterator consumes indices7..0 once. The owned state records every quotient write before the next remainder step. No discarded mutable restoration or mixed front/back iterator model. C_Division.body/C_Digits.body identify the copy with that complete-state recurrence.'),dict(rust='debug_assert high quotient bounds',lean='none in release semantic representation',justification='Pinned extraction/release use optimized overflow/debug-assertion settings. C_LowDigits.source removes the copy\\'s harmless eight-step check loop using C_ReleaseCheck.source.'),dict(rust='decode8: CM31::new builds fields, WideExact::new canonical_qm31 reduces all8 limbs modP',lean='PV_B2_E_OrdinaryOriginal.decode',justification='CM31::new is the direct field constructor. Non-ct canonical_qm31 uses x.0%P; ct-host-prover is extensionally the same reduction. Pure reduce uses bounded U32.ofNatCore of x.val%P, with no failure possible. decode_eq proves identity only on the proved canonical sampler outputs.'),dict(rust='ordinary_sample',lean='PV_B2_E_OrdinaryOriginal.original',justification='Same low-state call, discard quotient, decode eight digits. copy_equal_original is universal complete Result equality; no success, rank, canonicality or callback premise is assumed.')],checked_by_lean=['PV_B2_E_OrdinaryOriginal.reduce_eq','PV_B2_E_OrdinaryOriginal.decode_eq','PV_B2_E_OrdinaryOriginal.digits_canonical','PV_B2_E_OrdinaryOriginal.copy_equal_original'],source_changes_under_crates_programs=False,allocation='No allocation in op250; weights allocation transport not claimed',native_differential='Reuse existing labelled finite frozen/copy gates only when their exact input source pins match; no universal inference from samples',unchanged_trust=['entropy_law','entropy_kernel','observation'])"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/rowcheck-batch2b.py",
+    "sha256": "2dbfd0493e67c01dc07bc178393947e0b7f6994483b04ba9e2bc04f0a54996a9",
+    "lines": [
+      {
+        "line": 52,
+        "text": "cmd=['cargo','test','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--lib','--','pv_b2_resume_checks','--test-threads=1','--nocapture']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/bind-materialize-complete-batch2f.py",
+    "sha256": "08daad97078c4b93af6957c3a7d98fa4193edd0da376122c2de2e66b1ca9461b",
+    "lines": [
+      {
+        "line": 21,
+        "text": " ('QM31 canonicalization and WideExact mixed product','selected ct-host-prover branch reduces four raw RHS limbs with the exact ct reducer; mixed product matches the direct two-quartic field construction; from_limbs/unwrap succeeds by symbolic canonicality','PV_B2_D_MulQm31Total.source'),"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-batch2-20261027/build-function-cost.py",
+    "sha256": "30671218a7d91443e08d5e6cdd65976ae4e70f4891a4e051629da58a08b12534",
+    "lines": [
+      {
+        "line": 9,
+        "text": " cmd=['cargo','build','--release','--offline','--locked','-j','4','-p','aspis-r1-cost-probe','--example','prover_rw_gate','--features','optimized-terminal,r1p-check,ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/fixture_bytes_gate.py",
+    "sha256": "dcb505d113df9508e6664d3da07b780f468c5bbee909381204003f6cb1b0081e",
+    "lines": [
+      {
+        "line": 14,
+        "text": " manifest.write_text(manifest.read_text()+'\\n[[example]]\\nname=\"pv_b3_bytes\"\\nrequired-features=[\"r1p-check\",\"ct-host-prover\"]\\n')"
+      },
+      {
+        "line": 15,
+        "text": " cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','build','--release','--locked','--offline','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--example','pv_b3_bytes']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/elf.py",
+    "sha256": "89965717860fe860eaa86eabce9176466e3023db5c7ac27698e2a06d4d9aa965",
+    "lines": [
+      {
+        "line": 9,
+        "text": " env={'CARGO_HOME':'/home/dombarker/.cargo','CARGO_TARGET_DIR':str(H/'sbf-target'),'CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS':'-C link-arg=--threads=4','RUSTC_WRAPPER':'/home/dombarker/project-offloads/codex-cx-lowering2-20261026/rustc-diagnostics.py','S10_DIAGNOSTICS':str(H/label/'diagnostics')}"
+      },
+      {
+        "line": 11,
+        "text": " cmd=['timeout','600','taskset','--cpu-list','0-3','/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(S/'programs'/program/'Cargo.toml'),'--sbf-out-dir',str(out),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/group3_count_build.py",
+    "sha256": "fece62f64e15adaf639c3de89b2469847a6a547ccd186ccded961182bc7a5a2c",
+    "lines": [
+      {
+        "line": 10,
+        "text": " manifest.write_text(manifest.read_text()+'\\n[[example]]\\nname=\"pv_b3_counts\"\\nrequired-features=[\"r1p-check\",\"ct-host-prover\"]\\n')"
+      },
+      {
+        "line": 11,
+        "text": " cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','build','--release','--locked','--offline','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--example','pv_b3_counts']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/group4_count_build.py",
+    "sha256": "11d7b7b8be472ed1b81839c77dc890b6193b75e7ca267fb6c83e0b03c6363997",
+    "lines": [
+      {
+        "line": 10,
+        "text": " manifest.write_text(manifest.read_text()+'\\n[[example]]\\nname=\"pv_b3_counts\"\\nrequired-features=[\"r1p-check\",\"ct-host-prover\"]\\n')"
+      },
+      {
+        "line": 11,
+        "text": " cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','build','--release','--locked','--offline','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--example','pv_b3_counts']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/group2_count_build.py",
+    "sha256": "86260eabec1684666b4770ea662da206ddfc07104f5591d8373ac2e8061f4220",
+    "lines": [
+      {
+        "line": 10,
+        "text": " manifest.write_text(manifest.read_text()+'\\n[[example]]\\nname=\"pv_b3_counts\"\\nrequired-features=[\"r1p-check\",\"ct-host-prover\"]\\n')"
+      },
+      {
+        "line": 11,
+        "text": " cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','build','--release','--locked','--offline','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--example','pv_b3_counts']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/fixture_count_build.py",
+    "sha256": "9af1cf69d33ff6a1b6a8debecaa2b729aca6f9d25c14c5758c843eb61d89890b",
+    "lines": [
+      {
+        "line": 10,
+        "text": " manifest.write_text(manifest.read_text()+'\\n[[example]]\\nname=\"pv_b3_counts\"\\nrequired-features=[\"r1p-check\",\"ct-host-prover\"]\\n')"
+      },
+      {
+        "line": 11,
+        "text": " cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','build','--release','--locked','--offline','-j','4','-p','aspis-r1-cost-probe','--features','optimized-terminal,r1p-check,ct-host-prover','--example','pv_b3_counts']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench/Cargo.toml",
+    "sha256": "85a2c9dc6f188a358d447a3a93fb35dec3ffb2ec17f433f80eb1b085cfe4e791",
+    "lines": [
+      {
+        "line": 15,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench3b-carrier/Cargo.toml",
+    "sha256": "0a4a86a789154febe79610db069234bb1e66593be39e97961aa96177cef28a28",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench2/Cargo.toml",
+    "sha256": "7c7d02f376302735d4cb74c7c48ad9627b6d4c5a675245c790d363fc8b17323a",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench3b/Cargo.toml",
+    "sha256": "a451bdb3c0bf8f52b350691d5fdf11bff48ea49566bae459d3c1a89421c84943",
+    "lines": [
+      {
+        "line": 16,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench3/Cargo.toml",
+    "sha256": "2f1ac6ba06bb70fa5a8fccbf073684c9d0b9b1db77b9bafc138b95935e374bbf",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench4/Cargo.toml",
+    "sha256": "d76f32e475b64b220266e9e73f62afe8e6baa6759b177a9b0b6941562bad83c3",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/fidelity222-native/Cargo.toml",
+    "sha256": "4dfb38b0248b44282fa9d9b5f6d4349a1e7281cc20544272ffc4018e1c32606a",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench3b-terminal/Cargo.toml",
+    "sha256": "401c0092ef318a894ada0762ace15fb1ff1f9ff4f0d8db13622e89b45c14cd28",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/extract-copies/Cargo.toml",
+    "sha256": "15da0b46474a00728e1f1bc1e09a2a62e86df5667ad3020c41cab1f76a08af5c",
+    "lines": [
+      {
+        "line": 13,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 14,
+        "text": "aspis-prover={path=\"../../../crates/aspis-prover\",features=[\"r0\",\"prover\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 18,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/extract/Cargo.toml",
+    "sha256": "dc68005ee6125b6fbe6f495bae81cb46d6ab2ffcd11d86cbd456b8b02df03687",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 11,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 13,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/bench3b-owned/Cargo.toml",
+    "sha256": "53c797cc1c2366f4a052589f167297d4bb125bb1c05dffa3cba2dda262d55f61",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "aspis-r1-cost-probe={path=\"../../../crates/aspis-r1-cost-probe\",features=[\"optimized-terminal\",\"r1p-check\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 17,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-batch3-20261027/fidelity/Cargo.toml",
+    "sha256": "5aa15ea7cd384534e3d9558f9233676aefd9f6d7a370e15aa718a7e5237bab71",
+    "lines": [
+      {
+        "line": 15,
+        "text": "aspis-core={path=\"../../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 16,
+        "text": "[profile.release]"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-op223-20261027/build.py",
+    "sha256": "f15873e35f853731e7dbd5675d625de2393b5b19fe7964d738206d7545deee22",
+    "lines": [
+      {
+        "line": 16,
+        "text": "cmd=['/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf','--manifest-path',str(W/'source'/manifest/'Cargo.toml'),'--sbf-out-dir',str(out/'artifacts'),'--features',features,'--skip-tools-install','--offline','-j','4','--','--locked']"
+      },
+      {
+        "line": 17,
+        "text": "env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_HOME='/home/dombarker/.cargo',CARGO_TARGET_DIR=str(target),CARGO_NET_OFFLINE='true',CARGO_TARGET_SBPF_SOLANA_SOLANA_RUSTFLAGS='-C link-arg=--threads=4',RUSTC_WRAPPER=str(H/'rustc-diagnostics.py'),S10_DIAGNOSTICS=str(out/'diagnostics'))"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-op223-20261027/prepare_gates.py",
+    "sha256": "199982fb5865505c0063adaf94965367f1c5d5564012b8af46b2fbf2d68e8b39",
+    "lines": [
+      {
+        "line": 19,
+        "text": "subprocess.run(['ssh',H,'cp '+OLD+'/reservation.py '+D+'/reservation.py; cp '+OLD+'/rustc-diagnostics.py '+D+'/rustc-diagnostics.py; cp '+OLD+'/capped-template.py '+D+'/capped-template.py; ln -s '+OLD+'/candidate '+D+'/baseline'],check=True)"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-op223-20261027/gates.py",
+    "sha256": "c18d3b1db7bb3d5a106b4d0527db1c5af7eb9ec098bdd5d96083b4ce29a499cd",
+    "lines": [
+      {
+        "line": 29,
+        "text": " labels[label]=call('native.py',['candidate','{label}','cargo','build','--release','-p','aspis-r1-cost-probe','--example',example,'--features','optimized-terminal,r1p-check,ct-host-prover','-j','4','--locked'],label)"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-op223-20261027/extract_final.py",
+    "sha256": "25694ec5f7237430f3bf24746272e030bff85f18a3802e6fce64f2f4b734df05",
+    "lines": [
+      {
+        "line": 5,
+        "text": "base=json.loads((E/'charon-applied-001/target.json').read_text())['target'];base[base.index('--features')+1]='optimized-terminal,r1p-check,ct-host-prover';base[base.index('--dest-file')+1]=D+'/PV_Op223_AppliedFinal.llbc'"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-op223-20261027/extract.py",
+    "sha256": "52643f4f12487e48df19088835c22b975c140cf4f4b20a0c2c630378d3615fe7",
+    "lines": [
+      {
+        "line": 3,
+        "text": "cmd=['timeout','180','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+D+'/charon-target',T+'/charon','cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::prover_shared::compress_tagged_tuple','--include','aspis_r1_cost_probe::prover_shared::compress_tagged_tuple','--include','aspis_core::field::*','--dest-file',D+'/PV_Op223_Applied.llbc','--','--manifest-path',D+'/source/crates/aspis-r1-cost-probe/Cargo.toml','--release','--offline','--lib','--jobs','4','--features','ct-host-prover']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-dlib-20261028/kani.py",
+    "sha256": "d54d290d67b5b2eda5a836e441815992750df937d13b4608661b7472a4f5ba80",
+    "lines": [
+      {
+        "line": 8,
+        "text": "cmd=['timeout','900','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3','CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false','RUSTFLAGS=--cfg kani','CARGO_TARGET_DIR='+D+'/kani-target','cargo','kani','--manifest-path',D+'/'+proofdir+'/Cargo.toml','--lib','--exact','--harness',harness,'--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-dlib-20261028/resume-report.py",
+    "sha256": "fc42570c99d6da26ae8c3793ee3650b73abcfbf730771fcd1732c59246c114ec",
+    "lines": [
+      {
+        "line": 35,
+        "text": " 'No Kani verification run in the resume. RUSTFLAGS --cfg kani in native cargo test only enables the private snapshot accessors; it does not invoke cargo-kani/CBMC.',"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-b3p6-20261028/Cargo.toml",
+    "sha256": "deeddf9972bf4ecc7aa74a3fb0de6fdea40ed89ec9b6c0ecc069f8c82500f23e",
+    "lines": [
+      {
+        "line": 9,
+        "text": "aspis-core={path=\"../../crates/aspis-core\",features=[\"r0\",\"ct-host-prover\"]}"
+      },
+      {
+        "line": 11,
+        "text": "[profile.dev]"
+      },
+      {
+        "line": 13,
+        "text": "overflow-checks=false"
+      },
+      {
+        "line": 14,
+        "text": "debug-assertions=false"
+      },
+      {
+        "line": 15,
+        "text": "[profile.release]"
+      },
+      {
+        "line": 17,
+        "text": "overflow-checks=false"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-b3p6-20261028/gates.py",
+    "sha256": "50fb2329e48e494c815fd101e033de6c2ffc96ea847519df20f35c47ff8ee5f1",
+    "lines": [
+      {
+        "line": 27,
+        "text": " sys.exit(run(admission_label('kani133-kmx-nofield-09' if kind.endswith('_nofield') else 'kani133-kmx-08'),cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; exact lead KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67, default unwind1026 for replacement copy/realloc loops with per-loop bounds, universal auxiliary u8 index, forward/backward reachability slicing, dereference cache, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))"
+      },
+      {
+        "line": 76,
+        "text": " sys.exit(run('kani226-'+variant+'-01',cmd,'optimized compilation then no-stub native complete-Result serializer check; universal auxiliary u16 index, unwind65, small-width arithmetic only',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))"
+      },
+      {
+        "line": 82,
+        "text": " sys.exit(run(admission_label('kmx-growth-negative-nofield-02' if kind.endswith('_nofield') else 'kmx-growth-negative-01'),cmd,'exact lead KMX patch intended-negative growth control; optimized compilation, no business-function replacement; positive-control evidence is lead K008, not rerun here',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))"
+      },
+      {
+        "line": 94,
+        "text": " sys.exit(run(admission_label('kani226-v3-both-01'),cmd,'optimized compilation then positive complete-Result serializer equality plus matched wrong-byte negative control for both variants in one invocation; universal auxiliary u16 index, unwind2049 covers reallocation byte prefixes; exact KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 with checked negative growth control under same array model; no business stubs or chained field arithmetic',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/run-reserve.sh",
+    "sha256": "6e1e49b7ed8632856a345a563fbc21f75c7008148640d85b156938aa3db94a76",
+    "lines": [
+      {
+        "line": 4,
+        "text": "R=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/run-drop-u32.sh",
+    "sha256": "875dc231452db40c2f2bee04467e01c67b0ad4274bdb300e0d6b1068b88d4aa1",
+    "lines": [
+      {
+        "line": 4,
+        "text": "R=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/run-drop.sh",
+    "sha256": "e8ec2e223121dd16d6801bbc7570f44e7e740491e461480d569fe35e011a1369",
+    "lines": [
+      {
+        "line": 4,
+        "text": "pinned_rustc=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      },
+      {
+        "line": 5,
+        "text": "\"$pinned_rustc\" --version --verbose"
+      },
+      {
+        "line": 6,
+        "text": "\"$pinned_rustc\" -O -C panic=unwind drop-counterexample.rs -o drop-counterexample"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/run-zeroize-drop.sh",
+    "sha256": "991cd9fade4cca1d7d8ab092136e2deee3ca1c2f8fa3d90219a4ee55ba5570dc",
+    "lines": [
+      {
+        "line": 4,
+        "text": "R=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/run-zeroize.sh",
+    "sha256": "899c36f3ad71720b8f4055919eb6b3f445556d7f72052571ac9732c6663951f0",
+    "lines": [
+      {
+        "line": 4,
+        "text": "R=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-fxmem-20261028/structural-zeroize.py",
+    "sha256": "e2251ff3068ded0a215092bda6139674931dd92347b3e02f1333a4ce0bc2733d",
+    "lines": [
+      {
+        "line": 29,
+        "text": "want='{($t:ty, $v:expr, $doc:tt) => {#[stable(feature = \"rust1\", since = \"1.0.0\")] #[rustc_const_unstable(feature = \"const_default\", issue = \"143894\")] const impl Default for $t {#[inline(always)] #[doc = $doc] fn default() -> $t {$v}}};}'"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-relink-20261028/validate.py",
+    "sha256": "be3cafbef726a1d85153839d3edccd949f42d3e69fde80626a235674db4c921d",
+    "lines": [
+      {
+        "line": 12,
+        "text": " if 'Kani' in str(j['target']) or 'cargo kani' in str(j['target']):errors.append([row,'solver invocation'])"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-relink-20261028/run-cargo.sh",
+    "sha256": "510f4e0d51ddd076e7fd1daa2fd8e6555015bc8480303fb51fcbcf50c588d61a",
+    "lines": [
+      {
+        "line": 7,
+        "text": "rustc +nightly-2026-06-01 -vV"
+      },
+      {
+        "line": 8,
+        "text": "cargo +nightly-2026-06-01 build --offline --release -j 4 --bin \"$row\""
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-relink-20261028/run-std.sh",
+    "sha256": "78e6d97edd837c9f43bbd9443366a7082e5e6a853070362b5da701930afd29d6",
+    "lines": [
+      {
+        "line": 5,
+        "text": "rust=/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/bin/rustc"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-kstub-20261028/queue.py",
+    "sha256": "f6d5368815af77c92f3e974787f2f0e0fa582130dc9c84f69bbc667a37129622",
+    "lines": [
+      {
+        "line": 11,
+        "text": "  cmd=['timeout','900','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','CARGO_BUILD_JOBS=4','CARGO_PROFILE_DEV_OPT_LEVEL=3',f'TMPDIR={D}/tmp-Kani',f'CARGO_TARGET_DIR={D}/target','cargo','kani','--manifest-path',D+'/'+plan['package']+'/Cargo.toml','--lib','--exact','--harness',h,'--solver','kissat','--no-assertion-reach-checks','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--slice-formula']"
+      }
+    ]
+  },
+  {
+    "path": "evidence/pv-op254-20261027/native/Cargo.toml",
+    "sha256": "61f26a6f7e076913f7db26422e90d42a207e5ec158c5f2c2ee8bdab51228d9f7",
+    "lines": [
+      {
+        "line": 7,
+        "text": "aspis-core = { path = \"/home/dombarker/project-offloads/codex-pv-batch1-20261027/candidate/src/crates/aspis-core\", features = [\"ct-host-prover\"] }"
+      }
+    ]
+  },
+  {
+    "path": "tools/pv-d188-20261027/native.py",
+    "sha256": "2af9b86711af45f358e552bfa00905f55cecb459dbc2adbdd17708f26f695c5b",
+    "lines": [
+      {
+        "line": 14,
+        "text": "inner=shlex.join(['/home/dombarker/.cargo/bin/rustc','--edition=2021','-O',remote_src,'-o',base+'/native'])+' && '+shlex.quote(base+'/native')"
+      }
+    ]
+  }
+]

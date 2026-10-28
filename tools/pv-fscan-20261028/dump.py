@@ -1,6 +1,6 @@
 import pathlib,subprocess,json,os,sys,hashlib
-D=pathlib.Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028');S=D/'src';name,pkg,features,profile=sys.argv[1:];O=D/name;O.mkdir(exist_ok=True)
-env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN='1.94.1',RUSTC_BOOTSTRAP='1',CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(D/'target'),CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0')
+D=pathlib.Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028');S=D/'src';name,pkg,features,profile=sys.argv[1:5];tc=sys.argv[5] if len(sys.argv)>5 else '1.94.1';O=D/name;O.mkdir(exist_ok=True)
+env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN=tc,RUSTC_BOOTSTRAP='1',CARGO_BUILD_JOBS='4',CARGO_TARGET_DIR=str(D/'target'),CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0')
 cmd=['cargo','rustc','--manifest-path',str(S/'Cargo.toml'),'-p',pkg,'--lib','-j','4']
 if profile=='release':cmd+=['--release']
 if profile=='dev-unchecked':env.update(CARGO_PROFILE_DEV_DEBUG_ASSERTIONS='false',CARGO_PROFILE_DEV_OVERFLOW_CHECKS='false')

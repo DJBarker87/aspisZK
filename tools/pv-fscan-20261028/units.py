@@ -3,7 +3,8 @@ D=pathlib.Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028');S=D/'
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN=t,RUSTC_BOOTSTRAP='1')
 cmd=['cargo','build','--release','--locked','--manifest-path',str(S/m),'-p',p,'--features',f,'-j','4','-Z','unstable-options','--unit-graph']
 if name!='client':cmd+=['--target','sbpf-solana-solana']
-O=D/('units-'+name);O.mkdir(exist_ok=True);(O/'command.json').write_text(json.dumps(dict(argv=cmd,toolchain=t),indent=2));r=subprocess.run(cmd,env=env,capture_output=True,text=True);(O/'stderr.log').write_text(r.stderr);print(r.stderr[-2000:]);
+else:cmd+=['--bin','devnet_spend']
+O=D/('units-'+name+('-bin' if name=='client' else ''));O.mkdir(exist_ok=True);(O/'command.json').write_text(json.dumps(dict(argv=cmd,toolchain=t),indent=2));r=subprocess.run(cmd,env=env,capture_output=True,text=True);(O/'stderr.log').write_text(r.stderr);print(r.stderr[-2000:]);
 if r.returncode:sys.exit(r.returncode)
 a=json.loads(r.stdout);(O/'unit-graph.json').write_text(r.stdout)
 meta=json.loads((D/('config-'+name)/'metadata.json').read_text());pk={x['id']:x for x in meta['packages']}

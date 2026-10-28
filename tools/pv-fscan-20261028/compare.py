@@ -26,7 +26,9 @@ for p in D.glob('*/crate.mir'):
   b[key]=value
  maps[p.parent.name]=b;hashes[p.parent.name]={k:sha(v) for k,v in b.items()}
 pairs=[('core-old-dev','core-old-release','profile'),('core-ct-dev','core-ct-release','profile'),('core-ct-unchecked','core-ct-release','profile-unchecked'),('core-old-release','core-ct-release','ct-host-prover'),('statement-old-dev','statement-old-release','profile'),('statement-old-release','statement-ct-release','ct-host-prover'),('probe-default-dev','probe-default-release','profile'),('probe-default-release','probe-ct-release','prover/r1p-check/ct-host-prover')]
+pairs += [('serialize-old-dev-fixed','serialize-deployed','feature/profile concrete serialization')]
 pairs += [(a,'std-deployed','profile' if a=='std-same-compiler-dev' else 'compiler/sysroot/profile') for a in ['std-same-compiler-dev','std-kani-profile','std-charon-profile'] if a in maps]
+pairs += [(p+'-charon-release',p+'-ct-release','compiler1.98-to1.94') for p in ['core','statement','probe'] if p+'-charon-release' in maps]
 for n in ['statement-optimized2-release','probe-optimized-release']:
  if n in maps:pairs.append((n,n.split('-')[0]+'-ct-release','optimized-terminal'))
 all=[];diffs=[]
