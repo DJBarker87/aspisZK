@@ -8,6 +8,12 @@ theorem zeros (xs : List U8) :
     List.anyM NDI_PredicatesRef.tail_predicate_ref xs=ok false ↔ ∀ x∈xs, x=0#u8 := by
   rw [NDI_PredicateLoops.tail]
   simp
+  constructor
+  · intro all x member
+    exact UScalar.eq_of_val_eq (all x member)
+  · intro all x member
+    rw [all x member]
+    rfl
 
 theorem window (bytes : List U8) (fit : 16≤bytes.length) :
     ((bytes.drop 9).take 7).length=7 ∧

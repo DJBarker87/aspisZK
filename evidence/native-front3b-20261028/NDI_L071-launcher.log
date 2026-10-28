@@ -1,0 +1,60 @@
+{"attempt": "NDI_L071", "exit_status": 1, "wall_seconds": 3.0405058109899983, "peak_rss_kib": "4387324", "swaps": "0", "print_axioms": ["'NDI_PredicateLoops.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDI_PredicateLoops.contains' depends on axioms: [propext, sorryAx]", "'NDI_PredicateLoops.emitted_contains' depends on axioms: [propext, sorryAx]"]}
+NDI_generated/NDI_PredicateLoops.lean:11:17: error: unsolved goals
+case neg
+x : U8
+xs : List U8
+ih : List.anyM NDI_PredicatesRef.tail_predicate_ref xs = ok (xs.any fun x => x != 0#u8)
+nonzero : ¬x = 0#u8
+⊢ (match x != 0#u8 with
+    | true => pure true
+    | false => ok (xs.any fun x => x != 0#u8)) =
+    ok (x != 0#u8 || xs.any fun x => x != 0#u8)
+NDI_generated/NDI_PredicateLoops.lean:19:17: error: unsolved goals
+case pos
+q x : U32
+xs : List U32
+ih : List.anyM (fun x => NDI_PredicatesRef.contains_predicate_ref x q) xs = ok (decide (q ∈ xs))
+same : x = q
+⊢ pure true = ok true
+
+case neg
+q x : U32
+xs : List U32
+ih : List.anyM (fun x => NDI_PredicatesRef.contains_predicate_ref x q) xs = ok (decid
+...
+NDI_generated/NDI_PredicateLoops.lean:11:17: error: unsolved goals
+case neg
+x : U8
+xs : List U8
+ih : List.anyM NDI_PredicatesRef.tail_predicate_ref xs = ok (xs.any fun x => x != 0#u8)
+nonzero : ¬x = 0#u8
+⊢ (match x != 0#u8 with
+    | true => pure true
+    | false => ok (xs.any fun x => x != 0#u8)) =
+    ok (x != 0#u8 || xs.any fun x => x != 0#u8)
+NDI_generated/NDI_PredicateLoops.lean:19:17: error: unsolved goals
+case pos
+q x : U32
+xs : List U32
+ih : List.anyM (fun x => NDI_PredicatesRef.contains_predicate_ref x q) xs = ok (decide (q ∈ xs))
+same : x = q
+⊢ pure true = ok true
+
+case neg
+q x : U32
+xs : List U32
+ih : List.anyM (fun x => NDI_PredicatesRef.contains_predicate_ref x q) xs = ok (decide (q ∈ xs))
+same : ¬x = q
+⊢ ok (decide (q = x) || decide (q ∈ xs)) = List.anyM (fun x => ok (decide (q = x))) xs
+NDI_generated/NDI_PredicateLoops.lean:21:82: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp [List.anyM, ̲NDI_PredicatesRef.contains_predicate_ref, ̲List.mem_cons, ̲same,i̵h̵,̵ ̲eq_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_PredicateLoops.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDI_PredicateLoops.contains' depends on axioms: [propext, sorryAx]
+'NDI_PredicateLoops.emitted_contains' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r610af7a0e920431abf99c1c73e7347c6.scope; invocation ID: 2ee05556b7644284851a7711a74ec935
