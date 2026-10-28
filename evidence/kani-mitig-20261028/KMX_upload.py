@@ -6,9 +6,10 @@ h.admit(sys.argv[1])
 payload={h.B+'/KMX_gate.py':(E/'KMX_gate.py').read_text()}
 for p in E.glob('KMX_*.rs.txt'):payload[h.B+'/KMX_src/crates/aspis-r1-cost-probe/src/'+p.name[:-4]]=p.read_text()
 payload[h.B+'/KMX_CopyMeaning.lean']=(E.parents[1]/'lean/KMX_CopyMeaning.lean').read_text()
-r=h.remote_py('from pathlib import Path\nfor name,s in '+repr(payload)+'.items():\n p=Path(name);p.write_text(s)\nprint("uploaded own sources")')
-assert r.returncode==0,r.stderr
-print(r.stdout)
+for name,text in payload.items():
+ r=h.remote_py('from pathlib import Path\np=Path('+repr(name)+')\np.write_text('+repr(text)+')')
+ assert r.returncode==0,r.stderr
+print('uploaded own sources',len(payload))
 
 r=h.remote_py('from pathlib import Path\np=Path('+repr(h.B+'/KMX_src/crates/aspis-r1-cost-probe/src/lib.rs')+')\ns=p.read_text()\nif not s.startswith("#![feature(allocator_api)]"):p.write_text("#![feature(allocator_api)]\\n"+s)\nprint("scratch allocator_api enabled")')
 assert r.returncode==0,r.stderr

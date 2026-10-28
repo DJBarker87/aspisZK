@@ -41,7 +41,7 @@ for (crate,parent,mod),(sha,text) in modules.items():
   # Attribute nearest the definition; full source has no nested proof definitions.
   pat=r'(#[^;]*?kani::unwind\()\d+(\)[^;]*?fn\s+'+name+r'\s*\()'
   # Avoid crossing function bodies: update all unwind attributes to max selected module bound.
- bound=258 if mod in ['KMX_LPb_harnesses','KMX_LPe_replay'] else 1770 if mod in ['KMX_LPm_verifier','KMX_LPf_verifier','KMX_LPi_verifier'] else 70
+ bound=258 if mod in ['KMX_LPb_harnesses','KMX_LPe_replay','KMX_LPe_verifier'] else 1770 if mod in ['KMX_LPm_verifier','KMX_LPf_verifier','KMX_LPi_verifier'] else 70
  text=re.sub(r'kani::unwind\((\d+)\)',lambda m:f'kani::unwind({max(int(m[1]),bound)})',text)
  for p in plan:
   if p['module']==mod:p['effective_bound']=max(p['bound'],bound)

@@ -9,7 +9,7 @@ use crate::KMX_LPe_replay::{any_e,any_k,limbs,Ordered};
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 
- #[kani::unwind(70)] fn KMX_LPe_digest_prefix_cut(){let mut out=Vec::from(kani::any::<[u8;16]>());let before=out.clone();let state:[u8;32]=kani::any();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=kani::any();let count=core::cell::Cell::new(0);let hash=Ordered{count:&count,proof:&proof,public:&public,answers};
+ #[kani::unwind(258)] fn KMX_LPe_digest_prefix_cut(){let mut out=Vec::from(kani::any::<[u8;16]>());let before=out.clone();let state:[u8;32]=kani::any();let proof:[u8;3]=kani::any();let public:[u8;5]=kani::any();let answers:[[u8;32];3]=kani::any();let count=core::cell::Cell::new(0);let hash=Ordered{count:&count,proof:&proof,public:&public,answers};
  out.extend_from_slice(&hash.digest(&[&proof]));out.extend_from_slice(&hash.digest(&[&public]));out.extend_from_slice(&state);
  assert_eq!(count.get(),2);assert_eq!(out.len(),112);let j:usize=kani::any();kani::assume(j<112);let expected=if j<16{before[j]}else if j<48{answers[0][j-16]}else if j<80{answers[1][j-48]}else{state[j-80]};assert_eq!(out[j],expected);kani::cover!(j==111);
 }
@@ -21,7 +21,7 @@ use crate::KMX_LPe_replay::{any_e,any_k,limbs,Ordered};
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 
- #[kani::unwind(90)] fn KMX_LPe_roots_queries_cut(){let roots:[[u8;32];2]=kani::any();let queries:[u32;22]=kani::any();let mut out=Vec::new();
+ #[kani::unwind(258)] fn KMX_LPe_roots_queries_cut(){let roots:[[u8;32];2]=kani::any();let queries:[u32;22]=kani::any();let mut out=Vec::new();
  for root in &roots {out.extend_from_slice(root);}
  for q in queries {out.extend_from_slice(&q.to_le_bytes());}
  assert_eq!(out.len(),152);let j:usize=kani::any();kani::assume(j<152);let expected=if j<64{roots[j/32][j%32]}else{queries[(j-64)/4].to_le_bytes()[(j-64)%4]};assert_eq!(out[j],expected);kani::cover!(j==151);
@@ -34,7 +34,7 @@ use crate::KMX_LPe_replay::{any_e,any_k,limbs,Ordered};
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 
- #[kani::unwind(70)] fn KMX_LPe_private_put_cut(){let prefix:[u8;32]=kani::any();let mut out=Vec::from(prefix);let e=any_e();let k=any_k();put(&mut out,e);put_k(&mut out,k);assert_eq!(out.len(),80);let j:usize=kani::any();kani::assume(j<80);let expected=if j<32{prefix[j]}else if j<64{e.to_limbs()[(j-32)/4].to_le_bytes()[(j-32)%4]}else{limbs(k)[(j-64)/4].to_le_bytes()[(j-64)%4]};assert_eq!(out[j],expected);kani::cover!(j==79);}
+ #[kani::unwind(258)] fn KMX_LPe_private_put_cut(){let prefix:[u8;32]=kani::any();let mut out=Vec::from(prefix);let e=any_e();let k=any_k();put(&mut out,e);put_k(&mut out,k);assert_eq!(out.len(),80);let j:usize=kani::any();kani::assume(j<80);let expected=if j<32{prefix[j]}else if j<64{e.to_limbs()[(j-32)/4].to_le_bytes()[(j-32)%4]}else{limbs(k)[(j-64)/4].to_le_bytes()[(j-64)%4]};assert_eq!(out[j],expected);kani::cover!(j==79);}
 #[kani::proof]
 #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -43,7 +43,7 @@ use crate::KMX_LPe_replay::{any_e,any_k,limbs,Ordered};
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 
- #[kani::unwind(70)] fn KMX_LPe_semantic_z_cut(){let semantic_alpha:[K;10]=core::array::from_fn(|_|any_k());let z:[SecureCirclePoint;2]=core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()});let mut out=Vec::new();
+ #[kani::unwind(258)] fn KMX_LPe_semantic_z_cut(){let semantic_alpha:[K;10]=core::array::from_fn(|_|any_k());let z:[SecureCirclePoint;2]=core::array::from_fn(|_|SecureCirclePoint{x:any_k(),y:any_k()});let mut out=Vec::new();
  for x in semantic_alpha {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}
  for z in z {for x in [z.x,z.y] {let mut b=[0;16];x.write_le_bytes(&mut b);out.extend_from_slice(&b);}}
  assert_eq!(out.len(),224);let j:usize=kani::any();kani::assume(j<224);let k=if j<160{semantic_alpha[j/16]}else{let z=z[(j-160)/32];if (j-160)%32<16{z.x}else{z.y}};assert_eq!(out[j],limbs(k)[(j%16)/4].to_le_bytes()[j%4]);kani::cover!(j==223);
@@ -70,4 +70,4 @@ impl Digest32 for Sum<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{assert_eq!(se
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 
- #[kani::unwind(70)] fn KMX_LPe_weights_block32(){let xs:[K;32]=core::array::from_fn(|_|any_k());let mut out=Vec::new();for &x in &xs{put_k(&mut out,x);}assert_eq!(out.len(),512);let j:usize=kani::any();kani::assume(j<512);assert_eq!(out[j],limbs(xs[j/16])[(j%16)/4].to_le_bytes()[j%4]);kani::cover!(j==511);}
+ #[kani::unwind(258)] fn KMX_LPe_weights_block32(){let xs:[K;32]=core::array::from_fn(|_|any_k());let mut out=Vec::new();for &x in &xs{put_k(&mut out,x);}assert_eq!(out.len(),512);let j:usize=kani::any();kani::assume(j<512);assert_eq!(out[j],limbs(xs[j/16])[(j%16)/4].to_le_bytes()[j%4]);kani::cover!(j==511);}
