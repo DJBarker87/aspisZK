@@ -27,7 +27,7 @@ theorem asset (p : reference226.OwnedPublic) (i : Usize)
   have hoff := PV_B3P_Offset226V3.sub_value i 65#usize (by simpa using lo)
   rw [PV_B3P_Regions226V3.asset p i lo hi]
   rw [word_byte _ _ (by rw [hoff]; scalar_tac)]
-  simpa only [hoff]
+  simpa only [hoff, UScalar.ofNatCore_val_eq]
 
 theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = true)
     (lo : 103 ≤ i.val) (hi : i.val < 107) :
@@ -38,15 +38,15 @@ theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = t
   have hoff := PV_B3P_Offset226V3.sub_value i 103#usize (by simpa using lo)
   rw [PV_B3P_ScalarRegions226.amount p i hw lo hi]
   rw [word_byte _ _ (by rw [hoff]; scalar_tac)]
-  simpa only [hoff]
+  simpa only [hoff, UScalar.ofNatCore_val_eq]
 
 theorem index_list (v : U64) (j : Usize) (hj : j.val < 8) :
     PV_B3P_ScalarRegions226.indexLane v j = (indexBytes v)[j.val]?.getD 0#u8 := by
   have hb : j.val < (indexBytes v).length := by
     simpa only [indexBytes,List.length_cons,List.length_nil] using hj
-  rw [List.getElem?_eq_getElem hb]
-  change PV_B3P_ScalarRegions226.indexLane v j = (indexBytes v)[j.val]
   rw [PV_B3P_EndianVerified226V3.index_bytes]
+  rw [List.getElem?_eq_getElem (by rw [(core.num.U64.to_le_bytes v).property]; simpa using hj)]
+  change PV_B3P_ScalarRegions226.indexLane v j = (core.num.U64.to_le_bytes v).val[j.val]
   exact PV_B3P_IndexLane226.native_value v j hj
 
 theorem index (p : reference226.OwnedPublic) (i : Usize)
