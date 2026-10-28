@@ -1,21 +1,23 @@
 import AspisR1TerminalDecoder.Funs
 import R1Z.BuilderRecordsArray
 set_option autoImplicit false
+noncomputable section
 namespace R1Z.PV_RunJoin_ByteEquality29
 open Aeneas Aeneas.Std Result
+local instance (p : Prop) : Decidable p := Classical.propDecidable p
 
 def compare (p : U8 × U8) : Result Bool := do
   let b ← core.cmp.PartialEq.ne.trait_default core.cmp.PartialEqU8 p.1 p.2
   ok (decide (¬ b = true))
 
 theorem compare_result (a b : U8) : compare (a,b) = ok (decide (a=b)) := by
-  simp [compare,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEqU8]
+  simp [compare,core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEqU8,core.cmp.PartialEq.ne.default,core.cmp.impls.PartialEqU8.eq,liftFun2,lift]
 #print axioms compare_result
 
 theorem list_result (xs ys : List U8) (hl : xs.length=ys.length) :
     List.allM compare (xs.zip ys) = ok (decide (xs=ys)) := by
   induction xs generalizing ys with
-  | nil => cases ys <;> simp_all [List.allM]
+  | nil => cases ys <;> simp_all [List.allM] <;> rfl
   | cons x xs ih =>
     cases ys with
     | nil => simp at hl
@@ -24,7 +26,7 @@ theorem list_result (xs ys : List U8) (hl : xs.length=ys.length) :
       by_cases he : x=y
       · subst y
         simp [List.allM,compare_result,ih ys ht]
-      · simp [List.allM,compare_result,he]
+      · simp [List.allM,compare_result,he] <;> rfl
 #print axioms list_result
 
 theorem array_result {n : Usize} (a b : Array U8 n) :
