@@ -264,3 +264,7 @@ owner decision. The question for V242 stands as written above; the lead recommen
 lowering-only rows under the compiler-preservation obligation (row V370) with the compiler cohort
 recorded as a named boundary, because the alternative (re-establishing every native link on the
 1.94.1 toolchain itself) is not supported by the pinned extraction tools.
+
+### Pointer (D416, 2026-10-28): deployed devnet verifier is the historical program
+
+Stream A found that the devnet R1 verifier is immutable and runs the historical fb2fc048, not the proved release (devnet 63ad3e9c, default f8c0ec72), and has put the redeployment question to the owner. No credited privacy result depends on devnet runs. The privacy target is stated for the deployed system, though, so it cannot be claimed until the deployed verifier equals the pinned release ELF. Stream B has no separate decision to ask for here; this pointer only records that the privacy claim depends on the soundness lead's question.
