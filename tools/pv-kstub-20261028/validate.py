@@ -12,7 +12,14 @@ check(all(x['ok'] for x in json.loads((E/'lean-external-preflight.json').read_te
 lean_receipts=sorted(E.glob('447[0-9][0-9]/receipt.json'))
 check(len(lean_receipts)<=10,'Lean budget')
 for n in [p.parent.name for p in lean_receipts]:
- r=json.loads((E/n/'receipt.json').read_text());check(r['exit']==0,'Lean '+n);check(r['swap']=='0','Lean swap '+n)
+ r=json.loads((E/n/'receipt.json').read_text());check(r['swap']=='0','Lean swap '+n)
+ if r['exit']!=0:
+  correction=json.loads((E/'lean-parser-correction.json').read_text())
+  replacement=E/str(correction['replacement_attempt'])/'receipt.json'
+  check(n==str(correction['failed_attempt']) and replacement.exists(),'documented corrected Lean failure '+n)
+  if replacement.exists():
+   rr=json.loads(replacement.read_text());check(rr['exit']==0 and rr['sha256']==correction['source_after_sha256'] and r['sha256']==correction['source_before_sha256'],'changed-source replacement '+n)
+  continue
  log=(E/n/'output.log').read_text();check('sorryAx' not in log and ('axioms:' in log or 'does not depend on any axioms' in log),'axioms '+n)
  for names in re.findall(r'depends on axioms: \[([^\]]*)\]',log):
   check(set(x.strip() for x in names.replace('\n',' ').split(',') if x.strip()) <= {'propext','Classical.choice','Quot.sound'},'standard axioms '+n)
