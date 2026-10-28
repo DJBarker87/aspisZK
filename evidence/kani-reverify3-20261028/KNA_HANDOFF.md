@@ -1,0 +1,11 @@
+# Resume checkpoint
+
+Current source driver: KNA_resume.py, local process started by the ongoing task; never start a second copy while it is live. It reuses the unchanged KMY transport and S2W capped runner. Read KNA_KANI_RESUME.log and KMY_TRANSPORT.jsonl before recovery. Recover submitted attempts read-only; never rerun unresolved submissions.
+
+At 2026-10-28 07:35 UTC: Kani27/90 terminal TIMEOUT, Lean40/40 complete, Rust5/5 PASS. K028 has NOT been submitted: admission refused for a quiet window until07:59:17 UTC; the driver waits180s/retries. The incomplete body pair is K027 positive/K028 control. Audit scripts index terminal receipts; config filenames count submitted attempts, barrier-only filenames do not.
+
+Lean L001 syntax failure is archived; L002-L039 are38 focused PASS; L040 is the sole final manifest PASS with all38 top-theorem axioms limited to propext/Classical.choice/Quot.sound. No further Lean attempt allowed. Standalone KNA_Capacity is unrun and omitted from the manifest. Native R001-R005 are corroborating witnesses, not symbolic heap credit. No new row credited yet.
+
+Continuation order: finish remaining prescribed body windows and appended32; replace the first five retired160-byte parents by80-byte halves; actual query constructors with separated prefix/tail domains; arbitrary-length drafts split by observation byte; use final Kani budget on missing body halves. Positive/control source definitions, profile, solver, auxiliary scope and unwind match; XOR1 is the only assertion difference. Every invocation records the exact KMX patch and stub hashes. Never change the stubs or frozen release files.
+
+After runtime completion: run KNA_audit.py, KNA_remaining.py, inspect all classifications and controls, then KNA_report.py (currently asserts all9 rows OPEN and requires manual review if new credit appears). Audit control witnesses and native replay if an actual original assertion fails. Recover any submitted scope before continuing. Remove only own native binary/compiled scratch; preserve the persistent cache and unrelated files. Record cleanup and disk/file-size checks, update this handoff, commit, no push. No file over20MB may be committed: xz -6 plus original SHA256 if needed.
