@@ -13,14 +13,13 @@ for version in ['nightly-2026-06-01','1.94.1']:
  r=dict(version=version,files={},bodies={})
  for file,items in {
   'iter/range.rs':[('trusted_back','fn spec_next_back(&mut self) -> Option<T>','impl<T: TrustedStep> RangeIteratorImpl'),('unsigned_back','unsafe fn backward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods'),('unsigned_forward','unsafe fn forward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods')],
-  'iter/adapters/rev.rs':[('rev_next','fn next(&mut self) -> Option<I::Item>',''),('rev_new','fn new(iter: T) -> Rev<T>','')],
+  'iter/adapters/rev.rs':[('rev_next','fn next(&mut self) -> Option<<I as Iterator>::Item>',''),('rev_new','fn new(iter: T) -> Rev<T>','')],
   'iter/traits/iterator.rs':[('rev','fn rev(self) -> Rev<Self>','')],
   'iter/traits/collect.rs':[('identity_into_iter','fn into_iter(self) -> I','IntoIterator for I')],
  }.items():
   p=root/file;s=p.read_text();r['files'][file]=dict(path=str(p),sha256=sha(p.read_bytes()))
   for key,marker,after in items:
-   marker = marker.replace('Option<I::Item>','Option<<I as Iterator>::Item>') if version!='1.94.1' and key=='rev_next' else marker
-   b=span(s,marker,after);canonical=b.replace('<I as Iterator>::Item','I::Item');r['bodies'][key]=dict(text=b,type_projection_normalization='<I as Iterator>::Item = I::Item on Iterator impl',token_sha256=sha('\0'.join(tok(canonical)).encode()))
+   b=span(s,marker,after);r['bodies'][key]=dict(text=b,token_sha256=sha('\0'.join(tok(b)).encode()))
  s=(root/'iter/range.rs').read_text();assert re.search(r'step_integer_impls!\s*\{[\s\S]*?usize',s)
  if version=='1.94.1':
   assert tok(r['bodies']['trusted_back']['text'])==tok('''fn spec_next_back(&mut self) -> Option<T> { if self.start < self.end { self.end = unsafe { Step::backward_unchecked(self.end, 1) }; Some(self.end) } else { None } }''')
