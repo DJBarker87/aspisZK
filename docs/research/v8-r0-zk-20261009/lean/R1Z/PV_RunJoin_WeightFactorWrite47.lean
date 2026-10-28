@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_WeightPointRows46
+import R1Z.ProverCommitArrayIndex25
 import R1Z.PV_RunJoin_WeightBorrow46
 import R1Z.PV_RunJoin_WeightConstructorShape46
 set_option autoImplicit false
@@ -24,11 +25,10 @@ theorem equation (fs : Factors) (slot d : Usize) (row : Array K 4#usize) :
 
 theorem read_set (fs : Factors) (slot : Usize) (m : Matrix) (hs : slot.val<5) :
     Array.index_usize (Aeneas.Std.Array.set fs slot m) slot=ok m := by
-  unfold Array.index_usize Aeneas.Std.Array.set
-  have hb : slot.val<fs.val.length := by rw [fs.property];exact hs
-  change (match (fs.val.set slot.val m)[slot.val]? with
-    | none => Result.fail .arrayOutOfBounds | some v => Result.ok v)=ok m
-  rw [List.getElem?_set_self hb]
+  rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by scalar_tac)]
+  apply congrArg Result.ok
+  change (fs.val.set slot.val m)[slot.val]'_=m
+  exact List.getElem_set_self (by rw [fs.property];exact hs)
 #print axioms read_set
 
 theorem overwrite (fs : Factors) (slot : Usize) (m m1 : Matrix) :
