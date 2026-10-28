@@ -72,6 +72,7 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
             change Ext out.val o1.val (5*(n+1))
             have h := PV_RunJoin_ByteExtension43.trans hprefix hr
             convert h using 1 <;> omega)
-      simpa only [host_semantic.zc_rows_loop] using transformed
+      simpa only [host_semantic.zc_rows_loop,host_semantic.zc_rows_loop.body,
+        lift,bind_tc_ok,Aeneas.Std.uncurry,core.result.Result.Insts.CoreOpsTry.branch,bind_assoc_eq] using transformed
 #print axioms loop
 end R1Z.PV_RunJoin_ZeroRows43
