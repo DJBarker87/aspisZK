@@ -13228,3 +13228,14 @@ Kani PASS may be re-credited only when re-run with exactly that patch (sha256 re
 negative control; a timeout gives no credit; large buffers are split by window. Stream B's five
 suspended rows can therefore be restored either by the structural re-link now running or by a
 stubbed Kani re-run. Rows removed outright: 0. Privacy target not yet established.
+
+## D353 (Stream B) 2026-10-28 03:44 UTC: runjoin31 result; runjoin32 launched
+
+runjoin31 (92 compiles: 64 accepted, 28 rejected; no Kani; three reserved audits with standard
+axioms; eight reservation refusals retired eight IDs, exhausting 42900-42999 with eight attempts
+unspent) proves the canonical-route operational success and error domains and further semantic
+clauses. The unconditional "successful canonical preparation yields HonestInput" and the owner
+coverage sentence remain open; V038/V045 not started. Branch pushed (1e5edf7d8d). runjoin32 (fresh 100
+attempts; IDs 44600-44699) finishes native lane-root correspondence and the input, append, recipient
+and sentinel obligations, then the HonestInput theorem and the coverage sentence. Rows removed
+outright: 0. Privacy target not yet established.
