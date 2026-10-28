@@ -21,7 +21,7 @@ theorem complete_words (xs : List U32) :
     · simp only [hc,↓reduceIte,decide_true,Bool.true_and,bindR]
       rw [ih]
       cases hp : xs.all (fun v => decide (v < 2147483647#u32)) <;> rfl
-    · simp only [hc,↓reduceIte,decide_false,Bool.false_and,bindR]
+    · simp only [hc,↓reduceIte,decide_false,Bool.false_and,Bool.false_eq_true,bindR]
 
 theorem complete_byte_fields (xs : List U32) :
     mapR List.flatten (collect (xs.map PV_B3P_WordLaw226V3.four)) =
