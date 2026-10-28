@@ -13,7 +13,7 @@ theorem word_eq (a b : U32) : wordInst.eq a b = ok (decide (a=b)) := rfl
 
 theorem word_ne (a b : U32) :
     core.cmp.PartialEq.ne.trait_default wordInst a b = ok (decide (a≠b)) := by
-  simp only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,word_eq,bind_tc_ok]
+  simp only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,wordInst,aspis_core.field.M31.Insts.CoreCmpPartialEqM31,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,bind_tc_ok]
   by_cases h : a=b <;> simp [h]
 #print axioms word_ne
 
@@ -53,7 +53,10 @@ theorem array_eq {n : Usize} (a b : Array U32 n) :
   change List.allM compare (a.val.zip b.val) = _
   rw [list_result a.val b.val (by rw [a.property,b.property])]
   have he : a.val=b.val ↔ a=b := ⟨Subtype.ext,fun h => congrArg (fun x => x.val) h⟩
-  rw [propext he]
+  by_cases h : a=b
+  · subst b; simp
+  · have hv : ¬a.val=b.val := fun hv => h (he.mp hv)
+    simp only [decide_eq_false hv,decide_eq_false h]
 #print axioms array_eq
 
 theorem array_ne {n : Usize} (a b : Array U32 n) :
@@ -76,11 +79,8 @@ theorem list_contains {n : Usize} (x : Array U32 n) (xs : List (Array U32 n)) :
   induction xs with
   | nil => rfl
   | cons y ys ih =>
-    change (do let b ← core.array.equality.PartialEqArray.eq wordInst x y
-               if b then ok true else List.anyM _ ys) = _
-    rw [array_eq]
-    simp only [bind_tc_ok]
-    by_cases h : x=y <;> simp [h,ih]
+    by_cases h : x=y <;>
+      simp [List.anyM,Array.Insts.CoreCmpPartialEqArray,array_eq,h,ih]
 #print axioms list_contains
 
 theorem contains {n : Usize} (s : Slice (Array U32 n)) (x : Array U32 n) :
