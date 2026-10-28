@@ -3,6 +3,7 @@ import JHx_Instance
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.JHx_Joint
+#check JHe_SHARealization
 open Aeneas Aeneas.Std Result
 open JHv_Configuration JHu_FixturePdaRuntime
 attribute [local irreducible] JHg_World.e2 JHg_World.e1 JHb_World.e1

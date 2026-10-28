@@ -19,12 +19,22 @@ def ssh(command,submitted=False):return transport(['ssh',*OPTIONS,H,command],sub
 mode,attempt,module=sys.argv[1:]
 assert mode in ('preflight','large') and attempt.startswith('JHx_') and module.startswith('JHx_')
 assert not (E/attempt).exists()
+previous=[json.loads(line) for line in (E/'JHx_ATTEMPTS.jsonl').read_text().splitlines()]
+assert sum((r['mode']=='large')==(mode=='large') for r in previous)<(2 if mode=='large' else 60), 'Compile budget exhausted'
+if mode=='large':
+ assert module in ('JHx_Instance','JHx_Joint')
+ pins=json.loads((R/'evidence/joint-agg2-20261028/JHw_RUNNER_HASHES.json').read_text())['sha256']
+ verified=ssh('sha256sum '+ ' '.join(B+'/'+n for n in pins))
+ assert verified.returncode==0
+ actual={line.split()[1].split('/')[-1]:line.split()[0] for line in verified.stdout.splitlines()}
+ assert actual==pins,(actual,pins)
+ (E/(attempt+'-runner-hashes.json')).write_text(json.dumps(actual,indent=2)+'\n')
 cfg=json.loads((R/'evidence/joint-agg2-20261028/JHw_C.json').read_text())
 cfg={k:cfg[k] for k in ['kind','env','deps_fingerprint','command']}
 cfg.update(attempt=attempt,sources=[module+'.lean'],source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=subprocess.check_output(['git','status','--porcelain'],text=True).strip()!='',timeout=540,expected_time='Bounded single-round SHA256 certificates and symbolic block chaining; assembly imports and named applications')
 cfg['command']=[*cfg['command'][:3],'-j1','-M15000' if mode=='large' else '-M7000','-DElab.async=false','-o',module+'.olean',module+'.lean']
 cfg['env']['LEAN_PATH']=B+':'+cfg['env']['LEAN_PATH']
-cfg['deps_fingerprint']={'scope':'JHq owner-approved TX1 aggregation; inherited joint-fixture35 lane'}
+cfg['deps_fingerprint']={'scope':'JHx SHA453 bounded round certificates and realization assembly on pinned JHw cohort'}
 (E/(attempt+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 script=B+'/reservation_agg16.py' if mode=='large' else '/home/dombarker/project-offloads/codex-cx-s2c-20261023/reservation.py'
 admissions=[]

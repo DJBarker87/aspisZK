@@ -1,6 +1,5 @@
-import JHx_Blocks21
-import JHx_Blocks22
-import JHx_Blocks23
+import JHx_Blocks13
+import JHx_Blocks14
 import JHe_SHAEquations1
 import JGz_HashTools
 set_option autoImplicit false
@@ -9,21 +8,27 @@ open JFp_SHA256
 namespace H096
 open JHe_C_Gr_M1.Hash096
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B010.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B010.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B011.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B011.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash096.tail).map Fin.val=JHe_C_Gr_M1.Hash096.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash096.message).map Fin.val=JHe_C_Gr_M1.Hash096.message := by
   simp only [JHe_C_Gr_M1.Hash096.message,JHe_C_Gr_M1.Hash096.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash096.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash096.message=JHe_C_Gr_M1.Hash096.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash096.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash096.message,List.length_append]
@@ -36,6 +41,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash096.message=JHe_C_Gr_M1.Hash096.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash096.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash096.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -43,12 +49,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash096.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash096.message=JHe_C_Gr_M1.Hash096.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash096.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨96,by omega⟩)=JHe_SHAInputs1.expected ⟨96,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash096.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -59,21 +67,27 @@ end H096
 namespace H097
 open JHe_C_Gr_M1.Hash097
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B012.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B012.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B013.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B013.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash097.tail).map Fin.val=JHe_C_Gr_M1.Hash097.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash097.message).map Fin.val=JHe_C_Gr_M1.Hash097.message := by
   simp only [JHe_C_Gr_M1.Hash097.message,JHe_C_Gr_M1.Hash097.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash097.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash097.message=JHe_C_Gr_M1.Hash097.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash097.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash097.message,List.length_append]
@@ -86,6 +100,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash097.message=JHe_C_Gr_M1.Hash097.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash097.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash097.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -93,12 +108,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash097.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash097.message=JHe_C_Gr_M1.Hash097.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash097.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨97,by omega⟩)=JHe_SHAInputs1.expected ⟨97,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash097.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -109,21 +126,27 @@ end H097
 namespace H098
 open JHe_C_Gr_M1.Hash098
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B014.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B014.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B015.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B015.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash098.tail).map Fin.val=JHe_C_Gr_M1.Hash098.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash098.message).map Fin.val=JHe_C_Gr_M1.Hash098.message := by
   simp only [JHe_C_Gr_M1.Hash098.message,JHe_C_Gr_M1.Hash098.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash098.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash098.message=JHe_C_Gr_M1.Hash098.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash098.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash098.message,List.length_append]
@@ -136,6 +159,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash098.message=JHe_C_Gr_M1.Hash098.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash098.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash098.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -143,12 +167,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash098.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash098.message=JHe_C_Gr_M1.Hash098.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash098.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨98,by omega⟩)=JHe_SHAInputs1.expected ⟨98,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash098.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -159,21 +185,27 @@ end H098
 namespace H099
 open JHe_C_Gr_M1.Hash099
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B016.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B016.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B017.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B017.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash099.tail).map Fin.val=JHe_C_Gr_M1.Hash099.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash099.message).map Fin.val=JHe_C_Gr_M1.Hash099.message := by
   simp only [JHe_C_Gr_M1.Hash099.message,JHe_C_Gr_M1.Hash099.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash099.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash099.message=JHe_C_Gr_M1.Hash099.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash099.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash099.message,List.length_append]
@@ -186,6 +218,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash099.message=JHe_C_Gr_M1.Hash099.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash099.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash099.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -193,12 +226,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash099.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash099.message=JHe_C_Gr_M1.Hash099.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash099.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨99,by omega⟩)=JHe_SHAInputs1.expected ⟨99,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash099.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -209,21 +244,27 @@ end H099
 namespace H100
 open JHe_C_Gr_M1.Hash100
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B018.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B018.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B019.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B019.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash100.tail).map Fin.val=JHe_C_Gr_M1.Hash100.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash100.message).map Fin.val=JHe_C_Gr_M1.Hash100.message := by
   simp only [JHe_C_Gr_M1.Hash100.message,JHe_C_Gr_M1.Hash100.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash100.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash100.message=JHe_C_Gr_M1.Hash100.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash100.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash100.message,List.length_append]
@@ -236,6 +277,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash100.message=JHe_C_Gr_M1.Hash100.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash100.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash100.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -243,12 +285,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash100.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash100.message=JHe_C_Gr_M1.Hash100.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash100.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨100,by omega⟩)=JHe_SHAInputs1.expected ⟨100,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash100.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -259,21 +303,27 @@ end H100
 namespace H101
 open JHe_C_Gr_M1.Hash101
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B020.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B020.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B021.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B021.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash101.tail).map Fin.val=JHe_C_Gr_M1.Hash101.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash101.message).map Fin.val=JHe_C_Gr_M1.Hash101.message := by
   simp only [JHe_C_Gr_M1.Hash101.message,JHe_C_Gr_M1.Hash101.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash101.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash101.message=JHe_C_Gr_M1.Hash101.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash101.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash101.message,List.length_append]
@@ -286,6 +336,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash101.message=JHe_C_Gr_M1.Hash101.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash101.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash101.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -293,12 +344,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash101.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash101.message=JHe_C_Gr_M1.Hash101.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash101.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨101,by omega⟩)=JHe_SHAInputs1.expected ⟨101,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash101.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -309,21 +362,27 @@ end H101
 namespace H102
 open JHe_C_Gr_M1.Hash102
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B022.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B022.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B023.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B023.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash102.tail).map Fin.val=JHe_C_Gr_M1.Hash102.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash102.message).map Fin.val=JHe_C_Gr_M1.Hash102.message := by
   simp only [JHe_C_Gr_M1.Hash102.message,JHe_C_Gr_M1.Hash102.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash102.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash102.message=JHe_C_Gr_M1.Hash102.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash102.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash102.message,List.length_append]
@@ -336,6 +395,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash102.message=JHe_C_Gr_M1.Hash102.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash102.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash102.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -343,12 +403,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash102.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash102.message=JHe_C_Gr_M1.Hash102.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash102.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨102,by omega⟩)=JHe_SHAInputs1.expected ⟨102,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash102.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -359,21 +421,27 @@ end H102
 namespace H103
 open JHe_C_Gr_M1.Hash103
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B024.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B024.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B025.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B025.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash103.tail).map Fin.val=JHe_C_Gr_M1.Hash103.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash103.message).map Fin.val=JHe_C_Gr_M1.Hash103.message := by
   simp only [JHe_C_Gr_M1.Hash103.message,JHe_C_Gr_M1.Hash103.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash103.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash103.message=JHe_C_Gr_M1.Hash103.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash103.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash103.message,List.length_append]
@@ -386,6 +454,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash103.message=JHe_C_Gr_M1.Hash103.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash103.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash103.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -393,12 +462,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash103.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash103.message=JHe_C_Gr_M1.Hash103.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash103.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨103,by omega⟩)=JHe_SHAInputs1.expected ⟨103,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash103.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -409,21 +480,27 @@ end H103
 namespace H104
 open JHe_C_Gr_M1.Hash104
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks21.B026.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B026.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks21.B027.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B027.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash104.tail).map Fin.val=JHe_C_Gr_M1.Hash104.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash104.message).map Fin.val=JHe_C_Gr_M1.Hash104.message := by
   simp only [JHe_C_Gr_M1.Hash104.message,JHe_C_Gr_M1.Hash104.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash104.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash104.message=JHe_C_Gr_M1.Hash104.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash104.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash104.message,List.length_append]
@@ -436,6 +513,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash104.message=JHe_C_Gr_M1.Hash104.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash104.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash104.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -443,12 +521,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash104.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash104.message=JHe_C_Gr_M1.Hash104.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash104.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨104,by omega⟩)=JHe_SHAInputs1.expected ⟨104,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash104.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -459,21 +539,27 @@ end H104
 namespace H105
 open JHe_C_Gr_M1.Hash105
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B000.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B028.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B001.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B029.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash105.tail).map Fin.val=JHe_C_Gr_M1.Hash105.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash105.message).map Fin.val=JHe_C_Gr_M1.Hash105.message := by
   simp only [JHe_C_Gr_M1.Hash105.message,JHe_C_Gr_M1.Hash105.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash105.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash105.message=JHe_C_Gr_M1.Hash105.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash105.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash105.message,List.length_append]
@@ -486,6 +572,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash105.message=JHe_C_Gr_M1.Hash105.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash105.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash105.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -493,12 +580,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash105.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash105.message=JHe_C_Gr_M1.Hash105.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash105.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨105,by omega⟩)=JHe_SHAInputs1.expected ⟨105,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash105.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -509,21 +598,27 @@ end H105
 namespace H106
 open JHe_C_Gr_M1.Hash106
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B002.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B030.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B003.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B031.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash106.tail).map Fin.val=JHe_C_Gr_M1.Hash106.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash106.message).map Fin.val=JHe_C_Gr_M1.Hash106.message := by
   simp only [JHe_C_Gr_M1.Hash106.message,JHe_C_Gr_M1.Hash106.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash106.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash106.message=JHe_C_Gr_M1.Hash106.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash106.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash106.message,List.length_append]
@@ -536,6 +631,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash106.message=JHe_C_Gr_M1.Hash106.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash106.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash106.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -543,12 +639,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash106.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash106.message=JHe_C_Gr_M1.Hash106.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash106.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨106,by omega⟩)=JHe_SHAInputs1.expected ⟨106,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash106.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -559,21 +657,27 @@ end H106
 namespace H107
 open JHe_C_Gr_M1.Hash107
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B004.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B032.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B005.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B033.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash107.tail).map Fin.val=JHe_C_Gr_M1.Hash107.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash107.message).map Fin.val=JHe_C_Gr_M1.Hash107.message := by
   simp only [JHe_C_Gr_M1.Hash107.message,JHe_C_Gr_M1.Hash107.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash107.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash107.message=JHe_C_Gr_M1.Hash107.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash107.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash107.message,List.length_append]
@@ -586,6 +690,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash107.message=JHe_C_Gr_M1.Hash107.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash107.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash107.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -593,12 +698,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash107.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash107.message=JHe_C_Gr_M1.Hash107.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash107.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨107,by omega⟩)=JHe_SHAInputs1.expected ⟨107,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash107.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -609,21 +716,27 @@ end H107
 namespace H108
 open JHe_C_Gr_M1.Hash108
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B006.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B034.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B007.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B035.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash108.tail).map Fin.val=JHe_C_Gr_M1.Hash108.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash108.message).map Fin.val=JHe_C_Gr_M1.Hash108.message := by
   simp only [JHe_C_Gr_M1.Hash108.message,JHe_C_Gr_M1.Hash108.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash108.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash108.message=JHe_C_Gr_M1.Hash108.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash108.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash108.message,List.length_append]
@@ -636,6 +749,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash108.message=JHe_C_Gr_M1.Hash108.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash108.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash108.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -643,12 +757,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash108.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash108.message=JHe_C_Gr_M1.Hash108.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash108.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨108,by omega⟩)=JHe_SHAInputs1.expected ⟨108,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash108.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -659,21 +775,27 @@ end H108
 namespace H109
 open JHe_C_Gr_M1.Hash109
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B008.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B036.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B009.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B037.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash109.tail).map Fin.val=JHe_C_Gr_M1.Hash109.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash109.message).map Fin.val=JHe_C_Gr_M1.Hash109.message := by
   simp only [JHe_C_Gr_M1.Hash109.message,JHe_C_Gr_M1.Hash109.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash109.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash109.message=JHe_C_Gr_M1.Hash109.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash109.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash109.message,List.length_append]
@@ -686,6 +808,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash109.message=JHe_C_Gr_M1.Hash109.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash109.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash109.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -693,12 +816,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash109.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash109.message=JHe_C_Gr_M1.Hash109.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash109.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨109,by omega⟩)=JHe_SHAInputs1.expected ⟨109,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash109.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -709,21 +834,27 @@ end H109
 namespace H110
 open JHe_C_Gr_M1.Hash110
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B010.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B038.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B011.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B039.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash110.tail).map Fin.val=JHe_C_Gr_M1.Hash110.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash110.message).map Fin.val=JHe_C_Gr_M1.Hash110.message := by
   simp only [JHe_C_Gr_M1.Hash110.message,JHe_C_Gr_M1.Hash110.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash110.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash110.message=JHe_C_Gr_M1.Hash110.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash110.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash110.message,List.length_append]
@@ -736,6 +867,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash110.message=JHe_C_Gr_M1.Hash110.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash110.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash110.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -743,12 +875,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash110.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash110.message=JHe_C_Gr_M1.Hash110.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash110.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨110,by omega⟩)=JHe_SHAInputs1.expected ⟨110,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash110.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -759,21 +893,27 @@ end H110
 namespace H111
 open JHe_C_Gr_M1.Hash111
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B012.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B040.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B013.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B041.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash111.tail).map Fin.val=JHe_C_Gr_M1.Hash111.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash111.message).map Fin.val=JHe_C_Gr_M1.Hash111.message := by
   simp only [JHe_C_Gr_M1.Hash111.message,JHe_C_Gr_M1.Hash111.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash111.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash111.message=JHe_C_Gr_M1.Hash111.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash111.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash111.message,List.length_append]
@@ -786,6 +926,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash111.message=JHe_C_Gr_M1.Hash111.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash111.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash111.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -793,12 +934,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash111.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash111.message=JHe_C_Gr_M1.Hash111.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash111.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨111,by omega⟩)=JHe_SHAInputs1.expected ⟨111,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash111.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -809,21 +952,27 @@ end H111
 namespace H112
 open JHe_C_Gr_M1.Hash112
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B014.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B042.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B015.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B043.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash112.tail).map Fin.val=JHe_C_Gr_M1.Hash112.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash112.message).map Fin.val=JHe_C_Gr_M1.Hash112.message := by
   simp only [JHe_C_Gr_M1.Hash112.message,JHe_C_Gr_M1.Hash112.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash112.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash112.message=JHe_C_Gr_M1.Hash112.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash112.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash112.message,List.length_append]
@@ -836,6 +985,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash112.message=JHe_C_Gr_M1.Hash112.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash112.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash112.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -843,12 +993,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash112.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash112.message=JHe_C_Gr_M1.Hash112.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash112.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨112,by omega⟩)=JHe_SHAInputs1.expected ⟨112,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash112.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -859,21 +1011,27 @@ end H112
 namespace H113
 open JHe_C_Gr_M1.Hash113
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B016.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B044.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B017.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B045.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash113.tail).map Fin.val=JHe_C_Gr_M1.Hash113.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash113.message).map Fin.val=JHe_C_Gr_M1.Hash113.message := by
   simp only [JHe_C_Gr_M1.Hash113.message,JHe_C_Gr_M1.Hash113.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash113.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash113.message=JHe_C_Gr_M1.Hash113.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash113.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash113.message,List.length_append]
@@ -886,6 +1044,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash113.message=JHe_C_Gr_M1.Hash113.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash113.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash113.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -893,12 +1052,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash113.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash113.message=JHe_C_Gr_M1.Hash113.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash113.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨113,by omega⟩)=JHe_SHAInputs1.expected ⟨113,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash113.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -909,21 +1070,27 @@ end H113
 namespace H114
 open JHe_C_Gr_M1.Hash114
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B018.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B046.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B019.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B047.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash114.tail).map Fin.val=JHe_C_Gr_M1.Hash114.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash114.message).map Fin.val=JHe_C_Gr_M1.Hash114.message := by
   simp only [JHe_C_Gr_M1.Hash114.message,JHe_C_Gr_M1.Hash114.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash114.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash114.message=JHe_C_Gr_M1.Hash114.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash114.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash114.message,List.length_append]
@@ -936,6 +1103,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash114.message=JHe_C_Gr_M1.Hash114.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash114.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash114.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -943,12 +1111,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash114.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash114.message=JHe_C_Gr_M1.Hash114.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash114.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨114,by omega⟩)=JHe_SHAInputs1.expected ⟨114,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash114.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -959,21 +1129,27 @@ end H114
 namespace H115
 open JHe_C_Gr_M1.Hash115
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B020.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B048.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B021.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B049.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash115.tail).map Fin.val=JHe_C_Gr_M1.Hash115.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash115.message).map Fin.val=JHe_C_Gr_M1.Hash115.message := by
   simp only [JHe_C_Gr_M1.Hash115.message,JHe_C_Gr_M1.Hash115.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash115.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash115.message=JHe_C_Gr_M1.Hash115.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash115.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash115.message,List.length_append]
@@ -986,6 +1162,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash115.message=JHe_C_Gr_M1.Hash115.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash115.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash115.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -993,12 +1170,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash115.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash115.message=JHe_C_Gr_M1.Hash115.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash115.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨115,by omega⟩)=JHe_SHAInputs1.expected ⟨115,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash115.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1009,21 +1188,27 @@ end H115
 namespace H116
 open JHe_C_Gr_M1.Hash116
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B022.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B050.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B023.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B051.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash116.tail).map Fin.val=JHe_C_Gr_M1.Hash116.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash116.message).map Fin.val=JHe_C_Gr_M1.Hash116.message := by
   simp only [JHe_C_Gr_M1.Hash116.message,JHe_C_Gr_M1.Hash116.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash116.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash116.message=JHe_C_Gr_M1.Hash116.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash116.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash116.message,List.length_append]
@@ -1036,6 +1221,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash116.message=JHe_C_Gr_M1.Hash116.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash116.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash116.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1043,12 +1229,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash116.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash116.message=JHe_C_Gr_M1.Hash116.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash116.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨116,by omega⟩)=JHe_SHAInputs1.expected ⟨116,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash116.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1059,21 +1247,27 @@ end H116
 namespace H117
 open JHe_C_Gr_M1.Hash117
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B024.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B052.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B025.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B053.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash117.tail).map Fin.val=JHe_C_Gr_M1.Hash117.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash117.message).map Fin.val=JHe_C_Gr_M1.Hash117.message := by
   simp only [JHe_C_Gr_M1.Hash117.message,JHe_C_Gr_M1.Hash117.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash117.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash117.message=JHe_C_Gr_M1.Hash117.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash117.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash117.message,List.length_append]
@@ -1086,6 +1280,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash117.message=JHe_C_Gr_M1.Hash117.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash117.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash117.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1093,12 +1288,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash117.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash117.message=JHe_C_Gr_M1.Hash117.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash117.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨117,by omega⟩)=JHe_SHAInputs1.expected ⟨117,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash117.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1109,21 +1306,27 @@ end H117
 namespace H118
 open JHe_C_Gr_M1.Hash118
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks22.B026.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks13.B054.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks22.B027.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks13.B055.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash118.tail).map Fin.val=JHe_C_Gr_M1.Hash118.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash118.message).map Fin.val=JHe_C_Gr_M1.Hash118.message := by
   simp only [JHe_C_Gr_M1.Hash118.message,JHe_C_Gr_M1.Hash118.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash118.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash118.message=JHe_C_Gr_M1.Hash118.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash118.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash118.message,List.length_append]
@@ -1136,6 +1339,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash118.message=JHe_C_Gr_M1.Hash118.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash118.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash118.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1143,12 +1347,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash118.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash118.message=JHe_C_Gr_M1.Hash118.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash118.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨118,by omega⟩)=JHe_SHAInputs1.expected ⟨118,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash118.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1159,21 +1365,27 @@ end H118
 namespace H119
 open JHe_C_Gr_M1.Hash119
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B000.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B000.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B001.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B001.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash119.tail).map Fin.val=JHe_C_Gr_M1.Hash119.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash119.message).map Fin.val=JHe_C_Gr_M1.Hash119.message := by
   simp only [JHe_C_Gr_M1.Hash119.message,JHe_C_Gr_M1.Hash119.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash119.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash119.message=JHe_C_Gr_M1.Hash119.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash119.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash119.message,List.length_append]
@@ -1186,6 +1398,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash119.message=JHe_C_Gr_M1.Hash119.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash119.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash119.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1193,12 +1406,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash119.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash119.message=JHe_C_Gr_M1.Hash119.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash119.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨119,by omega⟩)=JHe_SHAInputs1.expected ⟨119,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash119.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1209,21 +1424,27 @@ end H119
 namespace H120
 open JHe_C_Gr_M1.Hash120
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B002.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B002.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B003.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B003.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash120.tail).map Fin.val=JHe_C_Gr_M1.Hash120.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash120.message).map Fin.val=JHe_C_Gr_M1.Hash120.message := by
   simp only [JHe_C_Gr_M1.Hash120.message,JHe_C_Gr_M1.Hash120.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash120.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash120.message=JHe_C_Gr_M1.Hash120.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash120.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash120.message,List.length_append]
@@ -1236,6 +1457,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash120.message=JHe_C_Gr_M1.Hash120.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash120.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash120.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1243,12 +1465,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash120.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash120.message=JHe_C_Gr_M1.Hash120.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash120.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨120,by omega⟩)=JHe_SHAInputs1.expected ⟨120,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash120.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1259,21 +1483,27 @@ end H120
 namespace H121
 open JHe_C_Gr_M1.Hash121
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B004.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B004.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B005.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B005.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash121.tail).map Fin.val=JHe_C_Gr_M1.Hash121.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash121.message).map Fin.val=JHe_C_Gr_M1.Hash121.message := by
   simp only [JHe_C_Gr_M1.Hash121.message,JHe_C_Gr_M1.Hash121.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash121.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash121.message=JHe_C_Gr_M1.Hash121.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash121.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash121.message,List.length_append]
@@ -1286,6 +1516,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash121.message=JHe_C_Gr_M1.Hash121.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash121.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash121.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1293,12 +1524,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash121.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash121.message=JHe_C_Gr_M1.Hash121.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash121.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨121,by omega⟩)=JHe_SHAInputs1.expected ⟨121,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash121.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1309,21 +1542,27 @@ end H121
 namespace H122
 open JGh_TX2_M1.Hash150
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B006.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B006.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B007.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B007.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JGh_TX2_M1.Hash150.tail).map Fin.val=JGh_TX2_M1.Hash150.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JGh_TX2_M1.Hash150.message).map Fin.val=JGh_TX2_M1.Hash150.message := by
   simp only [JGh_TX2_M1.Hash150.message,JGh_TX2_M1.Hash150.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JGh_TX2_M1.Hash150.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JGh_TX2_M1.Hash150.message=JGh_TX2_M1.Hash150.chunks.flatten := by
   have size : JGh_TX2_M1.Hash150.message.length=65 := by
     simp only [JGh_TX2_M1.Hash150.message,List.length_append]
@@ -1336,6 +1575,7 @@ theorem padded : pad JGh_TX2_M1.Hash150.message=JGh_TX2_M1.Hash150.chunks.flatte
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JGh_TX2_M1.Hash150.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JGh_TX2_M1.Hash150.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1343,12 +1583,14 @@ theorem lengths : ∀ b ∈ JGh_TX2_M1.Hash150.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JGh_TX2_M1.Hash150.message=JGh_TX2_M1.Hash150.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JGh_TX2_M1.Hash150.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨122,by omega⟩)=JHe_SHAInputs1.expected ⟨122,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JGh_TX2_M1.Hash150.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1359,21 +1601,27 @@ end H122
 namespace H123
 open JHe_C_Gr_M1.Hash123
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B008.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B008.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B009.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B009.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash123.tail).map Fin.val=JHe_C_Gr_M1.Hash123.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash123.message).map Fin.val=JHe_C_Gr_M1.Hash123.message := by
   simp only [JHe_C_Gr_M1.Hash123.message,JHe_C_Gr_M1.Hash123.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash123.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash123.message=JHe_C_Gr_M1.Hash123.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash123.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash123.message,List.length_append]
@@ -1386,6 +1634,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash123.message=JHe_C_Gr_M1.Hash123.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash123.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash123.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1393,12 +1642,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash123.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash123.message=JHe_C_Gr_M1.Hash123.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash123.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨123,by omega⟩)=JHe_SHAInputs1.expected ⟨123,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash123.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1409,21 +1660,27 @@ end H123
 namespace H124
 open JHe_C_Gr_M1.Hash124
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B010.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B010.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B011.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B011.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash124.tail).map Fin.val=JHe_C_Gr_M1.Hash124.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash124.message).map Fin.val=JHe_C_Gr_M1.Hash124.message := by
   simp only [JHe_C_Gr_M1.Hash124.message,JHe_C_Gr_M1.Hash124.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash124.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash124.message=JHe_C_Gr_M1.Hash124.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash124.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash124.message,List.length_append]
@@ -1436,6 +1693,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash124.message=JHe_C_Gr_M1.Hash124.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash124.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash124.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1443,12 +1701,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash124.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash124.message=JHe_C_Gr_M1.Hash124.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash124.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨124,by omega⟩)=JHe_SHAInputs1.expected ⟨124,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash124.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1459,21 +1719,27 @@ end H124
 namespace H125
 open JHe_C_Gr_M1.Hash125
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B012.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B012.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B013.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B013.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash125.tail).map Fin.val=JHe_C_Gr_M1.Hash125.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash125.message).map Fin.val=JHe_C_Gr_M1.Hash125.message := by
   simp only [JHe_C_Gr_M1.Hash125.message,JHe_C_Gr_M1.Hash125.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash125.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash125.message=JHe_C_Gr_M1.Hash125.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash125.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash125.message,List.length_append]
@@ -1486,6 +1752,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash125.message=JHe_C_Gr_M1.Hash125.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash125.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash125.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1493,12 +1760,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash125.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash125.message=JHe_C_Gr_M1.Hash125.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash125.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨125,by omega⟩)=JHe_SHAInputs1.expected ⟨125,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash125.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1509,21 +1778,27 @@ end H125
 namespace H126
 open JHe_C_Gr_M1.Hash126
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B014.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B014.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B015.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B015.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash126.tail).map Fin.val=JHe_C_Gr_M1.Hash126.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash126.message).map Fin.val=JHe_C_Gr_M1.Hash126.message := by
   simp only [JHe_C_Gr_M1.Hash126.message,JHe_C_Gr_M1.Hash126.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash126.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash126.message=JHe_C_Gr_M1.Hash126.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash126.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash126.message,List.length_append]
@@ -1536,6 +1811,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash126.message=JHe_C_Gr_M1.Hash126.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash126.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash126.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1543,12 +1819,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash126.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash126.message=JHe_C_Gr_M1.Hash126.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash126.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨126,by omega⟩)=JHe_SHAInputs1.expected ⟨126,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash126.message).map Fin.val))=_
   rw [numeric,hashed]
@@ -1559,21 +1837,27 @@ end H126
 namespace H127
 open JHe_C_Gr_M1.Hash127
 namespace C00
-theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks23.B016.checked
+theorem checked : compress B00.start (words B00.input)=B00.result := JHx_Blocks14.B016.checked
+#print axioms checked
 end C00
 namespace C01
-theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks23.B017.checked
+theorem checked : compress B01.start (words B01.input)=B01.result := JHx_Blocks14.B017.checked
+#print axioms checked
 end C01
 theorem cast00 : (JGc_TX2_HashBytes.bytes B00.input).map Fin.val=B00.input := by rfl
+#print axioms cast00
 theorem tailCast : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash127.tail).map Fin.val=JHe_C_Gr_M1.Hash127.tail := by rfl
+#print axioms tailCast
 theorem numeric : (JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash127.message).map Fin.val=JHe_C_Gr_M1.Hash127.message := by
   simp only [JHe_C_Gr_M1.Hash127.message,JHe_C_Gr_M1.Hash127.head,List.flatten_cons,List.flatten_nil,List.append_nil,JGc_TX2_HashBytes.append,List.map_append,cast00,tailCast]
+#print axioms numeric
 theorem headLengths : ∀ b ∈ JHe_C_Gr_M1.Hash127.head,b.length=64 := by
   intro b hb
   change b ∈ [B00.input] at hb
   simp only [List.mem_cons,List.not_mem_nil,or_false] at hb
   rcases hb with h0
   · subst b; rfl
+#print axioms headLengths
 theorem padded : pad JHe_C_Gr_M1.Hash127.message=JHe_C_Gr_M1.Hash127.chunks.flatten := by
   have size : JHe_C_Gr_M1.Hash127.message.length=65 := by
     simp only [JHe_C_Gr_M1.Hash127.message,List.length_append]
@@ -1586,6 +1870,7 @@ theorem padded : pad JHe_C_Gr_M1.Hash127.message=JHe_C_Gr_M1.Hash127.chunks.flat
   simp only [List.flatten_append,List.flatten_cons,List.flatten_nil,List.append_nil]
   simp only [List.append_assoc] at last ⊢
   exact congrArg (List.append JHe_C_Gr_M1.Hash127.head.flatten) last
+#print axioms padded
 theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash127.chunks,b.length=64 := by
   intro b hb
   change b ∈ [B00.input,B01.input] at hb
@@ -1593,12 +1878,14 @@ theorem lengths : ∀ b ∈ JHe_C_Gr_M1.Hash127.chunks,b.length=64 := by
   rcases hb with h0 | h1
   · subst b; rfl
   · subst b; rfl
+#print axioms lengths
 theorem hashed : JFp_SHA256.hash JHe_C_Gr_M1.Hash127.message=JHe_C_Gr_M1.Hash127.result := by
   rw [JGz_HashTools.hash_chunks _ _ padded lengths]
   change [B00.input,B01.input].foldl (fun s b=>compress s (words b)) initial=JHe_C_Gr_M1.Hash127.result
   rw [List.foldl_cons,show initial=B00.start from rfl,C00.checked]
   rw [List.foldl_cons,show B00.result=B01.start from rfl,C01.checked]
   rfl
+#print axioms hashed
 theorem source : JFp_SHADigest.digest (JHe_SHAInputs1.input ⟨127,by omega⟩)=JHe_SHAInputs1.expected ⟨127,by omega⟩ := by
   change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes JHe_C_Gr_M1.Hash127.message).map Fin.val))=_
   rw [numeric,hashed]

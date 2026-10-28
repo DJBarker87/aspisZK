@@ -30,3 +30,10 @@ congruence and passes with only standard axioms. No recursion-depth increase.
 measurement, final arithmetic groups use28 blocks, and equation groups32
 named equation applications. 36 arithmetic modules +15 equation modules,
 with assembly attempts and focused probes within the60-normal budget.
+
+Measured005: arithmetic28 passed68.287150439s,RSS4376252KiB,swap0,propext
+only. Growth from16 to28 is about595MiB; use56 for the remaining arithmetic
+modules after the first five fixed groups (16+4*28), projecting below7GiB.
+No successful module is repeated. Generator --check validates the new schedule.
+If a56-block module fails memory, it must be split with a changed schedule;
+no cap increase is authorized for arithmetic modules.

@@ -68,6 +68,18 @@ def collect():
    out.append(dict(tree=t,index=i,ns=ns,blocks=blocks,tail=tail,message=message))
  return out
 
+def audit_all(text):
+ out=[];pending=None
+ for line in text.splitlines():
+  if pending and not line.startswith(' '):
+   if line==f'#print axioms {pending}':pending=None
+   elif line.startswith(('theorem ','namespace ','end ')):
+    out.append(f'#print axioms {pending}');pending=None
+  out.append(line)
+  if line.startswith('theorem '):pending=line.split()[1]
+ assert pending is None
+ return '\n'.join(out)+'\n'
+
 def emit_chunk(rows,name):
  t=rows[0]['tree'];a=['import '+m for m in sorted({b['certificate'][0] for row in rows for b in row['blocks']})]+[f'import JHe_SHAEquations{t}','import JGz_HashTools','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256']
  for row in rows:
@@ -88,7 +100,7 @@ def emit_chunk(rows,name):
   for j in range(len(bs)):
    a += [f'  rw [List.foldl_cons,show '+('initial' if j==0 else f'B{j-1:02}.result')+f'=B{j:02}.start from rfl,C{j:02}.checked]']
   a += ['  rfl',f'theorem source : JFp_SHADigest.digest (JHe_SHAInputs{t}.input ⟨{i},by omega⟩)=JHe_SHAInputs{t}.expected ⟨{i},by omega⟩ := by',f'  change JFp_SHADigest.output (JFp_SHA256.hash ((JGc_TX2_HashBytes.bytes {ns}.message).map Fin.val))=_','  rw [numeric,hashed]','  funext i','  fin_cases i <;> rfl','#print axioms source',f'end H{i:03}']
- a += [f'end AspisR1.{name}'];return '\n'.join(a)+'\n'
+ a += [f'end AspisR1.{name}'];return audit_all('\n'.join(a)+'\n')
 
 def emit_compute(bs,name):
  a=['import JFp_SHA256','set_option autoImplicit false',f'namespace AspisR1.{name}','open JFp_SHA256']
@@ -103,9 +115,9 @@ def emit_compute(bs,name):
  a += [f'end AspisR1.{name}'];return '\n'.join(a)+'\n'
 
 def main():
- ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');ap.add_argument('--size',type=int,default=32);ap.add_argument('--block-size',type=int,default=28);args=ap.parse_args();rows=collect();manifest=[];computations=[]
+ ap=argparse.ArgumentParser();ap.add_argument('--check',action='store_true');ap.add_argument('--size',type=int,default=32);ap.add_argument('--block-size',type=int,default=56);args=ap.parse_args();rows=collect();manifest=[];computations=[]
  allblocks=[b for row in rows for b in row['blocks']]
- groups=[allblocks[:16]]+[allblocks[i:i+args.block_size] for i in range(16,len(allblocks),args.block_size)]
+ groups=[allblocks[:16]]+[allblocks[i:i+28] for i in range(16,128,28)]+[allblocks[i:i+args.block_size] for i in range(128,len(allblocks),args.block_size)]
  for j,bs in enumerate(groups):
   name=f'JHx_Blocks{j:02}';content=emit_compute(bs,name);p=L/(name+'.lean')
   if args.check:assert p.read_text()==content,p
@@ -118,7 +130,7 @@ def main():
    if args.check:assert p.read_text()==content,p
    else:p.write_text(content)
    manifest.append(dict(module=name,tree=t,indices=[r['index'] for r in chunk],blocks=sum(len(r['blocks']) for r in chunk),sha256=hashlib.sha256(content.encode()).hexdigest()))
- assembly=['import JHe_SHARealization']+['import '+m['module'] for m in manifest]+['set_option autoImplicit false','namespace AspisR1.JHx_Instance','theorem source : JHe_SHARealization := by','  constructor']
+ assembly=['import JHe_SHARealization']+['import '+m['module'] for m in manifest]+['set_option autoImplicit false','namespace AspisR1.JHx_Instance','#check JHe_SHARealization','theorem source : JHe_SHARealization := by','  constructor']
  for t,n in enumerate([157,157,139]):
   assembly += ['  · intro i','    fin_cases i']
   for i in range(n):assembly += [f'    · exact JHx_T{t}C{i//args.size:02}.H{i:03}.source']
@@ -130,6 +142,7 @@ def main():
  start=joint.index(' := by',joint.index('theorem source'))
  stop=joint.index('#print axioms source',start)
  joint=joint[:start]+' := by\n  exact JHw_Joint.source base stage slot runtime\n'+joint[stop:]
+ joint=joint.replace('namespace AspisR1.JHx_Joint','namespace AspisR1.JHx_Joint\n#check JHe_SHARealization')
  joint=joint.replace('end AspisR1.JHw_Joint','end AspisR1.JHx_Joint')
  p=L/'JHx_Joint.lean'
  if args.check:assert p.read_text()==joint,p

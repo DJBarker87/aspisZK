@@ -1,0 +1,16 @@
+theorem source [trees : JHe_SHARealization]
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) :
+    ∃ saved : alloc.vec.Vec U8,
+      S2W_D189Wrappers.first (JHe_Natives.first (adapter base) stage)
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHe_WrapperReady.post saved,())) ∧
+      S2W_D189Wrappers.first (JHe_Natives.first (adapter base) stage)
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHk_WorldFirst.post saved,())) ∧
+      saved.val=JFx_NativeBytes.checkpoint.val ∧ saved.val.length=1768 ∧
+      S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+        CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+        JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,()))

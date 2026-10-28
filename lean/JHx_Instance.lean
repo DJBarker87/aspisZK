@@ -16,6 +16,7 @@ import JHx_T2C03
 import JHx_T2C04
 set_option autoImplicit false
 namespace AspisR1.JHx_Instance
+#check JHe_SHARealization
 theorem source : JHe_SHARealization := by
   constructor
   · intro i
