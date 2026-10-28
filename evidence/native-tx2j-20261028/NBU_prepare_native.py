@@ -31,12 +31,15 @@ for name,mod in [('pair_terminal','codecs'),('pair_forest_terminal','more')]:
  files[path]=base+f'\n#[cfg(kani)]\n#[path="NBU_{mod}.rs"]\nmod NBU_{mod};\n'
  if name=='pair_terminal':files[path]+='\n#[cfg(kani)]\n#[path="NBU_decode.rs"]\nmod NBU_decode;\n'
 m.admit('NBU_UPLOAD')
-r=m.py(f'''from pathlib import Path
+payload=f'''from pathlib import Path
 import json
 b=Path({m.B!r})/'NBU_src'
 for n,s in {files!r}.items():(b/n).write_text(s)
 print('uploaded')
-''');assert r.returncode==0,r.stdout+r.stderr
+'''
+r=subprocess.run(['ssh','-o','ConnectTimeout=15',m.H,'python3 -'],input=payload,capture_output=True,text=True)
+(E/'NBU_UPLOAD_RESULT.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr)))
+assert r.returncode==0,r.stdout+r.stderr
 patch=''
 for p,txt in files.items():
  if Path(p).exists():base=subprocess.check_output(['git','show',m.REV+':'+p],text=True);src='a/'+p

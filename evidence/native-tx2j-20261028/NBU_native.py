@@ -37,7 +37,9 @@ b=Path({B!r}); print(json.dumps({{n:(b/n).read_text() for n in {[a+'/receipt.jso
  x=json.loads(r.stdout)
  for n,s in x.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
  assert a+'/receipt.json' in x,'STOP unresolved submitted run, do not resubmit'
- return json.loads(x[a+'/receipt.json'])
+ receipt=json.loads(x[a+'/receipt.json'])
+ with (E/'NBU_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(receipt)+'\n')
+ return receipt
 def launch(a,kind,command,sources,timeout=180):
  admit(a)
  preflight=py('from pathlib import Path; b=Path('+repr(B)+'); missing=[f for f in '+repr(sources)+' if not (b/f).is_file()]; assert not missing,missing')
