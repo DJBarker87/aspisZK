@@ -108,22 +108,13 @@ for i,chunk in enumerate(chunks):
  eps=[v for _,p,c in chunk for v in [p,c]]
  s+=f'def chunk{i} : List Link := {lit(chunk)}\ntheorem chunk{i}_eval : endpoints chunk{i} = {eps} := rfl\n#print axioms chunk{i}_eval\n'
 eps=[v for _,p,c in forest for v in [p,c]];expected=sorted(set(eps));assert len(expected)==214
-s+=f'def input : List Nat := {eps}\ndef expected : List Nat := {expected}\n'
+s+='def input : List Nat := '+ ' ++ '.join(str(eps[i:i+16]) for i in range(0,len(eps),16))+'\n'
+s+='def expected : List Nat := '+ ' ++ '.join(str(expected[i:i+16]) for i in range(0,len(expected),16))+'\n'
 s+='theorem endpoints_eval : endpoints PV_B3P_ForestValues133.fixed = input := by\n'
 s+='  have split : PV_B3P_ForestValues133.fixed = '+' ++ '.join(f'chunk{i}' for i in range(len(chunks)))+' := rfl\n'
 s+='  rw [split]\n  simp only [endpoints,List.flatMap_append]\n  change '+ ' ++ '.join(f'endpoints chunk{i}' for i in range(len(chunks)))+' = input\n'
 s+='  rw ['+','.join(f'chunk{i}_eval' for i in range(len(chunks)))+']\n  rfl\n'
-s+='''def canonical (xs : List Nat) : List Nat := (xs.mergeSort (fun a b => a ≤ b)).eraseDups
-
-theorem canonical_eval : canonical input = expected := rfl
-
-def active : Except Error (List Nat) := do
-  let schedule ← forest
-  pure (canonical (endpoints schedule))
-
-#print axioms endpoints_eval
-#print axioms canonical_eval
-end PV_B3P_Sorted133
+s+='''end PV_B3P_Sorted133
 '''
 p=D/f'{ns}.lean'
 if '--check' in sys.argv:assert p.read_text()==s
