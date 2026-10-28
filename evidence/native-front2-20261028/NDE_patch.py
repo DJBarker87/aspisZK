@@ -13,6 +13,11 @@ def files():
   if prefix=='copy':
    s=s.replace('fn selected_binary_weight(', '#[cfg_attr(kani,kani::ensures(|r| (*r==NDE_native::reference::selected_binary_ref(high,QM31::ZERO,weight.0)) != cfg!(NDE_simple_invert)))]\nfn selected_binary_weight(',1)
   if prefix=='semantic':
+   lo=s.index('fn equality_value(');hi=s.index('#[allow',lo);body=s[lo:hi]
+   body=body.replace('let mut index = 1usize;','let mut index = 1usize;\n    #[cfg(NDE_eq_step)] {product=unsafe{NDE_native::NDE_EQ_PRODUCT};index=unsafe{NDE_native::NDE_EQ_INDEX};}')
+   body=body.replace('index += 1;','index += 1;\n        #[cfg(NDE_eq_step)] {return product;}')
+   s=s[:lo]+body+s[hi:]
+  if prefix=='semantic':
    s=s.replace('fn variant_expected_output(', '#[cfg_attr(kani,kani::ensures(|r| (r.0==NDE_native::reference::variant_output_ref(variant==CompiledVariant::Withdrawal)) != cfg!(NDE_simple_invert)))]\nfn variant_expected_output(',1)
   if prefix=='poseidon':
    pre='#[cfg_attr(kani, kani::requires(limbs[0] < (1u64<<62) && limbs[1] < (1u64<<62) && limbs[2] < (1u64<<62) && limbs[3] < (1u64<<62)))]\n'
@@ -67,7 +72,7 @@ def files():
    assert point in raw
    raw=raw.replace(point,'                _ => unreachable!(),\n            };\n            #[cfg(all(kani,NDE_matrix_step))]\n            unsafe{NDE_native::NDE_MATRIX_REPLY=cell;NDE_native::NDE_MATRIX_COUNT+=1;}\n            cell\n        })',1)
    point='    let mut all_local_limbs_bounded = true;'
-   raw=raw.replace(point,'    #[cfg(all(kani,NDE_matrix_step))]\n    return [0;4];\n    #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]\n    let local=unsafe{NDE_native::NDE_PACKED_TABLE};\n'+point+'\n    #[cfg(all(kani,NDE_scan_step))]\n    let mut all_local_limbs_bounded=unsafe{NDE_native::NDE_PACKED_FLAG};',1)
+   raw=raw.replace(point,'    #[cfg(all(kani,NDE_matrix_step))]\n    {unsafe{NDE_native::NDE_MATRIX_REPLY=local[NDE_native::NDE_PACKED_ROW][NDE_native::NDE_PACKED_LIMB];}return [0;4];}\n    #[cfg(all(kani,any(NDE_scan_step,NDE_packed_after)))]\n    let local=unsafe{NDE_native::NDE_PACKED_TABLE};\n'+point+'\n    #[cfg(all(kani,NDE_scan_step))]\n    let mut all_local_limbs_bounded=unsafe{NDE_native::NDE_PACKED_FLAG};',1)
    point='    let mut output = 0usize;'
    raw=raw.replace(point,point+'\n    #[cfg(all(kani,NDE_scan_step))]\n    let mut output=unsafe{NDE_native::NDE_PACKED_ROW};\n    #[cfg(all(kani,NDE_packed_after))]\n    let mut output=4usize;',1)
    point='        let mut limb = 0usize;'
@@ -94,10 +99,10 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_from_raw_limbs)]\nfn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }\n'
   if prefix=='semantic':
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::variant_expected_output)]\nfn NDE_expected(){let v=if kani::any(){CompiledVariant::Withdrawal}else{CompiledVariant::PrivateTransfer};let _=super::variant_expected_output(v);}\n'
-   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()+(E/'NDE_carry_native.rs').read_text()+(E/'NDE_public_native.rs').read_text()+(E/'NDE_root_native.rs').read_text()+(E/'NDE_linear_native.rs').read_text()
+   harness+=(E/'NDE_semantic_extra.rs').read_text()+(E/'NDE_semantic_index.rs').read_text()+(E/'NDE_carry_native.rs').read_text()+(E/'NDE_public_native.rs').read_text()+(E/'NDE_root_native.rs').read_text()+(E/'NDE_linear_native.rs').read_text()+(E/'NDE_equality_native.rs').read_text()
    out['crates/aspis-statement/src/pool_v1/NDE_claim_reference.rs']=(E/'NDE_claim_reference.rs').read_text()
   if prefix=='copy':
-   harness+=(E/'NDE_row_native.rs').read_text()
+   harness+=(E/'NDE_row_native.rs').read_text()+(E/'NDE_residual_native.rs').read_text()
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::selected_binary_weight)]\nfn NDE_binary(){let high:QM31=kani::any();let weight:u32=kani::any();let _=super::selected_binary_weight(high,M31(weight));}\n'
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::link_weight)]\nfn NDE_link(){let k:u8=kani::any();let l:u8=kani::any();kani::assume(k<=4&&(k<3||l<64));let i:u64=kani::any();let v=if kani::any(){PoolV1PairForestCompiledVariantV1::Withdrawal}else{PoolV1PairForestCompiledVariantV1::PrivateTransfer};let ep=CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()};let link=CompiledPoolV1PairForestLink{tag:kani::any(),weight_kind:k,weight_level:l,producer:ep,consumer:CompiledPoolV1PairForestEndpoint{row:kani::any(),slot:kani::any(),pattern:kani::any()}};let _=super::link_weight(link,i,v); }\n'
   if prefix=='poseidon':harness+=(E/'NDE_packed_native.rs').read_text()
@@ -115,6 +120,7 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
  n='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs';s=subprocess.check_output(['git','show',REV+':'+n],text=True)
  out[n]=s+'\n#[cfg(kani)]\n#[path="NDE_terminal.rs"]\nmod NDE_terminal;\n'
  out['crates/aspis-statement/src/pool_v1/NDE_terminal.rs']=(E/'NDE_terminal_native.rs').read_text()
+ out['crates/aspis-statement/src/pool_v1/NDE_terminal_reference.rs']=(E/'NDE_terminal_reference.rs').read_text()
  patch=''
  for n,s in out.items():
   old=subprocess.run(['git','show',REV+':'+n],capture_output=True,text=True)

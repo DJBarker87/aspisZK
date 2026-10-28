@@ -24,6 +24,7 @@ theorem matrix (input : FJb_RawRowCallbacks.Input) (row limb : Usize)
         let out ← NDE_Reference11.matrix_cell_ref a0 b0 c0 d0 row
         ok (out,(input,row))) = FJe_PackedRawCallbacks.call (input,row) limb := by
   unfold FJe_PackedRawCallbacks.call FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure.Insts.CoreOpsFunctionFnMutTupleUsizeU64.call_mut
+  dsimp only []
   obtain ⟨a,ha,_⟩ := NDE_RowBridge.read_total input 0#usize (by decide)
   obtain ⟨b,hb,_⟩ := NDE_RowBridge.read_total input 1#usize (by decide)
   obtain ⟨c,hc,_⟩ := NDE_RowBridge.read_total input 2#usize (by decide)
@@ -32,8 +33,9 @@ theorem matrix (input : FJb_RawRowCallbacks.Input) (row limb : Usize)
   obtain ⟨b0,hb0,_⟩ := NDE_RowBridge.read_total b limb hl
   obtain ⟨c0,hc0,_⟩ := NDE_RowBridge.read_total c limb hl
   obtain ⟨d0,hd0,_⟩ := NDE_RowBridge.read_total d limb hl
+  dsimp only [FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure] at *
   simp only [ha,hb,hc,hd,ha0,hb0,hc0,hd0,bind_tc_ok,NDE_Reference11.matrix_cell_ref,lift]
-  split <;> simp only [bind_tc_ok,bind_assoc_eq]
+  split <;> first | rfl | (simp only [bind_tc_ok,bind_assoc_eq]; rfl)
 
 theorem scan (table : FJe_PackedRawAfter.Table) (flag : Bool) (row limb : Usize)
     (hl : limb.val < 4) :

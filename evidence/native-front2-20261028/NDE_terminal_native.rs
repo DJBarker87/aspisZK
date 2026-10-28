@@ -13,3 +13,16 @@ fn NDE_withdrawal_short(){let raw:[u8;8]=kani::any();let len:usize=kani::any();k
 #[kani::proof] #[kani::unwind(22)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
 fn NDE_request_short(){let raw:[u8;8]=kani::any();let len:usize=kani::any();kani::assume(len<=8);let r=super::decode_pool_v1_pair_forest_terminal_request_v1(&raw[..len]);let good=matches!(r,Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength));assert!(good!=cfg!(NDE_invert));}
+#[path="NDE_terminal_reference.rs"] mod reference;
+#[kani::proof] #[kani::unwind(22)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn NDE_semantic_view(){
+ use crate::pool_v1::payment_relation::{PoolV1PrivateTransferPublicV1,PoolV1WithdrawalPublicV1};
+ use crate::pool_v1::pair_forest_semantic_terminal::r0::Public;
+ let c=*common();
+ let statement=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common:c,public:PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:kani::any(),nullifier:kani::any(),asset_id:kani::any(),recipient_commitment:kani::any(),change_commitment:kani::any()}}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common:c,public:PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:kani::any(),nullifier:kani::any(),asset_id:kani::any(),amount:kani::any(),destination_token_account:kani::any(),change_commitment:kani::any()}}};
+ let expected=reference::terminal_view_ref(match &statement{PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public}=>reference::TerminalView::Transfer(public,&common.lane_transition),PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}=>reference::TerminalView::Withdrawal(public,&common.lane_transition)});
+ let got=statement.semantic_public();
+ let good=match(got,expected){(Public::Transfer(p,t),reference::TerminalView::Transfer(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),(Public::Withdrawal(p,t),reference::TerminalView::Withdrawal(q,u))=>core::ptr::eq(p,q)&&core::ptr::eq(t,u),_=>false};
+ assert!(good!=cfg!(NDE_view_invert));
+}

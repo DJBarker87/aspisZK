@@ -8,9 +8,9 @@ S=B/'NDE_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'src/lib.rs').write_bytes((B/'NDE_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 parser=os.environ.get('NDE_EXTRACT_PARSER')=='1'
-roots=['crate::selected_binary_ref','crate::variant_output_ref']
-namespace='NDE_Reference12'
-dest=B/'NDE_extracted12'
+roots=['crate::fields_word_ref']
+namespace='NDE_Reference20'
+dest=B/'NDE_extracted20'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
 cmd+=['--dest-file',str(B/'NDE_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']

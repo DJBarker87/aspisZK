@@ -18,3 +18,5 @@ node. Hence wrapping does not change the natural specification. A redundant
 canonical-output assume is justified by `qm31_value`'s canonical conclusion.
 The caller must establish the operand domain; the stub never assumes its own
 input domain. Its log is ghost data, with no Option<fn>/function pointer.
+
+K077 uses the same paired QM31 stub for a nine-call copy_residual domain diagnostic, but times out and receives no credit. K080 equality-domain preparation never reaches verification (scratch placement-hook syntax error). Neither is a bridged caller. No additional arithmetic stub is admitted.
