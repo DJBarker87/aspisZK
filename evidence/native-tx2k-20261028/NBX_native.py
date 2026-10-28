@@ -70,7 +70,7 @@ r=subprocess.run(['patch','-p1','--batch','--forward','-i',str(p)],cwd=b/'NBU_sr
 ''');assert r.returncode==0,r.stdout+r.stderr
 elif sys.argv[1]=='run':
  a,harness=sys.argv[2:];assert len(list(E.glob('NBX_K*/receipt.json')))<50
- assert not harness.endswith(('::NBX_store688_gate','::NBX_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
+ assert not harness.endswith(('::NBX_store688_gate','::NBX_store800_gate','::NBU_store688_gate','::NBU_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
  sources=['NBU_src/KMX_stubs.rs','NBU_src/crates/aspis-statement/src/KMX_stubs.rs','NBU_KMX_copy_stubs.patch','NBU_src/Cargo.lock','NBU_src/crates/aspis-statement/src/lib.rs','NBU_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_codecs.rs','NBU_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_more.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_decode.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBX_slots.rs','NBU_src/crates/aspis-statement/src/pool_v1/verifier_registry.rs']
  verify=py(f'''from pathlib import Path

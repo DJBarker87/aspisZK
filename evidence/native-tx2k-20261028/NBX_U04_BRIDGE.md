@@ -147,3 +147,25 @@ heartbeat/depth options. Rejected normalization shapes L073/L075/L076 are replac
 by NBX_AdapterShape.adapter and NBX_SdkRetention plus existing NBK lemmas, not by
 larger resource limits. L076 admission refused once and waited180s before a fresh
 exit0/allowed:true receipt; no prover launched on the refusal.
+
+## Remaining Lean-only loop components completed
+
+NBX_PredicateScan.value/step generalize the short-circuit fold to arbitrary pure
+predicates; byte reuses the already checked byte-scan value law, and capacity
+composes the SAME original sequence reader with the u64>2^20 predicate.
+NBX_SequenceDomains.within/disjoint and master/checkpoint/checkpoint_input derive
+all eight-byte read ranges and separation from the actual count8 and guarded
+384/192-byte input shapes. Checkpoint reads end at176 before its reserved suffix.
+No concrete sequence or whole-buffer computation is unfolded.
+
+L115 rejected an Aeneas scalar-literal simplification/transparency encoding;
+L117 rejected a Boolean base-case rfl. The replacement uses a direct generic
+Boolean fold and explicit two-case base proof, with no resource option change.
+L118 passes the predicate module; L116 passes the domain module. Native iterator,
+Box/allocator and original-caller association still require new native evidence.
+
+Final combined audit L119 (source closure changed since provisional L114):
+exit0,4.501810613s,peakRSS5,578,644KiB,swap0,revision ca1dedc93e plus recorded
+exact dirty source hash. All51 new theorem roots use a subset of
+propext/Classical.choice/Quot.sound. NBN_Audit and NBU_Audit are imported,
+not re-proved. This is a focused audit, not a full release manifest replay.

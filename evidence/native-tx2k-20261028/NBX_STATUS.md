@@ -51,3 +51,14 @@ abstract SDK request/emission retention; registry/account SDK retention reuses
 NBK’s existing theorems. Per-slot proofs now rewrite these named lemmas before
 reducing the tiny final record update. This permanently removes the failing
 large SDK/configuration normalization shape. No limits are raised.
+
+L110 rejected a simplification bridge; L111 confirms the actual loaded IDa seed
+and its adapter projection, then L112 composes all eight actual headline fields.
+L115/L117 rejected an unnecessary scalar encoding and a Boolean nil rfl;
+L118 uses a direct predicate fold and explicit Boolean cases. All failed
+artifacts remain rejected. The final audit L119 is justified by newly added
+predicate/domain modules; L114 was provisional and is not rerun unchanged.
+Own control validator initially guessed448 properties; it now requires the
+negative to have the SAME total as the recorded positive,447, and exactly one
+failure. The source/limits/env/attributes/lock checks remain enforced.
+K049 is an unpaired diagnostic and receives no native copy/closure credit.

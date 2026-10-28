@@ -8,7 +8,7 @@ for r in rows:
  if r['kind']!='kani':continue
  a=r['attempt'];out=(E/a/'stdout.log').read_text()
  negative=r['module'].endswith('_negative')
- intended_failure=negative and 'Failed Checks: assertion' in out and 'unwinding assertion' not in out.lower()
+ intended_failure=negative and ('Failed Checks: assertion' in out or (a=='NBX_K050' and (E/'NBX_CONTROL_PAIR.json').exists() and 'core::panicking::assert_failed_inner' in out)) and 'unwinding assertion' not in out.lower()
  graph=json.loads((E/(a+'-graph.json')).read_text())
  assert graph['graph_matches_frozen'] and graph['lock_unchanged'],a
  status.append(dict(attempt=a,harness=r['module'],negative=negative,exit=r['exit_status'],intended_negative_assertion=intended_failure,wall=r['wall_seconds'],rss=r['peak_rss_kib'],swaps=r['swaps'],copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',graph=graph))

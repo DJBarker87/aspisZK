@@ -1,0 +1,36 @@
+{
+  "positive": "evidence/native-tx2j-20261028/NBU_K050",
+  "negative": "evidence/native-tx2k-20261028/NBX_K050",
+  "common_sources_identical": {
+    "NBU_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBU_src/crates/aspis-statement/src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBU_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NBU_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBU_src/crates/aspis-statement/src/lib.rs": "3205b68fa9a1651202c3a8e263bf9b6277adfde4ebc9e0d7c1a89517c9ce64eb",
+    "NBU_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs": "a1dd43459bb53f1d1af4078b9e633fdf9b81790984cfe930535fa7a50b19c172",
+    "NBU_src/crates/aspis-statement/src/pool_v1/NBU_codecs.rs": "0235cabef3616a1ad000c785aa32b69eb6e0c47e91b1e7d6546b4e6d3fe75ae8",
+    "NBU_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs": "0f6b3f93aa50bf08ddc24cbf8b9c6437159f41410fcafe576bba8027e2b041d6",
+    "NBU_src/crates/aspis-statement/src/pool_v1/NBU_more.rs": "358d321a12ef8ef3cfe550770fae8a3d72ef35bf30a01168fc89b23549e44bef",
+    "NBU_src/crates/aspis-statement/src/pool_v1/NBU_decode.rs": "0b82905272571df726847ff8a8ebaac3c64085664dca9c4b2b8cb3d096f1bc2e"
+  },
+  "limits_identical": true,
+  "semantic_env_identical": true,
+  "only_env_differences": [
+    "CARGO_TARGET_DIR",
+    "TMPDIR"
+  ],
+  "attributes_identical": "#[kani::proof]\n#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]\n#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]\n#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]\n#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]\n#[kani::unwind(1881)]\n",
+  "only_control_change": "first reached lane callback: assert_eq!(stage.get(),0) -> assert_ne!(stage.get(),0)",
+  "failure_diagnostic": "VERIFICATION RESULT:\n ** 1 of 447 failed\nFailed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime\n File: \"/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs\", line 439, in core::panicking::assert_failed_inner\n\nVERIFICATION:- FAILED\nVerification Time: 2.9906728s\n\nManual Harness Summary:\nVerification failed for - pool_v1::pair_forest_terminal::NBU_more::NBU_result_control_negative\nComplete - 0 successfully verified harnesses, 1 failures, 1 total.\n",
+  "interpretation": "expected negative assertion panic path; Kani emits its runtime-format placeholder at assert_failed_inner; unsupported caller_location/foreign-function warnings retained, not hidden; no unwinding/codegen failure",
+  "KMX_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "graph": {
+    "graph_matches_frozen": true,
+    "lock_before_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "frozen_lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "reference": "evidence/leaf-p6-11-20261027/LPm_frozen_graph.json",
+    "offline": true,
+    "lock_after_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "lock_unchanged": true
+  }
+}
