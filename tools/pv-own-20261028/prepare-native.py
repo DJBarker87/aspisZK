@@ -6,7 +6,7 @@ for rel in ['crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs','crates/asp
  p=R/rel
  if p.exists():records.append(dict(path=rel,host_path='/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/'+rel,sha256=hashlib.sha256(p.read_bytes()).hexdigest(),blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],text=True).strip()))
 j=dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),sources=records)
-code='''from pathlib import Path
+code=r'''from pathlib import Path
 import json,re,shutil,base64
 D=Path(DIR);base=Path('/home/dombarker/project-offloads/codex-pv-rdb2c-20261028')
 p=D/'probe';p.mkdir(exist_ok=True)
