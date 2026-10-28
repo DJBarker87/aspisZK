@@ -17,7 +17,8 @@ theorem index (p : Nat → Old.Q) (i : Usize) (hi : i.val<10) :
 
 theorem update (p : Nat → Old.Q) (i : Usize) (hi : i.val<10) (z : Old.Q) :
     Array.update (array p) i (source z) = .ok (array (Function.update p i.val z)) := by
-  rw [array,ProverCommitArray49.update _ _ i hi]
+  unfold array
+  rw [ProverCommitArray49.update 10#usize (fun k => source (p k)) i hi]
   congr 2
   funext k
   by_cases he : k=i.val
@@ -32,7 +33,17 @@ theorem sample (ops : ExternalFuns) (p : Nat → Old.Q) (r : Usize) (hr : r.val<
       let q ← @aspis_core.field.QM31.from_cm31 _ (ProverRwDictionaryScalar.selected ops) c
       Array.update (array p) r q) =
     .ok (array (Function.update p r.val (ProverCommitSamplePoint49.word s))) := by
-  change Array.update (array p) r (source (ProverCommitSamplePoint49.word s)) = _
+  change (do
+    let c ← ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromC
+      (AspisR1ProducerRelease47.field.CM31.from_m31 s)
+    let q ← ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromQ
+      (AspisR1ProducerRelease47.field.QM31.from_cm31 (ProverRwDictionaryTower.toC c))
+    Array.update (array p) r q) = _
+  simp only [AspisR1ProducerRelease47.field.CM31.from_m31,
+    AspisR1ProducerRelease47.field.QM31.from_cm31,
+    AspisR1ProducerRelease47.field.M31.ZERO,AspisR1ProducerRelease47.field.CM31.ZERO,
+    ProverRwDictionaryTower.mapResult,ProverRwDictionaryTower.toC,
+    ProverRwDictionaryTower.fromC,ProverRwDictionaryTower.fromQ,bind_tc_ok]
   exact update p r hr _
 
 #print axioms array
