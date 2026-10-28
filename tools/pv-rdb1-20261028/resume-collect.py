@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,subprocess,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb1-20261028';D='/home/dombarker/project-offloads/codex-pv-rdb1-20261028';H='dombarker@100.108.41.90'
-for name in ['v184-deployed-binding.json','v170-deployed-binding.json','v187-deployed-binding.json','v183-deployed-binding.json','v198-deployed-binding.json','v195-deployed-binding.json','v164-deployed-binding.json','v219-deployed-binding.json','v198-errors-config/configuration.json','preflight.json']:
+for name in ['v184-deployed-binding.json','v170-deployed-binding.json','v187-deployed-binding.json','v183-deployed-binding.json','v198-deployed-binding.json','v195-deployed-binding.json','v164-deployed-binding.json','v219-deployed-binding.json','v198-errors-config/configuration.json','v181-deployed-binding.json','v178-deployed-binding.json','v182-deployed-binding.json','witness-config/configuration.json','v181-native-config/configuration.json','preflight.json']:
  r=subprocess.run(['ssh',H,'cat '+D+'/'+name],capture_output=True,check=True);(E/name).parent.mkdir(parents=True,exist_ok=True);(E/name).write_bytes(r.stdout)
 fsha=hashlib.sha256((E/'resolved-features.json').read_bytes()).hexdigest()
 for p in E.glob('*-submission.json'):
