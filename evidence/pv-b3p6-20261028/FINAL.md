@@ -1,96 +1,59 @@
-# LOG D387 resume handoff — V244 deployed-toolchain gate
+# D390 resume — budget exhausted under ruling (x′)
 
-Exact worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`, unchanged branch
-`codex/pv-b3p6-20261028`, entry `9539b7530bf5d364a0c363c768f0c95970905758`.
-Rust differential/extraction source revision
-`98d809dde3214eecc8f686b83df734606c34f598`.
-Prior accepted handoff: [FINAL-D377.md](FINAL-D377.md).
-Resume commits: [COMMIT-LOG-resume4.txt](COMMIT-LOG-resume4.txt).
+Worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`; branch
+`codex/pv-b3p6-20261028`; entry `bda15710cf14d580d76eb83d1d372ba383632e3e`.
+[Resume commit log](COMMIT-LOG-resume5.txt).
 
-**V244 remains OPEN. V228/V229/V243 retain accepted CLOSED status.
-V241/V245 remain OPEN and unchanged. Target not yet established.**
+**100/100 Lean attempts, IDs42000–42099; zero Kani.** Final supporting audits
+42097–42099 pass. V244 remains **OPEN**; V241/V245 remain open and were not
+started under the required ordering. V228/V229/V243 retain accepted closed
+status. No row/endpoint premise was removed, added, weakened or moved into T.
+**Target not established.**
 
-Stop/handoff: pinned extraction infrastructure cannot meet the explicit
-rustc 1.94.1/std requirement. The actual attempt failed E0514: pinned Charon
-uses rustc 1.98.0-nightly, incompatible with the required 1.94.1 std.
-[Exact finding and governing boundary](TOOLCHAIN-BLOCK-resume4.md).
-No nightly-std fallback, extractor rebuild/replacement, or Kani was used.
-No checked counterexample to a ledger row or endpoint was found.
+The pinned Charon/Aeneas path now succeeds on `nightly-2026-06-01` with deployed
+features, release settings and dependency versions. Native gates remain on
+1.94.1. The final owned Rust freeze is
+`1f96955af7a6b511bb69df2f748bbcb574fc440e`;720 source/configuration hashes were
+checked. Repeated changed-source native64 gates passed, including the final
+reference (32 Ok,32 Error.Public and D-column perturbations).36 arithmetic
+native/emission observations also match. These are **finite validation**.
 
-Fresh budget remains **100 Lean attempts, 0 Kani**: zero Lean compiles and
-zero Kani runs launched; all IDs 42000–42099, including audits 42097–42099,
-remain unused. No Lean import was attempted, so no external-object replay
-preflight or axioms audit is claimed for this resume. The requested final
-combined audit and focused closure replay await a completed row proof.
+Checked supporting results include selection84/value/D laws, ordered Result
+folds and array restoration/frame laws, pure field-value laws, numeric interface
+ports, carrier Q/array/challenge roundtrips, the complete emitted Result plan,
+whole-emission D independence, a concrete op227 installation in the original
+carrier with261 other-field frames, and its combined installed-Result bridge.
+The plan retains the closed emitted composition/equality bodies; it does not
+prove their native correspondence or successful nonvacuity. The262-field formal
+dictionary is noncomputable due to Lean runtime IR's constructor-field limit.
 
-## V244 work and exact validation scope
+[Residuals](RESIDUALS-resume5.md) remain: universal shipped/reference structural
+binding; successful formal `.ok (.Ok value)` nonvacuity; remaining D188 write
+checks; slice-law application and complete pre-inline std-cone coverage.
+The53-declaration expanded std inventory and13 additional integer bodies are
+source-compared. Four changed conversions have separate1.94.1 laws; the changed
+slice body has a checked loop-model law. Compiler-cohort boundaries remain
+explicit. The runjoin op227 hypothesis is not discharged as a deployed claim.
 
-Five owned files under `tools/pv-b3p6-20261028/v244/` byte-equal the shipped
-host terminal, copy-terminal and field helpers and generated constants.
-[Source pins](source244-resume4.json) and
-[structural preparation](structural227-resume4.json) retain hashes and cfg
-selection. This is preparation for the plain **structural** route, not a
-completed native/source/selected-callback law. No new theorem is claimed.
-The complete-Result Lean law, original-carrier installation, all other-field
-frames and nonvacuity are still missing; the runjoin op227 hypothesis remains.
-
-The native differential is a release **binary**, with cfg(test)=false, rather
-than a unit test that would select extra test-only helper bodies. It compares
-complete same-input Results across the shipped deployed host, the byte-identical
-owned host copy and the statement implementation. The final run checks
-64 cases: both public variants, 16 canonical arbitrary-claim/challenge seeds,
-and valid/invalid append increments. It observes **32 Ok and 32 Error::Public**
-and also checks perturbations of all three omitted D-column claims.
-This is **finite validation**, not universal equality or source refinement.
-
-The first retained 64-case run passed but produced only successes: its
-next-root mutation is not rejected by the terminal. That coverage gap was
-corrected by changing the differential source to violate the actual append
-increment guard and asserting the expected 32/32 split. This justified the
-second native run; no unchanged regression was repeated.
-
-[Deployed configuration](features227-resume4.json): rustc 1.94.1, release,
-opt-level 3, overflow checks/debug assertions off, no cfg(test), deployed
-`tools/r1-cost-probe` root features `r1p-check` and
-`aspis-r1-cost-probe/ct-host-prover`. Every validation dependency matches a
-deployed node's name, version, source and complete feature list, with zero
-feature differences. The record includes every resolved crate, both lock
-hashes and 1,943 std-source hashes. Preliminary graph snapshots retain the
-compile-free work that added explicit parity dependencies before launching
-any native gate. All 706 frozen source/configuration files were checked on
-the host against this worktree before gate launch. Initial absent files and
-an older host lockfile were synchronized only into this job's own workspace.
-
-## Receipts and remaining obligations
-
-All three runs used one own capped scope at a time, MemoryHigh 6G,
-MemoryMax 8G, MemorySwapMax 0, TasksMax 64, with successful admission.
-No refusal, transport retry or memory kill occurred.
-[Receipt index](receipt-index-resume4.json) links exact commands, revisions,
-admission logs and resource measurements; #print axioms is N/A for Rust runs.
-
-|Target|Exit|Wall seconds|Peak RSS KiB|Swap|
+|Final target|Exit|Wall s|Peak RSS KiB|Swap|
 |---|---:|---:|---:|---:|
-|native227-resume4, initial success-only coverage|0|46.982|544132|0|
-|native227-resume4-errors, final 32/32 Result coverage|0|0.174|136048|0|
-|charon227-deployed-resume4, incompatible std|101|0.128|58944|0|
+|Aeneas composition|0|108.165|1777812|0|
+|native composition64|0|9.512|293116|0|
+|42096 installation|0|16.535|2680712|0|
+|42097 combined|0|1.239|2645856|0|
+|42098 axioms|0|1.277|2641816|0|
+|42099 supporting replay|0|1.204|2645624|0|
 
-Before/after: no row or full endpoint premise was removed, added, weakened,
-or moved into T in this resume. T remains exactly entropy_law, entropy_kernel,
-observation. V165/V167, E1/E2, real RunJoin, client proof-account routing and
-L1/L2/L3 remain substantive. Simulator and observer are unchanged. No new
-Kani PASS, including quarantined copy/function-pointer evidence, is credited.
+[All177 receipts](receipt-index-resume5.json) record targets, commands, statuses,
+resources, revisions, exact source snapshots and axioms. Final Lean source
+revision: `50cbc0cab6d7a32e3e443760e93e741fd10487a5`. Only propext,
+Classical.choice and Quot.sound occur in the accepted audit.
+[Failures, refusals and corrected metadata](RECEIPT-NOTES-resume5.md) are retained.
+No checked ledger-row/endpoint counterexample was found.
 
-No files under crates/ or programs/, other worktrees, shared sources or keys
-were changed; no merge or push. The only source synchronization was into this
-job's own host workspace. [Cache cleanup](resume4-cleanup.json) records disposal
-of this job's rebuildable Rust output directories after all scopes ended;
-source, hashes and receipts are retained.
-
-Next concrete deliverable: the lead supplies an approved pinned extraction
-path compatible with rustc 1.94.1 and its std sources, resolving the conflicting
-constraints without silently changing configuration. Then extract the owned
-V244 reference, prove its complete Result law, install op227 in the original
-carrier with all other fields framed, prove nonvacuity and discharge the
-runjoin bridge's exact selected-callback hypothesis. Finish V244, then V241,
-then V245; combined audit and focused closure replay last.
+T stays entropy_law/entropy_kernel/observation. V165/V167, E1/E2, real RunJoin,
+client proof-account routing and L1/L2/L3 remain substantive; simulator/observer
+unchanged. No crates/programs, other worktrees or shared host sources changed;
+no merge/push or key deletion. [Own cache cleanup](cleanup-resume5.json) retains
+sources, receipts, LLBC and object hashes. Next: close V244's listed residuals,
+then V241 and V245; a full privacy manifest replay awaits actual row closure.
