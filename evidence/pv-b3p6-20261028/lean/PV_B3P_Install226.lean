@@ -1,6 +1,6 @@
 import PV_B3P_PublicCarrier226
 import PV_B3P_ByteOutput226
-import PV_B3P_BytesEmission226
+import PV_B3P_BytesRoot226
 namespace PV_B3P_Install226
 open Aeneas Aeneas.Std Result ProverRwFull
 set_option autoImplicit false

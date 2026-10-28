@@ -129,3 +129,11 @@ Copy-dependent PASS results require that patch and a failing negative control.
 No native link is inferred from the failed or timed-out gates here. Evidence
 class for any future structural fallback will be structural (K-1 substitute).
 All six rows remain OPEN. T retains its original three fields.
+
+42519 accepts serializer Types.42520 times out monolithic emission after
+900.612s, exit124, peak RSS9198824KiB, cgroup peak7070253056bytes, swap0,
+no axioms result. The ten-minute review held the cap and timeout fixed.
+No unchanged rerun. The exact nine emitted definitions are partitioned into
+seven modules, with per-definition body hashes in split226.json. Smaller
+scalar/indexing/projection declarations are tested before the64-read chunk.
+The split8 Rust candidate remains an unused alternative, not a source change.
