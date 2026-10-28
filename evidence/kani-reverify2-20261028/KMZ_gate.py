@@ -1,6 +1,6 @@
 """Executed inside the capped S2W command: strict frozen graph before each run."""
 from pathlib import Path
-import hashlib,json,subprocess,sys,tomllib,os
+import hashlib,json,subprocess,sys,tomllib,os,tempfile
 b=Path(__file__).resolve().parent;s=b/'KMY_src';a=sys.argv[1];harness=sys.argv[2]
 assert hashlib.sha256((b/'KMX_stubs.rs').read_bytes()).hexdigest()=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
 lock=s/'Cargo.lock';before=hashlib.sha256(lock.read_bytes()).hexdigest()
@@ -28,7 +28,11 @@ out=dict(lock_before=before,new_packages=new,edge_errors=edges,metadata_sha256=h
 assert out['allowed']
 cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver',str(b/'KMZ_windows.rs'),'-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular','--cbmc-args','--unwinding-assertions']
 print(json.dumps(dict(command=cmd)),flush=True)
-r=subprocess.run(cmd,env=os.environ)
+with tempfile.TemporaryDirectory(prefix='KMZ_'+a+'_tmp_',dir=b) as task_tmp:
+ child_env=os.environ.copy();child_env['TMPDIR']=task_tmp
+ print(json.dumps(dict(owned_temp=task_tmp)),flush=True)
+ r=subprocess.run(cmd,env=child_env)
+print(json.dumps(dict(owned_temp_removed=not Path(task_tmp).exists())),flush=True)
 after=hashlib.sha256(lock.read_bytes()).hexdigest();out.update(lock_after=after,unchanged=before==after,kani_exit=r.returncode)
 (b/(a+'-graph.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out),flush=True)
 assert after==before,'STOP frozen lock drift'
