@@ -27,7 +27,7 @@ theorem asset (p : reference226.OwnedPublic) (i : Usize)
   have hoff := PV_B3P_Offset226V3.sub_value i 65#usize (by simpa using lo)
   rw [PV_B3P_Regions226V3.asset p i lo hi]
   rw [word_byte _ _ (by rw [hoff]; scalar_tac)]
-  simpa only [hoff, UScalar.ofNatCore_val_eq]
+  simpa only [hoff, show (65#usize).val = 65 from rfl]
 
 theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = true)
     (lo : 103 ≤ i.val) (hi : i.val < 107) :
@@ -38,7 +38,7 @@ theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = t
   have hoff := PV_B3P_Offset226V3.sub_value i 103#usize (by simpa using lo)
   rw [PV_B3P_ScalarRegions226.amount p i hw lo hi]
   rw [word_byte _ _ (by rw [hoff]; scalar_tac)]
-  simpa only [hoff, UScalar.ofNatCore_val_eq]
+  simpa only [hoff, show (103#usize).val = 103 from rfl]
 
 theorem index_list (v : U64) (j : Usize) (hj : j.val < 8) :
     PV_B3P_ScalarRegions226.indexLane v j = (indexBytes v)[j.val]?.getD 0#u8 := by
