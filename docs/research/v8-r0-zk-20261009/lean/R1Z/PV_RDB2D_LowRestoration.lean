@@ -20,7 +20,7 @@ theorem final_quotient (q ds : Words) (out : Words × Words)
     (h : digits q ds 0#usize=ok out) :
     (do let (q1,_) ← digits q ds 0#usize
         Array.index_usize q1 0#usize)=Array.index_usize out.1 0#usize := by
-  simp only [h,bind_tc_ok]
+  simp only [h,bind_tc_ok] <;> rfl
 
 #print axioms low_complete
 #print axioms final_quotient
