@@ -33,12 +33,12 @@ theorem raw_valid {World : Type} (a : Usize) (world : World) (h : powerOfTwo a =
 theorem raw_four {World : Type} (world : World) :
     rawNew 4#usize world = ok (⟨4#usize,0#usize⟩,world) := raw_valid _ _ power_four
 
-theorem empty_view (T : Type) (raw : EmptyRaw) :
-    (alloc.vec.Vec.new T).val = [] := rfl
+theorem zero_length_view (T : Type) (payload : List T) :
+    payload.take 0 = (alloc.vec.Vec.new T).val := rfl
 
 #print axioms power_four
 #print axioms alignment_valid
 #print axioms raw_valid
 #print axioms raw_four
-#print axioms empty_view
+#print axioms zero_length_view
 end R1Z.PV_RDCD_EmptyRaw194
