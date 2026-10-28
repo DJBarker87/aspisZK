@@ -28,7 +28,7 @@ theorem transfer
     | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
     | (pv_if h)
     | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true,↓reduceIte] at h)
-    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
+    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value <;> pv_head h)
 #print axioms transfer
 
 theorem withdrawal_change
@@ -48,7 +48,7 @@ theorem withdrawal_change
     | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
     | (pv_if h)
     | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true,↓reduceIte] at h)
-    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
+    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value <;> pv_head h)
 #print axioms withdrawal_change
 
 theorem withdrawal_public (p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
@@ -63,7 +63,7 @@ theorem withdrawal_public (p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
     | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
     | (pv_if h)
     | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true,↓reduceIte] at h)
-    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
+    | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value <;> pv_head h)
 #print axioms withdrawal_public
 
 theorem withdrawal_amount
