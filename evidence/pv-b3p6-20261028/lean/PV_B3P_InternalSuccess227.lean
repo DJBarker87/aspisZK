@@ -272,7 +272,7 @@ theorem total_reference_poseidon_internal_full_sum227 (part_sum : Array Std.U64 
 
 #print axioms total_reference_poseidon_internal_full_sum227
 
-theorem total_reference_poseidon_internal_sum227 (part_sum : Array Std.U64 4#usize) (value : aspis_core.field.QM31) (hi : index.val<16) :
+theorem total_reference_poseidon_internal_sum227 (part_sum : Array Std.U64 4#usize) (value : aspis_core.field.QM31) :
     Success (reference_poseidon.internal_sum227 part_sum value) := by
   apply bind
   · apply total_reference_poseidon_extension_limbs

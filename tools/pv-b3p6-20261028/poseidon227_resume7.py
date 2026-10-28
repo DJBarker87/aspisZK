@@ -34,7 +34,6 @@ def emit(mod,srcs,imports):
      pos+=1
     b=head[start:pos];binders.append(b);args+=b[1:-1].split(':',1)[0].split()
    theorem='total_'+name.replace('.','_');mapping[name]=theorem
-   if name=='reference_poseidon.internal_sum227':binders.append('(hi : index.val<16)')
    if name=='reference_poseidon.interpolate_column227':pass
    lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*','  '+body.lstrip(),re.M));body='  '+body.lstrip();proof=[]
    def rule(expr):
