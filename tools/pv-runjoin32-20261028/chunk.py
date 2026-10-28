@@ -19,6 +19,22 @@ if prior:
  deadline=max(json.loads(p.read_text())['epoch'] for p in prior)+180
  if time.time()<deadline:
   print('unlaunched cooldown remaining',deadline-time.time(),flush=True);sys.exit(77)
+# Ruling o: refresh cross-job receipt and sent-table check for THIS ID.
+id_code=r"""import pathlib,re,json
+root=pathlib.Path('/home/dombarker/project-offloads');hits=[];a=ATTEMPT
+pat=re.compile(r'(^|[-_])'+str(a)+r'([-_.]|$)')
+for job in root.glob('codex-pv-*'):
+ if job.name=='codex-pv-runjoin-20261026':continue
+ for q in job.glob('evidence/**/*'):
+  if len(q.relative_to(job).parts)<=6 and q.is_file() and pat.search(q.name):hits.append(str(q))
+sent=root/'r1-privacy-build-integration-20261019/evidence/sent.txt'
+lines=[l for l in sent.read_text().splitlines() if len(l.split())>2 and l.split()[2]==str(a)]
+print(json.dumps(dict(attempt=a,other_receipt_hits=hits,sent_hits=lines)))
+""".replace('ATTEMPT',str(a))
+id_result=ssh('python3 -c '+shlex.quote(id_code));assert id_result.returncode==0,id_result.stderr
+id_audit=json.loads(id_result.stdout);(E/f'id-audit-{a}.json').write_text(json.dumps(id_audit,indent=2)+'\n')
+assert not id_audit['other_receipt_hits'] and not id_audit['sent_hits'],id_audit
+
 # Keep attempts fail-closed and check both admission signals.
 r=ssh(f'python3 {H}/reservation-existing.py {P}/evidence/reservation-{a}.json > {P}/evidence/reservation-{a}.log 2>&1\nstatus=$?\ncat {P}/evidence/reservation-{a}.log\nexit $status')
 (E/f'reservation-{a}-{time.time_ns()}.log').write_text(r.stdout+r.stderr)
@@ -40,10 +56,11 @@ print('LAUNCH',a,'chunk',idx,len(mods),'modules',flush=True)
 start=time.monotonic()
 remote='bash -o pipefail -c '+shlex.quote(shlex.join(cmd)+f' 2>&1 | tee {P}/evidence/out-{a}.log')
 proc=subprocess.Popen(['ssh',host,remote],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
-stream=[]
+stream=[];done_count=0
 for line in proc.stdout:
  stream.append(line)
- if line.startswith(('START','DONE','CHUNK','RECEIPT')):print(line.rstrip(),flush=True)
+ if line.startswith('DONE'):done_count+=1
+ if line.startswith(('CHUNK','RECEIPT')) or (line.startswith('DONE') and done_count%10==0):print(line.rstrip(),flush=True)
 rc=proc.wait()
 class Result:pass
 r=Result();r.returncode=rc
@@ -59,5 +76,7 @@ if elapsed:
  for c in elapsed[1].split(':'):wall=wall*60+float(c)
 intent.update(exit=int(ex[1]) if ex else None,host_wall_seconds=wall,peak_rss_bytes=int(rss[1])*1024 if rss else None,swaps=int(swap[1]) if swap else None,completed_modules=len(records),accepted=bool(ex and int(ex[1])==0 and len(records)==len(mods) and all(v['accepted'] for v in records)),failed_module=next((v['module'] for v in records if not v['accepted']),None),axioms=[line for v in records for line in v['axioms']],axiom_note='Per-module original #print axioms retained; empty means no print in that unchanged source. Root audits follow rebuild.')
 (E/f'receipt-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
-print(out[-3500:],flush=True);print('RECEIPT',json.dumps({k:intent[k] for k in ['attempt','accepted','completed_modules','failed_module','host_wall_seconds','peak_rss_bytes','swaps']}),flush=True)
+
+if not intent['accepted']:print(out[-7000:],flush=True)
+print('RECEIPT',json.dumps({k:intent[k] for k in ['attempt','accepted','completed_modules','failed_module','host_wall_seconds','peak_rss_bytes','swaps']}),flush=True)
 sys.exit(0 if intent['accepted'] else 1)
