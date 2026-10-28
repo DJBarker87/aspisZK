@@ -1,0 +1,41 @@
+{"attempt": "KMZ_K003", "exit_status": 1, "wall_seconds": 6.614048313000239, "peak_rss_kib": "282216", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMZ_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMZ_local_window32_selected", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions", "--trace"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition
+...
+ KMX_stubs::KMX_copy_from_slice::<u8>.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KMX_stubs.rs:9:67 in function KMX_stubs::KMX_copy_from_slice::<u8>
+
+Check 38: KMZ_local_window32_selected.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMZ_windows.rs:134:101 in function KMZ_local_window32_selected
+
+Check 39: KMZ_local_window32_selected.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMZ_windows.rs:136:13 in function KMZ_local_window32_selected
+
+Check 40: KMZ_local_window32_selected.array_bounds.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMZ_windows.rs:136:48 in function KMZ_local_window32_selected
+
+
+SUMMARY:
+ ** 1 of 40 failed
+Failed Checks: assertion failed: dst[j] ^ 1u8 == if pos<=j && j<pos+32{src[j-pos]}else{old}
+ File: "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMZ_windows.rs", line 136, in KMZ_local_window32_selected
+
+VERIFICATION:- FAILED
+Verification Time: 2.0733542s
+
+Manual Harness Summary:
+Verification failed for - KMZ_local_window32_selected
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r14ca27bdf6f047fba105fd7fc87459b4.scope; invocation ID: 9c277d5953c64553840f0d7eeccdd3ce
