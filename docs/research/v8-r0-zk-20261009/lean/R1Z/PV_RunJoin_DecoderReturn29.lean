@@ -19,10 +19,11 @@ theorem validated (bytes : Slice U8) (snapshot : PoolV1PairLiveSnapshotV1)
     (h : decode_pool_v1_pair_live_snapshot_v1 bytes = ok (.Ok snapshot)) :
     validate_pool_v1_pair_live_snapshot_v1 snapshot = ok (.Ok ()) := by
   unfold decode_pool_v1_pair_live_snapshot_v1 at h
+  dsimp only at h
   repeat' first
     | (have hr := branch_continue _ _ hvalue; clear hvalue; cases hr)
-    | (pv_peel h with value hvalue)
-    | (split at h)
+    | (pv_peel h with value hvalue; dsimp only at h)
+    | (split at h <;> dsimp only at h)
     | exact False.elim (PV_Src_ResultControl.error_ne_ok _ _ h)
     | exact False.elim (PV_Src_ResultControl.same_residual_ne_ok _ _ h)
     | (have _test : Bool := value; cases value <;> simp only [Bool.false_eq_true, ↓reduceIte] at h)
