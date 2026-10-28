@@ -72,6 +72,7 @@ for k,n in enumerate(selected):
   lines[at:end]=[(prefix+'← PV_L1_Logged.lift ('+expr+')')]
  body='\n'.join(lines)
  body=re.sub(r'(?<![A-Za-z0-9_.])ok(?=\s|\()', 'Pure.pure', body)
+ body=re.sub(r'(?<![A-Za-z0-9_.])(sampler|host_sampler)\.',r'ProverRwFull.\1.',body)
  applications=' '.join(('('+x+' := '+x+')') if kind=='{' else x for x,kind in args)
  result_sig=ret.replace('\n  Result','\n  Logged',1)
  # Parenthesize the parameterized Call.boundary constructor.

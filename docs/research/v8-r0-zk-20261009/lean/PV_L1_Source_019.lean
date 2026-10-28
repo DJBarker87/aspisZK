@@ -24,8 +24,8 @@ def produce
     PV_L1_Source_017.produce aspis_coredigestDigest32Inst self row
       payload
   let out ← PV_L1_Logged.lift (if nonzero
-    then sampler.gamma_sample block
-    else sampler.ordinary_sample block)
+    then ProverRwFull.sampler.gamma_sample block
+    else ProverRwFull.sampler.ordinary_sample block)
   let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .Usize row))
   trace.value 4#u16 i out
   Pure.pure (out, self1)
