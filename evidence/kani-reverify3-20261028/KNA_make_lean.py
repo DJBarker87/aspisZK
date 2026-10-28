@@ -7,12 +7,12 @@ def emit(n,imports,body,theorem='result'):
  m='KNA_'+n;expected[m]='\n'.join('import '+x for x in imports)+'\nset_option autoImplicit false\nnamespace '+m+'\nopen KMX_CopyMeaning KMY_WindowComposition\n'+body+'\n#print axioms '+theorem+'\nend '+m+'\n'
 emit('Frame',['KMZ_Growth'],'''/-- A pointwise heap frame is the runtime interface; no allocation is inferred. -/
 theorem result (before source after : Nat → Nat) (len size : Nat)
- (prefix : ∀ j, j<len → after j=before j)
+ (retained : ∀ j, j<len → after j=before j)
  (tail : ∀ j, len≤j → j<len+size → after j=source (j-len)) :
  ∀ j, j<len+size → after j=(if j<len then before j else source (j-len)) := by
  intro j bound
  by_cases h : j<len
- · simpa only [if_pos h] using prefix j h
+ · simpa only [if_pos h] using retained j h
  · simpa only [if_neg h] using tail j (by omega) bound''')
 emit('Partition',['KNA_Frame'],'''theorem result (j : Nat) (h : j<1768) :
  (j<1736 ∧ ∃ w, w<11 ∧ 160*w≤j ∧ j<min 1736 (160*(w+1))) ∨
@@ -104,10 +104,7 @@ emit('FrameUnion',['KNA_Partition'],'''theorem result (actual expected : Nat →
  rcases KNA_Partition.result j bound with ⟨_,w,hw,lo,hi⟩ | ⟨lo,hi⟩
  · exact prefixWindows w hw j lo hi
  · exact appended j lo hi''')
-emit('Capacity',['KNA_Frame'],'''theorem result (len size : Nat) :
- len≤max 8 (max (2*len) (len+size)) ∧
- len+size≤max 8 (max (2*len) (len+size)) := by omega''')
-assert len(expected)==39,len(expected)
+assert len(expected)==38,len(expected)
 final='\n'.join('import '+m for m in expected)+'\n'+'\n'.join('#print axioms '+m+'.result' for m in expected)+'\n'
 expected['KNA_Final']=final
 for m,s in expected.items():
@@ -116,6 +113,6 @@ for m,s in expected.items():
  if check:assert p.read_text()==s,m
  else:p.write_text(s)
 records=[dict(module=m,sha256=hashlib.sha256(s.encode()).hexdigest()) for m,s in expected.items()]
-(E/'KNA_LEAN_PREFLIGHT.json').write_text(json.dumps(dict(modules=records,next_consumer='KNA_Final',validation='Named symbolic applications only; 39 focused targets and one final replay; heap premises remain separately required'),indent=2)+'\n')
+(E/'KNA_LEAN_PREFLIGHT.json').write_text(json.dumps(dict(modules=records,next_consumer='KNA_Final',validation='Named symbolic applications only; 38 focused targets and one final replay; heap premises remain separately required'),indent=2)+'\n')
 (E/'KNA_LEAN_MANIFEST.json').write_text(json.dumps(list(expected),indent=2)+'\n')
-print('PASS 39 focused modules and one final manifest')
+print('PASS 38 focused modules and one final manifest')

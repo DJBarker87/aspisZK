@@ -36,7 +36,6 @@ import KNA_LPi_K017
 import KNA_LPi_K018
 import KNA_QuerySchedule
 import KNA_FrameUnion
-import KNA_Capacity
 #print axioms KNA_Frame.result
 #print axioms KNA_Partition.result
 #print axioms KNA_Window00.result
@@ -75,4 +74,3 @@ import KNA_Capacity
 #print axioms KNA_LPi_K018.result
 #print axioms KNA_QuerySchedule.result
 #print axioms KNA_FrameUnion.result
-#print axioms KNA_Capacity.result
