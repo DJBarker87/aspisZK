@@ -18,7 +18,7 @@ def branchTree (base path : List U8) : List U8 :=
     if verbatim then [] else base++PV_CBL_PathJoinValue.separator base++path
 theorem unix_control (base path : List U8) :
     branchTree base path=PV_CBL_PathJoinValue.join base path := by
-  simp only [branchTree,PV_CBL_PathJoinValue.join]; split <;> rfl
+  simp [branchTree,PV_CBL_PathJoinValue.join]
 theorem contents (base path : List U8) :
     unixPush base path=PV_CBL_PathJoinValue.join base path := by
   unfold unixPush PV_CBL_PathJoinValue.join
@@ -34,7 +34,7 @@ theorem asref_result {P : Type} (view : P → Result (List U8)) (base : List U8)
   cases h : view p <;> simp only [h,bind_tc_ok,complete] <;> rfl
 theorem nonvacuous : nativeResult [] []=ok [] ∧
     nativeResult [97#u8] [98#u8]=ok [97#u8,47#u8,98#u8] ∧
-    nativeResult [97#u8] [47#u8]=ok [47#u8] := by decide
+    nativeResult [97#u8] [47#u8]=ok [47#u8] := ⟨rfl,rfl,rfl⟩
 #print axioms unix_control
 #print axioms contents
 #print axioms complete
