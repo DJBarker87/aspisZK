@@ -69,11 +69,31 @@ for row,n,limit in [('LPm_K004',32,1704),('LPm_K005',4,1732),('LPi_K012',16,1720
  constructor
  · omega
  · exact KMZ_Growth.append_after_growth before garbage {source} {length} cap next {n} j live growth bound''')
-for row in ['LPe_K017','LPf_K027','LPi_K017','LPi_K018']:
- old=E.parent/'kani-reverify2-20261028'/('KMZ_'+row+'.lean')
- s=old.read_text().replace('namespace KMZ_'+row,'namespace KNA_'+row).replace('end KMZ_'+row,'end KNA_'+row)
- # Keep exact pre-existing composition, add runtime frame import as an explicit interface.
- expected['KNA_'+row]=s.replace('import KMZ_Growth','import KNA_Frame')
+emit('LPe_K017',['KNA_Frame'],'''theorem result (roots : Nat → Nat → Nat) (query before : Nat → Nat)
+ (j : Nat) (bound : j<152) :
+ 2*32+22*4=152 ∧
+ KMY_RootComposition.rootsQueries (fun b => roots (b/32) (b%32))
+  (fun b => (query (b/4) / 2^(8*(b%4))) % 256) before j =
+ if j<64 then roots (j/32) (j%32)
+ else (query ((j-64)/4) / 2^(8*((j-64)%4))) % 256 := by
+ constructor
+ · exact KMY_RootComposition.roots_queries_length
+ · exact KMY_RootComposition.roots_queries_bytes roots
+     (fun i b => (query i / 2^(8*b)) % 256) before j bound''')
+emit('LPf_K027',['KNA_Frame','KMZ_LPf_K027'],'''theorem result (initial garbage answer : Nat → Nat) (j : Nat) (bound : j<1768) :
+ 2+1=3 ∧ 1736+32=1768 ∧
+ window answer (loop initial garbage 0 (min 1736 3472)) 1736 32 j =
+ if j<1736 then initial j else answer (j-1736) := by
+ refine ⟨by omega,by omega,?_⟩
+ exact KMZ_LPf_K027.result initial garbage answer j bound''')
+for row in ['LPi_K017','LPi_K018']:
+ emit(row,['KNA_Frame','KMZ_'+row],f'''theorem result (body garbage hp hu answer : Nat → Nat) (j : Nat) (bound : j<1768) :
+ 0+3=3 ∧ 1736+32=1768 ∧
+ window answer (loop (KMZ_{row}.joinedPrefix body hp hu) garbage 0 (min 1736 3472)) 1736 32 j =
+ if 16≤j ∧ j<48 then hp (j-16) else if 48≤j ∧ j<80 then hu (j-48)
+ else if j<1736 then body j else if j<1768 then answer (j-1736) else body j := by
+ refine ⟨by omega,by omega,?_⟩
+ exact KMZ_{row}.result body garbage hp hu answer j bound''')
 emit('QuerySchedule',['KNA_Query128','KNA_Query256'],'''theorem result (i : Nat) (h : i<22) :
  i=0 ∨ (1≤i ∧ i<16) ∨ i=16 ∨ (17≤i ∧ i<22) := by omega''')
 emit('FrameUnion',['KNA_Partition'],'''theorem result (actual expected : Nat → Nat)

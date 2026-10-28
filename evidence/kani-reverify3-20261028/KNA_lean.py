@@ -14,7 +14,11 @@ def compile_one(module):
  names=re.findall(r'^import (\w+)',p.read_text(),re.M)
  r=t.remote_py('import hashlib,json;from pathlib import Path;names='+repr(names)+';print(json.dumps({n:dict(path=str(Path('+repr(t.CACHE)+')/(n+".olean")),sha256=hashlib.sha256((Path('+repr(t.CACHE)+')/(n+".olean")).read_bytes()).hexdigest()) for n in names}))')
  assert r.returncode==0,r.stderr
- cfg['deps_fingerprint']['selected_objects'].update(json.loads(r.stdout))
+ selected=json.loads(r.stdout)
+ baseline=json.loads((E.parent/'kani-reverify2-20261028/KMZ_L060/receipt.json').read_text())['deps_fingerprint']['selected_objects']
+ for name,pin in selected.items():
+  if not name.startswith('KNA_'):assert pin['sha256']==baseline[name]['sha256'],('STOP baseline cache drift',name)
+ cfg['deps_fingerprint']['selected_objects'].update(selected)
  r=t.remote_py('from pathlib import Path\nb=Path('+repr(t.B)+')\n(b/'+repr(p.name)+').write_text('+repr(p.read_text())+')\n(b/'+repr(a+'.json')+').write_text('+repr(json.dumps(cfg))+')')
  assert r.returncode==0,r.stderr
  (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
