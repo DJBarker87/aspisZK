@@ -47,13 +47,13 @@ open PV_B3P_Schedule133 PV_B3P_LegacyValues133
 set_option autoImplicit false
 '''
 s+=f'def retained : List Link := {lit(retained)}\n'
-s+='''theorem retained_eval :
-    (fixed.filter (fun x => !x.path)).map translate = retained := by
-  simp only [fixed,List.filter_cons,List.filter_nil,link,path,Bool.not_true,
-    Bool.not_false,ite_true,ite_false,List.map_cons,List.map_nil,translate]
-  rfl
-#print axioms retained_eval
-'''
+chunks=[legacy[i:i+8] for i in range(0,len(legacy),8)]
+for i,chunk in enumerate(chunks):
+ rc=[(k,p+48 if p>=864 else p,c+48 if c>=864 else c) for k,p,c in chunk if not k]
+ s+=f'def chunk{i} : List Link := {lit(chunk)}\ntheorem chunk{i}_eval : (chunk{i}.filter (fun x => !x.path)).map translate = {lit(rc)} := rfl\n#print axioms chunk{i}_eval\n'
+s+='theorem retained_eval : (PV_B3P_LegacyValues133.fixed.filter (fun x => !x.path)).map translate = retained := by\n'
+s+='  have split : PV_B3P_LegacyValues133.fixed = '+ ' ++ '.join(f'chunk{i}' for i in range(len(chunks)))+' := rfl\n'
+s+='  rw [split]\n  simp only [List.filter_append,List.map_append,'+','.join(f'chunk{i}_eval' for i in range(len(chunks)))+']\n  rfl\n#print axioms retained_eval\n'
 s+=f'def pathFixed : List Link := {lit(forestpath)}\n'
 s+='''theorem paths_eval : (List.range 24).flatMap (fun level =>
     let previous := if level == 0 then 3 else forestBlock (level-1)
