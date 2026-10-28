@@ -23,6 +23,8 @@ theorem gamma (ops : ExternalFuns) (g : Raw) (hg : canonical g) :
   have bridge := ProverRwP6PowersGammaSource.gamma ops (current (source g))
   change ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) = _ at bridge
   rw [bridge]
+  change ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map current)
+    (AspisR1ProducerRelease47.gamma (ProverRwDictionaryTower.toW (ProverRwDictionaryTower.fromW (source g)))) = _
   rw [ProverRwDictionaryTower.native_w_roundtrip,hp]
   change Result.ok (ProverRwP6ArrayMap.map current (sourceArray 29#usize p)) = _
   rw [PV_RunJoin_SourceArray44.map]
