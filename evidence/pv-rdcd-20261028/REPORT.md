@@ -1,6 +1,6 @@
 # PV_RDCD deployed-source disposition
 
-**D393 resume in progress:4 RESTORED at retained source-law/Result boundaries;13 SUSPENDED. Privacy target not established.**
+**D393 resume in progress:5 RESTORED at retained source-law/Result boundaries;12 SUSPENDED. Privacy target not established.**
 
 Branch `codex/pv-rdcd-20261028`, base `6273e62061`; assigned worktree unchanged. No crates/programs edits, pushes, SBF rebuilds, new trust fields, observer/simulator changes or key operations.
 
@@ -13,7 +13,7 @@ The15 class-D rows remain unclassified at the whole concrete native-cone level. 
 | [V169](rows/V169.md) | SUSPENDED / D | The emitted Default census is now concrete: Vec<M31>, Vec<QM31>, [Vec<M31>;10], [Vec<M31>;16]. The generic take/replace source equation does not discharge their1.94.1 Vec/RawVec and array Default construction laws. The historical native checker is a bounded Kani/extraction route, not a recovered complete structural checker for those instantiations. Native128 Vec plus two array-of-Vec cases support fidelity only. |
 | [V197](rows/V197.md) | SUSPENDED / D | Typed residual and slice Index overloads are resolved at the generic MIR signature level. A complete1.94.1 slice Range index/TryInto-array/u32 endian macro source-law binding to the retained extraction is still missing; generic dictionary calls are not a concrete body census. The original correspondence was extraction, and no executable complete original structural checker was recovered.6420 finite parser cases do not fill that gap. |
 | [V201](rows/V201.md) | SUSPENDED / D | The exact original encoder gate is recovered and passes all four native bodies plus the whole owned reference. The full concretely instantiated ChunksExact/Zip/array iterator and indexing cone is not resolved; the typed conservative envelope still has145 unresolved records. Its generic CodeField parameters remain the original explicit boundary. The required1.94.1 library transport is not proved by128 dense finite comparisons. |
-| [V212](rows/V212.md) | SUSPENDED / D | D393: see row for exact source-law/extraction disposition and receipts |
+| [V212](rows/V212.md) | RESTORED / B | D393: see row for exact source-law/extraction disposition and receipts |
 | [V213](rows/V213.md) | SUSPENDED / D | Typed residual ambiguity is removed. The1.94.1 Option/integer laws and the historical canonical_qm31 constructor leaf association still need a deployed structural/source proof. The old constructor Kani gate is not re-credited here.3075 native cases use safe WideExact::new construction and do not cover every arbitrary private raw WideExact carrier admitted by the Lean source equation. |
 | [V216](rows/V216.md) | RESTORED / A | D393: see row for exact source-law/extraction disposition and receipts |
 | [V217](rows/V217.md) | SUSPENDED / D | The owned/source Lean law is retained, but the complete original native structural-checker provenance is unrecovered. The typed envelope still has20 unresolved range/index/fold records. The deployed-feature original/copy finite arithmetic witnesses pass; no chained-field Kani route is planned. A pin/projection/measurement script is not substituted for a full body checker. |
@@ -49,3 +49,5 @@ The remaining budget is unspent, not exhausted. Next concrete deliverable: a dep
 ## D393 active resume
 
 V216 restored/A by exact concrete bytewise source identity, unchanged deployed-feature extraction, complete Result/carrier proof and new native gate. V246 restored/B by new1.94.1 generic slice-loop/source dictionary/index-increment laws plus unchanged final-selector extraction, complete Result/carrier transport and new native gate. V212 Option/wrapping obligations are proved; its unchanged generated-output API failures remain recorded. Baseline totals above are historical D393-entry evidence; final resume budget/audit will follow after remaining rows.
+
+V212 is now restored/B through its existing committed adapter: exact fresh-output token relation, three arbitrary-input literal laws, Option/wrapping/cast/precondition laws and unchanged retained importer replay.41418 remains an uncredited raw-output failure; no cohort-gap authority was replaced and no regenerated file edited.
