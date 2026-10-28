@@ -8,6 +8,10 @@ launch=json.loads((D/'stage-a2-launch.json').read_text());r['driver_pid_exists']
 p=D/'combined/corpus-6000/pipeline-progress.json'
 if p.exists():
  x=json.loads(p.read_text());r['progress']={k:v for k,v in x.items() if k!='cases'}
+review=D/'combined/corpus-6000/pipeline-resource-reviews.jsonl'
+if review.exists():
+ r['last_resource_review']=json.loads(review.read_text().splitlines()[-1])
+ v=r['last_resource_review'];r['driver_tail']+=' RESOURCE '+json.dumps({k:v[k] for k in ['completed_pairs','memory_current_bytes','memory_peak_bytes','pids_current','memory_swap_current_bytes']})
 for n in ['pipeline-failure.json','pipeline-resources-final.json']:
  p=D/'combined/corpus-6000'/n
  if p.exists():r[n]=json.loads(p.read_text())

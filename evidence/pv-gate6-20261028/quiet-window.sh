@@ -4,6 +4,9 @@ D=/home/dombarker/project-offloads/codex-pv-gate6-20261028
 M=/home/dombarker/project-offloads/QUIET_WINDOW.json
 cd "$D"
 cleanup() {
+  if [[ -f "$D/measurement-scope/launch-intent.json" ]]; then
+    systemctl --user stop pv-gate6-measurement.scope > "$D/measurement-scope/cleanup-stop.log" 2>&1 || true
+  fi
   python3 - "$D" "$M" <<'PY'
 from pathlib import Path
 import sys,json,time
@@ -55,6 +58,11 @@ D=Path(sys.argv[1]);o=D/'measurement-scope';o.mkdir()
 r=subprocess.run(['python3',str(D/'reservation.py'),str(o/'admission.json')],stdout=open(o/'reservation.log','w'),stderr=subprocess.STDOUT)
 assert r.returncode==0 and json.loads((o/'admission.json').read_text())['allowed'],'measurement admission refused'
 PY
+python3 - "$D" <<'PYINTENT'
+from pathlib import Path
+import sys,time,json
+D=Path(sys.argv[1]);(D/'measurement-scope/launch-intent.json').write_text(json.dumps(dict(unit='pv-gate6-measurement.scope',utc=time.time()),indent=2)+'\n')
+PYINTENT
 systemd-run --user --scope --unit=pv-gate6-measurement -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 \
   python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py "$D/measurement-scope/barrier.json" \
   python3 "$D/capped.py" "$D/measurement-scope/receipt" 'optimized paired proof generation and P_R1 elimination; no compilation' -- \
