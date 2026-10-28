@@ -1,0 +1,74 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -0,0 +1 @@
++#![cfg_attr(kani, feature(allocator_api))]
+@@ -9,0 +11 @@
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+@@ -170,0 +173,4 @@
++
++#[cfg(kani)] mod NDI_program;
++#[cfg(kani)] mod NDI_digest;
++#[cfg(kani)] mod NDI_shapes;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -340,0 +341,2 @@
++
++#[cfg(kani)] #[path="NDI_candidate.rs"] mod NDI_candidate;
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -23,0 +24 @@
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+@@ -122,0 +124 @@
++    #[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::validated_row_ref(self.row)) != cfg!(NDI_invert_row)))]
+@@ -171,0 +174 @@
++#[cfg_attr(kani,derive(kani::Arbitrary))]
+@@ -178,0 +182,2 @@
++    #[cfg_attr(kani,kani::requires(public_bytes.len()<=1880 && unsafe {NDI_wire::VALUE_COORD<32}))]
++    #[cfg_attr(kani,kani::ensures(|r| NDI_wire::new_matches(r) != cfg!(NDI_invert_actual_new)))]
+@@ -186,0 +192 @@
++    #[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::state_ref(self.state)) != cfg!(NDI_invert_state)))]
+@@ -194 +200,4 @@
+-    fn sample_block_validated(&mut self, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {
++    #[cfg_attr(kani,kani::requires(row<=26 && framed.len()<=3717 && unsafe {NDI_wire::VALUE_COORD<32}))]
++    #[cfg_attr(kani,kani::modifies(&mut self.state,&mut self.next_row))]
++    #[cfg_attr(kani,kani::ensures(|r| NDI_wire::sample_matches(r,&self.state,self.next_row,row,old(self.state[unsafe {NDI_wire::VALUE_COORD}]),old(self.next_row)) != cfg!(NDI_invert_actual_sample)))]
++    pub fn sample_block_validated(&mut self, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {
+@@ -850,0 +860,12 @@
++
++#[cfg(kani)] pub fn NDI_build<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H> {SemanticTranscript{hash,state,next_row}}
++
++#[cfg(kani)] pub fn NDI_set_values(reply:*const [u8;32],advanced:*const [u8;32],coordinate:usize) {unsafe {NDI_wire::VALUE_REPLY=reply;NDI_wire::VALUE_ADVANCED=advanced;NDI_wire::VALUE_COORD=coordinate;}}
++
++#[cfg(kani)] #[path="NDI_wire.rs"] mod NDI_wire;
++
++#[cfg(kani)] pub fn NDI_new_for_backend<H:Digest32>(hash:H,public:&[u8],root:&[u8;32])->Result<([u8;32],u8),Error> {let t=SemanticTranscript::new(hash,public,root)?;Ok((t.state,t.next_row))}
++
++#[cfg(kani)] pub fn NDI_sample_for_backend<H:Digest32>(hash:H,state:[u8;32],next_row:u8,row:u8,framed:&[u8])->Result<([u8;32],[u8;32],u8),Error> {let mut t=SemanticTranscript{hash,state,next_row};let b=t.sample_block_validated(row,framed)?;Ok((b,t.state,t.next_row))}
++
++#[cfg(kani)] pub fn NDI_state_for_backend<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->[u8;32] {SemanticTranscript{hash,state,next_row}.state()}
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -4,0 +5 @@
++    #[cfg(kani)] pub(crate) mod NDL_dot { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NDL_dot.rs")); }
+@@ -224,0 +226,2 @@
++
++#[cfg(kani)] #[path="NDL_pairing.rs"] pub(crate) mod NDL_pairing;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -0,0 +1 @@
++#![cfg_attr(kani, feature(allocator_api))]
+@@ -46,0 +48,2 @@
++
++#[cfg(kani)] mod NDI_controls;
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -178,0 +179,2 @@
++    #[cfg_attr(kani,kani::requires(self.start<=index && index-self.start<self.inverses.len()))]
++    #[cfg_attr(kani,kani::ensures(|r| (core::ptr::eq(*r,NDI_verifier::reference::geometry_ref(&self.inverses,self.start,index))) != cfg!(NDI_invert_geometry)))]
+@@ -343,0 +346,3 @@
++    #[cfg_attr(kani,kani::requires(self.bytes.len()<=1768 && self.at<=self.bytes.len() && N<=self.bytes.len()-self.at && unsafe {NDI_verifier::RAW_COORD<N}))]
++    #[cfg_attr(kani,kani::modifies(&mut self.at))]
++    #[cfg_attr(kani,kani::ensures(|r| NDI_verifier::raw_matches(r,self.bytes,self.at,old(self.at)) != cfg!(NDI_invert_actual_raw)))]
+@@ -528,0 +534,2 @@
++
++#[cfg(kani)] #[path="NDI_verifier.rs"] mod NDI_verifier;

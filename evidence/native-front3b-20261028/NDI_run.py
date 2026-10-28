@@ -3,7 +3,10 @@ from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,os
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-front3b-20261028';H='dombarker@100.108.41.90'
 a,kind,target=sys.argv[1:];limit=80 if kind=='kani' else (20 if kind=='extract' else 80)
-assert int(a[-3:])<=limit
+if kind=='kani':
+ launched=sum(('NDI_NATIVE_INVOCATION ' in p.read_text() or 'Kani Rust Verifier' in p.read_text()) for p in E.glob('NDI_K[0-9][0-9][0-9]/stdout.log'))
+ assert launched<80,('Kani budget exhausted',launched)
+else:assert int(a[-3:])<=limit
 if kind=='lean' and not os.environ.get('NDI_DEP_SOURCE'):
  current=E/(target+'.lean')
  for prior in E.glob('NDI_L[0-9][0-9][0-9]'):
@@ -50,6 +53,7 @@ else:
  files['NDI_generated/'+target+'.lean']=source.read_text();sources=['NDI_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDI_generated','-o','NDI_objects/'+target+'.olean',sources[0]]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDI_tmp',LEAN_PATH=B+'/NDI_objects:/home/dombarker/project-offloads/codex-cx-native-front3-20261028/NDF_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028/NCO_objects:/home/dombarker/project-offloads/codex-cx-front3-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
+if kind=='extract':env['NDI_EXTRACT_KIND']=target
 if os.environ.get('NDI_EXTRACT_PARSER'):env['NDI_EXTRACT_PARSER']=os.environ['NDI_EXTRACT_PARSER']
 if os.environ.get('NDI_PROGRAM'):
  native[native.index('--manifest-path')+1]=B+'/NDI_src/programs/r1-cost-probe/Cargo.toml'
@@ -117,7 +121,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-dependency-check.json','NDI_EXTRACTION_PINS.json']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-source-postcheck.json',a+'-graph.stderr',a+'-lock-check.json',a+'-dependency-check.json','NDI_EXTRACTION_PINS.json']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr
@@ -133,3 +137,5 @@ with (E/'NDI_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-1800:],flush=True)
+
+if kind=='kani' and 'NDI_NATIVE_INVOCATION ' not in out[a+'/stdout.log'] and 'Kani Rust Verifier' not in out[a+'/stdout.log']:raise SystemExit('STOP native preflight failed; no Kani invocation')

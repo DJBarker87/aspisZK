@@ -10,8 +10,11 @@ sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
 parser=os.environ.get('NDI_EXTRACT_PARSER')=='1'
-roots=['crate::transcript_new_byte_borrow_ref','crate::transcript_sample_byte_borrow_ref']
-namespace='NDI_TranscriptBorrow'
+jobs={
+ 'reader_byte':(['crate::raw_byte_ref'],'NDI_ReaderByteRef'),
+ 'batch':(['crate::batch_word_ref','crate::batch_init_ref','crate::batch_keys_ref','crate::range_ref'],'NDI_BatchRef'),
+}
+roots,namespace=jobs[os.environ['NDI_EXTRACT_KIND']]
 dest=B/'NDI_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
@@ -25,6 +28,6 @@ r=subprocess.run(cmd,cwd=S,env=env)
 if r.returncode:raise SystemExit(r.returncode)
 cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',namespace,'-dest',str(dest),'-subdir',namespace,'-split-files',str(B/'NDI_reference.llbc')]
 print(json.dumps(cmd),flush=True);r=subprocess.run(cmd,cwd=B,env=env)
-pins.update(aeneas_command=cmd,exit=r.returncode,outputs={str(p.relative_to(B)):sha(p) for p in dest.rglob('*') if p.is_file()})
+pins.update(llbc_sha256=sha(B/'NDI_reference.llbc'),llbc_bytes=(B/'NDI_reference.llbc').stat().st_size,aeneas_command=cmd,exit=r.returncode,outputs={str(p.relative_to(B)):sha(p) for p in dest.rglob('*') if p.is_file()})
 (B/'NDI_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2))
 raise SystemExit(r.returncode)

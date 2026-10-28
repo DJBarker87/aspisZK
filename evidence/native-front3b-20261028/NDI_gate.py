@@ -8,7 +8,7 @@ assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
 kmx={'KMX_stubs.rs': 'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138', 'KMX_native.rs': 'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880', 'KMX_CopyMeaning.lean': '2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}
 for n,h in kmx.items():assert sha(S/n)==h,('KMX exact patch mismatch',n)
 pins=json.loads((B/'NDI_SOURCE_PINS.json').read_text())
-errors=[n for n,h in pins.items() if sha(S/n)!=h]
+errors=[n for n,h in pins.items() if not (S/n).is_file() or (S/n).is_symlink() or sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
 manifest='programs/r1-cost-probe' if os.environ.get('NDI_PROGRAM') else 'crates/aspis-r1-cost-probe'
@@ -39,6 +39,10 @@ visit(next(p['id'] for p in m['packages'] if p['name']==('aspis-r1-cost-probe-pr
 out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not edge_errors,frozen_packages=len(f),resolved_packages=len(actual),new_package_tuples=sorted(added,key=str),missing_package_tuples=sorted(missing,key=str),edge_errors=edge_errors,lock_sha256=frozen,graph_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),all_crate_features=[dict(name=p['name'],version=p['version'],features=nodes[p['id']]['features']) for p in m['packages']],selected_closure=[dict(name=pkgs[i]['name'],version=pkgs[i]['version'],source=pkgs[i].get('source'),features=nodes[i]['features']) for i in sorted(seen)])
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
+print('NDI_NATIVE_INVOCATION '+a,flush=True)
 status=subprocess.run(x['native_command'],cwd=B).returncode
+post_errors=[n for n,h in pins.items() if not (S/n).is_file() or (S/n).is_symlink() or sha(S/n)!=h]
+(B/(a+'-source-postcheck.json')).write_text(json.dumps(dict(files=len(pins),errors=post_errors),indent=2)+'\n')
+assert not post_errors,('STOP source changed during Kani',post_errors)
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)

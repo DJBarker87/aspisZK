@@ -21,11 +21,16 @@ def files():
    s+='\n#[cfg(kani)] pub fn NDI_new_for_backend<H:Digest32>(hash:H,public:&[u8],root:&[u8;32])->Result<([u8;32],u8),Error> {let t=SemanticTranscript::new(hash,public,root)?;Ok((t.state,t.next_row))}\n'
    s+='\n#[cfg(kani)] pub fn NDI_sample_for_backend<H:Digest32>(hash:H,state:[u8;32],next_row:u8,row:u8,framed:&[u8])->Result<([u8;32],[u8;32],u8),Error> {let mut t=SemanticTranscript{hash,state,next_row};let b=t.sample_block_validated(row,framed)?;Ok((b,t.state,t.next_row))}\n'
    s+='\n#[cfg(kani)] pub fn NDI_state_for_backend<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->[u8;32] {SemanticTranscript{hash,state,next_row}.state()}\n'
+  if name=='candidate':
+   body='        let u = queries[lo + j];\n        let index = if tree == 2 { u / 4 } else { u };\n        keys[j] = (u64::from(index) << 8) | j as u64;'
+   assert body in s and body in harness['crates/aspis-r1-cost-probe/src/NDI_candidate.rs']
+   s+='\n#[cfg(kani)] #[path="NDI_candidate.rs"] mod NDI_candidate;\n'
   if name=='verifier':
+   s=s.replace('fn raw<const N:usize>', '#[cfg_attr(kani,kani::requires(self.bytes.len()<=1768 && self.at<=self.bytes.len() && N<=self.bytes.len()-self.at && unsafe {NDI_verifier::RAW_COORD<N}))]\n    #[cfg_attr(kani,kani::modifies(&mut self.at))]\n    #[cfg_attr(kani,kani::ensures(|r| NDI_verifier::raw_matches(r,self.bytes,self.at,old(self.at)) != cfg!(NDI_invert_actual_raw)))]\n    fn raw<const N:usize>')
    s=s.replace('fn for_query(&self,index:usize)', '#[cfg_attr(kani,kani::requires(self.start<=index && index-self.start<self.inverses.len()))]\n    #[cfg_attr(kani,kani::ensures(|r| (core::ptr::eq(*r,NDI_verifier::reference::geometry_ref(&self.inverses,self.start,index))) != cfg!(NDI_invert_geometry)))]\n    fn for_query(&self,index:usize)')
    s+='\n#[cfg(kani)] #[path="NDI_verifier.rs"] mod NDI_verifier;\n'
   out[p]=s
- for name in ['wire','reference','controls','verifier']:
+ for name in ['wire','reference','controls','verifier','candidate']:
   out['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']=harness['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']
  p='programs/r1-cost-probe/src/lib.rs'
  out[p]='#![cfg_attr(kani, feature(allocator_api))]\n'+subprocess.check_output(['git','show',F+':'+p],text=True)+'\n#[cfg(kani)] mod NDI_program;\n#[cfg(kani)] mod NDI_digest;\n#[cfg(kani)] mod NDI_shapes;\n'

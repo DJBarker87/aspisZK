@@ -1,4 +1,45 @@
 --- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDI_candidate.rs
+@@ -0,0 +1,38 @@
++use super::*;
++#[path="NDI_reference.rs"] mod reference;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[kani::requires(lo<=22 && n<=16 && lo+n<=22 && j<n && tree<3)]
++#[kani::modifies(&mut keys[j])]
++#[kani::ensures(|_| (keys[j]==reference::batch_word_ref(queries[lo+j],tree,j)) != cfg!(NDI_invert_key_step))]
++fn key_iteration(queries:&[u32;22],lo:usize,n:usize,tree:usize,j:usize,keys:&mut[u64;16]) {
++        let u = queries[lo + j];
++        let index = if tree == 2 { u / 4 } else { u };
++        keys[j] = (u64::from(index) << 8) | j as u64;
++}
++#[kani::proof_for_contract(key_iteration)] #[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn key_contract(){let queries:[u32;22]=kani::any();let mut keys:[u64;16]=kani::any();let batch:bool=kani::any();let (lo,n)=if batch{(10,12)}else{(0,10)};let tree:usize=kani::any();let j:usize=kani::any();kani::assume(tree<3 && j<n);key_iteration(&queries,lo,n,tree,j,&mut keys);}
++#[kani::requires(coordinate<16)]
++#[kani::ensures(|r| (r[coordinate]==0) != cfg!(NDI_invert_key_init))]
++fn key_initial(coordinate:usize)->[u64;16] {
++    let mut keys = [0u64; multiproof::MAX_BATCH];
++    keys
++}
++#[kani::proof_for_contract(key_initial)] #[kani::unwind(18)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn key_initial_contract(){let j:usize=kani::any();kani::assume(j<16);let _=key_initial(j);}
++#[kani::requires(start<=end && end<=16)]
++#[kani::ensures(|r| (*r==reference::range_ref(start,end)) != cfg!(NDI_invert_range))]
++fn range_packet(start:usize,end:usize)->(bool,usize,usize,usize){let mut iter=start..end;let reply=iter.next();(reply.is_some(),reply.unwrap_or(0),iter.start,iter.end)}
++#[kani::proof_for_contract(range_packet)]
++fn range_contract(){let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end && end<=16);let _=range_packet(start,end);}
++#[kani::ensures(|r| r.len()==16)] fn keys_weak()->[u64;16] {[0;16]}
++#[kani::proof_for_contract(keys_weak)] #[kani::unwind(18)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn keys_weak_contract(){let _=keys_weak();}
++#[kani::proof] #[kani::unwind(18)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn keys_real(){let j:usize=kani::any();kani::assume(j<16);assert_eq!(keys_weak()[j],0);}
++#[kani::proof] #[kani::stub_verified(keys_weak)] #[kani::unwind(18)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn keys_unimplied(){let j:usize=kani::any();kani::assume(j<16);assert_eq!(keys_weak()[j],0);}
++#[kani::modifies(&mut x[0])] fn keys_badframe(x:&mut[u64;2])->[u64;16] {x[1]=x[1].wrapping_add(1);[0;16]}
++#[kani::proof_for_contract(keys_badframe)] #[kani::unwind(18)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn keys_frame(){let mut x:[u64;2]=kani::any();let _=keys_badframe(&mut x);}
+--- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NDI_controls.rs
 @@ -0,0 +1,36 @@
 +#[kani::ensures(|r| *r==x)] fn scalar(x:u64)->u64{x}
@@ -39,7 +80,7 @@
 +fn array_frame(){let mut x:[u8;2]=kani::any();let _=array_badframe(&mut x);}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NDI_reference.rs
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,27 @@
 +// Safe Rust value references; extracted with the pilot tool pins.
 +pub fn batch_key_at_ref(keys:&[u64;16],index:usize)->u64 { keys[index] }
 +pub fn same_batch_index_ref(values:&[u32;16],index:usize,expected:u32)->bool {values[index]==expected}
@@ -60,9 +101,16 @@
 +pub fn transcript_sample_byte_ref(block:[u8;32],advanced:[u8;32],row:u8,coordinate:usize)->(u8,u8,u8,u8) {(block[coordinate],advanced[coordinate],row+1,3)}
 +pub fn transcript_new_byte_borrow_ref(reply:&[u8;32],coordinate:usize)->(u8,u8,u8) {(reply[coordinate],0,1)}
 +pub fn transcript_sample_byte_borrow_ref(block:&[u8;32],advanced:&[u8;32],row:u8,coordinate:usize)->(u8,u8,u8,u8) {(block[coordinate],advanced[coordinate],row+1,3)}
++
++pub fn raw_byte_ref(bytes:&[u8],offset:usize,width:usize,coordinate:usize)->(u8,usize) {(bytes[offset+coordinate],offset+width)}
++
++pub fn batch_word_ref(u:u32,tree:usize,j:usize)->u64 {let index=if tree==2 {u/4} else {u};u64::from(index)*256+j as u64}
++pub fn batch_init_ref()->[u64;16] {[0;16]}
++pub fn batch_keys_ref(queries:&[u32;22],lo:usize,n:usize,tree:usize)->[u64;16] {let mut keys=[0;16];let mut j=0;while j<n {keys[j]=batch_word_ref(queries[lo+j],tree,j);j+=1;}keys}
++pub fn range_ref(start:usize,end:usize)->(bool,usize,usize,usize) {if start<end {(true,start,start+1,end)} else {(false,0,start,end)}}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NDI_verifier.rs
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,45 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 +#[kani::requires(r.at<=r.bytes.len() && 1<=r.bytes.len()-r.at && j<1)]
@@ -90,6 +138,24 @@
 + let start:usize=kani::any();let index:usize=kani::any();kani::assume(start<=index && index-start<n);
 + let g=QueryGeometry{start,inverses:rows,line_z:Vec::new()};let _=g.for_query(index);
 +}
++
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn raw_transport(){let bytes:[u8;1768]=kani::any();let at:usize=kani::any();let j:usize=kani::any();kani::assume(at<=1736 && j<32);let mut r=Reader{bytes:&bytes,at};let out=r.raw::<32>();assert!((out[j]==bytes[at+j] && r.at==at+32) != cfg!(NDI_wrong_raw_transport));}
++
++pub(super) static mut RAW_COORD:usize=0;
++pub(super) fn raw_matches<const N:usize>(out:&[u8;N],bytes:&[u8],at:usize,before:usize)->bool {unsafe{let expected=reference::raw_byte_ref(bytes,before,N,RAW_COORD);(out[RAW_COORD],at)==expected}}
++#[kani::proof_for_contract(Reader::raw::<32>)] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_raw32_contract(){let bytes:[u8;1768]=kani::any();let at:usize=kani::any();let j:usize=kani::any();kani::assume(at<=1736 && j<32);unsafe{RAW_COORD=j;}let mut r=Reader{bytes:&bytes,at};let _=r.raw::<32>();}
++#[kani::proof_for_contract(Reader::raw::<16>)] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_raw16_contract(){let bytes:[u8;1768]=kani::any();let at:usize=kani::any();let j:usize=kani::any();kani::assume(at<=1752 && j<16);unsafe{RAW_COORD=j;}let mut r=Reader{bytes:&bytes,at};let _=r.raw::<16>();}
++
++#[kani::proof_for_contract(Reader::raw::<4>)] #[kani::unwind(35)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn actual_raw4_contract(){let bytes:[u8;1768]=kani::any();let at:usize=kani::any();let j:usize=kani::any();kani::assume(at<=1764 && j<4);unsafe{RAW_COORD=j;}let mut r=Reader{bytes:&bytes,at};let _=r.raw::<4>();}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NDI_wire.rs
 @@ -0,0 +1,22 @@
@@ -111,7 +177,7 @@
 +}
 +pub(super) fn sample_matches(out:&Result<[u8;32],Error>,state:&[u8;32],next:u8,row:u8,before:u8,old_next:u8)->bool {
 + unsafe {
-+  if row==old_next {match out {Ok(block)=>{let p=reference::transcript_sample_byte_borrow_ref(&*VALUE_REPLY,&*VALUE_ADVANCED,row,VALUE_COORD);(block[VALUE_COORD],state[VALUE_COORD],next)==(p.0,p.1,p.2)},Err(_)=>false}}
++  if row==old_next {match out {Ok(block)=>{if cfg!(NDI_sample_block_only) {return block[VALUE_COORD]==(*VALUE_REPLY)[VALUE_COORD];} if cfg!(NDI_sample_state_only) {return state[VALUE_COORD]==(*VALUE_ADVANCED)[VALUE_COORD] && next==row+1;} let p=reference::transcript_sample_byte_borrow_ref(&*VALUE_REPLY,&*VALUE_ADVANCED,row,VALUE_COORD);(block[VALUE_COORD],state[VALUE_COORD],next)==(p.0,p.1,p.2)},Err(_)=>false}}
 +  else {matches!(out,Err(Error::RowOrder{expected,actual}) if *expected==old_next && *actual==row) && state[VALUE_COORD]==before && next==old_next}
 + }
 +}
@@ -249,7 +315,7 @@
 +fn copy_negative(){let a:[u8;32]=kani::any();let mut b:[u8;32]=kani::any();b.copy_from_slice(&a);let i:usize=kani::any();kani::assume(i<32);assert_ne!(b[i],a[i]);}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NDI_reference.rs
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,27 @@
 +// Safe Rust value references; extracted with the pilot tool pins.
 +pub fn batch_key_at_ref(keys:&[u64;16],index:usize)->u64 { keys[index] }
 +pub fn same_batch_index_ref(values:&[u32;16],index:usize,expected:u32)->bool {values[index]==expected}
@@ -270,6 +336,13 @@
 +pub fn transcript_sample_byte_ref(block:[u8;32],advanced:[u8;32],row:u8,coordinate:usize)->(u8,u8,u8,u8) {(block[coordinate],advanced[coordinate],row+1,3)}
 +pub fn transcript_new_byte_borrow_ref(reply:&[u8;32],coordinate:usize)->(u8,u8,u8) {(reply[coordinate],0,1)}
 +pub fn transcript_sample_byte_borrow_ref(block:&[u8;32],advanced:&[u8;32],row:u8,coordinate:usize)->(u8,u8,u8,u8) {(block[coordinate],advanced[coordinate],row+1,3)}
++
++pub fn raw_byte_ref(bytes:&[u8],offset:usize,width:usize,coordinate:usize)->(u8,usize) {(bytes[offset+coordinate],offset+width)}
++
++pub fn batch_word_ref(u:u32,tree:usize,j:usize)->u64 {let index=if tree==2 {u/4} else {u};u64::from(index)*256+j as u64}
++pub fn batch_init_ref()->[u64;16] {[0;16]}
++pub fn batch_keys_ref(queries:&[u32;22],lo:usize,n:usize,tree:usize)->[u64;16] {let mut keys=[0;16];let mut j=0;while j<n {keys[j]=batch_word_ref(queries[lo+j],tree,j);j+=1;}keys}
++pub fn range_ref(start:usize,end:usize)->(bool,usize,usize,usize) {if start<end {(true,start,start+1,end)} else {(false,0,start,end)}}
 --- /dev/null
 +++ b/programs/r1-cost-probe/src/NDI_shapes.rs
 @@ -0,0 +1,36 @@
