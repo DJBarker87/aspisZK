@@ -41,7 +41,10 @@ theorem inner_success_iff
     R1Z.PV_RunJoin_CompilerDomain28.Path (inputToForest input) out
       (recipient.map noteToForest) (noteToForest change) (publicToForest public1)
       anchor (snapshotToForest snapshot) := by
-  change (∃ c, mapped compilationFromForest errorFromForest _ = ok (.Ok c)) ↔ _
+  change (∃ c, mapped compilationFromForest errorFromForest
+    (R1Z.BuilderForestAdmissionPort.pool_v1.pair_forest_trace.compile_forest_from_copies
+      (inputToForest input) out (recipient.map noteToForest) (noteToForest change)
+      (publicToForest public1) anchor (snapshotToForest snapshot)) = ok (.Ok c)) ↔ _
   rw [mapped_success_iff,PV_RunJoin_CompilerDomainProof28.success_iff]
 #print axioms inner_success_iff
 
@@ -75,7 +78,10 @@ theorem runtime_success_iff
       input context = ok (.Ok u)) ↔
     PV_RunJoin_RuntimeDomain30.Path pool domain seq anchor nullifier asset
       (pairToAdmission input) (contextToAdmission context) := by
-  change (∃ u, mapped id errorFromAdmission _ = ok (.Ok u)) ↔ _
+  change (∃ u, mapped id errorFromAdmission
+    (AspisBuilderAdmissionSource.pool_v1.pair_trace.validate_common
+      pool domain seq anchor nullifier asset (pairToAdmission input)
+      (contextToAdmission context)) = ok (.Ok u)) ↔ _
   rw [mapped_success_iff,PV_RunJoin_RuntimeDomain30.success_iff]
 #print axioms runtime_success_iff
 end R1Z.PV_RunJoin_OuterCall30
