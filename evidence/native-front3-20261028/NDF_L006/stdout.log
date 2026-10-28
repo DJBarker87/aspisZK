@@ -1,0 +1,14 @@
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+Aeneas.Std.UScalar.mul_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x * ↑y ≤ UScalar.max ty) :
+  x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+Aeneas.Std.Usize.mul_spec {x y : Usize} (hmax : ↑x * ↑y ≤ Usize.max) : x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.Usize.add_spec {x y : Usize} (hmax : ↑x + ↑y ≤ Usize.max) : x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar

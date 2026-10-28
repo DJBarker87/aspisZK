@@ -11,3 +11,5 @@ for a,kind,target,cfg in jobs:
  if kind=='kani':
   g=json.loads((E/(a+'-graph-check.json')).read_text());l=json.loads((E/(a+'-lock-check.json')).read_text())
   assert g['graph_matches_frozen'] and l['unchanged']
+  out=(E/a/'stdout.log').read_text()
+  if 'error: could not compile' in out:raise SystemExit('STOP own input/compiler error; diagnose before next run')

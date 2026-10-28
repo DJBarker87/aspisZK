@@ -24,3 +24,15 @@ fn state_wrong(){let r=SemanticTranscript{state:kani::any(),next_row:kani::any()
 fn framed_contract(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};let _=r.framed();}
 #[kani::proof] #[kani::stub_verified(ValidatedRecord::framed)]
 fn framed_caller(){let bytes:[u8;3717]=kani::any();let n:usize=kani::any();kani::assume(n<=3717);let r=ValidatedRecord{row:kani::any(),framed:&bytes[..n]};assert_eq!(r.framed(),r.framed);}
+
+pub(super) fn record_matches(actual:&Result<&[u8],Error>,expected:Option<&[u8]>)->bool {
+ match (actual,expected) {(Ok(a),Some(b))=>a.as_ptr()==b.as_ptr() && a.len()==b.len(),(Err(Error::InvalidRow),None)=>true,_=>false}
+}
+#[kani::proof_for_contract(Prefix::record)] #[kani::unwind(29)]
+fn record_contract(){
+ let bytes:[u8;13831]=kani::any();let root:[u8;32]=kani::any();
+ let records:[&[u8];27]=core::array::from_fn(|_|{let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=end && end<=13831);&bytes[start..end]});
+ let prefix=Prefix{c1_root:&root,records};let _=prefix.record(kani::any());
+}
+#[kani::proof] #[kani::stub_verified(Prefix::record)]
+fn record_caller(){let bytes:[u8;5]=kani::any();let root:[u8;32]=kani::any();let prefix=Prefix{c1_root:&root,records:[&bytes;27]};let row:u8=kani::any();let _=prefix.record(row);}

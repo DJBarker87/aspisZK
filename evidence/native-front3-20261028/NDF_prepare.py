@@ -9,9 +9,13 @@ for name in ['candidate','r1_wire','verifier','compact','lib']:
   for fn,req,expr in [('opening','proof.len()==compact::PROOF_BYTES && i<22','r.as_ptr() == NDF_candidate::reference::opening_ref(proof,i).as_ptr() && r.len() == 832'),('batch_key_at','index<16','*r == NDF_candidate::reference::batch_key_at_ref(keys,index)'),('same_batch_index','index<16','*r == NDF_candidate::reference::same_batch_index_ref(values,index,expected)'),('same_batch_leaf','index<16','*r == NDF_candidate::reference::same_batch_leaf_ref(values,index,leaf)')]:
    s=s.replace('fn '+fn+'(',f'#[cfg_attr(kani, kani::requires({req}))]\n#[cfg_attr(kani, kani::ensures(|r| ({expr}) != cfg!(NDF_invert_{fn})))]\nfn '+fn+'(')
   s+='\n#[cfg(kani)] #[path="NDF_candidate.rs"] mod NDF_candidate;\n'
+ if name=='verifier':
+  s=s.replace('fn raw<const N:usize>', '#[cfg_attr(kani, kani::requires(self.bytes.len()<=1768 && self.at<=self.bytes.len() && N<=self.bytes.len()-self.at))]\n    #[cfg_attr(kani, kani::modifies(&mut self.at))]\n    #[cfg_attr(kani, kani::ensures(|r| ((*r,self.at)==NDF_verifier::reference::raw_ref::<N>(self.bytes,old(self.at))) != cfg!(NDF_invert_raw)))]\n    fn raw<const N:usize>')
+  s+='\n#[cfg(kani)] #[path="NDF_verifier.rs"] mod NDF_verifier;\n'
  if name=='r1_wire':
   s=s.replace('pub(crate) fn row(&self)', '#[cfg_attr(kani, kani::ensures(|r| (*r == NDF_wire::reference::validated_row_ref(self.row)) != cfg!(NDF_invert_row)))]\n    pub(crate) fn row(&self)')
   s=s.replace('pub fn state(&self)', '#[cfg_attr(kani, kani::ensures(|r| (*r == NDF_wire::reference::state_ref(self.state)) != cfg!(NDF_invert_state)))]\n    pub fn state(&self)')
+  s=s.replace('pub fn record(&self, row: u8)', '#[cfg_attr(kani, kani::ensures(|r| (NDF_wire::record_matches(r,NDF_wire::reference::record_ref(&self.records,row))) != cfg!(NDF_invert_record)))]\n    pub fn record(&self, row: u8)')
   s=s.replace("pub(crate) fn framed(&self)", '#[cfg_attr(kani, kani::ensures(|r| (r.as_ptr()==self.framed.as_ptr() && r.len()==self.framed.len()) != cfg!(NDF_invert_framed)))]\n    pub(crate) fn framed(&self)')
   s+='\n#[cfg(kani)] #[path="NDF_wire.rs"] mod NDF_wire;\n'
  files[p]=s;patch+=list(difflib.unified_diff(old.splitlines(True),s.splitlines(True),fromfile='a/'+p,tofile='b/'+p))

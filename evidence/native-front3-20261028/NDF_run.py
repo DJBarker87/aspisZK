@@ -33,7 +33,7 @@ files={'NDF_gate.py':(E/'NDF_gate.py').read_text()}
 if kind=='kani':
  from NDF_patch import files as patch_files
  for n,s in patch_files().items():files['NDF_src/'+n]=s
- sources=['NDF_gate.py','NDF_SOURCE_PINS.json']+list(n for n in files if n.endswith('.rs'))+['NDF_src/Cargo.lock','NDF_src/Cargo.toml','NDF_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NDF_src/crates/aspis-r1-cost-probe/src/compact.rs','NDF_src/crates/aspis-r1-cost-probe/src/lib.rs']
+ sources=['NDF_gate.py','NDF_SOURCE_PINS.json']+list(n for n in files if n.endswith('.rs'))+['NDF_src/Cargo.lock','NDF_src/Cargo.toml','NDF_src/crates/aspis-r1-cost-probe/src/r1_wire.rs','NDF_src/crates/aspis-r1-cost-probe/src/compact.rs','NDF_src/crates/aspis-r1-cost-probe/src/lib.rs','NDF_src/crates/aspis-r1-cost-probe/src/candidate.rs','NDF_src/crates/aspis-r1-cost-probe/src/verifier.rs','NDF_src/KMX_stubs.rs','NDF_src/KMX_native.rs','NDF_src/KMX_CopyMeaning.lean']
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDF_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NDF_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NDF_gate.py',a+'.json']
 elif kind=='extract':

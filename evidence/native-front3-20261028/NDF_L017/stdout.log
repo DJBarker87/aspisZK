@@ -1,0 +1,15 @@
+Aeneas.Std.Array.update_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α)
+  (hbound : ↑i < v.length) : v.update i x ⦃ nv => nv = v.set i x ⦄
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+List.getElem_set.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} {a : α} (h : j < (l.set i a).length) :
+  (l.set i a)[j] = if i = j then a else l[j]
+List.getElem_set_self.{u_1} {α : Type u_1} {l : List α} {i : ℕ} {a : α} (h : i < (l.set i a).length) :
+  (l.set i a)[i] = a
+List.getElem_set_ne.{u_1} {α : Type u_1} {l : List α} {i j : ℕ} (h : i ≠ j) {a : α} (hj : j < (l.set i a).length) :
+  (l.set i a)[j] = l[j]
+NDF_generated/NDF_RawInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.val_eq_coe`
+NDF_generated/NDF_RawInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.ofNat_val`

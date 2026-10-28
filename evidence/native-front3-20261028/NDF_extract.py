@@ -9,8 +9,9 @@ S=B/'NDF_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 parser=os.environ.get('NDF_EXTRACT_PARSER')=='1'
 roots=['crate::batch_key_at_ref','crate::same_batch_index_ref','crate::same_batch_leaf_ref','crate::opening_ref','crate::validated_row_ref','crate::state_ref','crate::framed_ref']
-namespace='NDF_ParserRef' if parser else 'NDF_Reference'
-dest=B/('NDF_parser_extracted' if parser else 'NDF_extracted')
+roots=['crate::record_ref','crate::raw_ref'] if parser else roots
+namespace='NDF_ReaderRef' if parser else 'NDF_Reference'
+dest=B/('NDF_reader_extracted' if parser else 'NDF_extracted')
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
 cmd+=['--dest-file',str(B/'NDF_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']

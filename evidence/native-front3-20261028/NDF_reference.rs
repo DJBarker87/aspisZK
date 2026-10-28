@@ -6,3 +6,7 @@ pub fn opening_ref(proof:&[u8],i:usize)->&[u8] {let at=10055+i*832;&proof[at..at
 pub fn validated_row_ref(row:u8)->u8 {row}
 pub fn state_ref(state:[u8;32])->[u8;32] {state}
 pub fn framed_ref(framed:&[u8])->&[u8] {framed}
+pub fn record_ref<'a>(records:&[&'a [u8];27],row:u8)->Option<&'a [u8]> {if row>=27 {None} else {Some(records[row as usize])}}
+pub fn raw_ref<const N:usize>(bytes:&[u8],at:usize)->([u8;N],usize) {
+ let mut out=[0u8;N];let mut j=0;while j<N {out[j]=bytes[at+j];j+=1;}(out,at+N)
+}
