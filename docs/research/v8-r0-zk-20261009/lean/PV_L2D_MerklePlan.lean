@@ -69,7 +69,7 @@ theorem level_parent_count (fuel : Nat) (indices : List Nat) :
       split
       · have h := ih xs.tail
         simp only [List.length_cons]
-        have ht : xs.tail.length ≤ xs.length := List.length_tail_le xs
+        have ht : xs.tail.length ≤ xs.length := by simp only [List.length_tail]; omega
         omega
       · have h := ih xs
         simp only [List.length_cons]
@@ -87,7 +87,7 @@ theorem level_sibling_count (fuel : Nat) (indices : List Nat) :
       simp only [level]
       split
       · have h := ih xs.tail
-        have ht : xs.tail.length ≤ xs.length := List.length_tail_le xs
+        have ht : xs.tail.length ≤ xs.length := by simp only [List.length_tail]; omega
         simp only [List.length_cons]
         omega
       · have h := ih xs
