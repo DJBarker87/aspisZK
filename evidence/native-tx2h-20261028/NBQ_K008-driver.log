@@ -1,0 +1,154 @@
+{"attempt": "NBQ_K008", "exit_status": 0, "wall_seconds": 0.9707213069777936, "peak_rss_kib": "207324", "swaps": "0"}
+pis-r1-cost-probe/src/fast_dots.rs:46:13
+   |
+46 |         let mut value = WideExact::from_limbs([
+   |             ----^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/r1_semantic.rs:232:71
+    |
+232 | fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges...
+    |                                                                       ----^^^^^^^^^^
+    |                                                                       |
+    |                                                                       help: remove this `mut`
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: constant `MASK` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:6:11
+  |
+6 |     const MASK:u64=0x7fff_ffff_7fff_ffff;
+  |           ^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `ONES` is never used
+ --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:7:11
+  |
+7 |     const ONES:u64=0x0000_0001_0000_0001;
+  |           ^^^^
+
+warning: function `add` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:15:37
+   |
+15 |     #[inline(always)] pub(crate) fn add(a:u32,b:u32)->u32 {
+   |                                     ^^^
+
+warning: function `pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:18:26
+   |
+18 |     #[inline(always)] fn pair(a:u32,b:u32)->u64 {u64::from(a)|(u64::from(b)<<32)}
+   |                          ^^^^
+
+warning: function `reduce_pair` is never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:19:26
+   |
+19 |     #[inline(always)] fn reduce_pair(s:u64)->u64 {
+   |                          ^^^^^^^^^^^
+
+warning: multiple associated items are never used
+  --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:23:19
+   |
+22 |     impl Q {
+   |     ------ associated items in this implementation
+23 |         pub const ZERO:Self=Self([0;4]);pub const ONE:Self=Self([1,0,0,0]);
+   |                   ^^^^                            ^^^
+...
+28 |         pub fn from_m31(x:u32)->Option<Self>{if x<P{Some(Self([x,0,0,0]))}else{None}}
+   |                ^^^^^^^^
+...
+37 |         #[inline(always)] pub fn add(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+42 |         #[inline(always)] pub fn sub(self,rhs:Self)->Self {
+   |                                  ^^^
+...
+47 |         #[inline(always)] pub fn half(self)->Self {
+   |                                  ^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: function `push_route` is never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:273:5
+    |
+273 |  fn push_route(d:&mut canonical::Dot,a:canonical::Q,b:canonical::Q){unsafe{
+    |     ^^^^^^^^^^
+
+warning: function `no_push` is never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:286:5
+    |
+286 |  fn no_push(_d:&mut canonical::Dot,_a:canonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}
+    |     ^^^^^^^
+
+warning: module `NBQ_public` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:260:5
+    |
+260 | mod NBQ_public {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_public`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBQ_any_dot` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:125:32
+    |
+125 |     #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+    |                                ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_any_dot`
+
+warning: module `NBQ_private` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:127:9
+    |
+127 |     mod NBQ_private {
+    |         ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_private`
+
+    Finished `dev` profile [optimized] target(s) in 0.61s
+Checking harness fast_pairing::NBQ_public::checked...
+
+VERIFICATION RESULT:
+ ** 0 of 23 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.048753157s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

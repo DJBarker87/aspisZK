@@ -1,0 +1,60 @@
+{"attempt": "NBQ_K014", "exit_status": 0, "wall_seconds": 24.37217786104884, "peak_rss_kib": "208280", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+anonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}
+    |     ^^^^^^^
+
+warning: module `NBQ_public` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:261:5
+    |
+261 | mod NBQ_public {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_public`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NBQ_more` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:299:5
+    |
+299 | mod NBQ_more {
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nbq_more`
+
+warning: function `NBQ_sums` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:125:32
+    |
+125 |     #[cfg(kani)] pub(super) fn NBQ_sums(d:&Dot)->[u64;4]{d.sums}
+    |                                ^^^^^^^^ help: convert the identifier to snake case: `nbq_sums`
+
+warning: function `NBQ_any_dot` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:126:32
+    |
+126 |     #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+    |                                ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_any_dot`
+
+warning: module `NBQ_private` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:128:9
+    |
+128 |     mod NBQ_private {
+    |         ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_private`
+
+    Finished `dev` profile [optimized] target(s) in 1.21s
+Checking harness fast_pairing::NBQ_more::finish_all...
+
+VERIFICATION RESULT:
+ ** 0 of 22 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 22.729836s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r2e15643051f24adaa212ee4db4ea07ad.scope; invocation ID: f76de1037dc24fe1b09a8308bfb6c81a

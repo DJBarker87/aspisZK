@@ -1,0 +1,58 @@
+{"attempt": "NBQ_K002", "exit_status": 1, "wall_seconds": 0.9386961970012635, "peak_rss_kib": "204608", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+     ^^^^^^^^^^
+
+warning: function `no_push` is never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:284:5
+    |
+284 |  fn no_push(_d:&mut canonical::Dot,_a:canonical::Q,_b:canonical::Q){assert!(false,"rejection calls no private push");}
+    |     ^^^^^^^
+
+warning: module `NBQ_public` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:259:5
+    |
+259 | mod NBQ_public {
+    |     ^^^^^^^^^^ help: convert the identifier to snake case: `nbq_public`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBQ_any_dot` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:125:32
+    |
+125 |     #[cfg(kani)] pub(super) fn NBQ_any_dot()->Dot {Dot{sums:kani::any()}}
+    |                                ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_any_dot`
+
+warning: module `NBQ_private` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:127:9
+    |
+127 |     mod NBQ_private {
+    |         ^^^^^^^^^^^ help: convert the identifier to snake case: `nbq_private`
+
+    Finished `dev` profile [optimized] target(s) in 0.57s
+Checking harness fast_pairing::canonical::NBQ_private::new...
+
+VERIFICATION RESULT:
+ ** 1 of 16 failed (15 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.02923862s
+
+Manual Harness Summary:
+Verification failed for - fast_pairing::canonical::NBQ_private::new
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rc4f5d9aac84f47168a6796506377be8a.scope; invocation ID: 2a278af689ed4e16b419e16f59a1dbd4
