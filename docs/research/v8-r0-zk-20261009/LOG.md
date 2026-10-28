@@ -13445,3 +13445,28 @@ composition with a matched failing control per use, never in place of KMX_ copie
 multiplication, and only on interface shapes whose controls were re-run. Stream A's owner-approved
 16 GiB compile (JHq_) reduces host headroom; ruling (m') handles the extra refusals. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D363 (Stream B) 2026-10-28 10:20 UTC: the world-free external callbacks are a shared obstruction for the native-effect rows; file-effects line parked; pv-world launched
+
+pv-fxio (2 attempts; no Kani; native finite validation) left all seven file rows OPEN (V171, V172,
+V175, V176, V267, V268, V271) on a checked obstruction FXIO-1: a fixed world-free callback cannot
+reproduce create_new succeeding and then returning AlreadyExists for identical inputs across changing
+file-system worlds. This is the same obstruction pv-fxmem found for drop (D362): the ProverRwFull
+ExternalFuns callbacks are world-free, so any callback whose native outcome depends on external state
+cannot be installed as a fixed function. Its OS-contract coverage report shows that the trust field
+ (trust-items.md) already carries a world-threaded joint Observation (initial and final
+worlds, an ordered list of world-tagged calls, file-system State, the D159 payload) and only transfers
+an extracted outcome to native; it does not define what open, write, sync or close do, and
+entropy_law and entropy_kernel grant no file-system guarantees. Two OS facts may be needed and are
+not assumed: exclusive creation (O_EXCL atomicity) and fsync crash persistence. The second bears on
+privacy directly, since the durable mask-nonce store exists to prevent nonce reuse across restarts.
+
+Lead decision (AGENTS.md section 7): one job for the shared piece instead of more wrappers. pv-world
+(IDs 36000-36199; no Kani; no source change; T unchanged) defines a world-indexed state-and-error
+interpretation of the external callbacks over the existing Observation World, lifts the provably pure
+callbacks, gives the effectful ones explicit world laws, proves caller-level threading over the
+extracted control flow so the ordered calls produce exactly the tagged-call list  speaks
+about, and reports which OS facts the existing trust list covers; uncovered ones go to the owner as
+possible trust items with what depends on them. The file-effects line is parked (branch pushed) until
+then; fxmem2 continues on drop at the finite set of dropped types. Rows removed outright: 0. Privacy
+target not yet established.
