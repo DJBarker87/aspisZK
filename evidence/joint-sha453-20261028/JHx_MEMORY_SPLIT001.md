@@ -37,3 +37,9 @@ modules after the first five fixed groups (16+4*28), projecting below7GiB.
 No successful module is repeated. Generator --check validates the new schedule.
 If a56-block module fails memory, it must be split with a changed schedule;
 no cap increase is authorized for arithmetic modules.
+
+009 validates the56-block scale: exit0,123.720419006s,RSS5745880KiB,
+swap0, all56 compression theorems audit to propext only. Retain this
+size for remaining arithmetic modules; no need for a larger resource scope.
+Seed object collision check found no differing shared .olean companions between
+the own cache and read-only tx2fix cache (JHx_SEED_COLLISIONS.json).
