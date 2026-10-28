@@ -9,13 +9,21 @@ theorem usize_1024_size : 1024 < UScalar.size .Usize := by
   rw [UScalar.size_def]
   scalar_tac
 
+theorem checked_add_exact (x y z : Usize) (h : x.val+y.val=z.val) : x+y=.ok z := by
+  obtain ⟨s,hs,hval⟩ := WP.spec_imp_exists
+    (UScalar.add_spec (x:=x) (y:=y) (by rw [h]; scalar_tac))
+  have heq : s=z := UScalar.eq_of_val_eq (by omega)
+  simpa only [heq] using hs
+
 /-- Small symbolic layout constant, not a recurrence evaluation. -/
 theorem selected_columns28 :
     reference_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1 = .ok 28#usize := by
   unfold reference_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1
     reference_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
     aspis_core.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS
-  rfl
+  rw [checked_add_exact 16#usize 10#usize 26#usize (by rfl)]
+  simp only [bind_tc_ok]
+  exact checked_add_exact 26#usize 2#usize 28#usize (by rfl)
 
 theorem selected_claim_total (claims : Array aspis_core.field.QM31 84#usize)
     (row column : Usize) (hr : row.val<3) (hc : column.val<28) :
@@ -34,6 +42,7 @@ theorem selected_claim_total (claims : Array aspis_core.field.QM31 84#usize)
   exact ⟨value,hvalue⟩
 
 #print axioms usize_1024_size
+#print axioms checked_add_exact
 #print axioms selected_columns28
 #print axioms selected_claim_total
 end PV_B3P_Success227
