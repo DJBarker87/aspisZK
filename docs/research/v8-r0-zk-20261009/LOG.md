@@ -13862,3 +13862,27 @@ initialisation for the actual prover body, proves both ROMView decoder laws for 
 CommonObserver32, finishes interpolation, rounds, commitments, openings and serialization, and states
 the semantic-oracle bridge as a theorem whose only remaining hypothesis is op227's callback law,
 uncredited until V244 lands. Rows removed outright: 0. Privacy target not yet established.
+
+## D386 (Stream B) 2026-10-28 17:35 UTC: the 41 suspensions classified by cause: 1 compiler-lowering, 23 standard-library source, 2 dependency source, 15 unresolved; re-verification launched
+
+pv-fscan2 (34 capped scopes; no Kani; no Lean; no source change) classified every suspension at
+source level:
+| Class | Rows | Rows |
+|---|---:|---|
+| A: compiler lowering only (same source) | 1 | V242 |
+| B: std/alloc/core source differs (1.98 nightly vs shipped 1.94.1) | 23 | V164, V170, V178, V181, V182, V183, V184, V186, V187, V195, V198, V219, V229, V230, V231, V238, V239, V240, V247, V256, V257, V258, V259 |
+| C: dependency source differs | 2 | V221, V222 |
+| D: unresolved | 15 | V169, V197, V201, V212, V213, V216, V217, V218, V220, V233, V236, V237, V246, V260, V265 |
+Class C carries a substantive finding: the shipped zeroize 1.9.0 replaces the SeqCst compiler_fence
+call with an assembly barrier, so the effect trace proved for V221/V222 against 1.8.1 is not the
+shipped one, and passing byte tests do not establish it. Class D includes 14 original structural
+checkers that could not be recovered. All 41 suspensions remain; no credit restored.
+
+The compiler-cohort question for the owner (D381) now concerns one row, V242. The main work is
+re-verification against the deployed sources: pv-rdb1 (class B, first twelve rows; IDs 54700-54799),
+pv-rdb2 (class B, remaining eleven; IDs 41100-41199) and pv-rdcd (class C with a restated 1.9.0 zeroize
+law, then class D by resolving each call graph and rebuilding the missing checkers from their committed
+sources; IDs 41400-41499). Each re-runs the structural gate against the 1.94.1 std and deployed
+dependency sources and the native differential on a release 1.94.1 build, restores the row, keeps it
+suspended with a reason, or reports a finding. Rows removed outright: 0. Privacy target not yet
+established.

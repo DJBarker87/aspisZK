@@ -255,3 +255,12 @@ boundary, or must every native link be re-established on the 1.94.1 toolchain it
 extraction tool may not support)? Rows whose std or dependency SOURCE differs (classes B and C) are
 being re-checked against the deployed sources regardless. The lead's recommendation will follow the
 classification.
+
+**Update (LOG D386): the compiler-cohort question now concerns one row.** Classification of the 41
+suspensions found only V242 differing by compiler lowering alone (same Rust source). The other
+resolved differences are real source differences in the standard library (23 rows) or a dependency
+(2 rows, zeroize 1.9.0), which are being re-verified against the shipped sources and do not need an
+owner decision. The question for V242 stands as written above; the lead recommends crediting
+lowering-only rows under the compiler-preservation obligation (row V370) with the compiler cohort
+recorded as a named boundary, because the alternative (re-establishing every native link on the
+1.94.1 toolchain itself) is not supported by the pinned extraction tools.
