@@ -40,17 +40,24 @@ def finisher (base : ExternalTypes) {T N0 A0 Nout Aout K N1 A1 O0 : Type}
       Result (T × Buffer A0 × GenericArray U8 Nout Aout) :=
   @digest.core_api.VariableOutputCore.finalize_variable_core (Types base) T N0 A0 Nout Aout K N1 A1 O0 vc
 
+def direction (base : ExternalTypes) {T N0 A0 Nout Aout K N1 A1 O0 : Type}
+    (vc : @digest.core_api.VariableOutputCore (Types base) T N0 A0 Nout Aout K N1 A1 O0) :
+    Result PV_DL_CtFinal.Side :=
+  @digest.core_api.VariableOutputCore.TRUNC_SIDE (Types base) T N0 A0 Nout Aout K N1 A1 O0 vc
+
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (s : PV_DL_ArrayShape.Shape) : @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
   {ops with
-    op219 := fun vc al le nz less nz1 =>
-      dispatch (finisher base vc) vc.TRUNC_SIDE s (ops.op219 vc al le nz less nz1)}
+    op219 := fun {T OutN O N0 A0 Nout Aout K N1 A1 O0 OutA O1 O2} vc al le nz less nz1 =>
+      dispatch (finisher base vc) (direction base vc) s
+        (@ExternalFuns.op219 (Types base) ops T OutN O N0 A0 Nout Aout K N1 A1 O0 OutA O1 O2
+          vc al le nz less nz1)}
 
 theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (s : PV_DL_ArrayShape.Shape) {T OutN O N0 A0 Nout K N1 A1 O0 O1 O2 : Type}
     (vc : @digest.core_api.VariableOutputCore (Types base) T N0 A0 Nout (Storage U8 5) K N1 A1 O0)
-    (al : @generic_array.ArrayLength (Types base) OutN U8 (PV_DL_ArrayShape.Carrier U8 s))
+    (al : generic_array.ArrayLength OutN U8 (PV_DL_ArrayShape.Carrier U8 s))
     (le : typenum.type_operators.IsLessOrEqual OutN Nout O1) (nz : typenum.marker_traits.NonZero O1)
     (less : typenum.type_operators.IsLess N0 (PV_DL_DefaultCallback.Limit base) O2)
     (nz1 : typenum.marker_traits.NonZero O2)
@@ -58,8 +65,8 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
     @ExternalFuns.op219 (Types base) (selected base ops s)
       T OutN O N0 A0 Nout (Storage U8 5) K N1 A1 O0 (PV_DL_ArrayShape.Carrier U8 s) O1 O2
       vc al le nz less nz1 self buffer out=
-      PV_DL_CtCarrier.value (finisher base vc) vc.TRUNC_SIDE s self buffer :=
-  dispatch_source (finisher base vc) vc.TRUNC_SIDE s
+      PV_DL_CtCarrier.value (finisher base vc) (direction base vc) s self buffer :=
+  dispatch_source (finisher base vc) (direction base vc) s
     (@ExternalFuns.op219 (Types base) ops
       T OutN O N0 A0 Nout (Storage U8 5) K N1 A1 O0 (PV_DL_ArrayShape.Carrier U8 s) O1 O2
       vc al le nz less nz1) self buffer out
@@ -68,6 +75,7 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
 #print axioms dispatch
 #print axioms dispatch_source
 #print axioms finisher
+#print axioms direction
 #print axioms selected
 #print axioms selected_native
 end R1Z.PV_DL_CtSelected
