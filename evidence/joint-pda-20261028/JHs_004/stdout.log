@@ -1,0 +1,65 @@
+JHs_Inputs.lean:11:49: warning: This simp argument is unused:
+  JHj_Seeds.key
+
+Hint: Omit it from the simp argument list.
+  simp only [JHs_PDA.preimage, JHj_Seeds.master, J̵H̵j̵_̵S̵e̵e̵d̵s̵.̵k̵e̵y̵,̵ ̵Array.to_slice, Array.make, List.flatMap_cons,
+  ̲  ̲ ̲ ̲List.flatMap_nil, List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHs_Inputs.Master.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Master.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+JHs_Inputs.lean:40:2: error: Tactic `rfl` failed: The left-hand side
+  List.map Fin.val
+    (List.map decodeByte
+      ([97#u8, 115#u8, 112#u8, 105#u8, 115#u8, 45#u8, 112#u8, 97#u8, 105#u8, 114#u8, 45#u8, 102#u8, 111#u8, 114#u8,
+              101#u8, 115#u8, 116#u8, 45#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8,
+              116#u8, 45#u8, 118#u8, 49#u8] ++
+            ([34#u8, 8#u8, 198#u8, 55#u8, 61#u8, 211#u8, 19#u8, 178#u8, 242#u8, 118#u8, 165#u8, 45#u8, 20#u8, 254#u8,
+                147#u8, 25#u8, 55#u8, 157#u8, 211#u8, 124#u8, 152#u8, 170#u8, 59#u8, 88#u8, 182#u8, 77#u8, 252#u8,
+                152#u8, 45#u8, 26#u8, 82#u8, 63#u8] ++
+              (↑⟨List.map UScalar.mk JHg_AccountValues.checkpoint.checkpoint_sequence.bv.toLEBytes, ⋯⟩ ++
+                [JHg_AccountValues.checkpoint.bump])) ++
+          ↑JHb_Programs.pool ++
+        [80#u8, 114#u8, 111#u8, 103#u8, 114#u8, 97#u8, 109#u8, 68#u8, 101#u8, 114#u8, 105#u8, 118#u8, 101#u8, 100#u8,
+          65#u8, 100#u8, 100#u8, 114#u8, 101#u8, 115#u8, 115#u8]))
+is not definitionally equal to the right-hand side
+  raw
+
+⊢ List.map Fin.val
+      (List.map decodeByte
+        ([97#u8, 115#u8, 112#u8, 105#u8, 115#u8, 45#u8, 112#u8, 97#u8, 105#u8, 114#u8, 45#u8, 102#u8, 111#u8, 114#u8,
+                101#u8, 115#u8, 116#u8, 45#u8, 99#u8, 104#u8, 101#u8, 99#u8, 107#u8, 112#u8, 111#u8, 105#u8, 110#u8,
+                116#u8, 45#u8, 118#u8, 49#u8] ++
+              ([34#u8, 8#u8, 198#u8, 55#u8, 61#u8, 211#u8, 19#u8, 178#u8, 242#u8, 118#u8, 165#u8, 45#u8, 20#u8, 254#u8,
+                  147#u8, 25#u8, 55#u8, 157#u8, 211#u8, 124#u8, 152#u8, 170#u8, 59#u8, 88#u8, 182#u8, 77#u8, 252#u8,
+                  152#u8, 45#u8, 26#u8, 82#u8, 63#u8] ++
+                (↑⟨List.map UScalar.mk JHg_AccountValues.checkpoint.checkpoint_sequence.bv.toLEBytes, ⋯⟩ ++
+                  [JHg_AccountValues.checkpoint.bump])) ++
+            ↑JHb_Programs.pool ++
+          [80#u8, 114#u8, 111#u8, 103#u8, 114#u8, 97#u8, 109#u8, 68#u8, 101#u8, 114#u8, 105#u8, 118#u8, 101#u8, 100#u8,
+            65#u8, 100#u8, 100#u8, 114#u8, 101#u8, 115#u8, 115#u8])) =
+    raw
+'AspisR1.JHs_Inputs.Checkpoint.native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+JHs_Inputs.lean:56:6: error: Tactic `decide` failed for proposition
+  (↑⟨↑(core.num.U64.to_le_bytes JHg_AccountValues.checkpoint.checkpoint_sequence), ⋯⟩).length ≤ 32
+because its `Decidable` instance
+  (↑⟨↑(core.num.U64.to_le_bytes JHg_AccountValues.checkpoint.checkpoint_sequence), ⋯⟩).length.decLe 32
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (↑⟨↑(core.num.U64.to_le_bytes JHg_AccountValues.checkpoint.checkpoint_sequence), ⋯⟩).length.ble 32, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'AspisR1.JHs_Inputs.Checkpoint.valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Lane.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Lane.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Registry.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Registry.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.RegistryProgramdata.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.RegistryProgramdata.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Entry.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.Entry.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.VerifierProgramdata.native' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHs_Inputs.VerifierProgramdata.valid' depends on axioms: [propext, Classical.choice, Quot.sound]
