@@ -44,7 +44,7 @@ theorem sample (ops : ExternalFuns) (p : Nat → Old.Q) (r : Usize) (hr : r.val<
     AspisR1ProducerRelease47.field.M31.ZERO,AspisR1ProducerRelease47.field.CM31.ZERO,
     ProverRwDictionaryTower.mapResult,ProverRwDictionaryTower.toC,
     ProverRwDictionaryTower.fromC,ProverRwDictionaryTower.fromQ,bind_tc_ok]
-  exact update p r hr _
+  exact update p r hr (ProverCommitSamplePoint49.word s)
 
 #print axioms array
 #print axioms index
