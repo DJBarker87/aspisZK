@@ -25,8 +25,7 @@ theorem allocated {S F : Type} (free : Nat → Nat → Nat → S → S)
     (release free owned w).allocator=free owned.address owned.capacity 1 w.allocator ∧
     (release free owned w).deallocCalls=w.deallocCalls+1 ∧
     (release free owned w).live owned.address=false := by
-  simp only [release,h,if_false,if_true]
-  exact ⟨rfl,rfl,rfl⟩
+  simp only [release,h,if_false,if_true,and_self]
 
 /-- Success of Path::join<P=String> destroys P before the caller proceeds.
 The consumed library-body law remains inside this call-site cleanup. -/
