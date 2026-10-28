@@ -27,6 +27,24 @@ for f,name,child,N,offset in [('pair_terminal.rs','encode_pool_v1_pair_verified_
 fn NBH_store{N}_gate() {{let mut out:[u8;{N}]=kani::any();let old=out;let bytes:[u8;32]=kani::any();let level:usize=kani::any();kani::assume(level<20);let j:usize=kani::any();kani::assume(j<{N});NBH_store{N}(&mut out,level,bytes);let start={offset}+32*level;assert_eq!(out[j],if j>=start && j<start+32 {{bytes[j-start]}} else {{old[j]}});}}
 '''
  probes[f'store{N}']={'source_loop':loop,'iteration':inner,'transformation':'one arbitrary enumerate iteration, child encode_digest result explicit bytes parameter; lower digest encoder dependency remains OPEN','domain':f'level<20, all output[{N}] and bytes[32] arbitrary; proves complete byte frame using arbitrary j'}
+# Split the timed-out dynamic write shape at the TrustedStd copy boundary.
+for N,offset,child in [(688,48,'NBH_after'),(800,160,'NBH_live')]:
+ code=f'''fn NBH_range{N}(out:&mut[u8;{N}],level:usize)->(usize,usize,usize,*mut u8){{
+ let start={offset}+32*level;
+ let stop=start+32;
+ let range=&mut out[start..stop];
+ (start,stop,range.len(),range.as_mut_ptr())
+}}
+#[kani::proof]
+fn NBH_range{N}_gate(){{
+ let mut out:[u8;{N}]=kani::any();let level:usize=kani::any();kani::assume(level<20);
+ let start={offset}+32*level;let target=&mut out[start] as *mut u8;
+ let got=NBH_range{N}(&mut out,level);
+ assert_eq!(got.0,start);assert_eq!(got.1,start+32);assert_eq!(got.2,32);assert!(core::ptr::eq(got.3,target));
+}}
+'''
+ files[ROOT+child+'.rs']+=code
+ probes[f'range{N}']={'source_store_window':probes[f'store{N}']['iteration'],'native_gate':code,'split':'only offset/range borrow and precise typed pointer/length to TrustedStd copy_from_slice; all bytes arbitrary; no native whole-array write; actual copy uses existing Lean SourceStore/LoopStep laws plus explicit child dependency'}
 # Late preflight is checked before all output mutation and child calls.
 src=body('pair_tree_profile.rs','encode_pool_v1_pair_late_public_statement_v1');prefix=src[:src.index('    output.fill')]
 prefix=prefix.replace('statement.live_snapshot.next_pair_index','before').replace('statement.candidate_afterstate.next_pair_index','after')
@@ -63,12 +81,15 @@ files[ROOT+'NBH_terminal.rs']+=f'''fn NBH_asf8_stores(kind:u8,lane:u8,master:[u8
 fn NBH_asf8_stores_gate(){{let kind:u8=kani::any();let lane:u8=kani::any();let master:[u8;32]=kani::any();let checkpoint:[u8;32]=kani::any();let selected:[u8;32]=kani::any();let seq:u64=kani::any();let anchor:[u8;32]=kani::any();let out=NBH_asf8_stores(kind,lane,master,checkpoint,selected,seq,anchor);let j:usize=kani::any();kani::assume(j<1880);let expected=if j<4{{b"ASF8"[j]}}else if j==4{{1}}else if j==5{{kind}}else if j==6{{1}}else if j==7{{lane}}else if j<40{{master[j-8]}}else if j<72{{checkpoint[j-40]}}else if j<104{{selected[j-72]}}else if j<112{{seq.to_le_bytes()[j-104]}}else if j<144{{anchor[j-112]}}else{{0}};assert_eq!(out[j],expected);}}
 '''
 probes['asf8_stores']={'source_window':s,'scope':'prefix before late/payment calls; exact accounts and ordered field offsets; validation/projections/child digest dependencies explicit'}
-# ASR8 deliberately last: it has no headline soundness need (op53 universal).
-src=body('pair_forest_terminal.rs','encode_pool_v1_pair_forest_terminal_result_v1')
-s=src[src.index('    let mut output'):src.index('    output[RESULT_AFTERSTATE_OFFSET..]')]
-s=s.replace('result.transition_kind as u8','kind').replace('result.output_lane','lane').replace('result.master_account','master').replace('result.selected_lane_account','selected').replace('&encode_digest_canonical(&result.nullifier)','&nullifier')
-files[ROOT+'NBH_terminal.rs']+=f'''fn NBH_asr8_stores(kind:u8,lane:u8,master:[u8;32],selected:[u8;32],nullifier:[u8;32])->[u8;792]{{{s}output}}
-#[kani::proof]
-fn NBH_asr8_stores_gate(){{let kind:u8=kani::any();let lane:u8=kani::any();let master:[u8;32]=kani::any();let selected:[u8;32]=kani::any();let nullifier:[u8;32]=kani::any();let out=NBH_asr8_stores(kind,lane,master,selected,nullifier);let j:usize=kani::any();kani::assume(j<792);let expected=if j<4{{b"ASR8"[j]}}else if j==4{{1}}else if j==5{{kind}}else if j==6{{1}}else if j==7{{lane}}else if j<40{{master[j-8]}}else if j<72{{selected[j-40]}}else if j<104{{nullifier[j-72]}}else{{0}};assert_eq!(out[j],expected);}}
-'''
-probes['asr8_stores']={'source_window':s,'scope':'non-headline emission prefix only; full encoder OPEN'}
+# All-size decoder admission cut: complements the fixed-buffer native gates.
+length_jobs=[('verifier_registry.rs','decode_verifier_registry_v1',128,'PoolV1VerifierRegistryFormatError'),('verifier_registry.rs','decode_verifier_registry_entry_v1',192,'PoolV1VerifierRegistryFormatError'),('verifier_registry.rs','decode_verifier_registry_v2',256,'PoolV1VerifierRegistryFormatError'),('verifier_registry.rs','decode_verifier_registry_entry_v2',320,'PoolV1VerifierRegistryFormatError'),('format.rs','decode_pool_identity_v1',144,'PoolV1FormatError'),('format.rs','decode_verifier_policy_v1',104,'PoolV1FormatError'),('pair_terminal.rs','decode_pool_v1_pair_verified_afterstate_v1',688,'PoolV1PairVerifierTransportErrorV1'),('pair_forest_terminal.rs','decode_pool_v1_pair_forest_terminal_request_v1',320,'PoolV1PairForestTerminalFormatErrorV1'),('pair_forest_accounts.rs','decode_pool_v1_pair_forest_master_v1',384,'PoolV1PairForestAccountErrorV1'),('pair_forest_accounts.rs','decode_pool_v1_pair_forest_checkpoint_v1',192,'PoolV1PairForestAccountErrorV1')]
+checks=[]
+for idx,(f,name,N,err) in enumerate(length_jobs):
+ src=body(f,name); a=src.index('    if bytes.len()'); z=src.index('\n    }',a)+6; original=src[a:z]
+ assert original.count('if ')==1 and original.count('return Err')==1 and 'WrongLength' in original
+ qualified='crate::pool_v1::'+f[:-3]+'::'+err
+ native=re.sub(r'bytes.len\(\) != \w+',f'len != {N}',original).replace('return Err(', 'return Some(').replace(err+'::',qualified+'::')
+ files[ROOT+'NBH_registry.rs']+=f'fn NBH_length{idx}(len:usize)->Option<{qualified}> {{{native} None}}\n'
+ checks.append(f'assert_eq!(NBH_length{idx}(len),if len!={N} {{Some({qualified}::WrongLength)}}else{{None}});')
+ probes['length_'+name]={'source_first_guard':original,'probe':native,'domain':'all usize lengths; no data access before this guard; only valid exact width continues','native_fixed_width':N}
+files[ROOT+'NBH_registry.rs']+='#[kani::proof]\nfn NBH_all_lengths_gate(){let len:usize=kani::any();'+''.join(checks)+'}\n'

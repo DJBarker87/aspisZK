@@ -48,6 +48,7 @@ def launch(a,kind,command,sources,timeout=180):
  r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+shlex.quote(a+'.json'),submitted=True)
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
  rc=collect(a);print(a,rc['exit_status'],rc['wall_seconds'],rc['peak_rss_kib'],flush=True);return rc
+if (E/'NBH_PAUSE').exists():raise SystemExit('paused before any admission/submission')
 if sys.argv[1]=='setup':
  admit('NBH_SETUP')
  paths=['Cargo.toml','Cargo.lock','crates','programs','audit/poseidon-pair-probe/program','xtask','tools/r1-builder-reference','docs/research/v8-r0-zk-20261009/refine/diffharness/tests/glue_gen.rs','docs/research/v8-r0-zk-20261009/c3/check','docs/research/v8-r0-zk-20261009/c3/build','docs/research/v8-r0-zk-20261009/z4']+['docs/research/v8-r0-zk-20261009/refine/'+n for n in ['writers','blockwriters','poseidon']]
@@ -66,6 +67,7 @@ r=subprocess.run(['patch','-p1','--batch','--forward','-i',str(p)],cwd=b/'NBH_sr
 ''');assert r.returncode==0,r.stdout+r.stderr
 elif sys.argv[1]=='run':
  a,harness=sys.argv[2:];assert len(list(E.glob('NBH_K*/receipt.json')))<30
+ assert not harness.endswith(('::NBH_store688_gate','::NBH_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
  sources=['NBH_src/Cargo.lock','NBH_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_after.rs','NBH_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_live.rs','NBH_src/crates/aspis-statement/src/pool_v1/verifier_registry.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_registry.rs','NBH_src/crates/aspis-statement/src/pool_v1/format.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_format.rs','NBH_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_terminal.rs','NBH_src/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs','NBH_src/crates/aspis-statement/src/pool_v1/NBH_accounts.rs']
  g=a.replace('_K','_G');rc=launch(g,'metadata',['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/NBH_src/Cargo.toml','--locked','--offline','--format-version','1'],sources,120);assert rc['exit_status']==0
@@ -80,3 +82,4 @@ elif sys.argv[1]=='run':
  rc=launch(a,'kani',['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBH_src/crates/aspis-statement/Cargo.toml','--lib','-j','1','-Z','unstable-options','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse'],sources,600)
  after=ssh('sha256sum '+B+'/NBH_src/Cargo.lock').stdout.split()[0];check.update(lock_after_sha256=after,lock_unchanged=after==before);(E/(a+'-graph.json')).write_text(json.dumps(check,indent=2)+'\n');assert after==before,'STOP lock drift'
  print((E/a/'stdout.log').read_text()[-4000:])
+ sys.exit(rc['exit_status'])
