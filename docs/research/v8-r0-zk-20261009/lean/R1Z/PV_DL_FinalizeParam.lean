@@ -31,6 +31,7 @@ theorem source {S : Type} (compress : S → List U8 → Result S) (state : S)
   unfold reference
   rw [hpad]
   simp only [bind_tc_ok]
+  dsimp only
   rw [hfirst,hsecond]
   rfl
 
