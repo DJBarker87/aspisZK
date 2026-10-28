@@ -7,9 +7,11 @@ S=B/'NDI_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'Cargo.toml').write_text('[package]\nname="ndf_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n')
 (S/'src/lib.rs').write_bytes((B/'NDI_src/crates/aspis-r1-cost-probe/src/NDI_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(C)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
+assert sha(A)=='c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958'
 parser=os.environ.get('NDI_EXTRACT_PARSER')=='1'
-roots=['crate::geometry_ref']
-namespace='NDI_GeometryRef'
+roots=['crate::transcript_new_byte_borrow_ref','crate::transcript_sample_byte_borrow_ref']
+namespace='NDI_TranscriptBorrow'
 dest=B/'NDI_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]

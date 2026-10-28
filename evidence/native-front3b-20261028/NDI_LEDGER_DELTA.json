@@ -1,5 +1,5 @@
 {
-  "stage": 3,
+  "stage": 4,
   "new_local_closures": [
     {
       "function": "r1_wire::ValidatedRecord::row",
@@ -43,21 +43,51 @@
       "domain": "Vec length<=22; start<=index; index-start<Vec length; readonly borrowed row",
       "caller": "NDI_GeometryBridge.caller",
       "no_borrowed_return_substitution": true
+    },
+    {
+      "function": "r1_wire::SemanticTranscript<SolanaDigest>::new",
+      "status": "CLOSED-CONDITIONAL",
+      "native": [
+        "NDI_K033",
+        "NDI_K034"
+      ],
+      "ordered_transport": [
+        "NDI_K029",
+        "NDI_K031"
+      ],
+      "result_shape_controls": [
+        "NDI_K036",
+        "NDI_K037",
+        "NDI_K038",
+        "NDI_K039",
+        "NDI_K040"
+      ],
+      "copy_controls": [
+        "NDI_K012",
+        "NDI_K013"
+      ],
+      "reference": "NDI_E002",
+      "theorem": "NDI_TranscriptBridge.initial",
+      "projection": "all selected coordinates reconstruct state; next_row=0; actual zero-sized SolanaDigest carrier",
+      "caller": "NDI_TranscriptCaller.initialized_public (L034)",
+      "domain": "semantic public bytes length<=1880; live readonly root32; runtime call/reply interpretation"
     }
   ],
   "composed_closures": [],
   "inherited_local_conditional": 6,
-  "remaining_open": 15,
+  "remaining_open": 14,
   "lean_only_progress": [
     "NDI_ParserTotal.reference: all rows/all slices, no lower-callee equality premise",
     "NDI_ParserAt.reference: discharged NDF_AtCompose lower-parser premise",
-    "NDI_RawProjection.byte/kmx_window/kmx_disjoint: reuse NDF induction and KMX value laws"
+    "NDI_RawProjection.byte/kmx_window/kmx_disjoint: reuse NDF induction and KMX value laws",
+    "NDI_TranscriptLaw.sample/rejected/sample_domain; NDI_TranscriptInit.reference/length_conversion; NDI_TranscriptBridge.initial/sample; NDI_TranscriptWindows initial/sample/complete; NDI_TranscriptCaller.initialized_public"
   ],
   "failed_native_shapes": [
     "NDI_K014 raw32 projection/1768-byte backing TIMEOUT",
     "NDI_K015 raw1 projection/1768-byte backing TIMEOUT"
   ],
   "partial_native": [
-    "NDI_K018/K019/K020/K021: raw1 on backing1 only; no general reader closure"
+    "NDI_K018/K019/K020/K021: raw1 on backing1 only; no general reader closure",
+    "Sampler K030/K032 ordinary ordered transport passes/control fails; actual rejection branch K047 PASS/K049 inverted FAIL; accepted contracts K035/K046/K048 TIMEOUT, no full closure"
   ]
 }

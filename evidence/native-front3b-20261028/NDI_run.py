@@ -4,6 +4,13 @@ import subprocess,json,sys,time,shlex,hashlib,os
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-front3b-20261028';H='dombarker@100.108.41.90'
 a,kind,target=sys.argv[1:];limit=80 if kind=='kani' else (20 if kind=='extract' else 80)
 assert int(a[-3:])<=limit
+if kind=='lean' and not os.environ.get('NDI_DEP_SOURCE'):
+ current=E/(target+'.lean')
+ for prior in E.glob('NDI_L[0-9][0-9][0-9]'):
+  old=prior/'sources'/'NDI_generated'/(target+'.lean')
+  receipt=prior/'receipt.json'
+  if old.exists() and receipt.exists() and json.loads(receipt.read_text())['exit_status']==0 and old.read_bytes()==current.read_bytes():
+   raise SystemExit('REFUSED unchanged successful Lean target '+target+'; no admission or prover launch')
 assert not (E/a).exists()
 active=E/'NDI_ACTIVE.json';assert not active.exists(),active
 active.write_text(json.dumps(dict(attempt=a)))
@@ -60,6 +67,30 @@ if kind=='lean':
   cfg['deps_fingerprint']['selected_objects']=json.loads((E/'NDI_AUDIT_PINS.json').read_text())['selected_objects']
   files['NDI_AUDIT_PINS.json']=(E/'NDI_AUDIT_PINS.json').read_text()
   sources.append('NDI_AUDIT_PINS.json')
+if kind=='lean':
+ code=f"""from pathlib import Path
+import json,hashlib
+b=Path({B!r});objects={{}};sources={{}}
+for p in (b/'NDI_objects').rglob('*.olean'):
+ n=p.relative_to(b/'NDI_objects').with_suffix('')
+ if str(n)=={target!r}:continue
+ objects[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+ q=b/'NDI_generated'/n.with_suffix('.lean')
+ if q.exists():sources[str(q)]=hashlib.sha256(q.read_bytes()).hexdigest()
+print(json.dumps(dict(objects=objects,sources=sources)))
+"""
+ r=ssh('python3',code);assert r.returncode==0,r.stderr
+ own=json.loads(r.stdout)
+ cfg['deps_fingerprint']['selected_objects'].update(own['objects'])
+ cfg['deps_fingerprint']['own_sources']=own['sources']
+ if (E/'NDI_EXTRA_PINS.json').exists():
+  files['NDI_EXTRA_PINS.json']=(E/'NDI_EXTRA_PINS.json').read_text()
+  sources.append('NDI_EXTRA_PINS.json')
+  cfg['deps_fingerprint']['extra_pinset_sha256']=hashlib.sha256(files['NDI_EXTRA_PINS.json'].encode()).hexdigest()
+ cfg['lean_command']=cfg['command']
+ cfg['command']=['python3','NDI_lean_gate.py',a+'.json']
+ files['NDI_lean_gate.py']=(E/'NDI_lean_gate.py').read_text()
+ sources.append('NDI_lean_gate.py')
 files[a+'.json']=json.dumps(cfg,indent=2)
 # Upload after admission; snapshots permit exact local reconstruction.
 for n,s in files.items():
@@ -86,7 +117,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDI_EXTRACTION_PINS.json']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-dependency-check.json','NDI_EXTRACTION_PINS.json']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr
@@ -94,7 +125,11 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
-with (E/'NDI_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+summary={k:v for k,v in rc.items() if k not in ['deps_fingerprint','env']}
+summary['deps_fingerprint_sha256']=hashlib.sha256(json.dumps(rc['deps_fingerprint'],sort_keys=True).encode()).hexdigest()
+summary['full_receipt']=a+'/receipt.json'
+summary['full_receipt_sha256']=hashlib.sha256(out[a+'/receipt.json'].encode()).hexdigest()
+with (E/'NDI_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-1800:],flush=True)

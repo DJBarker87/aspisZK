@@ -1,13 +1,20 @@
 from pathlib import Path
 import subprocess,difflib
+from NDI_harness import read as read_harness
 E=Path(__file__).resolve().parent
 F='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 def files():
- out={}
+ out={};harness=read_harness()
  for name in ['lib','r1_wire','candidate','verifier','compact']:
   p='crates/aspis-r1-cost-probe/src/'+name+'.rs';s=subprocess.check_output(['git','show',F+':'+p],text=True)
   if name=='lib':s='#![cfg_attr(kani, feature(allocator_api))]\n'+s+'\n#[cfg(kani)] mod NDI_controls;\n'
   if name=='r1_wire':
+   s=s.replace('pub enum Error {', '#[cfg_attr(kani,derive(kani::Arbitrary))]\npub enum Error {')
+   s=s.replace('pub struct SemanticTranscript<H:', '#[cfg_attr(kani,derive(kani::Arbitrary))]\npub struct SemanticTranscript<H:')
+   s+='\n#[cfg(kani)] pub fn NDI_build<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H> {SemanticTranscript{hash,state,next_row}}\n'
+   s=s.replace('pub fn new(hash: H, public_bytes:', '#[cfg_attr(kani,kani::requires(public_bytes.len()<=1880 && unsafe {NDI_wire::VALUE_COORD<32}))]\n    #[cfg_attr(kani,kani::ensures(|r| NDI_wire::new_matches(r) != cfg!(NDI_invert_actual_new)))]\n    pub fn new(hash: H, public_bytes:')
+   s=s.replace('fn sample_block_validated(&mut self,', '#[cfg_attr(kani,kani::requires(row<=26 && framed.len()<=3717 && unsafe {NDI_wire::VALUE_COORD<32}))]\n    #[cfg_attr(kani,kani::modifies(&mut self.state,&mut self.next_row))]\n    #[cfg_attr(kani,kani::ensures(|r| NDI_wire::sample_matches(r,&self.state,self.next_row,row,old(self.state[unsafe {NDI_wire::VALUE_COORD}]),old(self.next_row)) != cfg!(NDI_invert_actual_sample)))]\n    pub fn sample_block_validated(&mut self,')
+   s+='\n#[cfg(kani)] pub fn NDI_set_values(reply:*const [u8;32],advanced:*const [u8;32],coordinate:usize) {unsafe {NDI_wire::VALUE_REPLY=reply;NDI_wire::VALUE_ADVANCED=advanced;NDI_wire::VALUE_COORD=coordinate;}}\n'
    s=s.replace('pub(crate) fn row(&self)', '#[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::validated_row_ref(self.row)) != cfg!(NDI_invert_row)))]\n    pub(crate) fn row(&self)')
    s=s.replace('pub fn state(&self)', '#[cfg_attr(kani,kani::ensures(|r| (*r==NDI_wire::reference::state_ref(self.state)) != cfg!(NDI_invert_state)))]\n    pub fn state(&self)')
    s+='\n#[cfg(kani)] #[path="NDI_wire.rs"] mod NDI_wire;\n'
@@ -19,12 +26,14 @@ def files():
    s+='\n#[cfg(kani)] #[path="NDI_verifier.rs"] mod NDI_verifier;\n'
   out[p]=s
  for name in ['wire','reference','controls','verifier']:
-  out['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']=(E/('NDI_'+name+'.rs')).read_text()
+  out['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']=harness['crates/aspis-r1-cost-probe/src/NDI_'+name+'.rs']
  p='programs/r1-cost-probe/src/lib.rs'
- out[p]='#![cfg_attr(kani, feature(allocator_api))]\n'+subprocess.check_output(['git','show',F+':'+p],text=True)+'\n#[cfg(kani)] mod NDI_program;\n#[cfg(kani)] mod NDI_digest;\n'
- out['programs/r1-cost-probe/src/NDI_digest.rs']=(E/'NDI_digest.rs').read_text()
- out['programs/r1-cost-probe/src/NDI_reference.rs']=(E/'NDI_reference.rs').read_text()
- out['programs/r1-cost-probe/src/NDI_program.rs']=(E/'NDI_program.rs').read_text()
+ out[p]='#![cfg_attr(kani, feature(allocator_api))]\n'+subprocess.check_output(['git','show',F+':'+p],text=True)+'\n#[cfg(kani)] mod NDI_program;\n#[cfg(kani)] mod NDI_digest;\n#[cfg(kani)] mod NDI_shapes;\n'
+ out[p]=out[p].replace('struct SolanaDigest;', '#[cfg_attr(kani,derive(kani::Arbitrary))]\nstruct SolanaDigest;')
+ out['programs/r1-cost-probe/src/NDI_shapes.rs']=harness['programs/r1-cost-probe/src/NDI_shapes.rs']
+ out['programs/r1-cost-probe/src/NDI_digest.rs']=harness['programs/r1-cost-probe/src/NDI_digest.rs']
+ out['programs/r1-cost-probe/src/NDI_reference.rs']=harness['programs/r1-cost-probe/src/NDI_reference.rs']
+ out['programs/r1-cost-probe/src/NDI_program.rs']=harness['programs/r1-cost-probe/src/NDI_program.rs']
  return out
 if __name__=='__main__':
  patch=[]

@@ -1,0 +1,60 @@
+{"attempt": "NDI_K034", "exit_status": 1, "wall_seconds": 106.16128945699893, "peak_rss_kib": "1139216", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.228
+   Compiling libc v0.2.186
+   Compiling zerocopy v0.8.52
+   Compiling serde v1.0.228
+   Compiling subtle v2.6.1
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling borsh v1.5.7
+   Compiling five8_core v0.1.2
+   Compiling cpufeatures v0.2.17
+   Compiling num-traits v0.2.19
+   Compiling ahash v0.8.12
+   Compiling five8 v0.2.1
+   Compiling getrandom v0.2.17
+   Compiling bytemuck v1.25.0
+   Compiling once_cell v1.21.4
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling solana-sa
+...
+ld have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 26.33s
+Checking harness NDI_digest::actual_new_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 440 failed (20 unreachable)
+Failed Checks: |r| NDI_wire::new_matches(r) != cfg!(NDI_invert_actual_new)
+ File: "/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-r1-cost-probe/src/r1_wire.rs", line 183, in aspis_r1_cost_probe::r1_wire::SemanticTranscript::<SolanaDigest>::new::{closure#3}
+
+VERIFICATION:- FAILED
+Verification Time: 76.8628s
+
+Manual Harness Summary:
+Verification failed for - NDI_digest::actual_new_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r24f5a80a53f144d7996898b4968f2568.scope; invocation ID: 284815dd5dd64ed3877d632581bfd469

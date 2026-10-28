@@ -1,0 +1,62 @@
+{"attempt": "NDI_K047", "exit_status": 0, "wall_seconds": 48.939636516035534, "peak_rss_kib": "5224460", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling serde v1.0.228
+   Compiling libc v0.2.186
+   Compiling subtle v2.6.1
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling borsh v1.5.7
+   Compiling five8_core v0.1.2
+   Compiling cpufeatures v0.2.17
+   Compiling num-traits v0.2.19
+   Compiling ahash v0.8.12
+   Compiling five8 v0.2.1
+   Compiling getrandom v0.2.17
+   Compiling solana-sanitize v2.2.1
+   Compiling solana-atomic-u64 v2.2.1
+   Compiling bytemuck v1.25.0
+   Compiling once
+...
+oject-offloads/codex-cx-native-front3b-20261028/NDI_src/programs/r1-cost-probe/../../KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 24.75s
+Checking harness NDI_digest::actual_sample_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 635 failed (61 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 21.486427s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r55cbfb1434f1483ca336df449cfe30ab.scope; invocation ID: de593a91a4e54eee8ef3ba33acad5868
