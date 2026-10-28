@@ -10,10 +10,10 @@ theorem value (p : reference226.OwnedPublic) (i : Usize)
   | false =>
     simp only [hw,Bool.false_eq_true,↓reduceIte] at hi
     have hb : i ≥ 1455#usize := by scalar_tac
-    simp only [reference226.byte_at,hw,Bool.false_eq_true,↓reduceIte,hb]
+    simp only [reference226.byte_at,hw,Bool.false_eq_true,↓reduceIte,bind_tc_ok,hb]
   | true =>
     simp only [hw,↓reduceIte] at hi
     have hb : i ≥ 1427#usize := by scalar_tac
-    simp only [reference226.byte_at,hw,↓reduceIte,hb]
+    simp only [reference226.byte_at,hw,↓reduceIte,bind_tc_ok,hb]
 #print axioms value
 end PV_B3P_Padding226
