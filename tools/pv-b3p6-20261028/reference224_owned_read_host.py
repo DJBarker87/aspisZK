@@ -1,7 +1,13 @@
 """V241 owned helper-continuation extraction; not a complete op224 closure."""
-from run import H,run
+from run import H,run as run_once
 from pathlib import Path
 import hashlib,sys
+def run(label,*args,**kwargs):
+ base=label;retry=0
+ while (H/label).exists():
+  assert not (H/label/'receipt/receipt.json').exists(), 'unchanged charged gate cannot be retried'
+  retry+=1;label=base+'-r'+str(retry)
+ return run_once(label,*args,**kwargs)
 kind=sys.argv[1];P=H/'source/tools/pv-b3p6-20261028/v241'
 charon=Path('/home/dombarker/project-offloads/codex-pv-extract-20261027/charon')
 aeneas=Path('/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/aeneas')
