@@ -1,0 +1,48 @@
+{
+  "row": "V179",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "needle": "fn as_ref(",
+      "body": "{\n        Path::new(self)\n    }",
+      "token_sha256": "0a5d3209ddd11686fb9b95097a70c5a092f9243536c8a4850124217cedb927cc",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub const fn new<S:",
+      "body": "{\n        unsafe { &*(s.as_ref() as *const OsStr as *const Path) }\n    }",
+      "token_sha256": "aa6f46e11ad45c23764716dc7761c9d9f67da6577bbf614bc9163c96c65033d6",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn string_owned_reference(",
+      "body": "{s}",
+      "token_sha256": "5213c3049a5a9e613270706929c15b87c3a017b1456b7e8b5234d7f92b9020f4",
+      "complete_body_tokens_match": true
+    },
+    {
+      "reference_body": "{ s }",
+      "reference_path": "tools/pv-cblib-20261027/lib.rs",
+      "path_file_sha256": "14fd41348e74555af61dacf60bd78edc9cd2ea534abdad3266854a9a0b696886",
+      "string_file_sha256": "d320cfe75e8962583e54f4094648a7d981684749f9eb65f46cceaedb1de8916d"
+    }
+  ],
+  "differences": [
+    {
+      "difference": "Borrowed Path reinterpretation vs owned String identity. Neither changes bytes; all byte observers agree. Lifetime/representation/compiler refinement stays explicit.",
+      "proof": "PV_RL_V179.observer; PV_CBL_StringViewValue.total"
+    },
+    {
+      "difference": "String -> str -> OsStr -> encoded bytes are borrowed native views; reference carrier String represents the same valid UTF8.",
+      "proof": "PV_RL_V179.complete; domain is valid native String, not arbitrary invalid bytes"
+    }
+  ],
+  "complete_Result_laws": [
+    "PV_CBL_StringViewSource.op28_source",
+    "PV_CBL_StringViewValue.total",
+    "PV_RL_V179.complete"
+  ],
+  "nonvacuity": "PV_RL_V179.nonvacuous; native run enumerates Unicode scalars and empty/context strings",
+  "suspended_Kani": "K-1: retained original evidence; NOT a native link",
+  "boundary": "Candidate value/library primitive interpretation only; original source-image, allocation/world, compiler and deployment residuals retained. No universal machine/compiler refinement is inferred from finite validation."
+}
