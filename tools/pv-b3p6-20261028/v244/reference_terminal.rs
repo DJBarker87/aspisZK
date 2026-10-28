@@ -2157,9 +2157,9 @@ fn composition_parts(
     }
     validate_transition(public)?;
     let openings = StateOnlyPoseidonOpenings {
-        z: qm31_array!(16, column, selected_claim(claims, 0, column)),
-        succ_z: qm31_array!(16, column, selected_claim(claims, 1, column)),
-        xor12_z: qm31_array!(16, column, selected_claim(claims, 2, column)),
+        z: select_c1_227(*claims,0),
+        succ_z: select_c1_227(*claims,1),
+        xor12_z: select_c1_227(*claims,2),
     };
     let mask_only = qm31_array!(STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS, column, {
         selected_claim(
@@ -2582,4 +2582,9 @@ use crate::reference_poseidon::evaluate_state_only_poseidon_oracle_projected;
 
 pub fn native227(public:r0::Public<'_>,claims:&[[QM31;29];3],alpha:&[QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<QM31,aspis_core::state_only_prefix::r0::Error> {
     reference227(public.semantic(),*claims,*alpha,*c)
+}
+
+#[inline(never)]
+fn select_c1_227(claims:[QM31;84],row:usize)->[QM31;16] {
+    [selected_claim(&claims,row,0),selected_claim(&claims,row,1),selected_claim(&claims,row,2),selected_claim(&claims,row,3),selected_claim(&claims,row,4),selected_claim(&claims,row,5),selected_claim(&claims,row,6),selected_claim(&claims,row,7),selected_claim(&claims,row,8),selected_claim(&claims,row,9),selected_claim(&claims,row,10),selected_claim(&claims,row,11),selected_claim(&claims,row,12),selected_claim(&claims,row,13),selected_claim(&claims,row,14),selected_claim(&claims,row,15)]
 }
