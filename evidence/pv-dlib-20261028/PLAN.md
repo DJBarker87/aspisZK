@@ -32,3 +32,7 @@ missing `Aeneas.olean`. The manifest-selected complete external module exists
 and hashes correctly. Replacement environment adds a private external-object
 link overlay before the partial project directories; no external object was
 rebuilt or substituted. This is a changed environment, not an unchanged retry.
+
+42201 was not launched: its second admission saw ENOENT for another session's
+vanished cgroup (`session-326995.scope`). Under ruling (p'), wait at least 60 s
+and retry the same unlaunched ID, at most three times. It is not a Lean charge.
