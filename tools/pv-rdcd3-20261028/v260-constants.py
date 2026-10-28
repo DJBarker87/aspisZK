@@ -54,7 +54,11 @@ def parse_expr(i):
  return seq,k
 order,k=parse_expr(0);assert k==len(toks) and order==list(range(32))
 lean=[x for n in order for x in chunks[n]]
-assert values==lean and len(values)==1024
+host=frozen('crates/aspis-r1-cost-probe/src/host_weights.rs')
+host_body=re.search(r'const\s+HOST_COEFFICIENT_TO_ROW\s*:\s*\[u16;\s*1024\]\s*=\s*\[([^]]*)\]',host).group(1)
+assert re.fullmatch(r'[\s\d,]+',host_body)
+host_values=[int(x) for x in re.findall(r'\d+',host_body)]
+assert values==lean==host_values and len(values)==1024
 bad=lean.copy();bad[0],bad[1]=bad[1],bad[0];assert values!=bad
 opening=frozen('crates/aspis-core/src/r0/opening.rs')
 body=opening.split('pub const COPY_ACTIVE_ROW_MASKS:',1)[1].split('=',1)[1].split('[',1)[1].split(']',1)[0]
@@ -66,4 +70,4 @@ model_masks=[int(x) for x in re.findall(r'(\d+)#u16',body)]
 assert masks==model_masks and len(masks)==64
 result=dict(input_packet_sha256=sha((D/'v260-native-inputs.json').read_bytes()),model_pins=[dict(path=p,sha256=bundle['files'][p]['sha256'],blob=bundle['files'][p]['blob']) for p in ['docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_C_Table.lean','docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_C_RawWeights253Funs.lean']],command=cmd,source_revision=bundle['revision'],input_pins=records,adapter_source=source,adapter_argument='Only the exact parent MESSAGE_LEN and Message aliases are supplied; native transport.rs and its included pads are unchanged, not copied or edited',table_entries=len(values),mask_entries=len(masks),native_table=values,model_table=lean,negative_control='swapped first two entries rejected',rustc=subprocess.check_output([rustc,'-vV'],text=True),binary_sha256=sha((D/'v260-constant-probe').read_bytes()),features_context='Retained deployed per-crate feature graph; reached transport source has no cfg/cfg!, compiled with ct-host-prover and the deployed release settings',feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()),evidence_class='exhaustive equality of static data under existing pinned compiler tool trust; not a proof of LLVM or complete row binding',composition='reclassification within existing tool trust; zero endpoint premise removal')
 (D/'v260-constants-result.json').write_text(json.dumps(result,indent=2)+'\n')
-print('All 1024 native/model transport entries and 64 mask literals match; changed-table control rejected; complete row binding still required')
+print('All 1024 native/owned-Rust/Lean transport entries and 64 mask literals match; changed-table control rejected; complete row binding still required')
