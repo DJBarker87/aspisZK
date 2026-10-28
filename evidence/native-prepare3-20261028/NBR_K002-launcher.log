@@ -1,0 +1,58 @@
+{"attempt": "NBR_K002", "exit_status": 0, "wall_seconds": 3.1102168440120295, "peak_rss_kib": "337448", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+d NBR_candidate;
+    |     ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_candidate`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBR_src` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:2:4
+  |
+2 | fn NBR_src(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{155+453*(row-15)}else if row==26{6546}else{7...
+  |    ^^^^^^^ help: convert the identifier to snake case: `nbr_src`
+
+warning: function `NBR_dst` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:3:4
+  |
+3 | fn NBR_dst(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{171+901*(row-15)}else if row==26{12898}else{...
+  |    ^^^^^^^ help: convert the identifier to snake case: `nbr_dst`
+
+warning: function `NBR_semantic_geometry` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:5:4
+  |
+5 | fn NBR_semantic_geometry(){
+  |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_semantic_geometry`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.77s
+Checking harness verifier::candidate::NBR_candidate::NBR_semantic_geometry...
+
+VERIFICATION RESULT:
+ ** 0 of 92 failed
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.39494956s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rae7ab9661ef6469cba1b58a4713eeaef.scope; invocation ID: 9868f581ba7f4f1da1b76505718b72ae

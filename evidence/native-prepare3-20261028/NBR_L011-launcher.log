@@ -1,0 +1,36 @@
+{"attempt": "NBR_L011", "exit_status": 1, "wall_seconds": 1.789600006013643, "peak_rss_kib": "4713848", "swaps": "0", "print_axioms": ["'AspisR1.NBR_OpeningConstruct.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBR_generated/NBR_OpeningConstruct.lean:27:6: error: 'change' tactic failed, pattern
+  0 + 32 ≤ Usize.max
+is not definitionally equal to target
+  (alloc.vec.Vec.with_capacity U8 256#usize).length + root.to_slice.length ≤ Usize.max
+NBR_generated/NBR_OpeningConstruct.lean:35:4: error: Tactic `decide` failed for proposition
+  32 + 224 ≤ Usize.max
+because its `Decidable` instance
+  (32 + 224).decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (32 + 224).ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false 
+...
+NBR_generated/NBR_OpeningConstruct.lean:27:6: error: 'change' tactic failed, pattern
+  0 + 32 ≤ Usize.max
+is not definitionally equal to target
+  (alloc.vec.Vec.with_capacity U8 256#usize).length + root.to_slice.length ≤ Usize.max
+NBR_generated/NBR_OpeningConstruct.lean:35:4: error: Tactic `decide` failed for proposition
+  32 + 224 ≤ Usize.max
+because its `Decidable` instance
+  (32 + 224).decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (32 + 224).ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'AspisR1.NBR_OpeningConstruct.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4f7231c3752c476e8efd83c1b8f739e8.scope; invocation ID: 3ee705eb61bf4a60a8af154292f92d82

@@ -1,0 +1,47 @@
+{"attempt": "NBR_K004", "exit_status": 124, "wall_seconds": 180.21970522601623, "peak_rss_kib": "100636", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ lives
+  = note: `#[warn(static_mut_refs)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+
+warning: function `NBR_prepare_cut` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:11:4
+   |
+11 | fn NBR_prepare_cut<H:Digest32>(_:Public<'_>,proof:&[u8],_:H,obs:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{unsafe{
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_prepare_cut`
+
+warning: creating a shared reference to mutable static
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:12:49
+   |
+12 |  assert!(NBR_SCANNED);assert_eq!(proof.as_ptr(),NBR_BASE);assert_eq!(proof.len(),57607);assert!(obs.is_none());
+   |                                                 ^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBR_tx1_prepare_cut` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:19:4
+   |
+19 | fn NBR_tx1_prepare_cut(){
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_tx1_prepare_cut`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.65s
+Checking harness verifier::candidate::NBR_candidate::NBR_tx1_prepare_cut...
+
+Running as unit: run-r26b0f2a41ad54efe9bfd6a35310300c5.scope; invocation ID: ca373df34a8d4cfd96c1cb3849014870

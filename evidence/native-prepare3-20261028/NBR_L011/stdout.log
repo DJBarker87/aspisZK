@@ -1,0 +1,17 @@
+NBR_generated/NBR_OpeningConstruct.lean:27:6: error: 'change' tactic failed, pattern
+  0 + 32 ≤ Usize.max
+is not definitionally equal to target
+  (alloc.vec.Vec.with_capacity U8 256#usize).length + root.to_slice.length ≤ Usize.max
+NBR_generated/NBR_OpeningConstruct.lean:35:4: error: Tactic `decide` failed for proposition
+  32 + 224 ≤ Usize.max
+because its `Decidable` instance
+  (32 + 224).decLe Usize.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match (32 + 224).ble Usize.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'AspisR1.NBR_OpeningConstruct.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

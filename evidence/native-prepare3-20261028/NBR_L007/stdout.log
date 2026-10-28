@@ -1,0 +1,93 @@
+NBR_generated/NBR_VecAppend.lean:12:30: warning: This simp argument is unused:
+  core.clone.CloneU8
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵a̵p̵M̵_̵c̵o̵n̵s̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵C̵l̵o̵n̵e̵U̵8̵,̵l̵i̵f̵t̵F̵u̵n̵1̵,̵c̵o̵r̵e̵.̵c̵l̵o̵n̵e̵.̵i̵m̵p̵l̵s̵.̵C̵l̵o̵n̵e̵U̵8̵.̵c̵l̵o̵n̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h̵]̵[̲L̲i̲s̲t̲.̲m̲a̲p̲M̲_̲c̲o̲n̲s̲,̲ ̲l̲i̲f̲t̲F̲u̲n̲1̲,̲ ̲c̲o̲r̲e̲.̲c̲l̲o̲n̲e̲.̲i̲m̲p̲l̲s̲.̲C̲l̲o̲n̲e̲U̲8̲.̲c̲l̲o̲n̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBR_generated/NBR_VecAppend.lean:18:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (do
+        let s' ←
+          match h : _a with
+            | ok v => ok ⟨v, ⋯⟩
+            | fail e => fail e
+            | div => div
+        ok ⟨↑s', ⋯⟩) =
+      ok xs
+Error: Application type mismatch: The argument
+  h
+has type
+  _a = ok v
+but is expected to have type
+  List.mapM core.clone.CloneU8.clone ↑xs = ok v
+in the application
+  List.clone._proof_1 core.clone.CloneU8.clone (↑xs) v h
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+xs : Slice U8
+⊢ (do
+      let s' ←
+        match h : List.mapM core.clone.CloneU8.clone ↑xs with
+          | ok v => ok ⟨v, ⋯⟩
+          | fail e => fail e
+          | div => div
+      ok ⟨↑s', ⋯⟩) =
+    ok xs
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    xs
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑xs
+NBR_generated/NBR_VecAppend.lean:27:20: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (match h' : _a with
+      | ok s' => ok ⟨↑before ++ ↑s', ⋯⟩
+      | fail e => fail e
+      | div => div) =
+      ok ⟨↑before ++ ↑input, ⋯⟩
+Error: Application type mismatch: The argument
+  h'
+has type
+  _a = ok s'
+but is expected to have type
+  Slice.clone core.clone.CloneU8.clone input = ok s'
+in the application
+  alloc.vec.Vec.extend_from_slice._proof_1 core.clone.CloneU8 before input bound s' h'
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+before : alloc.vec.Vec U8
+input : Slice U8
+bound : before.length + input.length ≤ Usize.max
+⊢ (match h' : Slice.clone core.clone.CloneU8.clone input with
+    | ok s' => ok ⟨↑before ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div) =
+    ok ⟨↑before ++ ↑input, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    before
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑before
+'AspisR1.NBR_VecAppend.clone_list' depends on axioms: [propext, Quot.sound]
+'AspisR1.NBR_VecAppend.clone_slice' depends on axioms: [propext, sorryAx, Quot.sound]
+'AspisR1.NBR_VecAppend.extend' depends on axioms: [propext, sorryAx, Quot.sound]
