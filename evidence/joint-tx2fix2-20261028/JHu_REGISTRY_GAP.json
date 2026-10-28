@@ -1,0 +1,46 @@
+{
+  "source_revision": "3207e3bc6ec94808da48c94c70b9f2aaf4103747",
+  "command": [
+    "git",
+    "grep",
+    "-n",
+    "-E",
+    "^def .*decode_verifier_registry(_entry)?_v2",
+    "HEAD",
+    "--",
+    "*.lean"
+  ],
+  "exit_status": 0,
+  "stdout": "HEAD:aeneas-verif/v7-registry-v2-accountinfo-correspondence-20260831/generated/V7RegistryV2ProductionCodecs/Funs.lean:243:def pool_v1.verifier_registry.decode_verifier_registry_v2\nHEAD:aeneas-verif/v7-registry-v2-accountinfo-correspondence-20260831/generated/V7RegistryV2ProductionCodecs/Funs.lean:517:def pool_v1.verifier_registry.decode_verifier_registry_entry_v2\n",
+  "stderr": "",
+  "pins": [
+    {
+      "path": "aeneas-verif/v7-registry-v2-accountinfo-correspondence-20260831/generated/V7RegistryV2ProductionCodecs/Funs.lean",
+      "sha256": "de4e20dccf49c0373839241103eccc693dda338880f26feebed8f2bd55ed221b"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/verifier_registry.rs",
+      "sha256": "594f8b53e6c8d7cd6265542e7730c5371f3233d778de06d220bedab7529d97d9"
+    },
+    {
+      "path": "lean/NCV_Install.lean",
+      "sha256": "c271a55fae37b43f8281dd1198eff5594e040d47c46c4503d4080f749dca7235"
+    },
+    {
+      "path": "lean/NCV_InstallationSupport.lean",
+      "sha256": "c5b74af40f79c165ead83c8ab8ec537edfcbf53e95d3452d64d4821cda5ef8d5"
+    },
+    {
+      "path": "lean/JHg_AuditRegistry.lean",
+      "sha256": "c3df1412ec8e5f5748bd699bf7c48c9dfac4ad420ca23ddad1a33f247379f3c6"
+    },
+    {
+      "path": "lean/JHu_Authentication.lean",
+      "sha256": "92018fef5291c51548d6997ace05a68a1e8ec40c1eb4aa84271513a031be1b94"
+    }
+  ],
+  "legacy_decoder_excerpt": "241:     Source: 'crates/aspis-statement/src/pool_v1/verifier_registry.rs', lines 404:0-436:1\n242:     Visibility: public -/\n243: def pool_v1.verifier_registry.decode_verifier_registry_v2\n244:   (bytes : Slice Std.U8) :\n245:   Result (core.result.Result pool_v1.verifier_registry.VerifierRegistryV2\n246:     pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError)\n247:   := do\n248:   let i := Slice.len bytes\n249:   if i != pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_V2_BYTES\n250:   then\n251:     ok (core.result.Result.Err\n252:       pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongLength)\n253:   else\n254:     let s \u2190\n255:       core.slice.index.Slice.index\n256:         (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes\n257:         { \u00abend\u00bb := 4#usize }\n258:     let b \u2190\n259:       Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s\n260:         pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_V2_MAGIC\n261:     if b\n262:     then\n263:       ok (core.result.Result.Err\n264:         pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongMagic)\n265:     else\n266:       let i1 \u2190 Slice.index_usize bytes 4#usize\n267:       if i1 != pool_v1.verifier_registry.POOL_V1_VERIFIER_REGISTRY_V2_VERSION\n268:       then\n269:         ok (core.result.Result.Err\n270:           pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.WrongVersion)\n271:       else\n272:         let i2 \u2190 Slice.index_usize bytes 6#usize\n273:         if i2 !=\n274:           pool_v1.verifier_registry.POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3\n275:         then\n276:           ok (core.result.Result.Err\n277:             pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.InvalidDeploymentMode)\n278:         else\n279:           let i3 \u2190 Slice.index_usize bytes 7#usize\n280:           if i3 != 0#u8\n281:           then\n282:             ok (core.result.Result.Err\n283:               pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.NonZeroReserved)\n284:           else\n285:             let s1 \u2190\n286:               core.slice.index.Slice.index\n287:                 (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes\n288:                 { start := 248#usize, \u00abend\u00bb := 256#usize }\n289:             let a := Array.repeat 8#usize 0#u8\n290:             let b1 \u2190\n291:               Slice.Insts.CoreCmpPartialEqArray.ne core.cmp.PartialEqU8 s1 a\n292:             if b1\n293:             then\n294:               ok (core.result.Result.Err\n295:                 pool_v1.verifier_registry.PoolV1VerifierRegistryFormatError.NonZeroReserved)",
+  "current_decoder_excerpt": "425: pub fn decode_verifier_registry_v2(\n426:     bytes: &[u8],\n427: ) -> Result<VerifierRegistryV2, PoolV1VerifierRegistryFormatError> {\n428:     if bytes.len() != POOL_V1_VERIFIER_REGISTRY_V2_BYTES {\n429:         return Err(PoolV1VerifierRegistryFormatError::WrongLength);\n430:     }\n431:     if bytes[..4] != POOL_V1_VERIFIER_REGISTRY_V2_MAGIC {\n432:         return Err(PoolV1VerifierRegistryFormatError::WrongMagic);\n433:     }\n434:     if bytes[4] != POOL_V1_VERIFIER_REGISTRY_V2_VERSION {\n435:         return Err(PoolV1VerifierRegistryFormatError::WrongVersion);\n436:     }\n437:     if bytes[6] != POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 {\n438:         return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);\n439:     }\n440:     if bytes[249..256] != [0u8; 7] {\n441:         return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);\n442:     }\n443:     let registry = VerifierRegistryV2 {\n444:         flags: bytes[5],\n445:         bump: bytes[7],\n446:         pool: bytes[8..40].try_into().unwrap(),\n447:         authority: bytes[40..72].try_into().unwrap(),\n448:         policy_binding: bytes[72..104].try_into().unwrap(),\n449:         generation: u64::from_le_bytes(bytes[104..112].try_into().unwrap()),\n450:         minimum_activation_delay_slots: u64::from_le_bytes(bytes[112..120].try_into().unwrap()),\n451:         registry_program: bytes[120..152].try_into().unwrap(),\n452:         loader_program: bytes[152..184].try_into().unwrap(),\n453:         programdata_address: bytes[184..216].try_into().unwrap(),\n454:         programdata_bump: bytes[248],\n455:         executable_hash: bytes[216..248].try_into().unwrap(),\n456:     };\n457:     validate_verifier_registry_v2(&registry)?;\n458:     Ok(registry)\n459: }\n460: \n461: pub fn validate_verifier_registry_entry_v2(\n462:     entry: &VerifierRegistryEntryV2,\n463: ) -> Result<(), PoolV1VerifierRegistryFormatError> {\n464:     if entry.statement_version == 0 {\n465:         return Err(PoolV1VerifierRegistryFormatError::InvalidStatementVersion);\n466:     }\n467:     if required_binding_is_zero(&entry.pool)",
+  "status": "Current model op33/op34 remain missing. Legacy decoder layout is incompatible; no source equivalence or current instantiation is assumed.",
+  "scope": "Static search of tracked Lean definitions; not a theorem that no model can be constructed elsewhere."
+}

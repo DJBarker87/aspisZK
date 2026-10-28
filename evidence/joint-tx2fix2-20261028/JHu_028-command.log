@@ -1,0 +1,49 @@
+Running as unit: run-r3ae533268e59434ab74041354efc356f.scope; invocation ID: a5bf1314374d4c4a89bb6c9256766bd1
+{"attempt": "JHu_028", "exit_status": 1, "wall_seconds": 2.6177697139792144, "peak_rss_kib": "5433944", "swaps": "0", "print_axioms": ["'AspisR1.JHu_MasterValid.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHu_MasterValid.lean:22:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Array.to_slice ?a).length
+in the target expression
+  (↑JHg_AccountValues.master.identity.token_program.to_slice).length ≤ 768
+
+case cap
+pool : NCV_Reference.zero JHg_AccountValues.master.identity.pool.to_slice = ok false
+mint : NCV_Reference.zero JHg_AccountValues.master.identity.asset_mint.to_slice = ok false
+⊢ (↑JHg_AccountValues.master.identity.token_program.to_slice).length ≤ 768
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tacti
+...
+gth ≤ 768
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+JHu_MasterValid.lean:33:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Array.to_slice ?a).length
+in the target expression
+  0 < (↑JHg_AccountValues.master.identity.deployment_domain.to_slice).length
+
+case len
+pool : NCV_Reference.zero JHg_AccountValues.master.identity.pool.to_slice = ok false
+mint : NCV_Reference.zero JHg_AccountValues.master.identity.asset_mint.to_slice = ok false
+token : NCV_Reference.zero JHg_AccountValues.master.identity.token_program.to_slice = ok false
+⊢ 0 < (↑JHg_AccountValues.master.identity.deployment_domain.to_slice).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.JHu_MasterValid.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

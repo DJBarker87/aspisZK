@@ -1,0 +1,58 @@
+Running as unit: run-rce1e58f4b54148d3866195bb04e68559.scope; invocation ID: 79b0b2030564406693f99e5862ba9ace
+{"attempt": "JHu_032", "exit_status": 1, "wall_seconds": 1.6635526090394706, "peak_rss_kib": "2634912", "swaps": "0", "print_axioms": ["'AspisR1.JHu_FrontierStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.JHu_FrontierStep.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+JHu_FrontierStep.lean:35:58: error: Tactic `rfl` failed: The left-hand side
+  let (_, index_mut_back) := (NCV_ArrayFrame.coord a ↑i, a.set i)
+  do
+  let b ← NCV_Reference.eq_digest row (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i)
+  if b = true then ok (ControlFlow.cont (index_mut_back row, successor))
+    else ok (ControlFlow.done (core.result.Result.Err ()))
+is not definitionally equal to the right-hand side
+  ok (ControlFlow.cont (a.set i row, successor))
+
+case pos
+tree : Slice U8
+next : U64
+a : Std.Array (Std.Array U32 8#usize) 20#usize
+i : Usize
+row : Std.Array U32 8#usize
+tag : U64
+index : ↑i < 20
+read : ∀ (addr : Usize), ↑addr = 48 + 32 * ↑i → NCV_Reference.digest tree addr = ok (core
+...
+ Usize), ↑addr = 48 + 32 * ↑i → NCV_Reference.digest tree addr = ok (core.result.Result.Ok row)
+shift : next >>> i = ok tag
+empty : tag &&& 1#u64 = 0#u64 → row = NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i
+sm : 32#usize * i ⦃ x => ↑x = 32 * ↑i ⦄
+offset : UScalar UScalarTy.Usize
+mul : 32#usize * i = ok offset
+offval : ↑offset = 32 * ↑i
+sa : 48#usize + offset ⦃ x => ↑x = 48 + ↑offset ⦄
+addr : UScalar UScalarTy.Usize
+add : 48#usize + offset = ok addr
+addrval : ↑addr = 48 + ↑offset
+digest : NCV_Reference.digest tree addr = ok (core.result.Result.Ok row)
+rd : a.index_usize i = ok (NCV_ArrayFrame.coord a ↑i)
+writeBackCall : a.index_mut_usize i = ok (NCV_ArrayFrame.coord a ↑i, a.set i)
+re : NCV_Reference.EMPTY.index_usize i = ok (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i)
+successor : Usize
+advance : i + 1#usize = ok successor
+value : ↑successor = ↑i + 1
+lt : i < 20#usize
+bit : tag &&& 1#u64 = 0#u64
+eq : NCV_CastRef.eq_digest row (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i) = ok true
+⊢ (let (_, index_mut_back) := (NCV_ArrayFrame.coord a ↑i, a.set i)
+    do
+    let b ← NCV_Reference.eq_digest row (NCV_ArrayFrame.coord NCV_Reference.EMPTY ↑i)
+    if b = true then ok (ControlFlow.cont (index_mut_back row, successor))
+      else ok (ControlFlow.done (core.result.Result.Err ()))) =
+    ok (ControlFlow.cont (a.set i row, successor))
+JHu_FrontierStep.lean:35:31: warning: This simp argument is unused:
+  eq
+
+Hint: Omit it from the simp argument list.
+  simp only [bit, ̲ite_true, ̲re,e̵q̵,̵ ̲bind_tc_ok, ̲advance]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.JHu_FrontierStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.JHu_FrontierStep.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]
+
