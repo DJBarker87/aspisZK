@@ -118,7 +118,52 @@
     },
     {
       "label": "massert",
-      "expression": "massert (left_val = right_val)\nlet (o, _) := core.option.Option.take p.backend.c1\nlet cc1 \u2190 core.option.Option.unwrap o\nlet (o1, _) := core.option.Option.take p.backend.c2\nlet cc2 \u2190 core.option.Option.unwrap o1\nlet s9 := alloc.vec.Vec.deref p.folded_word\nlet out10 \u2190\nprover.append_query_openings out9 cc1 cc2 p.queries s9 p.folded_salts\nlet left_val1 := alloc.vec.Vec.len out10\nlet right_val1 \u2190 compact.OFF_NODES\nmassert (left_val1 = right_val1)\nlet r4 \u2190 prover.append_node_slots out10 cc1 cc2 p.tree p.queries\nlet cf2 \u2190 core.result.Result.Insts.CoreOpsTry.branch r4\nmatch cf2 with\n| core.ops.control_flow.ControlFlow.Continue val =>\nlet left_val2 := alloc.vec.Vec.len val\nmassert (left_val2 = i)\nok (core.result.Result.Ok val)\n| core.ops.control_flow.ControlFlow.Break residual =>\ncore.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n(alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)\nresidual",
+      "expression": "massert (left_val = right_val)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.option.Option.unwrap",
+      "expression": "core.option.Option.unwrap o",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.option.Option.unwrap",
+      "expression": "core.option.Option.unwrap o1",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.append_query_openings",
+      "expression": "prover.append_query_openings out9 cc1 cc2 p.queries s9 p.folded_salts",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "compact.OFF_NODES",
+      "expression": "compact.OFF_NODES",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "massert",
+      "expression": "massert (left_val1 = right_val1)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.append_node_slots",
+      "expression": "prover.append_node_slots out10 cc1 cc2 p.tree p.queries",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r4",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "massert",
+      "expression": "massert (left_val2 = i)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n(alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)\nresidual",
       "classification": "opaque obligation"
     },
     {

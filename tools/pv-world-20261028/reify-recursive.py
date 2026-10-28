@@ -93,6 +93,9 @@ def parse(lines,base=None):
    if child and child[0].strip()=='do':child=child[1:]
    branches.append((pattern,parse(child)));i=j
   return Node('match',discr=t[6:-5].strip(),branches=branches)
+ i=1
+ while i<len(lines) and indent(lines[i])>base:i+=1
+ if i<len(lines):return Node('bind',var='_',expr=parse(lines[:i]),next=parse(lines[i:],base))
  expr='\n'.join(x.strip() for x in lines)
  return Node('pure' if (t=='ok' or t.startswith('ok ')) else 'call',expr=expr[3:] if (t=='ok' or t.startswith('ok ')) else expr)
 

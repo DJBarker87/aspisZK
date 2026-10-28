@@ -91,30 +91,47 @@ def program
       let right_val ← invoke "compact.OFF_OPENINGS" (fun ops =>
           letI : ExternalFuns := ops
           compact.OFF_OPENINGS)
-      invoke "massert" (fun ops =>
-        letI : ExternalFuns := ops
-        massert (left_val = right_val)
-        let (o, _) := core.option.Option.take p.backend.c1
-        let cc1 ← core.option.Option.unwrap o
-        let (o1, _) := core.option.Option.take p.backend.c2
-        let cc2 ← core.option.Option.unwrap o1
-        let s9 := alloc.vec.Vec.deref p.folded_word
-        let out10 ←
-        prover.append_query_openings out9 cc1 cc2 p.queries s9 p.folded_salts
-        let left_val1 := alloc.vec.Vec.len out10
-        let right_val1 ← compact.OFF_NODES
-        massert (left_val1 = right_val1)
-        let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
-        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r4
-        match cf2 with
-        | core.ops.control_flow.ControlFlow.Continue val =>
+      let _ ← invoke "massert" (fun ops =>
+          letI : ExternalFuns := ops
+          massert (left_val = right_val))
+      let (o, _) := core.option.Option.take p.backend.c1
+      let cc1 ← invoke "core.option.Option.unwrap" (fun ops =>
+          letI : ExternalFuns := ops
+          core.option.Option.unwrap o)
+      let (o1, _) := core.option.Option.take p.backend.c2
+      let cc2 ← invoke "core.option.Option.unwrap" (fun ops =>
+          letI : ExternalFuns := ops
+          core.option.Option.unwrap o1)
+      let s9 := alloc.vec.Vec.deref p.folded_word
+      let out10 ← invoke "prover.append_query_openings" (fun ops =>
+          letI : ExternalFuns := ops
+          prover.append_query_openings out9 cc1 cc2 p.queries s9 p.folded_salts)
+      let left_val1 := alloc.vec.Vec.len out10
+      let right_val1 ← invoke "compact.OFF_NODES" (fun ops =>
+          letI : ExternalFuns := ops
+          compact.OFF_NODES)
+      let _ ← invoke "massert" (fun ops =>
+          letI : ExternalFuns := ops
+          massert (left_val1 = right_val1))
+      let r4 ← invoke "prover.append_node_slots" (fun ops =>
+          letI : ExternalFuns := ops
+          prover.append_node_slots out10 cc1 cc2 p.tree p.queries)
+      let cf2 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
+          letI : ExternalFuns := ops
+          core.result.Result.Insts.CoreOpsTry.branch r4)
+      match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue val =>
         let left_val2 := alloc.vec.Vec.len val
-        massert (left_val2 = i)
-        ok (core.result.Result.Ok val)
-        | core.ops.control_flow.ControlFlow.Break residual =>
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-        (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
-        residual)
+        let _ ← invoke "massert" (fun ops =>
+            letI : ExternalFuns := ops
+            massert (left_val2 = i))
+        pure (core.result.Result.Ok val)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
+          letI : ExternalFuns := ops
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error)
+          residual)
     | core.ops.control_flow.ControlFlow.Break residual =>
       invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
         letI : ExternalFuns := ops
@@ -276,7 +293,71 @@ theorem erase_program (ops : ExternalFuns)
                                                 ·
                                                   exact erase_invoke ops _ _
                                                 · intro right_val
-                                                  exact erase_invoke ops _ _
+                                                  try dsimp only
+                                                  rw [erase_bind]
+                                                  apply PV_W_RecursiveLaws.bind_congr
+                                                  ·
+                                                    exact erase_invoke ops _ _
+                                                  · intro _
+                                                    try dsimp only
+                                                    try dsimp only
+                                                    rw [erase_bind]
+                                                    apply PV_W_RecursiveLaws.bind_congr
+                                                    ·
+                                                      exact erase_invoke ops _ _
+                                                    · intro cc1
+                                                      try dsimp only
+                                                      try dsimp only
+                                                      rw [erase_bind]
+                                                      apply PV_W_RecursiveLaws.bind_congr
+                                                      ·
+                                                        exact erase_invoke ops _ _
+                                                      · intro cc2
+                                                        try dsimp only
+                                                        try dsimp only
+                                                        rw [erase_bind]
+                                                        apply PV_W_RecursiveLaws.bind_congr
+                                                        ·
+                                                          exact erase_invoke ops _ _
+                                                        · intro out10
+                                                          try dsimp only
+                                                          try dsimp only
+                                                          rw [erase_bind]
+                                                          apply PV_W_RecursiveLaws.bind_congr
+                                                          ·
+                                                            exact erase_invoke ops _ _
+                                                          · intro right_val1
+                                                            try dsimp only
+                                                            rw [erase_bind]
+                                                            apply PV_W_RecursiveLaws.bind_congr
+                                                            ·
+                                                              exact erase_invoke ops _ _
+                                                            · intro _
+                                                              try dsimp only
+                                                              rw [erase_bind]
+                                                              apply PV_W_RecursiveLaws.bind_congr
+                                                              ·
+                                                                exact erase_invoke ops _ _
+                                                              · intro r4
+                                                                try dsimp only
+                                                                rw [erase_bind]
+                                                                apply PV_W_RecursiveLaws.bind_congr
+                                                                ·
+                                                                  exact erase_invoke ops _ _
+                                                                · intro cf2
+                                                                  try dsimp only
+                                                                  cases cf2 with
+                                                                  | Continue val =>
+                                                                    try dsimp only
+                                                                    try dsimp only
+                                                                    rw [erase_bind]
+                                                                    apply PV_W_RecursiveLaws.bind_congr
+                                                                    ·
+                                                                      exact erase_invoke ops _ _
+                                                                    · intro _
+                                                                      rfl
+                                                                  | Break residual =>
+                                                                    exact erase_invoke ops _ _
                               | Break residual =>
                                 exact erase_invoke ops _ _
                       | Break residual =>
