@@ -1,6 +1,7 @@
 import AspisR1TerminalDecoder.Funs
 import R1Z.PV_RunJoin_BranchDomain28
 import R1Z.PV_RunJoin_ControlDomain28
+import R1Z.PV_RunJoin_RejectionProof28
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_TransferDomain29
 open Aeneas Aeneas.Std Result

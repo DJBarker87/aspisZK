@@ -15,6 +15,7 @@ for label,fn,typ in [('Common','validate_common','CommonPublicV1'),('Withdrawal'
  text='''import AspisR1TerminalDecoder.Funs
 import R1Z.PV_RunJoin_BranchDomain28
 import R1Z.PV_RunJoin_ControlDomain28
+import R1Z.PV_RunJoin_RejectionProof28
 set_option autoImplicit false
 namespace NS
 open Aeneas Aeneas.Std Result
