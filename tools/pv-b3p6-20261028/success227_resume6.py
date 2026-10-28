@@ -15,7 +15,8 @@ mapping.update({'reference_terminal.read227':'read_total',
  'reference_terminal.sum_interval227':'interval_total',
  'reference_terminal.initial_variant_selectors':'initial_variant_total',
  'reference_terminal.initial_lane227':'initial_lane_total',
- 'reference_terminal.absorption_lane227':'absorption_lane_total'})
+ 'reference_terminal.absorption_lane227':'absorption_lane_total',
+ 'reference_terminal.selected_claim':'selected_claim_total'})
 records=[]
 def extract(mod):
  text=(L/(mod+'.lean')).read_text();blocks=re.split(r'(?=^def )',text,flags=re.M)[1:];out=[]
@@ -46,6 +47,7 @@ def emit(mod,source_mod,names,imports):
    ns=binder[1:-1].split(':',1)[0].split();args += ['('+n+':='+n+')' if binder[0]=='{' else n for n in ns]
   theorem='total_'+name.replace('.','_')
   mapping[name]=theorem
+  if name=='reference_terminal.select_c1_227':binders.append('(hrow : row.val<3)')
   ispack=name in ['host_terminal_field.qm31_pack_base4','reference_field.qm31_pack_base4']
   if ispack:
    binders.append('(hlen : (Slice.len values).val ≤ 4)')
@@ -64,7 +66,7 @@ def emit(mod,source_mod,names,imports):
    call=expr.split()[0];assert call in mapping,(name,call,expr)
    target=mapping[call]
    if target in ['index','update','borrow']:return 'apply '+target+' <;> scalar_tac'
-   if target in ['host_pack_loop_total','ref_pack_loop_total','read_total','interval_total']:return 'apply '+target+' <;> scalar_tac'
+   if target in ['host_pack_loop_total','ref_pack_loop_total','read_total','interval_total','selected_claim_total']:return 'apply '+target+' <;> scalar_tac'
    if target=='ok':return 'exact ok _'
    return 'apply '+target
   for j,m in enumerate(lets):
@@ -108,5 +110,6 @@ emit('PV_B3P_GlobalSumsSuccess227','PV_B3P_P227_02',['reference_poseidon.global_
 emit('PV_B3P_HostPackSuccess227','PV_B3P_E227_10',['host_terminal_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_RefPackSuccess227','PV_B3P_E227_19',['reference_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_AbsorptionSuccess227','PV_B3P_P227_09',['reference_terminal.absorption_lanes_literal','reference_terminal.semantic_initial_and_absorption'],['PV_B3P_SemanticBasicsSuccess227','PV_B3P_PureBind227'])
+emit('PV_B3P_C1Success227','PV_B3P_P227_13b',['reference_terminal.select_c1_227'],['PV_B3P_P227_13b','PV_B3P_ClaimSuccess227'])
 if '--check'not in sys.argv:(D/'resume6/success-generator.json').write_text(json.dumps(records,indent=2)+'\n')
 print(json.dumps(dict(theorems=len(records),check='--check'in sys.argv)))
