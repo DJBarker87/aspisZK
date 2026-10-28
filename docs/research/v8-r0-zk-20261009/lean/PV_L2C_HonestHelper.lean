@@ -8,15 +8,15 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 
 /-- The decoded honest compiler trace has balanced helper values at every
 challenge, with no helper-sum assumption. Native materialization is separate. -/
-theorem total (F : Subfield K) (B : PackBasis F) (i : Family (K:=K)) (lam chi : K) :
+theorem total (F : Subfield K) (B : PackBasis F) (i : PV_L2C_HonestCaller.Family (K:=K)) (lam chi : K) :
     (∑ r, R0Z.HonestView.helper ((source (K:=K)).public i)
       ((source (K:=K)).build i) lam chi r)=0 := by
   have hs := builder_sound F B (((source (K:=K)).public i),()) i rfl
   exact hs.helperSum lam chi
 #print axioms total
 
-theorem inactive (F : Subfield K) (B : PackBasis F) (i : Family (K:=K)) (lam chi : K) :
-    (∑ r ∈ R0Z.Partition.copyInactiveRows, R0Z.HonestView.helper ((source (K:=K)).public i)
+theorem inactive (F : Subfield K) (B : PackBasis F) (i : PV_L2C_HonestCaller.Family (K:=K)) (lam chi : K) :
+    (∑ r ∈ R0P.copyInactiveRows, R0Z.HonestView.helper ((source (K:=K)).public i)
       ((source (K:=K)).build i) lam chi r)=0 := by
   have hs := builder_sound F B (((source (K:=K)).public i),()) i rfl
   exact hs.helperInactive lam chi
