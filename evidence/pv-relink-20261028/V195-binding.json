@@ -1,0 +1,54 @@
+{
+  "row": "V195",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "needle": "pub fn to_le_bytes(",
+      "body": "{\n        let mut bytes = [0; Self::BYTE_LEN];\n        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {\n            chunk.copy_from_slice(&limb.to_le_bytes());\n        }\n        bytes\n    }",
+      "token_sha256": "c87f627012a1d85db700ed0b7b3430f8ec6d066017829a117b55a9afc57dded9",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "pub const fn to_limbs(",
+      "body": "{\n        [\n            self.c0.c0.a.0,\n            self.c0.c0.b.0,\n            self.c0.c1.a.0,\n            self.c0.c1.b.0,\n            self.c1.c0.a.0,\n            self.c1.c0.b.0,\n            self.c1.c1.a.0,\n            self.c1.c1.b.0,\n        ]\n    }",
+      "token_sha256": "75089c6391b182cdd8773484208e1076d0232e9ef19d21b739475feeb9e067ce",
+      "complete_body_tokens_match": true
+    },
+    {
+      "needle": "fn wide_bytes_flat(",
+      "body": "{\n let l=x.to_limbs();let a=l[0].to_le_bytes();let b=l[1].to_le_bytes();let c=l[2].to_le_bytes();let d=l[3].to_le_bytes();\n let e=l[4].to_le_bytes();let f=l[5].to_le_bytes();let g=l[6].to_le_bytes();let h=l[7].to_le_bytes();\n [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3],e[0],e[1],e[2],e[3],f[0],f[1],f[2],f[3],g[0],g[1],g[2],g[3],h[0],h[1],h[2],h[3]]\n}",
+      "token_sha256": "eeefbf47f4fc5367e09b1e79d81a0b5832e5e8c7e83aee3480e84ae4c179615a",
+      "complete_body_tokens_match": true
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "source_sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+      "revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "constants": {
+        "limbs": 8,
+        "chunk": 4,
+        "bytes": 32
+      },
+      "reference": "tools/pv-cb3-20261026/arbitrary_bytes.rs",
+      "native_bridge": "tools/pv-relink-20261028/v195-bridge.rs",
+      "mutable_write": "Native chunks_exact_mut write is compiled directly in Rust, never attributed to an Aeneas mutable-borrow emission. Differential observes all32 output bytes."
+    }
+  ],
+  "differences": [
+    {
+      "difference": "Native iterator/chunk copy vs eight explicit U32::to_le_bytes calls followed by Array.make. Same eight calls in limb order, same32 byte coordinates; no conditional/error branch or field reduction.",
+      "proof": "PV_RL_V195.copy_acc; chunks_flat; slot; PV_CB3_Op51Arbitrary.carrier_complete"
+    },
+    {
+      "difference": "References allocate a new32-byte array whereas native initializes then overwrites32 zero bytes; full disjoint overwrite makes initialization content unobservable.",
+      "proof": "PV_RL_V195.slot; chunks_flat; all eight chunks are4 bytes and zip length is8"
+    }
+  ],
+  "complete_Result_laws": [
+    "PV_CB3_Op51Arbitrary.op51_source",
+    "PV_RL_V195.complete"
+  ],
+  "nonvacuity": "PV_CB3_Op51Arbitrary.carrier_complete and PV_RL_V195.nonvacuous; native constructs all eight raw words, including >=2^31-1",
+  "suspended_Kani": "K-1: retained original evidence; NOT a native link",
+  "boundary": "Candidate value/library primitive interpretation only; original source-image, allocation/world, compiler and deployment residuals retained. No universal machine/compiler refinement is inferred from finite validation."
+}
