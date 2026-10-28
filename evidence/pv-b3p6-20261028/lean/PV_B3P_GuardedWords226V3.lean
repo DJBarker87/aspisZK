@@ -34,7 +34,7 @@ theorem complete_byte_fields (xs : List U32) :
     exact PV_B3P_WordLaw226V3.complete_word v
   rw [hm,complete_words]
   cases hp : xs.all (fun v => decide (v < 2147483647#u32)) <;>
-    simp only [hp,Bool.false_eq_true,↓reduceIte,mapR,bindR,fields,List.flatten_map]
+    simp only [hp,Bool.false_eq_true,↓reduceIte,mapR,bindR,fields] <;> rfl
 
 #print axioms complete_words
 #print axioms complete_byte_fields
