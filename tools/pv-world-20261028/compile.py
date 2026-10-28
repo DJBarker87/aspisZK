@@ -1,5 +1,7 @@
 from pathlib import Path
 import base64,hashlib,json,subprocess,sys,re,time,datetime
+from importlib import import_module
+archive_refusal=import_module("archive-refusal").archive
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-world-20261028'
 D='/home/dombarker/project-offloads/codex-pv-world-20261028';H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
@@ -31,6 +33,7 @@ s=subprocess.run(['ssh',H,f'cat {D}/upload-{n}.json'],capture_output=True,text=T
 upload=json.loads(s.stdout)
 (E/f'upload-{n}.json').write_text(json.dumps(dict(sha256=hashlib.sha256(s.stdout.encode()).hexdigest(),host_path=D+f'/upload-{n}.json',**{k:upload.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
 if q.returncode!=0 or json.loads(s.stdout).get('allowed') is not True:
+ archive_refusal(n)
  print('UNCHARGED UPLOAD REFUSAL',n,q.returncode,json.loads(s.stdout).get('utc'));sys.exit(78)
 code=f'''from pathlib import Path
 import base64,hashlib
@@ -59,6 +62,7 @@ meta['deps_fingerprint']=hashlib.sha256(json.dumps(dict(direct=meta['direct_depe
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-world-20261028/scope.py'),f'lean-{n}','compilation of '+m,*cmd])
+if r.returncode==78:archive_refusal(n)
 p=E/f'lean-{n}/receipt.json'
 if p.exists():
  j=json.loads(p.read_text());j.update(meta);j['print_axioms']=(p.parent/'output.log').read_text();p.write_text(json.dumps(j,indent=2)+'\n')
