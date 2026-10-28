@@ -60,9 +60,13 @@ theorem offset_provenance (p : Pointer) (i : Nat) :
 
 theorem offset_alignment (p : Pointer) (i : Nat) (aligned : p.address % 4 = 0) :
     (offset p i).address % 4 = 0 := by
-  simp only [offset,Nat.add_mod,Nat.mul_mod]
+  change (p.address+16*i)%4=0
   omega
 
+theorem length_from_pointers (base len : Nat) :
+    ((base+16*len)-base)/16 = len := by omega
+
+#print axioms length_from_pointers
 #print axioms complete
 #print axioms initial
 #print axioms increment
