@@ -36,6 +36,6 @@ j=dict(evidence_class='structural (K-1 substitute)',rulings=['r',"k'"],sources={
  differences=[dict(native='derived CoreWrapper Default',reference='explicit same two field-default calls in declaration order',proofs=['PV_DL_DefaultLaw.source','PV_DL_WrapLaw.source_reference']),
  dict(native='BlockBuffer default checks size0 then byte-array Default,pos0,PhantomData',reference='native64-byte storage constructor',proofs=['PV_DL_DefaultNative.native_callback','PV_DL_DefaultNative.consumed','PV_DL_DefaultBuffer.nonvacuous'])],
  native_size='64, discharged by PV_AL_SplitNativeShape.native_size; core Default is an original complete-Result parameter; kind/size Default trait arguments are not executed by these fields',
- finite_validation='default-native-finite-resume/receipt.json required before credit; native finite validation only',
+ finite_validation='../wrappers-native-combined-resume4/receipt.json; 4 paired Drop-core constructor cases; finite validation only',
  old_kani_credit='suspended; not used',v232_untouched=True,kani=False)
 (E/'V237/structural-binding.json').write_text(json.dumps(j,indent=2)+'\n');print('derived field order and full native/default buffer bodies checked')

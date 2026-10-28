@@ -53,11 +53,11 @@ out=dict(row=row,evidence_class='structural (K-1 substitute)',rulings=['r',"k'"]
  generic_array_all_checksum_files_verified=j['generic_array_all_checksum_files_verified'],
  native_bodies=dict(blanket_digest=digest,fixed_default=fixed,core_wrapper=forward,decompose=decompose,array_default=gadefault),
  owned_reference=dict(path=str(p.relative_to(R)),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),three_complete_bodies_token_checked=True,owned_fixed_helper=str(helper.relative_to(R)),helper_sha256=hashlib.sha256(helper.read_bytes()).hexdigest()),
- dispatch_scope='Generic Digest forwarding preserves finalize_fixed overrides; default expansion is tied to shipped CoreWrapper impl, which has no override. Typed installation is the frozen32-byte output carrier.',
+ dispatch_scope='Generic forwarding retains finalize_fixed as a parameter. Typed default expansion is ONLY the frozen CoreWrapper implementation, whose full impl has no override; no native claim for arbitrary overriding external dictionaries.',
  differences=[dict(native='method call syntax and receiver self',reference='UFCS call syntax and receiver d',proof='PV_DL_DigestFinal.complete; same method dispatch by full token binding'),
  dict(native='FixedOutput default initializes GenericArray then consumes self in finalize_into',reference='same initialization and consuming callback order',proof='PV_DL_DigestFinal.reference; original complete-Result callback retained, including its destructor behavior'),
  dict(native='borrow fields in consumed wrapper',reference='identical consumed-self field borrows and core call in owned helper; same implicit destructor',proof='PV_DL_OwnershipEffects.complete_result (V235); complete world is retained on callback failure and destructor sees changed state')],
- finite_validation='digest-forward-native-finite-resume/receipt.json; required before credit; finite validation only',
+ finite_validation='wrappers-native-combined-resume4/receipt.json; 256 same-input Drop-core cases; finite validation only',
  compression='forwarding preserves original core callback parameters; no compression evaluation law or backend equality assumed',
  v232_untouched=True,kani=False)
 if row=='V234':out['differences']=out['differences'][:2]
