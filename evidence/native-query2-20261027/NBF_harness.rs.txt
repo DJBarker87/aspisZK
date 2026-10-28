@@ -551,11 +551,12 @@ fn NBF_value_routing() {
 }
 
 static mut NBF_VALUE_I:usize=0;
+static mut NBF_VALUE_CALLS:usize=0;
 static mut NBF_VALUE_PTR:*const BatchedWeights=core::ptr::null();
 static mut NBF_VALUE_OUT:[u32;4]=[0;4];
 fn NBF_value_reply(b:&BatchedWeights,i:usize)->K {
  let words:[u32;4]=kani::any();for x in words {kani::assume(x<2147483647);}
- unsafe {NBF_VALUE_I=i;NBF_VALUE_PTR=b;NBF_VALUE_OUT=words;}
+ unsafe {NBF_VALUE_I=i;NBF_VALUE_PTR=b;NBF_VALUE_OUT=words;NBF_VALUE_CALLS+=1;}
  K{c0:CM31{a:M31(words[0]),b:M31(words[1])},c1:CM31{a:M31(words[2]),b:M31(words[3])}}
 }
 #[kani::proof]
@@ -1116,8 +1117,8 @@ fn NBF_enumerate_store_prestate() {
  let backing:Box<[[u64;4]]>=Box::new([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]);let terms:usize=kani::any();let b=BatchedWeights{raw:Vec::from(backing),terms};
  {let mut iter=out.iter_mut().enumerate();if i>0 {let _=iter.nth(i-1);}if let Some((index,w))=iter.next(){*w=b.value(index);}}
  let q=out[j];let after=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0][k];
- if i<64 {unsafe {assert_eq!(NBF_VALUE_I,i);assert_eq!(NBF_VALUE_PTR,&b as *const BatchedWeights);assert_eq!(after,if i==j {NBF_VALUE_OUT[k]} else {before});}}
- else {assert_eq!(after,before);}
+ if i<64 {unsafe {assert_eq!(NBF_VALUE_CALLS,1);assert_eq!(NBF_VALUE_I,i);assert_eq!(NBF_VALUE_PTR,&b as *const BatchedWeights);assert_eq!(after,if i==j {NBF_VALUE_OUT[k]} else {before});}}
+ else {assert_eq!(after,before);unsafe{assert_eq!(NBF_VALUE_CALLS,0);}}
  assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),64);
  kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);kani::cover!(i!=j);
 }

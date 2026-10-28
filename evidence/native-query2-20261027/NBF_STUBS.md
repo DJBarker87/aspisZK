@@ -1,26 +1,35 @@
-# NBF replacement table
+# Native caller replacements
 
-No field multiplication is run in Kani. No field-operation stub is introduced.
-Inherited field specifications remain in LPh_STUBS.md, unused by K001–K003.
+Field multiplication replacements and exact natural-spec pairings are in
+[LPh_STUBS.md](LPh_STUBS.md). No multiplication equivalence is proved in Kani.
 
-| Stub | Paired Lean theorem | Domain and credit |
+| Replacement | Named discharge / required dependency | Domain and precise credit |
 |---|---|---|
-| NBF_context for update_residue_row | NBB_Row.source; NBB_RowTrace.native_result; NBB_RowWitness.construct | Context-only no-op overapproximation; K002 checks the address, call count, arguments and Vec metadata. It supplies no row-value/frame credit. Actual row domain: U64 row, four power words<P, basis<P, each old word in SAME terms phase. |
-| NBF_write for update_residue_row | NBB_Row.source with NBF_Read.push and NBF_Frame.set_frame | Every row reply is havoced; K003 checks one selected-row write on arbitrary 64-row contents and arbitrary observation index/limb. Phase/canonicality are unnecessary for this routing/frame gate; exact values use the inherited row theorem. No final whole-buffer equality is assumed. |
+| `NBF_context` for `update_residue_row` | `NBB_Row.source`, `NBB_RowTrace.native_result`, `NBB_RowWitness.construct` | Address/arguments/call-count projection only. K002 does not credit row values. Exact row domain is four U64 words in SAME terms phase, four power words<P and basis<P. |
+| `NBF_write` for `update_residue_row` | Above, plus `NBF_Read.push` and `NBF_Frame.set_frame` | Every row reply is havoced; K003 checks one selected write and arbitrary other row/limb, metadata unchanged. Phase/read inputs for mathematical values are derived by `NBF_Progress.body`; canonical basis by `NBF_BasisDomain.read_canonical`. |
+| `NBF_reduce_reply` for `M31::reduce_u64` | `S8OwnedP6ValueModel.reducer_total`, `value_total_model` | Every U64 input; all canonical replies considered by K011 four-call routing. The unique exact natural modulo value comes from the paired Lean result. This is no new reducer equivalence proof. |
+| `NBF_value_reply` for `BatchedWeights::value` | `S8OwnedP6ValueModel.value_total_model`, K011 SAME-row routing, `NBB_Finish.source` | Arbitrary64-row raw vector, i<64, any terms. K013 checks a suffix store; later Enumerate context records SAME owner pointer/index. Whole iterator interpretation remains separate. |
+| `NBF_decode_reply` for `weights::field` | **OPEN** NBC/NBE SAME canonical-byte decoder law at direct Port3 op21 | K022 checks one closure iteration's slice[672:800], index and array setter for every canonical reply. It credits no decoder semantics or whole query. |
 
-NBF_Read.push derives the actual Vec read and row phase from the SAME list read
-and cursor invariant. Canonical power and basis remain explicit upstream
-premises: they are not obtained through a stub assumption. This closes the
-local selected-row context in its allocated64/capacity64 domain; arbitrary
-allocator/capacity lowering remains the inherited TrustedStd/P6 boundary.
-The whole query caller installation remains open.
+Native Vec gates use real64-row/capacity64 allocation and arbitrary contents.
+The model frame is length-generic; the exact native allocation-capacity law or
+capacity independence is still a finding in [NBF_FINDINGS.md](NBF_FINDINGS.md).
+No restricted local gate is promoted to an every-caller native bridge.
 
-| NBF_reduce_reply replacing M31::reduce_u64 in value routing | S8OwnedP6ValueModel.reducer_total and value_total_model, inherited by NBB_Finish.source | Arbitrary U64 input; K010 routes all four calls and every canonical arbitrary reply. This is a caller-routing overapproximation, not a new reducer-equivalence result. The exact natural modulo value is supplied by the paired Lean theorem. |
+## Query call-routing replacements: OPEN callee associations
 
-The natural-spec M31 multiplication used by K008 is also recorded in
-LPh_STUBS.md; its domain is selected basis word and node<P, with every other
-array cell arbitrary. Embedding K007 uses no replacement at all.
+K005 and its excluded broader successors replace opening, dots, inverse,
+circle, field decoding, line and accumulate with observations. They are not
+callee proofs. Required exact statements are [NBF_QueryDependencies.md](NBF_QueryDependencies.md):
 
-| NBF_value_reply replacing BatchedWeights::value in finish iteration | S8OwnedP6ValueModel.value_total_model / NBB_Finish.source | K012 is suffix-write context only on an unused raw witness; K013 supplies arbitrary64-row raw backing. Every chosen canonical K reply is considered. Complete value semantics come from the same selected-row K011 routing plus inherited reducer theorem. Global enumerate-count/continuation association remains explicit. |
+- `NBF_open`: NBA_Opening, SAME frozen proof/reached ordinal and opening832.
+- `NBF_dots`: native four_dots on SAME opening/g, canonical producer domains.
+- `NBF_inverse`: NBC_Geometry, SAME query inverse row and line_z ordinal.
+- `NBF_circle` / `NBF_line`: actual fold expression and direct op17/op16 dictionary.
+- `NBF_field`: NBC/NBE SAME canonical128-byte field decode and source selector.
+- `NBF_accumulate`: complete native accumulation/row/basis/tail association.
 
-| NBF_decode_reply replacing weights::field at one query decoder closure iteration | OPEN: required NBC/NBE SAME canonical-byte decoder law, direct Port3 op21 | K022 checks slice[672:800], SAME selected index and one array setter for arbitrary canonical returned E. It is a routing/frame context only; no decoder semantics, canonical-byte producer or whole query pass is credited. |
+The last item has new model-side `NBF_Accumulate.rows`, `NBF_Advance.accepted`
+and `NBF_QueryLoop.from_constructors`; their exact native dictionaries are
+still OPEN. Broader native query shapes K014–K017 timed out and are excluded.
+No field stub or canonicality assumption hides these outstanding associations.

@@ -3,8 +3,8 @@
 L046 co-imports ALL13 NBB modules and all25 new NBF proof modules. All47 public
 new top theorem prints contain only propext/Classical.choice/Quot.sound or a
 subset. Exit0,wall3.809377810s,peak4399116KiB,swaps0. Per-file private guard
-prints are also retained in their accepted receipts. No new source/proof change
-is planned after this audit; remaining native cuts use existing paired field
+prints are also retained in their accepted receipts. No Lean proof source change
+follows this audit; remaining native cuts use existing paired field
 value theorems. This is a focused co-import audit, not a full frozen manifest
 or release replay. The complete query composite stays OPEN.
 

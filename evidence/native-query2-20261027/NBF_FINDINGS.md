@@ -20,3 +20,14 @@ These are proof coverage findings, not shipped verifier bugs or changed trust.
    It is not a complete source-to-model or source-to-ELF refinement, and it
    removes no headline premise. Native field/dots/fold/geometry/producer
    dictionary installation and attempted-prefix effects remain as named.
+
+## Later native iterator evidence
+
+K025 proves mutable next/exhaustion on arbitrary suffix state. K026 proves the
+actual Enumerate ordinal/address and exhaustion using a native constant-time
+nth seed; no64-row body is executed. K027 performs ONE actual Enumerate
+next/store step on arbitrary backing contents, recording SAME value owner,
+index and exactly one call (zero at exhaustion), with arbitrary observation
+row/limb framed. These improve finding3's native context. The formal full
+Port3_NativeFlushBody iterator/back-continuation association and every-caller
+installation remain OPEN; the finding is narrowed, not silently deleted.
