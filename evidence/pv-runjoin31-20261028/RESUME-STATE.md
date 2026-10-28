@@ -45,3 +45,15 @@ Final privacy target must never be claimed established. Final REPORT.md, commits
 and final audits still pending. Every actual receipt stores exact source revision,
 blob/hash/snapshot, dependencies, exit/time/RSS/swaps and axioms. Current evidence
 integrity audit lists SemanticInput31/Subtraction31 as pending sources.
+
+## Recovery relaunch 2, 2026-10-28 07:35 UTC
+
+Host read-only inventory confirms 57 completed Lean attempts (32 accepted,25
+rejected), all collected; no own active driver or scope. Recovery completed list
+and host hashes are in recovery/*relaunch2.json. The stale tally missed44609
+(CompilerAppend31 failed; corrected source is committed and uncompiled).
+Remaining charged budget43, zero Kani. Rule m-prime supersedes the historical
+retired-ID notes: a refusal before compiler launch does not consume an ID.
+Next eligible unlaunched ID44611; full cooldown has elapsed. No unchanged
+compile/differential/measurement is rerun. Working tree had no uncommitted
+source work on entry; only this recovery evidence is newly written.
