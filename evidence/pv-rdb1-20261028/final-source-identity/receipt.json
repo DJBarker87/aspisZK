@@ -1,0 +1,49 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/final-source-identity/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/final-source-identity/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/final-source-manifest.py"
+  ],
+  "exit": 0,
+  "wall": "0:00.03",
+  "peak_rss_kib": "18128",
+  "swap": "0",
+  "source_revision": "d9e75e1a292525f5a8339088e4ea40a83fb365e6",
+  "expected_phase": "single final twelve-row source manifest identity validation; no repeated fixture or compiler run",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  }
+}

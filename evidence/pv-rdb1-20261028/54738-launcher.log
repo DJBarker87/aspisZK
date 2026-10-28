@@ -1,0 +1,65 @@
+reservation: populated 15 GiB + 8 GiB; window=0 (London 1911); env=J
+    Aeneas.Std.Result.ok (PV_RDB1_V170_World.reference free b w) :=
+@PV_RDB1_V170.complete
+'R1Z.PV_RDB1_ResumeAudit.V170_checked' does not depend on any axioms
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V182_checked : ∀ {S F R : Type}
+  (step : PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (wordMax byteMax : ℕ)
+  (shape : PV_RDB1_V183_ReserveWorld.Shape) (b : PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8)
+  (tail : List Aeneas.Std.U8) (w : PV_RDB1_V183_ReserveWorld.World S F)
+  (handler : PV_RDB1_Append.Appended S F → Aeneas.Std.Result R),
+  handler (PV_RDB1_Append.source step wordMax byteMax shape b tail w) =
+    handler (PV_RDB1_Append.reference step wordMax byteMax shape b tail w) :=
+@PV_RDB1_V182.world_complete
+'R1Z.PV_RDB1_ResumeAudit.V182_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V183_checked : ∀ {T S F : Type}
+  (step : PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (wordMax byteMax : ℕ)
+  (shape : PV_RDB1_V183_ReserveWorld.Shape) (b : PV_RDB1_V183_ReserveWorld.Buffer T) (additional : ℕ)
+  (w : PV_RDB1_V183_ReserveWorld.World S F),
+  PV_RDB1_V183_ReserveWorld.native step wordMax byteMax shape b additional w =
+    PV_RDB1_V183_ReserveWorld.reference step wordMax byteMax shape b additional w :=
+@PV_RDB1_V183.complete
+'R1Z.PV_RDB1_ResumeAudit.V183_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V184_checked : ∀ {T P F : Type} (p : PV_RDB1_Pointer.NonNull T P)
+  (b : PV_RDB1_V184_PopWorld.Buffer T) (w : PV_RDB1_V184_PopWorld.World) (memory : PV_RDB1_V184_MoveMemory.Memory)
+  (frame : F) (width : ℕ),
+  ∃ o,
+    PV_RDB1_V184Bridge.deployed p b w memory frame = Aeneas.Std.Result.ok (PV_RDB1_Pointer.historicalCast p, o) ∧
+      PV_RDB1_V184_MoveWorld.referenceWorld b w memory frame width = Aeneas.Std.Result.ok o ∧
+        o.returned = (↑b.value).getLast? ∧
+          ↑o.remaining = (↑b.value).dropLast ∧
+            o.buffer = b.address ∧ o.capacity = b.capacity ∧ o.world = w ∧ o.memory = memory ∧ o.frame = frame :=
+@PV_RDB1_V184Bridge.complete
+'R1Z.PV_RDB1_ResumeAudit.V184_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V186_checked : ∀ {α : Type} (newCall : Aeneas.Std.Result α),
+  PV_RDB1_V186.defaultCall newCall = PV_RDB1_V186.referenceCall newCall :=
+@PV_RDB1_V186.complete
+'R1Z.PV_RDB1_ResumeAudit.V186_checked' does not depend on any axioms
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V187_checked : ∀ {T W : Type} (N : Aeneas.Std.Usize)
+  (v : Aeneas.Std.alloc.vec.Vec T) (w : W) (finish : W → Aeneas.Std.Result W),
+  PV_RDB1_V187.reference N v w finish = PV_RDB1_V187.deployed N v w finish :=
+@PV_RDB1_V187.complete
+'R1Z.PV_RDB1_ResumeAudit.V187_checked' depends on axioms: [propext]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V195_checked : ∀ {W : Type} (limbs : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (world : W),
+  Aeneas.Std.Result.ok (PV_RDB1_V195.nativeBytes limbs, world) =
+    Aeneas.Std.Result.ok ((PV_RDB1_V195.chunks limbs).flatten, world) :=
+@PV_RDB1_V195.complete
+'R1Z.PV_RDB1_ResumeAudit.V195_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V198_checked : ∀ (a b c d : Aeneas.Std.U32) (out : List Aeneas.Std.U8),
+  PV_RDB1_V198Bridge.native a b c d out = PV_RDB1_V198.write a b c d out :=
+PV_RDB1_V198Bridge.source_complete
+'R1Z.PV_RDB1_ResumeAudit.V198_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[reducible] def R1Z.PV_RDB1_ResumeAudit.V219_checked : ∀ {X A Q : Type}
+  (initial : PV_RDB1_V219.Four X → Aeneas.Std.Result (PV_RDB1_V219.Four A)) (add : A → X → Aeneas.Std.Result A)
+  (finish : PV_RDB1_V219.Four A → Aeneas.Std.Result Q) (p : Aeneas.Std.Array (PV_RDB1_V219.Four X) 28#usize),
+  PV_RDB1_V219.source initial add finish p = PV_RDB1_V219.reference initial add finish p :=
+@PV_RDB1_V219.complete
+'R1Z.PV_RDB1_ResumeAudit.V219_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_ResumeAudit.capacity_obstruction' depends on axioms: [propext]
+'R1Z.PV_RDB1_ResumeAudit.path_repaired' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.06
+	Maximum resident set size (kbytes): 2629884
+	Swaps: 0
+	Exit status: 0

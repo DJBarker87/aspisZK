@@ -1,71 +1,58 @@
-# Deployed class-B row repair
+# Deployed class-B row repair — resumed final report
 
-**V186 RESTORED at its existing callback/library source-law boundary; eleven rows remain SUSPENDED. Privacy target not yet established.** No behaviour counterexample was found. A rejected historical source gate is not a behaviour finding.
+**Ten rows RESTORED at their existing qualified library/source-law boundaries. V178 and V181 stop with checked obstructions to complete Result/effect association with their old references. Privacy target not yet established.**
 
-Branch `codex/pv-rdb1-20261028`, exact assigned worktree retained. Base `6273e6206164ac60fbc68a49fa888f98b87476f1`. Host `/home/dombarker/project-offloads/codex-pv-rdb1-20261028/`. No push, crates/programs edit, ELF rebuild, key creation or cleanup. Shared rulings including (x), (k), (k'), (r), (r'), (r''), (s), and the host-restoration flag were read.
+Branch `codex/pv-rdb1-20261028`; exact assigned worktree `/Users/dominic/ZK/.worktrees/pv-rdb1` retained. Base `6273e6206164ac60fbc68a49fa888f98b87476f1`. Host `/home/dombarker/project-offloads/codex-pv-rdb1-20261028/`. No push, implementation edit, ELF rebuild, key creation or key cleanup. Shared rulings and host-restoration flag were read. [Commit history](COMMITS.txt) records `git log --oneline 6273e6206164ac60fbc68a49fa888f98b87476f1..HEAD` through the source/row commits; the final report/receipt commit follows that snapshot.
 
-## Restored source association
+The previous report was stale at relaunch: the WIP snapshot already contained 40 Lean attempts and 36 native scopes, including eight additional restored rows. All launched attempts were recovered and counted; no job was resubmitted merely to recover its receipt. This continuation used three more Lean attempts and eight more native scopes.
 
-[V186 record](rows/V186.json), [deployed complete-body binding](v186-structural.json), [final binding receipt](v186-final-binding/receipt.json), [source pins](v186-input-source-pins.json), [focused Lean receipt](54701-receipt.json).
+## Restored rows
 
-Before: `PV_CBL_Op35Source.default_empty` states, for the selected op35 dictionary and every T, `(selected ops).op35 T = ok (alloc.vec.Vec.new T)`. The Lean/model statement stood; its native association was suspended after sysroot drift.
+All restoration credit is **structural (K-1 substitute)**. Each linked row record retains its original closing theorem, before/after statement, source gate, proof receipts, finite validation, configuration and remaining semantic boundary. These are source-association repairs, not new security endpoint proofs.
 
-After: **the same equation, carrier, quantifiers and Result conclusion**. The complete deployed `Default for Vec<T>` body and the exact owned Rust reference used by the original extraction are both `Vec::new()`. Both resolve to the same deployed monomorphization, so the source equality holds for an arbitrary shared constructor, including every abstract Result variant. This is `PV_RDB1_V186.complete`; `selected_result` specializes it to the retained model result. The gate checks the original emitted reference equation too.
+| Row | Proved deployed law and complete binding |
+|---|---|
+| [V164](rows/V164.json) | Complete compressor/index-loop binding; arbitrary complete-Result arithmetic operations retain order and errors; deployed pointer construction laws |
+| [V170](rows/V170.json) | Deployed Vec<u32>/Global destructor slice construction, initialized prefix, no payload destructor, capacity-zero bypass and exact deallocation/world effects |
+| [V182](rows/V182.json) | Byte append: fresh iterator view, reserve/growth guards, capacity, snapshot copy, error-before-copy, length update and allocator/private world |
+| [V183](rows/V183.json) | Deployed Layout::repeat padding-mask identity for actual Rust element layouts; complete reserve allocation/reallocation/error and physical/private effects |
+| [V184](rows/V184.json) | Sized NonNull cast; last-slot offset/bounds; generic non-Copy/ZST pop ownership and unchanged allocation/memory/frame |
+| [V186](rows/V186.json) | Default and owned reference share exactly Vec::new at the same generic instantiation; zero live length gives empty value without changing ZST capacity |
+| [V187](rows/V187.json) | Forward iterator count/ZST cursor and array initialization; generic owned Vec-to-array complete Result, input retention on mismatch and finalization effects |
+| [V195](rows/V195.json) | All eight four-byte serializer chunks covered once, complete copy result/frame, transparent ManuallyDrop borrow/restoration and excluded bounds panics |
+| [V198](rows/V198.json) | All four writer copies and ordered range checks; complete return and buffer effects, including first eight bytes retained on second-range panic |
+| [V219](rows/V219.json) | Complete boundary traversal/index enumeration and independent four-limb updates, with arbitrary complete-Result arithmetic |
 
-The changed constructor's body constructs a RawVec and sets the Vec live length to zero. `empty_from_zero_length` proves that any vector value carrier of length zero equals `Vec.new`, and `constructor_value` audits the empty list projection. Thus the changed dangling-pointer construction (`as_nonzero` versus the old `as_nonzero_usize`) needs no historical/deployed pointer equivalence premise for this row: neither default nor its reference dereferences that pointer or allocates. The constructor is shared, and its live length is zero. ZST capacity representation is not silently changed to zero.
+For these rows the same original model/callback qualifications remain. New private model embeddings and pointer/copy/layout lemmas connect the changed deployed source shapes. Returning constructors and operations are not promoted to unconditional allocation success. Raw allocator/reallocator, language intrinsic, valid runtime carrier, compiler/executable and side-channel obligations remain at their recorded original boundaries.
 
-Evidence class: **structural (K-1 substitute)**. This restores the existing op35 native-to-reference source association, not a kernel proof of Rust/LLVM/machine semantics. Existing runtime carrier, compiler, executable, allocator/world and side-channel obligations keep their original boundary. No dictionary or endpoint proof was edited. The new theorem is not presented as a replacement endpoint theorem.
+## Checked obstructions and restated laws
 
-## Row dispositions
+**[V181](rows/V181.json): capacity Result mismatch.** On deployed 64-bit Linux, `String::with_capacity(9223372036854775808)` panics before allocation. The old `string_capacity_reference` is `String::new()` and returns empty. [Native witness](result-effect-witness/output.log) and [complete deployed constructor gate](v181-deployed-binding.json) record this discrepancy. `PV_RDB1_V181Finding.overflow_world` proves the overflow result leaves the allocator world unchanged; `no_unbounded_promotion` excludes equality with the unconditional returning model.
 
-Every row has an individually committed JSON record with its original closing theorem, before/after disposition, exact reason and fresh evidence references.
+The repaired safe reference is `String::new(); reserve_exact(n); return value`. `PV_RDB1_V181.complete` and `with_handlers` prove its complete allocation/error/world law, including zero request, layout overflow, null allocation/private state and actual error handling. [1,027 native pairs](v181-capacity-native/receipt.json) validate headers and deterministic overflow paths finitely. The selected all-Usize `ok empty` callback remains unchanged. Its historical bounded/returning-value qualification is not refuted; an unqualified native Result association is unavailable. Stop this row pending a reachable-domain/error-aware endpoint adapter.
 
-| Row | Status | Remaining native-link obligation |
-|---|---|---|
-| V164 | SUSPENDED | Complete compressor/reference deployed binding; changed NonNull laws and 27 conservative edges |
-| V170 | SUSPENDED | New slice/drop pointer construction into existing u32/Global world law |
-| V178 | SUSPENDED | Deployed truncate/separator/path and allocator laws; 609 conservative edges |
-| V181 | SUSPENDED | Complete capacity checker/binding and deployed Layout/allocator law; 29 edges |
-| V182 | SUSPENDED | Root gate passes; transitive extend/allocation/NonNull laws and 117 edges remain |
-| V183 | SUSPENDED | Deployed repeat/layout and allocator-world bridge; 29 edges |
-| V184 | SUSPENDED | Root gate passes; deployed NonNull cast law and six edges remain |
-| V186 | RESTORED | Exact shared deployed constructor binding, as described above |
-| V187 | SUSPENDED | Root gate passes; complete deployed iterator/from_fn/move binding and six edges remain |
-| V195 | SUSPENDED | Root gate passes; deployed callee binding, panic attribution and 131 edges remain |
-| V198 | SUSPENDED | Complete writer checker/binding, pointer laws, panic attribution and ten edges remain |
-| V219 | SUSPENDED | Complete boundary-sum checker/binding, changed pointer laws and 29 edges remain |
+**[V178](rows/V178.json): path allocation effects differ.** For base `base` and absolute path `/`, native `Path::join` first clones the four-byte base, then clears and reuses that buffer. The old reference skips the clone and requests eight bytes for its fresh output. Returned contents agree; allocation requests differ. The [native witness](result-effect-witness/output.log) records both requests. The historical gate explicitly retained allocation effects as residual, so this is an obstruction to discharging that residual, not a refutation of its narrower contents theorem or evidence of a Rust version regression.
 
-The edge counts are the retained conservative MIR envelope counts, not proven reachable execution counts. [Fresh source audit](source-audit.json) checks attributed installed files without resolving those edges. No root-body match or finite fixture is promoted to complete transitive correspondence. The unrecovered complete checkers for V164/V181/V198/V219 are reported as gaps, not replaced by a different successful checker.
+The [deployed path gate](v178-deployed-binding.json) checks the full `_push`, clone chain, Unix separator/prefix selection and changed truncate chain. `PV_RDB1_V178.truncate_complete` proves zero-length u8 truncation preserves address/capacity/world. `join_repaired` proves the clone-first reference equality for arbitrary complete-Result clone/append operations; `clone_failure` preserves failure before append. Sixty-four repaired-reference value/allocation-event pairs pass finitely. Stop this row pending transport of the clone-first error/world law through its endpoint adapter. No old world-equality credit is invented.
 
-## Configuration and validation
+## Validation, provenance and budget
 
-Exact client root: `tools/r1-cost-probe`, `devnet_spend`, `r1p-check,aspis-r1-cost-probe/ct-host-prover`, rustc **1.94.1**, release opt3, debug assertions and overflow checks off. The exact 487-unit graph was reproduced with `--locked --unit-graph`; no code generation occurs in that capture. [Resolved units](resolved-features.json) include every crate's features and effective profile, including build-script profiles. Every scope/Lean receipt references its SHA-pinned configuration; project fixtures additionally retain their actual resolved dependency features. Std-only fixtures link std/alloc/core directly and have no feature-bearing project dependency.
+Deployed configuration: `tools/r1-cost-probe`, client `devnet_spend`, features `r1p-check,aspis-r1-cost-probe/ct-host-prover`, rustc **1.94.1**, release opt3, assertions/overflow checks off, panic unwind. [Resolved features](resolved-features.json) retain every crate and effective profile in the 487-unit graph. Each scope receipt references that configuration; std-only fixtures separately record that no feature-bearing project dependency is linked. Changed library bodies are checked against installed pinned 1.94.1 rust-src.
 
-All 172 core/statement Rust files and manifests match this branch's HEAD in the read-only replay source tree. All 2,048 attributed standard-library source checks match the installed 1.94.1 files. All 5,673 external Lean objects match the coherent privacy replay manifest before the first compile. Only own new PV_RDB1 modules are imported as project modules; own import source/blob/object fingerprints are recorded for dependent audits.
+Earlier finite validation is reused: u32 drops260; path pairs774,256; append pairs5,679,337; reserve pairs2,160 including failures/overflow/ZST; pop99 plus33 Drop-bearing ZST; array606 plus99 ZST; serializer108,309; writer4,101; compressor768/boundary128 and supporting polynomial128. These remain finite checks. No quarantined or copy-dependent Kani PASS is re-credited; Kani usage is zero.
 
-Finite native validation passed:
+All 5,673 external objects were reverified before the final compile. Own import source/blob/object hashes are recorded recursively. [Final source manifest](final-source-manifest.json) matches165 checked body-file hashes across12 row bindings. The earlier172 project-file and2,048 attributed sysroot checks remain recorded separately.
 
-- V170: 260 paired u32 drop/world cases.
-- V178: 774,256 path pairs; V182: 5,679,337 append pairs.
-- V181: 1,025 capacity pairs; V186: empty default/new u32 headers without allocation.
-- V183: 2,160 reserve pairs, including injected failures, overflow and ZST.
-- V184: 99 non-Copy payload cases plus 33 Drop-bearing ZST cases.
-- V187: 606 non-Copy ownership pairs plus 99 ZST pairs.
-- V195: 108,309 serializer pairs, all 32 bytes; V198: 4,101 writer pairs, all 16 bytes.
-- V164/V219: 768 compressor and 128 boundary pairs; supporting 128 polynomial pairs.
+Combined statement/axioms audit **54738** passed. Focused replay of all ten restored rows **54739** passed with their full original quantifiers and Result/world conclusions. Only `propext`, `Classical.choice`, `Quot.sound` occur. Replay54799 failed because the new wrapper supplied unapplied theorem functions beneath local binders; applying those functions is the recorded source change compiled successfully at54739. Every final PV_RDB1 module has an exact-source successful receipt; failed elaborations remain evidence, not credited proofs. No unchanged full regression was repeated.
 
-All of these are **finite validation**, not unbounded native proofs. Historical Kani evidence is neither rerun nor re-credited. K-1/K-2 restrictions remain; no contracts, copy stubs or chained arithmetic Kani route was used. No XR imports or definitions were used.
+Totals: **43/100 Lean attempts, 44/120 capped native scopes, 0/0 Kani**. Remaining57 Lean IDs are54740–54796; remaining native scopes76. All swaps zero. Peak Lean RSS2,666,280 KiB; peak native RSS571,616 KiB. Six failed native/preflight source gates are retained with their corrected-input successors; none is a behaviour verdict. No memory kill, timeout, refusal, cap increase or transport failure occurred. Full targets, exits, wall/RSS/swap, source revisions and axiom lines appear in receipts and [audit.json](audit.json).
 
-## Premise accounting and handoff
+The unused budget is not reported as exhaustion: all ten nonfinding rows are finished; the other two stop on the checked Result/effect discrepancies above. No row stops merely at an unwritten pointer/allocation law.
 
-Removed: the V186 deployed default-to-owned-reference association obligation at its existing library source-law boundary. Retained: the other eleven native links, all endpoint premises including E1/E2, real RunJoin, client route, compiler/executable correspondence, L1/L2/L3. Added/changed trust items: **none**; T remains exactly entropy_law, entropy_kernel, observation. The simulator and observer are unchanged. No claim that `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` is established.
+## Premise accounting and next deliverable
 
-Next deliverable: a deployed pointer/slice-construction law for V170, followed by its complete destructor/world binding, or complete deployed NonNull/move bindings for V184/V187. Those missing laws, rather than further unchanged fixture runs, are what the suspended rows require.
+Removed: the deployed native-to-owned-reference source-association obligations for V164,V170,V182,V183,V184,V186,V187,V195,V198,V219 at their existing qualified source/library boundaries. Retained: V178/V181 complete Result/effect association, endpoint E1/E2, real RunJoin, client route, compiler/executable and runtime/allocator primitive adequacy, and L1/L2/L3. No dictionary, simulator or observer was edited; T remains exactly entropy_law, entropy_kernel, observation. No new trust item, success premise or narrower native input domain is silently introduced.
 
-## Final focused replay and budget
+Next concrete deliverable: error/world-aware endpoint adapters consuming the proved V181 reserve-based constructor and V178 clone-first reference, followed by endpoint dependency replay and premise audit. `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` is **not established** by this repair.
 
-Combined audit **54797**, focused universal V186 bridge replay **54798**: exit 0, only `propext`, zero swaps. Both are new modules; no unchanged full regression ran. The original dictionary theorem is reused unchanged by the source binding; the focused replay checks the new native-link bridge and empty-value consequence, not the package-wide endpoint import cone.
-
-Totals: **4/100 Lean attempts** (54700 initial, 54701 expanded zero-length law, 54797 audit, 54798 replay), **20/120 native scopes**, **0/0 Kani**. No refusal, cap increase, killed job, transient transport loss or failed compiler run occurred. Some historical structural expectations reject the deployed sources, as itemized above; the overall capture script's exit 0 does not turn those row gates into passes. Peak Lean RSS 2,629,236 KiB; peak native RSS 565,568 KiB; all swaps zero. Full target, source revision, exit, wall, RSS and axiom lines are in each receipt. [Final machine-readable audit](audit.json).
-
-Work stops after removal of V186's native-association obligation, as permitted by the shared completion rule; the remaining budget is unspent, not exhausted. The other eleven rows stop at the specific missing proof/binding named in their records. No new universal claims are merely proposed as proved. Host cargo targets and verified ELF fixture executables were removed after recording available SHA256/size data in [cleanup.json](cleanup.json); shared Lean objects and source evidence are retained. No keys were created or removed.
+[Final cleanup](cleanup-final.json) hashes three retained-at-run-time ELF fixtures before deleting only those executables and this job's143MiB Cargo target cache. Sources, receipts and shared Lean objects remain. No key was created, accessed or removed.
