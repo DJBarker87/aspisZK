@@ -20,7 +20,7 @@ def add(pkg,name,row,index,window=None):
  s=s.replace(body,attrs+'\n'+body,1)
  # False postcondition after the original complete property, only on admitted execution.
  neg=body.replace('fn '+name+'(', 'fn '+name+'_negative(',1)
- neg=neg[:-1]+'assert!(false,"PV_KSTUB_NEGATIVE");\n}'
+ j=neg.rfind('assert_eq!');assert j>=0;neg=neg[:j]+neg[j:].replace('assert_eq!','assert_ne!',1)
  s+='\n#[cfg(kani)] mod negative_'+name+' { use super::*; use std::os::unix::ffi::OsStrExt;\n#[kani::proof]\n#[kani::unwind(260)]\n'+attrs+'\n'+neg+'\n}\n'
  # negative module needs helpers in original module; instead append beside the original.
  s=s[:s.index('\n#[cfg(kani)] mod negative_'+name)]
@@ -46,7 +46,7 @@ ref=(S/'K06/package/reference_p6.rs').read_text();rb=func(ref,'wide_bytes_flat')
 (dst/'lib.rs').write_text(header+'use aspis_core::field::{QM31,CM31,M31};\n'+q+'\n'+rb+'\n#[kani::proof]\n#[kani::unwind(260)]\n'+b.replace('super::reference_p6::wide_bytes_flat','wide_bytes_flat'))
 add('wide','wide_flat','V195',152)
 # all_carriers retains its private constructor access, original module body and reference.
-s=p.read_text();b=func(s,'all_carriers');neg=b.replace('fn all_carriers(', 'fn all_carriers_negative(')[:-1]+'assert!(false,"PV_KSTUB_NEGATIVE");}'
+s=p.read_text();b=func(s,'all_carriers');neg=b.replace('fn all_carriers(', 'fn all_carriers_negative(').replace('assert_eq!','assert_ne!')
 s=s.replace(b,attrs+'\n'+b+'\n#[kani::proof]\n#[kani::unwind(260)]\n'+attrs+'\n'+neg);s=s.replace('#[kani::unwind(33)]','#[kani::unwind(260)]');p.write_text(s)
 plans.append(dict(package='native/core',harness='all_carriers',negative='all_carriers_negative',row='V195',index=151,body_sha256=sha(b.encode()),window=None))
 # Split the 129-byte gate by input-length windows; each preserves all output coordinates.
@@ -61,7 +61,7 @@ p.write_text(s.replace('    #[cfg(kani)]\n    #[kani::proof]\n    #[kani::unwind
 # add handles src/sealed.rs separately using temporary lib symlink is inappropriate; explicit body insertion
 s=p.read_text()
 for label in ['lo','hi']:
- name='split64_coordinate_'+label;b=func(s,name);neg=b.replace('fn '+name+'(', 'fn '+name+'_negative(')[:-1]+'assert!(false,"PV_KSTUB_NEGATIVE");}'
+ name='split64_coordinate_'+label;b=func(s,name);neg=b.replace('fn '+name+'(', 'fn '+name+'_negative(');j=neg.rfind('assert_eq!');neg=neg[:j]+neg[j:].replace('assert_eq!','assert_ne!',1)
  pos=s.rfind('}');s=s[:pos]+'\n#[kani::proof]\n#[kani::unwind(260)]\n'+attrs+'\n'+neg+s[pos:]
  plans.append(dict(package='split',harness=name,negative=name+'_negative',row='V233',index=117,window=label,body_sha256=sha(b.encode())))
 p.write_text(s)
