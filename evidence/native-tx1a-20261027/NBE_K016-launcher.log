@@ -1,0 +1,36 @@
+{"attempt": "NBE_K016", "exit_status": 1, "wall_seconds": 96.20123071403941, "peak_rss_kib": "1000656", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "ce4b82d36ea8fd176a4a6cd0efeccf118d9f71718a204d8be9138b9894a830a9", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1a-20261027/NBE_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1a-20261027/NBE_target", "--lib", "-j", "1", "-Z", "unstable-options", "--harness-timeout", "90s", "--exact", "--harness", "multiproof::NBE_multiproof::NBE_row_su
+...
+d have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBE_multiproof.rs:130:39
+    |
+130 | #[kani::proof] #[kani::unwind(18)] fn NBE_row_supplied(){NBE_row_case(1)}
+    |                                       ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbe_row_supplied`
+
+warning: function `NBE_row_short` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBE_multiproof.rs:131:39
+    |
+131 | #[kani::proof] #[kani::unwind(18)] fn NBE_row_short(){NBE_row_case(2)}
+    |                                       ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbe_row_short`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.02s
+Checking harness multiproof::NBE_multiproof::NBE_row_supplied...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - multiproof::NBE_multiproof::NBE_row_supplied
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "ce4b82d36ea8fd176a4a6cd0efeccf118d9f71718a204d8be9138b9894a830a9", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r7f78af26869c403c8a2c7334ac4fb8b5.scope; invocation ID: 5e16bfcf0df84e49a9524551474dfc62
