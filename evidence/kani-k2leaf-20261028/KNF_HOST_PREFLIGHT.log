@@ -1,0 +1,33 @@
+{"S2W_run_host.py": true, "KMY_src": true, "KMX_stubs.rs": true}
+[workspace]
+members = [
+    "crates/aspis-core",
+    "crates/aspis-r1-cost-probe",
+    "crates/aspis-prover",
+    "crates/aspis-statement",
+    "programs/aspis-pool",
+    "programs/aspis-registry",
+    "programs/aspis-verifier",
+    "programs/r1-cost-probe",
+    "audit/poseidon-pair-probe/program",
+    "xtask",
+    # Extracted builder copies (D68.2): the shipped pair-forest trace writers.
+    # Their src/lib.rs files are the pinned extraction inputs; keep them byte-identical.
+    "docs/research/v8-r0-zk-20261009/refine/writers",
+    "docs/research/v8-r0-zk-20261009/refine/blockwriters",
+    "docs/research/v8-r0-zk-20261009/refine/poseidon",
+]
+# The research probes under docs/ are standalone crates with their own
+# [workspace]; the R1 cost probe uses the z4 probe library only behind its
+# `r1p-check` feature (LOG D38.3).
+exclude = ["docs"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+version = "0.1.0"
+
+[workspace.dependencies]
+hkdf = "0.12.4"
+hpke =
