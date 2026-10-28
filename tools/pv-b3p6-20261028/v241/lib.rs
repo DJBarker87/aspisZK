@@ -46,3 +46,34 @@ fn finite224_full_prefix() {
     }
     println!("finite validation: {checks} complete same-input original/host/reference trace helper Results; both fixtures, append extremes, lambda0 and pole candidates");
 }
+pub mod prefix224;
+#[cfg(test)]
+fn project224(trace:&aspis_statement::pool_v1::pair_forest_trace::PoolV1PairForestTraceV1) -> prefix224::View {
+    use aspis_statement::pool_v1::pair_trace::PoolV1PairTraceVariantV1;
+    prefix224::View {
+        stable:core::array::from_fn(|c|core::array::from_fn(|r|trace.stable.c1[c].get(r).copied())),
+        late:core::array::from_fn(|c|core::array::from_fn(|r|trace.late[c].get(r).copied())),
+        withdrawal:trace.variant==PoolV1PairTraceVariantV1::Withdrawal,
+    }
+}
+#[test]
+fn finite224_owned_prefix() {
+    use aspis_core::field::{M31,CM31,QM31};
+    let q=|n|QM31::from_cm31(CM31::from_m31(M31(n)));
+    let registry=aspis_prover::host_forest::build_pool_v1_pair_forest_copy_registry_v1().unwrap();
+    assert_eq!(registry.len,136);
+    let mut checks=0;
+    for withdrawal in [false,true] {
+        let fixture=aspis_prover::r0_fixture::prepare(withdrawal);
+        let trace=&fixture.compiled.trace;
+        let view=project224(trace);
+        for index in [0,1,(1<<20)-1,u64::MAX] {
+            for lambda in [q(0),q(17)] {
+                let native=aspis_prover::host_forest::pool_v1_pair_forest_copy_rows_v1(trace,index,lambda);
+                let reference=prefix224::copy_rows(view,registry.data,index,lambda);
+                assert_eq!(native,reference);checks+=1;
+            }
+        }
+    }
+    println!("finite validation: {checks} complete owned-prefix row arrays / native; same registry, both projected fixtures, append extremes and lambda0");
+}
