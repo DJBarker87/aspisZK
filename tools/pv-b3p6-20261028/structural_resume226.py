@@ -175,6 +175,8 @@ assert (D/'lean/PV_B3P_BytesV3Types226.lean').read_text()==pt
 assert (D/'lean/PV_B3P_BytesV3Emission226.lean').read_text()==pf
 assert not re.search(r'index_mut|iter_mut|next_back|index_mut_back',f)
 assert re.search(r'pub const P: u32 = 0x7fff_ffff;', (R/'crates/aspis-core/src/field.rs').read_text())
+record['checker_source_path']=str(Path(__file__).resolve().relative_to(R))
+record['checker_sha256']=sha(Path(__file__))
 record['emission_fidelity']=dict(body_edits=False,mutable_writes=0,raw_types_sha256=sha(D/'raw226-v3/Types.lean'),raw_funs_sha256=sha(D/'raw226-v3/Funs.lean'),ported_types_sha256=sha(D/'lean/PV_B3P_BytesV3Types226.lean'),ported_funs_sha256=sha(D/'lean/PV_B3P_BytesV3Emission226.lean'))
 plan_source=(D/'lean/PV_B3P_NativePlan226.lean').read_text().split('def plan (p : reference226.OwnedPublic) : List Step :=',1)[1].split('theorem payload_value',1)[0]
 plan_expected='[\n  .push (if p.withdrawal then 1#u8 else 0#u8),\n  .fields p.anchor.val, .fields p.nullifier.val, .fields [p.asset_id],\n  .push (if p.withdrawal then 0#u8 else 1#u8),\n  .fields (if p.withdrawal then [] else p.recipient.val),\n  .fields p.change.val, .push (if p.withdrawal then 1#u8 else 0#u8),\n  .fields (if p.withdrawal then [p.withdrawal_amount] else []),\n  .bytes (indexSlice p.next_pair_index), .fields (frontier p.frontier),\n  .fields p.next_root.val, .fields (frontier p.next_frontier) ]\n'

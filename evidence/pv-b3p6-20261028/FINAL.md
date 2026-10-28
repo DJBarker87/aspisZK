@@ -71,7 +71,8 @@ not the privacy endpoint. [Receipt index](receipt-index-resume2.json) retains
 exact targets, SHA/blob/dependency fingerprints, errors, timings, resource
 measurements and full axioms logs. [Closure hash audit](closure-hash-audit-resume2.json)
 checks86 project modules with zero dependency mismatches. All5673 external
-objects were freshly SHA-verified before the first compile. Five early inherited
+objects were freshly SHA-verified before the first compile
+(`receipts-resume2/external-verification.json`). Five early inherited
 revision-label mismatches have explicit corrections in
 `resume2-revision-corrections.json`; original receipts remain unchanged.
 
