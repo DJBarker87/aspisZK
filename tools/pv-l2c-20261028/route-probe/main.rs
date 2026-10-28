@@ -7,6 +7,7 @@ fn digest(seed:u32)->Digest {core::array::from_fn(|i|M31((seed+17*i as u32+1)%P)
 fn canonical(d:&Digest){assert!(d.iter().all(|x|x.0<P))}
 fn main(){
  assert!(!cfg!(debug_assertions));
+ if std::env::args().nth(1).as_deref()==Some("inverse-only"){inverse_cases();return}
  let key=digest(10);let salt=digest(100);let asset=M31(77);
  let cm=pool_v1_note_commitment(&derive_owner_key(&key),1000,asset,&salt);
  let input=PoolV1PairForestInputNoteWitnessV1 {
@@ -47,4 +48,13 @@ fn main(){
   assert!(full.is_ok(),"canonical route diagnostic must pass the actual prover");
  }
  println!("finite_native_canonical_route_cases=2; source-generated-output_fields=true; account_codec=true; no_selected_planner_reconstruction_claim=true");
+}
+
+fn mod_pow(mut base:u64,mut exponent:u32)->u32{let mut acc=1u64;while exponent!=0{if exponent&1!=0{acc=acc*base%u64::from(P)}base=base*base%u64::from(P);exponent>>=1;}acc as u32}
+fn inverse_cases(){
+ let mut cases=vec![1,2,P-1];for i in 0..128u64{cases.push(((i*1664525+1013904223)%u64::from(P-1)+1) as u32)}
+ for x in &cases{let got=M31(*x).inv();assert_eq!(got.0,mod_pow(u64::from(*x),P-2));assert!(got.0<P);assert_eq!(M31(*x).mul(got),M31::ONE)}
+ let raw=[0,1,P-1,P,u32::MAX];let mut products=0;for x in raw{for y in raw{assert_eq!(M31(x).mul(M31(y)).0,(u64::from(x)*u64::from(y)%u64::from(P)) as u32);products+=1}}
+ let zero=std::panic::catch_unwind(||M31::ZERO.inv());assert!(zero.is_err());
+ println!("same_input_native_inverse_modpow_comparisons={} widened_product_comparisons={products} zero_inverse_expected_panic=true finite_validation_only=true",cases.len());
 }
