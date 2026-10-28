@@ -54,5 +54,5 @@ print(json.dumps({{n:(b/n).read_text() for n in ['receipt.json','stdout.log','ti
  if 'receipt.json' not in out:raise SystemExit('STOP missing receipt after submission; do not resubmit')
  rc=json.loads(out['receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True);
  if cfg['kind']!='metadata':
-  log=out['stdout.log'];pos=log.rfind('Checking harness');print(log[pos:] if pos>=0 else log[-1800:],flush=True)
+  log=out['stdout.log'];pos=log.rfind('Checking harness');print(log[pos:] if pos>=0 and len(log)-pos<18000 else log[-3000:],flush=True)
  return rc

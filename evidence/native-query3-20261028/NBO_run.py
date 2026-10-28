@@ -4,7 +4,7 @@ from pathlib import Path
 _nbo_serial = (Path(__file__).resolve().parent / 'NBO_SERIAL.lock').open('a')
 fcntl.flock(_nbo_serial, fcntl.LOCK_EX)
 from NBO_host import *
-import hashlib,tomllib,sys
+import hashlib,tomllib,sys,os
 attempt,harness=sys.argv[1:]
 assert attempt.startswith('NBO_K') and int(attempt[5:])<=40
 assert not (E/attempt/'receipt.json').exists()
@@ -24,7 +24,7 @@ graph={'packages':sorted(keys.values()),'edges':sorted([keys[n['id']],sorted(key
 assert graph==json.loads((E/'NBO_frozen_graph.json').read_text()),'STOP frozen graph changed'
 check=dict(exact_frozen_resolved_graph_match=True,frozen_graph_sha256=hashlib.sha256((E/'NBO_frozen_graph.json').read_bytes()).hexdigest(),metadata_receipt=meta+'/receipt.json',lock_before_sha256=expected,lock_after_sha256=None)
 (E/(attempt+'-graph-check.json')).write_text(json.dumps(check,indent=2)+'\n')
-cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBO_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NBO_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',(harness if '::' in harness else 'verifier::candidate::NBO_native::'+harness),'--output-format','terse']
+cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBO_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NBO_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',(harness if '::' in harness else 'verifier::candidate::NBO_native::'+harness),'--output-format',('regular' if os.getenv('NBO_DIAGNOSTIC') else 'terse')]
 r=launch(dict(base,attempt=attempt,kind='kani',command=cmd,timeout=600,expected_time='Optimized compilation then '+harness+' native single-call gate',deps_fingerprint={'frozen_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph_check':attempt+'-graph-check.json'}))
 after=ssh('sha256sum '+B+'/NBO_src/Cargo.lock');assert after.returncode==0
 check['lock_after_sha256']=after.stdout.split()[0];check['lock_unchanged']=check['lock_after_sha256']==expected
