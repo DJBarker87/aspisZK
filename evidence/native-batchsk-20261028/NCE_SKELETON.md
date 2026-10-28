@@ -139,3 +139,16 @@ remaining caller state. Actual Rust/P6 association remains OPEN.
 L005-L007 failed, retained and excluded. L008 checked the four initial roots;
 L009 checks the final renamed interface plus two entry-domain roots. All six
 L009 roots use standard axioms only. See NCE_REPAIRS.md and per-attempt receipts.
+
+### All-outcome cohort composition (L010)
+
+`NCE_CohortObservation.three_trees` consumes the existing P6 local gates and
+physical slot bounds to identify the first-failure observation of ALL three
+trees with that of the existing owned slot model. No successful-tree premise
+is introduced; the current poststate is always the next tree's prestate.
+`batch_result` identifies the cohort batch's entire chronological log and
+Boolean with that SAME owned first-failure observation. Batch b is arbitrary
+with b<2, covering TX1 b=0 and TX2 b=1. These model results do not instantiate
+native keys/count/padding, actual control lowering, Prepared provenance or U00.
+L010 passes; all three roots standard-only. The requested native skeleton
+still needs those bindings, so Stage 1 is NOT complete.
