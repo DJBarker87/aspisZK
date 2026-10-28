@@ -22,7 +22,7 @@ def rowWords (x : aspis_statement.logup.CopyLogUpRow) : List Nat :=
   (x.producer_values.val ++ x.consumer_values.val).flatMap words ++
     x.producer_weights.val.map UScalar.val ++ x.consumer_weights.val.map UScalar.val
 
-def cases : Result (List (List Nat)) := do
+def writeCases : Result (List (List Nat)) := do
   let rows := Array.repeat 1024#usize empty
   let a ← prefix224.side rows view tuple 7#u32 1#u32 aspis_core.field.QM31.ZERO false
   match a with
@@ -45,7 +45,7 @@ def cases : Result (List (List Nat)) := do
         | .Ok rows =>
           let a3 ← Array.index_usize rows 1023#usize
           .ok [rowWords a0,rowWords a1,rowWords a2,rowWords a3]
-#eval match cases with
+#eval match writeCases with
   | .ok xs => IO.println s!"D188-prefix224-cases={xs}"
   | .fail _ => IO.println "D188-prefix224-failed"
   | .div => IO.println "D188-prefix224-diverged"
