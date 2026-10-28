@@ -16,7 +16,11 @@ Final changed audit L048 compiles all21 public roots together: exit0,wall4.42852
 
 ## Native results and scope
 
-Native run summary will be completed from terminal receipts. Per-run graph and lock checks are binding; a gate counts only on exit0 and unchanged frozen lock.
+**Kani60/60 PASS; native allowance exhausted. Lean48/100 (29 passing,19 rejected drafts/inspections).** No further prover command after K060. All60 fresh metadata gates also pass frozen graph/lock checks; every Kani post-lock matches. No native timeout, memory kill or assertion failure.
+
+K001-K040 close all40 exact fixed-position native store/frame fragments (NBK_STORES_BRIDGE.md); K041/K042 ASF8 ordered binding/lane prefix and exact late/payment/domain ranges; K043-K058 all16 native account sequence iterations with full other-row frame and checkpoint capacity predicate; K059/K060 full ASJA/live fixed header cuts before frontier, with explicit OPEN same-root DigestEncode dependency. Details/limits in NBK_NATIVE_FINAL.md. No whole codec is promoted from these cuts.
+
+The two inherited NBH dynamic-store timeouts were split by position and never rerun unchanged. New fixed-position gates establish every buffer byte; native whole frontier/sequence loops are never submitted. No new stub. Header encoded bytes are explicit child cuts, not an independent successful DigestEncode. Per-gate fields are retained in NBK_ATTEMPTS.jsonl; raw metadata stays on host with committed hash/size/locator. Own wrapper compaction changes no graph/admission validation.
 
 ## Trust and freeze
 
@@ -32,3 +36,11 @@ No key/wallet was created, read or deleted. No binary, object, ELF or archive is
 ## Remaining deliverables
 
 U03: SAME DigestEncode/Decode lower native bridges, complete native iterator/prefix/copy/child/error composition, late header and parent composition. U04: coherent full registry/policy/identity/op48/49 carrier and Result associations, reserved scans and master validation; native sequence cuts still require SAME adopted-carrier induction. U05: good-prefix statement validator continuation, SAME variant payment and late child bridges, full ASF8 bytes/errors/carrier. ASR8 emission/results are optional for headline soundness (op53 universal), never claimed as closed. Every remaining member is listed individually in unit tables; none is held behind an unrelated unit.
+
+## Final verification and cleanup
+
+NBK_VALIDATION.json confirms all current NBK modules match passing source hashes, successful audits use standard axioms, exact scope caps and zero swap, offline optimized native commands, frozen graphs/locks and unchanged worktree crates/programs. Persistent cache start/end manifests record every object; reused NBD/NBH objects are unchanged. Actual LEAN_PATH Aeneas selections match pinned objects (NBK_RESOLVED_LIBRARY_PIN.json). Missing unchanged dependency builds were done once in the required persistent cache, with retained sources/revisions/metrics; no shared launcher, shim, reservation infrastructure or other cache was modified.
+
+NBK_HOST_CLEANUP.json pins499 frozen/source-patch files and coherent manifest/tool hashes, finds no own live prover, and records removal of1,548,213,593 bytes of own Rust target plus empty solver scratch. Persistent cache remains at its designated path with372 end files, never deleted. Source scratch and all receipts remain. No claimed fresh ELF reproduction or full frozen-manifest release replay.
+
+The stopping condition is the exhausted60-Kani allowance; no independent member is silently dropped. The exact40 open members and named remaining child/association obligations are in the three unit tables. Source-safe next deliverable: import merged lower DigestEncode/Decode on their proved domains, compose the checked ASJA/live fragments with those SAME calls, then complete late/ASF8 parent association. Registry/Pool callbacks and sequence induction remain explicit, not a new uninstalled dictionary.

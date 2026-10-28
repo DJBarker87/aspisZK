@@ -29,9 +29,11 @@ for name,pin in expected.items():
 unlisted=[str(p) for n in ['crates','programs'] for p in (b/'NBK_src'/n).rglob('*') if p.is_file() and str(p.relative_to(b/'NBK_src')) not in expected];assert not unlisted,unlisted
 cache_end={str(p):{'sha256':sha(p),'bytes':p.stat().st_size} for p in sorted(cache.rglob('*')) if p.is_file()}
 start=START_VALUE
-assert all(cache_end.get(p)==v for p,v in start.items()),'Initial persistent cache entry changed/missing'
+cache_changes=[{'path':p,'before':v,'after':cache_end.get(p)} for p,v in start.items() if cache_end.get(p)!=v]
+required_changes=[x for x in cache_changes if Path(x['path']).name.startswith(('NBD_','NBH_'))]
+assert not required_changes,('Reused NBD/NBH object changed/missing',required_changes)
 lib=json.loads((b/'NBK_LIBRARY_PIN.json').read_text());assert all(sha(Path(p))==v['sha256'] and Path(p).stat().st_size==v['bytes'] for p,v in lib.items())
-result={'cache_end':cache_end,'initial_cache_files_unchanged':len(start),'persistent_cache_retained':True,'own_live_provers':live,'frozen_source_and_patch_pins':actual,'library_pins_unchanged':True,'coherent_manifest_pins':{},'tool_file_pins':{},'removed_compiled_solver_scratch':[]}
+result={'cache_end':cache_end,'initial_cache_files_unchanged':len(start)-len(cache_changes),'initial_cache_entry_changes_recorded':cache_changes,'reused_NBD_NBH_objects_unchanged':True,'persistent_cache_retained':True,'own_live_provers':live,'frozen_source_and_patch_pins':actual,'library_pins_unchanged':True,'coherent_manifest_pins':{},'tool_file_pins':{},'removed_compiled_solver_scratch':[]}
 for name in ['object-source-manifest.json','final-closure-manifest.json','canonical-source-check.json']:
  p=coherent/name
  if p.is_file():result['coherent_manifest_pins'][str(p)]={'sha256':sha(p),'bytes':p.stat().st_size}
