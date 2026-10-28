@@ -1,0 +1,22 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -297,3 +297,19 @@
+     let square = x.mul(x);
+     square.double().sub(M31::ONE)
+ }
++
++#[cfg(kani)]
++mod NBS_tables {
++ use super::*;
++ #[kani::proof] #[kani::unwind(4)]
++ fn table_total() {
++  let a:u32=kani::any();let b:u32=kani::any();let x=table_value((a,b));
++  assert!(x.a.0==a);assert!(x.b.0==b);
++ }
++ #[kani::proof] #[kani::unwind(4)]
++ fn table_canonical() {
++  let i:usize=kani::any();kani::assume(i<512);
++  assert!(TABLE_A[i].0<0x7fff_ffff);assert!(TABLE_A[i].1<0x7fff_ffff);
++  assert!(TABLE_B[i].0<0x7fff_ffff);assert!(TABLE_B[i].1<0x7fff_ffff);
++ }
++}

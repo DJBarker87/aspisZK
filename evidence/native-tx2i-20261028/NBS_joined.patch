@@ -1,0 +1,71 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -249,3 +249,68 @@
+  #[kani::proof] #[kani::unwind(928)] #[kani::stub(EbyKDot::push,push)] fn second(){run::<1>();}
+  #[kani::proof] #[kani::unwind(928)] #[kani::stub(EbyKDot::push,push)] fn third(){run::<2>();}
+ }
++
++#[cfg(kani)] mod NBS_joined {
++use super::*;
++// ONE arbitrary source term after its eight product cuts. No multiplication
++// is executed here: NBS_DotTerm.update pairs all eight exact emitted cells.
++#[kani::proof] #[kani::unwind(64)]
++fn eight_cells(){
++ let mut sums:[u64;8]=kani::any();let p:[u64;8]=kani::any();let before=sums;
++ let n:u64=kani::any();kani::assume(n<4);
++ kani::assume(sums[0]<=n*4611686009837453316&&p[0]<=4611686009837453316);
++ kani::assume(sums[1]<=n*4611686009837453316&&p[1]<=4611686009837453316);
++ kani::assume(sums[2]<=n*4611686009837453316&&p[2]<=4611686009837453316);
++ kani::assume(sums[3]<=n*4611686009837453316&&p[3]<=4611686009837453316);
++ kani::assume(sums[4]<=n*4611686009837453316&&p[4]<=4611686009837453316);
++ kani::assume(sums[5]<=n*4611686009837453316&&p[5]<=4611686009837453316);
++ kani::assume(sums[6]<=n*4611686009837453316&&p[6]<=4611686009837453316);
++ kani::assume(sums[7]<=n*4611686009837453316&&p[7]<=4611686009837453316);
++ sums[0]+=p[0];
++ sums[1]+=p[1];
++ sums[2]+=p[2];
++ sums[3]+=p[3];
++ sums[4]+=p[4];
++ sums[5]+=p[5];
++ sums[6]+=p[6];
++ sums[7]+=p[7];
++ assert!(sums[0]==before[0]+p[0]);assert!(sums[0]<18446744073709551615);
++ assert!(sums[1]==before[1]+p[1]);assert!(sums[1]<18446744073709551615);
++ assert!(sums[2]==before[2]+p[2]);assert!(sums[2]<18446744073709551615);
++ assert!(sums[3]==before[3]+p[3]);assert!(sums[3]<18446744073709551615);
++ assert!(sums[4]==before[4]+p[4]);assert!(sums[4]<18446744073709551615);
++ assert!(sums[5]==before[5]+p[5]);assert!(sums[5]<18446744073709551615);
++ assert!(sums[6]==before[6]+p[6]);assert!(sums[6]<18446744073709551615);
++ assert!(sums[7]==before[7]+p[7]);assert!(sums[7]<18446744073709551615);
++}
++// ONE source folded group, all eight words on the SAME pre-state.
++#[kani::proof] #[kani::unwind(64)]
++fn eight_folds(){
++ let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let before=limbs;
++ let n:u64=kani::any();kani::assume(n<7);
++ kani::assume(limbs[0]<=n*10737418238);
++ kani::assume(limbs[1]<=n*10737418238);
++ kani::assume(limbs[2]<=n*10737418238);
++ kani::assume(limbs[3]<=n*10737418238);
++ kani::assume(limbs[4]<=n*10737418238);
++ kani::assume(limbs[5]<=n*10737418238);
++ kani::assume(limbs[6]<=n*10737418238);
++ kani::assume(limbs[7]<=n*10737418238);
++ limbs[0]+=(sums[0]&0x7fff_ffff)+(sums[0]>>31);
++ limbs[1]+=(sums[1]&0x7fff_ffff)+(sums[1]>>31);
++ limbs[2]+=(sums[2]&0x7fff_ffff)+(sums[2]>>31);
++ limbs[3]+=(sums[3]&0x7fff_ffff)+(sums[3]>>31);
++ limbs[4]+=(sums[4]&0x7fff_ffff)+(sums[4]>>31);
++ limbs[5]+=(sums[5]&0x7fff_ffff)+(sums[5]>>31);
++ limbs[6]+=(sums[6]&0x7fff_ffff)+(sums[6]>>31);
++ limbs[7]+=(sums[7]&0x7fff_ffff)+(sums[7]>>31);
++ assert!(limbs[0]==before[0]+(sums[0]%2147483648)+(sums[0]/2147483648));assert!(limbs[0]<=75161927666);
++ assert!(limbs[1]==before[1]+(sums[1]%2147483648)+(sums[1]/2147483648));assert!(limbs[1]<=75161927666);
++ assert!(limbs[2]==before[2]+(sums[2]%2147483648)+(sums[2]/2147483648));assert!(limbs[2]<=75161927666);
++ assert!(limbs[3]==before[3]+(sums[3]%2147483648)+(sums[3]/2147483648));assert!(limbs[3]<=75161927666);
++ assert!(limbs[4]==before[4]+(sums[4]%2147483648)+(sums[4]/2147483648));assert!(limbs[4]<=75161927666);
++ assert!(limbs[5]==before[5]+(sums[5]%2147483648)+(sums[5]/2147483648));assert!(limbs[5]<=75161927666);
++ assert!(limbs[6]==before[6]+(sums[6]%2147483648)+(sums[6]/2147483648));assert!(limbs[6]<=75161927666);
++ assert!(limbs[7]==before[7]+(sums[7]%2147483648)+(sums[7]/2147483648));assert!(limbs[7]<=75161927666);
++}
++}
