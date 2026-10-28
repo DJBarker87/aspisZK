@@ -99,7 +99,7 @@ recorded in NBX_OP53_FINDING.md. No headline/security/runtime assumption changes
 
 Stage3 completed: all23 NBX positive/control pairs K003–048 behave as
 expected; K049 additionally verifies empty-slice WrongLength from all seven
-actual decoder entry points (a copy-free boundary check, not arbitrary-length
+actual decoder entry points (an unpaired diagnostic, not native closure credit or arbitrary-length
 closure). No solver timeout, memory kill, unwinding failure or cap increase.
 K031/032 policy validator, K033–036 identity/policy decoders, K037/038 ASQ8
 wrong-magic frame, K039/040 master store, K041/042 checkpoint store,
@@ -112,3 +112,38 @@ row from an arbitrary initial state, by induction; no concrete array replay.
 nonempty_return_write proves the precise return-data effect obstruction.
 All printed axioms are standard. The aggregate installed-selection candidate
 is still pending missing unchanged imports and receives no proof credit yet.
+
+## Checked actual headline path
+
+The previously inspection-only installed projection is now kernel checked.
+NBX_HeadlineSelection.nativeMissing updates ONLY the existing seven op15/op25–30
+fields of ONE IDa_Deployed.Uninstalled record. seed_instance identifies its
+actual IDa seed with the same existing Configuration update. selected proves
+all seven candidate functions survive IDa.deployedConfiguration and the outer
+FIp installation. NBX_SeedAdapter.adapter proves the loaded seed's adapter is
+exactly missing.adapter; the printed definition matches the frozen cohort
+source. No law or additional dictionary carrier is introduced.
+
+NBX_HeadlineRetention.op23/op31/op32/op33/op34/op48/op49/op53 prove the exact
+same missing fields survive that actual headline path. Each consumes its named
+NBX_InstalledOpN.retained theorem, the seed identity and the small adapter closed
+form. This does NOT exhibit real native functions for those remaining slots or
+discharge their native caller/frame components. Their OPEN ledger is unchanged.
+
+L109 (headline selected/seed/remaining-adapter): exit0,4.815092277s,
+peakRSS5,586,868KiB,swaps0. L111 (seed projection plus printed definition):
+exit0,5.166297626s,peakRSS5,582,440KiB,swaps0. L112 (all eight actual headline
+retention equations): exit0,5.410560397s,peakRSS5,583,944KiB,swaps0. Every new root
+uses only propext/Classical.choice/Quot.sound. L110 is rejected simplification
+failure; the named seed projection fixes it. All exact sources/import object
+pins/commands/cgroups/axioms are retained, including rejected attempts.
+
+Private missing-dependency bootstrap is not new soundness credit:87 accepted
+single-module builds reuse unchanged existing sources; generated wrapper/fallback
+modules recovered from retained cohort/closed-leaf sources change only import
+spellings, with byte-identical non-import bodies (NBX_IMPORT_NORMALIZATION.json).
+No coherent/shared source or object is rewritten. New NBX proofs retain default
+heartbeat/depth options. Rejected normalization shapes L073/L075/L076 are replaced
+by NBX_AdapterShape.adapter and NBX_SdkRetention plus existing NBK lemmas, not by
+larger resource limits. L076 admission refused once and waited180s before a fresh
+exit0/allowed:true receipt; no prover launched on the refusal.

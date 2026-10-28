@@ -35,7 +35,23 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('admission refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBX_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2codec-cache-20261028:'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'Private prefix modules; persistent leaf cache and coherent SInt2; Aeneas objects pinned in NBX_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+# Own validation repair: pin the actual first-resolved direct import objects.
+import re
+imports=re.findall(r'^import (\S+)',local.read_text(),re.M)
+pin_code=f"""from pathlib import Path
+import hashlib,json
+roots=[Path('/home/dombarker/project-offloads/codex-cx-tx2codec-cache-20261028'),Path({C!r}),Path({(C+'/objects')!r})]
+pins={{}}
+for name in {imports!r}:
+ rel=name.replace('.','/')+'.olean';p=next((r/rel for r in roots if (r/rel).is_file()),None)
+ assert p is not None,('missing import',name)
+ pins[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size)
+print(json.dumps(pins,sort_keys=True))
+"""
+pin_run=ssh('python3 -c '+shlex.quote(pin_code));assert pin_run.returncode==0,pin_run.stdout+pin_run.stderr
+import_pins=json.loads(pin_run.stdout)
+(E/(a+'-imports.json')).write_text(json.dumps(import_pins,indent=2)+'\n')
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBX_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2codec-cache-20261028:'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'sha256':hashlib.sha256(json.dumps(import_pins,sort_keys=True).encode()).hexdigest(),'direct_imports':import_pins,'Aeneas':'NBX_LIBRARY_PIN.json','private_dependency_journal_sha256':hashlib.sha256((E/'NBX_DEPENDENCY_ATTEMPTS.jsonl').read_bytes()).hexdigest() if (E/'NBX_DEPENDENCY_ATTEMPTS.jsonl').exists() else None},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBX_LAUNCHER_INPUTS.json').read_text()))

@@ -1,0 +1,9 @@
+def AspisR1.IDa_Deployed.seed : {CoreError : Type} →
+  IDa_Deployed.Uninstalled CoreError →
+    NP6_StdModel.Reservation → DrvC_Installation.Configuration FIo_Install.W CoreError :=
+fun {CoreError} missing reservation =>
+  { adapter := missing.adapter, currentBase := missing.currentBase, stageBase := missing.stageBase,
+    finish := IDa_Deployed.finish reservation, reserved := missing.reserved, query := missing.query,
+    geometry := missing.geometry, boundaries := IDa_Deployed.boundaries reservation,
+    std := NP6_StdModel.calls reservation }
+'NBX_SeedAdapter.adapter' depends on axioms: [propext, Classical.choice, Quot.sound]
