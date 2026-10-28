@@ -1,0 +1,611 @@
+--- NBW normalized
++++ NBZ normalized
+@@ -1227,3 +1227,608 @@
+     kani::cover!(terms&3==3);kani::cover!(terms&3!=3);
+ }
+ 
++
++// NBZ matched negative controls; positive definitions above are unchanged.
++fn KNB_prefix_case_negative(){
++ let next:usize=kani::any();kani::assume(next<10);let u:u32=kani::any();kani::assume(u<262144);
++ let k:usize=kani::any();kani::assume(k<8);let mut queries=[0;22];queries[next]=u;
++ let alpha=KNB_any_e();let folded=KNB_any_e();let values=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[alpha,KNB_any_e()],rho:K::ZERO,queries,semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let proof:[u8;832]=kani::any();let g:[E;29]=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ let geometry=QueryGeometry{start:kani::any(),inverses:Vec::new(),line_z:Vec::new()};
++ unsafe {KNB_Q=next;KNB_COORD=k;KNB_PROOF=proof.as_ptr();KNB_G=g.as_ptr();KNB_GEOM=&geometry;KNB_ALPHA=alpha;
++ KNB_DOTS=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ KNB_INV=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ KNB_FOLD=folded;KNB_VALUES=values;}
++ let out=KNB_prefix(&proof,&p,next,&g,&geometry);
++ if folded!=values[(u%4)as usize] {assert!(matches!(out,Err(Error::Query)));}
++ else {let(f,v,inv)=out.unwrap();assert_eq!(f.to_limbs()[k],folded.to_limbs()[k]);
++ let j:usize=kani::any();kani::assume(j<4);assert_ne!(v[j].to_limbs()[k],values[j].to_limbs()[k]);
++ unsafe{assert_eq!(inv[k%5],KNB_INV[k%5]);}}
++ unsafe{assert_eq!(KNB_EVENT,8);}
++ kani::cover!(folded==values[(u%4)as usize]);kani::cover!(folded!=values[(u%4)as usize]);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(1024)]
++#[kani::stub(super::opening,KNB_open)]
++#[kani::stub(crate::fast_dots::four_dots,KNB_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,KNB_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,KNB_circle)]
++#[kani::stub(crate::weights::field,KNB_field)]
++fn KNB_prefix_all_g_negative(){KNB_prefix_case_negative()}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(1024)]
++#[kani::stub(crate::verifier::line_fold_with_inverses,KNB_line)]
++fn KNB_line_geometry_routing_negative() {
++ let i:usize=kani::any();kani::assume(i<10);let start:usize=kani::any();kani::assume(start<=i);
++ let k:usize=kani::any();kani::assume(k<8);let alpha=KNB_any_e();let line=KNB_any_e();
++ let values=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ let inverse=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let zs:[u32;10]=kani::any();
++ let geometry=QueryGeometry{start,inverses:Vec::new(),line_z:Vec::from([
++ M31(zs[0]),M31(zs[1]),M31(zs[2]),M31(zs[3]),M31(zs[4]),M31(zs[5]),M31(zs[6]),M31(zs[7]),M31(zs[8]),M31(zs[9])])};
++ unsafe{KNB_COORD=k;KNB_ALPHA1=alpha;KNB_LINE=line;KNB_VALUES=values;KNB_INV=inverse;}
++ let(out,z)=KNB_line_geometry(alpha,values,&inverse,i,&geometry);
++ assert_eq!(out.to_limbs()[k],line.to_limbs()[k]);assert_ne!(z.0,zs[i-start]);
++ assert_eq!(geometry.start,start);assert_eq!(geometry.line_z.len(),10);
++ unsafe{assert_eq!(KNB_LINE_CALLS,1);}
++ kani::cover!(start==i);kani::cover!(i==9);kani::cover!(start<i);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(1024)]
++fn KNB_tail_assignment_negative() {
++ let mut next:usize=kani::any();kani::assume(next<10);let mut terms:usize=kani::any();kani::assume(terms==next);
++ let old=next;let mut rhs=KNB_any_e();let old_rhs=rhs;let returned_rhs=KNB_any_e();
++ let mut power=K::ZERO;let returned_power=KNB_any_e().c0();let k:usize=kani::any();kani::assume(k<8);
++ terms+=1;
++ assert_eq!(rhs.to_limbs()[k],old_rhs.to_limbs()[k]);
++ rhs=returned_rhs;crate::trace::value(11,next,rhs);
++ power=returned_power;next+=1;
++ assert_eq!(next,old+1);assert_eq!(terms,next);assert_ne!(rhs.to_limbs()[k],returned_rhs.to_limbs()[k]);
++ let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];assert_eq!(words(power)[k%4],words(returned_power)[k%4]);
++ kani::cover!(old==0);kani::cover!(old==9);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::update_residue_row,KNB_update)]
++fn KNB_borrowed_push_frame_negative() {
++ let mut raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let terms:usize=kani::any();let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let before=raw[j][k];let power=K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}};let basis=M31(kani::any());let reply:[u64;4]=kani::any();
++ unsafe{KNB_ROW_PTR=raw.as_ptr().add(i);KNB_ROW_FLUSH=terms&3==3;KNB_ROW_POWER=power;KNB_ROW_BASIS=basis;KNB_ROW_REPLY=reply;KNB_COORD=k;}
++ KNB_push_borrowed(&mut raw,terms,i,power,basis);
++ assert_ne!(raw[j][k],if i==j {reply[k]}else{before});unsafe{assert_eq!(KNB_ROW_CALLS,1);}
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i!=j);kani::cover!(terms&3==3);kani::cover!(terms&3!=3);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,KNB_reduce)]
++fn KNB_finish_one_store_negative() {
++ let raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let b=BatchedWeights{raw:Vec::from(raw),terms:kani::any()};
++ let mut out:[K;64]=[K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}];
++ let i:usize=kani::any();kani::assume(i<=64);let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);
++ let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];let before=words(out[j])[k];
++ let returned:[u32;4]=kani::any();kani::assume(returned[0]<2147483647);kani::assume(returned[1]<2147483647);kani::assume(returned[2]<2147483647);kani::assume(returned[3]<2147483647);
++ unsafe{KNB_REDUCE_OUTPUT=returned;if i<64 {KNB_REDUCE_INPUT=b.raw[i];}}
++ {let mut iter=out.iter_mut().enumerate();if i>0 {let _=iter.nth(i-1);}if let Some((index,w))=iter.next(){*w=b.value(index);}}
++ assert_ne!(words(out[j])[k],if i<64&&i==j {returned[k]}else{before});
++ unsafe{assert_eq!(KNB_REDUCE_CALLS,if i<64 {4}else{0});}
++ assert_eq!(b.raw.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);kani::cover!(i!=j);
++}
++
++fn KNB_full_proof_prefix_case_negative(){
++ let next:usize=kani::any();kani::assume(next<10);let u:u32=kani::any();kani::assume(u<262144);
++ let k:usize=kani::any();kani::assume(k<8);let mut queries=[0;22];queries[next]=u;
++ let alpha=KNB_any_e();let folded=KNB_any_e();let values=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[alpha,KNB_any_e()],rho:K::ZERO,queries,semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let proof:[u8;57607]=kani::any();let g:[E;29]=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ let geometry=QueryGeometry{start:kani::any(),inverses:Vec::new(),line_z:Vec::new()};
++ unsafe {KNB_Q=next;KNB_COORD=k;KNB_EVENT=1;KNB_PROOF=proof.as_ptr().add(crate::compact::OFF_OPENINGS+next*crate::compact::OPENING);KNB_G=g.as_ptr();KNB_GEOM=&geometry;KNB_ALPHA=alpha;
++ KNB_DOTS=[KNB_any_e(),KNB_any_e(),KNB_any_e(),KNB_any_e()];
++ KNB_INV=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ KNB_FOLD=folded;KNB_VALUES=values;}
++ let out=KNB_prefix(&proof,&p,next,&g,&geometry);
++ if folded!=values[(u%4)as usize] {assert!(matches!(out,Err(Error::Query)));}
++ else {let(f,v,inv)=out.unwrap();assert_eq!(f.to_limbs()[k],folded.to_limbs()[k]);
++ let j:usize=kani::any();kani::assume(j<4);assert_ne!(v[j].to_limbs()[k],values[j].to_limbs()[k]);
++ unsafe{assert_eq!(inv[k%5],KNB_INV[k%5]);}}
++ unsafe{assert_eq!(KNB_EVENT,8);}
++ kani::cover!(folded==values[(u%4)as usize]);kani::cover!(folded!=values[(u%4)as usize]);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(65536)]
++#[kani::stub(crate::fast_dots::four_dots,KNB_dots)]
++#[kani::stub(crate::verifier::QueryGeometry::for_query,KNB_inverse)]
++#[kani::stub(crate::verifier::circle_fold_with_inverses,KNB_circle)]
++#[kani::stub(crate::weights::field,KNB_field)]
++fn KNB_full_proof_prefix_negative(){KNB_full_proof_prefix_case_negative()}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::mark,KNB_mark_none)]
++fn KNB_return_carriers_negative() {
++ let i:usize=kani::any();kani::assume(i<10);let k:usize=kani::any();kani::assume(k<8);let j:usize=kani::any();kani::assume(j<64);
++ let rhs=KNB_any_e();let power=KNB_any_e().c0();let next:usize=kani::any();let terms:usize=kani::any();
++ let a=Accumulator{weights:Vec::from([K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}]),rhs,power,next};
++ let b=BatchedWeights{raw:Vec::from([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]),terms};
++ let aptr=a.weights.as_ptr();let bptr=b.raw.as_ptr();let acap=a.weights.capacity();let bcap=b.raw.capacity();
++ let words=|q:K|[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];let aw=words(a.weights[j])[k%4];let bw=b.raw[j][k%4];
++ unsafe{KNB_Q=i;}
++ let(a,b)=KNB_after_accumulation(a,b,i,None).unwrap();
++ assert_eq!(a.weights.as_ptr(),aptr);assert_eq!(b.raw.as_ptr(),bptr);assert_eq!(a.weights.capacity(),acap);assert_eq!(b.raw.capacity(),bcap);
++ assert_eq!(a.weights.len(),64);assert_eq!(b.raw.len(),64);assert_eq!(a.next,next);assert_eq!(b.terms,terms);
++ assert_eq!(a.rhs.to_limbs()[k],rhs.to_limbs()[k]);assert_eq!(words(a.power)[k%4],words(power)[k%4]);assert_ne!(words(a.weights[j])[k%4],aw);assert_eq!(b.raw[j][k%4],bw);
++ unsafe{assert_eq!(KNB_MARK_CALLS,1);}
++ kani::cover!(i==0);kani::cover!(i==9);kani::cover!(j==0);kani::cover!(j==63);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(crate::verifier::accumulate_batched_with_node,KNB_accumulate_observe)]
++fn KNB_node_dispatch_context_negative(){
++ let next:usize=kani::any();kani::assume(next<10);let square:u32=kani::any();kani::assume(square<2147483647);
++ let k:usize=kani::any();kani::assume(k<8);let line=KNB_any_e();let rhs=KNB_any_e();let power=KNB_any_e().c0();
++ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
++ let mut a=Accumulator{weights:Vec::from([K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}},K{c0:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())},c1:aspis_core::field::CM31{a:M31(kani::any()),b:M31(kani::any())}}]),rhs,power,next};
++ let mut b=BatchedWeights{raw:Vec::from([kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()]),terms:next};
++ unsafe{KNB_Q=next;KNB_COORD=k;KNB_LINE=line;KNB_INITIAL_RHS=rhs;KNB_INITIAL_POWER=power;KNB_PREPARED=&p;KNB_INITIAL_WEIGHT=a.weights.as_ptr();KNB_INITIAL_RAW=b.raw.as_ptr();KNB_DISPATCH_SQUARE=M31(square);}
++ KNB_node_dispatch(&p,&mut a,&mut b,M31(square),line);
++ unsafe{assert_eq!(KNB_DISPATCH_CALLS,2);}
++ kani::cover!(next==0);kani::cover!(next==9);kani::cover!(square==0);kani::cover!(square==2147483646);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,KNB_qscalar_spec)]
++fn KNB_wide_scalar_dispatch_negative(){
++ let x=KNB_any_e();let scalar:u32=kani::any();kani::assume(scalar<2147483647);let k:usize=kani::any();kani::assume(k<8);
++ let y=x.mul_m31(M31(scalar));
++ unsafe{assert_eq!(KNB_SCALAR_CALLS,2);assert_eq!(KNB_SCALAR_INPUT[k/4][k%4],x.to_limbs()[k]);assert_eq!(KNB_SCALAR_SCALE[k/4],scalar);assert_ne!(y.to_limbs()[k],KNB_SCALAR_OUTPUT[k/4][k%4]);}
++ kani::cover!(k==0);kani::cover!(k==7);kani::cover!(scalar==0);kani::cover!(scalar==2147483646);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_m31_canonical_reply)]
++fn KNB_basis_store_full_copy_bound_negative(){
++ let mut basis:[M31;256]=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let n:usize=kani::any();kani::assume(n>=1&&n<=128);
++ let j:usize=kani::any();kani::assume(j<n);let i:usize=kani::any();kani::assume(i<256);
++ let node:u32=kani::any();kani::assume(node<2147483647);kani::assume(basis[j].0<2147483647);
++ let old=basis[i];let input=basis[j];
++ basis[n+j]=basis[j].mul(M31(node));
++ unsafe{assert_eq!(KNB_MUL_CALLS,1);assert_eq!(KNB_MUL_X,input);assert_eq!(KNB_MUL_Y.0,node);assert_ne!(basis[i],if i==n+j {KNB_MUL_OUT}else{old});}
++ kani::cover!(n==1);kani::cover!(n==128);kani::cover!(j==127);kani::cover!(i==n+j);kani::cover!(i!=n+j);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++fn KNB_range_next_bounded_negative(){
++ let start:usize=kani::any();let end:usize=kani::any();kani::assume(start<=256);kani::assume(end<=256);
++ let mut iter=start..end;let result=iter.next();
++ if start<end {assert_eq!(result,Some(start));assert_eq!(iter.start,start+1);}
++ else {assert_eq!(result,None);assert_eq!(iter.start,start);}
++ assert_ne!(iter.end,end);
++ kani::cover!(start==0&&end==128);kani::cover!(start==end);kani::cover!(start>end);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++fn KNB_basis_initializer_negative(){
++ let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let n=1usize;
++ let i:usize=kani::any();kani::assume(i<256);
++ assert_ne!(basis[i],if i==0 {M31::ONE}else{M31::ZERO});assert_eq!(n,1);
++ kani::cover!(i==0);kani::cover!(i==255);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_m31_canonical_reply)]
++fn KNB_basis_outer_after_inner_negative(){
++ let mut n:usize=kani::any();kani::assume(n>=1&&n<=32);let oldn=n;
++ let mut node:u32=kani::any();kani::assume(node<2147483647);let oldnode=node;
++ node=M31(node).mul(M31(node)).double().sub(M31::ONE).0;n*=2;
++ assert_eq!(n,2*oldn);assert!(n<=64);assert!(node<2147483647);
++ unsafe{assert_eq!(KNB_MUL_CALLS,1);assert_eq!(KNB_MUL_X.0,oldnode);assert_eq!(KNB_MUL_Y.0,oldnode);assert_ne!(node,KNB_MUL_OUT.double().sub(M31::ONE).0);}
++ kani::cover!(oldn==1);kani::cover!(oldn==32);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++fn KNB_initializer_borrowed_step_negative(){
++ let weights:[K;64]=[KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>()),KNB_qfrom(kani::any::<[u32;4]>())];let mut raw:[[u64;4];64]=[kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>(),kani::any::<[u64;4]>()];let mut index:usize=kani::any();kani::assume(index<=64);let old_index=index;
++ let j:usize=kani::any();kani::assume(j<64);let k:usize=kani::any();kani::assume(k<4);let before=raw[j][k];let mut chosen=0;
++ if index<weights.len(){let w=weights[index];chosen=KNB_qwords(w)[k]as u64;raw[index]=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];index+=1;}
++ assert_eq!(index,old_index+usize::from(old_index<64));assert_ne!(raw[j][k],if old_index<64&&old_index==j {chosen}else{before});
++ kani::cover!(old_index==0);kani::cover!(old_index==63);kani::cover!(old_index==64);kani::cover!(old_index!=j);
++}
++
++fn KNB_coeff_common_h0_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_ne!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_eq!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_common_h0_negative(){KNB_coeff_common_h0_case_negative(0);}
++
++fn KNB_coeff_circle_h1_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_circle_h1_negative(){KNB_coeff_circle_h1_case_negative(1);}
++
++fn KNB_coeff_circle_h2_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_circle_h2_negative(){KNB_coeff_circle_h2_case_negative(2);}
++
++fn KNB_coeff_circle_h3_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_circle_h3_negative(){KNB_coeff_circle_h3_case_negative(3);}
++
++fn KNB_coeff_line_h2_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_line_h2_negative(){KNB_coeff_line_h2_case_negative(4);}
++
++fn KNB_coeff_line_c0_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_line_c0_negative(){KNB_coeff_line_c0_case_negative(5);}
++
++fn KNB_coeff_line_c1_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_line_c1_negative(){KNB_coeff_line_c1_case_negative(6);}
++
++fn KNB_coeff_line_h1_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_ne!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_eq!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_line_h1_negative(){KNB_coeff_line_h1_case_negative(7);}
++
++fn KNB_coeff_line_h3_case_negative(which:u8){
++ let a=KNB_any_e();let b=KNB_any_e();let c=KNB_any_e();let d=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let inv:[u32;5]=kani::any();kani::assume(inv[0]<2147483647);kani::assume(inv[1]<2147483647);kani::assume(inv[2]<2147483647);kani::assume(inv[3]<2147483647);kani::assume(inv[4]<2147483647);
++ let(arg,scale)=KNB_coefficient_cut(which,a,b,c,d,[M31(inv[0]),M31(inv[1]),M31(inv[2]),M31(inv[3]),M31(inv[4])]);
++ assert!(arg.to_limbs()[k]<2147483647);assert!(scale.0<2147483647);
++ unsafe{
++ let count=if which==0||which==7 {0}else if which==3 {2}else{1};assert_eq!(KNB_SCALE_CALLS,count);
++ if count==0 {assert_eq!(scale.0,if which==0 {536870912}else{1073741824});}
++ else {
++ let constant=if which<5 {536870912}else{1073741824};assert_eq!(KNB_SCALE_X[0],constant);
++ let slot=match which{1=>1,2|3=>0,4|8=>4,5=>2,_=>3};assert_eq!(KNB_SCALE_Y[0],inv[slot]);
++ if count==2{assert_eq!(KNB_SCALE_X[1],KNB_SCALE_OUT[0]);assert_eq!(KNB_SCALE_Y[1],inv[1]);}
++ assert_ne!(scale.0,KNB_SCALE_OUT[count-1]);
++ }
++ }
++ kani::cover!(k==0);kani::cover!(k==7);
++}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++#[kani::stub(aspis_core::field::M31::mul,KNB_scale_spec)]
++fn KNB_coeff_line_h3_negative(){KNB_coeff_line_h3_case_negative(8);}
++
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++
++#[kani::unwind(4096)]
++fn KNB_horner_argument_cut_negative(){
++ let alpha=KNB_any_e();let h=KNB_any_e();let previous=KNB_any_e();let k:usize=kani::any();kani::assume(k<8);
++ let(receiver,arg)=KNB_horner_argument(alpha,h,previous);
++ assert_ne!(receiver.to_limbs()[k],alpha.to_limbs()[k]);assert!(arg.to_limbs()[k]<2147483647);
++ kani::cover!(k==0);kani::cover!(k==7);
++}
