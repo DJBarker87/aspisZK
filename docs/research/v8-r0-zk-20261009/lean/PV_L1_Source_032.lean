@@ -33,8 +33,7 @@ theorem complete_result
       intro value called
     | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   all_goals
-    repeat' match goal with
-      | x : Prod _ _ ⊢ _ => cases x
+    cases value
     rfl
 #print axioms complete_result
 end PV_L1_Source_032

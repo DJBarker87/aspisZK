@@ -420,8 +420,7 @@ theorem complete_result
       intro value called
     | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_043.complete_result,PV_L1_Source_044.complete_result,PV_L1_Source_045.complete_result,PV_L1_Source_047.complete_result,PV_L1_Source_049.complete_result,PV_L1_Source_051.complete_result,PV_L1_Source_052.complete_result,PV_L1_Source_055.complete_result,PV_L1_Source_056.complete_result,PV_L1_Source_066.complete_result]
   all_goals
-    repeat' match goal with
-      | x : Prod _ _ ⊢ _ => cases x
+    cases value
     rfl
 #print axioms complete_result
 end PV_L1_Source_067
