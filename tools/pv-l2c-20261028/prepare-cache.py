@@ -24,8 +24,8 @@ for m,x in rows.items():
   q=p.with_suffix(suffix) if suffix=='.ilean' else pathlib.Path(str(p)[:-6]+suffix)
   if not q.is_file():continue
   dest=H/'objects'/(m.replace('.','/')+suffix);dest.parent.mkdir(parents=True,exist_ok=True)
-  assert not dest.exists() and not dest.is_symlink(),str(dest)
-  dest.symlink_to(q.resolve())
+  if dest.exists() or dest.is_symlink():assert dest.is_file() and hashlib.sha256(dest.read_bytes()).digest()==hashlib.sha256(q.read_bytes()).digest(),str(dest)
+  else:dest.symlink_to(q.resolve())
   checks.append(dict(module=m,suffix=suffix,path=str(dest),retained=str(q.resolve()),sha256=hashlib.sha256(q.read_bytes()).hexdigest()))
 print(json.dumps(dict(toolchain_match=True,project_modules=len(rows),objects=checks)))
 '''
