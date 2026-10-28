@@ -37,7 +37,8 @@ theorem step (ops : ExternalFuns) (values p : Nat → Q) (i : Usize) (hi : i.val
       let scale ← @aspis_core.field.QM31.mul_m31 _ (ProverRwP6BodyCandidate.selected ops) (values i.val) m
       let out1 ← @host_sumcheck.interpolation_accumulate _ (ProverRwP6BodyCandidate.selected ops)
         (array p) (ProverCommitM31Array48.array 28#usize basis) scale
-      .ok (.cont (out1,Usize.wrapping_add i 1#usize))) = _
+      Result.ok (ControlFlow.cont (out1,Usize.wrapping_add i 1#usize) :
+        ControlFlow ((Array Q 28#usize) × Usize) (Array Q 28#usize))) = _
     simp only [bind_tc_ok,inverse,hscale,hout,lift]
   · change ProverCommitM31Ops48.decode inv=(ProverCommitM31Ops48.decode den)⁻¹ at hdinv
     rw [hacc,hdscale,ProverCommitInterpolationEmbed48.source_embed,hdinv,hdd,hpoly]
