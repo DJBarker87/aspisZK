@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MaskFreeLaw132.lean:30:6: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+r c : Usize
+rem : UScalar UScalarTy.Usize
+hrem : r % 16#usize = Result.ok rem
+hval : ↑rem = ↑r % ↑16#usize
+hv : ↑rem = ↑r % 16
+hr : ¬↑r < 912
+h : ¬r < 912#usize
+hr' : ↑r < 1008
+h' : r < 1008#usize
+⊢ (if rem = 1#usize then ¬↑rem = 2 ∧ ¬↑rem = 6 ∧ ¬↑rem = 10 ∧ 8 < ↑c ∧ ¬↑rem = 14
+    else
+      if rem = 5#usize then ¬↑rem = 2 ∧ ¬↑rem = 6 ∧ ¬↑rem = 10 ∧ 8 < ↑c ∧ ¬↑rem = 14
+      else
+        if rem = 9#usize then ¬↑rem = 2 ∧ ¬↑rem = 6 ∧ ¬↑rem = 10 ∧ 8 < ↑c ∧ ¬↑rem = 14
+        else ¬↑rem = 2 ∧ ¬↑rem = 6 ∧ ¬↑rem = 10 ∧ if rem = 13#usize then 8 < ↑c ∧ ¬↑rem = 14 else ¬↑rem = 14) ↔
+    if ↑r < 912 then 13 ≤ ↑r % 16
+    else
+      if ↑r < 1008 then
+        (↑r % 16 = 1 ∨ ↑r % 16 = 5 ∨ ↑r % 16 = 9 ∨ ↑r % 16 = 13 → 8 < ↑c) ∧
+          ¬↑r % 16 = 2 ∧ ¬↑r % 16 = 6 ∧ ¬↑r % 16 = 10 ∧ ¬↑r % 16 = 14
+      else ¬PV_B3P_MaskModel132.valueUsed (↑r - 1008) ↑c
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MaskFreeLaw132.lean:34:6: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'PV_B3P_MaskFreeLaw132.free_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
