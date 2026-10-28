@@ -6,13 +6,13 @@ set_option autoImplicit false
 
 /-- Explicit big-endian suffix. Only eight byte casts are constructed. -/
 def suffix (bits : U64) : Array U8 8#usize :=
-  Array.make 8#usize [UScalar.cast .U8 (U64.wrapping_shr bits 56#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 48#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 40#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 32#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 24#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 16#u64),
-    UScalar.cast .U8 (U64.wrapping_shr bits 8#u64),UScalar.cast .U8 bits]
+  Array.make 8#usize [UScalar.cast .U8 (U64.wrapping_shr bits 56#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 48#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 40#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 32#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 24#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 16#u32),
+    UScalar.cast .U8 (U64.wrapping_shr bits 8#u32),UScalar.cast .U8 bits]
 
 theorem suffix_length (bits : U64) : (suffix bits).val.length=8 :=
   (suffix bits).property
