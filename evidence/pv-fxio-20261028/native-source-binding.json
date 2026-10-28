@@ -2,7 +2,7 @@
   "source_path": "crates/aspis-prover/src/state_only_entropy.rs",
   "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
   "native_path": "tools/pv-fxio-20261028/native-repeat.rs",
-  "native_sha256": "7c8f4210158a5171271fa17c01b139e1d55a945f8b121874b48ef6c585c1d21c",
+  "native_sha256": "42c487f3a71b51ba93a592db5d0af0c945d74f7a07ec5b78cf63312f1157d727",
   "copied_body_sha256": "e89b859ebae58d0c0a519d216951464425a4d078088758ac5dfa7fb9b1a2354b",
   "exact_body": "        let mut options = OpenOptions::new();\n        options.write(true).create_new(true);\n        #[cfg(unix)]\n        options.mode(0o600);\n        let mut file = match options.open(path) {\n            Ok(file) => file,\n            Err(error) if error.kind() == io::ErrorKind::AlreadyExists => return Ok(false),\n            Err(error) => return Err(error),\n        };\n\n        // A partially written file is still a burned nonce. Never remove it\n        // on failure.\n        file.write_all(RESERVATION_MAGIC)?;\n        file.write_all(&statement_digest)?;\n        file.write_all(&mask_nonce)?;\n        file.sync_all()?;\n        sync_directory(&self.directory)?;\n        Ok(true)",
   "adaptations": [

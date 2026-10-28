@@ -56,6 +56,21 @@ theorem no_fixed_complete_result {Options Path Complete : Type}
        decode (callback options path) = (createNew createdWorld).1) :=
   no_fixed_callback (fun o p => decode (callback o p)) options path
 
+/-- Both states are inhabited with concrete path, descriptor, contents and
+persistence flag. No assumption of impossible worlds is used. -/
+theorem nonvacuous : ∃ before after : FileWorld,
+    before.exists = false ∧ after.exists = true ∧
+    before.path = after.path ∧
+    (createNew before).1 ≠ (createNew after).1 :=
+  ⟨emptyWorld,createdWorld,rfl,rfl,rfl,distinct_results⟩
+
+/-- Explicitly consuming/returning a world does represent the checked pair;
+there is no impossibility result against an effect-aware replacement. -/
+theorem threaded_reference :
+    createNew (createNew emptyWorld).2 = (.alreadyExists,createdWorld) := rfl
+
+#print axioms nonvacuous
+#print axioms threaded_reference
 #print axioms first_result
 #print axioms second_result
 #print axioms same_path

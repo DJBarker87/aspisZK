@@ -34,15 +34,19 @@ fn main() {
  let mut store=Store { directory:directory.clone() };
  let nonce=[0x42;32]; let digest=[0x73;32];
  assert!(!path.exists());
+ let mut reference_exists=false;
+ let reference_first=if reference_exists { false } else { reference_exists=true; true };
  let first=store.reached_suffix(path.clone(),digest,nonce).unwrap();
  let after_first=fs::read(&path).unwrap();
+ let reference_second=if reference_exists { false } else { reference_exists=true; true };
  let second=store.reached_suffix(path.clone(),digest,nonce).unwrap();
  let after_second=fs::read(&path).unwrap();
- assert!(first); assert!(!second); assert_eq!(after_first,after_second);
+ assert_eq!((first,second),(reference_first,reference_second));
+ assert!(reference_exists); assert!(first); assert!(!second); assert_eq!(after_first,after_second);
  assert_eq!(after_first.len(),80);
  let e=OpenOptions::new().write(true).create_new(true).mode(0o600).open(&path).unwrap_err();
  assert_eq!(e.kind(),io::ErrorKind::AlreadyExists);
- println!("{{\\"evidence_class\\":\\"finite validation\\",\\"first_reserve\\":true,\\"second_reserve\\":false,\\"same_path\\":true,\\"same_options\\":true,\\"same_digest\\":true,\\"same_nonce\\":true,\\"error_kind\\":\\"AlreadyExists\\",\\"raw_os_error\\":{:?},\\"contents_bytes\\":80,\\"contents_unchanged_on_repeat\\":true,\\"path\\":\\"{}\\",\\"crash_durability_tested\\":false}}",e.raw_os_error(),path.display());
+ println!("{{\\"evidence_class\\":\\"finite validation\\",\\"first_reserve\\":true,\\"second_reserve\\":false,\\"same_path\\":true,\\"same_options\\":true,\\"same_digest\\":true,\\"same_nonce\\":true,\\"error_kind\\":\\"AlreadyExists\\",\\"raw_os_error\\":{:?},\\"contents_bytes\\":80,\\"contents_unchanged_on_repeat\\":true,\\"path\\":\\"{}\\",\\"crash_durability_tested\\":false}}",e.raw_os_error().unwrap(),path.display());
 }
 '''
 out=R/'tools/pv-fxio-20261028/native-repeat.rs';out.write_text(header+body+main)
