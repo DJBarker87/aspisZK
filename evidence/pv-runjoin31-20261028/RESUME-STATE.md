@@ -181,3 +181,37 @@ Current single driver44649 CanonicalHonest31. Budget83charged(51accepted,
 32rejected),17remaining before49. CanonicalHonest31 is the sole unchecked
 existing source candidate. After it passes, write/check exact ready↔prepared
 coverage and owner sentence, then V038/V045. Preserve97-99 audit IDs.
+
+Coverage complete: CanonicalHonest31.transfer/withdrawal passed49, coverage
+ready↔prepared+HonestInput equivalences passed50. Owner sentence and exact
+premise accounting committed in OWNER-COVERAGE.md at ef3963d983. No deployed
+endpoint field removed; residual semantic admission on canonical preparations
+is discharged. Only now V038/V045 started.
+
+V045 substep: SnapshotRoot31.equal_of_eq/frame/checked passed51. Root validation
+compares the supplied root to reconstruction; reconstruction ignores the supplied
+root. Nonfull bound is essential (full validator branch does not check root).
+RootConstructor31 first failed56 on reserved identifier public, renamed validated
+and passed57 (owned,validated,bound). Current single driver67 AppendCapacity31.
+Budget88charged(55accepted,33rejected),12remaining before67. Unlaunched IDs67,68,
+69,70,72,74,83,84,85 and97-99(audits). After67: LateSnapshot31 with exact empty
+root call and read, then initial-root uniqueness for equal index/frontier on
+successful late appends; canonical/public agreement step next. Context bytes
+(pool/deployment/destination) are not in the semantic Public and stay explicit P
+obligations; do not infer full native public equality from semantic equality alone.
+No deployment selector search, no new T, no changed observer/simulator/source.
+
+Focused budget complete through85:97 charged(61accepted,36rejected),3remaining
+reserved97-99. V045 SnapshotRoot51,RootConstructor57,AppendCapacity67,LateSnapshot68,
+SnapshotUnique69,CanonicalWordEq72,SnapshotAgreement74,NativeSnapshot85 all pass.
+Failures56syntax,70field inference,83/84native dictionary instances were changed
+before retry. V045-SNAPSHOT.md states exact scope; no full V038/V045 closure.
+
+Final audit sources are committed at d1875a611a: CanonicalAudit31(97),
+SnapshotAudit31(98),FinalAudit31(99). A local resolve-admission.py process is active
+for FinalAudit31; no host scope currently active. Collect resolution, verify cache,
+verify replay reuse(h6), verify external objects(h4), then compile97,inspect,98,
+inspect,99 in order. Never send a dependent of a failed audit. No additional
+focused IDs remain; all99 except97-99 already have actual compile receipts.
+Do not rerun unchanged compiles/differentials/measurements. Admission refusals
+stay uncharged, retry same ID after>=180s. Final report/tally/commits still pending.
