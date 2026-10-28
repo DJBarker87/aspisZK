@@ -10,7 +10,7 @@ rows=json.loads(MANIFEST);linked=[]
 for r in rows:
  p=Path(r['path']);assert hashlib.sha256(p.read_bytes()).hexdigest()==r['object_sha256'],r['module']
  target=D/(r['module']+'.olean');target.parent.mkdir(parents=True,exist_ok=True)
- for source,dest in [(p,target),(Path(str(p)+'.server'),Path(str(target)+'.server')),(Path(str(p)+'.private'),Path(str(target)+'.private'))]:
+ for source,dest in [(p,target),(Path(str(p)+'.server'),Path(str(target)+'.server')),(Path(str(p)+'.private'),Path(str(target)+'.private')),(p.with_suffix('.ir'),target.with_suffix('.ir'))]:
   if source.exists():
    if dest.exists():assert hashlib.sha256(dest.read_bytes()).hexdigest()==hashlib.sha256(source.read_bytes()).hexdigest()
    else:dest.symlink_to(source);linked.append(str(dest))
