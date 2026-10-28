@@ -1,0 +1,88 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,6 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NBR_candidate;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBR_candidate.rs
+@@ -0,0 +1,69 @@
++use super::*;
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn NBR_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn NBR_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn NBR_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){NBR_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn NBR_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());NBR_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
++
++// Arbitrary initialized Vec pre-state with the exact constructor capacity.
++// Box<[u8;256]> and Vec<u8> with capacity256 have identical allocation layout.
++#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
++#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
++#[kani::proof] #[kani::unwind(35)]
++fn NBR_append_one_push(){
++ let backing:[u8;256]=kani::any();let n:usize=kani::any();kani::assume(n<256);
++ let i:usize=kani::any();kani::assume(i<=n);let old=backing[i];let value:u8=kani::any();
++ let ptr=alloc::boxed::Box::into_raw(alloc::boxed::Box::new(backing)) as *mut u8;
++ let mut v=unsafe{alloc::vec::Vec::from_raw_parts(ptr,n,256)};
++ let extra:usize=kani::any();kani::assume(extra<=256-n);v.reserve(extra);
++ assert_eq!(v.as_ptr(),ptr);assert_eq!(v.len(),n);assert_eq!(v.capacity(),256);
++ v.push(value);
++ assert_eq!(v.as_ptr(),ptr);assert_eq!(v.len(),n+1);assert_eq!(v.capacity(),256);
++ assert_eq!(v[i],if i==n{value}else{old});
++ kani::cover!(n==255,"last source append iteration reaches capacity without growth");
++}
++#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
++#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
++#[kani::proof] #[kani::unwind(35)]
++fn NBR_append_constructor(){
++ let v=alloc::vec::Vec::<u8>::with_capacity(32+224);
++ assert_eq!(v.len(),0);assert_eq!(v.capacity(),256);
++ kani::cover!(true,"opening obtains the empty exact-capacity append carrier");
++}

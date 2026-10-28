@@ -1,0 +1,84 @@
+use super::*;
+use alloc::vec::Vec;
+// Scratch-only replacements. T: Copy excludes Clone side effects.
+#[inline(never)]
+pub unsafe fn NBR_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
+}
+#[inline(never)]
+pub fn NBR_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
+}
+#[inline(never)]
+pub fn NBR_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){NBR_copy_from_slice(dst,src)}
+#[inline(never)]
+pub fn NBR_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
+}
+#[inline(never)]
+pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
+    let mut dst=Vec::with_capacity(src.len());NBR_extend_from_slice(&mut dst,src);dst
+}
+// Match the successful-reallocation byte law, preserving the old allocation on failure.
+// MaybeUninit permits copying spare-capacity bytes without reading them as values.
+pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
+ let out=unsafe{alloc::alloc::alloc(new_layout)};
+ if !out.is_null(){
+  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
+   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
+   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
+  }
+  unsafe{alloc::alloc::dealloc(ptr,layout)};
+ }
+ out
+}
+
+#[derive(Clone,Copy)]struct NBR_Digest;
+impl Digest32 for NBR_Digest{fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"digest is after these producer cuts");[0;32]}}
+static mut NBR_PROOF:*const u8=core::ptr::null();static mut NBR_LOGICAL:*mut u8=core::ptr::null_mut();static mut NBR_STAGE:u8=0;static mut NBR_VIEW:bool=false;
+fn NBR_alloc<T:Copy>(n:usize,_value:T)->Result<Vec<T>,aspis_core::r0::Error>{
+ assert_eq!(n,14759);assert_eq!(core::mem::size_of::<T>(),1);assert_eq!(core::mem::align_of::<T>(),1);
+ let data=Box::new(kani::any::<[u8;14759]>());let ptr=Box::into_raw(data) as *mut T;
+ unsafe{NBR_LOGICAL=ptr as *mut u8;Ok(Vec::from_raw_parts(ptr,n,n))}
+}
+fn NBR_sem(input:&[u8],out:&mut[u8])->Result<(),CodecError>{unsafe{
+ assert_eq!(NBR_STAGE,0);assert_eq!(input.as_ptr(),NBR_PROOF.add(16));assert_eq!(input.len(),7015);assert_eq!(out.as_ptr(),NBR_LOGICAL);assert_eq!(out.len(),13831);NBR_STAGE=1;Ok(())
+}}
+fn NBR_y1(input:&[u8],out:&mut[u8])->Result<(),CodecError>{unsafe{
+ assert_eq!(NBR_STAGE,1);assert_eq!(input.as_ptr(),NBR_PROOF.add(7031));assert_eq!(input.len(),464);assert_eq!(out.as_ptr(),NBR_LOGICAL.add(13831));assert_eq!(out.len(),928);NBR_STAGE=2;
+ if !NBR_VIEW{kani::cover!(true,"actual prepare reaches SAME compact/y1 producer after semantic producer");kani::assume(false);}
+ Ok(())
+}}
+fn NBR_view<'a>(proof:&'a[u8],semantic:&'a[u8],y1:&'a[u8])->Result<View<'a>,Error>{unsafe{
+ assert_eq!(NBR_STAGE,2);assert_eq!(proof.as_ptr(),NBR_PROOF);assert_eq!(proof.len(),57607);assert_eq!(semantic.as_ptr(),NBR_LOGICAL);assert_eq!(semantic.len(),13831);assert_eq!(y1.as_ptr(),NBR_LOGICAL.add(13831));assert_eq!(y1.len(),928);
+ kani::cover!(true,"wide_view borrows SAME allocation after both producing calls");kani::assume(false);Err(Error::Parse)
+}}
+fn NBR_prepare_fixture(view:bool){
+ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};let proof:[u8;57607]=kani::any();let mut g:[E;29]=unsafe{core::mem::transmute::<[u8;928],[E;29]>(kani::any())};unsafe{NBR_PROOF=proof.as_ptr();NBR_STAGE=0;NBR_VIEW=view;}
+ let _=prepare(Public::Transfer(&p,&t),&proof,NBR_Digest,None,&mut g);assert!(false,"selected source call cut terminates all paths");
+}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof]#[kani::unwind(3)]
+#[kani::stub(aspis_core::r0::heap::filled::<u8>,NBR_alloc)]
+#[kani::stub(crate::compact::expand_semantic,NBR_sem)]
+#[kani::stub(crate::compact::expand_values,NBR_y1)]
+#[kani::stub(crate::verifier::candidate::wide_view,NBR_view)]
+fn NBR_prepare_y1_cut(){NBR_prepare_fixture(false)}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof]#[kani::unwind(3)]
+#[kani::stub(aspis_core::r0::heap::filled::<u8>,NBR_alloc)]
+#[kani::stub(crate::compact::expand_semantic,NBR_sem)]
+#[kani::stub(crate::compact::expand_values,NBR_y1)]
+#[kani::stub(crate::verifier::candidate::wide_view,NBR_view)]
+fn NBR_prepare_view_cut(){NBR_prepare_fixture(true)}

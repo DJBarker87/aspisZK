@@ -1,0 +1,45 @@
+{"attempt": "NBR_L006", "exit_status": 0, "wall_seconds": 1.6166097070090473, "peak_rss_kib": "4714364", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Usize → alloc.vec.Vec T :=
+fun T x => alloc.vec.Vec.new T
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clo
+...
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Usize → alloc.vec.Vec T :=
+fun T x => alloc.vec.Vec.new T
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.core.clone.impls.CloneU8.clone : U8 → U8 :=
+fun x => x
+def Aeneas.Std.List.clone.{u_1} : {α : Type u_1} →
+  (α → Result α) → (l : List α) → Result { l' // l'.length = l.length } :=
+fun {α} clone l =>
+  match h : List.mapM clone l with
+  | ok v => ok ⟨v, ⋯⟩
+  | fail e => fail e
+  | div => div
+
+Running as unit: run-r02f77d9eb8424fc4ae56595a2a8b53f4.scope; invocation ID: c23ee05460c54783b2dca14b10d533b2

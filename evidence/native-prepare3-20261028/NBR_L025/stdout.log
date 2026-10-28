@@ -1,0 +1,52 @@
+NBR_generated/NBR_ValuesPort.lean:30:18: error: Tactic `rfl` failed: The left-hand side
+  (↑input)[j / 32 * 16 + j % 32]?.getD 0#u8
+is not definitionally equal to the right-hand side
+  LPt_LPl_A.Expand.byte (↑input) j
+
+case isTrue
+input initial : Slice U8
+bound : (↑input).length ≤ 1856
+aligned : (↑input).length % 16 = 0
+shape : (↑initial).length = 2 * (↑input).length
+after : List U8
+trace : LPt_LPn.Expand.NativeTrace (↑input) (↑initial) ((↑input).length / 16) after
+inherited : LPt_LPl.Expand.Trace (↑input) (↑initial) ((↑input).length / 16) after
+length : after.length = (↑initial).length
+returned : Slice U8 := ⟨after, ⋯⟩
+native : LPt_External.compact.expand_values input initial = ok (core.result.Result.Ok (), returned)
+output : Slice U8
+call : AspisS1ValuesOwnedInstallation.expandValues input initial = ok (core.result.Result.Ok (), output)
+size : output.length = initial.length
+bytes : ∀ j < output.length, (↑output)[j]? = if j % 32 < 16 then (↑input)[j / 32 * 16 + j % 32]? else some 0#u8
+j : ℕ
+hj : j < (↑output).length
+hk : j < after.length
+h✝ : j % 32 < 16
+⊢ (↑input)[j / 32 * 16 + j % 32]?.getD 0#u8 = LPt_LPl_A.Expand.byte (↑input) j
+NBR_generated/NBR_ValuesPort.lean:30:18: error: Tactic `rfl` failed: The left-hand side
+  (some 0#u8).getD 0#u8
+is not definitionally equal to the right-hand side
+  LPt_LPl_A.Expand.byte (↑input) j
+
+case isFalse
+input initial : Slice U8
+bound : (↑input).length ≤ 1856
+aligned : (↑input).length % 16 = 0
+shape : (↑initial).length = 2 * (↑input).length
+after : List U8
+trace : LPt_LPn.Expand.NativeTrace (↑input) (↑initial) ((↑input).length / 16) after
+inherited : LPt_LPl.Expand.Trace (↑input) (↑initial) ((↑input).length / 16) after
+length : after.length = (↑initial).length
+returned : Slice U8 := ⟨after, ⋯⟩
+native : LPt_External.compact.expand_values input initial = ok (core.result.Result.Ok (), returned)
+output : Slice U8
+call : AspisS1ValuesOwnedInstallation.expandValues input initial = ok (core.result.Result.Ok (), output)
+size : output.length = initial.length
+bytes : ∀ j < output.length, (↑output)[j]? = if j % 32 < 16 then (↑input)[j / 32 * 16 + j % 32]? else some 0#u8
+j : ℕ
+hj : j < (↑output).length
+hk : j < after.length
+h✝ : ¬j % 32 < 16
+⊢ (some 0#u8).getD 0#u8 = LPt_LPl_A.Expand.byte (↑input) j
+'AspisR1.NBR_ValuesPort.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBR_ValuesPort.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
