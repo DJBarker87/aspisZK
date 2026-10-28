@@ -1,28 +1,14 @@
-# V237 proposed source closure
+# V237 status: OPEN
 
-`R1Z.PV_DL_DefaultNative.native_callback` and `consumed` passed at 42239.
-`R1Z.PV_DL_WrapLaw.source_reference` passed at 42230. Non-vacuity is supplied
-by DefaultBuffer.nonvacuous and DefaultLaw.nonvacuous. All reported successful
-axiom lists are subsets of propext, Classical.choice, Quot.sound.
+The Lean selected64/model constructor laws passed: DefaultNative.native_callback,
+DefaultNative.consumed, WrapLaw.source_reference. DefaultBuffer.nonvacuous and
+DefaultLaw.nonvacuous provide model witnesses. These do not establish the
+shipped generic constructor/native association.
 
-The theorem specializes to the constructed native 64-byte Storage/Size cohort,
-matching the scope convention accepted for V233 in recount6/closure-audit6.json.
-Core Default remains the original trait input, including failure/divergence;
-it is not a new equality or success premise. Other carriers retain a fallback.
-The fixed actual SHA-256 constructor has a separate no-stub Kani snapshot gate;
-a second gate covers arbitrary 256-bit core values. Both use unwind 70.
+Kani constructor PASS1/2 credit is conservatively suspended under lead ruling
+(r), which was appended during this job. No copy-dependent PASS is cited as a
+native link. The pinned shipped wrapper extraction was rejected; it is retained.
 
-This is a proposed source-instance closure, not a claim that every generic Rust
-carrier or the deployment endpoint has been discharged. Data/caller/compiler/
-RunJoin binding and V232 remain. Deployed headline premises removed: zero.
-
-All target/exit/time/RSS/swap/revision/axiom receipts are indexed in status.json.
-The shipped generic extraction refusal is retained under
-../aeneas-wrapper-default-01; it is not a false-row counterexample.
-
-## Lead ruling (r), discovered on reread
-
-The selected model theorems remain kernel checked. The Kani native-link credit
-is suspended conservatively because the constructor/observer path may reach
-memory-copy builtins. V237 is OPEN; no native closure is claimed. The prior
-PASS receipts are measurements, not an accepted native correspondence.
+Before/after residual: ExternalFuns.op217 remains. Deployed premises removed0;
+trust fields added0. The original core Default Result input and unmatched
+carrier fallback remain. Full receipts are in ../receipts-index.json.
