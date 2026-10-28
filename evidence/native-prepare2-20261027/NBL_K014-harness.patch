@@ -1,0 +1,87 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,6 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NBL_candidate;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBL_candidate.rs
+@@ -0,0 +1,75 @@
++use super::*;
++#[derive(Clone,Copy)] struct NBL_Digest;
++static mut NBL_ENABLED:bool=false;
++static mut NBL_STAGE:usize=0;
++static mut NBL_INDEX:usize=0;
++static mut NBL_STATES:[[u8;32];7]=[[0;32];7];
++static mut NBL_GAMMA:E=E::ZERO;
++static mut NBL_KAPPA:E=E::ZERO;
++static mut NBL_G:[E;29]=[E::ZERO;29];
++static mut NBL_OLD:[E;29]=[E::ZERO;29];
++static mut NBL_GPTR:*const E=core::ptr::null();
++static mut NBL_SEMPTR:*const ()=core::ptr::null();
++static mut NBL_INACTIVE:E=E::ZERO;
++static mut NBL_SEM_STATE:[u8;32]=[0;32];
++static mut NBL_Y:*const u8=core::ptr::null();
++static mut NBL_R0:*const u8=core::ptr::null();
++static mut NBL_R1:*const u8=core::ptr::null();
++static mut NBL_ROOT:*const u8=core::ptr::null();
++static mut NBL_FINAL:*const u8=core::ptr::null();
++impl Digest32 for NBL_Digest { fn digest(&self,parts:&[&[u8]])->[u8;32]{unsafe{
++ if !NBL_ENABLED{return kani::any();}
++ assert_eq!(NBL_STAGE,0);assert_eq!(parts.len(),3);assert_eq!(parts[2].len(),32);
++ assert_eq!(parts[2][NBL_INDEX],NBL_SEM_STATE[NBL_INDEX]);NBL_STAGE=1;NBL_STATES[0]
++}}}
++fn NBL_scalar<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8],nonzero:bool)->E{unsafe{
++ assert!(NBL_STAGE>=1&&NBL_STAGE<=4);let k=NBL_STAGE-1;let i=NBL_INDEX;
++ assert_eq!(t.state[i],NBL_STATES[k][i]);assert_eq!(row,27+k as u8);assert_eq!(nonzero,k==0);
++ if k==0{assert_eq!(payload.as_ptr(),NBL_Y);assert_eq!(payload.len(),928);}
++ if k==1{assert_eq!(payload.len(),32);}
++ if k==2{assert_eq!(payload.as_ptr(),NBL_R0);assert_eq!(payload.len(),224);}
++ if k==3{let j:usize=kani::any();kani::assume(j<256);assert_eq!(payload.len(),256);assert_eq!(payload[j],if j<32{*NBL_ROOT.add(j)}else{*NBL_R1.add(j-32)});}
++ t.state=NBL_STATES[k+1];NBL_STAGE+=1;
++ {let out=core::mem::transmute::<[u8;32],E>(kani::any());if k==0{NBL_GAMMA=out;}if k==1{NBL_KAPPA=out;}out}
++}}
++fn NBL_queries_success<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->Result<[u32;22],Error>{unsafe{
++ assert_eq!(NBL_STAGE,5);assert_eq!(row,31);assert_eq!(t.state[NBL_INDEX],NBL_STATES[4][NBL_INDEX]);
++ assert_eq!(payload.as_ptr(),NBL_FINAL);assert_eq!(payload.len(),2048);NBL_STAGE=6;t.state=NBL_STATES[5];Ok(kani::any())
++}}
++fn NBL_rho<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->K{unsafe{
++ assert_eq!(NBL_STAGE,6);assert_eq!(row,32);assert!(payload.is_empty());assert_eq!(t.state[NBL_INDEX],NBL_STATES[5][NBL_INDEX]);
++ NBL_STAGE=7;t.state=NBL_STATES[6];core::mem::transmute::<[u8;16],K>(kani::any())
++}}
++fn NBL_powers<const N:usize>(x:E)->[E;N]{unsafe{
++ assert_eq!(N,29);assert_eq!(NBL_STAGE,7);assert_eq!(x,NBL_GAMMA);
++ assert_eq!(*NBL_GPTR.add(NBL_SLOT),NBL_OLD[NBL_SLOT]);NBL_STAGE=8;
++ // Aligned typed source; unlike NBA's superseded raw-u8 pointer cast.
++ let out:[E;29]=core::mem::transmute::<[u8;928],[E;29]>(kani::any());NBL_G=out;
++ *(&out as *const [E;29] as *const [E;N])
++}}
++static mut NBL_SLOT:usize=0;
++fn NBL_claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error>{unsafe{
++ assert_eq!(NBL_STAGE,8);assert_eq!(sem as *const _ as *const (),NBL_SEMPTR);
++ assert_eq!(y1.as_ptr(),NBL_Y);assert_eq!(y1.len(),928);assert_eq!(inactive,NBL_INACTIVE);
++ assert_eq!(kappa,NBL_KAPPA);assert_eq!(g.as_ptr(),NBL_GPTR);assert_eq!(g[NBL_SLOT],NBL_G[NBL_SLOT]);NBL_STAGE=9;
++ kani::cover!(true,"same native carrier reaches claim after query/rho/powers");kani::assume(false);Err(Error::Parse)
++}}
++#[kani::proof] #[kani::unwind(33)]
++#[kani::stub(crate::transcript::Transcript::scalar,NBL_scalar)]
++#[kani::stub(crate::transcript::Transcript::queries,NBL_queries_success)]
++#[kani::stub(crate::transcript::Transcript::scalar_k,NBL_rho)]
++#[kani::stub(powers::<29>,NBL_powers)]
++#[kani::stub(prepared_claim::<NBL_Digest>,NBL_claim)]
++fn NBL_success_carrier_to_claim(){
++ let q=K::ZERO;let point=SecureCirclePoint{x:q,y:q};
++ unsafe{NBL_ENABLED=false;}
++ let sem=crate::r1_semantic::Verified{roots:kani::any(),challenges:crate::r1_wire::Challenges{lambda:q,chi:q,theta:q,zc:[q;10],mu:q,eta:q},alpha:[q;10],claims:Box::new([[q;29];3]),extra:[q;29],before_z1:[q;29],state_before_z0:kani::any(),z:[point;2],transcript:crate::r1_wire::SemanticTranscript::new(NBL_Digest,&[],&kani::any()).unwrap()};
++ let y:[u8;928]=kani::any();let r0:[u8;224]=kani::any();let r1:[u8;224]=kani::any();let root:[u8;32]=kani::any();let final_message:[u8;2048]=kani::any();
++ let v=View{variant:Variant::S2,semantic:&[],y1:&y,inactive:unsafe{core::mem::transmute::<[u8;32],E>(kani::any())},round0:&r0,folded_root:Some(&root),round1:&r1,final_message:&final_message,query_bytes:&[]};
++ let mut g:[E;29]=unsafe{core::mem::transmute::<[u8;928],[E;29]>(kani::any())};let old=g;
++ let j:usize=kani::any();let i:usize=kani::any();kani::assume(j<29&&i<32);
++ unsafe{NBL_INDEX=i;NBL_STAGE=0;NBL_STATES=core::mem::transmute::<[u8;224],[[u8;32];7]>(kani::any());NBL_SEM_STATE=sem.transcript.state();NBL_Y=y.as_ptr();NBL_R0=r0.as_ptr();NBL_R1=r1.as_ptr();NBL_ROOT=root.as_ptr();NBL_FINAL=final_message.as_ptr();NBL_SLOT=j;NBL_GPTR=g.as_ptr();NBL_OLD=old;NBL_SEMPTR=&sem as *const _ as *const ();NBL_INACTIVE=v.inactive;NBL_ENABLED=true;}
++ let result=Prepared::new(&sem,&v,NBL_Digest,&mut g);
++ let _=result;assert!(false,"claim cut terminates all paths");
++ 
++}

@@ -1,0 +1,61 @@
+{"attempt": "NBL_K003", "exit_status": 0, "wall_seconds": 61.48479335498996, "peak_rss_kib": "821992", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ver used
+ --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:4:4
+  |
+4 | fn NBL_alloc_fail<T:Copy>(n:usize,_v:T)->Result<Vec<T>,aspis_core::r0::Error>{
+  |    ^^^^^^^^^^^^^^
+
+warning: module `NBL_candidate` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:343:5
+    |
+343 | mod NBL_candidate;
+    |     ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_candidate`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBL_alloc_fail` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:4:4
+  |
+4 | fn NBL_alloc_fail<T:Copy>(n:usize,_v:T)->Result<Vec<T>,aspis_core::r0::Error>{
+  |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_alloc_fail`
+
+warning: function `NBL_prepare_allocation_error` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:10:4
+   |
+10 | fn NBL_prepare_allocation_error(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_prepare_allocation_error`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.45s
+Checking harness verifier::candidate::NBL_candidate::NBL_prepare_allocation_error...
+
+VERIFICATION RESULT:
+ ** 0 of 6649 failed (676 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 37.26439s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rcb55a5ef73974fdb859fc4fc4e46820b.scope; invocation ID: abb9f339bf2f4c63baa5da29858ca375

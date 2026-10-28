@@ -1,0 +1,32 @@
+use super::*;
+#[derive(Clone,Copy)] struct NBL_Digest;
+impl Digest32 for NBL_Digest{fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"view rejection precedes every digest");[0;32]}}
+static mut NBL_PROOF:*const u8=core::ptr::null();
+static mut NBL_LOGICAL:*const u8=core::ptr::null();
+static mut NBL_ENTERED:bool=false;
+fn NBL_bad_view<'a>(proof:&'a[u8],semantic:&'a[u8],y1:&'a[u8])->Result<View<'a>,Error>{unsafe{
+ assert!(!NBL_ENTERED);NBL_ENTERED=true;
+ assert_eq!(proof.as_ptr(),NBL_PROOF);assert_eq!(proof.len(),57607);
+ assert_eq!(semantic.as_ptr(),NBL_LOGICAL);assert_eq!(semantic.len(),13831);
+ assert_eq!(y1.as_ptr(),NBL_LOGICAL.add(13831));assert_eq!(y1.len(),928);
+ Err(Error::Parse)
+}}
+// Exact source suffix after compact expansion returns its logical allocation.
+fn NBL_after_expand<H:Digest32>(public:Public<'_>,proof:&[u8],logical:&[u8],hash:H,obs:Observer,g:&mut[E;29])->Result<Box<Prepared>,Error>{
+ let v=wide_view(proof,&logical[..compact::LOGICAL_SEMANTIC],&logical[compact::LOGICAL_SEMANTIC..])?;
+ let sem=crate::r1_semantic::verify_observed(public,v.semantic,hash,obs).map_err(|_|Error::Semantic)?;
+ mark(obs,Phase::Semantic);
+ Prepared::new(&sem,&v,hash,g)
+}
+#[kani::proof] #[kani::unwind(3)]
+#[kani::stub(wide_view,NBL_bad_view)]
+fn NBL_view_rejection(){
+ let p:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};
+ let t:aspis_statement::pool_v1::PoolV1PairLatePublicStatementV1=unsafe{core::mem::zeroed()};
+ let proof:[u8;57607]=kani::any();let logical:[u8;14759]=kani::any();
+ let mut g:[E;29]=unsafe{core::mem::transmute::<[u8;928],[E;29]>(kani::any())};let old=g;let i:usize=kani::any();kani::assume(i<29);
+ unsafe{NBL_PROOF=proof.as_ptr();NBL_LOGICAL=logical.as_ptr();NBL_ENTERED=false;}
+ let r=NBL_after_expand(Public::Transfer(&p,&t),&proof,&logical,NBL_Digest,None,&mut g);
+ assert!(matches!(r,Err(Error::Parse)));assert_eq!(g[i],old[i]);unsafe{assert!(NBL_ENTERED);}
+ kani::cover!(true,"view Parse returns unchanged before semantic/digest/scratch");
+}

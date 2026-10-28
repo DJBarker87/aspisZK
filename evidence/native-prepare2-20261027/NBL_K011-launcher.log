@@ -1,0 +1,63 @@
+{"attempt": "NBL_K011", "exit_status": 0, "wall_seconds": 4.3402235910180025, "peak_rss_kib": "342172", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+entifier to snake case: `nbl_candidate`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBL_qdigits` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:4:4
+  |
+4 | fn NBL_qdigits(_block:&[u8;32])->[u32;4]{unsafe{
+  |    ^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_qdigits`
+
+warning: function `NBL_rho_pack` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:9:4
+  |
+9 | fn NBL_rho_pack(){
+  |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_rho_pack`
+
+warning: function `NBL_init_step` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:15:4
+   |
+15 | fn NBL_init_step(block:&[u8;32],rank:&mut[u32;8],i:&mut usize){
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_init_step`
+
+warning: function `NBL_rho_init` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:21:4
+   |
+21 | fn NBL_rho_init(){
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_rho_init`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.93s
+Checking harness verifier::candidate::NBL_candidate::NBL_rho_init...
+
+VERIFICATION RESULT:
+ ** 0 of 105 failed
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.0522408s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r402f106897234b38b61b0bcacd667953.scope; invocation ID: c921801c5fe14ff9a5aeb2d25a89ae03

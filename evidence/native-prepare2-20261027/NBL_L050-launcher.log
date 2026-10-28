@@ -1,0 +1,59 @@
+{"attempt": "NBL_L050", "exit_status": 1, "wall_seconds": 1.7452226959867403, "peak_rss_kib": "4719084", "swaps": "0", "print_axioms": ["'AspisR1.NBL_ScalarHashReplay.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBL_ScalarHashReplay.rho' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBL_generated/NBL_ScalarHashReplay.lean:11:86: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+before : transcript.Transcript H
+row : U8
+payload : Slice U8
+nonzero : Bool
+s : NBL_BlockTrace.Scalar D before row payload nonzero
+sampled :
+  (if nonzero = true then NBA_Installed.actual.sampling.gamma s.block.value
+    else NBA_Installed.actual.sampling.ordinary s.block.value) =
+    ok s.value
+⊢ (NBL_HashReplay.events D before.hash s.block.log ++
+        (run
+            (if nonzero = true then do
+              let out ← liftM (NBA_Installed.actual.sampling.gamma s.block.value)
+              let _ ← liftM (ok (UScalar.cast UScalarTy.Usize row))
+              liftM (ok ())
+              p
+...
+e U8
+b : NBL_BlockTrace.Block D before row payload
+digits : List ℕ
+last : List UInt32
+q : aspis_core.field.QM31
+trace : LPk_Induction.Digits 4 (SamplerBytePass.digits b.value) digits last
+packed : NBA_Rho.coordinates q = digits
+sample : sampler.qm31_sample b.value = ok q
+fromQm : NBA_Installed.actual.sampling.fromQm q = ok (PreparedFromQmSourceBridge.fromQmEmbedding q)
+⊢ (NBL_HashReplay.events D before.hash b.log ++
+        ([] ++
+          ([] ++
+            ([] ++
+              (match
+                  AspisR1PublicPreparation.trace.value 4#u16 (UScalar.cast UScalarTy.Usize row)
+                    (PreparedFromQmSourceBridge.fromQmEmbedding q) with
+                | ok a => ([], ok (q, b.after))
+                | fail e => ([], fail e)
+                | div => ([], div)).1))),
+      (match
+          AspisR1PublicPreparation.trace.value 4#u16 (UScalar.cast UScalarTy.Usize row)
+            (PreparedFromQmSourceBridge.fromQmEmbedding q) with
+        | ok a => ([], ok (q, b.after))
+        | fail e => ([], fail e)
+        | div => ([], div)).2) =
+    (NBL_HashReplay.events D before.hash b.log, ok (q, b.after))
+NBL_generated/NBL_ScalarHashReplay.lean:29:59: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [PreparedScalarEffects.scalar_k, ̲bind_run, ̲NBL_HashReplay.block D before row payload b,
+      chain, ̲lift_run, ̲pure_run, ̲sample, ̲fromQm, ̲lift, ̲trace.value,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBL_ScalarHashReplay.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_ScalarHashReplay.rho' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r132971817b9a43b4a0ca87f7e3ce2c9b.scope; invocation ID: a73b7182786f410491bb2d7b8c306953

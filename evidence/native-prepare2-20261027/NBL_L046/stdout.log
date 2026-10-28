@@ -1,0 +1,68 @@
+NBL_generated/NBL_CodeRunLaws.lean:28:11: error: unsolved goals
+case digest.ok.ok
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+c : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (c a >>= k) = chain (run (c a)) k
+a : Std.Array U8 32#usize
+call : D.digest hash parts = ok a
+v✝ : A
+hr : (run (c a)).2 = ok v✝
+⊢ (Event.digest D hash parts (ok a) :: (run (PreparedHashCode.bind (c a) k)).1,
+      (run (PreparedHashCode.bind (c a) k)).2) =
+    (Event.digest D hash parts (ok a) :: ((run (c a)).1 ++ (run (k v✝)).1), (run (k v✝)).2)
+
+case digest.ok.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+c : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (c a >>= k) = chain (run (c a)) k
+a : Std.Array U8 32#usize
+call : D.digest hash parts = ok a
+e✝ : Error
+hr : (run (c a)).2 = fail e✝
+⊢ (Event.digest D hash parts (ok a) :: (run (PreparedHashCode.bind (c a) k)).1,
+      (run (PreparedHashCode.bind (c a) k)).2) =
+    (Event.digest D hash parts (ok a) :: (run (c a)).1, fail e✝)
+
+case digest.ok.div
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+c : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (c a >>= k) = chain (run (c a)) k
+a : Std.Array U8 32#usize
+call : D.digest hash parts = ok a
+hr : (run (c a)).2 = div
+⊢ (Event.digest D hash parts (ok a) :: (run (PreparedHashCode.bind (c a) k)).1,
+      (run (PreparedHashCode.bind (c a) k)).2) =
+    (Event.digest D hash parts (ok a) :: (run (c a)).1, div)
+NBL_generated/NBL_CodeRunLaws.lean:29:26: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲call,i̵h̵,̵ ̲chain]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_CodeRunLaws.lean:30:46: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBL_CodeRunLaws.bind_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.digest_run' depends on axioms: [propext, Classical.choice, Quot.sound]

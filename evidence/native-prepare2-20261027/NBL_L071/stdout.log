@@ -1,0 +1,151 @@
+NBL_generated/NBL_ContinuationHash.lean:13:82: error: unsolved goals
+B : PreparedSourceEffects.Effects Code
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+old : Scratch
+o : Opening H
+log : Log
+e : verifier.Error
+after : transcript.Transcript H
+qc : PreparedHashCode.run (B.queries D o.transcript o.row v.final_message) = (log, ok (core.result.Result.Err e, after))
+⊢ (log ++
+        (match do
+            let v ← ok (core.convert.FromSame.from e)
+            ok (core.result.Result.Err v) with
+          | ok a => ([], ok (a, old))
+          | fail e => ([], fail e)
+          | div => ([], div)).1,
+      (match do
+          let v ← ok (core.convert.FromSame.from e)
+          ok (core.result.Result.Err v) with
+        | ok a => ([], ok (a, old))
+        | fail e => ([], fail e)
+        | div => ([], div)).2) =
+    (log, ok (core.result.Result.Err e, old))
+NBL_generated/NBL_ContinuationHash.lean:17:4: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_EffectControl.continuation, ̲bind_run, ̲qc, ̲chain, ̲lift_run, ̲pure_run, ̲lift,
+      core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_ContinuationHash.lean:34:36: error: unsolved goals
+case Ok
+B : PreparedSourceEffects.Effects Code
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+old g : Scratch
+o : Opening H
+queryLog rhoLog : Log
+q : Std.Array U32 22#usize
+t1 t2 : transcript.Transcript H
+row : U8
+rho : aspis_core.field.QM31
+qc :
+  PreparedHashCode.run (B.queries D o.transcript o.row v.final_message) = (queryLog, ok (core.result.Result.Ok q, t1))
+nextRow : o.row + 1#u8 = ok row
+rc : PreparedHashCode.run (B.rho D t1 row emptyPayload) = (rhoLog, ok (rho, t2))
+pc : PreparedHashCode.run (B.powers 29#usize o.gamma) = ([], ok g)
+a✝ : aspis_core.field.WideExact
+cc : PreparedHashCode.run (B.claim D sem v.y1 v.inactive g o.kappa) = ([], ok (core.result.Result.Ok a✝))
+⊢ (queryLog ++
+        (match (PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).2 with
+          | ok a =>
+            ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1,
+              ok (core.result.Result.Ok (output sem v o.gamma o.kappa o.alpha a.1 q a✝ a.2), g))
+          | fail e => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, fail e)
+          | div => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, div)).1,
+      (match (PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).2 with
+        | ok a =>
+          ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1,
+            ok (core.result.Result.Ok (output sem v o.gamma o.kappa o.alpha a.1 q a✝ a.2), g))
+        | fail e => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, fail e)
+        | div => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, div)).2) =
+    (queryLog ++ rhoLog, ok (core.result.Result.Ok (output sem v o.gamma o.kappa o.alpha rho q a✝ t2), g))
+
+case Err
+B : PreparedSourceEffects.Effects Code
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+old g : Scratch
+o : Opening H
+queryLog rhoLog : Log
+q : Std.Array U32 22#usize
+t1 t2 : transcript.Transcript H
+row : U8
+rho : aspis_core.field.QM31
+qc :
+  PreparedHashCode.run (B.queries D o.transcript o.row v.final_message) = (queryLog, ok (core.result.Result.Ok q, t1))
+nextRow : o.row + 1#u8 = ok row
+rc : PreparedHashCode.run (B.rho D t1 row emptyPayload) = (rhoLog, ok (rho, t2))
+pc : PreparedHashCode.run (B.powers 29#usize o.gamma) = ([], ok g)
+a✝ : verifier.Error
+cc : PreparedHashCode.run (B.claim D sem v.y1 v.inactive g o.kappa) = ([], ok (core.result.Result.Err a✝))
+⊢ (queryLog ++
+        (match (PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).2 with
+          | ok a =>
+            ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1 ++
+                (match do
+                    let v ← ok (core.convert.FromSame.from a✝)
+                    ok (core.result.Result.Err v) with
+                  | ok a => ([], ok (a, g))
+                  | fail e => ([], fail e)
+                  | div => ([], div)).1,
+              (match do
+                  let v ← ok (core.convert.FromSame.from a✝)
+                  ok (core.result.Result.Err v) with
+                | ok a => ([], ok (a, g))
+                | fail e => ([], fail e)
+                | div => ([], div)).2)
+          | fail e => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, fail e)
+          | div => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, div)).1,
+      (match (PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).2 with
+        | ok a =>
+          ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1 ++
+              (match do
+                  let v ← ok (core.convert.FromSame.from a✝)
+                  ok (core.result.Result.Err v) with
+                | ok a => ([], ok (a, g))
+                | fail e => ([], fail e)
+                | div => ([], div)).1,
+            (match do
+                let v ← ok (core.convert.FromSame.from a✝)
+                ok (core.result.Result.Err v) with
+              | ok a => ([], ok (a, g))
+              | fail e => ([], fail e)
+              | div => ([], div)).2)
+        | fail e => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, fail e)
+        | div => ((PreparedHashCode.run (B.rho D t1 row (Std.Array.empty U8).to_slice)).1, div)).2) =
+    (queryLog ++ rhoLog, ok (core.result.Result.Err a✝, g))
+NBL_generated/NBL_ContinuationHash.lean:37:57: warning: This simp argument is unused:
+  rc
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_EffectControl.continuation, ̲bind_run, ̲qc, ̲chain, ̲lift_run, ̲pure_run, ̲lift,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲nextRow,r̵c̵,̵ ̲pc, ̲cc,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        core.convert.FromSame, ̲List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_ContinuationHash.lean:39:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_EffectControl.continuation, ̲bind_run, ̲qc, ̲chain, ̲lift_run, ̲pure_run, ̲lift,
+        core.result.Result.Insts.CoreOpsTry.branch, ̲nextRow, ̲rc, ̲pc, ̲cc,
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+        c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵List.append_nil, ̲List.nil_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBL_ContinuationHash.query_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_ContinuationHash.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_ContinuationHash.after_opening' depends on axioms: [propext, Classical.choice, Quot.sound]

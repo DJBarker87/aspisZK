@@ -1,0 +1,1 @@
+Own transport preflight hit local ARG_MAX before ssh was created. No setup/submission/prover ran. Repair sends setup through stdin, keeping source pins, admission and validation identical. Actual run starts at K002.

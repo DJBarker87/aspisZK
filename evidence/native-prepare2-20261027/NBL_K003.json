@@ -1,0 +1,60 @@
+{
+  "attempt": "NBL_K003",
+  "kind": "kani",
+  "module": "verifier::candidate::NBL_candidate::NBL_prepare_allocation_error",
+  "sources": [
+    "NBL_src/crates/aspis-r1-cost-probe/src/NBL_candidate.rs",
+    "NBL_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBL_src/crates/aspis-core/src/r0_transcript.rs",
+    "NBL_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "NBL_src/Cargo.toml",
+    "NBL_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NBL_gate.py",
+    "NBL_K003.json"
+  ],
+  "timeout": 180,
+  "source_revision": "42c5ae0a52d4dcf07a1463dc9d156406e4b45513",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_tmp"
+  },
+  "deps_fingerprint": {
+    "scope": "frozen native source selected by NBL_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations"
+  },
+  "expected_time": "optimized Kani compilation then native call routing; no arithmetic elimination",
+  "reservation_retries": 0,
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NBL_candidate::NBL_prepare_allocation_error",
+    "--output-format",
+    "terse"
+  ]
+}

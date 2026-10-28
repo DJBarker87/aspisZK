@@ -1,0 +1,53 @@
+{"attempt": "NBL_K017", "exit_status": 1, "wall_seconds": 14.050697389990091, "peak_rss_kib": "783732", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBL_after_expand` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:15:4
+   |
+15 | fn NBL_after_expand<H:Digest32>(public:Public<'_>,proof:&[u8],logical:&[u8],hash:H,obs:Observer,g:&mut[E;29])->Result<Box<Prepared>,...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_after_expand`
+
+warning: function `NBL_view_rejection` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:23:4
+   |
+23 | fn NBL_view_rejection(){
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_view_rejection`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.67s
+Checking harness verifier::candidate::NBL_candidate::NBL_view_rejection...
+
+VERIFICATION RESULT:
+ ** 1 of 6543 failed (662 unreachable)
+
+ ** 0 of 1 cover properties satisfied (1 unreachable)
+
+Failed Checks: assertion failed: matches!(r,Err(Error::Parse))
+ File: "crates/aspis-r1-cost-probe/src/NBL_candidate.rs", line 30, in verifier::candidate::NBL_candidate::NBL_view_rejection
+
+VERIFICATION:- FAILED
+Verification Time: 4.1259546s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBL_candidate::NBL_view_rejection
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rbc52859a89dc432baf1a4830a3a82b34.scope; invocation ID: bc3d3d7589304ba693d481f10430fdb7

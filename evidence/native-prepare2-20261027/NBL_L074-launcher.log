@@ -1,0 +1,43 @@
+{"attempt": "NBL_L074", "exit_status": 1, "wall_seconds": 2.3224016259773634, "peak_rss_kib": "5272368", "swaps": "0", "print_axioms": ["'AspisR1.NBL_PrepareHashTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBL_generated/NBL_PrepareHashTrace.lean:95:2: error: Type mismatch: After simplification, term
+  whole
+ has type
+  @Eq
+    (PreparedHashCode.Log ×
+      Result (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.WideExact 29#usize))
+    (run (PreparedSourceEffects.prepare C D sem (AspisR1SelectedWideViewV1.preparedView view) hash old))
+    (List.map (fun event => Event.digest D hash event.1 (ok event.2)) opening.log ++
+        (List.map (fun event => Event.digest D hash event.1 (ok event.2)) (NBL_QueryHashReplay.log queries) ++
+          List.map (fun event => Event.digest D hash event.1 (ok event.2)) rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+      
+...
+ verifier.Prepared verifier.Error × Std.Array aspis_core.field.WideExact 29#usize))
+    (run (PreparedSourceEffects.prepare C D sem (AspisR1SelectedWideViewV1.preparedView view) hash old))
+    (List.map (fun event => Event.digest D hash event.1 (ok event.2)) opening.log ++
+        (List.map (fun event => Event.digest D hash event.1 (ok event.2)) (NBL_QueryHashReplay.log queries) ++
+          List.map (fun event => Event.digest D hash event.1 (ok event.2)) rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+            (output sem (AspisR1SelectedWideViewV1.preparedView view) opening.output.gamma opening.output.kappa
+              opening.output.alpha rho q (NBA_ClaimCallee.wide claim) rhoBlock.after),
+          mapArray NBA_ClaimCallee.wide g))
+but is expected to have type
+  @Eq
+    (PreparedHashCode.Log ×
+      Result (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.WideExact 29#usize))
+    (run
+      (PreparedSourceEffects.prepare (preparationEffects NBA_Installed.actual NBL_QueryDictionary.boundaries) D sem
+        (AspisR1SelectedWideViewV1.preparedView view) hash old))
+    (List.map (fun event => Event.digest D hash event.1 (ok event.2)) opening.log ++
+        (List.map (fun event => Event.digest D hash event.1 (ok event.2)) (NBL_QueryHashReplay.log queries) ++
+          List.map (fun event => Event.digest D hash event.1 (ok event.2)) rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+            (output sem (AspisR1SelectedWideViewV1.preparedView view) opening.gamma.value opening.kappa.value
+              opening.output.alpha rho q (NBA_ClaimCallee.wide claim) rhoBlock.after),
+          mapArray NBA_ClaimCallee.wide g))
+'AspisR1.NBL_PrepareHashTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re02a95c4c20244d9ac1f851aabb2f8de.scope; invocation ID: 40a1ccb0d4ed4d11a8fd64971b16fd40

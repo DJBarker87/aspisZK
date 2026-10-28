@@ -1,0 +1,31 @@
+NBL_generated/NBL_PrepareHashTrace.lean:95:2: error: Type mismatch: After simplification, term
+  whole
+ has type
+  @Eq
+    (PreparedHashCode.Log ×
+      Result (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.WideExact 29#usize))
+    (run (PreparedSourceEffects.prepare C D sem (AspisR1SelectedWideViewV1.preparedView view) hash old))
+    (List.map (fun event => Event.digest D hash event.1 (ok event.2)) opening.log ++
+        (List.map (fun event => Event.digest D hash event.1 (ok event.2)) (NBL_QueryHashReplay.log queries) ++
+          List.map (fun event => Event.digest D hash event.1 (ok event.2)) rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+            (output sem (AspisR1SelectedWideViewV1.preparedView view) opening.output.gamma opening.output.kappa
+              opening.output.alpha rho q (NBA_ClaimCallee.wide claim) rhoBlock.after),
+          mapArray NBA_ClaimCallee.wide g))
+but is expected to have type
+  @Eq
+    (PreparedHashCode.Log ×
+      Result (core.result.Result verifier.Prepared verifier.Error × Std.Array aspis_core.field.WideExact 29#usize))
+    (run
+      (PreparedSourceEffects.prepare (preparationEffects NBA_Installed.actual NBL_QueryDictionary.boundaries) D sem
+        (AspisR1SelectedWideViewV1.preparedView view) hash old))
+    (List.map (fun event => Event.digest D hash event.1 (ok event.2)) opening.log ++
+        (List.map (fun event => Event.digest D hash event.1 (ok event.2)) (NBL_QueryHashReplay.log queries) ++
+          List.map (fun event => Event.digest D hash event.1 (ok event.2)) rhoBlock.log),
+      ok
+        (core.result.Result.Ok
+            (output sem (AspisR1SelectedWideViewV1.preparedView view) opening.gamma.value opening.kappa.value
+              opening.output.alpha rho q (NBA_ClaimCallee.wide claim) rhoBlock.after),
+          mapArray NBA_ClaimCallee.wide g))
+'AspisR1.NBL_PrepareHashTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

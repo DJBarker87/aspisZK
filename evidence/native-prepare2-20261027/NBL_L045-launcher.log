@@ -1,0 +1,69 @@
+{"attempt": "NBL_L045", "exit_status": 1, "wall_seconds": 1.748537186998874, "peak_rss_kib": "4627476", "swaps": "0", "print_axioms": ["'AspisR1.NBL_CodeRunLaws.bind_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBL_CodeRunLaws.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NBL_CodeRunLaws.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NBL_CodeRunLaws.digest_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBL_generated/NBL_CodeRunLaws.lean:25:16: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash parts c >>= k)
+is not definitionally equal to the right-hand side
+  chain (run (Code.digest D hash parts c)) k
+
+case digest.fail
+A B : Type
+k : A → Code B
+H✝ : Type
+D : aspis_core.Digest32 H✝
+hash : H✝
+parts : Slice (Slice U8)
+c : Std.Array U8 32#usize → Code A
+ih : ∀ (a : Std.Array U8 32#usize), run (c a >>= k) = chain (run (c a)) k
+e : Error
+call : D.digest hash parts = fail e
+⊢ run (Code.digest D hash parts c >>= k) = chain (run (Code.digest D hash parts c)) k
+NBL_generated/NBL_CodeRunLaws.lean:26:13: error: Tactic `rfl` failed: The left-hand side
+  run (Code.digest D hash pa
+...
+n:29:46: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵r̵,̵List.cons_append]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_CodeRunLaws.lean:39:32: error: Tactic `rfl` failed: The left-hand side
+  run (effects.digest D hash parts)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts (ok v✝)], ok v✝)
+
+case ok
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+v✝ : Std.Array U8 32#usize
+⊢ run (effects.digest D hash parts) = ([Event.digest D hash parts (ok v✝)], ok v✝)
+NBL_generated/NBL_CodeRunLaws.lean:39:32: error: Tactic `rfl` failed: The left-hand side
+  run (effects.digest D hash parts)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts (fail e✝)], fail e✝)
+
+case fail
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+e✝ : Error
+⊢ run (effects.digest D hash parts) = ([Event.digest D hash parts (fail e✝)], fail e✝)
+NBL_generated/NBL_CodeRunLaws.lean:39:32: error: Tactic `rfl` failed: The left-hand side
+  run (effects.digest D hash parts)
+is not definitionally equal to the right-hand side
+  ([Event.digest D hash parts div], div)
+
+case div
+H : Type
+D : aspis_core.Digest32 H
+hash : H
+parts : Slice (Slice U8)
+⊢ run (effects.digest D hash parts) = ([Event.digest D hash parts div], div)
+'AspisR1.NBL_CodeRunLaws.bind_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.lift_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.pure_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_CodeRunLaws.digest_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re6322147c11e425c81abc056597f4c03.scope; invocation ID: 14c68907f4b3419dac3f3867c3abfe66

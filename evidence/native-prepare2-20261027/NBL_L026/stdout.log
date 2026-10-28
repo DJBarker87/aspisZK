@@ -1,0 +1,33 @@
+NBL_generated/NBL_DecodeNative.lean:10:24: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NBL_generated/NBL_DecodeNative.lean:51:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  field.canonical_qm31
+    { c0 := { a := digit digits 0, b := digit digits 1 }, c1 := { a := digit digits 2, b := digit digits 3 } }
+in the target expression
+  (do
+      let lo ← field.canonical_qm31 (pack digits).c0
+      let hi ← field.canonical_qm31 (pack digits).c1
+      ok { c0 := lo, c1 := hi }) =
+    ok (pack digits)
+
+digits : Digits
+canonical : Canonical digits
+read : ∀ (i : Usize) (hi : ↑i < 8), Array.index_usize digits i = ok (digit digits ⟨↑i, hi⟩)
+bound : ∀ (i : Fin 8), ↑(digit digits i) < 2147483647
+low :
+  field.canonical_qm31
+      { c0 := { a := digit digits 0, b := digit digits 1 }, c1 := { a := digit digits 2, b := digit digits 3 } } =
+    ok { c0 := { a := digit digits 0, b := digit digits 1 }, c1 := { a := digit digits 2, b := digit digits 3 } }
+high :
+  field.canonical_qm31
+      { c0 := { a := digit digits 4, b := digit digits 5 }, c1 := { a := digit digits 6, b := digit digits 7 } } =
+    ok { c0 := { a := digit digits 4, b := digit digits 5 }, c1 := { a := digit digits 6, b := digit digits 7 } }
+⊢ (do
+      let lo ← field.canonical_qm31 (pack digits).c0
+      let hi ← field.canonical_qm31 (pack digits).c1
+      ok { c0 := lo, c1 := hi }) =
+    ok (pack digits)
+'AspisR1.NBL_DecodeNative.remainder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_DecodeNative.canonical_qm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_DecodeNative.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
