@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,subprocess,hashlib,re
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2d-20261028';P=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
-j=json.loads((E/'forest-resolution.json').read_text());mapping={m:'R1Z.PV_RDB2D_'+m for m in j['modules'] if m.startswith('PV_B3P_')};rows=[]
+j=json.loads((E/'forest-resolution.json').read_text());mapping={m:'R1Z.PV_RDB2D_'+m.split('.')[-1] for m in j['modules'] if not m.startswith('R1Z.PV_RDB2C_')};rows=[]
 for m in j['order']:
  r=j['modules'][m]
  if r['authority']=='EJR':continue
