@@ -83,7 +83,7 @@ def visit(m):
  for dep in imports:visit(dep)
 
 roots=sys.argv[1:] or ['R1Z.ProverCommitStepLoop']
-label='embedding' if roots==['AspisR1ProducerRelease47.Funs'] else 'focused'
+label='sampler' if roots==['PV_L2B_SourceWords','PV_L2B_SamplerLaw'] else ('embedding' if roots==['AspisR1ProducerRelease47.Funs'] else 'focused')
 for m in roots:visit(m)
 (E/(label+'-resolution.json')).write_text(json.dumps(dict(head=head,research_revision=rev,resolved=done,unpinned=sorted(missing)),indent=2)+'\n')
 (E/(label+'-project-sources.json')).write_text(json.dumps(sources)+'\n')

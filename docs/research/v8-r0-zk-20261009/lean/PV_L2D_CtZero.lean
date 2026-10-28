@@ -7,8 +7,8 @@ def subtractP (x : UInt32) : UInt32 :=
   x - ((2147483647 : UInt32) &&& mask)
 
 def reduce64 (x : UInt64) : UInt32 :=
-  let x := (x &&& 2147483647) + (x >>> 31)
-  let x := (x &&& 2147483647) + (x >>> 31)
+  let x : UInt64 := (x &&& (2147483647 : UInt64)) + (x >>> 31)
+  let x : UInt64 := (x &&& (2147483647 : UInt64)) + (x >>> 31)
   subtractP x.toUInt32
 
 /-- This is a single zero-input shape fact, not a full canonicality proof.
