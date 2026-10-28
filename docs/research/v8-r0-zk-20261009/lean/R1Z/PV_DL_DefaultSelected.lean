@@ -28,10 +28,11 @@ separately; this dictionary equation alone is not source correspondence. -/
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
-  {ops with op217 := fun dc bk less nz dn dk =>
-    dispatch
-      bk.crypto_commonBlockSizeUserInst.generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst.typenummarker_traitsUnsignedInst.USIZE
-      dc.default (fun _ => ops.op217 dc bk less nz dn dk)}
+  {ops with
+    op217 := fun dc bk less nz dn dk =>
+      dispatch
+        bk.crypto_commonBlockSizeUserInst.generic_arrayArrayLengthSelf_BlockSizeU8Self_Clause0_ArrayTypeInst.typenummarker_traitsUnsignedInst.USIZE
+        dc.default (fun _ => ops.op217 dc bk less nz dn dk)}
 
 #print axioms dispatch
 #print axioms dispatch_source

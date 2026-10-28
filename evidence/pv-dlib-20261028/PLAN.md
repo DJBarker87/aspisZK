@@ -67,3 +67,8 @@ block-buffer's batched path may leave different bytes outside `get_data()`.
 A raw full-buffer equality would be too strong. The planned padding event gate
 must show that these dead suffix bytes are overwritten before compression.
 No raw-state/native equivalence is claimed from active-prefix equality alone.
+
+42218–42220 passed. 42221 failed on record-field layout in the new selected
+dictionary (unexpected identifier); its failed elaboration reports sorryAx.
+That failed object is not imported or credited. Fix the layout and compile
+the changed source with the next fresh ID before dependent targets.
