@@ -2438,13 +2438,13 @@ def reference_copy_terminal.link_weight
     let i ← lift (core.convert.num.FromU32Bool.from b)
     ok i
   | 3#uscalar =>
-    let i ← lift (Std.U64.wrapping_shr append_index link.weight_level)
+    let i ← lift (Std.U64.wrapping_shr append_index (UScalar.cast .U32 link.weight_level))
     let i1 ← lift (i &&& 1#u64)
     let i2 ← lift (UScalar.cast .U32 i1)
     let i3 ← lift (Std.U32.wrapping_sub 1#u32 i2)
     ok i3
   | 4#uscalar =>
-    let i ← lift (Std.U64.wrapping_shr append_index link.weight_level)
+    let i ← lift (Std.U64.wrapping_shr append_index (UScalar.cast .U32 link.weight_level))
     let i1 ← lift (i &&& 1#u64)
     let i2 ← lift (UScalar.cast .U32 i1)
     ok i2

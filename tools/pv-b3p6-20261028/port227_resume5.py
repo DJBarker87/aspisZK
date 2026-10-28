@@ -30,6 +30,11 @@ for kind in ['Types','Funs']:
  for val in ['31','4']:
   n=p.count(val+'#i32')
   if n:p=p.replace(val+'#i32',val+'#u32');numeric.append(dict(value=int(val),count=n,change='positive shift argument tag i32 -> u32; value unchanged; separate value law required'))
+ if kind=='Funs':
+  before='Std.U64.wrapping_shr append_index link.weight_level'
+  count=p.count(before); assert count==2
+  p=p.replace(before,'Std.U64.wrapping_shr append_index (UScalar.cast .U32 link.weight_level)')
+  numeric.append(dict(change='U8 dynamic shift argument widened to U32 for pinned Lean API',count=count,law='PV_B3P_Shift227.u8_u32_value'))
  assert not re.search(r'\b(sorry|admit|native_decide|implemented_by|axiom)\b',p)
  if kind=='Funs':
   names=re.findall(r'^def (\S+)',p,re.M);p+='\n'+''.join('#print axioms PV_B3P_227.'+n+'\n'for n in names)
