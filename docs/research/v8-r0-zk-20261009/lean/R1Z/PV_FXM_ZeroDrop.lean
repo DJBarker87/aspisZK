@@ -19,7 +19,9 @@ def dropArray {F : Type} (ops : ExternalFuns) (N : Usize) (a : Array U8 N)
 theorem complete {F : Type} (ops : ExternalFuns) (N : Usize) (a : Array U8 N)
     (address : Nat) (w : PV_FXM_ZeroWorld.World F) :
     dropArray ops N a address w=.ok ((),PV_FXM_ZeroWorld.indexed address 0 N.val w) := by
-  simp only [dropArray,PV_FXM_ZeroConsumed.emitted_array,bind_tc_ok]
+  change (do let _ ← PV_FXM_ZeroSelected.array PV_FXM_ZeroSelected.byteZero a
+             Result.ok ((),PV_FXM_ZeroWorld.native address N.val w)) = _
+  simp only [PV_FXM_ZeroSelected.array_value,bind_tc_ok]
   exact congrArg (fun q => Result.ok ((),q))
     (PV_FXM_ZeroWorld.caller_composition address N.val w id)
 
