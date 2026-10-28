@@ -5,6 +5,7 @@ namespace R1Z.PV_RDEA_NameBytes
 open PV_RDEA_ReservationName
 
 def digitByte (n : Fin 16) : U8 := U8.ofNatCore (digit n) (by
+  change digit n<256
   have h := n.isLt
   unfold digit
   split <;> omega)
