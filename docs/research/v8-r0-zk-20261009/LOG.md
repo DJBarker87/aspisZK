@@ -13709,3 +13709,14 @@ runtime and effect initialisation and both ROMView decoder laws, merging and bui
 state/error/trace calculus (codex/pv-world-20261028) instead of duplicating it, then composes into
 RustRealRefinement. The parked reachability, file-effects, world and level-2 lines wait on this.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D377 (Stream B) 2026-10-28 15:36 UTC: V243 closed on the candidate; b3p6d continues with V228, V241, V245, V244
+
+b3p6c (100 attempts: 86 passed, 14 failed drafts; no Kani; IDs 50500-50599; the three reserved audits
+pass with standard axioms; 86-module dependency checks with no mismatch; no counterexample) closes V243
+(op226 public_bytes) at its selected callback, source and value scope by a structural (K-1
+substitute) link. V228 (op132): fixed-array extraction and local proofs pass; the whole-loop ordered
+value and count invariant and the native binding remain. V241, V245, V244 remain open. Merged into the
+prover candidate (039410c906, pushed); the branch was fast-forwarded and continues as b3p6d (IDs
+51900-51999; no Kani): V228, then V241, V245, V244. V229 and V243 enter the ledger at the next
+recount. Rows removed outright: 0. Privacy target not yet established.
