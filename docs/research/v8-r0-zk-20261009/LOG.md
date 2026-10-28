@@ -13966,3 +13966,23 @@ A fresh scan finds no unused 100-block left in Stream B's ranges (35000-44999, 5
 52xxx, which is excluded after earlier cross-job reuse; 28000-29999 stays reserved for the final
 replay. The lead asked Stream A to agree that Stream B uses 60000-69999 under the same rules; the next
 runjoin run waits for that agreement. Rows removed outright: 0. Privacy target not yet established.
+
+## D392 (Stream B) 2026-10-28 18:17 UTC: Stream B ID range 60000-69999 agreed; run-joint.sh range-only edit; runjoin40 launched
+
+Stream A approved Stream B's use of env-J IDs 60000-69999 under the existing rules (a pre-scanned
+100-block per job; an ID consumed only on an actual compiler launch, ruling (m'); never 45000-49999 or
+55000-59999; 28000-29999 reserved for the final replay), after checking that none of its evidence uses
+6xxxx. The shared launcher
+/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/tools/run-joint.sh capped
+attempts at 59999; the lead made the one-off range-only edit Stream A approved, changing only line 21:
+
+    -  case "$A" in 5[0-7][0-9][0-9]|...|5[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+    +  case "$A" in 5[0-7][0-9][0-9]|...|5[0-9][0-9][0-9][0-9]|6[0-9][0-9][0-9][0-9]) ;; *) echo "attempt $A outside restored env-J ranges"; exit 64;; esac
+
+sha256 before 7ac8a13e34b33d2cb41b3ef4bf52e97498fe744b48010069950c63d6dd980c66 (kept as
+run-joint.sh.pre-D392), after 322768e0c515168cab2a84c185c2634154bacf61c691998c17ba00c77d5c1e7d;
+bash -n passes and a test ID 61234 is accepted; the new sha was sent to Stream A for its receipts.
+runjoin40 (IDs 60000-60099) continues with the ROMView decoders, the native helper-effect
+associations, commitments, openings and published-proof serialization, then the RustRealRefinement
+composition with the op227 bridge as its single named hypothesis. Rows removed outright: 0. Privacy
+target not yet established.
