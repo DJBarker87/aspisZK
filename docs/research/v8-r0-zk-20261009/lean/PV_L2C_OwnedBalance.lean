@@ -28,11 +28,12 @@ theorem complete_result (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
       ok (.Ok (),vector bound1024 (fun i => source (output table active d i))) := by
   have hlen : alloc.vec.Vec.len (vector bound1024 (fun i => source (table i)))=1024#usize := by
     apply UScalar.eq_of_val_eq
-    simp [alloc.vec.Vec.len,vector]
+    change (List.ofFn (fun i => source (table i))).length=1024
+    exact List.length_ofFn
   have hd' : d.val<(1024#usize).val := by scalar_tac
   rw [qm31_owned_fold,hlen]
   simp only [bne_self_eq_false,Bool.false_eq_true,if_false]
-  rw [read_active active d hd']
+  rw [read_active (n:=1024#usize) active d hd']
   simp only [ha,bind_tc_ok,Bool.false_eq_true,if_false]
   rw [← source_zero,fold_source table active d rows rows_bounded zero]
   simp only [bind_tc_ok,sub_source]
