@@ -34,15 +34,16 @@ def reference_field.qm31_sum_products3_prepared
   let a1 : Array aspis_core.field.M31 3#usize ← Array.index_usize pqm.components 0#usize
   let m3 : aspis_core.field.M31 ← Array.index_usize a1 0#usize
   let i : Std.U64 := (UScalar.cast .U64 m3)
-  let a2 : Array aspis_core.field.M31 3#usize ←
-    Array.index_usize
-      (Array.make 3#usize [
+  let right_components227_0 : Array (Array aspis_core.field.M31 3#usize) 3#usize := (Array.make 3#usize [
         (Array.make 3#usize [ q.c0.a, q.c0.b, m ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array aspis_core.field.M31
         3#usize), (Array.make 3#usize [ q.c1.a, q.c1.b, m1 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize),
         (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
+        ] (by simp only [List.length_cons, List.length_nil]; rfl))
+  let a2 : Array aspis_core.field.M31 3#usize ←
+    Array.index_usize
+      right_components227_0 0#usize
   let m4 : aspis_core.field.M31 ← Array.index_usize a2 0#usize
   let i1 : Std.U64 := (UScalar.cast .U64 m4)
   let i2 : Std.U64 := (Std.U64.wrapping_mul i i1)
@@ -80,13 +81,7 @@ def reference_field.qm31_sum_products3_prepared
   let i15 : Std.U64 := (UScalar.cast .U64 m9)
   let a15 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q.c0.a, q.c0.b, m ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array aspis_core.field.M31
-        3#usize), (Array.make 3#usize [ q.c1.a, q.c1.b, m1 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
+      right_components227_0 1#usize
   let m10 : aspis_core.field.M31 ← Array.index_usize a15 0#usize
   let i16 : Std.U64 := (UScalar.cast .U64 m10)
   let i17 : Std.U64 := (Std.U64.wrapping_mul i15 i16)
@@ -125,13 +120,7 @@ def reference_field.qm31_sum_products3_prepared
   let i30 : Std.U64 := (UScalar.cast .U64 m15)
   let a28 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q.c0.a, q.c0.b, m ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array aspis_core.field.M31
-        3#usize), (Array.make 3#usize [ q.c1.a, q.c1.b, m1 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
+      right_components227_0 2#usize
   let m16 : aspis_core.field.M31 ← Array.index_usize a28 0#usize
   let i31 : Std.U64 := (UScalar.cast .U64 m16)
   let i32 : Std.U64 := (Std.U64.wrapping_mul i30 i31)
@@ -174,16 +163,17 @@ def reference_field.qm31_sum_products3_prepared
   let a40 : Array aspis_core.field.M31 3#usize ← Array.index_usize pqm1.components 0#usize
   let m24 : aspis_core.field.M31 ← Array.index_usize a40 0#usize
   let i45 : Std.U64 := (UScalar.cast .U64 m24)
-  let a41 : Array aspis_core.field.M31 3#usize ←
-    Array.index_usize
-      (Array.make 3#usize [
+  let right_components227_1 : Array (Array aspis_core.field.M31 3#usize) 3#usize := (Array.make 3#usize [
         (Array.make 3#usize [ q1.c0.a, q1.c0.b, m21 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize),
         (Array.make 3#usize [ q1.c1.a, q1.c1.b, m22 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize),
         (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
+        ] (by simp only [List.length_cons, List.length_nil]; rfl))
+  let a41 : Array aspis_core.field.M31 3#usize ←
+    Array.index_usize
+      right_components227_1 0#usize
   let m25 : aspis_core.field.M31 ← Array.index_usize a41 0#usize
   let i46 : Std.U64 := (UScalar.cast .U64 m25)
   let i47 : Std.U64 := (Std.U64.wrapping_mul i45 i46)
@@ -222,14 +212,7 @@ def reference_field.qm31_sum_products3_prepared
   let i60 : Std.U64 := (UScalar.cast .U64 m30)
   let a54 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q1.c0.a, q1.c0.b, m21 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ q1.c1.a, q1.c1.b, m22 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
+      right_components227_1 1#usize
   let m31 : aspis_core.field.M31 ← Array.index_usize a54 0#usize
   let i61 : Std.U64 := (UScalar.cast .U64 m31)
   let i62 : Std.U64 := (Std.U64.wrapping_mul i60 i61)
@@ -268,14 +251,7 @@ def reference_field.qm31_sum_products3_prepared
   let i75 : Std.U64 := (UScalar.cast .U64 m36)
   let a67 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q1.c0.a, q1.c0.b, m21 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ q1.c1.a, q1.c1.b, m22 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum1.a, right_sum1.b, m23 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
+      right_components227_1 2#usize
   let m37 : aspis_core.field.M31 ← Array.index_usize a67 0#usize
   let i76 : Std.U64 := (UScalar.cast .U64 m37)
   let i77 : Std.U64 := (Std.U64.wrapping_mul i75 i76)
@@ -318,16 +294,17 @@ def reference_field.qm31_sum_products3_prepared
   let a79 : Array aspis_core.field.M31 3#usize ← Array.index_usize pqm2.components 0#usize
   let m45 : aspis_core.field.M31 ← Array.index_usize a79 0#usize
   let i90 : Std.U64 := (UScalar.cast .U64 m45)
-  let a80 : Array aspis_core.field.M31 3#usize ←
-    Array.index_usize
-      (Array.make 3#usize [
+  let right_components227_2 : Array (Array aspis_core.field.M31 3#usize) 3#usize := (Array.make 3#usize [
         (Array.make 3#usize [ q2.c0.a, q2.c0.b, m42 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize),
         (Array.make 3#usize [ q2.c1.a, q2.c1.b, m43 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize),
         (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
         aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
+        ] (by simp only [List.length_cons, List.length_nil]; rfl))
+  let a80 : Array aspis_core.field.M31 3#usize ←
+    Array.index_usize
+      right_components227_2 0#usize
   let m46 : aspis_core.field.M31 ← Array.index_usize a80 0#usize
   let i91 : Std.U64 := (UScalar.cast .U64 m46)
   let i92 : Std.U64 := (Std.U64.wrapping_mul i90 i91)
@@ -366,14 +343,7 @@ def reference_field.qm31_sum_products3_prepared
   let i105 : Std.U64 := (UScalar.cast .U64 m51)
   let a93 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q2.c0.a, q2.c0.b, m42 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ q2.c1.a, q2.c1.b, m43 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
+      right_components227_2 1#usize
   let m52 : aspis_core.field.M31 ← Array.index_usize a93 0#usize
   let i106 : Std.U64 := (UScalar.cast .U64 m52)
   let i107 : Std.U64 := (Std.U64.wrapping_mul i105 i106)
@@ -412,14 +382,7 @@ def reference_field.qm31_sum_products3_prepared
   let i120 : Std.U64 := (UScalar.cast .U64 m57)
   let a106 : Array aspis_core.field.M31 3#usize ←
     Array.index_usize
-      (Array.make 3#usize [
-        (Array.make 3#usize [ q2.c0.a, q2.c0.b, m42 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ q2.c1.a, q2.c1.b, m43 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize),
-        (Array.make 3#usize [ right_sum2.a, right_sum2.b, m44 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array
-        aspis_core.field.M31 3#usize)
-        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
+      right_components227_2 2#usize
   let m58 : aspis_core.field.M31 ← Array.index_usize a106 0#usize
   let i121 : Std.U64 := (UScalar.cast .U64 m58)
   let i122 : Std.U64 := (Std.U64.wrapping_mul i120 i121)
