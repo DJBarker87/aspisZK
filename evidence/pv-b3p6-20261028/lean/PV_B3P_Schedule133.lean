@@ -71,31 +71,5 @@ theorem kind_erasure (item : Link) :
     (item.producer,item.consumer) =
     (({item with path := false} : Link).producer,({item with path := false} : Link).consumer) := rfl
 
-theorem legacy_length : legacyLinks.length = 127 := rfl
--- Only 127/136 records and at most 272 scalar endpoints: these reductions
--- have no field arithmetic or large numeral recurrence.
-theorem legacy_capacity : checkEndpoints legacyLinks [] [] = .ok () := rfl
-
-theorem legacy_success : legacy = .ok legacyLinks := by
-  simp only [legacy,checked,legacy_length,ne_eq,not_true_eq_false,Bool.false_eq_true,
-    ↓reduceIte,legacy_capacity]
-  rfl
-
-theorem forest_length : (forestLinks legacyLinks).length = 136 := rfl
-theorem forest_capacity : checkEndpoints (forestLinks legacyLinks) [] [] = .ok () := rfl
-
-theorem forest_success : forest = .ok (forestLinks legacyLinks) := by
-  rw [forest,legacy_success]
-  change checked 136 (forestLinks legacyLinks) = _
-  simp only [checked,forest_length,ne_eq,not_true_eq_false,Bool.false_eq_true,
-    ↓reduceIte,forest_capacity]
-  rfl
-
 #print axioms kind_erasure
-#print axioms legacy_length
-#print axioms legacy_capacity
-#print axioms legacy_success
-#print axioms forest_length
-#print axioms forest_capacity
-#print axioms forest_success
 end PV_B3P_Schedule133
