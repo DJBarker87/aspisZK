@@ -66,7 +66,7 @@ def reference_terminal.empty_root
   let i5 ← Array.index_usize words 5#usize
   let i6 ← Array.index_usize words 6#usize
   let i7 ← Array.index_usize words 7#usize
-  ok (Array.make 8#usize [ i, i1, i2, i3, i4, i5, i6, i7 ])
+  ok (Array.make 8#usize [ i, i1, i2, i3, i4, i5, i6, i7 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 /-- [pv_b3p6_reference227::reference_terminal::checked_next227]:
     Source: 'reference_terminal.rs', lines 2579:0-2579:115 -/

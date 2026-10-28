@@ -60,11 +60,11 @@ def reference_terminal.add_value_lanes
       reference_terminal.VALUE_AUXILIARY_BLOCK)
   let i4 ← lift (Std.Usize.wrapping_add i3 4#usize)
   let q2 ← reference_copy_terminal.Selectors.row selectors i4
-  let q3 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ]) 0#usize
+  let q3 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
   let q4 ← aspis_core.field.QM31.add aspis_core.field.QM31.ZERO q3
-  let q5 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ]) 1#usize
+  let q5 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
   let q6 ← aspis_core.field.QM31.add q4 q5
-  let q7 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ]) 2#usize
+  let q7 ← Array.index_usize (Array.make 3#usize [ q, q1, q2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
   let range_selector ← aspis_core.field.QM31.add q6 q7
   let range := Array.repeat 33#usize aspis_core.field.QM31.ZERO
   let q8 ← reference_terminal.read227 openings.z 0#usize
@@ -340,7 +340,7 @@ def reference_terminal.add_value_lanes
   let q182 ← aspis_core.field.QM31.sub q180 q181
   let q183 ← aspis_core.field.QM31.mul conservation_selector q182
   reference_terminal.add_preweighted packed1 82#usize
-    (Array.make 2#usize [ q179, q183 ])
+    (Array.make 2#usize [ q179, q183 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

@@ -121,13 +121,13 @@ def reference_poseidon.interpolated_full_pair_packed
   let a2 ← Array.index_usize reference_poseidon.EXTERNAL_FINAL 2#usize
   let even ←
     reference_poseidon.interpolate_three_constant_columns
-      (Array.make 3#usize [ q, q1, q2 ]) a a1 a2
+      (Array.make 3#usize [ q, q1, q2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) a a1 a2
   let a3 ← Array.index_usize reference_poseidon.EXTERNAL_INITIAL 3#usize
   let a4 ← Array.index_usize reference_poseidon.EXTERNAL_FINAL 1#usize
   let a5 ← Array.index_usize reference_poseidon.EXTERNAL_FINAL 3#usize
   let odd ←
     reference_poseidon.interpolate_three_constant_columns
-      (Array.make 3#usize [ q, q1, q2 ]) a3 a4 a5
+      (Array.make 3#usize [ q, q1, q2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) a3 a4 a5
   let a6 ← reference_poseidon.full_round state even
   reference_poseidon.full_round_packed a6 odd
 
@@ -196,12 +196,12 @@ def reference_poseidon.interpolated_internal_pair
   let i48 ← Array.index_usize reference_poseidon.INTERNAL i47
   let even ←
     reference_field.qm31_m31_dot
-      (Array.make 7#usize [ q, q1, q2, q3, q4, q5, q6 ])
-      (Array.make 7#usize [ i2, i5, i8, i11, i14, i17, i20 ])
+      (Array.make 7#usize [ q, q1, q2, q3, q4, q5, q6 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 7#usize [ i2, i5, i8, i11, i14, i17, i20 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let odd ←
     reference_field.qm31_m31_dot
-      (Array.make 7#usize [ q, q1, q2, q3, q4, q5, q6 ])
-      (Array.make 7#usize [ i24, i28, i32, i36, i40, i44, i48 ])
+      (Array.make 7#usize [ q, q1, q2, q3, q4, q5, q6 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 7#usize [ i24, i28, i32, i36, i40, i44, i48 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let a ← reference_poseidon.internal_round state even
   reference_poseidon.internal_round a odd
 
@@ -256,7 +256,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q20 ← Array.index_usize openings.succ_z i2
   let i3 ← lift (Std.Usize.wrapping_add start 3#usize)
   let q21 ← Array.index_usize openings.succ_z i3
-  let s ← lift (Array.to_slice (Array.make 4#usize [ q18, q19, q20, q21 ]))
+  let s ← lift (Array.to_slice (Array.make 4#usize [ q18, q19, q20, q21 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let target ← reference_field.qm31_pack_base4 s
   let i4 ← lift (Std.Usize.wrapping_add start 0#usize)
   let q22 ← Array.index_usize internal i4
@@ -266,7 +266,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q24 ← Array.index_usize internal i6
   let i7 ← lift (Std.Usize.wrapping_add start 3#usize)
   let q25 ← Array.index_usize internal i7
-  let s1 ← lift (Array.to_slice (Array.make 4#usize [ q22, q23, q24, q25 ]))
+  let s1 ← lift (Array.to_slice (Array.make 4#usize [ q22, q23, q24, q25 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let internal1 ← reference_field.qm31_pack_base4 s1
   let q26 ← Array.index_usize leading 0#usize
   let q27 ← aspis_core.field.QM31.sub target q26
@@ -275,8 +275,8 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q30 ← aspis_core.field.QM31.sub target internal1
   let q31 ←
     reference_field.qm31_sum_products3_prepared
-      (Array.make 3#usize [ pqm, pqm1, pqm2 ])
-      (Array.make 3#usize [ q27, q29, q30 ])
+      (Array.make 3#usize [ pqm, pqm1, pqm2 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 3#usize [ q27, q29, q30 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q32 ← reference_field.PreparedQm31Multiplier.mul prepared_block q31
   let start1 ← lift (Std.Usize.wrapping_mul 4#usize 1#usize)
   let i8 ← lift (Std.Usize.wrapping_add start1 0#usize)
@@ -287,7 +287,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q35 ← Array.index_usize openings.succ_z i10
   let i11 ← lift (Std.Usize.wrapping_add start1 3#usize)
   let q36 ← Array.index_usize openings.succ_z i11
-  let s2 ← lift (Array.to_slice (Array.make 4#usize [ q33, q34, q35, q36 ]))
+  let s2 ← lift (Array.to_slice (Array.make 4#usize [ q33, q34, q35, q36 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let target1 ← reference_field.qm31_pack_base4 s2
   let i12 ← lift (Std.Usize.wrapping_add start1 0#usize)
   let q37 ← Array.index_usize internal i12
@@ -297,7 +297,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q39 ← Array.index_usize internal i14
   let i15 ← lift (Std.Usize.wrapping_add start1 3#usize)
   let q40 ← Array.index_usize internal i15
-  let s3 ← lift (Array.to_slice (Array.make 4#usize [ q37, q38, q39, q40 ]))
+  let s3 ← lift (Array.to_slice (Array.make 4#usize [ q37, q38, q39, q40 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let internal2 ← reference_field.qm31_pack_base4 s3
   let q41 ← Array.index_usize leading 1#usize
   let q42 ← aspis_core.field.QM31.sub target1 q41
@@ -306,8 +306,8 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q45 ← aspis_core.field.QM31.sub target1 internal2
   let q46 ←
     reference_field.qm31_sum_products3_prepared
-      (Array.make 3#usize [ pqm, pqm1, pqm2 ])
-      (Array.make 3#usize [ q42, q44, q45 ])
+      (Array.make 3#usize [ pqm, pqm1, pqm2 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 3#usize [ q42, q44, q45 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q47 ← reference_field.PreparedQm31Multiplier.mul prepared_block q46
   let start2 ← lift (Std.Usize.wrapping_mul 4#usize 2#usize)
   let i16 ← lift (Std.Usize.wrapping_add start2 0#usize)
@@ -318,7 +318,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q50 ← Array.index_usize openings.succ_z i18
   let i19 ← lift (Std.Usize.wrapping_add start2 3#usize)
   let q51 ← Array.index_usize openings.succ_z i19
-  let s4 ← lift (Array.to_slice (Array.make 4#usize [ q48, q49, q50, q51 ]))
+  let s4 ← lift (Array.to_slice (Array.make 4#usize [ q48, q49, q50, q51 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let target2 ← reference_field.qm31_pack_base4 s4
   let i20 ← lift (Std.Usize.wrapping_add start2 0#usize)
   let q52 ← Array.index_usize internal i20
@@ -328,7 +328,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q54 ← Array.index_usize internal i22
   let i23 ← lift (Std.Usize.wrapping_add start2 3#usize)
   let q55 ← Array.index_usize internal i23
-  let s5 ← lift (Array.to_slice (Array.make 4#usize [ q52, q53, q54, q55 ]))
+  let s5 ← lift (Array.to_slice (Array.make 4#usize [ q52, q53, q54, q55 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let internal3 ← reference_field.qm31_pack_base4 s5
   let q56 ← Array.index_usize leading 2#usize
   let q57 ← aspis_core.field.QM31.sub target2 q56
@@ -337,8 +337,8 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q60 ← aspis_core.field.QM31.sub target2 internal3
   let q61 ←
     reference_field.qm31_sum_products3_prepared
-      (Array.make 3#usize [ pqm, pqm1, pqm2 ])
-      (Array.make 3#usize [ q57, q59, q60 ])
+      (Array.make 3#usize [ pqm, pqm1, pqm2 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 3#usize [ q57, q59, q60 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q62 ← reference_field.PreparedQm31Multiplier.mul prepared_block q61
   let start3 ← lift (Std.Usize.wrapping_mul 4#usize 3#usize)
   let i24 ← lift (Std.Usize.wrapping_add start3 0#usize)
@@ -349,7 +349,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q65 ← Array.index_usize openings.succ_z i26
   let i27 ← lift (Std.Usize.wrapping_add start3 3#usize)
   let q66 ← Array.index_usize openings.succ_z i27
-  let s6 ← lift (Array.to_slice (Array.make 4#usize [ q63, q64, q65, q66 ]))
+  let s6 ← lift (Array.to_slice (Array.make 4#usize [ q63, q64, q65, q66 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let target3 ← reference_field.qm31_pack_base4 s6
   let i28 ← lift (Std.Usize.wrapping_add start3 0#usize)
   let q67 ← Array.index_usize internal i28
@@ -359,7 +359,7 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q69 ← Array.index_usize internal i30
   let i31 ← lift (Std.Usize.wrapping_add start3 3#usize)
   let q70 ← Array.index_usize internal i31
-  let s7 ← lift (Array.to_slice (Array.make 4#usize [ q67, q68, q69, q70 ]))
+  let s7 ← lift (Array.to_slice (Array.make 4#usize [ q67, q68, q69, q70 ] (by simp only [List.length_cons, List.length_nil]; rfl)))
   let internal4 ← reference_field.qm31_pack_base4 s7
   let q71 ← Array.index_usize leading 3#usize
   let q72 ← aspis_core.field.QM31.sub target3 q71
@@ -368,10 +368,10 @@ def reference_poseidon.evaluate_state_only_poseidon_oracle_projected
   let q75 ← aspis_core.field.QM31.sub target3 internal4
   let q76 ←
     reference_field.qm31_sum_products3_prepared
-      (Array.make 3#usize [ pqm, pqm1, pqm2 ])
-      (Array.make 3#usize [ q72, q74, q75 ])
+      (Array.make 3#usize [ pqm, pqm1, pqm2 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+      (Array.make 3#usize [ q72, q74, q75 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q77 ← reference_field.PreparedQm31Multiplier.mul prepared_block q76
-  ok (Array.make 4#usize [ q32, q47, q62, q77 ])
+  ok (Array.make 4#usize [ q32, q47, q62, q77 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

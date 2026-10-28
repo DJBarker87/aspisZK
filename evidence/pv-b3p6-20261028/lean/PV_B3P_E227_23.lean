@@ -32,7 +32,7 @@ def reference_poseidon.extension_limbs
   let i1 := value.c0.b
   let i2 := value.c1.a
   let i3 := value.c1.b
-  ok (Array.make 4#usize [ i, i1, i2, i3 ])
+  ok (Array.make 4#usize [ i, i1, i2, i3 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 /-- [pv_b3p6_reference227::reference_poseidon::extension_from_raw_limbs]:
     Source: 'reference_poseidon.rs', lines 73:0-78:1 -/

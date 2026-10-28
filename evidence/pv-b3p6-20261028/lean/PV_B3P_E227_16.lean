@@ -31,11 +31,11 @@ def reference_copy_terminal.copy_residual
   let q5 ← aspis_core.field.QM31.sub chi q4
   let q6 ← Array.index_usize row.consumer_values 1#usize
   let q7 ← aspis_core.field.QM31.sub chi q6
-  let q8 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ]) 0#usize
-  let q9 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ]) 1#usize
+  let q8 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
+  let q9 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
   let producer_denominator ← aspis_core.field.QM31.mul q8 q9
-  let q10 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ]) 2#usize
-  let q11 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ]) 3#usize
+  let q10 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
+  let q11 ← Array.index_usize (Array.make 4#usize [ q1, q3, q5, q7 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 3#usize
   let consumer_denominator ← aspis_core.field.QM31.mul q10 q11
   let q12 ← Array.index_usize row.producer_weights 0#usize
   let q13 ← aspis_core.field.QM31.mul q12 q9

@@ -30,16 +30,16 @@ def reference_poseidon.external_local_packed_raw
   let a2 ← reference_poseidon.extension_limbs q2
   let q3 ← Array.index_usize input 3#usize
   let a3 ← reference_poseidon.extension_limbs q3
-  let a4 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ]) 0#usize
+  let a4 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
   let i ← Array.index_usize a4 0#usize
   let a5 ← lift (core.convert.num.FromU64U32.from i)
-  let a6 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ]) 1#usize
+  let a6 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
   let i1 ← Array.index_usize a6 0#usize
   let b ← lift (core.convert.num.FromU64U32.from i1)
-  let a7 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ]) 2#usize
+  let a7 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
   let i2 ← Array.index_usize a7 0#usize
   let c ← lift (core.convert.num.FromU64U32.from i2)
-  let a8 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ]) 3#usize
+  let a8 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 3#usize
   let i3 ← Array.index_usize a8 0#usize
   let d ← lift (core.convert.num.FromU64U32.from i3)
   let i4 ← reference_poseidon.raw_limb227 0#usize a5 b c d
@@ -181,11 +181,11 @@ def reference_poseidon.external_local_packed_raw
   let a24 ←
     Array.index_usize
       (Array.make 4#usize [
-        (Array.make 4#usize [ i4, i9, i14, i19 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i24, i29, i34, i39 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i44, i49, i54, i59 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i64, i69, i74, i79 ] : Array Std.U64 4#usize)
-        ]) 0#usize
+        (Array.make 4#usize [ i4, i9, i14, i19 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i24, i29, i34, i39 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i44, i49, i54, i59 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i64, i69, i74, i79 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize)
+        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
   let _ ← Array.index_usize a24 0#usize
   let i80 ← reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
   let _ ← Array.index_usize a24 1#usize
@@ -194,11 +194,11 @@ def reference_poseidon.external_local_packed_raw
   let a25 ←
     Array.index_usize
       (Array.make 4#usize [
-        (Array.make 4#usize [ i4, i9, i14, i19 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i24, i29, i34, i39 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i44, i49, i54, i59 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i64, i69, i74, i79 ] : Array Std.U64 4#usize)
-        ]) 1#usize
+        (Array.make 4#usize [ i4, i9, i14, i19 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i24, i29, i34, i39 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i44, i49, i54, i59 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i64, i69, i74, i79 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize)
+        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
   let _ ← Array.index_usize a25 0#usize
   let _ ← Array.index_usize a25 1#usize
   let _ ← Array.index_usize a25 2#usize
@@ -206,11 +206,11 @@ def reference_poseidon.external_local_packed_raw
   let a26 ←
     Array.index_usize
       (Array.make 4#usize [
-        (Array.make 4#usize [ i4, i9, i14, i19 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i24, i29, i34, i39 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i44, i49, i54, i59 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i64, i69, i74, i79 ] : Array Std.U64 4#usize)
-        ]) 2#usize
+        (Array.make 4#usize [ i4, i9, i14, i19 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i24, i29, i34, i39 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i44, i49, i54, i59 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i64, i69, i74, i79 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize)
+        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
   let _ ← Array.index_usize a26 0#usize
   let _ ← Array.index_usize a26 1#usize
   let _ ← Array.index_usize a26 2#usize
@@ -218,11 +218,11 @@ def reference_poseidon.external_local_packed_raw
   let a27 ←
     Array.index_usize
       (Array.make 4#usize [
-        (Array.make 4#usize [ i4, i9, i14, i19 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i24, i29, i34, i39 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i44, i49, i54, i59 ] : Array Std.U64 4#usize),
-        (Array.make 4#usize [ i64, i69, i74, i79 ] : Array Std.U64 4#usize)
-        ]) 3#usize
+        (Array.make 4#usize [ i4, i9, i14, i19 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i24, i29, i34, i39 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i44, i49, i54, i59 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize),
+        (Array.make 4#usize [ i64, i69, i74, i79 ] (by simp only [List.length_cons, List.length_nil]; rfl) : Array Std.U64 4#usize)
+        ] (by simp only [List.length_cons, List.length_nil]; rfl)) 3#usize
   let _ ← Array.index_usize a27 0#usize
   let _ ← Array.index_usize a27 1#usize
   let _ ← Array.index_usize a27 2#usize
@@ -272,7 +272,7 @@ def reference_poseidon.external_local_packed_raw
   let i123 ← lift (Std.U64.wrapping_add i121 i122)
   let i124 ← Array.index_usize a27 0#usize
   let i125 ← lift (Std.U64.wrapping_add i123 i124)
-  ok (Array.make 4#usize [ i95, i109, i118, i125 ])
+  ok (Array.make 4#usize [ i95, i109, i118, i125 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

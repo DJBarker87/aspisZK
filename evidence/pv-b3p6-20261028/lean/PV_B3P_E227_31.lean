@@ -42,7 +42,7 @@ def reference_poseidon.external_linear_packed
   let q3 ← Array.index_usize state i2
   let q4 ←
     reference_poseidon.external_local_packed
-      (Array.make 4#usize [ q, q1, q2, q3 ])
+      (Array.make 4#usize [ q, q1, q2, q3 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let local_packed1 ← Array.update local_packed 0#usize q4
   let start1 ← lift (Std.Usize.wrapping_mul 4#usize 1#usize)
   let q5 ← Array.index_usize state start1
@@ -54,7 +54,7 @@ def reference_poseidon.external_linear_packed
   let q8 ← Array.index_usize state i5
   let q9 ←
     reference_poseidon.external_local_packed
-      (Array.make 4#usize [ q5, q6, q7, q8 ])
+      (Array.make 4#usize [ q5, q6, q7, q8 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let local_packed2 ← Array.update local_packed1 1#usize q9
   let start2 ← lift (Std.Usize.wrapping_mul 4#usize 2#usize)
   let q10 ← Array.index_usize state start2
@@ -66,7 +66,7 @@ def reference_poseidon.external_linear_packed
   let q13 ← Array.index_usize state i8
   let q14 ←
     reference_poseidon.external_local_packed
-      (Array.make 4#usize [ q10, q11, q12, q13 ])
+      (Array.make 4#usize [ q10, q11, q12, q13 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let local_packed3 ← Array.update local_packed2 2#usize q14
   let start3 ← lift (Std.Usize.wrapping_mul 4#usize 3#usize)
   let q15 ← Array.index_usize state start3
@@ -78,7 +78,7 @@ def reference_poseidon.external_linear_packed
   let q18 ← Array.index_usize state i11
   let q19 ←
     reference_poseidon.external_local_packed
-      (Array.make 4#usize [ q15, q16, q17, q18 ])
+      (Array.make 4#usize [ q15, q16, q17, q18 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let local_packed4 ← Array.update local_packed3 3#usize q19
   let q20 ← Array.index_usize local_packed4 0#usize
   let q21 ← aspis_core.field.QM31.add aspis_core.field.QM31.ZERO q20
@@ -92,7 +92,7 @@ def reference_poseidon.external_linear_packed
   let q28 ← aspis_core.field.QM31.add q22 sum
   let q29 ← aspis_core.field.QM31.add q24 sum
   let q30 ← aspis_core.field.QM31.add q26 sum
-  ok (Array.make 4#usize [ q27, q28, q29, q30 ])
+  ok (Array.make 4#usize [ q27, q28, q29, q30 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

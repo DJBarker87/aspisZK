@@ -40,7 +40,7 @@ def reference_poseidon.add_global227
   let i14 ← Array.index_usize sums 3#usize
   let i15 ← lift (Std.U64.wrapping_add i13 i14)
   reference_poseidon.extension_from_raw_limbs
-    (Array.make 4#usize [ i3, i7, i11, i15 ])
+    (Array.make 4#usize [ i3, i7, i11, i15 ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

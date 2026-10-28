@@ -974,7 +974,7 @@ def reference_copy_terminal.constants.COPY_LINKS
       producer := { row := 1006#u16, slot := 1#u8, pattern := 13#u8 },
       consumer := { row := 896#u16, slot := 0#u8, pattern := 10#u8 }
     }
-    ]
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 
 end PV_B3P_227

@@ -280,11 +280,11 @@ def reference_poseidon.global_sums227
   let i175 ← lift (Std.U64.wrapping_add i172 i174)
   ok
     (Array.make 4#usize [
-      Array.make 4#usize [ i10, i21, i32, i43 ],
-      Array.make 4#usize [ i54, i65, i76, i87 ],
-      Array.make 4#usize [ i98, i109, i120, i131 ],
-      Array.make 4#usize [ i142, i153, i164, i175 ]
-      ])
+      Array.make 4#usize [ i10, i21, i32, i43 ] (by simp only [List.length_cons, List.length_nil]; rfl),
+      Array.make 4#usize [ i54, i65, i76, i87 ] (by simp only [List.length_cons, List.length_nil]; rfl),
+      Array.make 4#usize [ i98, i109, i120, i131 ] (by simp only [List.length_cons, List.length_nil]; rfl),
+      Array.make 4#usize [ i142, i153, i164, i175 ] (by simp only [List.length_cons, List.length_nil]; rfl)
+      ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 
 end PV_B3P_227

@@ -23,7 +23,7 @@ def reference_poseidon.internal_linear_lazy.SHIFTS : Array Std.U8 15#usize :=
   Array.make 15#usize [
     0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 10#u8, 12#u8, 13#u8,
     14#u8, 15#u8, 16#u8
-    ]
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 /-- [pv_b3p6_reference227::reference_poseidon::internal_linear_lazy]:
     Source: 'reference_poseidon.rs', lines 340:0-755:1 -/
@@ -398,12 +398,12 @@ def reference_poseidon.internal_linear_lazy
   let i271 ← lift (Std.U64.wrapping_sub i269 i270)
   let q16 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i259, i263, i267, i271 ])
+      (Array.make 4#usize [ i259, i263, i267, i271 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state1 ← Array.update state 0#usize q16
   let q17 ← Array.index_usize state1 1#usize
   let limbs15 ← reference_poseidon.extension_limbs q17
   let i272 ←
-    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ]) 0#usize
+    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 0#usize
   let i273 ← Array.index_usize limbs15 0#usize
   let i274 ← lift (core.convert.num.FromU64U32.from i273)
   let i275 ← lift (Std.Usize.wrapping_sub 1#usize 1#usize)
@@ -412,7 +412,7 @@ def reference_poseidon.internal_linear_lazy
   let i277 ← lift (Std.U64.wrapping_shl i274 i276)
   let i278 ← lift (Std.U64.wrapping_add i272 i277)
   let i279 ←
-    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ]) 1#usize
+    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 1#usize
   let i280 ← Array.index_usize limbs15 1#usize
   let i281 ← lift (core.convert.num.FromU64U32.from i280)
   let i282 ← lift (Std.Usize.wrapping_sub 1#usize 1#usize)
@@ -421,7 +421,7 @@ def reference_poseidon.internal_linear_lazy
   let i284 ← lift (Std.U64.wrapping_shl i281 i283)
   let i285 ← lift (Std.U64.wrapping_add i279 i284)
   let i286 ←
-    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ]) 2#usize
+    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 2#usize
   let i287 ← Array.index_usize limbs15 2#usize
   let i288 ← lift (core.convert.num.FromU64U32.from i287)
   let i289 ← lift (Std.Usize.wrapping_sub 1#usize 1#usize)
@@ -430,7 +430,7 @@ def reference_poseidon.internal_linear_lazy
   let i291 ← lift (Std.U64.wrapping_shl i288 i290)
   let i292 ← lift (Std.U64.wrapping_add i286 i291)
   let i293 ←
-    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ]) 3#usize
+    Array.index_usize (Array.make 4#usize [ i243, i247, i251, i255 ] (by simp only [List.length_cons, List.length_nil]; rfl)) 3#usize
   let i294 ← Array.index_usize limbs15 3#usize
   let i295 ← lift (core.convert.num.FromU64U32.from i294)
   let i296 ← lift (Std.Usize.wrapping_sub 1#usize 1#usize)
@@ -440,7 +440,7 @@ def reference_poseidon.internal_linear_lazy
   let i299 ← lift (Std.U64.wrapping_add i293 i298)
   let q18 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i278, i285, i292, i299 ])
+      (Array.make 4#usize [ i278, i285, i292, i299 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state2 ← Array.update state1 1#usize q18
   let q19 ← Array.index_usize state2 2#usize
   let limbs16 ← reference_poseidon.extension_limbs q19
@@ -474,7 +474,7 @@ def reference_poseidon.internal_linear_lazy
   let i323 ← lift (Std.U64.wrapping_add i293 i322)
   let q20 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i305, i311, i317, i323 ])
+      (Array.make 4#usize [ i305, i311, i317, i323 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state3 ← Array.update state2 2#usize q20
   let q21 ← Array.index_usize state3 3#usize
   let limbs17 ← reference_poseidon.extension_limbs q21
@@ -508,7 +508,7 @@ def reference_poseidon.internal_linear_lazy
   let i347 ← lift (Std.U64.wrapping_add i293 i346)
   let q22 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i329, i335, i341, i347 ])
+      (Array.make 4#usize [ i329, i335, i341, i347 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state4 ← Array.update state3 3#usize q22
   let q23 ← Array.index_usize state4 4#usize
   let limbs18 ← reference_poseidon.extension_limbs q23
@@ -542,7 +542,7 @@ def reference_poseidon.internal_linear_lazy
   let i371 ← lift (Std.U64.wrapping_add i293 i370)
   let q24 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i353, i359, i365, i371 ])
+      (Array.make 4#usize [ i353, i359, i365, i371 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state5 ← Array.update state4 4#usize q24
   let q25 ← Array.index_usize state5 5#usize
   let limbs19 ← reference_poseidon.extension_limbs q25
@@ -576,7 +576,7 @@ def reference_poseidon.internal_linear_lazy
   let i395 ← lift (Std.U64.wrapping_add i293 i394)
   let q26 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i377, i383, i389, i395 ])
+      (Array.make 4#usize [ i377, i383, i389, i395 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state6 ← Array.update state5 5#usize q26
   let q27 ← Array.index_usize state6 6#usize
   let limbs20 ← reference_poseidon.extension_limbs q27
@@ -610,7 +610,7 @@ def reference_poseidon.internal_linear_lazy
   let i419 ← lift (Std.U64.wrapping_add i293 i418)
   let q28 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i401, i407, i413, i419 ])
+      (Array.make 4#usize [ i401, i407, i413, i419 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state7 ← Array.update state6 6#usize q28
   let q29 ← Array.index_usize state7 7#usize
   let limbs21 ← reference_poseidon.extension_limbs q29
@@ -644,7 +644,7 @@ def reference_poseidon.internal_linear_lazy
   let i443 ← lift (Std.U64.wrapping_add i293 i442)
   let q30 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i425, i431, i437, i443 ])
+      (Array.make 4#usize [ i425, i431, i437, i443 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state8 ← Array.update state7 7#usize q30
   let q31 ← Array.index_usize state8 8#usize
   let limbs22 ← reference_poseidon.extension_limbs q31
@@ -678,7 +678,7 @@ def reference_poseidon.internal_linear_lazy
   let i467 ← lift (Std.U64.wrapping_add i293 i466)
   let q32 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i449, i455, i461, i467 ])
+      (Array.make 4#usize [ i449, i455, i461, i467 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state9 ← Array.update state8 8#usize q32
   let q33 ← Array.index_usize state9 9#usize
   let limbs23 ← reference_poseidon.extension_limbs q33
@@ -712,7 +712,7 @@ def reference_poseidon.internal_linear_lazy
   let i491 ← lift (Std.U64.wrapping_add i293 i490)
   let q34 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i473, i479, i485, i491 ])
+      (Array.make 4#usize [ i473, i479, i485, i491 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state10 ← Array.update state9 9#usize q34
   let q35 ← Array.index_usize state10 10#usize
   let limbs24 ← reference_poseidon.extension_limbs q35
@@ -746,7 +746,7 @@ def reference_poseidon.internal_linear_lazy
   let i515 ← lift (Std.U64.wrapping_add i293 i514)
   let q36 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i497, i503, i509, i515 ])
+      (Array.make 4#usize [ i497, i503, i509, i515 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state11 ← Array.update state10 10#usize q36
   let q37 ← Array.index_usize state11 11#usize
   let limbs25 ← reference_poseidon.extension_limbs q37
@@ -780,7 +780,7 @@ def reference_poseidon.internal_linear_lazy
   let i539 ← lift (Std.U64.wrapping_add i293 i538)
   let q38 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i521, i527, i533, i539 ])
+      (Array.make 4#usize [ i521, i527, i533, i539 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state12 ← Array.update state11 11#usize q38
   let q39 ← Array.index_usize state12 12#usize
   let limbs26 ← reference_poseidon.extension_limbs q39
@@ -814,7 +814,7 @@ def reference_poseidon.internal_linear_lazy
   let i563 ← lift (Std.U64.wrapping_add i293 i562)
   let q40 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i545, i551, i557, i563 ])
+      (Array.make 4#usize [ i545, i551, i557, i563 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state13 ← Array.update state12 12#usize q40
   let q41 ← Array.index_usize state13 13#usize
   let limbs27 ← reference_poseidon.extension_limbs q41
@@ -848,7 +848,7 @@ def reference_poseidon.internal_linear_lazy
   let i587 ← lift (Std.U64.wrapping_add i293 i586)
   let q42 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i569, i575, i581, i587 ])
+      (Array.make 4#usize [ i569, i575, i581, i587 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state14 ← Array.update state13 13#usize q42
   let q43 ← Array.index_usize state14 14#usize
   let limbs28 ← reference_poseidon.extension_limbs q43
@@ -882,7 +882,7 @@ def reference_poseidon.internal_linear_lazy
   let i611 ← lift (Std.U64.wrapping_add i293 i610)
   let q44 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i593, i599, i605, i611 ])
+      (Array.make 4#usize [ i593, i599, i605, i611 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let state15 ← Array.update state14 14#usize q44
   let q45 ← Array.index_usize state15 15#usize
   let limbs29 ← reference_poseidon.extension_limbs q45
@@ -916,7 +916,7 @@ def reference_poseidon.internal_linear_lazy
   let i635 ← lift (Std.U64.wrapping_add i293 i634)
   let q46 ←
     reference_poseidon.extension_from_raw_limbs
-      (Array.make 4#usize [ i617, i623, i629, i635 ])
+      (Array.make 4#usize [ i617, i623, i629, i635 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   Array.update state15 15#usize q46
 
 

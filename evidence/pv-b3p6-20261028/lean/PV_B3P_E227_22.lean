@@ -27,26 +27,26 @@ def reference_poseidon.EXTERNAL_INITIAL
       1611656994#u32, 1104858731#u32, 1694088660#u32, 1564660990#u32,
       1991332205#u32, 1875486487#u32, 1890340790#u32, 1658614#u32,
       582370530#u32, 528029397#u32, 1196956642#u32, 655401251#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       1652877415#u32, 26032894#u32, 1576640243#u32, 1277052539#u32,
       1450142396#u32, 697623591#u32, 1401580866#u32, 1568404175#u32,
       2145004971#u32, 265835716#u32, 1183985610#u32, 1031234465#u32,
       436012490#u32, 172735299#u32, 352802897#u32, 1032863094#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       757665783#u32, 1082171296#u32, 1507509996#u32, 309929890#u32,
       1807683232#u32, 43258895#u32, 611592566#u32, 1854193793#u32,
       575164234#u32, 894217817#u32, 72613857#u32, 1061659596#u32, 8921166#u32,
       1617355017#u32, 998001536#u32, 1800758877#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       1002748055#u32, 1935405944#u32, 1351462722#u32, 411368491#u32,
       1913975372#u32, 1956167178#u32, 442558016#u32, 855898408#u32,
       699687798#u32, 1553382248#u32, 1708169125#u32, 490049183#u32,
       1251643415#u32, 1193594742#u32, 880473871#u32, 511174042#u32
-      ]
-    ]
+      ] (by simp only [List.length_cons, List.length_nil]; rfl)
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 /-- [pv_b3p6_reference227::reference_poseidon::EXTERNAL_FINAL]
     Source: 'reference_poseidon.rs', lines 31:0-52:2 -/
@@ -59,26 +59,26 @@ def reference_poseidon.EXTERNAL_FINAL
       75179210#u32, 1309934197#u32, 1335920373#u32, 127611036#u32,
       291093831#u32, 1832379621#u32, 123571662#u32, 303176864#u32,
       2137685056#u32, 1759609530#u32, 1418928155#u32, 71608334#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       6616262#u32, 1684515814#u32, 1721194338#u32, 720801691#u32,
       878392254#u32, 460379263#u32, 87930647#u32, 940673483#u32,
       1136203256#u32, 551499412#u32, 256220454#u32, 2007034235#u32,
       796124985#u32, 410436345#u32, 1705042586#u32, 1286336446#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       1522340456#u32, 1295296352#u32, 309794713#u32, 1772145068#u32,
       956898901#u32, 2137070800#u32, 988829146#u32, 2059451359#u32,
       1846491684#u32, 1105442551#u32, 1236497773#u32, 1452000568#u32,
       549485016#u32, 385992492#u32, 1987107948#u32, 1514377269#u32
-      ],
+      ] (by simp only [List.length_cons, List.length_nil]; rfl),
     Array.make 16#usize [
       2090065934#u32, 1444920141#u32, 293113979#u32, 41120774#u32,
       855319793#u32, 1663284746#u32, 1789994008#u32, 1120509162#u32,
       358222743#u32, 1406256810#u32, 735183687#u32, 664485235#u32,
       1331641456#u32, 38121324#u32, 595810771#u32, 1234594393#u32
-      ]
-    ]
+      ] (by simp only [List.length_cons, List.length_nil]; rfl)
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 /-- [pv_b3p6_reference227::reference_poseidon::INTERNAL]
     Source: 'reference_poseidon.rs', lines 53:0-56:2 -/
@@ -89,7 +89,7 @@ def reference_poseidon.INTERNAL : Array Std.U32 14#usize :=
     1130937085#u32, 1718115455#u32, 2027103386#u32, 1612216449#u32,
     1994053242#u32, 110146615#u32, 514413329#u32, 1088763546#u32,
     955319292#u32, 488794657#u32
-    ]
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 
 end PV_B3P_227

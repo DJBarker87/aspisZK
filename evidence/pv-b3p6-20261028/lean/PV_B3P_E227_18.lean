@@ -33,7 +33,7 @@ def reference_field.prepare_component
   Result (Array aspis_core.field.M31 3#usize)
   := do
   let m ← aspis_core.field.M31.add component.a component.b
-  ok (Array.make 3#usize [ component.a, component.b, m ])
+  ok (Array.make 3#usize [ component.a, component.b, m ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 /-- [pv_b3p6_reference227::reference_field::prepared_component_mul]:
     Source: 'reference_field.rs', lines 16:0-24:1 -/
@@ -63,7 +63,7 @@ def reference_field.PreparedQm31Multiplier.new
   let a1 ← reference_field.prepare_component value.c1
   let c ← aspis_core.field.CM31.add value.c0 value.c1
   let a2 ← reference_field.prepare_component c
-  ok { components := (Array.make 3#usize [ a, a1, a2 ]) }
+  ok { components := (Array.make 3#usize [ a, a1, a2 ] (by simp only [List.length_cons, List.length_nil]; rfl)) }
 
 /-- [pv_b3p6_reference227::reference_field::{pv_b3p6_reference227::reference_field::PreparedQm31Multiplier}::mul]:
     Source: 'reference_field.rs', lines 37:4-45:5 -/

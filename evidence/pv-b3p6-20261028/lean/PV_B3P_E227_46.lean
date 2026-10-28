@@ -30,14 +30,14 @@ def reference_terminal.scalar_lanes
   | reference_terminal.CompiledVariant.PrivateTransfer =>
     let output_scalar1 ←
       aspis_core.field.QM31.add output_scalar private_transfer_term
-    ok (Array.make 2#usize [ input_asset, output_scalar1 ])
+    ok (Array.make 2#usize [ input_asset, output_scalar1 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   | reference_terminal.CompiledVariant.Withdrawal =>
     if withdrawal_amount_present
     then
       let output_scalar1 ←
         aspis_core.field.QM31.add output_scalar withdrawal_term
-      ok (Array.make 2#usize [ input_asset, output_scalar1 ])
-    else ok (Array.make 2#usize [ input_asset, output_scalar ])
+      ok (Array.make 2#usize [ input_asset, output_scalar1 ] (by simp only [List.length_cons, List.length_nil]; rfl))
+    else ok (Array.make 2#usize [ input_asset, output_scalar ] (by simp only [List.length_cons, List.length_nil]; rfl))
 
 /-- [pv_b3p6_reference227::reference_terminal::semantic_packed]:
     Source: 'reference_terminal.rs', lines 2060:0-2100:1 -/

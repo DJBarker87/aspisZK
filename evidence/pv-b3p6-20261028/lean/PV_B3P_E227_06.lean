@@ -43,7 +43,7 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 10#u8,
           11#u8, 12#u8, 13#u8, 14#u8, 15#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a1
     },
     {
@@ -51,12 +51,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a2
     },
     {
@@ -64,12 +64,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a3
     },
     {
@@ -77,12 +77,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a4
     },
     {
@@ -90,12 +90,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           0#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a5
     },
     {
@@ -103,12 +103,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           6#u8, 7#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a6
     },
     {
@@ -116,7 +116,7 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns := a7,
       offsets := a8
     },
@@ -125,12 +125,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           10#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a9
     },
     {
@@ -138,12 +138,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a10
     },
     {
@@ -151,12 +151,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           2#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a11
     },
     {
@@ -164,29 +164,29 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           8#u8, 9#u8, 10#u8, 11#u8, 12#u8, 13#u8, 14#u8, 15#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets :=
         (Array.make 16#usize [
           0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 1051521018#u32,
           0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32
-          ])
+          ] (by simp only [List.length_cons, List.length_nil]; rfl))
     },
     {
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a12
     },
     {
@@ -194,12 +194,12 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a13
     },
     {
@@ -207,15 +207,15 @@ def reference_copy_terminal.constants.COPY_PATTERNS
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       columns :=
         (Array.make 16#usize [
           8#u8, 9#u8, 10#u8, 11#u8, 12#u8, 13#u8, 14#u8, 15#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8
-          ]),
+          ] (by simp only [List.length_cons, List.length_nil]; rfl)),
       offsets := a14
     }
-    ]
+    ] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 
 end PV_B3P_227

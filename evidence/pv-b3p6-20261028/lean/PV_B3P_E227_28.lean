@@ -27,7 +27,7 @@ def reference_poseidon.external_linear_lazy
   let q2 ← Array.index_usize state 2#usize
   let q3 ← Array.index_usize state 3#usize
   let output ←
-    reference_poseidon.external_group227 (Array.make 4#usize [ q, q1, q2, q3 ])
+    reference_poseidon.external_group227 (Array.make 4#usize [ q, q1, q2, q3 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q4 ← Array.index_usize output 0#usize
   let state1 ← Array.update state 0#usize q4
   let q5 ← Array.index_usize output 1#usize
@@ -42,7 +42,7 @@ def reference_poseidon.external_linear_lazy
   let q11 ← Array.index_usize state4 7#usize
   let output1 ←
     reference_poseidon.external_group227
-      (Array.make 4#usize [ q8, q9, q10, q11 ])
+      (Array.make 4#usize [ q8, q9, q10, q11 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q12 ← Array.index_usize output1 0#usize
   let state5 ← Array.update state4 4#usize q12
   let q13 ← Array.index_usize output1 1#usize
@@ -57,7 +57,7 @@ def reference_poseidon.external_linear_lazy
   let q19 ← Array.index_usize state8 11#usize
   let output2 ←
     reference_poseidon.external_group227
-      (Array.make 4#usize [ q16, q17, q18, q19 ])
+      (Array.make 4#usize [ q16, q17, q18, q19 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q20 ← Array.index_usize output2 0#usize
   let state9 ← Array.update state8 8#usize q20
   let q21 ← Array.index_usize output2 1#usize
@@ -72,7 +72,7 @@ def reference_poseidon.external_linear_lazy
   let q27 ← Array.index_usize state12 15#usize
   let output3 ←
     reference_poseidon.external_group227
-      (Array.make 4#usize [ q24, q25, q26, q27 ])
+      (Array.make 4#usize [ q24, q25, q26, q27 ] (by simp only [List.length_cons, List.length_nil]; rfl))
   let q28 ← Array.index_usize output3 0#usize
   let state13 ← Array.update state12 12#usize q28
   let q29 ← Array.index_usize output3 1#usize
