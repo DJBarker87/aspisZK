@@ -1,0 +1,788 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41153/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41153/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects/R1Z/PV_RDB2_SumDeployed.olean",
+    "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_SumDeployed.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall": "0:01.23",
+  "peak_rss_kib": "2649452",
+  "swap": "0",
+  "source_revision": "9a4c0447e4dc9a07ecb2a907d677f354565670bc",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": [
+    "'R1Z.PV_RDB2_SumDeployed.fold_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_RDB2_SumDeployed.complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_RDB2_SumDeployed.storage_and_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_RDB2_SumDeployed.wrong_length_no_read' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_RDB2_SumDeployed.installed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_RDB2_SumDeployed.compressor_retained' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 41153,
+  "module": "R1Z/PV_RDB2_SumDeployed",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RDB2_SumDeployed.lean",
+  "source_blob": "68cb1f3b2a3a21cc891931b40355edd4be20455a",
+  "source_sha256": "df4ab9d2f8b5e5dd1f6a396851131b3a7bd8ca1dcfdf077af6e9652b11f670a9",
+  "authority": "h5 git-tracked new module; all external manifest objects preflighted and selected prefixes checked",
+  "toolchain": "Lean4.32.0 env-J",
+  "imports": [
+    "R1Z.PV_RDB2_SumOriginal",
+    "R1Z.PV_RDB2_Fold",
+    "R1Z.PV_RDB2_ActualCarrier230",
+    "R1Z.PV_RDB2_Transport",
+    "R1Z.PV_RDB2_FullExternalFuns"
+  ],
+  "associated_deployed_resolved_features": [
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core#0.1.0",
+      "name": "aspis-core",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover#0.1.0",
+      "name": "aspis-prover",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "insecure-spend-fixture",
+        "prover",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/blockwriters#aspis-r0-block-writer-copies@0.0.0",
+      "name": "aspis-r0-block-writer-copies",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/poseidon#aspis-r0-poseidon-copy@0.0.0",
+      "name": "aspis-r0-poseidon-copy",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/writers#aspis-r0-writer-copies@0.0.0",
+      "name": "aspis-r0-writer-copies",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/build#aspis-r1-cert-build@0.0.0",
+      "name": "aspis-r1-cert-build",
+      "version": "0.0.0",
+      "features": [
+        "native-kernels",
+        "native-workers"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check#aspis-r1-cert-check@0.0.0",
+      "name": "aspis-r1-cert-check",
+      "version": "0.0.0",
+      "features": [
+        "native-kernels",
+        "native-workers"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe#0.1.0",
+      "name": "aspis-r1-cost-probe",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "default",
+        "private-leaf-salts",
+        "prover",
+        "r1p-check"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-statement#0.1.0",
+      "name": "aspis-statement",
+      "version": "0.1.0",
+      "features": [
+        "pool-v1-kernel",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/z4#aspis-z4b-probe@0.1.0",
+      "name": "aspis-z4b-probe",
+      "version": "0.1.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#block-buffer@0.10.4",
+      "name": "block-buffer",
+      "version": "0.10.4",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#cfg-if@1.0.5",
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#const-oid@0.9.6",
+      "name": "const-oid",
+      "version": "0.9.6",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#cpufeatures@0.2.17",
+      "name": "cpufeatures",
+      "version": "0.2.17",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#crypto-common@0.1.7",
+      "name": "crypto-common",
+      "version": "0.1.7",
+      "features": [
+        "getrandom",
+        "rand_core",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#digest@0.10.7",
+      "name": "digest",
+      "version": "0.10.7",
+      "features": [
+        "alloc",
+        "block-buffer",
+        "const-oid",
+        "core-api",
+        "default",
+        "mac",
+        "oid",
+        "std",
+        "subtle"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#generic-array@0.14.7",
+      "name": "generic-array",
+      "version": "0.14.7",
+      "features": [
+        "more_lengths",
+        "zeroize"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#getrandom@0.2.17",
+      "name": "getrandom",
+      "version": "0.2.17",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#getrandom@0.3.4",
+      "name": "getrandom",
+      "version": "0.3.4",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#itoa@1.0.18",
+      "name": "itoa",
+      "version": "1.0.18",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#libc@0.2.191",
+      "name": "libc",
+      "version": "0.2.191",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#memchr@2.8.3",
+      "name": "memchr",
+      "version": "2.8.3",
+      "features": [
+        "alloc",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.107",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-rdb2-20261028/classification-project-fixture#pv-fscan-deployed-project-fixture@0.0.0",
+      "name": "pv-fscan-deployed-project-fixture",
+      "version": "0.0.0",
+      "features": [
+        "ct-host-prover",
+        "default"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.47",
+      "name": "quote",
+      "version": "1.0.47",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#r-efi@5.3.0",
+      "name": "r-efi",
+      "version": "5.3.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand_core@0.6.4",
+      "name": "rand_core",
+      "version": "0.6.4",
+      "features": [
+        "getrandom"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.229",
+      "name": "serde",
+      "version": "1.0.229",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_core@1.0.229",
+      "name": "serde_core",
+      "version": "1.0.229",
+      "features": [
+        "result",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_derive@1.0.229",
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "features": [
+        "default"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.154",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "features": [
+        "default",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#sha2@0.10.9",
+      "name": "sha2",
+      "version": "0.10.9",
+      "features": [
+        "default",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#subtle@2.6.1",
+      "name": "subtle",
+      "version": "2.6.1",
+      "features": [
+        "default",
+        "i128",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.119",
+      "name": "syn",
+      "version": "2.0.119",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro",
+        "visit"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#syn@3.0.9",
+      "name": "syn",
+      "version": "3.0.9",
+      "features": [
+        "clone-impls",
+        "derive",
+        "parsing",
+        "printing",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#typenum@1.20.1",
+      "name": "typenum",
+      "version": "1.20.1",
+      "features": [
+        "const-generics"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#unicode-ident@1.0.27",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#version_check@0.9.5",
+      "name": "version_check",
+      "version": "0.9.5",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wasi@0.11.1+wasi-snapshot-preview1",
+      "name": "wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wasip2@1.0.4+wasi-0.2.12",
+      "name": "wasip2",
+      "version": "1.0.4+wasi-0.2.12",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wit-bindgen@0.57.1",
+      "name": "wit-bindgen",
+      "version": "0.57.1",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zeroize@1.9.0",
+      "name": "zeroize",
+      "version": "1.9.0",
+      "features": [
+        "alloc",
+        "default",
+        "zeroize_derive"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zeroize_derive@1.5.0",
+      "name": "zeroize_derive",
+      "version": "1.5.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zmij@1.0.23",
+      "name": "zmij",
+      "version": "1.0.23",
+      "features": []
+    }
+  ],
+  "associated_deployed_profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "associated_deployed_toolchain": "rustc1.94.1",
+  "dependency_fingerprint": "resume-final-dependency-fingerprint.json.xz",
+  "dependency_fingerprint_uncompressed_sha256": "5d8f8115f75e38264fe1c0b7aecf8d0e38b063ec5eaed285ccd38e180593df11",
+  "resolved_features": [
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core#0.1.0",
+      "name": "aspis-core",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover#0.1.0",
+      "name": "aspis-prover",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "insecure-spend-fixture",
+        "prover",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/blockwriters#aspis-r0-block-writer-copies@0.0.0",
+      "name": "aspis-r0-block-writer-copies",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/poseidon#aspis-r0-poseidon-copy@0.0.0",
+      "name": "aspis-r0-poseidon-copy",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/refine/writers#aspis-r0-writer-copies@0.0.0",
+      "name": "aspis-r0-writer-copies",
+      "version": "0.0.0",
+      "features": []
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/build#aspis-r1-cert-build@0.0.0",
+      "name": "aspis-r1-cert-build",
+      "version": "0.0.0",
+      "features": [
+        "native-kernels",
+        "native-workers"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check#aspis-r1-cert-check@0.0.0",
+      "name": "aspis-r1-cert-check",
+      "version": "0.0.0",
+      "features": [
+        "native-kernels",
+        "native-workers"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe#0.1.0",
+      "name": "aspis-r1-cost-probe",
+      "version": "0.1.0",
+      "features": [
+        "ct-host-prover",
+        "default",
+        "private-leaf-salts",
+        "prover",
+        "r1p-check"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-statement#0.1.0",
+      "name": "aspis-statement",
+      "version": "0.1.0",
+      "features": [
+        "pool-v1-kernel",
+        "r0"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/z4#aspis-z4b-probe@0.1.0",
+      "name": "aspis-z4b-probe",
+      "version": "0.1.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#block-buffer@0.10.4",
+      "name": "block-buffer",
+      "version": "0.10.4",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#cfg-if@1.0.5",
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#const-oid@0.9.6",
+      "name": "const-oid",
+      "version": "0.9.6",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#cpufeatures@0.2.17",
+      "name": "cpufeatures",
+      "version": "0.2.17",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#crypto-common@0.1.7",
+      "name": "crypto-common",
+      "version": "0.1.7",
+      "features": [
+        "getrandom",
+        "rand_core",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#digest@0.10.7",
+      "name": "digest",
+      "version": "0.10.7",
+      "features": [
+        "alloc",
+        "block-buffer",
+        "const-oid",
+        "core-api",
+        "default",
+        "mac",
+        "oid",
+        "std",
+        "subtle"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#generic-array@0.14.7",
+      "name": "generic-array",
+      "version": "0.14.7",
+      "features": [
+        "more_lengths",
+        "zeroize"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#getrandom@0.2.17",
+      "name": "getrandom",
+      "version": "0.2.17",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#getrandom@0.3.4",
+      "name": "getrandom",
+      "version": "0.3.4",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#itoa@1.0.18",
+      "name": "itoa",
+      "version": "1.0.18",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#libc@0.2.191",
+      "name": "libc",
+      "version": "0.2.191",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#memchr@2.8.3",
+      "name": "memchr",
+      "version": "2.8.3",
+      "features": [
+        "alloc",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.107",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "path+file:///home/dombarker/project-offloads/codex-pv-rdb2-20261028/classification-project-fixture#pv-fscan-deployed-project-fixture@0.0.0",
+      "name": "pv-fscan-deployed-project-fixture",
+      "version": "0.0.0",
+      "features": [
+        "ct-host-prover",
+        "default"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.47",
+      "name": "quote",
+      "version": "1.0.47",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#r-efi@5.3.0",
+      "name": "r-efi",
+      "version": "5.3.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#rand_core@0.6.4",
+      "name": "rand_core",
+      "version": "0.6.4",
+      "features": [
+        "getrandom"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde@1.0.229",
+      "name": "serde",
+      "version": "1.0.229",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_core@1.0.229",
+      "name": "serde_core",
+      "version": "1.0.229",
+      "features": [
+        "result",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_derive@1.0.229",
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "features": [
+        "default"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#serde_json@1.0.154",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "features": [
+        "default",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#sha2@0.10.9",
+      "name": "sha2",
+      "version": "0.10.9",
+      "features": [
+        "default",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#subtle@2.6.1",
+      "name": "subtle",
+      "version": "2.6.1",
+      "features": [
+        "default",
+        "i128",
+        "std"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.119",
+      "name": "syn",
+      "version": "2.0.119",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro",
+        "visit"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#syn@3.0.9",
+      "name": "syn",
+      "version": "3.0.9",
+      "features": [
+        "clone-impls",
+        "derive",
+        "parsing",
+        "printing",
+        "proc-macro"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#typenum@1.20.1",
+      "name": "typenum",
+      "version": "1.20.1",
+      "features": [
+        "const-generics"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#unicode-ident@1.0.27",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#version_check@0.9.5",
+      "name": "version_check",
+      "version": "0.9.5",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wasi@0.11.1+wasi-snapshot-preview1",
+      "name": "wasi",
+      "version": "0.11.1+wasi-snapshot-preview1",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wasip2@1.0.4+wasi-0.2.12",
+      "name": "wasip2",
+      "version": "1.0.4+wasi-0.2.12",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#wit-bindgen@0.57.1",
+      "name": "wit-bindgen",
+      "version": "0.57.1",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zeroize@1.9.0",
+      "name": "zeroize",
+      "version": "1.9.0",
+      "features": [
+        "alloc",
+        "default",
+        "zeroize_derive"
+      ]
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zeroize_derive@1.5.0",
+      "name": "zeroize_derive",
+      "version": "1.5.0",
+      "features": []
+    },
+    {
+      "id": "registry+https://github.com/rust-lang/crates.io-index#zmij@1.0.23",
+      "name": "zmij",
+      "version": "1.0.23",
+      "features": []
+    }
+  ],
+  "resolved_features_scope": "associated deployed source graph; this scope did not compile Rust",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "dependency_fingerprint_scope": "Final successful import cohort. Attempt source, imported module names, historical revision and error diagnostics are retained separately; this does not replace the failed41102 pre-correction environment."
+}
