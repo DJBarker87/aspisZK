@@ -20,7 +20,10 @@ def rawNew {World : Type} (a : Usize) (world : World) : Result (EmptyRaw × Worl
   -- retain the address at the Rust primitive representation boundary.
   ok (⟨align,0#usize⟩,world)
 
-theorem power_four : powerOfTwo 4#usize = true := rfl
+theorem power_four : powerOfTwo 4#usize = true := by
+  change ((BitVec.ofNat UScalarTy.Usize.numBits 4).cpop.toNat == 1) = true
+  simp only [UScalarTy.numBits]
+  rcases System.Platform.numBits_eq with h | h <;> rw [h] <;> rfl
 
 theorem alignment_valid (a : Usize) (h : powerOfTwo a = true) : alignmentOf a = ok a := by
   simp [alignmentOf,h]
