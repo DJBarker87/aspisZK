@@ -37,7 +37,8 @@ theorem complete_result (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
   simp only [bind_tc_ok,sub_source]
   rw [PV_L2C_VecBack.index_mut bound1024 _ d hd]
   simp only [bind_tc_ok]
-  dsimp only
+  change ok (.Ok (),PV_L2C_VecBack.back (vector bound1024 (fun i => source (table i))) d
+    (source (subQ zero (foldQ (selected table active d rows) zero))))=_
   rw [PV_L2C_VecBack.write bound1024 _ d hd]
   have he : (fun i : Fin 1024 => if i.val=d.val then
       source (subQ zero (foldQ (selected table active d rows) zero)) else source (table i))=
