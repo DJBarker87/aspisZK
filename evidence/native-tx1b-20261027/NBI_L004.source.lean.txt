@@ -1,0 +1,64 @@
+import NBE_KeyLoop
+import Port4B_KeyInstall
+import Port4B_Opening
+
+set_option autoImplicit false
+namespace AspisR1.NBI_Keys
+open Aeneas Aeneas.Std Result
+open OraclePortSelectedDraft MultiproofConeSortOrder
+
+/-- No modulo weakening: every selected canonical raw word is identical to
+its installed finite query. This domain must be derived by the producer. -/
+theorem canonical_query (raw : Array U32 22#usize) (j : Nat) (jb : j < 22)
+    (canonical : raw.val[j]!.val < 262144) :
+    (Port4B_KeyInstall.queries raw ⟨j,jb⟩).val = raw.val[j]!.val := by
+  have len : raw.val.length = 22 := raw.property
+  have h : j < raw.val.length := by omega
+  simp only [Port4B_KeyInstall.queries,List.getElem?_map,List.getElem?_eq_getElem h,
+    Option.map_some,Option.getD_some]
+  simpa only [List.getElem!_eq_getElem?_getD,List.getElem?_eq_getElem h,Option.getD_some]
+    using Nat.mod_eq_of_lt canonical
+
+/-- The natural word checked by NBE_key is exactly the installed packed U64
+word for both transaction splits, before any sorting is considered. -/
+theorem packed_word (raw : Array U32 22#usize) (batch kind j : Nat)
+    (jb : j < (if batch = 0 then 10 else 12))
+    (canonical : raw.val[(if batch = 0 then 0 else 10)+j]!.val < 262144) :
+    (packed (Port4B_KeyInstall.queries raw) batch kind
+      ((if batch = 0 then 0 else 10)+j)).val =
+      256 * (if kind = 2 then raw.val[(if batch = 0 then 0 else 10)+j]!.val / 4
+        else raw.val[(if batch = 0 then 0 else 10)+j]!.val) + j := by
+  have pos : (if batch = 0 then 0 else 10)+j < 22 := by split at * <;> omega
+  have query := canonical_query raw ((if batch = 0 then 0 else 10)+j) pos canonical
+  simp only [packed,UScalar.val_ofNat,index,Nat.mod_eq_of_lt pos,query]
+  split <;> omega
+
+/-- Exact forward producer, including every untouched zero suffix coordinate.
+The word is the native step's packed word, not an assumed final array. -/
+theorem key_array_values (raw : Array U32 22#usize) (batch kind k : Nat) (kb : k < 16) :
+    NBE_KeyLoop.fill
+      (fun j => packed (Port4B_KeyInstall.queries raw) batch kind
+        ((if batch = 0 then 0 else 10)+j))
+      (if batch = 0 then 10 else 12) 0 (fun _ => 0#u64) k =
+      (Port4B_KeyInstall.keyArray raw batch kind).val[k]! := by
+  rw [NBE_KeyLoop.fill_values]
+  unfold Port4B_KeyInstall.keyArray Port4B_KeyInstall.prefixKeys
+  by_cases zero : batch = 0
+  · subst batch
+    simp only [if_pos rfl,batchPositions,List.length_map,List.length_range,Nat.zero_add]
+    by_cases active : k < 10
+    · simp [active,List.getElem!_eq_getElem?_getD,List.getElem?_append_left,
+        List.getElem?_map,List.getElem?_range]
+    · simp [active,List.getElem!_eq_getElem?_getD,List.getElem?_append_right,
+        List.getElem?_replicate,show k-10 < 6 by omega]
+  · simp only [if_neg zero,batchPositions,List.length_map,List.length_range]
+    by_cases active : k < 12
+    · simp [active,List.getElem!_eq_getElem?_getD,List.getElem?_append_left,
+        List.getElem?_map,List.getElem?_range,Nat.add_comm]
+    · simp [active,List.getElem!_eq_getElem?_getD,List.getElem?_append_right,
+        List.getElem?_replicate,show k-12 < 4 by omega]
+
+#print axioms canonical_query
+#print axioms packed_word
+#print axioms key_array_values
+end AspisR1.NBI_Keys

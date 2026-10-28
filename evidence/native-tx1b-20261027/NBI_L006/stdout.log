@@ -1,0 +1,77 @@
+NBI_sources/NBI_Window.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (transport (writer ?s ?left ?right ?ni ?cursor ?index ?w))
+in the target expression
+  let l := if left = true then value else chunk;
+  let r := if left = true then chunk else value;
+  eval H (transport (writer s l r ni cursor index w)) =
+    ([(AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r),
+          H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))],
+      ok
+        (reference.Row.Next
+          { idx := s.idx.set w parent,
+            val :=
+              s.val.set w
+                (AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))),
+            n := s.n, «at» := cursor }
+          ni nw))
+
+H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State
+physical : Slice U8
+s : reference.Scratch
+value : Digest
+ni : Usize
+index : U32
+w : Usize
+wb : ↑w < 16
+enough : ↑s.at + 32 ≤ (↑physical).length
+left : Bool
+cursor : UScalar UScalarTy.Usize
+chunk : Std.Array U8 32#usize
+view : Slice U8
+add : s.at + 32#usize = ok cursor
+cv : ↑cursor = ↑s.at + 32
+range :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+      { start := s.at, «end» := cursor } =
+    ok view
+read : reference.read32 view = ok chunk
+bytes : ↑chunk = ↑(MultiproofConeNodeWindow.window physical s.at)
+l : Digest := if left = true then value else chunk
+r : Std.Array U8 32#usize := if left = true then chunk else value
+digest : Std.Array U8 32#usize :=
+  AspisV8R19.SqueezeOracleBridge.encodeState
+    (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))
+parent : U32
+nw : Usize
+pv : ↑parent = ↑index / 2
+nwv : ↑nw = ↑w + 1
+finish :
+  MultiproofConePhysicalProgram.finish s digest ni cursor index w =
+    ok (reference.Row.Next { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } ni nw)
+⊢ let l := if left = true then value else chunk;
+  let r := if left = true then chunk else value;
+  eval H (transport (writer s l r ni cursor index w)) =
+    ([(AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r),
+          H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))],
+      ok
+        (reference.Row.Next
+          { idx := s.idx.set w parent,
+            val :=
+              s.val.set w
+                (AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))),
+            n := s.n, «at» := cursor }
+          ni nw))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NBI_Window.supplied_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

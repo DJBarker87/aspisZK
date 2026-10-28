@@ -1,0 +1,29 @@
+{"attempt": "NBI_K003", "exit_status": 1, "wall_seconds": 6.776315816969145, "peak_rss_kib": "345176", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "61feaec67208f9e8c194b7bde4fcd9d5af6b68cde56caf7845a9e159a91203b9", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1b-20261027/NBI_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1b-20261027/NBI_target", "--lib", "-j", "1", "-Z", "unstable-options", "--harness-timeout", "90s", "--exact", "--harness", "multiproof::NBI_multiproof::NBI_digest
+...
+1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.91s
+Checking harness multiproof::NBI_multiproof::NBI_digest_write...
+
+VERIFICATION RESULT:
+ ** 1 of 197 failed (196 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in core::array::try_from_fn_erased::<[u8; 32], core::ops::try_trait::NeverShortCircuit<[u8; 32]>, {closure@core::array::try_from_trusted_iterator::next<core::ops::try_trait::NeverShortCircuit<[u8; 32]>, core::iter::Map<core::array::drain::Drain<'_, ()>, {closure@core::ops::try_trait::NeverShortCircuit<[u8; 32]>::wrap_mut_1<(), {closure@<[u8; 32] as kani::Arbitrary>::any_array<16>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.8584863s
+
+Manual Harness Summary:
+Verification failed for - multiproof::NBI_multiproof::NBI_digest_write
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "61feaec67208f9e8c194b7bde4fcd9d5af6b68cde56caf7845a9e159a91203b9", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r8f508585e5f94071a40c85b960ad45e1.scope; invocation ID: 09498e6dbf1c438fb52b52ebc00a6539

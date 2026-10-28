@@ -1,0 +1,45 @@
+import MultiproofConeCountPhysicalLevels
+
+set_option autoImplicit false
+namespace AspisR1.NBI_Admission
+
+def adjacent : List Nat → Bool
+  | [] => true
+  | [_] => true
+  | a::b::rest => decide (a < b) && adjacent (b::rest)
+
+/-- The native windows(2).all strict comparator, one native window per step,
+accepts exactly the cohort's strict Pairwise order. -/
+theorem adjacent_iff (xs : List Nat) : adjacent xs = true ↔ xs.Pairwise (· < ·) := by
+  induction xs with
+  | nil => simp [adjacent]
+  | cons a rest ih =>
+    cases rest with
+    | nil => simp [adjacent]
+    | cons b tail =>
+      simp only [adjacent,Bool.and_eq_true,decide_eq_true_eq,ih,List.pairwise_cons]
+      constructor
+      · rintro ⟨ab,bt,chain⟩
+        refine ⟨?_,bt,chain⟩
+        intro c mem
+        rcases List.mem_cons.mp mem with rfl|later
+        · exact ab
+        · exact Nat.lt_trans ab (bt c later)
+      · rintro ⟨first,bt,chain⟩
+        exact ⟨first b (by simp),bt,chain⟩
+
+def admission (xs : List Nat) : Bool :=
+  !xs.isEmpty && decide (xs.length ≤ 16) && adjacent xs &&
+    xs.all (fun x => decide (x < 262144))
+
+/-- No successful value or assumed validation result is a hypothesis. The
+actual empty/length/adjacent/range scan gives the installed admission domain. -/
+theorem admission_iff (xs : List Nat) :
+    admission xs = true ↔ OraclePortFrozenOrder.wellFormed xs := by
+  simp only [admission,Bool.and_eq_true,Bool.not_eq_true',List.isEmpty_eq_false,
+    decide_eq_true_eq,adjacent_iff,List.all_eq_true,OraclePortFrozenOrder.wellFormed]
+  tauto
+
+#print axioms adjacent_iff
+#print axioms admission_iff
+end AspisR1.NBI_Admission

@@ -1,0 +1,151 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBI_multiproof.rs
+@@ -0,0 +1,73 @@
++
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_sibling_window(){
++ let nodes:[u8;5504]=kani::any();let at:usize=kani::any();let len:usize=kani::any();let c:usize=kani::any();
++ kani::assume(at<=len && len<=5504 && c<32);
++ let selected=nodes[..len].get(at..at+32);
++ if len-at<32{assert!(selected.is_none())}else{
++  let sibling=selected.unwrap();assert_eq!(sibling.len(),32);assert_eq!(sibling.as_ptr(),nodes[at..].as_ptr());
++  assert_eq!(sibling[c],nodes[at+c]);
++ }
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_index_write(){
++ let mut idx:[u32;16]=kani::any();let old=idx;let w:usize=kani::any();let i:usize=kani::any();let k:usize=kani::any();
++ kani::assume(w<=i && i<16 && k<16);let parent=index_at(&idx,i)>>Arity::Two.bits();
++ idx[w]=parent;
++ assert_eq!(idx[k],if k==w{old[i]/2}else{old[k]});
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_digest_write(){
++ let mut val:[[u8;32];16]=kani::any();let old=val;let digest:[u8;32]=kani::any();
++ let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<16 && k<16 && c<32);
++ val[w]=digest;
++ assert_eq!(val[k][c],if k==w{digest[c]}else{old[k][c]});
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_supplied_cursors(){
++ let mut at:usize=kani::any();let mut i:usize=kani::any();let mut w:usize=kani::any();let len:usize=kani::any();let n:usize=kani::any();
++ kani::assume(n>0 && n<=16 && w<=i && i<n && at<=len && len<=5504 && len-at>=32);
++ let (a,b,c)=(at,i,w);at+=32;i+=1;w+=1;
++ assert_eq!((at,i,w),(a+32,b+1,c+1));assert!(at<=len && w<=i && i<=n);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_count_scan_step(){
++ let level:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let mut j:usize=kani::any();
++ kani::assume(i<=j && j<=n && n<=16 && i<n);let parent=index_at(&level,i)>>Arity::Two.bits();let before=j;
++ if j<n && index_at(&level,j)>>Arity::Two.bits()==parent{j+=1;assert!(j<=n);assert_eq!(level[before]/2,parent)}else{assert_eq!(j,before)}
++ assert!(j==before || j==before+1);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_count_commit(){
++ let mut level:[u32;16]=kani::any();let old=level;let n:usize=kani::any();let mut w:usize=kani::any();let mut i:usize=kani::any();let j:usize=kani::any();let mut count:usize=kani::any();let k:usize=kani::any();
++ kani::assume(w<=i && i<j && j<=n && n<=16 && j-i<=2 && count<=288 && k<16);
++ let parent=index_at(&level,i)>>Arity::Two.bits();let (ow,oc,oi)=(w,count,i);
++ count+=Arity::Two.width()-(j-i);level[w]=parent;w+=1;i=j;
++ assert_eq!(count,oc+2-(j-oi));
++ assert_eq!(level[k],if k==ow{parent}else{old[k]});assert!(w<=i && i<=n);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_order_cell(){let pair:[u32;2]=kani::any();let mut it=pair.windows(2);let w=it.next().unwrap();assert_eq!(w[0]<w[1],pair[0]<pair[1]);assert!(it.next().is_none());}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_bound_cell(){let x:u32=kani::any();assert_eq!(x<1<<LEAF_BITS,x<262144);assert_eq!(x>>Arity::Two.bits(),x/2);}
++#[kani::proof] #[kani::unwind(34)]
++fn NBI_final_control(){
++ let val:[[u8;32];16]=kani::any();let idx:[u32;16]=kani::any();let root:[u8;32]=kani::any();let n:usize=kani::any();let at:usize=kani::any();let len:usize=kani::any();
++ let out=n==1 && index_at(&idx,0)==0 && root_matches(&val,&root) && at==len;
++ assert_eq!(out,n==1 && idx[0]==0 && val[0]==root && at==len);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_count_copy_cell(){
++ let input:[u32;16]=kani::any();let mut level:[u32;16]=kani::any();let old=level;let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16 && k<16);
++ level[j]=input[j];assert_eq!(level[k],if k==j{input[j]}else{old[k]});
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_pair_control(){
++ let idx:[u32;16]=kani::any();let n:usize=kani::any();let mut i:usize=kani::any();kani::assume(i<n && n<=16);let old=i;
++ let paired=i+1<n && index_at(&idx,i+1)==index_at(&idx,i)^1;
++ if paired{i+=2;assert!(i<=n);assert_eq!(idx[old+1],idx[old]^1);assert_eq!(idx[old+1]/2,idx[old]/2)}else{i+=1;assert!(i<=n)}
++ assert!(i>old);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_level_commit(){let mut n:usize=kani::any();let mut i:usize=kani::any();let w:usize=kani::any();kani::assume(n>0 && n<=16 && i==n && w>0 && w<=i);n=w;i=0;let next_w=0;assert!(n>0 && n<=16 && i<=n && next_w<=i);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBI_keys.rs
+@@ -0,0 +1,52 @@
++
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_key_read(){let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);assert_eq!(batch_key_at(&keys,i),keys[i]);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_index_equal(){let values:[u32;16]=kani::any();let i:usize=kani::any();let expected:u32=kani::any();kani::assume(i<16);assert_eq!(same_batch_index(&values,i,expected),values[i]==expected);}
++#[kani::proof] #[kani::unwind(34)]
++fn NBI_leaf_equal(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();let leaf:[u8;32]=kani::any();kani::assume(i<16);assert_eq!(same_batch_leaf(&values,i,leaf),values[i]==leaf);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_opening_address(){
++ let proof:[u8;57607]=kani::any();let i:usize=kani::any();let c:usize=kani::any();kani::assume(i<22 && c<832);
++ let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());assert_eq!(q[c],proof[10055+832*i+c]);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_slot_range(){
++ let nodes:[u8;5504]=kani::any();let at:usize=kani::any();let end:usize=kani::any();let c:usize=kani::any();kani::assume(at<=end && end<=5504 && c<end-at);
++ let view=&nodes[at..end];assert_eq!(view.len(),end-at);assert_eq!(view[c],nodes[at+c]);assert_eq!(view.as_ptr(),nodes[at..].as_ptr());
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_key_position(){
++ let key:u64=kani::any();let lo:usize=kani::any();let n:usize=kani::any();let mut pos:usize=kani::any();kani::assume((lo==0 && n==10)||(lo==10 && n==12));kani::assume(pos<n && (key&255)<n as u64 && (key>>8)<262144);
++ let before=pos;pos+=1;let index=(key>>8) as u32;let opening_index=lo+(key&0xff) as usize;
++ assert!(pos<=n && pos==before+1 && opening_index<22 && index<262144);assert_eq!(index as u64,key/256);
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_packed_projections(){let u:u32=kani::any();let j:usize=kani::any();let tree:usize=kani::any();kani::assume(u<262144 && j<12 && tree<3);let index=if tree==2{u/4}else{u};let key=(u64::from(index)<<8)|j as u64;assert_eq!((key>>8) as u32,index);assert_eq!((key&255) as usize,j);assert!(index<262144);}
++#[kani::proof] #[kani::unwind(34)]
++fn NBI_duplicate_decision(){
++ let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();let d:usize=kani::any();let index:u32=kani::any();let leaf:[u8;32]=kani::any();kani::assume(d<=12);
++ let result=if d>0 && same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){1u8}else{2u8}}else{0u8};
++ assert_eq!(result,if d>0 && idx[d-1]==index{if val[d-1]!=leaf{1}else{2}}else{0});
++}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_dedup_index_write(){let mut idx:[u32;16]=kani::any();let old=idx;let index:u32=kani::any();let d:usize=kani::any();let k:usize=kani::any();kani::assume(d<12 && k<16);idx[d]=index;assert_eq!(idx[k],if k==d{index}else{old[k]});}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_dedup_leaf_write(){let mut val:[[u8;32];16]=kani::any();let old=val;let leaf:[u8;32]=kani::any();let d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12 && k<16 && c<32);val[d]=leaf;assert_eq!(val[k][c],if k==d{leaf[c]}else{old[k][c]});}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_dedup_advance(){let mut d:usize=kani::any();let pos:usize=kani::any();let n:usize=kani::any();kani::assume(d<pos && pos<=n && n<=12);let old=d;d+=1;assert!(d==old+1 && d<=pos && d<=12);}
++#[kani::proof] #[kani::unwind(10)]
++fn NBI_padding_word(){let w:[u8;8]=kani::any();let actual=u64::from_le_bytes(w)!=0;let expected=w[0]!=0||w[1]!=0||w[2]!=0||w[3]!=0||w[4]!=0||w[5]!=0||w[6]!=0||w[7]!=0;assert_eq!(actual,expected);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_padding_chunk(){let bytes:[u8;5504]=kani::any();let at:usize=kani::any();let len:usize=kani::any();let c:usize=kani::any();kani::assume(at<=len && len<=5504 && len-at>=8 && c<8);let mut chunks=bytes[at..len].chunks_exact(8);let w=chunks.next().unwrap();assert_eq!(w.len(),8);assert_eq!(w[c],bytes[at+c]);assert_eq!(chunks.remainder().len(),(len-at)%8);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_padding_bound(){let count:usize=kani::any();let s:usize=kani::any();kani::assume(s<6 && count<=SLOT_NODES[s]);let total=32*SLOT_NODES[s];let begin=32*count;assert!(begin<=total && total<=5504 && (total-begin)%8==0);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_split_slot(){let batch:usize=kani::any();let tree:usize=kani::any();kani::assume(batch<2 && tree<3);let (lo,hi)=if batch==0{(0,SPLIT)}else{(SPLIT,22)};let n=hi-lo;let s=3*batch+tree;assert!(lo+n==hi && hi<=22 && n>0 && n<=12 && s<6);assert_eq!(n,if batch==0{10}else{12});}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_padding_short_circuit(){let count:usize=kani::any();let s:usize=kani::any();kani::assume(s<6);let mut calls=0;let reject=count>SLOT_NODES[s] || {calls+=1;kani::any::<bool>()};assert_eq!(calls,if count>SLOT_NODES[s]{0}else{1});if count>SLOT_NODES[s]{assert!(reject)}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_verifier_node_prefix(){let nodes:[u8;5504]=kani::any();let count:usize=kani::any();let cap:usize=kani::any();let c:usize=kani::any();kani::assume(count<=cap && cap<=172 && c<32*count);let slot=&nodes[..32*cap];let prefix=&slot[..32*count];assert_eq!(prefix.len(),32*count);assert_eq!(prefix[c],nodes[c]);assert_eq!(prefix.as_ptr(),slot.as_ptr());}
++#[kani::proof] #[kani::unwind(2)]
++fn NBI_error_projection(){let verified:bool=kani::any();let r:Result<(),Error>=if !verified{Err(Error::Merkle)}else{Ok(())};assert_eq!(r.is_ok(),verified);if let Err(e)=r{assert!(matches!(e,Error::Merkle));}}
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,7 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBI_multiproof.rs"]
++mod NBI_multiproof;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBI_keys.rs"]
++mod NBI_keys;

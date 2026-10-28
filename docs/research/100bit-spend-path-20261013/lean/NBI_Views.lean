@@ -1,0 +1,52 @@
+import NBE_SlotLoop
+import Port4B_Opening
+import Port4B_LeafCode
+
+set_option autoImplicit false
+namespace AspisR1.NBI_Views
+open Aeneas Aeneas.Std Result
+
+/-- Native slot_offset accumulator, after the already checked single step and
+NBE forward induction. No physical slot or offset equation is assumed. -/
+def nativeOffset (n : Nat) (bound : n ≤ 6) : Usize :=
+  UScalar.ofNat (NBE_SlotLoop.offset n) (by
+    have fit := NBE_SlotLoop.reached_bound n bound
+    scalar_tac)
+
+def nativeSlot (proof : Slice U8) (s : Usize) : Result (Slice U8) :=
+  if small : s.val < 6 then
+    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+      proof {start := nativeOffset s.val (by omega), «end» := nativeOffset (s.val+1) (by omega)}
+  else fail .arrayOutOfBounds
+
+/-- The source's two forward offset runs select the actual installed all-byte
+slot view, for arbitrary proof content, including physical range failure. -/
+theorem slot_eq (proof : Slice U8) (s : Usize) :
+    nativeSlot proof s = Port4B_SlotInstall.nodeSlot proof s := by
+  have offset (n : Nat) (bound : n ≤ 6) :
+      nativeOffset n bound = Port4B_SlotInstall.offset n bound := by
+    apply UScalar.eq_of_val_eq
+    change NBE_SlotLoop.offset n = OraclePortSelectedDraft.slotStart n
+    exact NBE_SlotLoop.offset_eq n
+  unfold nativeSlot Port4B_SlotInstall.nodeSlot
+  split
+  · rw [offset,offset]
+  · rfl
+
+/-- Read the same selected physical opening before its leaf query. No
+independent opening carrier, leaf reply or post-query equality is a premise. -/
+theorem opening_leaf {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X)
+    (hash : X) (proof : Slice U8) (len : proof.val.length = 57607)
+    (i kind : Usize) (ib : i.val < 22) (before : CheckpointBytes5Effect.Log) :
+    ∃ view, Port4B_Opening.opening proof i = ok view ∧ view.val.length = 832 ∧
+      MultiproofConeCanonical.bytesOf view.val = OraclePortCompactDraft.slice
+        (MultiproofConeCanonical.bytesOf proof.val) (10055+i.val*832) 832 ∧
+      CheckpointBytes5Effect.run D hash (Port4B_LeafCode.code kind view) before =
+        (do let digest ← D.digest hash (Port4B_LeafCode.input kind view)
+            ok (digest,before++[(Port4B_LeafCode.input kind view,digest)])) := by
+  obtain ⟨view,read,size,bytes⟩ := Port4B_Opening.opening_exact proof len i ib
+  exact ⟨view,read,size,bytes,(Port4B_LeafCode.code_exact D hash kind view size before).2⟩
+
+#print axioms slot_eq
+#print axioms opening_leaf
+end AspisR1.NBI_Views
