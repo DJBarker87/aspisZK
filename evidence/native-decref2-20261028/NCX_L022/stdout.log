@@ -1,0 +1,157 @@
+NCX_generated/NCX_LengthRejection.lean:7:74: error: unsolved goals
+b : Slice U8
+length : (↑b).length ≠ 256
+h : b.len ≠ 256#usize
+⊢ (if b.len ≠ 256#usize then ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+    else do
+      let b_1 ← NCX_Reference.magic b NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_MAGIC
+      if b_1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_VERSION then
+              ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongVersion)
+            else do
+              let i2 ← b.index_usize 6#usize
+              if i2 ≠ NCX_Reference.POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 then
+                  ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidDeploymentMode)
+                else do
+                  let s ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                        { start := 249#usize, «end» := 256#usize }
+                  let b1 ← NCX_Reference.zero s
+                  if b1 = true then do
+                      let i3 ← b.index_usize 5#usize
+                      let i4 ← b.index_usize 7#usize
+                      let a ← NCX_Reference.read32 b 8#usize
+                      let a1 ← NCX_Reference.read32 b 40#usize
+                      let a2 ← NCX_Reference.read32 b 72#usize
+                      let i5 ← NCX_Reference.word b 104#usize
+                      let i6 ← NCX_Reference.word b 112#usize
+                      let a3 ← NCX_Reference.read32 b 120#usize
+                      let a4 ← NCX_Reference.read32 b 152#usize
+                      let a5 ← NCX_Reference.read32 b 184#usize
+                      let i7 ← b.index_usize 248#usize
+                      let a6 ← NCX_Reference.read32 b 216#usize
+                      let r ←
+                        NCX_Reference.validate_verifier_registry_v2
+                            { flags := i3, bump := i4, pool := a, authority := a1, policy_binding := a2,
+                              generation := i5, minimum_activation_delay_slots := i6, registry_program := a3,
+                              loader_program := a4, programdata_address := a5, programdata_bump := i7,
+                              executable_hash := a6 }
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue a_1 =>
+                          ok
+                            (core.result.Result.Ok
+                              { flags := i3, bump := i4, pool := a, authority := a1, policy_binding := a2,
+                                generation := i5, minimum_activation_delay_slots := i6, registry_program := a3,
+                                loader_program := a4, programdata_address := a5, programdata_bump := i7,
+                                executable_hash := a6 })
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            NCX_Reference.VerifierRegistryV2
+                            (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+                    else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+        else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongMagic)) =
+    ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+NCX_generated/NCX_LengthRejection.lean:13:64: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_BYTES, ̲bne_iff_ne,h̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCX_generated/NCX_LengthRejection.lean:13:66: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_BYTES, ̲bne_iff_ne, ̲h,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCX_generated/NCX_LengthRejection.lean:15:80: error: unsolved goals
+b : Slice U8
+length : (↑b).length ≠ 320
+h : b.len ≠ 320#usize
+⊢ (if b.len ≠ 320#usize then ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+    else do
+      let b_1 ← NCX_Reference.magic b NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_MAGIC
+      if b_1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_VERSION then
+              ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongVersion)
+            else do
+              let i2 ← b.index_usize 7#usize
+              if i2 ≠ NCX_Reference.POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 then
+                  ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidDeploymentMode)
+                else do
+                  let s ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                        { start := 314#usize, «end» := 320#usize }
+                  let b1 ← NCX_Reference.zero s
+                  if b1 = true then do
+                      let i3 ← b.index_usize 5#usize
+                      let r ← NCX_Reference.status i3
+                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                      match cf with
+                        | core.ops.control_flow.ControlFlow.Continue val => do
+                          let i4 ← b.index_usize 6#usize
+                          let i5 ← b.index_usize 312#usize
+                          let a ← NCX_Reference.read32 b 8#usize
+                          let a1 ← NCX_Reference.read32 b 40#usize
+                          let a2 ← NCX_Reference.read32 b 72#usize
+                          let a3 ← NCX_Reference.read32 b 104#usize
+                          let a4 ← NCX_Reference.read32 b 136#usize
+                          let a5 ← NCX_Reference.read32 b 168#usize
+                          let i6 ← b.index_usize 313#usize
+                          let a6 ← NCX_Reference.read32 b 200#usize
+                          let a7 ← NCX_Reference.read32 b 232#usize
+                          let i7 ← NCX_Reference.word b 264#usize
+                          let i8 ← NCX_Reference.word b 272#usize
+                          let a8 ← NCX_Reference.read32 b 280#usize
+                          let r1 ←
+                            NCX_Reference.validate_verifier_registry_entry_v2
+                                { status := val, statement_version := i4, bump := i5, pool := a, verifier_program := a1,
+                                  profile_binding := a2, release_binding := a3, loader_program := a4,
+                                  programdata_address := a5, programdata_bump := i6, executable_hash := a6,
+                                  expected_upgrade_authority := a7, activation_slot := i7, retirement_slot := i8,
+                                  policy_binding := a8 }
+                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                          match cf1 with
+                            | core.ops.control_flow.ControlFlow.Continue a_1 =>
+                              ok
+                                (core.result.Result.Ok
+                                  { status := val, statement_version := i4, bump := i5, pool := a,
+                                    verifier_program := a1, profile_binding := a2, release_binding := a3,
+                                    loader_program := a4, programdata_address := a5, programdata_bump := i6,
+                                    executable_hash := a6, expected_upgrade_authority := a7, activation_slot := i7,
+                                    retirement_slot := i8, policy_binding := a8 })
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                NCX_Reference.VerifierRegistryEntryV2
+                                (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            NCX_Reference.VerifierRegistryEntryV2
+                            (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+                    else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+        else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongMagic)) =
+    ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+NCX_generated/NCX_LengthRejection.lean:21:61: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_entry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_BYTES, ̲bne_iff_ne,h̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCX_generated/NCX_LengthRejection.lean:21:63: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_entry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_BYTES, ̲bne_iff_ne, ̲h,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCX_LengthRejection.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCX_LengthRejection.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

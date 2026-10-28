@@ -1,0 +1,32 @@
+{
+  "exit": 0,
+  "log": "{\"allowed\": true, \"bounded_reserved_bytes\": 8589934592, \"requested_bytes\": 8589934592}\n",
+  "reservation": {
+    "requested_bytes": 8589934592,
+    "allowed": true,
+    "utc": 1793216252.7656105,
+    "populated_scopes": [
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r78a9ee27fbff4465b24e7aa05c5e7db8.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 S2W_run_host.py NDB_K035.json",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_K035/time.log timeout 600 python3 NDB_gate.py NDB_K035 r1_pool_adapter::NDB_native::NDB_digest_limb",
+          "timeout 600 python3 NDB_gate.py NDB_K035 r1_pool_adapter::NDB_native::NDB_digest_limb",
+          "python3 NDB_gate.py NDB_K035 r1_pool_adapter::NDB_native::NDB_digest_limb",
+          "/home/dombarker/.cargo/bin/cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --lib -j 1 -Z unstable-options -Z stubbing -Z function-contracts --harness-timeout 90s --exact --harness r1_pool_adapter::NDB_native::NDB_digest_limb --output-format terse --features pool-adapter,private-leaf-salts",
+          "cargo-kani kani --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --lib -j 1 -Z unstable-options -Z stubbing -Z function-contracts --harness-timeout 90s --exact --harness r1_pool_adapter::NDB_native::NDB_digest_limb --output-format terse --features pool-adapter,private-leaf-salts",
+          "/home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo rustc --manifest-path /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe/Cargo.toml --features=pool-adapter,private-leaf-salts --target x86_64-unknown-linux-gnu -Zhost-config -Ztarget-applies-to-host --config=host.rustflags=[\"--cfg=kani_host\"] --target-dir /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani --message-format json-diagnostic-rendered-ansi -p path+file:///home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_src/programs/r1-cost-probe#aspis-r1-cost-probe-program@0.1.0 --lib -- -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness r1_pool_adapter::NDB_native::NDB_digest_limb --exact -Z unstable-options -Z stubbing -Z function-contracts",
+          "/home/dombarker/.kani/kani-0.67.0/bin/kani-compiler --crate-name aspis_r1_cost_probe_program --edition=2021 programs/r1-cost-probe/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --crate-type cdylib --crate-type lib --emit=dep-info,link -C opt-level=3 -C embed-bitcode=no -C debug-assertions=on --cfg feature=\"custom-heap\" --cfg feature=\"default\" --cfg feature=\"pool-adapter\" --cfg feature=\"private-leaf-salts\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"cu-profiling\", \"custom-heap\", \"custom-panic\", \"default\", \"no-entrypoint\", \"pool-adapter\", \"private-leaf-salts\")) -C metadata=3113c3db1d911abd --out-dir /home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps --target x86_64-unknown-linux-gnu -C incremental=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/incremental -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps -L dependency=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/debug/deps --extern aspis_core=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_core-243cad49f7d55dbe.rlib --extern aspis_r1_cost_probe=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r1_cost_probe-0bb5575ef4abf502.rlib --extern aspis_statement=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_statement-084015cc2ac0905e.rlib --extern solana_program=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/deps/libsolana_program-ddfc885eaf6dc725.rlib -Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness r1_pool_adapter::NDB_native::NDB_digest_limb --exact -Z unstable-options -Z stubbing -Z function-contracts -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0 -L native=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/build/blake3-44174dca84f2815f/out -L native=/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target/kani/x86_64-unknown-linux-gnu/debug/build/blake3-44174dca84f2815f/out"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 178999296
+      }
+    ],
+    "bounded_reserved_bytes": 8589934592,
+    "all_populated_scopes_bounded": true,
+    "safe_limit_bytes": 59055800320,
+    "print_axioms": "N/A: read-only resource preflight"
+  }
+}

@@ -1,0 +1,529 @@
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -207,3 +207,6 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)] pub mod NCX_reference;
++#[cfg(kani)] pub mod NCX_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/NCX_reference.rs
+@@ -0,0 +1,232 @@
++// Safe reference derived from frozen current registry source.
++pub const POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK:u8=3;
++pub const POOL_V1_VERIFIER_REGISTRY_MAGIC: [u8; 4] = *b"ASRG";
++
++pub const POOL_V1_VERIFIER_REGISTRY_VERSION: u8 = 2;
++
++pub const POOL_V1_VERIFIER_REGISTRY_BYTES: usize = 128;
++
++pub const POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED: u8 = 1 << 0;
++
++pub const POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE: u8 = 1 << 1;
++
++pub const POOL_V1_VERIFIER_ENTRY_MAGIC: [u8; 4] = *b"ASRE";
++
++pub const POOL_V1_VERIFIER_ENTRY_VERSION: u8 = 2;
++
++pub const POOL_V1_VERIFIER_ENTRY_BYTES: usize = 192;
++
++pub const POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT: u64 = u64::MAX;
++
++pub const POOL_V1_VERIFIER_REGISTRY_V2_MAGIC: [u8; 4] = *b"ASR2";
++
++pub const POOL_V1_VERIFIER_REGISTRY_V2_VERSION: u8 = 3;
++
++pub const POOL_V1_VERIFIER_REGISTRY_V2_BYTES: usize = 256;
++
++pub const POOL_V1_VERIFIER_ENTRY_V2_MAGIC: [u8; 4] = *b"ASE2";
++
++pub const POOL_V1_VERIFIER_ENTRY_V2_VERSION: u8 = 3;
++
++pub const POOL_V1_VERIFIER_ENTRY_V2_BYTES: usize = 320;
++
++pub const POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3: u8 = 1;
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum PoolV1VerifierRegistryFormatError {
++    WrongLength,
++    WrongMagic,
++    WrongVersion,
++    NonZeroReserved,
++    UnsupportedFlags,
++    InvalidStatus,
++    InvalidAuthorityMode,
++    ZeroRequiredBinding,
++    InvalidActivationDelay,
++    InvalidStatementVersion,
++    InvalidRetirementSlot,
++    InvalidDeploymentMode,
++}
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum VerifierEntryStatusV1 {
++    Pending = 0,
++    Active = 1,
++    Paused = 2,
++    Retired = 3,
++}
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct VerifierRegistryV2 {
++    pub flags: u8,
++    /// Canonical registry PDA bump established by initialization.
++    pub bump: u8,
++    pub pool: [u8; 32],
++    pub authority: [u8; 32],
++    pub policy_binding: [u8; 32],
++    pub generation: u64,
++    pub minimum_activation_delay_slots: u64,
++    pub registry_program: [u8; 32],
++    pub loader_program: [u8; 32],
++    pub programdata_address: [u8; 32],
++    /// Canonical loader-v3 ProgramData bump established by deployment authentication.
++    pub programdata_bump: u8,
++    pub executable_hash: [u8; 32],
++}
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub struct VerifierRegistryEntryV2 {
++    pub status: VerifierEntryStatusV1,
++    pub statement_version: u8,
++    /// Canonical entry PDA bump established by scheduling.
++    pub bump: u8,
++    pub pool: [u8; 32],
++    pub verifier_program: [u8; 32],
++    pub profile_binding: [u8; 32],
++    pub release_binding: [u8; 32],
++    pub loader_program: [u8; 32],
++    pub programdata_address: [u8; 32],
++    /// Canonical loader-v3 ProgramData bump established by deployment authentication.
++    pub programdata_bump: u8,
++    pub executable_hash: [u8; 32],
++    /// Production V2 requires this to be all zero, denoting `None`.
++    pub expected_upgrade_authority: [u8; 32],
++    pub activation_slot: u64,
++    pub retirement_slot: u64,
++    pub policy_binding: [u8; 32],
++}
++
++pub fn read32(b:&[u8],p:usize)->[u8;32] {match b[p..p+32].try_into(){Ok(a)=>a,Err(_)=>[0u8;32]}}
++pub fn word(b:&[u8],p:usize)->u64 {match b[p..p+8].try_into(){Ok(a)=>u64::from_le_bytes(a),Err(_)=>0}}
++pub fn zero(b:&[u8])->bool {let mut i=0;while i<b.len(){if b[i]!=0{return false}i+=1;}true}
++pub fn equal(b:&[u8],v:&[u8])->bool {if b.len()!=v.len(){return false} let mut i=0;while i<b.len(){if b[i]!=v[i]{return false}i+=1;}true}
++pub fn magic(b:&[u8],m:[u8;4])->bool {equal(&b[..4],&m)}
++pub fn required_binding_is_zero(b:&[u8;32])->bool {zero(b)}
++pub fn status(v:u8)->Result<VerifierEntryStatusV1,PoolV1VerifierRegistryFormatError> {match v {0=>Ok(VerifierEntryStatusV1::Pending),1=>Ok(VerifierEntryStatusV1::Active),2=>Ok(VerifierEntryStatusV1::Paused),3=>Ok(VerifierEntryStatusV1::Retired),_=>Err(PoolV1VerifierRegistryFormatError::InvalidStatus)}}
++
++pub fn validate_verifier_registry_v2(
++    registry: &VerifierRegistryV2,
++) -> Result<(), PoolV1VerifierRegistryFormatError> {
++    if registry.flags & !POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK != 0 {
++        return Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags);
++    }
++    if required_binding_is_zero(&registry.pool)
++        || required_binding_is_zero(&registry.policy_binding)
++        || required_binding_is_zero(&registry.registry_program)
++        || required_binding_is_zero(&registry.loader_program)
++        || required_binding_is_zero(&registry.programdata_address)
++        || required_binding_is_zero(&registry.executable_hash)
++    {
++        return Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding);
++    }
++    if (registry.flags & 2 != 0) != required_binding_is_zero(&registry.authority) {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode);
++    }
++    if registry.minimum_activation_delay_slots == 0 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay);
++    }
++    Ok(())
++}
++
++pub fn validate_verifier_registry_entry_v2(
++    entry: &VerifierRegistryEntryV2,
++) -> Result<(), PoolV1VerifierRegistryFormatError> {
++    if entry.statement_version == 0 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidStatementVersion);
++    }
++    if required_binding_is_zero(&entry.pool)
++        || required_binding_is_zero(&entry.verifier_program)
++        || required_binding_is_zero(&entry.profile_binding)
++        || required_binding_is_zero(&entry.release_binding)
++        || required_binding_is_zero(&entry.loader_program)
++        || required_binding_is_zero(&entry.programdata_address)
++        || required_binding_is_zero(&entry.executable_hash)
++        || required_binding_is_zero(&entry.policy_binding)
++    {
++        return Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding);
++    }
++    if !required_binding_is_zero(&entry.expected_upgrade_authority) {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode);
++    }
++    if !(entry.retirement_slot == u64::MAX) && entry.retirement_slot <= entry.activation_slot {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidRetirementSlot);
++    }
++    Ok(())
++}
++
++pub fn decode_verifier_registry_v2(
++    bytes: &[u8],
++) -> Result<VerifierRegistryV2, PoolV1VerifierRegistryFormatError> {
++    if bytes.len() != POOL_V1_VERIFIER_REGISTRY_V2_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if !magic(bytes,POOL_V1_VERIFIER_REGISTRY_V2_MAGIC) {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_REGISTRY_V2_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[6] != POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);
++    }
++    if !zero(&bytes[249..256]) {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    let registry = VerifierRegistryV2 {
++        flags: bytes[5],
++        bump: bytes[7],
++        pool: read32(bytes,8),
++        authority: read32(bytes,40),
++        policy_binding: read32(bytes,72),
++        generation: word(bytes,104),
++        minimum_activation_delay_slots: word(bytes,112),
++        registry_program: read32(bytes,120),
++        loader_program: read32(bytes,152),
++        programdata_address: read32(bytes,184),
++        programdata_bump: bytes[248],
++        executable_hash: read32(bytes,216),
++    };
++    validate_verifier_registry_v2(&registry)?;
++    Ok(registry)
++}
++
++pub fn decode_verifier_registry_entry_v2(
++    bytes: &[u8],
++) -> Result<VerifierRegistryEntryV2, PoolV1VerifierRegistryFormatError> {
++    if bytes.len() != POOL_V1_VERIFIER_ENTRY_V2_BYTES {
++        return Err(PoolV1VerifierRegistryFormatError::WrongLength);
++    }
++    if !magic(bytes,POOL_V1_VERIFIER_ENTRY_V2_MAGIC) {
++        return Err(PoolV1VerifierRegistryFormatError::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_VERIFIER_ENTRY_V2_VERSION {
++        return Err(PoolV1VerifierRegistryFormatError::WrongVersion);
++    }
++    if bytes[7] != POOL_V1_VERIFIER_DEPLOYMENT_MODE_IMMUTABLE_LOADER_V3 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode);
++    }
++    if !zero(&bytes[314..320]) {
++        return Err(PoolV1VerifierRegistryFormatError::NonZeroReserved);
++    }
++    let entry = VerifierRegistryEntryV2 {
++        status: status(bytes[5])?,
++        statement_version: bytes[6],
++        bump: bytes[312],
++        pool: read32(bytes,8),
++        verifier_program: read32(bytes,40),
++        profile_binding: read32(bytes,72),
++        release_binding: read32(bytes,104),
++        loader_program: read32(bytes,136),
++        programdata_address: read32(bytes,168),
++        programdata_bump: bytes[313],
++        executable_hash: read32(bytes,200),
++        expected_upgrade_authority: read32(bytes,232),
++        activation_slot: word(bytes,264),
++        retirement_slot: word(bytes,272),
++        policy_binding: read32(bytes,280),
++    };
++    validate_verifier_registry_entry_v2(&entry)?;
++    Ok(entry)
++}
++
++pub fn option_item(x:Option<u8>)->Option<u8>{x}
+--- /dev/null
++++ b/crates/aspis-statement/src/NCX_native.rs
+@@ -0,0 +1,62 @@
++#![allow(non_snake_case,dead_code)]
++use crate::pool_v1::verifier_registry::*;
++use crate::NCX_reference as R;
++fn eq_PoolV1VerifierRegistryFormatError(a:&PoolV1VerifierRegistryFormatError,b:&R::PoolV1VerifierRegistryFormatError)->bool {match (a,b){(PoolV1VerifierRegistryFormatError::WrongLength,R::PoolV1VerifierRegistryFormatError::WrongLength)=>true,(PoolV1VerifierRegistryFormatError::WrongMagic,R::PoolV1VerifierRegistryFormatError::WrongMagic)=>true,(PoolV1VerifierRegistryFormatError::WrongVersion,R::PoolV1VerifierRegistryFormatError::WrongVersion)=>true,(PoolV1VerifierRegistryFormatError::NonZeroReserved,R::PoolV1VerifierRegistryFormatError::NonZeroReserved)=>true,(PoolV1VerifierRegistryFormatError::UnsupportedFlags,R::PoolV1VerifierRegistryFormatError::UnsupportedFlags)=>true,(PoolV1VerifierRegistryFormatError::InvalidStatus,R::PoolV1VerifierRegistryFormatError::InvalidStatus)=>true,(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode,R::PoolV1VerifierRegistryFormatError::InvalidAuthorityMode)=>true,(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding,R::PoolV1VerifierRegistryFormatError::ZeroRequiredBinding)=>true,(PoolV1VerifierRegistryFormatError::InvalidActivationDelay,R::PoolV1VerifierRegistryFormatError::InvalidActivationDelay)=>true,(PoolV1VerifierRegistryFormatError::InvalidStatementVersion,R::PoolV1VerifierRegistryFormatError::InvalidStatementVersion)=>true,(PoolV1VerifierRegistryFormatError::InvalidRetirementSlot,R::PoolV1VerifierRegistryFormatError::InvalidRetirementSlot)=>true,(PoolV1VerifierRegistryFormatError::InvalidDeploymentMode,R::PoolV1VerifierRegistryFormatError::InvalidDeploymentMode)=>true,_=>false}}
++fn eq_VerifierEntryStatusV1(a:&VerifierEntryStatusV1,b:&R::VerifierEntryStatusV1)->bool {match (a,b){(VerifierEntryStatusV1::Pending,R::VerifierEntryStatusV1::Pending)=>true,(VerifierEntryStatusV1::Active,R::VerifierEntryStatusV1::Active)=>true,(VerifierEntryStatusV1::Paused,R::VerifierEntryStatusV1::Paused)=>true,(VerifierEntryStatusV1::Retired,R::VerifierEntryStatusV1::Retired)=>true,_=>false}}
++pub fn eq_registry(a:&Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError>,b:&Result<R::VerifierRegistryV2,R::PoolV1VerifierRegistryFormatError>)->bool {match (a,b){(Ok(a),Ok(b))=>a.flags==b.flags && a.bump==b.bump && a.pool==b.pool && a.authority==b.authority && a.policy_binding==b.policy_binding && a.generation==b.generation && a.minimum_activation_delay_slots==b.minimum_activation_delay_slots && a.registry_program==b.registry_program && a.loader_program==b.loader_program && a.programdata_address==b.programdata_address && a.programdata_bump==b.programdata_bump && a.executable_hash==b.executable_hash, (Err(a),Err(b))=>eq_PoolV1VerifierRegistryFormatError(a,b),_=>false}}
++pub fn eq_entry(a:&Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError>,b:&Result<R::VerifierRegistryEntryV2,R::PoolV1VerifierRegistryFormatError>)->bool {match (a,b){(Ok(a),Ok(b))=>eq_VerifierEntryStatusV1(&a.status,&b.status) && a.statement_version==b.statement_version && a.bump==b.bump && a.pool==b.pool && a.verifier_program==b.verifier_program && a.profile_binding==b.profile_binding && a.release_binding==b.release_binding && a.loader_program==b.loader_program && a.programdata_address==b.programdata_address && a.programdata_bump==b.programdata_bump && a.executable_hash==b.executable_hash && a.expected_upgrade_authority==b.expected_upgrade_authority && a.activation_slot==b.activation_slot && a.retirement_slot==b.retirement_slot && a.policy_binding==b.policy_binding, (Err(a),Err(b))=>eq_PoolV1VerifierRegistryFormatError(a,b),_=>false}}
++pub fn valid_registry_ref(
++    registry: &VerifierRegistryV2,
++) -> Result<(), PoolV1VerifierRegistryFormatError> {
++    if registry.flags & !POOL_V1_VERIFIER_REGISTRY_FLAGS_MASK != 0 {
++        return Err(PoolV1VerifierRegistryFormatError::UnsupportedFlags);
++    }
++    if crate::NCX_reference::required_binding_is_zero(&registry.pool)
++        || crate::NCX_reference::required_binding_is_zero(&registry.policy_binding)
++        || crate::NCX_reference::required_binding_is_zero(&registry.registry_program)
++        || crate::NCX_reference::required_binding_is_zero(&registry.loader_program)
++        || crate::NCX_reference::required_binding_is_zero(&registry.programdata_address)
++        || crate::NCX_reference::required_binding_is_zero(&registry.executable_hash)
++    {
++        return Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding);
++    }
++    if (registry.flags & 2 != 0) != crate::NCX_reference::required_binding_is_zero(&registry.authority) {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode);
++    }
++    if registry.minimum_activation_delay_slots == 0 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidActivationDelay);
++    }
++    Ok(())
++}
++
++pub fn valid_entry_ref(
++    entry: &VerifierRegistryEntryV2,
++) -> Result<(), PoolV1VerifierRegistryFormatError> {
++    if entry.statement_version == 0 {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidStatementVersion);
++    }
++    if crate::NCX_reference::required_binding_is_zero(&entry.pool)
++        || crate::NCX_reference::required_binding_is_zero(&entry.verifier_program)
++        || crate::NCX_reference::required_binding_is_zero(&entry.profile_binding)
++        || crate::NCX_reference::required_binding_is_zero(&entry.release_binding)
++        || crate::NCX_reference::required_binding_is_zero(&entry.loader_program)
++        || crate::NCX_reference::required_binding_is_zero(&entry.programdata_address)
++        || crate::NCX_reference::required_binding_is_zero(&entry.executable_hash)
++        || crate::NCX_reference::required_binding_is_zero(&entry.policy_binding)
++    {
++        return Err(PoolV1VerifierRegistryFormatError::ZeroRequiredBinding);
++    }
++    if !crate::NCX_reference::required_binding_is_zero(&entry.expected_upgrade_authority) {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidAuthorityMode);
++    }
++    if !(entry.retirement_slot == u64::MAX) && entry.retirement_slot <= entry.activation_slot {
++        return Err(PoolV1VerifierRegistryFormatError::InvalidRetirementSlot);
++    }
++    Ok(())
++}
++
++impl kani::Arbitrary for VerifierRegistryV2{fn any()->Self{Self{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}}
++impl kani::Arbitrary for VerifierRegistryEntryV2{fn any()->Self{Self{status: match kani::any::<u8>()%4{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}}
++impl kani::Arbitrary for PoolV1VerifierRegistryFormatError {fn any()->Self{match kani::any::<u8>()%12{0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::NonZeroReserved,4=>Self::UnsupportedFlags,5=>Self::InvalidStatus,6=>Self::InvalidAuthorityMode,7=>Self::ZeroRequiredBinding,8=>Self::InvalidActivationDelay,9=>Self::InvalidStatementVersion,10=>Self::InvalidRetirementSlot,_=>Self::InvalidDeploymentMode}}}
++pub fn eq_registry_coord(a:&Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError>,b:&Result<R::VerifierRegistryV2,R::PoolV1VerifierRegistryFormatError>,field:usize,j:usize)->bool{match (a,b){(Ok(a),Ok(b))=>match field{0=>a.flags==b.flags,1=>a.bump==b.bump,2=>a.pool[j]==b.pool[j],3=>a.authority[j]==b.authority[j],4=>a.policy_binding[j]==b.policy_binding[j],5=>a.generation==b.generation,6=>a.minimum_activation_delay_slots==b.minimum_activation_delay_slots,7=>a.registry_program[j]==b.registry_program[j],8=>a.loader_program[j]==b.loader_program[j],9=>a.programdata_address[j]==b.programdata_address[j],10=>a.programdata_bump==b.programdata_bump,11=>a.executable_hash[j]==b.executable_hash[j],_=>false},(Err(a),Err(b))=>eq_PoolV1VerifierRegistryFormatError(a,b),_=>false}}
++pub fn eq_entry_coord(a:&Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError>,b:&Result<R::VerifierRegistryEntryV2,R::PoolV1VerifierRegistryFormatError>,field:usize,j:usize)->bool{match (a,b){(Ok(a),Ok(b))=>match field{0=>eq_VerifierEntryStatusV1(&a.status,&b.status),1=>a.statement_version==b.statement_version,2=>a.bump==b.bump,3=>a.pool[j]==b.pool[j],4=>a.verifier_program[j]==b.verifier_program[j],5=>a.profile_binding[j]==b.profile_binding[j],6=>a.release_binding[j]==b.release_binding[j],7=>a.loader_program[j]==b.loader_program[j],8=>a.programdata_address[j]==b.programdata_address[j],9=>a.programdata_bump==b.programdata_bump,10=>a.executable_hash[j]==b.executable_hash[j],11=>a.expected_upgrade_authority[j]==b.expected_upgrade_authority[j],12=>a.activation_slot==b.activation_slot,13=>a.retirement_slot==b.retirement_slot,14=>a.policy_binding[j]==b.policy_binding[j],_=>false},(Err(a),Err(b))=>eq_PoolV1VerifierRegistryFormatError(a,b),_=>false}}
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -375,6 +375,8 @@
+     Ok(entry)
+ }
+ 
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r:&Result<(),PoolV1VerifierRegistryFormatError>|*r==crate::NCX_native::valid_registry_ref(registry)))]
+ pub fn validate_verifier_registry_v2(
+     registry: &VerifierRegistryV2,
+ ) -> Result<(), PoolV1VerifierRegistryFormatError> {
+@@ -422,6 +424,9 @@
+     Ok(output)
+ }
+ 
++#[cfg_attr(kani,kani::requires(true))]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r:&Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError>|crate::NCX_native::eq_registry(r,&crate::NCX_reference::decode_verifier_registry_v2(bytes))))]
+ pub fn decode_verifier_registry_v2(
+     bytes: &[u8],
+ ) -> Result<VerifierRegistryV2, PoolV1VerifierRegistryFormatError> {
+@@ -458,6 +463,8 @@
+     Ok(registry)
+ }
+ 
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r:&Result<(),PoolV1VerifierRegistryFormatError>|*r==crate::NCX_native::valid_entry_ref(entry)))]
+ pub fn validate_verifier_registry_entry_v2(
+     entry: &VerifierRegistryEntryV2,
+ ) -> Result<(), PoolV1VerifierRegistryFormatError> {
+@@ -510,6 +517,9 @@
+     Ok(output)
+ }
+ 
++#[cfg_attr(kani,kani::requires(true))]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r:&Result<VerifierRegistryEntryV2,PoolV1VerifierRegistryFormatError>|crate::NCX_native::eq_entry(r,&crate::NCX_reference::decode_verifier_registry_entry_v2(bytes))))]
+ pub fn decode_verifier_registry_entry_v2(
+     bytes: &[u8],
+ ) -> Result<VerifierRegistryEntryV2, PoolV1VerifierRegistryFormatError> {
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,4 +1,6 @@
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
++#![cfg_attr(kani, feature(allocator_api))]
++#[cfg(kani)] extern crate alloc;
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+ use solana_program::{account_info::AccountInfo,entrypoint::ProgramResult,pubkey::Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+@@ -168,3 +170,6 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NCX_KMX;
++#[cfg(kani)] mod NCX_native;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NCX_native.rs
+@@ -0,0 +1,161 @@
++#![allow(non_snake_case,dead_code)]
++use aspis_statement::pool_v1::verifier_registry::*;
++#[kani::proof_for_contract(aspis_statement::pool_v1::verifier_registry::decode_verifier_registry_v2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_registry_contract(){let b:[u8;256]=kani::any();let _=decode_verifier_registry_v2(&b);}
++#[kani::proof_for_contract(aspis_statement::pool_v1::verifier_registry::decode_verifier_registry_entry_v2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_entry_contract(){let b:[u8;320]=kani::any();let _=decode_verifier_registry_entry_v2(&b);}
++#[kani::proof_for_contract(aspis_statement::pool_v1::verifier_registry::validate_verifier_registry_v2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_validate_registry_contract(){let r=VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()};let _=validate_verifier_registry_v2(&r);}
++#[kani::proof_for_contract(aspis_statement::pool_v1::verifier_registry::validate_verifier_registry_entry_v2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_validate_entry_contract(){let r=VerifierRegistryEntryV2{status: match kani::any::<u8>()%4{0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()};let _=validate_verifier_registry_entry_v2(&r);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_copy_control(){let b:[u8;32]=kani::any();let mut a=[0u8;32];a.copy_from_slice(&b);let j:usize=kani::any();kani::assume(j<32);assert!((a[j]==b[j])!=false);}
++#[kani::requires(b.len()==256 && field<12 && j<32)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool|*r)]
++fn NCX_registry_window(b:&[u8],field:usize,j:usize)->bool{aspis_statement::NCX_native::eq_registry_coord(&decode_verifier_registry_v2(b),&aspis_statement::NCX_reference::decode_verifier_registry_v2(b),field,j)}
++#[kani::proof_for_contract(NCX_registry_window)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_registry_window_contract(){let b:[u8;256]=kani::any();let f:usize=kani::any();let j:usize=kani::any();kani::assume(f<12 && j<32);let _=NCX_registry_window(&b,f,j);}
++#[kani::requires(b.len()==320 && field<15 && j<32)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool|*r)]
++fn NCX_entry_window(b:&[u8],field:usize,j:usize)->bool{aspis_statement::NCX_native::eq_entry_coord(&decode_verifier_registry_entry_v2(b),&aspis_statement::NCX_reference::decode_verifier_registry_entry_v2(b),field,j)}
++#[kani::proof_for_contract(NCX_entry_window)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_entry_window_contract(){let b:[u8;320]=kani::any();let f:usize=kani::any();let j:usize=kani::any();kani::assume(f<15 && j<32);let _=NCX_entry_window(&b,f,j);}
++#[kani::requires(p<=32 && j<32)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool|*r)]
++fn NCX_read_window(b:&[u8;64],p:usize,j:usize)->bool{let a:[u8;32]=b[p..p+32].try_into().unwrap();let r=aspis_statement::NCX_reference::read32(b,p);a[j]==r[j]}
++#[kani::proof_for_contract(NCX_read_window)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_read_window_check(){let b:[u8;64]=kani::any();let p:usize=kani::any();let j:usize=kani::any();kani::assume(p<=32 && j<32);let _=NCX_read_window(&b,p,j);}
++#[kani::requires(p<=8 && j<8)]
++#[kani::modifies()]
++#[kani::ensures(|r:&bool|*r)]
++fn NCX_word_window(b:&[u8;16],p:usize,j:usize)->bool{let a=u64::from_le_bytes(b[p..p+8].try_into().unwrap());let r=aspis_statement::NCX_reference::word(b,p);a==r}
++#[kani::proof_for_contract(NCX_word_window)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_word_window_check(){let b:[u8;16]=kani::any();let p:usize=kani::any();let j:usize=kani::any();kani::assume(p<=8 && j<8);let _=NCX_word_window(&b,p,j);}
++#[kani::modifies(x)]
++#[kani::ensures(|r:&Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError>|matches!(r,Ok(v) if v.bump==a.bump))]
++fn NCX_shape(a:VerifierRegistryV2,x:&mut u8,y:&mut u8)->Result<VerifierRegistryV2,PoolV1VerifierRegistryFormatError>{*x=1;*y=2;Ok(a)}
++#[kani::proof_for_contract(NCX_shape)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_shape_contract(){let a=kani::any();let mut x=kani::any();let mut y=kani::any();let _=NCX_shape(a,&mut x,&mut y);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_shape_real(){let a:VerifierRegistryV2=kani::any();let before=a.programdata_bump;let mut x=kani::any();let mut y=kani::any();let r=NCX_shape(a,&mut x,&mut y);assert!(matches!(r,Ok(v) if v.programdata_bump==before));}
++#[kani::proof]
++#[kani::stub_verified(NCX_shape)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_shape_stub(){let a:VerifierRegistryV2=kani::any();let before=a.programdata_bump;let mut x=kani::any();let mut y=kani::any();let r=NCX_shape(a,&mut x,&mut y);assert!(matches!(r,Ok(v) if v.programdata_bump==before));}
++#[kani::modifies(x)]
++#[kani::ensures(|r:&Result<(),PoolV1VerifierRegistryFormatError>|r.is_err())]
++fn NCX_unit(x:&mut u8,y:&mut u8)->Result<(),PoolV1VerifierRegistryFormatError>{*x=1;*y=2;Err(PoolV1VerifierRegistryFormatError::InvalidStatus)}
++#[kani::proof_for_contract(NCX_unit)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_unit_contract(){let mut x=kani::any();let mut y=kani::any();let _=NCX_unit(&mut x,&mut y);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_unit_real(){let mut x=kani::any();let mut y=kani::any();let r=NCX_unit(&mut x,&mut y);assert!(r==Err(PoolV1VerifierRegistryFormatError::InvalidStatus));}
++#[kani::proof]
++#[kani::stub_verified(NCX_unit)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NCX_KMX::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCX_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NCX_KMX::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCX_KMX::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NCX_KMX::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NCX_KMX::KMX_realloc)]
++#[kani::unwind(34)]
++fn NCX_unit_stub(){let mut x=kani::any();let mut y=kani::any();let r=NCX_unit(&mut x,&mut y);assert!(r==Err(PoolV1VerifierRegistryFormatError::InvalidStatus));}
