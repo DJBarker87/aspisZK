@@ -1,0 +1,61 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/43701/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/43701/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-objects/R1Z/PV_AL_RangeUnfold.olean",
+    "/home/dombarker/project-offloads/codex-pv-relink-20261028/lean-sources/R1Z/PV_AL_RangeUnfold.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall": "0:01.09",
+  "peak_rss_kib": "2619832",
+  "swap": "0",
+  "source_revision": "2c7dc7a2999e8ebe71c18201b5cb8aeee6d6f1c2",
+  "expected_phase": "Lean",
+  "axioms": [
+    "'R1Z.PV_AL_RangeUnfold.same_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_AL_RangeUnfold.same_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'R1Z.PV_AL_RangeUnfold.unfold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 43701,
+  "module": "R1Z.PV_AL_RangeUnfold",
+  "sha256": "aef356be3602e0baea4e3a46c22c4560b56517b5ca768f09024c8638ac900916",
+  "revision": "2c7dc7a2999e8ebe71c18201b5cb8aeee6d6f1c2",
+  "imports": [
+    "R1Z.PV_AL_SplitFlat",
+    "R1Z.PV_CBL_ArrayUnfold",
+    "R1Z.PV_CBL_PopSlices"
+  ],
+  "dependency_source_resolution": "../source-resolution.json",
+  "preflight": "../preflight.json"
+}
