@@ -33,3 +33,64 @@ end PV_B3P_LegacyValues133
 p=D/'PV_B3P_LegacyValues133.lean'
 if '--check' in sys.argv:assert p.read_text()==s
 else:p.write_text(s)
+retained=[(k,p+48 if p>=864 else p,c+48 if c>=864 else c) for k,p,c in legacy if not k]
+forestpath=[]
+for l in range(24):
+ a=912+l//4*16+1+4*(l%4)
+ b=(4+l if l<=20 else 33+l)
+ prev=3 if l==0 else (4+l-1 if l-1<=20 else 33+l-1)
+ forestpath += [(True,prev*16+11,a),(True,a+1,b*16+12),(True,a+1,b*16)]
+forest=retained+forestpath
+s='''import PV_B3P_LegacyValues133
+namespace PV_B3P_ForestValues133
+open PV_B3P_Schedule133 PV_B3P_LegacyValues133
+set_option autoImplicit false
+'''
+s+=f'def retained : List Link := {lit(retained)}\n'
+s+='''theorem retained_eval :
+    (fixed.filter (fun x => !x.path)).map translate = retained := by
+  simp only [fixed,List.filter_cons,List.filter_nil,link,path,Bool.not_true,
+    Bool.not_false,ite_true,ite_false,List.map_cons,List.map_nil,translate]
+  rfl
+#print axioms retained_eval
+'''
+s+=f'def pathFixed : List Link := {lit(forestpath)}\n'
+s+='''theorem paths_eval : (List.range 24).flatMap (fun level =>
+    let previous := if level == 0 then 3 else forestBlock (level-1)
+    [path (previous*16+11) (forestAux level),
+     path (forestAux level+1) (forestBlock level*16+12),
+     path (forestAux level+1) (forestBlock level*16)]) = pathFixed := rfl
+#print axioms paths_eval
+'''
+s+=f'def fixed : List Link := {lit(forest)}\n'
+s+='''theorem forest_eval : forestLinks legacyLinks = fixed := by
+  rw [PV_B3P_LegacyValues133.legacy_eval]
+  unfold forestLinks
+  rw [retained_eval,paths_eval]
+  rfl
+#print axioms forest_eval
+end PV_B3P_ForestValues133
+'''
+p=D/'PV_B3P_ForestValues133.lean'
+if '--check' in sys.argv:assert p.read_text()==s
+else:p.write_text(s)
+# A block proves at most four check iterations; prior counts are explicit data.
+# No monolithic reduction of the entire recurrence is generated.
+for name,xs,imp in [('Legacy',legacy,'Legacy'),('Forest',forest,'Forest')]:
+ ns=f'PV_B3P_{name}Capacity133';v=f'PV_B3P_{name}Values133'
+ s=f'import {v}\nnamespace {ns}\nopen PV_B3P_Schedule133\nset_option autoImplicit false\n'
+ count=0
+ for start in range(0,len(xs),4):
+  end=min(start+4,len(xs));chunk=xs[start:end];ps=[p for _,p,_ in xs[:start]][::-1];cs=[c for _,_,c in xs[:start]][::-1]
+  np=[p for _,p,_ in xs[:end]][::-1];nc=[c for _,_,c in xs[:end]][::-1]
+  s+=f'theorem step{count} (tail : List Link) :\n    checkEndpoints ({lit(chunk)} ++ tail) {ps} {cs} =\n    checkEndpoints tail {np} {nc} := by rfl\n#print axioms step{count}\n'
+  count+=1
+ s+=f'theorem success : checkEndpoints {v}.fixed [] [] = .ok () := by\n  calc\n'
+ for i,start in enumerate(range(0,len(xs),4)):
+  end=min(start+4,len(xs));np=[p for _,p,_ in xs[:end]][::-1];nc=[c for _,_,c in xs[:end]][::-1]
+  if i==0:s+=f'    checkEndpoints {v}.fixed [] [] = checkEndpoints {lit(xs[end:])} {np} {nc} := step{i} _\n'
+  else:s+=f'    _ = checkEndpoints {lit(xs[end:])} {np} {nc} := step{i} _\n'
+ s+='    _ = .ok () := rfl\n#print axioms success\nend '+ns+'\n'
+ p=D/f'{ns}.lean'
+ if '--check' in sys.argv:assert p.read_text()==s
+ else:p.write_text(s)
