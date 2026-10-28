@@ -1,0 +1,22 @@
+import KMX_CopyMeaning
+set_option autoImplicit false
+namespace NCJ_CopyFrames
+/-- Source windows compose to the exact complete value view, with
+explicit address/ownership/length obligations left to the native caller. -/
+theorem two_windows {α : Type} (src dst : Nat → α) (a n b m k : Nat) :
+    KMX_CopyMeaning.loop src (KMX_CopyMeaning.loop src dst a n) b m k =
+      if (a≤ k ∧ k< a+n) ∨ (b≤ k ∧ k< b+m) then src k else dst k := by
+  rw [KMX_CopyMeaning.loop_spec,KMX_CopyMeaning.loop_spec]
+  by_cases first : a≤ k ∧ k< a+n
+  · by_cases second : b≤ k ∧ k< b+m <;> simp [first,second]
+  · by_cases second : b≤ k ∧ k< b+m <;> simp [first,second]
+
+/-- Source byte identity of a full copy follows pointwise from the actual
+indexed-copy law. No hash, root, address or allocation equality replaces it. -/
+theorem entire {α : Type} (src dst : Nat → α) (n : Nat) (i : Nat) (hi : i< n) :
+    KMX_CopyMeaning.loop src dst 0 n i=src i := by
+  rw [KMX_CopyMeaning.copy_prefix,if_pos hi]
+
+#print axioms two_windows
+#print axioms entire
+end NCJ_CopyFrames

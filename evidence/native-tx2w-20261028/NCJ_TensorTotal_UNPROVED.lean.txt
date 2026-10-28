@@ -1,0 +1,22 @@
+import NCJ_TensorOuterTotal
+import NCJ_Constants
+set_option autoImplicit false
+noncomputable section
+namespace NCJ_TensorTotal
+open Aeneas Aeneas.Std Result AspisR1 LPi_FieldValues NCJ_TensorOuterStep
+/-- Exact two-fold emitted tensor totality from the canonical real factor
+array and64-entry carrier. Source/native call-site association stays separate. -/
+theorem source (w : W) (k : Usize) (hk : k.val<5) (hf : Factors w)
+    (input : Slice NQ) (len : input.val.length=64) (ca : NCJ_CellCanon.slice input) :
+    ∃ out,FIo_Native.weights.Weights.tensor w k 2#usize input=ok out ∧
+      NCJ_CellCanon.slice out ∧ out.val.length=64 := by
+  let init := NCJ_SliceCells.put input 0 FIo_Native.aspis_core.field.QM31.ONE
+  have initRun := NCJ_SliceCells.update input 0#usize (by rw [len];decide)
+    FIo_Native.aspis_core.field.QM31.ONE
+  have ci : NCJ_CellCanon.slice init := NCJ_CellCanon.list_set _ _ _ _ ca NCJ_Constants.one
+  have li : init.val.length=64 := (NCJ_SliceCells.length input 0 _).trans len
+  obtain ⟨out,run,co,lo⟩ := NCJ_TensorOuterTotal.source w k 1#usize hk hf
+    {start:=2#usize,«end»:=5#usize} rfl (Or.inl ⟨rfl,rfl⟩) init li ci
+  exact ⟨out,by simpa only [FIo_Native.weights.Weights.tensor,initRun,bind_tc_ok] using run,co,lo⟩
+#print axioms source
+end NCJ_TensorTotal

@@ -1,0 +1,71 @@
+{"attempt": "NCJ_L071", "exit_status": 1, "wall_seconds": 2.197092436021194, "peak_rss_kib": "3858012", "swaps": "0", "print_axioms": ["'NCJ_TensorOuterStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCJ_TensorOuterStep.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCJ_generated/NCJ_TensorOuterStep.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.253 % ?m.254
+in the target expression
+  ↑(n.wrapping_mul 4#usize) = ↑n * 4
+
+w : W
+k n : Usize
+hk : ↑k < 5
+hf : Factors w
+iter : Iter
+he : ↑iter.end = 5
+stage : Stage ↑iter.start ↑n
+more : ↑iter.start < 5
+input : Slice NQ
+len : (↑input).length = 64
+ca : NCJ_CellCanon.slice input
+hn : NCJ_TensorDomains.Stage ↑n
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+advance : NCJ_ForwardRange.next iter = ok (some iter.start, rest)
+inc : ↑rest.start = ↑iter.start + 1
+last : rest.end = iter.end
+out : Slice FIo_Native.aspis_core.field.QM31
+run : FIo_Native.weights.Weights.tens
+...
+pUsize iter
+in the target expression
+  FIo_Native.weights.Weights.tensor_loop0.body k iter w input n = ok (cont (rest, w, out, next))
+
+case refine_1
+w : W
+k n : Usize
+hk : ↑k < 5
+hf : Factors w
+iter : Iter
+he : ↑iter.end = 5
+stage : Stage ↑iter.start ↑n
+more : ↑iter.start < 5
+input : Slice NQ
+len : (↑input).length = 64
+ca : NCJ_CellCanon.slice input
+hn : NCJ_TensorDomains.Stage ↑n
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+advance : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, rest)
+inc : ↑rest.start = ↑iter.start + 1
+last : rest.end = iter.end
+out : Slice FIo_Native.aspis_core.field.QM31
+run : FIo_Native.weights.Weights.tensor_loop0_loop0 (NCJ_Reverse.cursor n) w k input n iter.start = ok (w, out)
+co : NCJ_CellCanon.slice out
+lo : (↑out).length = 64
+rev :
+  core.iter.traits.iterator.Iterator.rev.trait_default
+      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) { start := 0#usize, «end» := n } =
+    ok (NCJ_Reverse.cursor n)
+next : Usize := n.wrapping_mul 4#usize
+nv : ↑next = ↑n * 4
+⊢ FIo_Native.weights.Weights.tensor_loop0.body k iter w input n = ok (cont (rest, w, out, next))
+NCJ_generated/NCJ_TensorOuterStep.lean:55:57: error: Application type mismatch: The argument
+  ↑iter.end
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.7
+of sort `Type (?u.7 + 1)` in the application
+  @InitialSeg ↑iter.end
+NCJ_generated/NCJ_TensorOuterStep.lean:55:71: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+'NCJ_TensorOuterStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_TensorOuterStep.done' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r56b9876ec1214f32a548ddf8465dd0fb.scope; invocation ID: bfe3329c113b45f4a02bebb905aa9b4f
