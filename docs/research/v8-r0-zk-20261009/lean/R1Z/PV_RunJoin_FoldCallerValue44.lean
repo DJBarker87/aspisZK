@@ -22,7 +22,10 @@ theorem complete (ops : ExternalFuns) (count outSize : Usize) (sizes : count.val
   obtain ⟨out,hout,hv⟩ := PV_RunJoin_FoldLoopValue44.complete ops count q z a dual hq ha
     (fun j hj => hz j (by omega)) (fun j hj => hd j (by omega)) (count.val / 4)
     (alloc.vec.Vec.with_capacity W k) 0#usize (by change 0 + _ = _;omega)
-    (by omega) (by have cap : 256 ≤ Usize.max := by scalar_tac;change 0 + count.val / 4 ≤ Usize.max;omega)
+    (by omega) (by
+      have cap : 256 ≤ Usize.max := by scalar_tac
+      change 0 + count.val / 4 ≤ Usize.max
+      omega)
   refine ⟨out,?_,?_⟩
   · rw [@PV_RunJoin_FoldThread44.caller _ (ProverRwP6BodyCandidate.selected ops) input
       (current (source a)) dual (by rw [len];omega),hk]
@@ -33,5 +36,6 @@ theorem complete (ops : ExternalFuns) (count outSize : Usize) (sizes : count.val
     change (array outSize z).val = out.val
     rw [hv,PV_RunJoin_SourceArray44.payload]
     simp only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val=0 from rfl,Nat.zero_add,array,ProverCommitArray49.array,sizes]
+    rfl
 #print axioms complete
 end R1Z.PV_RunJoin_FoldCallerValue44
