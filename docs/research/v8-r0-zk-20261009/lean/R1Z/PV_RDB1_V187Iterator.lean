@@ -6,7 +6,7 @@ namespace R1Z.PV_RDB1_V187Iterator
 Equality detects exactly zero remaining elements even when address arithmetic
 wraps. This is a symbolic bitvector law, not an enumeration of machine words. -/
 theorem zst_empty {width : Nat} (base count : BitVec width) :
-    base + count = base ↔ count = 0 := by
+    base + count = base ↔ count = 0#width := by
   constructor
   · intro h
     have hh := congrArg (fun x : BitVec width => x - base) h
@@ -16,7 +16,7 @@ theorem zst_empty {width : Nat} (base count : BitVec width) :
     rw [h, BitVec.add_zero]
 
 theorem zst_step {width : Nat} (base count : BitVec width) :
-    (base + count) - 1 = base + (count - 1) := by
+    (base + count) - 1#width = base + (count - 1#width) := by
   rw [BitVec.sub_eq_add_neg, BitVec.sub_eq_add_neg, BitVec.add_assoc]
 
 /-- Sequential owned reads in from_fn order. acc models the initialized
