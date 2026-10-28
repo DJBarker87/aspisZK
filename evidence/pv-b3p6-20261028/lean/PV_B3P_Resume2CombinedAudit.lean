@@ -1,5 +1,5 @@
 import PV_B3P_Install133
-import PV_B3P_SelectedValue226
+import PV_B3P_Closure226
 import PV_B3P_Install226V3
 namespace PV_B3P_Resume2CombinedAudit
 open Aeneas Aeneas.Std ProverRwFull
@@ -23,6 +23,18 @@ theorem source226 (base : ExternalTypes) (ops : @ExternalFuns (Types base))
   unfold selected
   rw [PV_B3P_Install133.preserved_op226]
   exact PV_B3P_Install226V3.source base ops p
+
+theorem value226 (base : ExternalTypes) (ops : @ExternalFuns (Types base))
+    (p : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (Types base))
+    (out : alloc.vec.Vec U8)
+    (h : @ExternalFuns.op226 (Types base) (selected base ops) p = .ok (.Ok out)) :
+    out.val = PV_B3P_ByteLayout226V3.layout
+      (PV_B3P_ProjectV3Law226.value (PV_B3P_PublicCarrier226V3.toSource base p)) := by
+  apply PV_B3P_SelectedValue226.success_value base ops p out
+  rw [PV_B3P_Install226V3.source]
+  rw [source226] at h
+  exact h
+#print axioms value226
 
 -- Exact combined carrier equations and all 260 other callback frames.
 #print axioms source133
