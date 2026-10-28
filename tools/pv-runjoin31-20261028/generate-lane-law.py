@@ -10,14 +10,14 @@ import R1Z.PV_RunJoin_BindCongruence
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_LaneDenotation31
-open Aeneas Aeneas.Std Result
+open Aeneas Aeneas.Std Result R0Z.WriterRefine
 open PV_RunJoin_LaneFold31 PV_RunJoin_LaneRecipe31
 abbrev Pair := PV_RunJoin_Lane31.aspis_statement.pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1
 variable [BuilderForestAdmissionPort.ExternalLinear]
 
 def sibling (input : Pair) (level : Nat) : Digest := input.membership.siblings.val[level]!
 def reverse (input : Pair) (level : Nat) : Bool :=
-  let count := U32.ofNatCore (level%20) (by have := Nat.mod_lt level (by decide : 0<20); omega)
+  let count := U32.ofNatCore (level%20) (by have := Nat.mod_lt level (by decide : 0<20); scalar_tac)
   (U32.wrapping_shr input.membership.index count &&& 1#u32) != 0#u32
 
 def model (input : Pair) := recipe
