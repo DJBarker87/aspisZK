@@ -13,7 +13,7 @@ theorem returned_eq (l r : Run W C Aeneas.Std.Error A) :
       (l.outcome=.div ∧ r.outcome=.div) := by
   cases l with | mk lo lw lc =>
     cases r with | mk ro rw rc =>
-      cases lo <;> cases ro <;> simp [returned]
+      cases lo <;> cases ro <;> simp [returned,eq_comm]
 
 /-- An exhaustive obligation, including outer fail/div and every inner
 Result rejection carried as an ordinary successful value of A. -/
