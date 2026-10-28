@@ -60,14 +60,14 @@ def withdrawal (t : Withdrawal) : PV_L2C_HonestCaller.Family (K:=K) :=
   Classical.choose (withdrawal_entry (K:=K) t)
 
 theorem transfer_payload (t : Transfer) :
-    (transfer (K:=K) t).val.compiled=t.compiled := by
+    (transfer (K:=K) t).val.compiled=PV_RunJoin_OuterABI30.compilationToForest t.compiled := by
   obtain ⟨root,_,hi⟩ := Classical.choose_spec (transfer_entry (K:=K) t)
   rw [show (transfer (K:=K) t).val = _ from hi]
   rfl
 #print axioms transfer_payload
 
 theorem withdrawal_payload (t : Withdrawal) :
-    (withdrawal (K:=K) t).val.compiled=t.compiled := by
+    (withdrawal (K:=K) t).val.compiled=PV_RunJoin_OuterABI30.compilationToForest t.compiled := by
   obtain ⟨root,_,hi⟩ := Classical.choose_spec (withdrawal_entry (K:=K) t)
   rw [show (withdrawal (K:=K) t).val = _ from hi]
   rfl
