@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PackedMasks.lean:10:49: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (1#?m.26).getLsbD ?m.27
+in the target expression
+  (s.getLsbD ↑q || decide (↑q < 16) && !decide (↑q < ↑p) && BitVec.getLsbD 1 (↑q - ↑p)) =
+    (s.getLsbD ↑q || decide (p = q))
+
+s : BitVec 16
+p q : Fin 16
+⊢ (s.getLsbD ↑q || decide (↑q < 16) && !decide (↑q < ↑p) && BitVec.getLsbD 1 (↑q - ↑p)) =
+    (s.getLsbD ↑q || decide (p = q))
+'PV_L2C_PackedMasks.inserted_bit' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PackedMasks.lean:36:8: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => ((m (block p)).getLsbD ↑(bit q) || decide _a) = ((m (block p)).getLsbD ↑(bit q) || decide (p = q))
+Error: Application type mismatch: The argument
+  instDecidableEqFin 16 (bit p) (bit q)
+has type
+  Decidable (bit p = bit q)
+but is expected to have type
+  Decidable _a
+in the application
+  @decide _a (instDecidableEqFin 16 (bit p) (bit q))
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case pos
+m : Masks
+p q : Fin 1024
+hb : block q = block p
+he : bit p = bit q ↔ p = q
+⊢ ((m (block p)).getLsbD ↑(bit q) || decide (bit p = bit q)) = ((m (block p)).getLsbD ↑(bit q) || decide (p = q))
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PackedMasks.lean:37:2: error: unsolved goals
+case neg
+m : Masks
+p q : Fin 1024
+hb : ¬block q = block p
+hpq : p ≠ q
+⊢ (if False then insert (m (block q)) (bit p) else m (block q)).getLsbD ↑(bit q) = (m (block q)).getLsbD ↑(bit q)
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PackedMasks.lean:38:31: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [contains, ̲put, ̲hb,i̵f̵_̵n̵e̵g̵,̵ ̲hpq, ̲decide_false, ̲Bool.or_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_PackedMasks.put_contains' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2C_PackedMasks.packed_contains' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

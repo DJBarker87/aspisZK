@@ -1,0 +1,17 @@
+theorem R1Z.PV_RDEA_FocusedReplay.source : ∀ [inst : ExternalTypes] [inst_1 : ExternalFuns] (self : Store)
+  (nonce : Std.Array U8 32#usize),
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path self nonce = do
+    let digest ← prelude self nonce
+    tail self digest :=
+fun [ExternalTypes] [ExternalFuns] self nonce => source_factor self nonce
+'R1Z.PV_RDEA_FocusedReplay.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDEA_FocusedReplay.finite : ∀ [inst : ExternalTypes] [inst_1 : ExternalFuns]
+  (digest : Std.Array U8 32#usize) (acc : String),
+  aspis_prover.state_only_entropy.reservation_name digest acc 0#usize =
+    PV_RDEA_ActualNameLoop.finite digest 32 acc 0#usize :=
+fun [ExternalTypes] [ExternalFuns] digest acc => PV_RDEA_ActualNameFinite.start digest acc
+'R1Z.PV_RDEA_FocusedReplay.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualEndpointConsumer.capacity_consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualEndpointConsumer.constructor_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualDigitLookup.index_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualReservation.digest_length' depends on axioms: [propext, Classical.choice, Quot.sound]

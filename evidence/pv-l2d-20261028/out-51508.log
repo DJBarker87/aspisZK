@@ -1,0 +1,35 @@
+'PV_L2D_MerkleGroups.paired_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2D_MerkleGroups.group_test' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_MerkleGroups.lean:45:6: error: unsolved goals
+case pos
+n : ℕ
+ih : ∀ (indices : List ℕ), List.Pairwise (fun x1 x2 => x1 < x2) indices → countedLevel n indices = level n indices
+x : ℕ
+xs : List ℕ
+ordered : List.Pairwise (fun x1 x2 => x1 < x2) (x :: xs)
+ht : List.Pairwise (fun x1 x2 => x1 < x2) xs
+hh : ∀ y ∈ xs, x < y
+hp : xs.head? = some (2 * (x / 2) + 1) ∧ x % 2 = 0
+hc : Option.map (fun y => y / 2) xs.head? = some (x / 2)
+⊢ (if Option.map (fun y => y / 2) (some (2 * (x / 2) + 1)) = some (x / 2) then
+      (x / 2 :: (level n xs.tail).1, (level n xs.tail).2)
+    else (x / 2 :: (countedLevel n xs).1, sibling x :: (countedLevel n xs).2)) =
+    if True ∧ True then (x / 2 :: (level n xs.tail).1, (level n xs.tail).2)
+    else (x / 2 :: (level n xs).1, sibling x :: (level n xs).2)
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_MerkleGroups.lean:46:38: warning: This simp argument is unused:
+  hc
+
+Hint: Omit it from the simp argument list.
+  simp only [countedLevel, ̲level, ̲hc̵,̵h̵p, ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_MerkleGroups.lean:46:44: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵u̵n̵t̵e̵d̵L̵e̵v̵e̵l̵,̵l̵e̵v̵e̵l̵,̵h̵c̵,̵h̵p̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲c̲o̲u̲n̲t̲e̲d̲L̲e̲v̲e̲l̲,̲ ̲l̲e̲v̲e̲l̲,̲ ̲h̲c̲,̲ ̲h̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2D_MerkleGroups.counted_equals_emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

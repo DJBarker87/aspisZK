@@ -1,0 +1,49 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/v181-capacity-native/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/v181-capacity-native/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/native-v181.py"
+  ],
+  "exit": 0,
+  "wall": "0:00.13",
+  "peak_rss_kib": "116860",
+  "swap": "0",
+  "source_revision": "6e1da9d299be38772f1490f4c7ca8f6db9423fee",
+  "expected_phase": "optimized-compilation-then1027capacity-cases",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  }
+}

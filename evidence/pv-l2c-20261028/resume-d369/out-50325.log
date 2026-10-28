@@ -1,0 +1,155 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:21:58: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iterator.next i
+in the target expression
+  (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize s index
+              let m1 ← m.add value
+              let a ← Array.update s index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok s
+
+case done
+i✝ : Iter
+pairs : List (Usize × U32)
+i j : Iter
+hn : iterator.next i = ok (none, j)
+hb : ∀ p ∈ [], ↑p.1 < 16 ∧ ↑p.2 < 2147483647
+s : State
+hc : Canonical s
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize s index
+              let m1 ← m.add value
+              let a ← Array.update s index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:30:58: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iterator.next i
+in the target expression
+  (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize s index
+              let m1 ← m.add value
+              let a ← Array.update s index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok out
+
+case step
+i✝ : Iter
+pairs : List (Usize × U32)
+i j : Iter
+p : Usize × U32
+ps : List (Usize × U32)
+hn : iterator.next i = ok (some p, j)
+tail : FiniteTrace iterator j ps
+ih :
+  (∀ p ∈ ps, ↑p.1 < 16 ∧ ↑p.2 < 2147483647) →
+    ∀ (s : State), Canonical s → ∃ out, poseidon2.hash_fields_with_trace_loop0_loop0 j s = ok out ∧ Canonical out
+hb : ∀ p_1 ∈ p :: ps, ↑p_1.1 < 16 ∧ ↑p_1.2 < 2147483647
+s : State
+hc : Canonical s
+hindex : ↑p.1 < 16
+hword : ↑p.2 < 2147483647
+z : aspis_core.field.M31
+hadd : aspis_core.field.M31.add (↑s)[↑p.1]! p.2 = ok z
+left✝ : ↑z = (↑(↑s)[↑p.1]! + ↑p.2) % 2147483647
+hz : ↑z < 2147483647
+updated : Canonical (Std.Array.set s p.1 z)
+out : Std.Array aspis_core.field.M31 16#usize
+ho : poseidon2.hash_fields_with_trace_loop0_loop0 j (Std.Array.set s p.1 z) = ok out
+hcan : Canonical out
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (index, value) => do
+              let m ← Array.index_usize s index
+              let m1 ← m.add value
+              let a ← Array.update s index m1
+              poseidon2.hash_fields_with_trace_loop0_loop0 iter1 a) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_L2C_AbsorbRange.trace' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:40:10: error(lean.unknownIdentifier): Unknown identifier `PV_RunJoin_EnumerateTrace.labels`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:41:6: error: Invalid projection: Type of
+  p
+is not known; cannot resolve projection `1`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:41:21: error: Invalid projection: Type of
+  p
+is not known; cannot resolve projection `2`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:43:17: error(lean.unknownIdentifier): Unknown identifier `PV_RunJoin_EnumerateTrace.labels`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:43:8: error: unsolved goals
+case nil
+count : Usize
+hc : ↑count + [].length ≤ 16
+hx : ∀ x ∈ [], ↑x < 2147483647
+⊢ ∀ p ∈ sorry (), sorry () < 16 ∧ sorry () < 2147483647
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:55:14: error(lean.unknownIdentifier): Unknown constant `labels_range`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:61:13: error(lean.unknownIdentifier): Unknown identifier `PV_RunJoin_EnumerateTrace.trace`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_AbsorbRange.lean:60:56: error: unsolved goals
+input : Slice U32
+hi : (↑input).length ≤ 8
+hx : ∀ x ∈ ↑input, ↑x < 2147483647
+s : State
+hs : Canonical s
+⊢ ∃ out,
+    poseidon2.hash_fields_with_trace_loop0_loop0 { iter := { slice := input, i := 0 }, count := 0#usize } s = ok out ∧
+      Canonical out
+'PV_L2C_AbsorbRange.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

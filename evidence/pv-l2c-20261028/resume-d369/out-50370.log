@@ -1,0 +1,38 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:24:5: error: unknown tactic
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:22:14: error: unsolved goals
+case succ
+S : Type
+next : S → Result (word × S)
+s1 : S
+v : word
+n : ℕ
+ih : ∀ (s : S), scalar next n s = ok (Except.ok v, s1) → canonical v
+s : S
+h :
+  (do
+      let (raw, s1) ← next s
+      have candidate : word := raw &&& BitVec.ofNat 32 p
+      if BitVec.toNat candidate < p then ok (Except.ok candidate, s1) else scalar next n s1) =
+    ok (Except.ok v, s1)
+⊢ canonical v
+'PV_L2C_StateSampler.canonical_result' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:45:3: error: unknown tactic
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:43:79: error: unsolved goals
+S A B : Type
+first : Step S A
+thenStep : A → Step S B
+s outState : S
+out : B
+h :
+  (do
+      let (result, s1) ← first s
+      match result with
+        | Except.error e => ok (Except.error e, s1)
+        | Except.ok a => thenStep a s1) =
+    ok (Except.ok out, outState)
+⊢ ∃ a s1, first s = ok (Except.ok a, s1) ∧ thenStep a s1 = ok (Except.ok out, outState)
+'PV_L2C_StateSampler.bind_returned' depends on axioms: [sorryAx]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_StateSampler.lean:68:75: error(lean.unknownIdentifier): Unknown identifier `sd`
+'PV_L2C_StateSampler.secure_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

@@ -1,0 +1,42 @@
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+def Aeneas.Std.alloc.vec.Vec.deref : {T : Type} → alloc.vec.Vec T → Slice T :=
+fun {T} v => ⟨↑v, ⋯⟩
+def Aeneas.Std.alloc.vec.Vec.index_mut : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → alloc.vec.Vec T → I → Result (Output × (Output → alloc.vec.Vec T)) :=
+fun {T I Output} inst self i => inst.index_mut i self
+@[reducible] def Aeneas.Std.alloc.vec.Vec.len.{u} : {α : Type u} → alloc.vec.Vec α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def AspisR1ProverBalance9.prover_commit_reference.balance_qm31_owned : alloc.vec.Vec aspis_core.field.QM31 →
+  Usize →
+    Std.Array Bool 1024#usize →
+      Result
+        (core.result.Result Unit state_only_hiding.StateOnlyMaskBuildError × alloc.vec.Vec aspis_core.field.QM31) :=
+fun table dependent active =>
+  have i := table.len;
+  if (i != 1024#usize) = true then
+    ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.TraceShape, table)
+  else do
+    let b ← active.index_usize dependent
+    if b = true then ok (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.TraceShape, table)
+      else
+        have s := table.deref;
+        do
+        let sum ← prover_commit_reference.balance_qm31_rows s dependent active 0#usize aspis_core.field.QM31.ZERO
+        let q ← aspis_core.field.QM31.ZERO.sub sum
+        let (_, index_mut_back) ←
+          alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31) table dependent
+        have table1 : alloc.vec.Vec aspis_core.field.QM31 := index_mut_back q
+        ok (core.result.Result.Ok (), table1)
+
+exit=0

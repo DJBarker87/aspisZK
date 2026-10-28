@@ -1,0 +1,196 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_HashTotal.lean:24:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_L2C_ChunkStep.next i
+in the target expression
+  (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (permutation, chunk) => do
+              let i ← core.slice.Slice.iter chunk
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.enumerate.trait_default
+                    (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+              let state1 ← poseidon2.hash_fields_with_trace_loop0_loop0 iter2 s
+              let __x ←
+                poseidon2.permute_optimized_with_trace_threaded
+                    (poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                      callback)
+                    state1 ((), permutation)
+              match __x with
+                | (state2, c) =>
+                  match c with
+                  | (trace1, snd) => poseidon2.hash_fields_with_trace_loop0 callback iter1 trace1 state2) =
+    ok s
+
+case pos
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (i : PV_L2C_ChunkStep.Iter),
+      i.iter.size = 8 →
+        ↑i.count + (↑i.iter.remaining).length ≤ 20 →
+          (∀ x ∈ ↑i.iter.remaining, ↑x < 2147483647) →
+            ∀ (s : State),
+              Canonical s →
+                (↑i.iter.remaining).length = m →
+                  ∃ out, poseidon2.hash_fields_with_trace_loop0 callback i () s = ok out ∧ Canonical out
+i : PV_L2C_ChunkStep.Iter
+hs : i.iter.size = 8
+hb : ↑i.count + (↑i.iter.remaining).length ≤ 20
+hx : ∀ x ∈ ↑i.iter.remaining, ↑x < 2147483647
+s : State
+hc : Canonical s
+he : (↑i.iter.remaining).length = n
+empty : ↑i.iter.remaining = []
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (permutation, chunk) => do
+              let i ← core.slice.Slice.iter chunk
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.enumerate.trait_default
+                    (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+              let state1 ← poseidon2.hash_fields_with_trace_loop0_loop0 iter2 s
+              let __x ←
+                poseidon2.permute_optimized_with_trace_threaded
+                    (poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                      callback)
+                    state1 ((), permutation)
+              match __x with
+                | (state2, c) =>
+                  match c with
+                  | (trace1, snd) => poseidon2.hash_fields_with_trace_loop0 callback iter1 trace1 state2) =
+    ok s
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_HashTotal.lean:39:54: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_L2C_ChunkStep.next i
+in the target expression
+  (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (permutation, chunk) => do
+              let i ← core.slice.Slice.iter chunk
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.enumerate.trait_default
+                    (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+              let state1 ← poseidon2.hash_fields_with_trace_loop0_loop0 iter2 s
+              let __x ←
+                poseidon2.permute_optimized_with_trace_threaded
+                    (poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                      callback)
+                    state1 ((), permutation)
+              match __x with
+                | (state2, c) =>
+                  match c with
+                  | (trace1, snd) => poseidon2.hash_fields_with_trace_loop0 callback iter1 trace1 state2) =
+    ok out
+
+case neg
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (i : PV_L2C_ChunkStep.Iter),
+      i.iter.size = 8 →
+        ↑i.count + (↑i.iter.remaining).length ≤ 20 →
+          (∀ x ∈ ↑i.iter.remaining, ↑x < 2147483647) →
+            ∀ (s : State),
+              Canonical s →
+                (↑i.iter.remaining).length = m →
+                  ∃ out, poseidon2.hash_fields_with_trace_loop0 callback i () s = ok out ∧ Canonical out
+i : PV_L2C_ChunkStep.Iter
+hs : i.iter.size = 8
+hb : ↑i.count + (↑i.iter.remaining).length ≤ 20
+hx : ∀ x ∈ ↑i.iter.remaining, ↑x < 2147483647
+s : State
+hc : Canonical s
+he : (↑i.iter.remaining).length = n
+empty : ¬↑i.iter.remaining = []
+count : ↑i.count < 24
+next :
+  PV_L2C_ChunkStep.next i = ok (some (i.count, PV_L2C_ChunkShape.head i.iter.remaining), PV_L2C_ChunkShape.advance i)
+absorbed : Std.Array aspis_core.field.M31 16#usize
+ha :
+  poseidon2.hash_fields_with_trace_loop0_loop0
+      { iter := { slice := PV_L2C_ChunkShape.head i.iter.remaining, i := 0 }, count := 0#usize } s =
+    ok absorbed
+hca : Canonical absorbed
+expected : State
+hperm :
+  poseidon2.permute_optimized_with_trace_threaded PV_RunJoin_HashCallback17.callback absorbed ((), i.count) =
+    ok (expected, (), i.count)
+hcan : Canonical expected
+right✝ : R0Z.PoseidonRefine.liftA expected = R0P.poseidonPermutation (R0Z.PoseidonRefine.liftA absorbed)
+out : Std.Array aspis_core.field.M31 16#usize
+ho : poseidon2.hash_fields_with_trace_loop0 callback (PV_L2C_ChunkShape.advance i) () expected = ok out
+hout : Canonical out
+⊢ (do
+      let __x ←
+        core.iter.adapters.enumerate.IteratorEnumerate.next
+            (core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice aspis_core.field.M31) i
+      match __x with
+        | (o, iter1) =>
+          match o with
+          | none => ok s
+          | some p =>
+            match p with
+            | (permutation, chunk) => do
+              let i ← core.slice.Slice.iter chunk
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.enumerate.trait_default
+                    (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31) i
+              let state1 ← poseidon2.hash_fields_with_trace_loop0_loop0 iter2 s
+              let __x ←
+                poseidon2.permute_optimized_with_trace_threaded
+                    (poseidon2.hash_fields_with_trace.closure_1.Insts.CoreOpsFunctionFnMutTuplePoseidon2RoundTransitionTuple
+                      callback)
+                    state1 ((), permutation)
+              match __x with
+                | (state2, c) =>
+                  match c with
+                  | (trace1, snd) => poseidon2.hash_fields_with_trace_loop0 callback iter1 trace1 state2) =
+    ok out
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_L2C_HashTotal.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_L2C_HashTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

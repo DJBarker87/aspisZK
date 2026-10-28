@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:11:117: error: unsolved goals
+case «0»
+⊢ (ByteArray.toList.loop "0".toByteArray 0 []).length = 1
+
+case «1»
+⊢ (ByteArray.toList.loop "1".toByteArray 0 []).length = 1
+
+case «2»
+⊢ (ByteArray.toList.loop "2".toByteArray 0 []).length = 1
+
+case «3»
+⊢ (ByteArray.toList.loop "3".toByteArray 0 []).length = 1
+
+case «4»
+⊢ (ByteArray.toList.loop "4".toByteArray 0 []).length = 1
+
+case «5»
+⊢ (ByteArray.toList.loop "5".toByteArray 0 []).length = 1
+
+case «6»
+⊢ (ByteArray.toList.loop "6".toByteArray 0 []).length = 1
+
+case «7»
+⊢ (ByteArray.toList.loop "7".toByteArray 0 []).length = 1
+
+case «8»
+⊢ (ByteArray.toList.loop "8".toByteArray 0 []).length = 1
+
+case «9»
+⊢ (ByteArray.toList.loop "9".toByteArray 0 []).length = 1
+
+case «10»
+⊢ (ByteArray.toList.loop "a".toByteArray 0 []).length = 1
+
+case «11»
+⊢ (ByteArray.toList.loop "b".toByteArray 0 []).length = 1
+
+case «12»
+⊢ (ByteArray.toList.loop "c".toByteArray 0 []).length = 1
+
+case «13»
+⊢ (ByteArray.toList.loop "d".toByteArray 0 []).length = 1
+
+case «14»
+⊢ (ByteArray.toList.loop "e".toByteArray 0 []).length = 1
+
+case «15»
+⊢ (ByteArray.toList.loop "f".toByteArray 0 []).length = 1
+def Aeneas.Std.toStr : (s : String) → autoParam (s.toByteArray.size ≤ U32.max) toStr._auto_1 → Str :=
+fun s h => ⟨List.map (fun x => { toFin := ⟨x.toNat, ⋯⟩ }#uscalar) s.toByteArray.toList, ⋯⟩
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+'R1Z.PV_RDEA_ActualDigitTable.entry_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

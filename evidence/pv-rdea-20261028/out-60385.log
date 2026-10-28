@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:13:2: error: Tactic `decide` failed for proposition
+  ∀ (i : Fin 16), (↑(↑table)[↑i]).length = 1
+because its `Decidable` instance
+  Nat.decidableForallFin fun i => (↑(↑table)[↑i]).length = 1
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `decidable_of_decidable_of_iff`, `decidable_of_iff`, `instDecidableEqNat`, `Nat.decEq`, `Nat.decidableBallLT`, and `Nat.decidableForallFin`, reduction got stuck at the `Decidable` instance
+  match h : (↑(↑table)[↑⟨0, ⋯⟩]).length.beq 1 with
+  | true => isTrue ⋯
+  | false => isFalse ⋯
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+'R1Z.PV_RDEA_ActualDigitTable.entry_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,22 @@
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Usize.max }
+@[reducible] def Aeneas.Std.alloc.vec.Vec.new.{u} : (α : Type u) → alloc.vec.Vec α :=
+fun α => ⟨[], alloc.vec.Vec.new._proof_1⟩
+structure Aeneas.Std.core.default.Default.{u} (Self : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.default.Default.default : Result Self
+constructor:
+  Aeneas.Std.core.default.Default.mk.{u} {Self : Type u} (default : Result Self) : core.default.Default Self
+def Aeneas.Std.Array.{u} : Type u → Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }
+structure _root_.Array.{u} (α : Type u) : Type u
+number of parameters: 1
+fields:
+  Array.toList : List α
+constructor:
+  Array.mk.{u} {α : Type u} (toList : List α) : _root_.Array α
+@[reducible] def Aeneas.Std.alloc.vec.Vec.len.{u} : {α : Type u} → alloc.vec.Vec α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.core.mem.replace : {a : Type} → a → a → a × a :=
+fun {a} dst src => (dst, src)

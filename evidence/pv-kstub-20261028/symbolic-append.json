@@ -1,0 +1,12 @@
+{
+  "harness": "resume8_links::push_bytes",
+  "before": "fn push_bytes() {\n        let raw:[u8;2]=kani::any();let tail:[u8;1]=kani::any();\n        if let (Ok(mut s),Ok(t))=(String::from_utf8(raw.to_vec()),std::str::from_utf8(&tail)) {\n            let mut reference=raw.to_vec();reference.extend_from_slice(&tail);\n            s.push_str(t);assert_eq!(s.as_bytes(),reference.as_slice());\n        }\n    }",
+  "after": "fn push_bytes() {\n        let raw:[u8;2]=kani::any();let tail:[u8;1]=kani::any();\n        let n:usize=kani::any();let m:usize=kani::any();\n        kani::assume(n<=2 && m<=1);\n        if let (Ok(mut s),Ok(t))=(String::from_utf8(raw[..n].to_vec()),std::str::from_utf8(&tail[..m])) {\n            let mut reference=raw[..n].to_vec();reference.extend_from_slice(&tail[..m]);\n            s.push_str(t);assert_eq!(s.as_bytes(),reference.as_slice());\n        }\n    }",
+  "before_sha256": "186c92221e85a698b624dac05e28f10b444e91edb1e9f19bbf0da2ef7a0530f6",
+  "after_sha256": "90f1c86d18002853415bddfaa9925651ab07872957b095e2d387d38f70038c3c",
+  "domain": "arbitrary symbolic UTF8 prefix raw[..n], n<=2; arbitrary symbolic UTF8 tail[..m], m<=1; exactly one append",
+  "original_domain_instance": "n=2,m=1 gives original index165 property without changing calls or expected byte relation",
+  "negative": "push_bytes_negative remains original concrete n=2,m=1 nonempty fixture and negates the same equality",
+  "existing_runs_changed": [],
+  "reason": "LEAD note under (r\u2032), KMZ symbolic-length single append"
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "function": "check_base_column",
+    "source": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+    "source_body": "fn check_base_column(column:&[M31])->Result<(),Error> {\n    if column.len()!=1024 {return Err(Error::Public);}\n    let mut row=0;\n    while row<1024 {\n        if column[row].0>=P {return Err(Error::Public);}\n        row+=1;\n    }\n    Ok(())\n}",
+    "sha256": "9e876694d3371a1ec139aca8d72db6db3d8e58570cabc016a2cb51a3a63e3546",
+    "whitespace_only": true
+  },
+  {
+    "function": "inactive_sum_m31",
+    "source": "crates/aspis-r1-cost-probe/src/prover.rs",
+    "source_body": "fn inactive_sum_m31(values:&[M31],masks:&[u16;64])->M31 {\n    let mut sum=M31::ZERO;\n    let mut row=0;\n    while row<values.len() {\n        if masks[row>>4]&(1<<(row&15))==0 {sum=sum.add(values[row]);}\n        row+=1;\n    }\n    sum\n}",
+    "sha256": "cfb11fcfd09e64ffceb0aebd2a0a0e5247d464b57e1f7baa5f9ea8e6d5d937ce",
+    "whitespace_only": true
+  }
+]

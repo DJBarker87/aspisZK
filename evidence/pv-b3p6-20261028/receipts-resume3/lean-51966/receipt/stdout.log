@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_HelperComplete224.lean:36:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    PV_B3P_HelperPlan224.run (PV_B3P_HelperEval224.eval rows chi) 0 _a ↑seed =
+      PV_B3P_HelperList224.ordered (PV_B3P_HelperEval224.eval rows chi) 0 _a
+Error: Application type mismatch: The argument
+  Output._proof_1
+has type
+  1024 ≤ UScalar.cMax UScalarTy.Usize
+but is expected to have type
+  autoParam (_a ≤ UScalar.cMax UScalarTy.Usize) UScalar.ofNat._auto_1
+in the application
+  _a#usize
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+rows : Std.Array aspis_statement.logup.CopyLogUpRow 1024#usize
+chi : aspis_core.field.QM31
+hlen : (↑seed).length = 1024
+⊢ PV_B3P_HelperPlan224.run (PV_B3P_HelperEval224.eval rows chi) 0 1024 ↑seed =
+    PV_B3P_HelperList224.ordered (PV_B3P_HelperEval224.eval rows chi) 0 1024
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    seed
+  has type
+    Output
+  but is expected to have type
+    { l // l.length = ↑1024#usize }
+  in the application
+    ↑seed
+'PV_B3P_HelperComplete224.observe_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_HelperComplete224.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_HelperComplete224.success_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,51 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ScalarValue226.lean:30:2: error: Tactic `assumption` failed
+
+p : reference226.OwnedPublic
+i : Usize
+lo : 65 ≤ ↑i
+hi : ↑i < 69
+hoff : ↑(i.wrapping_sub 65#usize) = ↑i - ↑65#usize
+⊢ (if p.asset_id < 2147483647#u32 then
+      Result.ok (core.result.Result.Ok ((fields [p.asset_id])[↑i - ↑65#usize]?.getD 0#u8))
+    else Result.ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public)) =
+    if p.asset_id < 2147483647#u32 then Result.ok (core.result.Result.Ok ((fields [p.asset_id])[↑i - 65]?.getD 0#u8))
+    else Result.ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ScalarValue226.lean:41:2: error: Tactic `assumption` failed
+
+p : reference226.OwnedPublic
+i : Usize
+hw : p.withdrawal = true
+lo : 103 ≤ ↑i
+hi : ↑i < 107
+hoff : ↑(i.wrapping_sub 103#usize) = ↑i - ↑103#usize
+⊢ (if p.withdrawal_amount < 2147483647#u32 then
+      Result.ok (core.result.Result.Ok ((fields [p.withdrawal_amount])[↑i - ↑103#usize]?.getD 0#u8))
+    else Result.ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public)) =
+    if p.withdrawal_amount < 2147483647#u32 then
+      Result.ok (core.result.Result.Ok ((fields [p.withdrawal_amount])[↑i - 103]?.getD 0#u8))
+    else Result.ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ScalarValue226.lean:49:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => PV_B3P_ScalarRegions226.indexLane v j = _a[↑j]
+Error: Application type mismatch: The argument
+  hb
+has type
+  ↑j < (indexBytes v).length
+but is expected to have type
+  ↑j < _a.length
+in the application
+  _a[↑j]
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+v : U64
+j : Usize
+hj : ↑j < 8
+hb : ↑j < (indexBytes v).length
+⊢ PV_B3P_ScalarRegions226.indexLane v j = (indexBytes v)[↑j]
+'PV_B3P_ScalarValue226.word_byte' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_ScalarValue226.asset' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_ScalarValue226.amount' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_ScalarValue226.index_list' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_ScalarValue226.index' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

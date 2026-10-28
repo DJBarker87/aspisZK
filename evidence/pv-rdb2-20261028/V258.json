@@ -1,0 +1,960 @@
+{
+  "row": "V258",
+  "name": "op251 weights.Weights.materialize",
+  "disposition": "SUSPENDED",
+  "class_": "B",
+  "native_link_evidence_class": "partial structural transport; no restored credit",
+  "deployed_native_receipt": "native-weights/receipt.json",
+  "native_profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "toolchain": "rustc1.94.1",
+  "resolved_features_in_receipt": true,
+  "project_structural": "Typed RawVec<T,A>::new_in wrapper association, allocator/resource family, and complete weights instantiation remain; the old mapping selected RawVecInner<A>::new_in instead.",
+  "exact_reason": "Typed RawVec<T,A>::new_in wrapper association, allocator/resource family, and complete weights instantiation remain; the old mapping selected RawVecInner<A>::new_in instead.",
+  "known_changed_functions": [
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>",
+      "source_class": "B",
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn cast<U>(self) -> NonNull<U> {\n         // SAFETY: `self` is a `NonNull` pointer which is necessarily non-null\n-        unsafe { transmute(self.as_ptr() as *mut U) }\n+        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n     }",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 499,
+          "end_line": 502,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "512a67fb3b354ed3d5b1302e6a5fc9107e02cd1863f489d6ebcfffaa1dd5252c",
+          "item_sha256": "e9b65d4d18d4f7855f2e5db7b34be8a61af5bfab1a04be4f3a12f7758ef03fda",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 503,
+          "end_line": 506,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "80ebf7613d4a28d6c9e2a1a2c9112bc190cf694a00420c2c25811033f90590f4",
+          "item_sha256": "328b65c8285b5ec6a62866811b0e50f565e37a0bf2125c00bbd1512269545d8f",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        }
+      }
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_mut(_1: &mut T) -> NonNull<T>",
+      "source_class": "B",
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn from_mut(r: &mut T) -> Self {\n         // SAFETY: A mutable reference cannot be null.\n-        unsafe { transmute(r as *mut T) }\n+        unsafe { NonNull { pointer: r as *mut T } }\n     }",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 288,
+          "end_line": 291,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "7acc01dae441afc44ee5a71a571c865ee4a6586bff3fd944ab0eda632d0ecbb3",
+          "item_sha256": "32f2d8e8ba761409b68742f25d2ea5de8b2630bee6e477e2d496a2c2966a877e",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 292,
+          "end_line": 295,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "be86ee5efc3e1d291ae2b7402a277928fbde7c22b428c25d8b4311ea51128e1f",
+          "item_sha256": "3ee1521eee809829143f309b3295e7a116255f6234871d89c344d59ec157720d",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        }
+      }
+    }
+  ],
+  "partial_guard": "V258-source-gate.json.xz",
+  "unresolved_source_associations": [
+    {
+      "function": "alloc::capacity_overflow() -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::collections::<impl at library/alloc/src/collections/mod.rs:132:1: 132:41>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::collections::<library/alloc/src/collections/mod.rs::impl const Clone for TryReserveErrorKind>::clone(_1: &TryReserveErrorKind) -> TryReserveErrorKind",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::handle_alloc_error(_1: core::alloc::Layout) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::handle_error(_1: TryReserveError) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:414:1: 414:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "alloc::raw_vec::<impl at library/alloc/src/raw_vec/mod.rs:430:1: 430:67>::grow_amortized(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> Result<(), TryReserveError>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<A: Allocator> RawVecInner<A>>::reserve(_1: &mut RawVecInner<A>, _2: usize, _3: usize, _4: core::alloc::Layout) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::raw_vec::<library/alloc/src/raw_vec/mod.rs::impl<T, A: Allocator> RawVec<T, A>>::reserve(_1: &mut RawVec<T, A>, _2: usize, _3: usize) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T, A: Allocator> Vec<T, A>>::reserve(_1: &mut Vec<T, A>, _2: usize) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T: Clone, A: Allocator> Vec<T, A>>::extend_with(_1: &mut Vec<T, A>, _2: usize, _3: T) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "alloc::vec::<library/alloc/src/vec/mod.rs::impl<T: Clone, A: Allocator> Vec<T, A>>::resize(_1: &mut Vec<T, A>, _2: usize, _3: T) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "aspis_core::canonical_qm31(_1: QM31) -> QM31",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::canonical_qm31::{closure#0}(_1: &{closure@crates/aspis-core/src/field/wide_exact.rs:633:18: 633:26}, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::ct::add(_1: u32, _2: u32) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::ct::sub(_1: u32, _2: u32) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::add(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::double(_1: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::mul(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::square(_1: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::sub(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::add(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::double(_1: M31) -> M31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::mul(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::reduce_u64(_1: u64) -> M31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::sub(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::add(_1: QM31, _2: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::mul(_1: QM31, _2: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::pow(_1: QM31, _2: u64) -> QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::square(_1: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::sub(_1: QM31, _2: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::mul_by_r(_1: CM31) -> CM31",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::heap::filled(_1: usize, _2: T) -> Result<Vec<T>, r0::Error>",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::heap::filled::{closure#0}(_1: {closure@crates/aspis-core/src/r0/heap.rs:7:38: 7:41}, _2: TryReserveError) -> r0::Error",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::inactive(_1: usize) -> Result<bool, r0::Error>",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::mul_u(_1: QM31) -> QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::r0::merkle::filled(_1: usize, _2: T) -> Result<Vec<T>, r0::Error>",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::r0::merkle::filled::{closure#0}(_1: {closure@crates/aspis-core/src/r0/merkle.rs:43:36: 43:39}, _2: TryReserveError) -> r0::Error",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::reduce64(_1: u64) -> u32",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::reduce_u64(_1: u64) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::subtract_p(_1: u32) -> u32",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::wide_exact::<crates/aspis-core/src/field/wide_exact.rs::impl WideExact>::add(_1: WideExact, _2: WideExact) -> WideExact",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::wide_exact::<crates/aspis-core/src/field/wide_exact.rs::impl WideExact>::mul(_1: WideExact, _2: WideExact) -> WideExact",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::wide_exact::<crates/aspis-core/src/field/wide_exact.rs::impl WideExact>::mul_qm31(_1: WideExact, _2: QM31) -> WideExact",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::transport::<crates/aspis-r1-cost-probe/src/transport.rs::impl Variant>::row(_1: transport::Variant, _2: usize) -> usize",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::transport::<impl at crates/aspis-r1-cost-probe/src/transport.rs:2:27: 2:36>::eq(_1: &transport::Variant, _2: &transport::Variant) -> bool",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::weights::<crates/aspis-r1-cost-probe/src/weights.rs::impl Weights>::materialize(_1: &weights::Weights, _2: WideExact) -> Result<alloc::vec::Vec<WideExact>, verifier::Error>",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::weights::<crates/aspis-r1-cost-probe/src/weights.rs::impl Weights>::raw(_1: &weights::Weights, _2: usize, _3: usize) -> aspis_core::field::QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::weights::<crates/aspis-r1-cost-probe/src/weights.rs::impl Weights>::raw::{closure#0}(_1: &mut {closure@crates/aspis-r1-cost-probe/src/weights.rs:229:37: 229:42}, _2: aspis_core::field::QM31, _3: usize) -> aspis_core::field::QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::weights::<crates/aspis-r1-cost-probe/src/weights.rs::impl Weights>::raw::{closure#1}(_1: &mut {closure@crates/aspis-r1-cost-probe/src/weights.rs:233:36: 233:41}, _2: aspis_core::field::QM31, _3: usize) -> aspis_core::field::QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_r1_cost_probe::weights::powers(_1: WideExact) -> [WideExact; N]",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_statement::pair_forest_constraint_residuals::<impl at crates/aspis-statement/src/pool_v1/pair_forest_constraint_residuals.rs:290:23: 290:32>::eq(_1: &Variant, _2: &Variant) -> bool",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_nonzero_usize(_1: alignment::Alignment) -> NonZero<usize>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/mem/alignment.rs::impl Alignment>::of() -> alignment::Alignment",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_nonzero(_1: alignment::Alignment) -> NonZero<usize>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::as_usize(_1: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new(_1: usize) -> Option<alignment::Alignment>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked(_1: usize) -> alignment::Alignment",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::new_unchecked::precondition_check(_1: usize) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::alignment::<library/core/src/ptr/alignment.rs::impl Alignment>::of() -> alignment::Alignment",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::assert_failed(_1: AssertKind, _2: &T, _3: &U, _4: Option<Arguments<'_>>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::assert_failed_inner(_1: AssertKind, _2: &dyn fmt::Debug, _3: &dyn fmt::Debug, _4: Option<Arguments<'_>>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::assert_unchecked::precondition_check(_1: bool) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::atomic::atomic_load(_1: *const T, _2: atomic::Ordering) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::check_language_ub() -> bool",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::check_language_ub::runtime() -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::cmp::Ord::max(_1: Self, _2: Self) -> Self",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 10
+    },
+    {
+      "function": "core::cmp::PartialOrd::lt(_1: &Self, _2: &Rhs) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 8
+    },
+    {
+      "function": "core::cmp::impls::<impl at library/core/src/cmp.rs:2048:5: 2048:28>::max(_1: bool, _2: bool) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::cmp::impls::<library/core/src/cmp.rs::impl const Ord for bool>::max(_1: bool, _2: bool) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::convert::<library/core/src/convert/mod.rs::impl<T, U> const Into<U> for T where     U: [const] From<T>,>::into(_1: T) -> U",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::addr(_1: vector::Simd<*const T, N>) -> vector::Simd<usize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::is_null(_1: vector::Simd<*const T, N>) -> masks::Mask<isize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*mut T, N>) -> vector::Simd<*mut U, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::cast_const(_1: vector::Simd<*mut T, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::is_null(_1: vector::Simd<*mut T, N>) -> masks::Mask<isize, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::ctpop(_1: T) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::fold::enumerate(_1: usize, _2: impl FnMut(Acc, (usize, T)) -> Acc) -> {closure@library/core/src/iter/adapters/enumerate.rs:139:13: 139:29}",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::enumerate::<library/core/src/iter/adapters/enumerate.rs::impl<I> Iterator for Enumerate<I> where     I: Iterator,>::try_fold::enumerate(_1: &mut usize, _2: impl FnMut(Acc, (usize, T)) -> R + 'a) -> {closure@library/core/src/iter/adapters/enumerate.rs:118:13: 118:29}",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::intrinsics::atomic_load(_1: *const T) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::intrinsics::simd::simd_splat(_1: U) -> T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::iterator::Iterator::lt(_1: Self, _2: I) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 8
+    },
+    {
+      "function": "core::iterator::Iterator::partial_cmp(_1: Self, _2: I) -> Option<cmp::Ordering>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 26
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_align_unchecked::precondition_check(_1: usize, _2: usize) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked(_1: usize, _2: alignment::Alignment) -> Layout",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::from_size_alignment_unchecked::precondition_check(_1: usize, _2: alignment::Alignment) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::is_size_alignment_valid(_1: usize, _2: alignment::Alignment) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_align(_1: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::max_size_for_alignment(_1: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_align(_1: &Layout, _2: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::layout::<library/core/src/alloc/layout.rs::impl Layout>::size_rounded_up_to_custom_alignment(_1: &Layout, _2: alignment::Alignment) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::mask_impl::<library/core/src/../../portable-simd/crates/core_simd/src/masks/full_masks.rs::impl<T, const N: usize> From<Mask<T, N>> for Simd<T, N> where     T: MaskElement,     LaneCount<N>: SupportedLaneCount,>::from(_1: mask_impl::Mask<T, N>) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::as_inner(_1: UsizeNoHighBit) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::niche_types::<library/core/src/num/niche_types.rs::impl $name>::new_unchecked(_1: usize) -> UsizeNoHighBit",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1746:1: 1746:59>::from(_1: Unique<T>) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 3
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1755:1: 1755:56>::from(_1: &mut T) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 3
+    },
+    {
+      "function": "core::non_null::<impl at library/core/src/ptr/non_null.rs:1767:1: 1767:52>::from(_1: &T) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 3
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::new_unchecked::precondition_check(_1: *mut ()) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read(_1: NonNull<T>) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read_unaligned(_1: NonNull<T>) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::write(_1: NonNull<T>, _2: T) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&T> for NonNull<T>>::from(_1: &T) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<&mut T> for NonNull<T>>::from(_1: &mut T) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> const From<Unique<T>> for NonNull<T>>::from(_1: Unique<T>) -> NonNull<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::nonzero::<library/core/src/num/nonzero.rs::impl<T> NonZero<T> where     T: ZeroablePrimitive,>::get(_1: NonZero<T>) -> T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::null() -> *const T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_add(_1: u32, _2: u32) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_sub(_1: u32, _2: u32) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::checked_add(_1: usize, _2: usize) -> Option<usize>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::checked_mul(_1: usize, _2: usize) -> Option<usize>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::count_ones(_1: usize) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::is_power_of_two(_1: usize) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::overflowing_mul(_1: usize, _2: usize) -> (usize, bool)",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul(_1: usize, _2: usize) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::unchecked_mul::precondition_check(_1: usize, _2: usize) -> ()",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl usize>::wrapping_sub(_1: usize, _2: usize) -> usize",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2438:1: 2438:57>::eq(_1: &Option<T>, _2: &Option<T>) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2791:1: 2791:75>::from_residual(_1: Option<Infallible>) -> Option<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "core::option::<impl at library/core/src/option.rs:2803:1: 2803:61>::from_residual(_1: Yeet<()>) -> Option<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T: [const] PartialEq> const PartialEq for Option<T>>::eq(_1: &Option<T>, _2: &Option<T>) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> Option<T>>::ok_or(_1: Option<T>, _2: E) -> result::Result<T, E>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::option::<library/core/src/option.rs::impl<T> const ops::FromResidual<Option<convert::Infallible>> for Option<T>>::from_residual(_1: Option<Infallible>) -> Option<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::panic_nounwind_fmt(_1: Arguments<'_>, _2: bool) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::panic_nounwind_fmt::runtime(_1: Arguments<'_>, _2: bool) -> !",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::panicking::panic(_1: &str) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::ptr::const_ptr::<library/core/src/ptr/const_ptr.rs::impl<T: PointeeSized> *const T>::is_null::runtime(_1: *const u8) -> bool",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::add(_1: *mut T, _2: usize) -> *mut T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T> *mut T>::cast_slice(_1: *mut T, _2: usize) -> *mut [T]",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::ptr::read(_1: *const T) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::ptr::write(_1: *mut T, _2: T) -> ()",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<Result<convert::Infallible, E>>     for Result<T, F>>::from_residual(_1: result::Result<Infallible, E>) -> result::Result<T, F>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E, F: [const] From<E>> const ops::FromResidual<ops::Yeet<E>> for Result<T, F>>::from_residual(_1: Yeet<E>) -> result::Result<T, F>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E> Result<T, E>>::map_err(_1: result::Result<T, E>, _2: O) -> result::Result<T, F>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::result::<library/core/src/result.rs::impl<T, E> Result<T, E>>::unwrap(_1: result::Result<T, E>) -> T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::simd_cast_ptr(_1: T) -> U",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::simd_shuffle(_1: T, _2: T, _3: U) -> V",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::splat_rt(_1: T) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::swizzle::Swizzle::swizzle(_1: vector::Simd<T, M>) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::unique::<impl at library/core/src/ptr/unique.rs:194:1: 194:55>::from(_1: &mut T) -> Unique<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "core::unique::<impl at library/core/src/ptr/unique.rs:206:1: 206:59>::from(_1: NonNull<T>) -> Unique<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<&mut T> for Unique<T>>::from(_1: &mut T) -> Unique<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::unique::<library/core/src/ptr/unique.rs::impl<T: PointeeSized> const From<NonNull<T>> for Unique<T>>::from(_1: NonNull<T>) -> Unique<T>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 1
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> From<[T; N]> for Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from(_1: [T; N]) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::from_array(_1: [T; N]) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::load(_1: *const [T; N]) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     LaneCount<N>: SupportedLaneCount,     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::vector::<library/core/src/../../portable-simd/crates/core_simd/src/vector.rs::impl<T, const N: usize> Simd<T, N> where     T: SimdElement,>::splat(_1: T) -> vector::Simd<T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::without_provenance(_1: usize) -> *const T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    },
+    {
+      "function": "std::__rust_alloc_error_handler(_1: usize, _2: usize) -> !",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    }
+  ],
+  "prior_conservative_mir_residuals": [
+    "131 unresolved conservative-MIR edges retained"
+  ],
+  "before": "D388: deployed native association SUSPENDED; original Lean/model law retained.",
+  "after": "Still SUSPENDED with narrower obligations; no endpoint premise removed.",
+  "premises": {
+    "removed": 0,
+    "added": 0,
+    "changed": 0,
+    "trust": [
+      "entropy_law",
+      "entropy_kernel",
+      "observation"
+    ]
+  },
+  "finding": false,
+  "kani_runs": 0,
+  "source_revision": "608fb7ff933fe70390075e09dbc4bf5a4ce6053e",
+  "prior_D388_disposition": "SUSPENDED; historical known_changed_functions and unresolved associations below remain the conservative envelope, not the new precise consumed call boundary",
+  "resume_gate": {
+    "row": "V258",
+    "disposition": "SUSPENDED",
+    "finding": false,
+    "source_bindings": [
+      "V240-deployed-body-binding.json",
+      "V240-primitive-binding.json",
+      "V247-deployed-body-binding.json",
+      "V238-deployed-body-binding.json",
+      "stdlib-transports.json"
+    ],
+    "new_source_file_checks": 28,
+    "audit": 41198,
+    "focused_replay": 41199,
+    "endpoint_premises_removed": 0,
+    "endpoint_premises_added": 0,
+    "endpoint_premises_changed": 0,
+    "evidence_class": "partial structural transport; no restored credit",
+    "exact_reason": "Typed RawVec<T,A>::new_in wrapper association, allocator/resource family, and complete weights instantiation remain; the old mapping selected RawVecInner<A>::new_in instead."
+  }
+}

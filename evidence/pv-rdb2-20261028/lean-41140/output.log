@@ -1,0 +1,63 @@
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:16:0: warning: Definition `R1Z.PV_RDB2_Compress.primitives` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:26:73: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+values : Slice PV_Op223_Applied.aspis_core.field.M31
+lambda out power : PV_Op223_Applied.aspis_core.field.QM31
+i : Usize
+⊢ (if i < values.len then do
+      let m ← values.index_usize i
+      let q ← power.mul_m31 m
+      let compressed1 ← out.add q
+      let power1 ← power.mul lambda
+      let i2 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (compressed1, power1, i2))
+    else ok (ControlFlow.done out)) =
+    if i < values.len then do
+      let m ← values.index_usize i
+      let q ← ExternalFuns.op70 power m
+      let out1 ← ExternalFuns.op67 out q
+      let power1 ← ExternalFuns.op69 power lambda
+      let i2 ← lift (i.wrapping_add 1#usize)
+      ok (ControlFlow.cont (out1, power1, i2))
+    else ok (ControlFlow.done out)
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:31:30: warning: This simp argument is unused:
+  primitives
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.QM31.mul_m31, ̲aspis_core.field.QM31.add,
+  ̵  ̵ ̵ ̵aspis_core.field.QM31.mul,̵p̵r̵i̵m̵i̵t̵i̵v̵e̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:44:63: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+tag : PV_Op223_Applied.aspis_core.field.M31
+values : Slice PV_Op223_Applied.aspis_core.field.M31
+lambda : PV_Op223_Applied.aspis_core.field.QM31
+⊢ (do
+      let c ← PV_Op223_Applied.aspis_core.field.CM31.from_m31 tag
+      let compressed ← PV_Op223_Applied.aspis_core.field.QM31.from_cm31 c
+      ProverRwP6CompressSource.compress_loop values lambda compressed lambda 0#usize) =
+    do
+    let c ← ExternalFuns.op61 tag
+    let out ← ExternalFuns.op66 c
+    ProverRwP6CompressSource.compress_loop values lambda out lambda 0#usize
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:49:4: warning: This simp argument is unused:
+  primitives
+
+Hint: Omit it from the simp argument list.
+  simp only [aspis_core.field.CM31.from_m31, ̲aspis_core.field.QM31.from_cm31,
+  ̵  ̵ ̵ ̵p̵r̵i̵m̵i̵t̵i̵v̵e̵s̵,̵loop ops]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:51:0: warning: Definition `R1Z.PV_RDB2_Compress.selected` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+'R1Z.PV_RDB2_Compress.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Compress.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Compress.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Compress.installed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2_Compress.callback_removed' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_Compress.lean:68:0: error: Unexpected name `R1Z.PV_RDB2_Compress` after `end`: The current section is unnamed
+
+Hint: Delete the name `R1Z.PV_RDB2_Compress` to end the current unnamed scope; outer named scopes can then be closed using additional `end` command(s):
+  end ̵R̵1̵Z̵.̵P̵V̵_̵R̵D̵B̵2̵_̵C̵o̵m̵p̵r̵e̵s̵s̵

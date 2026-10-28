@@ -1,0 +1,247 @@
+{
+  "declarations": [
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "line": 31,
+      "sha256": "670f59022e06b22e61f2527f30a0eaeb2588a2bfc076ab56e4ad0bb3b94b07cf",
+      "text": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub enum PoolV1PairCopyRowLinkKindV1 {\n    SpongeCarry {\n        from: u8,\n        to: u8,\n    },\n    OwnerOutput,\n    NullifierKey,\n    InputSaltHead,\n    InputSaltTail,\n    PrivatePathCurrent {\n        level: u8,\n    },\n    PrivatePathLeft {\n        level: u8,\n    },\n    PrivatePathRight {\n        level: u8,\n    },\n    ValueSource {\n        value: u8,\n    },\n    ConservationInput,\n    ConservationRecipient,\n    ConservationChange,\n    ConservationPartial,\n    InputSecondCommitment,\n    InputSelectedSide,\n    OutputSecondCommitment,\n    OutputPairFirst,\n    OutputPairFirstWithdrawal,\n    OutputPairSecond,\n    /// The two links at each level have complementary public weights\n    /// `(1-bit, bit)`. Both rows remain in the fixed active-row inventory.\n    AppendCurrentLeft {\n        level: u8,\n    },\n    AppendCurrentRight {\n        level: u8,\n    },\n}"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "line": 73,
+      "sha256": "e634b0c3c51e8cd0834f3fc206398448cd8a4a679af925fd7efcc2acd0f531fc",
+      "text": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub struct PoolV1PairCopyRowLinkV1 {\n    pub kind: PoolV1PairCopyRowLinkKindV1,\n    pub producer_row: u16,\n    pub consumer_row: u16,\n}"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "line": 80,
+      "sha256": "2a16676a6d8175a9cdae5253d039d0fa08ddade93a8d276457b1a5efb3fb00f0",
+      "text": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub enum PoolV1PairHidingLayoutErrorV1 {\n    Shape,\n    EndpointCapacity { row: u16 },\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 11,
+      "sha256": "c92eccc2a6869994b8b27b8ddec01294257ac091d560f447f654c4c99d53f38a",
+      "text": "#[derive(Clone, Copy)]\npub struct Schedule {\n    pub data: [PoolV1PairCopyRowLinkV1; 136],\n    pub len: usize,\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 16,
+      "sha256": "133ccc4861a44014f0d15f130bb8847479dcfd45bbc9eb4402bbb1a694018db8",
+      "text": "impl Schedule {\n    fn new() -> Self {\n        Self {\n            data: [PoolV1PairCopyRowLinkV1 {\n                kind: PoolV1PairCopyRowLinkKindV1::OwnerOutput,\n                producer_row: 0,\n                consumer_row: 0,\n            }; 136],\n            len: 0,\n        }\n    }\n    fn push(&mut self, value: PoolV1PairCopyRowLinkV1) {\n        self.data[self.len] = value;\n        self.len += 1;\n    }\n    fn len(&self) -> usize {\n        self.len\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 69,
+      "sha256": "07d1793088bc9a9fcd298191e710055139ea969b1d72240a4e7707c79acd2b89",
+      "text": "fn link(\n    kind: PoolV1PairCopyRowLinkKindV1,\n    producer_row: usize,\n    consumer_row: usize,\n) -> PoolV1PairCopyRowLinkV1 {\n    PoolV1PairCopyRowLinkV1 {\n        kind,\n        producer_row: producer_row as u16,\n        consumer_row: consumer_row as u16,\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 81,
+      "sha256": "4aafb89312e87e355c2cb78ce6852e4755266c649e33ceef511238e5186470b6",
+      "text": "pub fn build_pool_v1_pair_copy_row_schedule_v1() -> Result<Schedule, PoolV1PairHidingLayoutErrorV1>\n{\n    let mut links = Schedule::new();\n\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 1, to: 2 }, 1 * 16 + 11, 2 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 2, to: 3 }, 2 * 16 + 11, 3 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 25, to: 26 }, 25 * 16 + 11, 26 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 27, to: 28 }, 27 * 16 + 11, 28 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 28, to: 29 }, 28 * 16 + 11, 29 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 30, to: 31 }, 30 * 16 + 11, 31 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::SpongeCarry { from: 31, to: 32 }, 31 * 16 + 11, 32 * 16));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::OwnerOutput, 11, 28));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::NullifierKey, 12, 412));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltHead, 44, 428));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::InputSaltTail, 60, 428));\n\n    let mut level = 0usize;\n    while level < POOL_V1_PAIR_PRIVATE_DIRECTIONS {\n        let aux =\n            pool_v1_pair_path_base_row_v1(level).ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;\n        let previous_output = (3 + level) * 16 + 11;\n        let target_block = 4 + level;\n        links.push(link(\n            PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },\n            previous_output,\n            aux,\n        ));\n        links.push(link(\n            PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },\n            aux + 1,\n            target_block * 16 + 12,\n        ));\n        links.push(link(\n            PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },\n            aux + 1,\n            target_block * 16,\n        ));\n        level += 1;\n    }\n\n    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 0 }, 44, 960));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 1 }, 460, 962));\n    links.push(link(PoolV1PairCopyRowLinkKindV1::ValueSource { value: 2 }, 508, 964));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::ConservationInput,\n        960,\n        966,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::ConservationRecipient,\n        962,\n        966,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::ConservationChange,\n        964,\n        967,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::ConservationPartial,\n        966,\n        967,\n    ));\n\n    // Historical input-pair occupancy: duplicate the committed right child\n    // and private selected-side bit into one row-local certificate.\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::InputSecondCommitment,\n        64,\n        POOL_V1_PAIR_INPUT_OCCUPANCY_AUX_ROW,\n    ));\n    let input_selected_side_row =\n        pool_v1_pair_path_base_row_v1(0).ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::InputSelectedSide,\n        input_selected_side_row,\n        POOL_V1_PAIR_INPUT_OCCUPANCY_AUX_ROW,\n    ));\n\n    // Newly appended output pair: the change commitment is certified in its\n    // own occupancy row before that same complete digest enters the right\n    // child of block 33. The recipient is the always-occupied left child.\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::OutputSecondCommitment,\n        32 * 16 + 11,\n        POOL_V1_PAIR_OUTPUT_OCCUPANCY_AUX_ROW,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::OutputPairFirst,\n        29 * 16 + 11,\n        33 * 16 + 12,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::OutputPairFirstWithdrawal,\n        32 * 16 + 11,\n        33 * 16 + 12,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::OutputPairSecond,\n        POOL_V1_PAIR_OUTPUT_OCCUPANCY_AUX_ROW,\n        33 * 16,\n    ));\n\n    let mut level = 0usize;\n    while level < 20usize {\n        let previous_output = (33 + level) * 16 + 11;\n        let target_block = 34 + level;\n        links.push(link(\n            PoolV1PairCopyRowLinkKindV1::AppendCurrentLeft { level: level as u8 },\n            previous_output,\n            target_block * 16 + 12,\n        ));\n        links.push(link(\n            PoolV1PairCopyRowLinkKindV1::AppendCurrentRight { level: level as u8 },\n            previous_output,\n            target_block * 16,\n        ));\n        level += 1;\n    }\n\n    if links.len() != POOL_V1_PAIR_COPY_ROW_LINKS_V1 {\n        return Err(PoolV1PairHidingLayoutErrorV1::Shape);\n    }\n    endpoint_counts(&links.data, links.len)?;\n    Ok(links)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 207,
+      "sha256": "a785389f56180e19b591c2d1a5cb8e5ea5a84e2b10d14861fa749cbd122bcb22",
+      "text": "fn endpoint_counts(\n    links: &[PoolV1PairCopyRowLinkV1; 136],\n    len: usize,\n) -> Result<([u8; 1024], [u8; 1024]), PoolV1PairHidingLayoutErrorV1> {\n    let mut producers = [0u8; 1024];\n    let mut consumers = [0u8; 1024];\n    let mut i = 0usize;\n    while i < len {\n        let item = links[i];\n        let p = item.producer_row as usize;\n        let c = item.consumer_row as usize;\n        if p >= 1024 || producers[p] >= 2 {\n            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: p as u16 });\n        }\n        producers[p] += 1;\n        if c >= 1024 || consumers[c] >= 2 {\n            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: c as u16 });\n        }\n        consumers[c] += 1;\n        i += 1;\n    }\n    Ok((producers, consumers))\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 230,
+      "sha256": "6102346cfa2e6375dab09f9bf0e41adb6a5386ee0f725ddde4c278fd3294df66",
+      "text": "pub fn build_pool_v1_pair_forest_copy_row_schedule_v1(\n) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {\n    let legacy = build_pool_v1_pair_copy_row_schedule_v1()?;\n    let mut links = Schedule::new();\n    let mut i = 0usize;\n    while i < legacy.len {\n        let scheduled = schedule_at(&legacy, i);\n        if !path_kind(scheduled.kind) {\n            links.push(scheduled);\n        }\n        i += 1;\n    }\n    // The existing schedule's auxiliary endpoints live in rows 864..975.\n    // Move that complete seven-block region forward by three blocks while\n    // leaving every existing Poseidon endpoint unchanged.\n    let mut si = 0usize;\n    while si < links.len {\n        let mut scheduled = schedule_at(&links, si);\n        if usize::from(scheduled.producer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {\n            scheduled.producer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;\n        }\n        if usize::from(scheduled.consumer_row) >= 54 * POOL_V1_PAIR_TRACE_BLOCK_ROWS {\n            scheduled.consumer_row += 3 * POOL_V1_PAIR_TRACE_BLOCK_ROWS as u16;\n        }\n        links.data[si] = scheduled;\n        si += 1;\n    }\n\n    links = append_forest_level(links, 0)?;\n    links = append_forest_level(links, 1)?;\n    links = append_forest_level(links, 2)?;\n    links = append_forest_level(links, 3)?;\n    links = append_forest_level(links, 4)?;\n    links = append_forest_level(links, 5)?;\n    links = append_forest_level(links, 6)?;\n    links = append_forest_level(links, 7)?;\n    links = append_forest_level(links, 8)?;\n    links = append_forest_level(links, 9)?;\n    links = append_forest_level(links, 10)?;\n    links = append_forest_level(links, 11)?;\n    links = append_forest_level(links, 12)?;\n    links = append_forest_level(links, 13)?;\n    links = append_forest_level(links, 14)?;\n    links = append_forest_level(links, 15)?;\n    links = append_forest_level(links, 16)?;\n    links = append_forest_level(links, 17)?;\n    links = append_forest_level(links, 18)?;\n    links = append_forest_level(links, 19)?;\n    links = append_forest_level(links, 20)?;\n    links = append_forest_level(links, 21)?;\n    links = append_forest_level(links, 22)?;\n    links = append_forest_level(links, 23)?;\n    if links.len() != POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1 {\n        return Err(PoolV1PairHidingLayoutErrorV1::Shape);\n    }\n    endpoint_counts(&links.data, links.len)?;\n    Ok(links)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 288,
+      "sha256": "ec2d13223e346ec25c6d296ecb57f2b039519b253a88bf9c7ad41895c93c7f69",
+      "text": "pub fn pool_v1_pair_forest_copy_active_rows_v1(\n) -> Result<([u16; 214], usize), PoolV1PairHidingLayoutErrorV1> {\n    let schedule = build_pool_v1_pair_forest_copy_row_schedule_v1()?;\n    let mut flags = [false; 1024];\n    let mut i = 0usize;\n    while i < schedule.len {\n        let link = schedule_at(&schedule, i);\n        flags[link.producer_row as usize] = true;\n        flags[link.consumer_row as usize] = true;\n        i += 1;\n    }\n    let mut rows = [0u16; 214];\n    let mut len = 0usize;\n    i = 0;\n    while i < 1024 {\n        if flag_at(&flags, i) {\n            rows[len] = i as u16;\n            len += 1;\n        }\n        i += 1;\n    }\n    Ok((rows, len))\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 450,
+      "sha256": "8e313f8f6ce9693c2f82c2bd1554d8957085fb444c019207db50047c9f3debbc",
+      "text": "fn mask_endpoint_bump(n: u8) -> Option<u8> {\n    if n >= 2 {\n        None\n    } else {\n        Some(n + 1)\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 457,
+      "sha256": "af6a69f3c594ae5c437b8b3d25a8889de92d1da0b3561fe68540642035caa655",
+      "text": "pub fn pool_v1_pair_forest_copy_active_row_masks_v1(\n) -> Result<[u16; 64], PoolV1PairHidingLayoutErrorV1> {\n    let mut producers = [0u8; 1024];\n    let mut consumers = [0u8; 1024];\n    let mut masks = [0u16; 64];\n    let mut i = 0usize;\n    while i < 136 {\n        let (a, b) = MASK_LINKS[i];\n        let p = a as usize;\n        let c = b as usize;\n        if p >= 1024 {\n            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: a });\n        }\n        producers[p] = match mask_endpoint_bump(producers[p]) {\n            Some(n) => n,\n            None => return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: a }),\n        };\n        if c >= 1024 {\n            return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: b });\n        }\n        consumers[c] = match mask_endpoint_bump(consumers[c]) {\n            Some(n) => n,\n            None => return Err(PoolV1PairHidingLayoutErrorV1::EndpointCapacity { row: b }),\n        };\n        masks[p >> 4u32] |= 1u16 << ((p & 15) as u32);\n        masks[c >> 4u32] |= 1u16 << ((c & 15) as u32);\n        i += 1;\n    }\n    Ok(masks)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 695,
+      "sha256": "b1dd628f2fe040a529bfbfa626143a5bcba2c3d2ea1a85134347dbbad749571d",
+      "text": "fn path_kind(kind: PoolV1PairCopyRowLinkKindV1) -> bool {\n    matches!(\n        kind,\n        PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { .. }\n            | PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { .. }\n            | PoolV1PairCopyRowLinkKindV1::PrivatePathRight { .. }\n    )\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 997,
+      "sha256": "b1786e60284b9e7593194f2e2a073e53a57c731db302eb2e7d8375311700b87d",
+      "text": "fn schedule_at(schedule: &Schedule, i: usize) -> PoolV1PairCopyRowLinkV1 {\n    schedule.data[i]\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 1006,
+      "sha256": "8255e5682bd66ed627fde741095a11d1e83f1b728746336e2d51b64a8cae2647",
+      "text": "fn flag_at(flags: &[bool; 1024], i: usize) -> bool { flags[i] }"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 1009,
+      "sha256": "bdf2039f440f616abffbc9d0b9c0df5333ff39cffb0278e080f5f348ccfafdf5",
+      "text": "fn append_forest_level(mut links: Schedule, level: usize) -> Result<Schedule, PoolV1PairHidingLayoutErrorV1> {\n    let auxiliary = pool_v1_pair_forest_path_base_row_v1(level)\n        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;\n    let target_block = pool_v1_pair_forest_membership_hash_block_v1(level)\n        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?;\n    let previous_block = if level == 0 {\n        3\n    } else {\n        pool_v1_pair_forest_membership_hash_block_v1(level - 1)\n        .ok_or(PoolV1PairHidingLayoutErrorV1::Shape)?\n    };\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::PrivatePathCurrent { level: level as u8 },\n        previous_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 11,\n        auxiliary,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::PrivatePathLeft { level: level as u8 },\n        auxiliary + 1,\n        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS + 12,\n    ));\n    links.push(link(\n        PoolV1PairCopyRowLinkKindV1::PrivatePathRight { level: level as u8 },\n        auxiliary + 1,\n        target_block * POOL_V1_PAIR_TRACE_BLOCK_ROWS,\n    ));\n    Ok(links)\n}"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 64,
+      "sha256": "7aaa507bd58f9ae26112ca8f1e3d03fe4ad420b200d42b867d89c072e42d330c",
+      "text": "pub const fn pool_v1_pair_forest_path_base_row_v1(level: usize) -> Option<usize> {\n    if level >= POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {\n        return None;\n    }\n    Some(\n        POOL_V1_PAIR_FOREST_PATH_AUX_ROW_START_V1\n            + (level / POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK) * POOL_V1_PAIR_TRACE_BLOCK_ROWS\n            + POOL_V1_PAIR_FOREST_PATH_BASE_LOCAL_ROWS_V1\n                [level / POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK]\n                [level % POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK],\n    )\n}"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 78,
+      "sha256": "23dfc64b46f9f36af16808da3a40d86cebd5855b6e181ec1f540d262537bf6f3",
+      "text": "pub const fn pool_v1_pair_forest_membership_hash_block_v1(level: usize) -> Option<usize> {\n    if level >= POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1 {\n        None\n    } else if level <= 20 {\n        Some(4 + level)\n    } else {\n        Some(33 + level)\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 351,
+      "sha256": "3ab102cecb2b789d67166c0c0ed19fed59f6c4838ccc07e637de9c190a193333",
+      "text": "pub const fn pool_v1_pair_path_base_row_v1(level: usize) -> Option<usize> {\n    if level >= POOL_V1_PAIR_PRIVATE_DIRECTIONS {\n        return None;\n    }\n    Some(\n        POOL_V1_PAIR_PATH_AUX_ROW_START\n            + (level / POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK) * POOL_V1_PAIR_TRACE_BLOCK_ROWS\n            + POOL_V1_PAIR_PATH_LOCAL_ROW_OFFSET\n            + 2 * (level % POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK),\n    )\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/host_forest.rs",
+      "line": 311,
+      "sha256": "b4f0c40d119ab5688328473c72ad426a6bf23d37c84db6f81e8ed9cecebb0843",
+      "text": "const MASK_LINKS: [(u16, u16); 136] = [\n    (27, 32),\n    (43, 48),\n    (411, 416),\n    (443, 448),\n    (459, 464),\n    (491, 496),\n    (507, 512),\n    (11, 28),\n    (12, 412),\n    (44, 428),\n    (60, 428),\n    (44, 1008),\n    (460, 1010),\n    (508, 1012),\n    (1008, 1014),\n    (1010, 1014),\n    (1012, 1015),\n    (1014, 1015),\n    (64, 1017),\n    (913, 1017),\n    (523, 1018),\n    (475, 540),\n    (523, 540),\n    (1018, 528),\n    (539, 556),\n    (539, 544),\n    (555, 572),\n    (555, 560),\n    (571, 588),\n    (571, 576),\n    (587, 604),\n    (587, 592),\n    (603, 620),\n    (603, 608),\n    (619, 636),\n    (619, 624),\n    (635, 652),\n    (635, 640),\n    (651, 668),\n    (651, 656),\n    (667, 684),\n    (667, 672),\n    (683, 700),\n    (683, 688),\n    (699, 716),\n    (699, 704),\n    (715, 732),\n    (715, 720),\n    (731, 748),\n    (731, 736),\n    (747, 764),\n    (747, 752),\n    (763, 780),\n    (763, 768),\n    (779, 796),\n    (779, 784),\n    (795, 812),\n    (795, 800),\n    (811, 828),\n    (811, 816),\n    (827, 844),\n    (827, 832),\n    (843, 860),\n    (843, 848),\n    (59, 913),\n    (914, 76),\n    (914, 64),\n    (75, 917),\n    (918, 92),\n    (918, 80),\n    (91, 921),\n    (922, 108),\n    (922, 96),\n    (107, 925),\n    (926, 124),\n    (926, 112),\n    (123, 929),\n    (930, 140),\n    (930, 128),\n    (139, 933),\n    (934, 156),\n    (934, 144),\n    (155, 937),\n    (938, 172),\n    (938, 160),\n    (171, 941),\n    (942, 188),\n    (942, 176),\n    (187, 945),\n    (946, 204),\n    (946, 192),\n    (203, 949),\n    (950, 220),\n    (950, 208),\n    (219, 953),\n    (954, 236),\n    (954, 224),\n    (235, 957),\n    (958, 252),\n    (958, 240),\n    (251, 961),\n    (962, 268),\n    (962, 256),\n    (267, 965),\n    (966, 284),\n    (966, 272),\n    (283, 969),\n    (970, 300),\n    (970, 288),\n    (299, 973),\n    (974, 316),\n    (974, 304),\n    (315, 977),\n    (978, 332),\n    (978, 320),\n    (331, 981),\n    (982, 348),\n    (982, 336),\n    (347, 985),\n    (986, 364),\n    (986, 352),\n    (363, 989),\n    (990, 380),\n    (990, 368),\n    (379, 993),\n    (994, 396),\n    (994, 384),\n    (395, 997),\n    (998, 876),\n    (998, 864),\n    (875, 1001),\n    (1002, 892),\n    (1002, 880),\n    (891, 1005),\n    (1006, 908),\n    (1006, 896),\n];"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "line": 24,
+      "sha256": "b0d9f3f491abfe479ad1b7b9f7a061e338fcf18a5473432f1d1cb37ca819694d",
+      "text": "pub const POOL_V1_PAIR_COPY_ROW_LINKS_V1: usize = 127;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 238,
+      "sha256": "93487d47d357183d7de89b70ac99c5f981ecd20473a8114df4a112dd2648984a",
+      "text": "pub const POOL_V1_PAIR_DIRECTIONS_PER_AUX_BLOCK: usize = 4;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 47,
+      "sha256": "fcc69fa226245e270df676e2c7470d48eb8d44879001ee09a1a5bdabb7a12a2a",
+      "text": "pub const POOL_V1_PAIR_FOREST_COPY_ROW_LINKS_V1: usize = 136;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 41,
+      "sha256": "1b6934a18333a07974e06d09e64f60394c5e33936cca6e75d745891dfc9be28f",
+      "text": "pub const POOL_V1_PAIR_FOREST_PATH_AUX_ROW_START_V1: usize = 57 * 16;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 54,
+      "sha256": "0e272edbbe519994b7543d2ad221fc331377fa3a504026fa562fb8818977ee5f",
+      "text": "const POOL_V1_PAIR_FOREST_PATH_BASE_LOCAL_ROWS_V1: [[usize; 4]; 6] = [\n    [1, 5, 9, 13],\n    [1, 5, 9, 13],\n    [1, 5, 9, 13],\n    [1, 5, 9, 13],\n    [1, 5, 9, 13],\n    [1, 5, 9, 13],\n];"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "line": 38,
+      "sha256": "d2ec79b22fa7b4c5e71bda66cc114bca8b49c55eadc40c82b67f741e66296fe8",
+      "text": "pub const POOL_V1_PAIR_FOREST_PRIVATE_DIRECTIONS_V1: usize = 24;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 264,
+      "sha256": "2a859232992a55336252f0a8c551a6644e0efa8a1a5fbf96ffb47eb49a860fd7",
+      "text": "pub const POOL_V1_PAIR_INPUT_OCCUPANCY_AUX_ROW: usize = POOL_V1_PAIR_VALUE_AUX_ROW_START + 9;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 265,
+      "sha256": "8b62bea27452be9af6e504975e1ebfb8991547ae7e34f50abe93dc202dcd8625",
+      "text": "pub const POOL_V1_PAIR_OUTPUT_OCCUPANCY_AUX_ROW: usize = POOL_V1_PAIR_VALUE_AUX_ROW_START + 10;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 254,
+      "sha256": "b3893859265b020afa8e5f522663b50d459a3a49ec715214d361ba6919cfb4d5",
+      "text": "pub const POOL_V1_PAIR_PATH_AUX_ROW_START: usize = POOL_V1_PAIR_POSEIDON_ROW_END;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 243,
+      "sha256": "c28a35d62ae6abb890e08e720fa3f79e9d8060581269f4505e1ef33ed419f154",
+      "text": "pub const POOL_V1_PAIR_PATH_LOCAL_ROW_OFFSET: usize = 1;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 252,
+      "sha256": "bce73ffceaec1a19614db5ec5ca0776b0d550b50d441ec35863e7339902eb1ca",
+      "text": "pub const POOL_V1_PAIR_POSEIDON_ROW_END: usize =\n    POOL_V1_PAIR_POSEIDON_BLOCKS * POOL_V1_PAIR_TRACE_BLOCK_ROWS;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 235,
+      "sha256": "06a6d22a926f52823e1c7ad918b24126b29fe2641ee9fe1143f9c7e8403ef94f",
+      "text": "pub const POOL_V1_PAIR_POSEIDON_BLOCKS: usize =\n    POOL_V1_PAIR_STABLE_POSEIDON_BLOCKS + POOL_V1_PAIR_LATE_APPEND_POSEIDON_BLOCKS;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 234,
+      "sha256": "38d3ed761b95c19a3f129517baba15a14d08b3068d8d8e27c93bcd736bdeb907",
+      "text": "pub const POOL_V1_PAIR_LATE_APPEND_POSEIDON_BLOCKS: usize = 20;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 237,
+      "sha256": "be0829fc1085f6bfe2fc042d60ae4627481a356405f4e668ba4c7e90fdf6e286",
+      "text": "pub const POOL_V1_PAIR_PRIVATE_DIRECTIONS: usize = 21;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 233,
+      "sha256": "42c5666d41b17677efbabda5040c2125a0afec0755e42d16365be6c63f1927e2",
+      "text": "pub const POOL_V1_PAIR_STABLE_POSEIDON_BLOCKS: usize = 34;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 232,
+      "sha256": "d1a8fe6a72dcfd8f97ebc18c1db3693e0a837fb8365c90fb57ea18a097db252e",
+      "text": "pub const POOL_V1_PAIR_TRACE_BLOCK_ROWS: usize = 16;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 257,
+      "sha256": "b998d8129564bb3a76e751b93a6be315669692e58953763fa8562d4eaf4b397f",
+      "text": "pub const POOL_V1_PAIR_VALUE_AUX_ROW_START: usize = POOL_V1_PAIR_PATH_AUX_ROW_END;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 255,
+      "sha256": "84f78b030d142b6eaaad8adac974236ae211e9cd58cb8c34378b402a3837569c",
+      "text": "pub const POOL_V1_PAIR_PATH_AUX_ROW_END: usize =\n    POOL_V1_PAIR_PATH_AUX_ROW_START + POOL_V1_PAIR_PATH_AUX_BLOCKS * POOL_V1_PAIR_TRACE_BLOCK_ROWS;"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+      "line": 244,
+      "sha256": "d8c0fbc2c21c3209caccd34de3c1f8872248efd2882527119dae608281a8fdae",
+      "text": "pub const POOL_V1_PAIR_PATH_AUX_BLOCKS: usize = 6;"
+    }
+  ],
+  "source_files": {
+    "crates/aspis-prover/src/host_forest.rs": "30726aa267d50856e9c3cd71bfb57ec1b2e4f85719e3baa04fa061d5e6a00942",
+    "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs": "3dfe485fc2e9a643a15e0bc7ef0d9fed20b1fa43984bb1d0997d38a380a90ab6",
+    "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs": "61bcd59a22c9c02fe3f9ba69cda43bfa8fe02ea14f15da9b761e976fe48798bf",
+    "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af"
+  },
+  "cut_sha256": "71ea93a712b3bdbf037ce4b79e5660c3450ab9ffdd435de82b17271646299cd7",
+  "stubs": [],
+  "field_arithmetic_reachable": false
+}

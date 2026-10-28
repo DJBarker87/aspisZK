@@ -1,0 +1,75 @@
+{
+  "revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "classification": "structural (K-1 substitute), external-layer range cut",
+  "native_path": "crates/aspis-statement/src/poseidon2.rs",
+  "native_prefix_sha256": "8edab3f91272c782fdfaaa339e3f80c7b186ffbae8da81bc55b25968965f7230",
+  "reference_path": "tools/r1-builder-reference/poseidon.rs",
+  "reference_sha256": "eb0ec3c02674673b304ad4e8cb371ddd437b9fb46796afc17a6d218cccf53eeb",
+  "emission_module": "R1Z.BuilderPoseidonExtracted",
+  "emission_sha256": "261f78d241c02c63b30a47eb04e498cb7be29f72a500f5d2b9c98a6b0797d5a9",
+  "generated_sha256": "e093e0f7b3f383ff109156ce9f39b1bf6b3dd6ef7e9a33784bf36ec03fb8a9e2",
+  "constant_sha256": "d47b4b2b0804a7b72f88b735dda24376cfc16618a42d5b3b47438342b48abea1",
+  "substitution": "only external_linear_lazy body; calls existing extracted external_owned; all other native function bodies byte-identical",
+  "differences": [
+    {
+      "native": "four disjoint chunks_exact_mut(4)",
+      "owned": "while block<4 with base=4*block; four reads then four writes",
+      "laws": [
+        "PV_L2C_ExternalGeometry.group_bounds",
+        "PV_L2C_ExternalGeometry.disjoint_groups"
+      ]
+    },
+    {
+      "native": "apply_mat4_lazy in-place",
+      "owned": "mat4_owned by value; identical four reduced expressions",
+      "laws": [
+        "PV_L2C_ExternalGeometry.matrix_bounds",
+        "R1Z.PV_Src_ExternalMat4Copy.equals_copy"
+      ]
+    },
+    {
+      "native": "range(0..4).map(row*4+column).sum::<u64>()",
+      "owned": "state[col]+state[col+4]+state[col+8]+state[col+12]",
+      "laws": [
+        "PV_L2C_ExternalGeometry.sum_four",
+        "PV_L2C_ExternalGeometry.lane_bound"
+      ]
+    },
+    {
+      "native": "index & 3, iter_mut enumerate",
+      "owned": "lane % 4, ascending while lane<16",
+      "laws": [
+        "PV_L2C_ExternalGeometry.column_mask",
+        "R1Z.PV_Src_ExternalLaneModel.model"
+      ]
+    },
+    {
+      "native": "mutates [M31;16]",
+      "owned": "returns [M31;16], assigned back at the cut",
+      "law": "complete returned array copied by value; no observer at this cut"
+    }
+  ],
+  "reducer_native_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+  "reducer_body_sha256": "20d8d2d9afd6e8eb871635ad84d98eae0a31f9863cd388fcaea31065ad8344b8",
+  "complete_result_laws": [
+    "PV_L2C_NativeReduce.reference",
+    "R1Z.PV_Src_ExternalModel.source",
+    "PV_L2C_HashRange.success"
+  ],
+  "scope": "raw canonical result only; no source trace/timing refinement, no whole N3 or release-row closure",
+  "Kani": "no credit claimed; historical copy-dependent external gates not used",
+  "D188": "mat4_owned pure array literal; external_owned indexed reads/writes; inspected emission retains explicit Array.update state threading; no mutable iterator restoration in these two owned helpers",
+  "native_differential": {
+    "receipt": "evidence/pv-l2c-20261028/resume-d371/decoder-probe2/receipt.json",
+    "receipt_sha256": "569ea81d794555d0462b8eab15493bea63ba6b60d206b8f5184a0daa4ff01c65",
+    "comparisons": 512,
+    "executed_source_revision": "63dea8800efb648cd8e1cba22a0c4e0d9aff7e13",
+    "classification": "finite same-input validation; actual public hash APIs versus same native hash bodies at one owned external substitution",
+    "modes": [
+      "owner key",
+      "note commitment",
+      "nullifier",
+      "node compression"
+    ]
+  }
+}

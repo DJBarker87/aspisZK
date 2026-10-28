@@ -1,0 +1,186 @@
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_Coins.lean:31:7: warning: Variable name `h` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+'PV_L2D_Coins.seed_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2D_Coins.consumed_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2D_Coins.counter_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding/sources/PV_L2D_Coins.lean:86:6: error: Type mismatch: After simplification, term
+  t
+ has type
+  (run hash (m + n) { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value =
+      (run hash n
+          (run hash m
+              { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after).value ∧
+    (run hash (m + n) { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after =
+        (run hash n
+            (run hash m
+                { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after).after ∧
+      (run hash (m + n) { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).events =
+        (run hash m { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).events ++
+          (run hash n
+              (run hash m
+                  { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after).events
+but is expected to have type
+  (if h : hash s = fun x => 0 then
+          {
+            value :=
+              (run hash (m + n)
+                  { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+            after :=
+              (run hash (m + n)
+                  { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+            consumed :=
+              (run hash (m + n)
+                    { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).consumed +
+                1,
+            events :=
+              Event.hash s.attempt s.stream s.counter ::
+                Event.test false ::
+                  (run hash (m + n)
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).events }
+        else
+          { value := some (hash s),
+            after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+            consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).value =
+      (run hash n
+          (if h : hash s = fun x => 0 then
+              {
+                value :=
+                  (run hash m
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+                after :=
+                  (run hash m
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+                consumed :=
+                  (run hash m
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                          counter := s.counter + 1 }).consumed +
+                    1,
+                events :=
+                  Event.hash s.attempt s.stream s.counter ::
+                    Event.test false ::
+                      (run hash m
+                          { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                            counter := s.counter + 1 }).events }
+            else
+              { value := some (hash s),
+                after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+                consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).after).value ∧
+    (if h : hash s = fun x => 0 then
+            {
+              value :=
+                (run hash (m + n)
+                    { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+              after :=
+                (run hash (m + n)
+                    { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+              consumed :=
+                (run hash (m + n)
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).consumed +
+                  1,
+              events :=
+                Event.hash s.attempt s.stream s.counter ::
+                  Event.test false ::
+                    (run hash (m + n)
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).events }
+          else
+            { value := some (hash s),
+              after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+              consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).after =
+        (run hash n
+            (if h : hash s = fun x => 0 then
+                {
+                  value :=
+                    (run hash m
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+                  after :=
+                    (run hash m
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+                  consumed :=
+                    (run hash m
+                          { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                            counter := s.counter + 1 }).consumed +
+                      1,
+                  events :=
+                    Event.hash s.attempt s.stream s.counter ::
+                      Event.test false ::
+                        (run hash m
+                            { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                              counter := s.counter + 1 }).events }
+              else
+                { value := some (hash s),
+                  after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+                  consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).after).after ∧
+      (if h : hash s = fun x => 0 then
+            {
+              value :=
+                (run hash (m + n)
+                    { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+              after :=
+                (run hash (m + n)
+                    { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+              consumed :=
+                (run hash (m + n)
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).consumed +
+                  1,
+              events :=
+                Event.hash s.attempt s.stream s.counter ::
+                  Event.test false ::
+                    (run hash (m + n)
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).events }
+          else
+            { value := some (hash s),
+              after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+              consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).events =
+        (if h : hash s = fun x => 0 then
+              {
+                value :=
+                  (run hash m
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+                after :=
+                  (run hash m
+                      { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+                consumed :=
+                  (run hash m
+                        { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                          counter := s.counter + 1 }).consumed +
+                    1,
+                events :=
+                  Event.hash s.attempt s.stream s.counter ::
+                    Event.test false ::
+                      (run hash m
+                          { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                            counter := s.counter + 1 }).events }
+            else
+              { value := some (hash s),
+                after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+                consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).events ++
+          (run hash n
+              (if h : hash s = fun x => 0 then
+                  {
+                    value :=
+                      (run hash m
+                          { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).value,
+                    after :=
+                      (run hash m
+                          { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 }).after,
+                    consumed :=
+                      (run hash m
+                            { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                              counter := s.counter + 1 }).consumed +
+                        1,
+                    events :=
+                      Event.hash s.attempt s.stream s.counter ::
+                        Event.test false ::
+                          (run hash m
+                              { seed := s.seed, attempt := s.attempt, stream := s.stream,
+                                counter := s.counter + 1 }).events }
+                else
+                  { value := some (hash s),
+                    after := { seed := s.seed, attempt := s.attempt, stream := s.stream, counter := s.counter + 1 },
+                    consumed := 1, events := [Event.hash s.attempt s.stream s.counter, Event.test true] }).after).events
+'PV_L2D_Coins.complete_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_L2D_Coins.zero_continues' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2D_Coins.nonzero_terminates' depends on axioms: [propext, Classical.choice, Quot.sound]

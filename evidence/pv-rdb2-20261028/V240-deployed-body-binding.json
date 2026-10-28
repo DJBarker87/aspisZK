@@ -1,0 +1,107 @@
+{
+  "row": "V240",
+  "artifact": "devnet_spend",
+  "toolchain": "rustc1.94.1",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "resolved_features_reference": "native-leaves/receipt.json",
+  "checks": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/src/crates/aspis-r1-cost-probe/src/prover_shared.rs",
+      "file_sha256": "d514d8032a93216b2aac442901a5cad148a114166b5c815a79e817ba7c1333f4",
+      "item": "fn compress_tagged_tuple(",
+      "body": "{\n    let mut compressed = QM31::from_cm31(CM31::from_m31(tag));\n    let mut power = lambda;\n    let mut i = 0usize;\n    while i < values.len() {\n        compressed = compressed.add(power.mul_m31(values[i]));\n        power = power.mul(lambda);\n        i = i.wrapping_add(1);\n    }\n    compressed\n}",
+      "body_sha256": "931cf4bafd30dc8fdafb909bdd770e33a2a64a43d4db3d7c472e4e2a5c054fed",
+      "exact_tokens": true,
+      "law": "PV_Op223_Applied.prover_shared.compress_tagged_tuple; Index.index_complete/read_copy_complete/increment_bound"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn from_ref(",
+      "body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "body_sha256": "56724705056ef9fa0e3c470239e02cea4c8d45e455fb0e223f1495b97ee60692",
+      "exact_tokens": true,
+      "law": "NonNull.from_ref_complete"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn cast<U>(",
+      "body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "body_sha256": "0606cee2950903b2f8e12ba434272189383ccddb1532e43ff5e510f55299f47e",
+      "exact_tokens": true,
+      "law": "NonNull.cast_complete/cast_provenance/cast_metadata"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn as_ptr(",
+      "body": "{\n        \n\n        \n        \n        \n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "body_sha256": "009388c24995d3b65fe31b6a2150770382d22798be8aeaca33d0f469e5a59ba5",
+      "exact_tokens": true,
+      "law": "transparent single-field projection"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const unsafe fn as_ref<'a>(",
+      "body": "{\n        \n        \n        \n        unsafe { &*self.as_ptr().cast_const() }\n    }",
+      "body_sha256": "eae8c561e5ba4c3ae5d8a75bd6dfb8b15066ddabb1eac2abaa901cbcdbb0126d",
+      "exact_tokens": true,
+      "law": "Pointer.next_storage; shared-reference storage relation"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const unsafe fn add(",
+      "body": "{\n        \n        \n        \n        \n        unsafe { NonNull { pointer: intrinsics::offset(self.as_ptr(), count) } }\n    }",
+      "body_sha256": "c2c295f7a64813603d373337361c395898ced486cd6dfe29f04e9b8965b15aab",
+      "exact_tokens": true,
+      "law": "Pointer.advance_address/read_bounds/advance_valid"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "item": "fn index(self, slice: &[T])",
+      "body": "{\n        \n        &(*slice)[self]\n    }",
+      "body_sha256": "6f8a2c41c3447d147a10b7505a1cf5bc8e3342f0c5a0758d61241534244b6583",
+      "exact_tokens": true,
+      "law": "Index.index_complete; intrinsic checked indexing with unchanged storage"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "item": "pub(super) const fn new(slice:",
+      "body": "{\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        \n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+      "body_sha256": "4672679f49e3a8afddba9a0f735557fc2971b9cffd820eee94dd918e6b50e294",
+      "exact_tokens": true,
+      "law": "NonNull.iterator_constructor; Pointer.valid"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "item": "fn next(&mut self)",
+      "body": "{\n                \n                \n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                \n                \n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        \n                        \n                        \n                        \n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        \n                        \n                        \n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        \n                        \n                        self.ptr = ptr.add(1);\n                    }\n                    \n                    \n                    \n                    Some({ptr}.$into_ref())\n                }\n            }",
+      "body_sha256": "d83750b4a226cb9021cc57d3337707cb6730a0bec1bab1e263f223e9d593d064",
+      "exact_tokens": true,
+      "law": "Pointer.next_complete/next_storage; shared sized M31 branch only"
+    }
+  ],
+  "actual_caller": {
+    "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+    "sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+    "call": "crate::prover_shared::compress_tagged_tuple(tag,&limbs,lambda)"
+  },
+  "source_boundary": "actual candidate index helper; original logup iterator is a separate source boundary",
+  "differences": [
+    {
+      "old": "transparent transmute",
+      "deployed": "explicit single field construction",
+      "proof": "NonNull.from_ref_complete/cast_complete",
+      "effects": "address/allocation identity retained; target-sized cast drops metadata; heap and borrow tokens unchanged"
+    }
+  ],
+  "machine_boundary": "Rust intrinsic indexing, reference semantics, repr(transparent), word-copy and offset semantics; no SBF or compiler correctness claim",
+  "structural_status": "local bodies checked; row restoration additionally requires concrete proof-cone replay and exact arithmetic/call association",
+  "restored": false
+}

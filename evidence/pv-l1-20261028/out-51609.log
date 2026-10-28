@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_EntropyProducer.lean:45:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑after.used - ↑p.used
+in the target expression
+  (let (after, status) := (after, status)
+    ok ((drawEvents p (↑after.used - ↑p.used), status), after)) =
+    ok ((replayEvents states, status), after)
+
+inst✝ : ErasureFns
+nonce : Std.Array U8 32#usize
+p after : Tape
+status : Status
+executed : owner nonce p = ok (after, status)
+states : List State
+oldPath : OwnerReplay (oldBody nonce) Prod.swap nonce p states (after, status)
+path : OwnerReplay (newBody nonce) id nonce p states (after, status)
+replies : after.replies = p.replies
+cursor : ↑after.used = ↑p.used + drawCount states
+bound : drawCount states ≤ 16
+history :
+  events states =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states))
+available : ∀ event ∈ events states, event.2.2.isSome = true
+suffix : List.drop ↑after.used ↑after.replies = List.drop (↑p.used + drawCount states) ↑p.replies
+count : ↑after.used - ↑p.used = drawCount states
+⊢ (let (after, status) := (after, status)
+    ok ((drawEvents p (↑after.used - ↑p.used), status), after)) =
+    ok ((replayEvents states, status), after)
+'PV_L1_EntropyProducer.source_replay' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

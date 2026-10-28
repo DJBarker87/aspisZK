@@ -1,0 +1,32 @@
+warning: type `Arity` is more private than the item `generic_count`
+  --> /home/dombarker/project-offloads/codex-pv-l2d-20261028/merkle-native.rs:32:1
+   |
+32 | pub fn generic_count(arity: Arity, indices: &[u32]) -> Option<usize> {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ function `generic_count` is reachable at visibility `pub`
+   |
+note: but type `Arity` is only usable at visibility `pub(crate)`
+  --> /home/dombarker/project-offloads/codex-pv-l2d-20261028/merkle-native.rs:1:92
+   |
+ 1 | use std::vec::Vec; const LEAF_BITS:u32=18; const MAX_BATCH:usize=16; #[derive(Clone,Copy)] enum Arity { Two,Eight }
+   |                                                                                            ^^^^^^^^^^
+   = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Arity` is more private than the item `generate`
+  --> /home/dombarker/project-offloads/codex-pv-l2d-20261028/merkle-native.rs:59:1
+   |
+59 | / pub fn generate(
+60 | |     arity: Arity,
+61 | |     indices: &[u32],
+62 | |     mut node: impl FnMut(u32, u32) -> [u8; 32],
+63 | | ) -> Option<Vec<u8>> {
+   | |____________________^ function `generate` is reachable at visibility `pub`
+   |
+note: but type `Arity` is only usable at visibility `pub(crate)`
+  --> /home/dombarker/project-offloads/codex-pv-l2d-20261028/merkle-native.rs:1:92
+   |
+ 1 | use std::vec::Vec; const LEAF_BITS:u32=18; const MAX_BATCH:usize=16; #[derive(Clone,Copy)] enum Arity { Two,Eight }
+   |                                                                                            ^^^^^^^^^^
+
+warning: 2 warnings emitted
+
+{"binary_inputs":75535,"eight_way_controls":3,"invalid_controls":5,"failed":0}

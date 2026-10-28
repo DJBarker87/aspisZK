@@ -1,0 +1,26 @@
+from gate_common import *
+F=D.parent/'codex-pv-fscan-20261028';project=F/'src/crates/aspis-core/src/field.rs';s=project.read_text()
+for context,want,law in [('impl M31 {','{self.0.to_le_bytes()}','arbitrary raw u32 bits; no canonicality check'),('impl CM31 {','{out[0..4].copy_from_slice(&self.a.to_le_bytes());out[4..8].copy_from_slice(&self.b.to_le_bytes());}','V198Bridge.pair_result and inner_bounds'),('impl QM31 {','{self.c0.write_le_bytes(&mut out[0..8]);self.c1.write_le_bytes(&mut out[8..16]);}','V198Bridge.source_complete; ordered outer bounds and partial mutation retained')]:
+ text=s[s.index(context):];anchor='pub fn to_le_bytes(' if context=='impl M31 {' else 'pub fn write_le_bytes('
+ actual=body(text,anchor);assert tok(actual)==tok(want),(context,actual)
+ checks.append(dict(file=str(project),file_sha256=hashlib.sha256(s.encode()).hexdigest(),context=context,anchor=anchor,complete_body=actual,tokens_equal=True,law=law))
+check('core/src/slice/mod.rs','pub const fn copy_from_slice(', '{unsafe {copy_from_slice_impl(self,src)}}','U8 Copy wrapper; same snapshot primitive')
+check('core/src/slice/mod.rs','const unsafe fn copy_from_slice_impl<','''{#[cfg_attr(not(panic="immediate-abort"),inline(never),cold)]#[cfg_attr(panic="immediate-abort",inline)]#[track_caller]const fn len_mismatch_fail(dst_len:usize,src_len:usize)->! {const_panic!("copy_from_slice: source slice length does not match destination slice length","copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})",src_len:usize,dst_len:usize,)}if dest.len()!=src.len() {len_mismatch_fail(dest.len(),src.len());}unsafe {ptr::copy_nonoverlapping(src.as_ptr(),dest.as_mut_ptr(),dest.len());}}''','source/destination lengths exactly4 => mismatch panic unreachable; Copy.overwrite_frame and overwrite_length')
+# Range<usize> impl is selected by the literal 0..8 and 8..16 ranges.
+p=S/'core/src/slice/index.rs';rs=p.read_text();start=rs.index('SliceIndex<[T]> for ops::Range<usize>');actual=body(rs[start:],'fn index_mut(self, slice: &mut [T])')
+want='{if let Some(new_len)=usize::checked_sub(self.end,self.start) && self.end<=slice.len() {unsafe {&mut *get_offset_len_mut_noubcheck(slice,self.start,new_len)}} else {slice_index_fail(self.start,self.end,slice.len())}}'
+assert tok(actual)==tok(want),actual
+checks.append(dict(file=str(p),file_sha256=hashlib.sha256(rs.encode()).hexdigest(),complete_body=actual,tokens_equal=True,law='V198.short_first/short_second/full/status; increasing fixed bounds0..8,8..16'))
+check('core/src/ptr/non_null.rs','pub const fn from_ref(', '{unsafe {NonNull {pointer:r as *const T}}}','PointerConstruct.from_ref_complete; provenance/address preserved')
+check('core/src/ptr/non_null.rs','pub const fn cast<U>', '{unsafe {NonNull {pointer:self.as_ptr() as *mut U}}}','Pointer.cast_complete')
+# Audit original mutation restoration continuations, without modifying or
+# claiming a new extraction of a raw-pointer function.
+emit=(D/'v198-emission.lean.txt').read_text()
+assert emit.count('(s, index_mut_back)')==2
+assert 'let out1 := index_mut_back s2' in emit and 'let out1 := index_mut_back s1' in emit
+assert 'ok (index_mut_back1 s5)' in emit and 'ok (index_mut_back1 s3)' in emit
+assert not re.search(r'let \([^\n]*, _\)',emit)
+assert 'aspis_core.field.QM31.write_le_bytes x s' in emit
+checks.append(dict(emission='PV_CB_Op72Funs.lean',sha256=hashlib.sha256(emit.encode()).hexdigest(),restoration='all four mutable subrange continuations retained; wrapper forwards complete Result; no XR model'))
+j=dict(row='V198',evidence_class='structural (K-1 substitute)',checks=checks,laws=['PV_RDB1_V198Bridge.source_complete','PV_RDB1_V198Bridge.inner_bounds','PV_RDB1_V198.short_first','PV_RDB1_V198.short_second','PV_RDB1_V198.full','PV_RDB1_V198.length_preserved','PV_RDB1_PointerConstruct.from_ref_complete'],before='Original op72 selected callback equals the emitted qm_write Result. Native association suspended; it does not expose memory on Result.fail.',after='Same emitted Result law, plus explicit native buffer state on success/failure. len<8: panic/no writes; 8<=len<16: panic/first8 overwritten; len>=16: all16 overwritten/suffix retained. No allocator or destructor call.',native_validation=['project-bytes/receipt.json (4101 full-byte pairs, reused)','v198-errors-native/receipt.json (125 status/buffer pairs,40 partial panics,new)'],D188='All four emitted restoration continuations are used. Native observations cover a changed output and error partial writes; no discarded backward function is credited.',features=dict(path='resolved-features.json',sha256=hashlib.sha256((D/'resolved-features.json').read_bytes()).hexdigest()),toolchain='1.94.1',profile='release opt3; debug_assertions=false; overflow_checks=false; panic=unwind',retained_boundary='Original library intrinsic/valid mutable slice relation; raw byte copy semantics, compiler/binary and full side-channel obligations retained. Error buffer state is additional evidence, never erased by projecting Result.',new_trust_items=[],kani_credit=False)
+(D/'v198-deployed-binding.json').write_text(json.dumps(j,indent=2)+'\n');print('PASS V198 complete deployed writer/copy/range/pointer gate; partial-error buffer effects retained')

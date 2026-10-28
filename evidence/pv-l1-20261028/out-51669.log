@@ -1,0 +1,24 @@
+'PV_L1_FixedEvents.fixed_lift' does not depend on any axioms
+'PV_L1_FixedEvents.fixed_pure' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_FixedEvents.lean:23:30: error: Ambiguous term
+  bind
+Possible interpretations:
+  PV_L1_Logged.bind : Logged ?m.33 → (?m.33 → Logged ?m.34) → Logged ?m.34
+  
+  Std.bind : Result ?m.33 → (?m.33 → Result ?m.34) → Result ?m.34
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_FixedEvents.lean:23:35: error: Ambiguous term
+  lift
+Possible interpretations:
+  PV_L1_Logged.lift : Result ?m.33 → Logged ?m.33
+  
+  Std.lift : ?m.33 → Result ?m.33
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_FixedEvents.lean:23:12: error: Type mismatch: After simplification, term
+  h a
+ has type
+  ∀ (a_1 : β), (f a).result = Result.ok a_1 → @Eq (List Event) (f a).events events
+but is expected to have type
+  ∀ (a_1 : β),
+    (PV_L1_Logged.lift (Result.ok a) >>= f).result = Result.ok a_1 →
+      @Eq (List Event) (PV_L1_Logged.lift (Result.ok a) >>= f).events events
+'PV_L1_FixedEvents.bind_lift' depends on axioms: [sorryAx]
+'PV_L1_FixedEvents.bind_observe' does not depend on any axioms

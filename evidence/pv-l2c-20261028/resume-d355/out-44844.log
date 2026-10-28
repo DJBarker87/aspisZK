@@ -1,0 +1,17 @@
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+
+exit=0

@@ -1,0 +1,125 @@
+{
+  "row": "V218",
+  "cohorts": [
+    {
+      "version": "nightly-2026-06-01",
+      "files": {
+        "iter/range.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+          "sha256": "df884a169ec674a8d97312096d195b68f0d1761f4ef282a85450f02b1e4ca079"
+        },
+        "iter/adapters/rev.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/rev.rs",
+          "sha256": "2c733c153c7ca12c09f3d7639709ab005843e25fb80fd348480db349b80004ff"
+        },
+        "iter/traits/iterator.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+          "sha256": "db43b7acc33fca53d85fef3ddea29ec9f8c1e768df428676fe2de160f21d5f6b"
+        },
+        "iter/traits/collect.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/collect.rs",
+          "sha256": "47c3434877779443d4314cde2970263022f8fdd767a8eb709c86f5364b2d6acf"
+        }
+      },
+      "bodies": {
+        "trusted_back": {
+          "text": "fn spec_next_back(&mut self) -> Option<T> {\n        if self.start < self.end {\n            // SAFETY: just checked precondition\n            self.end = unsafe { Step::backward_unchecked(self.end, 1) };\n            Some(self.end)\n        } else {\n            None\n        }\n    }",
+          "token_sha256": "b7982ffd65c36c926cad0fa5a2f1eba69ee1c082e37a0061f82def44507c9966"
+        },
+        "unsigned_back": {
+          "text": "unsafe fn backward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start - n` doesn't overflow.\n            unsafe { start.unchecked_sub(n as Self) }\n        }",
+          "token_sha256": "aba2581563962f62a6bb3f860c53fe44b39a0b79dccb9456a4882e39e642202c"
+        },
+        "unsigned_forward": {
+          "text": "unsafe fn forward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+          "token_sha256": "813417d303f434aefa98769ae2bb3af3f8713a4c90a3d6351d6bd4ac91323baa"
+        },
+        "rev_next": {
+          "text": "fn next(&mut self) -> Option<<I as Iterator>::Item> {\n        self.iter.next_back()\n    }",
+          "token_sha256": "dad5d6acfe91150629a040bc6d62809f4f8d6ef6da0102542cd414fa316b3179"
+        },
+        "rev_new": {
+          "text": "fn new(iter: T) -> Rev<T> {\n        Rev { iter }\n    }",
+          "token_sha256": "0bb51139c9bc5cd8d76439e87cd00e0b9bdec58f287fc3ddf81b1a3a756463fa"
+        },
+        "rev": {
+          "text": "fn rev(self) -> Rev<Self>\n    where\n        Self: Sized + DoubleEndedIterator,\n    {\n        Rev::new(self)\n    }",
+          "token_sha256": "405338f760455d96c583a1d68ff71a5dd9a9f5c6a680eecafd8a55a392002a91"
+        },
+        "identity_into_iter": {
+          "text": "fn into_iter(self) -> I {\n        self\n    }",
+          "token_sha256": "ff0d6af587f6666a5ec50c59b9d28766ae5840e8826e27439ca1f2b13cee1e40"
+        }
+      }
+    },
+    {
+      "version": "1.94.1",
+      "files": {
+        "iter/range.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+          "sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9"
+        },
+        "iter/adapters/rev.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/rev.rs",
+          "sha256": "03beda6e5c6eefbc1ec7c5675f0695a5de924bbb7034e979a7b1764e58905320"
+        },
+        "iter/traits/iterator.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+          "sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589"
+        },
+        "iter/traits/collect.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/collect.rs",
+          "sha256": "1dca453947c77c96248f0f18bf5baa9d7f3440195537c85e2cd9149ce00b17de"
+        }
+      },
+      "bodies": {
+        "trusted_back": {
+          "text": "fn spec_next_back(&mut self) -> Option<T> {\n        if self.start < self.end {\n            // SAFETY: just checked precondition\n            self.end = unsafe { Step::backward_unchecked(self.end, 1) };\n            Some(self.end)\n        } else {\n            None\n        }\n    }",
+          "token_sha256": "b7982ffd65c36c926cad0fa5a2f1eba69ee1c082e37a0061f82def44507c9966"
+        },
+        "unsigned_back": {
+          "text": "unsafe fn backward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start - n` doesn't overflow.\n            unsafe { start.unchecked_sub(n as Self) }\n        }",
+          "token_sha256": "aba2581563962f62a6bb3f860c53fe44b39a0b79dccb9456a4882e39e642202c"
+        },
+        "unsigned_forward": {
+          "text": "unsafe fn forward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+          "token_sha256": "813417d303f434aefa98769ae2bb3af3f8713a4c90a3d6351d6bd4ac91323baa"
+        },
+        "rev_next": {
+          "text": "fn next(&mut self) -> Option<<I as Iterator>::Item> {\n        self.iter.next_back()\n    }",
+          "token_sha256": "dad5d6acfe91150629a040bc6d62809f4f8d6ef6da0102542cd414fa316b3179"
+        },
+        "rev_new": {
+          "text": "fn new(iter: T) -> Rev<T> {\n        Rev { iter }\n    }",
+          "token_sha256": "0bb51139c9bc5cd8d76439e87cd00e0b9bdec58f287fc3ddf81b1a3a756463fa"
+        },
+        "rev": {
+          "text": "fn rev(self) -> Rev<Self>\n    where\n        Self: Sized + DoubleEndedIterator,\n    {\n        Rev::new(self)\n    }",
+          "token_sha256": "405338f760455d96c583a1d68ff71a5dd9a9f5c6a680eecafd8a55a392002a91"
+        },
+        "identity_into_iter": {
+          "text": "fn into_iter(self) -> I {\n        self\n    }",
+          "token_sha256": "ff0d6af587f6666a5ec50c59b9d28766ae5840e8826e27439ca1f2b13cee1e40"
+        }
+      }
+    }
+  ],
+  "identical": {
+    "trusted_back": true,
+    "unsigned_back": true,
+    "unsigned_forward": true,
+    "rev_next": true,
+    "rev_new": true,
+    "rev": true,
+    "identity_into_iter": true
+  },
+  "concrete_dispatch": "Range<usize> is TrustedStep integer specialization; Rev.next calls next_back; usize cast is identity; next_back writes end before returning it",
+  "laws": [
+    "PV_RDCD_Range194.backward_bound",
+    "PV_RDCD_Range194.next_back",
+    "PV_RDCD_Range194.reverse_dispatch",
+    "PV_RDCD_Range194.reverse_new"
+  ],
+  "primitive_boundary": "Rust scalar unchecked subtraction with proved nonoverflow precondition; primitive comparisons, stack array copy/value layout and compiler cohort; no L1/L2/L3 or RunJoin discharge",
+  "qualification": "Supplemental concrete source/model binding, original route remains pinned extraction; source hash comparison alone never proves native binary refinement"
+}

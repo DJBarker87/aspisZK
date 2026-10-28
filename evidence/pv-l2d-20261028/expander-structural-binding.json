@@ -1,0 +1,134 @@
+{
+  "source_revision": "72e2a27deb0cf4aa956edd2dc88c0aad1d220149",
+  "application_bodies": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub struct CM31 {",
+      "sha256": "70788522ae518a81cf038cef9116d5bebc9dc6a097406a62c79f3635b8998d10",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub struct QM31 {",
+      "sha256": "7602e05ad6f14b7feb141cb99aceceb0d24174c409e0ccca4ae3e1911dc247dd",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub fn new(a: M31, b: M31)",
+      "sha256": "67b40a34e4de780871a1d5216430959a57e4ce4b83ec6f541c5c5a3bd763c22e",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "start": "pub enum StateOnlyMaskBuildError {",
+      "sha256": "164b97c3abcde39558b597d18079e9dbe40df0bee27dda20e4c3c09a0a01bf7a",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "struct Profile21SourceExpander {",
+      "sha256": "60fb12270c7728e80e1ed033fcd593998fc77933a127ad2217e31cbd83c5d340",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "impl Profile21SourceExpander {",
+      "sha256": "4aebf4e556179f26b86d59a6a86e5539e201a830dedfe4266ca2b4f53a2a2460",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "impl Drop for Profile21SourceExpander {",
+      "sha256": "f4d848fbe6d3067a5273f060f429f3155a186890f46f0ade81bdd828a5ccbfb3",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "fn profile21_source_expander_block(",
+      "sha256": "bb8d119cf88625597b23cd520393c40b91256ae382dfe7783a4710453413cc5a",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) struct State {",
+      "sha256": "e15014c952d294abfb5677ba7a061ae79512d9ff7de48322ca972cc0e31a2588",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "start": "pub fn host_hashv(",
+      "sha256": "f9f7cc6b026d72a12ddae62e0c2e8c46315cd04ee667e58eff57d6cf6fcee209",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn next(",
+      "sha256": "b5ebc19de6282ae556ce2c55da84b64636a72c74652f45b8ae57cc698518a4eb",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn limb_caller(",
+      "sha256": "0e29651ab2c9dbf9f35aee2135208aa6b509a9d42d9b91c588dbe77853ca7347",
+      "selected_application_body_feature_invariant": true
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn qm31_caller(",
+      "sha256": "41ee9e5ecb0f03bfd262c79701aec6953789b5f82269a678a7381d1aa9d0d800",
+      "selected_application_body_feature_invariant": true
+    }
+  ],
+  "artifact": "tools/r1-cost-probe devnet_spend",
+  "features_command": [
+    "cargo",
+    "metadata",
+    "--locked",
+    "--format-version",
+    "1",
+    "--manifest-path",
+    "tools/r1-cost-probe/Cargo.toml",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover"
+  ],
+  "feature_graph_sha256": "becea2f12ffa0ab5fccac8546da89edcf9efe1ecea91b2220e9ed70cb9772870",
+  "lock_sha256": "8f9334eb99bad527e191e545def30f103640fbcb28100abb3da9edae4fa6af43",
+  "profile": "release, opt-level=3; debug assertions and overflow checks false for these application crates",
+  "toolchain": "1.94.1",
+  "differences": [
+    {
+      "native": "next_word four-byte slice/try_into/unwrap",
+      "reference": "four individual indexed bytes",
+      "law": "PV_L2D_Read4.conversion_bytes, decode_same, last_word_offsets; total bounds from Fin8 and Fin4"
+    },
+    {
+      "native": "cursor increment before byte loads",
+      "reference": "cursor increment after byte loads",
+      "law": "PV_L2D_ExpanderPort.next models source ordering; indices use the saved offset in both; no claim that the owned reference write-order trace equals native"
+    },
+    {
+      "native": "while retry<16 with retry increment only after rejection",
+      "reference": "for 0..16 with early return",
+      "law": "PV_L2D_ScalarPort.complete_source / after_exact; PV_L2D_ScalarRender.trace_render records native retry guards, including exhaustion"
+    },
+    {
+      "native": "CM31::new after limb2 and limb4",
+      "reference": "record constructors after limb4",
+      "law": "constructor is the checked exact two-field record; zero branch/index/loop events; PV_L2D_FourLimbs.complete_four retains all short-circuit errors"
+    },
+    {
+      "native": "zeroize on Drop, then Zeroizing seed drop",
+      "reference": "owned state retained by the finite checker",
+      "law": "NOT PROVED: destruction excluded from current port model; retain as whole-row residual"
+    }
+  ],
+  "evidence_class": "structural (K-1 substitute), partial binding inventory plus complete-Result owned laws and finite validation; NOT whole-row closure",
+  "retained": [
+    "native drop/zeroize and SHA/library internal observer",
+    "joint seed/attempt history with previous hash reads and publication",
+    "canonical successful-preparation association",
+    "installation in the concrete endpoint realRows/modelRows; no T addition"
+  ],
+  "nonvacuity": "expander-v3 finite positive and matched negative controls, plus directed failures on each of four limbs; receipt must exist and pass before credit"
+}

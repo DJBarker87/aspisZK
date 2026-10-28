@@ -1,0 +1,78 @@
+[
+  {
+    "phase": "rustc-version",
+    "command": [
+      "/home/dombarker/.cargo/bin/rustup",
+      "run",
+      "1.94.1",
+      "rustc",
+      "--version",
+      "--verbose"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.012459845980629325
+  },
+  {
+    "phase": "coins-lock",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "generate-lockfile",
+      "--offline"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.02739013300742954
+  },
+  {
+    "phase": "coins-metadata",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "metadata",
+      "--offline",
+      "--locked",
+      "--format-version",
+      "1"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.05560166900977492
+  },
+  {
+    "phase": "coins-build",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "build",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j",
+      "4"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 1.592385396012105
+  },
+  {
+    "phase": "coins-positive",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-l2d-20261028/coins-target/release/pv-l2d-coins-native"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.043708287994377315
+  },
+  {
+    "phase": "coins-negative",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-l2d-20261028/coins-target/release/pv-l2d-coins-native",
+      "negative"
+    ],
+    "exit": 101,
+    "expected": 101,
+    "wall_seconds": 0.038689865032210946
+  }
+]

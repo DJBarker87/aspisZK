@@ -1,0 +1,74 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ResultSpine226.lean:27:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  bindR (bindR ?x ?f) ?g
+in the target expression
+  (match
+      match collect xs with
+      | Result.ok (core.result.Result.Ok a) =>
+        match collect ys with
+        | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a ++ a_1))
+        | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div with
+    | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a :: a_1))
+    | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    match
+      match collect xs with
+      | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a :: a_1))
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div with
+    | Result.ok (core.result.Result.Ok a) =>
+      match collect ys with
+      | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a ++ a_1))
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div
+    | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div
+
+case cons.ok.Ok
+α E : Type
+ys xs : List (Result (core.result.Result α E))
+ih :
+  collect (xs ++ ys) =
+    bindR (collect xs) fun headValues => mapR (fun tailValues => headValues ++ tailValues) (collect ys)
+a : α
+⊢ (match
+      match collect xs with
+      | Result.ok (core.result.Result.Ok a) =>
+        match collect ys with
+        | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a ++ a_1))
+        | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+        | Result.fail e => Result.fail e
+        | Result.div => Result.div
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div with
+    | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a :: a_1))
+    | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    match
+      match collect xs with
+      | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a :: a_1))
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div with
+    | Result.ok (core.result.Result.Ok a) =>
+      match collect ys with
+      | Result.ok (core.result.Result.Ok a_1) => Result.ok (core.result.Result.Ok (a ++ a_1))
+      | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div
+    | Result.ok (core.result.Result.Err e) => Result.ok (core.result.Result.Err e)
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div
+'PV_B3P_ResultSpine226.collect_append' depends on axioms: [sorryAx]
+'PV_B3P_ResultSpine226.collect_pure' depends on axioms: [propext]
+'PV_B3P_ResultSpine226.padding' depends on axioms: [propext, sorryAx, Quot.sound]

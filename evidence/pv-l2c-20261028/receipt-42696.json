@@ -1,0 +1,68 @@
+{
+  "attempt": 42696,
+  "module": "PV_L2C_OwnedBalance",
+  "source_sha256": "6b97d0db1d183888bd1b2bb27fab63a414dea35414be260f0337e0675553a548",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_OwnedBalance.lean",
+    "git_blob": "507d7d7e59efa31613745c6a1474ba5e1945f048",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "cc6abd7bf28820a923a9afe54de25c2ddd3c7150",
+  "exit": 1,
+  "wall_seconds": 2.013250794960186,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T06:01:15.198494+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 42815455232,
+    "projected_reserved_bytes": 51405389824
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-42695",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in re.findall(r'^import\\s+(\\S+)',x['source'],re.M):\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n\nnative_exit=subprocess.run(['env', 'PV8_SOURCE_DIR=/home/dombarker/project-offloads/codex-pv-l2c-20261028/differential', 'PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin', 'CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-l2c-20261028/differential-target', 'CARGO_BUILD_JOBS=4', 'CARGO_NET_OFFLINE=true', 'PV_L2C_PIN_FILES=Cargo.toml:Cargo.lock:main.rs:balance_cut.rs', 'PV_L2C_EXPECTED_TIME=Optimized compilation then 128 same-input native balancing differential cases', 'PV_L2C_EVIDENCE_CLASS=N/A: finite native validation, not universal proof', 'python3', '/home/dombarker/project-offloads/codex-pv-l2c-20261028/native-receipt.py', '/home/dombarker/project-offloads/codex-pv-l2c-20261028/evidence/native-after-42695', 'timeout', '180', 'taskset', '--cpu-list', '0-3', 'cargo', 'run', '--release', '--offline', '-j', '4']).returncode\nprint(\"NATIVE EXIT\",native_exit,flush=True)\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "42695"
+  ],
+  "dependencies": {
+    "PV_L2C_ExtractedRows": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedRows.olean",
+      "sha256": "d740f08f4c4c2dda01a36e952a87235ffb82d611dcf4aafb6577e64c4c6cd375"
+    },
+    "PV_L2C_VecShape": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecShape.olean",
+      "sha256": "fe6b17a4283adbc23ec3001084020869a95513f11455491ef12aa3a09f43a3e2"
+    },
+    "PV_L2C_VecWrite": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecWrite.olean",
+      "sha256": "b955b20a59bd09e7eddbab02c0995946d9768bccc3c13e5cd55a5e6ee59ad4b2"
+    }
+  },
+  "deps_fingerprint": "8c18f8468755bd9f12f313251444a3c7beee0d0a01b9b0c711ffe29bb06b6763",
+  "axioms": [
+    "'PV_L2C_OwnedBalance.rows_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OwnedBalance.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 2685104128,
+  "swaps": "0",
+  "host_wall": "0:02.01",
+  "accepted": false
+}

@@ -1,0 +1,8 @@
+import PV_L2C_CanonicalFixtureDomain
+import PV_L2C_FixtureAudit
+#print axioms PV_L2C_FixtureAudit.concrete
+#print axioms PV_L2C_FixtureOrigins.both
+#print axioms PV_L2C_CanonicalFixtureDomain.transfer
+#print axioms PV_L2C_CanonicalFixtureDomain.withdrawal
+#print axioms PV_L2C_CanonicalFixtureDomain.both
+#print axioms PV_L2C_CanonicalFixtureDomain.rawP_excluded

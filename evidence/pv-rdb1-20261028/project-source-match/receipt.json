@@ -1,0 +1,51 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/project-source-match/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/project-source-match/time.log",
+    "python3",
+    "-c",
+    "from pathlib import Path; import hashlib,json; D=Path(\"/home/dombarker/project-offloads/codex-pv-rdb1-20261028\"); F=D.parent/\"codex-pv-fscan-20261028/src\"; pins=json.loads((D/\"project-source-pins.json\").read_text()); checks=[dict(path=p,expected=h,actual=hashlib.sha256((F/p).read_bytes()).hexdigest()) for p,h in pins.items()]; (D/\"project-source-match.json\").write_text(json.dumps(checks,indent=2)); print(checks); assert all(x[\"actual\"]==x[\"expected\"] for x in checks)"
+  ],
+  "exit": 0,
+  "wall": "0:00.01",
+  "peak_rss_kib": "15664",
+  "swap": "0",
+  "source_revision": "27ed88dfdae3db50816e0cd5da3945bf74b83c52",
+  "expected_phase": "verify replayed project bodies equal branch HEAD",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "command_sha256": "7a2ea8d3f01bd53e18cc96341452b2c3cbe843b98a8ffdd681a2487ecf7a3c27"
+}

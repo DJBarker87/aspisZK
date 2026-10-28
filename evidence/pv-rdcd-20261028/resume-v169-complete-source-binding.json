@@ -1,0 +1,246 @@
+{
+  "row": "V169",
+  "cohorts": [
+    {
+      "version": "nightly-2026-06-01",
+      "files": {
+        "core/src/mem/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs",
+          "sha256": "9f450467849a7e829d2f57fe826518b7334df8a8eb206052d571ad7b5d018b9e"
+        },
+        "alloc/src/vec/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+          "sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f"
+        },
+        "alloc/src/raw_vec/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+          "sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14"
+        },
+        "core/src/ptr/non_null.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+          "sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd"
+        },
+        "core/src/ptr/unique.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+          "sha256": "1ad47a153caf5e6e3522baad25e0172aee4397c34b3401d5bc9cdf6a527c5b61"
+        },
+        "core/src/ptr/alignment.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/alignment.rs",
+          "sha256": "4a493ac5e8041f03d0ddc20430fbd5c476c1886bae2836df4f1c23fc80b3214b"
+        },
+        "core/src/array/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+          "sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f"
+        }
+      },
+      "bodies": {
+        "take": {
+          "text": "pub const fn take<T: [const] Default>(dest: &mut T) -> T {\n    replace(dest, T::default())\n}",
+          "body_token_sha256": "ce2bbdd6fa2a7afc213d25f8ee9e63d49187375f2ee2a78573969ff050bee99c"
+        },
+        "replace": {
+          "text": "pub const fn replace<T>(dest: &mut T, src: T) -> T {\n    // It may be tempting to use `swap` to avoid `unsafe` here. Don't!\n    // The compiler optimizes the implementation below to two `memcpy`s\n    // while `swap` would require at least three. See PR#83022 for details.\n\n    // SAFETY: We read from `dest` but directly write `src` into it afterwards,\n    // such that the old value is not duplicated. Nothing is dropped and\n    // nothing here can panic.\n    unsafe {\n        // Ideally we wouldn't use the intrinsics here, but going through the\n        // `ptr` methods introduces two unnecessary UbChecks, so until we can\n        // remove those for pointers that come from references, this uses the\n        // intrinsics instead so this stays very cheap in MIR (and debug).\n\n        let result = crate::intrinsics::read_via_copy(dest);\n        crate::intrinsics::write_via_move(dest, src);\n        result\n    }\n}",
+          "body_token_sha256": "f45dce0cc4b3cdc216a5e8a6045a87be5348ce9aa06c6f650f0ed7a202e55ccc"
+        },
+        "Vec.default": {
+          "text": "fn default() -> Vec<T> {\n        Vec::new()\n    }",
+          "body_token_sha256": "7befcda70ae8d6953f842c2b34aab51dc9d5742b98ccdd8ad64380b5a4377244"
+        },
+        "Vec.new": {
+          "text": "pub const fn new() -> Self {\n        Vec { buf: RawVec::new(), len: 0 }\n    }",
+          "body_token_sha256": "bf9073b1f85539aef3c7e7fac43ecf22cd725d4eb87a2f1b2e0710b042b68137"
+        },
+        "RawVec.new": {
+          "text": "pub(crate) const fn new() -> Self {\n        Self::new_in(Global)\n    }",
+          "body_token_sha256": "d0d9b632224f42dcc02c182f6bf29069c4436570a519ba05c02ebd8063ffc3bc"
+        },
+        "RawVec.new_in": {
+          "text": "pub(crate) const fn new_in(alloc: A) -> Self {\n        // Check assumption made in `current_memory`\n        const { assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0) };\n        Self { inner: RawVecInner::new_in(alloc, Alignment::of::<T>()), _marker: PhantomData }\n    }",
+          "body_token_sha256": "c6f88518a75701311dd3e93b0065b3f9e2d65f0970df662eca408055141ec8b5"
+        },
+        "RawVecInner.new_in": {
+          "text": "const fn new_in(alloc: A, align: Alignment) -> Self {\n        let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero_usize()));\n        // `cap: 0` means \"unallocated\". zero-sized types are ignored.\n        Self { ptr, cap: ZERO_CAP, alloc }\n    }",
+          "body_token_sha256": "bc3f8c2abe0eb72758a4368c127858290c48cab1c5f55e9a0f4f4084b44a8f12"
+        },
+        "NonNull.without_provenance": {
+          "text": "pub const fn without_provenance(addr: NonZero<usize>) -> Self {\n        // SAFETY: we know `addr` is non-zero and all nonzero integers are valid raw pointers.\n        unsafe { transmute(addr) }\n    }",
+          "body_token_sha256": "ebc7107fdcf8cfc58e8aa2100c05220b07c25e6295074032514cbe4cd22cfbdc"
+        },
+        "Unique.from_non_null": {
+          "text": "pub const fn from_non_null(pointer: NonNull<T>) -> Self {\n        Unique { pointer, _marker: PhantomData }\n    }",
+          "body_token_sha256": "e9e2717f70d58860b92e591a72d406cb3d5a94bdcd5d60a2dc9fb5bafe0888ca"
+        },
+        "Alignment.of": {
+          "text": "pub const fn of<T>() -> Self {\n        <T as mem::SizedTypeProperties>::ALIGNMENT\n    }",
+          "body_token_sha256": "e6e794491e8cb29e0676535594a1e0585511b15728cbc8ce13bab66ae67905f7"
+        },
+        "Alignment.as_nonzero": {
+          "text": "pub const fn as_nonzero(self) -> NonZero<usize> {\n        self.as_nonzero_usize()\n    }",
+          "body_token_sha256": "8b1a643e7f7e13fef533bb7fb6745a6537f25eaae19a6042ce2ccaf72928634e"
+        },
+        "arrayDefault_macro": {
+          "text": "macro_rules! array_impl_default {\n    {$n:expr, $t:ident $($ts:ident)*} => {\n        #[stable(since = \"1.4.0\", feature = \"array_default\")]\n        impl<T> Default for [T; $n] where T: Default {\n            fn default() -> [T; $n] {\n                [$t::default(), $($ts::default()),*]\n            }\n        }\n        array_impl_default!{($n - 1), $($ts)*}\n    };\n    {$n:expr,} => {\n        #[stable(since = \"1.4.0\", feature = \"array_default\")]\n        impl<T> Default for [T; $n] {\n            fn default() -> [T; $n] { [] }\n        }\n    };\n}",
+          "body_token_sha256": "2b846e47dbf1c267837969dba1df9ca40a2f7d652fea3e675ec8290ec695a4b1"
+        }
+      }
+    },
+    {
+      "version": "1.94.1",
+      "files": {
+        "core/src/mem/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs",
+          "sha256": "ad70d291fcddf9bd91e7b3d75d6d432d1473e078ab92bf21741fc1d47f786b78"
+        },
+        "alloc/src/vec/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+          "sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae"
+        },
+        "alloc/src/raw_vec/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+          "sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965"
+        },
+        "core/src/ptr/non_null.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+          "sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f"
+        },
+        "core/src/ptr/unique.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+          "sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e"
+        },
+        "core/src/ptr/alignment.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/alignment.rs",
+          "sha256": "d484d2379ea9dfdf3f3610ad9612db5cd732a5e1bfc9496d33be0e102b7a2244"
+        },
+        "core/src/array/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+          "sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934"
+        }
+      },
+      "bodies": {
+        "take": {
+          "text": "pub const fn take<T: [const] Default>(dest: &mut T) -> T {\n    replace(dest, T::default())\n}",
+          "body_token_sha256": "ce2bbdd6fa2a7afc213d25f8ee9e63d49187375f2ee2a78573969ff050bee99c"
+        },
+        "replace": {
+          "text": "pub const fn replace<T>(dest: &mut T, src: T) -> T {\n    // It may be tempting to use `swap` to avoid `unsafe` here. Don't!\n    // The compiler optimizes the implementation below to two `memcpy`s\n    // while `swap` would require at least three. See PR#83022 for details.\n\n    // SAFETY: We read from `dest` but directly write `src` into it afterwards,\n    // such that the old value is not duplicated. Nothing is dropped and\n    // nothing here can panic.\n    unsafe {\n        // Ideally we wouldn't use the intrinsics here, but going through the\n        // `ptr` methods introduces two unnecessary UbChecks, so until we can\n        // remove those for pointers that come from references, this uses the\n        // intrinsics instead so this stays very cheap in MIR (and debug).\n\n        let result = crate::intrinsics::read_via_copy(dest);\n        crate::intrinsics::write_via_move(dest, src);\n        result\n    }\n}",
+          "body_token_sha256": "f45dce0cc4b3cdc216a5e8a6045a87be5348ce9aa06c6f650f0ed7a202e55ccc"
+        },
+        "Vec.default": {
+          "text": "fn default() -> Vec<T> {\n        Vec::new()\n    }",
+          "body_token_sha256": "7befcda70ae8d6953f842c2b34aab51dc9d5742b98ccdd8ad64380b5a4377244"
+        },
+        "Vec.new": {
+          "text": "pub const fn new() -> Self {\n        Vec { buf: RawVec::new(), len: 0 }\n    }",
+          "body_token_sha256": "bf9073b1f85539aef3c7e7fac43ecf22cd725d4eb87a2f1b2e0710b042b68137"
+        },
+        "RawVec.new": {
+          "text": "pub(crate) const fn new() -> Self {\n        Self::new_in(Global)\n    }",
+          "body_token_sha256": "d0d9b632224f42dcc02c182f6bf29069c4436570a519ba05c02ebd8063ffc3bc"
+        },
+        "RawVec.new_in": {
+          "text": "pub(crate) const fn new_in(alloc: A) -> Self {\n        // Check assumption made in `current_memory`\n        const { assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0) };\n        Self { inner: RawVecInner::new_in(alloc, Alignment::of::<T>()), _marker: PhantomData }\n    }",
+          "body_token_sha256": "c6f88518a75701311dd3e93b0065b3f9e2d65f0970df662eca408055141ec8b5"
+        },
+        "RawVecInner.new_in": {
+          "text": "const fn new_in(alloc: A, align: Alignment) -> Self {\n        let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero()));\n        // `cap: 0` means \"unallocated\". zero-sized types are ignored.\n        Self { ptr, cap: ZERO_CAP, alloc }\n    }",
+          "body_token_sha256": "cd9c0a6a2ba78604c34328cc38a95c6345a11f9de49c9e50c07c0a4232fbdaf5"
+        },
+        "NonNull.without_provenance": {
+          "text": "pub const fn without_provenance(addr: NonZero<usize>) -> Self {\n        let pointer = crate::ptr::without_provenance(addr.get());\n        // SAFETY: we know `addr` is non-zero.\n        unsafe { NonNull { pointer } }\n    }",
+          "body_token_sha256": "0a9f8dc92e0c8c1b95c56f7a6b1e1a50c225cb826abc6563b23bafb31724efaa"
+        },
+        "Unique.from_non_null": {
+          "text": "pub const fn from_non_null(pointer: NonNull<T>) -> Self {\n        Unique { pointer, _marker: PhantomData }\n    }",
+          "body_token_sha256": "e9e2717f70d58860b92e591a72d406cb3d5a94bdcd5d60a2dc9fb5bafe0888ca"
+        },
+        "Alignment.of": {
+          "text": "pub const fn of<T>() -> Self {\n        // This can't actually panic since type alignment is always a power of two.\n        const { Alignment::new(align_of::<T>()).unwrap() }\n    }",
+          "body_token_sha256": "0c3e5821889baf742888c30164c2dc8bb6a3b9007874c3e624aa9af80d988703"
+        },
+        "Alignment.as_nonzero": {
+          "text": "pub const fn as_nonzero(self) -> NonZero<usize> {\n        // This transmutes directly to avoid the UbCheck in `NonZero::new_unchecked`\n        // since there's no way for the user to trip that check anyway -- the\n        // validity invariant of the type would have to have been broken earlier --\n        // and emitting it in an otherwise simple method is bad for compile time.\n\n        // SAFETY: All the discriminants are non-zero.\n        unsafe { mem::transmute::<Alignment, NonZero<usize>>(self) }\n    }",
+          "body_token_sha256": "91b989de17c0e0d2dfdfedd8d46cf1514cb6edadd3d7bc548a73e0fa9b4c57b4"
+        },
+        "arrayDefault_macro": {
+          "text": "macro_rules! array_impl_default {\n    {$n:expr, $t:ident $($ts:ident)*} => {\n        #[stable(since = \"1.4.0\", feature = \"array_default\")]\n        impl<T> Default for [T; $n] where T: Default {\n            fn default() -> [T; $n] {\n                [$t::default(), $($ts::default()),*]\n            }\n        }\n        array_impl_default!{($n - 1), $($ts)*}\n    };\n    {$n:expr,} => {\n        #[stable(since = \"1.4.0\", feature = \"array_default\")]\n        impl<T> Default for [T; $n] {\n            fn default() -> [T; $n] { [] }\n        }\n    };\n}",
+          "body_token_sha256": "2b846e47dbf1c267837969dba1df9ca40a2f7d652fea3e675ec8290ec695a4b1"
+        }
+      }
+    }
+  ],
+  "deployed_extra_bodies": [
+    {
+      "name": "Alignment.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/alignment.rs",
+      "file_sha256": "d484d2379ea9dfdf3f3610ad9612db5cd732a5e1bfc9496d33be0e102b7a2244",
+      "body": "pub const fn new(align: usize) -> Option<Self> {\n        if align.is_power_of_two() {\n            // SAFETY: Just checked it only has one bit set\n            Some(unsafe { Self::new_unchecked(align) })\n        } else {\n            None\n        }\n    }",
+      "body_token_sha256": "d03ab20bbeba866babf6c5817f9fbea658179f45e304891f89d5eb361883bf00"
+    },
+    {
+      "name": "Alignment.new_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/alignment.rs",
+      "file_sha256": "d484d2379ea9dfdf3f3610ad9612db5cd732a5e1bfc9496d33be0e102b7a2244",
+      "body": "pub const unsafe fn new_unchecked(align: usize) -> Self {\n        assert_unsafe_precondition!(\n            check_language_ub,\n            \"Alignment::new_unchecked requires a power of two\",\n            (align: usize = align) => align.is_power_of_two()\n        );\n\n        // SAFETY: By precondition, this must be a power of two, and\n        // our variants encompass all possible powers of two.\n        unsafe { mem::transmute::<usize, Alignment>(align) }\n    }",
+      "body_token_sha256": "86adb42a068ba39f1babee212c7218bcd55010ef2ee935096f719127c4740ed3"
+    },
+    {
+      "name": "ptr.without_provenance",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "body": "pub const fn without_provenance<T>(addr: usize) -> *const T {\n    without_provenance_mut(addr)\n}",
+      "body_token_sha256": "b2c72833d0b6aa5aba1c225430c5cb3dbafb1d61b109e1789134e331c59ed448"
+    },
+    {
+      "name": "NonZero.get",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/nonzero.rs",
+      "file_sha256": "d4b58564e57249cb03c8e4a7222b461ea6397a8dd72e7795da157f4d612219fb",
+      "body": "pub const fn get(self) -> T {\n        // Rustc can set range metadata only if it loads `self` from\n        // memory somewhere. If the value of `self` was from by-value argument\n        // of some not-inlined function, LLVM don't have range metadata\n        // to understand that the value cannot be zero.\n        //\n        // Using the transmute `assume`s the range at runtime.\n        //\n        // Even once LLVM supports `!range` metadata for function arguments\n        // (see <https://github.com/llvm/llvm-project/issues/76628>), this can't\n        // be `.0` because MCP#807 bans field-projecting into `scalar_valid_range`\n        // types, and it arguably wouldn't want to be anyway because if this is\n        // MIR-inlined, there's no opportunity to put that argument metadata anywhere.\n        //\n        // The good answer here will eventually be pattern types, which will hopefully\n        // allow it to go back to `.0`, maybe with a cast of some sort.\n        //\n        // SAFETY: `ZeroablePrimitive` guarantees that the size and bit validity\n        // of `.0` is such that this transmute is sound.\n        unsafe { intrinsics::transmute_unchecked(self) }\n    }",
+      "body_token_sha256": "17f83983b37e7976901fb3ddb435b068499f208d78367865b6ece70b6e89a71f"
+    },
+    {
+      "name": "usize.is_power_of_two",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn is_power_of_two(self) -> bool {\n            self.count_ones() == 1\n        }",
+      "body_token_sha256": "bb3b61d63c2cc86c6f7012fcf5c6e6cb494554cbc92599fa16233a502a2fbcc1"
+    },
+    {
+      "name": "usize.count_ones",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn count_ones(self) -> u32 {\n            return intrinsics::ctpop(self);\n        }",
+      "body_token_sha256": "81b3f65d8eff8bc5eafedda2498b0164118acbbea30bc328659a8ac4ef27787c"
+    }
+  ],
+  "deployed_source_laws": {
+    "metadata_frame": "R1Z.PV_RDCD_EmptyRaw194.raw_valid/raw_four",
+    "alignment_validation": "R1Z.PV_RDCD_EmptyRaw194.power_four/alignment_valid",
+    "zero_length_projection": "R1Z.PV_RDCD_EmptyRaw194.zero_length_view",
+    "array_defaults": "R1Z.PV_RDCD_Defaults194.array_values",
+    "concrete_takes": "R1Z.PV_RDCD_TakeBinding.vector_m31/vector_qm31/array10/array16",
+    "Rust_primitive_boundary": "address-preserving valid transmute/without_provenance, ctpop, typed layout and scalar loads/moves; no native machine/world composition claimed"
+  },
+  "body_identity": {
+    "take": true,
+    "replace": true,
+    "Vec.default": true,
+    "Vec.new": true,
+    "RawVec.new": true,
+    "RawVec.new_in": true,
+    "RawVecInner.new_in": false,
+    "NonNull.without_provenance": false,
+    "Unique.from_non_null": true,
+    "Alignment.of": false,
+    "Alignment.as_nonzero": false,
+    "arrayDefault_macro": true
+  },
+  "concrete_defaults": [
+    "Vec<M31>",
+    "Vec<QM31>",
+    "[Vec<M31>;10]",
+    "[Vec<M31>;16]"
+  ],
+  "law": "PV_RDCD_Defaults194: Vec.new empty value and left-to-right array literal defaults; fresh generic take returns old value and replacement",
+  "primitive_boundary": "layout/align/NonZero, pointer address/without-provenance constructors and ownership-preserving read/write moves; native carrier/world composition and L1/L2/L3 retained",
+  "qualification": "Source-body census and selected instantiation law binding; never labelled a recovered original structural checker. The original extraction route is separately replayed."
+}

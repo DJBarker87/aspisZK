@@ -1,0 +1,106 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "scope": "M31 and QM31 balancing cuts only; length=1024, dependent<1024, dependent inactive; no honest sampler/caller association",
+  "source_revision": "d8ce511a005d7ad491ab51bfa1fdcfff08cf34ab",
+  "checks": [
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "balance_qm31_copy_inactive",
+      "body_sha256": "5b146aaf9b50b9fadc16f758f60605cb55e3a2a198673728d9557c3a1daa4399"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "sum_qm31_copy_inactive",
+      "body_sha256": "8d634f6103ddb230fd319e413d39d91b717d20a7e11c83a1be871e47daad2233"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "inactive_qm31_step",
+      "body_sha256": "14b8f3a67694a495b5f1225c8f8c63e2bdc81cde35af8fdd9de96aa92f2e0db5"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_qm31_owned",
+      "body_sha256": "41a6e41f3b1eddd220c28ab2bd506b0071cd9b846a8a39ec85bbff2f6651fa37"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_qm31_rows",
+      "body_sha256": "7fa9aedad9e4b388fda9a6351f6af1d03dc44700dfc9be3411e2167e77e3c229"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_qm31_step",
+      "body_sha256": "60826dbb0f395e9e787ca68024a4a024f902fc92b560d563aa962595340a7234"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "balance_m31_copy_inactive",
+      "body_sha256": "765e2192a1de2fa4ff9d4f9a4a4c38b3cd2331eace9e36a82d3426d39b460eef"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "sum_m31_copy_inactive",
+      "body_sha256": "5f577d8c744b295594075c80cca040c9c2e0bd8db10af8cf8bdded7a23d3599e"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "inactive_m31_step",
+      "body_sha256": "14b8f3a67694a495b5f1225c8f8c63e2bdc81cde35af8fdd9de96aa92f2e0db5"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_owned",
+      "body_sha256": "e81ec4abb2e6623b732080b0d3d2b84e9bc115e249066f1ebfabcfde50347dc9"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_rows",
+      "body_sha256": "d8902cf5874026cfe5e0d8728138e5771778239d14124c6555d85299c7dbfcb5"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_step",
+      "body_sha256": "60826dbb0f395e9e787ca68024a4a024f902fc92b560d563aa962595340a7234"
+    }
+  ],
+  "differences": [
+    {
+      "change": "Borrowed slice vs owned Vec and Result/table pair",
+      "law": "PV_L2C_VecRead.read; PV_L2C_VecBack.index_mut/write; PV_L2C_OwnedBalance.complete_result"
+    },
+    {
+      "change": "While loop vs ascending tail recursion",
+      "law": "R1Z.ProverCommitBalanceRecursion.qm31_all_rows/sequence_ascending; PV_L2C_RowEnumeration.enumeration; PV_L2C_SelectedDense.selected_sum"
+    },
+    {
+      "change": "Reference eagerly reads table[row] before the active test; native reads it only on the addition arm",
+      "law": "PV_L2C_VecRead.read and PV_L2C_ExtractedRows.read_step on rows<1024: pure successful reads, no output/state change; no observation-trace equivalence asserted"
+    },
+    {
+      "change": "Dead rows local and intermediate value binding",
+      "law": "No calls, state effects or error paths; let substitution"
+    },
+    {
+      "change": "QM31 qualified name and trace-row constant",
+      "law": "Same aspis_core field type, constant checked =1024"
+    }
+  ],
+  "complete_Result_law": [
+    "PV_L2C_OwnedBalance.complete_result",
+    "PV_L2C_ScalarBalance.complete_result"
+  ],
+  "guard_law": "PV_L2C_ExtractedGuard.padding_result",
+  "finite_validation": {
+    "receipt": "evidence/pv-l2c-20261028/native-after-42695/receipt.json",
+    "cases": 128,
+    "changed_writes": 128,
+    "classification": "same-input native differential, finite validation; reused unchanged source cut"
+  },
+  "limitations": [
+    "Does not bind native sampler randomness to this table",
+    "Does not bind HonestInput native caller geometry or guard consumer",
+    "Does not prove an observation-trace refinement",
+    "Does not subtract V352/V354/V357/V360"
+  ]
+}

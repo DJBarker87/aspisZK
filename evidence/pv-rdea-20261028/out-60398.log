@@ -1,0 +1,57 @@
+theorem R1Z.PV_RDEA_V181ConsumedLaw.consumed : ∀ {S F R : Type}
+  (step : R1Z.PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F)
+      (failure : R1Z.PV_RDB1_V183_ReserveWorld.Error → R1Z.PV_RDB1_V183_ReserveWorld.World S F → R)
+      (next : R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 → R1Z.PV_RDB1_V183_ReserveWorld.World S F → R),
+      have e := R1Z.PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w;
+      (R1Z.PV_RDEA_CapacityEndpoint.consume e failure next =
+          match e.returned with
+          | Except.error err => failure err e.world
+          | Except.ok PUnit.unit => next e.buffer e.world) ∧
+        R1Z.PV_RDEA_CapacityEndpoint.sizes e.world.history =
+          R1Z.PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] :=
+fun {S F R} step shape width address w failure next =>
+  ⟨rfl, R1Z.PV_RDEA_CapacityEndpoint.literal_sizes step shape width address w⟩
+'R1Z.PV_RDEA_V181ConsumedLaw.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDEA_V181ConsumedLaw.name_stage : ∀ {S F : Type}
+  (step : R1Z.PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (digest : List (Fin 256)),
+      digest.length = 32 →
+        ∀ (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F),
+          R1Z.PV_RDEA_CapacityEndpoint.sizes
+              (R1Z.PV_RDEA_ReservationExecution.run step shape address digest w).2.history =
+            R1Z.PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] :=
+fun {S F} step shape width address digest length w =>
+  R1Z.PV_RDEA_ReservationExecution.requests step shape width address digest length w
+'R1Z.PV_RDEA_V181ConsumedLaw.name_stage' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDEA_V178ConsumedLaw.consumed : ∀ {S F R : Type}
+  (step : R1Z.PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (absolute needSep : Bool) (base path : List Aeneas.Std.U8)
+      (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F)
+      (failure : R1Z.PV_RDB1_V183_ReserveWorld.Error → R1Z.PV_RDB1_V183_ReserveWorld.World S F → R)
+      (next : List Aeneas.Std.U8 → R1Z.PV_RDB1_V183_ReserveWorld.World S F → R),
+      have e :=
+        R1Z.PV_RDEA_StatefulPath.sourceJoin (R1Z.PV_RDEA_CloneExecution.clone step shape address)
+          (R1Z.PV_RDEA_AppendExecution.append step shape) absolute needSep base path w;
+      (R1Z.PV_RDEA_JoinConsumer.consume e failure next =
+          match e.1 with
+          | Except.error err => failure err e.2
+          | Except.ok a => next (R1Z.PV_RDEA_PushValues.value base path absolute needSep) e.2) ∧
+        R1Z.PV_RDEA_PrefixWords.Prefix (R1Z.PV_RDEA_CapacityEndpoint.sizes e.2.history)
+          (R1Z.PV_RDEA_CapacityEndpoint.sizes w.history ++
+            R1Z.PV_RDEA_PathSchedule.joinWord base.length path.length absolute needSep) :=
+fun {S F R} step shape width address absolute needSep base path w failure next =>
+  ⟨R1Z.PV_RDEA_JoinConsumer.endpoint step shape address absolute needSep base path w failure next,
+    R1Z.PV_RDEA_JoinRequests.join_requests_prefix step shape width address absolute needSep base path w⟩
+'R1Z.PV_RDEA_V178ConsumedLaw.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_JoinSuccessRequests.success_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_LiteralSites.request_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ReservationJoin.request_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_SelectedCapacityConsumer.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_PublicPush.request_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_DiagnosticCapacity.hex_request_word' depends on axioms: [propext]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh

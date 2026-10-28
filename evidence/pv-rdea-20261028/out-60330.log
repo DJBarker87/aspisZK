@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendNoGrowth.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  match h :
+    (if tail.length ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+      else
+        if b.values.length + tail.length > 18446744073709551615 then
+          { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+        else
+          if
+              PV_RDB1_Append.growthCapacity b.values.length b.capacity tail.length * shape.width >
+                9223372036854775807 then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else PV_RDB1_Append.finishAt step shape b tail.length w).returned with
+  | Except.error err => (Except.error err, w)
+  | Except.ok PUnit.unit =>
+    (Except.ok { address := b.address, capacity := b.capacity, values := b.values ++ tail, fits := ⋯ },
+      { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc, successfulRealloc := w.successfulRealloc,
+        drops := w.drops, history := w.history,
+        memory := PV_RDB1_Append.writeTail b.address b.values.length tail w.memory, live := w.live, frame := w.frame })
+is not definitionally equal to the right-hand side
+  (Except.ok (appended b tail fits),
+    { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+      deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc, successfulRealloc := w.successfulRealloc,
+      drops := w.drops, history := w.history,
+      memory := PV_RDB1_Append.writeTail b.address b.values.length tail w.memory, live := w.live, frame := w.frame })
+
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+tail : List U8
+w : World S F
+fits : b.values.length + tail.length ≤ b.capacity
+enough : tail.length ≤ b.capacity - b.values.length
+⊢ (match h :
+      (if tail.length ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+        else
+          if b.values.length + tail.length > 18446744073709551615 then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else
+            if
+                PV_RDB1_Append.growthCapacity b.values.length b.capacity tail.length * shape.width >
+                  9223372036854775807 then
+              { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+            else PV_RDB1_Append.finishAt step shape b tail.length w).returned with
+    | Except.error err => (Except.error err, w)
+    | Except.ok PUnit.unit =>
+      (Except.ok { address := b.address, capacity := b.capacity, values := b.values ++ tail, fits := ⋯ },
+        { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+          deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+          successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+          memory := PV_RDB1_Append.writeTail b.address b.values.length tail w.memory, live := w.live,
+          frame := w.frame })) =
+    (Except.ok (appended b tail fits),
+      { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+        deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc, successfulRealloc := w.successfulRealloc,
+        drops := w.drops, history := w.history,
+        memory := PV_RDB1_Append.writeTail b.address b.values.length tail w.memory, live := w.live, frame := w.frame })
+'R1Z.PV_RDEA_AppendNoGrowth.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_AppendNoGrowth.header' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

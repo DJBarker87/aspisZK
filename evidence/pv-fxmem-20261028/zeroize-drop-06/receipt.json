@@ -1,0 +1,46 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/zeroize-drop-06/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/zeroize-drop-06/time.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/run-zeroize-drop.sh"
+  ],
+  "exit": 0,
+  "wall": "0:00.13",
+  "peak_rss_kib": "111392",
+  "swap": "0",
+  "source_revision": "18bc1f37781101be75fdda86ac0338a26555fcaa",
+  "expected_phase": "optimized destructor-path driver compile then paired native validation",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "source_files": {
+    "zeroize-drop.rs": "58bf1b1e1a38beb8e34d5b688df31f312d58b7529dd2157043e9ccd03391e1e5",
+    "run-zeroize-drop.sh": "991cd9fade4cca1d7d8ab092136e2deee3ca1c2f8fa3d90219a4ee55ba5570dc"
+  },
+  "library_reuse": {
+    "receipt": "zeroize-04/receipt.json",
+    "sha256": "4d112813f05f4d282c06d73ba04a7d372c8a6b08d07363af6504d8f579d4a169"
+  }
+}

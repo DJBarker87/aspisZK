@@ -1,0 +1,164 @@
+{
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "a9cfdfc0aeb91ccbe2e382784df6c6b4533dd07c7ed979f782069f784996729f",
+      "anchor": "pub fn try_reserve_exact(",
+      "body": "{\n        self.buf.try_reserve_exact(self.len, additional)\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "pub(crate) fn try_reserve_exact(",
+      "body": "{\n        \n        unsafe { self.inner.try_reserve_exact(len, additional, T::LAYOUT) }\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "unsafe fn try_reserve_exact(",
+      "body": "{\n        if self.needs_to_grow(len, additional, elem_layout) {\n            \n            unsafe {\n                self.grow_exact(len, additional, elem_layout)?;\n            }\n        }\n        unsafe {\n            \n            hint::assert_unchecked(!self.needs_to_grow(len, additional, elem_layout));\n        }\n        Ok(())\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "unsafe fn grow_exact(",
+      "body": "{\n        if elem_layout.size() == 0 {\n            \n            \n            return Err(CapacityOverflow.into());\n        }\n\n        let cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n\n        \n        let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n\n        \n        unsafe { self.set_ptr_and_cap(ptr, cap) };\n        Ok(())\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "fn needs_to_grow(",
+      "body": "{\n        additional > self.capacity(elem_layout.size()).wrapping_sub(len)\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "fn finish_grow(",
+      "body": "{\n        let new_layout = layout_array(cap, elem_layout)?;\n\n        let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n            \n            debug_assert!(old_layout.align() == new_layout.align());\n            unsafe {\n                \n                hint::assert_unchecked(old_layout.align() == new_layout.align());\n                self.alloc.grow(ptr, old_layout, new_layout)\n            }\n        } else {\n            self.alloc.allocate(new_layout)\n        };\n\n        \n        match memory {\n            Ok(memory) => Ok(memory),\n            Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n        }\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "unsafe fn set_ptr_and_cap(",
+      "body": "{\n        \n        \n        \n        self.ptr = Unique::from(ptr.cast());\n        self.cap = unsafe { Cap::new_unchecked(cap) };\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "anchor": "fn alloc_impl_runtime(",
+      "body": "{\n        match layout.size() {\n            0 => Ok(layout.dangling_ptr().cast_slice(0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(ptr.cast_slice(size))\n            },\n        }\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "anchor": "fn grow_impl_runtime(",
+      "body": "{\n        debug_assert!(\n            new_layout.size() >= old_layout.size(),\n            \"`new_layout.size()` must be greater than or equal to `old_layout.size()`\"\n        );\n\n        match old_layout.size() {\n            0 => self.alloc_impl(new_layout, zeroed),\n\n            \n            \n            old_size if old_layout.align() == new_layout.align() => unsafe {\n                let new_size = new_layout.size();\n\n                \n                hint::assert_unchecked(new_size >= old_layout.size());\n\n                let raw_ptr = realloc_nonnull(ptr, old_layout, new_size);\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                if zeroed {\n                    raw_ptr.add(old_size).write_bytes(0, new_size - old_size);\n                }\n                Ok(ptr.cast_slice(new_size))\n            },\n\n            \n            \n            \n            \n            \n            old_size => unsafe {\n                let new_ptr = self.alloc_impl(new_layout, zeroed)?;\n                ptr::copy_nonoverlapping(ptr.as_ptr(), new_ptr.as_mut_ptr(), old_size);\n                self.deallocate(ptr, old_layout);\n                Ok(new_ptr)\n            },\n        }\n    }",
+      "complete_tokens_match": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "anchor": "fn layout_array(",
+      "body": "{\n    \n    \n    debug_assert!(elem_layout.size() == elem_layout.pad_to_align().size());\n\n    elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())\n}",
+      "complete_tokens_match": true
+    }
+  ],
+  "emitted_calls": [
+    {
+      "line": 18339,
+      "context": "  let (r, salts) \u2190\n    alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (Array Std.U8\n      32#usize)) count\n  let r1 \u2190\n    core.result.Result.map_err"
+    },
+    {
+      "line": 19292,
+      "context": "  let (r, channels) \u2190\n    alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (alloc.vec.Vec\n      T)) 4#usize\n  let r1 \u2190\n    core.result.Result.map_err"
+    },
+    {
+      "line": 19743,
+      "context": "  let (r, words) \u2190\n    alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new\n      host_commitment.Word) i\n  let r1 \u2190\n    core.result.Result.map_err"
+    },
+    {
+      "line": 23687,
+      "context": "    let (r1, levels) \u2190\n      alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (alloc.vec.Vec\n        aspis_core.field.M31)) 9#usize\n    let r2 \u2190\n      core.result.Result.map_err"
+    }
+  ],
+  "emitted_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+  "scope": "Four emitted calls, each on Vec::new: Vec<[u8;32]>, Vec<Vec<T>> in generic encode, Vec<Word>, Vec<Vec<M31>>. The reference also handles valid general buffers and the zero-size overflow path using effective Vec::capacity.",
+  "source_order": "needs_to_grow; zero-size overflow; checked len+additional; checked repeated layout; allocate or same-align Global grow; map null/error to AllocError with requested layout; install pointer/capacity only after success; never change len or run element Drop.",
+  "allocation_world": "The raw allocator step is explicit and may change its private state even when returning null. Returning null preserves buffer/header/data. Counts and ordered allocator requests are retained. Successful realloc moves the old allocation bytes in memoryAfter, including uninitialized slots, and invalidates old allocation identity if moved.",
+  "differences": "Reference combines three ordered pure rejection tests into a disjunction after the no-growth test; source_reference proves harmlessness. Nat subtraction corresponds to wrapping_sub only for valid len<=capacity; same-type layouts share alignment, so Global grow fallback for changed alignment is unreachable. New allocations are nonzero sized. zeroed=false, so no zero-fill branch is taken.",
+  "retained": "No theorem about libc internals, arbitrary allocator nonreturn, deployed binary, or side-channel equivalence. These remain P and are not new T fields. Finite native validation recorded separately.",
+  "layout": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+    "sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+    "bodies": [
+      {
+        "anchor": "pub const fn repeat_packed(",
+        "body": "{\n        if let Some(size) = self.size.checked_mul(n) {\n            \n            Layout::from_size_alignment(size, self.align)\n        } else {\n            Err(LayoutError)\n        }\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "fn max_size_for_alignment(",
+        "body": "{\n        \n\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n\n        \n        \n        unsafe { unchecked_sub(isize::MAX as usize + 1, alignment.as_usize()) }\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const fn is_size_alignment_valid(",
+        "body": "{\n        size <= Self::max_size_for_alignment(alignment)\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const fn from_size_alignment(",
+        "body": "{\n        if Layout::is_size_alignment_valid(size, alignment) {\n            \n            Ok(Layout { size, align: alignment })\n        } else {\n            Err(LayoutError)\n        }\n    }",
+        "complete_tokens_match": true
+      }
+    ]
+  },
+  "symbolic_differences": "PV_FXM_ReserveLayout.aligned_limit proves padded alignment guard equivalence; product_error combines checked-mul overflow with the smaller byte bound; wrapped_available proves valid-buffer wrapping subtraction equals Nat subtraction; same_alignment excludes Global changed-alignment fallback.",
+  "physical_boundary": "World.memory is a logical allocation snapshot, whose validity is governed by live. PV_FXM_Physical retains actual raw bytes and arbitrary allocator-accessible external effects inside Runtime. No preservation of physical freed storage is claimed.",
+  "thin_allocator_wrappers": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+    "sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+    "bodies": [
+      {
+        "anchor": "fn allocate(&self, layout: Layout)",
+        "body": "{\n        self.alloc_impl(layout, false)\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "unsafe fn grow(",
+        "body": "{\n        \n        unsafe { self.grow_impl(ptr, old_layout, new_layout, false) }\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const fn alloc_impl(",
+        "body": "{\n        core::intrinsics::const_eval_select(\n            (layout, zeroed),\n            Global::alloc_impl_const,\n            Global::alloc_impl_runtime,\n        )\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const unsafe fn grow_impl(",
+        "body": "{\n        core::intrinsics::const_eval_select(\n            (self, ptr, old_layout, new_layout, zeroed),\n            Global::grow_shrink_impl_const,\n            Global::grow_impl_runtime,\n        )\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "pub unsafe fn dealloc(",
+        "body": "{\n    unsafe { dealloc_nonnull(NonNull::new_unchecked(ptr), layout) }\n}",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "unsafe fn dealloc_nonnull(",
+        "body": "{\n    unsafe { __rust_dealloc(ptr, layout.size(), layout.alignment()) }\n}",
+        "complete_tokens_match": true
+      }
+    ]
+  },
+  "wrapper_binding": "Global allocate/grow pass zeroed=false and runtime const_eval_select selects the runtime bodies in this non-const call. The dealloc reference wraps the same valid nonnull pointer and forwards the same Layout to dealloc_nonnull. Pointer wrapping/unwrapping is representation identity on valid owned allocations; both sides reach the identical deallocation primitive. No generic invalid-pointer or const-execution law is claimed."
+}

@@ -1,0 +1,65 @@
+reservation: populated 15 GiB + 8 GiB; window=0 (London 1912); env=J
+'R1Z.PV_RDB1_ResumeReplay.V183.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:56:45: error: Type mismatch
+  @complete
+has type
+  ∀ {T P F : Type} (p : NonNull T P) (b : PV_RDB1_V184_PopWorld.Buffer T) (w : PV_RDB1_V184_PopWorld.World)
+    (memory : PV_RDB1_V184_MoveMemory.Memory) (frame : F) (width : ℕ),
+    ∃ o,
+      deployed p b w memory frame = ok (historicalCast p, o) ∧
+        PV_RDB1_V184_MoveWorld.referenceWorld b w memory frame width = ok o ∧
+          o.returned = (↑b.value).getLast? ∧
+            ↑o.remaining = (↑b.value).dropLast ∧
+              o.buffer = b.address ∧ o.capacity = b.capacity ∧ o.world = w ∧ o.memory = memory ∧ o.frame = frame
+but is expected to have type
+  ∃ o,
+    deployed p b w memory frame = ok (historicalCast p, o) ∧
+      PV_RDB1_V184_MoveWorld.referenceWorld b w memory frame width = ok o ∧
+        o.returned = (↑b.value).getLast? ∧
+          ↑o.remaining = (↑b.value).dropLast ∧
+            o.buffer = b.address ∧ o.capacity = b.capacity ∧ o.world = w ∧ o.memory = memory ∧ o.frame = frame
+'R1Z.PV_RDB1_ResumeReplay.V184.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:63:51: error: Type mismatch
+  @complete
+has type
+  ∀ {α : Type} (newCall : Result α), defaultCall newCall = referenceCall newCall
+but is expected to have type
+  defaultCall newCall = referenceCall newCall
+'R1Z.PV_RDB1_ResumeReplay.V186.checked' depends on axioms: [sorryAx]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:70:80: error: Type mismatch
+  @complete
+has type
+  ∀ {T W : Type} (N : Usize) (v : alloc.vec.Vec T) (w : W) (finish : W → Result W),
+    reference N v w finish = deployed N v w finish
+but is expected to have type
+  reference N v w finish = deployed N v w finish
+'R1Z.PV_RDB1_ResumeReplay.V187.checked' depends on axioms: [propext, sorryAx]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:78:43: error: Type mismatch
+  @complete
+has type
+  ∀ {W : Type} (limbs : Std.Array U32 8#usize) (world : W),
+    ok (nativeBytes limbs, world) = ok ((chunks limbs).flatten, world)
+but is expected to have type
+  ok (nativeBytes limbs, world) = ok ((chunks limbs).flatten, world)
+'R1Z.PV_RDB1_ResumeReplay.V195.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:86:46: error: Type mismatch
+  source_complete
+has type
+  ∀ (a b c d : U32) (out : List U8), native a b c d out = write a b c d out
+but is expected to have type
+  native a b c d out = write a b c d out
+'R1Z.PV_RDB1_ResumeReplay.V198.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_ResumeReplay.lean:95:68: error: Type mismatch
+  @complete
+has type
+  ∀ {X A Q : Type} (initial : Four X → Result (Four A)) (add : A → X → Result A) (finish : Four A → Result Q)
+    (p : Std.Array (Four X) 28#usize), source initial add finish p = reference initial add finish p
+but is expected to have type
+  source initial add finish p = reference initial add finish p
+'R1Z.PV_RDB1_ResumeReplay.V219.checked' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.08
+	Maximum resident set size (kbytes): 2626400
+	Swaps: 0
+	Exit status: 1

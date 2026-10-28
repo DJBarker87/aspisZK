@@ -1,0 +1,1204 @@
+Existing unlaunched source freeze matches
+o_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.04s
+Thread 0: Checking harness checks::string_ascii8_negative...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 507 failed
+Failed Checks: assertion failed: path.as_os_str().as_bytes() != reference::borrow_bytes(owned.as_bytes())
+ File: "lib.rs", line 173, in checks::string_ascii8_negative
+
+VERIFICATION:- FAILED
+Verification Time: 76.84494s
+
+Manual Harness Summary:
+Verification failed for - checks::string_ascii8_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "1:22.28", "peak_rss_kib": "1937384", "swap": "0"}
+UNCHARGED admission refusal; wait three minutes and use next unused Lean ID
+a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.27s
+Thread 1: Checking harness checks::string_scalar...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 0 of 440 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 118.65247s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+{"exit": 0, "wall": "2:03.41", "peak_rss_kib": "1792392", "swap": "0"}
+_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.45s
+Thread 0: Checking harness checks::string_scalar_negative...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 436 failed
+Failed Checks: assertion failed: path.as_os_str().as_bytes() != reference::borrow_bytes(owned.as_bytes())
+ File: "lib.rs", line 202, in checks::string_scalar_negative
+
+VERIFICATION:- FAILED
+Verification Time: 1.3569522s
+
+Manual Harness Summary:
+Verification failed for - checks::string_scalar_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "0:07.41", "peak_rss_kib": "295760", "swap": "0"}
+UNCHARGED admission refusal; wait three minutes and use next unused Lean ID
+e a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.89s
+Thread 2: Checking harness checks::push_ascii1...
+Thread 2: 
+VERIFICATION RESULT:
+ ** 0 of 423 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 101.53741s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+{"exit": 0, "wall": "1:44.32", "peak_rss_kib": "2788348", "swap": "0"}
+help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.18s
+Thread 0: Checking harness checks::push_ascii1_negative...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 420 failed
+Failed Checks: assertion failed: actual.as_bytes() != &[a,b]
+ File: "lib.rs", line 239, in checks::push_ascii1_negative
+
+VERIFICATION:- FAILED
+Verification Time: 0.6699242s
+
+Manual Harness Summary:
+Verification failed for - checks::push_ascii1_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "0:03.87", "peak_rss_kib": "241732", "swap": "0"}
+oc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: function `KMX_to_vec` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.03s
+Thread 0: Checking harness join_split::join_one_byte...
+
+{"exit": 124, "wall": "15:00.67", "peak_rss_kib": "15472", "swap": "0"}
+_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.41s
+Thread 0: Checking harness join_split::join_one_byte_negative...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 1536 failed
+Failed Checks: assertion failed: native.as_os_str().as_bytes().get(i) != reference.get(i)
+ File: "lib.rs", line 242, in join_split::join_one_byte_negative
+
+VERIFICATION:- FAILED
+Verification Time: 3.4525337s
+
+Manual Harness Summary:
+Verification failed for - join_split::join_one_byte_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "0:11.76", "peak_rss_kib": "353088", "swap": "0"}
+ake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.27s
+Thread 0: Checking harness split_checks::string_path...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 506 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 7.7338476s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+{"exit": 0, "wall": "0:11.47", "peak_rss_kib": "248096", "swap": "0"}
+UNCHARGED admission refusal; wait three minutes and use next unused Lean ID
+UNCHARGED admission refusal; wait three minutes and use next unused Lean ID
+UNCHARGED admission refusal; wait three minutes and use next unused Lean ID
+x_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.66s
+Thread 0: Checking harness split_checks::string_path_negative...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 1 of 506 failed
+Failed Checks: assertion failed: path.as_os_str().as_bytes().get(i) != s.as_bytes().get(i)
+ File: "lib.rs", line 145, in split_checks::string_path_negative
+
+VERIFICATION:- FAILED
+Verification Time: 6.228215s
+
+Manual Harness Summary:
+Verification failed for - split_checks::string_path_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "0:11.02", "peak_rss_kib": "247516", "swap": "0"}
+nake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.60s
+Thread 0: Checking harness split_checks::string_push...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 517 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 248.0011s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+{"exit": 0, "wall": "4:12.00", "peak_rss_kib": "3180168", "swap": "0"}
+ snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: module `KMX_checks` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:36:5
+   |
+36 | mod KMX_checks{
+   |     ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_checks`
+
+warning: function `KMX_slice_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:40:4
+   |
+40 | fn KMX_slice_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.copy_from_slice(&src);let k:usize=kani::any();kani::as...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_correct`
+
+warning: function `KMX_slice_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:43:4
+   |
+43 | fn KMX_slice_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_slice_wrong`
+
+warning: function `KMX_ptr_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:46:4
+   |
+46 | fn KMX_ptr_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mu...
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_correct`
+
+warning: function `KMX_ptr_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:49:4
+   |
+49 | fn KMX_ptr_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as...
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_ptr_wrong`
+
+warning: function `KMX_clone_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:52:4
+   |
+52 | fn KMX_clone_correct(){let src:[u32;16]=kani::any();let mut dst=[0u32;16];dst.clone_from_slice(&src);let k:usize=kani::any();kani::a...
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_correct`
+
+warning: function `KMX_clone_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:55:4
+   |
+55 | fn KMX_clone_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];dst.clone_from_slice(&src);assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_wrong`
+
+warning: function `KMX_extend_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:58:4
+   |
+58 | fn KMX_extend_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);let k:usize=kani...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_correct`
+
+warning: function `KMX_extend_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:61:4
+   |
+61 | fn KMX_extend_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.03s
+Thread 1: Checking harness split_checks::string_push_negative...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 1 of 515 failed
+Failed Checks: assertion failed: s.as_bytes().get(i).copied() != expected
+ File: "lib.rs", line 194, in split_checks::string_push_negative
+
+VERIFICATION:- FAILED
+Verification Time: 17.596321s
+
+Manual Harness Summary:
+Verification failed for - split_checks::string_push_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+{"exit": 1, "wall": "0:21.00", "peak_rss_kib": "375420", "swap": "0"}

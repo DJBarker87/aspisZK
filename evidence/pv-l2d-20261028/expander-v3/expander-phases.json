@@ -1,0 +1,78 @@
+[
+  {
+    "phase": "rustc-version",
+    "command": [
+      "/home/dombarker/.cargo/bin/rustup",
+      "run",
+      "1.94.1",
+      "rustc",
+      "--version",
+      "--verbose"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.01469118008390069
+  },
+  {
+    "phase": "expander-lock",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "generate-lockfile",
+      "--offline"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.0381957070203498
+  },
+  {
+    "phase": "expander-metadata",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "metadata",
+      "--offline",
+      "--locked",
+      "--format-version",
+      "1"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.0557461449643597
+  },
+  {
+    "phase": "expander-build",
+    "command": [
+      "/home/dombarker/.cargo/bin/cargo",
+      "+1.94.1",
+      "build",
+      "--release",
+      "--offline",
+      "--locked",
+      "-j",
+      "4"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 3.043058492941782
+  },
+  {
+    "phase": "expander-positive",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-l2d-20261028/expander-target/release/pv-l2d-expander-native"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "wall_seconds": 0.004201488918624818
+  },
+  {
+    "phase": "expander-negative",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-l2d-20261028/expander-target/release/pv-l2d-expander-native",
+      "negative"
+    ],
+    "exit": 101,
+    "expected": 101,
+    "wall_seconds": 0.004214852931909263
+  }
+]

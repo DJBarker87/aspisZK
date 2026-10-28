@@ -1,0 +1,51 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/reached-source-audit/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/reached-source-audit/time.log",
+    "python3",
+    "-c",
+    "\"\"\"Fresh installed-source pins for every attributed reached library body.\nUnresolved symbols stay unresolved; hashes are not semantic proofs.\n\"\"\"\nfrom pathlib import Path\nimport json,lzma,hashlib\nD=Path('/home/dombarker/project-offloads/codex-pv-rdb1-20261028');F=D.parent/'codex-pv-fscan-20261028'\nrows=json.loads((D/'prior-rows.json').read_text());functions=json.loads(lzma.decompress((F/'classify-functions.json.xz').read_bytes()))\nS=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust')\nrecords=[];mismatches=[]\nfor row in rows:\n result=[]\n for item in row['reached_source_inventory']:\n  fn=item['function'];detail=functions.get(fn,{})\n  deps=detail.get('candidates',{}).get('deployed',[])\n  checks=[]\n  for pin in deps:\n   key=pin['key']\n   if not key.startswith('deployed/library/'):continue\n   p=S/key[len('deployed/'):];h=hashlib.sha256(p.read_bytes()).hexdigest()\n   ok=h==pin['file_sha256'];check=dict(path=str(p),sha256=h,pinned=pin['file_sha256'],ok=ok,line=pin['line'],end_line=pin['end_line']);checks.append(check)\n   if not ok:mismatches.append(dict(row=row['id'],function=fn,check=check))\n  result.append(dict(function=fn,source_class=item['source_class'],installed_std_checks=checks,unresolved=not checks and not fn.startswith(('aspis_','zeroize::'))))\n records.append(dict(row=row['id'],reached=result,prior_residuals=row['residuals']))\nout=dict(toolchain='1.94.1',records=records,mismatches=mismatches,meaning='Fresh installed-file verification of attributed bodies only. No resolution of conservative edges and no semantic transfer from a file hash.')\n(D/'source-audit.json').write_text(json.dumps(out,indent=2));print('rows',len(rows),'attributed source checks',sum(len(y['installed_std_checks']) for x in records for y in x['reached']),'mismatches',len(mismatches));assert not mismatches,mismatches"
+  ],
+  "exit": 0,
+  "wall": "0:00.15",
+  "peak_rss_kib": "32228",
+  "swap": "0",
+  "source_revision": "e4208bb8b594431dba7f0fa186d71cab946e8371",
+  "expected_phase": "verify installed sources of attributed reached standard library bodies",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "command_sha256": "617732fec52bb013b844da86afe6f95160da0e47bf8ddb2de39de60a3efdfbd9"
+}

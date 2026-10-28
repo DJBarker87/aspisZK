@@ -1,0 +1,12 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_IndexLane226.lean:10:2: error: 'change' tactic failed, pattern
+  8 * (↑j % 4294967296) % 4294967296 = 8 * ↑j
+is not definitionally equal to target
+  ↑8#u32 * (↑j % 2 ^ UScalarTy.U32.numBits) % UScalar.size UScalarTy.U32 = 8 * ↑j
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_IndexLane226.lean:22:2: error: 'change' tactic failed, pattern
+  (v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 j))).bv.toNat % 256 =
+    BitVec.toNat v.bv.toLEBytes[↑j]
+is not definitionally equal to target
+  ↑(v.wrapping_shr (U32.wrapping_mul 8#u32 (UScalar.cast UScalarTy.U32 j))) % 2 ^ UScalarTy.U8.numBits =
+    ↑(↑(core.num.U64.to_le_bytes v))[↑j]
+'PV_B3P_IndexLane226.shift_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_IndexLane226.native_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

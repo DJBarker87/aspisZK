@@ -1,0 +1,38 @@
+{
+  "revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "classification": "structural (K-1 substitute), ordered digest field cut of account decoding",
+  "native_tree_sha256": "1b32061871f52a74ddbc2a9cdaa6a884ec6dd04b41fec55926631496506faa81",
+  "native_accounts_sha256": "1992026c00dbced3a0c475b6e2be0a72fae1a7e859dd041e741707384e727ba3",
+  "reference_main_sha256": "54c815b525ddaf59fc819ac11ea5185e0e9d662376838a48f99c4cb229196d1d",
+  "native_tree_field_loop_sha256": "067484d071cbfd7326802d66dc8111b3644d644e6e3b67291ea6f945276686bc",
+  "reference_tree_field_loop_sha256": "f1e1b8ff72d01c8ea405865074af096a20f2b689212e3fe2591c983021d1a044",
+  "field_order": "root 16..48 then frontier[level] at 48+32*level for every level 0..19, irrespective of active frontier bits",
+  "lane_region": "80-byte lane header then all 688 tree bytes",
+  "checkpoint_region": "80..112 global_root",
+  "complete_result_reference": "PV_L2C_DigestList.run (ordered decoder calls, first error and all successful outputs retained)",
+  "laws": [
+    "PV_L2C_DigestRange.digest_success",
+    "PV_L2C_DigestList.success",
+    "PV_L2C_DigestList.field",
+    "PV_L2C_AccountLayout.bounds",
+    "PV_L2C_AccountLayout.frontier_offset",
+    "PV_L2C_AccountLayout.lane_bounds",
+    "PV_L2C_AccountLayout.frontier"
+  ],
+  "differences": [
+    "The field cut begins after the native fixed-length/header checks; those may reject before the cut.",
+    "The owned native comparison returns (root,frontier); native returns these identical fields alongside next_leaf_index.",
+    "Lean records the ordered successful digest fields in a list; success proves length and same-position lookup, with root at 0 and frontier[j] at j+1.",
+    "Native maps the fixed-array digest error to NonCanonicalDigest; the reference retains the underlying digest error. This changes only the error enum name at this cut, not which field rejects or its order.",
+    "After parsing, from_parts validates by immutable borrow and returns the same inner tree, and into_inner returns that tree unchanged. Additional semantic/account checks may reject; no additional successful raw field constructor appears."
+  ],
+  "D188": "No account-codec Aeneas mutable-iterator emission is credited. The native field loop is checked directly against the owned native comparison, and the list reference law supplies the ordered range invariant.",
+  "scope": "successful raw digest-field provenance only, not all account-error equality or a deployed observation theorem",
+  "Kani": "none",
+  "frozen_empty_roots_source_sha256": "c0c7542f8102d6d7fb3fc1c8a968789749079dc2e9029fd88091129d4a469867",
+  "native_differential": {
+    "receipt": "evidence/pv-l2c-20261028/resume-d371/account-probe4/receipt.json",
+    "receipt_sha256": "95c93bdd41ec361b4b34225e57a235e20395e4b95b7f7bd4019b228df59ec1e5",
+    "label": "finite native validation: four successful lane field comparisons, four checkpoint roundtrips, 704 raw-P field rejections"
+  }
+}

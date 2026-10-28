@@ -1,0 +1,53 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/project-wide/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/project-wide/time.log",
+    "python3",
+    "-c",
+    "\"\"\"Original finite fixtures rebound to frozen source paths, deployed graph and rustc.\nAll additional helpers/tests live outside crates/ and programs/.\n\"\"\"\nfrom pathlib import Path\nimport json,subprocess,sys,os,hashlib,ast,shutil\nF=Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028');D=Path('/home/dombarker/project-offloads/codex-pv-rdb1-20261028');S=F/'src';suite=sys.argv[1];O=D/('classify-project-'+suite);O.mkdir(exist_ok=True);P=D/'classification-project-fixture';P.mkdir(exist_ok=True)\nbundle=json.loads((F/'project-native-inputs.json').read_text());records=[]\ndef input_file(key):\n v=bundle[key];records.append(dict(path=key,sha256=v['sha256']));return v['text']\nif suite=='wide':\n bridge=input_file('tools/pv-relink-20261028/v195-bridge.rs')\n raw=(S/'crates/aspis-core/src/field/wide_exact.rs').read_bytes();(P/'wide_shadow.rs').write_bytes(raw+b'\\n'+bridge.encode());records.append(dict(path='crates/aspis-core/src/field/wide_exact.rs',original_sha256=hashlib.sha256(raw).hexdigest(),prefix_identical=True,shadow='wide_shadow.rs',reason='original arbitrary raw-limb constructor requires private fields; same original prefix+helper route, outside crates'))\n # The only private pure super helper is copied verbatim from the frozen source.\n field=(S/'crates/aspis-core/src/field.rs').read_text();a=field.index('fn mul_by_r(');b=field.index('{',a);end=b+1;depth=1\n while depth:\n  depth+=(field[end]=='{')-(field[end]=='}');end+=1\n helper=field[a:end];records.append(dict(path='crates/aspis-core/src/field.rs::mul_by_r',sha256=hashlib.sha256(helper.encode()).hexdigest(),body=helper))\n fixture=input_file('tools/pv-relink-20261028/v195.rs').replace('use aspis_core::field::pv_rl_bytes as native_and_reference;','use wide_shadow::pv_rl_checks::native_and_reference;')\n source='pub use aspis_core::field::{M31,CM31,P,QM31,ct};\\n'+helper+'\\nmod wide_shadow;\\npub mod field {pub use crate::wide_shadow::WideExact;}\\n'+fixture;test=False\nelif suite=='circle':\n source=input_file('tools/pv-alib-20261027/sampler-owned-reference.rs');old='../../codex-pv-cblib-20261027/source/crates/aspis-r1-cost-probe/src/sampler.rs';source=source.replace(old,str(S/'crates/aspis-r1-cost-probe/src/sampler.rs'));test=True\nelif suite=='sampler':\n source=input_file('tools/pv-batch2-20261027/sampler-native-batch2e.rs').replace('/home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/src/',str(S)+'/');test=False\nelif suite=='weights':\n script=input_file('tools/pv-batch2-20261027/rowcheck-batch2c.py');tree=ast.parse(script);testcode=next(ast.literal_eval(n.value) for n in tree.body if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='test' for t in n.targets));raw=(S/'crates/aspis-r1-cost-probe/src/host_weights.rs').read_bytes()\n (P/'host_weights_with_tests.rs').write_bytes(raw+testcode.encode());records.append(dict(path='crates/aspis-r1-cost-probe/src/host_weights.rs',original_sha256=hashlib.sha256(raw).hexdigest(),shadow_sha256=hashlib.sha256(raw+testcode.encode()).hexdigest(),prefix_identical=True))\n source='extern crate alloc;\\npub use aspis_r1_cost_probe::{weights,transport,verifier};\\n#[path=\"'+str(S/'crates/aspis-r1-cost-probe/src/prover_powers.rs')+'\"] pub mod prover_powers;\\nmod host_weights_with_tests;\\n';test=True\nelif suite=='rows':\n source=input_file('tools/pv-b3p6-20261028/lib.rs');test=True\n source=source.replace('pub mod reference226;','').replace('#[cfg(any(kani, test))]\\nmod native226;','')\n for name in ['reference133.rs','owned133.rs']:(P/name).write_text(input_file('tools/pv-b3p6-20261028/'+name))\nelif suite=='bytes':\n source=input_file('tools/pv-fscan-20261028/classify-bytes-fixture.rs');test=False\nelif suite in ['arithmetic','multilinear']:\n key={'arithmetic':'evidence/pv-batch3-20261027/fidelity/main.rs','multilinear':'evidence/pv-batch3-20261027/fidelity222-native/main.rs'}[suite];source=input_file(key);test=False\nelif suite=='sum':\n source=input_file('evidence/pv-op254-20261027/native/main.rs');test=False\n for key in bundle:\n  if key.startswith('evidence/pv-op254-20261027/native/') and not key.endswith('/main.rs'):(P/Path(key).name).write_text(input_file(key))\nelif suite=='leaves':\n source=input_file('tools/pv-fscan-20261028/classify-leaf-fixture.rs');test=False\n for name,key in [('compress','tools/pv-cb-20261026/step-proof/owned_compress.rs'),('boundary','tools/pv-cb3-20261026/reference_p6.rs'),('polynomial','tools/pv-cb3-20261026/reference_polynomial.rs')]:\n  (P/(name+'.rs')).write_text(input_file(key))\nelse:raise ValueError(suite)\n(P/'fixture.rs').write_text(source)\nmanifest='''[package]\\nname=\"pv-fscan-deployed-project-fixture\"\\nversion=\"0.0.0\"\\nedition=\"2021\"\\n[workspace]\\n[dependencies]\\n'''\nfeatures={'aspis-prover':['ct-host-prover','insecure-spend-fixture','prover','r0'],'aspis-core':['ct-host-prover','r0'],'aspis-statement':['r0','pool-v1-kernel'],'aspis-r1-cost-probe':['ct-host-prover','default','private-leaf-salts','prover','r1p-check']}\nfor pkg,feats in features.items():manifest+=pkg+'={path=\"'+str(S/'crates'/pkg)+'\",features='+json.dumps(feats)+'}\\n'\nmanifest+='zeroize={version=\"=1.9.0\",features=[\"alloc\",\"zeroize_derive\"]}\\ngeneric-array={version=\"=0.14.7\",features=[\"more_lengths\",\"zeroize\"]}\\ntypenum={version=\"=1.20.1\",features=[\"const-generics\"]}\\ndigest={version=\"=0.10.7\",features=[\"alloc\",\"const-oid\",\"core-api\",\"mac\",\"oid\",\"std\"]}\\ncrypto-common={version=\"=0.1.7\",features=[\"getrandom\",\"rand_core\",\"std\"]}\\nsubtle={version=\"=2.6.1\",features=[\"i128\",\"std\"]}\\n'\nmanifest+=('[lib]\\n' if test else '[[bin]]\\nname=\"fixture\"\\n')+'path=\"fixture.rs\"\\n[profile.release]\\noverflow-checks=false\\ndebug-assertions=false\\n'\nmanifest+='[features]\\ndefault=[\"ct-host-prover\"]\\nct-host-prover=[]\\n'\n(P/'Cargo.toml').write_text(manifest);(O/'Cargo.toml.txt').write_text(manifest);(O/'fixture.rs.txt').write_text(source)\nenv=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN='1.94.1',CARGO_TARGET_DIR=str(D/'classification-target'),CARGO_BUILD_JOBS='4')\ncmd=['cargo','test' if test else 'run','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','-j','4']\nif test:cmd+=['--lib','--','--nocapture','--test-threads=1']\nmeta=subprocess.run(['cargo','metadata','--manifest-path',str(P/'Cargo.toml'),'--format-version','1'],env=env,capture_output=True,text=True);(O/'metadata.json').write_text(meta.stdout)\nif meta.returncode:print(meta.stderr);sys.exit(meta.returncode)\nm=json.loads(meta.stdout);nodes={p['id']:p for p in m['resolve']['nodes']};resolved=[dict(id=p['id'],name=p['name'],version=p['version'],features=nodes[p['id']]['features']) for p in m['packages']]\nfor pkg,want in features.items():\n actual=next(p['features'] for p in resolved if p['name']==pkg);assert sorted(actual)==sorted(want),(pkg,actual,want)\n(O/'inputs.json').write_text(json.dumps(dict(command=cmd,env={k:v for k,v in env.items() if k.startswith(('RUST','CARGO'))},features=resolved,input_pins=records,profile='release opt3 debug_assertions=false overflow_checks=false panic=unwind',source_prefixes='No original source body modified; only external fixture path/import rebinding and same original tests appended to a shadow module outside crates/',expected_time='optimized compilation then '+suite+' finite differential; no proof aggregation/elimination'),indent=2))\nprint('expected time: optimized compilation then '+suite+' finite validation, no elimination',flush=True);r=subprocess.run(cmd,env=env);sys.exit(r.returncode)",
+    "wide"
+  ],
+  "exit": 0,
+  "wall": "0:00.25",
+  "peak_rss_kib": "131064",
+  "swap": "0",
+  "source_revision": "e4208bb8b594431dba7f0fa186d71cab946e8371",
+  "expected_phase": "optimized compilation then WideExact serializer finite differential",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "actual_fixture_configuration": "../classify-project-wide/inputs.json",
+  "command_sha256": "f3cfad81140640baf168524afe86983c22df1c8fde8f9c88c13c711d51996ad3"
+}

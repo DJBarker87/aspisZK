@@ -1,0 +1,332 @@
+{
+  "N2": [
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "sample_mask_h1_padding",
+      "line": 571,
+      "body": "fn sample_mask_h1_padding(expander:&mut SeedExpander,inactive:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<Vec<QM31>,StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    let mut values=vec![QM31::ZERO;STATE_ONLY_POSEIDON_TRACE_ROWS];let mut row=0;\n    while row<rows {\n        if !active[row] && row!=inactive {values[row]=expander.qm31()?;}\n        row+=1;\n    }\n    balance_qm31_copy_inactive(&mut values,inactive,active)?;\n    Ok(values)\n}",
+      "body_sha256": "74d96a9ef026f381e9e385ad82a901e0ae3c7ea69d9af73486b4f5a4dae05b61"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "sum_qm31_copy_inactive",
+      "line": 235,
+      "body": "fn sum_qm31_copy_inactive(table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->QM31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n    let mut sum=QM31::ZERO;\n    let mut row=0;\n    while row<rows {\n        sum=inactive_qm31_step(sum,table,dependent,active,row);\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "b194357b35594207687cfe6a9f3f16eae52dc70595ccff9a3029448182a9ef8d"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "inactive_qm31_step",
+      "line": 252,
+      "body": "fn inactive_qm31_step(sum:QM31,table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->QM31 {\n    if !active[row] && row!=dependent {sum.add(table[row])} else {sum}\n}",
+      "body_sha256": "eea0f9cb340eaed1875bfcc739785ae2035cf1e1052f3dfd5593a076182f805b"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "state_only_copy_inactive_sum_qm31",
+      "line": 256,
+      "body": "fn state_only_copy_inactive_sum_qm31(table: &[QM31]) -> Option<QM31> {\n    (table.len() == STATE_ONLY_POSEIDON_TRACE_ROWS).then(|| {\n        let active = copy_active_rows();\n        table\n            .iter()\n            .copied()\n            .enumerate()\n            .filter(|(row, _)| !active[*row])\n            .fold(QM31::ZERO, |sum, (_, value)| sum.add(value))\n    })\n}",
+      "body_sha256": "d6727da9bb52c4cc6b9084353e1a428a15fcd7a58461fabff1c303f5332e1ced"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "state_only_copy_inactive_sum_m31",
+      "line": 268,
+      "body": "fn state_only_copy_inactive_sum_m31(table: &[M31]) -> Option<M31> {\n    (table.len() == STATE_ONLY_POSEIDON_TRACE_ROWS).then(|| {\n        let active = copy_active_rows();\n        table\n            .iter()\n            .copied()\n            .enumerate()\n            .filter(|(row, _)| !active[*row])\n            .fold(M31::ZERO, |sum, (_, value)| sum.add(value))\n    })\n}",
+      "body_sha256": "a857bd8ace5052e38c1d17326f6b0cdd06303dfd77d8ffa19a863b3768ba78a2"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "balance_qm31_copy_inactive",
+      "line": 208,
+      "body": "fn balance_qm31_copy_inactive(\n    table: &mut [QM31],\n    dependent: usize,\n    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],\n) -> Result<(), StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {\n        return Err(StateOnlyMaskBuildError::TraceShape);\n    }\n    let sum=sum_qm31_copy_inactive(table,dependent,active);\n    let value=QM31::ZERO.sub(sum);\n    table[dependent]=value;\n    Ok(())\n}",
+      "body_sha256": "0a886d7c56ce2cd41dd14746ac83661c147ff6838519f3e00f5dbc5b759180d4"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "apply_h1_padding_mask_for_active",
+      "line": 305,
+      "body": "fn apply_h1_padding_mask_for_active(\n    h1: &mut [QM31],\n    padding: &[QM31],\n    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],\n) -> Result<(), StateOnlyMaskBuildError> {\n    if h1.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS || padding.len()!=STATE_ONLY_POSEIDON_TRACE_ROWS {\n        return Err(StateOnlyMaskBuildError::TraceShape);\n    }\n    check_h1_padding_active(padding,active)?;\n    if h1_padding_inactive_sum(padding,active)!=QM31::ZERO {return Err(StateOnlyMaskBuildError::TraceShape);}\n    add_h1_padding(h1,padding);\n    Ok(())\n}",
+      "body_sha256": "447afb27a939dd6300a7bcfe5798ec417e5b9f8798645f018ad51d9d401f6ea6"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "check_h1_padding_active",
+      "line": 318,
+      "body": "fn check_h1_padding_active(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->Result<(),StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    let mut row=0;\n    while row<rows {\n        if active[row] && padding[row]!=QM31::ZERO {return Err(StateOnlyMaskBuildError::TraceShape);}\n        row+=1;\n    }\n    Ok(())\n}",
+      "body_sha256": "9a0f7c9529bc4d3eac984b5c682113db99742dd07e6b428a1bf0a1edc34d55b7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "h1_padding_inactive_sum",
+      "line": 328,
+      "body": "fn h1_padding_inactive_sum(padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->QM31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    let mut sum=QM31::ZERO;let mut row=0;\n    while row<rows {\n        sum=h1_padding_inactive_step(sum,padding,active,row);\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "989c604ec0a9b3cb5b8900df96efc205b51dc9f3f6980c5edc42f12a0e050078"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "h1_padding_inactive_step",
+      "line": 339,
+      "body": "fn h1_padding_inactive_step(sum:QM31,padding:&[QM31],active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->QM31 {\n    if active[row] {sum} else {sum.add(padding[row])}\n}",
+      "body_sha256": "7a8e894df5ae23cda9528441cab6be4b97bff31f365299d2c792602568f19fe5"
+    }
+  ],
+  "N3": [
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
+      "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "function": "subtract_p",
+      "line": 7,
+      "body": "fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "body_sha256": "8a7a2a6c878237a407e21281bd93e4b4b3bb7c98c4e8852c1612d646041ddf62"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
+      "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "function": "add",
+      "line": 26,
+      "body": "fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "body_sha256": "c384253eae20c5a08703993470394255bfe1968a22d522653f7b3b6e65e757ce"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "218733bfcb7c87aa3279d62e2c22a448f66dcdd4",
+      "file_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "function": "sub",
+      "line": 30,
+      "body": "fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "body_sha256": "dca88dae62ae5d1440941c22917c300b0a54170da747a72932b1eaba58bca39d"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
+      "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+      "function": "check_semantic_columns",
+      "line": 147,
+      "body": "fn check_semantic_columns(c1:&[Vec<M31>;26],d:&[QM31;1024],g:&[QM31;1024])->Result<(),Error> {\n    check_base_columns(c1)?;\n    check_secure_column(d)?;\n    check_secure_column(g)\n}",
+      "body_sha256": "44d7685280b74f52402af7a9c8b0f947bd5400762cc7d7fdbf3e48443f4f420d"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
+      "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+      "function": "check_base_columns",
+      "line": 152,
+      "body": "fn check_base_columns(c1:&[Vec<M31>;26])->Result<(),Error> {\n    let mut lane=0;\n    while lane<26 {check_base_column(&c1[lane])?;lane+=1;}\n    Ok(())\n}",
+      "body_sha256": "3c753b927014fe9bd4617bd13b18a8d7fa6bb0c7da27839b87f7d6440badbba2"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
+      "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+      "function": "check_base_column",
+      "line": 157,
+      "body": "fn check_base_column(column:&[M31])->Result<(),Error> {\n    if column.len()!=1024 {return Err(Error::Public);}\n    let mut row=0;\n    while row<1024 {\n        if column[row].0>=P {return Err(Error::Public);}\n        row+=1;\n    }\n    Ok(())\n}",
+      "body_sha256": "9e876694d3371a1ec139aca8d72db6db3d8e58570cabc016a2cb51a3a63e3546"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
+      "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+      "function": "check_secure_column",
+      "line": 166,
+      "body": "fn check_secure_column(column:&[QM31;1024])->Result<(),Error> {\n    let mut row=0;\n    while row<1024 {\n        let mut b=[0;16];\n        column[row].write_le_bytes(&mut b);\n        if QM31::from_le_bytes(&b).is_none() {return Err(Error::Public);}\n        row+=1;\n    }\n    Ok(())\n}",
+      "body_sha256": "969dd0aca4c593139c71a1d4edc08883adaad5b870ecee7e91ee9ed8abd53fe1"
+    }
+  ],
+  "N4": [
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "balance_m31_copy_inactive",
+      "line": 192,
+      "body": "fn balance_m31_copy_inactive(\n    table: &mut [M31],\n    dependent: usize,\n    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],\n) -> Result<(), StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {\n        return Err(StateOnlyMaskBuildError::TraceShape);\n    }\n    let sum=sum_m31_copy_inactive(table,dependent,active);\n    let value=M31::ZERO.sub(sum);\n    table[dependent]=value;\n    Ok(())\n}",
+      "body_sha256": "b6d3430676e20f5b42ad3958ec44d6cafb3ef6e67144edaabdf4020f21dd57e8"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "sum_m31_copy_inactive",
+      "line": 224,
+      "body": "fn sum_m31_copy_inactive(table:&[M31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->M31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n    let mut sum=M31::ZERO;\n    let mut row=0;\n    while row<rows {\n        sum=inactive_m31_step(sum,table,dependent,active,row);\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "74451196d690e566667abde5cc45fb2ebfa971695e5c9b7416ba6078a950d958"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "inactive_m31_step",
+      "line": 247,
+      "body": "fn inactive_m31_step(sum:M31,table:&[M31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->M31 {\n    if !active[row] && row!=dependent {sum.add(table[row])} else {sum}\n}",
+      "body_sha256": "11d6796ff4539882d1415fba34e4d7ca89e159f4bd2aa16a67adfc9718f03201"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "a28029436638920cc07b5f4acf42cd5bef9171ee",
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "function": "balance_mask_column",
+      "line": 861,
+      "body": "fn balance_mask_column(mut columns:[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS],column:usize,dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->(Result<(),StateOnlyMaskBuildError>,[Vec<M31>;STATE_ONLY_HIDING_C1_COLUMNS]) {\n    let mut values=core::mem::take(&mut columns[column]);\n    let result=balance_m31_copy_inactive(&mut values,dependent,active);\n    columns[column]=values;\n    (result,columns)\n}",
+      "body_sha256": "449bf3c8191ac3c46c96f2d59aa548e5357e7b1556042c4776076c07b7de9a27"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
+      "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
+      "function": "audit_masks",
+      "line": 227,
+      "body": "fn audit_masks(c1:&[Vec<M31>],mask_only:&[Vec<M31>;10],d:&[K;1024],g:&[K;1024],h1_padding:&[K;1024],masks:&[u16;64])->MaskedFixtureAudit {\n    let mut c1_columns_inactive_balanced=0;\n    let mut column=0;\n    while column<c1.len() {\n        if inactive_sum_m31(&c1[column],masks)==M31::ZERO {c1_columns_inactive_balanced+=1;}\n        column+=1;\n    }\n    let mut mask_only_columns_inactive_balanced=0;\n    column=0;\n    while column<10 {\n        if inactive_sum_m31(&mask_only[column],masks)==M31::ZERO {mask_only_columns_inactive_balanced+=1;}\n        column+=1;\n    }\n    MaskedFixtureAudit{\n        c1_columns_inactive_balanced,\n        mask_only_columns_inactive_balanced,\n        d_inactive_balanced:inactive_sum_k(d,masks)==K::ZERO,\n        g_inactive_balanced:inactive_sum_k(g,masks)==K::ZERO,\n        h1_padding_inactive_balanced:inactive_sum_k(h1_padding,masks)==K::ZERO,\n        h1_total_balanced:true,\n    }\n\n}",
+      "body_sha256": "7538adebfe4e5eedec88f515edcc24518c191ef002fd02f55b0a8c7c32a59af4"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
+      "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
+      "function": "inactive_sum_m31",
+      "line": 122,
+      "body": "fn inactive_sum_m31(values:&[M31],masks:&[u16;64])->M31 {\n    let mut sum=M31::ZERO;\n    let mut row=0;\n    while row<values.len() {\n        if masks[row>>4]&(1<<(row&15))==0 {sum=sum.add(values[row]);}\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "cfb11fcfd09e64ffceb0aebd2a0a0e5247d464b57e1f7baa5f9ea8e6d5d937ce"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
+      "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
+      "function": "inactive_sum_k",
+      "line": 132,
+      "body": "fn inactive_sum_k(values:&[K],masks:&[u16;64])->K {\n    let mut sum=K::ZERO;\n    let mut row=0;\n    while row<values.len() {\n        if masks[row>>4]&(1<<(row&15))==0 {sum=sum.add(values[row]);}\n        row+=1;\n    }\n    sum\n}",
+      "body_sha256": "ae472fcc14797461e1b31fd00f7985e348818df36b54cb68fabd0c3a20c95ed0"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "bb75108e2a1690036fc57467a3474d20d69427b4",
+      "file_sha256": "f733b3a407fc152474ac01cbb472c01d81f611ab1b5c26a0d18df40f82e73611",
+      "function": "prove_masked_with_attempt",
+      "line": 181,
+      "body": "fn prove_masked_with_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    context:StateOnlyHidingContext,\n    binding:[u8;32],\n    attempt:StateOnlyAttemptSecrets,\n    nonce_store:&mut impl StateOnlyMaskNonceStore,\n)->Result<(Vec<u8>,MaskedFixtureAudit),Error> {\n    let (reserved,material)=attempt.reserve_and_build_pool_v1_pair_forest_mask_material_v1(hash,binding,context,nonce_store).map_err(mask_error)?;\n    #[cfg(all(test,feature=\"r1p-check\"))]\n    if test_hooks::forced_exhaustion(reserved.mask_nonce()) { return Err(mask_error(StateOnlyMaskBuildError::MaskSampleExhausted)); }\n    let mut noised_c1=compiled.semantic_c1.clone();\n    let applied=apply_pool_v1_pair_forest_mask_material_v1(&mut noised_c1,material).map_err(|_|Error::Semantic)?;\n    let masks=pool_v1_pair_forest_copy_active_row_masks_v1().map_err(|_|Error::Semantic)?;\n    let d: [K;1024]=reserved.derive_pool_v1_pair_forest_zero_factor_d(hash,context).map_err(mask_error)?.try_into().map_err(|_|Error::Semantic)?;\n    if applied.g.len()!=1024 || applied.h1_padding.len()!=1024 { return Err(Error::Semantic); }\n    let g=fixed_k_column(&applied.g);\n    let h1_padding=fixed_k_column(&applied.h1_padding);\n    let audit=audit_masks(&noised_c1.c1,&applied.mask_only_c1,&d,&g,&h1_padding,&masks);\n    if audit.c1_columns_inactive_balanced!=16\n        || audit.mask_only_columns_inactive_balanced!=10\n        || !audit.d_inactive_balanced\n        || !audit.g_inactive_balanced\n        || !audit.h1_padding_inactive_balanced\n    { return Err(Error::Semantic); }\n    let (c1_salts,c2_salts)=(Some(derive_private_salts(&reserved,context,hash,merkle::C1_TAG)?),Some(derive_private_salts(&reserved,context,hash,merkle::C2_TAG)?));\n    #[cfg(all(test,feature=\"r1p-check\"))]\n    test_hooks::observe_secrets(hash,reserved.mask_nonce(),&g,c1_salts.as_ref().unwrap().get(0));\n    let mut backend=Backend{hash,variant,domain:EncodingDomain::new().map_err(|_|Error::Allocation)?,messages:vec![[E::ZERO;1024];29],c1:None,c2:None,c1_salts,c2_salts};\n    let sem=crate::host_semantic::build_with_material(public,compiled,&noised_c1,&applied.mask_only_c1,&d,&g,&h1_padding,&mut backend,LegacyHashFn(hash),variant).map_err(semantic_error)?;\n    let h1_total_balanced=crate::prover_helper_sum::state_only_copy_helper_sum(&sem.columns[26])==Some(K::ZERO);\n    if !h1_total_balanced { return Err(Error::Semantic); }\n    let audit=MaskedFixtureAudit{h1_total_balanced,..audit};\n    let proof=prove_from_semantics(public,variant,hash,backend,sem,(&reserved,context))?;\n    Ok((proof,audit))\n}",
+      "body_sha256": "8647d908d3d418b188912712f39ba1391c0604c5d1c32ff0757f1ce2dd4810c0"
+    }
+  ],
+  "N5": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover_helper_sum.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "5d0cfaad17457a6c708228c318ad65ce7023ad9c",
+      "file_sha256": "b0ddcf3db5de6003459a042cafaff612259bdfc1c87db1581bb541af22003546",
+      "function": "state_only_copy_helper_sum",
+      "line": 3,
+      "body": "fn state_only_copy_helper_sum(h1: &[QM31]) -> Option<QM31> {\n    if h1.len() == TRACE_ROWS {\n        let mut sum = QM31::ZERO;\n        let mut i = 0usize;\n        while i < h1.len() { sum = sum.add(h1[i]); i += 1; }\n        Some(sum)\n    } else { None }\n}",
+      "body_sha256": "6ff30f40e41c0c0e32a6252210e6d2ab80eed5a0587ee17e7c666edf2735b934"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_semantic.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "2bc468959393074b3ef1f56016eaf5aef3da0f6e",
+      "file_sha256": "25b7b7d38b55e5a6e4eaee2b4a2a3fee7a29c155abec30eaf08583edfa0c8b12",
+      "function": "build_with_helper_mode",
+      "line": 51,
+      "body": "fn build_with_helper_mode<H: Digest32>(\n        public: Public<'_>,\n        c1: &[Vec<M31>; 26],\n        d: &[QM31; 1024],\n        g: &[QM31; 1024],\n        h1_padding: &[QM31; 1024],\n        helper: impl FnOnce(QM31, QM31) -> Result<Vec<QM31>, Error>,\n        commitments: &mut impl Commitments,\n        hash: H,\n        variant: crate::transport::Variant,\n    ) -> Result<BuiltSemantics<H>, Error> {\n        // Reject raw noncanonical constructors rather than normalize their\n        // commitment representation. D is supplied before any challenge.\n        check_semantic_columns(c1,d,g)?;\n        let c1_root=commitments.c1(c1,d)?;\n        let mut transcript = SemanticTranscript::new(hash, &crate::host_public::materialize_public_bytes(public).map_err(|_|Error::Public)?, &c1_root)?;\n        let mut bytes = c1_root.to_vec();\n        let lambda = semantic_row(0, &[], &mut transcript, &mut bytes)?;\n        let chi = semantic_row(1, &[], &mut transcript, &mut bytes)?;\n        let mut h1 = helper(lambda, chi)?;\n        aspis_prover::state_only_hiding::apply_pool_v1_pair_forest_h1_padding_mask_v1(\n            &mut h1,\n            h1_padding,\n        )\n        .map_err(|_| Error::Public)?;\n        if h1.len()!=1024 {return Err(Error::Public);}\n        if state_only_copy_helper_sum(&h1) != Some(QM31::ZERO) {\n            return Err(Error::Public);\n        }\n        let c2_root=commitments.c2(&h1,g)?;\n        let theta = semantic_row(2, &c2_root, &mut transcript, &mut bytes)?;\n        let zc=zc_rows(&mut transcript,&mut bytes)?;\n        let mu = semantic_row(13, &[], &mut transcript, &mut bytes)?;\n        let columns=lift_columns(c1,h1,g,d);\n        let dc=variant.coefficients(d);\n        let mut mask_sum=initial_mask_sum(&columns);\n        mask_sum=add_d_tail(mask_sum,&dc);\n        let eta = semantic_row(\n            14,\n            &WideExact::from_qm31(mask_sum).to_le_bytes(),\n            &mut transcript,\n            &mut bytes,\n        )?;\n        let challenges = Challenges {\n            lambda,\n            chi,\n            theta,\n            zc,\n            mu,\n            eta,\n        };\n        let oracle=SemanticOracle{public:&public,columns:&columns,challenges:&challenges,eta,d:&dc};\n        let (alpha, _) = crate::host_sumcheck::prove_sumcheck(\n            &mut transcript,&mut bytes,mask_sum,&oracle,\n        )?;\n        let claims = point_claims(&columns, &alpha)?;\n        let state_before_z0 = transcript.state();\n        let extras=extra_claims(&columns,variant,alpha[8],alpha[9]);\n        let before_z0=wire::record(25,&claim_bytes(claims,extras))?;\n        let z0=transcript.challenge_reference_circle_point(25,&before_z0)?;\n        bytes.extend_from_slice(&before_z0);\n        let before_z1=wire::record(26,&endpoint_bytes(&columns,variant,z0))?;\n        let z1 = transcript.challenge_reference_circle_point(26, &before_z1)?;\n        bytes.extend_from_slice(&before_z1);\n        if z0 == z1 {\n            return Err(Error::EqualCirclePoints);\n        }\n        Ok(BuiltSemantics {\n            bytes,\n            transcript,\n            challenges,\n            alpha,\n            state_before_z0,\n            roots: [c1_root, c2_root],\n            columns,\n            z: [z0, z1],\n        })\n    }",
+      "body_sha256": "9074bba03be4d494fa6dd5b639b4bf35c2765e19cca9191ba0cf46f589171796"
+    }
+  ],
+  "N6": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
+      "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
+      "function": "interpolate",
+      "line": 13,
+      "body": "fn interpolate(values:&[QM31;28])->[QM31;28] {\n        let mut out=[QM31::ZERO;28];let mut i=0;\n        while i<28 {\n            let (basis,denominator)=interpolation_basis(i);\n            let scale=values[i].mul_m31(denominator.inv());\n            out=interpolation_accumulate(out,&basis,scale);i+=1;\n        }\n        out\n    }",
+      "body_sha256": "b30ef73c7ce587ee88a4d59e08ddabbaed081230fa6922eb24d57c46151948bc"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
+      "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
+      "function": "prove_sumcheck_rounds",
+      "line": 68,
+      "body": "fn prove_sumcheck_rounds<H:aspis_core::Digest32,F:Oracle>(transcript:&mut SemanticTranscript<H>,output:&mut Vec<u8>,point:[QM31;10],running:QM31,round:usize,oracle:&F)->Result<([QM31;10],QM31),Error> {\n    if round==10 {\n        if oracle.evaluate(&point)?!=running {return Err(Error::Terminal);}\n        return Ok((point,running));\n    }\n    let (point,running)=prove_sumcheck_round(transcript,output,point,running,round,oracle)?;\n    prove_sumcheck_rounds(transcript,output,point,running,round+1,oracle)\n}",
+      "body_sha256": "3ee395d9e9733d14fa6eb6ba7af8b95b93e5c2e00400b16abd1dd3dce19a3883"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
+      "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
+      "function": "prove_sumcheck_round",
+      "line": 76,
+      "body": "fn prove_sumcheck_round<H:aspis_core::Digest32,F:Oracle>(transcript:&mut SemanticTranscript<H>,output:&mut Vec<u8>,mut point:[QM31;10],mut running:QM31,round:usize,oracle:&F)->Result<([QM31;10],QM31),Error> {\n            let remaining = 9 - round;\n            let mut values = [QM31::ZERO; 28];\n            #[cfg(feature=\"ct-host-prover\")]\n            {\n                let assignments=1usize<<remaining;\n                let evaluations=crate::host_work::map(100+round,28*assignments,|i| {\n                    evaluate_assignment(oracle,point,round,assignments,i)\n                });\n                // Same sample and assignment order, including error selection.\n                values=merge_evaluations(&evaluations,assignments)?;\n            }\n            #[cfg(not(feature=\"ct-host-prover\"))]\n            {\n            for (sample, value) in values.iter_mut().enumerate() {\n                point[round] = QM31::from_cm31(CM31::from_m31(M31(sample as u32)));\n                for assignment in 0..1usize << remaining {\n                    for offset in 0..remaining {\n                        point[round + 1 + offset] =\n                            if (assignment >> (remaining - 1 - offset)) & 1 == 0 {\n                                QM31::ZERO\n                            } else {\n                                QM31::ONE\n                            };\n                    }\n                    *value = value.add(oracle.evaluate(&point)?);\n                }\n            }\n            }\n            let polynomial = interpolate(&values);\n            if state_only_boundary_sum(&polynomial) != running {\n                return Err(Error::Boundary { round });\n            }\n            let polynomial_bytes=encode_polynomial(&polynomial);\n            let framed=wire::record(15+round as u8,&polynomial_bytes)?;\n            point[round] = transcript.semantic(15 + round as u8, &framed)?;\n            output.extend_from_slice(&framed);\n            running = evaluate_state_only_polynomial(&polynomial, point[round]);\n    Ok((point,running))\n}",
+      "body_sha256": "b1f5de9f95e9a160be25fea8b8314c8fa0fdfebf05cc36cde52fe64863febce8"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
+      "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
+      "function": "evaluate_assignment",
+      "line": 129,
+      "body": "fn evaluate_assignment<F:Oracle>(oracle:&F,point:[QM31;10],round:usize,assignments:usize,i:usize)->Result<QM31,Error> {\n    let remaining=9-round;\n                    let sample=i/assignments;let assignment=i%assignments;\n                    let mut at=point;\n                    at[round]=QM31::from_cm31(CM31::from_m31(M31(sample as u32)));\n                    let mut offset=0;\n                    while offset<remaining {\n                        at[round+1+offset]=if (assignment>>(remaining-1-offset))&1==0 {QM31::ZERO}else{QM31::ONE};\n                        offset+=1;\n                    }\n                    oracle.evaluate(&at)\n}",
+      "body_sha256": "5228527072ac10348a4547af5d2e89f1b0dd8572f8b3fe8a7aba8a2837879f36"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sumcheck.rs",
+      "source_revision": "24ac909b7f2eba756484240fd2c8b7e137027e8a",
+      "git_blob": "34ef223b78672aea20bc9942ba9e597a97029d70",
+      "file_sha256": "1fec5f5769c61b96ff0ea5bdadfdd9c9679fbe6363b7113102e3ce1576cd62cb",
+      "function": "merge_evaluations",
+      "line": 117,
+      "body": "fn merge_evaluations(evaluations:&[Result<QM31,Error>],assignments:usize)->Result<[QM31;28],Error> {\n    let mut values=[QM31::ZERO;28];\n    let count=evaluations.len();let mut i=0;\n    while i<count {\n        let value=evaluations[i]?;\n        let at=i/assignments;\n        let next=values[at].add(value);\n        values[at]=next;i+=1;\n    }\n    Ok(values)\n}",
+      "body_sha256": "d85526ef62e133a91afa4eb1a5251411b19ac167885be4f27ef6d08ea982b693"
+    }
+  ]
+}

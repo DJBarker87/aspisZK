@@ -1,0 +1,95 @@
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualReservation.lean:7:44: error: Application type mismatch: The argument
+  UScalar.hSize b
+has type
+  ↑b < UScalar.size UScalarTy.U8
+but is expected to have type
+  ↑b < 256
+in the application
+  ⟨↑b, ⋯⟩
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualReservation.lean:10:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RDEA_ActualReservation.array_length`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualReservation.lean:17:90: error: Tactic `decide` failed for proposition
+  5 ≤ U32.max
+because its `Decidable` instance
+  Nat.decLe 5 U32.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at the `Decidable` instance
+  match Nat.ble 5 U32.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualReservation.lean:22:42: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+digest : Std.Array U8 32#usize
+acc : String
+⊢ (if True then
+      alloc.string.String.push_str acc (toStr ".burn" aspis_prover.state_only_entropy.reservation_name._proof_1)
+    else do
+      let byte ← digest.index_usize 32#usize
+      let i1 ← lift (byte.wrapping_shr 4#u32)
+      let i2 ← lift (UScalar.cast UScalarTy.Usize i1)
+      let high ←
+        (Array.make 16#usize
+                [toStr "0" aspis_prover.state_only_entropy.reservation_name._proof_2,
+                  toStr "1" aspis_prover.state_only_entropy.reservation_name._proof_3,
+                  toStr "2" aspis_prover.state_only_entropy.reservation_name._proof_4,
+                  toStr "3" aspis_prover.state_only_entropy.reservation_name._proof_5,
+                  toStr "4" aspis_prover.state_only_entropy.reservation_name._proof_6,
+                  toStr "5" aspis_prover.state_only_entropy.reservation_name._proof_7,
+                  toStr "6" aspis_prover.state_only_entropy.reservation_name._proof_8,
+                  toStr "7" aspis_prover.state_only_entropy.reservation_name._proof_9,
+                  toStr "8" aspis_prover.state_only_entropy.reservation_name._proof_10,
+                  toStr "9" aspis_prover.state_only_entropy.reservation_name._proof_11,
+                  toStr "a" aspis_prover.state_only_entropy.reservation_name._proof_12,
+                  toStr "b" aspis_prover.state_only_entropy.reservation_name._proof_13,
+                  toStr "c" aspis_prover.state_only_entropy.reservation_name._proof_14,
+                  toStr "d" aspis_prover.state_only_entropy.reservation_name._proof_15,
+                  toStr "e" aspis_prover.state_only_entropy.reservation_name._proof_16,
+                  toStr "f" aspis_prover.state_only_entropy.reservation_name._proof_17]
+                aspis_prover.state_only_entropy.reservation_name._proof_18).index_usize
+            i2
+      let i3 ← lift (byte &&& 15#u8)
+      let i4 ← lift (UScalar.cast UScalarTy.Usize i3)
+      let low ←
+        (Array.make 16#usize
+                [toStr "0" aspis_prover.state_only_entropy.reservation_name._proof_2,
+                  toStr "1" aspis_prover.state_only_entropy.reservation_name._proof_3,
+                  toStr "2" aspis_prover.state_only_entropy.reservation_name._proof_4,
+                  toStr "3" aspis_prover.state_only_entropy.reservation_name._proof_5,
+                  toStr "4" aspis_prover.state_only_entropy.reservation_name._proof_6,
+                  toStr "5" aspis_prover.state_only_entropy.reservation_name._proof_7,
+                  toStr "6" aspis_prover.state_only_entropy.reservation_name._proof_8,
+                  toStr "7" aspis_prover.state_only_entropy.reservation_name._proof_9,
+                  toStr "8" aspis_prover.state_only_entropy.reservation_name._proof_10,
+                  toStr "9" aspis_prover.state_only_entropy.reservation_name._proof_11,
+                  toStr "a" aspis_prover.state_only_entropy.reservation_name._proof_12,
+                  toStr "b" aspis_prover.state_only_entropy.reservation_name._proof_13,
+                  toStr "c" aspis_prover.state_only_entropy.reservation_name._proof_14,
+                  toStr "d" aspis_prover.state_only_entropy.reservation_name._proof_15,
+                  toStr "e" aspis_prover.state_only_entropy.reservation_name._proof_16,
+                  toStr "f" aspis_prover.state_only_entropy.reservation_name._proof_17]
+                aspis_prover.state_only_entropy.reservation_name._proof_18).index_usize
+            i4
+      let name2 ← alloc.string.String.push_str acc high
+      let name3 ← alloc.string.String.push_str name2 low
+      let i5 ← lift (Usize.wrapping_add 32#usize 1#usize)
+      aspis_prover.state_only_entropy.reservation_name digest name3 i5) =
+    ExternalFuns.op31 acc suffixText
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualReservation.lean:24:13: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDEA_ActualReservation.array_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualReservation.digest_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_ActualReservation.at_end' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

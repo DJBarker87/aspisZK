@@ -1,0 +1,71 @@
+{
+  "attempt": 50396,
+  "module": "PV_L2C_CanonicalFixtureDomain",
+  "source_sha256": "788f80f0e79c187cfb24427cdeaa525f5d0b4b0bcc86901bbe7402f99e1db615",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_CanonicalFixtureDomain.lean",
+    "git_blob": "01d6b572dc0320fead9b798dab39cdebd4722b92",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "8bcde3e863b469d3f3e6cabfaeb240fe66ac407c",
+  "exit": 0,
+  "wall_seconds": 1.903323140926659,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T14:33:52.743954+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 17045651456,
+    "projected_reserved_bytes": 25635586048
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50395",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50395"
+  ],
+  "dependencies": {
+    "PV_L2C_AccountEncode": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AccountEncode.olean",
+      "sha256": "c53d35b51996d5e9b742956a12ae7aca29f2cd5dab00dd240aace16e5b1cded8"
+    },
+    "PV_L2C_ClientRoute": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ClientRoute.olean",
+      "sha256": "7171df14a1002023b9370d11ffaa7cda06c02aa6362ff1b865d23d1210486fa8"
+    },
+    "PV_L2C_FixtureOrigins": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_FixtureOrigins.olean",
+      "sha256": "70395ec114520c9f163c9ed35eaed581114a6ce72bd6651c1e8bd4315a32a043"
+    }
+  },
+  "deps_fingerprint": "c91b62b1d07b5c526e72f006079b881914378048f0c567e15f5349fa25d7f16d",
+  "axioms": [
+    "'PV_L2C_CanonicalFixtureDomain.tree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.rawP_excluded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.both' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 5036736512,
+  "swaps": "0",
+  "host_wall": "0:01.90",
+  "accepted": true
+}

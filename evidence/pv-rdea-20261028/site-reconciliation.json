@@ -1,0 +1,2962 @@
+{
+  "binary": {
+    "sha256": "fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348",
+    "bytes": 2619224,
+    "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n"
+  },
+  "MIR_candidates": [
+    {
+      "id": 0,
+      "function": "fn render(_1: &str, _2: &dyn Debug, _3: &dyn Debug) -> Error {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/anyhow-0e9d27585d51a73e.mir",
+      "body_sha256": "66f7cb63c5d9c0b5727fb9e0e64cb4761878efe772499d8f3484fc9d51b16d6c",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 3186,
+          "text": "                        scope 59 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ensure.rs:90:30: 90:56",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ensure.rs",
+          "source_line": 90,
+          "source_sha256": "709524741c8f9365e01cb36fc2349a8724513de02cf9e253809a93af8d6a7b6e",
+          "argument_source_excerpt": [
+            "            let lhs_str = lhs_buf.as_str();",
+            "            let rhs_str = rhs_buf.as_str();",
+            "            // \"{msg} ({lhs} vs {rhs})\"",
+            "            let len = msg.len() + 2 + lhs_str.len() + 4 + rhs_str.len() + 1;",
+            "            let mut string = String::with_capacity(len);",
+            "            string.push_str(msg);",
+            "            string.push_str(\" (\");",
+            "            string.push_str(lhs_str);",
+            "            string.push_str(\" vs \");",
+            "            string.push_str(rhs_str);"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "function": "fn hex(_1: &[u8]) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/aspis_prover-82cae697dbaea47e.mir",
+      "body_sha256": "d4c0a4a2d25c5b9908994218ac99ede2c81bdc775403db428280b68e09f4e5f3",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 37556,
+          "text": "    scope 4 (inlined String::with_capacity) { // at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/pow.rs:26:22: 26:60",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/pow.rs",
+          "source_line": 26,
+          "source_sha256": "6b0a966344fa68e8af227838be0747647f91b46dc6377812d5c16f50104c8616",
+          "argument_source_excerpt": [
+            "const CPU_PROGRESS_INTERVAL: Duration = Duration::from_secs(5);",
+            "",
+            "fn hex(bytes: &[u8]) -> String {",
+            "    const DIGITS: &[u8; 16] = b\"0123456789abcdef\";",
+            "    let mut output = String::with_capacity(bytes.len() * 2);",
+            "    for byte in bytes {",
+            "        output.push(DIGITS[(byte >> 4) as usize] as char);",
+            "        output.push(DIGITS[(byte & 15) as usize] as char);",
+            "    }",
+            "    output"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "function": "fn state_only_entropy::<impl at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:934:1: 934:36>::reservation_path(_1: &DurableStateOnlyMaskNonceStore, _2: &[u8; 32]) -> PathBuf {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/aspis_prover-82cae697dbaea47e.mir",
+      "body_sha256": "0ff8a34ab9ecb67bcd480c8aa5aad05515b4dfcdb844d5ca4bc6ff297d47ab13",
+      "classification": "application endpoint",
+      "sites": [
+        {
+          "line": 86070,
+          "text": "            scope 15 (inlined String::with_capacity) { // at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:961:44: 961:69",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs",
+          "source_line": 961,
+          "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+          "argument_source_excerpt": [
+            "        let mut hasher = Sha256::new();",
+            "        hasher.update(ATTEMPT_RESERVATION_DOMAIN);",
+            "        hasher.update(mask_nonce);",
+            "        let digest: [u8; 32] = hasher.finalize().into();",
+            "        let name = reservation_name(digest,String::with_capacity(69),0);",
+            "        self.directory.join(name)",
+            "    }",
+            "",
+            "    pub fn reserve_fallible(",
+            "        &mut self,"
+          ]
+        },
+        {
+          "line": 86201,
+          "text": "        _0 = Path::join::<String>(move _13, move _11) -> [return: bb4, unwind continue]; // scope 3 at /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs:962:9: 962:34",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_entropy.rs",
+          "source_line": 962,
+          "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+          "argument_source_excerpt": [
+            "        hasher.update(ATTEMPT_RESERVATION_DOMAIN);",
+            "        hasher.update(mask_nonce);",
+            "        let digest: [u8; 32] = hasher.finalize().into();",
+            "        let name = reservation_name(digest,String::with_capacity(69),0);",
+            "        self.directory.join(name)",
+            "    }",
+            "",
+            "    pub fn reserve_fallible(",
+            "        &mut self,",
+            "        statement_digest: [u8; 32],"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs:163:1: 163:13>::probe_fmt(_1: &AutoCfg, _2: Arguments<'_>) -> Result<(), error::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/autocfg-4969358b6ef648b7.mir",
+      "body_sha256": "bb77d4ce29367d72bb5b5f3769e8e54c294a331939d79f4eaaf7dcfbe4cf0968",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 4251,
+          "text": "        _60 = Path::join::<String>(copy _61, move _63) -> [return: bb40, unwind: bb55]; // scope 11 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs:339:32: 339:61",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs",
+          "source_line": 339,
+          "source_sha256": "772630d0e09d06f343fd72284c8330eacde87d2a4ee22f70af62a0e2119fbf05",
+          "argument_source_excerpt": [
+            "            Ok(status) if status.success() => {",
+            "                // Try to remove the output file so it doesn't look like a build product for",
+            "                // systems like bazel -- but this is best-effort, so we can ignore failure.",
+            "                // The probe itself is already considered successful at this point.",
+            "                let mut file = self.out_dir.join(crate_name);",
+            "                file.set_extension(\"ll\");",
+            "                let _ = fs::remove_file(file);",
+            "",
+            "                Ok(())",
+            "            }"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "function": "fn dir_contains_target::{closure#0}::{closure#0}(_1: {closure@/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs:565:35: 565:40}, _2: &str) -> Option<bool> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/autocfg-4969358b6ef648b7.mir",
+      "body_sha256": "9e9adef93f8f9dcd4aa7987c2f4d1fc7fbee633d5d80ebd8acd0bfc2197b0626",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 5906,
+          "text": "        _6 = PathBuf::push::<&OsString>(move _7, move _8) -> [return: bb3, unwind: bb8]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs:569:17: 569:46",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/autocfg-1.5.1/src/lib.rs",
+          "source_line": 569,
+          "source_sha256": "772630d0e09d06f343fd72284c8330eacde87d2a4ee22f70af62a0e2119fbf05",
+          "argument_source_excerpt": [
+            "            dir.to_str().and_then(|dir| {",
+            "                let mut cargo_target_dir = cargo_target_dir",
+            "                    .map(PathBuf::from)",
+            "                    .unwrap_or_else(|| PathBuf::from(\"target\"));",
+            "                cargo_target_dir.push(target);",
+            "",
+            "                cargo_target_dir",
+            "                    .to_str()",
+            "                    .map(|cargo_target_dir| dir.contains(cargo_target_dir))",
+            "            })"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "function": "fn command_helpers::objects_from_files(_1: &[Arc<Path>], _2: &Path) -> Result<Vec<Object>, Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "e60383d8e79caaddebc613f3aeb1c01ec58a913acf2c0c931cb48558c49a0cf1",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 17144,
+          "text": "        _62 = Path::join::<String>(copy _2, move _63) -> [return: bb51, unwind: bb78]; // scope 15 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/command_helpers.rs:323:19: 324:68",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/command_helpers.rs",
+          "source_line": 323,
+          "source_sha256": "592f63aab5f1af16900345fd1903499d38e5117548f63ed120f664c9a4aca4b0",
+          "argument_source_excerpt": [
+            "        if let Some(extension) = file.extension() {",
+            "            hasher.write(extension.to_string_lossy().as_bytes());",
+            "        }",
+            "",
+            "        let obj = dst",
+            "            .join(format!(\"{:016x}-{}\", hasher.finish(), basename))",
+            "            .with_extension(\"o\");",
+            "",
+            "        match obj.parent() {",
+            "            Some(s) => fs::create_dir_all(s)?,"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "function": "fn tempfile::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/tempfile.rs:47:1: 47:19>::new(_1: &Path, _2: &str) -> Result<NamedTempfile, std::io::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "fb80c72c77a4b920ef4edf3a29ee6694596490032f1dea8708376c5a9ba8359a",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 25646,
+          "text": "        _9 = Path::join::<String>(copy _1, move _10) -> [return: bb8, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/tempfile.rs:50:24: 50:50",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/tempfile.rs",
+          "source_line": 50,
+          "source_sha256": "77963fe55b63d3a30cccae46f763b8d61ed722247fe208e8485858770f6a67f7",
+          "argument_source_excerpt": [
+            "",
+            "impl NamedTempfile {",
+            "    pub(super) fn new(base: &Path, suffix: &str) -> io::Result<Self> {",
+            "        for _ in 0..10 {",
+            "            let path = base.join(tmpname(suffix));",
+            "            match create_named(&path) {",
+            "                Ok(file) => {",
+            "                    return Ok(Self {",
+            "                        file: Some(file),",
+            "                        path,"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::ensure_check_file(_1: &Build) -> Result<PathBuf, Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "8a6c3051a667b334716513ec0ae0e00e0babd292491c98a3e41e45083a973e66",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 36726,
+          "text": "        _8 = Path::join::<&str>(copy _12, const \"flag_check.cu\") -> [return: bb37, unwind: bb35]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1473:13: 1473:42",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1473,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "    fn ensure_check_file(&self) -> Result<PathBuf, Error> {",
+            "        let out_dir = self.get_out_dir()?;",
+            "        let src = if self.cuda {",
+            "            assert!(self.cpp);",
+            "            out_dir.join(\"flag_check.cu\")",
+            "        } else if self.cpp {",
+            "            out_dir.join(\"flag_check.cpp\")",
+            "        } else {",
+            "            out_dir.join(\"flag_check.c\")",
+            "        };"
+          ]
+        },
+        {
+          "line": 36749,
+          "text": "        _8 = Path::join::<&str>(copy _15, const \"flag_check.cpp\") -> [return: bb38, unwind: bb35]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1475:13: 1475:43",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1475,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "        let src = if self.cuda {",
+            "            assert!(self.cpp);",
+            "            out_dir.join(\"flag_check.cu\")",
+            "        } else if self.cpp {",
+            "            out_dir.join(\"flag_check.cpp\")",
+            "        } else {",
+            "            out_dir.join(\"flag_check.c\")",
+            "        };",
+            "",
+            "        if !src.exists() {"
+          ]
+        },
+        {
+          "line": 36767,
+          "text": "        _8 = Path::join::<&str>(copy _17, const \"flag_check.c\") -> [return: bb39, unwind: bb35]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1477:13: 1477:41",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1477,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "            out_dir.join(\"flag_check.cu\")",
+            "        } else if self.cpp {",
+            "            out_dir.join(\"flag_check.cpp\")",
+            "        } else {",
+            "            out_dir.join(\"flag_check.c\")",
+            "        };",
+            "",
+            "        if !src.exists() {",
+            "            let mut f = fs::File::create(&src)?;",
+            "            write!(f, \"int main(void) {{ return 0; }}\")?;"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::is_flag_supported_inner(_1: &Build, _2: &OsStr, _3: &tool::Tool, _4: &target::TargetInfo<'_>) -> Result<bool, Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "d8e11afca76a10bbb7f7cc15fc44f63cd429116dec93167bbc8e9c85cf2ebd2c",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 37370,
+          "text": "        _33 = Path::join::<&str>(copy _34, const \"flag_check\") -> [return: bb23, unwind: bb123]; // scope 8 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1512:19: 1512:45",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1512,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "        }",
+            "",
+            "        let out_dir = self.get_out_dir()?;",
+            "        let src = self.ensure_check_file()?;",
+            "        let obj = out_dir.join(\"flag_check\");",
+            "",
+            "        let mut compiler = {",
+            "            let mut cfg = Build::new();",
+            "            cfg.flag(flag)",
+            "                .compiler(tool.path())"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::try_compile(_1: &Build, _2: &str) -> Result<(), Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "ece060aace9a974f4341d2aa08b2a5d4fe126fefe3d81e7dd908cc11ec12a9ae",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 38931,
+          "text": "        _25 = String::with_capacity(move _26) -> [return: bb19, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1627:27: 1627:66",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1627,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "",
+            "        let (lib_name, gnu_lib_name) = if output.starts_with(\"lib\") && output.ends_with(\".a\") {",
+            "            (&output[3..output.len() - 2], output.to_owned())",
+            "        } else {",
+            "            let mut gnu = String::with_capacity(5 + output.len());",
+            "            gnu.push_str(\"lib\");",
+            "            gnu.push_str(output);",
+            "            gnu.push_str(\".a\");",
+            "            (output, gnu)",
+            "        };"
+          ]
+        },
+        {
+          "line": 39102,
+          "text": "        _63 = Path::join::<String>(copy _64, move _66) -> [return: bb41, unwind: bb213]; // scope 9 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1638:34: 1638:56",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1638,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "",
+            "        let objects = objects_from_files(&self.files, &dst)?;",
+            "",
+            "        self.compile_objects(&objects)?;",
+            "        self.assemble(lib_name, &dst.join(gnu_lib_name), &objects)?;",
+            "",
+            "        let target = self.get_target()?;",
+            "        if target.abi == \"pauthtest\" {",
+            "            self.cargo_output.print_warning(",
+            "                &\"cc-rs should not be used with `pauthtest` target: it only builds \\"
+          ]
+        },
+        {
+          "line": 40057,
+          "text": "        _287 = PathBuf::push::<&str>(move _288, const \"..\") -> [return: bb157, unwind: bb203]; // scope 72 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1739:17: 1739:34",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1739,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                // RUSTFLAGS environment variable.",
+            "                let mut libtst = false;",
+            "                let mut libdir = nvcc;",
+            "                libdir.pop(); // remove 'nvcc'",
+            "                libdir.push(\"..\");",
+            "                if cfg!(target_os = \"linux\") {",
+            "                    libdir.push(\"targets\");",
+            "                    libdir.push(format!(\"{}-linux\", target.arch));",
+            "                    if !libdir.exists() && target.arch == \"aarch64\" {",
+            "                        libdir.pop();"
+          ]
+        },
+        {
+          "line": 40068,
+          "text": "        _289 = PathBuf::push::<&str>(move _290, const \"targets\") -> [return: bb158, unwind: bb203]; // scope 72 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1741:21: 1741:43",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1741,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                let mut libdir = nvcc;",
+            "                libdir.pop(); // remove 'nvcc'",
+            "                libdir.push(\"..\");",
+            "                if cfg!(target_os = \"linux\") {",
+            "                    libdir.push(\"targets\");",
+            "                    libdir.push(format!(\"{}-linux\", target.arch));",
+            "                    if !libdir.exists() && target.arch == \"aarch64\" {",
+            "                        libdir.pop();",
+            "                        libdir.push(\"sbsa-linux\");",
+            "                    }"
+          ]
+        },
+        {
+          "line": 40118,
+          "text": "        _291 = PathBuf::push::<String>(move _292, move _293) -> [return: bb163, unwind: bb203]; // scope 72 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1742:21: 1742:66",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1742,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                libdir.pop(); // remove 'nvcc'",
+            "                libdir.push(\"..\");",
+            "                if cfg!(target_os = \"linux\") {",
+            "                    libdir.push(\"targets\");",
+            "                    libdir.push(format!(\"{}-linux\", target.arch));",
+            "                    if !libdir.exists() && target.arch == \"aarch64\" {",
+            "                        libdir.pop();",
+            "                        libdir.push(\"sbsa-linux\");",
+            "                    }",
+            "                    libdir.push(\"lib\");"
+          ]
+        },
+        {
+          "line": 40169,
+          "text": "        _310 = PathBuf::push::<&str>(move _311, const \"sbsa-linux\") -> [return: bb241, unwind: bb203]; // scope 72 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1745:25: 1745:50",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1745,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                    libdir.push(\"targets\");",
+            "                    libdir.push(format!(\"{}-linux\", target.arch));",
+            "                    if !libdir.exists() && target.arch == \"aarch64\" {",
+            "                        libdir.pop();",
+            "                        libdir.push(\"sbsa-linux\");",
+            "                    }",
+            "                    libdir.push(\"lib\");",
+            "                    libtst = true;",
+            "                } else if cfg!(target_env = \"msvc\") {",
+            "                    libdir.push(\"lib\");"
+          ]
+        },
+        {
+          "line": 40180,
+          "text": "        _312 = PathBuf::push::<&str>(move _313, const \"lib\") -> [return: bb171, unwind: bb203]; // scope 72 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1747:21: 1747:39",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 1747,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                    if !libdir.exists() && target.arch == \"aarch64\" {",
+            "                        libdir.pop();",
+            "                        libdir.push(\"sbsa-linux\");",
+            "                    }",
+            "                    libdir.push(\"lib\");",
+            "                    libtst = true;",
+            "                } else if cfg!(target_env = \"msvc\") {",
+            "                    libdir.push(\"lib\");",
+            "                    match target.arch {",
+            "                        \"x86_64\" => {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::assemble(_1: &Build, _2: &str, _3: &Path, _4: &[Object]) -> Result<(), Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "88ded1158a8dbe5a27ea296b8c244190edcd77f56fa895c21bacd85d2d37234d",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 55712,
+          "text": "        _52 = Path::join::<String>(copy _53, move _55) -> [return: bb39, unwind: bb134]; // scope 11 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:2948:25: 2948:71",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 2948,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "            // Link the device-side code and add it to the target library,",
+            "            // so that non-CUDA linker can link the final binary.",
+            "",
+            "            let out_dir = self.get_out_dir()?;",
+            "            let dlink = out_dir.join(lib_name.to_owned() + \"_dlink.o\");",
+            "            let mut nvcc = self.get_compiler().to_command();",
+            "            nvcc.arg(\"--device-link\").arg(\"-o\").arg(&dlink).arg(dst);",
+            "            run(&mut nvcc, &self.cargo_output)?;",
+            "            self.assemble_progressive(dst, &[dlink.as_path()], &mut deterministic_ar)?;",
+            "        }"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::apple_flags(_1: &Build, _2: &mut tool::Tool) -> Result<(), Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "deca517d935e25d2b2df3188e6b21bf3bb1388dddb0dbedc28b7d415dfd42c46",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 58000,
+          "text": "        _84 = Path::join::<&str>(copy _85, const \"System/iOSSupport\") -> [return: bb50, unwind: bb80]; // scope 10 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3131:35: 3131:81",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3131,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "            if target.env == \"macabi\" {",
+            "                // Mac Catalyst uses the macOS SDK, but to compile against and",
+            "                // link to iOS-specific frameworks, we should have the support",
+            "                // library stubs in the include and library search path.",
+            "                let ios_support = Path::new(&sdk_path).join(\"System/iOSSupport\");",
+            "",
+            "                cmd.args.extend([",
+            "                    // Header search path",
+            "                    OsString::from(\"-isystem\"),",
+            "                    ios_support.join(\"usr/include\").into(),"
+          ]
+        },
+        {
+          "line": 58030,
+          "text": "        _92 = Path::join::<&str>(copy _93, const \"usr/include\") -> [return: bb53, unwind: bb77]; // scope 15 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3136:21: 3136:52",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3136,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "",
+            "                cmd.args.extend([",
+            "                    // Header search path",
+            "                    OsString::from(\"-isystem\"),",
+            "                    ios_support.join(\"usr/include\").into(),",
+            "                    // Framework header search path",
+            "                    OsString::from(\"-iframework\"),",
+            "                    ios_support.join(\"System/Library/Frameworks\").into(),",
+            "                    // Library search path",
+            "                    {"
+          ]
+        },
+        {
+          "line": 58066,
+          "text": "        _97 = Path::join::<&str>(copy _98, const \"System/Library/Frameworks\") -> [return: bb57, unwind: bb75]; // scope 15 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3139:21: 3139:66",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3139,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                    OsString::from(\"-isystem\"),",
+            "                    ios_support.join(\"usr/include\").into(),",
+            "                    // Framework header search path",
+            "                    OsString::from(\"-iframework\"),",
+            "                    ios_support.join(\"System/Library/Frameworks\").into(),",
+            "                    // Library search path",
+            "                    {",
+            "                        let mut s = OsString::from(\"-L\");",
+            "                        s.push(ios_support.join(\"usr/lib\"));",
+            "                        s"
+          ]
+        },
+        {
+          "line": 58103,
+          "text": "        _104 = Path::join::<&str>(copy _105, const \"usr/lib\") -> [return: bb61, unwind: bb73]; // scope 16 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3143:32: 3143:59",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3143,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                    ios_support.join(\"System/Library/Frameworks\").into(),",
+            "                    // Library search path",
+            "                    {",
+            "                        let mut s = OsString::from(\"-L\");",
+            "                        s.push(ios_support.join(\"usr/lib\"));",
+            "                        s",
+            "                    },",
+            "                    // Framework linker search path",
+            "                    {",
+            "                        // Technically, we _could_ avoid emitting `-F`, as"
+          ]
+        },
+        {
+          "line": 58141,
+          "text": "        _111 = Path::join::<&str>(copy _112, const \"System/Library/Frameworks\") -> [return: bb65, unwind: bb71]; // scope 17 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3152:32: 3152:77",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3152,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                        // Technically, we _could_ avoid emitting `-F`, as",
+            "                        // `-iframework` implies it, but let's keep it in for",
+            "                        // clarity.",
+            "                        let mut s = OsString::from(\"-F\");",
+            "                        s.push(ios_support.join(\"System/Library/Frameworks\"));",
+            "                        s",
+            "                    },",
+            "                ]);",
+            "            }",
+            "        }"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::get_base_archiver_variant::{closure#2}(_1: {closure@/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3768:34: 3768:36}) -> Option<PathBuf> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "d2a4b92902b2c745d0d52ad2cfced3eed2a6f43ebd8093643969f27f09a7cf71",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 67430,
+          "text": "        _9 = PathBuf::push::<&str>(move _10, const \"llvm-lib\") -> [return: bb5, unwind: bb9]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:3772:33: 3772:53",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 3772,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "                        .or_else(|| {",
+            "                            // See if there is 'llvm-lib' next to 'clang-cl'",
+            "                            if let Some(mut cmd) = self.which(&compiler.path, None) {",
+            "                                cmd.pop();",
+            "                                cmd.push(\"llvm-lib\");",
+            "                                self.which(&cmd, None)",
+            "                            } else {",
+            "                                None",
+            "                            }",
+            "                        })"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::find_working_gnu_prefix::{closure#0}::{closure#0}(_1: &mut {closure@/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4061:57: 4061:69}, _2: PathBuf) -> Option<&&str> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "9b49bcb27cf30c61cc30e865077b483cad77fc30a284f18fb6b1237f2e657a66",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 72316,
+          "text": "        _24 = Path::join::<&String>(copy _25, move _27) -> [return: bb14, unwind: bb24]; // scope 3 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4064:28: 4064:61",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 4064,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "            .and_then(|path_entries| {",
+            "                env::split_paths(path_entries).find_map(|path_entry| {",
+            "                    for prefix in prefixes {",
+            "                        let target_compiler = format!(\"{prefix}{suffix}{extension}\");",
+            "                        if path_entry.join(&target_compiler).exists() {",
+            "                            return Some(prefix);",
+            "                        }",
+            "                    }",
+            "                    None",
+            "                })"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::which::{closure#0}::{closure#0}(_1: &mut {closure@/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4537:53: 4537:65}, _2: PathBuf) -> Option<PathBuf> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "3c908f78c2a9686a0e64653787a8f01d03d9a7b45f7b01c18861ba72b32d03a2",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 78752,
+          "text": "        _3 = Path::join::<&Path>(copy _4, move _6) -> [return: bb2, unwind: bb5]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4537:76: 4537:97",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 4537,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "",
+            "    fn which(&self, tool: &Path, path_entries: Option<&OsStr>) -> Option<PathBuf> {",
+            "        // Loop through PATH entries searching for the |tool|.",
+            "        let find_exe_in_path = |path_entries: &OsStr| -> Option<PathBuf> {",
+            "            env::split_paths(path_entries).find_map(|path_entry| check_exe(path_entry.join(tool)))",
+            "        };",
+            "",
+            "        // If |tool| is not just one \"word,\" assume it's an actual path...",
+            "        if tool.components().count() > 1 {",
+            "            check_exe(PathBuf::from(tool))"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "function": "fn <impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:1449:1: 1449:11>::autodetect_wasi_compiler(_1: &Build, _2: &str, _3: &str) -> PathBuf {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/cc-64fab580a682421b.mir",
+      "body_sha256": "c32892a45e5fb123a291ad138632ce332499db1e8f4f0075b94df3ca1e17ae8a",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 79421,
+          "text": "        _11 = Path::join::<&str>(copy _12, const \"bin\") -> [return: bb4, unwind: bb21]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4609:32: 4610:29",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 4609,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "    ///",
+            "    /// [wasi-sdk]: https://github.com/WebAssembly/wasi-sdk",
+            "    fn autodetect_wasi_compiler(&self, raw_target: &str, clang: &str) -> PathBuf {",
+            "        if let Some(path) = self.get_env_overridable(\"WASI_SDK_PATH\") {",
+            "            let target_clang = Path::new(&path)",
+            "                .join(\"bin\")",
+            "                .join(format!(\"{raw_target}-clang\"));",
+            "            if let Some(path) = self.which(&target_clang, None) {",
+            "                return path;",
+            "            }"
+          ]
+        },
+        {
+          "line": 79478,
+          "text": "        _8 = Path::join::<String>(copy _9, move _14) -> [return: bb10, unwind: bb20]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs:4609:32: 4611:53",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cc-1.4.4/src/lib.rs",
+          "source_line": 4609,
+          "source_sha256": "e993b29320fdd22a06cb8653247434cbe46851dcfeec821e637aab559cfa9111",
+          "argument_source_excerpt": [
+            "    ///",
+            "    /// [wasi-sdk]: https://github.com/WebAssembly/wasi-sdk",
+            "    fn autodetect_wasi_compiler(&self, raw_target: &str, clang: &str) -> PathBuf {",
+            "        if let Some(path) = self.get_env_overridable(\"WASI_SDK_PATH\") {",
+            "            let target_clang = Path::new(&path)",
+            "                .join(\"bin\")",
+            "                .join(format!(\"{raw_target}-clang\"));",
+            "            if let Some(path) = self.which(&target_clang, None) {",
+            "                return path;",
+            "            }"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "function": "fn hygienic_type_parameter(_1: &ast::Input<'_>, _2: &str) -> proc_macro2::Ident {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/derivative-bff7f263ae29f8e6.mir",
+      "body_sha256": "fab04559db1e47075bc29cc1c0e4c147c26c6255597b039ed15b0fde63088ce7",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 48492,
+          "text": "        _3 = std::string::String::with_capacity(const 150_usize) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derivative-2.2.0/src/utils.rs:35:23: 35:49",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derivative-2.2.0/src/utils.rs",
+          "source_line": 35,
+          "source_sha256": "a14bd907e2b39f30e42b19e869a360f45f35bcf69f2c5eec6a237f53b02a24c9",
+          "argument_source_excerpt": [
+            "/// Construct a name for the inner type parameter that can't collide with any",
+            "/// type parameters of the item. This is achieved by starting with a base and",
+            "/// then concatenating the names of all other type parameters.",
+            "pub fn hygienic_type_parameter(item: &ast::Input, base: &str) -> syn::Ident {",
+            "    let mut typaram = String::with_capacity(150);",
+            "    typaram.push_str(base);",
+            "    let typaram = item.generics.type_params().fold(typaram, |mut acc, ty| {",
+            "        acc.push_str(&format!(\"{}\", &ty.ident));",
+            "        acc",
+            "    });"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "function": "fn plan::prove(_1: &Value, _2: Pubkey, _3: Pubkey, _4: &[Pubkey], _5: Pubkey, _6: Pubkey, _7: Pubkey, _8: Pubkey, _9: Pubkey, _10: Pubkey) -> Result<Value, anyhow::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/devnet_spend-cb2523f3627e3282.mir",
+      "body_sha256": "080a6c828c823a1bc3a232cb79b8881eb3258ff9e95f74695bb57b7ceb5d3bd3",
+      "classification": "application endpoint",
+      "sites": [
+        {
+          "line": 27452,
+          "text": "        _372 = Path::join::<&str>(copy _243, const \"note-recovery.json\") -> [return: bb153, unwind: bb334]; // scope 91 at src/bin/devnet_spend/plan.rs:113:142: 113:172",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 113,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}",
+            " // Retain note recovery data on the host, alongside the durable nonce store.",
+            " // This is excluded from evidence export even though these are public fixtures.",
+            " let recovery=json!({\"input_nullifier_key\":super::hex(&encode_digest_canonical(&k)),\"input_salt\":super::hex(&encode_digest_canonical(&salt)),\"input_value\":1000,\"asset_id\":77,\"output_lane\":output_lane,\"output_pair_index\":lane.tree.next_leaf_index,\"change\":{\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(500+n))),\"salt\":super::hex(&encode_digest_canonical(&change.salt)),\"value\":change.value,\"selected_second\":!withdrawal},\"recipient\":if withdrawal{Value::Null}else{json!({\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(300))),\"salt\":super::hex(&encode_digest_canonical(&recipient.salt)),\"value\":recipient.value,\"selected_second\":false})}});",
+            " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+            " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;",
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);"
+          ]
+        },
+        {
+          "line": 32261,
+          "text": "        _399 = Path::join::<&str>(copy _243, const \"mask-nonce-ledger\") -> [return: bb159, unwind: bb334]; // scope 128 at src/bin/devnet_spend/plan.rs:115:53: 115:82",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 115,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " // This is excluded from evidence export even though these are public fixtures.",
+            " let recovery=json!({\"input_nullifier_key\":super::hex(&encode_digest_canonical(&k)),\"input_salt\":super::hex(&encode_digest_canonical(&salt)),\"input_value\":1000,\"asset_id\":77,\"output_lane\":output_lane,\"output_pair_index\":lane.tree.next_leaf_index,\"change\":{\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(500+n))),\"salt\":super::hex(&encode_digest_canonical(&change.salt)),\"value\":change.value,\"selected_second\":!withdrawal},\"recipient\":if withdrawal{Value::Null}else{json!({\"nullifier_key\":super::hex(&encode_digest_canonical(&digest(300))),\"salt\":super::hex(&encode_digest_canonical(&recipient.salt)),\"value\":recipient.value,\"selected_second\":false})}});",
+            " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+            " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;",
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};"
+          ]
+        },
+        {
+          "line": 32698,
+          "text": "        _433 = Path::join::<&str>(copy _243, const \"proof.bin\") -> [return: bb164, unwind: bb329]; // scope 148 at src/bin/devnet_spend/plan.rs:119:12: 119:33",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 119,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};",
+            " let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);",
+            " let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);",
+            " let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;",
+            " let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;"
+          ]
+        },
+        {
+          "line": 32734,
+          "text": "        _438 = Path::join::<&str>(move _243, const \"statement.bin\") -> [return: bb166, unwind: bb329]; // scope 148 at src/bin/devnet_spend/plan.rs:119:53: 119:78",
+          "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+          "source_line": 119,
+          "source_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+          "argument_source_excerpt": [
+            " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+            " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+            " let (attempt_index,proof_account)=accounts.selected(result.attempts)?;",
+            " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+            " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+            " let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};",
+            " let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);",
+            " let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);",
+            " let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;",
+            " let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "function": "fn find_msvc_environment::{closure#0}::{closure#0}(_1: &mut {closure@/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/find-msvc-tools-0.1.11/src/find_tools.rs:1542:22: 1542:25}, _2: PathBuf) -> PathBuf {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/find_msvc_tools-a9f1baab6c5d1f58.mir",
+      "body_sha256": "74eee98c721e0e3382d7b384fe540b382556efc62bda484392525ebc191b9b41",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 2288,
+          "text": "        _0 = Path::join::<&str>(copy _3, move _5) -> [return: bb2, unwind: bb4]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/find-msvc-tools-0.1.11/src/find_tools.rs:1542:26: 1542:38",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/find-msvc-tools-0.1.11/src/find_tools.rs",
+          "source_line": 1542,
+          "source_sha256": "c50eee79af77d6ca4c14a33cf25cbd775c31757c3ac9a00cef63bc7ee39a011c",
+          "argument_source_excerpt": [
+            "        let vs_install_dir = env_getter.get_env(\"VSINSTALLDIR\")?;",
+            "",
+            "        let get_tool = |install_dir: &OsStr| {",
+            "            env::split_paths(install_dir)",
+            "                .map(|p| p.join(tool))",
+            "                .find(|p| p.exists())",
+            "                .map(|path| Tool {",
+            "                    tool: path,",
+            "                    is_clang_cl: false,",
+            "                    env: Vec::new(),"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "function": "fn Itertools::join(_1: &mut Self, _2: &str) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/itertools-2601a3e1e25ca410.mir",
+      "body_sha256": "e9e3666b73ca34eebb93c5f8684a37fdc1acab01a59c136cce8997de29761fbf",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 150563,
+          "text": "            scope 23 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.14.0/src/lib.rs:2433:34: 2433:74",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.14.0/src/lib.rs",
+          "source_line": 2433,
+          "source_sha256": "e7f144351cca5018dc12270b4c33f0562afddb92452acfa85153cb276aebd6e9",
+          "argument_source_excerpt": [
+            "            None => String::new(),",
+            "            Some(first_elt) => {",
+            "                // estimate lower bound of capacity needed",
+            "                let (lower, _) = self.size_hint();",
+            "                let mut result = String::with_capacity(sep.len() * lower);",
+            "                write!(&mut result, \"{}\", first_elt).unwrap();",
+            "                self.for_each(|elt| {",
+            "                    result.push_str(sep);",
+            "                    write!(&mut result, \"{}\", elt).unwrap();",
+            "                });"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "function": "fn Itertools::join(_1: &mut Self, _2: &str) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/itertools-a96a713a645345c1.mir",
+      "body_sha256": "12aa0771136219a505d1ea0dfb8e71b82ceeebdd350d64db9f0920a9f3122da7",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 156936,
+          "text": "            scope 23 (inlined String::with_capacity) { // at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.15.0/src/lib.rs:2777:34: 2777:74",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/itertools-0.15.0/src/lib.rs",
+          "source_line": 2777,
+          "source_sha256": "cac2e34f5b83156078fbbb0137e173c1b4aa63528259f82100e16d7501692ee8",
+          "argument_source_excerpt": [
+            "            None => String::new(),",
+            "            Some(first_elt) => {",
+            "                // estimate lower bound of capacity needed",
+            "                let (lower, _) = self.size_hint();",
+            "                let mut result = String::with_capacity(sep.len() * lower);",
+            "                write!(&mut result, \"{first_elt}\").unwrap();",
+            "                self.for_each(|elt| {",
+            "                    result.push_str(sep);",
+            "                    write!(&mut result, \"{elt}\").unwrap();",
+            "                });"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "function": "fn linux::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:179:1: 179:12>::translate(_1: MountInfo, _2: Subsys) -> Option<Cgroup> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/num_cpus-78a8c71a0786d3c8.mir",
+      "body_sha256": "12a07b493bdefed48a1c0d27e630752c6f0956435513ed5f4f99c9d2315036fe",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 2178,
+          "text": "        _12 = PathBuf::push::<&Path>(move _13, move _8) -> [return: bb3, unwind: bb9]; // scope 9 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:197:9: 197:33",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs",
+          "source_line": 197,
+          "source_sha256": "378ea174d00d560e16fda4b09fb523dda5f4c6f420e46af7d317393a39d88dd1",
+          "argument_source_excerpt": [
+            "        debug!(\"rel_from_root: {:?}\", rel_from_root);",
+            "",
+            "        // join(mp.MountPoint, relPath)",
+            "        let mut path = PathBuf::from(mntinfo.mount_point);",
+            "        path.push(rel_from_root);",
+            "        Some(Cgroup::new(mntinfo.version, path))",
+            "    }",
+            "",
+            "    fn cpu_quota(&self) -> Option<usize> {",
+            "        let (quota_us, period_us) = match self.version {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "function": "fn linux::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:179:1: 179:12>::raw_param(_1: &Cgroup, _2: &str) -> Option<String> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/num_cpus-78a8c71a0786d3c8.mir",
+      "body_sha256": "60d1297af8d9fc4d918399c46cd841c4f87dc97b84249672fb56d6e4033d27a9",
+      "classification": "runtime candidate; not linked out of line; inlining/dispatch exclusion still requires closure",
+      "sites": [
+        {
+          "line": 3759,
+          "text": "        _6 = Path::join::<&str>(move _7, move _2) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs:243:41: 243:62",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/num_cpus-1.17.0/src/linux.rs",
+          "source_line": 243,
+          "source_sha256": "378ea174d00d560e16fda4b09fb523dda5f4c6f420e46af7d317393a39d88dd1",
+          "argument_source_excerpt": [
+            "        buf.trim().parse().ok()",
+            "    }",
+            "",
+            "    fn raw_param(&self, param: &str) -> Option<String> {",
+            "        let mut file = some!(File::open(self.base.join(param)).ok());",
+            "",
+            "        let mut buf = String::new();",
+            "        some!(file.read_to_string(&mut buf).ok());",
+            "",
+            "        Some(buf)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "function": "fn fallback::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.107/src/fallback.rs:964:1: 964:13>::string(_1: &str) -> fallback::Literal {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/proc_macro2-fe6748bf35be3b80.mir",
+      "body_sha256": "c5092bd872b16585dbb4234138f6061eac857ada742d907e6cff5f50fdcc54a9",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 16009,
+          "text": "        _2 = alloc::string::String::with_capacity(move _3) -> [return: bb2, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.107/src/fallback.rs:1056:24: 1056:63",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro2-1.0.107/src/fallback.rs",
+          "source_line": 1056,
+          "source_sha256": "416a3d24349c163d47f62ac8ae61c28ba6dc4990f04f3d5dacde030b86582d06",
+          "argument_source_excerpt": [
+            "        Literal::_new(s)",
+            "    }",
+            "",
+            "    pub(crate) fn string(string: &str) -> Literal {",
+            "        let mut repr = String::with_capacity(string.len() + 2);",
+            "        repr.push('\"');",
+            "        escape_utf8(string, &mut repr);",
+            "        repr.push('\"');",
+            "        Literal::_new(repr)",
+            "    }"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "function": "fn crate_name(_1: &str) -> Result<std::string::String, std::string::String> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/proc_macro_crate-23ed78934855912f.mir",
+      "body_sha256": "787cdd4381c67d950aa5a176b28b2c45d0771ecb20243cf1f6624992536cd105",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 155,
+          "text": "        _9 = Path::join::<&str>(copy _10, const \"Cargo.toml\") -> [return: bb9, unwind: bb35]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro-crate-0.1.5/src/lib.rs:86:27: 86:73",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro-crate-0.1.5/src/lib.rs",
+          "source_line": 86,
+          "source_sha256": "e0b9efd49c866268b412b84251ebf027bab97a4dd7fb3b557c3bfe5cd6e14f66",
+          "argument_source_excerpt": [
+            "pub fn crate_name(orig_name: &str) -> Result<String, String> {",
+            "    let manifest_dir = env::var(\"CARGO_MANIFEST_DIR\")",
+            "        .map_err(|_| \"Could not find `CARGO_MANIFEST_DIR` env variable.\")?;",
+            "",
+            "    let cargo_toml_path = PathBuf::from(manifest_dir).join(\"Cargo.toml\");",
+            "",
+            "    if !cargo_toml_path.exists() {",
+            "        return Err(format!(\"`{}` does not exist.\", cargo_toml_path.display()));",
+            "    }",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "function": "fn crate_name(_1: &str) -> Result<FoundCrate, Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/proc_macro_crate-613f788e7de421fe.mir",
+      "body_sha256": "4956485aeb37107d02dc78d512192f25f1a33a40a071759c85f7a4d318c4ca20",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 854,
+          "text": "        _9 = Path::join::<&str>(copy _10, const \"Cargo.toml\") -> [return: bb8, unwind: bb91]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro-crate-3.5.0/src/lib.rs:186:25: 186:68",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/proc-macro-crate-3.5.0/src/lib.rs",
+          "source_line": 186,
+          "source_sha256": "d2ef10bd020f64862ae854efa0ff901760c4f36b9984f58daba072d8bd894153",
+          "argument_source_excerpt": [
+            "/// The returned crate name is sanitized in such a way that it is a valid rust identifier. Thus,",
+            "/// it is ready to be used in `extern crate` as identifier.",
+            "pub fn crate_name(orig_name: &str) -> Result<FoundCrate, Error> {",
+            "    let manifest_dir = env::var(\"CARGO_MANIFEST_DIR\").map_err(|_| Error::CargoManifestDirNotSet)?;",
+            "    let manifest_path = Path::new(&manifest_dir).join(\"Cargo.toml\");",
+            "",
+            "    let manifest_ts = cargo_toml_timestamp(&manifest_path)?;",
+            "",
+            "    static CACHE: Mutex<Cache> = Mutex::new(BTreeMap::new());",
+            "    let mut cache = CACHE.lock().unwrap();"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "function": "fn bigint::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-3.0.4/src/bigint.rs:10:1: 10:12>::to_string(_1: &BigInt) -> alloc::string::String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/syn-45a63e32dc49f560.mir",
+      "body_sha256": "568eb62e9fdbb566bf44a34ad78473f149cc258970850f18495bcd61147ffceb",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 26801,
+          "text": "        _2 = alloc::string::String::with_capacity(move _3) -> [return: bb2, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-3.0.4/src/bigint.rs:16:24: 16:64",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-3.0.4/src/bigint.rs",
+          "source_line": 16,
+          "source_sha256": "21cf6cf0c8e175421a6579321878e140d6cd2c975e5bdac4eadde25907d7e879",
+          "argument_source_excerpt": [
+            "        BigInt { digits: Vec::new() }",
+            "    }",
+            "",
+            "    pub(crate) fn to_string(&self) -> String {",
+            "        let mut repr = String::with_capacity(self.digits.len());",
+            "",
+            "        let mut has_nonzero = false;",
+            "        for digit in self.digits.iter().rev() {",
+            "            has_nonzero |= *digit != 0;",
+            "            if has_nonzero {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "function": "fn bigint::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-2.0.119/src/bigint.rs:10:1: 10:12>::to_string(_1: &BigInt) -> alloc::string::String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/syn-5956ce34d90cb2bb.mir",
+      "body_sha256": "28a22a4d23ead0772a38401d01c8df628aca49fc8eb878b04ac254b1a775d3e9",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 31572,
+          "text": "        _2 = alloc::string::String::with_capacity(move _3) -> [return: bb2, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-2.0.119/src/bigint.rs:16:24: 16:64",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-2.0.119/src/bigint.rs",
+          "source_line": 16,
+          "source_sha256": "21cf6cf0c8e175421a6579321878e140d6cd2c975e5bdac4eadde25907d7e879",
+          "argument_source_excerpt": [
+            "        BigInt { digits: Vec::new() }",
+            "    }",
+            "",
+            "    pub(crate) fn to_string(&self) -> String {",
+            "        let mut repr = String::with_capacity(self.digits.len());",
+            "",
+            "        let mut has_nonzero = false;",
+            "        for digit in self.digits.iter().rev() {",
+            "            has_nonzero |= *digit != 0;",
+            "            if has_nonzero {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "function": "fn bigint::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-1.0.109/src/bigint.rs:8:1: 8:12>::to_string(_1: &BigInt) -> std::string::String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/syn-8160074dffd6eed6.mir",
+      "body_sha256": "4e6fc6d95ed819efa7dd90ee588f32e5857bc0bdd5b1fbec5a1dd7d3c533ce67",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 33946,
+          "text": "        _2 = std::string::String::with_capacity(move _3) -> [return: bb2, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-1.0.109/src/bigint.rs:14:24: 14:64",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/syn-1.0.109/src/bigint.rs",
+          "source_line": 14,
+          "source_sha256": "efc7f64959980653d73fe4f8bc2a3a2904dc05f45b02c6dc15cd316fa3d7c338",
+          "argument_source_excerpt": [
+            "        BigInt { digits: Vec::new() }",
+            "    }",
+            "",
+            "    pub fn to_string(&self) -> String {",
+            "        let mut repr = String::with_capacity(self.digits.len());",
+            "",
+            "        let mut has_nonzero = false;",
+            "        for digit in self.digits.iter().rev() {",
+            "            has_nonzero |= *digit != 0;",
+            "            if has_nonzero {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "function": "fn ser::to_string(_1: &T) -> Result<std::string::String, ser::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/toml-080967318014127b.mir",
+      "body_sha256": "6d6e5041278b711a59aff5341c4292df6c1c68777642fa36d8857ebefe9c72ef",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 13115,
+          "text": "        _2 = std::string::String::with_capacity(const 128_usize) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs:89:19: 89:45",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs",
+          "source_line": 89,
+          "source_sha256": "e7f1e703efc1d30b0aca55c8d3f6bd62bb163652e0680cd5aeea7bf7217ba90e",
+          "argument_source_excerpt": [
+            "pub fn to_string<T: ?Sized>(value: &T) -> Result<String, Error>",
+            "where",
+            "    T: ser::Serialize,",
+            "{",
+            "    let mut dst = String::with_capacity(128);",
+            "    value.serialize(&mut Serializer::new(&mut dst))?;",
+            "    Ok(dst)",
+            "}",
+            "",
+            "/// Serialize the given data structure as a \"pretty\" String of TOML."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "function": "fn to_string_pretty(_1: &T) -> Result<std::string::String, ser::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/toml-080967318014127b.mir",
+      "body_sha256": "656914768aa8b6ffdb3cbd0bf4a51c283077bc88f92e23ae6b6e150ac8544486",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 13224,
+          "text": "        _2 = std::string::String::with_capacity(const 128_usize) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs:102:19: 102:45",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs",
+          "source_line": 102,
+          "source_sha256": "e7f1e703efc1d30b0aca55c8d3f6bd62bb163652e0680cd5aeea7bf7217ba90e",
+          "argument_source_excerpt": [
+            "pub fn to_string_pretty<T: ?Sized>(value: &T) -> Result<String, Error>",
+            "where",
+            "    T: ser::Serialize,",
+            "{",
+            "    let mut dst = String::with_capacity(128);",
+            "    value.serialize(&mut Serializer::pretty(&mut dst))?;",
+            "    Ok(dst)",
+            "}",
+            "",
+            "/// Errors that can occur when serializing a type."
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "function": "fn do_pretty(_1: &str) -> Repr {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/toml-080967318014127b.mir",
+      "body_sha256": "554ae18f53b4ab4536cf5f3257eda930fd208fec91cb434b9f1e56284edd7ee3",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 16704,
+          "text": "        _2 = std::string::String::with_capacity(move _3) -> [return: bb2, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs:545:27: 545:65",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/ser.rs",
+          "source_line": 545,
+          "source_sha256": "e7f1e703efc1d30b0aca55c8d3f6bd62bb163652e0680cd5aeea7bf7217ba90e",
+          "argument_source_excerpt": [
+            "            // - if there are any invalid control characters",
+            "            //",
+            "            // Doing it any other way would require multiple passes",
+            "            // to determine if a pretty string works or not.",
+            "            let mut out = String::with_capacity(value.len() * 2);",
+            "            let mut ty = Type::OnelineSingle;",
+            "            // found consecutive single quotes",
+            "            let mut max_found_singles = 0;",
+            "            let mut found_singles = 0;",
+            "            let mut can_be_pretty = true;"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "function": "fn tokens::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/tokens.rs:83:1: 83:23>::hex(_1: &mut Tokenizer<'_>, _2: usize, _3: usize, _4: usize) -> Result<char, tokens::Error> {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/toml-080967318014127b.mir",
+      "body_sha256": "8e013d9a11fac95caf287d98b2aed0c58155642e2ff996409e669e518e332ea8",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 53394,
+          "text": "        _5 = std::string::String::with_capacity(copy _4) -> [return: bb1, unwind continue]; // scope 0 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/tokens.rs:432:23: 432:52",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/toml-0.5.11/src/tokens.rs",
+          "source_line": 432,
+          "source_sha256": "62c38be95ac994e6ae42ff983ac3ed66d3924decfd10e929455bf9168d9a1410",
+          "argument_source_excerpt": [
+            "        })",
+            "    }",
+            "",
+            "    fn hex(&mut self, start: usize, i: usize, len: usize) -> Result<char, Error> {",
+            "        let mut buf = StdString::with_capacity(len);",
+            "        for _ in 0..len {",
+            "            match self.one() {",
+            "                Some((_, ch)) if ch as u32 <= 0x7F && ch.is_ascii_hexdigit() => buf.push(ch),",
+            "                Some((i, ch)) => return Err(Error::InvalidHexEscape(i, ch)),",
+            "                None => return Err(Error::UnterminatedString(start)),"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "function": "fn stream::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1168:1: 1168:33>::initial(_1: Option<usize>) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/winnow-c32ac9474c954bfc.mir",
+      "body_sha256": "00aa1568f40154edc0c0e3fae80e1c43489ad60f9ad36b65225b854cd5d5942d",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 28085,
+          "text": "        _0 = String::with_capacity(move _4) -> [return: bb5, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1172:31: 1172:86",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs",
+          "source_line": 1172,
+          "source_sha256": "8b096cf5c699735c923583f4cddfac40f64f7d6a645363d9dd2fc42dd347660e",
+          "argument_source_excerpt": [
+            "impl Accumulate<char> for String {",
+            "    #[inline(always)]",
+            "    fn initial(capacity: Option<usize>) -> Self {",
+            "        match capacity {",
+            "            Some(capacity) => String::with_capacity(clamp_capacity::<char>(capacity)),",
+            "            None => String::new(),",
+            "        }",
+            "    }",
+            "    #[inline(always)]",
+            "    fn accumulate(&mut self, acc: char) {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "function": "fn stream::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1183:1: 1183:40>::initial(_1: Option<usize>) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/winnow-c32ac9474c954bfc.mir",
+      "body_sha256": "782bfdfcb4dfb65f737b65a195716f2e7848068108c4a56091c870a0e6c192d0",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 28149,
+          "text": "        _0 = String::with_capacity(move _4) -> [return: bb5, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1187:31: 1187:86",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs",
+          "source_line": 1187,
+          "source_sha256": "8b096cf5c699735c923583f4cddfac40f64f7d6a645363d9dd2fc42dd347660e",
+          "argument_source_excerpt": [
+            "impl<'i> Accumulate<&'i str> for String {",
+            "    #[inline(always)]",
+            "    fn initial(capacity: Option<usize>) -> Self {",
+            "        match capacity {",
+            "            Some(capacity) => String::with_capacity(clamp_capacity::<char>(capacity)),",
+            "            None => String::new(),",
+            "        }",
+            "    }",
+            "    #[inline(always)]",
+            "    fn accumulate(&mut self, acc: &'i str) {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "function": "fn stream::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1198:1: 1198:45>::initial(_1: Option<usize>) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/winnow-c32ac9474c954bfc.mir",
+      "body_sha256": "c45b8af181024d4b3981fe618fe36447e09605f854702877bb2782766bcf722c",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 28213,
+          "text": "        _0 = String::with_capacity(move _4) -> [return: bb5, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1202:31: 1202:86",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs",
+          "source_line": 1202,
+          "source_sha256": "8b096cf5c699735c923583f4cddfac40f64f7d6a645363d9dd2fc42dd347660e",
+          "argument_source_excerpt": [
+            "impl<'i> Accumulate<Cow<'i, str>> for String {",
+            "    #[inline(always)]",
+            "    fn initial(capacity: Option<usize>) -> Self {",
+            "        match capacity {",
+            "            Some(capacity) => String::with_capacity(clamp_capacity::<char>(capacity)),",
+            "            None => String::new(),",
+            "        }",
+            "    }",
+            "    #[inline(always)]",
+            "    fn accumulate(&mut self, acc: Cow<'i, str>) {"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "function": "fn stream::<impl at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1213:1: 1213:35>::initial(_1: Option<usize>) -> String {",
+      "mir": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/winnow-c32ac9474c954bfc.mir",
+      "body_sha256": "4a0e39d164f20e3ff51c747c607efdd2605bb0d5200f7406f8735d0d48931590",
+      "classification": "build/proc-macro only; no runtime invocation from spend entry points",
+      "sites": [
+        {
+          "line": 28299,
+          "text": "        _0 = String::with_capacity(move _4) -> [return: bb5, unwind continue]; // scope 1 at /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs:1217:31: 1217:86",
+          "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/winnow-1.0.4/src/stream/mod.rs",
+          "source_line": 1217,
+          "source_sha256": "8b096cf5c699735c923583f4cddfac40f64f7d6a645363d9dd2fc42dd347660e",
+          "argument_source_excerpt": [
+            "impl Accumulate<String> for String {",
+            "    #[inline(always)]",
+            "    fn initial(capacity: Option<usize>) -> Self {",
+            "        match capacity {",
+            "            Some(capacity) => String::with_capacity(clamp_capacity::<char>(capacity)),",
+            "            None => String::new(),",
+            "        }",
+            "    }",
+            "    #[inline(always)]",
+            "    fn accumulate(&mut self, acc: String) {"
+          ]
+        }
+      ]
+    }
+  ],
+  "stdlib": {
+    "binary_sha256": "fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348",
+    "class_": "Compiler-emitted inline debug metadata from the exact rustc1.94.1 installed std/alloc bitcode; restricted to functions present in the linked client. A conservative site inventory, not proof that each source branch executes.",
+    "modules": [
+      {
+        "path": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/stdlib-ir/alloc.ll.xz",
+        "ir_sha256": "8c65108df2fa1ea39b01ade771400b0f525e3610d64638a900d712030c702842",
+        "target_debug_subprograms": 5,
+        "debug_nodes": 9553
+      },
+      {
+        "path": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/stdlib-ir/std.ll.xz",
+        "ir_sha256": "2c27c343eb4eae39d9c9e4f83659a831e4e761c652741052d36dd849f0d6b0d5",
+        "target_debug_subprograms": 7,
+        "debug_nodes": 141425
+      }
+    ],
+    "sites": [
+      {
+        "module": "alloc.ll.xz",
+        "function": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE",
+        "demangled": "alloc::fmt::format::format_inner",
+        "function_address": "000000000020d7e0",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/alloc/src/fmt.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 647,
+          "column": 26,
+          "scope": 1385,
+          "program_name": "format_inner",
+          "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+        },
+        "source_origin": {
+          "file": "library/alloc/src/fmt.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 647,
+          "column": 26,
+          "scope": 1385,
+          "program_name": "format_inner",
+          "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/alloc/src/fmt.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 647,
+            "column": 26,
+            "scope": 1385,
+            "program_name": "format_inner",
+            "linkage": "_ZN5alloc3fmt6format12format_inner17h655a6aa2517b043fE"
+          }
+        ],
+        "instruction": "br label %82, !dbg !1411",
+        "ir_line": 1120,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/fmt.rs",
+        "source_sha256": "1c4e8c95da13bb474845fb1e122f7cd3147db94b5225c56b93a922f7da9a6119",
+        "argument_source_excerpt": [
+          "#[inline]",
+          "pub fn format(args: Arguments<'_>) -> string::String {",
+          "    fn format_inner(args: Arguments<'_>) -> string::String {",
+          "        let capacity = args.estimated_capacity();",
+          "        let mut output = string::String::with_capacity(capacity);",
+          "        output",
+          "            .write_fmt(args)",
+          "            .expect(\"a formatting trait implementation returned an error when the underlying stream did not\");",
+          "        output",
+          "    }"
+        ]
+      },
+      {
+        "module": "alloc.ll.xz",
+        "function": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE",
+        "demangled": "alloc::string::String::from_utf8_lossy",
+        "function_address": "000000000020dad0",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/alloc/src/string.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 633,
+          "column": 23,
+          "scope": 6550,
+          "program_name": "from_utf8_lossy",
+          "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+        },
+        "source_origin": {
+          "file": "library/alloc/src/string.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 633,
+          "column": 23,
+          "scope": 6550,
+          "program_name": "from_utf8_lossy",
+          "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/alloc/src/string.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 633,
+            "column": 23,
+            "scope": 6550,
+            "program_name": "from_utf8_lossy",
+            "linkage": "_ZN5alloc6string6String15from_utf8_lossy17hd0f7b55b89a3b97eE"
+          }
+        ],
+        "instruction": "%23 = icmp eq i64 %2, 0, !dbg !6570",
+        "ir_line": 6359,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+        "source_sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7",
+        "argument_source_excerpt": [
+          "        }",
+          "",
+          "        const REPLACEMENT: &str = \"\\u{FFFD}\";",
+          "",
+          "        let mut res = String::with_capacity(v.len());",
+          "        res.push_str(first_valid);",
+          "        res.push_str(REPLACEMENT);",
+          "",
+          "        for chunk in iter {",
+          "            res.push_str(chunk.valid());"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::elf::locate_build_id",
+        "function_address": "00000000001cf310",
+        "target": "V181/String::with_capacity",
+        "callsite": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 438,
+          "column": 9,
+          "scope": 3202,
+          "program_name": "locate_build_id",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 438,
+          "column": 9,
+          "scope": 3202,
+          "program_name": "locate_build_id",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 438,
+            "column": 9,
+            "scope": 3202,
+            "program_name": "locate_build_id",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf15locate_build_id17hb0fd2b41933e45d5E"
+          }
+        ],
+        "instruction": "br i1 %20, label %29, label %21, !dbg !3231, !prof !1857",
+        "ir_line": 4020,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        return None;",
+          "    }",
+          "",
+          "    let mut path =",
+          "        String::with_capacity(BUILD_ID_PATH.len() + BUILD_ID_SUFFIX.len() + build_id.len() * 2 + 1);",
+          "    path.push_str(BUILD_ID_PATH);",
+          "    path.push(char::from_digit((build_id[0] >> 4) as u32, 16)?);",
+          "    path.push(char::from_digit((build_id[0] & 0xf) as u32, 16)?);",
+          "    path.push('/');",
+          "    for byte in &build_id[1..] {"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug17hb7ee6f6cc578a079E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::elf::<impl std::backtrace_rs::symbolize::gimli::Mapping>::new_debug",
+        "function_address": "00000000001cfa00",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 521,
+          "column": 11,
+          "scope": 4647,
+          "program_name": "locate_debugaltlink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf19locate_debugaltlink17h7389829839006ef4E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 521,
+            "column": 11,
+            "scope": 4647,
+            "program_name": "locate_debugaltlink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf19locate_debugaltlink17h7389829839006ef4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 337,
+            "column": 24,
+            "scope": 4420,
+            "program_name": "gnu_debugaltlink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object21gnu_debugaltlink_path17h9eb9d860687552b5E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 105,
+            "column": 60,
+            "scope": 4366,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug28_$u7b$$u7b$closure$u7d$$u7d$17hf3865a0139c49a82E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 85,
+            "column": 22,
+            "scope": 4355,
+            "program_name": "{closure#0}<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping2mk28_$u7b$$u7b$closure$u7d$$u7d$17h906ede964bdbef57E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 4346,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::{impl#0}::mk::{closure_env#0}<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17h528fdd8ff06734b2E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 84,
+            "column": 9,
+            "scope": 4342,
+            "program_name": "mk<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new_debug::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping2mk17h63546a21ed0db366E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 96,
+            "column": 9,
+            "scope": 4293,
+            "program_name": "new_debug",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$9new_debug17hb7ee6f6cc578a079E"
+          }
+        ],
+        "instruction": "br label %259, !dbg !4912",
+        "ir_line": 5050,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    } else {",
+          "        let path = fs::canonicalize(path).ok()?;",
+          "        let parent = path.parent()?;",
+          "        let mut f = PathBuf::from(parent);",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }",
+          ""
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 470,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 470,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "call void @llvm.experimental.noalias.scope.decl(metadata !9318), !dbg !9321",
+        "ir_line": 8548,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        PathBuf::with_capacity(DEBUG_PATH.len() + parent.as_os_str().len() + filename.len() + 2);",
+          "    let filename = Path::new(filename);",
+          "",
+          "    // Try \"/parent/filename\" if it differs from \"path\"",
+          "    f.push(parent);",
+          "    f.push(filename);",
+          "    if f != path && f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          ""
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 471,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 471,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%961 = icmp eq i64 %960, 0, !dbg !9408",
+        "ir_line": 8590,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    let filename = Path::new(filename);",
+          "",
+          "    // Try \"/parent/filename\" if it differs from \"path\"",
+          "    f.push(parent);",
+          "    f.push(filename);",
+          "    if f != path && f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          "",
+          "    // Try \"/parent/.debug/filename\""
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 478,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 478,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1030 = load i64, ptr %47, align 8, !dbg !9611, !range !265, !alias.scope !9625, !noalias !9638",
+        "ir_line": 8731,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 9691,
+          "program_name": "push<&str>",
+          "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 479,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 9691,
+            "program_name": "push<&str>",
+            "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 479,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1048 = icmp eq i64 %1047, 0, !dbg !9693",
+        "ir_line": 8773,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "",
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          ""
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 480,
+          "column": 7,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 480,
+            "column": 7,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1087 = load ptr, ptr %942, align 8, !dbg !9816, !alias.scope !9826, !noalias !9827, !nonnull !12, !noundef !12",
+        "ir_line": 8850,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    // Try \"/parent/.debug/filename\"",
+          "    f.clear();",
+          "    f.push(parent);",
+          "    f.push(\".debug\");",
+          "    f.push(filename);",
+          "    if f.is_file() {",
+          "        return Some(f);",
+          "    }",
+          "",
+          "    if debug_path_exists() {"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 9691,
+          "program_name": "push<&str>",
+          "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 488,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 9691,
+            "program_name": "push<&str>",
+            "linkage": "_ZN3std4path7PathBuf4push17hd8ba50715958ac20E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 488,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "store i64 0, ptr %943, align 8, !dbg !10013, !alias.scope !10015, !noalias !10016",
+        "ir_line": 8973,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "",
+          "    if debug_path_exists() {",
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 489,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 489,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1168 = getelementptr i8, ptr %1157, i64 %1159, !dbg !10086",
+        "ir_line": 9020,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    if debug_path_exists() {",
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 490,
+          "column": 11,
+          "scope": 9056,
+          "program_name": "locate_debuglink",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 490,
+            "column": 11,
+            "scope": 9056,
+            "program_name": "locate_debuglink",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf16locate_debuglink17hd803677cbafb9dfaE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 326,
+            "column": 26,
+            "scope": 8881,
+            "program_name": "gnu_debuglink_path",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf6Object18gnu_debuglink_path17h8de231684112ea47E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 40,
+            "column": 53,
+            "scope": 8808,
+            "program_name": "{closure#0}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new28_$u7b$$u7b$closure$u7d$$u7d$17h1fe9a274de0f56cbE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 97,
+            "column": 24,
+            "scope": 8797,
+            "program_name": "mk_or_other<std::backtrace_rs::symbolize::gimli::elf::{impl#0}::new::{closure_env#0}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Mapping11mk_or_other17hd3c9a3efae15fc7cE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 29,
+            "column": 9,
+            "scope": 8779,
+            "program_name": "new",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf62_$LT$impl$u20$std..backtrace_rs..symbolize..gimli..Mapping$GT$3new17h8f0b65db163b03b4E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 325,
+            "column": 13,
+            "scope": 8781,
+            "program_name": "create_mapping",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli14create_mapping17hb270a7136b2efcf1E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 425,
+            "column": 13,
+            "scope": 8646,
+            "program_name": "mapping_for_lib",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache15mapping_for_lib17h00c6616ccfbfe51dE"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 461,
+            "column": 43,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%1210 = icmp eq i64 %1209, 0, !dbg !10229",
+        "ir_line": 9102,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "        // Try \"/usr/lib/debug/parent/filename\"",
+          "        f.clear();",
+          "        f.push(DEBUG_PATH);",
+          "        f.push(parent.strip_prefix(\"/\").unwrap());",
+          "        f.push(filename);",
+          "        if f.is_file() {",
+          "            return Some(f);",
+          "        }",
+          "    }",
+          ""
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 11428,
+          "program_name": "push<&std::ffi::os_str::OsStr>",
+          "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 543,
+          "column": 14,
+          "scope": 10815,
+          "program_name": "handle_split_dwarf",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 11428,
+            "program_name": "push<&std::ffi::os_str::OsStr>",
+            "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 543,
+            "column": 14,
+            "scope": 10815,
+            "program_name": "handle_split_dwarf",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 187,
+            "column": 37,
+            "scope": 10557,
+            "program_name": "find_frames",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Context11find_frames17h87cb1e0e1013bf11E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 466,
+            "column": 40,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "%2287 = icmp eq i64 %2286, 0, !dbg !11430",
+        "ir_line": 10685,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    let mut path = PathBuf::new();",
+          "    if let Some(p) = load.comp_dir.as_ref() {",
+          "        path.push(OsStr::from_bytes(&p));",
+          "    }",
+          "",
+          "    path.push(OsStr::from_bytes(&load.path.as_ref()?));",
+          "",
+          "    if let Some(map_dwo) = super::mmap(&path) {"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E",
+        "demangled": "std::backtrace_rs::symbolize::gimli::Cache::with_global",
+        "function_address": "00000000001d16b5",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 11428,
+          "program_name": "push<&std::ffi::os_str::OsStr>",
+          "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+        },
+        "source_origin": {
+          "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 546,
+          "column": 10,
+          "scope": 10815,
+          "program_name": "handle_split_dwarf",
+          "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 11428,
+            "program_name": "push<&std::ffi::os_str::OsStr>",
+            "linkage": "_ZN3std4path7PathBuf4push17ha014af4301601410E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 546,
+            "column": 10,
+            "scope": 10815,
+            "program_name": "handle_split_dwarf",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli3elf18handle_split_dwarf17h18b501a2faa4ff07E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 187,
+            "column": 37,
+            "scope": 10557,
+            "program_name": "find_frames",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7Context11find_frames17h87cb1e0e1013bf11E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 466,
+            "column": 40,
+            "scope": 8497,
+            "program_name": "{closure#1}",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli7resolve28_$u7b$$u7b$closure$u7d$$u7d$17h72bac65b1b383854E"
+          },
+          {
+            "file": "library/std/src/../../backtrace/src/symbolize/gimli.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 379,
+            "column": 13,
+            "scope": 7609,
+            "program_name": "with_global<std::backtrace_rs::symbolize::gimli::resolve::{closure_env#1}>",
+            "linkage": "_ZN3std12backtrace_rs9symbolize5gimli5Cache11with_global17hcda02a6222629b14E"
+          }
+        ],
+        "instruction": "br label %2324, !dbg !11485",
+        "ir_line": 10723,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/../../backtrace/src/symbolize/gimli/elf.rs",
+        "source_sha256": "d635a4fa2c39456395c3e4f425857d87e1999ba8f66d7631e695f9e448ff6fe9",
+        "argument_source_excerpt": [
+          "    if let Some(p) = load.comp_dir.as_ref() {",
+          "        path.push(OsStr::from_bytes(&p));",
+          "    }",
+          "",
+          "    path.push(OsStr::from_bytes(&load.path.as_ref()?));",
+          "",
+          "    if let Some(map_dwo) = super::mmap(&path) {",
+          "        let map_dwo = stash.cache_mmap(map_dwo);",
+          "        if let Some(dwo) = Object::parse(map_dwo) {",
+          "            return gimli::Dwarf::load(|id| -> Result<_, ()> {"
+        ]
+      },
+      {
+        "module": "std.ll.xz",
+        "function": "_ZN3std4path4Path5_join17h772e9499befd4fe9E",
+        "demangled": "std::path::Path::_join",
+        "function_address": "00000000001e0de0",
+        "target": "V178/Path::_push",
+        "callsite": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 1313,
+          "column": 14,
+          "scope": 4919,
+          "program_name": "push<&std::path::Path>",
+          "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+        },
+        "source_origin": {
+          "file": "library/std/src/path.rs",
+          "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+          "line": 3002,
+          "column": 13,
+          "scope": 56430,
+          "program_name": "_join",
+          "linkage": "_ZN3std4path4Path5_join17h772e9499befd4fe9E"
+        },
+        "inline_chain": [
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 1313,
+            "column": 14,
+            "scope": 4919,
+            "program_name": "push<&std::path::Path>",
+            "linkage": "_ZN3std4path7PathBuf4push17h73accadeed9a2a95E"
+          },
+          {
+            "file": "library/std/src/path.rs",
+            "directory": "/rustc/e408947bfd200af42db322daf0fadfe7e26d3bd1",
+            "line": 3002,
+            "column": 13,
+            "scope": 56430,
+            "program_name": "_join",
+            "linkage": "_ZN3std4path4Path5_join17h772e9499befd4fe9E"
+          }
+        ],
+        "instruction": "br label %22, !dbg !56451",
+        "ir_line": 54410,
+        "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+        "source_sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a",
+        "argument_source_excerpt": [
+          "    }",
+          "",
+          "    fn _join(&self, path: &Path) -> PathBuf {",
+          "        let mut buf = self.to_path_buf();",
+          "        buf.push(path);",
+          "        buf",
+          "    }",
+          "",
+          "    /// Creates an owned [`PathBuf`] like `self` but with the given file name.",
+          "    ///"
+        ]
+      }
+    ]
+  },
+  "complete": false,
+  "remaining": "Indirect dispatch closure and source-to-inlined-code completeness are not certified. Build-only exclusions are mechanical unit-graph classifications, not mere absence of an nm symbol."
+}

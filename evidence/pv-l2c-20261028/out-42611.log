@@ -1,0 +1,26 @@
+'PV_L2C_NativeBalance.rebalance_canonical' depends on axioms: [propext, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_NativeBalance.lean:37:3: error: unknown tactic
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_NativeBalance.lean:28:51: error: unsolved goals
+before after : List word
+hb : ∀ x ∈ before, canonical x
+ha : ∀ x ∈ after, canonical x
+hc : ∀ x ∈ before ++ after, canonical x
+hn : decode (sub 0 (fold (before ++ after) 0)) = -((List.map decode before).sum + (List.map decode after).sum)
+⊢ (List.map decode before).sum +
+      (-((List.map decode before).sum + (List.map decode after).sum) + (List.map decode after).sum) =
+    0
+'PV_L2C_NativeBalance.rebalance_decode_sum' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2C_NativeBalance.audit_zero' depends on axioms: [propext, sorryAx, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_NativeBalance.lean:52:56: error: unsolved goals
+before after : List word
+hb : ∀ x ∈ before, canonical x
+ha : ∀ x ∈ after, canonical x
+⊢ fold (rebalance before after) 0#32 = 0#32
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_NativeBalance.lean:53:8: warning: This simp argument is unused:
+  audit_zero before after hb ha
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵a̵u̵d̵i̵t̵_̵z̵e̵r̵o̵ ̵b̵e̵f̵o̵r̵e̵ ̵a̵f̵t̵e̵r̵ ̵h̵b̵ ̵h̵a̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_NativeBalance.audit_branch' depends on axioms: [propext, sorryAx, Quot.sound]

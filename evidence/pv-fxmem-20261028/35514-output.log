@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_FXM_ReserveWorld.lean:9:23: error: Application type mismatch: The argument
+  Nat.mod_lt n (Nat.zero_lt_succ Usize.max)
+has type
+  n % Usize.max.succ < Usize.max.succ
+but is expected to have type
+  (n % (Usize.max + 1)).succ < (2 ^ UScalarTy.Usize.numBits).succ
+in the application
+  Nat.le_of_lt_succ (Nat.mod_lt n (Nat.zero_lt_succ Usize.max))
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_FXM_ReserveWorld.lean:142:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue.isFalse.isFalse.isFalse
+T S F : Type
+step : Request → S → Option ℕ × S
+wordMax byteMax : ℕ
+shape : Shape
+b : Buffer T
+additional : ℕ
+w : World S F
+h✝³ : additional > b.capacity - b.values.length
+h✝² : ¬shape.width = 0
+h✝¹ : ¬b.values.length + additional > wordMax
+h✝ : ¬(b.values.length + additional) * shape.width > byteMax
+⊢ (let cap := b.values.length + additional;
+        have req := { address := b.address, oldCapacity := b.capacity, newCapacity := cap, shape := shape };
+        match step req w.allocator with
+        | (p, s) =>
+          have w' := attempted req p s w;
+          match p with
+          | none =>
+            { returned := Except.error (Error.allocError { size := usize (cap * shape.width), align := shape.align }),
+              buffer := b, world := w' }
+          | some address =>
+            { returned := Except.ok (),
+              buffer := { address := address, capacity := cap, values := b.values, fits := ⋯ },
+              world := succeeded req address w' }).buffer.values =
+    b.values
+'R1Z.PV_FXM_ReserveWorld.usize_exact' depends on axioms: [propext, sorryAx]
+'R1Z.PV_FXM_ReserveWorld.source_reference' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_FXM_ReserveWorld.values_preserved' depends on axioms: [propext, sorryAx]
+'R1Z.PV_FXM_ReserveWorld.no_growth' depends on axioms: [propext, sorryAx]
+'R1Z.PV_FXM_ReserveWorld.allocation_error' depends on axioms: [propext, sorryAx]
+'R1Z.PV_FXM_ReserveWorld.success_capacity' depends on axioms: [propext, sorryAx]
+'R1Z.PV_FXM_ReserveWorld.caller_composition' depends on axioms: [propext, sorryAx, Quot.sound]
+exit=1
+window=1 slot=/tmp/aspis-r0-lean-slot-1.lock env=J launcher=run-joint.sh
