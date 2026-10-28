@@ -1,0 +1,759 @@
+
+### ActualBeginSelectedCanonical -> RPz7_ActualBeginSelectedCanonical
+--- evidence/replay-dry3-20261026/RPz2_recovered/ActualBeginSelectedCanonical.lean
++++ evidence/replay-dry8-20261026/RPz7_ActualBeginSelectedCanonical.lean
+@@ -1,4 +1,3 @@
+ import RPz7_SemanticRoundAlphaSelectedCanonical
+-
+ /-! Canonical selected-carrier challenges from the successful retained begin
+ caller. Reuses the actual semantic-call run, not an independent sampler model. -/
+
+### AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1 -> RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualPolicyUnconditionalV1
+--- evidence/native-tx2i-20261028/NBS_L050/sources/NBS_generated/AspisR1CircleSampleWrapper/RawCircleSampleActualPolicyUnconditionalV1.lean
++++ evidence/replay-dry8-20261026/RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualPolicyUnconditionalV1.lean
+@@ -1,5 +1,4 @@
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualSamplerCanonicalV1
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualPolicyV2
+-
+ set_option autoImplicit false
+ set_option maxHeartbeats 1000000
+
+### AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyV2 -> RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualPolicyV2
+--- evidence/native-tx2i-20261028/NBS_L049/sources/NBS_generated/AspisR1CircleSampleWrapper/RawCircleSampleActualPolicyV2.lean
++++ evidence/replay-dry8-20261026/RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualPolicyV2.lean
+@@ -2,5 +2,4 @@
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualFallbackCircleV2
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualFallbackResultV4
+-
+ set_option autoImplicit false
+ set_option maxHeartbeats 1000000
+
+### AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw -> RPz7_AspisR1CircleSampleWrapper_RawCircleSampleEmittedWrapperLaw
+--- evidence/native-tx2i-20261028/NBS_L042/sources/NBS_generated/AspisR1CircleSampleWrapper/RawCircleSampleEmittedWrapperLaw.lean
++++ evidence/replay-dry8-20261026/RPz7_AspisR1CircleSampleWrapper_RawCircleSampleEmittedWrapperLaw.lean
+@@ -1,4 +1,3 @@
+ import RPz7_AspisR1CircleSampleWrapper_Funs
+-
+ set_option autoImplicit false
+ set_option maxHeartbeats 1000000
+
+### AuS1_Semantic3 -> RPz7_AuS1_Semantic3
+--- lean/AuS1_Semantic3.lean
++++ evidence/replay-dry8-20261026/RPz7_AuS1_Semantic3.lean
+@@ -24,5 +24,5 @@
+     (law : ∀ h parts, D.digest h parts = hashv parts) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (prefix1 : r1_wire.Prefix)
+     (transcript : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) :
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     Uniform hashv (finish R B D pub prefix1 transcript challenges obs) := by
+   unfold finish
+@@ -40,5 +40,5 @@
+     (hashv : SdkC_Source.Parts → Result SdkC_Source.Digest)
+     (law : ∀ h parts, D.digest h parts = hashv parts) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) :
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     Uniform hashv (verify (finish R B) D pub bytes hash obs) := by
+   unfold verify
+
+### ClaimsUnrolledFinish -> RPz7_ClaimsUnrolledFinish
+--- docs/research/100bit-spend-path-20261013/lean/ClaimsUnrolledFinish.lean
++++ evidence/replay-dry8-20261026/RPz7_ClaimsUnrolledFinish.lean
+@@ -2,5 +2,4 @@
+ import RPz7_S1ExtractedRoundChildrenV1
+ import RPz7_S1SemanticFinishBoundsV1
+-
+ /-! Install the complete emitted finite Claims VALUE interpretation in the
+ actual S1 finish consumer. Source getters and the existing full indexed decoder
+@@ -124,5 +123,5 @@
+     (pre : MainPrefix) (before : AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+     (challenges : AspisR1PublicPreparation.r1_wire.Challenges)
+-    (obs : Option (AspisR1PublicPreparation.verifier.Phase → Result Unit))
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit))
+     (out : AspisR1PublicPreparation.r1_semantic.Verified H)
+     (accepted : AspisR1PublicPreparation.FinishModel.finish R (install std B)
+
+### ClaimsUnrolledFinishAdapters -> RPz7_ClaimsUnrolledFinishAdapters
+--- docs/research/100bit-spend-path-20261013/lean/ClaimsUnrolledFinishAdapters.lean
++++ evidence/replay-dry8-20261026/RPz7_ClaimsUnrolledFinishAdapters.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ClaimsUnrolledFinish
+-
+ /-! Nominal carrier transport for the actual source callees installed in
+ ClaimsUnrolledFinish. Full raw field words and all error/fail/div outcomes,
+
+### ExtractedDigest32Begin -> RPz7_ExtractedDigest32Begin
+--- docs/research/100bit-spend-path-20261013/lean/ExtractedDigest32Begin.lean
++++ evidence/replay-dry8-20261026/RPz7_ExtractedDigest32Begin.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ExtractedDigest32Callers
+-
+ /-! Every call in the actual straight-line begin succeeds on acceptance. The
+ trace is a relation over the extracted functions, retaining exact validated
+
+### ExtractedDigest32Callers -> RPz7_ExtractedDigest32Callers
+--- docs/research/100bit-spend-path-20261013/lean/ExtractedDigest32Callers.lean
++++ evidence/replay-dry8-20261026/RPz7_ExtractedDigest32Callers.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ExtractedDigest32Transcript
+-
+ /-! Success inversion for the actual semantic wrapper and the actual opening
+ constructor/absorb/block. No claim about Observer effects or the outer verifier
+
+### ExtractedSourceDigestOracle -> RPz7_ExtractedSourceDigestOracle
+--- docs/research/100bit-spend-path-20261013/evidence/s4-source-byte-oracle-v1-20261022/dependencies/ExtractedSourceDigestOracle.lean
++++ evidence/replay-dry8-20261026/RPz7_ExtractedSourceDigestOracle.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ExtractedSourceDigestAddresses
+-
+ /-! Proof-only construction of a functional oracle for the exact source-call
+ grammar. D may depend on slice grouping: the inverse lemma establishes equality
+
+### ExtractedSourceFull25Frames -> RPz7_ExtractedSourceFull25Frames
+--- docs/research/100bit-spend-path-20261013/lean/bridge-source-full25-20261017/ExtractedSourceFull25Frames.lean
++++ evidence/replay-dry8-20261026/RPz7_ExtractedSourceFull25Frames.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ExtractedDigest32Begin
+-
+ /-! An ordered log constructed from the actual semantic call witnesses.
+ This generic source lemma does not assume record-byte equality. Applying it
+
+### F3U_VerifyHead -> RPz8_F3U_VerifyHead
+--- lean/F3U_VerifyHead.lean
++++ evidence/replay-dry9-20261027/RPz8_F3U_VerifyHead.lean
+@@ -10,5 +10,5 @@
+ theorem first (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (input : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
+     (success : erase (S1SemanticCode.verify F D pub input hash obs) = ok (.Ok out)) :
+     ∃ (encoded : alloc.vec.Vec U8) (root state : State),
+
+### F3V_SemanticFinish -> RPz7_F3V_SemanticFinish
+--- lean/F3V_SemanticFinish.lean
++++ evidence/replay-dry8-20261026/RPz7_F3V_SemanticFinish.lean
+@@ -13,5 +13,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+     (p : r1_wire.Prefix) (t : r1_wire.SemanticTranscript Hash)
+-    (ch : r1_wire.Challenges) (obs : Option (verifier.Phase → Result Unit)) :
++    (ch : r1_wire.Challenges) (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     F3U_Rehash.code H (S1SemanticCode.finish R B D pub p t ch obs)=
+       S1SemanticCode.finish R B (F3U_Rehash.dictionary H D) pub p t ch obs := by
+
+### F3V_SemanticVerify -> RPz7_F3V_SemanticVerify
+--- lean/F3V_SemanticVerify.lean
++++ evidence/replay-dry8-20261026/RPz7_F3V_SemanticVerify.lean
+@@ -13,5 +13,5 @@
+     (R : RoundModel.Boundaries) (B : FinishModel.Boundaries)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+-    (bytes : Slice U8) (hash : Hash) (obs : Option (verifier.Phase → Result Unit)) :
++    (bytes : Slice U8) (hash : Hash) (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     F3U_Rehash.code H (S1SemanticCode.verify (S1SemanticCode.finish R B) D pub bytes hash obs)=
+       S1SemanticCode.verify (S1SemanticCode.finish R B) (F3U_Rehash.dictionary H D) pub bytes hash obs := by
+
+### FIr_FinishComparison -> RPx_FIr_FinishComparison
+--- lean/FIr_FinishComparison.lean
++++ evidence/replay-deployed2-20261027/RPx_FIr_FinishComparison.lean
+@@ -42,5 +42,5 @@
+     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+     (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
+-    (hfinish : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
++    (hfinish : FinishModel.finish R B D pub pre before challenges (RPz7_PhaseIso.observerToFirst obs) = ok (.Ok out)) :
+     ∃ running afterRounds terminal mask16 mask10 claim0 claim27 mask
+         etaTerminal masked extra28,
+@@ -59,5 +59,5 @@
+       hrounds, hchallenges, hstate, htranscript, hclaims, hrecord25, hextra,
+       hcircle25, hrecord26, hbeforeZ1, hcircle26, hz⟩ :=
+-    S1SemanticFinishBounds.finish_success R B D pub pre before challenges obs out hfinish
++    S1SemanticFinishBounds.finish_success R B D pub pre before challenges (RPz7_PhaseIso.observerToFirst obs) out hfinish
+   have h := hfinish
+   unfold FinishModel.finish at h
+
+### FIs_Literal -> RPz7_FIs_Literal
+--- lean/FIs_Literal.lean
++++ evidence/replay-dry8-20261026/RPz7_FIs_Literal.lean
+@@ -8,5 +8,4 @@
+ import RPz7_SAF_C_SAF_FinishPrepared
+ import RPz7_SAF_C_SAF_PreparedOutcome
+-
+ import RPz7_Rc4_Model
+ import SAQ_Constructor
+
+### GExp_FinishAssociation -> RPz7_GExp_FinishAssociation
+--- lean/GExp_FinishAssociation.lean
++++ evidence/replay-dry8-20261026/RPz7_GExp_FinishAssociation.lean
+@@ -10,5 +10,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (prefix1 : r1_wire.Prefix)
+     (transcript : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
+     (law : ∀ h parts, D.digest h parts = hashv parts) :
+     AspisR1.SdkD_PrepareLower.Associated hashv (finish R B D pub prefix1 transcript challenges obs) := by
+
+### GExp_VerifyAssociation -> RPz7_GExp_VerifyAssociation
+--- lean/GExp_VerifyAssociation.lean
++++ evidence/replay-dry8-20261026/RPz7_GExp_VerifyAssociation.lean
+@@ -9,5 +9,5 @@
+ theorem verify_associated (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (hashv : AspisR1.SdkC_Source.Parts → Result AspisR1.SdkC_Source.Digest)
+     (law : ∀ h parts, D.digest h parts = hashv parts) :
+     AspisR1.SdkD_PrepareLower.Associated hashv (verify (finish R B) D pub bytes hash obs) := by
+
+### GExq_FirstChildRoot -> RPz8_GExq_FirstChildRoot
+--- lean/GExq_FirstChildRoot.lean
++++ evidence/replay-dry9-20261027/RPz8_GExq_FirstChildRoot.lean
+@@ -1,4 +1,3 @@
+ import RPz7_GExq_Caller
+-
+ import RPz8_GExq_FirstRoot
+ import RPz7_GExq_ChildCode
+
+### NP6_ClaimsMain -> RPz7_NP6_ClaimsMain
+--- lean/NP6_ClaimsMain.lean
++++ evidence/replay-dry8-20261026/RPz7_NP6_ClaimsMain.lean
+@@ -1,4 +1,3 @@
+ import RPz7_NP6_ClaimsSuccess
+-
+ set_option autoImplicit false
+ noncomputable section
+
+### NP6_ClaimsModel -> RPz7_NP6_ClaimsModel
+--- lean/NP6_ClaimsModel.lean
++++ evidence/replay-dry8-20261026/RPz7_NP6_ClaimsModel.lean
+@@ -1,4 +1,3 @@
+ import RPz7_NP6_StdModel
+-
+ /-! Complete Result normalization for the owned safe reference. Native P6
+ and dictionary installation are separate obligations, not hypotheses hidden
+
+### NP6_ClaimsSuccess -> RPz7_NP6_ClaimsSuccess
+--- lean/NP6_ClaimsSuccess.lean
++++ evidence/replay-dry8-20261026/RPz7_NP6_ClaimsSuccess.lean
+@@ -1,4 +1,3 @@
+ import RPz7_NP6_ClaimsModel
+-
+ /-! Success inversion retains the same record and each actual decoder call.
+ No canonicality, chosen decoder output or independently accepted child is a
+
+### NP6_RecordShape -> RPz7_NP6_RecordShape
+--- lean/NP6_RecordShape.lean
++++ evidence/replay-dry8-20261026/RPz7_NP6_RecordShape.lean
+@@ -2,5 +2,4 @@
+ import ExtractedPrefixParse
+ import RPz7_ExtractedSourceFull25Frames
+-
+ /-! Derive the exact record width used by the whole-body Kani gates from the
+ actual successful parser and validated getter on the same prefix. -/
+
+### NP6_StdModel -> RPz7_NP6_StdModel
+--- lean/NP6_StdModel.lean
++++ evidence/replay-dry8-20261026/RPz7_NP6_StdModel.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ClaimsUnrolledFinish
+-
+ /-! Safe owned-reference std interpretation. The reserve result is the existing
+ allocator outcome, not an assumption of successful Claims. This module proves
+
+### Op5I_AcceptedCarrierCounterexample -> RPz7_Op5I_AcceptedCarrierCounterexample
+--- lean/Op5I_AcceptedCarrierCounterexample.lean
++++ evidence/replay-dry8-20261026/RPz7_Op5I_AcceptedCarrierCounterexample.lean
+@@ -1,4 +1,3 @@
+ import RPz7_Op5I_EventCounterexample
+-
+ set_option autoImplicit false
+ noncomputable section
+
+### Op5I_EventCounterexample -> RPz7_Op5I_EventCounterexample
+--- lean/Op5I_EventCounterexample.lean
++++ evidence/replay-dry8-20261026/RPz7_Op5I_EventCounterexample.lean
+@@ -1,4 +1,3 @@
+ import RPz7_SInt2_AcceptedPairClaims
+-
+ set_option autoImplicit false
+ noncomputable section
+
+### Op5T_Final -> RPz7_Op5T_Final
+--- /Users/dominic/ZK/.worktrees/cx-native-reconcile/evidence/native-reconcile-20261028/NDO_Op5T_Final.original.lean.txt
++++ evidence/replay-dry8-20261026/RPz7_Op5T_Final.lean
+@@ -25,7 +25,7 @@
+ open AspisV8R19.DuplexFrames AspisV8R19.SourceDuplexStep
+ 
+-/-- Same accepted witnesses and all Tx2I conclusions, at the concrete batch
+-source in BOTH dictionaries. This theorem retains the predecessor's original
+-marks and is not yet its success-conditioned event/effect replacement. -/
++/-- Preserve all Tx2I conclusions under success-conditioned marks and derive
++both concrete batch successes on the SAME accepted f/s. This does not identify
++the arbitrary SDK child log with the canonical batch's oracle trace. -/
+ theorem accepted_pair_claims_op5 {W A E M Cv F : Type} {N : Nat}
+     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
+
+### Op5T_Marks -> RPz7_Op5T_Marks
+--- lean/Op5T_Marks.lean
++++ evidence/replay-dry8-20261026/RPz7_Op5T_Marks.lean
+@@ -2,5 +2,4 @@
+ import VTop_Order
+ import RPz7_Tx2I_Witness
+-
+ set_option autoImplicit false
+ noncomputable section
+
+### Op5T_NativeSchedule -> RPz7_Op5T_NativeSchedule
+--- lean/Op5T_NativeSchedule.lean
++++ evidence/replay-dry8-20261026/RPz7_Op5T_NativeSchedule.lean
+@@ -1,4 +1,3 @@
+ import RPz7_Op5T_Schedule
+-
+ /-! Accepted native source schedule on the expanded actual outer execution.
+ Only the named child erasure/source-mark theorems supply internal events. -/
+
+### Op5T_SuccessAccepted -> RPz7_Op5T_SuccessAccepted
+--- /Users/dominic/ZK/.worktrees/cx-native-reconcile/evidence/native-reconcile-20261028/NDO_Op5T_SuccessAccepted.original.lean.txt
++++ evidence/replay-dry8-20261026/RPz7_Op5T_SuccessAccepted.lean
+@@ -23,6 +23,6 @@
+ 
+ /-- Same accepted witnesses and all Tx2I conclusions, at the concrete batch
+-source in BOTH dictionaries. This theorem retains the predecessor's original
+-marks and is not yet its success-conditioned event/effect replacement. -/
++source in BOTH dictionaries, using success-conditioned marks. Actual SDK
++child-effect association remains a separate obligation. -/
+ theorem accepted_pair_claims_op5 {W A E M Cv F : Type} {N : Nat}
+     (L : Library W (Nat → Record)) (sdk : S2TrustedSdkBorrow L)
+
+### Query31DigestInputBridge -> RPz7_Query31DigestInputBridge
+--- docs/research/100bit-spend-path-20261013/lean-candidates/query31-materialized-schedule-20261020/sources/Query31DigestInputBridge.lean
++++ evidence/replay-dry8-20261026/RPz7_Query31DigestInputBridge.lean
+@@ -1,5 +1,4 @@
+ import Query31SourceCalls
+ import RPz7_ExtractedSourceDigestOracle
+-
+ open Aeneas Aeneas.Std Result
+ set_option autoImplicit false
+
+### Query31SourceOracleBridge -> RPz7_Query31SourceOracleBridge
+--- docs/research/100bit-spend-path-20261013/lean-candidates/query31-materialized-schedule-20261020/sources/Query31SourceOracleBridge.lean
++++ evidence/replay-dry8-20261026/RPz7_Query31SourceOracleBridge.lean
+@@ -3,5 +3,4 @@
+ import Query31ArrayReadback
+ import RPz7_ExtractedSourceDigestOracle
+-
+ open Aeneas Aeneas.Std Result
+ set_option autoImplicit false
+
+### R4TransportCircleCoordinates -> RPz7_R4TransportCircleCoordinates
+--- docs/research/100bit-spend-path-20261013/lean/R4TransportCircleCoordinates.lean
++++ evidence/replay-dry8-20261026/RPz7_R4TransportCircleCoordinates.lean
+@@ -2,5 +2,4 @@
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualFallbackCoordinatesV1
+ import RPz7_ExtractedSourceSemanticSampler
+-
+ /-! Exact circle coordinates, including both fallbacks, for the retained
+ extracted wrapper. Current caller/source pinning is a separate obligation. -/
+
+### RawJ_VerifyRead -> RPz8_RawJ_VerifyRead
+--- lean/RawJ_VerifyRead.lean
++++ evidence/replay-dry9-20261027/RPz8_RawJ_VerifyRead.lean
+@@ -10,5 +10,5 @@
+ theorem frame (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (input : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
+     (success : erase (S1SemanticCode.verify F D pub input hash obs) = ok (.Ok out)) :
+     ∃ p, PrefixAdapter.parseAccepted input = ok (.Ok p) ∧
+
+### RawK_VerifyHead -> RPz8_RawK_VerifyHead
+--- lean/RawK_VerifyHead.lean
++++ evidence/replay-dry9-20261027/RPz8_RawK_VerifyHead.lean
+@@ -10,5 +10,5 @@
+ theorem first (F : S1SemanticCode.Finish) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (input : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
+     (success : erase (S1SemanticCode.verify F D pub input hash obs) = ok (.Ok out)) :
+     ∃ entry, RawK_Head.head (S1SemanticCode.verify F D pub input hash obs) = some entry ∧
+
+### RawSourceDigestLog -> RPz7_RawSourceDigestLog
+--- docs/research/100bit-spend-path-20261013/lean/RawSourceDigestLog.lean
++++ evidence/replay-dry8-20261026/RPz7_RawSourceDigestLog.lean
+@@ -1,4 +1,3 @@
+ import RPz7_ExtractedSourceDigestAddresses
+-
+ /-! Exact input/output pairs of reached source digest calls. Kept independent
+ of commitment-cut recovery so source/literal coupling need not load that proof
+
+### RawSourceGlobalOracleCoupling -> RPz7_RawSourceGlobalOracleCoupling
+--- docs/research/100bit-spend-path-20261013/lean/RawSourceGlobalOracleCoupling.lean
++++ evidence/replay-dry8-20261026/RPz7_RawSourceGlobalOracleCoupling.lean
+@@ -1,5 +1,4 @@
+ import RPz7_RawSourceDigestLog
+ import RPz7_RawSourceLiteralTraceLift
+-
+ /-! Couple reached source calls to one global byte oracle. No equality of the
+ constructed source oracle on unqueried addresses is required. The actual global
+
+### RawTx1DigestLog -> RPz7_RawTx1DigestLog
+--- docs/research/100bit-spend-path-20261013/lean/RawTx1DigestLog.lean
++++ evidence/replay-dry8-20261026/RPz7_RawTx1DigestLog.lean
+@@ -1,4 +1,3 @@
+ import RPz7_RawSourceGlobalOracleInitial
+-
+ /-! Conditional tx1 log assembly. Inventory coverage is deliberately a named
+ obligation: no whole-tx1 execution trace is emitted by the retained extraction. -/
+
+### Rc5_Literal -> RPz7_Rc5_Literal
+--- lean/Rc5_Literal.lean
++++ evidence/replay-dry8-20261026/RPz7_Rc5_Literal.lean
+@@ -1,5 +1,4 @@
+ import RPz7_SAF_C_SAF_FinishPrepared
+ import RPz7_SAF_C_SAF_PreparedOutcome
+-
+ import RPz7_Rc4_Model
+ import SAQ_Constructor
+
+### S1AcceptedChallengesNumericV1 -> RPz7_S1AcceptedChallengesNumericV1
+--- evidence/replay-dry3-20261026/RPz2_recovered/S1AcceptedChallengesNumericV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1AcceptedChallengesNumericV1.lean
+@@ -14,5 +14,5 @@
+ theorem accepted_verify_challenges {H : Type} (B : FinishModel.Boundaries)
+     (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+-    (bytes : Slice U8) (hash : H) (obs : Option (verifier.Phase → Result Unit))
++    (bytes : Slice U8) (hash : H) (obs : Option (RPz7_PhaseIso.Phase → Result Unit))
+     (out : r1_semantic.Verified H)
+     (accepted : VerifyPrefix.verify (FinishModel.finish children B) D pub bytes hash obs = ok (.Ok out)) :
+
+### S1AcceptedSemanticNumericV1 -> RPz7_S1AcceptedSemanticNumericV1
+--- evidence/replay-dry3-20261026/RPz2_recovered/S1AcceptedSemanticNumericV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1AcceptedSemanticNumericV1.lean
+@@ -21,5 +21,5 @@
+     (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+     (pre : r1_wire.Prefix) (before : r1_wire.SemanticTranscript H)
+-    (challenges : r1_wire.Challenges) (obs : Option (verifier.Phase → Result Unit))
++    (challenges : r1_wire.Challenges) (obs : Option (RPz7_PhaseIso.Phase → Result Unit))
+     (out : r1_semantic.Verified H)
+     (accepted : FinishModel.finish children B D pub pre before challenges obs = ok (.Ok out)) :
+@@ -42,5 +42,5 @@
+ theorem accepted_verify_numeric {H : Type} (B : FinishModel.Boundaries)
+     (D : aspis_core.Digest32 H) (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+-    (bytes : Slice U8) (hash : H) (obs : Option (verifier.Phase → Result Unit))
++    (bytes : Slice U8) (hash : H) (obs : Option (RPz7_PhaseIso.Phase → Result Unit))
+     (out : r1_semantic.Verified H)
+     (accepted : VerifyPrefix.verify (FinishModel.finish children B) D pub bytes hash obs = ok (.Ok out)) :
+
+### S1SemanticBudgetV1 -> RPz7_S1SemanticBudgetV1
+--- evidence/global-exp-20261026/GExp_029/sources/S1SemanticBudgetV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticBudgetV1.lean
+@@ -220,5 +220,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (prefix1 : r1_wire.Prefix)
+     (transcript : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) : bounded 36 (finish R B D pub prefix1 transcript challenges obs) := by
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) : bounded 36 (finish R B D pub prefix1 transcript challenges obs) := by
+   unfold finish
+   repeat' first
+@@ -243,5 +243,5 @@
+ theorem verify_bounded (R : RoundModel.Boundaries) (B : FinishModel.Boundaries) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) : bounded 82 (verify (finish R B) D pub bytes hash obs) := by
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) : bounded 82 (verify (finish R B) D pub bytes hash obs) := by
+   unfold verify
+   repeat' first
+
+### S1SemanticCodeFinishExactV1 -> RPz7_S1SemanticCodeFinishExactV1
+--- evidence/sdk-child2-20261026/SdkD_091/sources/S1SemanticCodeFinishExactV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticCodeFinishExactV1.lean
+@@ -15,5 +15,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (prefix1 : r1_wire.Prefix)
+     (transcript : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) :
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     erase (finish R B D pub prefix1 transcript challenges obs)=FinishModel.finish R B D pub prefix1 transcript challenges obs := by
+   unfold finish FinishModel.finish
+
+### S1SemanticCodeFinishV1 -> RPz7_S1SemanticCodeFinishV1
+--- evidence/sdk-child2-20261026/SdkD_081/sources/S1SemanticCodeFinishV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticCodeFinishV1.lean
+@@ -13,5 +13,5 @@
+   (prefix1 : r1_wire.Prefix) (transcript : r1_wire.SemanticTranscript H)
+   (challenges : r1_wire.Challenges)
+-  (obs : Option (verifier.Phase → Result Unit)) :
++  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+   Code (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+   := do
+
+### S1SemanticCodeVerifyExactV1 -> RPz7_S1SemanticCodeVerifyExactV1
+--- evidence/sdk-child2-20261026/SdkD_095/sources/S1SemanticCodeVerifyExactV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticCodeVerifyExactV1.lean
+@@ -18,5 +18,5 @@
+     {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (bytes : Slice U8) (hash : H)
+-    (obs : Option (verifier.Phase → Result Unit)) :
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+     erase (verify (finish R B) D pub bytes hash obs)=
+       VerifyPrefix.verify (FinishModel.finish R B) D pub bytes hash obs := by
+
+### S1SemanticCodeVerifyV1 -> RPz7_S1SemanticCodeVerifyV1
+--- evidence/sdk-child2-20261026/SdkD_085/sources/S1SemanticCodeVerifyV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticCodeVerifyV1.lean
+@@ -11,5 +11,5 @@
+ abbrev Finish := {H : Type} → aspis_core.Digest32 H →
+   pool_v1.pair_forest_semantic_terminal.r0.Public → r1_wire.Prefix →
+-  r1_wire.SemanticTranscript H → r1_wire.Challenges → Option (verifier.Phase → Result Unit) →
++  r1_wire.SemanticTranscript H → r1_wire.Challenges → Option (RPz7_PhaseIso.Phase → Result Unit) →
+   Code (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+ 
+@@ -18,5 +18,5 @@
+   (public1 : pool_v1.pair_forest_semantic_terminal.r0.Public)
+   (bytes : Slice Std.U8) (hash : H)
+-  (obs : Option (verifier.Phase → Result Unit)) :
++  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+   Code (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+   := do
+
+### S1SemanticFinishBoundsV1 -> RPz7_S1SemanticFinishBoundsV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticFinishBoundsV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticFinishBoundsV1.lean
+@@ -27,5 +27,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
+     (h : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
+     ∃ running t25 record25 record26 z0 t26 z1 t27,
+
+### S1SemanticFinishModelV1 -> RPz7_S1SemanticFinishModelV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticFinishModelV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticFinishModelV1.lean
+@@ -226,5 +226,5 @@
+   (prefix1 : r1_wire.Prefix) (transcript : r1_wire.SemanticTranscript H)
+   (challenges : r1_wire.Challenges)
+-  (obs : Option (verifier.Phase → Result Unit)) :
++  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+   Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+   := do
+
+### S1SemanticFinishRootsV1 -> RPz7_S1SemanticFinishRootsV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticFinishRootsV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticFinishRootsV1.lean
+@@ -29,5 +29,5 @@
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public) (pre : r1_wire.Prefix)
+     (before : r1_wire.SemanticTranscript H) (challenges : r1_wire.Challenges)
+-    (obs : Option (verifier.Phase → Result Unit)) (out : r1_semantic.Verified H)
++    (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (out : r1_semantic.Verified H)
+     (h : FinishModel.finish R B D pub pre before challenges obs = ok (.Ok out)) :
+     ∃ (rootPayload : Slice U8)
+
+### S1SemanticPhaseV1 -> RPz7_S1SemanticPhaseV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticPhaseV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticPhaseV1.lean
+@@ -1,10 +1,6 @@
+-import CurrentCompactFirstCompositionV1
++import RPz7_PhaseIso
+ set_option autoImplicit false
+-namespace AspisR1PublicPreparation.verifier
+-/-- The full retained caller phase carrier, with every variant and payload.
+-This naming alias supplies the nominal phase absent from the selected legacy
+-public-preparation cache. Source-body transports below use release None. -/
+-abbrev Phase := AspisR1PublicPreparation.FirstCaller.Phase
+-end AspisR1PublicPreparation.verifier
+-
+-#print axioms AspisR1PublicPreparation.verifier.Phase
++/-! Lead-owned S1 phase replacement. The original has no theorems: its only
++export is the conflicting abbreviation. The retained S1 carrier now lives in
++RPz7_PhaseIso.Phase, with explicit producer/callback/consumer transports. -/
++#print axioms RPz7_PhaseIso.Phase
+
+### S1SemanticPrefixModelV1 -> RPz7_S1SemanticPrefixModelV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticPrefixModelV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticPrefixModelV1.lean
+@@ -6,8 +6,8 @@
+ abbrev VerifyPrefix.Finish := {H : Type} → aspis_core.Digest32 H →
+   pool_v1.pair_forest_semantic_terminal.r0.Public → r1_wire.Prefix →
+-  r1_wire.SemanticTranscript H → r1_wire.Challenges → Option (verifier.Phase → Result Unit) →
++  r1_wire.SemanticTranscript H → r1_wire.Challenges → Option (RPz7_PhaseIso.Phase → Result Unit) →
+   Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+ def VerifyPrefix.mark
+-  (obs : Option (verifier.Phase → Result Unit)) (i : Std.U8) :
++  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) (i : Std.U8) :
+   Result Unit
+   := do
+@@ -18,5 +18,5 @@
+   (public1 : pool_v1.pair_forest_semantic_terminal.r0.Public)
+   (bytes : Slice Std.U8) (hash : H)
+-  (obs : Option (verifier.Phase → Result Unit)) :
++  (obs : Option (RPz7_PhaseIso.Phase → Result Unit)) :
+   Result (core.result.Result (r1_semantic.Verified H) r1_wire.Error)
+   := do
+
+### S1SemanticVerifyReachabilityV1 -> RPz7_S1SemanticVerifyReachabilityV1
+--- evidence/port17release-20261024/dependency-source/S1SemanticVerifyReachabilityV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S1SemanticVerifyReachabilityV1.lean
+@@ -25,5 +25,5 @@
+ theorem verify_success (F : Finish) {H : Type} (D : aspis_core.Digest32 H)
+     (pub : pool_v1.pair_forest_semantic_terminal.r0.Public)
+-    (bytes : Slice U8) (hash : H) (obs : Option (verifier.Phase → Result Unit))
++    (bytes : Slice U8) (hash : H) (obs : Option (RPz7_PhaseIso.Phase → Result Unit))
+     (out : r1_semantic.Verified H)
+     (h : verify F D pub bytes hash obs = ok (.Ok out)) :
+
+### S2A_InstalledCuts -> RPz7_S2A_InstalledCuts
+--- docs/research/100bit-spend-path-20261013/lean/S2A_InstalledCuts.lean
++++ evidence/replay-dry8-20261026/RPz7_S2A_InstalledCuts.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2SdkReadyRawInputsV1
+-
+ /-! Concrete installed child carriers at ONE caller cut. These theorems consume
+ an observation of that cut, not an independently existential successful run.
+
+### S2G_InstalledValues -> RPz7_S2G_InstalledValues
+--- docs/research/100bit-spend-path-20261013/lean/S2G_InstalledValues.lean
++++ evidence/replay-dry8-20261026/RPz7_S2G_InstalledValues.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2A_InstalledCuts
+-
+ /-! Installed PURE value contracts. This module supplies neither native allocation
+ semantics nor a native state/effect frame. Outer fail/div are retained. -/
+
+### S2K_AfterstateBytes -> RPz7_S2K_AfterstateBytes
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstateBytes.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstateBytes.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_DigestBytes
+-
+ /-! Symbolic byte equality for the actual frontier loop. Rows stay arbitrary;
+ no concrete recurrence or output array is kernel-normalized. -/
+
+### S2K_AfterstateEncoding -> RPz7_S2K_AfterstateEncoding
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstateEncoding.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstateEncoding.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_AfterstatePrepare
+-
+ /-! Complete actual extracted ASJA payload from symbolic bounded stores and
+ ordered little-endian word folds. No independently chosen encoder payload. -/
+
+### S2K_AfterstateLoop -> RPz7_S2K_AfterstateLoop
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstateLoop.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstateLoop.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_DigestTotal
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result ControlFlow WP
+
+### S2K_AfterstatePrefix -> RPz7_S2K_AfterstatePrefix
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstatePrefix.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstatePrefix.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_AfterstateLoop
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### S2K_AfterstatePrepare -> RPz7_S2K_AfterstatePrepare
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstatePrepare.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstatePrepare.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_AfterstateBytes
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### S2K_AfterstateStatus -> RPz7_S2K_AfterstateStatus
+--- docs/research/100bit-spend-path-20261013/lean/S2K_AfterstateStatus.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_AfterstateStatus.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_AfterstatePrefix
+-
+ /-! Exact status composition of the actual extracted encoder, retaining every
+ validator error. No successful encoder premise or external certificate axiom. -/
+
+### S2K_DigestBytes -> RPz7_S2K_DigestBytes
+--- docs/research/100bit-spend-path-20261013/lean/S2K_DigestBytes.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_DigestBytes.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_AfterstateStatus
+-
+ /-! Symbolic byte equality for the actual digest loop. Words stay arbitrary;
+ no concrete recurrence or output array is kernel-normalized. -/
+
+### S2K_DigestTotal -> RPz7_S2K_DigestTotal
+--- docs/research/100bit-spend-path-20261013/lean/S2K_DigestTotal.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_DigestTotal.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_Iterator
+-
+ /-! Totality of the actual eight-word digest encoder by a decreasing iterator
+ invariant. No canonicality assumption is needed for byte serialization. -/
+
+### S2K_Iterator -> RPz7_S2K_Iterator
+--- docs/research/100bit-spend-path-20261013/lean/S2K_Iterator.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_Iterator.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_LoopStep
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### S2K_LoopStep -> RPz7_S2K_LoopStep
+--- docs/research/100bit-spend-path-20261013/lean/S2K_LoopStep.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_LoopStep.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_SourcePorts
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### S2K_SourcePorts -> RPz7_S2K_SourcePorts
+--- docs/research/100bit-spend-path-20261013/lean/S2K_SourcePorts.lean
++++ evidence/replay-dry8-20261026/RPz7_S2K_SourcePorts.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2K_SourceStore
+-
+ /-! All twenty range-write interpretation ports, on the exact extracted
+ slice/copy/back operation. Digest encoding and iterator scheduling are separate
+
+### S2SdkKeyEqualityV1 -> RPz7_S2SdkKeyEqualityV1
+--- evidence/port17release-20261024/dependency-source/S2SdkKeyEqualityV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S2SdkKeyEqualityV1.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S2SdkReadyStateV1
+-
+ /-! Reflection of the actual homogeneous array comparisons used by the terminal
+ validator. Symbolic list equality is reused; no concrete array is normalized. -/
+
+### S6NativeSnapshotLoopStepV1 -> RPz7_S6NativeSnapshotLoopStepV1
+--- evidence/port17release-20261024/dependency-source/S6NativeSnapshotLoopStepV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S6NativeSnapshotLoopStepV1.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S6NativeSnapshotStoreV1
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### S6NativeSnapshotLoopV1 -> RPz7_S6NativeSnapshotLoopV1
+--- evidence/port17release-20261024/dependency-source/S6NativeSnapshotLoopV1.lean
++++ evidence/replay-dry8-20261026/RPz7_S6NativeSnapshotLoopV1.lean
+@@ -1,4 +1,3 @@
+ import RPz7_S6NativeSnapshotLoopStepV1
+-
+ /-! Symbolic byte equality for the actual frontier loop. Rows stay arbitrary;
+ no concrete recurrence or output array is kernel-normalized. -/
+
+### SAP_WrapperCanonical -> RPz7_SAP_WrapperCanonical
+--- lean/SAP_WrapperCanonical.lean
++++ evidence/replay-dry8-20261026/RPz7_SAP_WrapperCanonical.lean
+@@ -2,5 +2,4 @@
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualSecureBridgeV1
+ import RPz7_AspisR1CircleSampleWrapper_RawCircleSampleActualFallbackResultV4
+-
+ set_option autoImplicit false
+ open Aeneas Aeneas.Std Result
+
+### SemanticRoundAlphaSelectedCanonical -> RPz7_SemanticRoundAlphaSelectedCanonical
+--- docs/research/100bit-spend-path-20261013/lean/SemanticRoundAlphaSelectedCanonical.lean
++++ evidence/replay-dry8-20261026/RPz7_SemanticRoundAlphaSelectedCanonical.lean
+@@ -1,5 +1,4 @@
+ import RPz7_SemanticCallSelectedCanonical
+ import RPz7_ExtractedSemanticRoundsReachability
+-
+ /-! Actual verifier alpha canonicality: the extracted rows 15--24 round loop
+ returns exactly the values of its successful semantic_validated run. -/
