@@ -137,3 +137,17 @@ No unchanged rerun. The exact nine emitted definitions are partitioned into
 seven modules, with per-definition body hashes in split226.json. Smaller
 scalar/indexing/projection declarations are tested before the64-read chunk.
 The split8 Rust candidate remains an unused alternative, not a source change.
+
+Declaration isolation:42521 retains a dangling source-doc-comment syntax
+failure in the partition, not a theorem failure; documentation removed while
+all definitions and original ZERO metadata are preserved.42522/23 are
+zero-charge refusals.42524 ByteField226 and42525 ByteAt226 pass.42526/27 are
+zero-charge Result-algebra admission refusals; queue observes full180s waits.
+17 charged Lean attempts so far;7 actual Kani runs (the old host tally's6
+is stale, not an eighth unrecorded run). No row removed.
+
+The supplied KMX_CopyMeaning source is retained as .lean.txt, an uncompiled
+source artifact, to keep every compiled/new Lean module under PV_B3P_. The
+exact patch and byte-exact Rust replacements remain pinned. No KMX theorem or
+compiled Stream A object is imported. The selected negative growth control
+and patched op133 recheck are prepared but not yet run. No Kani PASS claimed.
