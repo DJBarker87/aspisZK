@@ -5,10 +5,11 @@ namespace R1Z.PV_RunJoin_NativeSnapshot31
 open Aeneas Aeneas.Std Result
 
 def live (base : ProverRwFull.ExternalTypes) (p : PV_RunJoin_NominalPublicData.TargetPublic base) :
-    PV_RunJoin_NominalLeafData.TargetSnapshot :=
-  match p with
-  | .Transfer _ transition => transition.live_snapshot
-  | .Withdrawal _ transition => transition.live_snapshot
+    PV_RunJoin_NominalLeafData.TargetSnapshot := by
+  letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
+  exact match p with
+    | .Transfer _ transition => transition.live_snapshot
+    | .Withdrawal _ transition => transition.live_snapshot
 
 theorem from_input (base : ProverRwFull.ExternalTypes) (i : PV_Src_NativeInput.Input) :
     live base (PV_RunJoin_NominalPublicData.fromInput base i) =
@@ -32,7 +33,10 @@ theorem caller {N C : Type} (base : ProverRwFull.ExternalTypes)
     (hash : Slice (Slice U8) → Result (Array U8 32#usize))
     (i : PV_Src_NativeInput.Input) (s : PV_RunJoin_NativeSelectedInputs.SourceState base N C)
     (h : PV_Src_NativeInput.run i = ok (.Ok i.compiled)) :
+    letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
     live base ((PV_RunJoin_NativeSelectedInputs.inputs base ops hash i).pub s) =
-      PV_RunJoin_NominalLeafData.snapshot i.snapshot := actual base i h
+      PV_RunJoin_NominalLeafData.snapshot i.snapshot := by
+  letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
+  exact actual base i h
 #print axioms caller
 end R1Z.PV_RunJoin_NativeSnapshot31
