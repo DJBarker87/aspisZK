@@ -9,3 +9,17 @@ K003: Rust lifetime compile error caused by a static raw pointer whose pointee c
 K004: the own patch preflight used patch -R --batch, which automatically reverses direction and misleadingly accepted an unapplied patch. The intended lifetime edit was not installed, and the same compile error recurred. Replaced preflight/application with strict git apply --reverse --check / git apply (no automatic reversal). No solver ran.
 
 L001: residual pair let-pattern reduction after the Result rewrite; L002 adds the final definitional reduction. Rejected sorryAx diagnostic excluded from evidence.
+
+L003: transport discriminant and checked Usize arithmetic need their named reductions; rfl alone rejected. L004 unfolds only those definitions and decides tiny constant bounds. No large numeral/recurrence reduction.
+
+L004: checked Usize operations are noncomputable; deciding the entire Result equality is invalid. L005 uses existing Port4A_ReaderInstall.mul_value/add_value and tiny bound decisions, as the existing size_s2 proof does. Rejected diagnostics excluded.
+
+L006: immutable launcher correctly rejected missing LPi_TowerValues before invoking Lean; no prover receipt. Missing unchanged dependency closure will be compiled once into the designated persistent cache, with original module source hashes; no shared object is overwritten. This is an input preflight failure, not a launcher repair.
+
+L017: QM31 embedding needs the emitted ZERO constant explicitly unfolded; L018 supplies it. cm31_new already passed without axioms; no reuse of the rejected module object.
+
+L019: digest canonicality left a Result/Bool conditional distribution goal. L020 splits the seven short-circuit tests and simplifies their branch hypotheses. The generic unwrap/projection and M31 decoder facts already elaborated; no rejected object is used.
+
+L021: the full raw-limb decoder theorem left eight contradictory numeric branch cases; L022 closes them with omega after symbolic branch simplification. Other facts passed, including wrong-length rejection and raw canonicalization. No concrete field enumeration.
+
+L024/L025: selected optional imports reference absent PAln_RowBounds. L026 building that unchanged source exposes missing Port5Q1_Ten through an existing retained dependency. Its21 missing unchanged source modules were located under the committed research lean tree (not another worktree); they will be built once serially in the persistent cache, if focused gates pass. No existing module or shared object is edited.

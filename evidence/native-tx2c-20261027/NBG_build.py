@@ -43,6 +43,7 @@ payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loa
 setup=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});x=json.loads({json.dumps(json.dumps(payload))})
+if not x['cfg']['module'].startswith('NBG_'):assert not Path(x['obj']).exists(),'dependency appeared; inspect and reuse, never overwrite'
 for n in ['S2W_lean_host.py','S2W_run_host.py','lakefile.toml','lean-toolchain','lake-manifest.json']:
  p=b/n;s=x['launchers'][n]
  if p.exists():assert p.read_text()==s,(n,'unchanged backend mismatch')

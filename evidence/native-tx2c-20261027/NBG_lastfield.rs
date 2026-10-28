@@ -1,0 +1,23 @@
+static mut NBG_PRODUCT:u32=0;
+static mut NBG_MUL_CALLS:usize=0;
+fn NBG_product(x:super::M31,y:super::M31)->super::M31{
+ let r:u32=kani::any();
+ kani::assume((r as u64)==((x.0 as u64)*(y.0 as u64))%(super::P as u64));
+ unsafe{NBG_PRODUCT=r;NBG_MUL_CALLS+=1;}
+ super::M31(r)
+}
+#[kani::proof]
+#[kani::stub(super::M31::mul,NBG_product)]
+fn NBG_square_iteration(){
+ let start:usize=kani::any();let end:usize=kani::any();let mut iter=start..end;
+ let mut value=super::M31(kani::any());
+ unsafe{NBG_MUL_CALLS=0;}
+ let next=iter.next();
+ if start<end{
+  assert!(next==Some(start));assert!(iter.start==start+1&&iter.end==end);
+  value=value.mul(value);
+  unsafe{assert!(value.0==NBG_PRODUCT);assert!(NBG_MUL_CALLS==1);}
+  assert!(value.0<super::P);
+ }else{assert!(next.is_none());assert!(iter.start==start&&iter.end==end);unsafe{assert!(NBG_MUL_CALLS==0);}}
+ kani::cover!(start==0&&end==1&&value.0==0);
+}
