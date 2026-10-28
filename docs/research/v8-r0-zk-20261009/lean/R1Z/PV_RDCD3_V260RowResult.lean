@@ -9,7 +9,7 @@ theorem invalid_D (j : Usize) (invalid : 1024 ≤ j.val) :
     host_weights.host_row .D j = fail .arrayOutOfBounds := by
   unfold host_weights.host_row
   rw [← PV_RDCD3_Index194.array_complete]
-  rw [PV_RDCD3_Index194.failure _ _ (by
+  rw [PV_RDCD3_Index194.failure host_weights.HOST_COEFFICIENT_TO_ROW.val j.val (by
     rw [host_weights.HOST_COEFFICIENT_TO_ROW.property]
     exact invalid),bind_tc_fail]
 
