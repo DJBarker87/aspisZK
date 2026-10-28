@@ -66,7 +66,7 @@ theorem selected_callback (ops : ExternalFuns) (terminal : Terminal)
   unfold host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate withTerminal
   apply congrArg (Aeneas.Std.bind (@host_semantic.point_claims _ ops self.columns point))
   funext r
-  apply congrArg (Aeneas.Std.bind (@core.result.Result.Insts.CoreOpsTry.branch _ ops _ _ r))
+  apply congrArg (Aeneas.Std.bind (core.result.Result.Insts.CoreOpsTry.branch r))
   funext cf
   cases cf with
   | Break residual => rfl
