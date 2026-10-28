@@ -2,7 +2,7 @@ import R1Z.PV_W_Syntax
 import R1Z.ProverRwFullFuns
 set_option autoImplicit false
 noncomputable section
-labelspace R1Z.PV_W_SourceSyntax
+namespace R1Z.PV_W_SourceSyntax
 open PV_W_Syntax PV_W_Threading
 open ProverRwFull
 variable [ExternalTypes]
