@@ -11,6 +11,7 @@ theorem next (logical : Slice U8) (count : U8) (out mid : alloc.vec.Vec U8)
       .ok (.cont (mid,at2,U8.wrapping_add row 1#u8)) := by
   simp only [host_compact.compact_semantic_loop.body,more,↓reduceIte,
     source,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,lift]
+  rfl
 
 theorem stop (logical : Slice U8) (count row : U8) (out : alloc.vec.Vec U8)
     (at1 : Usize) (last : count≤row) (cursor : at1=Slice.len logical) :
