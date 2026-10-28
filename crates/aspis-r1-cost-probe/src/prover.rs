@@ -315,7 +315,13 @@ fn prepare_opening(variant:Variant,hash:HashFn,backend:Backend,sem:BuiltSemantic
     let mut transcript=Transcript::new(LegacyHashFn(hash),sem.transcript.state(),variant);
     let gamma=transcript.scalar(27,&y1,true);
     let q=opening_batch(&coefficients,gamma);
-    let w=Weights::new(variant,&sem.alpha,&sem.z)?;
+    // Retain the frozen constructor's allocation and drop at the caller boundary.
+    // The owned extraction kernel remains free of Box/Drop.
+    const _: () = {
+        assert!(core::mem::size_of::<Weights>() == core::mem::size_of::<crate::weights::Weights>());
+        assert!(core::mem::align_of::<Weights>() == core::mem::align_of::<crate::weights::Weights>());
+    };
+    let w=alloc::boxed::Box::new(Weights::new(variant,&sem.alpha,&sem.z)?);
     let inactive=opening_inactive(&q,&w);
     let kappa=transcript.scalar(28,&inactive.to_le_bytes(),false);
     let mut weights=match aspis_core::r0::heap::filled(1024,E::ZERO) { Ok(v)=>v, Err(_)=>return Err(Error::Allocation) };
