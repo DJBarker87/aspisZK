@@ -54,7 +54,7 @@ output.append('''theorem erase_syncDirectory (ops : ExternalFuns) (directory : s
   | rw [erase_bind]
   | rw [erase_invoke]
   | rw [erase_pure]
-  | pv_source_bind
+  | congr 1
   | funext x
   | split
 
@@ -71,7 +71,7 @@ theorem erase_reserveFallible (ops : ExternalFuns)
   | rw [erase_invoke]
   | rw [erase_pure]
   | rw [erase_syncDirectory]
-  | pv_source_bind
+  | congr 1
   | funext x
   | split
 
@@ -88,7 +88,7 @@ theorem erase_reserve (ops : ExternalFuns)
   | rw [erase_invoke]
   | rw [erase_pure]
   | rw [erase_reserveFallible]
-  | pv_source_bind
+  | congr 1
   | funext x
   | split
 
