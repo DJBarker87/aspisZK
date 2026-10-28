@@ -42,7 +42,10 @@ for dep in deps:
  z=subprocess.check_output(['ssh',H,'sha256sum '+dp],text=True).split()[0]
  sp=R/dependencies[dep.replace('.','/')] if dep.replace('.','/') in dependencies else R/'docs/research/v8-r0-zk-20261009/lean'/(dep.replace('.','/')+'.lean')
  meta['direct_dependency_objects'][dep]=dict(path=dp,sha256=z,source_sha256=resolution[dep]['sha256'] if dep in resolution else hashlib.sha256(sp.read_bytes()).hexdigest())
-meta['deps_fingerprint']=hashlib.sha256(json.dumps(meta['direct_dependency_objects'],sort_keys=True).encode()).hexdigest()
+selection=E/'os-cache-selection.json'
+meta['transitive_cache_selection_sha256']=hashlib.sha256(selection.read_bytes()).hexdigest() if pin and selection.exists() else None
+meta['external_selection_sha256']=hashlib.sha256((E/'private-external-selection.json').read_bytes()).hexdigest() if (E/'private-external-selection.json').exists() else None
+meta['deps_fingerprint']=hashlib.sha256(json.dumps(dict(direct=meta['direct_dependency_objects'],transitive=meta['transitive_cache_selection_sha256'],external=meta['external_selection_sha256']),sort_keys=True).encode()).hexdigest()
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-world-20261028/scope.py'),f'lean-{n}','compilation of '+m,*cmd])

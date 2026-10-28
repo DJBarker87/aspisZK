@@ -54,7 +54,7 @@ def visit(m):
   ps=tracked.get(m,[])
   if len(ps)!=1:errors.append(dict(module=m,issue='unresolved h5 association',paths=ps));rows[m]={};return
   p=ps[0];r=rev;b=git('show','HEAD:'+p);assert b==(R/p).read_bytes();a='h5';blob=git('rev-parse','HEAD:'+p).decode().strip()
- deps=re.findall(r'^import\s+(\S+)',uncomment(b.decode()),re.M)
+ deps=[name for line in re.findall(r'^[ \t]*(?:(?:public|private|meta)[ \t]+)*import[ \t]+([^\n]+)',uncomment(b.decode()),re.M) for name in line.split()]
  rows[m]=dict(authority=a,revision=r,path=p,blob=blob,sha256=sha(b),imports=deps,tracked_alternatives=[dict(path=p,sha256=sha(git('show','HEAD:'+p))) for p in tracked.get(m,[])])
  for d in deps:visit(d)
  order.append(m)
