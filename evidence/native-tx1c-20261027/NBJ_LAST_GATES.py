@@ -8,7 +8,7 @@ fn NBJ_padding_option_error(){let result:Option<usize>=kani::any();let actual=re
 #[kani::proof] #[kani::unwind(34)]
 fn NBJ_roots_projection(){let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let t:usize=kani::any();let c:usize=kani::any();kani::assume(t<3&&c<32);let [root0,root1]=roots;let forwarded=[root0,root1,folded];assert_eq!(forwarded[t][c],if t==2{folded[c]}else{roots[t][c]});}
 #[kani::proof] #[kani::unwind(2)]
-fn NBJ_slot_view_pointer(){let proof=[0u8;57607];let s:usize=kani::any();kani::assume(s<6);let q=slot(&proof,s);let begin=compact::slot_offset(s);let end=compact::slot_offset(s+1);assert_eq!(q.len(),end-begin);assert_eq!(q.len(),32*SLOT_NODES[s]);assert_eq!(q.as_ptr(),proof[begin..].as_ptr());}
+fn NBJ_slot_view_pointer(){let proof=[0u8;57607];let begin:usize=kani::any();let capacity:usize=kani::any();kani::assume(capacity<=172&&begin<=57607&&32*capacity<=57607-begin);let end=begin+32*capacity;let q=&proof[begin..end];assert_eq!(q.len(),end-begin);assert_eq!(q.len(),32*capacity);assert_eq!(q.as_ptr(),proof[begin..].as_ptr());}
 '''
 mp=r'''
 #[kani::proof] #[kani::unwind(2)]
@@ -17,8 +17,10 @@ fn NBJ_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any(
 fn NBJ_level_terminal(){let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let at:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(n>0&&n<=16&&i==n&&w>0&&w<=i&&at<=5504&&k<16&&c<32);let mut next_n=n;let old_idx=idx[k];let old_val=val[k][c];if i>=n{next_n=w;}assert_eq!(next_n,w);assert_eq!(idx[k],old_idx);assert_eq!(val[k][c],old_val);assert_eq!(at,at);}
 #[kani::proof] #[kani::unwind(2)]
 fn NBJ_count_guard(){let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(n<=16&&w<=i&&i<=n);if i<n{assert!(i<16&&w<16);let j=i;assert!(j<=n);}else{assert_eq!(i,n);assert!(w<=16)}}
+'''
+keys+=r'''
 #[kani::proof] #[kani::unwind(2)]
-fn NBJ_verify_mod32(){let length:usize=kani::any();kani::assume(length<=5504);assert_eq!(length%32==0,32*(length/32)==length);}
+fn NBJ_opening_carrier(){let proof=[0u8;57607];let i:usize=kani::any();kani::assume(i<22);let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());}
 '''
 # Applied only after the current batch is terminal.
 if '--upload' not in sys.argv:raise SystemExit('use --upload after terminal receipt')

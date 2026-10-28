@@ -1,0 +1,66 @@
+NBJ_sources/NBJ_NodeCuts.lean:27:43: error: unsolved goals
+physical : Slice U8
+s : reference.Scratch
+i w : Usize
+domain : RowDomain physical s i w
+active : ↑i < ↑s.n
+paired : ↑i + 1 < ↑s.n ∧ (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i]! ^^^ 1#u32
+dom : 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+ni : UScalar UScalarTy.Usize
+add : i + 1#usize = ok ni
+niVal : ↑ni = ↑i + ↑1#usize
+next : UScalar UScalarTy.Usize
+add2 : i + 2#usize = ok next
+nextVal : ↑next = ↑i + ↑2#usize
+nv : ↑ni = ↑i + 1
+xv : ↑next = ↑i + 2
+ib : ↑i < 16
+nb : ↑ni < 16
+more : ni < s.n
+nextIndex : (↑s.idx)[↑ni]! = (↑s.idx)[↑i]! ^^^ 1#u32
+⊢ (if (↑s.idx)[↑i + 1]! = (↑s.idx)[↑i]! ^^^ 1#u32 then
+      writer s (↑s.val)[↑i]! (↑s.val)[↑i + 1]! next s.at (↑s.idx)[↑i]! w
+    else
+      match physical.len - s.at with
+      | ok x =>
+        if x < 32#usize then AspisV8R19.MemoizedProgramLaw.Program.done (ok (reference.Row.Stop s))
+        else
+          match s.at + 32#usize with
+          | ok x =>
+            match
+              core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) physical
+                { start := s.at, «end» := x } with
+            | ok x_1 =>
+              match reference.read32 x_1 with
+              | ok x_2 =>
+                if (↑s.idx)[↑i]! &&& 1#u32 = 0#u32 then writer s (↑s.val)[↑i]! x_2 ni x (↑s.idx)[↑i]! w
+                else writer s x_2 (↑s.val)[↑i]! ni x (↑s.idx)[↑i]! w
+              | fail e => AspisV8R19.MemoizedProgramLaw.Program.done (fail e)
+              | div => AspisV8R19.MemoizedProgramLaw.Program.done div
+            | fail e => AspisV8R19.MemoizedProgramLaw.Program.done (fail e)
+            | div => AspisV8R19.MemoizedProgramLaw.Program.done div
+          | fail e => AspisV8R19.MemoizedProgramLaw.Program.done (fail e)
+          | div => AspisV8R19.MemoizedProgramLaw.Program.done div
+      | fail e => AspisV8R19.MemoizedProgramLaw.Program.done (fail e)
+      | div => AspisV8R19.MemoizedProgramLaw.Program.done div) =
+    writer s (↑s.val)[↑i]! (↑s.val)[↑i + 1]! next s.at (↑s.idx)[↑i]! w
+NBJ_sources/NBJ_NodeCuts.lean:43:39: warning: This simp argument is unused:
+  if_pos nextIndex
+
+Hint: Omit it from the simp argument list.
+  simp only [̵n̵o̵d̵e̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵[̲n̲o̲d̲e̲,̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ s.idx i i̵b̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵i̲b̲,̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ s.val i i̵b̵,̵a̵d̵d̵,̵c̵h̵e̵c̵k̵e̵d̵,̵i̲b̲,̲ ̲a̲d̲d̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲,̲ if_pos m̵o̵r̵e̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵m̲o̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ s.idx ni n̵b̵,̵i̵f̵_̵p̵o̵s̵ ̵n̵e̵x̵t̵I̵n̵d̵e̵x̵,̵a̵r̵r̵a̵y̵_̵r̵e̵a̵d̵n̲b̲,̲ ̲a̲r̲r̲a̲y̲_̲r̲e̲a̲d̲ s.val ni n̵b̵,̵a̵d̵d̵2̵,̵n̵v̵]̵n̲b̲,̲ ̲a̲d̲d̲2̲,̲ ̲n̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBJ_sources/NBJ_NodeCuts.lean:78:53: warning: This simp argument is unused:
+  checked
+
+Hint: Omit it from the simp argument list.
+  simp only [if_pos more, ̲array_read s.idx ni small,c̵h̵e̵c̵k̵e̵d̵,̵ ̲if_neg neq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBJ_NodeCuts.array_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBJ_NodeCuts.paired_program' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBJ_NodeCuts.unpaired_program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBJ_NodeCuts.short_program' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBJ_NodeCuts.supplied_program' depends on axioms: [propext, Classical.choice, Quot.sound]

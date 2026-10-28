@@ -8,3 +8,9 @@ not an infrastructure failure; neither cap nor reservation was bypassed.
 K001 is a passing native check; L001 is rejected, including recovery sorryAx.
 Subsequent submissions wait for terminal receipt recovery before launching.
 No claim that all NBJ attempts were serial is permitted.
+
+Own NBJ_host.py was strengthened after K027: before admission/submission it
+checks the host process inventory for an active NBJ S2W runner and refuses
+the launch if found. This repairs only the job's own wrapper; it does not
+modify any shared launcher, admission or monitor. The check strengthens the
+previous validation. No mutex/flock wrapper is introduced.

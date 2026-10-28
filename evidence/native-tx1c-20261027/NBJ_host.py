@@ -46,6 +46,10 @@ if __name__=='__main__':
  a=sys.argv[1]; assert not (E/a/'receipt.json').exists()
  if json.loads((E/(a+'.json')).read_text()).get('deferred'):
   print('DEFERRED before admission: '+a);raise SystemExit(0)
+ # Own wrapper safety check: a receipt must be terminal before the next scope.
+ r=remote_py("import subprocess,re,json; rows=subprocess.check_output(['ps','-eo','args='],text=True).splitlines(); live=[x for x in rows if re.match(r'^python3 S2W_(?:run|lean)_host[.]py NBJ_',x.strip())]; print(json.dumps(live))")
+ assert r.returncode==0,r.stderr
+ assert not json.loads(r.stdout),'STOP own NBJ scope still active'
  retry=admit(a)
  cfg=json.loads((E/(a+'.json')).read_text());cfg['reservation_retries']=retry
  cfg['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();cfg['source_tree_dirty']=True

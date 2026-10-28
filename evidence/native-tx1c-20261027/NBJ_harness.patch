@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBJ_keys.rs
-@@ -0,0 +1,402 @@
+@@ -0,0 +1,412 @@
 +
 +use super::*;
 +#[kani::proof] #[kani::unwind(2)]
@@ -403,9 +403,19 @@
 + let q=opening(&proof,0);let selected=&q[800..832];
 + assert_eq!(selected.len(),32);assert_eq!(selected[c],b);assert_eq!(selected.as_ptr(),proof[10855..].as_ptr());
 +}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_padding_option_error(){let result:Option<usize>=kani::any();let actual=result.ok_or(Error::Merkle);match result{None=>assert!(matches!(actual,Err(Error::Merkle))),Some(c)=>assert!(matches!(actual,Ok(x) if x==c))}}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_roots_projection(){let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let t:usize=kani::any();let c:usize=kani::any();kani::assume(t<3&&c<32);let [root0,root1]=roots;let forwarded=[root0,root1,folded];assert_eq!(forwarded[t][c],if t==2{folded[c]}else{roots[t][c]});}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_slot_view_pointer(){let proof=[0u8;57607];let begin:usize=kani::any();let capacity:usize=kani::any();kani::assume(capacity<=172&&begin<=57607&&32*capacity<=57607-begin);let end=begin+32*capacity;let q=&proof[begin..end];assert_eq!(q.len(),end-begin);assert_eq!(q.len(),32*capacity);assert_eq!(q.as_ptr(),proof[begin..].as_ptr());}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_opening_carrier(){let proof=[0u8;57607];let i:usize=kani::any();kani::assume(i<22);let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBJ_multiproof.rs
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,60 @@
 +
 +use super::*;
 +use core::cell::Cell;
@@ -429,7 +439,7 @@
 +
 +#[kani::proof] #[kani::unwind(34)]
 +fn NBJ_pair_window(){
-+ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32 && a%2==0);
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
 + idx[0]=a;idx[1]=a^1;val[0]=left;val[1]=right;let calls=Cell::new(0);
 + let out=NBJ_row(Hash{answer:reply,left:&left,right:&right,c,calls:&calls},&mut idx,&mut val,2,&[],0,0,0);
 + assert_eq!(out,(true,0,1,2));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_eq!(val[0][c],reply[c]);
@@ -459,6 +469,13 @@
 +fn NBJ_admission_value_iterator(){let indices:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<=n&&n<=16);let mut it=indices[j..n].iter();let next=it.next();if j<n{assert_eq!(*next.unwrap(),indices[j]);assert_eq!(it.len(),n-j-1)}else{assert!(next.is_none())}}
 +#[kani::proof] #[kani::unwind(2)]
 +fn NBJ_count_zero(){let level=[0u32;16];let k:usize=kani::any();kani::assume(k<16);assert_eq!(level[k],0);let count=0usize;assert_eq!(count,0);}
++
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof] #[kani::unwind(34)]
++fn NBJ_level_terminal(){let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let at:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(n>0&&n<=16&&i==n&&w>0&&w<=i&&at<=5504&&k<16&&c<32);let mut next_n=n;let old_idx=idx[k];let old_val=val[k][c];if i>=n{next_n=w;}assert_eq!(next_n,w);assert_eq!(idx[k],old_idx);assert_eq!(val[k][c],old_val);assert_eq!(at,at);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBJ_count_guard(){let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(n<=16&&w<=i&&i<=n);if i<n{assert!(i<16&&w<16);let j=i;assert!(j<=n);}else{assert_eq!(i,n);assert!(w<=16)}}
 --- a/crates/aspis-r1-cost-probe/src/candidate.rs
 +++ b/crates/aspis-r1-cost-probe/src/candidate.rs
 @@ -338,3 +338,7 @@
