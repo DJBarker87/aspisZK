@@ -5,6 +5,20 @@ E=Path(__file__).resolve().parent; OLD=E.parent/'kani-reverify1-20261028'
 t=types.ModuleType('transport');t.__file__=str(OLD/'KMY_host.py');exec(compile((OLD/'KMY_host.py').read_text(),t.__file__,'exec'),t.__dict__);t.E=E
 PATCH='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67';STUB='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
 archive=json.loads((OLD/'KMY_SOURCE_ARCHIVE.json').read_text())['attempts']
+def submit(a,command):
+ # A TCP/banner timeout precedes SSH command execution. Other exit255 cases
+ # remain possible submissions and must use read-only receipt recovery.
+ for retry in range(10):
+  r=t.ssh(command,True)
+  prestart=r.returncode==255 and not r.stdout and 'Running as unit:' not in r.stderr and (
+   'Connection timed out during banner exchange' in r.stderr or
+   (' port 22 timed out' in r.stderr and 'Connection to ' in r.stderr) or
+   'connect to host ' in r.stderr)
+  with (E/'KNA_SUBMISSION_TRANSPORT.jsonl').open('a') as f:
+   f.write(json.dumps(dict(attempt=a,retry=retry,exit=r.returncode,definite_prestart=prestart,stderr=r.stderr))+'\n')
+  if not prestart:return r
+  if retry<9:time.sleep(60)
+ raise SystemExit('STOP ten consecutive pre-start submission transport failures '+a)
 def run(a,cfg,source):
  assert not (E/a/'receipt.json').exists(),a
  cfg.update(attempt=a,kmx_patch_sha256=PATCH,kmx_stub_file_sha256=STUB,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
@@ -17,7 +31,7 @@ def run(a,cfg,source):
  assert r.returncode==0,r.stderr
  (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n');(E/'sources').mkdir(exist_ok=True)
  sha=hashlib.sha256(source.encode()).hexdigest();(E/'sources'/f'{sha}.rs').write_text(source)
- r=t.ssh('cd '+shlex.quote(t.B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',True)
+ r=submit(a,'cd '+shlex.quote(t.B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json')
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
  if r.returncode==255:
   for retry in range(10):

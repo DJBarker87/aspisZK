@@ -38,17 +38,20 @@ for p in sorted(E.glob('KNA_*/receipt.json')):
  c=p.parent/'classification.json'
  result=json.loads(c.read_text())['result'] if c.exists() else ('PASS' if r['exit_status']==0 else 'ERROR')
  receipts.append(dict(attempt=a,kind=r['kind'],result=result,exit_status=r['exit_status'],wall_seconds=r['wall_seconds'],peak_rss_kib=int(r['peak_rss_kib']),swaps=int(r['swaps']),source_revision=r['source_revision']))
-unresolved=E/'KNA_K034_RECOVERY.json'
-if unresolved.exists():
- u=json.loads(unresolved.read_text());cfg=json.loads((E/'KNA_K034.json').read_text())
+unresolved_ids=set()
+for recovery in sorted(E.glob('KNA_K[0-9][0-9][0-9]_RECOVERY.json')):
+ u=json.loads(recovery.read_text());attempt=recovery.name.removesuffix('_RECOVERY.json');cfg=json.loads((E/(attempt+'.json')).read_text())
  assert not u['live'] and not u['receipt_exists'] and u['result']=='UNRESOLVED'
- assert not (E/'KNA_K034/receipt.json').exists()
+ assert not (E/attempt/'receipt.json').exists()
  src=E/'sources'/(u['source_sha256']+'.rs');assert hashlib.sha256(src.read_bytes()).hexdigest()==u['source_sha256']
- archive['KNA_K034']={'KNA_windows.rs':str(src.relative_to(E)),'recovery':'KNA_K034_RECOVERY.json'}
- receipts.append(dict(attempt='KNA_K034',kind='kani',result='UNRESOLVED',exit_status=None,wall_seconds=None,peak_rss_kib=None,swaps=None,source_revision=cfg['source_revision'],note='Admitted upload; launcher connection timed out; no host attempt directory/receipt after recovery. Conservatively charged; never resubmitted.'))
+ archive[attempt]={'KNA_windows.rs':str(src.relative_to(E)),'recovery':recovery.name}
+ unresolved_ids.add(attempt)
+ receipts.append(dict(attempt=attempt,kind='kani',result='UNRESOLVED',exit_status=None,wall_seconds=None,peak_rss_kib=None,swaps=None,source_revision=cfg['source_revision'],note='Admitted upload; launcher connection timed out; no host attempt directory/receipt after recovery. Conservatively charged; never resubmitted.'))
 for pair in json.loads((E/'KNA_PAIRS.json').read_text()):
- if pair['control']=='UNRESOLVED':
-  assert pair['control_id']=='KNA_K034' and not pair['credit']
+ if 'UNRESOLVED' in [pair['positive'],pair['control']]:
+  assert not pair['credit']
+  for result,key in [(pair['positive'],'positive_id'),(pair['control'],'control_id')]:
+   if result=='UNRESOLVED':assert pair[key] in unresolved_ids
   continue
  pos=json.loads((E/pair['positive_id']/'receipt.json').read_text());neg=json.loads((E/pair['control_id']/'receipt.json').read_text())
  for key in ['env','command','timeout']:
@@ -58,5 +61,6 @@ for pair in json.loads((E/'KNA_PAIRS.json').read_text()):
  for key in pos['source_hashes']:
   if key!='KNA_windows.rs':assert pos['source_hashes'][key]==neg['source_hashes'][key],(pair,key)
  p=(E/archive[pos['attempt']]['KNA_windows.rs']).read_text();n=(E/archive[neg['attempt']]['KNA_windows.rs']).read_text();assert p.replace('^0u8','^1u8').replace('^ 0u8','^ 1u8')==n,pair['name']
+receipts.sort(key=lambda r:r['attempt'])
 (E/'KNA_RUNS.json').write_text(json.dumps(receipts,indent=2)+'\n');(E/'KNA_SOURCE_ARCHIVE.json').write_text(json.dumps(archive,indent=2)+'\n')
 print(json.dumps({'attempts':len(receipts),'kani':sum(r['kind']=='kani' for r in receipts),'lean':sum(r['kind']=='lean' for r in receipts),'rust':sum(r['kind']=='rust' for r in receipts),'max_rss_kib':max(r['peak_rss_kib'] for r in receipts if r['peak_rss_kib'] is not None)}))
