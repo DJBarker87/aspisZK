@@ -36,7 +36,7 @@ lines += ['',f'Fresh budget:100 Lean /0 Kani; IDs43400–43499 only; usedIDs={le
  'Old copy-dependent Kani PASS credit stays suspended. Structural K-1 substitutes await re-verification with the lead-validated remedy when budget is authorized.',
  'All5673 authoritative and selected external objects matched before first compile; private existing caches reused, no external rebuild/substitution.',
  'Every actual host receipt: receipts-index.json (target,exit,wall,peakRSS,swap,revision,print_axioms). Caps6G/8G/swap0/Tasks64; Lean-M7000. Failed candidates/source snapshots retained, not credited.',
- 'Final audit/replay and closure fingerprint: see successful current-source receipt entries and final-closure-fingerprint.json; do not infer success for missing receipts.',
+ 'Final audit/replay and closure fingerprint: see successful current-source receipt entries and resume-final-closure-fingerprint.json; do not infer success for missing receipts.',
  'Uncompiled drafts are explicitly listed in uncompiled-drafts.json; no draft credited.',
  '', 'PROCESS DEVIATION',
  'Staging admission04:42:54.960463Z was167.062062s after43441 refusal04:40:07.898401Z (12.938s early). It refused; no upload/compiler ran.',
