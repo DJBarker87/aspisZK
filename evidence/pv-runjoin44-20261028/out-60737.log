@@ -1,0 +1,64 @@
+START 60737 R1Z.PV_RunJoin_GammaAssociation44
+DONE 60737 R1Z.PV_RunJoin_GammaAssociation44 exit 1 wall 1.75 RSS 4410499072
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaAssociation44.lean:19:4: error: Tactic `apply` failed: could not unify the conclusion of `congrArg List.ofFn`
+  List.ofFn ?m.120 = List.ofFn ?m.121
+with the goal
+  ↑(array 29#usize p') = ↑(array 29#usize p)
+
+Note: The full type of `congrArg List.ofFn` is
+  ?m.120 = ?m.121 → List.ofFn ?m.120 = List.ofFn ?m.121
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+g : Raw
+hg : canonical g
+p : ℕ → Raw
+hp : AspisR1ProducerRelease47.gamma (source g) = ok (sourceArray 29#usize p)
+hcp : ∀ k < 29, canonical (p k)
+hdp : ∀ k < 29, value (p k) = value g ^ k
+p' : ℕ → Raw
+hp' : ExternalFuns.op254 29#usize (current (source g)) = ok (array 29#usize p')
+hcp' : ∀ i < 29, canonical (p' i)
+hdp' : ∀ i < 29, value (p' i) = value g ^ i
+⊢ ↑(array 29#usize p') = ↑(array 29#usize p)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaAssociation44.lean:38:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op254 29#usize (current (source g))
+in the target expression
+  (do
+      let gp ← weights.powers 29#usize (current (source g))
+      have q : alloc.vec.Vec aspis_core.field.wide_exact.WideExact :=
+        alloc.vec.Vec.with_capacity aspis_core.field.wide_exact.WideExact 1024#usize
+      prover.opening_batch_loop (table c) gp q 0#usize) =
+    ok out
+
+case refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+c : ℕ → ℕ → Raw
+g : Raw
+hc : ∀ l < 29, ∀ j < 1024, canonical (c l j)
+hg : canonical g
+p : ℕ → Raw
+hp : AspisR1ProducerRelease47.gamma (source g) = ok (sourceArray 29#usize p)
+hcur : ExternalFuns.op254 29#usize (current (source g)) = ok (array 29#usize p)
+hcp : ∀ i < 29, canonical (p i)
+hdp : ∀ i < 29, value (p i) = value g ^ i
+z : ℕ → Raw
+out : alloc.vec.Vec W
+hout :
+  prover.opening_batch_loop (table c) (array 29#usize p) (alloc.vec.Vec.with_capacity W 1024#usize) 0#usize = ok out
+hz :
+  AspisR1ProducerRelease47.gamma53.all (ProverCommitGammaCell53.table c) (sourceArray 29#usize p) =
+    ok (sourceArray 1024#usize z)
+himage : (array 1024#usize z).to_slice = out.deref
+hcz : ∀ j < 1024, canonical (z j)
+hdz : ∀ (j : Fin 1024), value (z ↑j) = sum (fun l => c l ↑j) p 29 0
+⊢ (do
+      let gp ← weights.powers 29#usize (current (source g))
+      have q : alloc.vec.Vec aspis_core.field.wide_exact.WideExact :=
+        alloc.vec.Vec.with_capacity aspis_core.field.wide_exact.WideExact 1024#usize
+      prover.opening_batch_loop (table c) gp q 0#usize) =
+    ok out
+'R1Z.PV_RunJoin_GammaAssociation44.powers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_GammaAssociation44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

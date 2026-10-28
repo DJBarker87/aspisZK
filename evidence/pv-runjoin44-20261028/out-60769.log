@@ -1,0 +1,39 @@
+START 60769 R1Z.PV_RunJoin_RoundSecond44
+DONE 60769 R1Z.PV_RunJoin_RoundSecond44 exit 1 wall 1.76 RSS 4410056704
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSecond44.lean:16:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ↑i < ↑256#usize then ?m.36 else ?m.37
+in the target expression
+  PV_RunJoin_WideArithmetic44.current (source (if ↑i < 256 then q ↑i else ProverCommitGamma48.zero)) =
+    PV_RunJoin_WideArithmetic44.current (source (q ↑i))
+
+inst✝ : ExternalTypes
+q : ℕ → Raw
+i : Fin ↑256#usize
+⊢ PV_RunJoin_WideArithmetic44.current (source (if ↑i < 256 then q ↑i else ProverCommitGamma48.zero)) =
+    PV_RunJoin_WideArithmetic44.current (source (q ↑i))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSecond44.lean:30:2: error: Type mismatch: After simplification, term
+  hret
+ has type
+  @Eq (Result (List Source))
+    (ProverCommitRoundScaled48.run (↑256#usize / 4) (sourceArray 1024#usize (ProverCommitRoundShape49.pad q))
+      (sourceArray 1024#usize (ProverCommitRoundShape49.pad w)))
+    (ok (List.ofFn fun k => source (ys ↑k)))
+but is expected to have type
+  @Eq (Result (List Source))
+    (ProverCommitRoundScaled48.run 64 (sourceArray 1024#usize (ProverCommitRoundShape49.pad q))
+      (sourceArray 1024#usize (ProverCommitRoundShape49.pad w)))
+    (ok (List.ofFn fun k => source (ys ↑k)))
+'R1Z.PV_RunJoin_RoundSecond44.pad_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSecond44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,45 @@
+START 60710 R1Z.PV_RunJoin_BatchRowValue44
+DONE 60710 R1Z.PV_RunJoin_BatchRowValue44 exit 1 wall 1.97 RSS 4417339392
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BatchRowValue44.lean:30:41: error: Application type mismatch: The argument
+  hl
+has type
+  ↑lane < 29
+but is expected to have type
+  ↑lane < ↑?m.105
+in the application
+  ProverCommitArray49.index ?m.105 ?m.106 lane hl
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BatchRowValue44.lean:25:91: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+c : ℕ → ℕ → Raw
+p : ℕ → Raw
+row lane : Usize
+hr : ↑row < 1024
+hl : ↑lane < 29
+s : Raw
+hs : canonical s
+hp : canonical (p ↑lane)
+hc : canonical (c ↑lane ↑row)
+product : Raw
+hprod :
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.mul (source (p ↑lane)) (source (c ↑lane ↑row)) =
+    ok (source product)
+hcprod : canonical product
+hdprod : value product = value (p ↑lane) * value (c ↑lane ↑row)
+z : Raw
+hz : AspisR1ProducerRelease47.field.wide_exact.WideExact.add (source s) (source product) = ok (source z)
+hcz : canonical z
+hdz : value z = value s + value product
+⊢ (do
+      let p ← (ProverCommitArray49.array 29#usize fun i => current (source (p i))).index_usize lane
+      let a ←
+        (ProverCommitArray49.array 29#usize fun l =>
+                  ProverCommitArray49.array 1024#usize fun i => current (source (c l i))).to_slice.index_usize
+            lane
+      let q ← a.index_usize row
+      let product ← aspis_core.field.wide_exact.WideExact.mul p q
+      aspis_core.field.wide_exact.WideExact.add (current (source s)) product) =
+    ok (current (source z))
+'R1Z.PV_RunJoin_BatchRowValue44.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_BatchRowValue44.phase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

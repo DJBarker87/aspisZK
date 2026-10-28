@@ -1,0 +1,23 @@
+START 60770 R1Z.PV_RunJoin_CoefficientScalarInspect44
+DONE 60770 R1Z.PV_RunJoin_CoefficientScalarInspect44 exit 1 wall 1.82 RSS 4390256640
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientScalarInspect44.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shr`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientScalarInspect44.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shl`
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.ops.range.Range A → Aeneas.Std.Result (Option A × Aeneas.Std.core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+        | some n => Aeneas.Std.Result.ok (some range', { start := n, «end» := range.end })
+    else Aeneas.Std.Result.ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : Aeneas.Std.core.iter.range.Step
+  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) :=
+Aeneas.Std.core.iter.range.UScalarStep Aeneas.Std.UScalarTy.Usize Aeneas.Std.core.clone.CloneUsize
+  Aeneas.Std.core.cmp.PartialOrdUsize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientScalarInspect44.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shr_spec`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientScalarInspect44.lean:9:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.shl_spec`
+

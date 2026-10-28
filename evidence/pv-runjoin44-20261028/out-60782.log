@@ -1,0 +1,89 @@
+START 60782 R1Z.PV_RunJoin_CoefficientDigit044
+DONE 60782 R1Z.PV_RunJoin_CoefficientDigit044 exit 1 wall 2.61 RSS 4402188288
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:15:8: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ProverRwFull.ExternalTypes
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:23:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+j out : Usize
+inc : Usize.wrapping_add 0#usize 1#usize = 1#usize
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 5#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 5#usize })
+⊢ 2#usize * 0#usize = ok 0#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:24:67: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+j out : Usize
+inc : Usize.wrapping_add 0#usize 1#usize = 1#usize
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 5#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 5#usize })
+lo : 2#usize * 0#usize = ok 0#usize
+⊢ 2#usize * 3#usize = ok 6#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  j >>> 0#usize
+in the target expression
+  (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 5#usize })
+    match o with
+    | none => ok (ControlFlow.done out)
+    | some d => do
+      let i ← 2#usize * d
+      let i1 ← j >>> i
+      let i2 ← lift (i1 &&& 3#usize)
+      let i3 ← transport.TAU.index_usize d
+      let i4 ← 2#usize * i3
+      let i5 ← i2 <<< i4
+      let out1 ← lift (out ||| i5)
+      ok (ControlFlow.cont (iter1, out1))) =
+    ok (ControlFlow.cont ({ start := 1#usize, «end» := 5#usize }, out ||| digit j))
+
+j out : Usize
+inc : Usize.wrapping_add 0#usize 1#usize = 1#usize
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 5#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 5#usize })
+lo : 2#usize * 0#usize = ok 0#usize
+hi : 2#usize * 3#usize = ok 6#usize
+tau : transport.TAU.index_usize 0#usize = ok 3#usize
+⊢ (let (o, iter1) := (some 0#usize, { start := 1#usize, «end» := 5#usize })
+    match o with
+    | none => ok (ControlFlow.done out)
+    | some d => do
+      let i ← 2#usize * d
+      let i1 ← j >>> i
+      let i2 ← lift (i1 &&& 3#usize)
+      let i3 ← transport.TAU.index_usize d
+      let i4 ← 2#usize * i3
+      let i5 ← i2 <<< i4
+      let out1 ← lift (out ||| i5)
+      ok (ControlFlow.cont (iter1, out1))) =
+    ok (ControlFlow.cont ({ start := 1#usize, «end» := 5#usize }, out ||| digit j))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:28:24: warning: This simp argument is unused:
+  lo
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok,̵l̵o̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CoefficientDigit044.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

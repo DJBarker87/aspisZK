@@ -1,0 +1,40 @@
+START 60784 R1Z.PV_RunJoin_CoefficientDigit044
+DONE 60784 R1Z.PV_RunJoin_CoefficientDigit044 exit 1 wall 2.45 RSS 4410888192
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:39:2: error: Tactic `rfl` failed: The left-hand side
+  ok
+    (ControlFlow.cont
+      ({ start := 1#usize, «end» := 5#usize },
+        out |||
+          Usize.wrapping_shl (j.wrapping_shr (UScalar.cast UScalarTy.U32 0#usize) &&& 3#usize)
+            (UScalar.cast UScalarTy.U32 6#usize)))
+is not definitionally equal to the right-hand side
+  ok
+    (ControlFlow.cont
+      ({ start := 1#usize, «end» := 5#usize }, out ||| Usize.wrapping_shl (j.wrapping_shr 0#u32 &&& 3#usize) 6#u32))
+
+j out : Usize
+inc : Usize.wrapping_add 0#usize 1#usize = 1#usize
+hn :
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := 0#usize, «end» := 5#usize } =
+    ok (some 0#usize, { start := 1#usize, «end» := 5#usize })
+lo : 2#usize * 0#usize = ok 0#usize
+hi : 2#usize * 3#usize = ok 6#usize
+tau : transport.TAU.index_usize 0#usize = ok 3#usize
+⊢ ok
+      (ControlFlow.cont
+        ({ start := 1#usize, «end» := 5#usize },
+          out |||
+            Usize.wrapping_shl (j.wrapping_shr (UScalar.cast UScalarTy.U32 0#usize) &&& 3#usize)
+              (UScalar.cast UScalarTy.U32 6#usize))) =
+    ok
+      (ControlFlow.cont
+        ({ start := 1#usize, «end» := 5#usize }, out ||| Usize.wrapping_shl (j.wrapping_shr 0#u32 &&& 3#usize) 6#u32))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientDigit044.lean:38:24: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵d̵i̵g̵i̵t̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲d̲i̲g̲i̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CoefficientDigit044.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

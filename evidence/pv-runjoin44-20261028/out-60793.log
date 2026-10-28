@@ -1,0 +1,18 @@
+START 60793 R1Z.PV_RunJoin_CoefficientArray44
+DONE 60793 R1Z.PV_RunJoin_CoefficientArray44 exit 1 wall 1.81 RSS 4393156608
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientArray44.lean:26:91: error: unsolved goals
+T : Type
+copy : core.marker.Copy T
+v : transport.Variant
+xs : ℕ → T
+rows : Std.Array T 1024#usize := ProverCommitArray49.array 1024#usize xs
+f : core.ops.function.FnMut (transport.Variant.coefficients.closure T) Usize T :=
+  transport.Variant.coefficients.closure.Insts.CoreOpsFunctionFnMutTupleUsizeT copy
+calls : ∀ (i : Usize), ↑i < ↑1024#usize → f.call_mut (rows, v) i = ok (xs (AspisR1.rowNat ↑i), rows, v)
+a : Std.Array T 1024#usize
+ha : ProverRwSuccessArrayFromFn.fromFn 1024#usize f (rows, v) = ok a
+hav : ↑a = List.map (fun i => xs (AspisR1.rowNat ↑i)) (ProverRwSuccessArrayFromFn.indices 1024#usize)
+⊢ (List.ofFn fun x => xs (AspisR1.rowNat ↑(Usize.ofNatCore ↑(Fin.cast ⋯ x) ⋯))) =
+    List.ofFn fun i => xs (AspisR1.rowNat ↑(Fin.cast ⋯ i))
+'R1Z.PV_RunJoin_CoefficientArray44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

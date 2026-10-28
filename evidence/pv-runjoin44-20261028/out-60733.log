@@ -1,0 +1,51 @@
+START 60733 R1Z.PV_RunJoin_FoldCallerValue44
+DONE 60733 R1Z.PV_RunJoin_FoldCallerValue44 exit 1 wall 1.73 RSS 4423098368
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldCallerValue44.lean:25:63: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldCallerValue44.lean:25:16: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+count outSize : Usize
+sizes : ↑count / 4 = ↑outSize
+small : ↑outSize ≤ 256
+q z : ℕ → Raw
+a : Raw
+dual : Bool
+hq : ∀ j < ↑count, canonical (q j)
+ha : canonical a
+hz : ∀ j < ↑outSize, canonical (z j)
+hd : ∀ j < ↑outSize, value (z j) = PV_RunJoin_FoldStepValue44.model q a dual j
+input : Slice ProverRwDictionaryTower.W := (array count q).to_slice
+len : input.length = ↑count
+k : Usize
+hk : input.len / 4#usize = ok k
+hkv : ↑k = input.length / 4
+cap : 256 ≤ Usize.max
+⊢ (alloc.vec.Vec.with_capacity W k).length + ↑count / 4 ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldCallerValue44.lean:31:2: error: unsolved goals
+case refine_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+count outSize : Usize
+sizes : ↑count / 4 = ↑outSize
+small : ↑outSize ≤ 256
+q z : ℕ → Raw
+a : Raw
+dual : Bool
+hq : ∀ j < ↑count, canonical (q j)
+ha : canonical a
+hz : ∀ j < ↑outSize, canonical (z j)
+hd : ∀ j < ↑outSize, value (z j) = PV_RunJoin_FoldStepValue44.model q a dual j
+input : Slice ProverRwDictionaryTower.W := (array count q).to_slice
+len : input.length = ↑count
+k : Usize
+hk : input.len / 4#usize = ok k
+hkv : ↑k = input.length / 4
+out : alloc.vec.Vec PV_RunJoin_FoldThread44.W
+hout :
+  PV_RunJoin_FoldThread44.phase (array count q).to_slice (current (source a)) dual (↑count / 4)
+      (alloc.vec.Vec.with_capacity W k) 0#usize =
+    ok out
+hv : ↑out = ↑(alloc.vec.Vec.with_capacity W k) ++ PV_RunJoin_BatchLoopValue44.payload z (↑0#usize) (↑count / 4)
+⊢ (List.ofFn fun i => current (source (z ↑i))) = List.ofFn fun i => current (source (z ↑(Fin.cast ⋯ i)))
+'R1Z.PV_RunJoin_FoldCallerValue44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,34 @@
+{
+  "rule": "local-lean rule 11: own staging/wrapper inputs corrected; no host infrastructure changes",
+  "issues": [
+    {
+      "kind": "premature dependent staging",
+      "attempt": 60717,
+      "compiler_started": false,
+      "evidence": "unlaunched-input-60717.json",
+      "correction": "Prerequisite accepted at 60718, new local dependency gate added, same unlaunched ID used for its first compiler launch."
+    },
+    {
+      "kind": "local prerequisite gate",
+      "attempts": [
+        60759,
+        60794
+      ],
+      "compiler_started": false,
+      "correction": "Rejected dependent requests before admission; accepted prerequisites first; IDs used for first compiler launches afterward."
+    },
+    {
+      "kind": "overlapping local git commits",
+      "compiler_started": false,
+      "git_error": "cannot lock ref HEAD: is at 2ab21b7274 but expected 73216d9c09",
+      "correction": "Rejected commit retained source; OpeningEncoded44 committed serially as 841488479e; subsequent commits serialized."
+    },
+    {
+      "kind": "admission refusal",
+      "attempt": 60785,
+      "compiler_started": false,
+      "correction": "Full cooldown at least 180 seconds; same ID later admitted; independent remaining digits compiled serially after cooldown."
+    }
+  ],
+  "new_endpoint_credit": false
+}

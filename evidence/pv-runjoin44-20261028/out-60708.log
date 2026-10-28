@@ -1,0 +1,21 @@
+START 60708 R1Z.PV_RunJoin_Vector44
+DONE 60708 R1Z.PV_RunJoin_Vector44 exit 1 wall 1.85 RSS 4401045504
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_Vector44.lean:15:94: error: unsolved goals
+A : Type
+out : alloc.vec.Vec A
+a : A
+room : out.length + 1 ≤ Usize.max
+⊢ (if h : (decide ((↑out).length + 1 ≤ U32.max) || decide ((↑out).length + 1 ≤ Usize.max)) = true then
+      ok ⟨(↑out).concat a, ⋯⟩
+    else fail Error.maximumSizeExceeded) =
+    ok ⟨↑out ++ [a], ⋯⟩
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_Vector44.lean:16:34: warning: This simp argument is unused:
+  dif_pos room
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.push,̵d̵i̵f̵_̵p̵o̵s̵ ̵r̵o̵o̵m̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_Vector44.read' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_Vector44.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,172 @@
+START 60705 R1Z.PV_RunJoin_FoldThread44
+DONE 60705 R1Z.PV_RunJoin_FoldThread44 exit 1 wall 2.17 RSS 4426088448
+n/sources/R1Z/PV_RunJoin_FoldThread44.lean:34:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  q.len / 4#usize
+in the target expression
+  (have i1 := q.len;
+    do
+    let i2 ← i1 / 4#usize
+    if i < i2 then do
+        let i3 ← lift (Usize.wrapping_mul 4#usize i)
+        let we ← q.index_usize i3
+        let i4 ← lift (Usize.wrapping_mul 4#usize i)
+        let i5 ← lift (i4.wrapping_add 1#usize)
+        let we1 ← q.index_usize i5
+        let i6 ← lift (Usize.wrapping_mul 4#usize i)
+        let i7 ← lift (i6.wrapping_add 2#usize)
+        let we2 ← q.index_usize i7
+        let i8 ← lift (Usize.wrapping_mul 4#usize i)
+        let i9 ← lift (i8.wrapping_add 3#usize)
+        let we3 ← q.index_usize i9
+        let value ← prover.fold_cell (Array.make 4#usize [we, we1, we2, we3] ⋯) alpha dual
+        let out1 ← out.push value
+        let i10 ← lift (i.wrapping_add 1#usize)
+        ok (ControlFlow.cont (out1, i10))
+      else ok (ControlFlow.done out)) =
+    ok (ControlFlow.done out)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+q : Slice W
+alpha : W
+dual : Bool
+out : alloc.vec.Vec W
+i : Usize
+bound : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ (have i1 := q.len;
+    do
+    let i2 ← i1 / 4#usize
+    if i < i2 then do
+        let i3 ← lift (Usize.wrapping_mul 4#usize i)
+        let we ← q.index_usize i3
+        let i4 ← lift (Usize.wrapping_mul 4#usize i)
+        let i5 ← lift (i4.wrapping_add 1#usize)
+        let we1 ← q.index_usize i5
+        let i6 ← lift (Usize.wrapping_mul 4#usize i)
+        let i7 ← lift (i6.wrapping_add 2#usize)
+        let we2 ← q.index_usize i7
+        let i8 ← lift (Usize.wrapping_mul 4#usize i)
+        let i9 ← lift (i8.wrapping_add 3#usize)
+        let we3 ← q.index_usize i9
+        let value ← prover.fold_cell (Array.make 4#usize [we, we1, we2, we3] ⋯) alpha dual
+        let out1 ← out.push value
+        let i10 ← lift (i.wrapping_add 1#usize)
+        ok (ControlFlow.cont (out1, i10))
+      else ok (ControlFlow.done out)) =
+    ok (ControlFlow.done out)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:43:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  q.len / 4#usize
+in the target expression
+  (have i1 := q.len;
+    do
+    let i2 ← i1 / 4#usize
+    if i < i2 then do
+        let i3 ← lift (Usize.wrapping_mul 4#usize i)
+        let we ← q.index_usize i3
+        let i4 ← lift (Usize.wrapping_mul 4#usize i)
+        let i5 ← lift (i4.wrapping_add 1#usize)
+        let we1 ← q.index_usize i5
+        let i6 ← lift (Usize.wrapping_mul 4#usize i)
+        let i7 ← lift (i6.wrapping_add 2#usize)
+        let we2 ← q.index_usize i7
+        let i8 ← lift (Usize.wrapping_mul 4#usize i)
+        let i9 ← lift (i8.wrapping_add 3#usize)
+        let we3 ← q.index_usize i9
+        let value ← prover.fold_cell (Array.make 4#usize [we, we1, we2, we3] ⋯) alpha dual
+        let out1 ← out.push value
+        let i10 ← lift (i.wrapping_add 1#usize)
+        ok (ControlFlow.cont (out1, i10))
+      else ok (ControlFlow.done out)) =
+    do
+    let next ← step q alpha dual out i
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+q : Slice W
+alpha : W
+dual : Bool
+out : alloc.vec.Vec W
+i : Usize
+bound : ↑i < q.length / 4
+⊢ (have i1 := q.len;
+    do
+    let i2 ← i1 / 4#usize
+    if i < i2 then do
+        let i3 ← lift (Usize.wrapping_mul 4#usize i)
+        let we ← q.index_usize i3
+        let i4 ← lift (Usize.wrapping_mul 4#usize i)
+        let i5 ← lift (i4.wrapping_add 1#usize)
+        let we1 ← q.index_usize i5
+        let i6 ← lift (Usize.wrapping_mul 4#usize i)
+        let i7 ← lift (i6.wrapping_add 2#usize)
+        let we2 ← q.index_usize i7
+        let i8 ← lift (Usize.wrapping_mul 4#usize i)
+        let i9 ← lift (i8.wrapping_add 3#usize)
+        let we3 ← q.index_usize i9
+        let value ← prover.fold_cell (Array.make 4#usize [we, we1, we2, we3] ⋯) alpha dual
+        let out1 ← out.push value
+        let i10 ← lift (i.wrapping_add 1#usize)
+        ok (ControlFlow.cont (out1, i10))
+      else ok (ControlFlow.done out)) =
+    do
+    let next ← step q alpha dual out i
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:55:15: error(lean.unknownIdentifier): Unknown identifier `stop`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:52:9: error: unsolved goals
+case zero
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+q : Slice W
+alpha : W
+dual : Bool
+small : q.length / 4 ≤ 256
+out : alloc.vec.Vec W
+i : Usize
+bound : ↑i + 0 = q.length / 4
+⊢ (do
+      let cf ← prover.fold_loop.body q alpha dual out i
+      match cf with
+        | ControlFlow.cont next => loop (fun x => prover.fold_loop.body q alpha dual x.1 x.2) next
+        | ControlFlow.done out => ok out) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:55:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [stop q alpha dual out i (by o̵m̵e̵g̵a̵)̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵p̵h̵a̵s̵e̵]̵o̲m̲e̲g̲a̲)̲,̲ ̲p̲h̲a̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:70:86: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≥ 0
+  b ≥ 0
+  a ≤ 256
+  a - e ≥ 1
+  -3 ≤ 4*a - b ≤ 0
+where
+ a := ↑q.length / 4
+ b := ↑q.length
+ c := ↑Usize.max
+ d := ↑(↑q).length
+ e := ↑(UScalar.cMax UScalarTy.Usize)
+'R1Z.PV_RunJoin_FoldThread44.quotient' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FoldThread44.lean:76:14: error(lean.unknownIdentifier): Unknown constant `stop`
+'R1Z.PV_RunJoin_FoldThread44.one_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FoldThread44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FoldThread44.caller' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

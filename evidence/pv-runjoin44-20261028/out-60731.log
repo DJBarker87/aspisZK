@@ -1,0 +1,37 @@
+START 60731 R1Z.PV_RunJoin_GammaPowers44
+DONE 60731 R1Z.PV_RunJoin_GammaPowers44 exit 1 wall 1.83 RSS 4408004608
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaPowers44.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverRwDictionaryTower.toW (ProverRwDictionaryTower.fromW ?x)
+in the target expression
+  ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (current (source g)))) =
+    ok (PV_RunJoin_BatchRowValue44.array 29#usize p)
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+g : Raw
+hg : canonical g
+p : ℕ → Raw
+hp : AspisR1ProducerRelease47.gamma (source g) = ok (sourceArray 29#usize p)
+hcp : ∀ k < 29, canonical (p k)
+hdp : ∀ k < 29, value (p k) = value g ^ k
+bridge :
+  ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) =
+    ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (current (source g))))
+⊢ ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (current (source g)))) =
+    ok (PV_RunJoin_BatchRowValue44.array 29#usize p)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_GammaPowers44.gamma' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

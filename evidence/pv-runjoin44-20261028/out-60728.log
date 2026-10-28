@@ -1,0 +1,31 @@
+START 60728 R1Z.PV_RunJoin_GammaVector44
+DONE 60728 R1Z.PV_RunJoin_GammaVector44 exit 1 wall 1.76 RSS 4420857856
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaVector44.lean:29:2: error: unsolved goals
+case refine_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+c : ℕ → ℕ → Raw
+p : ℕ → Raw
+hc : ∀ l < 29, ∀ j < 1024, canonical (c l j)
+hp : ∀ l < 29, canonical (p l)
+z : ℕ → Raw
+hz :
+  AspisR1ProducerRelease47.gamma53.all (ProverCommitGammaCell53.table c) (sourceArray 29#usize p) =
+    ok (sourceArray 1024#usize z)
+hcz : ∀ j < 1024, canonical (z j)
+hdz : ∀ (j : Fin 1024), value (z ↑j) = sum (fun l => c l ↑j) p 29 0
+out : alloc.vec.Vec PV_RunJoin_BatchRowThread44.W
+hout :
+  PV_RunJoin_BatchThread44.phase (table c) (array 29#usize p) 1024 (alloc.vec.Vec.with_capacity W 1024#usize) 0#usize =
+    ok out
+hv : ↑out = ↑(alloc.vec.Vec.with_capacity W 1024#usize) ++ PV_RunJoin_BatchLoopValue44.payload z (↑0#usize) 1024
+⊢ (List.ofFn fun i => current (source (z ↑i))) = List.ofFn fun i => current (source (z (↑0#usize + ↑i)))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaVector44.lean:33:59: warning: This simp argument is unused:
+  Nat.zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.with_capacity, ̲List.nil_append,N̵ ̲at̵.̵z̵e̵ro̵_̵a̵d̵d̵,̵a̵rr̵ay, ̲ProverCommitArray49.array]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_GammaVector44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

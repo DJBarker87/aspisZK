@@ -1,0 +1,76 @@
+START 60772 R1Z.PV_RunJoin_OpeningKernel44
+DONE 60772 R1Z.PV_RunJoin_OpeningKernel44 exit 1 wall 1.7 RSS 4424249344
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningKernel44.lean:44:2: error: unsolved goals
+case refine_2
+inst✝ : ExternalTypes
+ops : ExternalFuns
+q w : ℕ → Raw
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+a b : Raw
+ha : canonical a
+hb : canonical b
+c0 : ℕ → Raw
+hc0 : prover.round (array 1024#usize q).to_slice (array 1024#usize w).to_slice = ok (array 7#usize c0)
+holdc0 :
+  ProverCommitRoundScaled48.run (↑1024#usize / 4) (sourceArray 1024#usize q) (sourceArray 1024#usize w) =
+    ok (List.ofFn fun k => source (c0 ↑k))
+hcc0 : ∀ k < 7, canonical (c0 k)
+q1 : ℕ → Raw
+vq : alloc.vec.Vec W
+hq1 : prover.fold (array 1024#usize q).to_slice (current (source a)) false = ok vq
+holdq1 :
+  AspisR1ProducerRelease47.fold_first (sourceArray 1024#usize q) (source a)
+      (Array.repeat 256#usize AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) 0#usize 256#u16 =
+    ok (sourceArray 256#usize q1)
+hiq : (array 256#usize q1).to_slice = vq.deref
+hcq1 : ∀ j < 256, canonical (q1 j)
+hdq1 : ∀ j < 256, value (q1 j) = ProverCommitFoldOutput48.mathCell (fun i => value (q i)) (value a) j
+w1 : ℕ → Raw
+vw : alloc.vec.Vec W
+hw1 : prover.fold (array 1024#usize w).to_slice (current (source a)) true = ok vw
+holdw1 : AspisR1ProducerRelease47.dual.all (sourceArray 1024#usize w) (source a) = ok (sourceArray 256#usize w1)
+hiw : (array 256#usize w1).to_slice = vw.deref
+hcw1 : ∀ j < 256, canonical (w1 j)
+hdw1 : ∀ (j : Fin 256), value (w1 ↑j) = AspisR1.RoundPairing.dualFold (value a) (fun i => value (w ↑i)) j
+c1 : ℕ → Raw
+hc1 : prover.round (array 256#usize q1).to_slice (array 256#usize w1).to_slice = ok (array 7#usize c1)
+holdc1 :
+  ProverCommitRoundShape49.run (sourceArray 256#usize q1) (sourceArray 256#usize w1) =
+    ok (List.ofFn fun k => source (c1 ↑k))
+hcc1 : ∀ k < 7, canonical (c1 k)
+fin : ℕ → Raw
+vf : alloc.vec.Vec W
+hfin : prover.fold (array 256#usize q1).to_slice (current (source b)) false = ok vf
+holdfin :
+  AspisR1ProducerRelease47.fold_second (sourceArray 256#usize q1) (source b)
+      (Array.repeat 64#usize AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) 0#usize 64#u8 =
+    ok (sourceArray 64#usize fin)
+hifin : (array 64#usize fin).to_slice = vf.deref
+hcfin : ∀ j < 64, canonical (fin j)
+hdfin : ∀ j < 64, value (fin j) = ProverCommitFoldOutput48.mathCell (fun i => value (q1 i)) (value b) j
+⊢ (do
+      let c0 ← ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w)
+      ok (c0, sourceArray 256#usize q1, List.ofFn fun k => source (c1 ↑k), sourceArray 64#usize fin)) =
+    ok
+      (List.ofFn fun k => source (c0 ↑k), sourceArray 256#usize q1, List.ofFn fun k => source (c1 ↑k),
+        sourceArray 64#usize fin)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningKernel44.lean:44:47: warning: This simp argument is unused:
+  show (1024#usize).val / 4 = 256 from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵O̵p̵e̵n̵i̵n̵g̵K̵e̵r̵n̵e̵l̵4̵9̵.̵r̵u̵n̵,̵s̵h̵o̵w̵ ̵(̵1̵0̵2̵4̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵ ̵/̵ ̵4̵ ̵=̵ ̵2̵5̵6̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵h̵o̵l̵d̵c̵0̵,̵h̵o̵l̵d̵q̵1̵,̵h̵o̵l̵d̵w̵1̵,̵h̵o̵l̵d̵c̵1̵,̵h̵o̵l̵d̵f̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲O̲p̲e̲n̲i̲n̲g̲K̲e̲r̲n̲e̲l̲4̲9̲.̲r̲u̲n̲,̲ ̲h̲o̲l̲d̲c̲0̲,̲ ̲h̲o̲l̲d̲q̲1̲,̲ ̲h̲o̲l̲d̲w̲1̲,̲ ̲h̲o̲l̲d̲c̲1̲,̲ ̲h̲o̲l̲d̲f̲i̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningKernel44.lean:45:6: warning: This simp argument is unused:
+  holdc0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵O̵p̵e̵n̵i̵n̵g̵K̵e̵r̵n̵e̵l̵4̵9̵.̵r̵u̵n̵,̵s̵h̵o̵w̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲O̲p̲e̲n̲i̲n̲g̲K̲e̲r̲n̲e̲l̲4̲9̲.̲r̲u̲n̲,̲ ̲s̲h̲o̲w̲ (1024#usize).val / 4 = 256 from rfl, h̵o̵l̵d̵c̵0̵,̵h̵o̵l̵d̵q̵1̵,̵h̵o̵l̵d̵w̵1̵,̵h̵o̵l̵d̵c̵1̵,̵h̵o̵l̵d̵f̵i̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵h̲o̲l̲d̲q̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲o̲l̲d̲w̲1̲,̲ ̲h̲o̲l̲d̲c̲1̲,̲ ̲h̲o̲l̲d̲f̲i̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_OpeningKernel44.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

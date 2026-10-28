@@ -1,0 +1,52 @@
+START 60736 R1Z.PV_RunJoin_RoundStepValue44
+DONE 60736 R1Z.PV_RunJoin_RoundStepValue44 exit 1 wall 1.88 RSS 4410400768
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundStepValue44.lean:47:4: error: Tactic `apply` failed: could not unify the conclusion of `congrArg (ProverCommitArray49.array 7#usize)`
+  ProverCommitArray49.array 7#usize ?m.437 = ProverCommitArray49.array 7#usize ?m.438
+with the goal
+  (ProverCommitArray49.array 7#usize
+        (Function.update (fun i => current (source (xs i))) (↑s + ↑p) (current (source z))),
+      t.wrapping_add 1#usize) =
+    (ProverCommitArray49.array 7#usize fun i => current (source (ys i)), t.wrapping_add 1#usize)
+
+Note: The full type of `congrArg (ProverCommitArray49.array 7#usize)` is
+  ?m.437 = ?m.438 → ProverCommitArray49.array 7#usize ?m.437 = ProverCommitArray49.array 7#usize ?m.438
+
+case refine_1
+inst✝ : ExternalTypes
+ops : ExternalFuns
+count : Usize
+q w xs : ℕ → Raw
+hq : ∀ k < 1024, canonical (q k)
+hw : ∀ k < 1024, canonical (w k)
+hxs : ∀ k < 7, canonical (xs k)
+d s t : Usize
+hd : ↑d < 256
+size : 4 * ↑d + 4 ≤ ↑count
+hs : ↑s < 4
+ht : ↑t < 4
+seven : ↑7#usize = 7
+big : ↑1024#usize = 1024
+p : Usize
+hp : (Array.make 4#usize [0#usize, 3#usize, 2#usize, 1#usize] ⋯).index_usize t = ok p
+hpv : ↑p = perm ↑t
+hpb : ↑p < 4
+hidx : ↑(s.wrapping_add p) = ↑s + ↑p
+hqidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add s) = 4 * ↑d + ↑s
+hwidx : ↑((Usize.wrapping_mul 4#usize d).wrapping_add t) = 4 * ↑d + ↑t
+m : Raw
+hm :
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.mul (source (q (4 * ↑d + ↑s))) (source (w (4 * ↑d + ↑t))) =
+    ok (source m)
+hcm : canonical m
+hdm : value m = value (q (4 * ↑d + ↑s)) * value (w (4 * ↑d + ↑t))
+z : Raw
+hz : AspisR1ProducerRelease47.field.wide_exact.WideExact.add (source (xs (↑s + ↑p))) (source m) = ok (source z)
+hcz : canonical z
+hdz : value z = value (xs (↑s + ↑p)) + value m
+ys : ℕ → Raw := Function.update xs (↑s + ↑p) z
+⊢ (ProverCommitArray49.array 7#usize
+        (Function.update (fun i => current (source (xs i))) (↑s + ↑p) (current (source z))),
+      t.wrapping_add 1#usize) =
+    (ProverCommitArray49.array 7#usize fun i => current (source (ys i)), t.wrapping_add 1#usize)
+'R1Z.PV_RunJoin_RoundStepValue44.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
