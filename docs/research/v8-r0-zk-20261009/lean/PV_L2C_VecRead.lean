@@ -20,10 +20,10 @@ theorem read {A : Type} {n : Nat} (hn : n≤Usize.max) (f : Fin n → A)
 #print axioms read
 
 /-- The same literal row lookup for the public active array. -/
-def active (f : Fin 1024 → Bool) : Aeneas.Std.Array Bool 1024#usize :=
-  ⟨List.ofFn f,by simp⟩
+def active {n : Usize} (f : Fin n.val → Bool) : Aeneas.Std.Array Bool n :=
+  ⟨List.ofFn f,by simp only [List.length_ofFn]⟩
 
-theorem read_active (f : Fin 1024 → Bool) (r : Usize) (hr : r.val<1024) :
+theorem read_active {n : Usize} (f : Fin n.val → Bool) (r : Usize) (hr : r.val<n.val) :
     Aeneas.Std.Array.index_usize (active f) r=ok (f ⟨r.val,hr⟩) := by
   unfold Aeneas.Std.Array.index_usize
   change (match (List.ofFn f)[r.val]? with
