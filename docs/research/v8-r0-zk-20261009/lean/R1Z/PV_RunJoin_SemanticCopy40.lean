@@ -48,7 +48,7 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
       let s1 ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
         logical { start := (Usize.wrapping_add at1 5#usize), «end» := (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size) }
       let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 mid s1
-      .ok (.Ok (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size),out2)) = _
+      Result.ok (core.result.Result.Ok (E := compact.CodecError) (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size),out2)) = _
     rw [hp]
     simp only [bind_tc_ok,hn]
   · rw [hnext,hmid,inc,endval]
