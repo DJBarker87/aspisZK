@@ -42,7 +42,7 @@ def emit(mod,source_mod,names,imports):
   assert not re.search(r'\b(if|match|loop|massert)\b',body),(name,'non-straightline')
   body='  '+body.lstrip()
   lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*',body,re.M))
-  proof=['  unfold '+name]
+  proof=['  '+('delta' if name=='reference_poseidon.global_sums227' else 'unfold')+' '+name]
   def rule(expr):
    call=expr.split()[0];assert call in mapping,(name,call,expr)
    target=mapping[call]

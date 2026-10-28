@@ -121,7 +121,7 @@ theorem total_reference_poseidon_add_global227 (value : aspis_core.field.QM31) (
 
 theorem total_reference_poseidon_global_sums227 (state : Array aspis_core.field.QM31 16#usize) :
     Success (reference_poseidon.global_sums227 state) := by
-  unfold reference_poseidon.global_sums227
+  delta reference_poseidon.global_sums227
   apply bind
   · apply index <;> scalar_tac
   intro q
