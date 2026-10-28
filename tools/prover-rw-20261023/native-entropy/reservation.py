@@ -88,6 +88,20 @@ def admission(root=Path('/sys/fs/cgroup'), requested=8*GIB):
                    allowed=total+requested < LIMIT)
     except (OSError, ValueError) as error:
         out['error'] = f'{type(error).__name__}: {error}'
+    # Cross-stream quiet window (Stream B ruling (e), LOG D358): while
+    # QUIET_WINDOW.json exists with now < until, refuse every launch except the
+    # window owner's (QUIET_WINDOW_OWNER=1). An unreadable marker also refuses.
+    marker = Path('/home/dombarker/project-offloads/QUIET_WINDOW.json')
+    if marker.exists() and os.environ.get('QUIET_WINDOW_OWNER') != '1':
+        import time
+        try:
+            until = float(json.loads(marker.read_text())['until'])
+            active = time.time() < until
+        except (OSError, ValueError, KeyError, TypeError) as error:
+            until, active = None, True
+            out['quiet_window_error'] = f'{type(error).__name__}: {error}'
+        if active:
+            out.update(allowed=False, quiet_window=dict(marker=str(marker), until=until))
     return out
 
 
