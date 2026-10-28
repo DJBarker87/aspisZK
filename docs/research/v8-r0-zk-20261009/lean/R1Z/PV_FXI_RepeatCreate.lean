@@ -9,7 +9,7 @@ structure FileWorld where
   descriptor : Nat
   contents : List UInt8
   durable : Bool
-  exists : Bool
+  entryPresent : Bool
   errors : List Nat
   deriving DecidableEq
 
@@ -21,8 +21,8 @@ inductive OpenOutcome where
 /-- The checked create_new success / EEXIST branch, with no crash theorem.
 This is an owned boundary reference, not a claimed OS-kernel axiom. -/
 def createNew (w : FileWorld) : OpenOutcome × FileWorld :=
-  if w.exists then (.alreadyExists,w)
-  else (.opened w.descriptor,{w with exists := true, contents := [], durable := false})
+  if w.entryPresent then (.alreadyExists,w)
+  else (.opened w.descriptor,{w with entryPresent := true, contents := [], durable := false})
 
 def emptyWorld : FileWorld := ⟨[110],3,[],false,false,[]⟩
 def createdWorld : FileWorld := (createNew emptyWorld).2
@@ -59,7 +59,7 @@ theorem no_fixed_complete_result {Options Path Complete : Type}
 /-- Both states are inhabited with concrete path, descriptor, contents and
 persistence flag. No assumption of impossible worlds is used. -/
 theorem nonvacuous : ∃ before after : FileWorld,
-    before.exists = false ∧ after.exists = true ∧
+    before.entryPresent = false ∧ after.entryPresent = true ∧
     before.path = after.path ∧
     (createNew before).1 ≠ (createNew after).1 :=
   ⟨emptyWorld,createdWorld,rfl,rfl,rfl,distinct_results⟩

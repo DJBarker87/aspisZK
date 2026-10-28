@@ -15,3 +15,8 @@
   paths. The copied job wrapper records SSH 255 and retries only pre-launch
   and read-only commands; a scope submission is never re-submitted on 255.
   No shared launcher, reservation tool or infrastructure source is edited.
+- Lean35800 ran once and failed on the reserved field name `exists`; its
+  subsequent errors and sorryAx reports are failed-elaboration artifacts,
+  not accepted theorems. Rename the field to entryPresent before the next
+  assigned attempt. The complete failed output/receipt is retained. Log
+  recovery required four read-only SSH retries; no compiler resubmission.

@@ -18,7 +18,7 @@ meta['imported_external_objects']=['Init (all 5673 external objects verified bef
 meta['reused_project_objects']=[]
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 # Upload only after the separate recorded successful admission check.
-upload=json.loads((E/'source-upload-04.json').read_text())
+upload=json.loads((E/f'{n}-source-upload.json').read_text())
 assert upload[D+'/lean-sources/'+m+'.lean']==meta['source_sha256']
 # The recorded SSH-stdin upload was hash-checked in the private directory;
 # do not need a second transport to copy the same source again.
