@@ -65,5 +65,5 @@ r=transport(['scp',*OPTIONS,'-qr',H+':'+B+'/'+attempt,str(E)])
 assert r.returncode==0,r.stderr
 receipt=json.loads((E/attempt/'receipt.json').read_text())
 print(json.dumps({k:receipt[k] for k in ['exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']},indent=2),flush=True)
-with (E/'JHx_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=attempt,mode=mode,**receipt))+'\n')
+with (E/'JHx_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(dict(receipt,mode=mode))+'\n')
 sys.exit(receipt['exit_status'])
