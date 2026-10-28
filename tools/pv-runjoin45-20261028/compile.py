@@ -5,6 +5,7 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin45-20261028';H='/h
 a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 61200<=a<=61299
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
+assert len(mods)==1,'one module per attempt'
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.
@@ -72,9 +73,15 @@ if not admission.get('allowed') or rc!=0:
   admission.update(epoch=time.time(),attempt=a,compiler_started=False,admission_exit=rc)
   (E/f'refusal-{a}-{time.time_ns()}.json').write_text(json.dumps(admission,indent=2)+'\n')
   (E/f'submission-{a}.json').rename(E/f'unlaunched-submission-{a}-{time.time_ns()}.json')
+  if 'error' in admission:
+   assert re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',admission['error']),admission
+   assert sum('error' in json.loads(p.read_text()) for p in E.glob(f'refusal-{a}-*.json'))<=3,'fourth scan race'
   print('REFUSED uncharged; same ID after full 180s cooldown',admission,flush=True);sys.exit(78)
 assert admission.get('allowed') is True,'VOID launch'
 intent['reservation']=admission
+intent['admission_exit']=0
+intent['admission_and_launch_same_shell']=True
+intent['cooldown_checked_before_launch']=True
 for n in ['out','time']:
  q=ssh(f'cat {P}/evidence/{n}-{a}.log');assert q.returncode==0,q.stderr
  (E/f'{n}-{a}.log').write_text(q.stdout)

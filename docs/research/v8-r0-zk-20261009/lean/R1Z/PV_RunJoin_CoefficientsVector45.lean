@@ -57,9 +57,15 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
       simp only [prover.opening_coefficients_loop.body,
         show lane < Slice.len (messages p) from (by change lane.val < (messages p).length;rw [messages,Array.length_to_slice];exact hi),↓reduceIte,read,bind_tc_ok,
         lift]
-      erw [installed ops (p lane.val)]
-      simp only [bind_tc_ok,hm]
-      exact hn
+      have cell := congrArg (fun r : Result Column => do
+        let c ← r
+        let coefficients1 ← alloc.vec.Vec.push out c
+        let cf := ControlFlow.cont (coefficients1, Usize.wrapping_add lane 1#usize)
+        match cf with
+        | .cont next => @prover.opening_coefficients_loop _ (ProverRwP6BodyCandidate.selected ops) .S2 (messages p) next.1 next.2
+        | .done out => .ok out) (installed ops (p lane.val))
+      apply Eq.trans cell
+      simpa only [bind_tc_ok,hm] using hn
     · rw [hnv,hmv,inc,payload,List.append_assoc,List.singleton_append]
 #print axioms payload_length
 #print axioms installed
