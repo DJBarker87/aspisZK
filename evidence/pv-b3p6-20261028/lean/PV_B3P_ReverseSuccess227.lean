@@ -13,20 +13,20 @@ theorem reverse1_total (semantic : Array aspis_core.field.QM31 24#usize)
   refine loop_total _ (fun x : aspis_core.field.QM31 × Usize => x.2.val)
     (fun x => x.2.val ≤ 24) ?_ (composition,index) hi
   rintro ⟨acc,i⟩ hbound
+  change i.val ≤ 24 at hbound
   by_cases hp : 0 < i.val
   · have hb : i > 0#usize := by scalar_tac
     let j := Usize.wrapping_sub i 1#usize
     have hj : j.val = i.val-1 := PV_B3P_Offset226V3.sub_value i 1#usize (by scalar_tac)
     obtain ⟨mulval,hmul⟩ := total_host_terminal_field_PreparedQm31Multiplier_mul prepared acc
     obtain ⟨readval,hread⟩ := PV_B3P_Success227.index semantic j (by change j.val < 24; omega)
+    simp only [j] at hread
     obtain ⟨next,hnext⟩ := qadd mulval readval
     refine ⟨.cont (next,j),?_,?_,?_⟩
     · simp only [reference_terminal.composition_parts_loop1.body,hb,↓reduceIte,lift,bind_tc_ok,hmul,
         reference_terminal.read227,hread,hnext]
-    · dsimp only
-      omega
-    · dsimp only
-      omega
+    · omega
+    · omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done acc,?_,True.intro⟩
     simp only [reference_terminal.composition_parts_loop1.body,hb,↓reduceIte]
@@ -41,20 +41,20 @@ theorem reverse2_total (poseidon : Array aspis_core.field.QM31 4#usize)
   refine loop_total _ (fun x : aspis_core.field.QM31 × Usize => x.2.val)
     (fun x => x.2.val ≤ 4) ?_ (composition,index) hi
   rintro ⟨acc,i⟩ hbound
+  change i.val ≤ 4 at hbound
   by_cases hp : 0 < i.val
   · have hb : i > 0#usize := by scalar_tac
     let j := Usize.wrapping_sub i 1#usize
     have hj : j.val = i.val-1 := PV_B3P_Offset226V3.sub_value i 1#usize (by scalar_tac)
     obtain ⟨mulval,hmul⟩ := total_host_terminal_field_PreparedQm31Multiplier_mul prepared acc
     obtain ⟨readval,hread⟩ := PV_B3P_Success227.index poseidon j (by change j.val < 4; omega)
+    simp only [j] at hread
     obtain ⟨next,hnext⟩ := qadd mulval readval
     refine ⟨.cont (next,j),?_,?_,?_⟩
     · simp only [reference_terminal.composition_parts_loop2.body,hb,↓reduceIte,lift,bind_tc_ok,hmul,
         reference_terminal.read227,hread,hnext]
-    · dsimp only
-      omega
-    · dsimp only
-      omega
+    · omega
+    · omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done acc,?_,True.intro⟩
     simp only [reference_terminal.composition_parts_loop2.body,hb,↓reduceIte]

@@ -19,6 +19,7 @@ theorem expand_inner_total {N : Usize}
   refine loop_total _ (fun x : Array aspis_core.field.QM31 N × Usize => x.2.val)
     (fun x => 2*x.2.val ≤ N.val) ?_ (weights,index) hi
   rintro ⟨w,i⟩ hbound
+  change 2*i.val ≤ N.val at hbound
   by_cases hp : 0 < i.val
   · have hb : i > 0#usize := by scalar_tac
     let j := Usize.wrapping_sub i 1#usize
@@ -33,13 +34,12 @@ theorem expand_inner_total {N : Usize}
     obtain ⟨left,hleft⟩ := qsub parent right
     obtain ⟨w1,hw1⟩ := update w k left (by omega)
     obtain ⟨w2,hw2⟩ := update w1 k1 right (by omega)
+    simp only [j,k,k1] at hparent hw1 hw2
     refine ⟨.cont (w2,j),?_,?_,?_⟩
     · simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body,hb,
         ↓reduceIte,lift,bind_tc_ok,hparent,hright,hleft,hw1,hw2]
-    · dsimp only
-      omega
-    · dsimp only
-      omega
+    · omega
+    · omega
   · have hb : ¬ i > 0#usize := by scalar_tac
     refine ⟨.done w,?_,True.intro⟩
     simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body,hb,↓reduceIte]
