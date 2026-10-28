@@ -20,22 +20,22 @@ def produce
   Logged (core.result.Result (alloc.vec.Vec U8) verifier.Error) := do
   let (reserved,context) := salts
   let r ← observe .opening 0 (prover.prepare_opening variant hash backend sem)
-  let cf ← lift (core.result.Result.Insts.CoreOpsTry.branch r)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | .Continue val =>
     let r1 ← observe .saltDerivation 2 (prover.derive_private_salts reserved context hash 114#u8)
-    let cf1 ← lift (core.result.Result.Insts.CoreOpsTry.branch r1)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | .Continue val1 =>
       let r2 ← observe .opening 1 (prover.finish_opening variant hash val val1)
-      let cf2 ← lift (core.result.Result.Insts.CoreOpsTry.branch r2)
+      let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | .Continue val2 => observe .publication 0 (prover.publish_compact variant val2)
-      | .Break residual => lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      | .Break residual => PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
-    | .Break residual => lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+    | .Break residual => PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
-  | .Break residual => lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+  | .Break residual => PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
 
 theorem complete_result
