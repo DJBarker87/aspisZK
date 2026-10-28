@@ -26,15 +26,21 @@ def digits (digest : Array U8 32#usize) (i : Usize) : Result (Str × Str) := do
           ]) i4
     ok (high,low)
 
+theorem bind_return {A : Type} (r : Result A) :
+    (do let x ← r; ok x)=r := by cases r <;> rfl
+
 theorem factor (digest : Array U8 32#usize) (s : String) (i : Usize) :
     PV_RDEA_ActualNameLoop.round digest s i = (do
       let (high,low) ← digits digest i
       let next ← ExternalFuns.op31 s high
       ExternalFuns.op31 next low) := by
   simp only [PV_RDEA_ActualNameLoop.round, digits, bind_assoc, bind_tc_ok]
+  simp only [bind_return]
+  rfl
 
 #print Std.U8.wrapping_shr
 #print UScalar.cast
 #print UScalar.and
+#print axioms bind_return
 #print axioms factor
 end R1Z.PV_RDEAC_ActualRound
