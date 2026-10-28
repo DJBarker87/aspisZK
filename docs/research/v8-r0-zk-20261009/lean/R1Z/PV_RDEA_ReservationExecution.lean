@@ -29,7 +29,7 @@ theorem requests {S F : Type} (step : Request → S → Option Nat × S)
   | ok unit =>
     have cap : e.buffer.capacity=69 := PV_RDEA_CloneExecution.capacity_success step shape address 69 w h
     have empty : e.buffer.values=[] := PV_RDB1_V181.empty_value step _ _ shape width address 69 w
-    have fits : e.buffer.values.length+2*digest.length+5≤e.buffer.capacity := by rw [empty,length,cap]; omega
+    have fits : e.buffer.values.length+2*digest.length+5≤e.buffer.capacity := by rw [empty,length,cap]; simp only [List.length_nil]; omega
     obtain ⟨out,after,hr,_,_,_,_,hh,_⟩ := PV_RDEA_NameFill.complete step shape digest e.buffer e.world fits
     rw [hr]
     simpa only [hh] using hist
