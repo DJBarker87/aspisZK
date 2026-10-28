@@ -1,0 +1,13 @@
+{"attempt": "NBP_L028", "exit_status": 1, "wall_seconds": 1.520155156031251, "peak_rss_kib": "3882992", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.Array.setSlice!.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → ℕ → List α → Aeneas.Std.Array α n :=
+fun {α} {n} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+def Aeneas.Std.Slice.setSlice!.{u} : {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α :=
+fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Slice α → Aeneas.Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+NBP_generated/NBP_InspectSlices.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.getElem!_val`
+NBP_generated/NBP_InspectSlices.lean:6:7: error(lean.unknownIdentifier): Unknown constant `List.setSlice!_singleton`
+NBP_generated/NBP_InspectSlices.lean:7:7: error(lean.unknownIdentifier): Unknown constant `List.setSlice!_eq`
+

@@ -1,6 +1,6 @@
 # NBP U02 atomic digest and payment codecs
 
-Status: nine of sixteen local members CLOSED; seven OPEN. No headline premise
+Status: ten of sixteen local members CLOSED; six OPEN. No headline premise
 removed. RPx_Deployed.deployed, L154 statement parameter, narrowed D188,
 frozen3, RuntimePersistence and approved game fields unchanged. S2 and the
 100-bit deployed target remain unestablished.
@@ -41,8 +41,7 @@ validate_common, validate_pool_v1_private_transfer_public_v1,
 validate_pool_v1_withdrawal_public_v1. Their domains and exact references remain
 those in that handoff.
 
-OPEN: encode_digest_canonical (model induction/enumerator association);
-decode_common and encode_common (full bytes/error/frame association);
+OPEN: decode_common and encode_common (full bytes/error/frame association);
 decode_pool_v1_private_transfer_public_v1 and encoder;
 decode_pool_v1_withdrawal_public_v1 and encoder (compose exact common/digest
 callees and full native/model caller Results). U01 remains reused CLOSED.
@@ -53,3 +52,24 @@ change, no ELF rebuild trigger; release pins inherited, not reproduced:
 default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+## Digest encoder — CLOSED local
+
+NBP_DigestEncode.result (L017) reuses S2K_DigestBytes.exact on the ACTUAL
+selected TerminalDecoder definition, all raw8 limbs. Its loop_exact is a
+decreasing-Nat induction, with DigestTotal.body_word/next_row/exhausted proving
+the exact iterator association, count<8 byte ranges, one4-byte update and
+terminal state. NBP_DigestLayout.bytes (L026) identifies its same output with
+the ordered concatenation of all eight little-endian words.
+
+Native iteration association reuses NBG_K020: arbitrary32-byte prestate,
+arbitrary index<8, raw value, exact four bytes and all untouched positions.
+Standard iter/enumerate supplies indices0..7 in source order; the selected
+model next_row/exhausted carries the identical counts/words and derives
+arithmetic/copy bounds. Existing Kani credit remains subject to KDX exposure
+review. No whole native encoder loop is unwound.
+
+The closed model proofs and native step refer to the same fold: start32 zero
+bytes; at indexi setSlice4i of raw wordi.to_le_bytes; stop at8. No output
+equality is supplied by a caller. The source loop has no external effects,
+allocator or syscall. No new standard-library trust item is introduced.

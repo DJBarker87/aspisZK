@@ -1,0 +1,23 @@
+{"attempt": "NBP_L023", "exit_status": 0, "wall_seconds": 1.3266422740416601, "peak_rss_kib": "2642404", "swaps": "0", "print_axioms": ["'NBP_Store.exact' depends on axioms: [propext, Quot.sound]", "'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]"]}
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }
+
+...
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }
+
+Running as unit: run-r098730a263aa4d2c96e9918970e0c016.scope; invocation ID: ef6ffadb28c447f1b6a6142bcea3f8c8

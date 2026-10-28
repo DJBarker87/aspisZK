@@ -1,0 +1,44 @@
+{"attempt": "NBP_L033", "exit_status": 1, "wall_seconds": 2.10157448699465, "peak_rss_kib": "3859848", "swaps": "0", "print_axioms": ["'NBP_CommonDecode.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBP_generated/NBP_CommonDecode.lean:32:65: error: unsolved goals
+b : Std.Array U8 216#usize
+⊢ (do
+      let r ←
+        if h : (List.slice 144 148 ↑b).length = 4 then ok (core.result.Result.Ok ⟨List.slice 144 148 ↑b, ⋯⟩)
+          else ok (core.result.Result.Err ())
+      let a ←
+        match r with
+          | core.result.Result.Ok value1 => ok value1
+          | core.result.Result.Err a => fail Error.panic
+      if 2147483647 ≤ ↑(core.num.U32.from_le_bytes a) then
+          ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+        else do
+          let r1 ←
+            if h : (List.slice 8 40 ↑b).length = 32 then ok (core.result.Res
+...
+rom_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩) then
+        core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId
+      else
+        match NBP_DigestDecode.decoded ⟨List.take 32 (List.drop 80 ↑b), ⋯⟩ with
+        | core.result.Result.Err a =>
+          core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest
+        | core.result.Result.Ok anchor =>
+          match NBP_DigestDecode.decoded ⟨List.take 32 (List.drop 112 ↑b), ⋯⟩ with
+          | core.result.Result.Err a =>
+            core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest
+          | core.result.Result.Ok nullifier =>
+            match
+              NBG_PaymentChecks.common
+                { pool := ⟨List.take 32 (List.drop 8 ↑b), ⋯⟩, deployment_domain := ⟨List.take 32 (List.drop 40 ↑b), ⋯⟩,
+                  anchor_sequence := core.num.U64.from_le_bytes ⟨List.take 8 (List.drop 72 ↑b), ⋯⟩,
+                  anchor_root := anchor, nullifier := nullifier,
+                  asset_id := core.num.U32.from_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩ } with
+            | core.result.Result.Err e => core.result.Result.Err e
+            | core.result.Result.Ok PUnit.unit =>
+              core.result.Result.Ok
+                { pool := ⟨List.take 32 (List.drop 8 ↑b), ⋯⟩, deployment_domain := ⟨List.take 32 (List.drop 40 ↑b), ⋯⟩,
+                  anchor_sequence := core.num.U64.from_le_bytes ⟨List.take 8 (List.drop 72 ↑b), ⋯⟩,
+                  anchor_root := anchor, nullifier := nullifier,
+                  asset_id := core.num.U32.from_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩ })
+'NBP_CommonDecode.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a56ed62ea664fcc90da8ea4c0bfb4a0.scope; invocation ID: c2862bea57b449069ad9bbfaa1108572

@@ -1,0 +1,131 @@
+use super::*;
+fn NBP_digest_bytes(d:&Digest)->[u8;32] {
+ let b0=d[0].0.to_le_bytes();
+ let b1=d[1].0.to_le_bytes();
+ let b2=d[2].0.to_le_bytes();
+ let b3=d[3].0.to_le_bytes();
+ let b4=d[4].0.to_le_bytes();
+ let b5=d[5].0.to_le_bytes();
+ let b6=d[6].0.to_le_bytes();
+ let b7=d[7].0.to_le_bytes();
+ [b0[0],b0[1],b0[2],b0[3],b1[0],b1[1],b1[2],b1[3],b2[0],b2[1],b2[2],b2[3],b3[0],b3[1],b3[2],b3[3],b4[0],b4[1],b4[2],b4[3],b5[0],b5[1],b5[2],b5[3],b6[0],b6[1],b6[2],b6[3],b7[0],b7[1],b7[2],b7[3]]
+}
+#[kani::proof]
+#[kani::unwind(256)]
+#[kani::stub(crate::atomic_statement::encode_digest_canonical, NBP_digest_bytes)]
+fn NBP_common_encoder() {
+ let mut out:[u8;216]=kani::any();let before=out;
+ let magic:[u8;4]=kani::any();let withdrawal:bool=kani::any();
+ let kind=if withdrawal{PoolV1TransitionKind::Withdrawal}else{PoolV1TransitionKind::PrivateTransfer};
+ let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NBP_digest(),nullifier:NBP_digest(),asset_id:M31(kani::any())};
+ let j:usize=kani::any();kani::assume(j<216);
+ super::encode_common(&mut out,magic,kind,c);
+ let expected=match j {
+ 0..=3=>magic[j],4=>1,5=>if withdrawal{2}else{1},6=>1,7=>before[j],
+ 8..=39=>c.pool[j-8],40..=71=>c.deployment_domain[j-40],
+ 72..=79=>c.anchor_sequence.to_le_bytes()[j-72],
+ 80..=111=>NBP_digest_bytes(&c.anchor_root)[j-80],
+ 112..=143=>NBP_digest_bytes(&c.nullifier)[j-112],
+ 144..=147=>c.asset_id.0.to_le_bytes()[j-144],_=>before[j]};
+ assert!(out[j]==expected);kani::cover!(j==215);
+}
+fn NBP_digest()->Digest { [M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())] }
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_magic() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;4]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[0..4].copy_from_slice(&src);
+ assert!(out[j]==if j>=0&&j<4{src[j-0]}else{before[j]});
+ kani::cover!(j==3);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_pool() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[8..40].copy_from_slice(&src);
+ assert!(out[j]==if j>=8&&j<40{src[j-8]}else{before[j]});
+ kani::cover!(j==39);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_deployment() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[40..72].copy_from_slice(&src);
+ assert!(out[j]==if j>=40&&j<72{src[j-40]}else{before[j]});
+ kani::cover!(j==71);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_sequence() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;8]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[72..80].copy_from_slice(&src);
+ assert!(out[j]==if j>=72&&j<80{src[j-72]}else{before[j]});
+ kani::cover!(j==79);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_anchor() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[80..112].copy_from_slice(&src);
+ assert!(out[j]==if j>=80&&j<112{src[j-80]}else{before[j]});
+ kani::cover!(j==111);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_nullifier() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[112..144].copy_from_slice(&src);
+ assert!(out[j]==if j>=112&&j<144{src[j-112]}else{before[j]});
+ kani::cover!(j==143);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_asset() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;4]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[144..148].copy_from_slice(&src);
+ assert!(out[j]==if j>=144&&j<148{src[j-144]}else{before[j]});
+ kani::cover!(j==147);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_recipient() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[152..184].copy_from_slice(&src);
+ assert!(out[j]==if j>=152&&j<184{src[j-152]}else{before[j]});
+ kani::cover!(j==183);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_change() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[184..216].copy_from_slice(&src);
+ assert!(out[j]==if j>=184&&j<216{src[j-184]}else{before[j]});
+ kani::cover!(j==215);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_amount() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;4]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[148..152].copy_from_slice(&src);
+ assert!(out[j]==if j>=148&&j<152{src[j-148]}else{before[j]});
+ kani::cover!(j==151);
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_store_destination() {
+ let mut out:[u8;216]=kani::any();let before=out;let src:[u8;32]=kani::any();
+ let j:usize=kani::any();kani::assume(j<216);
+ out[152..184].copy_from_slice(&src);
+ assert!(out[j]==if j>=152&&j<184{src[j-152]}else{before[j]});
+ kani::cover!(j==183);
+}

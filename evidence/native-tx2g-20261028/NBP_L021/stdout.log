@@ -1,0 +1,21 @@
+NBP_generated/NBP_Store.lean:49:4: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 W
+  but is expected to have type
+    { l // l.length = ↑W }
+  in the application
+    ↑bytes
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, sorryAx, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }

@@ -1,0 +1,8 @@
+import NBG_Audit
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+#print atomic_statement.decode_digest_canonical
+#print atomic_statement.encode_digest_canonical
+#print pool_v1.payment_relation.decode_common
+#print pool_v1.payment_relation.encode_common
+#print atomic_statement.encode_digest_canonical.loop

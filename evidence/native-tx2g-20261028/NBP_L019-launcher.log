@@ -1,0 +1,55 @@
+{"attempt": "NBP_L019", "exit_status": 1, "wall_seconds": 1.1974882200011052, "peak_rss_kib": "2630924", "swaps": "0", "print_axioms": ["'NBP_Store.exact' depends on axioms: [propext, Quot.sound]"]}
+NBP_generated/NBP_Store.lean:29:7: error: unexpected token 'then'; expected identifier
+NBP_generated/NBP_Store.lean:41:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  (core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+        { start := start, «end» := stop } >>=
+      fun x =>
+      (let (s, back) := x
+        do
+        let src ← lift bytes.to_slice
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+        ok (back copied)) >>=
+        k) =
+    k (output.setSlice! ↑start ↑bytes)
+but is expected to have type
+  (do
+      let (s, back) ←
+        core.array.Array.index_mut (core.ops.
+...
+NBP_generated/NBP_Store.lean:29:7: error: unexpected token 'then'; expected identifier
+NBP_generated/NBP_Store.lean:41:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  (core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+        { start := start, «end» := stop } >>=
+      fun x =>
+      (let (s, back) := x
+        do
+        let src ← lift bytes.to_slice
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+        ok (back copied)) >>=
+        k) =
+    k (output.setSlice! ↑start ↑bytes)
+but is expected to have type
+  (do
+      let (s, back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output
+            { start := start, «end» := stop }
+      let src ← lift bytes.to_slice
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+      k (back copied)) =
+    k (output.setSlice! ↑start ↑bytes)
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+NBP_generated/NBP_Store.lean:43:7: error(lean.unknownIdentifier): Unknown constant `axioms`
+NBP_generated/NBP_Store.lean:43:14: error: unexpected token 'then'; expected command
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }
+
+Running as unit: run-r617c0da11565476a8c0764dbf7c1f354.scope; invocation ID: c9352854f46046e38ce7e79274604fbc
