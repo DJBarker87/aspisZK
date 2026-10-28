@@ -1,3 +1,5 @@
+import PV_L2C_VecShape
+import PV_L2C_PackedMasks
 import PV_L2C_ExtractedM31Fold
 import PV_L2C_ExtractedRows
 import PV_L2C_VecWrite
@@ -122,3 +124,8 @@ import PV_L2C_ExtractedFold
 #print axioms PV_L2C_ExtractedRows.fold_source
 #print axioms PV_L2C_ExtractedM31Fold.source
 #print axioms PV_L2C_ExtractedM31Fold.zero_sum
+#print axioms PV_L2C_PackedMasks.inserted_bit
+#print axioms PV_L2C_PackedMasks.put_contains
+#print axioms PV_L2C_PackedMasks.packed_contains
+#print axioms PV_L2C_VecShape.length
+#print axioms PV_L2C_VecShape.active_read
