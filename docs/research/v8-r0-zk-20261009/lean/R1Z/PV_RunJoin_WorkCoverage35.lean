@@ -8,16 +8,18 @@ def indices (n : Nat) : Nat → List Nat
   | 0 => []
   | k+1 => indices n k ++ List.range' (start n k) (width n k)
 
-theorem prefix (n k : Nat) : indices n k=List.range' 0 (start n k) := by
+theorem initial_ranges (n k : Nat) : indices n k=List.range' 0 (start n k) := by
   induction k with
   | zero => rw [indices,PV_RunJoin_WorkRange35.zero];rfl
   | succ k ih =>
     rw [indices,ih,PV_RunJoin_WorkRange35.next]
-    simpa only [Nat.zero_add] using
-      (List.range'_append 0 (start n k) (width n k)).symm
+    have h : List.range' 0 (start n k) ++
+        List.range' (0+1*start n k) (width n k) =
+        List.range' 0 (start n k+width n k) := List.range'_append
+    simpa only [Nat.one_mul,Nat.zero_add] using h
 
 theorem complete (n : Nat) : indices n 16=List.range n := by
-  rw [prefix,end_all]
+  rw [initial_ranges,end_all]
   rfl
 
 theorem count (n : Nat) : (indices n 16).length=n := by rw [complete,List.length_range]
@@ -26,7 +28,7 @@ theorem coverage (n i : Nat) : i∈indices n 16 ↔ i<n := by rw [complete,List.
 
 theorem no_duplicates (n : Nat) : (indices n 16).Nodup := by rw [complete];exact List.nodup_range
 
-#print axioms prefix
+#print axioms initial_ranges
 #print axioms complete
 #print axioms count
 #print axioms coverage
