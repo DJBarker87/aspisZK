@@ -14,3 +14,10 @@ NCX_E001 is a rejected missing-Option-item extraction, not proof evidence.
 NCX_L001/L002 compile Types/Funs (-M7000; capped host; exact receipts).
 No external template was emitted. Safe casts preserve exact width; native
 source correspondence and fixture evaluations remain OPEN.
+
+Stage 2: NCX_Carrier roundtrip/surjectivity covers both complete records,
+all four statuses and all twelve exact error variants (L003). NCX_Install
+selects op33/op34 in missing.adapter and in the SDK, alongside NCV_Install's
+op48/op49/op50; preserves outer failure/divergence (L004). These are dictionary
+selection results, not a discharged AeneasExtraction/native P6 boundary.
+Axioms are standard only; no hypotheses/trust items were added or changed.
