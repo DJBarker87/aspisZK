@@ -43,7 +43,7 @@ theorem step (ops : ExternalFuns) (count : Usize) (q w xs : Nat â†’ Raw) (hq : â
       PV_RunJoin_WideArithmetic44.add ops _ _ _ hz]
     rw [ProverCommitArray49.update 7#usize _ _ (by rw [hidx];omega)]
     simp only [hidx,bind_tc_ok]
-    congr 2
+    congr 3
     apply congrArg (ProverCommitArray49.array 7#usize)
     funext k
     by_cases h : k = s.val+p.val
