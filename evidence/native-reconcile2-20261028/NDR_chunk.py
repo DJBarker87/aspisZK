@@ -53,3 +53,5 @@ for n in modules:
  if 'NDR_BEGIN '+n in (E/a/'stdout.log').read_text():get(a+'/'+n+'.time')
 receipts=sorted(E.glob('NDR_B[0-9][0-9][0-9]/receipt.json'));(E/'NDR_BUILD_RECEIPTS.json').write_text(json.dumps([json.loads(p.read_text()) for p in receipts],indent=2)+'\n')
 print(json.dumps({k:r[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print((E/a/'stdout.log').read_text()[-4500:])
+
+sys.exit(r["exit_status"])
