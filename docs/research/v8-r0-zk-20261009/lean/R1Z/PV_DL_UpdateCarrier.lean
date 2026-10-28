@@ -11,6 +11,25 @@ def blockList (N : Type) (bytes : List U8) : List (GenericArray U8 N (Storage U8
   (PV_DL_UpdateViews.views (bytes.length/64) bytes).map
     (fun block => ⟨PV_DL_StorageBuild.build 6 (fun i => block[i]!)⟩)
 
+theorem block_decoding (N : Type) (blocks : List (List U8))
+    (h : ∀ block∈blocks,block.length=64) :
+    (blocks.map (fun block => (⟨PV_DL_StorageBuild.build 6 (fun i => block[i]!)⟩ :
+      GenericArray U8 N (Storage U8 6)))).flatMap (fun block => flatten 6 block.data)=
+      blocks.flatMap id := by
+  induction blocks with
+  | nil => rfl
+  | cons block tail ih =>
+    simp only [List.map_cons,List.flatMap_cons]
+    rw [PV_DL_StorageBuild.reconstruct 6 block (h block (by simp only [List.mem_cons_self]))]
+    rw [ih (fun b hb => h b (by simp only [List.mem_cons];exact Or.inr hb))]
+    rfl
+
+theorem decoded_blocks (N : Type) (bytes : List U8) :
+    (blockList N bytes).flatMap (fun block => flatten 6 block.data)=(PV_DL_BatchPlan.bulk bytes).1 := by
+  unfold blockList
+  rw [block_decoding N _ (fun b hb => PV_DL_UpdateViews.native_block_lengths bytes b hb)]
+  exact PV_DL_UpdateViews.native_bulk bytes
+
 def compress {T N : Type} (update : T → Blocks N → Result T)
     (state : T) (bytes : List U8) : Result T :=
   if h : (blockList N bytes).length≤Usize.max then update state ⟨blockList N bytes,h⟩ else fail .panic
@@ -63,8 +82,12 @@ theorem decoded {T : Type} (state : T) (buffer : List U8) (pos : Nat)
   PV_DL_StorageBuild.reconstruct 6 buffer hb
 
 #print axioms blockList
+#print axioms block_decoding
+#print axioms decoded_blocks
 #print axioms compress
 #print axioms block_count
+#print axioms block_decoding
+#print axioms decoded_blocks
 #print axioms compression_call
 #print axioms encode
 #print axioms callback
