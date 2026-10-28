@@ -41,3 +41,11 @@ Inspected authoritative LEAF packets, LPq's exact checked-stage table, inherited
 LPm prepared/powers and LPi harness bodies, LPk/LPo harness snapshots, KNE model,
 writer and final leaf, NCS_PARITY_AUDIT, KNB_FINDING and KNC_FINDING. No prover,
 Rust or Kani invocation was needed for this source/evidence dependency audit.
+
+## Subsequent disposition
+
+The stage1 classifications above are preserved. KNF_FINDING.md records the
+six matched static-form routes restoring all four DEPENDENT leaves. Final K-2
+tally: nine standing credits plus four restored; none still dependent or failed.
+Original pointer-form harnesses and enclosing runtime observer chains stay
+quarantined.
