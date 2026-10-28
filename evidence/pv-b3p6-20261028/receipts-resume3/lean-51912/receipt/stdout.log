@@ -1,0 +1,223 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MaskScan132.lean:28:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reference132.cells_loop0_loop0.body c out count r
+in the target expression
+  (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (out, count)
+
+case zero
+p : ℕ → ℕ → Bool
+hp : ∀ (r c : Usize), ↑r < 1024 → ↑c < 16 → reference132.free r c = Result.ok (p ↑r ↑c)
+c : Usize
+hc : ↑c < 16
+out : Std.Array reference132.Cell 3803#usize
+count r : Usize
+hr : ↑r + 0 = 1024
+hcap : ↑count + (rows p (↑c) (↑r) 0).length ≤ 3803
+hd : reference132.cells_loop0_loop0.body c out count r = Result.ok (ControlFlow.done (out, count))
+⊢ (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (out, count)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3803 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MaskScan132.lean:41:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reference132.cells_loop0_loop0.body c out count r
+in the target expression
+  (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (o, k)
+
+case succ.false.refine_1
+p : ℕ → ℕ → Bool
+hp : ∀ (r c : Usize), ↑r < 1024 → ↑c < 16 → reference132.free r c = Result.ok (p ↑r ↑c)
+c : Usize
+hc : ↑c < 16
+n : ℕ
+ih :
+  ∀ (out : Std.Array reference132.Cell 3803#usize) (count r : Usize),
+    ↑r + n = 1024 →
+      ↑count + (rows p (↑c) (↑r) n).length ≤ 3803 →
+        ∃ out' count',
+          reference132.cells_loop0_loop0 out count c r = Result.ok (out', count') ∧
+            ↑count' = ↑count + (rows p (↑c) (↑r) n).length ∧
+              written out' ↑count' = written out ↑count ++ rows p (↑c) (↑r) n
+out : Std.Array reference132.Cell 3803#usize
+count r : Usize
+hr : ↑r + (n + 1) = 1024
+hcap : ↑count + (rows p (↑c) (↑r) (n + 1)).length ≤ 3803
+hrow : ↑r < 1024
+hnext : ↑(r.wrapping_add 1#usize) = ↑r + 1
+hfree : reference132.free r c = Result.ok (p ↑r ↑c)
+hb : p ↑r ↑c = false
+hstep :
+  reference132.cells_loop0_loop0.body c out count r = Result.ok (ControlFlow.cont (out, count, r.wrapping_add 1#usize))
+hcap' : ↑count + (rows p (↑c) (↑(r.wrapping_add 1#usize)) n).length ≤ 3803
+o : Std.Array reference132.Cell 3803#usize
+k : Usize
+hloop :
+  loop
+      (fun x =>
+        match x with
+        | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+      (out, count, r.wrapping_add 1#usize) =
+    Result.ok (o, k)
+hcount : ↑k = ↑count + (rows p (↑c) (↑(r.wrapping_add 1#usize)) n).length
+hprefix : written o ↑k = written out ↑count ++ rows p (↑c) (↑(r.wrapping_add 1#usize)) n
+⊢ (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (o, k)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3803 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MaskScan132.lean:60:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reference132.cells_loop0_loop0.body c out count r
+in the target expression
+  (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (o', k)
+
+case succ.true.refine_1
+p : ℕ → ℕ → Bool
+hp : ∀ (r c : Usize), ↑r < 1024 → ↑c < 16 → reference132.free r c = Result.ok (p ↑r ↑c)
+c : Usize
+hc : ↑c < 16
+n : ℕ
+ih :
+  ∀ (out : Std.Array reference132.Cell 3803#usize) (count r : Usize),
+    ↑r + n = 1024 →
+      ↑count + (rows p (↑c) (↑r) n).length ≤ 3803 →
+        ∃ out' count',
+          reference132.cells_loop0_loop0 out count c r = Result.ok (out', count') ∧
+            ↑count' = ↑count + (rows p (↑c) (↑r) n).length ∧
+              written out' ↑count' = written out ↑count ++ rows p (↑c) (↑r) n
+out : Std.Array reference132.Cell 3803#usize
+count r : Usize
+hr : ↑r + (n + 1) = 1024
+hcap : ↑count + (rows p (↑c) (↑r) (n + 1)).length ≤ 3803
+hrow : ↑r < 1024
+hnext : ↑(r.wrapping_add 1#usize) = ↑r + 1
+hfree : reference132.free r c = Result.ok (p ↑r ↑c)
+hb : p ↑r ↑c = true
+hn : ↑count < 3803
+o : Std.Array reference132.Cell 3803#usize
+hs :
+  reference132.cells_loop0_loop0.body c out count r =
+    Result.ok (ControlFlow.cont (o, count.wrapping_add 1#usize, r.wrapping_add 1#usize))
+ho : o = out.set count { row := UScalar.cast UScalarTy.U16 r, column := UScalar.cast UScalarTy.U8 c }
+hk : ↑(count.wrapping_add 1#usize) = ↑count + 1
+hcap' : ↑(count.wrapping_add 1#usize) + (rows p (↑c) (↑(r.wrapping_add 1#usize)) n).length ≤ 3803
+o' : Std.Array reference132.Cell 3803#usize
+k : Usize
+hloop :
+  loop
+      (fun x =>
+        match x with
+        | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+      (o, count.wrapping_add 1#usize, r.wrapping_add 1#usize) =
+    Result.ok (o', k)
+hcount : ↑k = ↑(count.wrapping_add 1#usize) + (rows p (↑c) (↑(r.wrapping_add 1#usize)) n).length
+hprefix : written o' ↑k = written o ↑(count.wrapping_add 1#usize) ++ rows p (↑c) (↑(r.wrapping_add 1#usize)) n
+⊢ (match
+      match (out, count, r) with
+      | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (out1, count1, row1) => reference132.cells_loop0_loop0.body c out1 count1 row1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Result.ok (o', k)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3803 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3P_MaskScan132.inner' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
