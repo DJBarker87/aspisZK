@@ -22,7 +22,7 @@ code='''from pathlib import Path
 import json,hashlib
 b=Path(BASE);d=Path(DIR);e=json.loads((b/'r1-privacy-build-integration-20261019/env/J.json').read_text());shared=b/'aspis-joint-20261019/objects'
 e['LEAN_PATH']=str(shared)+':'+e['LEAN_PATH'];(d/'env-private-J.json').write_text(json.dumps(e))
-(d/'lean-objects').mkdir(exist_ok=True);(d/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True)
+(d/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True);(d/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True)
 roots=[d/'lean-objects',shared]+[Path(p) for p in e['LEAN_PATH'].split(':')]
 deps={}
 for m in IMPORTS:
