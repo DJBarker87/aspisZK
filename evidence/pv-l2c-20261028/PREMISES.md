@@ -1,3 +1,21 @@
+# D370 current disposition — checked N3 counterexample
+
+Target not yet established. Successful canonical preparation can retain raw
+M31(P) at C1[0][444]; native masking preserves it and N3 rejects it, whereas
+the same-public M31(0) case passes the exact-body guard diagnostic. The actual
+secure prover entry with OS entropy returns Err(Semantic) on the bad case.
+Work stopped under the explicit counterexample rule, with 97 Lean attempts
+unspent and no new Kani. V352/V354/V357/V360 remain OPEN/P; zero premises
+removed, added, weakened or changed. Frozen implementation and HonestInput
+are unchanged. Current evidence and accounting:
+[resumed finding](resume-d369/D370-FINDING.md),
+[state reconciliation](resume-d369/RECOVERY-D370.json),
+[native receipt](resume-d369/canonical-n3-probe5/receipt.json).
+
+The earlier dispositions below are historical and superseded by this finding.
+
+---
+
 # Before / after accounting
 
 The before state is the candidate e461dca06a plus the authorized runjoin merge;

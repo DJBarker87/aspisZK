@@ -1,3 +1,13 @@
+# Final diagnostic disposition
+
+Probe5 passed; see D370-FINDING.md. The proposed private-module recording
+backend could not compile and was removed. Row 444 is inactive, not active;
+its raw value nevertheless survives native masking. The historical plan below
+is retained to explain the failed probes, not as an executed instrumentation
+claim.
+
+---
+
 # N3 source review, pending native reachability diagnostic
 
 At 9062bd72f5 the 437-file private view equals the tracked worktree source.
