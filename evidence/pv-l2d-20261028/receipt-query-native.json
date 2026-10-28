@@ -1,0 +1,52 @@
+{
+  "target": "query-native",
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=pv-l2d-query-native",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-l2d-20261028/time-query-native.log",
+    "sh",
+    "-c",
+    "/home/dombarker/.cargo/bin/rustup run 1.94.1 rustc -O --edition=2021 -C codegen-units=1 -C link-arg=-Wl,--threads=4 /home/dombarker/project-offloads/codex-pv-l2d-20261028/query-native.rs -o /home/dombarker/project-offloads/codex-pv-l2d-20261028/query-native && /home/dombarker/project-offloads/codex-pv-l2d-20261028/query-native"
+  ],
+  "source_revision": "d371d368d16b41b9e0878c967188f34fd70a2ddd",
+  "source_sha256": "d15a8227d648a1fae822fce106afa796e2d6b0389d204d007a76a69877e71090",
+  "admission": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T17:01:15.292434+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 17045651456,
+    "projected_reserved_bytes": 25635586048
+  },
+  "expected_time": "optimized standalone compilation, then finite public index/byte control-flow validation; no chained field arithmetic",
+  "print_axioms": "N/A: Rust finite validation",
+  "features": "standalone exact-body comparator; no crate feature or deployed-ELF credit",
+  "scope_exit": 1,
+  "exit": 1,
+  "wall": "0:00.05",
+  "peak_rss_kib": 127496,
+  "swaps": 0,
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}
