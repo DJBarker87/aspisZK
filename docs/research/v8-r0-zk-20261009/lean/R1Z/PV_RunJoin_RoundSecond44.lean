@@ -13,7 +13,8 @@ theorem pad_prefix (q : Nat → Raw) : array 256#usize (ProverCommitRoundShape49
   dsimp only [array,ProverCommitArray49.array]
   apply congrArg List.ofFn
   funext i
-  rw [ProverCommitRoundShape49.pad,if_pos i.isLt]
+  have hi : i.val < 256 := i.isLt
+  rw [ProverCommitRoundShape49.pad,if_pos hi]
 
 theorem complete (ops : ExternalFuns) (q w : Nat → Raw)
     (hq : ∀ k, k < 256 → canonical (q k)) (hw : ∀ k, k < 256 → canonical (w k)) :
@@ -27,7 +28,7 @@ theorem complete (ops : ExternalFuns) (q w : Nat → Raw)
     (ProverCommitRoundShape49.pad_canonical q hq) (ProverCommitRoundShape49.pad_canonical w hw)
   rw [pad_prefix q,pad_prefix w] at hy
   refine ⟨ys,hy,?_,hcy⟩
-  simpa only [ProverCommitRoundShape49.run,ProverCommitRoundShape49.lift_source] using hret
+  simpa only [ProverCommitRoundShape49.run,ProverCommitRoundShape49.lift_source,show (256#usize).val / 4 = 64 from rfl] using hret
 #print axioms pad_prefix
 #print axioms complete
 end R1Z.PV_RunJoin_RoundSecond44
