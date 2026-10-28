@@ -14,6 +14,8 @@ def visit(p):
 visit(R/'Cargo.toml');visit(R/'tools/r1-cost-probe/Cargo.toml')
 paths=set()
 for p in seen:
+ if p.parent==R:
+  paths.update(['Cargo.toml','Cargo.lock']);continue
  for s in subprocess.check_output(['git','ls-tree','-r','--name-only','HEAD',str(p.parent.relative_to(R))],text=True).splitlines():
   if s.endswith(('.rs','.toml','.lock')):paths.add(s)
 files={p:(R/p).read_text() for p in sorted(paths)}
