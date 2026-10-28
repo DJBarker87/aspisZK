@@ -1,5 +1,5 @@
 from pathlib import Path
-import base64,hashlib,json,subprocess,sys
+import base64,hashlib,json,subprocess,sys,re
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-world-20261028'
 D='/home/dombarker/project-offloads/codex-pv-world-20261028';H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
@@ -23,6 +23,15 @@ assert hashlib.sha256(p.read_bytes()).hexdigest()=={hashlib.sha256(b).hexdigest(
 '''
 q=subprocess.run(['ssh',H,'python3','-'],input=code,text=True);assert q.returncode==0
 meta=dict(id=n,module=m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_path=str(p.relative_to(R)),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_sha256=hashlib.sha256(b).hexdigest(),external_manifest_sha256=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest(),project_imports=['R1Z.PV_W_Threading'] if 'import R1Z.PV_W_Threading' in b.decode() else [],reused_project_objects=[],deps_fingerprint=hashlib.sha256((E/'external-verification.json').read_bytes()).hexdigest())
+deps=re.findall(r'^import (R1Z\.PV_W_\S+)',b.decode(),re.M)
+meta['project_imports']=deps
+meta['direct_dependency_objects']={}
+for dep in deps:
+ dp=D+'/lean-objects/'+dep.replace('.','/')+'.olean'
+ z=subprocess.check_output(['ssh',H,'sha256sum '+dp],text=True).split()[0]
+ sp=R/'docs/research/v8-r0-zk-20261009/lean'/(dep.replace('.','/')+'.lean')
+ meta['direct_dependency_objects'][dep]=dict(path=dp,sha256=z,source_sha256=hashlib.sha256(sp.read_bytes()).hexdigest())
+meta['deps_fingerprint']=hashlib.sha256(json.dumps(meta['direct_dependency_objects'],sort_keys=True).encode()).hexdigest()
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-world-20261028/scope.py'),f'lean-{n}','compilation of '+m,*cmd])

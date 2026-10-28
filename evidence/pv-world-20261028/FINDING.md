@@ -1,7 +1,7 @@
 # W-CARRIER-1: world indexing must retain destructor-accessible state
 
-This is a checked-counterexample candidate until its focused Lean receipt is
-accepted. It is narrower than an impossibility of sidecar semantics.
+This logical counterexample passed focused attempt 36002 (exit 0; five empty
+axiom reports). It is narrower than an impossibility of sidecar semantics.
 
 The proposed generic interpretation of effectful Drop over **only** the current
 OS Observation World needs an adequacy projection from native worlds to that
