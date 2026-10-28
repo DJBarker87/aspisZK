@@ -12,9 +12,16 @@ assert not (E/f'lean-{n}/receipt.json').exists()
 # New proof source is tracked at HEAD under h5; never select an object from a sibling job.
 b=subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))]);assert b==p.read_bytes()
 meta=dict(id=n,module=m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_path=str(p.relative_to(R)),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_sha256=hashlib.sha256(b).hexdigest(),external_manifest_sha256=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest())
+assert json.loads((E/f'{n}-id-preflight.json').read_text())['unused'] is True
+meta['deps_fingerprint']=hashlib.sha256((E/'external-verification.json').read_bytes()).hexdigest()
+meta['imported_external_objects']=['Init (all 5673 external objects verified before compile)']
+meta['reused_project_objects']=[]
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 # Upload only after the separate recorded successful admission check.
-subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
+upload=json.loads((E/'source-upload-04.json').read_text())
+assert upload[D+'/lean-sources/'+m+'.lean']==meta['source_sha256']
+# The recorded SSH-stdin upload was hash-checked in the private directory;
+# do not need a second transport to copy the same source again.
 B='/home/dombarker/project-offloads'
 cmd=['timeout','900','python3',B+'/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-fxio-20261028/scope.py'),f'lean-{n}','compilation of '+m,*cmd])
