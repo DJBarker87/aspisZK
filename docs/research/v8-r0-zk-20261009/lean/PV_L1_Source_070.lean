@@ -2,7 +2,6 @@ import PV_L1_ResultCoercion
 import PV_L1_Projection
 import PV_L1_EraseIf
 import R1Z.ProverRwFullFuns
-import PV_L1_Source_069
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1_Source_070
@@ -54,7 +53,7 @@ def produce
     let s5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice a2))
     let s6 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 4#usize [ s2, s3, s4, s5 ])))
     let binding ← PV_L1_Logged.lift (hash s6)
-    PV_L1_Source_069.produce
+    prover.prove_masked_with_attempt
       aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
       public1 compiled variant hash context binding attempt nonce_store
   | core.ops.control_flow.ControlFlow.Break residual =>
@@ -75,10 +74,10 @@ theorem complete_result
   erase (produce public1 compiled variant hash attempt nonce_store) = prover.prove_masked_attempt public1 compiled variant hash attempt nonce_store := by
   unfold produce
   conv_rhs => unfold prover.prove_masked_attempt
-  simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_069.complete_result]
+  simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_069.complete_result]
+    | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -87,7 +86,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_069.complete_result]
+      | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
     all_goals rfl
 #print axioms complete_result
 end PV_L1_Source_070

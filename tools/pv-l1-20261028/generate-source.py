@@ -55,6 +55,7 @@ for k,n in enumerate(selected):
  # retained edge is listed so entry markers cannot be misreported as full traces.
  deps=[];body=b
  for dep,dm in sorted(known.items(),key=lambda x:-len(x[0])):
+  if dm=='PV_L1_Source_069':continue  # explicit unproved body-event frontier
   if dep==n or dep.endswith('.body') or dep.endswith('_loop'):continue
   if re.search(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',body):
    body=re.sub(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',lambda m:m[1]+dm+'.produce',body);deps.append(dm)
