@@ -2,17 +2,18 @@ import R1Z.PV_W_Threading
 set_option autoImplicit false
 namespace R1Z.PV_W_Syntax
 open PV_W_Threading
+universe u
 
 /-- Reification retains control flow before a Result evaluator erases calls.
 The operation family retains each call's actual argument and return type. -/
-inductive Program (Op : Type → Type) (E A : Type) : Type 1 where
+inductive Program (Op : Type → Type u) (E A : Type) : Type (max 1 u) where
   | pure (a : A)
   | failure (e : E)
   | diverge
   | call {B : Type} (op : Op B) (next : B → Program Op E A)
 
-variable {Op : Type → Type} {W C E A B : Type}
-abbrev Interpreter (Op : Type → Type) (W C E : Type) :=
+variable {Op : Type → Type u} {W C E A B : Type}
+abbrev Interpreter (Op : Type → Type u) (W C E : Type) :=
   {B : Type} → Op B → M W C E B
 
 def eval (ops : Interpreter Op W C E) : Program Op E A → M W C E A
