@@ -1,0 +1,545 @@
+def AspisR1ClaimPreparedBridge.claimPublic : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_semantic.Verified H →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        AspisR1ClaimPreparedBridge.PE →
+          Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE 29#usize →
+            AspisR1ClaimPreparedBridge.PE →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result AspisR1ClaimPreparedBridge.PE AspisR1PublicPreparation.verifier.Error) :=
+fun {H} D sem y1 inactive g kappa => do
+  let r ←
+    AspisR1CurrentPreparedClaim.verifier.prepared_claim
+        (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+        (AspisR1ClaimPreparedBridge.toClaimDigest D) (AspisR1ClaimPreparedBridge.toClaimSem sem) y1
+        (AspisR1ClaimPreparedBridge.toClaimE inactive)
+        (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE g)
+        (AspisR1ClaimPreparedBridge.toClaimE kappa)
+  Aeneas.Std.Result.ok
+      (match r with
+      | Aeneas.Std.core.result.Result.Ok x => Aeneas.Std.core.result.Result.Ok (AspisR1ClaimPreparedBridge.fromClaimE x)
+      | Aeneas.Std.core.result.Result.Err e =>
+        Aeneas.Std.core.result.Result.Err (AspisR1ClaimPreparedBridge.fromClaimError e))
+theorem AspisR1ClaimPreparedBridge.powersPublic_success : ∀ {N : Aeneas.Std.Usize} (x : AspisR1ClaimPreparedBridge.PE)
+  (out : Aeneas.Std.Array AspisR1ClaimPreparedBridge.PE N),
+  AspisR1ClaimPreparedBridge.powersPublic N x = Aeneas.Std.Result.ok out →
+    AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) =
+      Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE out) :=
+fun {N} x out h =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) = t →
+      AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) =
+        Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE out))
+    (AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x))
+    (fun ys h_1 =>
+      Eq.ndrec (motive := fun x_1 =>
+        AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) = x_1 →
+          x_1 = Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE out))
+        (fun hr =>
+          have he :=
+            Aeneas.Std.Result.ok.inj
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg bind hr) fun ys =>
+                        Aeneas.Std.Result.ok
+                          (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys))
+                      (Aeneas.Std.bind_tc_ok ys fun y =>
+                        Aeneas.Std.Result.ok
+                          (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE y))))
+                  (Aeneas.Std.Result.ok out))
+                h);
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  Aeneas.Std.Result.ok ys =
+                    Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE _a))
+                (Eq.symm he)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => Aeneas.Std.Result.ok ys = Aeneas.Std.Result.ok _a)
+                  (AspisR1ClaimPreparedBridge.to_from_array ys)))
+              (Eq.refl (Aeneas.Std.Result.ok ys))))
+        (Eq.symm h_1)
+        (Eq.refl (AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x))))
+    (fun e h_1 =>
+      Eq.ndrec (motive := fun x_1 =>
+        AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) = x_1 →
+          x_1 = Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE out))
+        (fun hr =>
+          let ⟨⟩ := Aeneas.Std.Result.ok out
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind hr) fun ys =>
+                    Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys))
+                  (Aeneas.Std.bind_tc_fail e fun y =>
+                    Aeneas.Std.Result.ok
+                      (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE y))))
+              (Aeneas.Std.Result.ok out))
+            h)
+        (Eq.symm h_1)
+        (Eq.refl (AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x))))
+    (fun h_1 =>
+      Eq.ndrec (motive := fun x_1 =>
+        AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x) = x_1 →
+          x_1 = Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.toClaimE out))
+        (fun hr =>
+          let ⟨⟩ := Aeneas.Std.Result.ok out
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind hr) fun ys =>
+                    Aeneas.Std.Result.ok (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE ys))
+                  (Aeneas.Std.bind_tc_div fun y =>
+                    Aeneas.Std.Result.ok
+                      (AspisR1ClaimPreparedBridge.mapArray AspisR1ClaimPreparedBridge.fromClaimE y))))
+              (Aeneas.Std.Result.ok out))
+            h)
+        (Eq.symm h_1)
+        (Eq.refl (AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x))))
+    (Eq.refl (AspisR1CurrentPreparedClaim.ClaimPowers.powers N (AspisR1ClaimPreparedBridge.toClaimE x)))
+def AspisR1CurrentPreparedClaim.ClaimParts.kappaTerm : AspisR1CurrentPreparedClaim.Concrete.E →
+  Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E 7#usize → ℕ → AspisWideTower.WideExact :=
+fun kappa parts j =>
+  if h : j < 7 then
+    AspisR1CurrentPreparedClaim.Concrete.decode kappa ^ j * AspisR1CurrentPreparedClaim.Concrete.decode (↑parts)[j]
+  else 0
+theorem AspisR1CurrentPreparedClaim.ClaimParser.field_success : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (i : Aeneas.Std.Usize) (out : AspisR1CurrentPreparedClaim.ClaimParser.E),
+  AspisR1CurrentPreparedClaim.ClaimParser.field bytes i = Aeneas.Std.Result.ok out →
+    AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+      ∃ x,
+        AspisR1CurrentWide.Proof.finishField bytes i = Aeneas.Std.Result.ok x ∧
+          out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x ∧
+            AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x :=
+fun bytes i out h =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    AspisR1CurrentWide.Proof.finishField bytes i = t →
+      AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+        ∃ x,
+          AspisR1CurrentWide.Proof.finishField bytes i = Aeneas.Std.Result.ok x ∧
+            out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x ∧
+              AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x)
+    (AspisR1CurrentWide.Proof.finishField bytes i)
+    (fun x h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1CurrentWide.Proof.finishField bytes i = x →
+          AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+            ∃ x_1,
+              x = Aeneas.Std.Result.ok x_1 ∧
+                out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x_1 ∧
+                  AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x_1)
+        (fun hr =>
+          have he :=
+            Aeneas.Std.Result.ok.inj
+              (Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (Eq.trans
+                      (congrFun' (congrArg bind hr) fun x =>
+                        Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x))
+                      (Aeneas.Std.bind_tc_ok x fun y =>
+                        Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish y))))
+                  (Aeneas.Std.Result.ok out))
+                h);
+          Eq.ndrec (motive := fun out =>
+            Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x) = Aeneas.Std.Result.ok out →
+              AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+                ∃ x_1,
+                  Aeneas.Std.Result.ok x = Aeneas.Std.Result.ok x_1 ∧
+                    out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x_1 ∧
+                      AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x_1)
+            (fun h =>
+              ⟨AspisR1CurrentPreparedClaim.ClaimParser.canonical_from_finish x
+                  (AspisR1CurrentWide.Proof.finishField_success_canonical bytes i x hr),
+                Exists.intro x ⟨rfl, ⟨rfl, AspisR1CurrentPreparedClaim.ClaimParser.decode_from_finish x⟩⟩⟩)
+            he
+            (Eq.mp
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (congrFun' (congrArg bind hr) fun x =>
+                      Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x))
+                    (Aeneas.Std.bind_tc_ok x fun y =>
+                      Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish y))))
+                (Aeneas.Std.Result.ok out))
+              h))
+        (Eq.symm h_1) (Eq.refl (AspisR1CurrentWide.Proof.finishField bytes i)))
+    (fun e h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1CurrentWide.Proof.finishField bytes i = x →
+          AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+            ∃ x_1,
+              x = Aeneas.Std.Result.ok x_1 ∧
+                out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x_1 ∧
+                  AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x_1)
+        (fun hr =>
+          let ⟨⟩ := Aeneas.Std.Result.ok out
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind hr) fun x =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x))
+                  (Aeneas.Std.bind_tc_fail e fun y =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish y))))
+              (Aeneas.Std.Result.ok out))
+            h)
+        (Eq.symm h_1) (Eq.refl (AspisR1CurrentWide.Proof.finishField bytes i)))
+    (fun h_1 =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1CurrentWide.Proof.finishField bytes i = x →
+          AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+            ∃ x_1,
+              x = Aeneas.Std.Result.ok x_1 ∧
+                out = AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x_1 ∧
+                  AspisR1CurrentPreparedClaim.Concrete.decode out = AspisR1CurrentWide.Proof.decodeFinish x_1)
+        (fun hr =>
+          let ⟨⟩ := Aeneas.Std.Result.ok out
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind hr) fun x =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish x))
+                  (Aeneas.Std.bind_tc_div fun y =>
+                    Aeneas.Std.Result.ok (AspisR1CurrentPreparedClaim.ClaimParser.fromFinish y))))
+              (Aeneas.Std.Result.ok out))
+            h)
+        (Eq.symm h_1) (Eq.refl (AspisR1CurrentWide.Proof.finishField bytes i)))
+    (Eq.refl (AspisR1CurrentWide.Proof.finishField bytes i))
+theorem AspisR1.JGi_CurrentSemantic.source : ∀ {H : Type} (D : AspisR1CurrentCaller.aspis_core.digest.Digest32 H)
+  (hash : H) (expanded : Aeneas.Std.Slice Aeneas.Std.U8) (pre : AspisR1PublicPreparation.r1_wire.Prefix)
+  (sem : AspisR1PublicPreparation.r1_semantic.Verified H),
+  AspisS1NativeCompact.compact.expand_semantic AspisS1ValuesOwnedInstallation.nativeValues
+        AspisR1.JFw_RealExpansion.stored AspisR1.JFw_RealExpansion.initial =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), expanded) →
+    AspisR1PublicPreparation.PrefixAdapter.parseAccepted expanded =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pre) →
+      AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children AspisR1.JGe_Boundaries.value
+            (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+              (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+            AspisR1.JFs_PublicSerialization.value pre
+            { state := AspisV8R19.SqueezeOracleBridge.encodeState AspisR1.JFm_Q14Source.ratchet, hash := hash,
+              next_row := 15#u8 }
+            AspisR1.JFm_Begin.challenges none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok sem) →
+        AspisR1CurrentCaller.S1SemanticInstallation.verify AspisS1ExtractedRoundChildren.children
+            AspisR1.JGe_Boundaries.value (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D)
+            (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value) expanded
+            hash =
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)) :=
+fun {H} D hash expanded pre sem expand parse finish =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let result ←
+                  AspisR1PublicPreparation.VerifyPrefix.verify
+                      (fun {H} =>
+                        AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children
+                          (AspisR1PublicPreparation.S1SemanticRootCopy.install AspisR1.JGe_Boundaries.value))
+                      (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                        (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+                      _a expanded hash none
+                Aeneas.Std.Result.ok
+                    (match result with
+                    | Aeneas.Std.core.result.Result.Ok sem =>
+                      Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+                    | Aeneas.Std.core.result.Result.Err error =>
+                      Aeneas.Std.core.result.Result.Err
+                        (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))) =
+              Aeneas.Std.Result.ok
+                (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)))
+          (AspisR1CurrentCaller.FirstComposition.retained_current_roundtrip AspisR1.JFs_PublicSerialization.value)))
+      (have installed := rfl;
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (do
+                  let result ←
+                    AspisR1PublicPreparation.VerifyPrefix.verify
+                        (fun {H} =>
+                          AspisR1PublicPreparation.FinishModel.finish AspisS1ExtractedRoundChildren.children _a)
+                        (AspisR1CurrentCaller.InstalledPreparation.retainedDigest
+                          (AspisR1.F3V_OracleDictionary.current AspisR1.JFp_SHADigest.digest D))
+                        AspisR1.JFs_PublicSerialization.value expanded hash none
+                  Aeneas.Std.Result.ok
+                      (match result with
+                      | Aeneas.Std.core.result.Result.Ok sem =>
+                        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+                      | Aeneas.Std.core.result.Result.Err error =>
+                        Aeneas.Std.core.result.Result.Err
+                          (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))) =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)))
+            installed))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let result ← _a
+                    Aeneas.Std.Result.ok
+                        (match result with
+                        | Aeneas.Std.core.result.Result.Ok sem =>
+                          Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+                        | Aeneas.Std.core.result.Result.Err error =>
+                          Aeneas.Std.core.result.Result.Err
+                            (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))) =
+                  Aeneas.Std.Result.ok
+                    (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)))
+              (AspisR1.JGi_SemanticVerify.source D hash expanded pre sem expand parse finish)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)))
+                (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Ok sem) fun result =>
+                  Aeneas.Std.Result.ok
+                    (match result with
+                    | Aeneas.Std.core.result.Result.Ok sem =>
+                      Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+                    | Aeneas.Std.core.result.Result.Err error =>
+                      Aeneas.Std.core.result.Result.Err
+                        (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error)))))
+            (Eq.refl
+              (Aeneas.Std.Result.ok
+                (match Aeneas.Std.core.result.Result.Ok sem with
+                | Aeneas.Std.core.result.Result.Ok sem =>
+                  Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.S1SemanticCarrier.currentSem sem)
+                | Aeneas.Std.core.result.Result.Err error =>
+                  Aeneas.Std.core.result.Result.Err
+                    (AspisR1CurrentCaller.S1SemanticCarrier.currentWireError error))))))))
+theorem AspisR1CurrentCaller.InstalledPreparation.sourceView_semantic : ∀
+  (proof semantic y1 : Aeneas.Std.Slice Aeneas.Std.U8) (view : AspisR1CurrentCaller.verifier.View),
+  AspisR1CurrentCaller.InstalledPreparation.sourceView proof semantic y1 =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view) →
+    view.semantic = semantic :=
+fun proof semantic y1 view accepted =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = t → view.semantic = semantic)
+    (AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1)
+    (fun r h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = x → view.semantic = semantic)
+        (fun source =>
+          Aeneas.Std.core.result.Result.casesOn (motive := fun t => r = t → view.semantic = semantic) r
+            (fun old h =>
+              Eq.ndrec (motive := fun r =>
+                AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = Aeneas.Std.Result.ok r →
+                  view.semantic = semantic)
+                (fun source =>
+                  have same :=
+                    Aeneas.Std.core.result.Result.Ok.inj
+                      (Aeneas.Std.Result.ok.inj
+                        (Eq.mp
+                          (congrFun'
+                            (congrArg Eq
+                              (Eq.trans
+                                (congrFun' (congrArg bind source) fun r =>
+                                  Aeneas.Std.Result.ok
+                                    (match r with
+                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                      Aeneas.Std.core.result.Result.Ok
+                                        (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                                    | Aeneas.Std.core.result.Result.Err e =>
+                                      Aeneas.Std.core.result.Result.Err
+                                        (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))
+                                (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Ok old) fun y =>
+                                  Aeneas.Std.Result.ok
+                                    (match y with
+                                    | Aeneas.Std.core.result.Result.Ok v =>
+                                      Aeneas.Std.core.result.Result.Ok
+                                        (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                                    | Aeneas.Std.core.result.Result.Err e =>
+                                      Aeneas.Std.core.result.Result.Err
+                                        (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))))
+                            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)))
+                          accepted));
+                  Eq.mpr (id (congrArg (fun _a => _a.semantic = semantic) (Eq.symm same)))
+                    (AspisR1SelectedWideViewV1.wide_view_semantic proof semantic y1 old source))
+                (Eq.symm h) source)
+            (fun e h =>
+              Eq.ndrec (motive := fun r =>
+                AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = Aeneas.Std.Result.ok r →
+                  view.semantic = semantic)
+                (fun source =>
+                  let ⟨⟩ := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)
+                  Eq.mp
+                    (congrFun'
+                      (congrArg Eq
+                        (Eq.trans
+                          (congrFun' (congrArg bind source) fun r =>
+                            Aeneas.Std.Result.ok
+                              (match r with
+                              | Aeneas.Std.core.result.Result.Ok v =>
+                                Aeneas.Std.core.result.Result.Ok
+                                  (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                              | Aeneas.Std.core.result.Result.Err e =>
+                                Aeneas.Std.core.result.Result.Err
+                                  (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))
+                          (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Err e) fun y =>
+                            Aeneas.Std.Result.ok
+                              (match y with
+                              | Aeneas.Std.core.result.Result.Ok v =>
+                                Aeneas.Std.core.result.Result.Ok
+                                  (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                              | Aeneas.Std.core.result.Result.Err e =>
+                                Aeneas.Std.core.result.Result.Err
+                                  (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))))
+                      (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)))
+                    accepted)
+                (Eq.symm h) source)
+            (Eq.refl r))
+        (Eq.symm h) (Eq.refl (AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1)))
+    (fun e h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = x → view.semantic = semantic)
+        (fun source =>
+          let ⟨⟩ := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind source) fun r =>
+                    Aeneas.Std.Result.ok
+                      (match r with
+                      | Aeneas.Std.core.result.Result.Ok v =>
+                        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.core.result.Result.Err (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))
+                  (Aeneas.Std.bind_tc_fail e fun y =>
+                    Aeneas.Std.Result.ok
+                      (match y with
+                      | Aeneas.Std.core.result.Result.Ok v =>
+                        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.core.result.Result.Err
+                          (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))))
+              (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)))
+            accepted)
+        (Eq.symm h) (Eq.refl (AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1)))
+    (fun h =>
+      Eq.ndrec (motive := fun x =>
+        AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1 = x → view.semantic = semantic)
+        (fun source =>
+          let ⟨⟩ := Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)
+          Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (congrFun' (congrArg bind source) fun r =>
+                    Aeneas.Std.Result.ok
+                      (match r with
+                      | Aeneas.Std.core.result.Result.Ok v =>
+                        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.core.result.Result.Err (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))
+                  (Aeneas.Std.bind_tc_div fun y =>
+                    Aeneas.Std.Result.ok
+                      (match y with
+                      | Aeneas.Std.core.result.Result.Ok v =>
+                        Aeneas.Std.core.result.Result.Ok (AspisR1CurrentCaller.InstalledPreparation.selectedView v)
+                      | Aeneas.Std.core.result.Result.Err e =>
+                        Aeneas.Std.core.result.Result.Err
+                          (AspisR1CurrentCaller.InstalledPreparation.selectedError e)))))
+              (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok view)))
+            accepted)
+        (Eq.symm h) (Eq.refl (AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1)))
+    (Eq.refl (AspisR1SelectedWideViewV1.verifier.candidate.wide_view proof semantic y1))
+List.sum_ofFn.{u_2} {M : Type u_2} [AddCommMonoid M] {n : ℕ} {f : Fin n → M} : (List.ofFn f).sum = ∑ i, f i
+JHm_Inspect.lean:11:7: error(lean.unknownIdentifier): Unknown constant `List.sum_eq_sum_range`
+List.ofFn_getElem.{u_1} {α : Type u_1} {xs : List α} : (List.ofFn fun i => xs[↑i]) = xs
+List.ext_getElem.{u_1} {α : Type u_1} {l₁ l₂ : List α} (hl : l₁.length = l₂.length)
+  (h : ∀ (i : ℕ) (h₁ : i < l₁.length) (h₂ : i < l₂.length), l₁[i] = l₂[i]) : l₁ = l₂
+theorem AspisR1CurrentPreparedClaim.ClaimParts.successful_claim_gamma_kappa_aggregation : ∀ {H : Type}
+  (inst : AspisR1CurrentPreparedClaim.aspis_core.Digest32 H) (sem : AspisR1CurrentPreparedClaim.r1_semantic.Verified H)
+  (y1 : Aeneas.Std.Slice Aeneas.Std.U8) (inactive gamma kappa out : AspisR1CurrentPreparedClaim.Concrete.E)
+  (g : Aeneas.Std.Array AspisR1CurrentPreparedClaim.Concrete.E 29#usize),
+  AspisR1CurrentPreparedClaim.Concrete.Canonical gamma →
+    AspisR1CurrentPreparedClaim.Concrete.Canonical kappa →
+      AspisR1CurrentPreparedClaim.Concrete.Canonical inactive →
+        AspisR1CurrentPreparedClaim.ClaimPowers.powers 29#usize gamma = Aeneas.Std.Result.ok g →
+          AspisR1CurrentPreparedClaim.verifier.prepared_claim
+                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) inst sem y1
+                inactive g kappa =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok out) →
+            ∃ final,
+              AspisR1CurrentPreparedClaim.cell final 0#usize
+                    AspisR1CurrentPreparedClaim.ClaimParts.successful_claim_gamma_kappa_aggregation._proof_1 =
+                  inactive ∧
+                (∀ (point : Aeneas.Std.Usize),
+                    ↑point < 6 →
+                      ∃ i value,
+                        ∃ (hi : ↑i < 7),
+                          ∃ xs,
+                            point + 1#usize = Aeneas.Std.Result.ok i ∧
+                              AspisR1CurrentPreparedClaim.cell final i hi = value ∧
+                                xs.length = 29 ∧
+                                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                                    (∀ t ∈ xs,
+                                        AspisR1CurrentPreparedClaim.ClaimScalar.read
+                                              (AspisR1S5ClaimDotConcreteAdapter.concreteOps
+                                                AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                              sem y1 point t.1 =
+                                            Aeneas.Std.Result.ok t.2.2 ∧
+                                          g.index_usize t.1 = Aeneas.Std.Result.ok t.2.1 ∧
+                                            AspisR1CurrentPreparedClaim.Concrete.decode t.2.1 =
+                                              AspisR1CurrentPreparedClaim.Concrete.decode gamma ^ ↑t.1) ∧
+                                      AspisR1CurrentPreparedClaim.Concrete.decode value =
+                                        AspisR1FinishDotReturnedFieldProductV1.productSum
+                                          (AspisR1S5ClaimScalarConcreteQRawTrace.finishRows xs)) ∧
+                  AspisR1CurrentPreparedClaim.Concrete.Canonical out ∧
+                    AspisR1CurrentPreparedClaim.Concrete.decode out =
+                      AspisR1CurrentPreparedClaim.ClaimParts.kappaPolynomial kappa final :=
+fun {H} inst sem y1 inactive gamma kappa out g hgamma hkappa hinactive hg h =>
+  have hweights := fun i value hr =>
+    (AspisR1CurrentPreparedClaim.ClaimPowers.powers_success_read gamma g hgamma hg i value hr).left;
+  let ⟨final, h✝⟩ :=
+    AspisR1CurrentPreparedClaim.ClaimParts.successful_concrete_claim_kappa_polynomial
+      AspisR1EbyKPushDecodedProductUpdate.QRaw inst sem y1 inactive kappa out g hkappa hinactive h
+  let ⟨hzero, right✝⟩ := h✝
+  let ⟨hvalues, right✝¹⟩ := right✝
+  let ⟨hout, he⟩ := right✝¹
+  Exists.intro final
+    ⟨hzero,
+      ⟨fun point hp =>
+        let ⟨i, h✝¹⟩ := hvalues point hp
+        let ⟨value, h✝²⟩ := h✝¹
+        let ⟨hi, h✝³⟩ := h✝²
+        let ⟨hinc, right✝²⟩ := h✝³
+        let ⟨hcall, hcell⟩ := right✝²
+        let ⟨xs, h✝⁴⟩ :=
+          AspisR1S5ClaimScalarConcreteQRawTrace.successful_concrete_claim_dot_decoded_product_sum inst sem y1 g point
+            value hweights hcall
+        let ⟨hlen, right✝³⟩ := h✝⁴
+        let ⟨horder, right✝⁴⟩ := right✝³
+        let ⟨hreads, hdecode⟩ := right✝⁴
+        Exists.intro i
+          (Exists.intro value
+            (Exists.intro hi
+              (Exists.intro xs
+                ⟨hinc,
+                  ⟨hcell,
+                    ⟨hlen,
+                      ⟨horder,
+                        ⟨fun t ht =>
+                          let ⟨hr, hw⟩ := hreads t ht
+                          ⟨hr,
+                            ⟨hw,
+                              (AspisR1CurrentPreparedClaim.ClaimPowers.powers_success_read gamma g hgamma hg t.1 t.2.1
+                                  hw).right⟩⟩,
+                          hdecode⟩⟩⟩⟩⟩))),
+        ⟨hout, he⟩⟩⟩
