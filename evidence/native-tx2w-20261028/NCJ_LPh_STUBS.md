@@ -30,3 +30,5 @@ positive (PASS). Every reached copy family needs its corresponding matched
 control before credit; additional families are not inferred from pointer credit.
 
 U13 additions: NCJ_scale is the same WideExact::mul_m31 replacement paired with NBG_FieldDischarge.wide_scale; NCJ_mul is paired with LPi_TowerValues.wide_mul. NCJ_field is an OPEN decoder callee overapproximation, with exact byte/index logs and canonical outputs; its model value/Result is NBQ_FieldTotal.range plus NBG_WideBytes.bytes_result, while the general native slice association remains an exact lower obligation. NCJ_poly is an OPEN whole-polynomial substitution. No pass of the enclosing control gate discharges that callee bridge.
+
+Dot fragments: NCJ_raw / canonical::Q::raw is paired with AspisR1.LPi_RawValues.source on both private Q operands' canonical four limbs. The native stub ASSERTS those domains on every call, returns arbitrary four U64 words, and logs both exact operands. The actual public checked_q/from_wide and count checks run. Natural raw substitution and public/count invariants are inherited from NBQ_U06 and NBQ_PublicInvariant, with the inherited native/copy qualifications retained.

@@ -1,0 +1,77 @@
+--- a/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
++++ b/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
+@@ -340,3 +340,74 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+ fn NCJ_kappa_negative(){kappa_gate(true);}
++
++fn factor_address_gate(bad:bool){
++ let k:usize=kani::any();let d:usize=kani::any();kani::assume(k<5&&d<5);let f=[cq(),cq(),cq(),cq()];let x=cq();
++ let mut w=weights();w.factors[k][d]=f;reset();
++ let out=[x.mul(w.factors[k][d][0]),x.mul(w.factors[k][d][1]),x.mul(w.factors[k][d][2]),x.mul(w.factors[k][d][3])];
++ let i:usize=kani::any();kani::assume(i<4);unsafe{assert_eq!(NCJ_QN,4);assert_eq!(NCJ_QL[i].0,x);assert_eq!(NCJ_QL[i].1,if bad{f[i].add(K::ONE)}else{f[i]});assert_eq!(out[i],NCJ_QL[i].2);}
++}
++fn kind_index_gate(bad:bool){
++ let kind:usize=kani::any();kani::assume(kind==1||kind==2||kind==3||kind==5||kind==6);
++ let k=if kind<4{kind-1}else{kind-2};
++ assert!(k<5);let expected=match kind{1=>0,2=>1,3=>2,5=>3,_=>4};assert_eq!(k,expected+if bad{1}else{0});
++}
++fn reverse_gate(bad:bool){let e:usize=kani::any();kani::assume(e<=16);let mut it=(0..e).rev();let result=it.next();if bad{assert_eq!(result,Some(e));}else{assert_eq!(result,if e==0{None}else{Some(e-1)});assert_eq!(it.len(),if e==0{0}else{e-1});}}
++fn box_window_gate(mode:u8,bad:bool){
++ let mut factors=[[[K::ZERO;4];5];5];let mut points=[[K::ZERO;10];3];let mut extra=[K::ZERO;2];let value=cq();
++ let k:usize=kani::any();let d:usize=kani::any();let lane:usize=kani::any();kani::assume(k<5&&d<5&&lane<4);
++ let p:usize=kani::any();let c:usize=kani::any();let e:usize=kani::any();kani::assume(p<3&&c<10&&e<2);
++ if mode==0{factors[k][d][lane]=value;}if mode==1{points[p][c]=value;}if mode==2{extra[e]=value;}
++ let out=Weights::box_from_parts(Variant::S2,factors,points,extra);
++ assert_eq!(out.variant,Variant::S2);let after=match mode{0=>out.factors[k][d][lane],1=>out.points[p][c],_=>out.extra[e]};assert_eq!(after,if bad{value.add(K::ONE)}else{value});
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_factor_address_positive(){factor_address_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_factor_address_negative(){factor_address_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_reverse_positive(){reverse_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_reverse_negative(){reverse_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_0_positive(){box_window_gate(0,false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_0_negative(){box_window_gate(0,true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_1_positive(){box_window_gate(1,false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_1_negative(){box_window_gate(1,true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_2_positive(){box_window_gate(2,false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_box_2_negative(){box_window_gate(2,true);}

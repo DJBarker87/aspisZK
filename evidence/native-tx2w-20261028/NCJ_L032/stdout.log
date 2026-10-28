@@ -1,0 +1,208 @@
+NCJ_generated/NCJ_TensorCellTotal.lean:23:78: error: unsolved goals
+w : FIo_Native.weights.Weights
+k d n j : Usize
+hk : ↑k < 5
+hd : ↑d < 5
+hn : NCJ_TensorDomains.Stage ↑n
+hj : ↑j < ↑n
+input : Slice NQ
+len : (↑input).length = 64
+canonical : NCJ_CellCanon.slice input
+digitCanon : NCJ_CellCanon.array (NCJ_GuardExact.pick (NCJ_GuardExact.pick w.factors (↑k) hk) (↑d) hd)
+iter cursor : Rev
+advance :
+  core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next
+      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize) iter =
+    ok (some j, cursor)
+row : Std.Array (Std.Array FIo_Native.aspis_core.field.QM31 4#usize) 5#usize := NCJ_GuardExact.pick w.factors (↑k) hk
+digit : Std.Array FIo_Native.aspis_core.field.QM31 4#usize := NCJ_GuardExact.pick row (↑d) hd
+rowRead : w.factors.index_usize k = ok (NCJ_GuardExact.pick w.factors (↑k) hk)
+digitRead : row.index_usize d = ok (NCJ_GuardExact.pick row (↑d) hd)
+q0 : FIo_Native.aspis_core.field.QM31 := NCJ_GuardExact.pick digit 0 ⋯
+q1 : FIo_Native.aspis_core.field.QM31 := NCJ_GuardExact.pick digit 1 ⋯
+q2 : FIo_Native.aspis_core.field.QM31 := NCJ_GuardExact.pick digit 2 ⋯
+q3 : FIo_Native.aspis_core.field.QM31 := NCJ_GuardExact.pick digit 3 ⋯
+hq0 : digit.index_usize 0#usize = ok (NCJ_GuardExact.pick digit ↑0#usize ⋯)
+hq1 : digit.index_usize 1#usize = ok (NCJ_GuardExact.pick digit ↑1#usize ⋯)
+hq2 : digit.index_usize 2#usize = ok (NCJ_GuardExact.pick digit ↑2#usize ⋯)
+hq3 : digit.index_usize 3#usize = ok (NCJ_GuardExact.pick digit ↑3#usize ⋯)
+jBound : ↑j < (↑input).length
+x : NQ := NCJ_SliceCells.pick input (↑j) jBound
+hx : input.index_usize j = ok (NCJ_SliceCells.pick input (↑j) jBound)
+cx : canonQ x
+cq0 : canonQ q0
+cq1 : canonQ q1
+cq2 : canonQ q2
+cq3 : canonQ q3
+p0 : FIo_Native.aspis_core.field.QM31
+hp0 : FIo_Native.aspis_core.field.QM31.mul x q0 = ok p0
+cp0 : canonQ p0
+right✝³ : qw p0 = mulQ (qw x) (qw q0)
+p1 : FIo_Native.aspis_core.field.QM31
+hp1 : FIo_Native.aspis_core.field.QM31.mul x q1 = ok p1
+cp1 : canonQ p1
+right✝² : qw p1 = mulQ (qw x) (qw q1)
+p2 : FIo_Native.aspis_core.field.QM31
+hp2 : FIo_Native.aspis_core.field.QM31.mul x q2 = ok p2
+cp2 : canonQ p2
+right✝¹ : qw p2 = mulQ (qw x) (qw q2)
+p3 : FIo_Native.aspis_core.field.QM31
+hp3 : FIo_Native.aspis_core.field.QM31.mul x q3 = ok p3
+cp3 : canonQ p3
+right✝ : qw p3 = mulQ (qw x) (qw q3)
+i0 : Usize := NCJ_TensorOffsets.index j n 0#usize
+i1 : Usize := NCJ_TensorOffsets.index j n 1#usize
+i2 : Usize := NCJ_TensorOffsets.index j n 2#usize
+i3 : Usize := NCJ_TensorOffsets.index j n 3#usize
+b0 : ↑i0 < 64
+b1 : ↑i1 < 64
+b2 : ↑i2 < 64
+b3 : ↑i3 < 64
+s0 : Slice NQ := NCJ_SliceCells.put input (↑i0) p0
+s1 : Slice NQ := NCJ_SliceCells.put s0 (↑i1) p1
+s2 : Slice NQ := NCJ_SliceCells.put s1 (↑i2) p2
+out : Slice NQ := NCJ_SliceCells.put s2 (↑i3) p3
+l0 : (↑s0).length = 64
+l1 : (↑s1).length = 64
+l2 : (↑s2).length = 64
+lo : (↑out).length = 64
+c0 : NCJ_CellCanon.slice (NCJ_SliceCells.put input (↑i0) p0)
+c1 : NCJ_CellCanon.slice (NCJ_SliceCells.put s0 (↑i1) p1)
+c2 : NCJ_CellCanon.slice (NCJ_SliceCells.put s1 (↑i2) p2)
+co : NCJ_CellCanon.slice (NCJ_SliceCells.put s2 (↑i3) p3)
+hu0 :
+  input.update (j.wrapping_add (Usize.wrapping_mul 0#usize n)) p0 =
+    ok (NCJ_SliceCells.put input (↑(j.wrapping_add (Usize.wrapping_mul 0#usize n))) p0)
+hu1 :
+  s0.update (j.wrapping_add (Usize.wrapping_mul 1#usize n)) p1 =
+    ok (NCJ_SliceCells.put s0 (↑(j.wrapping_add (Usize.wrapping_mul 1#usize n))) p1)
+hu2 :
+  s1.update (j.wrapping_add (Usize.wrapping_mul 2#usize n)) p2 =
+    ok (NCJ_SliceCells.put s1 (↑(j.wrapping_add (Usize.wrapping_mul 2#usize n))) p2)
+hu3 :
+  s2.update (j.wrapping_add (Usize.wrapping_mul 3#usize n)) p3 =
+    ok (NCJ_SliceCells.put s2 (↑(j.wrapping_add (Usize.wrapping_mul 3#usize n))) p3)
+⊢ (do
+      let a1 ← (NCJ_GuardExact.pick w.factors (↑k) hk).index_usize d
+      let q ← a1.index_usize 0#usize
+      let q1 ← FIo_Native.aspis_core.field.QM31.mul (NCJ_SliceCells.pick input (↑j) jBound) q
+      let output1 ← input.update (j.wrapping_add (Usize.wrapping_mul 0#usize n)) q1
+      let a2 ← (NCJ_GuardExact.pick w.factors (↑k) hk).index_usize d
+      let q2 ← a2.index_usize 1#usize
+      let q3 ← FIo_Native.aspis_core.field.QM31.mul (NCJ_SliceCells.pick input (↑j) jBound) q2
+      let output2 ← output1.update (j.wrapping_add (Usize.wrapping_mul 1#usize n)) q3
+      let a3 ← (NCJ_GuardExact.pick w.factors (↑k) hk).index_usize d
+      let q4 ← a3.index_usize 2#usize
+      let q5 ← FIo_Native.aspis_core.field.QM31.mul (NCJ_SliceCells.pick input (↑j) jBound) q4
+      let output3 ← output2.update (j.wrapping_add (Usize.wrapping_mul 2#usize n)) q5
+      let a4 ← (NCJ_GuardExact.pick w.factors (↑k) hk).index_usize d
+      let q6 ← a4.index_usize 3#usize
+      let q7 ← FIo_Native.aspis_core.field.QM31.mul (NCJ_SliceCells.pick input (↑j) jBound) q6
+      let s ← output3.update (j.wrapping_add (Usize.wrapping_mul 3#usize n)) q7
+      ok (cont (cursor, s))) =
+    ok (cont (cursor, out))
+NCJ_generated/NCJ_TensorCellTotal.lean:81:24: warning: This simp argument is unused:
+  digitRead
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲ ̲h̲u̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:34: warning: This simp argument is unused:
+  hq0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:38: warning: This simp argument is unused:
+  hq1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:42: warning: This simp argument is unused:
+  hq2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:46: warning: This simp argument is unused:
+  hq3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:50: warning: This simp argument is unused:
+  hp0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:54: warning: This simp argument is unused:
+  hp1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:58: warning: This simp argument is unused:
+  hp2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:62: warning: This simp argument is unused:
+  hp3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:82: warning: This simp argument is unused:
+  hu0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:86: warning: This simp argument is unused:
+  hu1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲2̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:90: warning: This simp argument is unused:
+  hu2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲1̲,̲ ̲h̲u̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_TensorCellTotal.lean:81:94: warning: This simp argument is unused:
+  hu3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵x̵,̵r̵o̵w̵R̵e̵a̵d̵,̵d̵i̵g̵i̵t̵R̵e̵a̵d̵,̵h̵q̵0̵,̵h̵q̵1̵,̵h̵q̵2̵,̵h̵q̵3̵,̵h̵p̵0̵,̵h̵p̵1̵,̵h̵p̵2̵,̵h̵p̵3̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵u̵0̵,̵h̵u̵1̵,̵h̵u̵2̵,̵h̵u̵3̵]̵[̲h̲x̲,̲ ̲r̲o̲w̲R̲e̲a̲d̲,̲ ̲d̲i̲g̲i̲t̲R̲e̲a̲d̲,̲ ̲h̲q̲0̲,̲ ̲h̲q̲1̲,̲ ̲h̲q̲2̲,̲ ̲h̲q̲3̲,̲ ̲h̲p̲0̲,̲ ̲h̲p̲1̲,̲ ̲h̲p̲2̲,̲ ̲h̲p̲3̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲u̲0̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲u̲1̲,̲ ̲h̲u̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCJ_TensorCellTotal.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

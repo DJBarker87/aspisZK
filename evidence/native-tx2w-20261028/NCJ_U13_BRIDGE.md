@@ -16,3 +16,5 @@ K037 PASS / K038 FAIL: actual frozen finish_relation_round on SAME224-byte canon
 K039 PASS / K040 FAIL: one literal Horner closure update, arbitrary canonical prestate and scalar, arbitrary i<7 on canonical SAME224 bytes; exact operand/read routing and linear sum. Multiplication is an opaque logged reply with LPi_TowerValues.wide_mul; decoding retains the exact lower-field native association qualification. NCJ_HornerInduction.total (L017) supplies canonical induction. Full adopted polynomial port/source association is OPEN.
 
 finish_relation is not given native credit: its observer is Option<fn(Phase)> and rule14 remains binding. No harness was renamed to alter a verdict. No digest or function-pointer value was modeled.
+
+Stage6 K057 PASS / K058 FAIL is one actual final-dot push fragment: arbitrary valid raw prestate/count<64, exact scalar/value and byte-index routing, both raw reply updates and count+1. It uses the same explicit U06/U07 qualifications as the U12 dot fragments. Native same-final-message association and full finish_query_dot call/return remain OPEN.
