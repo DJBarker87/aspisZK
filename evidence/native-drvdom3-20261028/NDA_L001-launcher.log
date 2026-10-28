@@ -1,0 +1,49 @@
+{"attempt": "NDA_L001", "exit_status": 1, "wall_seconds": 2.405811093049124, "peak_rss_kib": "5365448", "swaps": "0", "print_axioms": ["'AspisR1.NDA_DriverDomain.preparation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDA_DriverDomain.lean:22:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NDA_DriverDomain.lean:31:8: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NDA_DriverDomain.lean:50:4: error: Type mismatch
+  SAP_AlphaTransport.alpha out alpha
+has type
+  ∀ (j : Fin 2),
+    OraclePortCkptAbi4Decode.CanonicalWide
+      (CheckpointBytes3Namespaces.toE (↑(Tx1Q_Carriers.prepared (currentPrepared out)).alpha)[↑j])
+but is expected to have type
+  ∀ (j : Fin 2), OraclePortCkptAbi4Decode.CanonicalWide (↑(writerPrepared (currentPrepared out)).alpha)[↑j]
+NDA_Drive
+...
+R1ClaimPreparedBridge.InstalledMeaning.installedBoundaries (withOriginalSerializer closedSampling)
+        AspisS1M31Embedding.Total.embed))
+    (retainedDigest (currentDigest c)) (retainedSem sem) (retainedView view) () out rs
+canon :
+  AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out.gamma) ∧
+    AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out.kappa)
+alpha : AspisR1ClaimPreparedBridge.CanonicalAlphaPair out
+claim : AspisR1CurrentPreparedClaim.Concrete.Canonical (AspisR1ClaimPreparedBridge.toClaimE out.claim)
+variant : (retainedView view).variant = AspisR1PublicPreparation.transport.Variant.S2
+shape :
+  out.variant = AspisR1PublicPreparation.transport.Variant.S2 ∧
+    out.semantic_alpha = (retainedSem sem).alpha ∧
+      out.z = (retainedSem sem).z ∧
+        (∀ (j : Fin 22), ↑(↑out.queries)[↑j] < 262144) ∧
+          Port3_FlushInstall.Canonical (Tx1Q_Carriers.k (currentQ out.rho))
+semanticCanon : ∀ q ∈ ↑(retainedSem sem).alpha, SAP_CanonicalCarrier.CanonK q
+j : Fin 10
+⊢ SAP_CanonicalCarrier.CanonK (↑out.semantic_alpha)[↑j]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out.semantic_alpha
+  has type
+    Std.Array AspisR1PublicPreparation.aspis_core.field.QM31 10#usize
+  but is expected to have type
+    { l // l.length = ↑10#usize }
+  in the application
+    ↑out.semantic_alpha
+'AspisR1.NDA_DriverDomain.preparation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r89027ec4de024ac7b9490298c1acedfa.scope; invocation ID: 01e65ae8045144a9b36d4437deeb8a01
