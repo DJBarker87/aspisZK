@@ -22,7 +22,7 @@ def transport(args):
   time.sleep(60)
 def ssh(code):return transport(['ssh',host,code])
 code='''import pathlib,re,json
-r=pathlib.Path('/home/dombarker/project-offloads');pat=re.compile(r'(?<![0-9])ID(?![0-9])');hits=[]
+r=pathlib.Path('/home/dombarker/project-offloads');pat=re.compile(r'(?<![A-Za-z0-9])ID(?![A-Za-z0-9])');hits=[]
 for d in r.glob('codex-pv-*'):
  if d.name=='codex-pv-l2d-20261028':continue
  for p in d.glob('**/*ID*'):
