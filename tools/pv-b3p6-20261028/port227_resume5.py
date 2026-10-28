@@ -34,7 +34,7 @@ for kind in ['Types','Funs']:
  if kind=='Funs':
   names=re.findall(r'^def (\S+)',p,re.M);p+='\n'+''.join('#print axioms PV_B3P_227.'+n+'\n'for n in names)
  module='PV_B3P_CompleteTypes227' if kind=='Types' else 'PV_B3P_CompleteEmission227'
- (D/'lean'/(module+'.lean')).write_text(p)
+ ((D/'lean'/(module+'.lean')) if kind=='Types' else D/'ported227-complete-resume5.lean.txt').write_text(p)
  record[kind]=dict(raw_sha256=sha(raw),ported_sha256=sha(p),shared_declarations=reused,numeric_interface_ports=numeric)
 record['edits']=['Aeneas.Std/RustAttributes imports','private module imports','reuse exactly body-identical Types/selection definitions from focused extraction','remove unsupported discriminant metadata, constructor order/payloads unchanged','positive shift argument interface tags; numeric value laws required','append axioms queries']
 record['raw_emission_modified']=False
