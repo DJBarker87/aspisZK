@@ -23,15 +23,19 @@ complete-Result comparisons with a name-only copy of the frozen body, including
 successful paths, high index bits and leaf rejections. Native -01 was a retained
 probe type error, corrected before -02. No shipped source was edited.
 
-Checked so far: `LaneFold31.step_original`, `LaneFold31.fold_append`, and
-`LaneRecipe31.recipe_success`, with standard axioms only. These are generic
-symbolic facts, not an accepted native correspondence yet.
+Checked so far: `LaneFold31.step_original` / `fold_append` (44600),
+`LaneRecipe31.recipe_success` (44602), `LaneCounts31.count` / `shift` (44617),
+`LaneDenotation31.complete_result` (44626), the original branch transport
+(44634), and both complete witness/error roundtrips (44635), all standard axioms and zero
+swap. The uniquely named enum/child/body cohort is checked at 44610, 44618 and
+44621. Denotation now normalizes only explicit Result binds and twenty array
+reads; it never unfolds a hash.
 
-Pending focused checks: uniquely named enum cohort, explicit shift-count
-transport, the reference's complete Result denotation, lossless outer ABI and
-error adapters, and the installed native lane dictionary. Import/discriminant
-and signed-shift emission failures are retained. The signed-shift failure was
-replaced by regenerated Rust/emission, never an executable Lean body edit.
+Pending: the installed native lane dictionary, parent-fold field meaning, successful
+leaf transport, complete root field meaning, and the canonical-route bridge.
+Signed-shift, import/discriminant, bound/name and Result sequencing failures
+are retained. The signed-shift failure was replaced by regenerated Rust and
+emission, never by an executable Lean body edit.
 
 No semantic Admission, unconditional HonestInput, owner coverage or V038/V045
 closure is claimed. Endpoint premises removed/added/weakened remain 0/0/0.
