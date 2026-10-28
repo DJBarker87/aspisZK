@@ -9,7 +9,7 @@ theorem rejection (s : PoolV1PairLiveSnapshotV1)
     (bad : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 s.deployment_domain (Array.repeat 32#usize 0#u8) = ok true) :
     validate_pool_v1_pair_live_snapshot_v1 s = ok (.Err PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding) := by
   unfold validate_pool_v1_pair_live_snapshot_v1
-  simp only [hp, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_SnapshotDomain

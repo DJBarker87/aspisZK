@@ -37,6 +37,6 @@ for group,ns,typ,fn,guards in configs:
   b=f'open {ns}\n\ntheorem rejection (s : {typ}){cap}\n'
   for h in pre:b+=f'    ({h} : {assumptions[h]})\n'
   b+=f'    (bad : {condition}) :\n    {fn} s = ok (.Err {error}.{err}) := by\n'
-  b+=f'  unfold {fn}\n  simp only ['+', '.join(pre+['bad','bind_tc_ok','Bool.false_eq_true','Bool.true_eq_true','↓reduceIte'])+']\n'
+  b+=f'  unfold {fn}\n  simp only ['+', '.join(pre+['bad','bind_tc_ok','Bool.false_eq_true','↓reduceIte'])+']\n'
   emit(group+leaf,b)
 (Path('evidence/pv-rjdec-20261028')/'guard-order.json').write_text(__import__('json').dumps(names,indent=2)+'\n')

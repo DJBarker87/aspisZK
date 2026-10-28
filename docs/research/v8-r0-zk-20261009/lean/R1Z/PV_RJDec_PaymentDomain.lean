@@ -9,7 +9,7 @@ theorem rejection (s : CommonPublicV1)
     (bad : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 s.deployment_domain (Array.repeat 32#usize 0#u8) = ok true) :
     validate_common s = ok (.Err PoolV1PaymentStatementFormatError.ZeroRequiredBinding) := by
   unfold validate_common
-  simp only [hp, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_PaymentDomain

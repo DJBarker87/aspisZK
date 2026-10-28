@@ -14,7 +14,7 @@ theorem rejection (s : CommonPublicV1) (capacity : U64)
     (bad : (s.asset_id >= aspis_core.field.P) = true) :
     validate_common s = ok (.Err PoolV1PaymentStatementFormatError.NonCanonicalAssetId) := by
   unfold validate_common
-  simp only [hp, hd, hc, hi, hr, hn, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, hc, hi, hr, hn, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_PaymentAsset

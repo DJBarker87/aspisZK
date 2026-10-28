@@ -10,7 +10,7 @@ theorem rejection (s : PoolV1PairLiveSnapshotV1)
     (bad : (s.sequence != s.next_pair_index) = true) :
     validate_pool_v1_pair_live_snapshot_v1 s = ok (.Err PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch) := by
   unfold validate_pool_v1_pair_live_snapshot_v1
-  simp only [hp, hd, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_SnapshotSequence

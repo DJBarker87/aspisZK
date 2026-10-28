@@ -13,7 +13,7 @@ theorem rejection (s : CommonPublicV1) (capacity : U64)
     (bad : pool_v1.payment_relation.digest_is_canonical s.nullifier = ok false) :
     validate_common s = ok (.Err PoolV1PaymentStatementFormatError.NonCanonicalDigest) := by
   unfold validate_common
-  simp only [hp, hd, hc, hi, hr, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, hc, hi, hr, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_PaymentNullifier

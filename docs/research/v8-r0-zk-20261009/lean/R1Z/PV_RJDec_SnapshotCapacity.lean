@@ -12,7 +12,7 @@ theorem rejection (s : PoolV1PairLiveSnapshotV1) (capacity : U64)
     (bad : (s.next_pair_index >= capacity) = true) :
     validate_pool_v1_pair_live_snapshot_v1 s = ok (.Err PoolV1PairLiveSnapshotErrorV1.TreeFull) := by
   unfold validate_pool_v1_pair_live_snapshot_v1
-  simp only [hp, hd, hs, hc, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, hs, hc, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_SnapshotCapacity

@@ -11,7 +11,7 @@ theorem rejection (s : CommonPublicV1) (capacity : U64)
     (bad : (s.anchor_sequence > capacity) = true) :
     validate_common s = ok (.Err PoolV1PaymentStatementFormatError.InvalidAnchorSequence) := by
   unfold validate_common
-  simp only [hp, hd, hc, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, hc, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_PaymentSequence

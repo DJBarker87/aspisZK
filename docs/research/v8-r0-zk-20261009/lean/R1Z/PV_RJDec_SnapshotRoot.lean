@@ -13,7 +13,7 @@ theorem rejection (s : PoolV1PairLiveSnapshotV1) (capacity : U64)
     (bad : pool_v1.pair_tree_profile.digest_is_canonical s.current_root = ok false) :
     validate_pool_v1_pair_live_snapshot_v1 s = ok (.Err PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest) := by
   unfold validate_pool_v1_pair_live_snapshot_v1
-  simp only [hp, hd, hs, hc, hi, bad, bind_tc_ok, Bool.false_eq_true, Bool.true_eq_true, ↓reduceIte]
+  simp only [hp, hd, hs, hc, hi, bad, bind_tc_ok, Bool.false_eq_true, ↓reduceIte]
 
 #print axioms rejection
 end R1Z.PV_RJDec_SnapshotRoot
