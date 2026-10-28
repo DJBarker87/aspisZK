@@ -5,7 +5,7 @@ open Aeneas Aeneas.Std Result PV_RDB1_V183_ReserveWorld
 open PV_RDB2D_CollectorTrace PV_B3P_Schedule133
 set_option autoImplicit false
 
-abbrev Returned := Except Error (Buffer Nat)
+abbrev Returned := Except PV_B3P_Schedule133.Error (Buffer Nat)
 abbrev Handler (S F : Type) := Action → State S F → Result (Returned × State S F)
 
 def request {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
