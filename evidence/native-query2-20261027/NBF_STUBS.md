@@ -14,3 +14,9 @@ premises: they are not obtained through a stub assumption. This closes the
 local selected-row context in its allocated64/capacity64 domain; arbitrary
 allocator/capacity lowering remains the inherited TrustedStd/P6 boundary.
 The whole query caller installation remains open.
+
+| NBF_reduce_reply replacing M31::reduce_u64 in value routing | S8OwnedP6ValueModel.reducer_total and value_total_model, inherited by NBB_Finish.source | Arbitrary U64 input; K010 routes all four calls and every canonical arbitrary reply. This is a caller-routing overapproximation, not a new reducer-equivalence result. The exact natural modulo value is supplied by the paired Lean theorem. |
+
+The natural-spec M31 multiplication used by K008 is also recorded in
+LPh_STUBS.md; its domain is selected basis word and node<P, with every other
+array cell arbitrary. Embedding K007 uses no replacement at all.

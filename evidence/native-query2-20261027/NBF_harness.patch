@@ -8,7 +8,7 @@
 +#[cfg(kani)] #[path="NBF_harness.rs"] mod NBF_harness;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBF_harness.rs
-@@ -0,0 +1,465 @@
+@@ -0,0 +1,551 @@
 +use super::*;
 +use aspis_core::field::CM31;
 +static mut NBF_PTR: *mut [u64;4] = core::ptr::null_mut();
@@ -473,6 +473,92 @@
 + assert_eq!(raw.len(),64);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),p);
 + assert_eq!(raw[j][k],if i==j {words[k]as u64} else {before});
 + kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i!=j);
++}
++
++static mut NBF_REDUCE_CALLS:usize=0;
++static mut NBF_REDUCE_IN:[u64;4]=[0;4];
++static mut NBF_REDUCE_OUT:[u32;4]=[0;4];
++fn NBF_reduce_reply(x:u64)->M31 {
++ let out:u32=kani::any();kani::assume(out<2147483647);
++ unsafe {let k=NBF_REDUCE_CALLS;assert!(k<4);NBF_REDUCE_IN[k]=x;NBF_REDUCE_OUT[k]=out;NBF_REDUCE_CALLS+=1;}M31(out)
++}
++#[kani::proof]
++#[kani::unwind(5)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,NBF_reduce_reply)]
++fn NBF_value_routing() {
++ let backing:Box<[[u64;4];64]>=Box::new([
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>(),
++ kani::any::<[u64;4]>()
++]);let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let i:usize=kani::any();kani::assume(i<64);
++ let k:usize=kani::any();kani::assume(k<4);let word=raw[i][k];
++ let terms:usize=kani::any();let b=BatchedWeights{raw,terms};let out=b.value(i);
++ let words=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];
++ unsafe {assert_eq!(NBF_REDUCE_CALLS,4);assert_eq!(NBF_REDUCE_IN[k],word);assert_eq!(words[k],NBF_REDUCE_OUT[k]);}
++ assert_eq!(b.terms,terms);assert_eq!(b.raw.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(k==3);
 +}
 --- a/crates/aspis-r1-cost-probe/src/candidate.rs
 +++ b/crates/aspis-r1-cost-probe/src/candidate.rs

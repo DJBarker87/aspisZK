@@ -1,0 +1,63 @@
+{"attempt": "NBF_L023", "exit_status": 1, "wall_seconds": 4.705164416984189, "peak_rss_kib": "4410080", "swaps": "0", "print_axioms": ["'NBF_BasisOuter.levels_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_BasisOuter.lean:18:5: error: Type mismatch: After simplification, term
+  have this := fun a => levels_eq._proof_1 width n a;
+  this
+ has type
+  ¬↑n < ↑n
+but is expected to have type
+  ¬↑n < ↑width
+NBF_generated/NBF_BasisOuter.lean:45:37: error: unsolved goals
+ops : Ops
+width : Usize
+bound : ↑width ≤ 256
+k : ℕ
+ih :
+  ∀ (basis : Std.Array U32 256#usize) (node : U32) (n : Usize),
+    0 < ↑n →
+      ↑n * 2 ^ k = ↑width →
+        verifier.accumulate_batched_with_node_loop0 (NBF_BasisInstall.install ops) 1#u32 node width basis n =
+          levels k basis node n
+basis : Std.Array U32 256#usize
+node : U32
+n : Usize
+positive : 0 < ↑n
+schedule : ↑n * 2 ^ (k + 1) = ↑width
+power : 0 <
+...
+tic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NBF_generated/NBF_BasisOuter.lean:21:82: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵a̵c̵c̵u̵m̵u̵l̵a̵t̵e̵_̵b̵a̵t̵c̵h̵e̵d̵_̵w̵i̵t̵h̵_̵n̵o̵d̵e̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵d̵o̵n̵e̵,̵l̵e̵v̵e̵l̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲a̲c̲c̲u̲m̲u̲l̲a̲t̲e̲_̲b̲a̲t̲c̲h̲e̲d̲_̲w̲i̲t̲h̲_̲n̲o̲d̲e̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲d̲o̲n̲e̲,̲ ̲l̲e̲v̲e̲l̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_BasisOuter.lean:47:7: warning: This simp argument is unused:
+  block
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0.body, ̲if_pos active,
+         b̵l̵o̵c̵k̵,̵NBF_BasisInstall.install, ̲t2, ̲double, ̲multiply, ̲lift, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_BasisOuter.lean:47:48: warning: This simp argument is unused:
+  multiply
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0.body, ̲if_pos active,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵block,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲NBF_BasisInstall.install, ̲t2, ̲double,m̵u̵ ̲lt̵ip̵l̵y̵,̵l̵i̵ft, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBF_BasisOuter.levels_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra247e936f02748eca201cfc900a5afb3.scope; invocation ID: b9e6c0eadd2e42b4ab3fddd4ff32a44c
