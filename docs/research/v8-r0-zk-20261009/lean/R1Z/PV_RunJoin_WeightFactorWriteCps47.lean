@@ -18,6 +18,9 @@ theorem complete {A : Type} (fs : Factors) (slot d : Usize)
   | div => simp only [h,bind_tc_div]
   | ok pair =>
     rcases pair with ⟨m,back⟩
-    simp only [h,bind_tc_ok,bind_assoc]
+    simp only [h,bind_tc_ok]
+    change ((do let m1 ← Array.update m d row;ok (back m1)) >>=k)=
+      (do let m1 ← Array.update m d row;k (back m1))
+    simp only [bind_assoc,bind_tc_ok]
 #print axioms complete
 end R1Z.PV_RunJoin_WeightFactorWriteCps47
