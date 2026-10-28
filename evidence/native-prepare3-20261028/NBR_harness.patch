@@ -16,7 +16,7 @@
 +mod NBR_candidate;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBR_candidate.rs
-@@ -0,0 +1,65 @@
+@@ -0,0 +1,62 @@
 +use super::*;
 +use alloc::vec::Vec;
 +// Scratch-only replacements. T: Copy excludes Clone side effects.
@@ -53,32 +53,29 @@
 + out
 +}
 +
-+// Frozen initial root copy: restrict to the exact source/destination windows.
-+fn NBR_root_copy(input:&[u8],out:&mut[u8]){out[..32].copy_from_slice(&input[..32]);}
-+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
-+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
-+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
-+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
-+#[kani::proof] #[kani::unwind(35)]
-+fn NBR_root_byte(){
-+ let input:[u8;32]=kani::any();let mut out:[u8;33]=kani::any();let old=out[32];
-+ let j:usize=kani::any();kani::assume(j<32);NBR_root_copy(&input,&mut out);
-+ assert_eq!(out[j],input[j]);assert_eq!(out[32],old);
-+ kani::cover!(true,"semantic root bytes and adjacent byte use one source window");
++static mut NBR_INPUT:*const u8=core::ptr::null();static mut NBR_OUTPUT:*mut u8=core::ptr::null_mut();static mut NBR_SRC:usize=0;static mut NBR_DST:usize=0;static mut NBR_SIZE:usize=0;
++fn NBR_src(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{155+453*(row-15)}else if row==26{6546}else{7015}}
++fn NBR_dst(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{171+901*(row-15)}else if row==26{12898}else{13831}}
++
++fn NBR_payload_cut(dst:&mut[u8],src:&[u8]){unsafe{
++ assert_eq!(src.as_ptr(),NBR_INPUT.add(NBR_SRC+5));assert_eq!(dst.as_ptr(),NBR_OUTPUT.add(NBR_DST+5));assert_eq!(src.len(),NBR_SIZE);assert_eq!(dst.len(),NBR_SIZE);assert!(NBR_SIZE==0||NBR_SIZE==32);
++ kani::cover!(NBR_SIZE==0,"empty ordinary semantic payload keeps exact range");kani::cover!(NBR_SIZE==32,"row2 payload selects SAME32 source bytes");kani::assume(false);
++}}
++// Ordinary source branch, stopping at its actual payload copy arguments.
++fn NBR_ordinary(compact:&[u8],out:&mut[u8],row:u8,mut src:usize,mut dst:usize)->Result<(),CodecError>{
++ let size=crate::r1_wire::row_shape(row).ok_or(CodecError::Length)?.1;
++ out[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ NBR_payload_cut(&mut out[dst..dst+size],&compact[src..src+size]);Ok(())
 +}
-+// Arbitrary row header with one adjacent byte of the logical allocation.
 +#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
 +#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
 +#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
 +#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
-+#[kani::proof] #[kani::unwind(35)]
-+fn NBR_header_byte(){
-+ let input:[u8;5]=kani::any();let mut out:[u8;6]=kani::any();let old=out[5];
-+ let j:usize=kani::any();kani::assume(j<5);out[..5].copy_from_slice(&input);
-+ assert_eq!(out[j],input[j]);assert_eq!(out[5],old);
-+ kani::cover!(true,"every framed-row header byte is copied before its payload");
++#[kani::proof]#[kani::unwind(7)]
++fn NBR_ordinary_payload_cut(){
++ let input:[u8;7015]=kani::any();let mut out:[u8;13831]=kani::any();let row:u8=kani::any();kani::assume(row<14);let r=row as usize;
++ unsafe{NBR_INPUT=input.as_ptr();NBR_OUTPUT=out.as_mut_ptr();NBR_SRC=NBR_src(r);NBR_DST=NBR_dst(r);NBR_SIZE=crate::r1_wire::row_shape(row).unwrap().1;}
++ let _=NBR_ordinary(&input,&mut out,row,NBR_src(r),NBR_dst(r));assert!(false,"ordinary copy argument cut terminates all paths");
 +}

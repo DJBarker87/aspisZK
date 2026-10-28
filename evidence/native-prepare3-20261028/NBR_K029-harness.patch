@@ -1,0 +1,81 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,6 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NBR_candidate;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBR_candidate.rs
+@@ -0,0 +1,62 @@
++use super::*;
++use alloc::vec::Vec;
++// Scratch-only replacements. T: Copy excludes Clone side effects.
++#[inline(never)]
++pub unsafe fn NBR_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
++    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
++}
++#[inline(never)]
++pub fn NBR_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
++    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
++}
++#[inline(never)]
++pub fn NBR_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){NBR_copy_from_slice(dst,src)}
++#[inline(never)]
++pub fn NBR_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
++    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
++}
++#[inline(never)]
++pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
++    let mut dst=Vec::with_capacity(src.len());NBR_extend_from_slice(&mut dst,src);dst
++}
++// Match the successful-reallocation byte law, preserving the old allocation on failure.
++// MaybeUninit permits copying spare-capacity bytes without reading them as values.
++pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
++ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
++ let out=unsafe{alloc::alloc::alloc(new_layout)};
++ if !out.is_null(){
++  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
++   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
++   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
++  }
++  unsafe{alloc::alloc::dealloc(ptr,layout)};
++ }
++ out
++}
++
++static mut NBR_INPUT:*const u8=core::ptr::null();static mut NBR_OUTPUT:*mut u8=core::ptr::null_mut();static mut NBR_SRC:usize=0;static mut NBR_DST:usize=0;static mut NBR_SIZE:usize=0;
++fn NBR_src(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{155+453*(row-15)}else if row==26{6546}else{7015}}
++fn NBR_dst(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{171+901*(row-15)}else if row==26{12898}else{13831}}
++
++fn NBR_payload_cut(dst:&mut[u8],src:&[u8]){unsafe{
++ assert_eq!(src.as_ptr(),NBR_INPUT.add(NBR_SRC+5));assert_eq!(dst.as_ptr(),NBR_OUTPUT.add(NBR_DST+5));assert_eq!(src.len(),NBR_SIZE);assert_eq!(dst.len(),NBR_SIZE);assert!(NBR_SIZE==0||NBR_SIZE==32);
++ kani::cover!(NBR_SIZE==0,"empty ordinary semantic payload keeps exact range");kani::cover!(NBR_SIZE==32,"row2 payload selects SAME32 source bytes");kani::assume(false);
++}}
++// Ordinary source branch, stopping at its actual payload copy arguments.
++fn NBR_ordinary(compact:&[u8],out:&mut[u8],row:u8,mut src:usize,mut dst:usize)->Result<(),CodecError>{
++ let size=crate::r1_wire::row_shape(row).ok_or(CodecError::Length)?.1;
++ out[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
++ NBR_payload_cut(&mut out[dst..dst+size],&compact[src..src+size]);Ok(())
++}
++#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
++#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
++#[kani::proof]#[kani::unwind(7)]
++fn NBR_ordinary_payload_cut(){
++ let input:[u8;7015]=kani::any();let mut out:[u8;13831]=kani::any();let row:u8=kani::any();kani::assume(row<14);let r=row as usize;
++ unsafe{NBR_INPUT=input.as_ptr();NBR_OUTPUT=out.as_mut_ptr();NBR_SRC=NBR_src(r);NBR_DST=NBR_dst(r);NBR_SIZE=crate::r1_wire::row_shape(row).unwrap().1;}
++ let _=NBR_ordinary(&input,&mut out,row,NBR_src(r),NBR_dst(r));assert!(false,"ordinary copy argument cut terminates all paths");
++}

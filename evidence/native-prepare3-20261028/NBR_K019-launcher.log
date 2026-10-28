@@ -1,0 +1,61 @@
+{"attempt": "NBR_K019", "exit_status": 0, "wall_seconds": 48.66596407699399, "peak_rss_kib": "1372824", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ce`
+
+warning: function `NBR_to_vec` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:19:8
+   |
+19 | pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `nbr_to_vec`
+
+warning: function `NBR_realloc` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:24:15
+   |
+24 | pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_realloc`
+
+warning: function `NBR_append_one_push` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:46:4
+   |
+46 | fn NBR_append_one_push(){
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_append_one_push`
+
+warning: function `NBR_append_constructor` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:65:4
+   |
+65 | fn NBR_append_constructor(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_append_constructor`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.39s
+Checking harness verifier::candidate::NBR_candidate::NBR_append_one_push...
+
+VERIFICATION RESULT:
+ ** 0 of 342 failed (8 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 40.900917s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r4b5140ae63424440b0c74c72f796b4c9.scope; invocation ID: 2f488d7502104011835222832a1ff955

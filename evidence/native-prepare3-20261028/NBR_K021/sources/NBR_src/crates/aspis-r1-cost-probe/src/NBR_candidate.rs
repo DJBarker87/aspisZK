@@ -1,0 +1,71 @@
+use super::*;
+use alloc::vec::Vec;
+// Scratch-only replacements. T: Copy excludes Clone side effects.
+#[inline(never)]
+pub unsafe fn NBR_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
+}
+#[inline(never)]
+pub fn NBR_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
+}
+#[inline(never)]
+pub fn NBR_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){NBR_copy_from_slice(dst,src)}
+#[inline(never)]
+pub fn NBR_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
+}
+#[inline(never)]
+pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
+    let mut dst=Vec::with_capacity(src.len());NBR_extend_from_slice(&mut dst,src);dst
+}
+// Match the successful-reallocation byte law, preserving the old allocation on failure.
+// MaybeUninit permits copying spare-capacity bytes without reading them as values.
+pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
+ let out=unsafe{alloc::alloc::alloc(new_layout)};
+ if !out.is_null(){
+  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
+   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
+   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
+  }
+  unsafe{alloc::alloc::dealloc(ptr,layout)};
+ }
+ out
+}
+
+static mut NBR_BASE:*const u8=core::ptr::null();
+static mut NBR_SCANNED:bool=false;
+static mut NBR_ACCEPT:bool=false;
+fn NBR_scan(proof:&[u8])->Result<(),Error>{unsafe{
+ assert_eq!(proof.as_ptr(),NBR_BASE);assert_eq!(proof.len(),57607);NBR_SCANNED=NBR_ACCEPT;
+ if NBR_ACCEPT{Ok(())}else{Err(Error::Parse)}
+}}
+fn NBR_shape(proof:&[u8])->Result<Variant,Error>{unsafe{assert_eq!(proof.as_ptr(),NBR_BASE);assert_eq!(proof.len(),57607);}if kani::any(){Ok(Variant::S2)}else{Err(Error::Parse)}}
+// Exact frozen TX1 prefix ending immediately before the prepare call.
+fn NBR_tx1_prefix(proof:&[u8],k:usize,obs:Observer)->Result<(),Error>{
+ if k!=SPLIT{return Err(Error::Parse);}
+ parse_shape(proof)?;
+ canonical_scan(proof)?;
+ mark(obs,Phase::Parsed);
+ let mut g=[E::ZERO;29];
+ unsafe{assert!(NBR_SCANNED);assert_eq!(proof.as_ptr(),NBR_BASE);assert_eq!(proof.len(),57607);}
+ let i:usize=kani::any();kani::assume(i<29);assert_eq!(g[i],E::ZERO);
+ Ok(())
+}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof] #[kani::unwind(35)]
+#[kani::stub(crate::verifier::candidate::canonical_scan,NBR_scan)]
+#[kani::stub(crate::verifier::candidate::parse_shape,NBR_shape)]
+fn NBR_tx1_full_prefix_cut(){
+ let backing:[u8;57607]=kani::any();let n:usize=57607;
+ let k:usize=kani::any();unsafe{NBR_BASE=backing.as_ptr();NBR_SCANNED=false;NBR_ACCEPT=kani::any();}
+ let r=NBR_tx1_prefix(&backing[..n],k,None);
+ match r{Ok(())=>{unsafe{assert!(NBR_SCANNED&&NBR_ACCEPT)}assert_eq!(n,57607);assert_eq!(k,10);kani::cover!(true,"prepare prefix reached on same successful full scan");},Err(e)=>assert_eq!(e,Error::Parse)}
+
+}

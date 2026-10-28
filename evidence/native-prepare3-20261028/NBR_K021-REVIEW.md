@@ -1,0 +1,5 @@
+# Generic TX1 prefix check remains unresolved
+
+K021 ran the frozen prefix fission on arbitrary 57607-byte storage and arbitrary k. parse_shape and canonical_scan returned arbitrary typed Results; the harness checked every rejected path was Parse and every reached preparation followed scan success. Kani reported one failed assertion of156 and no reached success cover. The terse receipt does not identify the assertion, so no frozen-source counterexample is asserted. The failed gate has NO closure credit.
+
+K022 changed the shape to all-zero proof bytes, k=10, labelled assertions and explicit error-variant matching, with --trace output. It passed, including the reached-success cover. This is a restricted diagnostic, not a restoration of K021. The distinction is retained in the bridge boundary: arbitrary-input accepted canonical_scan to the prepare invocation is an explicit pending association. Next deliverable: inspect the original K021 check identifiers/trace without rerunning the old shape; isolate one failed predicate and validate its stub/source binding on arbitrary storage.

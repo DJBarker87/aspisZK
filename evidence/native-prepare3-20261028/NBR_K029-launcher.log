@@ -1,0 +1,54 @@
+{"attempt": "NBR_K029", "exit_status": 0, "wall_seconds": 11.12155174597865, "peak_rss_kib": "343032", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+   |
+42 | ...!(src.len(),NBR_SIZE);assert_eq!(dst.len(),NBR_SIZE);assert!(NBR_SIZE==0||NBR_SIZE==32);
+   |                                               ^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBR_ordinary` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:46:4
+   |
+46 | fn NBR_ordinary(compact:&[u8],out:&mut[u8],row:u8,mut src:usize,mut dst:usize)->Result<(),CodecError>{
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_ordinary`
+
+warning: function `NBR_ordinary_payload_cut` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBR_candidate.rs:58:4
+   |
+58 | fn NBR_ordinary_payload_cut(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbr_ordinary_payload_cut`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.04s
+Checking harness verifier::candidate::NBR_candidate::NBR_ordinary_payload_cut...
+
+VERIFICATION RESULT:
+ ** 0 of 193 failed (7 unreachable)
+
+ ** 2 of 2 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 4.406291s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r5327abca8b94411fa79e6c52cdede0ae.scope; invocation ID: 4451c948b8734aa5904a7918c03fe57b

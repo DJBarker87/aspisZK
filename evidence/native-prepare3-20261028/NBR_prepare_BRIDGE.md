@@ -1,0 +1,37 @@
+# TX1 prepare composite bridge
+
+Status: **OPEN for the complete frozen native candidate::prepare**. The cohort producer/chronological replay theorem is proved. The native local fragments below do not instantiate all of its native premises. No headline premise is removed and no 100-bit claim follows.
+
+## Exact target and strongest established result
+
+Frozen Rust revision: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Adopted headline: AspisR1.RPx_Deployed.deployed. Frozen3, L154 statement parameter, narrowed D188, approved RuntimePersistence and two-transaction game remain unchanged.
+
+`AspisR1.NBR_ReturnedInputs.source` is the strongest proved cohort theorem (lean/NBR_ReturnedInputs.lean; L040). On ONE proof57607 and initial logical14759 carrier, it takes the complete semantic/y1 producer Results on their exact source/destination slices, compact check success, wide_view Result on THOSE returned buffers, and full semantic verifier Result on THAT semantic buffer. It derives prefix/begin/finish witnesses, buffer lengths/row bytes, one joined final carrier with exact semantic/y1 projections, one linked opening/query/rho trace, and inherited exact30 rejection/33 success attempts, complete Prepared fields and scratch output. No selected local trace, rho, claim, semantic finish, fabricated producer buffer or successful whole prepare call is supplied. Full statement retains B, Total D, the producer Results and semantic verification Result; these are not native theorems. NBR_TOTAL_DOMAIN.md spells out digest totality.
+
+Imports reuse NBA/NBL proofs; all own top roots are audited by NBR_Audit (39 printed roots). The existing XRo coordinate conversion inside inherited accepted leaf interfaces is a carrier conversion only; no XRn_Join implementation or stand-in is used. NBR_ValuesPort identifies LPt's complete values producer with the semantic owned values slot; NBR_SemanticStep reuses JFw_Row.spec and its invariant/domain proof. NBR_AppendInduction connects an indexed native step to existing list induction; it does not assert a whole-buffer native run.
+
+## Native fragments and limits
+
+Every configured Kani invocation has its own source patch, frozen graph and lock audit, reservation, receipt and raw stdout. Only passing mitigated fragments count where copying is involved. K001 is a no-matched-harness command; K004/K006/K008/K012/K013/K024 timeouts and K009/K021 failures are excluded. K007/K010 remain quarantined by K-1; K022 is only a restricted diagnostic. See the final ledger for subsequent results.
+
+K002 establishes arbitrary semantic row shape/offset domains. K003 establishes the first scan check on the SAME464 source slice and its error-before-echeck order; it does not establish the whole accepted scan. K011 establishes compact-row expansion argument identity/alignment/doubling/size<=1856, ending at the call. K014/K015/K016 establish returned claim errors and all typed Box initializer fields in separate fragments. K017/K018 establish copied root/header windows with adjacent frames. K019/K020 establish one native append iteration on arbitrary valid Vec prestate, with capacity/no-reallocation bounds and actual source indexing. K023 establishes one native Range iteration. K025/K026 establish completion predicates and returned expansion error/position control in source fissions. None replaces a native semantic verifier bridge.
+
+K027/K028 target the ACTUAL prepare function up to producing-call/wide-view argument cuts. Their allocation stub supplies arbitrary initialized bytes (overapproximation); semantic/y1 child stubs return success without any byte law. Consequently passing gates establish SAME allocation pointer/ranges and order only, not allocation refinement, producer values, frames or wide_view results. The exact joined byte carrier is proved at model level, not silently supplied by these overapproximations.
+
+The final opening and ordinary-row fissions are bounded local checks; source cuts invent no returned serializer bytes, expansion values or complete local trace. They retain the missing source association below. LPh_STUBS.md records exact cut domains and pairings.
+
+## CLOSED-CONDITIONAL callee obligations
+
+Exactly these four inherited suspended leaves remain conditional on K-1 re-verification of their own full gates: **wide_view**, **verifier::prepared_claim**, **compact::expand_values**, **r1_wire::ValidatedRecord::decode_k**. Merged KMX validated copy replacements are imported at b173d5111cab35fe169da8c9942872071d04213a. Their primitive value laws and selected replay passes do not restore all four leaves. Existing CLOSED check_values/validate_record_fields/echeck/semantic_boundary/circle_sample/low_base_p_digits are reused only on their documented domains; a leaf name alone does not establish its caller's actual producing execution.
+
+## Explicit named native dependencies (not new trust assumptions)
+
+1. `NBR_NativeFilled14759`: native filled allocation returns a live owned initialized14759-byte buffer or the exact error, with source/destination ownership and frames; lifetime through both expansions, view borrow and preparation. NBC owns the runtime association. K027/K028 prove only slice identities under an overapproximation.
+2. `NBR_NativeSemanticObserved`: for the SAME produced semantic bytes/public/hash/observer, complete frozen native verify_observed corresponds to the complete VerifyPrefix Result and its exact fields, ordered digest requests, phase callbacks, error/abort behavior and effects. JHe/JHg owner dependency; not an independently selected successful finish.
+3. `NBR_NativeDigestRequests`: valid reached native digest requests/replies and all effects correspond to the chronological total model digest. NBC owner dependency. No Rust return-type argument establishes Total D on arbitrary ABI terms.
+4. `NBR_NativeAcceptedScan`: actual TX1 accepted parse/scan establishes SAME464 check success and reaches prepare with SAME proof/public/scratch, respecting observer behavior. K003 establishes only its first local check; K021 is unresolved, K022 restricted. CLOSED scan children must compose on their reached domains.
+5. `NBR_NativeInactiveSerialize`: actual WideExact::to_le_bytes on the reached inactive field produces exactly the model's32-byte kappa payload, including canonical/domain hypotheses and ordinary errors/effects. An argument cut is not a result theorem.
+6. `NBR_NativeSemanticLoop`: full native semantic root/header/ordinary-copy frames plus compact returned buffer laws associate the arbitrary-prestate row step with JFw_Row.spec and its existing induction. K012 whole-frame timeout is excluded; sparse copy and argument-cut fragments are retained as inputs, not asserted to close every byte/frame association.
+7. `NBR_NativeOpeningJoin`: assemble source-position fissions, append iteration/induction, lifetime/destruction, scalar/query/powers/claim callee ports into ONE actual native preparation trace. The cohort theorem supplies a compatible value/trace carrier but is not this native instantiation.
+
+These dependencies are not merged results from concurrent lanes. They remain named OPEN obligations. Thus labelling the entire bridge CLOSED-CONDITIONAL solely on the four suspended leaves would be inaccurate. Next concrete deliverable is to supply these exact native statements from the owning lanes and complete the native trace instantiation, then replay affected focused targets and audit the axioms once.
