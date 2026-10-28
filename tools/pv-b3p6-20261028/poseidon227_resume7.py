@@ -18,6 +18,8 @@ def emit(mod,srcs,imports):
  out=['import '+m for m in imports]+['namespace PV_B3P_Success227','open Aeneas Aeneas.Std PV_B3P_227','set_option autoImplicit false','']
  if mod=='PV_B3P_InternalSuccess227':
   out += ['/-- A grid offset stays below16 even if wrapping occurs: modulo never\nincreases a natural number. This lemma does not evaluate a field expression. -/\ntheorem grid_mul_bound (g : Usize) (hg : g.val<4) :\n    (Usize.wrapping_mul 4#usize g).val<16 := by\n  rw [Usize.wrapping_mul_val_eq]\n  change (4*g.val) % UScalar.size .Usize < 16\n  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)\n  omega\n\ntheorem grid_add_bound (g offset : Usize) (hg : g.val<4) (ho : offset.val<4) :\n    (Usize.wrapping_add (Usize.wrapping_mul 4#usize g) offset).val<16 := by\n  rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq]\n  change ((4*g.val) % UScalar.size .Usize + offset.val) % UScalar.size .Usize < 16\n  have hm := Nat.mod_le (4*g.val) (UScalar.size .Usize)\n  have ha := Nat.mod_le ((4*g.val) % UScalar.size .Usize + offset.val) (UScalar.size .Usize)\n  omega\n\n#print axioms grid_mul_bound\n#print axioms grid_add_bound\n']
+ if mod=='PV_B3P_PoseidonSuccess227':
+  out += ['theorem round_even_bound (row : Usize) (hlo : 2≤row.val) (hhi : row.val≤8) :\n    (Usize.wrapping_mul 2#usize (Usize.wrapping_sub row 2#usize)).val<14 := by\n  rw [Usize.wrapping_mul_val_eq,\n    PV_B3P_Offset226V3.sub_value row 2#usize (by scalar_tac)]\n  change (2*(row.val-2)) % UScalar.size .Usize < 14\n  have hm := Nat.mod_le (2*(row.val-2)) (UScalar.size .Usize)\n  omega\n\ntheorem round_odd_bound (row : Usize) (hlo : 2≤row.val) (hhi : row.val≤8) :\n    (Usize.wrapping_add (Usize.wrapping_mul 2#usize (Usize.wrapping_sub row 2#usize)) 1#usize).val<14 := by\n  rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq,\n    PV_B3P_Offset226V3.sub_value row 2#usize (by scalar_tac)]\n  change ((2*(row.val-2)) % UScalar.size .Usize+1) % UScalar.size .Usize < 14\n  have hm := Nat.mod_le (2*(row.val-2)) (UScalar.size .Usize)\n  have ha := Nat.mod_le ((2*(row.val-2)) % UScalar.size .Usize+1) (UScalar.size .Usize)\n  omega\n\n#print axioms round_even_bound\n#print axioms round_odd_bound\n']
  for source in srcs:
   for name,head,body in extract(source):
    if name.endswith('.SHIFTS'):continue
@@ -41,7 +43,8 @@ def emit(mod,srcs,imports):
    def rule(expr):
     call=expr.split()[0];assert call in mapping,(name,call,expr)
     target=mapping[call]
-    if name=='reference_poseidon.external_linear_packed' and target=='index':return 'apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)'
+    if name=='reference_poseidon.interpolated_internal_pair' and target=='index':return 'apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)'
+    if name in ['reference_poseidon.external_linear_packed','reference_poseidon.evaluate_state_only_poseidon_oracle_projected'] and target=='index':return 'apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)'
     if target in ['index','update','borrow','raw_limb_total','total_reference_field_qm31_pack_base4']:return 'apply '+target+' <;> scalar_tac'
     if target=='ok':return 'exact ok _'
     return 'apply '+target

@@ -6,6 +6,26 @@ namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
 
+theorem round_even_bound (row : Usize) (hlo : 2≤row.val) (hhi : row.val≤8) :
+    (Usize.wrapping_mul 2#usize (Usize.wrapping_sub row 2#usize)).val<14 := by
+  rw [Usize.wrapping_mul_val_eq,
+    PV_B3P_Offset226V3.sub_value row 2#usize (by scalar_tac)]
+  change (2*(row.val-2)) % UScalar.size .Usize < 14
+  have hm := Nat.mod_le (2*(row.val-2)) (UScalar.size .Usize)
+  omega
+
+theorem round_odd_bound (row : Usize) (hlo : 2≤row.val) (hhi : row.val≤8) :
+    (Usize.wrapping_add (Usize.wrapping_mul 2#usize (Usize.wrapping_sub row 2#usize)) 1#usize).val<14 := by
+  rw [Usize.wrapping_add_val_eq,Usize.wrapping_mul_val_eq,
+    PV_B3P_Offset226V3.sub_value row 2#usize (by scalar_tac)]
+  change ((2*(row.val-2)) % UScalar.size .Usize+1) % UScalar.size .Usize < 14
+  have hm := Nat.mod_le (2*(row.val-2)) (UScalar.size .Usize)
+  have ha := Nat.mod_le ((2*(row.val-2)) % UScalar.size .Usize+1) (UScalar.size .Usize)
+  omega
+
+#print axioms round_even_bound
+#print axioms round_odd_bound
+
 theorem total_reference_poseidon_internal_round (state : Array aspis_core.field.QM31 16#usize) (constant1 : aspis_core.field.QM31) :
     Success (reference_poseidon.internal_round state constant1) := by
   apply bind
@@ -476,102 +496,102 @@ theorem total_reference_poseidon_interpolated_full_pair_packed (state : Array as
 theorem total_reference_poseidon_interpolated_internal_pair (state : Array aspis_core.field.QM31 16#usize) (local1 : Array aspis_core.field.QM31 16#usize) :
     Success (reference_poseidon.interpolated_internal_pair state local1) := by
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q1
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q2
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q3
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q4
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q5
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro q6
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i2
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i5
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i8
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i11
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i14
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i17
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i20
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i24
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i28
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i32
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i36
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i40
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i44
   apply lift_total
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply round_even_bound <;> scalar_tac) | (apply round_odd_bound <;> scalar_tac)
   intro i48
   apply bind
   · apply total_reference_field_qm31_m31_dot
@@ -589,64 +609,64 @@ theorem total_reference_poseidon_interpolated_internal_pair (state : Array aspis
 theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings) (selectors : aspis_statement.state_only_poseidon.StateOnlyPoseidonSelectors) :
     Success (reference_poseidon.evaluate_state_only_poseidon_oracle_projected openings selectors) := by
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro leading_low
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q
   apply bind
   · apply qadd
   intro q1
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q2
   apply bind
   · apply qadd
   intro q3
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q4
   apply bind
   · apply qadd
   intro full_low
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q5
   apply bind
   · apply qadd
   intro q6
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q7
   apply bind
   · apply qadd
   intro q8
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q9
   apply bind
   · apply qadd
   intro q10
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q11
   apply bind
   · apply qadd
   intro q12
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q13
   apply bind
   · apply qadd
   intro q14
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q15
   apply bind
   · apply qadd
   intro q16
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q17
   apply bind
   · apply qadd
@@ -675,19 +695,19 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q18
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q19
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q20
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q21
   apply lift_total
   apply bind
@@ -695,32 +715,32 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   intro target
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q22
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q23
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q24
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q25
   apply lift_total
   apply bind
   · apply total_reference_field_qm31_pack_base4 <;> scalar_tac
   intro internal1
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q26
   apply bind
   · apply qsub
   intro q27
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q28
   apply bind
   · apply qsub
@@ -737,19 +757,19 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q33
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q34
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q35
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q36
   apply lift_total
   apply bind
@@ -757,32 +777,32 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   intro target1
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q37
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q38
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q39
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q40
   apply lift_total
   apply bind
   · apply total_reference_field_qm31_pack_base4 <;> scalar_tac
   intro internal2
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q41
   apply bind
   · apply qsub
   intro q42
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q43
   apply bind
   · apply qsub
@@ -799,19 +819,19 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q48
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q49
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q50
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q51
   apply lift_total
   apply bind
@@ -819,32 +839,32 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   intro target2
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q52
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q53
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q54
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q55
   apply lift_total
   apply bind
   · apply total_reference_field_qm31_pack_base4 <;> scalar_tac
   intro internal3
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q56
   apply bind
   · apply qsub
   intro q57
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q58
   apply bind
   · apply qsub
@@ -861,19 +881,19 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   apply lift_total
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q63
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q64
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q65
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q66
   apply lift_total
   apply bind
@@ -881,32 +901,32 @@ theorem total_reference_poseidon_evaluate_state_only_poseidon_oracle_projected (
   intro target3
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q67
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q68
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q69
   apply lift_total
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q70
   apply lift_total
   apply bind
   · apply total_reference_field_qm31_pack_base4 <;> scalar_tac
   intro internal4
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q71
   apply bind
   · apply qsub
   intro q72
   apply bind
-  · apply index <;> scalar_tac
+  · apply index; first | scalar_tac | (apply grid_mul_bound; scalar_tac) | (apply grid_add_bound <;> scalar_tac)
   intro q73
   apply bind
   · apply qsub
