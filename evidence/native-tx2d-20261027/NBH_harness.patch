@@ -38,9 +38,29 @@
 +#[cfg(kani)]
 +#[path="NBH_format.rs"]
 +mod NBH_format;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NBH_terminal.rs"]
++mod NBH_terminal;
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBH_accounts.rs"]
++mod NBH_accounts;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NBH_after.rs
-@@ -0,0 +1,46 @@
+@@ -0,0 +1,85 @@
 +use super::*;
 +fn NBH_digest(d: &Digest) -> bool {
 + let b: bool = kani::any();
@@ -87,9 +107,48 @@
 + let got=exact::<32>(&bytes[..len]);
 + if len==32 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<32); assert_eq!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
 +}
++fn NBH_asja_header(bytes: &[u8])->Result<(),PoolV1PairVerifierTransportErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[0..4] {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongVersion);
++    }
++    if bytes[5] != crate::pool_v1::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding);
++    }
++    if bytes[7] != 1 {
++        return Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode);
++    }
++ Ok(())}
++#[kani::proof]
++fn NBH_asja_header_gate() {let raw:[u8;689]=kani::any();let n:usize=kani::any();kani::assume(n<=689);let bytes=&raw[..n];assert_eq!(NBH_asja_header(bytes),if bytes.len()!=688 {Err(PoolV1PairVerifierTransportErrorV1::WrongLength)} else if &bytes[..4]!=b"ASJA" {Err(PoolV1PairVerifierTransportErrorV1::WrongMagic)} else if bytes[4]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongVersion)} else if bytes[5]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat)} else if bytes[6]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding)} else if bytes[7]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode)} else {Ok(())});}
++fn NBH_store688(output: &mut [u8;688], level:usize,bytes:[u8;32]) {
++        let start = 48 + 32 * level;
++        output[start..start + 32].copy_from_slice(&bytes);
++    }
++#[kani::proof]
++fn NBH_store688_gate() {let mut out:[u8;688]=kani::any();let old=out;let bytes:[u8;32]=kani::any();let level:usize=kani::any();kani::assume(level<20);let j:usize=kani::any();kani::assume(j<688);NBH_store688(&mut out,level,bytes);let start=48+32*level;assert_eq!(out[j],if j>=start && j<start+32 {bytes[j-start]} else {old[j]});}
++fn NBH_asja_stores(index:u64,root:[u8;32])->[u8;688]{    let mut output = [0u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES];
++    output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);
++    output[4] = POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION;
++    output[5] = crate::pool_v1::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[7] = 1;
++    output[8..16].copy_from_slice(&index.to_le_bytes());
++    output[16..48].copy_from_slice(&root);
++output}
++#[kani::proof]
++fn NBH_asja_stores_gate(){let index:u64=kani::any();let root:[u8;32]=kani::any();let out=NBH_asja_stores(index,root);let j:usize=kani::any();kani::assume(j<688);let header=[65,83,74,65,1,1,1,1];let expected=if j<8{header[j]}else if j<16{index.to_le_bytes()[j-8]}else if j<48{root[j-16]}else{0};assert_eq!(out[j],expected);}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NBH_live.rs
-@@ -0,0 +1,41 @@
+@@ -0,0 +1,71 @@
 +use super::*;
 +fn NBH_digest(d: &Digest) -> bool {
 + let b: bool = kani::any();
@@ -131,6 +190,36 @@
 + None}
 +#[kani::proof]
 +fn NBH_live_prefix_gate() { let snapshot=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_eq!(NBH_live_prefix(&snapshot),if snapshot.pool==[0;32] || snapshot.deployment_domain==[0;32] {Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding)} else if snapshot.sequence!=snapshot.next_pair_index {Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch)} else if snapshot.next_pair_index>=1048576 {Some(PoolV1PairLiveSnapshotErrorV1::TreeFull)} else if !NBH_digest(&snapshot.current_root) {Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)} else {None}); }
++fn NBH_store800(output: &mut [u8;800], level:usize,bytes:[u8;32]) {
++        let start = 160 + 32 * level;
++        output[start..start + 32].copy_from_slice(&bytes);
++    }
++#[kani::proof]
++fn NBH_store800_gate() {let mut out:[u8;800]=kani::any();let old=out;let bytes:[u8;32]=kani::any();let level:usize=kani::any();kani::assume(level<20);let j:usize=kani::any();kani::assume(j<800);NBH_store800(&mut out,level,bytes);let start=160+32*level;assert_eq!(out[j],if j>=start && j<start+32 {bytes[j-start]} else {old[j]});}
++fn NBH_late_preflight(before:u64,after:u64,output:&mut[u8])->Result<(),PoolV1PairLatePublicStatementErrorV1>{
++    if output.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {
++        return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);
++    }
++    if before.checked_add(1)
++        != Some(after)
++    {
++        return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);
++    }
++ Ok(())}
++#[kani::proof]
++fn NBH_late_preflight_gate() {let before:u64=kani::any();let after:u64=kani::any();let mut out:[u8;1521]=kani::any();let old=out;let n:usize=kani::any();kani::assume(n<=1521);let got=NBH_late_preflight(before,after,&mut out[..n]);let expected=if n!=1520 {Err(PoolV1PairLatePublicStatementErrorV1::WrongLength)}else if before==u64::MAX || after!=before.wrapping_add(1) {Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch)}else{Ok(())};assert_eq!(got,expected);let j:usize=kani::any();kani::assume(j<1521);assert_eq!(out[j],old[j]);}
++fn NBH_live_stores(output:&mut[u8;800],pool:[u8;32],domain:[u8;32],seq:u64,index:u64,root:[u8;32]){    output.fill(0);
++    output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);
++    output[8] = POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;
++    output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);
++    output[48..80].copy_from_slice(&pool);
++    output[80..112].copy_from_slice(&domain);
++    output[112..120].copy_from_slice(&seq.to_le_bytes());
++    output[120..128].copy_from_slice(&index.to_le_bytes());
++    output[128..160].copy_from_slice(&root);
++}
++#[kani::proof]
++fn NBH_live_stores_gate(){let mut out:[u8;800]=kani::any();let pool:[u8;32]=kani::any();let domain:[u8;32]=kani::any();let seq:u64=kani::any();let index:u64=kani::any();let root:[u8;32]=kani::any();NBH_live_stores(&mut out,pool,domain,seq,index,root);let j:usize=kani::any();kani::assume(j<800);let expected=if j<8{b"ASPLIVE1"[j]}else if j==8{1}else if j<16{0}else if j<48{POOL_V1_PAIR_TREE_FORMAT_BINDING[j-16]}else if j<80{pool[j-48]}else if j<112{domain[j-80]}else if j<120{seq.to_le_bytes()[j-112]}else if j<128{index.to_le_bytes()[j-120]}else if j<160{root[j-128]}else{0};assert_eq!(out[j],expected);}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NBH_registry.rs
 @@ -0,0 +1,51 @@
@@ -214,3 +303,102 @@
 +}
 +#[kani::proof]
 +fn NBH_policy_decode_gate() {let b:[u8;105]=kani::any(); let n:usize=kani::any();kani::assume(n<=105);assert_eq!(decode_verifier_policy_v1(&b[..n]),NBH_policy_decode(&b[..n]));}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_terminal.rs
+@@ -0,0 +1,54 @@
++use super::*;
++fn NBH_asq8_header(bytes: &[u8])->Result<(),PoolV1PairForestTerminalFormatErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);
++    }
++    let kind = transition_kind(bytes[5])?;
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);
++    }
++    if bytes[7] != 0 {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
++    }
++ Ok(())}
++#[kani::proof]
++fn NBH_asq8_header_gate() {let raw:[u8;321]=kani::any();let n:usize=kani::any();kani::assume(n<=321);let bytes=&raw[..n];assert_eq!(NBH_asq8_header(bytes),if bytes.len()!=320 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)} else if &bytes[..4]!=b"ASQ8" {Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic)} else if bytes[4]!=1 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion)} else if bytes[5]!=1 && bytes[5]!=2 {Err(PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind)} else if bytes[6]!=1 {Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding)} else if bytes[7]!=0 {Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)} else {Ok(())});}
++fn NBH_asf8_stores(kind:u8,lane:u8,master:[u8;32],checkpoint:[u8;32],selected:[u8;32],seq:u64,anchor:[u8;32])->[u8;1880]{    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES];
++    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);
++    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
++    output[5] = kind;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[7] = lane;
++    output[MASTER_OFFSET..CHECKPOINT_ACCOUNT_OFFSET].copy_from_slice(&master);
++    output[CHECKPOINT_ACCOUNT_OFFSET..SELECTED_LANE_ACCOUNT_OFFSET]
++        .copy_from_slice(&checkpoint);
++    output[SELECTED_LANE_ACCOUNT_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]
++        .copy_from_slice(&selected);
++    output[CHECKPOINT_SEQUENCE_OFFSET..HISTORICAL_ANCHOR_OFFSET]
++        .copy_from_slice(&seq.to_le_bytes());
++    output[HISTORICAL_ANCHOR_OFFSET..LATE_STATEMENT_OFFSET]
++        .copy_from_slice(&anchor);
++output}
++#[kani::proof]
++fn NBH_asf8_stores_gate(){let kind:u8=kani::any();let lane:u8=kani::any();let master:[u8;32]=kani::any();let checkpoint:[u8;32]=kani::any();let selected:[u8;32]=kani::any();let seq:u64=kani::any();let anchor:[u8;32]=kani::any();let out=NBH_asf8_stores(kind,lane,master,checkpoint,selected,seq,anchor);let j:usize=kani::any();kani::assume(j<1880);let expected=if j<4{b"ASF8"[j]}else if j==4{1}else if j==5{kind}else if j==6{1}else if j==7{lane}else if j<40{master[j-8]}else if j<72{checkpoint[j-40]}else if j<104{selected[j-72]}else if j<112{seq.to_le_bytes()[j-104]}else if j<144{anchor[j-112]}else{0};assert_eq!(out[j],expected);}
++fn NBH_asr8_stores(kind:u8,lane:u8,master:[u8;32],selected:[u8;32],nullifier:[u8;32])->[u8;792]{    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES];
++    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);
++    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
++    output[5] = kind;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[7] = lane;
++    output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]
++        .copy_from_slice(&master);
++    output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]
++        .copy_from_slice(&selected);
++    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]
++        .copy_from_slice(&nullifier);
++output}
++#[kani::proof]
++fn NBH_asr8_stores_gate(){let kind:u8=kani::any();let lane:u8=kani::any();let master:[u8;32]=kani::any();let selected:[u8;32]=kani::any();let nullifier:[u8;32]=kani::any();let out=NBH_asr8_stores(kind,lane,master,selected,nullifier);let j:usize=kani::any();kani::assume(j<792);let expected=if j<4{b"ASR8"[j]}else if j==4{1}else if j==5{kind}else if j==6{1}else if j==7{lane}else if j<40{master[j-8]}else if j<72{selected[j-40]}else if j<104{nullifier[j-72]}else{0};assert_eq!(out[j],expected);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBH_accounts.rs
+@@ -0,0 +1,39 @@
++use super::*;
++fn NBH_asm8_header(bytes: &[u8])->Result<(),PoolV1PairForestAccountErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_MASTER_MAGIC {
++        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_MASTER_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
++    }
++    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
++    }
++ Ok(())}
++#[kani::proof]
++fn NBH_asm8_header_gate() {let raw:[u8;385]=kani::any();let n:usize=kani::any();kani::assume(n<=385);let bytes=&raw[..n];assert_eq!(NBH_asm8_header(bytes),if bytes.len()!=384 {Err(PoolV1PairForestAccountErrorV1::WrongLength)} else if &bytes[..4]!=b"ASM8" {Err(PoolV1PairForestAccountErrorV1::WrongMagic)} else if bytes[4]!=2 {Err(PoolV1PairForestAccountErrorV1::WrongVersion)} else if bytes[5]!=8 {Err(PoolV1PairForestAccountErrorV1::WrongLaneCount)} else if bytes[6]!=1 {Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding)} else {Ok(())});}
++fn NBH_asc8_header(bytes: &[u8])->Result<(),PoolV1PairForestAccountErrorV1> {
++    if bytes.len() != POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLength);
++    }
++    if bytes[..4] != POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC {
++        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);
++    }
++    if bytes[4] != POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);
++    }
++    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {
++        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);
++    }
++    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
++        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);
++    }
++ Ok(())}
++#[kani::proof]
++fn NBH_asc8_header_gate() {let raw:[u8;193]=kani::any();let n:usize=kani::any();kani::assume(n<=193);let bytes=&raw[..n];assert_eq!(NBH_asc8_header(bytes),if bytes.len()!=192 {Err(PoolV1PairForestAccountErrorV1::WrongLength)} else if &bytes[..4]!=b"ASC8" {Err(PoolV1PairForestAccountErrorV1::WrongMagic)} else if bytes[4]!=2 {Err(PoolV1PairForestAccountErrorV1::WrongVersion)} else if bytes[5]!=8 {Err(PoolV1PairForestAccountErrorV1::WrongLaneCount)} else if bytes[6]!=1 {Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding)} else {Ok(())});}

@@ -12,5 +12,57 @@
     "one_iteration": "    if level < frontier.len() {\n        if !NBH_digest(&frontier[level]) {\n            return (level, Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest));\n        }\n        level += 1;\n    }\n",
     "transformation": "while to if; return error exposes level; digest call replaced by Lean-discharged all-raw-limb contract; invariant level<=20",
     "prefix": "\n    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {\n        return Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);\n    }\n    if snapshot.sequence != snapshot.next_pair_index {\n        return Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);\n    }\n    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {\n        return Some(PoolV1PairLiveSnapshotErrorV1::TreeFull);\n    }\n    if !NBH_digest(&snapshot.current_root) {\n        return Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n    }\n"
+  },
+  "asja_header": {
+    "source_prefix": "\n    if bytes.len() != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongLength);\n    }\n    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[0..4] {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongMagic);\n    }\n    if bytes[4] != POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongVersion);\n    }\n    if bytes[5] != super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat);\n    }\n    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding);\n    }\n    if bytes[7] != 1 {\n        return Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode);\n    }\n",
+    "sha256": "ad75275270b24b85f78f0c8396b392686f61d5368e503a9ae44e82c417ea7289",
+    "scope": "pending suffix, not codec success; arbitrary bounded slice; no loops"
+  },
+  "asq8_header": {
+    "source_prefix": "\n    if bytes.len() != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_BYTES {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);\n    }\n    if bytes[..4] != POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongMagic);\n    }\n    if bytes[4] != POOL_V1_PAIR_FOREST_TERMINAL_VERSION {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongVersion);\n    }\n    let kind = transition_kind(bytes[5])?;\n    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding);\n    }\n    if bytes[7] != 0 {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n",
+    "sha256": "2aa67d55dd21d5c300111218dacd12667007a6803e0c39b2e8bcec642767ad3a",
+    "scope": "pending suffix, not codec success; arbitrary bounded slice; no loops"
+  },
+  "asm8_header": {
+    "source_prefix": "\n    if bytes.len() != POOL_V1_PAIR_FOREST_MASTER_ACCOUNT_BYTES {\n        return Err(PoolV1PairForestAccountErrorV1::WrongLength);\n    }\n    if bytes[..4] != POOL_V1_PAIR_FOREST_MASTER_MAGIC {\n        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);\n    }\n    if bytes[4] != POOL_V1_PAIR_FOREST_MASTER_VERSION {\n        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);\n    }\n    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {\n        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);\n    }\n    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {\n        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);\n    }\n",
+    "sha256": "ad48f6273757b245beea3cf8f8b4d22a20e3dc72c0e1ec4d3785fbb1130c13f3",
+    "scope": "pending suffix, not codec success; arbitrary bounded slice; no loops"
+  },
+  "asc8_header": {
+    "source_prefix": "\n    if bytes.len() != POOL_V1_PAIR_FOREST_CHECKPOINT_ACCOUNT_BYTES {\n        return Err(PoolV1PairForestAccountErrorV1::WrongLength);\n    }\n    if bytes[..4] != POOL_V1_PAIR_FOREST_CHECKPOINT_MAGIC {\n        return Err(PoolV1PairForestAccountErrorV1::WrongMagic);\n    }\n    if bytes[4] != POOL_V1_PAIR_FOREST_CHECKPOINT_VERSION {\n        return Err(PoolV1PairForestAccountErrorV1::WrongVersion);\n    }\n    if bytes[5] != POOL_V1_PAIR_FOREST_LANE_COUNT as u8 {\n        return Err(PoolV1PairForestAccountErrorV1::WrongLaneCount);\n    }\n    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {\n        return Err(PoolV1PairForestAccountErrorV1::WrongDigestEncoding);\n    }\n",
+    "sha256": "2496b206ccedb52b0a1e63d517184c8907532d3dbd920616a76235443819738e",
+    "scope": "pending suffix, not codec success; arbitrary bounded slice; no loops"
+  },
+  "store688": {
+    "source_loop": "    for (level, node) in afterstate.next_frontier.iter().enumerate() {\n        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    }\n",
+    "iteration": "\n        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    ",
+    "transformation": "one arbitrary enumerate iteration, child encode_digest result explicit bytes parameter; lower digest encoder dependency remains OPEN",
+    "domain": "level<20, all output[688] and bytes[32] arbitrary; proves complete byte frame using arbitrary j"
+  },
+  "store800": {
+    "source_loop": "    for (level, node) in snapshot.frontier.iter().enumerate() {\n        let start = 160 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    }\n",
+    "iteration": "\n        let start = 160 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    ",
+    "transformation": "one arbitrary enumerate iteration, child encode_digest result explicit bytes parameter; lower digest encoder dependency remains OPEN",
+    "domain": "level<20, all output[800] and bytes[32] arbitrary; proves complete byte frame using arbitrary j"
+  },
+  "late_preflight": {
+    "source_prefix": "\n    if output.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {\n        return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);\n    }\n    if before.checked_add(1)\n        != Some(after)\n    {\n        return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);\n    }\n",
+    "domain": "all u64 indices; bounded output widths including 1520; unchanged output before children"
+  },
+  "asja_stores": {
+    "source_window": "    let mut output = [0u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);\n    output[4] = POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION;\n    output[5] = super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = 1;\n    output[8..16].copy_from_slice(&index.to_le_bytes());\n    output[16..48].copy_from_slice(&root);\n",
+    "scope": "validation precedes this window; root result parameter retains OPEN lower encode dependency"
+  },
+  "live_stores": {
+    "source_window": "    output.fill(0);\n    output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);\n    output[8] = POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;\n    output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);\n    output[48..80].copy_from_slice(&pool);\n    output[80..112].copy_from_slice(&domain);\n    output[112..120].copy_from_slice(&seq.to_le_bytes());\n    output[120..128].copy_from_slice(&index.to_le_bytes());\n    output[128..160].copy_from_slice(&root);\n",
+    "scope": "length/validation precede this window; arbitrary initial output; explicit root child result; domain at80..112"
+  },
+  "asf8_stores": {
+    "source_window": "    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);\n    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;\n    output[5] = kind;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = lane;\n    output[MASTER_OFFSET..CHECKPOINT_ACCOUNT_OFFSET].copy_from_slice(&master);\n    output[CHECKPOINT_ACCOUNT_OFFSET..SELECTED_LANE_ACCOUNT_OFFSET]\n        .copy_from_slice(&checkpoint);\n    output[SELECTED_LANE_ACCOUNT_OFFSET..CHECKPOINT_SEQUENCE_OFFSET]\n        .copy_from_slice(&selected);\n    output[CHECKPOINT_SEQUENCE_OFFSET..HISTORICAL_ANCHOR_OFFSET]\n        .copy_from_slice(&seq.to_le_bytes());\n    output[HISTORICAL_ANCHOR_OFFSET..LATE_STATEMENT_OFFSET]\n        .copy_from_slice(&anchor);\n",
+    "scope": "prefix before late/payment calls; exact accounts and ordered field offsets; validation/projections/child digest dependencies explicit"
+  },
+  "asr8_stores": {
+    "source_window": "    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);\n    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;\n    output[5] = kind;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = lane;\n    output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&master);\n    output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&selected);\n    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&nullifier);\n",
+    "scope": "non-headline emission prefix only; full encoder OPEN"
   }
 }

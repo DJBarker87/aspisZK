@@ -77,8 +77,10 @@ fn NBH_exact{n}() {{ let bytes: [u8;64]=kani::any(); let len: usize=kani::any();
 }}
 '''
 exec((E/'NBH_extra.py').read_text())
+exec((E/'NBH_extra2.py').read_text())
+files={p:s.replace('super::POOL_','crate::pool_v1::POOL_') for p,s in files.items()}
 patch=''
-for f,child in [('pair_terminal.rs','NBH_after'),('pair_tree_profile.rs','NBH_live'),('verifier_registry.rs','NBH_registry'),('format.rs','NBH_format')]:
+for f,child in [('pair_terminal.rs','NBH_after'),('pair_tree_profile.rs','NBH_live'),('verifier_registry.rs','NBH_registry'),('format.rs','NBH_format'),('pair_forest_terminal.rs','NBH_terminal'),('pair_forest_accounts.rs','NBH_accounts')]:
  old=frozen(f);new=old+'\n#[cfg(kani)]\n#[path="'+child+'.rs"]\nmod '+child+';\n'
  patch+=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/'+ROOT+f,tofile='b/'+ROOT+f))
 for p,s in files.items():patch+=''.join(difflib.unified_diff([],s.splitlines(True),fromfile='/dev/null',tofile='b/'+p))

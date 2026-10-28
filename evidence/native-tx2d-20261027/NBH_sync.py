@@ -11,7 +11,7 @@ for line in patch.splitlines(True):
   if current:files[current]=''
  elif current and line.startswith('+'):files[current]+=line[1:]
 parents={}
-for name,child in [('pair_terminal.rs','NBH_after'),('pair_tree_profile.rs','NBH_live'),('verifier_registry.rs','NBH_registry'),('format.rs','NBH_format')]:
+for name,child in [('pair_terminal.rs','NBH_after'),('pair_tree_profile.rs','NBH_live'),('verifier_registry.rs','NBH_registry'),('format.rs','NBH_format'),('pair_forest_terminal.rs','NBH_terminal'),('pair_forest_accounts.rs','NBH_accounts')]:
  path='crates/aspis-statement/src/pool_v1/'+name
  old=subprocess.check_output(['git','show',m.REV+':'+path],text=True)
  marker='\n#[cfg(kani)]\n#[path="'+child+'.rs"]\nmod '+child+';\n'
