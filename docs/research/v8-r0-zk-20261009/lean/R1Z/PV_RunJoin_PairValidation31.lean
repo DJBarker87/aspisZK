@@ -54,6 +54,7 @@ theorem valid (p : pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1)
   obtain ⟨hb2',h⟩ := error_then h
   have hb2f : b2=false := Bool.eq_false_iff.mpr hb2'
   subst b2
+  simp only [Bool.false_eq_true,↓reduceIte] at h
   have he1 := word_equal _ _ hb2
   pv_peel h with sentinel hsentinel
   pv_peel h with m3 hm3
@@ -61,12 +62,14 @@ theorem valid (p : pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1)
   obtain ⟨hb3',h⟩ := error_then h
   have hb3f : b3=false := Bool.eq_false_iff.mpr hb3'
   subst b3
+  simp only [Bool.false_eq_true,↓reduceIte] at h
   have he3 := word_equal _ _ hb3
   pv_peel h with m4 hm4
   pv_peel h with b4 hb4
   obtain ⟨hb4',h⟩ := error_then h
   have hb4f : b4=false := Bool.eq_false_iff.mpr hb4'
   subst b4
+  simp only [Bool.false_eq_true,↓reduceIte] at h
   have he4 := word_equal _ _ hb4
   simp only [lift,bind_tc_ok,core.slice.Slice.iter] at h
   pv_peel h with scan hscan
@@ -74,6 +77,7 @@ theorem valid (p : pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1)
   obtain ⟨hb5',h⟩ := error_then h
   have hb5f : b5=false := Bool.eq_false_iff.mpr hb5'
   subst b5
+  simp only [Bool.false_eq_true,↓reduceIte] at h
   have hs := PV_RunJoin_ZeroScan31.array (K := K) p.second_commitment om after hscan
   have homv := sub_meaning (K := K) _ _ _ (by decide) hoc hom
   have hmov := sub_meaning (K := K) _ _ _ hoc (by decide) hmo
