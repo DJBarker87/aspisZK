@@ -20,7 +20,8 @@ theorem variant (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms variant
@@ -42,7 +43,8 @@ theorem recipient_flag (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms recipient_flag
@@ -64,7 +66,8 @@ theorem withdrawal_flag (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms withdrawal_flag
@@ -86,7 +89,8 @@ theorem anchor (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms anchor
@@ -108,7 +112,8 @@ theorem nullifier (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms nullifier
@@ -130,7 +135,8 @@ theorem asset (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms asset
@@ -150,7 +156,8 @@ theorem recipient (p : reference226.OwnedPublic) (i : Nat)
         simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
           List.length_cons,List.length_nil]
         omega)]
-  simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+  try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+  first
   | rfl
   | congr 1 <;> omega
 #print axioms recipient
@@ -172,7 +179,8 @@ theorem change (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms change
@@ -192,7 +200,8 @@ theorem amount (p : reference226.OwnedPublic) (i : Nat)
         simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
           List.length_cons,List.length_nil]
         omega)]
-  simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+  try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+  first
   | rfl
   | congr 1 <;> omega
 #print axioms amount
@@ -214,7 +223,8 @@ theorem index (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms index
@@ -236,7 +246,8 @@ theorem frontier (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms frontier
@@ -258,7 +269,8 @@ theorem next_root (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms next_root
@@ -280,7 +292,8 @@ theorem next_frontier (p : reference226.OwnedPublic) (i : Nat)
           simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,
             List.length_cons,List.length_nil]
           omega)]
-    simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first
+    try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]
+    first
     | rfl
     | congr 1 <;> omega
 #print axioms next_frontier

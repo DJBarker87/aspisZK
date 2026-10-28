@@ -6,13 +6,13 @@ set_option autoImplicit false
 
 theorem recipient_tag (p : reference226.OwnedPublic) :
     reference226.byte_at p 69#usize = .ok (.Ok (if p.withdrawal then 0#u8 else 1#u8)) := by
-  cases hw : p.withdrawal <;> simp [reference226.byte_at,hw]
+  cases hw : p.withdrawal <;> simp [reference226.byte_at,hw,lift,bind_tc_ok]
 #print axioms recipient_tag
 
 theorem withdrawal_tag (p : reference226.OwnedPublic) :
     reference226.byte_at p (if p.withdrawal then 102#usize else 134#usize) =
     .ok (.Ok (if p.withdrawal then 1#u8 else 0#u8)) := by
-  cases hw : p.withdrawal <;> simp [reference226.byte_at,hw,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
+  cases hw : p.withdrawal <;> simp [reference226.byte_at,hw,lift,bind_tc_ok,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9]
 #print axioms withdrawal_tag
 theorem amount (p : reference226.OwnedPublic) (i : Usize) (hw : p.withdrawal = true)
     (lo : 103 ≤ i.val) (hi : i.val < 107) :
@@ -77,10 +77,10 @@ theorem padding (p : reference226.OwnedPublic) (i : Usize)
   | false =>
     simp only [hw,Bool.false_eq_true,↓reduceIte] at lo
     have hn : i ≥ 1455#usize := by scalar_tac
-    simp only [reference226.byte_at,hw,Bool.false_eq_true,↓reduceIte,hn]
+    simp only [reference226.byte_at,hw,Bool.false_eq_true,↓reduceIte,hn,lift,bind_tc_ok]
   | true =>
     simp only [hw,↓reduceIte] at lo
     have hn : i ≥ 1427#usize := by scalar_tac
-    simp only [reference226.byte_at,hw,↓reduceIte,hn]
+    simp only [reference226.byte_at,hw,↓reduceIte,hn,lift,bind_tc_ok]
 #print axioms padding
 end PV_B3P_ScalarRegions226

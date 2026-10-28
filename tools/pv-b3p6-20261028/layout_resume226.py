@@ -39,7 +39,7 @@ for name,lo,hi,body,w in specs:
 '''+indent+'''        List.length_cons,List.length_nil]
 '''+indent+'''      omega)]
 '''
- s+=indent+'simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil] <;> first\n'+indent+'| rfl\n'+indent+'| congr 1 <;> omega\n'
+ s+=indent+'try simp only [fields_length,Array.length_eq,frontier_length,indexBytes,h8,List.length_append,List.length_cons,List.length_nil]\n'+indent+'first\n'+indent+'| rfl\n'+indent+'| congr 1 <;> omega\n'
  s+=f'#print axioms {name}\n'
 s+='end PV_B3P_LayoutRegions226\n'
 Path('evidence/pv-b3p6-20261028/lean/PV_B3P_LayoutRegions226.lean').write_text(s)
