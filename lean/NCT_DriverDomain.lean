@@ -146,11 +146,97 @@ theorem established (c : Configuration F C)
     accumulator (fields p a sizes.1 (queries p a h)) full,
     variant p a h,sizes.1,queries p a h,full,sizes.2,rfl,rfl⟩
 
+/-- Pointwise form: the same explicit remaining gates, with no universal
+DriverEstablishedDomain or independently supplied WriterDomain premise. -/
+theorem on_call (c : Configuration F C) (p : Prepared) (a : Accumulator)
+    (h : Reached c p a) (variant : p.variant = .S2)
+    (qb : ∀ j : Fin 22,
+      (p.queries.val[j.val]'(by simpa [p.queries.property] using j.isLt)).val < 262144)
+    (canonical : NonWeightCanonical (fields p a (reached_control c p a h).1 qb)) :
+    KNE_Caller.WriterDomain p a :=
+  ⟨variant,(reached_control c p a h).1,qb,
+    ⟨canonical.gamma,canonical.kappa,canonical.alpha,canonical.rho,
+      canonical.semanticAlpha,canonical.coordinates,canonical.claim,canonical.rhs,
+      canonical.power,reached_weights c p a h qb⟩,(reached_control c p a h).2⟩
+
+section Leaf
+variable (c : Configuration F C)
+    (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (public1 proof : Slice U8) (saved : alloc.vec.Vec U8)
+    (cut : Cut c semantic public1 proof saved)
+
+theorem cutReached : Reached c (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) := ⟨semantic,public1,proof,saved,cut,rfl,rfl⟩
+
+
+theorem callDomain
+    (variant : ((writerPrepared cut.prepared)).variant = .S2)
+    (qb : ∀ j : Fin 22,
+      (((writerPrepared cut.prepared)).queries.val[j.val]'(by simpa [((writerPrepared cut.prepared)).queries.property] using j.isLt)).val < 262144)
+    (canonical : NonWeightCanonical (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed)
+      (reached_control c (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (cutReached c semantic public1 proof saved cut)).1 qb)) :
+    KNE_Caller.WriterDomain (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) :=
+  on_call c (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (cutReached c semantic public1 proof saved cut) variant qb canonical
+
+
+/-- Step-4 fallback: SAME model-driver proof/public and writer p/a. The three
+unproved input-field gates remain explicit. This is NOT an unconditional
+model driver theorem and is NOT a native driver call association. -/
+
+theorem native_result
+    (variant : ((writerPrepared cut.prepared)).variant = .S2)
+    (qb : ∀ j : Fin 22,
+      (((writerPrepared cut.prepared)).queries.val[j.val]'(by simpa [((writerPrepared cut.prepared)).queries.property] using j.isLt)).val < 262144)
+    (canonical : NonWeightCanonical (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed)
+      (reached_control c (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (cutReached c semantic public1 proof saved cut)).1 qb))
+    (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State)
+    (oracle : CheckpointBytes5Inputs.Oracle (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () H)
+    (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.DuplexFrames.Bytes →
+      AspisV8R19.DuplexFrames.Bytes → Prop)
+    (valid : KNE_Composition.LocalCorrect native KND_Schedule.schedule)
+    (hp hu hc : CheckpointBytes5Effect.Digest) (body out : Slice U8)
+    (before : CheckpointBytes5Effect.Log)
+    (tr : KNE_Composition.Trace native (KNE_Model.bodyEmissions
+      (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) ((callDomain c semantic public1 proof saved cut variant qb canonical)).size ((callDomain c semantic public1 proof saved cut variant qb canonical)).queriesBound)
+      (CheckpointBytesDigest.stateOf hp) (CheckpointBytesDigest.stateOf hu)) []
+      (MultiproofConeCanonical.bytesOf body.val))
+    (checksumWrite : native (MultiproofConeCanonical.bytesOf body.val)
+      (MultiproofConeCanonical.bytesOf hc.val) (MultiproofConeCanonical.bytesOf out.val))
+    (proofCall : ((VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c)))).digest () (AspisR1Stage2.WireTx2.singletonParts proof) = ok hp)
+    (publicCall : ((VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c)))).digest () (AspisR1Stage2.WireTx2.singletonParts public1) = ok hu)
+    (checksumCall : ((VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c)))).digest () (AspisR1Stage2.WireTx2.checksumParts body) = ok hc) :
+    KNE_Schedule.sourceFinalLen ((writerPrepared cut.prepared)).variant = 64 ∧
+    out.val = saved.val ∧
+    out.val.length = 1768 ∧
+    out = LPm_CheckpointProgram.returned (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) ((callDomain c semantic public1 proof saved cut variant qb canonical)).size ((callDomain c semantic public1 proof saved cut variant qb canonical)).queriesBound
+      ((callDomain c semantic public1 proof saved cut variant qb canonical)).canonical ((callDomain c semantic public1 proof saved cut variant qb canonical)).next hp hu hc ∧
+    CheckpointBytes5Effect.run (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () (writer (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) proof public1) before =
+      ok (out,((before ++ [(AspisR1Stage2.WireTx2.singletonParts proof,hp)]) ++
+        [(AspisR1Stage2.WireTx2.singletonParts public1,hu)]) ++
+        [(AspisR1Stage2.WireTx2.checksumParts body,hc)]) ∧
+    MultiproofConeCanonical.bytesOf out.val = OraclePortCheckpointAbiC5.encode H
+      (MultiproofConeCanonical.bytesOf proof.val) (MultiproofConeCanonical.bytesOf public1.val)
+      (prepared (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) ((callDomain c semantic public1 proof saved cut variant qb canonical)).size ((callDomain c semantic public1 proof saved cut variant qb canonical)).queriesBound) ((callDomain c semantic public1 proof saved cut variant qb canonical)).canonical)
+      (accumulator (fields (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) ((callDomain c semantic public1 proof saved cut variant qb canonical)).size ((callDomain c semantic public1 proof saved cut variant qb canonical)).queriesBound) ((callDomain c semantic public1 proof saved cut variant qb canonical)).canonical) := by
+  have leaf := KNE_Leaf.native_result (VTop_Checkpoint.digest (Tx1Q_Install.digest (currentDigest c))) () H oracle native valid (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (callDomain c semantic public1 proof saved cut variant qb canonical) proof public1
+    hp hu hc body out before tr checksumWrite proofCall publicCall checksumCall
+  obtain ⟨after,modelRun⟩ := Port3_CheckpointInstall.writer_run
+    (Tx1Q_Install.digest (currentDigest c)) (Tx1Q_Carriers.prepared cut.prepared)
+    (Tx1Q_Carriers.accumulator {cut.out with weights := ⟨cut.flushed.val,cut.flushed.property⟩})
+    proof public1 () saved cut.checkpoint before
+  have same : VTop_Checkpoint.checkpointSlice saved = out :=
+    congrArg Prod.fst (Result.ok.inj (modelRun.symm.trans leaf.2.2.1))
+  exact ⟨KNE_Schedule.caller_final_len (writerPrepared cut.prepared) (writerAccumulator cut.out cut.flushed) (callDomain c semantic public1 proof saved cut variant qb canonical),congrArg Subtype.val same.symm,leaf⟩
+end Leaf
+
 #print axioms of_accepted
 #print axioms replay
 #print axioms control
 #print axioms reached_control
 #print axioms reached_weights
 #print axioms established
+#print axioms on_call
+#print axioms cutReached
+#print axioms callDomain
+#print axioms native_result
 end AspisR1.NCT_DriverDomain
 end

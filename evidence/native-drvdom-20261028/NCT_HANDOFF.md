@@ -83,3 +83,39 @@ outputs receive ZERO credit. Rejected source is retained. NCT_L003 passed the
 initial assembly; NCT_L004 passed the strengthened weight-canonicality assembly,
 exit0, 2.393719s, peak RSS5381180KiB, swaps0, revisiond97db4e276 plus source
 hash in receipt. Every six new theorem roots has standard axioms only.
+
+## Stage 3: same-call conditional leaf composition
+
+`NCT_DriverDomain.native_result` now takes an explicit NCL cut and the three
+pointwise field gates above. There is NO DriverEstablishedDomain or WriterDomain
+argument. `callDomain` constructs the writer domain using the proved control
+and weight facts, and `KNE_Leaf.native_result` supplies the complete leaf result.
+This is a partial premise discharge: the field gates remain premises, not a
+new unconditional model-driver closure.
+
+The exact semantic/public/proof/saved of that cut are retained. The writer
+Prepared is `toPrepared (Tx1Q_Carriers.prepared cut.prepared)`; the Accumulator
+is `toAccumulator (Tx1Q_Carriers.accumulator {cut.out with weights:=cut.flushed})`.
+The digest is the existing `VTop_Checkpoint.digest (Tx1Q_Install.digest
+(currentDigest c))`, with Unit hash (). No independent digest, second proof,
+public input, accumulator, accepted execution, saved checkpoint or output
+equality is added. Port3_CheckpointInstall.writer_run on cut.checkpoint and
+same-run determinism derive `out.val = saved.val`.
+
+After: for this cut, under explicit S2/query/non-weight-canonicality gates plus
+the unchanged leaf's local append correctness, same-body trace/checksum write,
+oracle interpretation and three digest calls:
+- sourceFinalLen=64;
+- output bytes are the cut's saved Vec bytes and length1768;
+- output is LPm_CheckpointProgram.returned for these exact fields;
+- writer run has the SAME chronological proof/public/checksum read log;
+- bytes equal OraclePortCheckpointAbiC5.encode for the SAME pm/am.
+The `native` relation here remains the leaf's abstract local append relation,
+not an assertion that a native enclosing driver has reached these arguments.
+
+NCT_L005–L007 are rejected drafts (notation namespaces, proof section binders,
+and captured notation free variables respectively). Their source snapshots and
+full errors are retained, all recovery sorryAx outputs uncredited. NCT_L008
+checks the final same-call composition: exit0, wall2.472852s,
+peakRSS5384916KiB, swaps0, revision8a098e8591 plus exact source hash in receipt.
+All ten NCT roots use only propext/Classical.choice/Quot.sound.
