@@ -1,7 +1,12 @@
 # FXIO-1: a fixed pure dictionary loses the repeated-create world change
 
-Status: proof/native receipts pending. No row closure or native counterexample
-is credited until both are recorded below.
+Status: **checked obstruction to the fixed-dictionary source association**.
+Lean35801 exited 0 (0.22 s, 487,912 KiB peak RSS, zero swaps); all eight
+#print axioms results are empty. The optimized native suffix check exited 0
+(0.16 s, 119,500 KiB peak RSS, zero swaps), with true then false/EEXIST(17)
+and unchanged 80-byte contents. See lean-35801/receipt.json and
+native-repeat-01/receipt.json. Lean35800 is a retained failed elaboration.
+No ledger row is closed and no privacy attack is asserted.
 
 ## Precise affected claim
 
