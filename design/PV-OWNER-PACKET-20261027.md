@@ -1,7 +1,7 @@
 # Privacy owner decision packet — 2026-10-27 (B)
 
 Target not yet established. Evidence is frozen by the
-[recount 7 pins](../evidence/privacy-recount-20261026/recount7/pins.json).
+[recount 8 pins](../evidence/privacy-recount-20261026/recount8/pins.json).
 Approvals resolve the named choices; native proof, adoption and release binding
 remain separate obligations. D248 already adopted option B and the capped
 RunJoin trust list, exactly entropy_law, entropy_kernel and observation.
@@ -31,6 +31,14 @@ research `evidence/fidelity-check1-20261027/SDY_FINDING.md`. This resolves the
 contract choice and permits the narrowed association/bridge work; it does not
 approve a new translator or add a trust field.
 
+The fifth owner amendment of 2026-10-28 adopts composition-trust option A.
+Every use of Kani, Charon or Aeneas agreeing on Rust semantics is
+reclassification within existing tool trust, never premise removal. It approves
+no additional RunJoin T field. FixturePdaRuntime remains deferred. The standing
+delegation is to the soundness lead and preserves privacy; D396 explicitly
+keeps the privacy choices below with the owner. No later adoption of those
+choices occurs at the recount pins.
+
 The following decisions/actions remain open.
 
 1. **Release recipe and constant-time private-input decoding.** The question is
@@ -38,7 +46,7 @@ The following decisions/actions remain open.
    with the approved client toolchain, and fixed-width constant-time decoding
    for private input, as recommended in D272/D276. Options are that recorded
    recipe and decoding route, or another explicit recipe/decoder with renewed
-   evidence. The historical recipe retains N1; inspected audit B removes N1,
+   evidence. The fscan deployed client unit graph still includes the transitive insecure-spend-fixture feature; this is the measured current configuration, not adoption of the proposed fixture-off recipe. The historical recipe retains N1; inspected audit B removes N1,
    while N2–N6 remain L2/native obligations. The client toolchain approval does
    not adopt the features or decoder. This unblocks the selected release binary,
    final transitive audit and qualified V374 campaign. Disabling the fixture
@@ -66,7 +74,7 @@ The following decisions/actions remain open.
    it records no separate explicit lead backend selection. The +5.93 s /
    19.6–19.9 s soft estimate is a projection, not a measured whole-prover gate
    failure. A decision unblocks the dispatcher/instruction refinement route
-   for V231–V238. V233's split law does not resolve this choice. Evidence:
+   for V231–V238. V233's split law does not resolve this choice, and its deployed native link is currently suspended. The restored V238 wrapper keeps its finalizer and TRUNC_SIDE parameters; it does not establish V232 instruction semantics. Evidence:
    LOG D263/D273/D301 and candidate `design/PV-SHA-DISPATCH-20261027.md`.
 
 4. **DOITM implementation.** The question is how to implement the already
@@ -118,9 +126,7 @@ proofs.
 
 **Lead recommendation.** (A) for the privacy claim now, because it changes no implementation and
 the zero-change guard rejects locally before any proof or transaction is produced; the functional
-limitation goes to the owner as a product question, independent of privacy. The privacy route's
-remaining step (successful preparation implies the honesty guards) is needed under either option and
-proceeds meanwhile.
+limitation goes to the owner as a product question, independent of privacy. CanonicalHonest31 and Coverage31 now prove the source-level coverage for the codec-first route. Actual native caller, world and observation association remains necessary under either option.
 
 **Unblocks.** The exact honest-user domain in the privacy statement; the coverage half of the
 honest-family source identification (D337).
@@ -152,48 +158,86 @@ The canonical honest pipeline decodes the snapshot through its codec before
 calling the wrapper (D342). The raw withdrawal wrapper can return success on
 noncanonical active frontier words, and those payloads fail HonestInput; the
 snapshot codec rejects them. Positive change alone is therefore not a sufficient
-honesty or preparation-domain characterisation. The exact successful canonical
-preparation implies HonestInput theorem is still open at the pinned runjoin32
-snapshot, after lane-root progress. Input, append, recipient and sentinel
-obligations remain. Neither the domain choice nor the client-scope choice
-converts that missing implication into trust. The lead's option A recommendation
-from D338/D342 stands; no later owner adoption is recorded in the audited LOG.
-Evidence: pinned runjoin evidence/pv-runjoin26-20261027/REPORT.md,
-evidence/pv-runjoin28-20261027/GUARDS.md and FINDING.md,
-evidence/pv-runjoin31-20261028/LANE-STATEMENT-AUDIT.md and
-recovery/RESUME32.md. This clarifies what the domain and client choices unblock:
-a precise successful-user coverage statement and a concrete caller/runtime
-binding toward V038/V045, rather than a new proof on arbitrary cached inputs.
+honesty or preparation-domain characterisation. CanonicalHonest31.transfer/withdrawal now derives the honesty guards from every
+successful canonical preparation, and Coverage31.transfer_iff/withdrawal_iff
+characterizes that codec-first source route. The source conclusion retains its
+canonical codec, pool/deployment and readiness meaning; it is not the missing
+native world/ROMView decoder identification. Runjoin33 repaired the stale-cache
+endpoint, lane and snapshot audit obstruction. Runjoin34–46 adds body,
+serialization and actual-caller-domain proofs, while the full published-proof
+Result, native helper effects/decoders and RustRealRefinement composition remain
+unfinished at the pins. V244/op227 is still a named undischarged dependency.
+The owner domain choice remains open despite this proof progress. Evidence:
+LOG D367/D376/D401/D404/D411/D413, the pinned runjoin reports and recount8
+CORRECTIONS8.md. These choices unblock a precise successful-user domain and
+concrete caller/runtime binding toward V038/V045, not privacy for arbitrary
+cached compiler inputs.
 
-The D348 observer coverage decision is open. The question is how the deployed
-verifier's on-chain log and formatted error bytes on every reached path are
-represented in the endpoint observation. The audited endpoint exposes an abstract
-View/ROMView and observer_program; no selected total encoding/association ties
-all those bytes, including rejection-path bytes, to that observation. Abstract
-Aux capacity and forwarding a Boolean decision do not establish this association.
-This is a coverage gap against D159, not an extra trust item or a privacy proof
-inside the current statement. The options are to specify a total representation
-in the existing observation carrier and prove its deployed association, or to
-approve an explicit model extension with the affected theorem and simulation
-transport work. Omitting published logs would change the adopted observer and
-is not an approved option. D348 records the lead's expected route: prove logs
-and error text deterministic from public transaction bytes, without allocator
-addresses, timing or uninitialised bytes in the text; it records no selected
-representation or owner approval. The chosen route must account explicitly for
-any public execution context used by the program. This unblocks a complete
-observer specification and the subsequent verifier log/error determinism proof.
-Evidence: LOG D159/D348 and recount7/D348.md, with immutable endpoint,
-FsStatement, ZkStatement, RomObserverBin and RunJoin source witnesses in the
-recount 7 manifest. Owner: privacy lead and owner for the contract; deployed
-verifier/client association remains a P obligation after that choice.
+The D348 log/error observer coverage decision is open for the verifier and
+the deployed client. The question is how every deployed on-chain log and error
+byte, and client formatting, diagnostics, panic/error and backtrace channel,
+including occurrence on rejection paths, is represented in the endpoint's
+observation. View/ROMView, abstract Aux and observer_program provide no selected
+total deployed encoding/association. Forwarding the model Boolean decision does
+not supply it. D159 includes these observables. This is a coverage gap in the
+current statement, not a new trust item or a theorem already proved inside it.
 
-K-1 is an evidence correction, not an owner trust-list choice. The historical
-copy-dependent Kani links of V178, V179, V182, V195 and V233 remain suspended.
-Their independent replacements have class structural (K-1 substitute), with the
-same statements and residuals. Exact KMX-patched positive gates and failing
-matched negative controls are required before Kani re-credit; the pinned kstub
-progress does not yet supply all five. V184 stands on its structural proof.
-The capped RunJoin T remains exactly its three approved fields.
+The options are a total representation in the existing observation carrier
+with a proved deployed association, or an explicitly approved model extension
+with the affected simulation and theorem transport. Omitting published logs,
+error text or witness-dependent occurrence would change the adopted observer
+and is not approved. The chosen route must include the public execution context
+and every observable abort/rejection event, alongside bytes and side channels.
+
+The lead's D348 recommendation is to prove verifier log/error text determined
+by public transaction bytes and explicit public context, without allocator
+addresses, timing or uninitialized bytes in the text. D414 adds the direction
+to trace each formatting entry to its actual caller and guard and classify it
+as panic-only or honest-path. There is no recorded lead or owner selection of
+a client diagnostic representation, and no recorded claim that these client
+channels are all public. The recommendation unblocks a complete observer
+specification and the subsequent native determinism or simulation proofs;
+approval alone would not establish either property.
+
+D414 identifies core::fmt vtable, vtable_drop_shim, write_str, write_char and
+write_fmt glue in the op227 cone. Panic-message construction on bounds/unwrap
+failure is a proposed explanation, not a proved exclusion from honest runs.
+The candidate's rdeac report and diagnostic-provenance.json identify reachable
+deployed-client anyhow::ensure formatting, strerror and UTF-8-lossy error
+strings, and backtrace symbolization through build-id, debuglink/debugaltlink,
+split-DWARF and addr2line. Known public pieces include the literal69 basename,
+public name/join shapes and /proc paths, template capacity shape, and build-id
+size arithmetic. Their invocation guards are not thereby public. Comparison
+failure/operand lengths, error and invalid-UTF8 guards, selected captured PC,
+module/frame/unit/path, cache-miss selection and metadata provenance remain
+unclassified. The23 recorded contexts and conservative executable-address
+indirect cover are not an exhaustive source reachability certificate.
+
+No admitted same-public witness pair exhibiting different diagnostic events or
+text was established. No proof establishes witness independence of occurrence
+or content either. Honest-run reachability and witness dependence remain open.
+The passing adapter/axioms targets61197/61198 do not close the gap; final endpoint
+replay61199 failed and its corrected source is uncompiled. V178/V181 remain
+suspended. Public-size allocation failure is already under retained runtime/
+allocator primitive adequacy under rdea-1, with explicit failure/post-world
+branches; it does not prove public invocation or allocator outcome independence
+given earlier private state. V268–V270 do not cover this entire diagnostic cone.
+
+Evidence: LOG D159/D348/D399/D410/D414, recount7/D348.md, candidate
+`evidence/pv-rdeac-20261028/REPORT.md` and `diagnostic-provenance.json`, pinned
+b3p6 `resume7/RESIDUALS.md`, and recount8/CORRECTIONS8.md. The privacy lead and
+owner resolve the representation/contract choice; deployed verifier/client
+association remains proof work. The capped T is unchanged.
+
+K-1 and K-2 are evidence corrections, not owner trust-list choices. Exact KMX
+patches and matched failing controls are required for copy-dependent Kani
+credit; function-pointer forms stay quarantined. Historical three-row KMX
+re-credit in D365 does not override deployed-source suspensions. Recount8
+accepts22 of23 claimed restoration packets and rejects V213: its only binding
+compile41466 is void under ruling(t), and final import audits did not recompile
+it. V178/V181 and the remaining native-instance rows stay suspended. These
+results preserve their model/source theorems and do not remove endpoint
+premises. The compiler, runtime, E1/E2, real RunJoin and L1/L2/L3 boundaries remain.
 
 ## Decision: prover timing evidence on a continuously throttled build host (LOG D359, 2026-10-28)
 
@@ -205,9 +249,7 @@ shipped (ratio 0.998), withdrawal 13.90 s vs 13.85 s (ratio 1.004). The host has
 third of its uptime and on every pair in this window. Evidence: codex/pv-gate6-20261028,
 evidence/pv-gate6-20261028/README.md and comparison.json (per-pair thermal counters).
 
-**Options.** (A) Accept paired, alternating, throttled runs as the timing evidence: throttling only
-lowers the clock, so a throttled median is an upper bound on the unthrottled time (13.9 s is under
-15 s), and pairing under the same throttling makes the ratio a fair comparison. (B) Restore the
+**Options.** (A) Accept paired, alternating, throttled runs as the timing evidence: the measured throttled medians are under15 s and the paired ratios are near1. Treating these data as sufficient would amend the evidence acceptance rule; the samples do not prove a universal unthrottled upper bound or eliminate frequency/order effects from the ratio. (B) Restore the
 host's cooling (or use another x86_64 host with the same toolchain) and repeat the window until ten
 unthrottled pairs exist. (C) Keep the gate undecided.
 
@@ -218,27 +260,23 @@ not change the pre-registered criterion itself; this is the owner's call.
 **Unblocks.** The prover candidate's adoption gates (stage A already passes: three ELF pins, pinned
 client, fixtures, 1,000/1,000 differential).
 
-**Update (LOG D367, 2026-10-28): the coverage under option (A) is now proved exactly.** On the
+**Coverage update (LOG D367): the zero-change domain option (A) has source-level coverage.** On the
 canonical preparation route (snapshot codec, then the frozen outer wrapper, then the inner compiler),
 the universal V152-V154 honest-family theorem covers exactly the admitted pairs that route prepares;
 every successful preparation yields an honest input with no remaining admission hypothesis, and
 positive change is necessary for both transfers and withdrawals
 (PV_RunJoin_CanonicalHonest31.transfer/withdrawal; PV_RunJoin_CanonicalCoverage31.transfer_iff/
 withdrawal_iff; codex/pv-runjoin-20261026, evidence/pv-runjoin31-20261028/OWNER-COVERAGE.md). Under
-option (A) the privacy claim's honest-user domain is therefore exactly "spends the shipped client
+the zero-change domain option (A), the proposed privacy claim's honest-user domain is therefore exactly "spends the shipped client
 prepares", with zero-change spends of either kind outside it. The decision itself is still the
 owner's.
 
-## Pending (LOG D371, 2026-10-28): noncanonical witness limbs accepted by the compiler, then rejected by the prover
+## Resolved domain finding (LOG D371/D375): direct library noncanonical limbs
 
-A recipient owner-key limb written as raw P (the same field element as 0) is accepted by the frozen
-forest compiler and later makes the shipped prover fail with Err(Semantic); the canonically written
-twin succeeds (codex/pv-l2c-20261028, evidence/pv-l2c-20261028/resume-d369/D370-FINDING.md). A job is
-tracing whether the shipped client's input decoders can ever pass such a limb through. If they always
-canonicalise or reject, this is outside the honest route and no decision is needed. If not, the
-options will be (A) reject or canonicalise noncanonical limbs at decode, which changes frozen client
-code and its gates, or (B) restrict the privacy claim's honest domain to canonical inputs. The lead's
-recommendation will follow the trace.
+The raw recipient-key limb P versus0 finding is retained for direct library
+callers. The shipped JSON planner trace excludes that pair as described below;
+this is no longer a pending owner choice. The actual native caller/domain and
+observer coupling still belong to the open RunJoin proof.
 
 **Resolved (LOG D375, 2026-10-28): the noncanonical-limb finding is outside the shipped client's honest route.** The trace (codex/pv-l2c-20261028, evidence/pv-l2c-20261028/resume-d371/REPORT.md) found no unchecked path by which a noncanonical limb reaches the compiler through the shipped JSON request planner; decoder and generator bounds and canonical compiler columns are proved, and guard N3 composes on that canonical domain. No owner decision is needed for privacy. Residual, for information: the Rust library API accepts raw noncanonical limbs from direct callers that bypass the client's decoders, which makes such a spend fail (availability only).
 
@@ -260,7 +298,7 @@ classification.
 suspensions found only V242 differing by compiler lowering alone (same Rust source). The other
 resolved differences are real source differences in the standard library (23 rows) or a dependency
 (2 rows, zeroize 1.9.0), which are being re-verified against the shipped sources and do not need an
-owner decision. The question for V242 stands as written above; the lead recommends crediting
+owner decision. The fifth amendment labels tool-semantic transport as reclassification and leaves this separate Stream B compiler-cohort choice pending (D396). Recount8 keeps V242 OPEN in owner bucket(c). The question for V242 stands as written above; the lead recommends crediting
 lowering-only rows under the compiler-preservation obligation (row V370) with the compiler cohort
 recorded as a named boundary, because the alternative (re-establishing every native link on the
 1.94.1 toolchain itself) is not supported by the pinned extraction tools.
@@ -268,3 +306,34 @@ recorded as a named boundary, because the alternative (re-establishing every nat
 ### Pointer (D416, 2026-10-28): deployed devnet verifier is the historical program
 
 Stream A found that the devnet R1 verifier is immutable and runs the historical fb2fc048, not the proved release (devnet 63ad3e9c, default f8c0ec72), and has put the redeployment question to the owner. No credited privacy result depends on devnet runs. The privacy target is stated for the deployed system, though, so it cannot be claimed until the deployed verifier equals the pinned release ELF. Stream B has no separate decision to ask for here; this pointer only records that the privacy claim depends on the soundness lead's question.
+
+
+## Release checklist and nonvacuity update, recount8
+
+The release checklist requires the shipped prover to match its proved source,
+E1/E2 and real RunJoin, the proof-account client route, L1/L2/L3 evidence, final
+adoption/timing gates, a coherent dependency-closure replay and accepted axioms,
+and **deployed verifier equals the pinned release ELF**. D416 records the
+immutable historical devnet verifier fb2fc048 and matching Pool121f3e29; the
+release verifier pins are devnet63ad3e9c and defaultf8c0ec72. This is a deployment
+obligation and a pointer to Stream A's owner question, not a new privacy premise
+or a decision authorizing redeployment here. No credited privacy row was derived
+from historical devnet transaction behavior.
+
+D415 corrects D406–D408: JHx_Joint.source establishes historical-forest
+satisfiability only. Its phase/observer carriers differ from the headline;
+identity components alone are not a compiled retargeted joint witness. V045,
+V046 and V047 retain their existing status. The merged pv-2tnv partial result
+constructs a byte-derived transfer13 public statement, canonical matching
+witness, append/payment/lane associations in the headline carrier. Native
+handles/decoders and exact joint-wrapper association are still missing.
+FixturePdaRuntime remains deferred and no AGG16 consumer was staged. The owner
+need not approve a mathematical bridge that has not yet been proved.
+
+The full-withdrawal/zero-change domain, paired throttled timing, V242 compiler
+cohort, complete log/error observer, release features/CT decoding, N7 custody,
+SHA-NI route, DOITM implementation and client scope choices remain open. Client
+toolchain selection, D188 narrowing, failure-signal optionB and the capped T
+remain approved. O_EXCL atomicity, durable nonce-store fsync/directory persistence
+and process-state observation remain named proof/adequacy findings, with no new
+trust field silently adopted. Target not yet established.
