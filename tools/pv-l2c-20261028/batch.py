@@ -5,14 +5,18 @@ receipt per compiler invocation. Stops immediately on the first nonzero exit.
 from pathlib import Path
 import json,subprocess,hashlib,shlex,sys,re,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90'
-start=int(sys.argv[1]);names=sys.argv[2:];assert 42600<=start<42697 and names
+audit='--audit' in sys.argv
+args=[x for x in sys.argv[1:] if x!='--audit']
+start=int(args[0]);names=args[1:]
+assert (42697<=start<=42699 if audit else 42600<=start<42697) and names
+if audit:assert all(m in ['PV_L2C_CombinedAudit','PV_L2C_FixtureAudit','PV_L2C_FocusedReplay'] for m in names)
 old=[json.loads(p.read_text()) for p in E.glob('refusal-*.json')]
 if old:
  remaining=180-(datetime.datetime.now(datetime.timezone.utc)-max(datetime.datetime.fromisoformat(x['utc']) for x in old)).total_seconds()
  if remaining>0:print('WAIT',remaining,'seconds; no ID consumed');sys.exit(77)
 resolution=json.loads((E/'focused-resolution.json').read_text())['resolved'];sources=json.loads((E/'focused-project-sources.json').read_text());rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();spec=[]
 for idx,m in enumerate(names):
- a=start+idx;assert a<42697
+ a=start+idx;assert a<=42699 if audit else a<42697
  assert not (E/f'used-{a}.json').exists(),a
  if m in sources:
   body=sources[m];origin=resolution[m]
