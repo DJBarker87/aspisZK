@@ -245,3 +245,25 @@ checks, flat-map/sort/dedup and calls in order. The deterministic specialization
 into the extracted literal reference is a separate Lean proof obligation; body
 copy equality alone does not close it. `structural133.json` stays candidate until
 all named laws and same-input native finite-validation receipt are checked.
+
+### V229 complete selected callback packet
+
+35/100 resume Lean attempts charged, zero Kani. `PV_B3P_Closure133.row_law`
+compiled at36434, source0229c802f5, standard axioms. Seven native bodies are
+copied token-exactly, including schedule construction/error paths. The checked
+specialization covers127/136 schedule lengths and endpoint capacity, helper
+Option domains, counts-state correspondence, scalar bounds, endpoint membership,
+strict ordering, adjacent deduplication, and extracted literal/reference values.
+All261 other original-carrier callback fields remain unchanged (`Install133`).
+`structural133.py --check --finalize` checks current exact-source Lean receipts
+and the same-input native finite-validation receipt, and records V229 as closed
+at the selected callback/source/value scope under `structural (K-1 substitute)`.
+This is a structural source argument, not universal native machine equality.
+The std collection/sort/dedup value reading is explicit in the structural record;
+`Closure133.sorted_value` is algorithm-independent over ascending permutations.
+The endpoint, V165/V167 and all side-channel premises remain open. T unchanged.
+Two proof-revision label corrections are recorded separately; no old receipt
+was rewritten. Failed drafts remain without proof credit.
+
+Next row V243: remaining region/layout values, chunk flatten/take value law,
+native Vec composition and complete structural binding, then its carrier law.
