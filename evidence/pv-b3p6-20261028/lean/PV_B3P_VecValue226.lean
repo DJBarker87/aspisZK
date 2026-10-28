@@ -13,19 +13,39 @@ theorem extend_value (inst : core.clone.Clone U8) (v : alloc.vec.Vec U8) (s : Sl
     (hc : Slice.clone inst.clone s = .ok s) :
     ∃ out, alloc.vec.Vec.extend_from_slice inst v s = .ok out ∧ out.val = v.val ++ s.val := by
   unfold alloc.vec.Vec.extend_from_slice
-  rw [dif_pos hb]
-  simp only [hc]
-  exact ⟨_,rfl,rfl⟩
+  split
+  · split
+    · rename_i s' he
+      have hs : s' = s := Result.ok.inj (he.symm.trans hc)
+      cases hs
+      exact ⟨_,rfl,rfl⟩
+    · rename_i e he
+      rw [hc] at he
+      cases he
+    · rename_i he
+      rw [hc] at he
+      cases he
+  · contradiction
+
+theorem mapM_id (xs : List U8) : List.mapM (fun b : U8 => Result.ok b) xs = .ok xs := by
+  simp
 
 set_option backward.isDefEq.respectTransparency false in
 theorem u8_clone (s : Slice U8) : Slice.clone core.clone.CloneU8.clone s = .ok s := by
-  change Slice.clone (fun b : U8 => Result.ok b) s = .ok s
-  have hm : List.mapM (fun b : U8 => Result.ok b) s.val = .ok s.val := by simp
+  rcases s with ⟨xs,hxs⟩
+  change Slice.clone (fun b : U8 => Result.ok b) ⟨xs,hxs⟩ = .ok ⟨xs,hxs⟩
   unfold Slice.clone List.clone
-  simp only [hm,bind_tc_ok]
-  apply congrArg Result.ok
-  apply Subtype.ext
-  rfl
+  split
+  · rename_i ys he
+    have hy : ys = xs := Result.ok.inj (he.symm.trans (mapM_id xs))
+    cases hy
+    rfl
+  · rename_i e he
+    have bad := he.symm.trans (mapM_id xs)
+    cases bad
+  · rename_i he
+    have bad := he.symm.trans (mapM_id xs)
+    cases bad
 
 theorem u8_extend (v : alloc.vec.Vec U8) (s : Slice U8)
     (hb : v.val.length + s.val.length ≤ Usize.max) :
@@ -40,6 +60,7 @@ theorem extend_failure (v : alloc.vec.Vec U8) (s : Slice U8)
 
 #print axioms push_value
 #print axioms extend_value
+#print axioms mapM_id
 #print axioms u8_clone
 #print axioms u8_extend
 #print axioms extend_failure

@@ -1,6 +1,6 @@
 import PV_B3P_GuardedWords226V3
 namespace PV_B3P_AppendFields226
-open Aeneas Aeneas.Std PV_B3P_RustResult PV_B3P_ByteLayout226V3
+open Aeneas Aeneas.Std PV_B3P_226V3 PV_B3P_RustResult PV_B3P_ByteLayout226V3
 set_option autoImplicit false
 abbrev E := PV_B3P_GuardedWords226V3.E
 
