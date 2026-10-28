@@ -24,7 +24,7 @@ theorem records_public (i : Input)
   · intro n hn;exact hp.emptyCanon ⟨n,hn⟩
 #print axioms records_public
 
-/-- Exact raw returned compiler payload, not merely its field projection. -/
+/- Exact raw returned compiler payload, not merely its field projection. -/
 include K in
 theorem source (i : Input)
     (success : run i = ok (.Ok i.compiled))
