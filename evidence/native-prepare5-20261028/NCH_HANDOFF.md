@@ -111,3 +111,14 @@ Vec heap byte-write contract while retaining the actual Vec body, with the
 required pointer-shape controls (proposal only, not run); obtain an approved
 native semantic-observer representation. Reuse all checked objects and do not
 rerun the timed-out aggregate shapes unchanged. Commits remain local; no push.
+
+## Capacity-error recovery 1
+
+Recovered local commit `0ca739c0dc` and reconciled all76 unique attempt
+receipts: Kani70/70 configured invocations, Lean6/60. Verified all76 receipt
+hashes against the final inventory and every successful Lean source against
+its recorded hash. No new prover was launched and no unchanged regression
+was repeated. Prior host postflight is reused, not newly reproduced.
+`NCH_RESUME1.json` records this evidence-only recovery. The member-by-member
+native obligations above remain unchanged; no independent Lean-only
+obligation is identified. All work remains committed locally; no push.
