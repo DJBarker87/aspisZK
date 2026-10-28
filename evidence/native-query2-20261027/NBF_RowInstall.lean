@@ -42,7 +42,7 @@ theorem body (ops : Ops) (v : alloc.vec.Vec Q) (q : Q) (next : Usize)
     iter (by omega))
  subst o
  obtain ⟨m,hm,hval⟩ := WP.spec_imp_exists
-   (Array.index_usize_spec basis iter.start (by change iter.start.val<256;omega))
+   (Array.index_usize_spec basis iter.start (by change iter.start.val < basis.val.length;rw [basis.property];change iter.start.val<256;omega))
  obtain ⟨y,hpush,hinv,frame⟩ := NBF_Read.push (Port3_RowsInstall.toBW b)
    iter.start (Port3_RowsInstall.toK q) m x inv read hq (hb iter.start active m hm)
  have push : Port3_NativeRowFrame.push b iter.start q m=
@@ -54,8 +54,6 @@ theorem body (ops : Ops) (v : alloc.vec.Vec Q) (q : Q) (next : Usize)
  have hw' : core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q)
    v.deref iter.start=ok word := hw
  refine ⟨iter1,S7Kani2OwnedRowRefinement.makeRow y,?_,hs,he,hinv⟩
- simp only [verifier.accumulate_batched_with_node_loop1.body,hr,install,hm,push,
-   hw',lift,bind_tc_ok]
- rfl
+ simp [verifier.accumulate_batched_with_node_loop1.body,hr,install,hm,push,hw',lift]
 #print axioms body
 end NBF_RowInstall
