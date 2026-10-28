@@ -97,3 +97,24 @@ Prepared provenance, P6 and accepted-run boundaries; their statements do not
 establish these eight native interfaces. Merely importing them cannot prove
 exact arbitrary-error native execution correspondence. No XRn_Join kit,
 arbitrary whole-child stub or substituted headline is used here.
+
+## Capacity-recovery continuation
+
+The L166 ruling already resolves the observation: successful values and ordered
+rejected prefixes are retained; exact error-enum identity is not required.
+The previous pending interpretation question is therefore not a stage gate.
+The exact-error obstruction above remains valid at its stronger observation.
+
+`NCE_FirstFailure` now constructs the first failed TREE observation from the
+existing cohort's actual evaluations, carrying each prior return into its next
+child. `sequence_observation` identifies its log, success Boolean and final
+scratch with the existing sequence on EVERY outcome. `batch_observation`
+instantiates exactly three chronological children for arbitrary batch and
+initial scratch. `stop_here` retains the rejecting child's reads and leaves
+an arbitrary suffix unvisited. This is the model/control part of the requested
+skeleton; it supplies NONE of the eight native associations. Stage 1 remains
+incomplete. No new native interpreter or execution-join stand-in was added.
+
+L004 passed: source, dependency/Aeneas pins, scoped resource fields and all
+five standard-only axiom reports are in `NCE_L004/receipt.json`. Budget after
+recovery: 4/60 Lean, 0/70 Kani (also within the earlier 120/50 ceiling).
