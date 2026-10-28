@@ -11,7 +11,7 @@ def request {K : Type} (isBoolean : K → Bool) (point : List K) : Request :=
 
 theorem public_layout {K : Type} (isBoolean : K → Bool) (point : List K) :
     publicRequest (request isBoolean point)=.allocate (24*capacity isBoolean point) 8 := by
-  simp only [publicRequest,request,shape,alignmentWord,ite_true,Nat.mul_comm]
+  simp only [publicRequest,request,shape,alignmentWord,ite_true,Nat.mul_comm] <;> rfl
 
 theorem padded : (24:Nat)%8=0 := rfl
 
