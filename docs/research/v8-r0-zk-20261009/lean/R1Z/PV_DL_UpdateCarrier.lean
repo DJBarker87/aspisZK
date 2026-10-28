@@ -16,9 +16,11 @@ theorem block_decoding (N : Type) (blocks : List (List U8))
     (blocks.map (fun block => (⟨PV_DL_StorageBuild.build 6 (fun i => block[i]!)⟩ :
       GenericArray U8 N (Storage U8 6)))).flatMap (fun block => flatten 6 block.data)=
       blocks.flatMap id := by
+  revert h
   induction blocks with
-  | nil => rfl
+  | nil => intro h;rfl
   | cons block tail ih =>
+    intro h
     simp only [List.map_cons,List.flatMap_cons]
     rw [PV_DL_StorageBuild.reconstruct 6 block (h block (by simp only [List.mem_cons_self]))]
     rw [ih (fun b hb => h b (by simp only [List.mem_cons];exact Or.inr hb))]
