@@ -1,0 +1,42 @@
+#[cfg(ncp_for)]
+#[kani::proof]
+fn NCP_for_invariant(){let a:[u8;4]=kani::any();let mut count:usize=0;
+ #[kani::loop_invariant(count == kani::index && count <= 4)]
+ for _x in a.iter().enumerate(){count+=1;}
+ assert_eq!(count,4);
+}
+#[cfg(ncp_for)]
+#[kani::proof]
+fn NCP_for_invariant_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
+ #[kani::loop_invariant(count == kani::index && count <= 4)]
+ for _x in a.iter().enumerate(){count+=1;}
+ assert_eq!(count,3);
+}
+#[cfg(ncp_while)]
+#[kani::proof]
+fn NCP_while_invariant(){let mut i=0usize;
+ #[kani::loop_invariant(i<=4)]
+ while i<4{i+=1;}
+ assert_eq!(i,4);
+}
+#[cfg(ncp_while)]
+#[kani::proof]
+fn NCP_while_invariant_negative(){let mut i=0usize;
+ #[kani::loop_invariant(i<=4)]
+ while i<4{i+=1;}
+ assert_eq!(i,3);
+}
+#[cfg(ncp_while)]
+#[kani::proof]
+fn NCP_while_bad_step(){let mut i=0usize;
+ #[kani::loop_invariant(i<=4)]
+ while i<4{i+=2;}
+ assert_eq!(i,4);
+}
+#[cfg(ncp_while)]
+#[kani::proof]
+fn NCP_while_weak(){let mut i=0usize;
+ #[kani::loop_invariant(i<=5)]
+ while i<4{i+=1;}
+ assert_eq!(i,4);
+}

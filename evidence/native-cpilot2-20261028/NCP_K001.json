@@ -1,0 +1,51 @@
+{
+  "attempt": "NCP_K001",
+  "kind": "kani",
+  "module": "NCP_controls::NCP_slice_inverted_check",
+  "sources": [
+    "NCP_src/Cargo.lock",
+    "NCP_KMX_copy_stubs.patch",
+    "NCP_src/crates/aspis-statement/src/lib.rs",
+    "NCP_src/crates/aspis-statement/src/NCP_controls.rs",
+    "NCP_src/crates/aspis-statement/src/KMX_stubs.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_src/crates/aspis-statement/Cargo.toml",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NCP_controls::NCP_slice_inverted_check",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "source_revision": "86fc5f0c2b73cf4afd20592ac8634251b30fe188",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_target",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387"
+  },
+  "expected_time": "Optimized compilation, then NCP_controls::NCP_slice_inverted_check solver gate; no field multiplication or protocol whole-buffer loop"
+}

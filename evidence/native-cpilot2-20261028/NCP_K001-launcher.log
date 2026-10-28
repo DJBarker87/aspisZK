@@ -1,0 +1,51 @@
+{"attempt": "NCP_K001", "exit_status": 1, "wall_seconds": 8.833106036996469, "peak_rss_kib": "532748", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+ name
+  --> crates/aspis-statement/src/NCP_controls.rs:39:4
+   |
+39 | fn NCP_vec_real(){let x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_real`
+
+warning: function `NCP_vec_stub` should have a snake case name
+  --> crates/aspis-statement/src/NCP_controls.rs:42:4
+   |
+42 | fn NCP_vec_stub(){let x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_stub`
+
+warning: function `NCP_vec_frame_check` should have a snake case name
+  --> crates/aspis-statement/src/NCP_controls.rs:44:4
+   |
+44 | fn NCP_vec_frame_check(){let mut a=[0u8];let mut b=[0u8];let _=NCP_vec_frame(&mut a,&mut b);}
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_check`
+
+warning: function `NCP_vec_frame_real` should have a snake case name
+  --> crates/aspis-statement/src/NCP_controls.rs:46:4
+   |
+46 | fn NCP_vec_frame_real(){let mut a=[0u8];let mut b=[0u8];let v=NCP_vec_frame(&mut a,&mut b).unwrap();assert!(a[0]==1 && b[0]==2 && v....
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_real`
+
+    Finished `dev` profile [optimized] target(s) in 8.31s
+Checking harness NCP_controls::NCP_slice_inverted_check...
+
+VERIFICATION RESULT:
+ ** 1 of 107 failed (1 unreachable)
+Failed Checks: |r: &Result<u8,u8>| *r != Ok(input[0])
+ File: "crates/aspis-statement/src/NCP_controls.rs", line 3, in NCP_controls::NCP_slice_inverted::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.07150961s
+
+Manual Harness Summary:
+Verification failed for - NCP_controls::NCP_slice_inverted_check
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rbb105fc91394415aaf2d80b49c8cca47.scope; invocation ID: 1296cc33305f434bb66cfadc782d7b9d

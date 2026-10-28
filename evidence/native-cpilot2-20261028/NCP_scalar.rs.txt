@@ -1,0 +1,31 @@
+use aspis_core::field::M31;
+use crate::poseidon2::Digest;
+pub fn NCP_canon(d:&Digest)->bool {d[0].0<2147483647&&d[1].0<2147483647&&d[2].0<2147483647&&d[3].0<2147483647&&d[4].0<2147483647&&d[5].0<2147483647&&d[6].0<2147483647&&d[7].0<2147483647}
+pub fn NCP_canon_prefix(d:&Digest,n:usize)->bool {(n<=0||d[0].0<2147483647)&&(n<=1||d[1].0<2147483647)&&(n<=2||d[2].0<2147483647)&&(n<=3||d[3].0<2147483647)&&(n<=4||d[4].0<2147483647)&&(n<=5||d[5].0<2147483647)&&(n<=6||d[6].0<2147483647)&&(n<=7||d[7].0<2147483647)}
+fn NCP_any_digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
+#[kani::proof_for_contract(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_canon_contract(){let d=NCP_any_digest();let _=crate::pool_v1::pair_tree_profile::digest_is_canonical(&d);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_canon_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+fn NCP_canon_caller(){let d=NCP_any_digest();assert_eq!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+fn NCP_canon_caller_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}

@@ -1,0 +1,113 @@
+NCP_G042 0 0.16475000698119402 100824
+NCP_K042 0 7.900320064043626 529152
+l(&b),NCP_ref_de...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_decode_caller_negative`
+
+warning: function `NCP_digest_inverted` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:100:4
+    |
+100 | fn NCP_digest_inverted(b:&[u8;32])->Result<Digest,AtomicStatementError>{crate::atomic_statement::decode_digest_canonical(b)}
+    |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_inverted`
+
+warning: function `NCP_digest_weak` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:102:4
+    |
+102 | fn NCP_digest_weak(b:&[u8;32])->Result<Digest,AtomicStatementError>{crate::atomic_statement::decode_digest_canonical(b)}
+    |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_weak`
+
+warning: function `NCP_digest_frame` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:106:4
+    |
+106 | fn NCP_digest_frame(a:&mut [u8],z:&mut [u8],b:&[u8;32])->Result<Digest,AtomicStatementError>{a[0]=1;z[0]=2;crate::atomic_statement:...
+    |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_frame`
+
+warning: function `NCP_digest_inverted_check` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:115:4
+    |
+115 | fn NCP_digest_inverted_check(){let b:[u8;32]=kani::any();let _=NCP_digest_inverted(&b);}
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_inverted_check`
+
+warning: function `NCP_digest_weak_check` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:124:4
+    |
+124 | fn NCP_digest_weak_check(){let b:[u8;32]=kani::any();let _=NCP_digest_weak(&b);}
+    |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_weak_check`
+
+warning: function `NCP_digest_real` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:133:4
+    |
+133 | fn NCP_digest_real(){let b:[u8;32]=kani::any();assert_eq!(NCP_digest_weak(&b),NCP_ref_decode(&b));}
+    |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_real`
+
+warning: function `NCP_digest_stub` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:143:4
+    |
+143 | fn NCP_digest_stub(){let b:[u8;32]=kani::any();assert_eq!(NCP_digest_weak(&b),NCP_ref_decode(&b));}
+    |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_stub`
+
+warning: function `NCP_digest_frame_check` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:152:4
+    |
+152 | fn NCP_digest_frame_check(){let b:[u8;32]=kani::any();let mut a=[0u8];let mut z=[0u8];let _=NCP_digest_frame(&mut a,&mut z,&b);}
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_frame_check`
+
+warning: function `NCP_digest_frame_real` should have a snake case name
+   --> crates/aspis-statement/src/NCP_digest.rs:161:4
+    |
+161 | fn NCP_digest_frame_real(){let b:[u8;32]=kani::any();let mut a=[0u8];let mut z=[0u8];assert_eq!(NCP_digest_frame(&mut a,&mut z,&b),...
+    |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest_frame_real`
+
+warning: function `NCP_canon` should have a snake case name
+ --> crates/aspis-statement/src/NCP_scalar.rs:3:8
+  |
+3 | pub fn NCP_canon(d:&Digest)->bool {d[0].0<2147483647&&d[1].0<2147483647&&d[2].0<2147483647&&d[3].0<2147483647&&d[4].0<2147483647&&d[5...
+  |        ^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon`
+
+warning: function `NCP_canon_prefix` should have a snake case name
+ --> crates/aspis-statement/src/NCP_scalar.rs:4:8
+  |
+4 | pub fn NCP_canon_prefix(d:&Digest,n:usize)->bool {(n<=0||d[0].0<2147483647)&&(n<=1||d[1].0<2147483647)&&(n<=2||d[2].0<2147483647)&&(n...
+  |        ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_prefix`
+
+warning: function `NCP_any_digest` should have a snake case name
+ --> crates/aspis-statement/src/NCP_scalar.rs:5:4
+  |
+5 | fn NCP_any_digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M3...
+  |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_any_digest`
+
+warning: function `NCP_canon_contract` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:11:4
+   |
+11 | fn NCP_canon_contract(){let d=NCP_any_digest();let _=crate::pool_v1::pair_tree_profile::digest_is_canonical(&d);}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_contract`
+
+warning: function `NCP_canon_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:17:4
+   |
+17 | fn NCP_canon_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_negative`
+
+warning: function `NCP_canon_caller` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:24:4
+   |
+24 | fn NCP_canon_caller(){let d=NCP_any_digest();assert_eq!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller`
+
+warning: function `NCP_canon_caller_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:31:4
+   |
+31 | fn NCP_canon_caller_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_cano...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller_negative`
+
+    Finished `dev` profile [optimized] target(s) in 4.16s
+Checking harness NCP_scalar::NCP_canon_contract...
+
+VERIFICATION RESULT:
+ ** 0 of 204 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.1074998s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

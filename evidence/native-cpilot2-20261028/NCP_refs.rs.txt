@@ -1,0 +1,4 @@
+use crate::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1;
+use crate::poseidon2::Digest;
+pub fn NCP_exact_ref<const N:usize>(bytes:&[u8])->Result<[u8;N],PoolV1PairVerifierTransportErrorV1>{bytes.try_into().map_err(|_|PoolV1PairVerifierTransportErrorV1::WrongLength)}
+pub fn NCP_canon(d:&Digest)->bool {d[0].0<2147483647&&d[1].0<2147483647&&d[2].0<2147483647&&d[3].0<2147483647&&d[4].0<2147483647&&d[5].0<2147483647&&d[6].0<2147483647&&d[7].0<2147483647}

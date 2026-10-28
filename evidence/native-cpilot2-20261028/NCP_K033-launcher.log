@@ -1,0 +1,19 @@
+{"attempt": "NCP_K033", "exit_status": 1, "wall_seconds": 4.689122084993869, "peak_rss_kib": "524020", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+is_core-ed4da4b0d86386c7.rmeta --extern aspis_r0_block_writer_copies=/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_block_writer_copies-141b36e291450edc.rmeta --extern aspis_r0_poseidon_copy=/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_poseidon_copy-e13dfd6ca6b71ce3.rmeta --extern aspis_r0_writer_copies=/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_r0_writer_copies-339b825f6cee4017.rmeta '-Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness NCP_loops::NCP_for_invariant_negative --exact -Z unstable-options -Z stubbing -Z function-contracts -Z loop-contracts' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' --cfg ncp_loops --cfg ncp_for -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)
+error: Failed to compile `aspis_statement` due to an internal compiler error.: error: internal compiler error: Kani unexpectedly panicked at panicked at kani-compiler/src/kani_middle/transform/loop_contracts.rs:394:44:
+                                called `Option::unwrap()` on a `None` value.
+
+
+
+Running as unit: run-r0ad385b2ccd449fb93f781e50e8e6308.scope; invocation ID: b1a367f7aea74667b608dfada773b7ba

@@ -1,0 +1,52 @@
+{"attempt": "NCP_K048", "exit_status": 0, "wall_seconds": 5.382725061965175, "peak_rss_kib": "648560", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_contract`
+
+warning: function `NCP_canon_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:17:4
+   |
+17 | fn NCP_canon_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_negative`
+
+warning: function `NCP_canon_caller` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:24:4
+   |
+24 | fn NCP_canon_caller(){let d=NCP_any_digest();assert_eq!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller`
+
+warning: function `NCP_canon_caller_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:31:4
+   |
+31 | fn NCP_canon_caller_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_cano...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller_negative`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.13s
+Checking harness pool_v1::pair_terminal::NCP_after::NCP_exact8_caller...
+
+VERIFICATION RESULT:
+ ** 0 of 130 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.29161337s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r308beab9592340df843605098db63c96.scope; invocation ID: 674ea43079784e6093186465b43925a8

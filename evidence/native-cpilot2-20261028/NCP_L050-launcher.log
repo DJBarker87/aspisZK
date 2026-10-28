@@ -1,0 +1,35 @@
+{"attempt": "NCP_L050", "exit_status": 0, "wall_seconds": 1.9209850669139996, "peak_rss_kib": "5399380", "swaps": "0", "print_axioms": []}
+AspisR1TerminalDecoder.core.result.Result.map_err {T E F O : Type}
+  (opsfunctionFnOnceOTupleEFInst : core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) :
+  Result (core.result.Result T F)
+def AspisR1TerminalDecoder.core.result.Result.map_err : {T E F O : Type} →
+  core.ops.function.FnOnce O E F → core.result.Result T E → O → Result (core.result.Result T F) :=
+fun {T E F O} opsfunctionFnOnceOTupleEFInst self op =>
+  match self with
+  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+  | core.result.Result.Err e => do
+    let t ← opsfunctionFnOnceOTupleEFInst.call_once op e
+    ok (core.result.Result.Err t)
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.exact :
+...
+AspisR1TerminalDecoder.core.result.Result.map_err {T E F O : Type}
+  (opsfunctionFnOnceOTupleEFInst : core.ops.function.FnOnce O E F) (self : core.result.Result T E) (op : O) :
+  Result (core.result.Result T F)
+def AspisR1TerminalDecoder.core.result.Result.map_err : {T E F O : Type} →
+  core.ops.function.FnOnce O E F → core.result.Result T E → O → Result (core.result.Result T F) :=
+fun {T E F O} opsfunctionFnOnceOTupleEFInst self op =>
+  match self with
+  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+  | core.result.Result.Err e => do
+    let t ← opsfunctionFnOnceOTupleEFInst.call_once op e
+    ok (core.result.Result.Err t)
+def AspisR1TerminalDecoder.pool_v1.pair_terminal.exact : (N : Usize) →
+  Slice U8 → Result (core.result.Result (Std.Array U8 N) pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :=
+fun N bytes => do
+  let r ← core.array.TryFromArrayCopySlice.try_from N core.marker.CopyU8 bytes
+  core.result.Result.map_err
+      (pool_v1.pair_terminal.exact.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairVerifierTransportErrorV1
+        N)
+      r ()
+
+Running as unit: run-rf64c9a457fbb437085e5c387af18ec92.scope; invocation ID: 554b3412f7cf4087a6efcb41e0f42ce4

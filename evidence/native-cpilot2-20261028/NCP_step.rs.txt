@@ -1,0 +1,17 @@
+
+fn NCP_after_step(afterstate:&PoolV1PairVerifiedAfterstateV1,mut level:usize)->Result<usize,PoolV1PairVerifierTransportErrorV1>{
+ if !crate::pool_v1::pair_tree_profile::digest_is_canonical(&afterstate.next_frontier[level]) {return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);}
+ level+=1;Ok(level)
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+#[kani::unwind(35)]
+fn NCP_step_positive(){let afterstate:PoolV1PairVerifiedAfterstateV1=kani::any();let level:usize=kani::any();kani::assume(level<20);let expected=if crate::NCP_scalar::NCP_canon(&afterstate.next_frontier[level]){Ok(level+1)}else{Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)};assert_eq!(NCP_after_step(&afterstate,level),expected);}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+#[kani::unwind(35)]
+fn NCP_step_negative(){let afterstate:PoolV1PairVerifiedAfterstateV1=kani::any();let level:usize=kani::any();kani::assume(level<20);let expected=if crate::NCP_scalar::NCP_canon(&afterstate.next_frontier[level]){Ok(level+1)}else{Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)};assert_ne!(NCP_after_step(&afterstate,level),expected);}
