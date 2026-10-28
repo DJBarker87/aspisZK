@@ -5,18 +5,18 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_SemanticCopy40
 open Aeneas Aeneas.Std Result ProverRwFull
 variable [ExternalTypes] (ops : ExternalFuns)
-local instance : ExternalFuns := ProverRwP6BodyCandidate.selected ops
 
 /-- A message-free or uncompressed semantic row retains its five-byte header
 and exact payload. The source row-shape law is supplied separately. -/
 theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row tag : U8)
-    (at1 size : Usize) (shape : r1_wire.row_shape row=.ok (some (tag,size)))
+    (at1 size : Usize) (shape : @r1_wire.row_shape _ (ProverRwP6BodyCandidate.selected ops) row=.ok (some (tag,size)))
     (small : row.val<14) (bound : at1.val+5+size.val≤logical.length)
     (room : out.length+5+size.val≤Usize.max) :
-    ∃ next, host_compact.compact_semantic_row logical out row at1=
+    ∃ next, @host_compact.compact_semantic_row _ (ProverRwP6BodyCandidate.selected ops) logical out row at1=
       .ok (.Ok (Usize.wrapping_add (Usize.wrapping_add at1 5#usize) size),next) ∧
       next.val=out.val ++ (logical.val.drop at1.val).take 5 ++
         (logical.val.drop (at1.val+5)).take size.val := by
+  letI : ExternalFuns := ProverRwP6BodyCandidate.selected ops
   have cap : logical.length≤Usize.max := logical.property
   have inc : (Usize.wrapping_add at1 5#usize).val=at1.val+5 :=
     PV_RunJoin_CompactStep39.offset at1 5#usize (by change at1.val+5≤Usize.max;omega)
