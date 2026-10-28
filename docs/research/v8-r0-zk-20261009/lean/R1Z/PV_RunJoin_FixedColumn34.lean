@@ -18,6 +18,7 @@ theorem loop_source (values : Slice Q) (out : Array Q 1024#usize) (i : Usize) :
 are irrelevant because every cell is overwritten before return. -/
 theorem loop_exact (input out : Array Q 1024#usize) :
     prover.fixed_k_column_loop (Array.to_slice input) out 0#usize = .ok input := by
+  letI : Inhabited Q := ⟨input.val[0]' (by rw [input.property]; decide)⟩
   rw [loop_source]
   obtain ⟨a,ha,hcopy⟩ := PV_CBL_ArrayCopied.total_copied (Array.to_slice input)
     (by simp only [Array.to_slice,input.property]; rfl) out 0#usize (by decide)
