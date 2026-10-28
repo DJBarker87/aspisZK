@@ -13,7 +13,9 @@ theorem chunk_width (limbs : Array U32 8#usize) :
   exact (core.num.U32.to_le_bytes a).property
 
 theorem chunk_count (limbs : Array U32 8#usize) : (chunks limbs).length=8 := by
-  simpa only [chunks,List.length_map] using limbs.property
+  have h := limbs.property
+  change limbs.val.length=8 at h
+  simpa only [chunks,List.length_map] using h
 
 theorem total_width (cs : List (List U8)) (h : ∀ c ∈ cs, c.length=4) :
     cs.flatten.length=cs.length*4 := by
@@ -34,7 +36,7 @@ def nativeBytes (limbs : Array U32 8#usize) : List U8 :=
 theorem source_complete (limbs : Array U32 8#usize) :
     nativeBytes limbs = (chunks limbs).flatten := by
   have h := copies_result (chunks limbs) [] (List.replicate 32 (0#u8))
-  simpa only [List.nil_append,List.length_nil,bytes_length,List.drop_replicate,
+  simpa only [nativeBytes,List.nil_append,List.length_nil,bytes_length,List.drop_replicate,
     Nat.sub_self,List.replicate_zero,List.append_nil] using h
 
 /-- The zip covers eight four-byte chunks, preserving an arbitrary external
