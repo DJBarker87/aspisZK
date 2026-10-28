@@ -1,6 +1,7 @@
 import R1Z.PV_W_StructuredBinds
 import R1Z.PV_W_RecursiveLaws
 import R1Z.PV_W_R_PrivateSaltStep
+open Aeneas.Std.ControlFlow
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_R_PrivateSaltsBody

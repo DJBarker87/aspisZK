@@ -23,6 +23,10 @@ CONFIG=[
  ('prover.audit_masks_loop0.body','AuditMasksBody0'),
  ('prover.audit_masks_loop1.body','AuditMasksBody1'),
  ('prover.inactive_sum_k_loop.body','InactiveSumBody'),
+ ('prover.opening_inactive_loop.body','OpeningInactiveBody'),
+ ('prover.opening_batch_loop.body','OpeningBatchBody'),
+ ('prover.fold_cell','FoldCell'),
+ ('prover.fold_loop.body','FoldBody'),
  ('prover.derive_private_salts','PrivateSalts'),
  ('prover.prepare_opening','PrepareOpening'),
  ('prover.finish_opening','FinishOpening'),
@@ -121,6 +125,7 @@ for name,short in CONFIG:
   kind=next((t for n,t in callbacks if n==a),None)
   actualargs.append('(source'+kind+' ops '+a+')' if kind else a)
  pre='import R1Z.PV_W_StructuredBinds\nimport R1Z.PV_W_RecursiveLaws\n'+''.join('import R1Z.PV_W_R_'+x+'\n' for x in sorted(imports))
+ pre+=('open Aeneas.Std.ControlFlow\n' if re.search(r'\b(?:cont|done)\b',body) else '')
  out=pre+'set_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_W_R_'+short+'\nopen Aeneas Aeneas.Std ProverRwFull PV_W_ReachedEffects PV_W_Callbacks\nvariable [ExternalTypes]\n\n'
  out+='def program\n  '+h+' :\n  P '+result+' := do\n'+translated+'\n\n'
  out+='theorem erase_program (ops : ExternalFuns)\n  '+h+' :\n  erase ops (program '+' '.join(explicit)+') =\n    @'+name+(' ' if short=='PreReservedReserve' else ' _ ops ')+' '.join(actualargs)+' := by\n  unfold program '+name+'\n'+pr+'\n\n#print axioms erase_program\n'
