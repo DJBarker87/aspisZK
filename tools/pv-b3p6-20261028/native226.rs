@@ -172,3 +172,75 @@ fn both_variants() { check(arbitrary_source(kani::any())); }
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 fn both_variants_wrong_byte() { check_controlled(arbitrary_source(kani::any()),true); }
+
+#[cfg(test)]
+#[path="owned226.rs"]
+mod owned226;
+#[cfg(test)]
+fn finite_structural(source: Source) {
+ let actual=match source {
+  Source::Transfer(p,t)=>Public::Transfer(&p,&t).public_bytes(),
+  Source::Withdrawal(p,t)=>Public::Withdrawal(&p,&t).public_bytes(),
+ };
+ let copy=match source {
+  Source::Transfer(p,t)=>owned226::Public::Transfer(&p,&t).public_bytes(),
+  Source::Withdrawal(p,t)=>owned226::Public::Withdrawal(&p,&t).public_bytes(),
+ };
+ let reference=public_bytes(source).map(|(chunks,n)|chunks.into_iter().flatten().take(n).collect::<Vec<_>>());
+ assert_eq!(actual,copy);
+ assert_eq!(copy,reference);
+}
+#[cfg(test)]
+fn mutated(source: Source,region: usize,index: usize,value: u32) -> Source {
+ match source {
+  Source::Transfer(mut p,mut t)=> {
+   match region {
+    0=>p.anchor_root[index]=M31(value),1=>p.nullifier[index]=M31(value),
+    2=>p.asset_id=M31(value),3=>p.recipient_commitment[index]=M31(value),
+    4=>p.change_commitment[index]=M31(value),
+    6=>t.live_snapshot.frontier[index/8][index%8]=M31(value),
+    7=>t.candidate_afterstate.next_root[index]=M31(value),
+    8=>t.candidate_afterstate.next_frontier[index/8][index%8]=M31(value),
+    _=>panic!("invalid transfer region"),
+   }
+   Source::Transfer(p,t)
+  },
+  Source::Withdrawal(mut p,mut t)=> {
+   match region {
+    0=>p.anchor_root[index]=M31(value),1=>p.nullifier[index]=M31(value),
+    2=>p.asset_id=M31(value),4=>p.change_commitment[index]=M31(value),5=>p.amount=value,
+    6=>t.live_snapshot.frontier[index/8][index%8]=M31(value),
+    7=>t.candidate_afterstate.next_root[index]=M31(value),
+    8=>t.candidate_afterstate.next_frontier[index/8][index%8]=M31(value),
+    _=>panic!("invalid withdrawal region"),
+   }
+   Source::Withdrawal(p,t)
+  },
+ }
+}
+#[test]
+fn structural_source226() {
+ let mut comparisons=0;
+ for withdrawal in [false,true] {
+  let base=fixture(withdrawal);
+  finite_structural(base);comparisons+=1;
+  for region in 0..9 {
+   if (withdrawal && region==3) || (!withdrawal && region==5) {continue;}
+   let n=if region==2 || region==5 {1} else if region==6 || region==8 {160} else {8};
+   for index in 0..n {
+    for value in [0,2147483646,2147483647,u32::MAX] {
+     finite_structural(mutated(base,region,index,value));comparisons+=1;
+    }
+   }
+  }
+  for index in [0,u64::MAX,0x0123456789abcdef,1,256,65536,16777216,1u64<<32,1u64<<40,1u64<<48,1u64<<56] {
+   let p=match base {
+    Source::Transfer(p,mut t)=>{t.live_snapshot.next_pair_index=index;Source::Transfer(p,t)},
+    Source::Withdrawal(p,mut t)=>{t.live_snapshot.next_pair_index=index;Source::Withdrawal(p,t)},
+   };
+   finite_structural(p);comparisons+=1;
+  }
+ }
+ assert_eq!(comparisons,2884);
+ println!("same-input structural serializer differentials: {comparisons}; finite validation");
+}
