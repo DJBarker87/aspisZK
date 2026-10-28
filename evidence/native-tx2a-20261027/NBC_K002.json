@@ -1,0 +1,63 @@
+{
+  "attempt": "NBC_K002",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "1fb4e565b2c334ec1755a6a7f63613828f1c2c07",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBC_src/Cargo.toml",
+    "NBC_src/Cargo.lock",
+    "NBC_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBC_src/crates/aspis-r1-cost-probe/src/verifier/NBC_runtime.rs",
+    "NBC_src/programs/r1-cost-probe/src/lib.rs",
+    "NBC_src/programs/r1-cost-probe/src/NBC_runtime.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2a-20261027/NBC_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2a-20261027/NBC_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NBC_runtime::NBC_observer_none",
+    "--output-format",
+    "terse",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2a-20261027/NBC_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "a60c1441923b44af5fff702fbf7ff6bf987d75228c1932a72b8c6ef7a5273860",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "56dd704ba2750051d7b87e59495755f48e0cf3fde72d750a9f885ac4f5a057b2"
+  },
+  "expected_time": "optimized dependency compilation then native release leaf NBC_runtime::NBC_observer_none"
+}
