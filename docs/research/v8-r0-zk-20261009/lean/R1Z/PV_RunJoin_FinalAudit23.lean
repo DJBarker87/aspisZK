@@ -1,0 +1,11 @@
+import R1Z.PV_RunJoin_PublicAudit23
+import R1Z.PV_RunJoin_ReturnAudit23
+import R1Z.PV_RunJoin_AdmissionAudit23
+set_option autoImplicit false
+#print axioms R1Z.PV_RunJoin_AdmissionBoundary23.admission_not_derivable
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.public_eq
+#print axioms R1Z.PV_RunJoin_AdmittedCarrier23.nonempty_both
+#print axioms R1Z.PV_RunJoin_NativeAdmitted21.transfer
+#print axioms R1Z.PV_RunJoin_NativeAdmitted21.withdrawal
+#print axioms R1Z.PV_RunJoin_AdmittedReturnCounterexample23.universal_guarded_return_false
+#print axioms R1Z.PV_RunJoin_UniversalBuild22.transport_eq
