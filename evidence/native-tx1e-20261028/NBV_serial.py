@@ -6,8 +6,10 @@ for n in range(int(sys.argv[1]),int(sys.argv[2])+1):
  r=subprocess.run([sys.executable,str(E/'NBV_host.py'),a]);assert r.returncode==0
  rc=json.loads((E/a/'receipt.json').read_text());out=(E/a/'stdout.log').read_text()
  print('TERMINAL',a,rc['exit_status'],flush=True)
- if 'VERIFICATION:- FAILED' in out and n not in [2,8,14,15,17,19,21]:raise SystemExit('FINDING: inspect failed property before continuing')
- if 'TIMEOUT' in out or rc['exit_status']==124:
+ timed='timed out' in out.lower() or rc['exit_status']==124
+ if rc['exit_status']!=0 and not timed and 'VERIFICATION:- FAILED' not in out:raise SystemExit('Pre-proof failure: inspect and repair own input')
+ if 'VERIFICATION:- FAILED' in out and not timed and n not in [2,8,14,15,17,19,21,29,31,33,35,37,39,41,43,45,47,49,50]:raise SystemExit('FINDING: inspect failed property before continuing')
+ if timed:
   r=h.remote_py(f'''from pathlib import Path
 import json
 p=Path({(h.B+'/NBV_tmp')!r});out=[]
