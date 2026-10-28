@@ -24,7 +24,7 @@ def produce
 
 theorem complete_result
   (mask_sum : aspis_core.field.QM31)
-  (dc : Array aspis_core.field.QM31 1024#usize) : :
+  (dc : Array aspis_core.field.QM31 1024#usize) :
   erase (produce mask_sum dc) = host_semantic.add_d_tail mask_sum dc := by
   unfold produce host_semantic.add_d_tail
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

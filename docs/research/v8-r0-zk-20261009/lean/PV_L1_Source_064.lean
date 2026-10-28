@@ -42,7 +42,7 @@ def produce
 
 theorem complete_result
   (claims : Array aspis_core.field.QM31 29#usize)
-  (point : Array aspis_core.field.QM31 10#usize) : :
+  (point : Array aspis_core.field.QM31 10#usize) :
   erase (produce claims point) = host_semantic.claim_mask_value claims point := by
   unfold produce host_semantic.claim_mask_value
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

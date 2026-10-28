@@ -24,7 +24,7 @@ theorem complete_result
   (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment)
   (cc2 : host_commitment.Commitment) (queries : Array Std.U32 22#usize)
   (folded_word : Slice aspis_core.field.wide_exact.WideExact)
-  (folded_salts : host_commitment.PrivateSalts) : :
+  (folded_salts : host_commitment.PrivateSalts) :
   erase (produce out cc1 cc2 queries folded_word folded_salts) = prover.append_query_openings out cc1 cc2 queries folded_word folded_salts := by
   unfold produce prover.append_query_openings
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

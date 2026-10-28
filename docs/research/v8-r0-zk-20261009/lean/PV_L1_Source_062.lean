@@ -20,7 +20,7 @@ def produce
   | some r => ok r
 
 theorem complete_result
-  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) : :
+  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) :
   erase (produce c1) = host_semantic.check_base_columns c1 := by
   unfold produce host_semantic.check_base_columns
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

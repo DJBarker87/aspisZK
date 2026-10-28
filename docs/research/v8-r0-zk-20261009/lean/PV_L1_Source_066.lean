@@ -48,7 +48,7 @@ def produce
 
 theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
-  (point : Array aspis_core.field.QM31 10#usize) : :
+  (point : Array aspis_core.field.QM31 10#usize) :
   erase (produce columns point) = host_semantic.point_claims columns point := by
   unfold produce host_semantic.point_claims
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

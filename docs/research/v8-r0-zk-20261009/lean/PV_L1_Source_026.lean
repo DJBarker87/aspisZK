@@ -33,7 +33,7 @@ def produce
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
   (hash : H) (semantic_state : Array Std.U8 32#usize)
-  (variant : transport.Variant) : :
+  (variant : transport.Variant) :
   erase (produce (H := H) aspis_coredigestDigest32Inst hash semantic_state variant) = host_transcript.Transcript.new (H := H) aspis_coredigestDigest32Inst hash semantic_state variant := by
   unfold produce host_transcript.Transcript.new
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

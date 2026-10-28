@@ -18,7 +18,7 @@ def produce
   prover.opening_inactive_loop q w inactive 0#usize
 
 theorem complete_result
-  (q : Slice aspis_core.field.wide_exact.WideExact) (w : weights.Weights) : :
+  (q : Slice aspis_core.field.wide_exact.WideExact) (w : weights.Weights) :
   erase (produce q w) = prover.opening_inactive q w := by
   unfold produce prover.opening_inactive
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

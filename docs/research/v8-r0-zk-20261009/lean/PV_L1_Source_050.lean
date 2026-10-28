@@ -32,7 +32,7 @@ def produce
 
 theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
-  (row : Std.Usize) : :
+  (row : Std.Usize) :
   erase (produce columns row) = host_semantic.initial_mask_value columns row := by
   unfold produce host_semantic.initial_mask_value
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

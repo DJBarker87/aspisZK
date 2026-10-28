@@ -92,7 +92,7 @@ theorem complete_result
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (nonce_store :
   aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
-  (next_attempt : T0) (k : Std.Usize) : :
+  (next_attempt : T0) (k : Std.Usize) :
   erase (produce (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k) = prover.retry_attempt (T0 := T0) coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k := by
   unfold produce prover.retry_attempt
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_070.complete_result]

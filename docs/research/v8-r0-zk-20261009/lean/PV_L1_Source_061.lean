@@ -34,8 +34,7 @@ def produce
   else ok (done none)
 
 theorem complete_result
-  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize)
-  : :
+  (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) (lane : Std.Usize) :
   erase (produce c1 lane) = host_semantic.check_base_columns_loop.body c1 lane := by
   unfold produce host_semantic.check_base_columns_loop.body
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

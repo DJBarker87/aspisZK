@@ -22,7 +22,7 @@ def produce
 theorem complete_result
   (coefficients : Slice (Array aspis_core.field.wide_exact.WideExact
   1024#usize)) (gp : Array aspis_core.field.wide_exact.WideExact 29#usize)
-  (row : Std.Usize) : :
+  (row : Std.Usize) :
   erase (produce coefficients gp row) = prover.opening_row coefficients gp row := by
   unfold produce prover.opening_row
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

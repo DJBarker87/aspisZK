@@ -19,7 +19,7 @@ def produce
   prover.fixed_k_column_loop values out 0#usize
 
 theorem complete_result
-  (values : Slice aspis_core.field.QM31) : :
+  (values : Slice aspis_core.field.QM31) :
   erase (produce values) = prover.fixed_k_column values := by
   unfold produce prover.fixed_k_column
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

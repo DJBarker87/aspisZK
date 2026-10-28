@@ -20,7 +20,7 @@ def produce
   | some r => ok r
 
 theorem complete_result
-  (column : Array aspis_core.field.QM31 1024#usize) : :
+  (column : Array aspis_core.field.QM31 1024#usize) :
   erase (produce column) = host_semantic.check_secure_column column := by
   unfold produce host_semantic.check_secure_column
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

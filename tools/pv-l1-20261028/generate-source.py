@@ -65,7 +65,7 @@ for k,n in enumerate(selected):
  code+='set_option autoImplicit false\nnoncomputable section\nnamespace '+mod+'\nopen Aeneas Aeneas.Std Result ControlFlow ProverRwFull\nopen PV_L1_Logged\nvariable [ExternalTypes] [ExternalFuns]\n'
  code+='\n/-- Source-parametric phase entry and complete Result. Remaining loop and\nopaque/native event edges are recorded in source-frontier.json. -/\n'
  code+='def produce'+params+result_sig+'\n  := do\n  let _ ← observe '+marker+' 0 (ok ())\n'+body+'\n\n'
- code+='theorem complete_result'+params+' :\n  erase (produce '+applications+') = '+n+' '+applications+' := by\n'
+ code+='theorem complete_result'+params.rstrip().removesuffix(':').rstrip()+' :\n  erase (produce '+applications+') = '+n+' '+applications+' := by\n'
  code+='  unfold produce '+n+'\n'
  lemmas=['erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'

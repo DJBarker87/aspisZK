@@ -23,7 +23,7 @@ def produce
 
 theorem complete_result
   (coefficients : Slice (Array aspis_core.field.wide_exact.WideExact
-  1024#usize)) (gamma : aspis_core.field.wide_exact.WideExact) : :
+  1024#usize)) (gamma : aspis_core.field.wide_exact.WideExact) :
   erase (produce coefficients gamma) = prover.opening_batch coefficients gamma := by
   unfold produce prover.opening_batch
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

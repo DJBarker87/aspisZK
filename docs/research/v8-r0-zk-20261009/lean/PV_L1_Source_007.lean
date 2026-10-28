@@ -86,7 +86,7 @@ def produce
       (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual
 
 theorem complete_result
-  (variant : transport.Variant) (p : prover.Publication) : :
+  (variant : transport.Variant) (p : prover.Publication) :
   erase (produce variant p) = prover.publish_compact variant p := by
   unfold produce prover.publish_compact
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_003.complete_result]

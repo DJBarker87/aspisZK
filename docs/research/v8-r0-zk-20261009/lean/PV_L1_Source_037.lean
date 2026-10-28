@@ -49,7 +49,7 @@ theorem complete_result
   (d : Array aspis_core.field.QM31 1024#usize)
   (g : Array aspis_core.field.QM31 1024#usize)
   (h1_padding : Array aspis_core.field.QM31 1024#usize)
-  (masks : Array Std.U16 64#usize) : :
+  (masks : Array Std.U16 64#usize) :
   erase (produce c1 mask_only d g h1_padding masks) = prover.audit_masks c1 mask_only d g h1_padding masks := by
   unfold produce prover.audit_masks
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

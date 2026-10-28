@@ -18,7 +18,7 @@ def produce
   prover.inactive_sum_m31_loop values masks sum 0#usize
 
 theorem complete_result
-  (values : Slice aspis_core.field.M31) (masks : Array Std.U16 64#usize) : :
+  (values : Slice aspis_core.field.M31) (masks : Array Std.U16 64#usize) :
   erase (produce values masks) = prover.inactive_sum_m31 values masks := by
   unfold produce prover.inactive_sum_m31
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

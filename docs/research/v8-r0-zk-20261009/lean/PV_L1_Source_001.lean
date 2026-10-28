@@ -26,7 +26,7 @@ def produce
 
 theorem complete_result
   (out : alloc.vec.Vec Std.U8)
-  (row : Array aspis_core.field.wide_exact.WideExact 29#usize) : :
+  (row : Array aspis_core.field.wide_exact.WideExact 29#usize) :
   erase (produce out row) = prover.append_opening_base_row out row := by
   unfold produce prover.append_opening_base_row
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

@@ -115,7 +115,7 @@ theorem complete_result
   (variant : transport.Variant)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (prepared : prover.PreparedOpening)
-  (folded_salts : host_commitment.PrivateSalts) : :
+  (folded_salts : host_commitment.PrivateSalts) :
   erase (produce variant hash prepared folded_salts) = prover.finish_opening variant hash prepared folded_salts := by
   unfold produce prover.finish_opening
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_008.complete_result,PV_L1_Source_016.complete_result,PV_L1_Source_018.complete_result,PV_L1_Source_019.complete_result]

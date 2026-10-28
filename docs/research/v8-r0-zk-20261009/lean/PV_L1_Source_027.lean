@@ -121,7 +121,7 @@ theorem complete_result
   (variant : transport.Variant)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (backend : prover.Backend)
-  (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) : :
+  (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) :
   erase (produce variant hash backend sem) = prover.prepare_opening variant hash backend sem := by
   unfold produce prover.prepare_opening
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]

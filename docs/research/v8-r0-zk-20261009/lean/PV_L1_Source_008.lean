@@ -32,7 +32,7 @@ def produce
 theorem complete_result
   (variant : transport.Variant)
   (challenges : aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)
-  (c1_root : Array Std.U8 32#usize) : :
+  (c1_root : Array Std.U8 32#usize) :
   erase (produce variant challenges c1_root) = prover.public_check variant challenges c1_root := by
   unfold produce prover.public_check
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

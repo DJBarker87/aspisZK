@@ -21,7 +21,7 @@ def produce
 
 theorem complete_result
   (queries : Array Std.U32 22#usize) (begin1 : Std.Usize) (end1 : Std.Usize)
-  (folded : Bool) : :
+  (folded : Bool) :
   erase (produce queries begin1 end1 folded) = prover.publication_indices queries begin1 end1 folded := by
   unfold produce prover.publication_indices
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

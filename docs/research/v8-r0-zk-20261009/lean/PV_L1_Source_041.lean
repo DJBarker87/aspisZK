@@ -95,7 +95,7 @@ theorem complete_result
   aspis_core.digest.Digest32 H) (OracleInst : host_sumcheck.Oracle F)
   (transcript : host_wire.SemanticTranscript H) (output : alloc.vec.Vec Std.U8)
   (point : Array aspis_core.field.QM31 10#usize)
-  (running : aspis_core.field.QM31) (round : Std.Usize) (oracle : F) : :
+  (running : aspis_core.field.QM31) (round : Std.Usize) (oracle : F) :
   erase (produce (H := H) (F := F) aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle) = host_sumcheck.prove_sumcheck_round (H := H) (F := F) aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle := by
   unfold produce host_sumcheck.prove_sumcheck_round
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

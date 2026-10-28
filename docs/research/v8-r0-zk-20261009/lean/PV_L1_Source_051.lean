@@ -18,7 +18,7 @@ def produce
   host_semantic.initial_mask_sum_loop columns sum 0#usize
 
 theorem complete_result
-  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize) : :
+  (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize) :
   erase (produce columns) = host_semantic.initial_mask_sum columns := by
   unfold produce host_semantic.initial_mask_sum
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

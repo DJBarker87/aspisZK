@@ -23,7 +23,7 @@ def produce
 theorem complete_result
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (word : Slice aspis_core.field.wide_exact.WideExact)
-  (salts : host_commitment.PrivateSalts) : :
+  (salts : host_commitment.PrivateSalts) :
   erase (produce hash word salts) = prover.folded_leaves hash word salts := by
   unfold produce prover.folded_leaves
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

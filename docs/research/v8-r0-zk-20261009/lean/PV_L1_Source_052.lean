@@ -44,7 +44,7 @@ theorem complete_result
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
   (h1 : alloc.vec.Vec aspis_core.field.QM31)
   (g : Array aspis_core.field.QM31 1024#usize)
-  (d : Array aspis_core.field.QM31 1024#usize) : :
+  (d : Array aspis_core.field.QM31 1024#usize) :
   erase (produce c1 h1 g d) = host_semantic.lift_columns c1 h1 g d := by
   unfold produce host_semantic.lift_columns
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

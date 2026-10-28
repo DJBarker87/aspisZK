@@ -20,7 +20,7 @@ def produce
 
 theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
-  (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) : :
+  (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) :
   erase (produce columns variant z) = host_semantic.endpoint_bytes columns variant z := by
   unfold produce host_semantic.endpoint_bytes
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

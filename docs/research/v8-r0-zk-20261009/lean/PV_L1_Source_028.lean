@@ -41,7 +41,7 @@ theorem complete_result
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (tag : Std.U8) (index : Std.U32)
-  (salts : alloc.vec.Vec (Array Std.U8 32#usize)) : :
+  (salts : alloc.vec.Vec (Array Std.U8 32#usize)) :
   erase (produce reserved context hash tag index salts) = prover.derive_private_salt_step reserved context hash tag index salts := by
   unfold produce prover.derive_private_salt_step
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

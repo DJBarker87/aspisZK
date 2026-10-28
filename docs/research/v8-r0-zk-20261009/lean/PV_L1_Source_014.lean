@@ -26,7 +26,7 @@ def produce
   else ok (done ())
 
 theorem complete_result
-  (q : Array Std.U32 22#usize) (i : Std.Usize) : :
+  (q : Array Std.U32 22#usize) (i : Std.Usize) :
   erase (produce q i) = host_transcript.trace_queries_loop.body q i := by
   unfold produce host_transcript.trace_queries_loop.body
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

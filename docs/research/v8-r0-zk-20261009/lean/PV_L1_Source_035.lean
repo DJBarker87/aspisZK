@@ -35,7 +35,7 @@ def produce
 theorem complete_result
   (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
   (masks : Array Std.U16 64#usize) (c1_columns_inactive_balanced : Std.Usize)
-  (column : Std.Usize) : :
+  (column : Std.Usize) :
   erase (produce c1 masks c1_columns_inactive_balanced column) = prover.audit_masks_loop0.body c1 masks c1_columns_inactive_balanced column := by
   unfold produce prover.audit_masks_loop0.body
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

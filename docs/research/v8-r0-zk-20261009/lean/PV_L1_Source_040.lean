@@ -42,7 +42,7 @@ def produce
 theorem complete_result
   (compiled :
   aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
-  (lambda : aspis_core.field.QM31) (chi : aspis_core.field.QM31) : :
+  (lambda : aspis_core.field.QM31) (chi : aspis_core.field.QM31) :
   erase (produce compiled lambda chi) = host_semantic.no_pole compiled lambda chi := by
   unfold produce host_semantic.no_pole
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

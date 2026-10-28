@@ -24,7 +24,7 @@ def produce
 theorem complete_result
   (coefficients : Slice (Array aspis_core.field.wide_exact.WideExact
   1024#usize))
-  (z1 : aspis_core.r0.domain.Point aspis_core.field.wide_exact.WideExact) : :
+  (z1 : aspis_core.r0.domain.Point aspis_core.field.wide_exact.WideExact) :
   erase (produce coefficients z1) = prover.opening_claim_bytes coefficients z1 := by
   unfold produce prover.opening_claim_bytes
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

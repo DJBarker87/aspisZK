@@ -26,7 +26,7 @@ def produce
 
 theorem complete_result
   (dc : Array aspis_core.field.QM31 1024#usize) (offset : Std.Usize)
-  (j : Std.Usize) (sum : aspis_core.field.QM31) : :
+  (j : Std.Usize) (sum : aspis_core.field.QM31) :
   erase (produce dc offset j sum) = host_semantic.d_tail_sum dc offset j sum := by
   unfold produce host_semantic.d_tail_sum
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

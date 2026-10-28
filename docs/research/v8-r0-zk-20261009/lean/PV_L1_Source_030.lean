@@ -43,7 +43,7 @@ theorem complete_result
   (reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
-  (tag : Std.U8) : :
+  (tag : Std.U8) :
   erase (produce reserved context hash tag) = prover.derive_private_salts reserved context hash tag := by
   unfold produce prover.derive_private_salts
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

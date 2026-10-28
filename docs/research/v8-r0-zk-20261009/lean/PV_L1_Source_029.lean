@@ -41,7 +41,7 @@ theorem complete_result
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (tag : Std.U8) (count : Std.Usize)
   (result : core.result.Result (alloc.vec.Vec (Array Std.U8 32#usize))
-  verifier.Error) (index : Std.Usize) : :
+  verifier.Error) (index : Std.Usize) :
   erase (produce reserved context hash tag count result index) = prover.derive_private_salts_loop.body reserved context hash tag count result index := by
   unfold produce prover.derive_private_salts_loop.body
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_028.complete_result]

@@ -76,7 +76,7 @@ theorem complete_result
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
   (nonce_store :
-  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) : :
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) :
   erase (produce public1 compiled variant hash attempt nonce_store) = prover.prove_masked_attempt public1 compiled variant hash attempt nonce_store := by
   unfold produce prover.prove_masked_attempt
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_069.complete_result]

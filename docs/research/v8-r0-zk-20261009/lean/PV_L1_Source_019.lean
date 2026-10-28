@@ -32,7 +32,7 @@ def produce
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
   (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8)
-  (nonzero : Bool) : :
+  (nonzero : Bool) :
   erase (produce (H := H) aspis_coredigestDigest32Inst self row payload nonzero) = host_transcript.Transcript.scalar (H := H) aspis_coredigestDigest32Inst self row payload nonzero := by
   unfold produce host_transcript.Transcript.scalar
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]

@@ -59,7 +59,7 @@ def produce
 theorem complete_result
   (blocks : Array (Array Std.U8 32#usize) 8#usize)
   (advances : Array (Array Std.U8 32#usize) 8#usize)
-  (accepted : Array Std.U32 22#usize) (n : Std.Usize) (draws : Std.Usize) : :
+  (accepted : Array Std.U32 22#usize) (n : Std.Usize) (draws : Std.Usize) :
   erase (produce blocks advances accepted n draws) = host_transcript.scan_query_words blocks advances accepted n draws := by
   unfold produce host_transcript.scan_query_words
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

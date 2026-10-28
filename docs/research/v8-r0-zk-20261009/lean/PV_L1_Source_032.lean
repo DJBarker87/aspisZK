@@ -23,7 +23,7 @@ def produce
   else ok verifier.Error.Semantic
 
 theorem complete_result
-  (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) : :
+  (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) :
   erase (produce e) = prover.mask_error e := by
   unfold produce prover.mask_error
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

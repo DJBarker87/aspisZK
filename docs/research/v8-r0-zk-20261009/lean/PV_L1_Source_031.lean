@@ -53,7 +53,7 @@ theorem complete_result
   (backend : prover.Backend)
   (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
   (salts : (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
-  aspis_core.state_only_hiding.StateOnlyHidingContext)) : :
+  aspis_core.state_only_hiding.StateOnlyHidingContext)) :
   erase (produce public1 variant hash backend sem salts) = prover.prove_from_semantics public1 variant hash backend sem salts := by
   unfold produce prover.prove_from_semantics
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_007.complete_result]

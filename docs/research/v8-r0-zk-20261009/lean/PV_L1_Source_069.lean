@@ -304,7 +304,7 @@ theorem complete_result
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
   (binding : Array Std.U8 32#usize)
   (attempt : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
-  (nonce_store : T0) : :
+  (nonce_store : T0) :
   erase (produce (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store) = prover.prove_masked_with_attempt (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store := by
   unfold produce prover.prove_masked_with_attempt
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]

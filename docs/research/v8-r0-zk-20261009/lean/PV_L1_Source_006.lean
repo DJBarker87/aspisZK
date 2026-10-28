@@ -63,7 +63,7 @@ def produce
 theorem complete_result
   (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment)
   (cc2 : host_commitment.Commitment) (tree : host_tree.BinaryTree)
-  (queries : Array Std.U32 22#usize) : :
+  (queries : Array Std.U32 22#usize) :
   erase (produce out cc1 cc2 tree queries) = prover.append_node_slots out cc1 cc2 tree queries := by
   unfold produce prover.append_node_slots
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_005.complete_result]

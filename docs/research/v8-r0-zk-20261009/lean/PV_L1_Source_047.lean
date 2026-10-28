@@ -27,7 +27,7 @@ def produce
 
 theorem complete_result
   (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
-  (extras : Array aspis_core.field.QM31 29#usize) : :
+  (extras : Array aspis_core.field.QM31 29#usize) :
   erase (produce claims extras) = host_semantic.claim_bytes claims extras := by
   unfold produce host_semantic.claim_bytes
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_046.complete_result]

@@ -29,7 +29,7 @@ def produce
   PV_L1_Source_000.produce out7 a3
 
 theorem complete_result
-  (out : alloc.vec.Vec Std.U8) (opening : aspis_core.r0.wire.FibreOpening) : :
+  (out : alloc.vec.Vec Std.U8) (opening : aspis_core.r0.wire.FibreOpening) :
   erase (produce out opening) = prover.append_opening_values out opening := by
   unfold produce prover.append_opening_values
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_000.complete_result]

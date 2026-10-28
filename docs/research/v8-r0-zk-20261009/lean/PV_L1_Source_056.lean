@@ -29,8 +29,7 @@ def produce
 
 theorem complete_result
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
-  (transcript : host_wire.SemanticTranscript H) (bytes : alloc.vec.Vec Std.U8)
-  : :
+  (transcript : host_wire.SemanticTranscript H) (bytes : alloc.vec.Vec Std.U8) :
   erase (produce (H := H) aspis_coredigestDigest32Inst transcript bytes) = host_semantic.zc_rows (H := H) aspis_coredigestDigest32Inst transcript bytes := by
   unfold produce host_semantic.zc_rows
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

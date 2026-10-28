@@ -36,7 +36,7 @@ def produce
 theorem complete_result
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
   (d : Array aspis_core.field.QM31 1024#usize)
-  (g : Array aspis_core.field.QM31 1024#usize) : :
+  (g : Array aspis_core.field.QM31 1024#usize) :
   erase (produce c1 d g) = host_semantic.check_semantic_columns c1 d g := by
   unfold produce host_semantic.check_semantic_columns
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_058.complete_result]

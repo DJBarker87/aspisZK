@@ -19,7 +19,7 @@ def produce
 
 theorem complete_result
   (bytes : alloc.vec.Vec Std.U8)
-  (claims : Array aspis_core.field.QM31 29#usize) : :
+  (claims : Array aspis_core.field.QM31 29#usize) :
   erase (produce bytes claims) = host_semantic.append_claim_bytes bytes claims := by
   unfold produce host_semantic.append_claim_bytes
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

@@ -24,7 +24,7 @@ def produce
     | some r => ok r
 
 theorem complete_result
-  (column : Slice aspis_core.field.M31) : :
+  (column : Slice aspis_core.field.M31) :
   erase (produce column) = host_semantic.check_base_column column := by
   unfold produce host_semantic.check_base_column
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]

@@ -26,7 +26,7 @@ def produce
 
 theorem complete_result
   (accepted : Array Std.U32 22#usize) (n : Std.Usize) (candidate : Std.U32)
-  (i : Std.Usize) : :
+  (i : Std.Usize) :
   erase (produce accepted n candidate i) = host_transcript.query_contains_loop.body accepted n candidate i := by
   unfold produce host_transcript.query_contains_loop.body
   simp only [erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
