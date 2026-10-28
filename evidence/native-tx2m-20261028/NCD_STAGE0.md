@@ -1,0 +1,9 @@
+# NCD adapter identity and inherited audit
+
+The RPx_Deployed header closure (12712 modules, retained RPx_0038) excludes the original module name AspisR1CircleSampleWrapper.FunsExternal and includes RPz7_AspisR1CircleSampleWrapper_FunsExternal. The selected RPz7 source, read directly from its retained source workspace, is byte-identical to NBS_L040: SHA256 333c99752d98b2b195203bddbb781549c8bd4114d6dc271f8897378230a38374. Thus this is a module-selection issue, not a differing implementation body. NCD_RPX_CLOSURE.json and NCD_RPX_SelectedExternal.lean.txt retain the checks.
+
+NCD_ADAPTER_AUDIT.json enumerates all 17 affected NBS/NCB modules and their theorem names, and every intermediate import. Deployed-cohort association credit for those old-module imports is withdrawn pending explicit retargeting. Independent local/model/native facts retain only their original scope. The next stage replays existing bodies with import/name fixes against the selected RPx closure, without creating new mathematical arguments or editing proved modules.
+
+NCD_L001 runs the prepared NCB co-import audit, adding only import-header observation. PASS: exit0, wall2.3128556709853s, peak5547556KiB, swaps0; all 20 printed requested axioms are standard-only. Full source revision/hash, resolved direct dependencies, exact command, cgroup caps and axiom lines are in NCD_L001/receipt.json. This audit establishes compatibility of the inherited lane selection, not its deployed-cohort identity. One admitted capped scope; no shipped source changes, no ELF rebuild trigger.
+
+Runner NCD_build.py is a prefix/path-only adaptation of NCB's own transport/validation wrapper; immutable S2W launcher bytes are reused. Budget ceiling is120 Lean and50 Kani (the stricter initial Kani ceiling); accounting starts with1 Lean and0 Kani this round. Aeneas objects are pinned by NCD_LIBRARY_PIN.json. No push, merge, key operation or other worker changes.
