@@ -6,10 +6,10 @@ set_option autoImplicit false
 /-- This records the exact public-point transport still needed at the consuming
 protocol call. It is not discharged merely by declaring point as an argument. -/
 theorem point_transport {P H K : Type} (sourcePoint : P → H → List K) (publicPoint : P → List K)
-    (public : ∀ p h, sourcePoint p h=publicPoint p) (isBoolean : K → Bool)
+    (hpublic : ∀ p h, sourcePoint p h=publicPoint p) (isBoolean : K → Bool)
     (p : P) (left right : H) :
     publicRequest (PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p left))=
-      publicRequest (PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p right)) := by rw [public,public]
+      publicRequest (PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p right)) := by rw [hpublic,hpublic]
 
 theorem size_alignment_order {K H : Type} (isBoolean : K → Bool) (point : List K) (left right : H) :
     (fun (_ : H) => [publicRequest (PV_RDB2D_SparseLayout.request isBoolean point),
