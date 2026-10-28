@@ -1,0 +1,39 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/box-llvm/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/box-llvm/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/llvm-box.py"
+  ],
+  "exit": 1,
+  "wall": "0:00.09",
+  "peak_rss_kib": "30540",
+  "swap": "0",
+  "source_revision": "09461044cb2c1db0c27c558afe0e5c7f8d69257c",
+  "expected_phase": "optimized diagnostic emission for missing Box intrinsic-lowering artifact",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "associated_deployed_configuration": "configuration.json"
+}

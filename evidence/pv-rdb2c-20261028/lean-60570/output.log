@@ -1,0 +1,67 @@
+'PV_B2_F_ArrayMutation.untouched' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_F_ArrayMutation.update_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B2_F_ArrayMutation.suffix_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem Aeneas.Std.Array.update_spec.{u} : ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize) (x : α),
+  ↑i < v.length → v.update i x ⦃ nv => nv = v.set i x ⦄ :=
+fun {α} {n} v i x hbound =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg WP.spec
+            (congrArg
+              (fun x_1 =>
+                match x_1 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩)
+              (Array.getElem?_Usize_eq v i)))
+          fun nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩))
+      (Aeneas.Std.Array.index_usize.match_1.splitter✝
+        (fun x_1 =>
+          (↑v)[↑i]? = x_1 →
+            (match (↑v)[↑i]? with
+              | none => fail Error.arrayOutOfBounds
+              | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+              nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+        (↑v)[↑i]?
+        (fun _ h =>
+          Eq.ndrec (motive := fun x_1 =>
+            (↑v)[↑i]? = x_1 →
+              (match x_1 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+                nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+            (fun heq =>
+              id
+                (False.elim
+                  (Eq.mp
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (getElem?_pos (↑v) (↑i)
+                            (of_eq_true
+                              (Eq.trans (congrArg (LT.lt ↑i) (List.Vector.length_val v))
+                                (eq_true (Eq.mp (congrArg (LT.lt ↑i) (List.Vector.length_val v)) hbound))))))
+                        none)
+                      (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+                    heq)))
+            (Eq.symm h) (Eq.refl (↑v)[↑i]?))
+        (fun x_1 h =>
+          Eq.ndrec (motive := fun x_2 =>
+            (↑v)[↑i]? = x_2 →
+              (match x_2 with
+                | none => fail Error.arrayOutOfBounds
+                | some val => ok ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩) ⦃
+                nv => nv = ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩ ⦄)
+            (fun heq =>
+              id
+                (of_eq_true
+                  (Eq.trans (WP.spec_ok._simp_1 ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩)
+                    (eq_self ⟨(↑v).set (↑i) x, Array.set._proof_1 v i x⟩))))
+            (Eq.symm h) (Eq.refl (↑v)[↑i]?))
+        (Eq.refl (↑v)[↑i]?)))
+theorem Aeneas.Std.Array.index_usize_spec.{u} : ∀ {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length), v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄ :=
+fun {α} {n} v i hbound => Array.index_usize_spec._proof_5 v i hbound
+def Aeneas.Std.Array.repeat.{u} : {α : Type u} → (n : Usize) → α → Std.Array α n :=
+fun {α} n x => ⟨List.replicate (↑n) x, ⋯⟩
