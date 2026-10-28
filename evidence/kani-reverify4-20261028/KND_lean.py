@@ -18,6 +18,9 @@ def compile_one(module):
  baseline=json.loads((E.parent/'kani-reverify2-20261028/KMZ_L060/receipt.json').read_text())['deps_fingerprint']['selected_objects']
  for name,pin in selected.items():
   if not name.startswith(('KND_','KNA_')):assert pin['sha256']==baseline[name]['sha256'],('STOP baseline cache drift',name)
+  if name.startswith('KNA_'):
+   kna=json.loads((E.parent/'kani-reverify3-20261028/KNA_L040/receipt.json').read_text())['deps_fingerprint']['selected_objects']
+   assert pin['sha256']==kna[name]['sha256'],('STOP KNA cache drift',name)
  cfg['deps_fingerprint']['selected_objects'].update(selected)
  r=t.remote_py('from pathlib import Path\nb=Path('+repr(t.B)+')\n(b/'+repr(p.name)+').write_text('+repr(p.read_text())+')\n(b/'+repr(a+'.json')+').write_text('+repr(json.dumps(cfg))+')')
  assert r.returncode==0,r.stderr

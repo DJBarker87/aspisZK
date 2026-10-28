@@ -1,0 +1,1 @@
+Ninety Kani and five optimized native attempts are complete. KND_PAIRS.json and KND_PAIR_AUDIT.json retain matched-control results. Original-row scope limitations remain in KND_SCOPE.md. Every terminal run has a capped-host receipt and frozen graph validation.

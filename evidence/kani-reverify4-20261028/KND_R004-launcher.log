@@ -1,0 +1,47 @@
+{"attempt": "KND_R004", "exit_status": 0, "wall_seconds": 0.48796441103331745, "peak_rss_kib": "128120", "swaps": "0", "print_axioms": "N/A: rust"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/rustc", "KND_native.rs", "--edition=2021", "-C", "opt-level=3", "-o", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KND_native_bin"]}
+warning: function `KMX_copy_nonoverlapping` is never used
+ --> KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = n
+...
+ have a snake case name
+ --> KMX_stubs.rs:8:8
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  |        ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_from_slice`
+
+warning: function `KMX_clone_from_slice` should have a snake case name
+  --> KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_from_slice`
+
+warning: function `KMX_extend_from_slice` should have a snake case name
+  --> KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: function `KMX_to_vec` should have a snake case name
+  --> KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: 12 warnings emitted
+
+PASS selected 64 concrete transitions; XOR1 inequalities checked
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "rust_exit": 0}
+
+Running as unit: run-rc915f463a2ce42e2af5524e7f8e0ffeb.scope; invocation ID: a49e5318cf474e6f84ce81527cd22d12
