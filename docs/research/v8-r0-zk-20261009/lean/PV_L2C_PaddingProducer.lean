@@ -40,15 +40,20 @@ theorem balanced_sum {n : Nat} (active : Fin n → Bool) (d : Fin n)
     simp only [hd, Bool.false_eq_true, if_false, balanced, if_pos rfl]
     congr 1
     unfold excludedSum
-    apply Finset.sum_subset (Finset.erase_subset d Finset.univ)
-    · intro i hi he
-      simp only [Finset.mem_erase,Finset.mem_univ,true_and] at he
-      have hid : i=d := by simpa using he
-      subst i
-      simp
-    · intro i hi
-      have hid : i≠d := (Finset.mem_erase.mp hi).1
-      simp [hid]
+    calc
+      _ = ∑ i ∈ Finset.univ.erase d, if !active i && decide (i≠d) then v i else 0 := by
+        apply Finset.sum_congr rfl
+        intro i hi
+        have hid : i≠d := (Finset.mem_erase.mp hi).1
+        cases ha : active i <;> simp [hid,ha]
+      _ = _ := by
+        apply Finset.sum_subset (Finset.erase_subset d Finset.univ)
+        intro i hi he
+        have hid : i=d := by
+          by_contra h
+          exact he (Finset.mem_erase.mpr ⟨h,hi⟩)
+        subst i
+        simp
   rw [hsum,neg_add_cancel]
 #print axioms balanced_sum
 end PV_L2C_PaddingProducer

@@ -60,6 +60,12 @@ def visit(m):
   if not ps:ps=[p for p in tracked if p.endswith('/'+suffix+'.txt')]
   if not ps:
    ps=[p for p in tracked if p.endswith('/'+m.split('.')[-1]+'.lean.txt') and ('namespace '+m) in git(head+':'+p).decode()]
+  if not ps:
+   explicit={
+    'AspisR1CircleFallback.Funs':'evidence/pv-rw19-resume-20261026/retained-source-inputs/AspisR1CircleFallback.Funs.lean.txt',
+    'AspisR1CircleFallback.RawCircleFallbackOutputBridge':'evidence/pv-rw19-resume-20261026/retained-source-inputs/AspisR1CircleFallback.RawCircleFallbackOutputBridge.lean.txt',
+    **{'AspisR1CircleSampleWrapper.'+n:'docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019/'+n+'.lean' for n in ['RawCircleSampleActualFallbackResultV4','RawCircleSampleActualPolicyV2','RawCircleSampleActualSamplerCanonicalV1','RawCircleSampleActualSecureBridgeV1','RawCircleSampleActualFallbackCircleV2','RawCircleSampleEmittedWrapperLaw']}}
+   if m in explicit and explicit[m] in tracked:ps=[explicit[m]]
   if not ps:missing.add(m);return
   variants={hashlib.sha256(git(head+':'+p)).hexdigest() for p in ps}
   if len(variants)!=1:missing.add(m+' [conflicting h5 tracked variants]');return
