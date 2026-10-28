@@ -15,3 +15,11 @@ import PV_KStub_SplitCoverage
 #print axioms PV_KStub_AppendBridge.complete_append
 #print axioms PV_KStub_SplitCoverage.metadata_and_bytes
 #print axioms PV_KStub_SplitCoverage.high_nonempty
+#print axioms KMX_CopyMeaning.loop_spec
+#print axioms KMX_CopyMeaning.copy_prefix
+#print axioms KMX_CopyMeaning.copy_frame
+#print axioms KMX_CopyMeaning.append_spec
+#print axioms KMX_CopyMeaning.realloc_prefix
+#print axioms PV_KStub_WindowFrame.split_windows
+#print axioms PV_KStub_WindowFrame.coordinate_frame
+#print axioms PV_KStub_WindowFrame.readonly_frame
