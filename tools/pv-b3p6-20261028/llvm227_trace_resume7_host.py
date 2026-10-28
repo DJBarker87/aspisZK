@@ -21,6 +21,7 @@ while i<len(lines):
   if not m:i+=1;continue
   name=m[1];start=i;body=[line]
   if name.startswith('llvm.'):comment='LLVM intrinsic '+name
+  elif not name.startswith('_ZN'):comment=name
   if line.startswith('define '):
    i+=1
    while lines[i]!='}':body.append(lines[i]);i+=1
