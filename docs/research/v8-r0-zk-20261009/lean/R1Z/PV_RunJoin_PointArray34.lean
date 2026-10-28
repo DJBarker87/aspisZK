@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_FieldData34
+import R1Z.ProverRwDictionaryScalar
 import R1Z.ProverCommitArray49
 import R1Z.ProverCommitSamplePoint49
 set_option autoImplicit false
@@ -7,7 +8,7 @@ namespace R1Z.PV_RunJoin_PointArray34
 open Aeneas Aeneas.Std Result ProverRwFull ProverCommitPrimitive47
 open PV_RunJoin_FieldData34
 
-def array (p : Nat → Old.Q) : Array Q 10#usize :=
+def array (p : Nat → Old.Q) : Array PV_RunJoin_FieldData34.Q 10#usize :=
   ProverCommitArray49.array 10#usize (fun i => source (p i))
 
 theorem index (p : Nat → Old.Q) (i : Usize) (hi : i.val<10) :
