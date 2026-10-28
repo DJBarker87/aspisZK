@@ -1,15 +1,16 @@
 """Task inputs and receipts using the unchanged KMY transport and S2W host runner."""
 from pathlib import Path
-import importlib.util,json,hashlib,subprocess,sys,shlex,time
+import types,json,hashlib,subprocess,sys,shlex,time
 E=Path(__file__).resolve().parent; OLD=E.parent/'kani-reverify1-20261028'
-spec=importlib.util.spec_from_file_location('transport',OLD/'KMY_host.py');t=importlib.util.module_from_spec(spec);spec.loader.exec_module(t);t.E=E
+t=types.ModuleType('transport');t.__file__=str(OLD/'KMY_host.py');exec(compile((OLD/'KMY_host.py').read_text(),t.__file__,'exec'),t.__dict__);t.E=E
 PATCH='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67';STUB='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
 archive=json.loads((OLD/'KMY_SOURCE_ARCHIVE.json').read_text())['attempts']
 def run(a,cfg,source):
  assert not (E/a/'receipt.json').exists(),a
  cfg.update(attempt=a,kmx_patch_sha256=PATCH,kmx_stub_file_sha256=STUB,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True)
  assert len(list(E.glob('KMZ_K[0-9][0-9][0-9].json')))<70 or cfg['kind']!='kani'
- t.admit(a)
+ retry=t.admit(a)
+ cfg['reservation_retries']=retry
  files={a+'.json':json.dumps(cfg),'KMZ_windows.rs':source,'KMZ_gate.py':(E/'KMZ_gate.py').read_text()}
  if cfg['kind']=='rust':files.update({n:(E/n).read_text() for n in ['KMZ_native.rs','KMZ_native_gate.py']})
  r=t.remote_py('from pathlib import Path\nb=Path('+repr(t.B)+')\n'+ '\n'.join('(b/'+repr(n)+').write_text('+repr(s)+')' for n,s in files.items()))
