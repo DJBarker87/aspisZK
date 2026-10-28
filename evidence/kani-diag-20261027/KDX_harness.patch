@@ -1,0 +1,374 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="KDX_R_LPa_K015.rs"]
++mod KDX_R_LPa_K015;
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -199,3 +199,47 @@
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path="KDX_R_LPa_K004.rs"]
++mod KDX_R_LPa_K004;
++
++#[cfg(kani)]
++#[path="KDX_R_LPa_K005.rs"]
++mod KDX_R_LPa_K005;
++
++#[cfg(kani)]
++#[path="KDX_R_LPa_K007.rs"]
++mod KDX_R_LPa_K007;
++
++#[cfg(kani)]
++#[path="KDX_R_LPg_K011.rs"]
++mod KDX_R_LPg_K011;
++
++#[cfg(kani)]
++#[path="KDX_R_LPg_K012.rs"]
++mod KDX_R_LPg_K012;
++
++#[cfg(kani)]
++#[path="KDX_R_LPh_K018.rs"]
++mod KDX_R_LPh_K018;
++
++#[cfg(kani)]
++#[path="KDX_R_LPh_K019.rs"]
++mod KDX_R_LPh_K019;
++
++#[cfg(kani)]
++#[path="KDX_R_LPh_K020.rs"]
++mod KDX_R_LPh_K020;
++
++#[cfg(kani)]
++#[path="KDX_R_LPh_K021.rs"]
++mod KDX_R_LPh_K021;
++
++#[cfg(kani)]
++#[path="KDX_R_LPl_K015.rs"]
++mod KDX_R_LPl_K015;
++
++#[cfg(kani)]
++#[path="KDX_R_LPn_K001.rs"]
++mod KDX_R_LPn_K001;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,7 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="KDX_copy.rs"]
++mod KDX_copy;
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path="KDX_R_LPn_K010.rs"]
++mod KDX_R_LPn_K010;
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,11 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++#[path="KDX_R_LPm_K001.rs"]
++mod KDX_R_LPm_K001;
++
++#[cfg(kani)]
++#[path="KDX_R_LPm_K004.rs"]
++mod KDX_R_LPm_K004;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPa_K005.rs
+@@ -0,0 +1,10 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(17)]
++fn KDX_LPa_expand_alignment(){
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let n:usize=kani::any();kani::assume(n<=464&&n%16!=0);
++ assert_eq!(expand_values(&b[..n],&mut o),Err(CodecError::Length));
++ let j:usize=kani::any();kani::assume(j<928);assert_eq!(o[j],before[j]);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPa_K015.rs
+@@ -0,0 +1,23 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(35)]
++fn KDX_LPa_view_inactive(){
++ let mut proof=[0u8;compact::PROOF_BYTES];let b:[u8;32]=kani::any();
++ proof[compact::OFF_INACTIVE..compact::OFF_ROUND0].copy_from_slice(&b);
++ let semantic=[0u8;super::SEMANTIC_BYTES];let y1=[0u8;29*32];
++ let actual=wide_view(&proof,&semantic,&y1);let inactive=E::from_le_bytes(&b);
++ match (actual,inactive){
++  (Err(e),None)=>assert_eq!(e,Error::Parse),
++  (Ok(v),Some(x))=>{
++   assert_eq!(v.inactive,x);assert_eq!(v.variant,Variant::S2);
++   assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
++   assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
++   assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
++   assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
++   assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
++   assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
++   assert_eq!(v.query_bytes.len(),0);
++  },_=>assert!(false)
++ }
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPm_K001.rs
+@@ -0,0 +1,19 @@
++use super::*;
++use aspis_core::field::CM31;
++fn q(w:[u32;4])->K {K{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
++#[kani::proof]
++#[kani::unwind(1025)]
++fn weights_iterator() {
++ let raw:[[u32;4];64]=kani::any();
++ let a=Accumulator{next:kani::any(),weights:raw.map(q).to_vec(),rhs:E::ZERO,power:q(kani::any())};
++ let i:usize=kani::any();kani::assume(i<=64);
++ let mut iter=a.weights[i..].iter();
++ let item=iter.next();
++ assert_eq!(item.is_none(),i==64);
++ if let Some(&x)=item {let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(x)[limb],raw[i][limb]);}
++ assert_eq!(iter.as_slice().len(),if i==64{0}else{63-i});
++ if i<63 {let j:usize=kani::any();kani::assume(j<63-i);let limb:usize=kani::any();kani::assume(limb<4);assert_eq!(words(iter.as_slice()[j])[limb],raw[i+1+j][limb]);}
++ assert_eq!(a.weights.len(),64);
++ kani::cover!(i==0);kani::cover!(i==63);kani::cover!(i==64);
++}
++fn words(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPh_K021.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPh_live_after(){live_window::<3>()}
++fn live_window<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;96]=kani::any();let j:usize=kani::any();kani::assume(j<96);
++ kani::assume(if PART==0{j<32}else if PART==1{j>=32&&j<48}else if PART==2{j>=48&&j<64}else{j>=64});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[32..64]),Ok(()));
++ assert_eq!(out[j],if j>=32&&j<48{input[j-32]}else if j>=48&&j<64{0}else{old});
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPg_K012.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPg_expand_high(){expansion::<16,32>()}
++fn expansion<const LO:usize,const HI:usize>(){
++ let b:[u8;16]=kani::any();let mut out:[u8;32]=kani::any();let old=out;
++ let lane:usize=kani::any();kani::assume(lane>=LO&&lane<HI);
++ assert_eq!(expand_values(&b,&mut out),Ok(()));
++ assert_eq!(out[lane],if lane<16{b[lane]}else{0});let _=old;
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPh_K019.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPh_live_low(){live_window::<1>()}
++fn live_window<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;96]=kani::any();let j:usize=kani::any();kani::assume(j<96);
++ kani::assume(if PART==0{j<32}else if PART==1{j>=32&&j<48}else if PART==2{j>=48&&j<64}else{j>=64});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[32..64]),Ok(()));
++ assert_eq!(out[j],if j>=32&&j<48{input[j-32]}else if j>=48&&j<64{0}else{old});
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPl_K015.rs
+@@ -0,0 +1,10 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPl_fixed_probe(){fixed::<1>()}
++fn fixed<const ROW:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);
++ let old=out[j];let at=32*ROW;assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
++ assert_eq!(out[j],if j>=at&&j<at+16{input[j-at]}else if j>=at+16&&j<at+32{0}else{old});
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPa_K004.rs
+@@ -0,0 +1,13 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(35)]
++fn KDX_LPa_expand_stage(){
++ let b:[u8;16]=kani::any();let mut o:[u8;48]=kani::any();let mut r=o;
++ assert_eq!(expand_values(&b,&mut o[8..40]),reference_expand(&b,&mut r[8..40]));
++ let j:usize=kani::any();kani::assume(j<48);assert_eq!(o[j],r[j]);
++}
++fn reference_expand(b:&[u8],o:&mut[u8])->Result<(),CodecError>{
++ if b.len()%16!=0||o.len()!=2*b.len(){return Err(CodecError::Length)}
++ for i in 0..b.len()/16 {for j in 0..32{o[32*i+j]=if j<16{b[16*i+j]}else{0};}}Ok(())
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPh_K020.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPh_live_high(){live_window::<2>()}
++fn live_window<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;96]=kani::any();let j:usize=kani::any();kani::assume(j<96);
++ kani::assume(if PART==0{j<32}else if PART==1{j>=32&&j<48}else if PART==2{j>=48&&j<64}else{j>=64});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[32..64]),Ok(()));
++ assert_eq!(out[j],if j>=32&&j<48{input[j-32]}else if j>=48&&j<64{0}else{old});
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPg_K011.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPg_expand_low(){expansion::<0,16>()}
++fn expansion<const LO:usize,const HI:usize>(){
++ let b:[u8;16]=kani::any();let mut out:[u8;32]=kani::any();let old=out;
++ let lane:usize=kani::any();kani::assume(lane>=LO&&lane<HI);
++ assert_eq!(expand_values(&b,&mut out),Ok(()));
++ assert_eq!(out[lane],if lane<16{b[lane]}else{0});let _=old;
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPa_K007.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(17)]
++fn KDX_LPa_expand_length(){
++ let b:[u8;464]=kani::any();let mut o:[u8;928]=kani::any();let before=o;
++ let n:usize=kani::any();kani::assume(n<=464&&n%16==0);
++ let m:usize=kani::any();kani::assume(m<=928&&m!=2*n);
++ assert_eq!(expand_values(&b[..n],&mut o[..m]),Err(CodecError::Length));
++ let j:usize=kani::any();kani::assume(j<928);assert_eq!(o[j],before[j]);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_copy.rs
+@@ -0,0 +1,32 @@
++#[kani::proof] #[kani::unwind(17)]
++fn KDX_attr17(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof]
++fn KDX_default17(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof] #[kani::unwind(2)]
++fn KDX_checks2(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof] #[kani::unwind(2)]
++fn KDX_cells2(){let mut input=[0u32;16];input[7]=1;input[15]=512;let mut level=[0u32;16];let n:usize=kani::any();kani::assume(n==16);level[..n].copy_from_slice(&input[..n]);
++assert!(level[0]==input[0], "KDX_cell_00");
++assert!(level[1]==input[1], "KDX_cell_01");
++assert!(level[2]==input[2], "KDX_cell_02");
++assert!(level[3]==input[3], "KDX_cell_03");
++assert!(level[4]==input[4], "KDX_cell_04");
++assert!(level[5]==input[5], "KDX_cell_05");
++assert!(level[6]==input[6], "KDX_cell_06");
++assert!(level[7]==input[7], "KDX_cell_07");
++assert!(level[8]==input[8], "KDX_cell_08");
++assert!(level[9]==input[9], "KDX_cell_09");
++assert!(level[10]==input[10], "KDX_cell_10");
++assert!(level[11]==input[11], "KDX_cell_11");
++assert!(level[12]==input[12], "KDX_cell_12");
++assert!(level[13]==input[13], "KDX_cell_13");
++assert!(level[14]==input[14], "KDX_cell_14");
++assert!(level[15]==input[15], "KDX_cell_15");
++}
++
++// Negative control: this assertion is FALSE in native Rust on the retained fixture.
++#[kani::proof] #[kani::unwind(17)]
++fn KDX_false_zero(){let mut input=[0u32;16];input[7]=1;input[15]=512;let mut level=[0u32;16];let n:usize=kani::any();kani::assume(n==16);level[..n].copy_from_slice(&input[..n]);assert!(level[15]==0);}
++// Constant whole-array slice control; same element width and source domain.
++#[kani::proof] #[kani::unwind(17)]
++fn KDX_constant_copy(){let input:[u32;16]=kani::any();let mut level=[0u32;16];level.copy_from_slice(&input);let k:usize=kani::any();kani::assume(k<16);assert_eq!(level[k],input[k]);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPm_K004.rs
+@@ -0,0 +1,14 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(1769)]
++fn append32(){check_append::<32>();}
++fn check_append<const N:usize>() {
++ let initial:[u8;1736]=kani::any();let value:[u8;N]=kani::any();
++ let len:usize=kani::any();kani::assume(len<=1736-N);
++ let mut out=initial[..len].to_vec();out.extend_from_slice(&value);
++ assert_eq!(out.len(),len+N);
++ let at:usize=kani::any();kani::assume(at<out.len());
++ assert_eq!(out[at],if at<len{initial[at]}else{value[at-len]});
++ kani::cover!(len==0);kani::cover!(len==1736-N);kani::cover!(at==len+N-1);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPh_K018.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPh_live_before(){live_window::<0>()}
++fn live_window<const PART:usize>(){
++ let input:[u8;16]=kani::any();let mut out:[u8;96]=kani::any();let j:usize=kani::any();kani::assume(j<96);
++ kani::assume(if PART==0{j<32}else if PART==1{j>=32&&j<48}else if PART==2{j>=48&&j<64}else{j>=64});
++ let old=out[j];assert_eq!(expand_values(&input,&mut out[32..64]),Ok(()));
++ assert_eq!(out[j],if j>=32&&j<48{input[j-32]}else if j>=48&&j<64{0}else{old});
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPn_K001.rs
+@@ -0,0 +1,21 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPn_step_frame() {
++    let source: [u8;16] = kani::any();
++    let mut backing: [u8;96] = kani::any();
++    let slot: usize = kani::any(); kani::assume(slot < 3);
++    let at = 32 * slot;
++    let end: usize = kani::any(); kani::assume(at+32 <= end && end <= 96);
++    let j: usize = kani::any(); kani::assume(j < end);
++    let old = backing[j];
++    let base = backing.as_mut_ptr();
++    let window = &mut backing[..end][at..at+32];
++    assert!(core::ptr::eq(window.as_ptr(),base.wrapping_add(at)));
++    assert_eq!(window.len(),32);
++    assert_eq!(expand_values(&source,window),Ok(()));
++    assert_eq!(backing[j],if at<=j && j<at+16 { source[j-at] }
++        else if at+16<=j && j<at+32 { 0 } else { old });
++    assert!(core::ptr::eq(backing.as_ptr(),base));
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/KDX_R_LPn_K010.rs
+@@ -0,0 +1,13 @@
++use super::*;
++use aspis_core::field::CM31;
++#[kani::proof]
++#[kani::unwind(33)]
++fn KDX_LPn_nonvacuity(){
++ let mut b=[0u8;37];let high:[u8;16]=kani::any();b[21..].copy_from_slice(&high);
++ let got=ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0).unwrap();eq_q(got[0],QM31::ZERO);
++ b[5]=255;b[6]=255;b[7]=255;b[8]=127;
++ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0),Err(Error::NonCanonical{row:25,value:0}));
++ assert_eq!(ValidatedRecord{row:0,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::InvalidRow));
++ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::Length{row:25}));
++}
++fn eq_q(a:QM31,b:QM31){assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}

@@ -1,0 +1,13 @@
+use super::*;
+use aspis_core::field::CM31;
+#[kani::proof]
+#[kani::unwind(35)]
+fn KDX_LPa_expand_stage(){
+ let b:[u8;16]=kani::any();let mut o:[u8;48]=kani::any();let mut r=o;
+ assert_eq!(expand_values(&b,&mut o[8..40]),reference_expand(&b,&mut r[8..40]));
+ let j:usize=kani::any();kani::assume(j<48);assert_eq!(o[j],r[j]);
+}
+fn reference_expand(b:&[u8],o:&mut[u8])->Result<(),CodecError>{
+ if b.len()%16!=0||o.len()!=2*b.len(){return Err(CodecError::Length)}
+ for i in 0..b.len()/16 {for j in 0..32{o[32*i+j]=if j<16{b[16*i+j]}else{0};}}Ok(())
+}
