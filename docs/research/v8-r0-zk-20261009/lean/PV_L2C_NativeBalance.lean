@@ -1,4 +1,5 @@
 import PV_L2C_NativeFold
+import Mathlib.Tactic.Abel
 set_option autoImplicit false
 namespace PV_L2C_NativeBalance
 open PV_L2C_M31 PV_L2C_NativeFold
@@ -50,6 +51,7 @@ theorem audit_zero (before after : List word)
 theorem audit_branch (before after : List word)
     (hb : ∀ x ∈ before, canonical x) (ha : ∀ x ∈ after, canonical x) :
     decide (fold (rebalance before after) 0≠0)=false := by
-  simp [audit_zero before after hb ha]
+  rw [audit_zero before after hb ha]
+  rfl
 #print axioms audit_branch
 end PV_L2C_NativeBalance
