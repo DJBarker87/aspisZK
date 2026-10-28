@@ -1,0 +1,15 @@
+{"attempt": "NBZ_G087", "exit_status": 0, "wall_seconds": 0.3532092100358568, "peak_rss_kib": "100472", "swaps": "0"}
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/cx-native-query5/evidence/native-query5-20261028/NBZ_run.py", line 31, in <module>
+    r=launch(dict(base,attempt=attempt,kind='kani',command=cmd,timeout=600,expected_time='Optimized compilation then '+harness+' native single-call gate',deps_fingerprint={'frozen_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph_check':attempt+'-graph-check.json'}))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-native-query5/evidence/native-query5-20261028/NBZ_host.py", line 46, in launch
+    r=py(f'''from pathlib import Path
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-native-query5/evidence/native-query5-20261028/NBZ_host.py", line 14, in py
+    def py(code,submitted=False):return ssh('python3 -c '+shlex.quote(code),submitted)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/dominic/ZK/.worktrees/cx-native-query5/evidence/native-query5-20261028/NBZ_host.py", line 10, in ssh
+    with (E/'NBZ_NATIVE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=trial,exit=r.returncode,submitted=submitted,command=code,stdout=r.stdout,stderr=r.stderr))+'\n')
+                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 28] No space left on device

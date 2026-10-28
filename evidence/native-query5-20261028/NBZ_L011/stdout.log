@@ -1,0 +1,299 @@
+'NBZ_Carrier.length' depends on axioms: [propext]
+'NBZ_Carrier.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Carrier.window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Wide.u_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Wide.product_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Wide.horner_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Folds.circle_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Folds.line_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_WordFrame.nested' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_WordFrame.commute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Nested.array_nested' depends on axioms: [propext, Quot.sound]
+'NBZ_Nested.word_write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_Nested.q_nested' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_DotBounds.product_bound' depends on axioms: [propext, Quot.sound]
+'NBZ_DotBounds.sum_bound' depends on axioms: [propext, Quot.sound]
+'NBZ_DotBounds.group_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBZ_DotBounds.folded_sum' depends on axioms: [propext, Quot.sound]
+'NBZ_DotPhase.caller' depends on axioms: [propext, Quot.sound]
+inductive NBZ_Carrier.Fill : {α : Type} →
+  (ℕ → α) → ℕ → ℕ → Aeneas.Std.alloc.vec.Vec α → Aeneas.Std.alloc.vec.Vec α → Prop
+number of parameters: 3
+constructors:
+NBZ_Carrier.Fill.nil : ∀ {α : Type} {source : ℕ → α} (start : ℕ) (raw : Aeneas.Std.alloc.vec.Vec α),
+  NBZ_Carrier.Fill source start 0 raw raw
+NBZ_Carrier.Fill.step : ∀ {α : Type} {source : ℕ → α} {start count : ℕ} {before mid : Aeneas.Std.alloc.vec.Vec α},
+  NBZ_Carrier.Fill source start count before mid →
+    ∀ (index : Aeneas.Std.Usize),
+      ↑index = start + count →
+        ↑index < (↑mid).length → NBZ_Carrier.Fill source start (count + 1) before (mid.set index (source ↑index))
+def NBZ_Wide.product : AspisR1Stage2.Stage2E → AspisR1Stage2.Stage2E → Aeneas.Std.Result AspisR1Stage2.Stage2E :=
+fun x y => do
+  let ac ← AspisR1SelectedMaskProbe.field.QM31.mul (NBO_FieldPorts.toQ x.c0) (NBO_FieldPorts.toQ y.c0)
+  let bd ← AspisR1SelectedMaskProbe.field.QM31.mul (NBO_FieldPorts.toQ x.c1) (NBO_FieldPorts.toQ y.c1)
+  let xs ← AspisR1SelectedMaskProbe.field.QM31.add (NBO_FieldPorts.toQ x.c0) (NBO_FieldPorts.toQ x.c1)
+  let ys ← AspisR1SelectedMaskProbe.field.QM31.add (NBO_FieldPorts.toQ y.c0) (NBO_FieldPorts.toQ y.c1)
+  let cross ← xs.mul ys
+  let ub ← NBZ_Wide.u bd
+  let lo ← ac.add ub
+  let hi0 ← NBO_FoldLinear.qsub cross ac
+  let hi ← NBO_FoldLinear.qsub hi0 bd
+  Aeneas.Std.Result.ok (NBO_FieldPorts.fromE (lo, hi))
+def NBZ_Folds.circle : AspisR1Stage2.Stage2E →
+  AspisR1Stage2.Stage2E →
+    AspisR1Stage2.Stage2E →
+      AspisR1Stage2.Stage2E →
+        AspisR1Stage2.Stage2E →
+          Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.Result AspisR1Stage2.Stage2E :=
+fun alpha a b c d quarter qiy qix qixiy => do
+  let h0 ← NBW_Coefficients.coefficient a b c d true true true quarter
+  let h1 ← NBW_Coefficients.coefficient a b c d false false true qiy
+  let h2 ← NBW_Coefficients.coefficient a b c d true false false qix
+  let h3 ← NBW_Coefficients.coefficient a b c d false true false qixiy
+  NBW_Horner.eval NBZ_Wide.product alpha [h0, h1, h2] h3
+def NBZ_Folds.line : AspisR1Stage2.Stage2E →
+  AspisR1Stage2.Stage2E →
+    AspisR1Stage2.Stage2E →
+      AspisR1Stage2.Stage2E →
+        AspisR1Stage2.Stage2E →
+          Aeneas.Std.U32 →
+            Aeneas.Std.U32 →
+              Aeneas.Std.U32 →
+                Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.Result AspisR1Stage2.Stage2E :=
+fun alpha a b c d quarter qiz hix hiy half hiz => do
+  let h0 ← NBW_Coefficients.coefficient a b c d true true true quarter
+  let h2 ← NBW_Coefficients.coefficient a b c d true false false qiz
+  let ab ← NBO_FoldLinear.sub a b
+  let c0 ← NBO_FoldLinear.scale ab hix
+  let dc ← NBO_FoldLinear.sub d c
+  let c1 ← NBO_FoldLinear.scale dc hiy
+  let sum ← NBO_FieldSemantics.add c0 c1
+  let h1 ← NBO_FoldLinear.scale sum half
+  let diff ← NBO_FoldLinear.sub c0 c1
+  let h3 ← NBO_FoldLinear.scale diff hiz
+  NBW_Horner.eval NBZ_Wide.product alpha [h0, h1, h2] h3
+structure NBO_QueryDomains.Lower (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  NBO_QueryDomains.Lower.decode : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+      (out : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      ops.op21 bytes i = Aeneas.Std.Result.ok out → NBO_TailDomain.WideCanonical out
+  NBO_QueryDomains.Lower.fromFn : ∀ {T F : Type} (n : Aeneas.Std.Usize)
+      (dict : Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T) (initial : F) (out : Aeneas.Std.Array T n)
+      (property : T → Prop),
+      (∀ (state : F) (i : Aeneas.Std.Usize) (x : T) (next : F),
+          dict.call_mut state i = Aeneas.Std.Result.ok (x, next) → property x) →
+        ops.op0 n dict initial = Aeneas.Std.Result.ok out → ∀ x ∈ ↑out, property x
+  NBO_QueryDomains.Lower.inverse : ∀ (geometry : AspisR1Stage2.verifier.QueryGeometry) (i : Aeneas.Std.Usize)
+      (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+      NBO_QueryDomains.GeometryDomain geometry →
+        ↑i < 10 → ops.op18 geometry i = Aeneas.Std.Result.ok inverse → NBO_QueryDomains.AllBase inverse
+  NBO_QueryDomains.Lower.line : ∀ (alpha : AspisR1Stage2.Stage2E)
+      (values : Aeneas.Std.Array AspisR1Stage2.Stage2E 4#usize) (inverse : Aeneas.Std.Array Aeneas.Std.U32 5#usize)
+      (out : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+      NBO_TailDomain.WideCanonical alpha →
+        NBO_QueryDomains.AllWide values →
+          NBO_QueryDomains.AllBase inverse →
+            ops.op16 alpha values inverse = Aeneas.Std.Result.ok out → NBO_TailDomain.WideCanonical out
+constructor:
+  NBO_QueryDomains.Lower.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (decode :
+      ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8) (i : Aeneas.Std.Usize)
+        (out : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        ops.op21 bytes i = Aeneas.Std.Result.ok out → NBO_TailDomain.WideCanonical out)
+    (fromFn :
+      ∀ {T F : Type} (n : Aeneas.Std.Usize) (dict : Aeneas.Std.core.ops.function.FnMut F Aeneas.Std.Usize T)
+        (initial : F) (out : Aeneas.Std.Array T n) (property : T → Prop),
+        (∀ (state : F) (i : Aeneas.Std.Usize) (x : T) (next : F),
+            dict.call_mut state i = Aeneas.Std.Result.ok (x, next) → property x) →
+          ops.op0 n dict initial = Aeneas.Std.Result.ok out → ∀ x ∈ ↑out, property x)
+    (inverse :
+      ∀ (geometry : AspisR1Stage2.verifier.QueryGeometry) (i : Aeneas.Std.Usize)
+        (inverse : Aeneas.Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+        NBO_QueryDomains.GeometryDomain geometry →
+          ↑i < 10 → ops.op18 geometry i = Aeneas.Std.Result.ok inverse → NBO_QueryDomains.AllBase inverse)
+    (line :
+      ∀ (alpha : AspisR1Stage2.Stage2E) (values : Aeneas.Std.Array AspisR1Stage2.Stage2E 4#usize)
+        (inverse : Aeneas.Std.Array Aeneas.Std.U32 5#usize) (out : AspisR1Stage2.aspis_core.field.wide_exact.WideExact),
+        NBO_TailDomain.WideCanonical alpha →
+          NBO_QueryDomains.AllWide values →
+            NBO_QueryDomains.AllBase inverse →
+              ops.op16 alpha values inverse = Aeneas.Std.Result.ok out → NBO_TailDomain.WideCanonical out) :
+    NBO_QueryDomains.Lower ops
+structure NBO_FieldSemantics.NBC_Bindings (ops : AspisR1.Port3_NativeQueryBody.Ops) : Prop
+number of parameters: 1
+fields:
+  NBO_FieldSemantics.NBC_Bindings.sum : ∀ (x y : AspisR1Stage2.Stage2E),
+      NBO_TailDomain.WideCanonical x → NBO_TailDomain.WideCanonical y → ops.op2 x y = NBO_FieldSemantics.add x y
+  NBO_FieldSemantics.NBC_Bindings.product : ∀ (x : AspisR1Stage2.Stage2E) (q : NBF_RowInstall.Q),
+      NBO_TailDomain.WideCanonical x → NBF_PowerStep.Canonical q → ops.op3 x q = NBO_FieldSemantics.product x q
+  NBO_FieldSemantics.NBC_Bindings.power : ∀ (x y : NBF_RowInstall.Q),
+      NBF_PowerStep.Canonical x → NBF_PowerStep.Canonical y → ops.op9 x y = NBO_FieldSemantics.power x y
+constructor:
+  NBO_FieldSemantics.NBC_Bindings.mk {ops : AspisR1.Port3_NativeQueryBody.Ops}
+    (sum :
+      ∀ (x y : AspisR1Stage2.Stage2E),
+        NBO_TailDomain.WideCanonical x → NBO_TailDomain.WideCanonical y → ops.op2 x y = NBO_FieldSemantics.add x y)
+    (product :
+      ∀ (x : AspisR1Stage2.Stage2E) (q : NBF_RowInstall.Q),
+        NBO_TailDomain.WideCanonical x → NBF_PowerStep.Canonical q → ops.op3 x q = NBO_FieldSemantics.product x q)
+    (power :
+      ∀ (x y : NBF_RowInstall.Q),
+        NBF_PowerStep.Canonical x → NBF_PowerStep.Canonical y → ops.op9 x y = NBO_FieldSemantics.power x y) :
+    NBO_FieldSemantics.NBC_Bindings ops
+theorem NBO_WriterEntry.same_writer : ∀ (base : VTop_Stages.Ops) (reserved : Bool)
+  (ops : AspisR1.Port3_NativeQueryBody.Ops),
+  NBO_ProducerDomains.NBA_NBC base ops →
+    NBO_Entry.NBC_Bounds base →
+      NBO_QueryDomains.Lower ops →
+        NBO_FieldSemantics.NBC_Bindings ops →
+          ∀ {Hash : Type} (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+            (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+            (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : AspisR1Stage2.verifier.Prepared)
+            (a : AspisR1Stage2.verifier.Accumulator),
+            AspisR1.VTop_Provenance.WriterPrefix (NBO_TopInstall.install base reserved ops) D hash semantic proof split
+                none p a →
+              ∃ g initial pending geometry after,
+                NBO_Entry.Prelude base reserved D hash semantic proof split p g initial pending geometry ∧
+                  NBO_Composite.source ops proof p initial g geometry pending =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after)) ∧
+                    NBO_Composite.reference ops proof p initial g geometry pending =
+                      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after)) :=
+fun base reserved ops producers bounds lower bindings {Hash} D hash semantic proof split p a reached =>
+  let ⟨zero, h✝⟩ := reached
+  let ⟨g, h✝¹⟩ := h✝
+  let ⟨prep, h✝²⟩ := h✝¹
+  let ⟨initial, h✝³⟩ := h✝²
+  let ⟨root, h✝⁴⟩ := h✝³
+  let ⟨geometry, h✝⁵⟩ := h✝⁴
+  let ⟨pending, h✝⁶⟩ := h✝⁵
+  let ⟨returned, h✝⁷⟩ := h✝⁶
+  let ⟨flushed, h✝⁸⟩ := h✝⁷
+  let ⟨parsed, h✝⁹⟩ := h✝⁸
+  let ⟨sv, h✝¹⁰⟩ := h✝⁹
+  let ⟨hs, right✝⟩ := h✝¹⁰
+  let ⟨hsv, right✝¹⟩ := right✝
+  let ⟨hparse, right✝²⟩ := right✝¹
+  let ⟨hscan, right✝³⟩ := right✝²
+  let ⟨hzero, right✝⁴⟩ := right✝³
+  let ⟨hprep, right✝⁵⟩ := right✝⁴
+  let ⟨hbranch, right✝⁶⟩ := right✝⁵
+  let ⟨hinit, right✝⁷⟩ := right✝⁶
+  let ⟨hbatch, right✝⁸⟩ := right✝⁷
+  let ⟨hgeom, right✝⁹⟩ := right✝⁸
+  let ⟨hpending, right✝¹⁰⟩ := right✝⁹
+  let ⟨hquery, right✝¹¹⟩ := right✝¹⁰
+  let ⟨hflush, right✝¹²⟩ := right✝¹¹
+  let ⟨hw, right✝¹³⟩ := right✝¹²
+  let ⟨hr, right✝¹⁴⟩ := right✝¹³
+  let ⟨hp, hn⟩ := right✝¹⁴
+  have split10 :=
+    have same := Aeneas.Std.Result.ok.inj hs;
+    Eq.ndrec (motive := fun sv =>
+      (NBO_TopInstall.install base reserved ops).op16 = Aeneas.Std.Result.ok sv → ↑split = ↑sv → ↑split = 10)
+      (fun hs hsv => hsv) same hs hsv;
+  have splitEq := Aeneas.Std.UScalar.eq_of_val_eq split10;
+  have entry :=
+    Exists.intro zero
+      (Exists.intro prep
+        (Exists.intro root
+          (Exists.intro parsed
+            ⟨split10, ⟨hparse, ⟨hscan, ⟨hzero, ⟨hprep, ⟨hbranch, ⟨hinit, ⟨hbatch, ⟨hgeom, hpending⟩⟩⟩⟩⟩⟩⟩⟩⟩)));
+  have query :=
+    id
+      (fun hquery =>
+        have h :=
+          (AspisR1.Port3_QueryInstall.success_iff
+                (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (NBF_Accumulate.install ops) proof p
+                  initial g (AspisR1.Port3_QueryInstall.observer none) geometry pending split)
+                returned).mp
+            hquery;
+        Eq.mp
+          (congrFun'
+            (congrArg Eq
+              (congrArg
+                (AspisR1.Port3_NativeQueryBody.verifier.candidate.query_loop (NBF_Accumulate.install ops) proof p
+                  initial g none geometry pending)
+                splitEq))
+            (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok returned)))
+          h)
+      hquery;
+  have weightsEq := Subtype.ext (Eq.symm hw);
+  have same :=
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => { weights := _a, rhs := returned.1.rhs, power := returned.1.power, next := returned.1.next } = a)
+            weightsEq))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a => { weights := a.weights, rhs := _a, power := returned.1.power, next := returned.1.next } = a)
+              (Eq.symm hr)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => { weights := a.weights, rhs := a.rhs, power := _a, next := returned.1.next } = a)
+                (Eq.symm hp)))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => { weights := a.weights, rhs := a.rhs, power := a.power, next := _a } = a)
+                  (Eq.symm hn)))
+              (Eq.refl { weights := a.weights, rhs := a.rhs, power := a.power, next := a.next })))));
+  id
+    (fun hflush =>
+      have source :=
+        of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (Eq.trans
+                    (congrFun' (congrArg bind query) fun result =>
+                      match result with
+                      | Aeneas.Std.core.result.Result.Err error =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+                      | Aeneas.Std.core.result.Result.Ok (a, b) => do
+                        let finished ← AspisR1.Port3_FlushInstall.flush b a.weights.deref
+                        Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.result.Result.Ok
+                              ({ weights := ⟨↑finished, NBO_Composite.finishResult._proof_1 finished⟩, rhs := a.rhs,
+                                  power := a.power, next := a.next },
+                                b)))
+                    (Aeneas.Std.bind_tc_ok (Aeneas.Std.core.result.Result.Ok returned) fun y =>
+                      match y with
+                      | Aeneas.Std.core.result.Result.Err error =>
+                        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err error)
+                      | Aeneas.Std.core.result.Result.Ok (a, b) => do
+                        let finished ← AspisR1.Port3_FlushInstall.flush b a.weights.deref
+                        Aeneas.Std.Result.ok
+                            (Aeneas.Std.core.result.Result.Ok
+                              ({ weights := ⟨↑finished, NBO_Composite.finishResult._proof_1 finished⟩, rhs := a.rhs,
+                                  power := a.power, next := a.next },
+                                b))))
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun' (congrArg bind hflush) fun finished =>
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                            ({ weights := ⟨↑finished, NBO_Composite.finishResult._proof_1 finished⟩,
+                                rhs := returned.1.rhs, power := returned.1.power, next := returned.1.next },
+                              returned.2)))
+                      (Aeneas.Std.bind_tc_ok flushed fun y =>
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Ok
+                            ({ weights := ⟨↑y, NBO_Composite.finishResult._proof_1 y⟩, rhs := returned.1.rhs,
+                                power := returned.1.power, next := returned.1.next },
+                              returned.2))))
+                    (congrArg Aeneas.Std.Result.ok
+                      (congrArg Aeneas.Std.core.result.Result.Ok (congrFun' (congrArg Prod.mk same) returned.2))))))
+              (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, returned.2))))
+            (eq_self (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, returned.2)))));
+      have assoc :=
+        NBO_Entry.association base reserved ops producers bounds lower bindings D hash semantic proof split p g initial
+          pending geometry entry;
+      Exists.intro g
+        (Exists.intro initial
+          (Exists.intro pending
+            (Exists.intro geometry (Exists.intro returned.2 ⟨entry, ⟨source, Eq.trans (Eq.symm assoc) source⟩⟩)))))
+    hflush

@@ -15,5 +15,5 @@ for row in plan:
  (E/(a+'-driver.log')).write_text(r.stdout);print(a,r.returncode,r.stdout[-2600:],flush=True)
  if r.returncode:raise SystemExit(r.returncode)
  rc=json.loads(p.read_text());log=(p.parent/'stdout.log').read_text()
- if row.get('positive') and rc['exit_status']==0:raise SystemExit('VACUITY FINDING '+a)
+ if row.get('negative') and rc['exit_status']==0:raise SystemExit('VACUITY FINDING '+a)
  if 'error[' in log or 'compilation error' in log:raise SystemExit('own harness compilation failure: repair before proceeding')

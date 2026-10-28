@@ -6,6 +6,9 @@ fcntl.flock(_nbo_serial, fcntl.LOCK_EX)
 from NBZ_host import *
 import hashlib,tomllib,sys,os
 attempt,harness=sys.argv[1:]
+if (E/'NBZ_REDIRECT_REQUEST').exists():
+ (E/'NBZ_REDIRECT_ACK.json').write_text(json.dumps(dict(not_submitted=attempt,reason='independent coefficient-read gate next'))+'\n')
+ raise SystemExit('Own queue redirected before metadata or submission')
 assert attempt.startswith('NBZ_K')
 assert len(list(E.glob('NBZ_K[0-9][0-9][0-9].json')))<90, 'Kani budget exhausted'
 assert not (E/(attempt+'.json')).exists(), 'submitted attempt must only be recovered, never resubmitted'

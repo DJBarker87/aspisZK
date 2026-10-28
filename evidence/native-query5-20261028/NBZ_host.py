@@ -1,13 +1,13 @@
 """Own transport/admission wrapper; never modifies the shared launchers."""
 from pathlib import Path
-import subprocess,json,shlex,time
+import subprocess,json,shlex,time,hashlib
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-native-query5-20261028'
 def ssh(code,submitted=False):
  for trial in range(11):
   r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],capture_output=True,text=True)
-  with (E/'NBZ_NATIVE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=trial,exit=r.returncode,submitted=submitted,command=code,stdout=r.stdout,stderr=r.stderr))+'\n')
+  with (E/'NBZ_NATIVE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=trial,exit=r.returncode,submitted=submitted,command=code,stdout_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),stdout_bytes=len(r.stdout.encode()),stdout_tail=r.stdout[-1500:],stderr=r.stderr))+'\n')
   if r.returncode!=255 or submitted:return r
   if trial<10:print('transport255; waiting60s',flush=True);time.sleep(60)
  raise SystemExit('STOP persistent transport255')

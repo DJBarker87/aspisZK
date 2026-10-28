@@ -10,3 +10,6 @@ All inherited pairings in native-query4-20261028/LPh_STUBS.md and native-query2-
 | Exact KMX payload | KMX_CopyMeaning.loop_spec/copy_prefix/copy_frame/append_spec/realloc_prefix | Exact upstream patch and stub hashes in NBZ_IMPORTS.json. Each positive copy-dependent gate also needs its own failing matched negative control. |
 
 NBZ_Wide.product_total and NBZ_Folds domain theorems use the coherent probe carrier. They do not reattribute historical emitted FIo proofs to a different source or install NBC_FieldOps.
+
+| NBZ_dots/NBZ_rescue::NBZ_add_spec → factored integer add/product expression | NBB_Arithmetic.add, on the exact S7OwnedP6Scalar.residue_scalar_owned emitted fragment with flush=false; caller phase supplied by NBZ_DotPhase.caller | old <2^34+phase*(P-1)^2, phase<4, both U32 inputs<P. Returns any U64 constrained in U128 arithmetic to old+coefficient*scalar. This is the same integer expression as the frozen base-prefix statement. K065 timed out; no product equivalence is claimed from Kani. |
+| NBZ_dots::NBZ_reduce_spec → M31::reduce_u64 | S8OwnedP6ValueModel.reducer_total/value_total_model; NBB_Arithmetic.fold for the prior fold | All U64; any U32 constrained exactly to x%P, hence canonical. Actual eight returned words and callback order are checked. |
