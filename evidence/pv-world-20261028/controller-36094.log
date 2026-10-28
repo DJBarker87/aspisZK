@@ -1,0 +1,70 @@
+structure R1Z.PV_RunJoin_NativeEffectInterface.Identity {E File Reply Time Worker : Type} [DecidableEq File]
+  (native : Native E File Reply Time Worker) (laws : Laws E File Reply Time Worker) : Prop
+number of parameters: 8
+fields:
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.entropy : ∀ (world : World E File Reply Time Worker) (i : Fin 128)
+      (reply : PV_RunJoin_CallerWorld.RawReply E), native.entropyDraw world i reply ↔ EntropyAllowed laws world i reply
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.open64 : ∀ (world : World E File Reply Time Worker) (path : List U8)
+      (flags mode : U32) (reply : Reply) (next : World E File Reply Time Worker),
+      fileStep (Request.open64 path flags mode) world = some (reply, next) →
+        (native.open64 world path flags mode reply ↔ laws.open64 world path flags mode reply)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.read : ∀ (world : World E File Reply Time Worker) (owner : File)
+      (count : Usize) (reply : Reply) (next : World E File Reply Time Worker),
+      fileStep (Request.read owner count) world = some (reply, next) →
+        (native.read world owner count reply ↔ laws.read world owner count reply)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.write : ∀ (world : World E File Reply Time Worker) (owner : File)
+      (bytes : List U8) (reply : Reply) (next : World E File Reply Time Worker),
+      fileStep (Request.write owner bytes) world = some (reply, next) →
+        (native.write world owner bytes reply ↔ laws.write world owner bytes reply)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.sync : ∀ (world : World E File Reply Time Worker) (owner : File)
+      (reply : Reply) (next : World E File Reply Time Worker),
+      fileStep (Request.sync owner) world = some (reply, next) →
+        (native.sync world owner reply ↔ laws.sync world owner reply)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.close : ∀ (world : World E File Reply Time Worker) (owner : File)
+      (reply : Reply) (next : World E File Reply Time Worker),
+      fileStep (Request.close owner) world = some (reply, next) →
+        (native.close world owner reply ↔ laws.close world owner reply)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.time : ∀ (world : World E File Reply Time Worker) (outcome : Time)
+      (next : World E File Reply Time Worker),
+      timeStep world = some (outcome, next) → (native.time world outcome ↔ laws.time world outcome)
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.worker : ∀ (world : World E File Reply Time Worker) (outcome : Worker)
+      (next : World E File Reply Time Worker),
+      workerStep world = some (outcome, next) → (native.worker world outcome ↔ laws.worker world outcome)
+constructor:
+  R1Z.PV_RunJoin_NativeEffectInterface.Identity.mk {E File Reply Time Worker : Type} [DecidableEq File]
+    {native : Native E File Reply Time Worker} {laws : Laws E File Reply Time Worker}
+    (entropy :
+      ∀ (world : World E File Reply Time Worker) (i : Fin 128) (reply : PV_RunJoin_CallerWorld.RawReply E),
+        native.entropyDraw world i reply ↔ EntropyAllowed laws world i reply)
+    (open64 :
+      ∀ (world : World E File Reply Time Worker) (path : List U8) (flags mode : U32) (reply : Reply)
+        (next : World E File Reply Time Worker),
+        fileStep (Request.open64 path flags mode) world = some (reply, next) →
+          (native.open64 world path flags mode reply ↔ laws.open64 world path flags mode reply))
+    (read :
+      ∀ (world : World E File Reply Time Worker) (owner : File) (count : Usize) (reply : Reply)
+        (next : World E File Reply Time Worker),
+        fileStep (Request.read owner count) world = some (reply, next) →
+          (native.read world owner count reply ↔ laws.read world owner count reply))
+    (write :
+      ∀ (world : World E File Reply Time Worker) (owner : File) (bytes : List U8) (reply : Reply)
+        (next : World E File Reply Time Worker),
+        fileStep (Request.write owner bytes) world = some (reply, next) →
+          (native.write world owner bytes reply ↔ laws.write world owner bytes reply))
+    (sync :
+      ∀ (world : World E File Reply Time Worker) (owner : File) (reply : Reply) (next : World E File Reply Time Worker),
+        fileStep (Request.sync owner) world = some (reply, next) →
+          (native.sync world owner reply ↔ laws.sync world owner reply))
+    (close :
+      ∀ (world : World E File Reply Time Worker) (owner : File) (reply : Reply) (next : World E File Reply Time Worker),
+        fileStep (Request.close owner) world = some (reply, next) →
+          (native.close world owner reply ↔ laws.close world owner reply))
+    (time :
+      ∀ (world : World E File Reply Time Worker) (outcome : Time) (next : World E File Reply Time Worker),
+        timeStep world = some (outcome, next) → (native.time world outcome ↔ laws.time world outcome))
+    (worker :
+      ∀ (world : World E File Reply Time Worker) (outcome : Worker) (next : World E File Reply Time Worker),
+        workerStep world = some (outcome, next) → (native.worker world outcome ↔ laws.worker world outcome)) :
+    Identity native laws
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36094/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36094/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_RunJoin_NativeEffectInterface.olean", "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_RunJoin_NativeEffectInterface.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.65", "peak_rss_kib": "3859836", "swap": "0", "source_revision": "ea0eda5aadf5aa64dba2cd3e2d7749be167769fd", "expected_phase": "compilation of R1Z/PV_RunJoin_NativeEffectInterface", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/ProverRwRngTape.lean:16:0: warning: automatically included section variable(s) unused in theorem `R1Z.ProverRwRngTape.fill_at`:
+  [ErasureFns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ErasureFns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/ProverRwRngTape.lean:62:23: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵z̵e̵r̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/ProverRwRngTape.lean:64:13: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵o̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲o̲n̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/ProverRwRngTape.lean:64:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵o̵n̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲t̲e̲p̲,̲ ̲o̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.ProverRwRngTape.concrete_zero_then_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.fill_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngTape.zero_then_one_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure ProverRwRng.Draw64 (Self : Type) : Type
+number of parameters: 1
+fields:
+  ProverRwRng.Draw64.fill : Self →
+      Aeneas.Std.Array Aeneas.Std.U8 64#usize →
+        Aeneas.Std.Result
+          ((Self × Aeneas.Std.core.result.Result Unit Aeneas.Std.U8) × Aeneas.Std.Array Aeneas.Std.U8 64#usize)
+constructor:
+  ProverRwRng.Draw64.mk {Self : Type}
+    (fill :
+      Self →
+        Aeneas.Std.Array Aeneas.Std.U8 64#usize →
+          Aeneas.Std.Result
+            ((Self × Aeneas.Std.core.result.Result Unit Aeneas.Std.U8) × Aeneas.Std.Array Aeneas.Std.U8 64#usize)) :
+    ProverRwRng.Draw64 Self
+def ProverRwRng.StateOnlyAttemptSecrets.generate_with : [ProverRwRng.ErasureFns] →
+  {P : Type} →
+    ProverRwRng.Draw64 P →
+      Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+        P →
+          Aeneas.Std.Result
+            (P ×
+              Aeneas.Std.core.result.Result ProverRwRng.StateOnlyAttemptSecrets
+                ProverRwRng.StateOnlyAttemptEntropyError) :=
+fun [ProverRwRng.ErasureFns] {P} Draw64Inst mask_nonce provider => do
+  let b ← ProverRwRng.entropy_nonzero32 mask_nonce
+  if b = true then
+      ProverRwRng.StateOnlyAttemptSecrets.generate_with_loop Draw64Inst mask_nonce provider
+        ProverRwRng.ENTROPY_RETRY_LIMIT 0#usize
+    else
+      Aeneas.Std.Result.ok
+        (provider, Aeneas.Std.core.result.Result.Err ProverRwRng.StateOnlyAttemptEntropyError.RepeatedZeroBlock)
+'R1Z.ProverRwRngNonzero.index_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNonzero.scan_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngNonzero.nonzero_repeat' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.constant_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.error_state' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverRwRngControl.cap_state' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -28,3 +28,8 @@ asserted from an unavailable/in-progress source.
 11:41:31.514564 UTC. Same-ID retry after 11:44:47 UTC passed, followed by
 36054 and 36055. 36056 scope admission refused at 11:47:21.293233 UTC; no
 compiler started. Retry is permitted after 11:50:21.293233 UTC.
+
+36060 admission refused 12:08:46.196229 UTC; retried after 12:12:35 UTC and
+compiled successfully with the repaired public-import closure.
+36066 in-scope barrier refused 12:25:35.442703 UTC (aggregate reservation),
+no compiler started. Same-ID retry is permitted after 12:28:35.442703 UTC.

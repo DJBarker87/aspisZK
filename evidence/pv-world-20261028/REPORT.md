@@ -1,7 +1,8 @@
 # World interpretation result — D364 resume
 
-**Target not yet established. No row closed; no endpoint premise removed.**
-This resume is in progress. W-CARRIER-1 is a finding about a design that
+**Target not established. No row closed; no endpoint premise removed.**
+Stopped on budget exhaustion: 100/100 Lean compiler starts total, including
+96 resumed attempts; zero Kani. Final focused audit and replay passed. W-CARRIER-1 is a finding about a design that
 forgets destructor-accessible state, not a ledger/endpoint counterexample and
 not a stop. The earlier report's stop disposition is superseded.
 
@@ -9,9 +10,8 @@ Exact worktree `/Users/dominic/ZK/.worktrees/pv-world`, unchanged branch
 `codex/pv-world-20261028`; resume start `937b8f561de14683239b9f5f7abe74c7eafd013c`.
 Original prover base `10b8afe7647d478f70693d8fc12e07be871c91e0`.
 Host directory `/home/dombarker/project-offloads/codex-pv-world-20261028/`.
-Budget at resume entry: 96 Lean attempts, zero Kani. All IDs stay in
-36000–36199, excluding original uses 36000–36002 and 36197; 36198–36199 are
-reserved final audits. `REFUSALS.md` records uncharged admission cooldowns.
+Used IDs: 36000–36096 and 36197–36199, all within the assigned block.
+Original uses were 36000–36002 and 36197; final audits used 36198–36199. `REFUSALS.md` records uncharged admission cooldowns.
 
 ## Established focused results
 
@@ -48,8 +48,15 @@ error values. Focused receipts include their axiom reports.
 ## Still required
 
 The requested **entire extracted prover → existing trust Observation** theorem
-is not established. Prover entry staging, existing-OsWorld step models and
-projection composition are being checked. The main nested proof routine,
+is not established. The exact `prove_masked_attempt` entry reification
+(16 call sites) and complete-Result erasure passed, as did entry threading
+conditional on local model-step laws. `PV_W_OsFile`, `PV_W_OsEntropy`,
+`PV_W_OsSchedule` and `PV_W_OsCombined` interpret the actual existing OsWorld
+tapes and prove reservation projection to its ordered tagged-call sequence.
+They preserve native error payloads separately from tape faults and retain
+process/filesystem updates. `PV_W_RepeatFile` checks an advancing repeated-call
+model; it is not a native O_EXCL proof. These results do not establish
+primitive native adequacy or bind a complete trust-field Observation. The main nested proof routine,
 reservation_path and other helpers still need recursive interpretations;
 primitive native adequacy, actual reached Drop/implicit close and ownership,
 allocator/zeroize fidelity, and the complete filesystem/D159 observation
@@ -94,5 +101,29 @@ No unchanged full regression or full frozen manifest replay was run: no
 row-closing native/deployment instance has been obtained.
 
 History: `git log --oneline 10b8afe7647d478f70693d8fc12e07be871c91e0..HEAD`.
-The final budget/audit/cleanup accounting will be recorded when this resume
-stops under the task rules.
+Final source/receipt accounting is `resume-validation.json`: 100 compiler
+starts (76 accepted and 24 failed), no unverified focused sources, and no row closures. Final targets:
+
+| ID | Target | Exit | Wall | Peak RSS (KiB) | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 36198 | R1Z/PV_W_ResumeAudit | 0 | 1.50 s | 3856952 | 0 |
+| 36199 | R1Z/PV_W_ResumeReplay | 0 | 1.53 s | 3859612 | 0 |
+
+The audit contains 93 explicit axiom queries; the replay adds six. Every
+accepted query uses only a subset of propext, Classical.choice and Quot.sound.
+Exact source revisions and source hashes are recorded per attempt in
+`36198-source.json`, `36199-source.json` and their receipt directories,
+with the final module hashes in `resume-source-freeze.json`. This is a
+focused dependency/import replay, not a full deployment-manifest release.
+
+`resume-cleanup.json` and `resume-private-object-manifest.json` retain the
+compiled-artifact inventory/hashes. Cleanup removed 22,148 private entries;
+zero reused targets were removed. Sources, receipts and witnesses remain;
+no keys were touched.
+
+Next concrete deliverable: recursively interpret `prove_masked_with_attempt`
+and reached helpers, prove native primitive/Drop/ownership adequacy for their
+actual types, then connect the resulting full filesystem and D159 payload
+sequence to the existing Observation producer without adding any T premise.
+The source/model results here provide composition lemmas for that work, not
+a substitute for it.

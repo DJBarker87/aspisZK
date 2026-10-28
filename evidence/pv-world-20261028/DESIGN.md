@@ -106,3 +106,33 @@ the constructed extracted observation has those exact fields and full D159
 payload. Prove filesystem projection agrees with the interpreted ledger,
 including post-error partial effects. Then use T.observation to transfer it.
 Using that trust equality to justify the primitive steps would be circular.
+
+## D364 resume: checked implementation of the source-stage design
+
+The historical "proposed" subsections above describe the initial stop state.
+The resume supplies `PV_W_Enriched`, typed syntax, exact reservation reification,
+source erasure, operational execution correspondence, typed primitive arguments
+and algebra, explicit error embedding, and tape interpreters over the EXISTING
+OsWorld. File, entropy (including error replies), time and worker steps retain
+pre-world tags and explicit filesystem/process updates. A tape/configuration
+fault is distinct from a native IO error value. Value-only model decoding
+retains prior effects on errors/divergence; no native decoder purity is assumed.
+
+`PV_W_OsCombined.reservation_full` and `.reservation_os` compose the typed frozen
+reservation with these relations and project internal process steps only when
+OS framing is proved. `PV_W_RepeatFile` represents the retained repeated-create
+outcome shape with a genuinely advancing shared tape and full ordered trace.
+Neither the tape nor its arbitrary update DATA proves OS semantics.
+
+`PV_W_ProverEntry` additionally reifies the exact emitted prove_masked_attempt
+entry (16 call sites), with complete-Result erasure and ordered operational
+composition. Its prove_masked_with_attempt call remains a helper subprogram;
+it is NOT a theorem about that helper's internal external calls or the whole
+retrying prover. Remaining helper thunks are not declared genuinely pure.
+
+The sufficient concrete native process representation, primitive/helper
+adequacy, implicit Drop/close, native filesystem/error carriers, whole-prover
+control-flow coverage and complete D159 Observation/deployment binding remain
+unproved. In particular the new projection theorem is not silently substituted
+for the required existing Observation producer. No T field, observer, simulator
+or privacy premise is changed, and no row is closed.
