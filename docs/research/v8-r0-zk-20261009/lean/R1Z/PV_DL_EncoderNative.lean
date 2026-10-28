@@ -33,6 +33,7 @@ theorem fold {E : Type} [Inhabited E] (inst : aspis_core.r0.scalar.CodeField E)
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro pair hp
     rcases pair with ⟨a,c⟩
+    simp only [Aeneas.Std.uncurry]
     rw [ih (PV_DL_EncoderRange.advance j) a c (by rw [PV_DL_EncoderRange.advance_val j hj];omega)]
     rw [PV_DL_EncoderRange.advance_val j hj]
 
