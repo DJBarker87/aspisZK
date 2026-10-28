@@ -28,10 +28,10 @@ elab "pv_if " h:ident : tactic => do
   let fresh ← mkFreshUserName `pv_condition
   let hc := mkIdent fresh
   evalTactic (← `(tactic| by_cases $hc : $cond))
-  allGoals fun goal => do
-    replaceMainGoal [goal]
-    evalTactic (← `(tactic| first | rw [if_pos $hc] at $h | rw [if_neg $hc] at $h))
-    getMainGoal
+  evalTactic (← `(tactic| all_goals first
+    | rw [if_pos $hc] at $h:ident
+    | rw [if_neg $hc] at $h:ident))
+
 
 open Aeneas Aeneas.Std Result
 
