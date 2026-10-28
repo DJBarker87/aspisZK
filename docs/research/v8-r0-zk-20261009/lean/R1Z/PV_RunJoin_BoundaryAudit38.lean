@@ -1,8 +1,8 @@
 import R1Z.PV_RunJoin_OracleBridge38
-import R1Z.PV_RunJoin_TrustItems
-import R1Z.PV_RunJoin_AbstractEndpoint
+import R1Z.PV_RunJoin_CommonObserver32
 set_option autoImplicit false
 #print R1Z.PV_RunJoin_OracleBridge38.selected_callback
-#print R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises
-#print R1Z.PV_RunJoin_TrustBoundary.PV_RunJoin_TrustItems
+#print R1Z.PV_RunJoin_UnifiedRetry.BodySourceLaw
+#print R1Z.PV_RunJoin_CommonSample32.complete_view
+#print R1Z.PV_RunJoin_CommonObserver32.complete_pair
 #print axioms R1Z.PV_RunJoin_OracleBridge38.selected_callback
