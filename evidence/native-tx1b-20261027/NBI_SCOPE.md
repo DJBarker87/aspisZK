@@ -15,3 +15,7 @@ No pushes. Retain persistent shared leaf cache.
 Stage 1 freezes sources, tool/object selection, source-cut association and scope.
 Stage 2 records native atomic gates and new symbolic modules. Stage 3 provides
 exact remaining unit obligations, receipts and terminal audits.
+
+Cohort authority is the replayed RPx_Deployed.deployed closure with the pinned
+SInt2 objects. Digest/error dictionary slots are op43/op44. The NBI source
+inventory records these corrected slots; no XRn_Join kit/stand-in is used.
