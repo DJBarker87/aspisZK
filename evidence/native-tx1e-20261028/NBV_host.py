@@ -46,10 +46,13 @@ print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))''')
  return rc
 if __name__=='__main__':
  a=sys.argv[1]; assert not (E/a/'receipt.json').exists()
+ cfg0=json.loads((E/(a+'.json')).read_text())
+ if cfg0['kind']=='kani':assert int(a.removeprefix('NBV_K'))<=50 and len(list(E.glob('NBV_K[0-9][0-9][0-9]/receipt.json')))<50,'STOP Kani budget exhausted'
+ if cfg0['kind']=='lean':assert int(a.removeprefix('NBV_L'))<=100 and len(list(E.glob('NBV_L[0-9][0-9][0-9]/receipt.json')))<100,'STOP Lean budget exhausted'
  if json.loads((E/(a+'.json')).read_text()).get('deferred'):
   print('DEFERRED before admission: '+a);raise SystemExit(0)
  # Own wrapper safety check: a receipt must be terminal before the next scope.
- r=remote_py("import subprocess,re,json; rows=subprocess.check_output(['ps','-eo','args='],text=True).splitlines(); live=[x for x in rows if re.match(r'^python3 S2W_(?:run|lean)_host[.]py NBV_',x.strip())]; print(json.dumps(live))")
+ r=remote_py("import subprocess,re,json; rows=subprocess.check_output(['ps','-eo','args='],text=True).splitlines(); live=[x for x in rows if re.match(r'^(?:/usr/bin/)?python3 S2W_(?:run|lean)_host[.]py NBV_',x.strip())]; print(json.dumps(live))")
  assert r.returncode==0,r.stderr
  assert not json.loads(r.stdout),'STOP own NBV scope still active'
  retry=admit(a)

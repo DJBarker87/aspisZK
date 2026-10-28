@@ -42,7 +42,7 @@ k+='\n#[kani::proof] #[kani::unwind(10)]\n'+attrs+'''fn NBV_padding_word_wrong()
 if '--upload' not in sys.argv:raise SystemExit(0)
 h.admit('NBV_UPLOAD5')
 files={'crates/aspis-r1-cost-probe/src/NBV_row_windows.rs':s,'crates/aspis-r1-cost-probe/src/NBV_parent.rs':k}
-for f,mods in [('multiproof.rs',['NBV_multiproof','NBV_row_windows']),('candidate.rs',['NBV_keys','NBV_replay_keys','NBV_leaf_rows','NBV_parent'])]:
+for f,mods in [('multiproof.rs',['NBV_multiproof','NBV_row_windows']),('candidate.rs',['NBV_keys','NBV_replay_keys','NBV_leaf_rows','NBV_posthash','NBV_parent'])]:
  n='crates/aspis-r1-cost-probe/src/'+f;files[n]=(R/n).read_text()+''.join(f'\n#[cfg(kani)]\n#[path="{m}.rs"]\nmod {m};\n' for m in mods)
 r=h.remote_py(f'from pathlib import Path\nb=Path({h.B!r})\nfor n,s in {files!r}.items():(b/"NBV_src"/n).write_text(s)');assert r.returncode==0,r.stderr
 patch=''
@@ -52,6 +52,6 @@ for n,new in files.items():
 (E/'NBV_final_gates.patch').write_text(patch)
 names=[('verifier::candidate::NBV_parent::',n) for n in ['NBV_roots','NBV_roots_wrong','NBV_opening_installed_window','NBV_opening_installed_window_wrong']]+[('multiproof::NBV_row_windows::','NBV_W_'+kind+'_window'+suffix) for kind in ['pair','supply','short'] for suffix in ['', '_wrong']]+[('verifier::candidate::NBV_parent::','NBV_padding_word_wrong')]
 for num,(m,n) in enumerate(names,40):
- a=f'NBV_K{num:03}';cfg=json.loads((E/'NBV_K028.json').read_text());cfg.update(attempt=a,command=['python3','NBV_gate.py',a,m+n,'--cbmc-args','--unwinding-assertions']);cfg['sources']+=['NBV_src/crates/aspis-r1-cost-probe/src/'+x for x in ['NBV_row_windows.rs','NBV_parent.rs']];cfg['deps_fingerprint']['graph_receipt']=a+'-graph.json'
+ a=f'NBV_K{num:03}';cfg=json.loads((E/'NBV_K028.json').read_text());cfg.update(attempt=a,command=['python3','NBV_gate.py',a,m+n,'--cbmc-args','--unwinding-assertions']);cfg['sources']+=['NBV_src/crates/aspis-r1-cost-probe/src/'+x for x in ['NBV_row_windows.rs','NBV_parent.rs','NBV_posthash.rs']];cfg['deps_fingerprint']['graph_receipt']=a+'-graph.json'
  for key in ['reservation_retries','source_revision','source_tree_dirty']:cfg.pop(key,None)
  (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')

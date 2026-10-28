@@ -9,8 +9,12 @@ for a in {names!r}:
  for suffix in ['.json','-graph.json','-metadata.stderr']:
   p=b/(a+suffix)
   if p.is_file():out[p.name]=p.read_text()
+ root=b/a/'sources'
+ for p in root.rglob('*'):
+  if p.is_file():out[str(p.relative_to(b))]=p.read_text()
 print(json.dumps(out))''');assert r.returncode==0,r.stderr
-for n,s in json.loads(r.stdout).items():(E/n).write_text(s)
+for n,s in json.loads(r.stdout).items():
+ p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 files=subprocess.check_output(['git','ls-tree','-r','--name-only','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','--','crates','programs','Cargo.toml','Cargo.lock'],text=True).splitlines()
 out={}
 for n in files:
