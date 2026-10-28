@@ -47,7 +47,7 @@ theorem late : Canonical (lateBank w p) := by
   have hk' : k < 16384 := by simpa using hk
   rw [lateBank,arrT_get _ k hk']
   split_ifs with hl
-  · unfold LateRow at hl
+  · change 544 ≤ k%1024 ∧ k%1024 < 864 at hl
     exact block w p hw hp (k%1024/16) (by omega) _ (by change (k%1024%16)*16+k/1024 < 256;omega)
   · change 0 < 2147483647;omega
 #print axioms late
