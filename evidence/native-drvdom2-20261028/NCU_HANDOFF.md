@@ -97,3 +97,37 @@ capture draft. L035-L037 pass the successive prefix/control/domain targets.
 L039 is the complete conditional leaf: exit0,2.948817s,RSS5410044KiB,swap0,
 standard axioms for all five module roots. Predecessor generic lemmas were
 imported; new proofs invert/factor the driver and compose their results.
+
+# Final validation and next owner action
+
+Final cached audit NCU_Final.lean passed once in L040: exit0,2.491043s,
+peakRSS5432512KiB,swap0,revision b44d165fb5 plus exact source hash in receipt.
+All nine new roots use only propext/Classical.choice/Quot.sound. This is a
+focused cached co-import/statement/axiom audit, NOT a frozen release rebuild.
+NCU_VALIDATION.json checks all 40 source snapshots, the final five current
+source hashes against passing receipts, all admissions allowed:true, and every
+scope's 6G/8G/swap0/Tasks64 settings. Admission exit0 is in each admission and
+launcher record; no refusals/retries, transport ambiguities or memory kills.
+The 40-attempt budget is exhausted (8 passed,32 rejected). No further compile
+was launched. Rejected recovery sorryAx outputs receive zero credit.
+
+Concrete arithmetic deliverable still missing: on the Prefix's actual
+currentInstalled c preparation result, prove S2 and every query<262144; prove
+canonical gamma,kappa,both alpha,rho,ten semanticAlpha,four coordinates,claim;
+and on its actual query result prove canonical rhs,power. Query lanes' local
+functions and their NBC producer/field laws must be matched to c.query's actual
+retained operations (notably op2/op3/op9/op16/op17 and widePartialEq); semantic
+coordinate canonicality must be justified for c.boundaries.circle, rather than
+substituting F3M_CircleSource.install c.boundaries without an equality. S2/query
+bounds may already follow from installed preparation facts, but no such
+same-prefix instantiation was completed in this budget. The exact three gates
+remain in the exported leaf statement and must not be reported as discharged.
+
+For an arbitrary actual reached call use prefix_of_reached with its own
+semantic/pub/proof/split/p/a and the two offset equations, then control/domain/
+leaf on the returned prefix. No writer success is needed for that route.
+Only use accepted_when_writer_returns/NCL.accepted when that SAME op16 returns.
+The native association, extraction/runtime/library/oracle/ABI/artifact bounds
+and the security target remain unchanged and open as inherited. LEAN ONLY;
+no Kani, Rust, key/account operations, protocol/source edits or push.
+The assigned persistent cache remains in place; only NCU objects were added.
