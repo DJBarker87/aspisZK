@@ -27,7 +27,7 @@ theorem value_word (i : Honest (K := K)) (lane : Fin 16) (row : Fin 1024) :
     change row.val < (rawColumn (PV_RunJoin_NominalLeafData.foundation i.val.compiled.semantic_c1) lane).val.length
     rw [hr]; exact row.isLt
   simp only [values,column,List.getElem_map,rawColumn,PV_RunJoin_NominalLeafData.foundation,
-    PV_Src_Forest_Columns.read,dif_pos lane.isLt,Fin.val_mk,
+    PV_Src_Forest_Columns.read,if_pos lane.isLt,Fin.val_mk,
     getElem!_pos i.val.compiled.semantic_c1.c1.val lane.val hc,
     getElem!_pos (i.val.compiled.semantic_c1.c1.val[lane.val]).val row.val hr']
 
@@ -37,7 +37,7 @@ theorem canonical_cell (i : Honest (K := K)) (lane : Fin 16) (row : Fin 1024) :
   rw [value_word]
   rw [← build_eq i]
   change algebraMap M K ((_ : U32).val : M) = R0Z.WriterRefine.liftU _
-  simp only [map_natCast,R0Z.WriterRefine.liftU]
+  simp only [map_natCast,R0Z.WriterRefine.liftU,inputs]
 
 #print axioms values
 #print axioms decode_values
