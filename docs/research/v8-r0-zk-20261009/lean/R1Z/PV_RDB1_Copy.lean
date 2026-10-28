@@ -29,7 +29,6 @@ theorem copies_result {T : Type} (chunks : List (List T)) (before suffix : List 
     simp only [copies,overwrite_frame]
     rw [← List.length_append,ih]
     simp only [List.flatten_cons,List.length_append,List.drop_drop,List.append_assoc]
-    rw [Nat.add_comm cs.flatten.length c.length]
 
 /-- Replacing a valid range preserves the complete buffer length. -/
 theorem overwrite_length {T : Type} (out data : List T) (offset : Nat)
