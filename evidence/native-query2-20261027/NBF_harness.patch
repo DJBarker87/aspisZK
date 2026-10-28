@@ -8,7 +8,7 @@
 +#[cfg(kani)] #[path="NBF_harness.rs"] mod NBF_harness;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBF_harness.rs
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,84 @@
 +use super::*;
 +use aspis_core::field::CM31;
 +static mut NBF_PTR: *mut [u64;4] = core::ptr::null_mut();
@@ -56,4 +56,40 @@
 + assert_eq!(weights.raw.len(),64);assert_eq!(weights.raw.capacity(),capacity);assert_eq!(weights.raw.as_ptr(),ptr);assert_eq!(weights.terms,terms);
 + unsafe {assert_eq!(weights.raw[j][k],if i==j {NBF_REPLY[k]} else {before});}
 + kani::cover!(i!=j);kani::cover!(i==j);kani::cover!(i==63);kani::cover!(i==0);
++}
++
++// Native release row-loop iteration, factored verbatim at its loop boundary.
++// The Vec push remains actual except its row leaf; no complete loop executes.
++fn NBF_row_iteration(a:&Accumulator,weights:&mut BatchedWeights,basis:&[M31;256],j:usize) {
++ let width=a.weights.len();
++ weights.push(j,a.power,basis_at(basis,j));
++ crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));
++ crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(basis,j)));
++}
++fn NBF_arbitrary_k()->K {
++ let p:[u32;4]=kani::any();K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}}
++}
++// Field carriers have no invalid bit patterns; map initialization is irrelevant
++// to the checked iteration and is bounded explicitly.
++#[kani::proof]
++#[kani::unwind(257)]
++#[kani::stub(super::update_residue_row,NBF_context)]
++fn NBF_row_iteration_context() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());
++ let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let mut basis=[M31::ZERO;256];
++ let j:usize=kani::any();kani::assume(j<64);
++ let b:u32=kani::any();basis[j]=M31(b);
++ // Context gate observes no unselected weight. Arbitrary selected value and
++ // arbitrary row contents; Vec width is the SAME native width used by traces.
++ let mut output=alloc::vec![K::ZERO;64];output[j]=NBF_arbitrary_k();
++ let next:usize=kani::any();kani::assume(next<10);
++ let terms:usize=kani::any();let power=NBF_arbitrary_k();
++ let a=Accumulator{weights:output,rhs:E::ZERO,power,next};
++ let mut pending=BatchedWeights{raw,terms};let ptr=pending.raw.as_ptr();
++ NBF_row_iteration(&a,&mut pending,&basis,j);
++ unsafe {assert_eq!(NBF_PTR,ptr.add(j) as *mut [u64;4]);assert_eq!(NBF_BASIS,b);assert_eq!(NBF_FLUSH,terms&3==3);assert_eq!(NBF_CALLS,1);}
++ assert_eq!(pending.terms,terms);assert_eq!(pending.raw.len(),64);
++ assert_eq!(a.next,next);assert_eq!(a.weights.len(),64);
++ kani::cover!(j==0);kani::cover!(j==63);kani::cover!(next==9);
 +}

@@ -5,7 +5,7 @@ set_option autoImplicit false
 namespace NBF_RowContext
 open AspisR1Stage2
 open AspisR1.Port3_NativeQueryBody
-open AspisR1 (Port3_NativeRowFrame)
+open AspisR1
 /-- Successful actual owned push is exactly one setter at the reached index.
 The setter is derived by inverting its concrete continuation. -/
 theorem push_write (b out : verifier.BatchedWeights) (j : Usize)
@@ -38,7 +38,7 @@ theorem body_write (ops : Ops) (v : alloc.vec.Vec aspis_core.field.QM31)
  (q : aspis_core.field.QM31) (next width : Usize)
  (basis : Array U32 256#usize) (iter : core.ops.range.Range Usize)
  (b : verifier.BatchedWeights)
- (active : iter.start.val<iter.end.val) (bound : iter.end.val≤b.raw.val.length)
+ (active : iter.start.val < iter.end.val) (bound : iter.end.val≤b.raw.val.length)
  (out : ControlFlow (core.ops.range.Range Usize × verifier.BatchedWeights) verifier.BatchedWeights)
  (run : verifier.accumulate_batched_with_node_loop1.body
    (Port3_NativeRowFrame.install ops) v q next width basis iter b=ok out) :
