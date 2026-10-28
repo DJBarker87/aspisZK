@@ -1,0 +1,72 @@
+NBN_generated/NBN_StatementDomains.lean:17:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have c := common s;
+    if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+      ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if 8 ≤ ↑c.output_lane then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+      else do
+        let r ← payment s
+        match r with
+          | core.result.Result.Err e => ok (core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.Payment e))
+          | core.result.Result.Ok a => ok (suffix s)) =
+    ok (core.result.Result.Ok ())
+of `accepted`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+s : Statement
+accepted :
+  (have c := common s;
+    if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+      ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if 8 ≤ ↑c.output_lane then ok (core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+      else do
+        let r ← payment s
+        match r with
+          | core.result.Result.Err e => ok (core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.Payment e))
+          | core.result.Result.Ok a => ok (suffix s)) =
+    ok (core.result.Result.Ok ())
+⊢ ∃ bytes, payment s = ok (core.result.Result.Ok bytes) ∧ suffix s = core.result.Result.Ok ()
+NBN_generated/NBN_StatementDomains.lean:36:63: error: unsolved goals
+s : Statement
+accepted : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (core.result.Result.Ok ())
+w✝ : Std.Array U8 216#usize
+left✝ : payment s = ok (core.result.Result.Ok w✝)
+h :
+  (have c := common s;
+    match parts s with
+    | (pool, deployment, sequence, anchor, nullifier, snd) =>
+      if pool ≠ c.master_account then core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+      else
+        if deployment ≠ c.lane_transition.live_snapshot.deployment_domain then
+          core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch
+        else
+          if c.lane_transition.live_snapshot.pool ≠ c.master_account then
+            core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+          else
+            if sequence ≠ c.checkpoint_sequence then
+              core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+            else
+              if anchor ≠ c.historical_global_anchor then
+                core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+              else
+                match NBN_OutputLane.result nullifier with
+                | core.result.Result.Err e => core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.Account e)
+                | core.result.Result.Ok lane =>
+                  if lane ≠ c.output_lane then
+                    core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+                  else
+                    match lateStatus c.lane_transition with
+                    | core.result.Result.Err e =>
+                      core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)
+                    | core.result.Result.Ok a => core.result.Result.Ok ()) =
+    core.result.Result.Ok ()
+⊢ (parts s).1 = (common s).master_account ∧
+    (parts s).2.1 = (common s).lane_transition.live_snapshot.deployment_domain ∧
+      (common s).lane_transition.live_snapshot.pool = (common s).master_account ∧
+        (parts s).2.2.1 = (common s).checkpoint_sequence ∧ (parts s).2.2.2.1 = (common s).historical_global_anchor
+'NBN_StatementDomains.payment_reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_StatementDomains.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_StatementDomains.lane_late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_StatementDomains.late_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

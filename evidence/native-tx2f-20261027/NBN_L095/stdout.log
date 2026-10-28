@@ -1,0 +1,41 @@
+NBN_generated/NBN_ResultDependency.lean:12:7: error: unsupported `do` element (kind: Lean.Parser.Term.doIf)
+  if r.output_lane ≠ l then 
+    ok (.Err .OutputLaneMismatch)
+NBN_generated/NBN_ResultDependency.lean:17:6: error: unexpected token 'else'; expected command
+NBN_generated/NBN_ResultDependency.lean:23:8: warning: declaration uses `sorry`
+NBN_generated/NBN_ResultDependency.lean:24:5: warning: Variable name `NBN_Dep_DigestEncodeCanonical` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NBN_generated/NBN_ResultDependency.lean:28:2: warning: 'simp only [NBN_FirstByteDependency.lane_source enc NBN_Dep_DigestEncodeCanonical, NBN_OutputLane.source,
+  NBN_EncoderSummary.after_source enc NBN_Dep_DigestEncodeCanonical, NBK_AfterstateResult.source]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NBN_generated/NBN_ResultDependency.lean:30:2: warning: 'by_cases h : r.master_account = zero ∨ r.selected_lane_account = zero' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NBN_generated/NBN_ResultDependency.lean:31:2: warning: '· simp only [h, if_true]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NBN_generated/NBN_ResultDependency.lean:32:2: warning: '·
+  simp only [h, if_false, bind_tc_ok]
+  cases NBN_OutputLane.result r.nullifier with
+  | Err e => rfl
+  | Ok lane =>
+    by_cases mismatch : r.output_lane = lane
+    · simp only [mismatch, ne_eq, not_true_eq_false, if_false]
+      cases NBH_Validators.afterResult r.verified_afterstate <;> rfl
+    · simp only [mismatch, ne_eq, not_false_eq_true, if_true]' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+NBN_generated/NBN_ResultDependency.lean:30:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NBN_generated/NBN_ResultDependency.lean:31:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+NBN_generated/NBN_ResultDependency.lean:32:2: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'NBN_ResultDependency.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

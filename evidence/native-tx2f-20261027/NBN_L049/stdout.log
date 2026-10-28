@@ -1,0 +1,127 @@
+NBN_generated/NBN_EncoderContents.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+    (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p)).lane_transition initial
+in the target expression
+  nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial =
+    resultMap (fun result => (rustMapError fromPoolV1PairLatePublicStatementErrorV1 result.1, result.2))
+      (pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial)
+
+case refl
+c : PoolV1PairForestTerminalCommonV1
+p : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+valid :
+  validate_pool_v1_pair_forest_terminal_statement_v1 (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p) =
+    ok (core.result.Result.Ok ())
+good :
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1
+      nativeOps
+      (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+        (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1PrivateTransferPublicV1 p)) ⦃
+    result =>
+    ∃ encoded initial updated payment,
+      result = core.result.Result.Ok encoded ∧
+        initial.length = 1520 ∧
+          updated.length = 1520 ∧
+            nativeOps.late (fromPoolV1PairForestTerminalCommonV1 c).lane_transition initial =
+                ok (core.result.Result.Ok (), updated) ∧
+              nativeOps.transfer (fromPoolV1PrivateTransferPublicV1 p) = ok (core.result.Result.Ok payment) ∧
+                ↑encoded =
+                  AspisS6OuterEncoderContents.common_prefix (fromPoolV1PairForestTerminalCommonV1 c) 1#u8 ++ ↑updated ++
+                    ↑payment ⦄
+encoded : Std.Array U8 1880#usize
+initial updated : Slice U8
+pay : Std.Array U8 216#usize
+size : initial.length = 1520
+len : updated.length = 1520
+late_run :
+  nativeOps.late (fromPoolV1PairForestTerminalCommonV1 c).lane_transition initial =
+    ok (core.result.Result.Ok (), updated)
+pay_run : nativeOps.transfer (fromPoolV1PrivateTransferPublicV1 p) = ok (core.result.Result.Ok pay)
+layout :
+  ↑encoded = AspisS6OuterEncoderContents.common_prefix (fromPoolV1PairForestTerminalCommonV1 c) 1#u8 ++ ↑updated ++ ↑pay
+run :
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1
+      nativeOps
+      (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+        (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1PrivateTransferPublicV1 p)) =
+    ok (core.result.Result.Ok encoded)
+late_call :
+  nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial =
+    resultMap (fun result => (rustMapError fromPoolV1PairLatePublicStatementErrorV1 result.1, result.2))
+      (pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial)
+ready :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+      (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p)).lane_transition initial =
+    ok
+      (core.result.Result.Ok (),
+        NBN_LateTail.value (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p)).lane_transition
+          NBN_LateResult.header)
+⊢ ∃ pay,
+    payment (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p) = ok (core.result.Result.Ok pay) ∧
+      AspisS6OuterNativeInstalled.encode (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p) =
+        ok
+          (core.result.Result.Ok (NBN_EncoderBytes.bytes (PoolV1PairForestTerminalStatementV1.PrivateTransfer c p) pay))
+NBN_generated/NBN_EncoderContents.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+    (common (PoolV1PairForestTerminalStatementV1.Withdrawal c p)).lane_transition initial
+in the target expression
+  nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial =
+    resultMap (fun result => (rustMapError fromPoolV1PairLatePublicStatementErrorV1 result.1, result.2))
+      (pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial)
+
+case refl
+c : PoolV1PairForestTerminalCommonV1
+p : pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+valid :
+  validate_pool_v1_pair_forest_terminal_statement_v1 (PoolV1PairForestTerminalStatementV1.Withdrawal c p) =
+    ok (core.result.Result.Ok ())
+good :
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1
+      nativeOps
+      (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+        (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1WithdrawalPublicV1 p)) ⦃
+    result =>
+    ∃ encoded initial updated payment,
+      result = core.result.Result.Ok encoded ∧
+        initial.length = 1520 ∧
+          updated.length = 1520 ∧
+            nativeOps.late (fromPoolV1PairForestTerminalCommonV1 c).lane_transition initial =
+                ok (core.result.Result.Ok (), updated) ∧
+              nativeOps.withdrawal (fromPoolV1WithdrawalPublicV1 p) = ok (core.result.Result.Ok payment) ∧
+                ↑encoded =
+                  AspisS6OuterEncoderContents.common_prefix (fromPoolV1PairForestTerminalCommonV1 c) 2#u8 ++ ↑updated ++
+                    ↑payment ⦄
+encoded : Std.Array U8 1880#usize
+initial updated : Slice U8
+pay : Std.Array U8 216#usize
+size : initial.length = 1520
+len : updated.length = 1520
+late_run :
+  nativeOps.late (fromPoolV1PairForestTerminalCommonV1 c).lane_transition initial =
+    ok (core.result.Result.Ok (), updated)
+pay_run : nativeOps.withdrawal (fromPoolV1WithdrawalPublicV1 p) = ok (core.result.Result.Ok pay)
+layout :
+  ↑encoded = AspisS6OuterEncoderContents.common_prefix (fromPoolV1PairForestTerminalCommonV1 c) 2#u8 ++ ↑updated ++ ↑pay
+run :
+  AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_statement_v1
+      nativeOps
+      (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+        (fromPoolV1PairForestTerminalCommonV1 c) (fromPoolV1WithdrawalPublicV1 p)) =
+    ok (core.result.Result.Ok encoded)
+late_call :
+  nativeOps.late (fromPoolV1PairLatePublicStatementV1 c.lane_transition) initial =
+    resultMap (fun result => (rustMapError fromPoolV1PairLatePublicStatementErrorV1 result.1, result.2))
+      (pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 c.lane_transition initial)
+ready :
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+      (common (PoolV1PairForestTerminalStatementV1.Withdrawal c p)).lane_transition initial =
+    ok
+      (core.result.Result.Ok (),
+        NBN_LateTail.value (common (PoolV1PairForestTerminalStatementV1.Withdrawal c p)).lane_transition
+          NBN_LateResult.header)
+⊢ ∃ pay,
+    payment (PoolV1PairForestTerminalStatementV1.Withdrawal c p) = ok (core.result.Result.Ok pay) ∧
+      AspisS6OuterNativeInstalled.encode (PoolV1PairForestTerminalStatementV1.Withdrawal c p) =
+        ok (core.result.Result.Ok (NBN_EncoderBytes.bytes (PoolV1PairForestTerminalStatementV1.Withdrawal c p) pay))
+'NBN_EncoderContents.private_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_EncoderContents.withdrawal_contents' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

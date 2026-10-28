@@ -1,0 +1,173 @@
+NBN_generated/NBN_LateTail.lean:52:6: warning: try 'simp' instead of 'simpa'
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`
+NBN_generated/NBN_LateTail.lean:75:10: error: unsolved goals
+case Err
+s : Statement
+output : Slice U8
+size : output.length = 1520
+len : (↑output).length = 1520
+add : 32#usize + 800#usize = ok 832#usize
+e : NBH_LiveValidator.Error
+hv : NBH_LiveValidator.result s.live_snapshot = core.result.Result.Err e
+⊢ ⟨(↑output).setSlice! 32 (List.take 800 (List.drop 32 ↑output)), ⋯⟩ = output
+NBN_generated/NBN_LateTail.lean:81:12: error: unsolved goals
+case Ok.unit.Err
+s : Statement
+output : Slice U8
+size : output.length = 1520
+len : (↑output).length = 1520
+add : 32#usize + 800#usize = ok 832#usize
+hv : NBH_LiveValidator.result s.live_snapshot = core.result.Result.Ok PUnit.unit
+e : NBH_Validators.AfterError
+ha : NBH_Validators.afterResult s.candidate_afterstate = core.result.Result.Err e
+⊢ ⟨(↑output).setSlice! 32 ↑(NBK_LiveResult.bytes s.live_snapshot), ⋯⟩ =
+    output.setSlice! 32 ↑(NBK_LiveResult.bytes s.live_snapshot)
+s : Statement
+output : Slice U8
+size : output.length = 1520
+len : (↑output).length = 1520
+add : 32#usize + 800#usize = ok 832#usize
+⊢ ∃ a b,
+    (match NBH_LiveValidator.result s.live_snapshot with
+        | core.result.Result.Ok a => ok (core.result.Result.Ok (), NBK_LiveResult.bytes s.live_snapshot)
+        | core.result.Result.Err e => ok (core.result.Result.Err e, ⟨List.take 800 (List.drop 32 ↑output), ⋯⟩)) =
+        ok (a, b) ∧
+      (match a with
+        | core.result.Result.Err e =>
+          ok (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Snapshot e), ⟨(↑output).setSlice! 32 ↑b, ⋯⟩)
+        | core.result.Result.Ok a => do
+          let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate
+          match r2 with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err (PoolV1PairLatePublicStatementErrorV1.Afterstate e),
+                  ⟨(↑output).setSlice! 32 ↑b, ⋯⟩)
+            | core.result.Result.Ok bytes => do
+              let (dest, back2) ←
+                core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut { start := 832#usize }
+                    ⟨(↑output).setSlice! 32 ↑b, ⋯⟩
+              let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+              ok (core.result.Result.Ok (), back2 copied)) =
+        ok (status s, value s output)
+NBN_generated/NBN_LateTail.lean:70:71: warning: This simp argument is unused:
+  Slice.len
+
+Hint: Omit it from the simp argument list.
+  simp [core.slice.index.Slice.index_mut, core.slice.index.SliceIndexRangeUsizeSlice.index_mut,
+  ̲  ̲ ̲ ̲S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵l̵e̵n̵]̵S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:72:22: warning: This simp argument is unused:
+  Slice.slice
+
+Hint: Omit it from the simp argument list.
+  simp [Slice.length, S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵l̵e̵n̵]̵L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲l̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:75:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:78:15: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵v̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:78:18: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [hv,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:85:8: warning: This simp argument is unused:
+  core.slice.index.Slice.index_mut
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲e̲n̲,̲ ̲l̲i̲v̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ (AfterstateEncoding.bytes s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵s̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲_̲a̲f̲t̲e̲r̲s̲t̲a̲t̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:87:8: warning: This simp argument is unused:
+  Slice.slice
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲v̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ (AfterstateEncoding.bytes s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵s̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲_̲a̲f̲t̲e̲r̲s̲t̲a̲t̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:87:20: warning: This simp argument is unused:
+  List.slice
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲l̲e̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲v̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ (AfterstateEncoding.bytes s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵s̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲_̲a̲f̲t̲e̲r̲s̲t̲a̲t̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:87:57: warning: This simp argument is unused:
+  live_length
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲e̲n̲,̲ (AfterstateEncoding.bytes s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵s̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲_̲a̲f̲t̲e̲r̲s̲t̲a̲t̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:88:8: warning: This simp argument is unused:
+  (AfterstateEncoding.bytes s.candidate_afterstate).property
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵(̵A̵f̵t̵e̵r̵s̵t̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵.̵b̵y̵t̵e̵s̵ ̵s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲e̲n̲,̲ ̲l̲i̲v̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBN_generated/NBN_LateTail.lean:88:83: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp [̵h̵a̵,̵h̵v̵,̵s̵t̵a̵t̵u̵s̵,̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵.̵S̵l̵i̵c̵e̵I̵n̵d̵e̵x̵R̵a̵n̵g̵e̵F̵r̵o̵m̵U̵s̵i̵z̵e̵S̵l̵i̵c̵e̵.̵i̵n̵d̵e̵x̵_̵m̵u̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵S̵l̵i̵c̵e̵.̵c̵o̵p̵y̵_̵f̵r̵o̵m̵_̵s̵l̵i̵c̵e̵,̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵S̵l̵i̵c̵e̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵s̵l̵i̵c̵e̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵e̵n̵,̵l̵i̵v̵e̵_̵l̵e̵n̵g̵t̵h̵,̵[̲h̲a̲,̲ ̲h̲v̲,̲ ̲s̲t̲a̲t̲u̲s̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲.̲S̲l̲i̲c̲e̲I̲n̲d̲e̲x̲R̲a̲n̲g̲e̲F̲r̲o̲m̲U̲s̲i̲z̲e̲S̲l̲i̲c̲e̲.̲i̲n̲d̲e̲x̲_̲m̲u̲t̲,̲ ̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲S̲l̲i̲c̲e̲.̲c̲o̲p̲y̲_̲f̲r̲o̲m̲_̲s̲l̲i̲c̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲,̲ ̲S̲l̲i̲c̲e̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲s̲l̲i̲c̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲l̲e̲n̲,̲ ̲l̲i̲v̲e̲_̲l̲e̲n̲g̲t̲h̲,̲ (AfterstateEncoding.bytes s̵.̵c̵a̵n̵d̵i̵d̵a̵t̵e̵_̵a̵f̵t̵e̵r̵s̵t̵a̵t̵e̵)̵.̵p̵r̵o̵p̵e̵r̵t̵y̵,̵S̵l̵i̵c̵e̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵l̵i̵f̵t̵]̵s̲.̲c̲a̲n̲d̲i̲d̲a̲t̲e̲_̲a̲f̲t̲e̲r̲s̲t̲a̲t̲e̲)̲.̲p̲r̲o̲p̲e̲r̲t̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲S̲l̲i̲c̲e̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBN_LateTail.live_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBN_LateTail.exact' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
