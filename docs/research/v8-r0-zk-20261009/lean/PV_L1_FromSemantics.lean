@@ -50,11 +50,11 @@ theorem complete_result
     prover.prove_from_semantics public1 variant hash backend sem salts := by
   rcases salts with ⟨reserved,context⟩
   unfold produce prover.prove_from_semantics
+  simp only [erase_bind,erase_observe,erase_lift]
   repeat' first
     | rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split
-    | progress simp only [erase_bind,erase_observe,erase_lift]
+    | split <;> simp only [erase_bind,erase_observe,erase_lift]
 #print axioms complete_result
 end PV_L1_FromSemantics
