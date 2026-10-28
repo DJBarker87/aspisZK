@@ -7,28 +7,28 @@ def add(name,statement):
  rows.append(name)
  (L/f'PV_OWN_{name}.lean').write_text('import R1Z.PV_OWN_Operations\nset_option autoImplicit false\nnamespace R1Z.PV_OWN_Laws\nopen PV_OWN_Heap PV_OWN_Bytes PV_OWN_View PV_OWN_Operations PV_W_Threading\nvariable {S X E T : Type}\ntheorem '+name+' '+statement+'\n#print axioms '+name+'\nend R1Z.PV_OWN_Laws\n')
 add('InitLive', '''(k : Codec T) (t : Token) (c : Cell) (s : Nat) (v : T) (m : Memory)
- (h:Live m t c) : Live (initialize k t c s v m) t (store c s k.width (k.encode v)) := by
+ (h:Live m t c) : Live (writeTyped k t c s v m) t (store c s k.width (k.encode v)) := by
  exact ⟨put_same _ _ _,h.2.1,h.2.2⟩''')
 add('InitOwned', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Owned m slot t c) : Owned (initialize k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Owned m slot t c) : Owned (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
  exact ⟨⟨put_same _ _ _,h.1.2.1,h.1.2.2⟩,h.2.1,h.2.2⟩''')
 add('InitReadable', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Readable m slot t c) : Readable (initialize k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Readable m slot t c) : Readable (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
  exact ⟨⟨⟨put_same _ _ _,h.1.1.2.1,h.1.1.2.2⟩,h.1.2.1,h.1.2.2⟩,h.2⟩''')
 add('InitWritable', '''(k : Codec T) (t : Token) (c : Cell) (slot s : Nat) (v : T) (m : Memory)
- (h:Writable m slot t c) : Writable (initialize k t c s v m) slot (store c s k.width (k.encode v)) := by
+ (h:Writable m slot t c) : Writable (writeTyped k t c s v m) slot (store c s k.width (k.encode v)) := by
  exact ⟨⟨⟨put_same _ _ _,h.1.1.2.1,h.1.1.2.2⟩,h.1.2.1,h.1.2.2⟩,h.2⟩''')
 add('InitView', '''(k : Codec T) (t : Token) (c : Cell) (s : Nat) (v : T) (m : Memory)
- (h:Live m t c) (fits:Fits c s k.width) : View k (initialize k t c s v m) t s v := by
+ (h:Live m t c) (fits:Fits c s k.width) : View k (writeTyped k t c s v m) t s v := by
  exact ⟨store c s k.width (k.encode v),⟨put_same _ _ _,h.2.1,h.2.2⟩,initialized k c s v fits⟩''')
 add('InitFrame', '''(k : Codec T) (t : Token) (c : Cell) (s a : Nat) (v : T) (m : Memory)
- (h:a≠t.address) : (initialize k t c s v m).heap a=m.heap a := put_other _ _ _ _ h''')
+ (h:a≠t.address) : (writeTyped k t c s v m).heap a=m.heap a := put_other _ _ _ _ h''')
 add('InitOutside', '''(k : Codec T) (t : Token) (c : Cell) (s i : Nat) (v : T) (m : Memory)
  (h:i<s ∨ s+k.width≤i) :
  (store c s k.width (k.encode v)).contents i=c.contents i := outside _ _ _ _ _ h''')
 add('InitIdentity', '''(k : Codec T) (t : Token) (c : Cell) (s : Nat) (v : T) (m : Memory) :
- (initialize k t c s v m).generations=m.generations ∧
- (initialize k t c s v m).slots=m.slots ∧ (initialize k t c s v m).loans=m.loans := ⟨rfl,rfl,rfl⟩''')
+ (writeTyped k t c s v m).generations=m.generations ∧
+ (writeTyped k t c s v m).slots=m.slots ∧ (writeTyped k t c s v m).loans=m.loans := ⟨rfl,rfl,rfl⟩''')
 add('ReadUnique', '''(k : Codec T) (m : Memory) (t : Token) (s : Nat) (a b : T)
  (ha:View k m t s a) (hb:View k m t s b) : a=b := by
  obtain ⟨ca,la,ra⟩:=ha

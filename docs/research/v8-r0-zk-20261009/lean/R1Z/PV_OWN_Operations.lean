@@ -45,7 +45,7 @@ def AllocatorAdequate {S X E : Type}
   q+c.size≤p ∨ p+r.size≤q
 
 /-- A store has no alternate logical-cell map to forget updating. -/
-def initialize {T : Type} (codec : Codec T) (t : Token) (c : Cell)
+def writeTyped {T : Type} (codec : Codec T) (t : Token) (c : Cell)
  (start : Nat) (v : T) (m : Memory) : Memory :=
  {m with heap := put m.heap t.address (some (store c start codec.width (codec.encode v)))}
 
