@@ -12,6 +12,7 @@ for version in ['nightly-2026-06-01','1.94.1']:
  root=Path('/home/dombarker/.rustup/toolchains')/(version+'-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src')
  r=dict(version=version,files={},bodies={})
  for file,items in {
+  'num/uint_macros.rs':[('unchecked_sub','pub const unsafe fn unchecked_sub(self, rhs: Self) -> Self',''),('unchecked_add','pub const unsafe fn unchecked_add(self, rhs: Self) -> Self','')],
   'iter/range.rs':[('trusted_back','fn spec_next_back(&mut self) -> Option<T>','impl<T: TrustedStep> RangeIteratorImpl'),('unsigned_back','unsafe fn backward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods'),('unsigned_forward','unsafe fn forward_unchecked(start: Self, n: usize) -> Self','macro_rules! step_unsigned_methods')],
   'iter/adapters/rev.rs':[('rev_next','fn next(&mut self) -> Option<<I as Iterator>::Item>',''),('rev_new','fn new(iter: T) -> Rev<T>','')],
   'iter/traits/iterator.rs':[('rev','fn rev(self) -> Rev<Self>','')],
