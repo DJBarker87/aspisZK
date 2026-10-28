@@ -5,7 +5,7 @@ set_option autoImplicit false
 
 theorem collect_append {α E : Type} (xs ys : List (Result (core.result.Result α E))) :
     collect (xs++ys) = bindR (collect xs)
-      (fun prefix => mapR (fun suffix => prefix++suffix) (collect ys)) := by
+      (fun headValues => mapR (fun tailValues => headValues++tailValues) (collect ys)) := by
   induction xs with
   | nil =>
     simp only [List.nil_append,collect,bindR,mapR]
@@ -31,7 +31,7 @@ theorem collect_append {α E : Type} (xs ys : List (Result (core.result.Result �
         | ok v =>
           cases v with
           | Err e => rfl
-          | Ok prefix =>
+          | Ok headValues =>
             cases collect ys with
             | fail e => rfl
             | div => rfl
