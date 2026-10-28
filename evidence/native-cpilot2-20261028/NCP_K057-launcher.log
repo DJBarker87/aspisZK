@@ -1,0 +1,49 @@
+{"attempt": "NCP_K057", "exit_status": 1, "wall_seconds": 14.829177145962603, "peak_rss_kib": "663292", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ntifier to snake case: `ncp_canon_negative`
+
+warning: function `NCP_canon_caller` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:24:4
+   |
+24 | fn NCP_canon_caller(){let d=NCP_any_digest();assert_eq!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_canon(&d));}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller`
+
+warning: function `NCP_canon_caller_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_scalar.rs:31:4
+   |
+31 | fn NCP_canon_caller_negative(){let d=NCP_any_digest();assert_ne!(crate::pool_v1::pair_tree_profile::digest_is_canonical(&d),NCP_cano...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_canon_caller_negative`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.09s
+Checking harness pool_v1::pair_terminal::NCP_after::NCP_after_caller_negative...
+
+VERIFICATION RESULT:
+ ** 1 of 517 failed (12 unreachable)
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 7.5523753s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_terminal::NCP_after::NCP_after_caller_negative
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r954a48da2c964cef8c88c6adfb3c4c8f.scope; invocation ID: 4f9d48bde13f4e5dbaa9a372bb51594a

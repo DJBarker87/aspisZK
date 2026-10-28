@@ -1,0 +1,62 @@
+58 NCP_EncodeExtracted.Types 0 {"attempt": "NCP_L058", "exit_status": 0, "wall_seconds": 1.085987131926231, "peak_rss_kib": "2627184", "swaps": "0", "print_axioms": []}
+
+
+59 NCP_EncodeExtracted.Funs 0 {"attempt": "NCP_L059", "exit_status": 0, "wall_seconds": 1.2403073570458218, "peak_rss_kib": "2639140", "swaps": "0", "print_axioms": ["'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCP_EncodeExtracted.NCP_refs.NCP_ref_encode' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+
+60 NCP_EncodeStep 1 {"attempt": "NCP_L060", "exit_status": 1, "wall_seconds": 2.261571168084629, "peak_rss_kib": "5419072", "swaps": "0", "print_axioms": ["'NCP_EncodeStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCP_generated/NCP_EncodeStep.lean:14:55: error: unsolved goals
+d : Std.Array U32 8#usize
+out : Std.Array U8 32#usize
+i : Usize
+bound : ↑i < 8
+⊢ (if ↑i < 8 then do
+      let m ← d.index_usize i
+      let i1 ← lift (m &&& 255#u32)
+      let i2 ← 4#usize * i
+      let i3 ← lift (UScalar.cast UScalarTy.U8 i1)
+      let out1 ← out.update i2 i3
+      let i4 ← m >>> 8#i32
+      let i5 ← lift (i4 &&& 255#u32)
+      let i6 ← i2 + 1#usize
+      let i7 ← lift (UScalar.cast UScalarTy.U8 i5)
+      let out2 ← out1.update i6 i7
+      let i8 ← m >>> 16#i32
+      let i9 ← lift (i8 &&& 255#u32)
+      let i10 ← i2 + 2#usize
+      let i11 ← lift (UScalar.cast UScalarTy.U8 i9)
+      let out3 ← out2.update i10 i11
+      let i12 ← m >>> 24#i32
+      let i13 ← i2 + 3#usize
+      let i14 ← lift (UScalar.cast UScalarTy.U8 i12)
+      let out4 ← out3.update i13 i14
+      let i15 ← i + 1#usize
+      ok (cont (out4, i15))
+    else ok (done out)) =
+    ok
+      (cont
+        (out.setSlice! (4 * ↑i)
+            [BitVec.setWidth 8 (↑d)[↑i].bv#uscalar, BitVec.setWidth 8 ((↑d)[↑i].bv >>> 8)#uscalar,
+              BitVec.setWidth 8 (BitVec.setWidth 24 ((↑d)[↑i].bv >>> 8) >>> 8)#uscalar,
+              BitVec.setWidth 8 (BitVec.setWidth 16 (BitVec.setWidth 24 ((↑d)[↑i].bv >>> 8) >>> 8) >>> 8)#uscalar],
+          Usize.ofNatCore (↑i + 1) ⋯))
+NCP_generated/NCP_EncodeStep.lean:18:18: warning: This simp argument is unused:
+  Array.setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵3̵2̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵L̵E̵B̵y̵t̵e̵s̵]̵[̲L̲i̲s̲t̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲3̲2̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲L̲E̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCP_generated/NCP_EncodeStep.lean:18:34: warning: This simp argument is unused:
+  List.setSlice!
+
+Hint: Omit it from the simp argument list.
+  simp [̵A̵r̵r̵a̵y̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵L̵i̵s̵t̵.̵s̵e̵t̵S̵l̵i̵c̵e̵!̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵3̵2̵.̵t̵o̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵B̵i̵t̵V̵e̵c̵.̵t̵o̵L̵E̵B̵y̵t̵e̵s̵]̵[̲A̲r̲r̲a̲y̲.̲s̲e̲t̲S̲l̲i̲c̲e̲!̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲3̲2̲.̲t̲o̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲t̲o̲L̲E̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCP_EncodeStep.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+
