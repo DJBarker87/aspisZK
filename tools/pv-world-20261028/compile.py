@@ -7,10 +7,10 @@ n=int(sys.argv[1]);m=sys.argv[2]
 dependencies = {'R1Z/ProverRwFull'+x: 'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFull'+x+'.lean' for x in ['ExternalTypes','Types','ExternalFuns','Funs']}
 resolution=json.loads((E/'observation-resolution.json').read_text())['modules'] if (E/'observation-resolution.json').exists() else {}
 pin=resolution.get(m.replace('/','.'))
-assert 36000<=n<=36199 and (m.startswith('R1Z/PV_W_') or m in dependencies or pin is not None)
-assert n<36197 or 'Audit' in m or 'Replay' in m
+assert 50400<=n<=50499 and (m.startswith(('R1Z/PV_W_','R1Z/PV_FXM_')) or m in dependencies or pin is not None)
+assert n<50497 or 'Audit' in m or 'Replay' in m
 assert json.loads((E/'external-verification.json').read_text())['ok']
-assert json.loads((E/'id-preflight.json').read_text())['unused']
+assert json.loads((E/'d372-id-preflight.json').read_text())['unused']
 p=R/pin['path'] if pin else R/dependencies[m] if m in dependencies else R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 if pin:
  b=subprocess.check_output(['git','cat-file','blob',pin['blob']]);assert hashlib.sha256(b).hexdigest()==pin['sha256']
@@ -19,7 +19,8 @@ else:
 assert not (E/f'lean-{n}/receipt.json').exists()
 q=subprocess.run(['ssh',H,f'python3 {G}/reservation.py {D}/upload-{n}.json > {D}/upload-{n}.log 2>&1'],capture_output=True,text=True)
 s=subprocess.run(['ssh',H,f'cat {D}/upload-{n}.json'],capture_output=True,text=True)
-(E/f'upload-{n}.json').write_text(s.stdout)
+upload=json.loads(s.stdout)
+(E/f'upload-{n}.json').write_text(json.dumps(dict(sha256=hashlib.sha256(s.stdout.encode()).hexdigest(),host_path=D+f'/upload-{n}.json',**{k:upload.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
 if q.returncode!=0 or json.loads(s.stdout).get('allowed') is not True:
  print('UNCHARGED UPLOAD REFUSAL',n,q.returncode,json.loads(s.stdout).get('utc'));sys.exit(78)
 code=f'''from pathlib import Path

@@ -45,5 +45,9 @@ actual_exit=field('Exit status')
 actual_exit=int(actual_exit) if actual_exit is not None else r.returncode
 receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+# Full admission inventories stay on the host; retain decisions and a byte hash.
+for f in ['admission-before.json','admission-barrier.json']:
+ raw=(out/f).read_bytes();a=json.loads(raw)
+ (out/f).write_text(json.dumps(dict(sha256=hashlib.sha256(raw).hexdigest(),host_path=D+'/'+name+'/'+f,**{k:a.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
 print((out/'output.log').read_text()[-14000:]);print(json.dumps(receipt))
 sys.exit(actual_exit)
