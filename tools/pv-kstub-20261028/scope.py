@@ -16,6 +16,7 @@ for k in range(11):
  for f in ['admission-before.json','reservation.log']:
   q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout)
  ad=json.loads((out/'admission-before.json').read_text())
+ with (out/'admission-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=r.returncode,admission=ad))+'\n')
  if r.returncode==0 and ad.get('allowed') is True:break
  (out/f'refusal-{k}.json').write_text(json.dumps(dict(exit=r.returncode,admission=ad)))
  if k==10:sys.exit(78)

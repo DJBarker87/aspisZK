@@ -9,8 +9,8 @@ for row in ['V178','V179','V182','V195','V233']:
  for p in plans:
   if p['row']!=row:continue
   rs=[r for r in results if r['harness']==p['harness'] and r.get('window')==p.get('window')]
-  pos=next((r for r in rs if not r['negative_control']),None);neg=next((r for r in rs if r['negative_control']),None)
-  hs.append(dict(**p,positive=pos,negative_control=neg,confirmed=bool(pos and neg and pos['status']=='PASS' and neg['status']=='FAIL')))
+  pos=next((r for r in reversed(rs) if not r['negative_control']),None);neg=next((r for r in reversed(rs) if r['negative_control']),None)
+  hs.append(dict(**p,attempts=rs,positive=pos,negative_control=neg,confirmed=bool(pos and neg and pos['status']=='PASS' and neg['status']=='FAIL')))
  finding=any(x['positive'] and x['positive']['status']=='FAIL' or x['negative_control'] and x['negative_control']['status']=='PASS' for x in hs)
  complete=all(x['confirmed'] for x in hs)
  status='finding' if finding else 'stubbed Kani confirmed' if complete else 'stubbed Kani unconfirmed (timeouts)' if any(x['positive'] and x['positive']['status']=='TIMEOUT' or x['negative_control'] and x['negative_control']['status']=='TIMEOUT' for x in hs) else 'pending'
