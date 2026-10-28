@@ -68,6 +68,8 @@ for x in json.load(open(H/('batch-'+start+'.json'))):
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=l2c-batch-{start}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3','-u','-c',remote,H,str(start)]
 (D/'command.json').write_text(json.dumps(cmd,indent=2)+'\n');print('LAUNCH BATCH',start,len(spec),'serial modules',flush=True)
 p=ssh(shlex.join(cmd));(D/'scope.log').write_text(p.stdout+p.stderr);print(p.stdout+p.stderr,flush=True)
+if p.returncode==78:
+ (E/f'refusal-{start}.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),reason='scope launcher exit78 after admission'),indent=2)+'\n');sys.exit(78)
 # Recover exactly the invocations actually launched; never re-submit after SSH loss.
 for x in spec:
  a=x['attempt'];q=ssh(f'cat {H}/evidence/done-{a}.json')
