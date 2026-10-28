@@ -8,3 +8,5 @@ Inherited NBZ/NBW/NBO/NBF/NBB/LPh pairings are reused unchanged. KMX patch bcdf7
 | NCG_wide_opaque → WideExact::mul | AspisR1.LPh.Native.wide_mul_expanded; NBZ_Wide.product_total on coherent probe | all16 input limbs<P; output is arbitrary canonical WideExact, with no product relation. Canonical carrier bounds alone are used; NBZ_Wide/NBZ_Folds supply emitted output totality/domain. Caller constructs canonical inputs and checks logged operands/order. |
 
 Kani does not prove field multiplication. Neither an opaque structural pass nor the explicit NCG semantic substitution template installs the native/emitted association by itself.
+| NCG_scalar_opaque → QM31::mul_m31 | AspisR1.LPh.Native.qm_scalar_value | four QM limbs and scalar<P; arbitrary canonical four-word reply; no product constraint; callers assert domain and log both Wide halves separately. |
+| NCG_m31_opaque → M31::mul | AspisR1.LPh.Native.m31_value | both limbs<P; arbitrary canonical reply; no product constraint; input operand/order checked. |

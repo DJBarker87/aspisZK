@@ -1,0 +1,13 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -3266,3 +3266,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="NCG_field_arbitrary.rs"] mod NCG_field_arbitrary;
+--- /dev/null
++++ b/crates/aspis-core/src/NCG_field_arbitrary.rs
+@@ -0,0 +1,2 @@
++use super::M31;
++impl kani::Arbitrary for M31 {fn any()->Self {M31(kani::any())}}

@@ -1,0 +1,1 @@
+Full fold results: K018 circle TIMEOUT, K019 queued circle false-control TIMEOUT (no control credit), K020 line TIMEOUT; K021 was never launched after the adaptive queue change. Source Horner subfragment and its matched controls remain usable locally. Full scale/operand association needs smaller coefficient splits, not a larger cap or a full-fold replay.

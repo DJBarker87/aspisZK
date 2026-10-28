@@ -6,6 +6,7 @@ fcntl.flock(_nbo_serial, fcntl.LOCK_EX)
 from NCG_host import *
 import hashlib,tomllib,sys,os
 attempt,harness=sys.argv[1:]
+if (E/'NCG_HOLD').exists():raise SystemExit('Own queue paused before admission; adaptive split next')
 if (E/'NCG_REDIRECT_REQUEST').exists():
  (E/'NCG_REDIRECT_ACK.json').write_text(json.dumps(dict(not_submitted=attempt,reason='independent coefficient-read gate next'))+'\n')
  raise SystemExit('Own queue redirected before metadata or submission')

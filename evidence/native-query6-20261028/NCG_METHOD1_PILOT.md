@@ -13,3 +13,5 @@ Next split: native one source coordinate update after decoder/coefficient read; 
 ## Post-read split
 
 NCG_K002 single-coordinate PASS; K003 deliberately false output routing FAILS. K004 eight-coordinate PASS (20.751s,637736KiB,swap0). The source prestate is arbitrary within inherited phase bounds; scalar/coefficient inputs are canonical; there is no constraint at all on the logged U64 replies. This is the local add-product fragment after decoder/read, not the full-carrier read/update association. The native decoder/read cuts and their existing matched controls are imported from NBZ. Full installation stays open.
+
+Full-circle follow-up NCG_K018 timed out. The previously queued negative K019 had already submitted by the time the positive was recovered; it earns no positive credit and is not a repeat of the unchanged assertion. The own queue is now adaptive: stop before further queued full-fold launches and split at coefficient/Horner boundaries. No timeout/cap increase.
