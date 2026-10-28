@@ -18,17 +18,25 @@ theorem padded_mask (wordBits alignBits k : Nat) :
   have hz : 0 < 2^alignBits := Nat.two_pow_pos _
   have hsum := Nat.testBit_two_pow_mul_add k hm i
   have hbase := Nat.testBit_two_pow_mul_add k hz i
-  simp only [Nat.add_zero, Nat.testBit_zero] at hbase
+  simp only [Nat.add_zero] at hbase
   simp only [BitVec.getLsbD_and, BitVec.getLsbD_not, BitVec.getLsbD_ofNat,
     hsum, hbase, Nat.testBit_two_pow_sub_one]
   by_cases hw : i < wordBits <;> by_cases ha : i < alignBits <;>
-    simp only [hw,ha,decide_true,decide_false,if_true,if_false,
-      Bool.true_and,Bool.false_and,Bool.not_true,Bool.not_false,Bool.and_false]
+    simp [hw,ha]
 
 structure Layout where
   size : Nat
   align : Nat
   deriving DecidableEq
+
+def pad (wordBits : Nat) (layout : Layout) : Layout :=
+  ⟨((BitVec.ofNat wordBits layout.size + BitVec.ofNat wordBits (layout.align-1))
+    &&& ~~~(BitVec.ofNat wordBits (layout.align-1))).toNat,layout.align⟩
+
+theorem pad_element (wordBits alignBits k : Nat)
+    (representable : 2^alignBits*k < 2^wordBits) :
+    pad wordBits ⟨2^alignBits*k,2^alignBits⟩ = ⟨2^alignBits*k,2^alignBits⟩ := by
+  simp only [pad,padded_mask,BitVec.toNat_ofNat,Nat.mod_eq_of_lt representable]
 
 /-- The shared repeat_packed computation keeps both checked multiplication
 and the alignment-dependent size limit. -/
@@ -57,6 +65,7 @@ theorem constructor_guard (size maxSize : Nat) :
   · have hh : maxSize < size := by omega
     simp only [h,hh,ite_true,ite_false]
 
+#print axioms pad_element
 #print axioms padded_mask
 #print axioms repeat_complete
 #print axioms constructor_guard
