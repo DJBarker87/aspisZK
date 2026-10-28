@@ -25,8 +25,10 @@ theorem admission_iff (i : Input)
       ((statement (K := K) i).variant = .privateTransfer →
         (statement (K := K) i).change 7 ≠ 0) := by
   change (AspisR1.SpendRelation.Rspend (statement (K := K) i) (witness (K := K) i) ∧ _) ↔ _
-  unfold AspisR1.SpendRelation.Rspend
-  simp only [shape,balance,change,true_and]
-  tauto
+  constructor
+  · intro h
+    exact ⟨h.1.2.1,h.1.2.2.2.2.1,h.1.2.2.2.2.2,h.2⟩
+  · rintro ⟨hin,hout,happend,hsentinel⟩
+    exact ⟨⟨shape,hin,balance,change,hout,happend⟩,hsentinel⟩
 #print axioms admission_iff
 end R1Z.PV_RunJoin_SemanticResidual30
