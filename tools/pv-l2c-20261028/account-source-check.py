@@ -65,11 +65,15 @@ out={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=Tr
  'D188':'No account-codec Aeneas mutable-iterator emission is credited. The native field loop is checked directly against the owned native comparison, and the list reference law supplies the ordered range invariant.',
  'scope':'successful raw digest-field provenance only, not all account-error equality or a deployed observation theorem',
  'Kani':'none'}
-receipt=E/'account-probe3/receipt.json'
+root_source=(R/'programs/aspis-pool/src/empty_roots.rs').read_text()
+assert (R/'tools/pv-l2c-20261028/decoder-probe/frozen_empty_roots.rs').read_text()==root_source.split('#[cfg(test)]')[0]
+assert all(int(v.replace('_',''),0)<2147483647 for v in re.findall(r'M31\(([^)]+)\)',root_source.split('#[cfg(test)]')[0]))
+out['frozen_empty_roots_source_sha256']=sha(root_source)
+receipt=E/'account-probe4/receipt.json'
 if receipt.exists():
     r=json.loads(receipt.read_text());assert r['exit']==0
     assert r['source_sha256']['main.rs']==sha(probe)
-    assert 'noncanonical_account_rejections=704' in (E/'account-probe3/out.log').read_text()
+    assert 'noncanonical_account_rejections=704' in (E/'account-probe4/out.log').read_text()
     out['classification']='structural (K-1 substitute), ordered digest field cut of account decoding'
     out['native_differential']={'receipt':str(receipt.relative_to(R)),'receipt_sha256':hashlib.sha256(receipt.read_bytes()).hexdigest(),
        'label':'finite native validation: four successful lane field comparisons, four checkpoint roundtrips, 704 raw-P field rejections'}

@@ -3,6 +3,8 @@ use aspis_statement::{decode_digest_canonical, derive_owner_key, encode_digest_c
     poseidon2::Digest, pool_v1::{pool_v1_note_commitment, pool_v1_nullifier, pool_v1_tree_parent}};
 #[path="domain_constants.rs"] mod spend;
 #[path="hash_reference.rs"] mod reference;
+#[path="frozen_empty_roots.rs"] mod frozen_empty_roots;
+use frozen_empty_roots::POOL_V1_PAIR_EMPTY_ROOTS;
 
 // Exact body of devnet_spend/plan.rs::digest, checked by decoder-source-check.py.
 fn digest(seed:u32)->Digest{core::array::from_fn(|i|M31((seed+17*i as u32+1)%P))}
