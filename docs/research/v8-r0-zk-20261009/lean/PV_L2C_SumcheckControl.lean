@@ -2,7 +2,7 @@ import PV_L2C_HonestSumcheck
 set_option autoImplicit false
 noncomputable section
 namespace PV_L2C_SumcheckControl
-open R1Z R0P R0Z.ZkStatement R0Z.PayloadSplit R0Z.RefPayload
+open R1Z R0P R0P.Sumcheck R0Z.ZkStatement R0Z.PayloadSplit R0Z.RefPayload
 variable {K : Type} [Field K] [DecidableEq K]
 inductive Failure where
   | boundary : Nat → Failure
