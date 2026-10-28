@@ -48,7 +48,7 @@ theorem first_direction (i : Input) :
   have hb := BuilderRecordsPath.bits_get (PV_Src_NativeDirections.reference i.witness) 0#usize (by decide)
   simp only [UScalar.ofNatCore_val_eq] at hb
   rw [hb]
-  change decide ((AspisBuilderRecordsReference.core.convert.num.FromU32Bool.from i.witness.pair.selected_second).val ≠ 0) = _
+  change decide ((core.convert.num.FromU32Bool.from i.witness.pair.selected_second).val ≠ 0) = _
   cases i.witness.pair.selected_second <;> rfl
 #print axioms first_direction
 
