@@ -24,4 +24,3 @@ seed=Path('/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027');cache
 assert not cache.exists();shutil.copytree(seed,cache)
 pins={str(p.relative_to(cache)):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in cache.rglob('*') if p.is_file()}
 (b/'KNH_CACHE_IMPORT.json').write_text(json.dumps(dict(source=str(seed),destination=str(cache),files=pins),indent=2)+'\n')
-

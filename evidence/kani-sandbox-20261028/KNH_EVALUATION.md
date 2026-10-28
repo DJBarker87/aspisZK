@@ -212,3 +212,12 @@ budget; K-2 needs an independently validated tool correction and original-contex
 rechecks; the19 missing preflights require replacement invocations. There is **no
 Lean-only obligation authorized in this zero-Lean sandbox job**. No assumption is
 discharged, added, weakened or removed, and no S2/native/security row is closed.
+
+Final local audit: KNH_VALIDATION.json checks52 receipts (50 Kani, installation,
+audit), exact caps and zero swaps, each captured probe source against committed
+source bytes, approved KMX payload identity, all lock hashes,31 strict graph
+preflights and the explicit19-run gap. Peak RSS6,503,356KiB; total configured
+Kani wall560.542s. Largest evidence file2,254,068 bytes, below20MB.
+Exact failed-source snapshots match their original receipt hashes. Changed paths
+are confined to this directory; `git diff --check` passes. Stage commits remain
+local; no push. No proof/native/security credit or adoption is authorized here.

@@ -1,3 +1,5 @@
+# Archived initial generator; final compiled inputs include later revisions.
+# Use KNH_RESULTS.json/source hashes and committed rs.txt files for replay.
 from pathlib import Path
 import json
 E=Path(__file__).resolve().parent
