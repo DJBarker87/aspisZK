@@ -28,9 +28,11 @@ theorem call_once (ops : ExternalFuns) {H F : Type} (digest : aspis_core.digest.
     host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnOnceTupleUsizeResultQM31Error.call_once
     host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultQM31Error.call_mut
     host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error.call
-  cases c
+  rcases c with ⟨f,p,r,a⟩
+  dsimp only
   simp only [bind_assoc_eq]
-  cases h : @host_sumcheck.evaluate_assignment _ ops F oracle _ _ _ _ i <;> rfl
+  cases h : @host_sumcheck.evaluate_assignment _ ops F oracle f p r a i <;>
+    simp only [h,bind_tc_ok,bind_tc_fail,bind_tc_div]
 
 #print axioms call
 #print axioms call_mut
