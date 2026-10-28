@@ -30,7 +30,7 @@ collision=[]
 for base,dirs,files in os.walk(root):
  depth=len(Path(base).relative_to(root).parts)
  if depth>=5: dirs[:]=[]
- dirs[:]=[d for d in dirs if d not in {'target','sbf-target','charon-target','node_modules','.git','source','sources','.lake'}]
+ dirs[:]=[d for d in dirs if d not in {'target','sbf-target','charon-target','node_modules','.git','source','sources','.lake','objects','lean-objects','lean','generated','src','rebuild-objects'}]
  for name in dirs+files:
   if re.search(r'(?<![A-Za-z0-9])'+str(a)+r'(?![A-Za-z0-9])',name): collision.append(str(Path(base)/name))
  for name in files:
