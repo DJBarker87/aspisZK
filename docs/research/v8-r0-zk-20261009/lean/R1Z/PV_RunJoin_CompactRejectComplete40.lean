@@ -24,6 +24,8 @@ theorem reject (logical : Slice U8) (out : alloc.vec.Vec U8) (total k : Nat)
   obtain ⟨next,hn,hbytes⟩ := PV_RunJoin_CompactRejectPrefix40.loop logical badAt bad value
     cell_bound bad_lo bad_hi nonzero read_bad before_bad k 0#usize out
     (by change 0+32*k=badAt.val;omega) room (fun pos _ hb => prior pos hb)
+  have zero : (0#usize).val=0 := by scalar_tac
+  rw [zero] at hbytes
   obtain ⟨r,hr,hv⟩ := WP.spec_imp_exists
     (UScalar.rem_spec (Slice.len logical) (y := 32#usize) (by decide))
   have rz : r=0#usize := by
