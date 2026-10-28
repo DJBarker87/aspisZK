@@ -17,6 +17,13 @@ def selected (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
     (d : Usize) (rows : List Usize) : List Q :=
   rows.filterMap (fun r => if (!flag active r) && (r != d) then some (lookup table r) else none)
 
+theorem row_source (s q : Q) (a : Bool) (r d : Usize) :
+    prover_commit_reference.balance_qm31_step (source s) (source q) a r d=
+      (if (!a) && (r != d) then ok (source (addQ s q)) else ok (source s)) := by
+  cases a <;> by_cases h : r=d <;>
+    simp [prover_commit_reference.balance_qm31_step,h,add_source]
+#print axioms row_source
+
 theorem read_step (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
     (d r : Usize) (hr : r.val<1024) (s : Q) :
     qm31ReadStep (alloc.vec.Vec.deref (PV_L2C_VecRead.vector PV_L2C_VecRead.bound1024
@@ -27,8 +34,10 @@ theorem read_step (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
   simp only [bind_tc_ok]
   have hr' : r.val<(1024#usize).val := by scalar_tac
   rw [PV_L2C_VecRead.read_active (n:=1024#usize) active r hr']
-  simp only [bind_tc_ok, qm31_row, flag,lookup,dif_pos hr]
-  split <;> simp only [add_source]
+  change prover_commit_reference.balance_qm31_step (source s)
+    (source (table ⟨r.val,hr⟩)) (active ⟨r.val,hr⟩) r d=_
+  simp only [flag,lookup,dif_pos hr]
+  exact row_source s (table ⟨r.val,hr⟩) (active ⟨r.val,hr⟩) r d
 #print axioms read_step
 
 theorem fold_source (table : Fin 1024 → Q) (active : Fin 1024 → Bool)
