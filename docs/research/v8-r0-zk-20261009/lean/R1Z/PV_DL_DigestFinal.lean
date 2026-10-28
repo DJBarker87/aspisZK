@@ -37,7 +37,13 @@ theorem dispatch_source {D N : Type}
     dispatch finish fallback self=
       reference (ok ⟨PV_DL_StorageBuild.build 5 (fun _ => 0#u8)⟩) finish self := by
   classical
-  simp only [dispatch,dif_pos rfl]
+  simp only [dispatch]
+  exact dif_pos True.intro
+
+def finisher (base : ExternalTypes) {D N A : Type}
+    (fi : @digest.FixedOutput (Types base) D N A) :
+    D → GenericArray U8 N A → Result (GenericArray U8 N A) :=
+  @digest.FixedOutput.finalize_into (Types base) D N A fi
 
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns (Types base) :=
@@ -49,8 +55,9 @@ theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base)
     (dc : core.default.Default D) (up : digest.Update D) (marker : digest.digest.HashMarker D)
     (self : D) :
     @ExternalFuns.op212 (Types base) (selected base ops) D N (Storage U8 5) fi dc up marker self=
-      reference (ok ⟨PV_DL_StorageBuild.build 5 (fun _ => 0#u8)⟩) fi.finalize_into self :=
-  dispatch_source fi.finalize_into (ops.op212 fi dc up marker) self
+      reference (ok ⟨PV_DL_StorageBuild.build 5 (fun _ => 0#u8)⟩) (finisher base fi) self :=
+  dispatch_source (finisher base fi)
+    (@ExternalFuns.op212 (Types base) ops D N (Storage U8 5) fi dc up marker) self
 
 theorem nonvacuous :
     reference (ok (0 : Nat)) (fun (_ : Unit) out => ok out) ()=ok 0 := rfl
@@ -60,6 +67,7 @@ theorem nonvacuous :
 #print axioms complete
 #print axioms dispatch
 #print axioms dispatch_source
+#print axioms finisher
 #print axioms selected
 #print axioms selected_native
 #print axioms nonvacuous
