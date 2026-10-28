@@ -49,6 +49,23 @@ s+=f'\ndef errorToOuter : {nt} → {ot}\n'
 for n in trace:
  a={'Statement':1,'PairLeaf':1,'Tree':1,'BlockMismatch':3,'AuxiliaryMismatch':2}.get(n,0);args=['a','b','c'][:a];pat=' '.join(args);rhs='(leafErrorToOuter a)' if n=='PairLeaf' else pat
  s+=f'  | .{n} {pat} => .{n} {rhs}\n'
+s+=f'\ndef errorFromOuter : {ot} → {nt}\n'
+for n in trace:
+ a={'Statement':1,'PairLeaf':1,'Tree':1,'BlockMismatch':3,'AuxiliaryMismatch':2}.get(n,0);args=['a','b','c'][:a];pat=' '.join(args);rhs='(leafErrorFromOuter a)' if n=='PairLeaf' else pat
+ s+=f'  | .{n} {pat} => .{n} {rhs}\n'
+s+=f"""
+
+theorem leaf_error_roundtrip_outer (e : {oe}) : leafErrorToOuter (leafErrorFromOuter e) = e := by cases e <;> rfl
+#print axioms leaf_error_roundtrip_outer
+
+theorem trace_error_roundtrip (e : {nt}) : errorFromOuter (errorToOuter e) = e := by
+  cases e <;> simp only [errorFromOuter,errorToOuter,error_roundtrip]
+#print axioms trace_error_roundtrip
+
+theorem trace_error_roundtrip_outer (e : {ot}) : errorToOuter (errorFromOuter e) = e := by
+  cases e <;> simp only [errorFromOuter,errorToOuter,leaf_error_roundtrip_outer]
+#print axioms trace_error_roundtrip_outer
+"""
 s+='''
 variable [BuilderForestAdmissionPort.ExternalLinear]
 def call (x : PV_RunJoin_Outer30.pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1) :
