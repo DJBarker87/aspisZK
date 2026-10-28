@@ -62,6 +62,9 @@ fn run(seed:[u8;32],bytes:[u8;64],pos:u8,initial:[u8;32],mode:u8)->([u8;32],Vec<
         let bytes=core::array::from_fn(|i|seed.rotate_left(i as u32).wrapping_add(i as u8));
         let initial=core::array::from_fn(|i|seed.wrapping_sub(i as u8));
         let native=run(state,bytes,pos,[0;32],0);
+        let head=if pos==0 {0}else{bytes[0]};
+        let expected:[u8;32]=core::array::from_fn(|i|(state[i]^pos).wrapping_add(head));
+        assert_eq!(native.0,expected);
         assert_eq!(native,run(state,bytes,pos,[0;32],1));
         assert_eq!(native,run(state,bytes,pos,[0;32],2));
         assert_eq!(run(state,bytes,pos,initial,3),run(state,bytes,pos,initial,4));
