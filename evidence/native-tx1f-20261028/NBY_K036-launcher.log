@@ -1,0 +1,32 @@
+{"attempt": "NBY_K036", "exit_status": 1, "wall_seconds": 3.2453159900032915, "peak_rss_kib": "233236", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--exact", "--harness", "verifier::candidate:
+...
+:PartialEq for usize>::eq
+
+Check 64: core::cmp::impls::<impl core::cmp::PartialEq for usize>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for usize>::eq
+
+Check 65: core::cmp::impls::<impl core::cmp::PartialEq for usize>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for usize>::eq
+
+
+SUMMARY:
+ ** 1 of 65 failed (1 unreachable)
+Failed Checks: assertion failed: !(returned[k] == old && next == if i < n { Some(i) } else { None } &&
+                cursor <= n && it.start == if i < n { i + 1 } else { i })
+ File: "crates/aspis-r1-cost-probe/src/NBY_keys.rs", line 49, in verifier::candidate::NBY_keys::NBY_sort_outer_iterator_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.10361442s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBY_keys::NBY_sort_outer_iterator_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r79b50ffbf9fa46a7b2885f8e1c134266.scope; invocation ID: 7642f7f416104d56a193ff7728f7011f

@@ -11,7 +11,7 @@ for number in range(int(sys.argv[1]),int(sys.argv[2])+1):
  rc=json.loads((E/a/'receipt.json').read_text())
  print(a,rc['exit_status'],flush=True)
  # On timeout, do not run an unchanged paired shape.
- if any(x in (E/a/'stdout.log').read_text().lower() for x in ['timeout','timed out']) or rc['exit_status'] in [124,137]:
+ if any(x in (E/a/'stdout.log').read_text().lower() for x in ['cbmc timed out','harness timed out']) or rc['exit_status'] in [124,137]:
   r=h.remote_py(f'''from pathlib import Path
 import json
 p=Path({(h.B+'/NBY_tmp')!r});out=[]

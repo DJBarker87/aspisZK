@@ -51,3 +51,18 @@ selectors, retaining the full scratch. It also TIME OUTS at90s; K018 is deferred
 not launched. No unchanged positive retry, time increase or cap increase.
 Further row cuts must split the copy/return surface rather than rerun K017.
 All own solver temporary files were inspected/removed after terminal runs.
+
+NBY_CountExecution.rows_spent (L004) propagates the reached accumulator
+invariant along the inherited scan/write recurrence, instantiating each next
+key carrier with the actual write result. Exit0,3.985432686s,4430072KiB,swap0;
+axioms [propext,Quot.sound]. It removes the need to posit a final-count bound
+at each intermediate row; it does not assert nativeCountScanPort.
+
+K019 outside-frame variant with a referenced hash reply also TIME OUTS at90s;
+its control and the larger supplied-write variants are deferred. K025/026,
+using arbitrary idx/val, arbitrary physical5504-byte node backing and arbitrary
+short slice length/cursor, PASS and FAIL respectively: exact short rejection,
+no scratch writes and no digest-log extension. K027/028 give a small borrowed
+supplied-window indexed-load/frame law with a failing control, not the entire
+variable-length physical-node read association. No short rejection is being
+used to justify a successful row.
