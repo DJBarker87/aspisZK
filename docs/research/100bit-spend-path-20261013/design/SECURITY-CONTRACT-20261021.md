@@ -293,3 +293,13 @@ Owner message, 2026-10-28 evening: "take all your recommendatrions". This adopts
 4. **Newer Kani: sandbox evaluation only.** A newer Kani release may be evaluated outside the pinned release configuration, for contract support on slice and Vec returns and for loop contracts. Adoption needs a further owner decision, after the K-1, K-2 and contract fidelity controls have been re-run on it.
 
 Deployed 100-bit target: not yet established.
+
+## Owner delegation, 2026-10-28 evening (standing)
+
+Owner message: "ultimately you can take authority as long as you dont compromise 100 bit soundness, privacy and 2 tx, anything else is your call. no work normalised soundness".
+
+Standing delegation to the soundness lead. The lead may decide method, tooling, trust-boundary clarifications, routes, scheduling and resource matters WITHOUT further owner approval, PROVIDED the decision does not compromise:
+1. the 100-bit soundness target for the actual deployed spend path, PER ATTEMPT, with NO work-normalised soundness and NO grinding or proof-of-work credit (as stated in AGENTS.md; this restates the target, it does not change it);
+2. privacy (Stream B's contract, including the side-channel scope of D159);
+3. the two-transaction design (the approved two-transaction game, RuntimePersistence).
+Any change that would weaken any of these three still goes to the owner. Every decision taken under this delegation is recorded in C3-BIN with its reasoning, and in the trust inventory if it touches trust, and is reported to the owner in plain language.
