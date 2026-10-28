@@ -41,7 +41,7 @@ theorem decoded (i n : Nat) (hi : i < 28) (hn : n ≤ 28) :
     rw [run,PV_L2C_InterpolationNodes.denominator,Finset.prod_range_succ]
     by_cases he : n=i
     · rw [if_pos he,if_pos he]
-      simpa only [mul_one] using ih (by omega)
+      simpa only [mul_one,PV_L2C_InterpolationNodes.denominator] using ih (by omega)
     · rw [if_neg he,if_neg he,PV_L2C_NativeMultiply.decoded,
         sub_decode _ _ (raw_canonical i hi) (raw_canonical n hsmall),
         raw_decoded i hi,raw_decoded n hsmall]
