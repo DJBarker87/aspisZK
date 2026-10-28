@@ -25,7 +25,7 @@ fn main(){
  let mut copy=String::with_capacity(69);copy.push_str(&name);
  start();let a=std::hint::black_box(owned(&base,name));let owned_events=stop();
  start();let b=std::hint::black_box(borrowed(&base,&copy));let borrowed_events=stop();
- assert_eq!(a,b);assert_eq!(owned_events,vec![(1,0,4),(2,4,74),(3,69,0)]);
- assert_eq!(borrowed_events,vec![(1,0,4),(2,4,74)]);
+ assert_eq!(a,b);assert_eq!(owned_events,vec![(1,0,4),(2,4,8),(2,8,74),(3,69,0)]);
+ assert_eq!(borrowed_events,vec![(1,0,4),(2,4,8),(2,8,74)]);
  println!("owned={owned_events:?}\nborrowed={borrowed_events:?}\nvalue_bytes={}",a.as_os_str().len());
 }

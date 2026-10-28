@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess,json,hashlib
-D=Path('/home/dombarker/project-offloads/codex-pv-rdeac-20261028');N=D/'native01';N.mkdir(exist_ok=True)
+D=Path('/home/dombarker/project-offloads/codex-pv-rdeac-20261028');N=D/'native02';N.mkdir(exist_ok=True)
 R=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu')
 cmd=[str(R/'bin/rustc'),'--edition=2021','-Copt-level=3','-Cdebug-assertions=false','-Coverflow-checks=false','-Cpanic=unwind',f'--emit=link={N}/owned-join,mir={N}/owned-join.mir',str(D/'owned-join.rs')]
 print('Expected time: optimized fixture compilation then finite allocation/deallocation validation.',flush=True)
