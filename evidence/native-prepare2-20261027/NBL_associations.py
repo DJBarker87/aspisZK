@@ -51,6 +51,22 @@ checks.append(dict(name='K011 qm31 initialization ONE iteration',same=tok(expect
  rewrites=['loop index local -> mutable index reference','ignore trailing array comma'],
  native_sha256=sha(init_source),cut_sha256=sha(local),
  credit='one iteration frame; NBL_InitTrace.rho gives ordered input after induction'))
+cut=(E/'NBL_K015/sources/NBL_src/crates/aspis-r1-cost-probe/src/NBL_candidate.rs').read_text()
+suffix=new[new.index('let queries='):]
+expected=suffix.replace('Box::new(Self{','Box::new(Prepared{')
+local=body(cut,'fn NBL_after_opening<')
+checks.append(dict(name='K015 after-opening suffix',same=tokens(expected)==tokens(local),
+ rewrites=['Self -> Prepared; prior locals explicit typed parameters'],
+ native_sha256=sha(suffix),cut_sha256=sha(local),
+ credit='same-carrier query/rho/powers/claim-call association; ends at claim cut'))
+cut=(E/'NBL_K020/sources/NBL_src/crates/aspis-r1-cost-probe/src/NBL_candidate.rs').read_text()
+suffix=native[native.index('let v = wide_view'):]
+expected=re.sub(r'let v = wide_view\(.*?\)\?;', 'let v=view_result?;', suffix, count=1)
+local=body(cut,'fn NBL_after_view_result<')
+checks.append(dict(name='K020 returned-View-Result continuation',same=tokens(expected)==tokens(local),
+ rewrites=['one native wide_view call isolated into typed view_result input'],
+ native_sha256=sha(suffix),cut_sha256=sha(local),
+ credit='local Parse Result propagation only; native producing-call association OPEN'))
 # Frozen corpus integrity includes every tracked crates/programs file and lock.
 names=subprocess.check_output(['git','ls-tree','-r','--name-only',F,'--','crates','programs','Cargo.lock'],cwd=R,text=True).splitlines()
 changed=[]

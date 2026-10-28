@@ -21,3 +21,5 @@ No field multiplication is evaluated in Kani. Composite prepare remains OPEN.
 All replacements are in an external scratch overlay and retained as patches.
 Per-run frozen graph/lock/source receipts apply. Every used emitted theorem is
 standard-axiom checked; failed diagnostic sorryAx roots receive no credit.
+
+| NBL_queries_success / NBL_rho / NBL_powers / NBL_claim | K015 source suffix starts at the exact two-fold post-opening position. Arbitrary replies; assertions link query state to rho, gamma to powers, the old/produced SAME scratch pointer and arbitrary slot, and semantic/y1/inactive/kappa to claim | NBL_QueryHashReplay.source; NBL_ScalarHashReplay.rho; NBA_PowersCallee.source; CLOSED LPt via NBL_ClaimDomain.source | Passing control/carrier association, ending at claim cut. Does not prove callees from arbitrary replacements or the full native trace instance. K014 spanning timeout excluded. |

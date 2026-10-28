@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 root=Path(__file__).resolve().parents[2]
 s=(root/'lean/NBL_PrepareTrace.lean').read_text()
 start=s.index('theorem success')
@@ -60,4 +61,7 @@ open NBL_BlockTrace PreparedScratchReachability PreparedHashCode
 Prepared value, final scratch and every attempted digest. Native construction
 of the local producing executions remains a separate obligation. -/
 '''
-(root/'lean/NBL_PrepareHashTrace.lean').write_text(pre+s+'\n#print axioms source\nend AspisR1.NBL_PrepareHashTrace\nend\n')
+out=pre+s+'\n#print axioms source\nend AspisR1.NBL_PrepareHashTrace\nend\n'
+target=root/'lean/NBL_PrepareHashTrace.lean'
+if '--check' in sys.argv: assert target.read_text()==out
+else: target.write_text(out)

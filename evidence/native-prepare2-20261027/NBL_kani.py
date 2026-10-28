@@ -51,6 +51,9 @@ else:raise SystemExit('STOP admission exhausted')
 (E/(a+'-harness.patch')).write_bytes((E/'NBL_harness.patch').read_bytes())
 (E/(a+'-source-pin.json')).write_bytes((E/'NBL_SOURCE.json').read_bytes())
 cfg=dict(attempt=a,kind='kani',module=module,sources=[src,'NBL_src/crates/aspis-r1-cost-probe/src/verifier.rs','NBL_src/crates/aspis-core/src/r0_transcript.rs','NBL_src/crates/aspis-r1-cost-probe/src/sampler.rs','NBL_src/Cargo.toml','NBL_src/Cargo.lock'],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBL_src/crates/'+package+'/Cargo.toml','--target-dir',B+'/NBL_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',module,'--output-format','terse'],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NBL_tmp'},deps_fingerprint={'scope':'frozen native source selected by NBL_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations'},expected_time='optimized Kani compilation then native call routing; no arithmetic elimination',reservation_retries=retry)
+if os.environ.get('NBL_KANI_TRACE')=='1':
+ cfg['command'][cfg['command'].index('terse')]='regular'
+ cfg['command']+=['--cbmc-args','--trace']
 cfg['native_command']=cfg['command'];cfg['command']=['python3','NBL_gate.py',a+'.json']
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
