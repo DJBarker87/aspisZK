@@ -61,9 +61,9 @@ theorem both :
   constructor
   · exact (PV_L2C_CompilerRange.source
       (⟨_,PV_L2C_FixtureAudit.transfer (K:=K)⟩ : PV_L2C_HonestCaller.Family (K:=K))
-      transfer_fields (by decide)).2
+      transfer_fields (by change (77#u32 : U32).val < 2147483647;scalar_tac)).2
   · exact (PV_L2C_CompilerRange.source
       (⟨_,PV_L2C_FixtureAudit.withdrawal (K:=K)⟩ : PV_L2C_HonestCaller.Family (K:=K))
-      withdrawal_fields (by decide)).2
+      withdrawal_fields (by change (77#u32 : U32).val < 2147483647;scalar_tac)).2
 #print axioms both
 end PV_L2C_FixtureOrigins
