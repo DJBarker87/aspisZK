@@ -18,7 +18,7 @@ for i in range(a,len(s)):
   depth-=1
   if depth==0:end=i+1;break
 assert end
-copy=s[begin:end].replace('FixedOutputCore for ','',1).replace('fn finalize_fixed_core(','pub fn pv_dl_owned_finalize_fixed_core(',1)
+copy=s[begin:end].replace('FixedOutputCore for ','',1).replace('fn finalize_fixed_core(','pub fn pv_dl_owned_finalize_fixed_core(',1).replace('GenericArray<u8, Self::OutputSize>','GenericArray<u8, <Self as OutputSizeUser>::OutputSize>')
 p.write_text(s+'\\n'+copy+'\\n')
 c=b/'wrapper-proof/ct-owned-helper.rs';c.write_text(copy+'\\n')
 p=b/'wrapper-proof/Cargo.toml';s=p.read_text();assert 'ct_final_native' not in s
