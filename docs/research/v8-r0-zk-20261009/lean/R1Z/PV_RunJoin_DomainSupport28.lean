@@ -24,11 +24,22 @@ theorem active_slot_skipped
   simp only [format.POOL_V1_TREE_DEPTH]
   rw [if_pos (by decide)]
   simp only [core.result.Result.is_ok,bind_tc_ok,lift,Bool.true_eq,if_true]
+  have shifted : (BuilderStdModels.shift64 1#u64 0#usize).val = 1 := by
+    rw [BuilderStdModels.shift64_spec]
+    change ((1#u64).bv.ushiftRight ((0#usize).val % 64)).toNat = 1
+    simp only [UScalar.ofNatCore_val_eq,Nat.zero_mod,BitVec.toNat_ushiftRight]
+    rfl
   have active : BuilderStdModels.shift64 1#u64 0#usize &&& 1#u64 ≠ 0#u64 := by
-    with_unfolding_all decide
+    intro h
+    have words := congrArg UScalar.val h
+    rw [UScalar.val_and,shifted] at words
+    change 1 = 0 at words
+    omega
   rw [if_neg active]
   have next : Usize.wrapping_add 0#usize 1#usize = 1#usize := by
-    with_unfolding_all rfl
+    apply UScalar.eq_of_val_eq
+    rw [R0Z.WriterRefine.uadd _ _ (by simp)]
+    rfl
   rw [next]
 #print axioms active_slot_skipped
 end R1Z.PV_RunJoin_ActiveFrontier28
