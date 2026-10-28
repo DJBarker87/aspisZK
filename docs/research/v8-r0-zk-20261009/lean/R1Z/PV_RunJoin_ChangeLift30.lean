@@ -24,8 +24,9 @@ theorem change_lift (r : CopyRecords) (pub : R0P.Public K)
   have hs := chunks_sabs (wordWitness r.w) (wordPublic r.p) pub hp hw
   obtain ⟨d',he,hl,_⟩ := noteDigest_lift pub (toModel (wordWitness r.w))
     (chunksOf (wordWitness r.w) (wordPublic r.p)) hs ⟨32,by decide⟩
-    (by unfold NodeKind; omega) (by unfold ZeroKind; omega)
-  change noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) 32 = ok raw at hr
+    (by change ¬ NodeKind 32; unfold NodeKind; omega)
+    (by change ¬ ZeroKind pub.variant 32; unfold ZeroKind; omega)
+  change noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) 32 = ok d at hr
   rw [hr] at he
   cases Result.ok.inj he
   exact hl
