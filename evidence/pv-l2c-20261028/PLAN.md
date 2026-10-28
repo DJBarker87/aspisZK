@@ -21,3 +21,17 @@ E1/E2 stream/environment association, complete failed-prefix and deployed
 RunJoin/simE coupling remain independently of any local guard result.
 Target not yet established. No row will be subtracted on the strength of a
 conditional algebra law or fixture run.
+
+## Current checkpoint
+
+Read common instructions through r-prime on 2026-10-28; copy-dependent Kani
+codec credit is suspended (KANI-COPY-REVIEW.md). No endpoint row removed.
+Next unspent ID 42661 after refused 42660; audits 42697–42699 untouched.
+Current focused arithmetic, canonical scalar parser, source subtraction/Q
+operations, vector reads, first-inactive scan, and extracted plain Q fold
+compile with standard axioms. Selected actual balance-row fold is next.
+95 preexisting bridge closure nodes needed rebuilding; the balance recursion
+and word codec nodes are now built privately. Source resolution remains EJR /
+freeze / tracked HEAD, with exact full dependency fingerprints for h6 reuse.
+One scope at a time. No changes under crates/ or programs/, no shared writes,
+no wallet/key creation. Budget and final outcome will be tallied from receipts.
