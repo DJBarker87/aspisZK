@@ -42,3 +42,42 @@ scratch repair adds cfg(kani)-only Arbitrary derives to the three field records
 and Error. No repository shipped file is modified, and no source-body or domain
 is changed. The unimplied-under-stub and call-site cursor controls remain pending.
 A weak cursor contract never supplies byte or canonical-output correspondence.
+
+## Stage 3: arbitrary iteration and ten-read call order
+
+NCN_K025 supplies the third Result fidelity control: is_ok on real zero bytes
+passes at K023 and fails under stub_verified at K025. K026/K027 are the weak
+cursor call-site pass/failing control. This contract carries only cursor+16
+and its modifies frame, never a byte/result equation. Derive repairs are
+scratch-only; K024 remains excluded, not renamed.
+
+NCN_K032–K041: five matched pairs establish one native mutable suffix-iterator
+step over arbitrary64-cell pre-state and arbitrary i<64: cursor at712+16*i,
+exact writeback of the SAME returned K (ghost reply log), arbitrary other-cell
+frame, unchanged target on Err, and remaining iterator length63-i. The native
+step uses the actual Reader::k contract, with full1768 backing. Ghost logs
+contain Option<K>, never Option<fn>. Erasing the two ghost writes restores the
+frozen four-statement loop body, pinned in NCN_WEIGHT_SOURCE.json. Borrowed
+slice iteration is established; full Vec allocation/ownership/cleanup and its
+same-buffer association remain lower obligations, not silently inferred.
+
+NCN_K042–K047: the actual ten-read helper, with erased reply/cursor observation
+wrappers and stub_verified Reader::k, has exact408+16*j ordered calls, successful
+return values identical to each corresponding reply, final568, and first-error
+short circuit. The full checkpoint is arbitrary, replacing NCI's sparse input
+class. The weak contract quantifies over more replies than real decoding, so
+this is call-site transport parametric in the real lower reply; byte/decode
+identity must still be supplied by the CLOSED raw/codec child association.
+No fictitious suffix call or independently selected output is assumed.
+
+NCN_L007 proves NCN_WeightErrors.loop_error, the missing generic mutable-loop
+error induction. It uses the real selected mutable iterator and existing
+replace_slot lemma. Axioms [propext, Quot.sound]. L004–L006 were rejected proof
+drafts and their sorryAx audits are explicitly excluded. L003 proves all nine
+raw32 cursor-domain classes and the no-overflow addition domain, standard axioms
+only; L002 was a rejected list-case split, not an accepted audit.
+
+Still OPEN: native Vec owner/allocation association, full query contains-prefix
+association, resume/proof/public/syscall/same-save pairing and all parent
+installations. This stage removes the sparse64-byte and one-slot limitations
+from the stated native windows; it does not close U11 or the deployed theorem.

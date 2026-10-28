@@ -1,0 +1,40 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1362,3 +1362,37 @@
+ #[kani::stub_verified(Reader::k)]
+ fn stub_cursor_wrong(){let bytes=[0u8;1768];let start:usize=kani::any();kani::assume(start<=1752);let mut r=Reader{bytes:&bytes,at:start};let out=r.k();assert!(r.at!=start+16);}
+ }
++
++#[cfg(kani)] mod NCN_arith {
++use super::*;
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn product_ok(){
++let a:u32=kani::any();let b:u32=kani::any();let x=u64::from(a);let y=u64::from(b);let result=x*y;
++assert!(result==(a as u64)*(b as u64));
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn product_wrong(){
++let a:u32=kani::any();let b:u32=kani::any();let x=u64::from(a);let y=u64::from(b);let result=x*y;
++assert!(result!=(a as u64)*(b as u64));
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn add_ok(){
++let mut row:[u64;4]=kani::any();let product:u64=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<4&&k<4&&k!=j);
++kani::assume(row[j]<=u64::MAX-product);let before=row[j];let frame=row[k];row[j]=before+product;
++assert!(row[j]==before+product);assert!(row[k]==frame);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn add_wrong(){
++let mut row:[u64;4]=kani::any();let product:u64=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<4&&k<4&&k!=j);
++kani::assume(row[j]<=u64::MAX-product);let before=row[j];let frame=row[k];row[j]=before+product;
++assert!(row[j]!=before+product);assert!(row[k]==frame);
++}
++}

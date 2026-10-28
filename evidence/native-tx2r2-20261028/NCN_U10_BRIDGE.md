@@ -25,3 +25,10 @@ does not discharge them or create a whole-call output premise.
 Per-attempt target/source/dependency pins, command, exit, wall, RSS, swaps and
 axiom lines are in NCN_ATTEMPTS.jsonl and individual receipts. Frozen source,
 model headline, approved assumptions and ELF pins are unchanged.
+
+NCN_K028 isolated widened product timed out90s; zero credit and K029 unrun.
+NCN_K030/K031 establish native checked addition and exact selected-cell write/
+arbitrary other-cell frame under raw<=MAX-product. NCN_ReaderDomains.word_add_domain
+(L003) obtains that precondition from the existing cadence bound. The primitive
+product remains OPEN natively; no multiplier body or new field-product stub
+is credited. Existing NCI checked word arithmetic and induction remain reused.

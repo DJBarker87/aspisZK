@@ -21,7 +21,7 @@ caller execution theorem. -/
 theorem source_positions (start : Nat)
     (h : start ∈ ([80,112,144,176,208,240,272,632,664] : List Nat)) :
     Raw32Cursor start := by
-  simp only [List.mem_cons,List.mem_singleton] at h
+  simp only [List.mem_cons,List.not_mem_nil,or_false] at h
   rcases h with h|h|h|h|h|h|h|h|h <;> subst start
   · exact (prefix_bound 0 (by decide)).1
   · exact (prefix_bound 1 (by decide)).1

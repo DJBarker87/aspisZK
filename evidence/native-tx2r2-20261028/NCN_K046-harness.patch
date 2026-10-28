@@ -1,0 +1,90 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -383,16 +383,16 @@
+ fn read_checkpoint_semantic_alpha(bytes:&[u8],at:usize)->Result<([K;10],usize),Error> {
+     let mut r=Reader{bytes,at};
+     let values=[
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
+-        r.k()?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
++        {#[cfg(kani)] {NCN_semantic::observed(&mut r)} #[cfg(not(kani))] {r.k()}}?,
+     ];
+     Ok((values,r.at))
+ }
+@@ -1542,3 +1542,60 @@
+ assert!(remaining!=63-i);
+ }
+ }
++
++#[cfg(kani)] mod NCN_semantic {
++use super::*;
++static mut CALLS:usize=0;
++static mut INPUT:[usize;10]=[0;10];
++static mut OUTPUT:[usize;10]=[0;10];
++static mut GOOD:[bool;10]=[false;10];
++static mut REPLY:[K;10]=[K::ZERO;10];
++pub(super) fn observed(r:&mut Reader<'_>)->Result<K,Error>{
++let i=unsafe{CALLS};assert!(i<10);unsafe{INPUT[i]=r.at;}
++let out=r.k();
++unsafe{OUTPUT[i]=r.at;if let Ok(v)=out {GOOD[i]=true;REPLY[i]=v;}CALLS+=1;}
++out
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn order_ok(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++assert!(unsafe{INPUT[j]}==408+16*j);assert!(unsafe{OUTPUT[j]}==424+16*j);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn order_wrong(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++assert!(unsafe{INPUT[j]}!=408+16*j);assert!(unsafe{OUTPUT[j]}==424+16*j);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn values_ok(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++if let Ok((values,at))=out{assert!(calls==10&&at==568);assert!(values[j]==unsafe{REPLY[j]});assert!(unsafe{GOOD[j]});}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn values_wrong(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++if let Ok((values,at))=out{assert!(calls==10&&at==568);assert!(values[j]!=unsafe{REPLY[j]});assert!(unsafe{GOOD[j]});}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn errors_ok(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++if out.is_err(){assert!(unsafe{GOOD[calls-1]}==false);if j+1<calls{assert!(unsafe{GOOD[j]});}}else{assert!(calls==10);assert!(unsafe{GOOD[j]});}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn errors_wrong(){let bytes:[u8;1768]=kani::any();let out=read_checkpoint_semantic_alpha(&bytes,408);let calls=unsafe{CALLS};assert!(calls>=1&&calls<=10);let j:usize=kani::any();kani::assume(j<calls);
++if out.is_err(){assert!(unsafe{GOOD[calls-1]}!=false);if j+1<calls{assert!(unsafe{GOOD[j]});}}else{assert!(calls==10);assert!(unsafe{GOOD[j]});}
++}
++}

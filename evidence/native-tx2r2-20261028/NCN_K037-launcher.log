@@ -1,0 +1,50 @@
+{"attempt": "NCN_K037", "exit_status": 1, "wall_seconds": 8.200216969009489, "peak_rss_kib": "401760", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: function `Reader_k_contract` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1345:4
+     |
+1345 | fn Reader_k_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=r...
+     |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `reader_k_contract`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.21s
+Checking harness verifier::NCN_weights::frame_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 286 failed (3 unreachable)
+Failed Checks: assertion failed: weights[k] != frame
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 1490, in verifier::NCN_weights::frame_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 4.2448s
+
+Manual Harness Summary:
+Verification failed for - verifier::NCN_weights::frame_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf056b99e9d6e4c5687d5ca49655c9e55.scope; invocation ID: 217fd2b348204b4fa35a9481ddff30df
