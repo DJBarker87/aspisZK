@@ -40,3 +40,5 @@ pub fn native_default() -> sha2::Sha256 { Default::default() }
 
 #[cfg(kani)] #[path="update-gate.rs"] mod update_gate;
 #[cfg(kani)] #[path="padding-gate.rs"] mod padding_gate;
+
+#[cfg(kani)] #[path="update-coordinate.rs"] mod update_coordinate_gate;

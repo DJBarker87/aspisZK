@@ -108,3 +108,12 @@ reachable from its target. Keep the unchanged 6G/8G/no-swap caps and existing
 900-second timeout; do not extend it. A distinct follow-up candidate uses
 symbolic event/byte coordinates and unwind 70 (same input bounds), avoiding
 whole-array comparison formulas. It is not launched in parallel.
+
+Kani update-03 exited 124 at 900 seconds (wall 15:01.20). Optimized compilation
+finished in 0.96 s; time was spent in verification, not an unoptimized build.
+No counterexample or proof was returned. The actual source unwind was 132;
+the generic receipt label inherited 196 and has been corrected explicitly.
+The post-timeout scope check found the recorded own cgroup removed and no
+remaining processes. GNU-time RSS is retained; aggregate peak was unavailable
+after scope removal. Next candidate: same input bounds, symbolic coordinates,
+unwind 70, same caps. No unchanged retry and no cap/timeout increase.
