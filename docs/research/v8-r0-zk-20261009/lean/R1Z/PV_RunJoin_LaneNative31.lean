@@ -14,6 +14,7 @@ theorem complete_result
           ok (match r with | .Ok d => .Ok d | .Err e => .Err (PV_RunJoin_LaneABI31.errorToOuter e))) := by
   unfold PV_RunJoin_LaneABI31.call
   rw [PV_RunJoin_LaneDenotation31.complete_result]
+  rfl
 #print axioms complete_result
 
 theorem installed
