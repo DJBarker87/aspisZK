@@ -13899,3 +13899,24 @@ remaining hypothesis is op227's callback law (D385), then V241 and V245, all und
 configuration of ruling (x). V228's evidence predates the deployed-configuration audit and goes into
 the re-verification queue with the other structural closures. Rows removed outright: 0. Privacy
 target not yet established.
+
+## D388 (Stream B) 2026-10-28 17:55 UTC: correction to D387 (the V228 merge had failed on a full disk); disk cleared; V228 merged; rdb2 result
+
+Correction to D387: the merge of codex/pv-b3p6-20261028 into the prover candidate did NOT happen when
+D387 was written. The Mac's disk filled again (6.1 GiB free) and creating the merge worktree failed
+with "No space left on device"; the push that followed pushed an unchanged candidate, and the
+fast-forward of the b3p6 branch failed. b3p6e, launched on a prompt saying the branch was
+fast-forwarded, saw the divergence and stopped correctly without spending anything. The lead removed
+eight idle worktrees whose branches were clean and pushed (pv-l1, pv-l2c, pv-l2d, pv-gate6, pv-fxio,
+pv-reach, pv-world, pv-fscan; about 12 GB each), leaving 104 GiB free, then redid the merge: the prover
+candidate is at 9539b7530b with V228 merged, shipped code still identical to the gated 82566acdfb, and
+the b3p6 branch fast-forwarded. b3p6e is relaunched unchanged (V244 first). No running job reported a
+disk-full error. Parked lines will get fresh worktrees from their pushed branches when they resume.
+
+pv-rdb2 (3 of 100 Lean attempts; 11 native scopes; no Kani) restored none of its 11 class-B rows:
+nine deployed-configuration native suites passed, V229's project checker was recovered, the V231/V238
+wrapper checks passed and a limited padded-layout transport was proved, but laws for the 1.94.1
+standard library's pointer, allocation and source-association bodies are missing. No native behaviour
+finding. rdb2b continues with the remaining budget and proves those laws against the pinned 1.94.1
+library sources before re-running the gates. Rows removed outright: 0. Privacy target not yet
+established.
