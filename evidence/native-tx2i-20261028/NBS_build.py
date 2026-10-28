@@ -6,6 +6,7 @@ import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2i-20261028';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X=C+'/objects'
 a,local,module=sys.argv[1:];local=Path(local);src='NBS_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028/'+module.replace('.','/')+'.olean'
 if (E/'NBS_PAUSE').exists():raise SystemExit('paused before admission')
+if len(list(E.glob('NBS_K*/receipt.json')))>=40:raise SystemExit('native budget exhausted; no additional prover launch')
 assert int(a.rsplit('L',1)[1])<=100
 assert len(list(E.glob('NBS_L*/receipt.json')))<100
 assert not (E/a/'receipt.json').exists()
@@ -36,7 +37,7 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('admission refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBS_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'NBG prefix; persistent leaf cache and coherent SInt2; resolved Aeneas pins in NBS_LIBRARY_START.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBS_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'NBS prefix; persistent leaf cache and coherent SInt2; resolved Aeneas pins in NBS_LIBRARY_START.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBS_LAUNCHER_INPUTS.json').read_text()))

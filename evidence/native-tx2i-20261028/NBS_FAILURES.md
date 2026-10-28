@@ -25,3 +25,10 @@ L095 rejected a powers-array length proof because omega did not normalize the Us
 Correction to the earlier broad no-rerun wording: L052 redundantly repeated L051's unchanged missing-import attempt before dependency repair. It supplied no proof evidence and is counted in the budget. This own-orchestration error is retained; no timed-out or memory-killed shape was rerun unchanged. Subsequent dependent retries follow an actual new dependency object or source edit. The recovery helper is repaired to resolve the known missing import before another identical target attempt.
 
 NBS_ResizeStep_UNRUN.lean.txt was not compiled; NBS_DotSourceProbe_FAILED.lean.txt retains the failed import probe. Neither is installed as a proved Lean module.
+
+Final audit L099 passes all24 new theorem roots with standard axioms only. The
+unused ResizeStep draft was not launched; the final native K040 passes all22
+getter rows with KMX. Native budget40/40 exhausted; no further prover launched.
+An inherited descriptive `NBG prefix` label in the own Lean wrapper's dependency
+scope text is corrected to NBS in the final script; actual module/path/source/
+object fields in retained receipts were already authoritative and correct.

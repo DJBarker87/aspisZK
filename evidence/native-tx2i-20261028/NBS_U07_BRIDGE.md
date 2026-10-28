@@ -53,7 +53,8 @@ Exact remaining work:
 No XRn_Join kit, copied model substitute or session A edit was used. The actual
 FIp_NativeDots and coherent SInt2 owners are imported. Missing unchanged imports
 were built once into the designated persistent cache from recorded replay source
-choices. No shared workspace/source/object was rewritten.
+choices. No coherent SInt2 source/object or shared launcher was rewritten. The retained
+NBQ native scratch corpus was extended only by the recorded NBS cfg patches.
 
 L088–094, L096 and L098 pass the nine new U07 proof modules. L099 co-imports all
 13 new modules plus NBQ_Audit and prints all24 new theorem axioms; only propext,

@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,subprocess,hashlib
+E=Path('evidence/native-tx2i-20261028');E.mkdir(exist_ok=True)
+old=Path('evidence/native-tx2h-20261028')
+for name in ['build.py','kani.py']:
+ s=(old/('NBQ_'+name)).read_text().replace('NBQ_','NBS_').replace('codex-cx-native-tx2h-20261028','codex-cx-native-tx2i-20261028')
+ (E/('NBS_'+name)).write_text(s)
+(E/'NBS_LAUNCHER_INPUTS.json').write_bytes((old/'NBQ_LAUNCHER_INPUTS.json').read_bytes())
+manifest={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in list(Path('lean').glob('NBQ_*.lean'))+list(old.glob('NBQ_*BRIDGE.md'))+[old/'NBQ_HANDOFF.md',old/'NBQ_VERIFICATION.json']}
+(E/'NBS_REUSE.json').write_text(json.dumps(manifest,indent=2)+'\n')
+(E/'NBS_PLAN.md').write_text('''# NBS continuation\n\nFrozen Rust 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Headline AspisR1.RPx_Deployed.deployed; L154 statement parameter; narrowed D188. No headline premise removal. Target not yet established.\n\nStage 0 imports NBQ components read-only (NBS_REUSE.json), sets own serial wrappers using byte-identical host backends, inventories existing persistent cache/Aeneas objects. Stage 1: U00 positive-size native use. Stage 2: U07 complete four-dot loop/tail association. Stage 3: U08 fast domain/geometry. Commit after stages.\n\nConservative budget: 40 Kani, 100 Lean (earlier global limit is tighter than the final 120). One admitted capped scope at a time, high6G/max8G/swap0/tasks64, Lean-M7000; Rust optimized/offline, frozen dependency validation before each Kani and lock check after. No shared launcher repair. Persistent cache is retained.\n\nNo shipped file edits. Scratch harnesses only; commit patches/receipts only. Inherited ELF pins, not reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4, devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299, Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.\n''')

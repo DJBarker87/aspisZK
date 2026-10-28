@@ -7,6 +7,7 @@ B='/home/dombarker/project-offloads/codex-cx-native-tx2i-20261028';S=B+'/NBS_src
 a,crate,harness=sys.argv[1:4]
 extra=Path(sys.argv[4]) if len(sys.argv)>4 else None
 assert len(list(E.glob('NBS_K*/receipt.json')))<40
+assert len(list(E.glob('NBS_L*/receipt.json')))<100
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False,stdin=None):
  args=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]
