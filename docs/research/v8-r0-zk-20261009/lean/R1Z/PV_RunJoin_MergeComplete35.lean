@@ -6,7 +6,7 @@ open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_FieldData34 PV_RunJoin_MergeArray35 PV_RunJoin_MergeFold35
 variable [ExternalTypes]
 
-theorem repeat (q : Q) : Array.repeat 28#usize q = array (fun _ => q) := by
+theorem repeat_constant (q : Q) : Array.repeat 28#usize q = array (fun _ => q) := by
   apply Subtype.ext
   simp only [Array.repeat,array,ProverCommitArray49.array,List.ofFn_const]
 
@@ -36,7 +36,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
   refine ⟨out,?_,hc,?_⟩
   · unfold host_sumcheck.merge_evaluations
     rw [zero]
-    simp only [bind_tc_ok,repeat]
+    simp only [bind_tc_ok,repeat_constant]
     have len : Slice.len (Array.to_slice (ProverCommitArray49.array count
         (fun j => core.result.Result.Ok (es j))))=count := by
       apply UScalar.eq_of_val_eq
@@ -46,7 +46,7 @@ theorem complete (ops : ExternalFuns) (count a : Usize) (es : Nat → Q)
   · simpa only [value_source,ProverCommitSubfieldOps47.zero_decode,
       show (0#usize).val=0 from rfl] using hm
 
-#print axioms repeat
+#print axioms repeat_constant
 #print axioms zero
 #print axioms complete
 end R1Z.PV_RunJoin_MergeComplete35
