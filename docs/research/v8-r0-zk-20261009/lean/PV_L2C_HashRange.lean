@@ -16,6 +16,8 @@ theorem initial_canonical (domain : U32) (input : Slice U32)
     Canonical (initial domain input) := by
   have hn : (UScalar.cast .U32 (Slice.len input)).val < 2147483647 := by
     rw [UScalar.cast_val_eq,Slice.len_val]
+    change input.length % 4294967296 < 2147483647
+    change input.length < 2147483647 at hl
     omega
   intro i
   unfold initial
@@ -32,8 +34,8 @@ theorem digest (s : State) :
       (poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31 callback).call_mut s i =
       ok (s.val[i.val]!,s) := by
     intro i hi
-    rw [poseidon2.hash_fields_with_trace.closure_2.Insts.CoreOpsFunctionFnMutTupleUsizeM31.call_mut,
-      index_ok s i (by simp; omega)]
+    with_unfolding_all change (do let m ← Array.index_usize s i; ok (m,s)) = _
+    rw [index_ok s i (by simp; omega)]
     rfl
   rw [PV_Src_Forest_DigestArguments.from_fn_nat 8#usize _ s (fun i => s.val[i]!) hf]
   rfl
@@ -47,7 +49,10 @@ theorem shape (domain : U32) (input : Slice U32) (hne : input.val ≠ []) :
         ok (digest8 s)) := by
   unfold poseidon2.hash_fields poseidon2.hash_fields_with_trace
   simp only [poseidon2.RATE,aspis_core.field.M31.ZERO]
-  have hr : Usize.wrapping_add 8#usize 1#usize = 9#usize := by rfl
+  have hr : Usize.wrapping_add 8#usize 1#usize = 9#usize := by
+    apply UScalar.eq_of_val_eq
+    rw [R0Z.PoseidonRefine.uadd _ _ (by simp)]
+    rfl
   rw [hr]
   simp only [core.slice.Slice.is_empty,core.slice.Slice.chunks,lift,bind_tc_ok]
   rw [BuilderRecordsArray.update_gen _ _ _ (by decide)]
@@ -55,7 +60,7 @@ theorem shape (domain : U32) (input : Slice U32) (hne : input.val ≠ []) :
   rw [Array.index_mut_usize,index_ok _ 9#usize (by decide)]
   simp only [bind_tc_ok]
   have hp : input.length ≠ 0 := by simpa using hne
-  simp only [if_neg hp,decide_false,Bool.false_eq_true,ite_false]
+  simp only [hp,decide_false,Bool.false_eq_true,ite_false]
   simp only [BuilderForestStd.chunks,
     core.iter.traits.iterator.Iterator.enumerate.trait_default,
     core.iter.traits.iterator.Iterator.enumerate.default,UScalar.ofNatCore_val_eq,
@@ -78,7 +83,7 @@ theorem success (domain : U32) (input : Slice U32) (d : Array U32 8#usize)
   pv_peel h with s hs
   cases h
   have hc := PV_L2C_HashLoopRange.success ⟨⟨input,8⟩,0#usize⟩
-    (initial domain input) s (by decide) (initial_canonical domain input hd hl) hs
+    (initial domain input) s (by change 0<8; omega) (initial_canonical domain input hd hl) hs
   intro j hj
   rw [digest8_get s j hj]
   exact hc ⟨j,by omega⟩
