@@ -54,3 +54,8 @@ Disposition: finite consumed-type library law and installation supplied;
 generic row remains refuted, and deployment/allocator primitive realization
 and L1/L2/L3 side-channel obligations are retained. Do not count the latter as
 new T fields or as discharged endpoint premises.
+
+Semantic library Drop entries are one Vec::drop and one RawVec::drop per
+consumed vector; primitive u32/Global have no user destructor. The counter
+field elementDestructors counts element/user glue, not emitted machine call
+instructions. Allocator-internal effects are inside Runtime.

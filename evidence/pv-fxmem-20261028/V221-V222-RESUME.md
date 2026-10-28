@@ -54,3 +54,10 @@ Disposition: explicit effect-aware byte source laws and original-carrier
 installations supplied. Complete native-to-deployed execution and L3 remain P
 obligations. Generic custom trait effects are not silently counted as proved
 physical zero-byte laws, and no endpoint premise is reported removed.
+
+Consuming destructor addendum: ZeroDrop.complete/caller_composition (35529)
+threads the exact emitted array callback through Zeroizing::drop and consumes
+the owned array. The source gate now also checks the complete Zeroizing Drop
+body. zeroize-drop-06 passes 1,024 paired actual destructor cases using live
+MaybeUninit storage; no destroyed owning value is read and no double drop occurs.
+This remains finite validation, with the same L3 boundary.
