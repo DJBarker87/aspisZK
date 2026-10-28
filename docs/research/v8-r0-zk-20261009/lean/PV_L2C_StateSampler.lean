@@ -1,5 +1,6 @@
 import PV_L2C_SampleCanonical
 import PV_L2C_DecodeRange
+import R1Z.PV_Src_CompilerTactic
 set_option autoImplicit false
 namespace PV_L2C_StateSampler
 open Aeneas Aeneas.Std Result PV_L2C_M31
@@ -65,6 +66,6 @@ theorem secure_result {S : Type} (next : S → Result (word × S)) (fuel : Nat)
   cases h
   exact PV_L2C_SampleCanonical.tuple_canonical _ _ _ _
     (canonical_result next fuel s sa a ha) (canonical_result next fuel sa sb b hb)
-    (canonical_result next fuel sb sc c hc) (canonical_result next fuel sc sd d hd)
+    (canonical_result next fuel sb sc c hc) (canonical_result next fuel sc s1 d hd)
 #print axioms secure_result
 end PV_L2C_StateSampler
