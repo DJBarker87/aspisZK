@@ -1,3 +1,22 @@
+# Current disposition after D355/D356 recovery
+
+Target not yet established. Resume allocation exhausted: 72/72 Lean attempts
+(55 pass, 17 fail), zero new Kani. Including prior work: 140 Lean, six Kani.
+Final corrected-closure audits 44897/44898/44899 all passed with standard
+axioms. Both exact-carrier fixtures are audited. V352/V354/V357/V360 remain
+OPEN/P; no endpoint premise removed or weakened. Recovery launched no runs.
+
+The current detailed report, complete attempt inventory, recovery receipts,
+remaining obligations and stop reason are in
+[RECOVERY-D356.md](resume-d355/RECOVERY-D356.md),
+[RECOVERY-D356.json](resume-d355/RECOVERY-D356.json) and
+[RESULTS.json](resume-d355/RESULTS.json).
+
+The earlier allocation's report below is retained as historical evidence;
+its missing audit/ID-allocation status is superseded by the current receipts.
+
+---
+
 # L2C D355 continuation — target not established
 
 Branch `codex/pv-l2c-20261028`, worktree exactly
