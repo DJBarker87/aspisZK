@@ -35,13 +35,12 @@ theorem complete_result : ∃ out : Array reference132.Cell 3803#usize,
     exact PV_B3P_MaskFreeLaw132.free_eq r c
   let initial : Array reference132.Cell 3803#usize := Array.repeat 3803#usize ⟨0#u16,0#u8⟩
   have hcap : (0#usize).val + (columns pick (0#usize).val 16).length ≤ 3803 := by
-    change 0+(columns pick 0 16).length ≤ 3803
+    simp only [show (0#usize).val = 0 from rfl]
     rw [PV_B3P_MaskCapacity132.full_count]
     omega
   obtain ⟨out,k,hloop,hcount,hvalue⟩ := PV_B3P_MaskOuter132.outer pick hp 16 initial 0#usize 0#usize
     (by simp) hcap
-  change k.val = 0+(columns pick 0 16).length at hcount
-  change PV_B3P_MaskPrefix132.written out k.val = [] ++ columns pick 0 16 at hvalue
+  simp only [show (0#usize).val = 0 from rfl] at hcount hvalue
   have hk : k = 3803#usize := by
     apply UScalar.val_eq_imp
     rw [PV_B3P_MaskCapacity132.full_count] at hcount
@@ -50,7 +49,8 @@ theorem complete_result : ∃ out : Array reference132.Cell 3803#usize,
   · simpa only [reference132.cells,hk] using hloop
   · rw [hk] at hvalue
     have hlen : out.val.length = 3803 := out.property
-    change (out.val.take 3803).map PV_B3P_MaskPrefix132.decode = [] ++ columns pick 0 16 at hvalue
+    simp only [PV_B3P_MaskPrefix132.written,show (3803#usize).val = 3803 from rfl,
+      List.take_zero,List.map_nil] at hvalue
     rw [List.take_of_length_le (by omega : out.val.length ≤ 3803),List.nil_append,model_eq] at hvalue
     exact hvalue
 
