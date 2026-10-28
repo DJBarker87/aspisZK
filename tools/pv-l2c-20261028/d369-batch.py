@@ -10,7 +10,7 @@ native_after='--native-after' in sys.argv
 args=[x for x in sys.argv[1:] if x not in ['--audit','--native-after']]
 start=int(args[0]);names=args[1:]
 assert (50397<=start<=50399 if audit else 50300<=start<50397) and names
-if audit:assert all(m in ['PV_L2C_CombinedAudit','PV_L2C_FixtureAudit','PV_L2C_FocusedReplay'] for m in names)
+if audit:assert all(m in ['PV_L2C_CombinedAudit','PV_L2C_FixtureAudit','PV_L2C_FocusedReplay','PV_L2C_D371CombinedAudit','PV_L2C_D371FixtureAudit','PV_L2C_D371FocusedReplay'] for m in names)
 old=[json.loads(p.read_text()) for p in E.glob('refusal-*.json')]
 if old:
  remaining=180-(datetime.datetime.now(datetime.timezone.utc)-max(datetime.datetime.fromisoformat(x['utc']) for x in old)).total_seconds()
