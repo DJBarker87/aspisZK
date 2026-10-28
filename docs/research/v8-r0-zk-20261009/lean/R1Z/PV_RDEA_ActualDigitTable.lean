@@ -9,7 +9,7 @@ def table : Array Str 16#usize := Array.make 16#usize [
           ]
 
 theorem entry_length (i : Fin 16) : (table.val[i.val]'(by have h:=i.isLt; change i.val<16; exact h)).val.length=1 := by
-  fin_cases i <;> simp [table,Array.make,toStr,ByteArray.toList]
+  fin_cases i <;> simp [table,Array.make,toStr,ByteArray.toList,ByteArray.toList.loop,String.size_toByteArray]
 
 #print toStr
 #print Array.make
