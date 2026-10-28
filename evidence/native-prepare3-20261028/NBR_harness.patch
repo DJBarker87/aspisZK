@@ -9,35 +9,25 @@
 +mod NBR_candidate;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBR_candidate.rs
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,21 @@
 +use super::*;
-+static mut NBR_INPUT:*const u8=core::ptr::null();
-+static mut NBR_OUTPUT:*mut u8=core::ptr::null_mut();
-+static mut NBR_SRC:usize=0;
-+static mut NBR_DST:usize=0;
-+static mut NBR_SIZE:usize=0;
-+fn NBR_src(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{155+453*(row-15)}else if row==26{6546}else{7015}}
-+fn NBR_dst(row:usize)->usize{if row<=2{32+5*row}else if row<=14{64+5*row}else if row<=25{171+901*(row-15)}else if row==26{12898}else{13831}}
-+fn NBR_expand_cut(input:&[u8],out:&mut[u8])->Result<(),CodecError>{unsafe{
-+ assert_eq!(input.as_ptr(),NBR_INPUT.add(NBR_SRC+5));assert_eq!(input.len(),NBR_SIZE/2);
-+ assert_eq!(out.as_mut_ptr(),NBR_OUTPUT.add(NBR_DST+5));assert_eq!(out.len(),NBR_SIZE);
-+ assert_eq!(input.len()%16,0);assert_eq!(out.len(),2*input.len());assert!(input.len()<=1856);
-+ kani::cover!(true,"same row reaches expansion with proved full callee domain");kani::assume(false);Ok(())
-+}}
-+// Frozen expand_semantic loop body after selecting its genuine row.
-+fn NBR_row(compact:&[u8],out:&mut[u8],row:u8,mut src:usize,mut dst:usize)->Result<(usize,usize),CodecError>{
-+ let size=crate::r1_wire::row_shape(row).ok_or(CodecError::Length)?.1;
-+ out[dst..dst+5].copy_from_slice(&compact[src..src+5]);src+=5;dst+=5;
-+ if row>=14{
-+  compact::expand_values(&compact[src..src+size/2],&mut out[dst..dst+size])?;src+=size/2;
-+ }else{out[dst..dst+size].copy_from_slice(&compact[src..src+size]);src+=size;}
-+ dst+=size;Ok((src,dst))
++#[derive(Clone,Copy)] struct NBR_Digest;
++static mut NBR_ENABLED:bool=false;
++impl Digest32 for NBR_Digest{fn digest(&self,_:&[&[u8]])->[u8;32]{unsafe{assert!(!NBR_ENABLED,"no digest after returned claim");}kani::any()}}
++fn NBR_claim_tail<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,t:Transcript<H>,gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],returned:Result<E,Error>)->Result<Box<Prepared>,Error>{
++ let claim=returned?;
++ Ok(Box::new(Prepared{variant:v.variant,roots:sem.roots,gamma,kappa,alpha,rho,queries,semantic_alpha:sem.alpha,z:sem.z,claim,state:t.state}))
 +}
-+#[kani::proof] #[kani::unwind(2)]
-+#[kani::stub(crate::compact::expand_values,NBR_expand_cut)]
-+fn NBR_semantic_compact_cut(){
-+ let input:[u8;7015]=kani::any();let mut out:[u8;13831]=kani::any();
-+ let row:u8=kani::any();kani::assume(row>=14&&row<27);let r=row as usize;let size=crate::r1_wire::row_shape(row).unwrap().1;
-+ unsafe{NBR_INPUT=input.as_ptr();NBR_OUTPUT=out.as_mut_ptr();NBR_SRC=NBR_src(r);NBR_DST=NBR_dst(r);NBR_SIZE=size;}
-+ let _=NBR_row(&input,&mut out,row,NBR_src(r),NBR_dst(r));assert!(false,"expansion call cut terminates all paths");
++#[kani::proof] #[kani::unwind(33)]
++fn NBR_claim_tail_all_fields(){
++ let q=K::ZERO;unsafe{NBR_ENABLED=false;}
++ let sem=crate::r1_semantic::Verified{roots:kani::any(),challenges:crate::r1_wire::Challenges{lambda:q,chi:q,theta:q,zc:[q;10],mu:q,eta:q},alpha:unsafe{core::mem::transmute::<[u8;160],[K;10]>(kani::any())},claims:Box::new([[q;29];3]),extra:[q;29],before_z1:[q;29],state_before_z0:kani::any(),z:unsafe{core::mem::transmute::<[u8;64],[SecureCirclePoint;2]>(kani::any())},transcript:crate::r1_wire::SemanticTranscript::new(NBR_Digest,&[],&kani::any()).unwrap()};
++ let v=View{variant:Variant::S2,semantic:&[],y1:&[],inactive:E::ZERO,round0:&[],folded_root:None,round1:&[],final_message:&[],query_bytes:&[]};
++ let mut t=Transcript::new(NBR_Digest,kani::any(),Variant::S2);t.state=kani::any();let state=t.state;
++ let gamma:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};let kappa:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};let alpha:[E;2]=unsafe{core::mem::transmute::<[u8;64],[E;2]>(kani::any())};let rho:K=unsafe{core::mem::transmute::<[u8;16],K>(kani::any())};let queries:[u32;22]=kani::any();let claim:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};
++ let choice:u8=kani::any();kani::assume(choice<=8);let error=match choice{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation};let returned=if choice==8{Ok(claim)}else{Err(error)};
++ unsafe{NBR_ENABLED=true;}
++ let i:usize=kani::any();let b:usize=kani::any();let j:usize=kani::any();let a:usize=kani::any();kani::assume(i<32&&b<2&&j<22&&a<10);
++ let r=NBR_claim_tail(&sem,&v,t,gamma,kappa,alpha,rho,queries,returned);
++ if choice==8{let p=r.unwrap();assert_eq!(p.variant,Variant::S2);assert_eq!(p.roots[b][i],sem.roots[b][i]);assert_eq!(p.gamma,gamma);assert_eq!(p.kappa,kappa);assert_eq!(p.alpha[b],alpha[b]);assert_eq!(p.rho,rho);assert_eq!(p.queries[j],queries[j]);assert_eq!(p.semantic_alpha[a],sem.alpha[a]);assert_eq!(p.z[b],sem.z[b]);assert_eq!(p.claim,claim);assert_eq!(p.state[i],state[i]);kani::cover!(true,"complete Prepared uses SAME returned native carriers");}else{match r{Err(e)=>assert_eq!(e,error),Ok(_)=>assert!(false,"error was swallowed")};kani::cover!(true,"all eight returned error variants propagate without a suffix");}
 +}

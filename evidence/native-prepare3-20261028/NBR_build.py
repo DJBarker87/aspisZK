@@ -46,7 +46,7 @@ else:raise SystemExit('STOP admission exhausted')
 cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NBR_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-prepare-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'Private prefix modules; XRy persistent cache and coherent SInt2; Aeneas objects pinned in NBR_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
-payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBR_LAUNCHER_INPUTS.json').read_text()))
+payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NBR_LAUNCHER_INPUTS.json').read_text()),library_checker=(E/'NBR_pin_library.py').read_text(),inherited_library=json.loads((E/'NBR_LIBRARY_RESOLVED_INHERITED.json').read_text()))
 # Data serialization is shell-quoted; input source is never shell code.
 setup=f'''from pathlib import Path
 import json,hashlib
@@ -62,13 +62,22 @@ pins={{str(p):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.sta
 p=b/'NBR_LIBRARY_PIN.json'
 if p.exists(): assert json.loads(p.read_text())==pins,'library pin changed'
 else:p.write_text(json.dumps(pins,indent=2)+'\\n')
+import subprocess,sys
+r=subprocess.run(['python3','-',x['cfg']['env']['LEAN_PATH']],input=x['library_checker'],capture_output=True,text=True)
+assert r.returncode==0,r.stderr
+resolved=json.loads(r.stdout)
+assert resolved==x['inherited_library'],'resolved library differs from inherited 222-object/sidecar pins'
+assert all(n in resolved and resolved[n]==v for n,v in pins.items()),'initial library pins changed'
+p=b/'NBR_LIBRARY_RESOLVED.json'
+if p.exists():assert json.loads(p.read_text())==resolved,'resolved Aeneas objects changed'
+else:p.write_text(json.dumps(resolved,indent=2)+'\\n')
 '''
 # Submission is never retried, including transport failures; recover read-only.
 cmd='cd '+shlex.quote(B)+' && python3 -c '+shlex.quote(setup)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py '+shlex.quote(a+'.json')
 r=ssh(cmd,submitted=True);(E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 recover=f'''from pathlib import Path
 import json
-b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r},'NBR_LIBRARY_PIN.json']
+b=Path({B!r});names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r},'NBR_LIBRARY_PIN.json','NBR_LIBRARY_RESOLVED.json']
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
 '''
 r=ssh('python3 -c '+shlex.quote(recover));assert r.returncode==0,r.stderr

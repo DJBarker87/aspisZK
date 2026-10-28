@@ -8,4 +8,5 @@ new=s+'\n#[cfg(kani)]\nmod NBR_candidate;\n'
 h=Path('/private/tmp/NBR_candidate.rs').read_text()
 patch=''.join(difflib.unified_diff(s.splitlines(True),new.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 patch+=''.join(difflib.unified_diff([],h.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBR_candidate.rs'))
+if (E/'NBR_COPY_CFG_PARENT.patch').exists(): patch=(E/'NBR_COPY_CFG_PARENT.patch').read_text()+patch
 (E/'NBR_harness.patch').write_text(patch)
