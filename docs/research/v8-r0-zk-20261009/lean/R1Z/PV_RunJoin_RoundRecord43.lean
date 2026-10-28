@@ -84,6 +84,9 @@ theorem post (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest3
           apply PV_RunJoin_ResultPost41.bind
           intro runningValue
           refine ⟨header,payload.val,hlen,plen,phigh,?_⟩
-          rw [hv,fbytes,List.append_assoc]
+          rw [hv]
+          change out.val++framed.val=out.val++header++payload.val
+          change framed.val=header++payload.val at fbytes
+          rw [fbytes,List.append_assoc]
 #print axioms post
 end R1Z.PV_RunJoin_RoundRecord43
