@@ -38,3 +38,38 @@ E008 moves sequence/frontier loops into separate reference helpers, avoiding the
 loop-context exception without modifying tools. L001 typechecked but could not
 write its output because this job omitted the nested output directory; L002
 corrects the own-runner input directory. No timeout or memory kill was rerun.
+
+## Stage 2: typed model installation
+
+L004 proves both directions of the three carrier conversions (and identity/
+policy round trips). L005 supplies `NCV_Install.install : AdapterRw.Ops →
+AdapterRw.Ops`, assigning exactly op48/op49/op50 to extracted references with
+nominal output conversion. It preserves the outer Aeneas failures/divergence
+and maps inner Unit rejection to the actual ProgramError.InvalidAccountData.
+PDA op38 remains the original slot. JHr can use
+`{missing with adapter := NCV_Install.install missing.adapter}`; this installs
+bodies, not their still-open native P6 proofs.
+
+L007 proves all-length reference wrong-length rejection, with no finite-buffer
+bound. Its preceding L006 draft failed rewriting the Bool guard and is excluded
+(including Lean's error-placeholder `sorryAx` audit output). All accepted top
+statements print only propext/Classical.choice/Quot.sound.
+
+Native status: K002 KMX positive PASS, K003 matched wrong-copy control FAIL.
+K001 was an own wrapper error (empty RUSTFLAGS passed an empty rustc argument),
+corrected in K002. K004 direct master/ref comparison on a <=385-byte rejection
+union TIMEOUT94.870s/RSS6452428KiB; K005 isolated native Err postcondition also
+TIMEOUT94.150s/RSS6460752KiB. No credit, unchanged rerun or cap increase.
+K006 splits to EXACTLY383 bytes, arbitrary complete payload: native master
+equals reference PASS19.695s/RSS3564688KiB; K007 inverse postcondition FAIL
+49.129s/RSS3573092KiB, only its intended contract assertion failed. These
+receipts use deployed program features and exact KMX configuration. This is a
+wrong-length subdomain only, not a decoder bridge for TX2's accepted384 bytes.
+No `stub_verified` Box substitution is used or admitted. Narrow preconditions
+cannot be installed as a complete caller law.
+
+Own-runner repairs are limited to input/output paths, the empty RUSTFLAGS bug,
+and explicit negative-property source generation to avoid rebuilding unchanged
+dependencies when toggling a control flag. From L007 onward direct imported
+object hashes accompany the frozen cache manifest and all resolved Aeneas pins.
+Lead launchers/admission tooling and shared objects remain unchanged.
