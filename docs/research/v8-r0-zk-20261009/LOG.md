@@ -13007,3 +13007,21 @@ TryFrom<Vec>), V201 (op79 eval_message), and the six digest-wrapper rows V231, V
 V238. The wrapper rows are proved with the block compression function as a parameter, so they hold
 for both the soft backend and SHA-NI and leave the SHA-NI decision (V232) with the owner. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D342 (Stream B) 2026-10-28 01:08 UTC: runjoin29: inner compiler characterised; zero change is rejected for transfers too; the honest pipeline is the canonical (codec-first) route; runjoin30 launched
+
+runjoin29 (23 attempts, 12 accepted; final audit with standard axioms; two optimized native probes
+pass; no shipped-code change) proves exact success and error-path characterisations of the
+extracted inner compiler including guard precedence, and that fresh-payload packaging preserves the
+full compiler return with both Result layers. Two findings:
+- RspendPlus admits a transfer of 400 with zero change (400/0/400), and native preparation rejects
+  it with Err(Conservation). The zero-change limitation of D338 therefore applies to both spend
+  kinds; the owner packet item is updated, recommendation unchanged.
+- The raw withdrawal wrapper succeeds on noncanonical active frontier words and keeps them in its
+  output; Lean proves every such payload fails HonestInput. The snapshot codec rejects those words.
+Lead ruling: the honest pipeline is the canonical route (the snapshot decoded by the codec before
+the wrapper); the raw wrapper on noncanonical words is not an honest route and stays recorded.
+runjoin30 (64 attempts; IDs 38183-38193 then 42300-42399) characterises the outer preparation domain
+along that route, proves that every successful canonical preparation is an honest input, and states
+the coverage sentence for the owner, before V038/V045. Rows removed outright: 0. Privacy target not
+yet established.
