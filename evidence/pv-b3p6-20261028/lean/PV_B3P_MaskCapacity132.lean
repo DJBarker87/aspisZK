@@ -3,6 +3,13 @@ namespace PV_B3P_MaskCapacity132
 open PV_B3P_MaskScan132 PV_B3P_MaskCount132
 set_option autoImplicit false
 
+instance (r c : Nat) : Decidable (PV_B3P_MaskShape132.localUsed r c) := by
+  unfold PV_B3P_MaskShape132.localUsed
+  infer_instance
+instance (r c : Nat) : Decidable (PV_B3P_MaskModel132.valueUsed r c) := by
+  unfold PV_B3P_MaskModel132.valueUsed
+  infer_instance
+
 theorem pick_path (r c : Nat) (lo : 912 ≤ r) (hi : r < 1008) :
     pick r c = decide (¬ PV_B3P_MaskShape132.localUsed r c) := by
   apply Bool.eq_iff_iff.mpr
@@ -20,7 +27,7 @@ theorem path_block (c b : Nat) (hb : b < 6) :
   simp only [number]
   simp (disch := omega) only [pick_path,decide_eq_true_eq]
   simp [PV_B3P_MaskShape132.localUsed,Nat.add_mod,Nat.mul_mod]
-  split <;> simp_all
+  by_cases h : c ≤ 8 <;> simp_all
 
 theorem value_block (c : Nat) :
     number pick c 1008 16 =
@@ -28,7 +35,8 @@ theorem value_block (c : Nat) :
   simp only [number]
   simp (disch := omega) only [pick_value,decide_eq_true_eq]
   simp [PV_B3P_MaskModel132.valueUsed]
-  split <;> split <;> split <;> split <;> simp_all <;> omega
+  by_cases h0 : c < 2 <;> by_cases h1 : c < 3 <;>
+    by_cases h2 : c < 10 <;> by_cases h3 : c ≤ 10 <;> simp_all <;> omega
 
 theorem per_column (c : Nat) :
     (rows pick c 0 1024).length =
