@@ -1,51 +1,83 @@
 # NCC U04 bridge ledger
 
-S2 OPEN; deployed 100-bit target not yet established. Every row is OPEN.
-Frozen Rust: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`.
-Adopted headline: `AspisR1.RPx_Deployed.deployed`; op43/op44 are digest/error.
-No XRn join kit, new trust item, model weakening or body-fidelity premise.
+PILOT RESULT: required contract controls behave correctly on the tested interface;
+four actual native getter contracts and one real private native caller pair pass.
+See NCC_CONTRACT_PILOT.md. **All fourteen whole-slot rows remain OPEN.**
+S2 / deployed 100-bit target not yet established.
 
-NBX modules/results and coherent SInt2 ownership are imported read-only via
-NCC_IMPORTS.json. Existing field selection does not instantiate extraction.
-The final specific job budget is 60 Kani and 60 Lean, superseding earlier
-generic limits in the brief. Metadata runs are recorded separately.
+Frozen Rust: 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387.
+Headline: AspisR1.RPx_Deployed.deployed. op43/op44 are digest/error.
+No XRn kit, new trust, body-fidelity premise, headline or metric change.
 
-| Slot | Actual native function | Exact SDK argument | Status / missing obligation |
+| Slot | Actual native function | Exact SDK argument | Checked component and remaining obligation |
 |---|---|---|---|
-| op15 | `validate_verifier_policy_v1` | full policy record | OPEN: full typed Result equality and authority-byte frame K021/K022; all-field frame strengthening pending. |
-| op23 | `decode_pool_v1_pair_forest_terminal_request_v1` | instruction suffix slice | OPEN: whole Result/backing-byte frame for 0≤len≤321: K033/K034 controlled; arbitrary lengths and actual caller association pending. |
-| op25 | `VerifierRegistryV1::is_paused` | full registry V1 | OPEN: full typed two-run/frame K001/K002 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op26 | `VerifierRegistryV1::is_immutable` | full registry V1 | OPEN: full typed two-run/frame K003/K004 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op27 | `VerifierRegistryV2::is_paused` | full registry V2 | OPEN: full typed two-run/frame K005/K006 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op28 | `VerifierRegistryV2::is_immutable` | full registry V2 | OPEN: full typed two-run/frame K007/K008 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op29 | `VerifierRegistryEntryV2::is_active_at` | full entry V2, current_slot | OPEN: full typed two-run/frame K009/K010 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op30 | `VerifierRegistryEntryV1::is_active_at` | full entry V1, current_slot | OPEN: full typed two-run/frame K011/K012 confirmed with failing one-byte argument-change control; actual SDK authentication call-site association pending. |
-| op31 | `decode_verifier_registry_v1` | registry account data slice | OPEN: whole Result/backing-byte frame for 0≤len≤129: K025/K026 controlled; arbitrary lengths and authentication caller association pending. |
-| op32 | `decode_verifier_registry_entry_v1` | entry account data slice | OPEN: whole Result/backing-byte frame for 0≤len≤193: K027/K028 controlled; arbitrary lengths and authentication caller association pending. |
-| op33 | `decode_verifier_registry_v2` | registry account data slice | OPEN: whole Result/backing-byte frame for 0≤len≤257: K029/K030 controlled; arbitrary lengths and authentication caller association pending. |
-| op34 | `decode_verifier_registry_entry_v2` | entry account data slice | OPEN: whole Result/backing-byte frame for 0≤len≤321: K031/K032 controlled; arbitrary lengths and authentication caller association pending. |
-| op48 | `decode_master_box` | master account data slice | OPEN: NBX loop induction reused; actual reader/iterator/Box/error/allocator association and caller pending. |
-| op49 | `decode_checkpoint_box` | checkpoint account data slice | OPEN: NBX loop induction reused; original reader/canonical digest/Box/error/allocator association and caller pending. |
+| op15 | `validate_verifier_policy_v1` | master.verifier_policy | K053/K054: full typed two-run Result, every initialized field and arbitrary ambient coordinate; actual authentication caller/carrier association OPEN. |
+| op23 | `decode_pool_v1_pair_forest_terminal_request_v1` | instruction suffix | K033/K034: two-run whole Result/backing byte, 0≤len≤321; arbitrary-length rejection and actual caller association OPEN. |
+| op25 | `VerifierRegistryV1::is_paused` | full V1 registry | K041/K042 full field/ambient two-run; K055 native contract; actual SDK authentication point OPEN. |
+| op26 | `VerifierRegistryV1::is_immutable` | full V1 registry | K043/K044 full field/ambient two-run; K056 native contract; K059/K060 private validator context only; SDK authentication point OPEN. |
+| op27 | `VerifierRegistryV2::is_paused` | full V2 registry | K045/K046 full field/ambient two-run; K057 native contract; actual SDK authentication point OPEN. |
+| op28 | `VerifierRegistryV2::is_immutable` | full V2 registry | K047/K048 full field/ambient two-run; K058 native contract; actual SDK authentication point OPEN. |
+| op29 | `VerifierRegistryEntryV2::is_active_at` | full V2 entry, current_slot | K049/K050 full field/ambient two-run; actual SDK authentication point OPEN; native contract candidate not run. |
+| op30 | `VerifierRegistryEntryV1::is_active_at` | full V1 entry, current_slot | K051/K052 full field/ambient two-run; actual SDK authentication point OPEN; native contract candidate not run. |
+| op31 | `decode_verifier_registry_v1` | registry account data | K025/K026 whole Result/backing byte, 0≤len≤129; arbitrary lengths and actual authentication point OPEN. |
+| op32 | `decode_verifier_registry_entry_v1` | entry account data | K027/K028 whole Result/backing byte, 0≤len≤193; arbitrary lengths and actual authentication point OPEN. |
+| op33 | `decode_verifier_registry_v2` | registry account data | K029/K030 whole Result/backing byte, 0≤len≤257; arbitrary lengths and actual authentication point OPEN. |
+| op34 | `decode_verifier_registry_entry_v2` | entry account data | K031/K032 whole Result/backing byte, 0≤len≤321; arbitrary lengths and actual authentication point OPEN. |
+| op48 | `decode_master_box` | master account data | NBX original-reader row/scan/domain induction reused; actual iterator/reader, validation, Box/error/allocator and caller association OPEN. |
+| op49 | `decode_checkpoint_box` | checkpoint account data | NBX original-reader row/scan/domain induction reused; actual iterator/canonical digest, Box/error/allocator and caller association OPEN. |
 
-## Credit boundary
+## Meaning of the checks
 
-Stage 1 two-run native checks establish local dependence/frame only in their
-stated typed or bounded-slice domains, with meaningful input-change controls.
-They do not establish arbitrary runtime heap admission or caller extraction.
-The private caller used to exercise contract substitution is not automatically
-the authentication caller at an SDK opN point. No local check is promoted to
-"instantiated by native function (ruling s)" without BOTH required components.
+Every cited pair has a passing two-run check and a failing control changing one
+meaningful argument byte, with matching native source, KMX, tool flags, semantic
+environment and caps. The final typed-record checks observe an arbitrary field
+(and arbitrary byte of each array field), scalar fields exactly, and independent
+ambient states. They cover initialized Rust values on valid references, with
+existing P6/runtime/ABI admission retained. They do not read padding as initialized
+bytes or assert a theorem about invalid references/concurrent mutation.
 
-op48/op49 cannot be closed by re-proving NBX's one-row value/frame induction:
-the missing piece is the actual original iterator/reader and wrapper execution,
-including allocation and mapped errors. A whole-buffer replay is disallowed.
-No independent new Lean wrapper can replace that native obligation.
+The slice checks agree on exactly the passed prefix; independent bytes beyond
+it may differ. Complete Result equality includes all decoded fields/errors.
+K013–020/K023–024 are rejected memcmp unwinding failures with undetermined
+properties, not decoder counterexamples or credited controls. K025–034 replace
+the harness assumption with guarded per-byte constraints; native bodies and limits
+are unchanged. No timed-out or memory-killed shape was replayed.
 
-No shipped source changed; ELF rebuild trigger has not fired. Inherited,
-not reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+NCC_DOMAIN_FINDINGS.md records the bounded-slice caller gap. No contract requiring
+those upper bounds is used. The real getter contracts have requires(true).
+
+## Stage 3 / extraction
+
+The installed candidate selection and unchanged missing-field retention are the
+existing NBX_HeadlineSelection/HeadlineRetention/SeedAdapter results, reused
+without re-proving them. Native getter behavior now has the additional local
+checks above. No actual SDK authentication caller has been proved to invoke
+those fields at its opN point with the same record from ONE native execution.
+The private validator pilot is not that enclosing caller. No new per-slot
+component of AeneasExtraction is discharged and no row is marked
+"instantiated by native function (ruling s)".
+
+op48/op49 cannot advance by repeating NBX's symbolic induction: the native
+original iterator/wrapper association is missing. No whole-buffer replay or
+unverified decoder/allocator stub is used. No standalone full decoder/Box closure
+is inferred from row/value laws. No op53 work is attempted in this lane.
+
+## Budget and next deliverable
+
+Kani 60/60: 27 PASS, 23 semantic counterexamples (20 matching negative controls
+plus three machinery controls), ten excluded unwinding failures. No Kani run
+remains authorized. Lean reuse audit is recorded separately. No new theorem is
+needed merely to restate the outstanding native conclusion as a hypothesis.
+
+Remaining member-by-member native needs are in the table: getter/policy SDK
+caller association; decoder arbitrary-length/caller association; original
+master/checkpoint loop/Box/error/allocator/caller association. Each needs new
+native/P6 evidence. All independent existing Lean selection/induction results
+are reused. The next useful target is the actual authentication continuation
+under the verified getter contract, with its same decoded-record prestate and
+real lower-call domains established, then the source/SDK call-point composition.
+
+No shipped file changed. Inherited ELF pins, NOT rebuilt/reproduced:
+default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
-
-Getter substage audit: NCC_AUDIT.json confirms six controlled pairs, all exact source/KMX/lock/env/flags/cgroup matches. Kani 12/60; Lean 0/60. All exits, wall/RSS/swap/source hashes are in NCC_ATTEMPTS.jsonl. No new theorem or axioms claim.
-
-Decoder substage: K013–020 and K023/K024 are excluded memcmp unwinding failures (245–812 properties undetermined), not semantic counterexamples. Indexed argument constraints fix the harness, without changing the native body or increasing limits. K025–034 all meet their positive/control obligations. No timeout, memory kill or unchanged prover rerun. Budget 34/60 Kani, 0/60 Lean.

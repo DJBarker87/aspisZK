@@ -28,10 +28,13 @@ same exact comparison succeeds on the actual body in K037 and fails only under
 replacement in K038; the valid weak contract is independently checked in K036.
 This is a semantic assertion failure, not a compiler error or unwinding failure.
 
-The next test proves a contract on an ACTUAL native getter and exercises the
-unchanged native validate_verifier_registry_v1 caller under that verified
-replacement. This private validator is not the SDK authentication caller at
-op26. Its success cannot discharge that separate extraction component.
+K055–K058 PASS actual VerifierRegistryV1/V2 is_paused/is_immutable contracts
+on the full typed domains (requires true). K059 PASSES the unchanged actual
+validate_verifier_registry_v1 caller under verified V1 is_immutable replacement;
+K060 FAILS its matching inverted Result assertion (1/125 properties).
+The complete caller Result, including every rejection, is compared to the
+source-order guard formula. These are local native results. This private
+validator is not the SDK authentication caller at op26. Its success cannot discharge that separate extraction component.
 
 Reference for syntax only: [Kani contracts documentation](https://model-checking.github.io/kani/reference/experimental/contracts.html).
 All result claims above come from the retained pinned receipts.
