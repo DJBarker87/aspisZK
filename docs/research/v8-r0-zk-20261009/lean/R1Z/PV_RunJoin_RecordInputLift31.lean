@@ -22,7 +22,6 @@ theorem input (r : CopyRecords) (pub : R0P.Public K)
   cases Result.ok.inj hd
   rw [PV_Src_Forest_AuxContent.input_digest] at hr
   obtain ⟨out,ho,hm,_⟩ := PV_RunJoin_LeafLift16.input (wordWitness r.w) (wordPublic r.p) pub hp.asset hw
-  simp only [UScalar.ofNatCore_val_eq] at hr
   rw [hr] at ho
   cases Result.ok.inj ho
   exact funext hm
