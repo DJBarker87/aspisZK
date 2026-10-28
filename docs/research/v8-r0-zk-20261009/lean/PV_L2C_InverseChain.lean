@@ -27,6 +27,6 @@ theorem exponent {M : Type} [Monoid M] (x : M) : chain x = x^2147483645 := by
   have h30 : x^536870911*x^536870911 = x^1073741822 := by rw [← pow_add]
   dsimp only [chain]
   rw [h2,h4,h8,h16,h24,h28,h29,h30,← pow_add,← pow_succ]
-  norm_num
+
 #print axioms exponent
 end PV_L2C_InverseChain
