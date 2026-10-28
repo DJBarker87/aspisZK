@@ -118,7 +118,6 @@ structure aspis_statement.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
 /-- [pv_b3p6_reference::reference226::Source]
     Source: 'reference226.rs', lines 10:0-13:1
     Visibility: public -/
-@[discriminant isize]
 inductive reference226.Source where
 | Transfer :
   aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
