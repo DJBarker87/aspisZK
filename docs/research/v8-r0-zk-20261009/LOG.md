@@ -13239,3 +13239,21 @@ coverage sentence remain open; V038/V045 not started. Branch pushed (1e5edf7d8d)
 attempts; IDs 44600-44699) finishes native lane-root correspondence and the input, append, recipient
 and sentinel obligations, then the HonestInput theorem and the coverage sentence. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D354 (Stream B) 2026-10-28 04:32 UTC: the five K-1 rows re-linked by the structural route; stubbed Kani re-verification launched
+
+pv-relink (28 of 100 Lean attempts; no Kani; no source change) re-links V178, V179, V182, V195 and V233
+at their prior candidate scopes as "structural (K-1 substitute)" under ruling (k'): a script-checked
+structural binding between each shipped body and its owned reference, the reference's Lean law
+unchanged, and 8,852,102 same-input native comparisons (finite validation). The suspended Kani
+PASSes stay in the evidence and are not cited. Combined audit 43799 and focused replay 43731 pass with
+standard axioms. One deviation is recorded: a retry 67.7 s before the required cooldown ended.
+Endpoint premises and residuals unchanged. Merged into the prover candidate (6d4350e42c, pushed); the
+branch was removed and its clean worktree reused.
+
+pv-kstub (30 Kani runs; IDs 44700-44799; no source change) re-runs the copy-exposed harnesses behind
+the same five rows with exactly Stream A's KMX_copy_stubs.patch (sha256 recorded), failing negative
+controls and window splitting, as the independent second link agreed with Stream A. A stubbed FAIL or
+any disagreement with native or with the structural link is a finding for both streams. Recount 7
+records these rows with their evidence class. Rows removed outright: 0. Privacy target not yet
+established.
