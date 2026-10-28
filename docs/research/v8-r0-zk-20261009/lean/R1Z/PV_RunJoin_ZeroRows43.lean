@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_PostMap43
 import R1Z.PV_RunJoin_ZeroShapes43
 import R1Z.PV_RunJoin_ByteExtension43
 import R1Z.PV_RunJoin_MergeLoop35
@@ -34,18 +35,20 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
     have post := PV_RunJoin_RecordPost43.append ops hash
       (U8.wrapping_add 3#u8 (UScalar.cast .U8 i)) 0#u8 0#usize
       (Array.to_slice (Std.Array.empty U8)) transcript out
-      (PV_RunJoin_ZeroShapes43.shape ops i (by omega)) rfl (by omega)
+      (PV_RunJoin_ZeroShapes43.shape ops i (by omega)) rfl (by change out.length+5+0≤Usize.max;omega)
     unfold host_semantic.zc_rows_loop
     rw [ProverRw19LoopBind.loop_bind]
-    simp only [host_semantic.zc_rows_loop.body,hi,↓reduceIte,lift,bind_tc_ok]
+    simp only [host_semantic.zc_rows_loop.body,hi,↓reduceIte,lift,bind_tc_ok,bind_assoc_eq]
     apply PV_RunJoin_RecordAppend41.bind_post post
     intro triple hp
     rcases triple with ⟨r,t,o⟩
     cases r with
-    | Err e => trivial
+    | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+      trivial
     | Ok q =>
       obtain ⟨header,hlen,hbytes,olen⟩ := hp
-      have prefix : Ext out.val o.val 5 := by
+      have hprefix : Ext out.val o.val 5 := by
         refine ⟨header,hlen,?_⟩
         simpa only [List.append_nil] using hbytes
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
@@ -54,20 +57,23 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
       simp only [lift,bind_tc_ok]
       have next := ih (Usize.wrapping_add i 1#usize) t o zc1
         (by rw [inc];omega) (by rw [olen];omega)
-      apply PV_RunJoin_RecordAppend41.bind_post next
-      intro result hr
-      rcases result with ⟨t1,o1,z1,pending⟩
-      cases pending with
-      | none =>
-        change Ext out.val o1.val (5*(n+1))
-        have h := PV_RunJoin_ByteExtension43.trans prefix hr
-        convert h using 1 <;> omega
-      | some status =>
-        cases status with
-        | Err e => trivial
-        | Ok value =>
+      have transformed := PV_RunJoin_PostMap43.mono next (q := Good out (n+1)) (by
+        intro result hr
+        rcases result with ⟨t1,o1,z1,pending⟩
+        cases pending with
+        | none =>
           change Ext out.val o1.val (5*(n+1))
-          have h := PV_RunJoin_ByteExtension43.trans prefix hr
+          have h := PV_RunJoin_ByteExtension43.trans hprefix hr
           convert h using 1 <;> omega
+        | some status =>
+          cases status with
+        | Err e =>
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+      trivial
+          | Ok value =>
+            change Ext out.val o1.val (5*(n+1))
+            have h := PV_RunJoin_ByteExtension43.trans hprefix hr
+            convert h using 1 <;> omega)
+      simpa only [host_semantic.zc_rows_loop] using transformed
 #print axioms loop
 end R1Z.PV_RunJoin_ZeroRows43
