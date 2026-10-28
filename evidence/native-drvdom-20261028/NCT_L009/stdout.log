@@ -1,0 +1,161 @@
+@AspisR1.NCT_DriverDomain.Reached : {F C : Type} →
+  AspisR1.DrvC_Installation.Configuration F C →
+    AspisR1.CheckpointBytes5Writer.Prepared → AspisR1.CheckpointBytes5Writer.Accumulator → Prop
+@AspisR1.NCT_DriverDomain.of_accepted : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize)
+  (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT (AspisR1.DrvC_Installation.currentInstalled c) =
+      Aeneas.Std.Result.ok 7751#usize →
+    AspisR1CurrentCaller.compact.OFF_ROUND1 (AspisR1.DrvC_Installation.currentInstalled c) =
+        Aeneas.Std.Result.ok 7783#usize →
+      AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.DrvC_Installation.currentInstalled c)
+            (AspisR1.DrvC_Installation.currentDigest c) semantic pub proof split () none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved) →
+        ∃ cut,
+          AspisR1.NCT_DriverDomain.Reached c (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+            (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed)
+@AspisR1.NCT_DriverDomain.replay : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  AspisR1CurrentCaller.compact.OFF_FOLDED_ROOT (AspisR1.DrvC_Installation.currentInstalled c) =
+      Aeneas.Std.Result.ok 7751#usize →
+    AspisR1CurrentCaller.compact.OFF_ROUND1 (AspisR1.DrvC_Installation.currentInstalled c) =
+        Aeneas.Std.Result.ok 7783#usize →
+      ∀ (cut : AspisR1.NCT_DriverDomain.Cut c semantic pub proof saved),
+        AspisR1CurrentCaller.verifier.candidate.tx1 (AspisR1.DrvC_Installation.currentInstalled c)
+            (AspisR1.DrvC_Installation.currentDigest c) semantic pub proof 10#usize () none =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok saved)
+@AspisR1.NCT_DriverDomain.control : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (pub proof : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (cut : AspisR1.NCT_DriverDomain.Cut c semantic pub proof saved),
+  (↑(AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed).weights).length = 64 ∧
+    ↑(AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed).next = 10 ∧
+      ∀ x ∈ ↑(AspisR1.Tx1Q_Carriers.slice AspisR1.Tx1Q_Carriers.k cut.flushed), AspisR1.Port3_FlushInstall.Canonical x
+@AspisR1.NCT_DriverDomain.reached_weights : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (p : AspisR1.CheckpointBytes5Writer.Prepared) (a : AspisR1.CheckpointBytes5Writer.Accumulator)
+  (h : AspisR1.NCT_DriverDomain.Reached c p a) (qb : ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144) (j : Fin 64),
+  AspisR1.OraclePortCkptAbi4Decode.Canonical ((AspisR1.CheckpointBytesBody.fields p a ⋯ qb).weights j)
+structure AspisR1.NCT_DriverDomain.NonWeightCanonical (f : AspisR1.CheckpointBytesBlocks.Fields) : Prop
+number of parameters: 1
+fields:
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.gamma : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.gamma
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.kappa : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.kappa
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.alpha : ∀ (j : Fin 2),
+      AspisR1.OraclePortCkptAbi4Decode.CanonicalWide (f.alpha j)
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.rho : AspisR1.OraclePortCkptAbi4Decode.Canonical f.rho
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.semanticAlpha : ∀ (j : Fin 10),
+      AspisR1.OraclePortCkptAbi4Decode.Canonical (f.semanticAlpha j)
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.coordinates : ∀ (j : Fin 4),
+      AspisR1.OraclePortCkptAbi4Decode.Canonical (f.coordinates j)
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.claim : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.claim
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.rhs : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.rhs
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.power : AspisR1.OraclePortCkptAbi4Decode.Canonical f.power
+constructor:
+  AspisR1.NCT_DriverDomain.NonWeightCanonical.mk {f : AspisR1.CheckpointBytesBlocks.Fields}
+    (gamma : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.gamma)
+    (kappa : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.kappa)
+    (alpha : ∀ (j : Fin 2), AspisR1.OraclePortCkptAbi4Decode.CanonicalWide (f.alpha j))
+    (rho : AspisR1.OraclePortCkptAbi4Decode.Canonical f.rho)
+    (semanticAlpha : ∀ (j : Fin 10), AspisR1.OraclePortCkptAbi4Decode.Canonical (f.semanticAlpha j))
+    (coordinates : ∀ (j : Fin 4), AspisR1.OraclePortCkptAbi4Decode.Canonical (f.coordinates j))
+    (claim : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.claim)
+    (rhs : AspisR1.OraclePortCkptAbi4Decode.CanonicalWide f.rhs)
+    (power : AspisR1.OraclePortCkptAbi4Decode.Canonical f.power) : AspisR1.NCT_DriverDomain.NonWeightCanonical f
+@AspisR1.NCT_DriverDomain.established : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C),
+  (∀ (p : AspisR1.CheckpointBytes5Writer.Prepared) (a : AspisR1.CheckpointBytes5Writer.Accumulator),
+      AspisR1.NCT_DriverDomain.Reached c p a →
+        p.variant = OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2) →
+    ∀
+      (queries :
+        ∀ (p : AspisR1.CheckpointBytes5Writer.Prepared) (a : AspisR1.CheckpointBytes5Writer.Accumulator),
+          AspisR1.NCT_DriverDomain.Reached c p a → ∀ (j : Fin 22), ↑(↑p.queries)[↑j] < 262144),
+      (∀ (p : AspisR1.CheckpointBytes5Writer.Prepared) (a : AspisR1.CheckpointBytes5Writer.Accumulator)
+          (h : AspisR1.NCT_DriverDomain.Reached c p a),
+          AspisR1.NCT_DriverDomain.NonWeightCanonical (AspisR1.CheckpointBytesBody.fields p a ⋯ ⋯)) →
+        AspisR1.KNE_Caller.DriverEstablishedDomain (AspisR1.NCT_DriverDomain.Reached c)
+@AspisR1.NCT_DriverDomain.native_result : ∀ {F C : Type} (c : AspisR1.DrvC_Installation.Configuration F C)
+  (semantic : AspisR1CurrentCaller.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (public1 proof : Aeneas.Std.Slice Aeneas.Std.U8) (saved : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (cut : AspisR1.NCT_DriverDomain.Cut c semantic public1 proof saved)
+  (variant :
+    (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).variant =
+      OraclePortCkptAbi2Extracted.aspis_r1_cost_probe.transport.CheckpointAbi2Variant.S2)
+  (qb : ∀ (j : Fin 22), ↑(↑(AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).queries)[↑j] < 262144)
+  (canonical :
+    AspisR1.NCT_DriverDomain.NonWeightCanonical
+      (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+        (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ qb))
+  (H : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.SourceDuplexStep.State),
+  AspisR1.CheckpointBytes5Inputs.Oracle
+      (AspisR1.VTop_Checkpoint.digest (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))) () H →
+    ∀ (native : AspisV8R19.DuplexFrames.Bytes → AspisV8R19.DuplexFrames.Bytes → AspisV8R19.DuplexFrames.Bytes → Prop),
+      AspisR1.KNE_Composition.LocalCorrect native KND_Schedule.schedule →
+        ∀ (hp hu hc : AspisR1.CheckpointBytes5Effect.Digest) (body out : Aeneas.Std.Slice Aeneas.Std.U8)
+          (before : AspisR1.CheckpointBytes5Effect.Log),
+          AspisR1.KNE_Composition.Trace native
+              (AspisR1.KNE_Model.bodyEmissions
+                (AspisR1.CheckpointBytesBody.fields (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                  (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+                (AspisR1.CheckpointBytesDigest.stateOf hp) (AspisR1.CheckpointBytesDigest.stateOf hu))
+              [] (AspisR1.MultiproofConeCanonical.bytesOf ↑body) →
+            native (AspisR1.MultiproofConeCanonical.bytesOf ↑body) (AspisR1.MultiproofConeCanonical.bytesOf ↑hc)
+                (AspisR1.MultiproofConeCanonical.bytesOf ↑out) →
+              (AspisR1.VTop_Checkpoint.digest
+                        (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest
+                    () (AspisR1Stage2.WireTx2.singletonParts proof) =
+                  Aeneas.Std.Result.ok hp →
+                (AspisR1.VTop_Checkpoint.digest
+                          (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest
+                      () (AspisR1Stage2.WireTx2.singletonParts public1) =
+                    Aeneas.Std.Result.ok hu →
+                  (AspisR1.VTop_Checkpoint.digest
+                            (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c))).digest
+                        () (AspisR1Stage2.WireTx2.checksumParts body) =
+                      Aeneas.Std.Result.ok hc →
+                    AspisR1.KNE_Schedule.sourceFinalLen (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared).variant =
+                        64 ∧
+                      ↑out = ↑saved ∧
+                        (↑out).length = 1768 ∧
+                          out =
+                              AspisR1.LPm_CheckpointProgram.returned
+                                (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                                (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯ ⋯ ⋯ hp hu hc ∧
+                            AspisR1.CheckpointBytes5Effect.run
+                                  (AspisR1.VTop_Checkpoint.digest
+                                    (AspisR1.Tx1Q_Install.digest (AspisR1.DrvC_Installation.currentDigest c)))
+                                  ()
+                                  (AspisR1.CheckpointBytes5Writer.writer
+                                    (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                                    (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) proof public1)
+                                  before =
+                                Aeneas.Std.Result.ok
+                                  (out,
+                                    before ++ [(AspisR1Stage2.WireTx2.singletonParts proof, hp)] ++
+                                        [(AspisR1Stage2.WireTx2.singletonParts public1, hu)] ++
+                                      [(AspisR1Stage2.WireTx2.checksumParts body, hc)]) ∧
+                              AspisR1.MultiproofConeCanonical.bytesOf ↑out =
+                                AspisR1.OraclePortCheckpointAbiC5.encode H
+                                  (AspisR1.MultiproofConeCanonical.bytesOf ↑proof)
+                                  (AspisR1.MultiproofConeCanonical.bytesOf ↑public1)
+                                  (AspisR1.CheckpointBytesBlocks.prepared
+                                    (AspisR1.CheckpointBytesBody.fields
+                                      (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                                      (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+                                    ⋯)
+                                  (AspisR1.CheckpointBytesBlocks.accumulator
+                                    (AspisR1.CheckpointBytesBody.fields
+                                      (AspisR1.NCT_DriverDomain.writerPrepared cut.prepared)
+                                      (AspisR1.NCT_DriverDomain.writerAccumulator cut.out cut.flushed) ⋯ ⋯)
+                                    ⋯)
+'AspisR1.NCT_DriverDomain.of_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.replay' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.control' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.reached_control' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.reached_weights' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.established' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.on_call' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.cutReached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.callDomain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCT_DriverDomain.native_result' depends on axioms: [propext, Classical.choice, Quot.sound]
