@@ -1,0 +1,25 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,6 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NBL_candidate;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBL_candidate.rs
+@@ -0,0 +1,13 @@
++use super::*;
++const NBL_LOGICAL_BYTES:usize=compact::LOGICAL_SEMANTIC+compact::LOGICAL_Y1;
++#[kani::proof] #[kani::unwind(3)]
++fn NBL_prepare_geometry(){
++ let proof:[u8;compact::PROOF_BYTES]=kani::any();let mut logical:[u8;NBL_LOGICAL_BYTES]=kani::any();
++ let p=logical.as_mut_ptr();let(semantic,y1)=logical.split_at_mut(compact::LOGICAL_SEMANTIC);
++ assert_eq!(semantic.as_ptr(),p);assert_eq!(semantic.len(),13831);
++ assert_eq!(y1.as_ptr(),unsafe{p.add(13831)});assert_eq!(y1.len(),928);
++ assert_eq!(proof[compact::OFF_Y1..compact::OFF_INACTIVE].len(),464);
++ assert_eq!(proof[compact::OFF_SEMANTIC..compact::OFF_Y1].len(),compact::COMPACT_SEMANTIC);
++ assert_eq!(y1.len(),2*proof[compact::OFF_Y1..compact::OFF_INACTIVE].len());
++ kani::cover!(true,"reached expansion lengths exclude the y1 rejection guard");
++}
