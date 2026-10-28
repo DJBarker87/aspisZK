@@ -1,0 +1,25 @@
+import PV_KStub_AppendDomain
+import PV_KStub_CopyWindows
+import PV_KStub_CopyEquality
+import PV_KStub_AppendBridge
+import PV_KStub_SplitCoverage
+#print axioms PV_KStub_AppendDomain.original_instance
+#print axioms PV_KStub_AppendDomain.empty_instances
+#print axioms PV_KStub_CopyWindows.adjacent
+#print axioms PV_KStub_CopyEquality.transport
+#print axioms PV_KStub_AppendCoordinates.prefix_frame
+#print axioms PV_KStub_AppendCoordinates.tail_value
+#print axioms PV_KStub_AppendCoordinates.length_bound
+#print axioms PV_KStub_OptionCoordinates.complete_view
+#print axioms PV_KStub_OptionCoordinates.outside_none
+#print axioms PV_KStub_AppendBridge.complete_append
+#print axioms PV_KStub_SplitCoverage.metadata_and_bytes
+#print axioms PV_KStub_SplitCoverage.high_nonempty
+#print axioms KMX_CopyMeaning.loop_spec
+#print axioms KMX_CopyMeaning.copy_prefix
+#print axioms KMX_CopyMeaning.copy_frame
+#print axioms KMX_CopyMeaning.append_spec
+#print axioms KMX_CopyMeaning.realloc_prefix
+#print axioms PV_KStub_WindowFrame.split_windows
+#print axioms PV_KStub_WindowFrame.coordinate_frame
+#print axioms PV_KStub_WindowFrame.readonly_frame
