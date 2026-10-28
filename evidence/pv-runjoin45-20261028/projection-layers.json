@@ -1,0 +1,72 @@
+[
+  [
+    "Sampler",
+    "ProverRwFullSampler.install",
+    "ops"
+  ],
+  [
+    "Binding",
+    "ProverRwCallerBinding.install",
+    "ProverRwFullSampler.install ops"
+  ],
+  [
+    "Context",
+    "ProverRwOuterContext.install",
+    "ops"
+  ],
+  [
+    "TagInstall",
+    "ProverRwOuterTag.install",
+    "ProverRwOuterContext.install ops"
+  ],
+  [
+    "TagSelected",
+    "ProverRwOuterTag.selected",
+    "ProverRwCallerBinding.install (ProverRwOuterTag.install ops)"
+  ],
+  [
+    "Guards",
+    "ProverRwOuterGuardLeaves.selected",
+    "ProverRwOuterTag.selected {ops with op112 := ProverRwOuterGuardLeaves.mask, op113 := ProverRwOuterGuardLeaves.factor}"
+  ],
+  [
+    "Heap",
+    "ProverRwSuccessHeapInstall.selected",
+    "ProverRwSuccessBodyInterpretation.selected ops"
+  ],
+  [
+    "Error",
+    "ProverRwSuccessErrorInstall.selected",
+    "ProverRwSuccessHeapInstall.selected ops"
+  ],
+  [
+    "Neg",
+    "ProverRwSuccessNativeNegInstall.selected",
+    "ProverRwSuccessErrorInstall.selected ops"
+  ],
+  [
+    "Wide",
+    "ProverRwSuccessNativeWideInstall.selected",
+    "ProverRwSuccessNativeNegInstall.selected ops"
+  ],
+  [
+    "Body",
+    "ProverRwBodyNativeWideInstall.selected",
+    "ProverRwOuterGuardLeaves.selected (ProverRwSuccessNativeWideInstall.selected ops)"
+  ],
+  [
+    "Transition",
+    "ProverRwP6TransitionInstall.selected",
+    "ProverRwBodyNativeWideInstall.selected ops"
+  ],
+  [
+    "Flat",
+    "ProverRwP6FlatInstall.selected",
+    "ProverRwP6TransitionInstall.selected ops"
+  ],
+  [
+    "Boundary",
+    "ProverRwP6BoundaryInstall.selected",
+    "ProverRwP6FlatInstall.selected ops"
+  ]
+]
