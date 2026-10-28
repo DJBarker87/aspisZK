@@ -35,6 +35,8 @@ def frontier (a : Array (Array U32 8#usize) 20#usize) : List U32 :=
 
 theorem frontier_length (a : Array (Array U32 8#usize) 20#usize) :
     (frontier a).length = 160 := by
+  have h8 : (8#usize).val = 8 := by rfl
+  have h20 : (20#usize).val = 20 := by rfl
   have h : ∀ xs : List (Array U32 8#usize),
       (xs.flatMap (fun x => x.val)).length = xs.length * 8 := by
     intro xs
@@ -42,10 +44,10 @@ theorem frontier_length (a : Array (Array U32 8#usize) 20#usize) :
     | nil => rfl
     | cons x xs ih =>
       simp only [List.flatMap_cons, List.length_append, Array.length_eq, List.length_cons]
-      rw [ih]
+      rw [ih,h8]
       omega
   unfold frontier
-  rw [h, Array.length_eq]
+  rw [h, Array.length_eq,h20]
 
 def layout (p : reference226.OwnedPublic) : List U8 :=
   [if p.withdrawal then 1#u8 else 0#u8] ++
@@ -59,9 +61,10 @@ def layout (p : reference226.OwnedPublic) : List U8 :=
 
 theorem layout_length (p : reference226.OwnedPublic) :
     (layout p).length = if p.withdrawal then 1427 else 1455 := by
+  have h8 : (8#usize).val = 8 := by rfl
   cases hp : p.withdrawal <;>
     simp only [layout, hp, Bool.false_eq_true, ↓reduceIte, List.length_append,
-      fields_length, Array.length_eq, frontier_length, indexBytes,
+      fields_length, Array.length_eq, h8, frontier_length, indexBytes,
       List.length_cons, List.length_nil]
 
 -- This mathematical layout is a specification. Association to chunk/byte_at
