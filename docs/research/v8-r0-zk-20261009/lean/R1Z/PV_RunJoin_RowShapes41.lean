@@ -101,7 +101,9 @@ theorem row15 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row15
 
 theorem row16 (ops : ExternalFuns) :
@@ -110,7 +112,9 @@ theorem row16 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row16
 
 theorem row17 (ops : ExternalFuns) :
@@ -119,7 +123,9 @@ theorem row17 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row17
 
 theorem row18 (ops : ExternalFuns) :
@@ -128,7 +134,9 @@ theorem row18 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row18
 
 theorem row19 (ops : ExternalFuns) :
@@ -137,7 +145,9 @@ theorem row19 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row19
 
 theorem row20 (ops : ExternalFuns) :
@@ -146,7 +156,9 @@ theorem row20 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row20
 
 theorem row21 (ops : ExternalFuns) :
@@ -155,7 +167,9 @@ theorem row21 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row21
 
 theorem row22 (ops : ExternalFuns) :
@@ -164,7 +178,9 @@ theorem row22 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row22
 
 theorem row23 (ops : ExternalFuns) :
@@ -173,7 +189,9 @@ theorem row23 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row23
 
 theorem row24 (ops : ExternalFuns) :
@@ -182,7 +200,9 @@ theorem row24 (ops : ExternalFuns) :
   change Result.ok (some (2#u8,Usize.wrapping_mul 28#usize 32#usize)) =
     Result.ok (some (2#u8,896#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row24
 
 theorem row25 (ops : ExternalFuns) :
@@ -191,7 +211,9 @@ theorem row25 (ops : ExternalFuns) :
   change Result.ok (some (4#u8,Usize.wrapping_mul (Usize.wrapping_add 87#usize 29#usize) 32#usize)) =
     Result.ok (some (4#u8,3712#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row25
 
 theorem row26 (ops : ExternalFuns) :
@@ -200,6 +222,8 @@ theorem row26 (ops : ExternalFuns) :
   change Result.ok (some (5#u8,Usize.wrapping_mul 29#usize 32#usize)) =
     Result.ok (some (5#u8,928#usize))
   congr 3
-  scalar_tac
+  apply UScalar.eq_of_val_eq
+  simp only [Usize.wrapping_mul_val_eq, Usize.wrapping_add_val_eq, UScalar.size_def, UScalarTy.Usize_numBits_eq]
+  decide
 #print axioms row26
 end R1Z.PV_RunJoin_RowShapes41
