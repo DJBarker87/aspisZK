@@ -1,0 +1,66 @@
+{"attempt": "JHm34_096", "exit_status": 1, "wall_seconds": 9.855550816981122, "peak_rss_kib": "6307112", "swaps": "0", "print_axioms": ["'AspisR1.JHm_ClaimEvaluation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHm_ClaimEvaluation.lean:42:38: error: Application type mismatch: The argument
+  j.isLt
+has type
+  ↑j < (JHm_Arithmetic.row ↑point).length
+of sort `Prop` but is expected to have type
+  List ?m.317
+of sort `Type ?u.135` in the application
+  List.getD_eq_getElem j.isLt
+JHm_ClaimEvaluation.lean:38:4: error: unsolved goals
+case refine_2
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : dec
+...
+apter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+point : Usize
+hp : ↑point < 6
+i : Usize
+value : E
+hi : ↑i < 7
+xs : List (Usize × E × aspis_core.field.QM31)
+inc : point + 1#usize = ok i
+cellEq : cell final i hi = value
+len : xs.length = 29
+order : ∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j
+reads :
+  ∀ t ∈ xs,
+    ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+      ClaimScalar.read (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) sem y1
+            point t.1 =
+          ok t.2.2 ∧
+        g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1
+decoded :
+  decode value =
+    (List.map (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum
+iv : ↑i = ↑point + 1
+ce : (↑final)[↑point + 1] = value
+total :
+  (List.map (fun t => JHm_Arithmetic.gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum =
+    ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0
+j : Fin (JHm_Arithmetic.row ↑point).length
+hj : j ∈ Finset.univ
+⊢ JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0 =
+    JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point)[↑j]
+'AspisR1.JHm_ClaimEvaluation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r42a8a17511a04497aab50341679b0b9c.scope; invocation ID: 6835a23e77894cbba053290a17e30a4b

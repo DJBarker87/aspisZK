@@ -1,0 +1,522 @@
+JHm_ClaimEvaluation.lean:40:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    horner JHm_Arithmetic.gamma (JHm_Arithmetic.row ↑point) =
+      ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point)[↑j]
+Error: Application type mismatch: The argument
+  j
+has type
+  Fin _a
+but is expected to have type
+  Fin (JHm_Arithmetic.row ↑point).length
+in the application
+  JHm_Polynomial.horner_sum._proof_1 (JHm_Arithmetic.row ↑point) j
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+case refine_2
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+point : Usize
+hp : ↑point < 6
+i : Usize
+value : E
+hi : ↑i < 7
+xs : List (Usize × E × aspis_core.field.QM31)
+inc : point + 1#usize = ok i
+cellEq : cell final i hi = value
+len : xs.length = 29
+order : ∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j
+reads :
+  ∀ t ∈ xs,
+    ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+      ClaimScalar.read (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) sem y1
+            point t.1 =
+          ok t.2.2 ∧
+        g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1
+decoded :
+  decode value =
+    (List.map (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum
+iv : ↑i = ↑point + 1
+ce : (↑final)[↑point + 1] = value
+total :
+  (List.map (fun t => JHm_Arithmetic.gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum =
+    ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0
+hs :
+  horner JHm_Arithmetic.gamma (JHm_Arithmetic.row ↑point) =
+    ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point)[↑j]
+⊢ ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0 =
+    horner JHm_Arithmetic.gamma (JHm_Arithmetic.row ↑⟨↑point, hp⟩)
+JHm_ClaimEvaluation.lean:59:39: error: Expected type must not contain metavariables
+  ?m.1222
+JHm_ClaimEvaluation.lean:60:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑0#usize + 1]
+in the target expression
+  (if h : 1 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 1 * decode (↑final)[1] else 0) =
+    if 1 = 0 then 0 else JHm_Dots.term (1 - 1)
+
+case «1»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 1 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 1 * decode (↑final)[1] else 0) =
+    if 1 = 0 then 0 else JHm_Dots.term (1 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:62:39: error: Expected type must not contain metavariables
+  ?m.1227
+JHm_ClaimEvaluation.lean:63:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑1#usize + 1]
+in the target expression
+  (if h : 2 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 2 * decode (↑final)[2] else 0) =
+    if 2 = 0 then 0 else JHm_Dots.term (2 - 1)
+
+case «2»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 2 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 2 * decode (↑final)[2] else 0) =
+    if 2 = 0 then 0 else JHm_Dots.term (2 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:65:39: error: Expected type must not contain metavariables
+  ?m.1232
+JHm_ClaimEvaluation.lean:66:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑2#usize + 1]
+in the target expression
+  (if h : 3 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 3 * decode (↑final)[3] else 0) =
+    if 3 = 0 then 0 else JHm_Dots.term (3 - 1)
+
+case «3»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 3 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 3 * decode (↑final)[3] else 0) =
+    if 3 = 0 then 0 else JHm_Dots.term (3 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:68:39: error: Expected type must not contain metavariables
+  ?m.1237
+JHm_ClaimEvaluation.lean:69:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑3#usize + 1]
+in the target expression
+  (if h : 4 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 4 * decode (↑final)[4] else 0) =
+    if 4 = 0 then 0 else JHm_Dots.term (4 - 1)
+
+case «4»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 4 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 4 * decode (↑final)[4] else 0) =
+    if 4 = 0 then 0 else JHm_Dots.term (4 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:71:39: error: Expected type must not contain metavariables
+  ?m.1242
+JHm_ClaimEvaluation.lean:72:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑4#usize + 1]
+in the target expression
+  (if h : 5 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 5 * decode (↑final)[5] else 0) =
+    if 5 = 0 then 0 else JHm_Dots.term (5 - 1)
+
+case «5»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 5 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 5 * decode (↑final)[5] else 0) =
+    if 5 = 0 then 0 else JHm_Dots.term (5 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:74:39: error: Expected type must not contain metavariables
+  ?m.1247
+JHm_ClaimEvaluation.lean:75:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decode (↑final)[↑5#usize + 1]
+in the target expression
+  (if h : 6 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 6 * decode (↑final)[6] else 0) =
+    if 6 = 0 then 0 else JHm_Dots.term (6 - 1)
+
+case «6»
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+dot : ∀ (point : Usize) (hp : ↑point < 6), decode (↑final)[↑point + 1] = JHm_Dots.value ↑point
+z : decode (↑final)[0] = 0
+⊢ (if h : 6 < 7 then CheckpointBytes5Output.ofE JFq_Kappa.scalar ^ 6 * decode (↑final)[6] else 0) =
+    if 6 = 0 then 0 else JHm_Dots.term (6 - 1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    final
+  has type
+    Std.Array E 7#usize
+  but is expected to have type
+    { l // l.length = ↑7#usize }
+  in the application
+    ↑final
+JHm_ClaimEvaluation.lean:86:16: error(lean.unknownIdentifier): Unknown constant `Nat.add_ne_zero_iff`
+JHm_ClaimEvaluation.lean:86:4: error: Type mismatch: After simplification, term
+  h
+ has type
+  @Eq AspisWideTower.WideExact (kappaTerm kappa final (j + 1)) (if j + 1 = 0 then 0 else JHm_Dots.term j)
+but is expected to have type
+  @Eq AspisWideTower.WideExact (kappaTerm kappa final (j + 1)) (JHm_Dots.term j)
+'AspisR1.JHm_ClaimEvaluation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

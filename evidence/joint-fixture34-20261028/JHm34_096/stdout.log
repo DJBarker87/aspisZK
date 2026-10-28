@@ -1,0 +1,86 @@
+JHm_ClaimEvaluation.lean:42:38: error: Application type mismatch: The argument
+  j.isLt
+has type
+  ↑j < (JHm_Arithmetic.row ↑point).length
+of sort `Prop` but is expected to have type
+  List ?m.317
+of sort `Type ?u.135` in the application
+  List.getD_eq_getElem j.isLt
+JHm_ClaimEvaluation.lean:38:4: error: unsolved goals
+case refine_2
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+y1 : Slice U8
+inactive gamma kappa out : E
+g : Std.Array E 29#usize
+gc : Canonical gamma
+kc : Canonical kappa
+ic : Canonical inactive
+gp : ClaimPowers.powers 29#usize gamma = ok g
+call : verifier.prepared_claim JGi_DotOps.ops D sem y1 inactive g kappa = ok (core.result.Result.Ok out)
+gammaValue : decode gamma = JHm_Arithmetic.gamma
+kappaValue : decode kappa = CheckpointBytes5Output.ofE JFq_Kappa.scalar
+inactiveValue : decode inactive = 0
+numeric :
+  ∀ (point j : Usize),
+    ↑point < 6 →
+      ↑j < 29 →
+        ∀ (q : aspis_core.field.QM31),
+          ClaimScalar.SelectedSource sem y1 point j q →
+            AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed q = (JHm_Arithmetic.row ↑point).getD (↑j) 0
+final : Std.Array E 7#usize
+zero : cell final 0#usize successful_claim_source_gamma_kappa_sum._proof_1 = inactive
+dots :
+  ∀ (point : Usize),
+    ↑point < 6 →
+      ∃ i value,
+        ∃ (hi : ↑i < 7),
+          ∃ xs,
+            point + 1#usize = ok i ∧
+              cell final i hi = value ∧
+                xs.length = 29 ∧
+                  (∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j) ∧
+                    (∀ t ∈ xs,
+                        ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+                          ClaimScalar.read
+                                (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw)
+                                sem y1 point t.1 =
+                              ok t.2.2 ∧
+                            g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1) ∧
+                      decode value =
+                        (List.map
+                            (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2)
+                            xs).sum
+oc : Canonical out
+oe : decode out = kappaPolynomial kappa final
+point : Usize
+hp : ↑point < 6
+i : Usize
+value : E
+hi : ↑i < 7
+xs : List (Usize × E × aspis_core.field.QM31)
+inc : point + 1#usize = ok i
+cellEq : cell final i hi = value
+len : xs.length = 29
+order : ∀ (j : ℕ) (hj : j < xs.length), ↑xs[j].1 = j
+reads :
+  ∀ t ∈ xs,
+    ClaimScalar.SelectedSource sem y1 point t.1 t.2.2 ∧
+      ClaimScalar.read (AspisR1S5ClaimDotConcreteAdapter.concreteOps AspisR1EbyKPushDecodedProductUpdate.QRaw) sem y1
+            point t.1 =
+          ok t.2.2 ∧
+        g.index_usize t.1 = ok t.2.1 ∧ decode t.2.1 = decode gamma ^ ↑t.1
+decoded :
+  decode value =
+    (List.map (fun t => decode gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum
+iv : ↑i = ↑point + 1
+ce : (↑final)[↑point + 1] = value
+total :
+  (List.map (fun t => JHm_Arithmetic.gamma ^ ↑t.1 * AspisR1S5ClaimScalarEmbeddedProductSum.scalarEmbed t.2.2) xs).sum =
+    ∑ j, JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0
+j : Fin (JHm_Arithmetic.row ↑point).length
+hj : j ∈ Finset.univ
+⊢ JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point).getD (↑j) 0 =
+    JHm_Arithmetic.gamma ^ ↑j * (JHm_Arithmetic.row ↑point)[↑j]
+'AspisR1.JHm_ClaimEvaluation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
