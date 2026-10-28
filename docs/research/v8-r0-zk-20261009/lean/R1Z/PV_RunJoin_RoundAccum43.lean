@@ -42,7 +42,10 @@ theorem phase (ops : ExternalFuns) {H F : Type} (hash : aspis_core.digest.Digest
     change out.val.length+901*(n+1)≤Usize.max at room
     have stepRoom : out.length+901≤Usize.max := by
       change out.val.length+901≤Usize.max
-      omega
+      apply Nat.le_trans _ room
+      apply Nat.add_le_add_left
+      have h := Nat.mul_le_mul_left 901 (Nat.succ_le_succ (Nat.zero_le n))
+      simpa only [Nat.mul_one] using h
     have post := PV_RunJoin_RoundRecord43.post ops hash oi oracle round (by omega)
       transcript out point running stepRoom
     apply PV_RunJoin_RecordAppend41.bind_post post
