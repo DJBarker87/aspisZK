@@ -1,0 +1,33 @@
+{"attempt": "KND_K010", "exit_status": 1, "wall_seconds": 12.202172948978841, "peak_rss_kib": "544016", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KND_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KND_transition", "--output-format", "regular", "--solver", "kissat", "--cbmc-args", "--unwinding-assertions", "--slice-formula"]}
+{"owned_temp": "/home/dombarker/project-offloads/codex-cx
+...
+result.rs:2173:15 in function <std::result::Result<std::ptr::NonNull<[u8]>, std::alloc::AllocError> as std::ops::Try>::branch
+
+Check 341: <std::result::Result<std::ptr::NonNull<[u8]>, std::alloc::AllocError> as std::ops::Try>::branch.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:2175:23 in function <std::result::Result<std::ptr::NonNull<[u8]>, std::alloc::AllocError> as std::ops::Try>::branch
+
+Check 342: std::alloc::Layout::is_size_align_valid.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:69:27 in function std::alloc::Layout::is_size_align_valid
+
+
+SUMMARY:
+ ** 1 of 342 failed (7 unreachable)
+Failed Checks: assertion failed: out[j] == (if j<144{initial[j]}else{bytes[j-144]}) ^ 1u8
+ File: "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KND_windows.rs", line 15, in KND_transition
+
+VERIFICATION:- FAILED
+Verification Time: 11.041659s
+
+Manual Harness Summary:
+Verification failed for - KND_transition
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"owned_temp_removed": true}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-rd94bbe53bd9a483089adbac4a3f2538b.scope; invocation ID: 2e4f11e6ff1e405885e8b818e20637c5

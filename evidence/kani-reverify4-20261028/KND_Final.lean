@@ -1,0 +1,52 @@
+import KND_Schedule
+import KND_Composition
+import KND_Steps00
+import KND_Steps01
+import KND_Steps02
+import KND_Steps03
+import KND_Steps04
+import KND_Steps05
+import KND_Steps06
+import KND_Steps07
+import KND_Steps08
+import KND_Steps09
+import KND_Steps10
+import KND_Steps11
+import KND_Steps12
+import KND_Steps13
+import KND_Steps14
+import KND_Steps15
+import KND_Steps16
+import KND_Steps17
+import KND_Steps18
+import KND_Steps19
+import KND_Steps20
+import KND_Steps21
+import KND_Steps22
+import KND_Steps23
+import KND_Steps24
+import KND_Steps25
+import KND_Steps26
+import KND_Steps27
+import KND_Steps28
+import KND_Steps29
+import KND_Steps30
+import KND_Steps31
+import KND_Steps32
+import KND_Steps33
+import KND_Steps34
+import KND_Steps35
+import KND_Steps36
+import KND_Steps37
+import KND_LPm_K003
+import KND_LPm_K004
+import KND_LPm_K005
+import KND_LPi_K012
+import KND_LPi_K013
+import KND_LPi_K017
+import KND_LPi_K018
+import KND_LPf_K027
+#print axioms KND_Composition.schedule_composition
+#print axioms KND_Schedule.exact_schedule
+theorem KND_partition : KND_Steps00.steps ++ KND_Steps01.steps ++ KND_Steps02.steps ++ KND_Steps03.steps ++ KND_Steps04.steps ++ KND_Steps05.steps ++ KND_Steps06.steps ++ KND_Steps07.steps ++ KND_Steps08.steps ++ KND_Steps09.steps ++ KND_Steps10.steps ++ KND_Steps11.steps ++ KND_Steps12.steps ++ KND_Steps13.steps ++ KND_Steps14.steps ++ KND_Steps15.steps ++ KND_Steps16.steps ++ KND_Steps17.steps ++ KND_Steps18.steps ++ KND_Steps19.steps ++ KND_Steps20.steps ++ KND_Steps21.steps ++ KND_Steps22.steps ++ KND_Steps23.steps ++ KND_Steps24.steps ++ KND_Steps25.steps ++ KND_Steps26.steps ++ KND_Steps27.steps ++ KND_Steps28.steps ++ KND_Steps29.steps ++ KND_Steps30.steps ++ KND_Steps31.steps ++ KND_Steps32.steps ++ KND_Steps33.steps ++ KND_Steps34.steps ++ KND_Steps35.steps ++ KND_Steps36.steps ++ KND_Steps37.steps = KND_Schedule.schedule := by decide
+#print axioms KND_partition
