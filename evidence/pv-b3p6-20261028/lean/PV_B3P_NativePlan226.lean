@@ -46,7 +46,7 @@ theorem complete_result (p : reference226.OwnedPublic) :
       if PV_B3P_NativeList226.valid (plan p) then .ok (.Ok (layout p))
       else .ok (.Err aspis_core.state_only_prefix.r0.Error.Public) := by
   unfold native
-  rw [PV_B3P_NativeSteps226.complete_result empty (plan p) (by exact budget_bound p),
+  rw [PV_B3P_NativeSteps226.complete_result empty (plan p) (by simpa only [empty,List.length_nil,Nat.zero_add] using budget_bound p),
       PV_B3P_NativeList226.complete_result,payload_value]
   rfl
 
