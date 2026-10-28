@@ -13257,3 +13257,22 @@ controls and window splitting, as the independent second link agreed with Stream
 any disagreement with native or with the structural link is a finding for both streams. Recount 7
 records these rows with their evidence class. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D355 (Stream B) 2026-10-28 06:39 UTC: pv-l2c stopped on ID exhaustion, no L2 leak found; refused admissions no longer consume IDs (ruling (m')); l2c2 launched
+
+pv-l2c ran 68 Lean compiles (34 passed, 34 failed); reservation refusals retired the other 32 IDs of
+42600-42699, leaving 32 compiles unspent. It proved local arithmetic, parser, fold and mask lemmas for
+the guard sites, and a native balancing differential passed 128 complete-output comparisons with
+changed dependent writes (finite validation). Six Kani invocations gave no usable positive native
+link (three control timeouts, CLI/dependency failures, and one copy-dependent PASS suspended under
+K-1). Its final combined audit and replay failed on a missing project object because its own
+public-import parser omitted a dependency; the parser is corrected and the closure claim withdrawn.
+No honest input was found on which a guard takes the other branch. V352, V354, V357, V360 stay OPEN;
+no premise or trust field changed.
+
+Several jobs have lost large parts of their ID blocks to admission refusals while the host is busy
+(load average about 16). A refusal happens before any compiler starts, so ruling (m') stops treating
+it as consuming the ID: the worker waits the full cooldown and retries the same ID, moving on only if
+the launcher rejects the reuse. l2c2 (72 attempts; IDs 44800-44899) re-runs the audit and replay with
+the corrected parser, then links each guard site to the honest-input carrier and proves constancy on
+every honest input. Rows removed outright: 0. Privacy target not yet established.
