@@ -50,6 +50,9 @@ theorem reserve_complete {T S F : Type} (step : Request → S → Option Nat × 
       reference step wordMax byteMax shape buffer additional world :=
   PV_RDB1_V183.complete step wordMax byteMax shape buffer additional world
 
+theorem selected_layouts_padded : (32:Nat)%4=0 ∧ (2116:Nat)%4=0 := by decide
+
+#print axioms selected_layouts_padded
 #print axioms materialize_request
 #print axioms failed_request
 #print axioms request_no_reallocation
