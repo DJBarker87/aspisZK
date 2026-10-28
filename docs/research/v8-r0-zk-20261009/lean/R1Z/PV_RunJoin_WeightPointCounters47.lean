@@ -9,7 +9,7 @@ theorem cast_small (x : U8) : (UScalar.cast .Usize x).val=x.val := by
   have hx := x.hBounds
   change x.val<256 at hx
   have hb := PV_B2_D_SmallScalar.size_bound
-  change 1024<2^UScalarTy.Usize.numBits at hb
+  rw [UScalar.size] at hb
   omega
 #print axioms cast_small
 
