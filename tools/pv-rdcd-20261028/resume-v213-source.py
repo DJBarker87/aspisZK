@@ -18,7 +18,7 @@ QM31 { c0: CM31 { a: reduce(value.c0.a), b: reduce(value.c0.b) }, c1: CM31 { a: 
 assert tok(body)==tok(expected)
 a=text.rindex('fn canonical_qm31(');prefix=text[max(0,a-80):a];assert '#[cfg(feature = "ct-host-prover")]' in prefix
 new=span(text,'pub fn new(c0: QM31, c1: QM31) -> Self')
-assert tok(new)==tok('''pub fn new(c0: QM31, c1: QM31) -> Self { Self { c0: canonical_qm31(c0), c1: canonical_qm31(c1) } }''')
+assert tok(new)==tok('''pub fn new(c0: QM31, c1: QM31) -> Self { Self { c0: canonical_qm31(c0), c1: canonical_qm31(c1), } }''')
 refs=json.load(open(D/'resume-extraction-plans.json'));ref=refs['V213REF']['wrapper'];rb=span(ref,'pub fn canonical_qm31(')
 expectedref='''pub fn canonical_qm31(x: QM31) -> QM31 { QM31 { c0: CM31 { a: M31(ct::reduce64(x.c0.a.0 as u64)), b: M31(ct::reduce64(x.c0.b.0 as u64)) }, c1: CM31 { a: M31(ct::reduce64(x.c1.a.0 as u64)), b: M31(ct::reduce64(x.c1.b.0 as u64)) } } }'''
 assert tok(rb)==tok(expectedref)
