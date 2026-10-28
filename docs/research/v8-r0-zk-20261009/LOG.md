@@ -13836,3 +13836,14 @@ reports the function and proposes a route (P6 with a structural link, or a prove
 under D187, which needs the ELF gate and a cost check) without changing crates. It then continues the
 semantic-oracle Result identification and the remaining body, runtime and decoder work. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D384 (Stream B) 2026-10-28 17:19 UTC: pv-l2d result: no level-2 leak at the ten remaining sites; rows open on the RunJoin coupling; line parked
+
+pv-l2d (100 Lean attempts; no Kani; 35 final replay and audit targets with standard axioms; peak 3.65
+GiB; no swap; no source change) proves helper laws for expander rejection traces, uncapped coin
+prefixes, query scanning, division bounds and Merkle/publication geometry, with native finite checks
+passing. No checked honest-input leak was found at V353, V355, V356, V358, V359, V361-V365; all ten
+rows stay OPEN, their next step being to bind the complete native observer and failure state to the
+CanonicalHonest31 RunJoin coupling. Merged into the prover candidate (pushed); the line is parked with
+its worktree, alongside the reachability, file-effects, world, level-2 guard and level-1 lines, all
+waiting on the runjoin line. Rows removed outright: 0. Privacy target not yet established.
