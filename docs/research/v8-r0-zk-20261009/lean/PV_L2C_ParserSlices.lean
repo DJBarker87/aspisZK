@@ -35,6 +35,6 @@ theorem right (a b : Array U8 4#usize) :
   simp [core.slice.index.SliceIndexRangeUsizeSlice.index,pair,slice,List.slice,ha,hb]
   apply Subtype.ext
   change b.val.take 4=b.val
-  rw [← hb,List.take_length]
+  exact List.take_of_length_le (Nat.le_of_eq hb)
 #print axioms right
 end PV_L2C_ParserSlices
