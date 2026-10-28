@@ -60,7 +60,13 @@ theorem phase_exact (ops : ExternalFuns) (n : Nat) (c : host_commitment.Commitme
   induction n generalizing values j with
   | zero => rfl
   | succ n ih =>
-    rw [PV_RunJoin_FibreFillThread43.phase,phase,step_exact ops c u values j]
+    change (do
+      let next ← @PV_RunJoin_FibreFillThread43.step _ (ProverRwP6BodyCandidate.selected ops) c u values j
+      @PV_RunJoin_FibreFillThread43.phase _ (ProverRwP6BodyCandidate.selected ops) n c u next
+        (Usize.wrapping_add j 1#usize))=(do
+      let next ← step ops c u values j
+      phase ops n c u next (Usize.wrapping_add j 1#usize))
+    rw [step_exact ops c u values j]
     apply congrArg (Aeneas.Std.bind (step ops c u values j))
     funext next
     exact ih next (Usize.wrapping_add j 1#usize)
@@ -70,8 +76,8 @@ theorem values_complete (ops : ExternalFuns) (n : Nat) (c : host_commitment.Comm
     (bound : j.val+n=c.lanes.length) (small : c.lanes.length≤29) :
     @host_commitment.fill_opening_values _ (ProverRwP6BodyCandidate.selected ops) c u values j=
       phase ops n c u values j := by
-  letI : ExternalFuns := ProverRwP6BodyCandidate.selected ops
-  rw [PV_RunJoin_FibreFillThread43.thread n c u values j bound small,phase_exact ops n c u values j]
+  exact (@PV_RunJoin_FibreFillThread43.thread _ (ProverRwP6BodyCandidate.selected ops)
+    n c u values j bound small).trans (phase_exact ops n c u values j)
 
 /-- The actual constructor is the ordered finite stored-word fill, followed
 by the exact path-slot update. No successful helper Result is a premise. -/
