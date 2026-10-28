@@ -13,7 +13,6 @@ def entry (values : Slice W) (i : Nat) : W := values.val[i]?.getD zero
 theorem read (values : Slice W) (i : Usize) (hi : i.val<values.length) :
     Slice.index_usize values i=.ok (entry values i.val) := by
   simp only [Slice.index_usize,Slice.getElem?_Usize_eq,List.getElem?_eq_getElem hi,entry]
-  rw [List.getElem?_eq_getElem hi]
   rfl
 
 theorem stop (ops : ExternalFuns) (values : Slice W) (out : alloc.vec.Vec U8)
