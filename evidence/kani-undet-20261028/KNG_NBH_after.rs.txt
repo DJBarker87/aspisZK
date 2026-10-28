@@ -1,0 +1,203 @@
+use super::*;
+fn NBH_digest(d: &Digest) -> bool {
+ let b: bool = kani::any();
+ kani::assume(b == (d[0].0 < P && d[1].0 < P && d[2].0 < P && d[3].0 < P && d[4].0 < P && d[5].0 < P && d[6].0 < P && d[7].0 < P)); b
+}
+fn NBH_after_iteration(frontier: &[Digest;20], mut level: usize) -> (usize, Option<PoolV1PairVerifierTransportErrorV1>) {
+    if level < frontier.len() {
+        if !NBH_digest(&frontier[level]) {
+            return (level, Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate));
+        }
+        level += 1;
+    }
+
+(level,None)
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_after_step() {
+ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
+ let level: usize = kani::any(); kani::assume(level<=20);
+ let got=NBH_after_iteration(&frontier,level);
+ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate))};
+ assert_eq!(got,expected);
+}
+fn NBH_after_prefix(
+    afterstate: &PoolV1PairVerifiedAfterstateV1,
+) -> Option<PoolV1PairVerifierTransportErrorV1> {
+    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > crate::pool_v1::POOL_V1_PAIR_CAPACITY
+    {
+        return Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
+    }
+    if !NBH_digest(&afterstate.next_root) {
+        return Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
+    }
+ None}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_after_prefix_gate() { let afterstate=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],next_frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_eq!(NBH_after_prefix(&afterstate),if afterstate.next_pair_index==0 || afterstate.next_pair_index>1048576 {Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex)} else if !NBH_digest(&afterstate.next_root) {Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)} else {None}); }
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_exact8() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
+ let got=exact::<8>(&bytes[..len]);
+ if len==8 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<8); assert_eq!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_exact32() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
+ let got=exact::<32>(&bytes[..len]);
+ if len==32 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<32); assert_eq!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
+}
+fn NBH_asja_header(bytes: &[u8])->Result<(),PoolV1PairVerifierTransportErrorV1> {
+    if bytes.len() != POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongLength);
+    }
+    if bytes[..4] != POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC[0..4] {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongMagic);
+    }
+    if bytes[4] != POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongVersion);
+    }
+    if bytes[5] != crate::pool_v1::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat);
+    }
+    if bytes[6] != POOL_V1_DIGEST_ENCODING_VERSION {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding);
+    }
+    if bytes[7] != 1 {
+        return Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode);
+    }
+ Ok(())}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_asja_header_gate() {let raw:[u8;689]=kani::any();let n:usize=kani::any();kani::assume(n<=689);let bytes=&raw[..n];assert_eq!(NBH_asja_header(bytes),if bytes.len()!=688 {Err(PoolV1PairVerifierTransportErrorV1::WrongLength)} else if &bytes[..4]!=b"ASJA" {Err(PoolV1PairVerifierTransportErrorV1::WrongMagic)} else if bytes[4]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongVersion)} else if bytes[5]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongPairFormat)} else if bytes[6]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding)} else if bytes[7]!=1 {Err(PoolV1PairVerifierTransportErrorV1::WrongSuccessCode)} else {Ok(())});}
+fn NBH_store688(output: &mut [u8;688], level:usize,bytes:[u8;32]) {
+        let start = 48 + 32 * level;
+        output[start..start + 32].copy_from_slice(&bytes);
+    }
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_store688_gate() {let mut out:[u8;688]=kani::any();let old=out;let bytes:[u8;32]=kani::any();let level:usize=kani::any();kani::assume(level<20);let j:usize=kani::any();kani::assume(j<688);NBH_store688(&mut out,level,bytes);let start=48+32*level;assert_eq!(out[j],if j>=start && j<start+32 {bytes[j-start]} else {old[j]});}
+fn NBH_range688(out:&mut[u8;688],level:usize)->(usize,usize,usize,*mut u8){
+ let start=48+32*level;
+ let stop=start+32;
+ let range=&mut out[start..stop];
+ (start,stop,range.len(),range.as_mut_ptr())
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_range688_gate(){
+ let mut out:[u8;688]=kani::any();let level:usize=kani::any();kani::assume(level<20);
+ let start=48+32*level;let target=&mut out[start] as *mut u8;
+ let got=NBH_range688(&mut out,level);
+ assert_eq!(got.0,start);assert_eq!(got.1,start+32);assert_eq!(got.2,32);assert!(core::ptr::eq(got.3,target));
+}
+fn NBH_asja_stores(index:u64,root:[u8;32])->[u8;688]{    let mut output = [0u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES];
+    output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);
+    output[4] = POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION;
+    output[5] = crate::pool_v1::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION;
+    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
+    output[7] = 1;
+    output[8..16].copy_from_slice(&index.to_le_bytes());
+    output[16..48].copy_from_slice(&root);
+output}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_asja_stores_gate(){let index:u64=kani::any();let root:[u8;32]=kani::any();let out=NBH_asja_stores(index,root);let j:usize=kani::any();kani::assume(j<688);let header=[65,83,74,65,1,1,1,1];let expected=if j<8{header[j]}else if j<16{index.to_le_bytes()[j-8]}else if j<48{root[j-16]}else{0};assert_eq!(out[j],expected);}
+
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_after_step_negative() {
+ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
+ let level: usize = kani::any(); kani::assume(level<=20);
+ let got=NBH_after_iteration(&frontier,level);
+ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate))};
+ assert_ne!(got,expected);
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_after_prefix_gate_negative() { let afterstate=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],next_frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_ne!(NBH_after_prefix(&afterstate),if afterstate.next_pair_index==0 || afterstate.next_pair_index>1048576 {Some(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex)} else if !NBH_digest(&afterstate.next_root) {Some(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)} else {None}); }
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_exact8_negative() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
+ let got=exact::<8>(&bytes[..len]);
+ if len==8 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<8); assert_ne!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_exact32_negative() { let bytes: [u8;64]=kani::any(); let len: usize=kani::any(); kani::assume(len<=64);
+ let got=exact::<32>(&bytes[..len]);
+ if len==32 { let out=got.unwrap(); let j:usize=kani::any(); kani::assume(j<32); assert_ne!(out[j],bytes[j]); } else {assert_eq!(got,Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
+}

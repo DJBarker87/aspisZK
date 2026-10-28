@@ -1,0 +1,151 @@
+use super::*;
+fn NBH_digest(d: &Digest) -> bool {
+ let b: bool = kani::any();
+ kani::assume(b == (d[0].0 < P && d[1].0 < P && d[2].0 < P && d[3].0 < P && d[4].0 < P && d[5].0 < P && d[6].0 < P && d[7].0 < P)); b
+}
+fn NBH_live_iteration(frontier: &[Digest;20], mut level: usize) -> (usize, Option<PoolV1PairLiveSnapshotErrorV1>) {
+    if level < frontier.len() {
+        if !NBH_digest(&frontier[level]) {
+            return (level, Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest));
+        }
+        level += 1;
+    }
+
+(level,None)
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_live_step() {
+ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
+ let level: usize = kani::any(); kani::assume(level<=20);
+ let got=NBH_live_iteration(&frontier,level);
+ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest))};
+ assert_eq!(got,expected);
+}
+fn NBH_live_prefix(
+    snapshot: &PoolV1PairLiveSnapshotV1,
+) -> Option<PoolV1PairLiveSnapshotErrorV1> {
+    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {
+        return Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);
+    }
+    if snapshot.sequence != snapshot.next_pair_index {
+        return Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);
+    }
+    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
+        return Some(PoolV1PairLiveSnapshotErrorV1::TreeFull);
+    }
+    if !NBH_digest(&snapshot.current_root) {
+        return Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
+    }
+ None}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_live_prefix_gate() { let snapshot=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_eq!(NBH_live_prefix(&snapshot),if snapshot.pool==[0;32] || snapshot.deployment_domain==[0;32] {Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding)} else if snapshot.sequence!=snapshot.next_pair_index {Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch)} else if snapshot.next_pair_index>=1048576 {Some(PoolV1PairLiveSnapshotErrorV1::TreeFull)} else if !NBH_digest(&snapshot.current_root) {Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)} else {None}); }
+fn NBH_store800(output: &mut [u8;800], level:usize,bytes:[u8;32]) {
+        let start = 160 + 32 * level;
+        output[start..start + 32].copy_from_slice(&bytes);
+    }
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_store800_gate() {let mut out:[u8;800]=kani::any();let old=out;let bytes:[u8;32]=kani::any();let level:usize=kani::any();kani::assume(level<20);let j:usize=kani::any();kani::assume(j<800);NBH_store800(&mut out,level,bytes);let start=160+32*level;assert_eq!(out[j],if j>=start && j<start+32 {bytes[j-start]} else {old[j]});}
+fn NBH_range800(out:&mut[u8;800],level:usize)->(usize,usize,usize,*mut u8){
+ let start=160+32*level;
+ let stop=start+32;
+ let range=&mut out[start..stop];
+ (start,stop,range.len(),range.as_mut_ptr())
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_range800_gate(){
+ let mut out:[u8;800]=kani::any();let level:usize=kani::any();kani::assume(level<20);
+ let start=160+32*level;let target=&mut out[start] as *mut u8;
+ let got=NBH_range800(&mut out,level);
+ assert_eq!(got.0,start);assert_eq!(got.1,start+32);assert_eq!(got.2,32);assert!(core::ptr::eq(got.3,target));
+}
+fn NBH_late_preflight(before:u64,after:u64,output:&mut[u8])->Result<(),PoolV1PairLatePublicStatementErrorV1>{
+    if output.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {
+        return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);
+    }
+    if before.checked_add(1)
+        != Some(after)
+    {
+        return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);
+    }
+ Ok(())}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_late_preflight_gate() {let before:u64=kani::any();let after:u64=kani::any();let mut out:[u8;1521]=kani::any();let old=out;let n:usize=kani::any();kani::assume(n<=1521);let got=NBH_late_preflight(before,after,&mut out[..n]);let expected=if n!=1520 {Err(PoolV1PairLatePublicStatementErrorV1::WrongLength)}else if before==u64::MAX || after!=before.wrapping_add(1) {Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch)}else{Ok(())};assert_eq!(got,expected);let j:usize=kani::any();kani::assume(j<1521);assert_eq!(out[j],old[j]);}
+fn NBH_live_stores(output:&mut[u8;800],pool:[u8;32],domain:[u8;32],seq:u64,index:u64,root:[u8;32]){    output.fill(0);
+    output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);
+    output[8] = POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;
+    output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);
+    output[48..80].copy_from_slice(&pool);
+    output[80..112].copy_from_slice(&domain);
+    output[112..120].copy_from_slice(&seq.to_le_bytes());
+    output[120..128].copy_from_slice(&index.to_le_bytes());
+    output[128..160].copy_from_slice(&root);
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_live_stores_gate(){let mut out:[u8;800]=kani::any();let pool:[u8;32]=kani::any();let domain:[u8;32]=kani::any();let seq:u64=kani::any();let index:u64=kani::any();let root:[u8;32]=kani::any();NBH_live_stores(&mut out,pool,domain,seq,index,root);let j:usize=kani::any();kani::assume(j<800);let expected=if j<8{b"ASPLIVE1"[j]}else if j==8{1}else if j<16{0}else if j<48{POOL_V1_PAIR_TREE_FORMAT_BINDING[j-16]}else if j<80{pool[j-48]}else if j<112{domain[j-80]}else if j<120{seq.to_le_bytes()[j-112]}else if j<128{index.to_le_bytes()[j-120]}else if j<160{root[j-128]}else{0};assert_eq!(out[j],expected);}
+
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_live_step_negative() {
+ let frontier: [Digest;20] = [[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]];
+ let level: usize = kani::any(); kani::assume(level<=20);
+ let got=NBH_live_iteration(&frontier,level);
+ let expected=if level==20 {(level,None)} else if NBH_digest(&frontier[level]) {(level+1,None)} else {(level,Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest))};
+ assert_ne!(got,expected);
+}
+#[kani::proof]
+#[kani::unwind(70)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn NBH_live_prefix_gate_negative() { let snapshot=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],frontier:[[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())],[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]]}; assert_ne!(NBH_live_prefix(&snapshot),if snapshot.pool==[0;32] || snapshot.deployment_domain==[0;32] {Some(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding)} else if snapshot.sequence!=snapshot.next_pair_index {Some(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch)} else if snapshot.next_pair_index>=1048576 {Some(PoolV1PairLiveSnapshotErrorV1::TreeFull)} else if !NBH_digest(&snapshot.current_root) {Some(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest)} else {None}); }
