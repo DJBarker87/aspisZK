@@ -16,8 +16,8 @@ theorem body_in_range (d : Array U32 8#usize) (i : Usize) (hi : i.val < 8) :
   rw [index_ok_gen d i (by simpa using hi)]
   simp only [Array.to_slice, Slice.len, lift, bind_tc_ok]
   rw [if_pos (by simpa [UScalar.lt_equiv] using hi)]
-  simp only [AspisR1TerminalDecoder.aspis_core.field.P, UScalar.ge_equiv]
-  split_ifs <;> simp_all only [not_le]
+  simp only [AspisR1TerminalDecoder.aspis_core.field.P, UScalar.lt_equiv, UScalar.ofNatCore_val_eq]
+  split_ifs <;> rfl
 #print axioms body_in_range
 
 theorem body_done (d : Array U32 8#usize) (i : Usize) (hi : 8 ≤ i.val) :
