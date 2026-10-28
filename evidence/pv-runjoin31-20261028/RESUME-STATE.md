@@ -98,3 +98,18 @@ substituted. No actual shipped edit, wallet action, push or merge.
 No deployment premise removed/added/weakened/changed; T/observer/simulator fixed.
 The unconditional honesty and exact owner coverage sentence remain unproved.
 Do not proceed to V038/V045 until they are checked. Commit evidence after stages.
+
+Update: PublicCarry31 passed44615; CompilerAppend31 passed44619;
+LateAppendRoot31 passed44620. Current driver44622 LateAppendFrame31 is active.
+Budget64charged (37accepted,27rejected),36remaining before22. Next unused27.
+All new top results use standard axioms and zero swap. No endpoint change.
+
+Update08:57UTC: LateAppendFrame31 failed44622 because map_err success payloads
+were not identified by the tactic. New ResultMap31.success passed44627 (only
+propext), then the changed LateAppendFrame31 was scheduled under44628. That
+admission was refused08:57:12UTC for reservation contention before a compiler
+started. resume-check.py44628 is active and waits full180s, retries SAME ID
+(m-prime), up to10 refusals. Do not submit another own scope while it runs.
+Budget66charged (38accepted,28rejected),34remaining. Next unlaunched ID29 after
+28 is actually compiled; do not charge a reservation refusal. Current candidates
+have the map_success tactic added where needed; no unchanged rerun.
