@@ -14,7 +14,7 @@ for p in frozen.rglob('*'):
 p=src/'crates/aspis-r1-cost-probe/src'
 # KNB module is a prefix-only rename of the K042 source.
 (p/'KNB_native.rs').write_text((p/'NBZ_native.rs').read_text().replace('NBZ_','KNB_'))
-f=p/'candidate.rs';f.write_text(f.read_text()+'\n#[cfg(kani)] #[path="KNB_native.rs"] mod KNB_native;\n')
+f=p/'candidate.rs';f.write_text(f.read_text()+chr(10)+'#[cfg(kani)] #[path="KNB_native.rs"] mod KNB_native;'+chr(10))
 (b/'KNB_tmp').mkdir(exist_ok=True)
 print(json.dumps(dict(source=str(src),cache=str(cache))))
 """
