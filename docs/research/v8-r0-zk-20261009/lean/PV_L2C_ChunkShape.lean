@@ -22,6 +22,11 @@ theorem done (i : Iter) (h : i.iter.remaining.val = []) :
 theorem step (i : Iter) (hs : i.iter.size = 8)
     (hne : i.iter.remaining.val ≠ []) (hc : i.count.val < 24) :
     next i = ok (some (i.count,head i.iter.remaining),advance i) := by
+  rcases i with ⟨⟨remaining,width⟩,count⟩
+  change width = 8 at hs
+  subst width
+  let i : Iter := ⟨⟨remaining,8⟩,count⟩
+  change next i = ok (some (i.count,head i.iter.remaining),advance i)
   have hb : i.iter.remaining.val.isEmpty = false := by
     cases he : i.iter.remaining.val with
     | nil => exact False.elim (hne he)
@@ -31,8 +36,7 @@ theorem step (i : Iter) (hs : i.iter.size = 8)
     BuilderForestStd.chunksNext,hb,Bool.false_eq_true,ite_false,bind_tc_ok]
   rw [PV_RunJoin_EnumerateTrace.checked_next i.count hc]
   simp only [bind_tc_ok]
-  simp only [advance,head,tail]
-  rw [hs]
+  rfl
 #print axioms step
 
 theorem head_length (s : Slice U32) : (head s).val.length ≤ 8 := by
