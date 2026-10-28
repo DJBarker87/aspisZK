@@ -46,3 +46,30 @@ p='crates/aspis-statement/src/pool_v1/payment_relation.rs';old=subprocess.check_
 patch=''.join(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='a/'+p,tofile='b/'+p))
 patch+=''.join(difflib.unified_diff([],s.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs'))
 (E/'NBP_statement.rs').write_text(s);(E/'NBP_statement.patch').write_text(patch)
+# Native decoder association, each coordinate as well as complete error result.
+old=s
+s+='''fn NBP_raw32(b:&[u8;216],off:usize)->[u8;32] {
+'''+ ' ['+','.join(f'b[off+{i}]' for i in range(32))+']\n}\n'
+s+='''fn NBP_common_spec(b:&[u8;216])->Result<CommonPublicV1,PoolV1PaymentStatementFormatError> {
+ let asset=u32::from_le_bytes([b[144],b[145],b[146],b[147]]);
+ if asset>=P {return Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId);}
+ let root=crate::atomic_statement::decode_digest_canonical(&NBP_raw32(b,80)).map_err(|_|PoolV1PaymentStatementFormatError::NonCanonicalDigest)?;
+ let nullifier=crate::atomic_statement::decode_digest_canonical(&NBP_raw32(b,112)).map_err(|_|PoolV1PaymentStatementFormatError::NonCanonicalDigest)?;
+ let c=CommonPublicV1{pool:NBP_raw32(b,8),deployment_domain:NBP_raw32(b,40),anchor_sequence:u64::from_le_bytes([b[72],b[73],b[74],b[75],b[76],b[77],b[78],b[79]]),anchor_root:root,nullifier,asset_id:M31(asset)};
+ super::validate_common(c)?;Ok(c)
+}
+#[kani::proof]
+#[kani::unwind(256)]
+fn NBP_common_decoder() {
+ let b:[u8;216]=kani::any();let j:usize=kani::any();kani::assume(j<32);
+ match (super::decode_common(&b),NBP_common_spec(&b)) {
+ (Err(a),Err(e))=>assert!(a==e),
+ (Ok(a),Ok(c))=>{assert!(a.pool[j]==c.pool[j]);assert!(a.deployment_domain[j]==c.deployment_domain[j]);assert!(a.anchor_sequence==c.anchor_sequence);assert!(a.anchor_root[j%8]==c.anchor_root[j%8]);assert!(a.nullifier[j%8]==c.nullifier[j%8]);assert!(a.asset_id==c.asset_id);},
+ _=>assert!(false),
+ }
+ kani::cover!(b[144]==255);
+}
+'''
+p='crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs'
+(E/'NBP_statement2.rs').write_text(s[len(old):])
+(E/'NBP_statement2.patch').write_text(''.join(difflib.unified_diff(old.splitlines(True),s.splitlines(True),fromfile='a/'+p,tofile='b/'+p)))

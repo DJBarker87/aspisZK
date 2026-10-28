@@ -1,6 +1,6 @@
 # NBP U02 atomic digest and payment codecs
 
-Status: ten of sixteen local members CLOSED; six OPEN. No headline premise
+Status: twelve of sixteen local members CLOSED; four OPEN. No headline premise
 removed. RPx_Deployed.deployed, L154 statement parameter, narrowed D188,
 frozen3, RuntimePersistence and approved game fields unchanged. S2 and the
 100-bit deployed target remain unestablished.
@@ -41,10 +41,10 @@ validate_common, validate_pool_v1_private_transfer_public_v1,
 validate_pool_v1_withdrawal_public_v1. Their domains and exact references remain
 those in that handoff.
 
-OPEN: decode_common and encode_common (full bytes/error/frame association);
-decode_pool_v1_private_transfer_public_v1 and encoder;
-decode_pool_v1_withdrawal_public_v1 and encoder (compose exact common/digest
-callees and full native/model caller Results). U01 remains reused CLOSED.
+OPEN: decode_pool_v1_private_transfer_public_v1 and encoder;
+decode_pool_v1_withdrawal_public_v1 and encoder. Their native checks now pass;
+selected full model parent composition remains under validation. U01 remains
+reused CLOSED.
 
 Retained caller dictionary installation, runtime/allocator/SDK/ABI/compiler/P6
 and source-to-ELF boundaries are not removed. No repository crates/programs
@@ -73,3 +73,32 @@ The closed model proofs and native step refer to the same fold: start32 zero
 bytes; at indexi setSlice4i of raw wordi.to_le_bytes; stop at8. No output
 equality is supplied by a caller. The source loop has no external effects,
 allocator or syscall. No new standard-library trust item is introduced.
+
+## Common codecs — CLOSED local
+
+`decode_common`: NBP_K030 (0/588 failed) plus NBP_CommonDecode.result (L034).
+Every216-byte input, full error Result and every byte/limb field. The asset
+word144..148 rejects FIRST; then the exact80..112 and112..144 digest Results,
+then validate_common on pool8..40, deployment40..72, sequence72..80 and those
+SAME digest values. Reuses the CLOSED digest decoder and common validator;
+fixed-width slice widths/bounds are derived, never supplied as child success.
+The native reference checks complete error identity and every record coordinate.
+No loop, field multiplication or syscall is involved.
+
+`encode_common`: NBP_K018 (0/191 failed) plus NBP_CommonBytes.result/association
+(L057), all216-byte pre-states, arbitrary magic, both kinds and all raw common
+records. The exact pure expected value writes magic0..4, version4, kind5,
+digest version6, pool8..40, deployment40..72, sequence72..80, digest80..112,
+digest112..144, asset144..148. Byte7 and suffix148..216 are preserved.
+The seven NBP_CommonTail modules reuse arbitrary-output index/copy/update laws;
+they use the actual frozen operation bodies. association reassembles those
+bodies by definitional equality; it is not a hypothesized callee result.
+The replacement splits the default-heartbeat-exhausted whole normalization,
+not an increased limit or unchanged replay.
+
+Every digest encoder invocation admits all raw8 limbs; NBP_STUBS.md pairs the
+native substitution with result and byte-layout theorems. Native store checks
+K019–K029 check every used source range and frame on arbitrary pre-state.
+All new memory-copy gates use unwind256≥216, not the low-bound KDX hold shape.
+All accepted new roots print only standard axioms (or none). Exact metrics,
+source/object hashes and revision pins remain in the per-attempt receipts.

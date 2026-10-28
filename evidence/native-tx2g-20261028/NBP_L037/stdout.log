@@ -1,0 +1,358 @@
+NBP_generated/NBP_CommonBytes.lean:76:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (s, index_mut_back) ←
+      do
+        let __x ←
+          if ↑4#usize ≤ output.to_slice.length then
+              ok (⟨List.slice 0 ↑4#usize ↑output.to_slice, ⋯⟩, fun s' => ⟨(↑output.to_slice).setSlice! 0 ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => output.from_slice (__x.2 o))
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+    let output2 ← (index_mut_back s2).update 4#usize 1#u8
+    let output3 ← output2.update 5#usize (NBG_Header.tag kind)
+    let output4 ← output3.update 6#usize 1#u8
+    let (s3, index_mut_back1) ←
+      do
+        let __x ←
+          if 8#usize ≤ 40#usize ∧ ↑40#usize ≤ output4.to_slice.length then
+              ok
+                (⟨List.slice ↑8#usize ↑40#usize ↑output4.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑output4.to_slice).setSlice! ↑8#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => output4.from_slice (__x.2 o))
+    let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 c.pool.to_slice
+    let (s6, index_mut_back2) ←
+      do
+        let __x ←
+          if 40#usize ≤ 72#usize ∧ ↑72#usize ≤ (index_mut_back1 s5).to_slice.length then
+              ok
+                (⟨List.slice ↑40#usize ↑72#usize ↑(index_mut_back1 s5).to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑(index_mut_back1 s5).to_slice).setSlice! ↑40#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => (index_mut_back1 s5).from_slice (__x.2 o))
+    let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 c.deployment_domain.to_slice
+    let (s9, index_mut_back3) ←
+      do
+        let __x ←
+          if 72#usize ≤ 80#usize ∧ ↑80#usize ≤ (index_mut_back2 s8).to_slice.length then
+              ok
+                (⟨List.slice ↑72#usize ↑80#usize ↑(index_mut_back2 s8).to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑(index_mut_back2 s8).to_slice).setSlice! ↑72#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => (index_mut_back2 s8).from_slice (__x.2 o))
+    let s11 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+    let (s12, index_mut_back4) ←
+      do
+        let __x ←
+          if 80#usize ≤ 112#usize ∧ ↑112#usize ≤ (index_mut_back3 s11).to_slice.length then
+              ok
+                (⟨List.slice ↑80#usize ↑112#usize ↑(index_mut_back3 s11).to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑(index_mut_back3 s11).to_slice).setSlice! ↑80#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => (index_mut_back3 s11).from_slice (__x.2 o))
+    let s14 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+    let (s15, index_mut_back5) ←
+      do
+        let __x ←
+          if 112#usize ≤ 144#usize ∧ ↑144#usize ≤ (index_mut_back4 s14).to_slice.length then
+              ok
+                (⟨List.slice ↑112#usize ↑144#usize ↑(index_mut_back4 s14).to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑(index_mut_back4 s14).to_slice).setSlice! ↑112#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => (index_mut_back4 s14).from_slice (__x.2 o))
+    let s17 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+    let (s18, index_mut_back6) ←
+      do
+        let __x ←
+          if 144#usize ≤ 148#usize ∧ ↑148#usize ≤ (index_mut_back5 s17).to_slice.length then
+              ok
+                (⟨List.slice ↑144#usize ↑148#usize ↑(index_mut_back5 s17).to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑(index_mut_back5 s17).to_slice).setSlice! ↑144#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => (index_mut_back5 s17).from_slice (__x.2 o))
+    let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (index_mut_back6 s20)
+is not definitionally equal to the right-hand side
+  do
+    let x ←
+      do
+        let __x ←
+          if 0#usize ≤ 4#usize ∧ ↑4#usize ≤ output.to_slice.length then
+              ok
+                (⟨List.slice ↑0#usize ↑4#usize ↑output.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑output.to_slice).setSlice! ↑0#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => output.from_slice (__x.2 o))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+        ok (back copied)
+    let o ← o.update 4#usize 1#u8
+    let o ← o.update 5#usize (NBG_Header.tag kind)
+    let o ← o.update 6#usize 1#u8
+    let x ←
+      do
+        let __x ←
+          if 8#usize ≤ 40#usize ∧ ↑40#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑8#usize ↑40#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑8#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s c.pool.to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 40#usize ≤ 72#usize ∧ ↑72#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑40#usize ↑72#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑40#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s c.deployment_domain.to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 72#usize ≤ 80#usize ∧ ↑80#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑72#usize ↑80#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑72#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 80#usize ≤ 112#usize ∧ ↑112#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑80#usize ↑112#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑80#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 112#usize ≤ 144#usize ∧ ↑144#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑112#usize ↑144#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑112#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+        ok (back copied)
+    let (s, back) ←
+      do
+        let __x ←
+          if 144#usize ≤ 148#usize ∧ ↑148#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑144#usize ↑148#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑144#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (back copied)
+
+output : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : K
+c : C
+⊢ (do
+      let (s, index_mut_back) ←
+        do
+          let __x ←
+            if ↑4#usize ≤ output.to_slice.length then
+                ok (⟨List.slice 0 ↑4#usize ↑output.to_slice, ⋯⟩, fun s' => ⟨(↑output.to_slice).setSlice! 0 ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => output.from_slice (__x.2 o))
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+      let output2 ← (index_mut_back s2).update 4#usize 1#u8
+      let output3 ← output2.update 5#usize (NBG_Header.tag kind)
+      let output4 ← output3.update 6#usize 1#u8
+      let (s3, index_mut_back1) ←
+        do
+          let __x ←
+            if 8#usize ≤ 40#usize ∧ ↑40#usize ≤ output4.to_slice.length then
+                ok
+                  (⟨List.slice ↑8#usize ↑40#usize ↑output4.to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑output4.to_slice).setSlice! ↑8#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => output4.from_slice (__x.2 o))
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 c.pool.to_slice
+      let (s6, index_mut_back2) ←
+        do
+          let __x ←
+            if 40#usize ≤ 72#usize ∧ ↑72#usize ≤ (index_mut_back1 s5).to_slice.length then
+                ok
+                  (⟨List.slice ↑40#usize ↑72#usize ↑(index_mut_back1 s5).to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑(index_mut_back1 s5).to_slice).setSlice! ↑40#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => (index_mut_back1 s5).from_slice (__x.2 o))
+      let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 c.deployment_domain.to_slice
+      let (s9, index_mut_back3) ←
+        do
+          let __x ←
+            if 72#usize ≤ 80#usize ∧ ↑80#usize ≤ (index_mut_back2 s8).to_slice.length then
+                ok
+                  (⟨List.slice ↑72#usize ↑80#usize ↑(index_mut_back2 s8).to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑(index_mut_back2 s8).to_slice).setSlice! ↑72#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => (index_mut_back2 s8).from_slice (__x.2 o))
+      let s11 ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+      let (s12, index_mut_back4) ←
+        do
+          let __x ←
+            if 80#usize ≤ 112#usize ∧ ↑112#usize ≤ (index_mut_back3 s11).to_slice.length then
+                ok
+                  (⟨List.slice ↑80#usize ↑112#usize ↑(index_mut_back3 s11).to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑(index_mut_back3 s11).to_slice).setSlice! ↑80#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => (index_mut_back3 s11).from_slice (__x.2 o))
+      let s14 ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+      let (s15, index_mut_back5) ←
+        do
+          let __x ←
+            if 112#usize ≤ 144#usize ∧ ↑144#usize ≤ (index_mut_back4 s14).to_slice.length then
+                ok
+                  (⟨List.slice ↑112#usize ↑144#usize ↑(index_mut_back4 s14).to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑(index_mut_back4 s14).to_slice).setSlice! ↑112#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => (index_mut_back4 s14).from_slice (__x.2 o))
+      let s17 ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+      let (s18, index_mut_back6) ←
+        do
+          let __x ←
+            if 144#usize ≤ 148#usize ∧ ↑148#usize ≤ (index_mut_back5 s17).to_slice.length then
+                ok
+                  (⟨List.slice ↑144#usize ↑148#usize ↑(index_mut_back5 s17).to_slice, ⋯⟩, fun s' =>
+                    ⟨(↑(index_mut_back5 s17).to_slice).setSlice! ↑144#usize ↑s', ⋯⟩)
+              else fail Error.panic
+          ok (__x.1, fun o => (index_mut_back5 s17).from_slice (__x.2 o))
+      let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 (core.num.U32.to_le_bytes c.asset_id).to_slice
+      ok (index_mut_back6 s20)) =
+    do
+    let x ←
+      do
+        let __x ←
+          if 0#usize ≤ 4#usize ∧ ↑4#usize ≤ output.to_slice.length then
+              ok
+                (⟨List.slice ↑0#usize ↑4#usize ↑output.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑output.to_slice).setSlice! ↑0#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => output.from_slice (__x.2 o))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+        ok (back copied)
+    let o ← o.update 4#usize 1#u8
+    let o ← o.update 5#usize (NBG_Header.tag kind)
+    let o ← o.update 6#usize 1#u8
+    let x ←
+      do
+        let __x ←
+          if 8#usize ≤ 40#usize ∧ ↑40#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑8#usize ↑40#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑8#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s c.pool.to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 40#usize ≤ 72#usize ∧ ↑72#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑40#usize ↑72#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑40#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s c.deployment_domain.to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 72#usize ≤ 80#usize ∧ ↑80#usize ≤ o.to_slice.length then
+              ok (⟨List.slice ↑72#usize ↑80#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑72#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 80#usize ≤ 112#usize ∧ ↑112#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑80#usize ↑112#usize ↑o.to_slice, ⋯⟩, fun s' => ⟨(↑o.to_slice).setSlice! ↑80#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 112#usize ≤ 144#usize ∧ ↑144#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑112#usize ↑144#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑112#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+        ok (back copied)
+    let (s, back) ←
+      do
+        let __x ←
+          if 144#usize ≤ 148#usize ∧ ↑148#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑144#usize ↑148#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑144#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (back copied)
+NBP_generated/NBP_CommonBytes.lean:71:50: warning: This simp argument is unused:
+  NBP_BindPair.pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵c̵t̵i̵o̵n̵,̵N̵B̵P̵_̵S̵t̵o̵r̵e̵.̵s̵t̵o̵r̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵N̵B̵P̵_̵B̵i̵n̵d̵P̵a̵i̵r̵.̵p̵a̵i̵r̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲a̲c̲t̲i̲o̲n̲,̲ ̲N̲B̲P̲_̲S̲t̲o̲r̲e̲.̲s̲t̲o̲r̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBP_CommonBytes.action_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

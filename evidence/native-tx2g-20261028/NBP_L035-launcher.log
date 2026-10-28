@@ -1,0 +1,47 @@
+{"attempt": "NBP_L035", "exit_status": 1, "wall_seconds": 1.6431786199682392, "peak_rss_kib": "3890692", "swaps": "0", "print_axioms": ["'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBP_generated/NBP_CommonBytes.lean:35:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let (s, back) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) output
+          { «end» := 4#usize }
+    let src ← lift magic.to_slice
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s src
+    ?m.15 (back copied)
+in the target expression
+  (do
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8))
+            output { «end» := 4#usize }
+      let s2 ← core.slice.Slice.copy_from_slice core.mar
+...
+or_sequence).to_slice
+      let (s12, index_mut_back4) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (index_mut_back3 s11) { start := 80#usize, «end» := 112#usize }
+      let s14 ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+      let (s15, index_mut_back5) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize }
+      let s17 ←
+        core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+      let (s18, index_mut_back6) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (index_mut_back5 s17) { start := 144#usize, «end» := 148#usize }
+      let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 (core.num.U32.to_le_bytes c.asset_id).to_slice
+      ok (index_mut_back6 s20)) =
+    ok (encoded output magic kind c)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (216 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4a68fba5dd41462d9c94ac340a6a1cb9.scope; invocation ID: 6f52f46faba742a6accd3166e9498be1

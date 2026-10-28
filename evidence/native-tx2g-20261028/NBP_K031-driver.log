@@ -1,0 +1,121 @@
+{"attempt": "NBP_K031", "exit_status": 0, "wall_seconds": 12.701010712014977, "peak_rss_kib": "636748", "swaps": "0"}
+ase: `nbp_store_amount`
+
+warning: function `NBP_store_destination` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:125:4
+    |
+125 | fn NBP_store_destination() {
+    |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_store_destination`
+
+warning: function `NBP_raw32` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:132:4
+    |
+132 | fn NBP_raw32(b:&[u8;216],off:usize)->[u8;32] {
+    |    ^^^^^^^^^ help: convert the identifier to snake case: `nbp_raw32`
+
+warning: function `NBP_common_spec` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:135:4
+    |
+135 | fn NBP_common_spec(b:&[u8;216])->Result<CommonPublicV1,PoolV1PaymentStatementFormatError> {
+    |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_common_spec`
+
+warning: function `NBP_common_decoder` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:145:4
+    |
+145 | fn NBP_common_decoder() {
+    |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_common_decoder`
+
+warning: function `NBP_t` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:154:4
+    |
+154 | fn NBP_t()->PoolV1PrivateTransferPublicV1 { PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_seq...
+    |    ^^^^^ help: convert the identifier to snake case: `nbp_t`
+
+warning: function `NBP_w` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:155:4
+    |
+155 | fn NBP_w()->PoolV1WithdrawalPublicV1 { PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani...
+    |    ^^^^^ help: convert the identifier to snake case: `nbp_w`
+
+warning: function `NBP_encoded_common_byte` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:156:4
+    |
+156 | fn NBP_encoded_common_byte(c:CommonPublicV1,withdrawal:bool,j:usize)->u8 {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_encoded_common_byte`
+
+warning: function `NBP_transfer_encoder` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:163:4
+    |
+163 | fn NBP_transfer_encoder() {
+    |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_transfer_encoder`
+
+warning: function `NBP_withdrawal_encoder` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:174:4
+    |
+174 | fn NBP_withdrawal_encoder() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_withdrawal_encoder`
+
+warning: function `NBP_transfer_spec` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:182:4
+    |
+182 | fn NBP_transfer_spec(b:&[u8;216])->Result<PoolV1PrivateTransferPublicV1,PoolV1PaymentStatementFormatError> {
+    |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_transfer_spec`
+
+warning: function `NBP_withdrawal_spec` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:191:4
+    |
+191 | fn NBP_withdrawal_spec(b:&[u8;216])->Result<PoolV1WithdrawalPublicV1,PoolV1PaymentStatementFormatError> {
+    |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_withdrawal_spec`
+
+warning: function `NBP_transfer_decoder` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:200:4
+    |
+200 | fn NBP_transfer_decoder() {
+    |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_transfer_decoder`
+
+warning: function `NBP_withdrawal_decoder` should have a snake case name
+   --> crates/aspis-statement/src/pool_v1/payment_relation/NBP_codecs.rs:205:4
+    |
+205 | fn NBP_withdrawal_decoder() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_withdrawal_decoder`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.75s
+Checking harness pool_v1::payment_relation::NBP_codecs::NBP_transfer_encoder...
+
+VERIFICATION RESULT:
+ ** 0 of 338 failed (4 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 6.412659s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

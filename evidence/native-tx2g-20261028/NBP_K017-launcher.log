@@ -1,0 +1,61 @@
+{"attempt": "NBP_K017", "exit_status": 0, "wall_seconds": 2.2632960909977555, "peak_rss_kib": "334012", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+p: convert the identifier to snake case: `nbp_message_query`
+
+warning: function `NBP_debug_Checkpoint` should have a snake case name
+   --> programs/r1-cost-probe/src/NBP_error.rs:211:4
+    |
+211 | fn NBP_debug_Checkpoint() {
+    |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_debug_checkpoint`
+
+warning: function `NBP_message_Checkpoint` should have a snake case name
+   --> programs/r1-cost-probe/src/NBP_error.rs:220:4
+    |
+220 | fn NBP_message_Checkpoint() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_message_checkpoint`
+
+warning: function `NBP_debug_Allocation` should have a snake case name
+   --> programs/r1-cost-probe/src/NBP_error.rs:229:4
+    |
+229 | fn NBP_debug_Allocation() {
+    |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_debug_allocation`
+
+warning: function `NBP_message_Allocation` should have a snake case name
+   --> programs/r1-cost-probe/src/NBP_error.rs:238:4
+    |
+238 | fn NBP_message_Allocation() {
+    |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbp_message_allocation`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.64s
+Checking harness NBP_error::NBP_message_Allocation...
+
+VERIFICATION RESULT:
+ ** 0 of 1870 failed (123 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.45996332s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rea94638405e14e4c995506746ae8182e.scope; invocation ID: 4a0932f792da45a8ac931dc25d512963
