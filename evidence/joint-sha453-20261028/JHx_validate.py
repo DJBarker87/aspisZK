@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,hashlib,re,subprocess
 E=Path(__file__).resolve().parent;R=E.parents[1];L=R/'lean'
-x=json.loads((E/'JHx_GENERATOR_CHECK.json').read_text());rows=[json.loads(s) for s in (E/'JHx_ATTEMPTS.jsonl').read_text().splitlines()];required=[m['module'] for m in x['computations']+x['manifest']]+['JHx_Instance','JHx_Joint'];result=[]
+x=json.loads((E/'JHx_GENERATOR_CHECK.json').read_text());rows=[json.loads(s) for s in (E/'JHx_ATTEMPTS.jsonl').read_text().splitlines()];required=[m['module'] for m in x['computations']+x['manifest']+x['families']]+['JHx_Instance','JHx_Joint'];result=[]
 for name in required:
  p=L/(name+'.lean');h=hashlib.sha256(p.read_bytes()).hexdigest();matches=[r for r in rows if r.get('source_hashes',{}).get(p.name)==h and r['exit_status']==0]
  if not matches:result.append(dict(module=name,passed=False,reason='no passing exact-source receipt'));continue

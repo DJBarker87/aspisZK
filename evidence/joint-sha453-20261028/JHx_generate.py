@@ -47,7 +47,7 @@ def collect():
   for i,((ix,input_expr),(jx,expr)) in enumerate(zip(im,em)):
    if not input_expr.startswith('JGc_TX2_HashBytes.bytes '):input_expr=D['AspisR1.'+input_expr][0]
    ns=re.fullmatch(r'JGc_TX2_HashBytes.bytes (\S+)\.message',input_expr)[1]
-   assert ix==jx and ix in (str(i),'_')
+   assert ix==jx and ix in (str(i),'_') and (ix!='_' or i==n-1)
    full='AspisR1.'+ns; blocks=[]
    for j in range(100):
     bn=full+f'.B{j:02}'
@@ -130,11 +130,16 @@ def main():
    if args.check:assert p.read_text()==content,p
    else:p.write_text(content)
    manifest.append(dict(module=name,tree=t,indices=[r['index'] for r in chunk],blocks=sum(len(r['blocks']) for r in chunk),sha256=hashlib.sha256(content.encode()).hexdigest()))
- assembly=['import JHe_SHARealization']+['import '+m['module'] for m in manifest]+['set_option autoImplicit false','namespace AspisR1.JHx_Instance','#check JHe_SHARealization','theorem source : JHe_SHARealization := by','  constructor']
+ families=[]
  for t,n in enumerate([157,157,139]):
-  assembly += ['  · intro i','    fin_cases i']
-  for i in range(n):assembly += [f'    · exact JHx_T{t}C{i//args.size:02}.H{i:03}.source']
- assembly += ['#print axioms source','instance realization : JHe_SHARealization := source','#print axioms realization','end AspisR1.JHx_Instance']
+  name=f'JHx_Tree{t}';imports=['import '+m['module'] for m in manifest if m['tree']==t]
+  tree=imports+['set_option autoImplicit false',f'namespace AspisR1.{name}',f'theorem source : ∀ i : Fin {n}, JFp_SHADigest.digest (JHe_SHAInputs{t}.input i)=JHe_SHAInputs{t}.expected i := by','  intro i','  fin_cases i']
+  for i in range(n):tree += [f'  · exact JHx_T{t}C{i//args.size:02}.H{i:03}.source']
+  tree += ['#print axioms source',f'end AspisR1.{name}'];content='\n'.join(tree)+'\n';p=L/(name+'.lean')
+  if args.check:assert p.read_text()==content,p
+  else:p.write_text(content)
+  families.append(dict(module=name,tree=t,equations=n,sha256=hashlib.sha256(content.encode()).hexdigest()))
+ assembly=['import JHe_SHARealization']+['import '+m['module'] for m in families]+['set_option autoImplicit false','namespace AspisR1.JHx_Instance','#check JHe_SHARealization','theorem source : JHe_SHARealization := ⟨JHx_Tree0.source,JHx_Tree1.source,JHx_Tree2.source⟩','#print axioms source','instance realization : JHe_SHARealization := source','#print axioms realization','end AspisR1.JHx_Instance']
  p=L/'JHx_Instance.lean';content='\n'.join(assembly)+'\n'
  if args.check:assert p.read_text()==content,p
  else:p.write_text(content)
@@ -147,7 +152,7 @@ def main():
  p=L/'JHx_Joint.lean'
  if args.check:assert p.read_text()==joint,p
  else:p.write_text(joint)
- report=dict(passed=True,equations=len(rows),compression_blocks=sum(len(r['blocks']) for r in rows),method='independent integer SHA256 compression, hashlib full digest, padding/chaining and input/expected association',source_pins=pins,chunk_size=args.size,block_size=args.block_size,computations=computations,manifest=manifest)
+ report=dict(equation_checks=[dict(tree=r['tree'],index=r['index'],input_namespace=r['ns'],message_bytes=len(r['message']),blocks=len(r['blocks']),digest_hex=hashlib.sha256(bytes(r['message'])).hexdigest(),registers=r['blocks'][-1]['result']) for r in rows],passed=True,equations=len(rows),compression_blocks=sum(len(r['blocks']) for r in rows),method='independent integer SHA256 compression, hashlib full digest, padding/chaining and input/expected association',source_pins=pins,chunk_size=args.size,block_size=args.block_size,computations=computations,families=families,manifest=manifest)
  (E/'JHx_GENERATOR_CHECK.json').write_text(json.dumps(report,indent=2)+'\n')
  print(json.dumps({k:report[k] for k in ['passed','equations','compression_blocks','chunk_size']}))
 if __name__=='__main__':main()
