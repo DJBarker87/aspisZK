@@ -241,3 +241,12 @@ fn NCC_contract_weak_caller() { let r=NCC_any_VerifierRegistryV1(); assert_eq!(N
 fn NCC_wrong_modifies(a: &mut u8, b: &mut u8) { *a=1; *b=2; }
 #[kani::proof_for_contract(NCC_wrong_modifies)]
 fn NCC_contract_wrong_modifies() { let mut a:u8=kani::any();let mut b:u8=kani::any();NCC_wrong_modifies(&mut a,&mut b); }
+
+#[kani::proof_for_contract(NCC_weak)]
+#[kani::unwind(33)]
+fn NCC_contract_weak_callee() { let r=NCC_any_VerifierRegistryV1(); NCC_weak(&r); }
+#[kani::proof]
+#[kani::unwind(33)]
+fn NCC_contract_weak_direct() { let r=NCC_any_VerifierRegistryV1(); assert_eq!(NCC_weak(&r), r.flags & 1 != 0); }
+#[kani::proof]
+fn NCC_contract_modifies_direct() { let mut a:u8=kani::any();let mut b:u8=kani::any();NCC_wrong_modifies(&mut a,&mut b);assert!(a==1 && b==2); }

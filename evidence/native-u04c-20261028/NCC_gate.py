@@ -2,6 +2,12 @@
 from pathlib import Path
 import hashlib,json,subprocess,sys,os
 B=Path(__file__).resolve().parent;S=B/'NBU_src';a,h=sys.argv[1:]
+tools={}
+for name,path in [('kani','/home/dombarker/.kani/kani-0.67.0/bin/kani-driver'),('cbmc','/home/dombarker/.kani/kani-0.67.0/bin/cbmc')]:
+ p=Path(path);v=subprocess.run([str(p),'--version'],capture_output=True,text=True);assert v.returncode==0,(path,v.stderr)
+ tools[name]=dict(path=str(p),version=v.stdout.strip(),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+assert '0.67.0' in tools['kani']['version'] and '6.8.0' in tools['cbmc']['version'],tools
+print(json.dumps(dict(tool_pins=tools)),flush=True)
 lock=S/'Cargo.lock';before=hashlib.sha256(lock.read_bytes()).hexdigest()
 assert before=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert hashlib.sha256((B/'NBU_KMX_copy_stubs.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'

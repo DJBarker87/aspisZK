@@ -6,6 +6,10 @@ spec=json.loads((B/sys.argv[1]).read_text());items=[dict(spec['base'],**target) 
 status=B/(sys.argv[1]+'.status.json');summary=[]
 def save(state): status.write_text(json.dumps(dict(state=state,summary=summary)))
 save('running')
+original_hook=sys.excepthook
+def report_error(kind,error,tb):
+ save('failed');original_hook(kind,error,tb)
+sys.excepthook=report_error
 for cfg in items:
  a=cfg['attempt'];assert not (B/a/'receipt.json').exists(),('already submitted',a)
  for n in range(11):
@@ -30,6 +34,7 @@ for cfg in items:
  print(json.dumps(dict(event='result',attempt=a,files=result,launcher=r.stdout+r.stderr)),flush=True)
  rc=json.loads(result[a+'/receipt.json'])
  summary.append({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib']});save('running')
+ if 'Checking harness' not in result[a+'/stdout.log']:raise RuntimeError('STOP own compile/input error; repair before another target')
  if rc['exit_status'] not in [0,1]:raise SystemExit('STOP exceptional exit; inspect and split')
  if not json.loads(result[a+'-graph.json']).get('lock_unchanged'):raise SystemExit('STOP lock mismatch')
 

@@ -339,3 +339,12 @@ fn NCC_replacement1_contract(){let a=NCC_any_VerifierRegistryEntryV1();let b=NCC
 #[kani::unwind(33)]
 #[kani::stub_verified(VerifierRegistryEntryV1::is_active_at)]
 fn NCC_replacement1_contract_negative(){let a=NCC_any_VerifierRegistryEntryV1();let b=NCC_any_VerifierRegistryEntryV1();let slot:u64=kani::any();let got=a.is_exact_compatible_replacement_for(&b,slot);let expected=a.pool==b.pool && a.policy_binding==b.policy_binding && a.profile_binding==b.profile_binding && a.statement_version==b.statement_version && a.release_binding!=b.release_binding && a.status==VerifierEntryStatusV1::Active && a.activation_slot<=slot && (a.retirement_slot==u64::MAX || slot<a.retirement_slot);assert_ne!(got,expected);}
+
+#[kani::proof_for_contract(NCC_weak)]
+#[kani::unwind(33)]
+fn NCC_contract_weak_callee() { let r=NCC_any_VerifierRegistryV1(); NCC_weak(&r); }
+#[kani::proof]
+#[kani::unwind(33)]
+fn NCC_contract_weak_direct() { let r=NCC_any_VerifierRegistryV1(); assert_eq!(NCC_weak(&r), r.flags & 1 != 0); }
+#[kani::proof]
+fn NCC_contract_modifies_direct() { let mut a:u8=kani::any();let mut b:u8=kani::any();NCC_wrong_modifies(&mut a,&mut b);assert!(a==1 && b==2); }

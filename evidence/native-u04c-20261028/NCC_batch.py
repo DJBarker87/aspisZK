@@ -28,6 +28,9 @@ while True:
  (E/(name+'.status.json')).write_text(json.dumps(x,indent=2))
  print(json.dumps(x),flush=True)
  if x['state']=='complete':break
+ if x['state']=='failed':
+  subprocess.run([sys.executable,str(E/'NCC_recover.py')]+[r['attempt'] for r in x['summary']],check=True)
+  raise SystemExit('STOP own batch target error; inspect the retained receipt and repair')
  if x['state']=='unresolved':raise SystemExit('STOP unresolved submission: inspect read-only, never resubmit')
  time.sleep(60)
 subprocess.run([sys.executable,str(E/'NCC_recover.py')]+[x['attempt'] for x in items],check=True)

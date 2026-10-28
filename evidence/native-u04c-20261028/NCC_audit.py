@@ -11,6 +11,7 @@ for p in sorted(E.glob('NCC_K*/receipt.json')):
  assert r['source_hashes']['NBU_src/KMX_stubs.rs']==r['source_hashes']['NBU_src/crates/aspis-statement/src/KMX_stubs.rs']=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
  start=s.find('Checking harness');tail=s[start:] if start>=0 else s[-1500:]
  if r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL' in tail:status='PASS'
+ elif 'unwinding assertion' in tail:status='UNWIND'
  elif r['exit_status']==1 and 'VERIFICATION:- FAILED' in tail and 'Failed Checks:' in tail:status='COUNTEREXAMPLE'
  elif 'TIMEOUT' in s.upper() or 'TIMED OUT' in s.upper() or r['exit_status']==124:status='TIMEOUT'
  else:status='ERROR'
@@ -34,4 +35,4 @@ for i,row in enumerate(rows):
  intended=row['status']=='COUNTEREXAMPLE' and 'unwind' not in row['diagnostic'].lower() and 'overflow' not in row['diagnostic'].lower()
  pairs.append(dict(positive=positive['attempt'],negative=row['attempt'],same_configuration=same,controlled=positive['status']=='PASS' and intended and same))
 (E/'NCC_AUDIT.json').write_text(json.dumps(dict(kani_used=len(rows),lean_used=len(list(E.glob('NCC_L*/receipt.json'))),rows=rows,pairs=pairs,all_pairs_controlled=all(x['controlled'] for x in pairs)),indent=2)+'\n')
-print(json.dumps(dict(kani_used=len(rows),statuses={k:sum(r['status']==k for r in rows) for k in ['PASS','COUNTEREXAMPLE','TIMEOUT','ERROR']},controlled_pairs=sum(p['controlled'] for p in pairs))))
+print(json.dumps(dict(kani_used=len(rows),statuses={k:sum(r['status']==k for r in rows) for k in ['PASS','COUNTEREXAMPLE','UNWIND','TIMEOUT','ERROR']},controlled_pairs=sum(p['controlled'] for p in pairs))))
