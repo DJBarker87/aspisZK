@@ -1,0 +1,56 @@
+{"attempt": "JHk32_045", "exit_status": 1, "wall_seconds": 7.942339892033488, "peak_rss_kib": "6358156", "swaps": "0", "print_axioms": ["'AspisR1.JHk_QueryPower.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHk_QueryPower.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (out1, after1).1
+in the target expression
+  Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator out1).power
+
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial out : verifier.Accumulator
+pending after : verifier.BatchedWeights
+g : verifier.QueryGeometry
+prepare :
+  verifier.candidate.prepare installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.proof ()
+      none input =
+    ok (core.result.Result.Ok p, scratch)
+queries : p.queries = JFq_Queries.value
+init : installed.op20 transport.Variant.S2 = ok (core.resu
+...
+WideExact 29#usize
+initial out : verifier.Accumulator
+pending after : verifier.BatchedWeights
+g : verifier.QueryGeometry
+prepare :
+  verifier.candidate.prepare installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.proof ()
+      none input =
+    ok (core.result.Result.Ok p, scratch)
+queries : p.queries = JFq_Queries.value
+init : installed.op20 transport.Variant.S2 = ok (core.result.Result.Ok initial)
+pend : installed.op18 initial.weights.deref = ok (core.result.Result.Ok pending)
+geo : installed.op19 p.queries 0#usize 10#usize = ok (core.result.Result.Ok g)
+query :
+  installed.op7 JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+    ok (core.result.Result.Ok (out, after))
+power : ofK (Tx1Q_Carriers.accumulator out).power = ofK JFq_Power.scalar
+rho :
+  Tx1Q_Carriers.k p.rho = JFq_Rho.scalar ∧
+    p.variant = transport.Variant.S2 ∧ p.state = AspisV8R19.SqueezeOracleBridge.encodeState JGg_Opening32.next0
+initialPower : (Tx1Q_Carriers.accumulator initial).power = Port2_Initial.oneK
+one : ofK Port2_Initial.oneK = 1
+out1 : verifier.Accumulator
+after1 : verifier.BatchedWeights
+flushed : Slice aspis_core.field.QM31
+run :
+  installed.op7 JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+    ok (core.result.Result.Ok (out1, after1))
+flush : installed.op17 after1 out1.weights.deref = ok flushed
+next : ↑out1.next = 10
+length : (↑flushed).length = 64
+variant : p.variant = transport.Variant.S2
+rhs : Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator out1).rhs
+canon : Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator out1).power
+same : (out1, after1).1 = (out, after).1
+⊢ Tx1Q_Carriers.k out.power = JFq_Power.scalar
+'AspisR1.JHk_QueryPower.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re47f178002804c1380c841cedb31a5c0.scope; invocation ID: 3adc909e1d26481ab6f77b13fe3727e9

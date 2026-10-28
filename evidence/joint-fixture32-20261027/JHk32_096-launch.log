@@ -1,0 +1,35 @@
+{"attempt": "JHk32_096", "exit_status": 0, "wall_seconds": 4.504798429028597, "peak_rss_kib": "6379300", "swaps": "0", "print_axioms": ["'AspisR1.JHk_QueryRhs.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHk_RhsBytes.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JHk_QueryRhs.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHk_RhsBytes.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.JHk_QueryRhs.source : ∀ (p : AspisR1CurrentCaller.verifier.Prepared)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (initial out : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending after : AspisR1CurrentCaller.verifier.BatchedWeights) (g : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1CurrentCaller.verifier.candidate.prepare AspisR1.JGr_Geometry.installed AspisR1.JGr_Geometry.digest
+        (AspisR1CurrentCaller.FirstComposition.
+...
+1CurrentCaller.verifier.Prepared)
+  (input scratch : Aeneas.Std.Array AspisR1CurrentCaller.aspis_core.field.wide_exact.WideExact 29#usize)
+  (initial out : AspisR1CurrentCaller.verifier.Accumulator)
+  (pending after : AspisR1CurrentCaller.verifier.BatchedWeights) (g : AspisR1CurrentCaller.verifier.QueryGeometry),
+  AspisR1CurrentCaller.verifier.candidate.prepare AspisR1.JGr_Geometry.installed AspisR1.JGr_Geometry.digest
+        (AspisR1CurrentCaller.FirstComposition.toCurrentPublic AspisR1.JFs_PublicSerialization.value)
+        AspisR1.JFx_NativeBytes.proof () none input =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok p, scratch) →
+    p.queries = AspisR1.JFq_Queries.value →
+      AspisR1.JGr_Geometry.installed.op20 AspisR1CurrentCaller.transport.Variant.S2 =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok initial) →
+        AspisR1.JGr_Geometry.installed.op18 initial.weights.deref =
+            Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok pending) →
+          AspisR1.JGr_Geometry.installed.op19 p.queries 0#usize 10#usize =
+              Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok g) →
+            AspisR1.JGr_Geometry.installed.op7 AspisR1.JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+                Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (out, after)) →
+              List.map AspisR1.CheckpointBytes5Writer.u8
+                  (AspisR1.WAdm_SourceBody.put (AspisR1.JHe_CurrentWriterImage.accumulator out).rhs) =
+                AspisR1.JFq_Rhs.bytes :=
+fun p input scratch initial out pending after g prepare queries init pend geo query =>
+  AspisR1.JHk_RhsBytes.encode out
+    (AspisR1.JHk_QueryRhs.source p input scratch initial out pending after g prepare queries init pend geo query)
+
+Running as unit: run-r99ec64bf437b4d978fe86232b78eca8c.scope; invocation ID: 0e636fed04b94626bd8a3aacfca27e04

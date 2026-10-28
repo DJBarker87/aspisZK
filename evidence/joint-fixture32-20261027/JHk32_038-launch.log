@@ -1,0 +1,49 @@
+{"attempt": "JHk32_038", "exit_status": 1, "wall_seconds": 26.945607775007375, "peak_rss_kib": "6357476", "swaps": "0", "print_axioms": []}
+JHk power: preparation inputs assembled
+JHk_CurrentPowerFormula.lean:35:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Tx1Q_Carriers.prepared p).rho
+in the target expression
+  Port3_FlushInstall.Canonical (Tx1Q_Carriers.k p.rho)
+
+p : verifier.Prepared
+input scratch : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+initial out : verifier.Accumulator
+pending after : verifier.BatchedWeights
+g : verifier.QueryGeometry
+prepare :
+  verifier.candidate.prepare installed digest (toCurrentPublic JFs_PublicSerialization.value) JFx_NativeBytes.proof ()
+      none input =
+    ok (core.result.Result.Ok p, scratch)
+queries : p.queries = JFq_Queries.value
+init : ins
+...
+ = ok (core.result.Result.Ok initial)
+pend : installed.op18 initial.weights.deref = ok (core.result.Result.Ok pending)
+geo : installed.op19 p.queries 0#usize 10#usize = ok (core.result.Result.Ok g)
+query :
+  installed.op7 JFx_NativeBytes.proof p initial scratch none g pending 10#usize =
+    ok (core.result.Result.Ok (out, after))
+alpha : (Tx1Q_Carriers.prepared p).alpha = JFo_Prepared.value.alpha
+rho : (Tx1Q_Carriers.prepared p).rho = JFq_Rho.scalar
+powers : Tx1Q_Carriers.arr Tx1Q_Carriers.e scratch = JFr_TX2_Powers.value
+geometry : Tx1Q_Carriers.geometry g = JGp_Geometry.value () JGp_Seeds.geometry
+size : (↑(Tx1Q_Carriers.accumulator initial).weights).length = 64
+zero : (Tx1Q_Carriers.accumulator initial).next = 0#usize
+crhs : Port4C_QueryArithmetic.CanonE (Tx1Q_Carriers.accumulator initial).rhs
+cpower : Port3_FlushInstall.Canonical (Tx1Q_Carriers.accumulator initial).power
+history :
+  S7Kani3CallerTrace.PushTrace (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref)
+    (Port3_RowsInstall.toBW (Tx1Q_Carriers.pending pending))
+    (S7Kani3CallerTrace.initialSum (Port3_PendingInstall.owned (Tx1Q_Carriers.accumulator initial).weights.deref))
+phase : S7JoinRowsTrace.Progress 0 0 (Port3_RowsInstall.toBW (Tx1Q_Carriers.pending pending))
+⊢ Port3_FlushInstall.Canonical (Tx1Q_Carriers.k p.rho)
+JHk power: pending inputs assembled
+JHk power: native query transported
+JHk_CurrentPowerFormula.lean:29:40: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+JHk_CurrentPowerFormula.lean:47:14: error(lean.unknownIdentifier): Unknown constant `source`
+
+Running as unit: run-r9b35ced47f534fecb5077f17c54c0ecd.scope; invocation ID: 66ab793176804f5b8c942eba8d930849

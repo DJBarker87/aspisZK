@@ -1,0 +1,36 @@
+JHk_PreparedScalarBytes.lean:29:24: error: Tactic `decide` failed for proposition
+  List.map CheckpointBytes5Writer.u8 (WAdm_SourceBody.putK (CheckpointBytes3Namespaces.toK JFq_Rho.scalar)) =
+    JFq_Rho.bytes
+because its `Decidable` instance
+  instDecidableEqList
+    (List.map CheckpointBytes5Writer.u8 (WAdm_SourceBody.putK (CheckpointBytes3Namespaces.toK JFq_Rho.scalar)))
+    JFq_Rho.bytes
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match List.map CheckpointBytes5Writer.u8 (WAdm_SourceBody.putK (CheckpointBytes3Namespaces.toK JFq_Rho.scalar)) with
+  | [] =>
+    match JFq_Rho.bytes with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: «as» =>
+    match JFq_Rho.bytes with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match «as».hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+JHk_PreparedScalarBytes.lean:29:17: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.116 = ?m.116
+but is expected to have type
+  List.map CheckpointBytes5Writer.u8
+      (List.flatMap WAdm_SourceBody.put (List.map CheckpointBytes3Namespaces.toE ↑JFo_Prepared.value.alpha)) =
+    JFq_Alpha0.bytes ++ JFq_Alpha1.bytes
+in the application
+  And.intro rfl
+'AspisR1.JHk_PreparedScalarBytes.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

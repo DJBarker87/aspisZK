@@ -1,0 +1,74 @@
+import JHh_C_TX1Candidate
+import JHh_ChildBridge
+import JHk_WorldFirst
+import JFn_HashBoundary
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHk_TX1
+open Aeneas Aeneas.Std Result
+variable [sha : JHe_SHARealization]
+
+/-- Actual source return, transported to the corrected JHg world. Neither
+the saved bytes nor a successful child is supplied as a hypothesis. -/
+theorem source (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    ∃ saved : alloc.vec.Vec U8,
+      saved.val.length=1768 ∧
+      AdapterRw.first_decoded (JHe_Natives.sdk base stage)
+        (S6N_Getters.publicValue JGx_RealStatement.value) JFx_NativeBytes.publicInput
+        JFx_NativeBytes.proof 10#usize=ok (.Ok saved) ∧
+      S2W_D189Wrappers.first (JHe_Natives.first base stage)
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHk_WorldFirst.post saved,())) := by
+  obtain ⟨p,scratch,initial,out,pending,after,g,flushed,saved,
+    prepare,batch,query,flush,write,returned,length,variant,next,size⟩ :=
+    JHh_C_TX1Candidate.returns
+  have child := JHh_ChildBridge.source base stage saved returned
+  exact ⟨saved,length,child,JHk_WorldFirst.source base stage saved length child⟩
+#print axioms source
+
+def saved (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) : alloc.vec.Vec U8 :=
+  Classical.choose (source base stage)
+
+theorem saved_length (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    (saved base stage).val.length=1768 :=
+  (Classical.choose_spec (source base stage)).1
+#print axioms saved_length
+
+theorem accepted1 (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :
+    S2W_D189Wrappers.first (JHe_Natives.first base stage)
+      CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+      CPH_Program.verifier JHe_Natives.data1 ()=
+        ok (.Ok (saved base stage,JHk_WorldFirst.post (saved base stage),())) :=
+  (Classical.choose_spec (source base stage)).2.2
+#print axioms accepted1
+end AspisR1.JHk_TX1
+
+namespace AspisR1.JHk_JointFrontier
+open Aeneas Aeneas.Std Result
+
+/-- Exact pending statement, NOT a theorem or an inhabited proposition.
+The two SHA inventories contain only the 453 tree and three retained-byte
+digest equations. The SAME SDK's accepted2 remains a named hypothesis.
+The body identity in this conclusion has not been established. -/
+def JointStatement : Prop :=
+  ∀ [trees : JHe_SHARealization]
+    (bytes : JFn_HashBoundary.Realizes JFp_SHADigest.digest)
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops)
+    (data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+    (accepted2 : S2W_D189Wrappers.second (JHe_Natives.second base stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier data2 slot ()=
+        ok (.Ok (JHg_World.e2.heap,()))),
+    S2W_D189Wrappers.first (JHe_Natives.first base stage)
+      CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+      CPH_Program.verifier JHe_Natives.data1 ()=
+        ok (.Ok (JHk_TX1.saved base stage,JHk_WorldFirst.post (JHk_TX1.saved base stage),())) ∧
+    (JHk_TX1.saved base stage).val=JFx_NativeBytes.checkpoint.val ∧
+    S2W_D189Wrappers.second (JHe_Natives.second base stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier data2 slot ()=
+        ok (.Ok (JHg_World.e2.heap,()))
+
+#print JointStatement
+#print axioms JointStatement
+end AspisR1.JHk_JointFrontier
+end
