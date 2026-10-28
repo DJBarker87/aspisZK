@@ -1,0 +1,196 @@
+{
+  "row": "V195",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/wide_exact.rs",
+      "file_sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+      "anchor": "pub fn to_le_bytes(",
+      "complete_body": "{\n        let mut bytes = [0; Self::BYTE_LEN];\n        for (chunk, limb) in bytes.chunks_exact_mut(4).zip(self.to_limbs()) {\n            chunk.copy_from_slice(&limb.to_le_bytes());\n        }\n        bytes\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/wide_exact.rs",
+      "file_sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3",
+      "anchor": "pub const fn to_limbs(",
+      "complete_body": "{\n        [\n            self.c0.c0.a.0,\n            self.c0.c0.b.0,\n            self.c0.c1.a.0,\n            self.c0.c1.b.0,\n            self.c1.c0.a.0,\n            self.c1.c0.b.0,\n            self.c1.c1.a.0,\n            self.c1.c1.b.0,\n        ]\n    }",
+      "tokens_equal": true
+    },
+    {
+      "owned_reference": "tools/pv-relink-20261028/v195-bridge.rs",
+      "sha256": "7a09d0764455c324ca45e6c1d6add695284016d54c37f41379e824c3a6cbd1ca",
+      "complete_body": "{\n let l=x.to_limbs();let a=l[0].to_le_bytes();let b=l[1].to_le_bytes();let c=l[2].to_le_bytes();let d=l[3].to_le_bytes();\n let e=l[4].to_le_bytes();let f=l[5].to_le_bytes();let g=l[6].to_le_bytes();let h=l[7].to_le_bytes();\n [a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3],e[0],e[1],e[2],e[3],f[0],f[1],f[2],f[3],g[0],g[1],g[2],g[3],h[0],h[1],h[2],h[3]]\n}",
+      "coordinates": "all8 scalar calls/all32 coordinates in identical limb order"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "scope": "impl<'a, T> ChunksExactMut",
+      "anchor": "pub(super) const fn new(",
+      "complete_body": "{\n        let rem = slice.len() % chunk_size;\n        let fst_len = slice.len() - rem;\n        \n        let (fst, snd) = unsafe { slice.split_at_mut_unchecked(fst_len) };\n        Self { v: fst, rem: snd, chunk_size, _marker: PhantomData }\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "scope": "Iterator for ChunksExactMut",
+      "anchor": "fn next(",
+      "complete_body": "{\n        \n        unsafe { &mut *self.v }.split_at_mut_checked(self.chunk_size).and_then(|(chunk, rest)| {\n            self.v = rest;\n            Some(chunk)\n        })\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "scope": "Iterator for ChunksExactMut",
+      "anchor": "unsafe fn __iterator_get_unchecked(",
+      "complete_body": "{\n        let start = idx * self.chunk_size;\n        \n        unsafe { from_raw_parts_mut(self.v.as_mut_ptr().add(start), self.chunk_size) }\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "scope": "macro_rules! zip_impl_general_defaults",
+      "anchor": "default fn next(",
+      "complete_body": "{\n            let x = self.a.next()?;\n            let y = self.b.next()?;\n            Some((x, y))\n        }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "scope": "A: TrustedRandomAccess + Iterator",
+      "anchor": "fn next(",
+      "complete_body": "{\n        if self.index < self.len {\n            let i = self.index;\n            \n            \n            self.index += 1;\n            \n            unsafe {\n                Some((self.a.__iterator_get_unchecked(i), self.b.__iterator_get_unchecked(i)))\n            }\n        } else {\n            None\n        }\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "anchor": "fn next(&mut self)",
+      "complete_body": "{\n        self.unsize_mut().next()\n    }",
+      "selected_release_body": "{\n        self.unsize_mut().next()\n    }",
+      "tokens_equal": true,
+      "law": "forward alive index; no mixed front/back path"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter/iter_inner.rs",
+      "file_sha256": "b12ffcb34aeac42367411691e5dd9fedf723140cbd9d6c0bfbcfb9694cbe4105",
+      "anchor": "fn next(&mut self)",
+      "complete_body": "{\n        \n        \n        \n        \n        \n        self.alive.next().map(|idx| {\n            \n            \n            \n            \n            \n            \n            unsafe { self.data.get_unchecked(idx).assume_init_read() }\n        })\n    }",
+      "selected_release_body": "{\n        \n        \n        \n        \n        \n        self.alive.next().map(|idx| {\n            \n            \n            \n            \n            \n            \n            unsafe { self.data.get_unchecked(idx).assume_init_read() }\n        })\n    }",
+      "tokens_equal": true,
+      "law": "forward alive index increments once; input T=u32 is Copy and has no Drop"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "anchor": "unsafe fn __iterator_get_unchecked(",
+      "complete_body": "{\n        \n        let elem_ref = unsafe { self.as_mut_slice().get_unchecked_mut(idx) };\n        \n        \n        unsafe { ptr::read(elem_ref) }\n    }",
+      "selected_release_body": "{\n        \n        let elem_ref = unsafe { self.as_mut_slice().get_unchecked_mut(idx) };\n        \n        \n        unsafe { ptr::read(elem_ref) }\n    }",
+      "tokens_equal": true,
+      "law": "same indexed u32 for all i<8; random or forward route has same value trace"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "anchor": "pub const fn new(value:",
+      "complete_body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+      "selected_release_body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+      "tokens_equal": true,
+      "law": "Wrappers.new"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "scope": "Deref for ManuallyDrop<T>",
+      "anchor": "fn deref(",
+      "complete_body": "{\n        self.value.as_ref()\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "scope": "DerefMut for ManuallyDrop<T>",
+      "anchor": "fn deref_mut(",
+      "complete_body": "{\n        self.value.as_mut()\n    }",
+      "tokens_equal": true
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_dangling.rs",
+      "file_sha256": "f5aad27a540c58b44377e4b80819dc00c1487fecf07fb9eb54b6ac1efb259286",
+      "anchor": "fn as_ref(",
+      "complete_body": "{\n        &self.0\n    }",
+      "selected_release_body": "{\n        &self.0\n    }",
+      "tokens_equal": true,
+      "law": "Wrappers.deref_complete; transparent inner value"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_dangling.rs",
+      "file_sha256": "f5aad27a540c58b44377e4b80819dc00c1487fecf07fb9eb54b6ac1efb259286",
+      "anchor": "fn as_mut(",
+      "complete_body": "{\n        &mut self.0\n    }",
+      "selected_release_body": "{\n        &mut self.0\n    }",
+      "tokens_equal": true,
+      "law": "Wrappers.deref_mut_complete; restoration retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_mut(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_mut_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "anchor": "const unsafe fn copy_from_slice_impl<",
+      "complete_body": "{\n    \n    \n    #[cfg_attr(not(panic = \"immediate-abort\"), inline(never), cold)]\n    #[cfg_attr(panic = \"immediate-abort\", inline)]\n    #[track_caller]\n    const fn len_mismatch_fail(dst_len: usize, src_len: usize) -> ! {\n        const_panic!(\n            \"copy_from_slice: source slice length does not match destination slice length\",\n            \"copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})\",\n            src_len: usize,\n            dst_len: usize,\n        )\n    }\n\n    if dest.len() != src.len() {\n        len_mismatch_fail(dest.len(), src.len());\n    }\n\n    \n    \n    \n    unsafe {\n        ptr::copy_nonoverlapping(src.as_ptr(), dest.as_mut_ptr(), dest.len());\n    }\n}",
+      "selected_release_body": "{\n    \n    \n    #[cfg_attr(not(panic = \"immediate-abort\"), inline(never), cold)]\n    #[cfg_attr(panic = \"immediate-abort\", inline)]\n    #[track_caller]\n    const fn len_mismatch_fail(dst_len: usize, src_len: usize) -> ! {\n        const_panic!(\n            \"copy_from_slice: source slice length does not match destination slice length\",\n            \"copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})\",\n            src_len: usize,\n            dst_len: usize,\n        )\n    }\n\n    if dest.len() != src.len() {\n        len_mismatch_fail(dest.len(), src.len());\n    }\n\n    \n    \n    \n    unsafe {\n        ptr::copy_nonoverlapping(src.as_ptr(), dest.as_mut_ptr(), dest.len());\n    }\n}",
+      "tokens_equal": true,
+      "law": "V195.chunk_width excludes length failure; Copy.copies_result/full overwrite/frame law"
+    }
+  ],
+  "laws": [
+    "PV_RDB1_V195.complete",
+    "PV_RDB1_V195.source_complete",
+    "PV_RDB1_V195.chunk_width",
+    "PV_RDB1_V195.chunk_count",
+    "PV_RDB1_V195.slot_bounds",
+    "PV_RDB1_V195.cover",
+    "PV_RDB1_V195.disjoint",
+    "PV_RDB1_Wrappers.deref_complete",
+    "PV_RDB1_Wrappers.deref_mut_complete"
+  ],
+  "source_dispatch": "Both forward and specialized indexed Zip.next routes checked. Fixed32/4 destination and8 u32 limbs; monotone0..7 indexing; no mixed front/back. All4-byte copy lengths match. No zero-chunk or bounds panic reachable.",
+  "conservative_changed_panic_nodes": "Vec::deref, AtomicPtr construction, CStr conversion and panic attribution belong to conservative panic/formatting envelope; constant nonzero chunk width and proved32-byte/8-word bounds exclude entry. No invocation of these bodies is silently credited as a successful native call.",
+  "D188": "Native mutable chunk writes are bound directly to snapshot-copy source law. No Aeneas emission of mutable-iterator writes or discarded restoration is credited.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_validation": "project-wide/receipt.json:108309 paired arrays observing all32 bytes,raw u32 domain; reused unchanged; finite only",
+  "retained_boundary": "Original generic raw-carrier op51 value/library intrinsic interpretation; no field reduction. Compiler/binary/side-channel obligations remain; no allocator call introduced.",
+  "new_trust_items": [],
+  "kani_credit": false
+}
