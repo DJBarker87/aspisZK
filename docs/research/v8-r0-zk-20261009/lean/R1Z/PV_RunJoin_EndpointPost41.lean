@@ -66,6 +66,7 @@ theorem loop (ops : ExternalFuns)
     have next := ih (Usize.wrapping_add i 1#usize) mid (by rw [inc];omega)
       (by rw [ml];omega) (by rw [ml];omega) mh
     have len : mid.length+32*n=out.length+32*(n+1) := by rw [ml];omega
-    simpa only [len] using next
+    simpa only [len,host_semantic.endpoint_bytes_loop,host_semantic.endpoint_bytes_loop.body,
+      lift,bind_tc_ok] using next
 #print axioms loop
 end R1Z.PV_RunJoin_EndpointPost41
