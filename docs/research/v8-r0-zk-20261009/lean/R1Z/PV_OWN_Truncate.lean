@@ -11,11 +11,10 @@ theorem view {T : Type} (k : Codec T) (m : Memory) (v : Vector T) (n : Nat)
  · simp only [truncate,List.length_take]; omega
  · intro i x hi
    apply repr i x
-   have hh:=List.getElem?_take v.values n i
-   simp only [truncate] at hi
-   rw [hh] at hi
-   split at hi
-   · exact hi
-   · cases hi
+   have hin:i<n := by
+     have lt:=List.lt_length_of_getElem? hi
+     simp only [truncate,List.length_take] at lt
+     omega
+   simpa only [truncate,List.getElem?_take_of_lt hin] using hi
 #print axioms view
 end R1Z.PV_OWN_Truncate
