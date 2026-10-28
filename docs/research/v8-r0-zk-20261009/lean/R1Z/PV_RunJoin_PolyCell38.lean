@@ -1,3 +1,5 @@
+import R1Z.PV_RunJoin_FieldData34
+import R1Z.ProverCommitWideQM31Scalar49
 import R1Z.PV_RunJoin_FlatBytes35
 set_option autoImplicit false
 noncomputable section
@@ -7,12 +9,21 @@ variable [ExternalTypes]
 abbrev Q := aspis_core.field.QM31
 
 def wide (q : Q) : aspis_core.field.wide_exact.WideExact :=
-  ⟨q,⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩⟩
+  ⟨PV_RunJoin_FieldData34.source
+    (ProverCommitNativeOps47.normalize (PV_RunJoin_FieldData34.old q)),⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩⟩
 def cell (q : Q) : List U8 := (PV_RunJoin_FlatBytes35.wire (wide q)).val
 
 theorem embed (ops : ExternalFuns) (q : Q) :
     (ProverRwP6BodyCandidate.selected ops).op45 q = .ok (wide q) := by
-  cases q with | mk a b => cases a; cases b; rfl
+  change ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromW
+    (AspisR1ProducerRelease47.field.wide_exact.WideExact.from_qm31
+      (ProverRwDictionaryTower.toQ q)) = _
+  rw [AspisR1ProducerRelease47.field.wide_exact.WideExact.from_qm31,
+    ← PV_RunJoin_FieldData34.native_source q,
+    ProverCommitWideQM31Scalar49.normalize_source]
+  simp only [bind_tc_ok,AspisR1ProducerRelease47.field.QM31.ZERO,
+    ProverRwDictionaryTower.mapResult]
+  rfl
 
 theorem encode (ops : ExternalFuns) (q : Q) :
     (do
