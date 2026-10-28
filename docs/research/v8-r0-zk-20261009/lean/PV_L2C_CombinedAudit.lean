@@ -1,3 +1,19 @@
+import PV_L2C_HonestCaller
+import PV_L2C_HonestHelper
+import PV_L2C_HonestValidity
+import PV_L2C_HonestSumcheck
+import PV_L2C_VecBack
+import PV_L2C_OwnedBalance
+import PV_L2C_RowEnumeration
+import PV_L2C_SelectedDense
+import PV_L2C_ExtractedGuard
+import PV_L2C_ParserSlices
+import PV_L2C_ComplexParser
+import PV_L2C_ParserHalves8
+import PV_L2C_QParser
+import PV_L2C_ScalarBalance
+import PV_L2C_ScalarCanonical
+import PV_L2C_CanonicalityBoundary
 import R1Z.PV_RunJoin_ConsumerBoundary25
 import PV_L2C_VecShape
 import PV_L2C_PackedMasks
@@ -131,3 +147,26 @@ import PV_L2C_ExtractedFold
 #print axioms PV_L2C_VecShape.length
 #print axioms PV_L2C_VecShape.active_read
 
+
+/-! D355 continuation: complete Results and exact-carrier decoded facts.
+No universal native HonestInput guard claim is imported or asserted. -/
+#print axioms PV_L2C_HonestCaller.identification
+#print axioms PV_L2C_HonestCaller.returned_bank
+#print axioms PV_L2C_HonestCaller.builder_sound
+#print axioms PV_L2C_HonestHelper.total
+#print axioms PV_L2C_HonestHelper.inactive
+#print axioms PV_L2C_HonestValidity.valid
+#print axioms PV_L2C_HonestSumcheck.initial
+#print axioms PV_L2C_HonestSumcheck.chain
+#print axioms PV_L2C_HonestSumcheck.terminal
+#print axioms PV_L2C_VecBack.index_mut
+#print axioms PV_L2C_VecBack.write
+#print axioms PV_L2C_OwnedBalance.complete_result
+#print axioms PV_L2C_RowEnumeration.enumeration
+#print axioms PV_L2C_SelectedDense.selected_sum
+#print axioms PV_L2C_ExtractedGuard.padding_result
+#print axioms PV_L2C_ComplexParser.parse
+#print axioms PV_L2C_QParser.parse
+#print axioms PV_L2C_ScalarBalance.complete_result
+#print axioms PV_L2C_ScalarCanonical.output_canonical
+#print axioms PV_L2C_CanonicalityBoundary.decoded_equality_insufficient

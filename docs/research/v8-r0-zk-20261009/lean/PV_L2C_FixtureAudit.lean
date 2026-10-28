@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_ConsumerBoundary25
+import PV_L2C_HonestCaller
 set_option autoImplicit false
 noncomputable section
 namespace PV_L2C_FixtureAudit
@@ -20,6 +21,11 @@ theorem withdrawal : PV_RunJoin_ConsumerBoundary25.HonestInput (K:=K)
 theorem nonempty : ∃ i, PV_RunJoin_ConsumerBoundary25.HonestInput (K:=K) i :=
   ⟨_, transfer⟩
 #print axioms nonempty
+/-- Non-vacuity of the caller proof's exact subtype, without a guard-success field. -/
+theorem caller_family : Nonempty (PV_L2C_HonestCaller.Family (K:=K)) :=
+  ⟨⟨PV_RunJoin_AdmittedCarrier23.transfer,transfer⟩⟩
+#print axioms caller_family
+
 local instance : CharP PrivacyR1AcctBasis.K 2147483647 :=
   charP_of_injective_algebraMap
     (algebraMap (ZMod AspisCircleGroupOrder.P) PrivacyR1AcctBasis.K).injective AspisCircleGroupOrder.P
