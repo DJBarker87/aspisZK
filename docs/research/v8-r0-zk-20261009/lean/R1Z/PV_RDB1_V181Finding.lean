@@ -25,10 +25,8 @@ theorem overflow_world {S F : Type} (step : Request → S → Option Nat × S)
     (PV_RDB1_V181.deployed step wordMax byteMax shape address n w).world=w := by
   unfold PV_RDB1_V181.deployed
   by_cases hw : n>wordMax
-  · simp only [hw,ite_true]
-    exact ⟨rfl,rfl⟩
-  · simp only [hw,hwidth,Nat.mul_one,over,ite_false,ite_true]
-    exact ⟨rfl,rfl⟩
+  · simp [hw]
+  · simp [hw,hwidth,over]
 
 /-- A panic cannot refine an unconditional returned empty String. The
 stateful reference law is correct; the total old value callback cannot be
