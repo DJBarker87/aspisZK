@@ -346,19 +346,19 @@ theorem erase_program (ops : ExternalFuns)
   unfold program prover.prove_masked_with_attempt
   try dsimp only
   rw [erase_bind]
-  apply bind_congr
+  apply PV_W_RecursiveLaws.bind_congr
   ·
     exact erase_invoke ops _ _
   · rintro ⟨r, nonce_store1⟩
     try dsimp only
     rw [erase_bind]
-    apply bind_congr
+    apply PV_W_RecursiveLaws.bind_congr
     ·
       exact erase_invoke ops _ _
     · intro r1
       try dsimp only
       rw [erase_bind]
-      apply bind_congr
+      apply PV_W_RecursiveLaws.bind_congr
       ·
         exact erase_invoke ops _ _
       · intro cf
@@ -368,25 +368,25 @@ theorem erase_program (ops : ExternalFuns)
           try dsimp only
           try dsimp only
           rw [erase_bind]
-          apply bind_congr
+          apply PV_W_RecursiveLaws.bind_congr
           ·
             exact erase_invoke ops _ _
           · intro noised_c1
             try dsimp only
             rw [erase_bind]
-            apply bind_congr
+            apply PV_W_RecursiveLaws.bind_congr
             ·
               exact erase_invoke ops _ _
             · rintro ⟨r2, noised_c11⟩
               try dsimp only
               rw [erase_bind]
-              apply bind_congr
+              apply PV_W_RecursiveLaws.bind_congr
               ·
                 exact erase_invoke ops _ _
               · intro r3
                 try dsimp only
                 rw [erase_bind]
-                apply bind_congr
+                apply PV_W_RecursiveLaws.bind_congr
                 ·
                   exact erase_invoke ops _ _
                 · intro cf1
@@ -395,19 +395,19 @@ theorem erase_program (ops : ExternalFuns)
                   | Continue val1 =>
                     try dsimp only
                     rw [erase_bind]
-                    apply bind_congr
+                    apply PV_W_RecursiveLaws.bind_congr
                     ·
                       exact erase_invoke ops _ _
                     · intro r4
                       try dsimp only
                       rw [erase_bind]
-                      apply bind_congr
+                      apply PV_W_RecursiveLaws.bind_congr
                       ·
                         exact erase_invoke ops _ _
                       · intro r5
                         try dsimp only
                         rw [erase_bind]
-                        apply bind_congr
+                        apply PV_W_RecursiveLaws.bind_congr
                         ·
                           exact erase_invoke ops _ _
                         · intro cf2
@@ -416,19 +416,19 @@ theorem erase_program (ops : ExternalFuns)
                           | Continue val2 =>
                             try dsimp only
                             rw [erase_bind]
-                            apply bind_congr
+                            apply PV_W_RecursiveLaws.bind_congr
                             ·
                               exact erase_invoke ops _ _
                             · intro r6
                               try dsimp only
                               rw [erase_bind]
-                              apply bind_congr
+                              apply PV_W_RecursiveLaws.bind_congr
                               ·
                                 exact erase_invoke ops _ _
                               · intro r7
                                 try dsimp only
                                 rw [erase_bind]
-                                apply bind_congr
+                                apply PV_W_RecursiveLaws.bind_congr
                                 ·
                                   exact erase_invoke ops _ _
                                 · intro cf3
@@ -437,19 +437,19 @@ theorem erase_program (ops : ExternalFuns)
                                   | Continue val3 =>
                                     try dsimp only
                                     rw [erase_bind]
-                                    apply bind_congr
+                                    apply PV_W_RecursiveLaws.bind_congr
                                     ·
                                       exact erase_invoke ops _ _
                                     · intro r8
                                       try dsimp only
                                       rw [erase_bind]
-                                      apply bind_congr
+                                      apply PV_W_RecursiveLaws.bind_congr
                                       ·
                                         exact erase_invoke ops _ _
                                       · intro r9
                                         try dsimp only
                                         rw [erase_bind]
-                                        apply bind_congr
+                                        apply PV_W_RecursiveLaws.bind_congr
                                         ·
                                           exact erase_invoke ops _ _
                                         · intro cf4
@@ -473,26 +473,26 @@ theorem erase_program (ops : ExternalFuns)
                                                 try dsimp only
                                                 try dsimp only
                                                 rw [erase_bind]
-                                                apply bind_congr
+                                                apply PV_W_RecursiveLaws.bind_congr
                                                 ·
                                                   exact erase_invoke ops _ _
                                                 · intro g
                                                   try dsimp only
                                                   try dsimp only
                                                   rw [erase_bind]
-                                                  apply bind_congr
+                                                  apply PV_W_RecursiveLaws.bind_congr
                                                   ·
                                                     exact erase_invoke ops _ _
                                                   · intro h1_padding
                                                     try dsimp only
                                                     rw [erase_bind]
-                                                    apply bind_congr
+                                                    apply PV_W_RecursiveLaws.bind_congr
                                                     ·
                                                       exact erase_invoke ops _ _
                                                     · intro s2
                                                       try dsimp only
                                                       rw [erase_bind]
-                                                      apply bind_congr
+                                                      apply PV_W_RecursiveLaws.bind_congr
                                                       ·
                                                         exact erase_invoke ops _ _
                                                       · intro audit
@@ -522,19 +522,19 @@ theorem erase_program (ops : ExternalFuns)
                                                                 ·
                                                                   try dsimp only
                                                                   rw [erase_bind]
-                                                                  apply bind_congr
+                                                                  apply PV_W_RecursiveLaws.bind_congr
                                                                   ·
                                                                     exact erase_invoke ops _ _
                                                                   · intro i2
                                                                     try dsimp only
                                                                     rw [erase_bind]
-                                                                    apply bind_congr
+                                                                    apply PV_W_RecursiveLaws.bind_congr
                                                                     ·
                                                                       exact erase_invoke ops _ _
                                                                     · intro r10
                                                                       try dsimp only
                                                                       rw [erase_bind]
-                                                                      apply bind_congr
+                                                                      apply PV_W_RecursiveLaws.bind_congr
                                                                       ·
                                                                         exact erase_invoke ops _ _
                                                                       · intro cf5
@@ -543,19 +543,19 @@ theorem erase_program (ops : ExternalFuns)
                                                                         | Continue val5 =>
                                                                           try dsimp only
                                                                           rw [erase_bind]
-                                                                          apply bind_congr
+                                                                          apply PV_W_RecursiveLaws.bind_congr
                                                                           ·
                                                                             exact erase_invoke ops _ _
                                                                           · intro i3
                                                                             try dsimp only
                                                                             rw [erase_bind]
-                                                                            apply bind_congr
+                                                                            apply PV_W_RecursiveLaws.bind_congr
                                                                             ·
                                                                               exact erase_invoke ops _ _
                                                                             · intro r11
                                                                               try dsimp only
                                                                               rw [erase_bind]
-                                                                              apply bind_congr
+                                                                              apply PV_W_RecursiveLaws.bind_congr
                                                                               ·
                                                                                 exact erase_invoke ops _ _
                                                                               · intro cf6
@@ -564,19 +564,19 @@ theorem erase_program (ops : ExternalFuns)
                                                                                 | Continue val6 =>
                                                                                   try dsimp only
                                                                                   rw [erase_bind]
-                                                                                  apply bind_congr
+                                                                                  apply PV_W_RecursiveLaws.bind_congr
                                                                                   ·
                                                                                     exact erase_invoke ops _ _
                                                                                   · intro r12
                                                                                     try dsimp only
                                                                                     rw [erase_bind]
-                                                                                    apply bind_congr
+                                                                                    apply PV_W_RecursiveLaws.bind_congr
                                                                                     ·
                                                                                       exact erase_invoke ops _ _
                                                                                     · intro r13
                                                                                       try dsimp only
                                                                                       rw [erase_bind]
-                                                                                      apply bind_congr
+                                                                                      apply PV_W_RecursiveLaws.bind_congr
                                                                                       ·
                                                                                         exact erase_invoke ops _ _
                                                                                       · intro cf7
@@ -585,32 +585,32 @@ theorem erase_program (ops : ExternalFuns)
                                                                                         | Continue val7 =>
                                                                                           try dsimp only
                                                                                           rw [erase_bind]
-                                                                                          apply bind_congr
+                                                                                          apply PV_W_RecursiveLaws.bind_congr
                                                                                           ·
                                                                                             exact erase_invoke ops _ _
                                                                                           · intro we
                                                                                             try dsimp only
                                                                                             try dsimp only
                                                                                             rw [erase_bind]
-                                                                                            apply bind_congr
+                                                                                            apply PV_W_RecursiveLaws.bind_congr
                                                                                             ·
                                                                                               exact erase_invoke ops _ _
                                                                                             · intro v
                                                                                               try dsimp only
                                                                                               rw [erase_bind]
-                                                                                              apply bind_congr
+                                                                                              apply PV_W_RecursiveLaws.bind_congr
                                                                                               ·
                                                                                                 exact erase_invoke ops _ _
                                                                                               · rintro ⟨r14, backend⟩
                                                                                                 try dsimp only
                                                                                                 rw [erase_bind]
-                                                                                                apply bind_congr
+                                                                                                apply PV_W_RecursiveLaws.bind_congr
                                                                                                 ·
                                                                                                   exact erase_invoke ops _ _
                                                                                                 · intro r15
                                                                                                   try dsimp only
                                                                                                   rw [erase_bind]
-                                                                                                  apply bind_congr
+                                                                                                  apply PV_W_RecursiveLaws.bind_congr
                                                                                                   ·
                                                                                                     exact erase_invoke ops _ _
                                                                                                   · intro cf8
@@ -619,26 +619,26 @@ theorem erase_program (ops : ExternalFuns)
                                                                                                     | Continue val8 =>
                                                                                                       try dsimp only
                                                                                                       rw [erase_bind]
-                                                                                                      apply bind_congr
+                                                                                                      apply PV_W_RecursiveLaws.bind_congr
                                                                                                       ·
                                                                                                         exact erase_invoke ops _ _
                                                                                                       · intro v1
                                                                                                         try dsimp only
                                                                                                         try dsimp only
                                                                                                         rw [erase_bind]
-                                                                                                        apply bind_congr
+                                                                                                        apply PV_W_RecursiveLaws.bind_congr
                                                                                                         ·
                                                                                                           exact erase_invoke ops _ _
                                                                                                         · intro o
                                                                                                           try dsimp only
                                                                                                           rw [erase_bind]
-                                                                                                          apply bind_congr
+                                                                                                          apply PV_W_RecursiveLaws.bind_congr
                                                                                                           ·
                                                                                                             exact erase_invoke ops _ _
                                                                                                           · intro q
                                                                                                             try dsimp only
                                                                                                             rw [erase_bind]
-                                                                                                            apply bind_congr
+                                                                                                            apply PV_W_RecursiveLaws.bind_congr
                                                                                                             ·
                                                                                                               exact erase_invoke ops _ _
                                                                                                             · intro h1_total_balanced
@@ -648,13 +648,13 @@ theorem erase_program (ops : ExternalFuns)
                                                                                                               ·
                                                                                                                 try dsimp only
                                                                                                                 rw [erase_bind]
-                                                                                                                apply bind_congr
+                                                                                                                apply PV_W_RecursiveLaws.bind_congr
                                                                                                                 ·
                                                                                                                   exact erase_invoke ops _ _
                                                                                                                 · intro r16
                                                                                                                   try dsimp only
                                                                                                                   rw [erase_bind]
-                                                                                                                  apply bind_congr
+                                                                                                                  apply PV_W_RecursiveLaws.bind_congr
                                                                                                                   ·
                                                                                                                     exact erase_invoke ops _ _
                                                                                                                   · intro cf9
@@ -665,7 +665,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                                                                     | Break residual =>
                                                                                                                       try dsimp only
                                                                                                                       rw [erase_bind]
-                                                                                                                      apply bind_congr
+                                                                                                                      apply PV_W_RecursiveLaws.bind_congr
                                                                                                                       ·
                                                                                                                         exact erase_invoke ops _ _
                                                                                                                       · intro r17
@@ -675,7 +675,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                                                     | Break residual =>
                                                                                                       try dsimp only
                                                                                                       rw [erase_bind]
-                                                                                                      apply bind_congr
+                                                                                                      apply PV_W_RecursiveLaws.bind_congr
                                                                                                       ·
                                                                                                         exact erase_invoke ops _ _
                                                                                                       · intro r16
@@ -683,7 +683,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                                         | Break residual =>
                                                                                           try dsimp only
                                                                                           rw [erase_bind]
-                                                                                          apply bind_congr
+                                                                                          apply PV_W_RecursiveLaws.bind_congr
                                                                                           ·
                                                                                             exact erase_invoke ops _ _
                                                                                           · intro r14
@@ -691,7 +691,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                                 | Break residual =>
                                                                                   try dsimp only
                                                                                   rw [erase_bind]
-                                                                                  apply bind_congr
+                                                                                  apply PV_W_RecursiveLaws.bind_congr
                                                                                   ·
                                                                                     exact erase_invoke ops _ _
                                                                                   · intro r12
@@ -699,7 +699,7 @@ theorem erase_program (ops : ExternalFuns)
                                                                         | Break residual =>
                                                                           try dsimp only
                                                                           rw [erase_bind]
-                                                                          apply bind_congr
+                                                                          apply PV_W_RecursiveLaws.bind_congr
                                                                           ·
                                                                             exact erase_invoke ops _ _
                                                                           · intro r11
@@ -713,7 +713,7 @@ theorem erase_program (ops : ExternalFuns)
                                           | Break residual =>
                                             try dsimp only
                                             rw [erase_bind]
-                                            apply bind_congr
+                                            apply PV_W_RecursiveLaws.bind_congr
                                             ·
                                               exact erase_invoke ops _ _
                                             · intro r10
@@ -721,7 +721,7 @@ theorem erase_program (ops : ExternalFuns)
                                   | Break residual =>
                                     try dsimp only
                                     rw [erase_bind]
-                                    apply bind_congr
+                                    apply PV_W_RecursiveLaws.bind_congr
                                     ·
                                       exact erase_invoke ops _ _
                                     · intro r8
@@ -729,7 +729,7 @@ theorem erase_program (ops : ExternalFuns)
                           | Break residual =>
                             try dsimp only
                             rw [erase_bind]
-                            apply bind_congr
+                            apply PV_W_RecursiveLaws.bind_congr
                             ·
                               exact erase_invoke ops _ _
                             · intro r6
@@ -737,7 +737,7 @@ theorem erase_program (ops : ExternalFuns)
                   | Break residual =>
                     try dsimp only
                     rw [erase_bind]
-                    apply bind_congr
+                    apply PV_W_RecursiveLaws.bind_congr
                     ·
                       exact erase_invoke ops _ _
                     · intro r4
@@ -745,7 +745,7 @@ theorem erase_program (ops : ExternalFuns)
         | Break residual =>
           try dsimp only
           rw [erase_bind]
-          apply bind_congr
+          apply PV_W_RecursiveLaws.bind_congr
           ·
             exact erase_invoke ops _ _
           · intro r2

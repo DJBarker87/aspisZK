@@ -7,7 +7,7 @@ n=int(sys.argv[1]);m=sys.argv[2]
 dependencies = {'R1Z/ProverRwFull'+x: 'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFull'+x+'.lean' for x in ['ExternalTypes','Types','ExternalFuns','Funs']}
 resolution=json.loads((E/'observation-resolution.json').read_text())['modules'] if (E/'observation-resolution.json').exists() else {}
 pin=resolution.get(m.replace('/','.'))
-assert 50400<=n<=50499 and (m.startswith(('R1Z/PV_W_','R1Z/PV_FXM_')) or m in dependencies or pin is not None)
+assert 50400<=n<=50499 and (m.startswith(('R1Z/PV_W_','R1Z/PV_FXM_','R1Z/PDict_')) or m in dependencies or pin is not None)
 assert n<50497 or 'Audit' in m or 'Replay' in m
 assert json.loads((E/'external-verification.json').read_text())['ok']
 assert json.loads((E/'d372-id-preflight.json').read_text())['unused']

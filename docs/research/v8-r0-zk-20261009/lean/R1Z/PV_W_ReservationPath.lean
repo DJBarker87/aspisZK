@@ -10029,49 +10029,49 @@ theorem erase_program (ops : ExternalFuns)
   unfold program aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path
   try dsimp only
   rw [erase_bind]
-  apply bind_congr
+  apply PV_W_RecursiveLaws.bind_congr
   ·
     exact erase_invoke ops _ _
   · intro hasher
     try dsimp only
     rw [erase_bind]
-    apply bind_congr
+    apply PV_W_RecursiveLaws.bind_congr
     ·
       exact erase_invoke ops _ _
     · intro hasher1
       try dsimp only
       rw [erase_bind]
-      apply bind_congr
+      apply PV_W_RecursiveLaws.bind_congr
       ·
         exact erase_invoke ops _ _
       · intro hasher2
         try dsimp only
         rw [erase_bind]
-        apply bind_congr
+        apply PV_W_RecursiveLaws.bind_congr
         ·
           exact erase_invoke ops _ _
         · intro ga
           try dsimp only
           rw [erase_bind]
-          apply bind_congr
+          apply PV_W_RecursiveLaws.bind_congr
           ·
             exact erase_invoke ops _ _
           · intro digest
             try dsimp only
             rw [erase_bind]
-            apply bind_congr
+            apply PV_W_RecursiveLaws.bind_congr
             ·
               exact erase_invoke ops _ _
             · intro s
               try dsimp only
               rw [erase_bind]
-              apply bind_congr
+              apply PV_W_RecursiveLaws.bind_congr
               ·
                 exact erase_invoke ops _ _
               · intro name1
                 try dsimp only
                 rw [erase_bind]
-                apply bind_congr
+                apply PV_W_RecursiveLaws.bind_congr
                 ·
                   exact erase_invoke ops _ _
                 · intro p

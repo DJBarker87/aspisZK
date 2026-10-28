@@ -55,25 +55,25 @@ theorem erase_program (ops : ExternalFuns)
   unfold program prover.derive_private_salts
   try dsimp only
   rw [erase_bind]
-  apply bind_congr
+  apply PV_W_RecursiveLaws.bind_congr
   ·
     exact erase_invoke ops _ _
   · intro count
     try dsimp only
     rw [erase_bind]
-    apply bind_congr
+    apply PV_W_RecursiveLaws.bind_congr
     ·
       exact erase_invoke ops _ _
     · rintro ⟨r, salts⟩
       try dsimp only
       rw [erase_bind]
-      apply bind_congr
+      apply PV_W_RecursiveLaws.bind_congr
       ·
         exact erase_invoke ops _ _
       · intro r1
         try dsimp only
         rw [erase_bind]
-        apply bind_congr
+        apply PV_W_RecursiveLaws.bind_congr
         ·
           exact erase_invoke ops _ _
         · intro cf
@@ -82,7 +82,7 @@ theorem erase_program (ops : ExternalFuns)
           | Continue unused0_0 =>
             try dsimp only
             rw [erase_bind]
-            apply bind_congr
+            apply PV_W_RecursiveLaws.bind_congr
             ·
               exact erase_invoke ops _ _
             · intro result
