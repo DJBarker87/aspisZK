@@ -51,8 +51,14 @@ for name in ['mat4_owned','external_owned']:
     end=emitted.find('/--',start)
     section=emitted[start:end if end>=0 else len(emitted)]
     assert 'next_back' not in section and 'index_mut' not in section
+ct=(R/'crates/aspis-core/src/field/ct.rs').read_text()
+_,_,reduce=body(ct,'pub fn reduce64(')
+assert compact(reduce)==compact('''let x = (x & P as u64) + (x >> 31);
+let x = (x & P as u64) + (x >> 31); subtract_p(x as u32)''')
+_,_,subtract=body(ct,'pub fn subtract_p(')
+assert compact(subtract)==compact('''let mask = 0u32.wrapping_sub((x >= P) as u32); x.wrapping_sub(P & mask)''')
 out={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),
- 'classification':'structural (K-1 substitute), external-layer range cut; native differential pending',
+ 'classification':'structural (K-1 substitute), external-layer range cut',
  'native_path':'crates/aspis-statement/src/poseidon2.rs','native_prefix_sha256':sha(native),
  'reference_path':'tools/r1-builder-reference/poseidon.rs','reference_sha256':sha(owned),
  'emission_module':'R1Z.BuilderPoseidonExtracted','emission_sha256':sha(emitted),
@@ -68,9 +74,22 @@ out={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=Tr
   {'native':'index & 3, iter_mut enumerate','owned':'lane % 4, ascending while lane<16',
    'laws':['PV_L2C_ExternalGeometry.column_mask','R1Z.PV_Src_ExternalLaneModel.model']},
   {'native':'mutates [M31;16]','owned':'returns [M31;16], assigned back at the cut','law':'complete returned array copied by value; no observer at this cut'}],
- 'complete_result_laws':['R1Z.PV_Src_ExternalModel.source','PV_L2C_HashRange.success'],
+ 'reducer_native_sha256':sha(ct),'reducer_body_sha256':sha(reduce),
+ 'complete_result_laws':['PV_L2C_NativeReduce.reference','R1Z.PV_Src_ExternalModel.source','PV_L2C_HashRange.success'],
  'scope':'raw canonical result only; no source trace/timing refinement, no whole N3 or release-row closure',
  'Kani':'no credit claimed; historical copy-dependent external gates not used',
  'D188':'mat4_owned pure array literal; external_owned indexed reads/writes; inspected emission retains explicit Array.update state threading; no mutable iterator restoration in these two owned helpers'}
+receipt=E/'decoder-probe2/receipt.json'
+if receipt.exists():
+    r=json.loads(receipt.read_text()); assert r['exit']==0
+    for name in ['main.rs','hash_reference.rs','domain_constants.rs']:
+        assert r['source_sha256'][name]==hashlib.sha256((D/name).read_bytes()).hexdigest(),name
+    log=(E/'decoder-probe2/out.log').read_text()
+    assert 'same_input_native_owned_external_hash_comparisons=512' in log
+    out['native_differential']={'receipt':str(receipt.relative_to(R)),
+      'receipt_sha256':hashlib.sha256(receipt.read_bytes()).hexdigest(),'comparisons':512,
+      'classification':'finite same-input validation; actual public hash APIs versus same native hash bodies at one owned external substitution',
+      'modes':['owner key','note commitment','nullifier','node compression']}
+else:out['native_differential']='pending; no structural credit before collection'
 (E/'hash-source-check.json').write_text(json.dumps(out,indent=2)+'\n')
 print('Checked exact native matrix/external bodies; generated one-call external substitution; retained all other hash bodies')
