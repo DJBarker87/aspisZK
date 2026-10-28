@@ -179,3 +179,58 @@ existing window coordinate arithmetic. Native harness: one selected load on
 actual proof/reborrow pointer, arbitrary symbolic selected indices and
 arbitrary exterior coordinate; no whole-proof equality or zero surroundings.
 L015 passes. The complete opening continuation remains a separate target.
+
+### Opening, keys, sort, row store, leaf and padding cut consumers
+
+All following hypotheses are prospective P6 native cuts, NOT native passes.
+They have no sorry/axiom declarations. These typed fragments do not yet form
+the requested single eight-hypothesis same-execution top theorem.
+
+- L020 `NCE_OpeningCuts.opening`: sequential byte reads consume their actual
+  predecessor's returned Carrier and reconstruct the whole selected opening
+  image with unchanged full caller. It uses the one-byte L015 cut. No native
+  whole832-byte or full-proof run is required.
+- L030 `NCE_KeyCuts.NCE_Native_KeysWrite`: one raw query read/packed U64 write
+  at arbitrary cursor; selected value is the natural256*index+position,
+  every other key and Prepared/proof/scratch/log is unchanged. Domain is
+  batch<2,kind<3,cursor<10/12,canonical physical queries. Existing NBI packing
+  identifies that raw value with the model; fill_eq/fill_values consume the
+  inherited NBE recurrence along actual poststates. Query canonicality needs
+  the named NBR_/NBS_ caller bridge; native zero allocation remains separate.
+- L022 `NCE_SortCuts.NCE_Native_KeysSort`: one compare/swap/stop at cursor<16
+  on arbitrary16 keys. Its postcondition is NBI_Sort.NativeStep, including the
+  swapped values, decreasing cursor and outside frame. Existing step_port is
+  reused. Native insertion/full-sort continuations equal the emitted model
+  by induction; no sorted-array result is an input. Separate source control/
+  allocation/iterator associations remain.
+- L033 `NCE_RowStoreCuts.NCE_Native_RowStore`: one post-hash index write plus
+  one selected32-byte digest window on arbitrary SAME Carrier and arbitrary
+  actual reply. Domain w<16. Each arbitrary j<16,c<32 obeys the selected-byte/
+  outside law, idx[w]=parent and all other idx coordinates are retained;
+  n/prepared/proof/log stay fixed and at becomes the supplied actual cursor.
+  store_eq consumes NBI's array frame; stored_bytes consumes NBY's KMX law.
+  Native request selection/reply/source assignment association is still open.
+- L025 `NCE_LeafCuts.NCE_Native_Leaf`: phase-selected one request/reply or one
+  post-hash control step. Request domain kind<3/view.length832; it retains ANY
+  raw prefix and exact source component slices/reply, paired with the existing
+  Port4B_LeafCode theorem under the runtime digest law. Post domain scratch.n<16;
+  it retains duplicate-success, duplicate-error and insertion control and full
+  caller frame via existing Port4B_LeafStep.post_exact. The SAME actual returned
+  digest is passed to post. Raw/high-level log transport and selected native
+  opening association are explicit remaining joins, not hidden assumptions.
+- L026 `NCE_PaddingCuts.NCE_Native_Padding`: one extracted iterator/predicate
+  iteration on arbitrary physical chunks and arbitrary Frame, all reached
+  chunks length8. It includes exact stop/continue and unvisited iterator state,
+  preserving Frame. run_eq consumes NBI's existing scan; first_stop consumes
+  NBI's existing first-stop theorem. No final successful scan is a hypothesis.
+  Native physical partition/count association and exact predicate lowering
+  still require concrete instances.
+- L032 `NCE_CountLevelCuts.NCE_Native_CountHeight`: one outer n=w/height+1
+  transition, unchanged returned private key/count/caller frame. Domains
+  w<=16/currentdepth<18 are derived from the actual preceding row result.
+  level_port consumes checked scan+commit cuts and NBJ/NBY count results to
+  derive the next live keys, count, order/range/size and spent invariant.
+
+Source paths are under docs/research/100bit-spend-path-20261013/lean/.
+All listed final roots pass with standard axioms only. No frozen replay,
+Rust/Kani/SBF gate or native premise removal is claimed.

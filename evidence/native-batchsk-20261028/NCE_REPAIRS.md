@@ -68,3 +68,50 @@ smaller module; key-fill imports only the byte/carrier module it actually needs.
 This is source/dependency isolation, not a resubmission of L012 or a claimed
 recovery pass. The original submitted source remains immutable in evidence.
 No old module, host launcher or shared workspace object is rewritten.
+
+L016 (isolated continuation): an extra dsimp step reports no progress. Replace
+the staged tuple rewrites with one targeted symbolic simplification using the
+same byte cut, induction hypothesis and ofFn successor law. No statement/domain
+changed and no concrete832-byte reduction is requested. L016 is excluded.
+
+L017's targeted simplification normalized commutative address additions before
+the specific byte-read law could match. Keep address normalization exclusively
+in the final pure-image goal, after consuming read/continuation equations.
+No native domain or statement changed; failed-module recovery axioms excluded.
+
+L018: explicit tuple pattern lets remained unreduced under the targeted
+rewrites. Replace them in the NEW opening continuation with explicit pair
+projections after each bind. This is the identical read order and returned
+carrier, with no changed domain/specification. No existing source changed.
+
+L019: pair projection isolation worked; the sole remaining image goal differs
+by0+x versusx. Add Nat.zero_add to the final small symbolic image rewrite.
+No read, carrier, domain or proposition changed. L019 remains excluded.
+
+Independent queue L021-L025 ran ONE admitted scope at a time. L022 sort and
+L025 leaf pass. L021: close the known nil tuple by kernel reflexivity and remove
+an arithmetic tactic after simp had closed the goal. L023: split the actual
+batch condition consistently for address bounds; expose the inherited single
+write at its selected/outside coordinates; finish the unchanged word function
+by definitional equality. L024: rename the reserved binder `at` to cursorValue.
+All three failed modules are excluded. No cut domain or property was weakened.
+
+L026 padding passes. L027 key's only remaining issue is if True not reducing
+under the selected-write rewrite; use ite_true explicitly. L028 row-store:
+state the fixed32-byte length as Nat, use getElem!_pos at the actual inner
+list, and reconstruct records by constructor congruence instead of dependent
+equality elimination. L029 count-level: expose entry's zero cursors, type
+its front/count projections directly, and rewrite the actual level result
+rather than an unused let binder. Existing count bounds suffice for the next
+spent inequality. These are own proof repairs; no native spec/domain changes.
+
+L030 key-fill and L032 count-level pass. L031: give getElem!_pos its actual
+inner byte list and coordinate explicitly; congruence already closed scalar/
+frame goals from the context, so handle only remaining goals. No statement
+or domain changed. The failed row-store module remains excluded.
+
+L033 row-store passes. L034: constructor congruence already discharged the
+named scalar frames; use only remaining goals. Expose the initialized cursor
+projection before arithmetic and use Nat.zero_add in the final constructed
+copy carrier. The source/index/window domains are unchanged; no native copy
+pass is claimed, and the failed module is excluded.

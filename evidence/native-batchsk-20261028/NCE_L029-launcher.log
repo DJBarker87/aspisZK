@@ -1,0 +1,48 @@
+{"attempt": "NCE_L029", "exit_status": 1, "wall_seconds": 2.210777816013433, "peak_rss_kib": "4419380", "swaps": "0", "print_axioms": ["'AspisR1.NCE_CountLevelCuts.advance_eq' depends on axioms: [Quot.sound]", "'AspisR1.NCE_CountLevelCuts.level_port' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCE_sources/NCE_CountLevelCuts.lean:73:8: error: Expected type must not contain free variables
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }.w ≤
+    { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }.i
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+NCE_sources/NCE_CountLevelCuts.lean:73:89: error: Type mismatch: After simplification, term
+  spent
+ has type
+  @LE.le ℕ instLENat s.count (16 * s.depth)
+but is expected to have type
+  @LE.le ℕ instLENat entry.count (16 * s.depth + entry.i)
+NCE_sources/NCE_CountLevelCuts.lean:86:38: error: Tactic `rewrite` failed: Did not find 
+...
+≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+⊢ (level scan store height s).count ≤ 16 * (level scan store height s).depth
+'AspisR1.NCE_CountLevelCuts.advance_eq' depends on axioms: [Quot.sound]
+'AspisR1.NCE_CountLevelCuts.level_port' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r754787f53cfc40c0919c83b950be72b6.scope; invocation ID: 5f5cb92f746c4b23ac0aebc2b7349427

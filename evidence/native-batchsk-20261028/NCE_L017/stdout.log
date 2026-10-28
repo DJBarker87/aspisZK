@@ -1,0 +1,65 @@
+NCE_sources/NCE_OpeningCuts.lean:25:18: error: unsolved goals
+case succ
+reader : Reader
+cut : NCE_Native_Opening reader
+i : ℕ
+ib : i < 22
+width : ℕ
+ih :
+  ∀ (s : Carrier) (offset : ℕ),
+    (↑s.proof).length = 57607 →
+      offset + width ≤ 832 →
+        readWindow reader i width offset s =
+          ok (NBJ_WindowCover.image (fun k => (↑s.proof)[10055 + 832 * i + k]!) offset width, s)
+s : Carrier
+offset : ℕ
+size : (↑s.proof).length = 57607
+span : offset + (width + 1) ≤ 832
+⊢ (do
+      let (byte, after) ← reader s (offset + (832 * i + 10055))
+      let (tail, final) ← readWindow reader i width (offset + 1) after
+      ok (byte :: tail, final)) =
+    ok
+      ((↑s.proof)[offset + (832 * i + (10055 + ↑0))]! ::
+          List.ofFn fun i_1 => (↑s.proof)[offset + (↑i_1.succ + (832 * i + 10055))]!,
+        s)
+NCE_sources/NCE_OpeningCuts.lean:26:26: warning: This simp argument is unused:
+  read_byte reader cut s i offset size ib (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵W̵i̵n̵d̵o̵w̵,̵r̵e̵a̵d̵_̵b̵y̵t̵e̵ ̵r̵e̵a̵d̵e̵r̵ ̵c̵u̵t̵[̲r̲e̲a̲d̲W̲i̲n̲d̲o̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲h̲ s i̵ ̵o̵f̵f̵s̵e̵t̵(̲o̲f̲f̲s̲e̲t̲ ̲+̲ ̲1̲)̲ size i̵b̵ ̵(by omega), b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h̵ ̵s̵ ̵(̵o̵f̵f̵s̵e̵t̵+̵1̵)̵ ̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵N̵B̵J̵_̵W̵i̵n̵d̵o̵w̵C̵o̵v̵e̵r̵.̵i̵m̵a̵g̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵o̵f̵F̵n̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]̵N̲B̲J̲_̲W̲i̲n̲d̲o̲w̲C̲o̲v̲e̲r̲.̲i̲m̲a̲g̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲o̲f̲F̲n̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCE_sources/NCE_OpeningCuts.lean:27:6: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [readWindow, ̲read_byte reader cut s i offset size ib (by omega),
+        b̵in̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h s (offset ̲+ ̲1) size (by omega), ̲NBJ_WindowCover.image,
+  ̵  ̵ ̵ ̵ ̵ ̵List.ofFn_succ, ̲Nat.add_assoc,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Nat.add_comm, ̲Nat.add_left_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCE_sources/NCE_OpeningCuts.lean:27:17: warning: This simp argument is unused:
+  ih s (offset + 1) size (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵W̵i̵n̵d̵o̵w̵,̵r̵e̵a̵d̵_̵b̵y̵t̵e̵[̲r̲e̲a̲d̲W̲i̲n̲d̲o̲w̲,̲ ̲r̲e̲a̲d̲_̲b̲y̲t̲e̲ reader cut s i offset size ib (by omega), b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h̵ ̵s̵ ̵(̵o̵f̵f̵s̵e̵t̵+̵1̵)̵ ̵s̵i̵z̵e̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵N̵B̵J̵_̵W̵i̵n̵d̵o̵w̵C̵o̵v̵e̵r̵.̵i̵m̵a̵g̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵o̵f̵F̵n̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲B̲J̲_̲W̲i̲n̲d̲o̲w̲C̲o̲v̲e̲r̲.̲i̲m̲a̲g̲e̲,̲ ̲L̲i̲s̲t̲.̲o̲f̲F̲n̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲a̲s̲s̲o̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲l̲e̲f̲t̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCE_sources/NCE_OpeningCuts.lean:28:48: warning: This simp argument is unused:
+  Nat.add_left_comm
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵a̵d̵W̵i̵n̵d̵o̵w̵,̵r̵e̵a̵d̵_̵b̵y̵t̵e̵[̲r̲e̲a̲d̲W̲i̲n̲d̲o̲w̲,̲ ̲r̲e̲a̲d̲_̲b̲y̲t̲e̲ reader cut s i offset size ib (by omega), b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵h̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲h̲ s (̵o̵f̵f̵s̵e̵t̵+̵1̵)̵(̲o̲f̲f̲s̲e̲t̲ ̲+̲ ̲1̲)̲ size (by o̵m̵e̵g̵a̵)̵,̵N̵B̵J̵_̵W̵i̵n̵d̵o̵w̵C̵o̵v̵e̵r̵.̵i̵m̵a̵g̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵o̵f̵F̵n̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵a̵s̵s̵o̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵,̵N̵a̵t̵.̵a̵d̵d̵_̵l̵e̵f̵t̵_̵c̵o̵m̵m̵]̵o̲m̲e̲g̲a̲)̲,̲ ̲N̲B̲J̲_̲W̲i̲n̲d̲o̲w̲C̲o̲v̲e̲r̲.̲i̲m̲a̲g̲e̲,̲ ̲L̲i̲s̲t̲.̲o̲f̲F̲n̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲a̲s̲s̲o̲c̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCE_OpeningCuts.read_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_OpeningCuts.opening' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

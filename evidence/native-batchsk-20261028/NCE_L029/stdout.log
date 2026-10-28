@@ -1,0 +1,339 @@
+NCE_sources/NCE_CountLevelCuts.lean:73:8: error: Expected type must not contain free variables
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }.w ≤
+    { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }.i
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+NCE_sources/NCE_CountLevelCuts.lean:73:89: error: Type mismatch: After simplification, term
+  spent
+ has type
+  @LE.le ℕ instLENat s.count (16 * s.depth)
+but is expected to have type
+  @LE.le ℕ instLENat entry.count (16 * s.depth + entry.i)
+NCE_sources/NCE_CountLevelCuts.lean:86:38: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (cells after.key 0 after.w, after.count).1
+in the target expression
+  (cells after.key 0 after.w).length = after.w
+
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+⊢ after.w ≤ 16
+NCE_sources/NCE_CountLevelCuts.lean:98:10: error: Application type mismatch: The argument
+  front
+has type
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+but is expected to have type
+  cells (level scan store height s).key 0 (level scan store height s).n = (countLevel s.n (cells s.key 0 s.n)).1
+in the application
+  And.intro front
+NCE_sources/NCE_CountLevelCuts.lean:98:53: error: Application type mismatch: The argument
+  width
+has type
+  after.w ≤ 16
+but is expected to have type
+  (level scan store height s).n ≤ 16
+in the application
+  And.intro width
+NCE_sources/NCE_CountLevelCuts.lean:98:19: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  l ≥ 0
+  0 ≤ k ≤ 17
+  0 ≤ j ≤ 16
+  0 ≤ i ≤ 16
+  i - j ≥ 0
+  0 ≤ h ≤ 16
+  g ≥ 0
+  g - i ≤ 0
+  f ≥ 0
+  f - g ≥ 0
+  f - l ≥ 1
+  0 ≤ e ≤ 17
+  16*e - f + g ≥ 0
+where
+ e := ↑s.depth
+ f := ↑after.count
+ g := ↑(countLevel s.n (cells s.key 0 s.n)).2
+ h := ↑after.w
+ i := ↑(cells s.key 0 s.n).length
+ j := ↑(countLevel s.n (cells s.key 0 s.n)).1.length
+ k := ↑after.frame.1
+ l := ↑(level scan store height s).count
+NCE_sources/NCE_CountLevelCuts.lean:98:32: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  after.frame
+in the target expression
+  (level scan store height s).depth = s.depth + 1
+
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+⊢ (level scan store height s).depth = s.depth + 1
+NCE_sources/NCE_CountLevelCuts.lean:98:46: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  after.frame
+in the target expression
+  (level scan store height s).frame = s.frame
+
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+⊢ (level scan store height s).frame = s.frame
+NCE_sources/NCE_CountLevelCuts.lean:99:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (cells after.key 0 after.w, after.count).1
+in the target expression
+  List.Pairwise (fun x1 x2 => x1 < x2) (cells (level scan store height s).key 0 (level scan store height s).n)
+
+case refine_1
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+⊢ List.Pairwise (fun x1 x2 => x1 < x2) (cells (level scan store height s).key 0 (level scan store height s).n)
+NCE_sources/NCE_CountLevelCuts.lean:104:32: error: Application type mismatch: The argument
+  kb
+has type
+  k < (level scan store height s).n
+but is expected to have type
+  k < after.w
+in the application
+  List.mem_range.mpr kb
+NCE_sources/NCE_CountLevelCuts.lean:104:35: error: unsolved goals
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+k : ℕ
+kb : k < (level scan store height s).n
+⊢ after.key k = (level scan store height s).key k
+NCE_sources/NCE_CountLevelCuts.lean:105:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  after.frame
+in the target expression
+  (level scan store height s).count ≤ 16 * (level scan store height s).depth
+
+case refine_3
+Frame : Type
+scan : ScanState (ℕ × Frame) → Bool × ScanState (ℕ × Frame)
+scanCut : NCE_Native_CountScan scan
+store : RowState (ℕ × Frame) → ℕ → RowState (ℕ × Frame)
+storeCut : NCE_Native_CountCommit store
+height : RowState (ℕ × Frame) → LevelState Frame
+heightCut : NCE_Native_CountHeight height
+s : LevelState Frame
+depth : s.depth < 18
+small : s.n ≤ 16
+order : List.Pairwise (fun x1 x2 => x1 < x2) (cells s.key 0 s.n)
+range : ∀ k < s.n, s.key k < 262144
+spent : s.count ≤ 16 * s.depth
+entry : RowState (ℕ × Frame) :=
+  { key := s.key, n := s.n, i := 0, w := 0, count := s.count, frame := (s.depth, s.frame) }
+after : RowState (ℕ × Frame) := NCE_CountRowCuts.rows scan store s.n entry
+port :
+  have out := NCE_CountRowCuts.rows scan store s.n entry;
+  (cells out.key 0 out.w, out.count) = NBJ_CountRows.nativeRows s.n entry.key entry.n entry.i entry.w entry.count ∧
+    out.frame = entry.frame
+shifted :
+  NBJ_CountRows.nativeRows s.n s.key s.n 0 0 s.count =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+result :
+  (cells after.key 0 after.w, after.count) =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count)
+front :
+  (cells after.key 0 after.w, after.count).1 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).1
+total :
+  (cells after.key 0 after.w, after.count).2 =
+    ((countLevel s.n (cells s.key 0 s.n)).1, (countLevel s.n (cells s.key 0 s.n)).2 + s.count).2
+frame : after.frame = (s.depth, s.frame)
+length : (cells after.key 0 after.w).length = after.w
+inputLength : (cells s.key 0 s.n).length = s.n
+bounds : (countLevel s.n (cells s.key 0 s.n)).1.length ≤ s.n ∧ (countLevel s.n (cells s.key 0 s.n)).2 ≤ s.n
+width : after.w ≤ 16
+next :
+  List.Pairwise (fun x1 x2 => x1 < x2) (countLevel s.n (cells s.key 0 s.n)).1 ∧
+    (countLevel s.n (cells s.key 0 s.n)).1.length ≤ 16 ∧ ∀ j ∈ (countLevel s.n (cells s.key 0 s.n)).1, j < 262144
+advanceDomain : after.frame.1 < 18
+⊢ (level scan store height s).count ≤ 16 * (level scan store height s).depth
+'AspisR1.NCE_CountLevelCuts.advance_eq' depends on axioms: [Quot.sound]
+'AspisR1.NCE_CountLevelCuts.level_port' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
