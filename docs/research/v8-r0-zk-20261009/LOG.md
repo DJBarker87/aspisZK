@@ -13886,3 +13886,16 @@ sources; IDs 41400-41499). Each re-runs the structural gate against the 1.94.1 s
 dependency sources and the native differential on a release 1.94.1 build, restores the row, keeps it
 suspended with a reason, or reports a finding. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D387 (Stream B) 2026-10-28 17:38 UTC: V228 closed on the candidate; b3p6e takes V244 first for the runjoin oracle bridge
+
+b3p6d (100 attempts: 65 passed, 35 failed; no Kani; three final audits with standard axioms) closes
+V228 (op132 relation_free_mask_cells) by a structural binding with complete ordered-value and count
+laws. V241 (op224) has its component loops proved, with conversion, native binding and installation
+remaining; V245 (op228) and V244 (op227) remain open. Merged into the prover candidate (pushed;
+shipped code still identical to the gated 82566acdfb); the branch was fast-forwarded and continues as
+b3p6e (IDs 42000-42099; no Kani) with V244 FIRST, because the runjoin semantic-oracle bridge's only
+remaining hypothesis is op227's callback law (D385), then V241 and V245, all under the deployed
+configuration of ruling (x). V228's evidence predates the deployed-configuration audit and goes into
+the re-verification queue with the other structural closures. Rows removed outright: 0. Privacy
+target not yet established.
