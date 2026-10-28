@@ -3,7 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace PV_L1_EntropyCounts
 open Aeneas Aeneas.Std Result
-open R1Z ProverRwRng ProverRwRngControl ProverRwRngOwnerEvents ProverRwRngOwnerInventory
+open R1Z ProverRwRng ProverRwRngControl ProverRwRngOwnerEvents
 open SideChannelL1AttemptRecord (Event)
 open PV_L1_EntropyProducer
 variable [ErasureFns]
