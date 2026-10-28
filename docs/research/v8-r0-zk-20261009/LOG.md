@@ -13795,3 +13795,23 @@ pv-fscan2 (IDs 54100-54199; no Kani) classifies every suspended row by cause at 
 the structural gates and native differentials of class-(B) and class-(C) rows against the deployed
 std and dependency sources (a disagreement is a stop), and records class-(A) rows without re-crediting
 them. Recount 8 waits for it. Rows removed outright: 0. Privacy target not yet established.
+
+## D382 (Stream B) 2026-10-28 16:57 UTC: runjoin36 result; two generated modules are cohort gaps; regeneration rule ((h7) step 4); runjoin37 launched
+
+runjoin36 (100 attempts: 88 passed, 12 failures retained; no Kani; three audits with standard axioms)
+resolved R1PublicCodecAgreement (EJR, under (h5')) and AspisR1WithdrawalValidation.Funs (through the
+jointly pinned importer source and the attempt-c extraction artifact hashes) under (h7). Both
+AspisR1SelectedMaskProbe modules remain cohort gaps: the compiled objects the import-union graph names
+are missing at both recorded host paths, their historical cohorts disagree with the current external
+manifest on 19 objects, and no generation hash chain exists; the semantic-oracle cone was therefore
+not imported, and nothing was substituted. It proves the complete source merge laws (array, step,
+fold, loop), worker coverage and callback laws, initialisation facts and exact flat serializer bytes.
+No row closed.
+
+(h7) step 4 resolves such a gap by regeneration: the unchanged pinned extractor runs on the frozen
+shipped source under the deployed features and profile, and the importer is re-elaborated against the
+result without any edit to its proof text; success makes the regenerated module the authority for
+that cone, and an elaboration failure is a finding. runjoin37 (IDs 54400-54499) does this for the two
+SelectedMaskProbe modules and R1Z.ProverCommitOracle55, then continues the semantic-oracle Result
+identification, interpolation, rounds, commitments and serialization, and the runtime and decoder
+installation. Rows removed outright: 0. Privacy target not yet established.
