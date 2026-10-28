@@ -6,8 +6,8 @@ P=H/'source/tools/pv-b3p6-20261028'
 if kind=='kani133':
  (H/'tmp').mkdir(exist_ok=True)
  bounds=json.loads((H/'bounds133.json').read_text())
- cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions','--unwindset',','.join(k+':'+str(v['bound']) for k,v in bounds['loops'].items())]
- sys.exit(run('kani133-05',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, default unwind32 with per-loop bounds, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+ cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--symex-cache-dereferences','--paths','lifo','--unwinding-assertions','--unwindset',','.join(k+':'+str(v['bound']) for k,v in bounds['loops'].items())]
+ sys.exit(run('kani133-06',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, default unwind32 with per-loop bounds, path-at-a-time lifo, dereference cache, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
 if kind=='loops133':
  artifacts=list((H/'target/kani').glob('**/*shipped_equals_reference133.out'))
  assert len(artifacts)==1,artifacts
