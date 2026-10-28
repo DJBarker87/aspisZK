@@ -124,3 +124,11 @@ proceeds meanwhile.
 
 **Unblocks.** The exact honest-user domain in the privacy statement; the coverage half of the
 honest-family source identification (D337).
+
+**Update (LOG D342, 2026-10-28).** The zero-change rejection is not specific to withdrawals: the
+admitted relation also contains a transfer with zero change (400 in, 400 to the recipient, 0 change),
+and native preparation rejects it with Err(Conservation) as well (codex/pv-runjoin-20261026,
+evidence/pv-runjoin28-20261027/). Option (A) therefore reads: the honest-user domain is spends whose
+preparation succeeds, which today means positive change for both transfers and withdrawals; users
+cannot spend a note's entire value in one transaction through the shipped client. The lead's
+recommendation is unchanged.
