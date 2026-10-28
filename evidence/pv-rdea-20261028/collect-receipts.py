@@ -17,3 +17,18 @@ for group,p in [('physical',D.parent/'aspis-joint-20261019/objects/R1Z'),('actua
   out.append(dict(module='R1Z.'+f.stem,path=str(f),sha256=hashlib.sha256(f.read_bytes()).hexdigest()))
  (D/f'{group}-objects-final.json').write_text(json.dumps(out,indent=2)+'\n')
 print('used IDs',len(rows),rows)
+
+# Pinned inputs and complete job-owned project dependency closure at capture time.
+for cohort,S,O in [('physical',D.parent/'aspis-joint-20261019/sources',D.parent/'aspis-joint-20261019/objects'),('actual',D/'actual-sources',D/'actual-objects')]:
+ roots=list((S/'R1Z').glob('PV_RDEA_*.lean'));seen={};pending=[('R1Z.'+x.stem) for x in roots]
+ while pending:
+  m=pending.pop()
+  if m in seen:continue
+  p=S/(m.replace('.','/')+'.lean');o=O/(m.replace('.','/')+'.olean')
+  if not p.exists():continue
+  raw=p.read_bytes();imports=[]
+  for line in raw.decode().splitlines():
+   if line.startswith('import '):imports.extend(line[7:].split())
+  seen[m]=dict(module=m,source=str(p),source_sha256=hashlib.sha256(raw).hexdigest(),object=str(o),object_sha256=hashlib.sha256(o.read_bytes()).hexdigest() if o.exists() else None,imports=imports)
+  pending.extend(x for x in imports if x.startswith('R1Z.'))
+ (D/f'{cohort}-closure-final.json').write_text(json.dumps(list(seen.values()),indent=2)+'\n')
