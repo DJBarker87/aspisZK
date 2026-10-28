@@ -84,10 +84,11 @@ for f in fields:
  if f in ['op134','op222','op117','op121']:continue
  body+=f'theorem preserved_{f} (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :\n    @ExternalFuns.{f} (Types base) (installed base ops) = @ExternalFuns.{f} (Types base) ops := rfl\n#print axioms preserved_{f}\n'
 body+='end\nend PV_B3_ClosureD336\n'
-outputs={L/'PV_B3_AuditD336.lean':audit,L/'PV_B3_ClosureD336.lean':head+body}
+final_closure=(D/'closure-flat-template-d336.lean.txt').read_text()
+outputs={L/'PV_B3_AuditD336.lean':audit,L/'PV_B3_ClosureD336.lean':final_closure}
 for p,s in outputs.items():
  if '--check' in sys.argv:assert p.read_text()==s,p
  else:p.write_text(s)
-meta=dict(roots=roots,private_cone=order,audit_declarations=list(dict.fromkeys(names)),preserved_combined_fields=len(fields)-4,XR_imports=False,targets={p.name:hashlib.sha256(s.encode()).hexdigest()for p,s in outputs.items()})
+meta=dict(roots=roots,private_cone=order,audit_declarations=list(dict.fromkeys(names)),preserved_combined_fields=len(fields)-4,flat_bridge='PV_B3_FlatInstallD336',failed_nested_replay=40598,focused_replay=40599,XR_imports=False,targets={p.name:hashlib.sha256(s.encode()).hexdigest()for p,s in outputs.items()})
 if '--check' not in sys.argv:(D/'d336-closure-manifest.json').write_text(json.dumps(meta,indent=2)+'\n')
 print(json.dumps(dict(modules=len(order),axiom_queries=len(set(names)),preserved_fields=len(fields)-4)))

@@ -21,7 +21,7 @@ for a in T['used_ids']:
  records.append(r)
 charged=[r for r in records if r['charged']];assert len(charged)==T['lean_attempts']
 accepted=[r for r in charged if r['credited']]
-required=['PV_B3_Close134','PV_B3_Install222','PV_B3_Install117','PV_B3_Install121','PV_B3_AuditD336','PV_B3_ClosureD336']
+required=['PV_B3_Close134','PV_B3_Install222','PV_B3_Install117','PV_B3_Install121','PV_B3_AuditD336','PV_B3_FlatInstallD336','PV_B3_ClosureD336']
 latest={m:next(r for r in reversed(accepted)if r['module']==m)for m in required}
 assert latest['PV_B3_AuditD336']['attempt']==40597
 assert latest['PV_B3_ClosureD336']['attempt']in [40598,40599]
