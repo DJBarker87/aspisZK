@@ -37,7 +37,17 @@ theorem next_source (n : Usize) : next n =
     have hs : 1 ≤ n.val := by omega
     rw [if_pos hb, dif_pos hs, if_pos hr]
     simp only [bind_tc_ok]
-    congr 4 <;> scalar_tac
+    congr 4
+    · simp only [UScalar.bv_toNat]
+      change n.val - 1 = (2 ^ UScalarTy.Usize.numBits - 1 + n.val) % 2 ^ UScalarTy.Usize.numBits
+      have hnsize := n.hSize
+      change n.val < 2 ^ UScalarTy.Usize.numBits at hnsize
+      rw [show 2 ^ UScalarTy.Usize.numBits - 1 + n.val =
+        (n.val - 1) + 2 ^ UScalarTy.Usize.numBits from by omega,
+        Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
+    · apply UScalar.eq_of_val_eq
+      change n.val - 1 = (Usize.wrapping_sub n 1#usize).val
+      exact (sub_value n 1#usize hs).symm
   · have hr : ¬ 0#usize < n := hn
     have hb : ¬ decide (0 < n.val) = true := by simpa only [decide_eq_true_eq] using hn
     rw [if_neg hb, if_neg hr]
