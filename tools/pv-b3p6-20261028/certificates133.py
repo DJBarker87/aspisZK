@@ -33,7 +33,7 @@ for i,chunk in enumerate(outs):
  hi=outs[i+1][0] if i+1<len(outs) else 1024
  s+=f'theorem block{i} : Block {chunk} {los[i]} {hi} := by decide\n#print axioms block{i}\n'
 for i in range(len(outs)-1,-1,-1):
- suffix=' ++ '.join(str(c) for c in outs[i:])
+ suffix=v['rightappend']([str(c) for c in outs[i:]])
  s+=f'theorem tail{i} : Block ({suffix}) {los[i]} 1024 := '
  if i==len(outs)-1:s+=f'block{i}\n'
  else:s+=f'join _ _ _ _ _ block{i} tail{i+1} (by decide) (by decide)\n'

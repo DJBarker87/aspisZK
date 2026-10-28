@@ -108,12 +108,14 @@ for i,chunk in enumerate(chunks):
  eps=[v for _,p,c in chunk for v in [p,c]]
  s+=f'def chunk{i} : List Link := {lit(chunk)}\ntheorem chunk{i}_eval : endpoints chunk{i} = {eps} := rfl\n#print axioms chunk{i}_eval\n'
 eps=[v for _,p,c in forest for v in [p,c]];expected=sorted(set(eps));assert len(expected)==214
-s+='def input : List Nat := '+ ' ++ '.join(str(eps[i:i+16]) for i in range(0,len(eps),16))+'\n'
-s+='def expected : List Nat := '+ ' ++ '.join(str(expected[i:i+16]) for i in range(0,len(expected),16))+'\n'
+def rightappend(parts):
+ return parts[0] if len(parts)==1 else parts[0]+' ++ ('+rightappend(parts[1:])+')'
+s+='def input : List Nat := '+rightappend([str(eps[i:i+16]) for i in range(0,len(eps),16)])+'\n'
+s+='def expected : List Nat := '+ rightappend([str(expected[i:i+16]) for i in range(0,len(expected),16)])+'\n'
 s+='theorem endpoints_eval : endpoints PV_B3P_ForestValues133.fixed = input := by\n'
 s+='  have split : PV_B3P_ForestValues133.fixed = '+' ++ '.join(f'chunk{i}' for i in range(len(chunks)))+' := rfl\n'
 s+='  rw [split]\n  simp only [endpoints,List.flatMap_append]\n  change '+ ' ++ '.join(f'endpoints chunk{i}' for i in range(len(chunks)))+' = input\n'
-s+='  rw ['+','.join(f'chunk{i}_eval' for i in range(len(chunks)))+']\n  rfl\n'
+s+='  rw ['+','.join(f'chunk{i}_eval' for i in range(len(chunks)))+']\n  simp only [List.append_assoc]\n  rfl\n'
 s+='''end PV_B3P_Sorted133
 '''
 p=D/f'{ns}.lean'
