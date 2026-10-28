@@ -17,7 +17,8 @@ theorem values {α : Type} (a : Array α 8#usize) : readEight a = a.val := by
   · simp only [readEight,List.length_cons,List.length_nil,a.property]
     rfl
   · intro i hi hj
-    have hb : i < 8 := by simpa only [a.property] using hj
+    have h8 : (8#usize).val = 8 := rfl
+    have hb : i < 8 := by simpa only [a.property,h8] using hj
     have hc : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 ∨ i = 4 ∨ i = 5 ∨ i = 6 ∨ i = 7 := by omega
     rcases hc with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl <;> rfl
 
