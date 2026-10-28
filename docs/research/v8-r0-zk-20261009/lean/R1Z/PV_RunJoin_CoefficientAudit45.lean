@@ -1,0 +1,15 @@
+import R1Z.PV_RunJoin_CoefficientsCaller45
+#print R1Z.PV_RunJoin_CoefficientInstalled45.source
+#print R1Z.PV_RunJoin_CoefficientsCell45.step
+#print R1Z.PV_RunJoin_CoefficientsCaller45.complete
+#print axioms R1Z.PV_RunJoin_CoefficientInstalled45.guards
+#print axioms R1Z.PV_RunJoin_CoefficientInstalled45.source
+#print axioms R1Z.PV_RunJoin_CoefficientInstalled45.complete
+#print axioms R1Z.PV_RunJoin_CoefficientsThread45.stop
+#print axioms R1Z.PV_RunJoin_CoefficientsThread45.one_step
+#print axioms R1Z.PV_RunJoin_CoefficientsThread45.complete
+#print axioms R1Z.PV_RunJoin_CoefficientsCell45.step
+#print axioms R1Z.PV_RunJoin_CoefficientsVector45.payload_length
+#print axioms R1Z.PV_RunJoin_CoefficientsVector45.installed
+#print axioms R1Z.PV_RunJoin_CoefficientsVector45.complete
+#print axioms R1Z.PV_RunJoin_CoefficientsCaller45.complete
