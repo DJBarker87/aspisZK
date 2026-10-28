@@ -26,22 +26,22 @@ theorem materialize_complete {S : Type} (allocate : Request → S → Result (Op
 
 def boxed {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
-    (alpha : Array PV_B2_C_WeightsNative.K 10#usize)
-    (z : Array PV_B2_C_WeightsNative.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
+    (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
+    (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
   let decision ← allocate PV_RDB2C_V259.request world.allocator
   PV_RDB2C_V259.copied (fun _ _ => decision) v alpha z world
 
 def boxedReference {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
-    (alpha : Array PV_B2_C_WeightsNative.K 10#usize)
-    (z : Array PV_B2_C_WeightsNative.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
+    (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
+    (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) := do
   let decision ← allocate PV_RDB2C_V259.request world.allocator
   PV_RDB2C_V259.original (fun _ _ => decision) v alpha z world
 
 theorem boxed_complete {S : Type} (allocate : Request → S → Result (Option Nat × S))
     (v : PV_B2_C_WeightsNative.transport.Variant)
-    (alpha : Array PV_B2_C_WeightsNative.K 10#usize)
-    (z : Array PV_B2_C_WeightsNative.Point 2#usize) (world : PV_RDB2C_V259.World S) :
+    (alpha : Array PV_B2_C_ConstructorRows.K 10#usize)
+    (z : Array PV_B2_C_ConstructorRows.Point 2#usize) (world : PV_RDB2C_V259.World S) :
     boxed allocate v alpha z world=boxedReference allocate v alpha z world := by
   unfold boxed boxedReference
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr

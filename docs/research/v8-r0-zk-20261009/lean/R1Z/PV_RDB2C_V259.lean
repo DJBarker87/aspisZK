@@ -1,7 +1,7 @@
 import R1Z.PV_RDB2C_PV_B2_C_ConstructorSuccess
 import R1Z.PV_RDB2C_Box
 namespace R1Z.PV_RDB2C_V259
-open Aeneas Aeneas.Std Result PV_B2_C_WeightsNative
+open Aeneas Aeneas.Std Result PV_B2_C_WeightsNative PV_B2_C_ConstructorRows
 open PV_RDB2C_PublicRequests PV_RDB2C_Box
 abbrev Weight := host_weights.Weights
 abbrev World (S : Type) := PV_RDB2C_Box.World Weight S
