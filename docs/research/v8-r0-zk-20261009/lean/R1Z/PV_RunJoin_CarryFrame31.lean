@@ -34,15 +34,15 @@ theorem frame [ExternalLinear] (index : U64) (roots : Roots)
         rw [BuilderRecordsArray.update_gen frontier level _ (by simpa using hl)] at h
         simp only [bind_tc_ok] at h
         have hnxt := BuilderRecordsArray.next_val level (by omega)
-        have rec := ih (20-(Usize.wrapping_add level 1#usize).val) (by omega)
+        have nextFrame := ih (20-(Usize.wrapping_add level 1#usize).val) (by omega)
           _ parent _ (by omega) h rfl
-        refine ⟨by omega,rec.2.1,?_⟩
+        refine ⟨by omega,nextFrame.2.1,?_⟩
         intro j hj
-        rw [rec.2.2 j hj,BuilderRecordsArray.set_get _ _ _ _ (by simpa using hl),if_neg (by omega)]
-      · cases Result.ok.inj h
+        rw [nextFrame.2.2 j hj,BuilderRecordsArray.set_get _ _ _ _ (by simpa using hl),if_neg (by omega)]
+      · obtain ⟨rfl,rfl,rfl⟩ := Prod.mk.inj (Result.ok.inj h)
         exact ⟨le_rfl,bound,fun _ _ => rfl⟩
     · rw [if_neg active] at h
-      cases Result.ok.inj h
+      obtain ⟨rfl,rfl,rfl⟩ := Prod.mk.inj (Result.ok.inj h)
       exact ⟨le_rfl,bound,fun _ _ => rfl⟩
 #print axioms frame
 end R1Z.PV_RunJoin_CarryFrame31

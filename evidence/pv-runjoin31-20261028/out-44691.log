@@ -1,0 +1,133 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryFrame31.lean:29:6: error: unsolved goals
+case rec
+inst✝ : ExternalLinear
+index : U64
+roots : Roots
+final : Frontier
+result : Digest
+stop : Usize
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (frontier : Frontier) (carry : Digest) (level : Usize),
+      ↑level ≤ 20 →
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots frontier carry level =
+            ok (final, result, stop) →
+          20 - ↑level = m → ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+frontier : Frontier
+carry : Digest
+level : Usize
+bound : ↑level ≤ 20
+hn : 20 - ↑level = n
+active : level < 20#usize
+h✝ : BuilderStdModels.shift64 index level &&& 1#u64 = 1#u64
+sibling : Std.Array aspis_core.field.M31 8#usize
+hs : Array.index_usize frontier level = ok sibling
+parent : Std.Array aspis_core.field.M31 8#usize
+hp : format.pool_v1_tree_parent sibling carry = ok parent
+hl : ↑level < 20
+h :
+  incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots
+      (Std.Array.set frontier level (↑roots)[↑level]!) parent (level.wrapping_add 1#usize) =
+    ok (final, result, stop)
+hnxt : ↑(level.wrapping_add 1#usize) = ↑level + 1
+⊢ ?m.289
+
+case pos.isTrue
+inst✝ : ExternalLinear
+index : U64
+roots : Roots
+final : Frontier
+result : Digest
+stop : Usize
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (frontier : Frontier) (carry : Digest) (level : Usize),
+      ↑level ≤ 20 →
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots frontier carry level =
+            ok (final, result, stop) →
+          20 - ↑level = m → ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+frontier : Frontier
+carry : Digest
+level : Usize
+bound : ↑level ≤ 20
+hn : 20 - ↑level = n
+active : level < 20#usize
+h✝ : BuilderStdModels.shift64 index level &&& 1#u64 = 1#u64
+sibling : Std.Array aspis_core.field.M31 8#usize
+hs : Array.index_usize frontier level = ok sibling
+parent : Std.Array aspis_core.field.M31 8#usize
+hp : format.pool_v1_tree_parent sibling carry = ok parent
+hl : ↑level < 20
+h :
+  incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots
+      (Std.Array.set frontier level (↑roots)[↑level]!) parent (level.wrapping_add 1#usize) =
+    ok (final, result, stop)
+hnxt : ↑(level.wrapping_add 1#usize) = ↑level + 1
+rec : ?m.289
+⊢ ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryFrame31.lean:26:4: error: unsolved goals
+case pos.isFalse
+inst✝ : ExternalLinear
+index : U64
+roots : Roots
+final : Frontier
+result : Digest
+stop : Usize
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (frontier : Frontier) (carry : Digest) (level : Usize),
+      ↑level ≤ 20 →
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots frontier carry level =
+            ok (final, result, stop) →
+          20 - ↑level = m → ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+frontier : Frontier
+carry : Digest
+level : Usize
+bound : ↑level ≤ 20
+hn : 20 - ↑level = n
+active : level < 20#usize
+h✝ : ¬BuilderStdModels.shift64 index level &&& 1#u64 = 1#u64
+h : ok (frontier, carry, level) = ok (final, result, stop)
+⊢ ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryFrame31.lean:22:11: error: unsolved goals
+case neg
+inst✝ : ExternalLinear
+index : U64
+roots : Roots
+final : Frontier
+result : Digest
+stop : Usize
+n : ℕ
+ih :
+  ∀ m < n,
+    ∀ (frontier : Frontier) (carry : Digest) (level : Usize),
+      ↑level ≤ 20 →
+        incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots frontier carry level =
+            ok (final, result, stop) →
+          20 - ↑level = m → ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+frontier : Frontier
+carry : Digest
+level : Usize
+bound : ↑level ≤ 20
+h :
+  (if level < 20#usize then do
+      let i ← lift (BuilderStdModels.shift64 index level)
+      let i1 ← lift (i &&& 1#u64)
+      if i1 = 1#u64 then do
+          let a1 ← Array.index_usize frontier level
+          let carry1 ← format.pool_v1_tree_parent a1 carry
+          let a2 ← Array.index_usize roots level
+          let a3 ← Array.update frontier level a2
+          let carry_level1 ← lift (level.wrapping_add 1#usize)
+          incremental_merkle.tree_reference.OwnedTree.append_one_loop index roots a3 carry1 carry_level1
+        else ok (frontier, carry, level)
+    else ok (frontier, carry, level)) =
+    ok (final, result, stop)
+hn : 20 - ↑level = n
+active : ¬level < 20#usize
+⊢ ↑level ≤ ↑stop ∧ ↑stop ≤ 20 ∧ ∀ (j : Fin 20), ↑stop ≤ ↑j → (↑final)[↑j]! = (↑frontier)[↑j]!
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CarryFrame31.lean:37:17: error: unexpected token ':='; expected command
+'R1Z.PV_RunJoin_CarryFrame31.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
