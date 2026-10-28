@@ -43,7 +43,6 @@ theorem complete (p : Array K 10#usize) (n : Nat) (out : Matrix)
     rw [PV_RunJoin_WeightResult46.shared_bind]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro t _
-    dsimp only
     rw [PV_RunJoin_WeightMap46.index]
     symm
     apply map_bind toQ (amap (amap toQ))
