@@ -1,0 +1,13 @@
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:8:7: error(lean.unknownIdentifier): Unknown constant `alloc.vec.Vec.extend_from_slice_loop`
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+'R1Z.PV_RDEAC_AppendSimulation.empty_represents' depends on axioms: [propext]

@@ -1,0 +1,14 @@
+Expected time: optimized fixture compilation then finite allocation/deallocation validation.
+
+
+thread 'main' (3127748) panicked at /home/dombarker/project-offloads/codex-pv-rdeac-20261028/owned-join.rs:28:18:
+assertion `left == right` failed
+  left: [(1, 0, 4), (2, 4, 8), (2, 8, 74), (3, 69, 0)]
+ right: [(1, 0, 4), (2, 4, 74), (3, 69, 0)]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-pv-rdeac-20261028/native-owned.py", line 8, in <module>
+    p=subprocess.run([str(N/'owned-join')],capture_output=True,text=True);print(p.stdout,flush=True);print(p.stderr,flush=True);assert p.returncode==0,p
+                                                                                                                                       ^^^^^^^^^^^^^^^
+AssertionError: CompletedProcess(args=['/home/dombarker/project-offloads/codex-pv-rdeac-20261028/native01/owned-join'], returncode=101, stdout='', stderr="\nthread 'main' (3127748) panicked at /home/dombarker/project-offloads/codex-pv-rdeac-20261028/owned-join.rs:28:18:\nassertion `left == right` failed\n  left: [(1, 0, 4), (2, 4, 8), (2, 8, 74), (3, 69, 0)]\n right: [(1, 0, 4), (2, 4, 74), (3, 69, 0)]\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n")

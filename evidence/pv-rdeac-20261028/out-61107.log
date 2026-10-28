@@ -1,0 +1,11 @@
+def Aeneas.Std.List.clone.{u_1} : {α : Type u_1} →
+  (α → Aeneas.Std.Result α) → (l : List α) → Aeneas.Std.Result { l' // l'.length = l.length } :=
+fun {α} clone l =>
+  match h : List.mapM clone l with
+  | Aeneas.Std.Result.ok v => Aeneas.Std.Result.ok ⟨v, ⋯⟩
+  | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+  | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+'R1Z.PV_RDEAC_AppendSimulation.map_ok' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.clone_bytes' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.callback_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.empty_represents' depends on axioms: [propext]
