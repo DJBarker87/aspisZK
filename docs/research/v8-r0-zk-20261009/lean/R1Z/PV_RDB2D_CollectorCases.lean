@@ -7,7 +7,8 @@ set_option autoImplicit false
 def afterRequest {S F : Type} (r : Request) (p : Option Nat) (s : S)
     (state : State S F) : State S F :=
   let w := attempted r p s state.resource
-  {state with resource := match p with | none => w | some a => succeeded r a w,
+  {state with
+    resource := match p with | none => w | some a => succeeded r a w
     trace := state.trace++[publicRequest r]}
 
 theorem success {T S F : Type} (allocate : Allocator S) (handler : Handler S F)
@@ -64,7 +65,9 @@ theorem null_keeps_allocated_storage {S F : Type} (r : Request) (s : S) (state :
   simp only [afterRequest,attempted,and_self]
 
 theorem stored_prefix {S F : Type} (a : Nat) (cells : Cells) (state : State S F) :
-    (store a cells state).initialized a=some cells := by simp only [store,ite_true]
+    (store a cells state).initialized a=some cells := by
+  change (if a=a then some cells else state.initialized a)=some cells
+  exact if_pos rfl
 
 #print axioms success
 #print axioms null
