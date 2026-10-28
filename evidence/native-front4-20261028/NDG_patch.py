@@ -11,7 +11,7 @@ def files():
  s='#![cfg_attr(kani, feature(allocator_api))]\n'+b+'\n#[cfg(kani)]\nmod NDG_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n'
  put(n,s,b)
  n='programs/r1-cost-probe/src/r1_pool_adapter.rs';b=base(n);s=b
- for name,ens in [('pool_program_id','*r == NDG_native::reference::pool_id_ref()'),('registry_program_id','*r == NDG_native::reference::registry_id_ref()'),('readonly_buffer_meta_ok','*r == if NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable) {Ok(())} else {Err(ProgramError::InvalidAccountData)}'),('readonly_meta_ok','*r == if NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable) {Ok(())} else {Err(ProgramError::InvalidAccountData)}')]:
+ for name,ens in [('pool_program_id','*r == NDG_native::reference::pool_id_ref()'),('registry_program_id','*r == NDG_native::reference::registry_id_ref()'),('readonly_buffer_meta_ok','match r {Ok(())=>NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable),Err(ProgramError::InvalidAccountData)=>!NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable),_=>false}'),('readonly_meta_ok','match r {Ok(())=>NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable),Err(ProgramError::InvalidAccountData)=>!NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable),_=>false}')]:
   s=s.replace('fn '+name+'(',f'#[cfg_attr(kani, kani::ensures(|r| ({ens}) != cfg!(NDG_invert_{name}))) ]\nfn '+name+'(',1)
  s+='\n#[cfg(kani)]\n#[path="NDG_native.rs"]\nmod NDG_native;\n';put(n,s,b)
  n='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs';b=base(n);s=b

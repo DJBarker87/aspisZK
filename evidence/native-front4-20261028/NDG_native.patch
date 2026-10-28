@@ -32,7 +32,7 @@
      proof_length: usize,
  }
  
-+#[cfg_attr(kani, kani::ensures(|r| (*r == if NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable) {Ok(())} else {Err(ProgramError::InvalidAccountData)}) != cfg!(NDG_invert_readonly_meta_ok))) ]
++#[cfg_attr(kani, kani::ensures(|r| (match r {Ok(())=>NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable),Err(ProgramError::InvalidAccountData)=>!NDG_native::reference::readonly_ref(owner!=expected,is_signer,is_writable,executable),_=>false}) != true)) ]
  fn readonly_meta_ok(
      owner: &Pubkey,
      expected: &Pubkey,
@@ -40,7 +40,7 @@
  #[path = "readonly_meta_tests.rs"]
  mod readonly_meta_tests;
  
-+#[cfg_attr(kani, kani::ensures(|r| (*r == if NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable) {Ok(())} else {Err(ProgramError::InvalidAccountData)}) != true)) ]
++#[cfg_attr(kani, kani::ensures(|r| (match r {Ok(())=>NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable),Err(ProgramError::InvalidAccountData)=>!NDG_native::reference::readonly_buffer_ref(is_signer,is_writable,executable),_=>false}) != cfg!(NDG_invert_readonly_buffer_meta_ok))) ]
  fn readonly_buffer_meta_ok(
      is_signer: bool,
      is_writable: bool,

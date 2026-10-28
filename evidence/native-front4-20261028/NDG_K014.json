@@ -1,0 +1,69 @@
+{
+  "attempt": "NDG_K014",
+  "kind": "kani",
+  "module": "r1_pool_adapter::NDG_native::buffer_contract",
+  "sources": [
+    "NDG_gate.py",
+    "NDG_graph.py",
+    "NDG_SOURCE_PINS.json",
+    "NDG_src/programs/r1-cost-probe/src/lib.rs",
+    "NDG_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NDG_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "NDG_src/programs/r1-cost-probe/src/NDG_reference.rs",
+    "NDG_src/programs/r1-cost-probe/src/NDG_native.rs",
+    "NDG_src/programs/r1-cost-probe/src/NDG_owned.rs",
+    "NDG_src/Cargo.lock",
+    "NDG_src/Cargo.toml"
+  ],
+  "command": [
+    "python3",
+    "NDG_gate.py",
+    "NDG_K014.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::NDG_native::buffer_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_objects:/home/dombarker/project-offloads/codex-cx-front4-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 240,
+  "source_revision": "2927700fa8254c80b802a0e6c3b4653438b4cf3b",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDG_SOURCE.json",
+    "library_pinset": "NDG_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

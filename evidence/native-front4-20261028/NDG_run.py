@@ -33,6 +33,8 @@ files={'NDG_gate.py':(E/'NDG_gate.py').read_text(),'NDG_graph.py':(E/'NDG_graph.
 if kind=='kani':
  from NDG_patch import files as patch_files
  for n,s in patch_files().items():files['NDG_src/'+n]=s
+ (E/a).mkdir(exist_ok=True)
+ (E/a/'NDG_harness.patch').write_text((E/'NDG_native.patch').read_text())
  sources=['NDG_gate.py','NDG_graph.py','NDG_SOURCE_PINS.json']+list(n for n in files if n.endswith('.rs'))+['NDG_src/Cargo.lock','NDG_src/Cargo.toml']
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDG_src/programs/r1-cost-probe/Cargo.toml','--target-dir',B+'/NDG_target','--lib','--features','pool-adapter,private-leaf-salts','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NDG_gate.py',a+'.json']
@@ -48,18 +50,19 @@ cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,nativ
 if kind=='lean':
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDG_SOURCE.json').read_text())['library'].items()}
  cfg['deps_fingerprint']['coherent_object_manifest_sha256']=__import__('hashlib').sha256((E/'NDG_COHERENT_OBJECT_PINS.json').read_bytes()).hexdigest()
-  pins=json.loads((E/'NDG_COHERENT_OBJECT_PINS.json').read_text())
-  for n in ['AdapterRwModel','AdapterRwTypes','AdapterRwScalar']:
-   for root in ['/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/','/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/']:
-    p=root+n+'.olean'
-    if p in pins:cfg['deps_fingerprint']['selected_objects'][p]=pins[p];break
-  if target=='NDG_Audit':
+ pins=json.loads((E/'NDG_COHERENT_OBJECT_PINS.json').read_text())
+ for n in ['AdapterRwModel','AdapterRwTypes','AdapterRwScalar']:
+  for root in ['/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/','/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects/']:
+   p=root+n+'.olean'
+   if p in pins:cfg['deps_fingerprint']['selected_objects'][p]=pins[p];break
+ if target=='NDG_Audit':
   cfg['deps_fingerprint']['selected_objects']=json.loads((E/'NDG_AUDIT_PINS.json').read_text())['selected_objects']
   files['NDG_AUDIT_PINS.json']=(E/'NDG_AUDIT_PINS.json').read_text()
   sources.append('NDG_AUDIT_PINS.json')
 files[a+'.json']=json.dumps(cfg,indent=2)
 # Upload after admission; snapshots permit exact local reconstruction.
 for n,s in files.items():
+ if n.startswith('NDG_src/'):continue
  p=E/a/'sources'/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 payload=json.dumps(files)
 code=f'''from pathlib import Path
