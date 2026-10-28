@@ -28,7 +28,11 @@ theorem extend_value (inst : core.clone.Clone U8) (v : alloc.vec.Vec U8) (s : Sl
   · contradiction
 
 theorem mapM_id (xs : List U8) : List.mapM (fun b : U8 => Result.ok b) xs = .ok xs := by
-  simp
+  induction xs with
+  | nil => rfl
+  | cons x xs ih =>
+    rw [List.mapM_cons,ih]
+    rfl
 
 set_option backward.isDefEq.respectTransparency false in
 theorem u8_clone (s : Slice U8) : Slice.clone core.clone.CloneU8.clone s = .ok s := by
