@@ -49,7 +49,7 @@ import R1Z.PV_RunJoin_CausalHeadline
 #print R1Z.PV_RunJoin_CommonSample32.complete_view
 #print R1Z.PV_RunJoin_CommonObserver32.complete_pair
 #print R1Z.PV_RunJoin_TrustItems
-#print R1Z.PV_RunJoin_Premises
+#print R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises
 #print axioms R1Z.PV_RJDec_RuntimeFields.execute_independent
 #print axioms R1Z.PV_RJDec_RuntimeFields.oracle_underdetermined
 #print axioms R1Z.PV_RJDec_TotalExtension.cases_iff
