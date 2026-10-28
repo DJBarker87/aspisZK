@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,hashlib,re,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2c-20261028';D='/home/dombarker/project-offloads/codex-pv-rdb2c-20261028';H='dombarker@100.108.41.90'
-n=int(sys.argv[1]);module=sys.argv[2];assert n==60593 and module=='AspisR72Sampler/Types'
+n=int(sys.argv[1]);module=sys.argv[2];assert n==60594 and module=='AspisR72Sampler/Types'
 assert n<60597 or any(x in module for x in ['Audit','Replay'])
 p=R/'docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RDB2C_R72Authority.lean';raw=p.read_bytes()
 assert hashlib.sha256(raw).hexdigest()=='cf419274de35c08c3588a641745fc9f120f59d5205d82f026fb9faee96622b8c'

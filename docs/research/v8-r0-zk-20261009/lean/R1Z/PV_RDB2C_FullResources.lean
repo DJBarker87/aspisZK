@@ -93,7 +93,7 @@ theorem failure_has_no_initialization {T S : Type}
     (h : allocate request world.allocator=(none,state)) :
     (lowered allocate request value world).2.objects=world.objects ∧
     (lowered allocate request value world).2.live=world.live := by
-  simp only [lowered,h]
+  simp [lowered,h]
 
 #print axioms initialized_fresh_aligned
 #print axioms failure_has_no_initialization
