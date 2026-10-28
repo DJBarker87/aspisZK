@@ -26,7 +26,11 @@ for m in IMPORTS:
  deps[m]={'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}
 print(json.dumps(deps))
 '''.replace('IMPORTS',repr(re.findall(r'^import (\S+)',s.decode(),re.M)))
-r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stdout+r.stderr
+r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
+(E/f'{n}-metadata-ssh{retry}.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr,compiler_submitted=False),indent=2)+'\n')
+if r.returncode==255:
+ print('PRE-LAUNCH METADATA TRANSPORT FAILURE; compiler not submitted; rule(p) recovery applies');sys.exit(255)
+assert r.returncode==0,r.stdout+r.stderr
 meta['imports']=json.loads(r.stdout);meta['deps_fingerprint']=hashlib.sha256(r.stdout.encode()).hexdigest()
 meta['environment_generation']='private pinned external overlay with same-authority IR companions'
 meta['external_manifest_sha256']=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest()
