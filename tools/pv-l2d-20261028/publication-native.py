@@ -19,7 +19,7 @@ flat=lambda s:re.sub(r'\s+','',s)
 assert flat(body)==flat(expected),'review changed body; no silent template refresh'
 ins=body.replace('fn publication_indices','fn instrumented',1).replace('->Vec<u32>','->(Vec<u32>,Vec<(u8,usize)>)',1)
 ins=ins.replace('let mut out=','let mut trace=vec![];let mut out=',1)
-changes=[('i<end','obs(&mut trace,0,i<end)'),('if folded','if obs(&mut trace,1,folded)'),('queries[i]','queries[ix(&mut trace,2,i)]'),('at<out.len()','obs(&mut trace,3,at<out.len())'),('out[at]<value','obs(&mut trace,4,out[ix(&mut trace,5,at)]<value)'),('at==out.len()','obs(&mut trace,6,at==out.len())'),('out[at]!=value','obs(&mut trace,7,out[ix(&mut trace,8,at)]!=value)'),('out.insert(at,value)','out.insert(ix(&mut trace,9,at),value)')]
+changes=[('i<end','obs(0,i<end,&mut trace)'),('if folded','if obs(1,folded,&mut trace)'),('queries[i]','queries[ix(2,i,&mut trace)]'),('at<out.len()','obs(3,at<out.len(),&mut trace)'),('out[at]<value','obs(4,out[ix(5,at,&mut trace)]<value,&mut trace)'),('at==out.len()','obs(6,at==out.len(),&mut trace)'),('out[at]!=value','obs(7,out[ix(8,at,&mut trace)]!=value,&mut trace)'),('out.insert(at,value)','out.insert(ix(9,at,&mut trace),value)')]
 for x,y in changes:
  assert x in ins,x
  ins=ins.replace(x,y)
@@ -32,8 +32,8 @@ back=back.replace('let mut trace=vec![];','').replace('fn instrumented','fn publ
 back=back.replace('(out,trace)\n}','out\n}')
 assert flat(back)==flat(body)
 raw=body+'\n'+r'''
-fn obs(t:&mut Vec<(u8,usize)>,tag:u8,b:bool)->bool {t.push((tag,b as usize));b}
-fn ix(t:&mut Vec<(u8,usize)>,tag:u8,i:usize)->usize {t.push((tag,i));i}
+fn obs(tag:u8,b:bool,t:&mut Vec<(u8,usize)>)->bool {t.push((tag,b as usize));b}
+fn ix(tag:u8,i:usize,t:&mut Vec<(u8,usize)>)->usize {t.push((tag,i));i}
 '''+ins+r'''
 fn check(q:&[u32;22],begin:usize,end:usize,folded:bool)->usize {
  let native=publication_indices(q,begin,end,folded);

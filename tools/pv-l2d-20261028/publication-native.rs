@@ -11,16 +11,16 @@ fn publication_indices(queries:&[u32;22],begin:usize,end:usize,folded:bool)->Vec
     out
 }
 
-fn obs(t:&mut Vec<(u8,usize)>,tag:u8,b:bool)->bool {t.push((tag,b as usize));b}
-fn ix(t:&mut Vec<(u8,usize)>,tag:u8,i:usize)->usize {t.push((tag,i));i}
+fn obs(tag:u8,b:bool,t:&mut Vec<(u8,usize)>)->bool {t.push((tag,b as usize));b}
+fn ix(tag:u8,i:usize,t:&mut Vec<(u8,usize)>)->usize {t.push((tag,i));i}
 fn instrumented(queries:&[u32;22],begin:usize,end:usize,folded:bool)->(Vec<u32>,Vec<(u8,usize)>) {
     let mut trace=vec![];let mut out=Vec::with_capacity(end-begin);
     let mut i=begin;
-    while obs(&mut trace,0,i<end) {
-        let value=if obs(&mut trace,1,folded) {queries[ix(&mut trace,2,i)]/4} else {queries[ix(&mut trace,2,i)]};
+    while obs(0,i<end,&mut trace) {
+        let value=if obs(1,folded,&mut trace) {queries[ix(2,i,&mut trace)]/4} else {queries[ix(2,i,&mut trace)]};
         let mut at=0;
-        while obs(&mut trace,3,at<out.len()) && obs(&mut trace,4,out[ix(&mut trace,5,at)]<value) {at+=1;}
-        if obs(&mut trace,6,at==out.len()) || obs(&mut trace,7,out[ix(&mut trace,8,at)]!=value) {out.insert(ix(&mut trace,9,at),value);}
+        while obs(3,at<out.len(),&mut trace) && obs(4,out[ix(5,at,&mut trace)]<value,&mut trace) {at+=1;}
+        if obs(6,at==out.len(),&mut trace) || obs(7,out[ix(8,at,&mut trace)]!=value,&mut trace) {out.insert(ix(9,at,&mut trace),value);}
         i+=1;
     }
     (out,trace)
