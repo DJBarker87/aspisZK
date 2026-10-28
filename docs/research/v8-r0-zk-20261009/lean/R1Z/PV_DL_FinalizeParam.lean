@@ -10,7 +10,7 @@ def reference {S : Type} (compress : S → List U8 → Result S) (state : S)
     Result (S × List U8 × Nat) := do
   let (first,second,retained,pos) ← PV_CBL_ShaPadFixed.sha_pad_owned_split8 buffer pos suffix
   let state ← PV_DL_CompressionTrace.run compress
-    (first.val::(second.map (fun a => a.val)).toList) state
+    (first.val::(second.map (fun (a : Array U8 64#usize) => a.val)).toList) state
   ok (state,retained.val,pos.val)
 
 def model {S : Type} (compress : S → List U8 → Result S) (state : S)
@@ -32,7 +32,7 @@ theorem source {S : Type} (compress : S → List U8 → Result S) (state : S)
   rw [hpad]
   change (do
     let next ← PV_DL_CompressionTrace.run compress
-      (first.val::(second.map (fun a => a.val)).toList) state
+      (first.val::(second.map (fun (a : Array U8 64#usize) => a.val)).toList) state
     ok (next,first.val,0)) = _
   rw [hfirst,hsecond]
   rfl
