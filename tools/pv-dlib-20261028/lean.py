@@ -15,7 +15,7 @@ meta=dict(attempt=n,module=m,source_path=str(p.relative_to(R)),source_blob=blob,
 code='''import json,pathlib,hashlib
 b=pathlib.Path('/home/dombarker/project-offloads');d=b/'codex-pv-dlib-20261028'
 e=json.load(open(b/'r1-privacy-build-integration-20261019/env/J.json'))
-e['LEAN_PATH']=str(d/'lean-objects')+':'+e['LEAN_PATH'];(d/'env-J.json').write_text(json.dumps(e))
+e['LEAN_PATH']=str(d/'lean-objects')+':'+str(d/'external-objects')+':'+e['LEAN_PATH'];(d/'env-J.json').write_text(json.dumps(e))
 (d/'lean-objects/R1Z').mkdir(parents=True,exist_ok=True);(d/'lean-sources/R1Z').mkdir(parents=True,exist_ok=True)
 roots=[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')];deps={}
 for m in IMPORTS:

@@ -25,3 +25,10 @@ after the first refusal rather than 180 s. It was admitted by both checks;
 no reservation bypass occurred. Future refusals require the full wait.
 The reference upload before the first admission is also recorded; no compiler
 ran on that upload. Subsequent Lean uploads use admission receipts first.
+
+42200: first focused Types compile failed before declaration checking because
+Lean namespace lookup chose the partial commit54 directory and reported its
+missing `Aeneas.olean`. The manifest-selected complete external module exists
+and hashes correctly. Replacement environment adds a private external-object
+link overlay before the partial project directories; no external object was
+rebuilt or substituted. This is a changed environment, not an unchanged retry.
