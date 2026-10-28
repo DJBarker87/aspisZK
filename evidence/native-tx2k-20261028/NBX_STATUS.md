@@ -71,3 +71,7 @@ receipt. No submitted configuration lacks a receipt and no own process remains.
 NBX_RESUME_RECOVERY.json records the comparison. Nothing was resubmitted.
 Disk preflight:8.8GiB available locally; no own evidence file exceeds20MB.
 Budget remaining:1 Lean,0 Kani. All historical failures remain charged.
+
+Final new module NBX_SequenceResult passed at L120 (three standard-axiom roots).
+All120 Lean and50 Kani attempts are now used. Reused L119 aggregate audit;
+new module has its own complete axiom audit. No unchanged regression rerun.

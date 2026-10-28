@@ -72,7 +72,7 @@ op43/op44; op32 is V1 entry and op33 is V2 registry.
 
 ## Validation / resources / rejected attempts
 
-**119/120 Lean attempts;50/50 Kani runs;50 separate metadata scopes.** Of119 Lean,
+**120/120 Lean attempts;50/50 Kani runs;50 separate metadata scopes.** Of120 Lean,
 87 are private missing unchanged-dependency builds. Frozen/coherent objects were
 reused; generated wrapper/fallback recovery changes IMPORT SPELLINGS ONLY and
 keeps non-import bodies byte-identical (NBX_IMPORT_NORMALIZATION.json).
@@ -80,7 +80,7 @@ No coherent/shared source or object was rewritten; no XRn join/stand-in used.
 
 Final focused audit NBX_L119: NBX_Audit.lean, exit0,wall4.501810613s,
 peakRSS5,578,644KiB,swap0,revision ca1dedc93e plus exact dirty source hashes.
-All51 new theorem roots use only propext/Classical.choice/Quot.sound or none.
+The51 theorem roots in L119 use only propext/Classical.choice/Quot.sound or none.
 Exact targets/commands/source/dependency object hashes/cgroups/errors/full
 multiline axioms are in NBX_ATTEMPTS.jsonl, per-attempt receipts and NBX_AXIOMS.json.
 Provisional audit L114 is not final: L119 follows NEW predicate/domain sources.
@@ -110,7 +110,7 @@ crate-local KMX copy and NBU_harness.patch, then NBX_harness.patch. Copy the
 frozen lock; repeat graph validation offline before every native run.
 
 Retain `/home/dombarker/project-offloads/codex-cx-tx2codec-cache-20261028`:
-475 imported files unchanged,583 final files;219 actual Aeneas pins unchanged.
+475 imported files unchanged,584 final files;219 actual Aeneas pins unchanged.
 No own prover remains. Own1,344,969,279-byte Rust target and empty temp directory
 were removed; sources, receipts and private Lean cache remain. No wallet/key
 operation; no binary/object/ELF/archive commit. No session-A candidate edit.
@@ -126,3 +126,29 @@ No shipped-file change or SBF rebuild trigger. Inherited pins, NOT reproduced:
 No cryptographic/security metric, protocol, headline, trust item or runtime
 assumption changed. Native/SDK/std/allocator/runtime/ABI/compiler/P6 and
 source-to-ELF boundaries remain. Deployed100-bit target not established.
+
+## Disk-full resume and final budget stop, 2026-10-28
+
+Recovered WIP5eab9d4604. NBX_RESUME_RECOVERY.json confirms all219 earlier host
+receipts match local bytes, no missing submitted receipt and no own live job.
+No attempt was resubmitted. Recovery stage committed as e5406c96e1.
+
+The sole remaining compile slot was used for NEW NBX_SequenceResult. Its
+returned/argument_frame/capacity lemmas compose the checked row-write induction
+with original-reader sequence output and capacity scan. Initial accumulator
+values disappear from returned rows; no equality outside the passed reads is
+required. This is a value-level component, not native representability.
+
+L120: exit0,wall4.663582181s,peakRSS5,414,860KiB,swap0,
+revision e5406c96e1 plus exact source hash. Three new roots use only the standard
+axioms. The54 new roots are audited across L119 and L120; no unchanged aggregate
+or full regression was rerun. NBX_ATTEMPTS.jsonl and NBX_AXIOMS.json include
+all120 Lean attempts, including rejected attempts. Budget exhausted:120/120
+Lean,50/50 Kani. No further prover launch is authorized by this job's budget.
+
+Every remaining member and its native requirement is listed above and in the
+U04/U05 ledgers. op53 needs the lead's existing authorized runtime-effect
+interpretation before its literal frame can be asserted. No new runtime trust,
+contract/interface change, assumption discharge or whole-slot closure is claimed.
+Local size check: no evidence file over20MB; no compression needed. No shipped
+source change, ELF rebuild trigger, wallet operation, push or other worktree edit.

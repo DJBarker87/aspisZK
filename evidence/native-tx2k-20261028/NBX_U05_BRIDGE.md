@@ -63,3 +63,13 @@ This promotion does not close ASR8 encoding, against-statement comparison,
 emission or op53’s required frame instance. Those whole-member/native effect
 rows remain as listed. The body-fidelity part of op53 remains out of soundness
 scope under ruling(s); its actual call-site/frame obligation remains OPEN.
+
+## Disk-full recovery, 2026-10-28
+
+Read-only recovery confirms all submitted receipts were already collected,
+including the matching K050 negative and L113 composition. No Kani rerun.
+The final Lean-only sequence-result composition is in NBX_U04_BRIDGE.md;
+it does not change any U05 member status. Final budget:120/120 Lean,50/50 Kani.
+ASQ8 still needs native success/caller/frame composition. Against-statement,
+ASR8 encoding and emission body rows remain out of soundness scope; op53's
+required call-site/frame instance retains the documented return-data obstruction.

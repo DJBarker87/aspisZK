@@ -169,3 +169,19 @@ exit0,4.501810613s,peakRSS5,578,644KiB,swap0,revision ca1dedc93e plus recorded
 exact dirty source hash. All51 new theorem roots use a subset of
 propext/Classical.choice/Quot.sound. NBN_Audit and NBU_Audit are imported,
 not re-proved. This is a focused audit, not a full release manifest replay.
+
+## Disk-full continuation: returned sequence composition
+
+NBX_SequenceResult.returned proves that observing exactly the assigned rows
+of writeRows gives sequenceRows of the SAME original reader, independently
+of the arbitrary initial accumulator. argument_frame permits distinct initial
+accumulators and requires equality only of the passed row reads. capacity
+composes the actual >2^20 scan with those returned rows. These reuse the existing
+induction and scan laws; they add no native/allocator/iterator premise or credit.
+
+NBX_L120 passes: exit0,wall4.663582181s,peakRSS5,414,860KiB,swap0;
+source revision e5406c96e1 plus exact dirty source hashes. All three printed
+roots use only propext/Classical.choice/Quot.sound. Admission exit0/allowed:true;
+-M7000,6G/8G/swap0/tasks64. Budget now120/120 Lean and50/50 Kani.
+The fourteen whole-instance rows above remain OPEN for their listed native
+caller/argument/heap obligations. No remaining budget authorizes another run.
