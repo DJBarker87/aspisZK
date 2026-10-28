@@ -1,0 +1,40 @@
+{"attempt": "NBA_L034", "exit_status": 1, "wall_seconds": 4.48598185001174, "peak_rss_kib": "3849308", "swaps": "0", "print_axioms": ["'AspisR1.NBA_QueryDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBA_generated/NBA_QueryDriver.lean:24:121: error: unsolved goals
+scan : State → Bytes32 → Result (Bool × State)
+s : State
+blocks advances : Blocks
+values :
+  ↑blocks =
+    [(↑blocks)[0], (↑blocks)[1], (↑blocks)[2], (↑blocks)[3], (↑blocks)[4], (↑blocks)[5], (↑blocks)[6], (↑blocks)[7]]
+r0 : Array.index_usize blocks 0#usize = ok (↑blocks)[↑0#usize]
+r1 : Array.index_usize blocks 1#usize = ok (↑blocks)[↑1#usize]
+r2 : Array.index_usize blocks 2#usize = ok (↑blocks)[↑2#usize]
+r3 : Array.index_usize blocks 3#usize = ok (↑blocks)[↑3#usize]
+r4 : Array.index_usize blocks 4#usize = ok (↑blocks)[↑4#usize]
+r5 : Array.index_usize blocks 5#usize = ok (↑blocks)[↑5#usize]
+r6 : Array.index_usize blocks 6#usize
+...
+.Result.Insts.CoreOpsTry.branch r
+                                match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue val => do
+                                    let a ← Array.index_usize advances 6#usize
+                                    ok (core.result.Result.Ok (val, a))
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (Std.Array U32 22#usize × Std.Array U8 32#usize)
+                                      (core.convert.FromSame aspis_core.transcript.QuerySampleError) residual
+                              else do
+                                let (stop, next) ← scan next (↑blocks)[7]
+                                let r ← aspis_core.r0_transcript.QueryScan.finish next
+                                let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                match cf with
+                                  | core.ops.control_flow.ControlFlow.Continue val => do
+                                    let a ← Array.index_usize advances 7#usize
+                                    ok (core.result.Result.Ok (val, a))
+                                  | core.ops.control_flow.ControlFlow.Break residual =>
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (Std.Array U32 22#usize × Std.Array U8 32#usize)
+                                      (core.convert.FromSame aspis_core.transcript.QuerySampleError) residual
+'AspisR1.NBA_QueryDriver.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0ca0a3d799d64943b23e54c7643d6984.scope; invocation ID: 48ef309772314f51970e986360f3aa2c

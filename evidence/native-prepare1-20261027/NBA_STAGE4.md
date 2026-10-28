@@ -2,8 +2,9 @@
 
 K017 PASS: exact actual Prepared::new prefix through query/rho to powers,
 both query-rejection scratch preservation and continuing rho/empty-payload/row
-routing; powers cut terminates before scratch write. K018 PASS: isolated actual
-scratch overwrite, arbitrary old array, arbitrary returned928 bits, every slot.
+routing; powers cut terminates before scratch write. K018 is superseded for a harness alignment defect; corrected K022 PASS:
+isolated actual scratch overwrite, arbitrary old array, every returned raw
+928-byte array, every slot. See NBA_POWER_ALIGNMENT.md.
 K012 PASS: isolated frozen typed record/Box challenge fields, all raw values.
 
 K013 PASS: ONE query word iteration, actual private QueryScan, arbitrary

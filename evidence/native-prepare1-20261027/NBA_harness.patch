@@ -237,7 +237,7 @@
 + assert_eq!(QE,17);let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<32);assert_eq!(blocks[k][j],QR[2*k+1][j]);assert_eq!(advances[k][j],QR[2*k+2][j]);
 + kani::cover!(true,"all eight eager digest pairs reach decoder");if QTERM{kani::assume(false);}
 + QRESULT=core::mem::transmute::<[u8;88],[u32;22]>(kani::any());QSTATE=kani::any();QFAIL=kani::any();
-+ if QFAIL{Err(aspis_core::transcript::QuerySampleError::DrawLimitExhausted{accepted:0,max_draws:64})}else{Ok((QRESULT,QSTATE))}
++ if QFAIL{Err(aspis_core::transcript::QuerySampleError::DrawLimitExhausted{accepted:kani::any(),max_draws:64})}else{Ok((QRESULT,QSTATE))}
 +}}
 +fn NBA_query_context(terminal:bool){
 + let payload:[u8;2048]=kani::any();let i:usize=kani::any();kani::assume(i<32);
