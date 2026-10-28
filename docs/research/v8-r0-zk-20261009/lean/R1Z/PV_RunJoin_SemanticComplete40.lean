@@ -25,6 +25,8 @@ theorem encode (ops : ExternalFuns) (logical : Slice U8) (out : alloc.vec.Vec U8
     exact length
   obtain ⟨s,mid,hs,hm,hmid⟩ := PV_RunJoin_BytePrefix40.append logical out 32#usize
     (by change 32≤logical.length;omega) (by change out.length+32≤Usize.max;omega)
+  have val32 : (32#usize).val=32 := by scalar_tac
+  rw [val32] at hmid
   have midlen : mid.length=out.length+32 := by
     change mid.val.length=out.val.length+32
     rw [hmid,List.length_append,List.length_take]
@@ -32,7 +34,7 @@ theorem encode (ops : ExternalFuns) (logical : Slice U8) (out : alloc.vec.Vec U8
     omega
   obtain ⟨next,hn,hnext⟩ := PV_RunJoin_SemanticLoop40.complete ops logical 27#u8
     32#usize 0#u8 records domain mid (by rw [midlen];exact room)
-  refine ⟨next,?_,by rw [hnext,hmid,List.append_assoc]⟩
+  refine ⟨next,?_,by rw [hnext,hmid];simp only [List.append_assoc]⟩
   simp only [host_compact.compact_semantic,layout,lenword,bind_tc_ok,
     bne_self_eq_false,Bool.false_eq_true,↓reduceIte,hs,hm,compact.SEMANTIC_ROWS,hn]
 #print axioms encode
