@@ -10,6 +10,7 @@ theorem complete_result (v : U32) (j : Usize) (hj : j.val < 4) :
       if v < 2147483647#u32 then .ok (.Ok
         ((core.num.U32.to_le_bytes v).val[j.val]'(by
           have hlen := (core.num.U32.to_le_bytes v).property
+          rw [hlen]
           simpa using hj)))
       else .ok (.Err aspis_core.state_only_prefix.r0.Error.Public) := by
   by_cases h : v < 2147483647#u32
