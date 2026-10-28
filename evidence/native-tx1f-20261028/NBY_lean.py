@@ -17,8 +17,8 @@ for m in {imports!r}:
  out[m]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 print(json.dumps(out))''');assert r.returncode==0,r.stderr
 pins=json.loads(r.stdout)
-initial=json.loads((E/'NBY_INITIAL_HOST_PINS.json').read_text())
-for n,v in initial['aeneas'].items():pins[n]={'path':n,'sha256':v['sha256']}
+initial=json.loads((E/'NBY_RESOLVED_AENEAS_PINS.json').read_text())
+for n,v in initial.items():pins[n]={'path':v['path'],'sha256':v['sha256']}
 cfg=dict(attempt=a,kind='lean',sources=[f'NBY_sources/{module}.lean'],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',h.CACHE+'/'+module+'.olean',f'NBY_sources/{module}.lean'],timeout=180,env={'LEAN_PATH':':'.join([h.CACHE,h.C,h.C+'/objects'])},deps_fingerprint={'selected_objects':pins,'cohort':'SInt2 with shared persistent cache; initial full object pins NBY_INITIAL_HOST_PINS.json'},expected_time='focused symbolic proof, no generated arithmetic')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 r=subprocess.run([sys.executable,str(E/'NBY_host.py'),a]);sys.exit(r.returncode)

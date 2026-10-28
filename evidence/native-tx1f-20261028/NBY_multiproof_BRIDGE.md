@@ -26,3 +26,28 @@ All exact commands, source revision/hash, dependency pins, exits, wall,
 peak RSS, swap and axioms are in NBY_ATTEMPTS.jsonl and attempt directories.
 Coherent SInt2 and 219 resolved Aeneas objects are pinned by
 NBY_INITIAL_HOST_PINS.json. These are focused jobs, not a final release replay.
+
+## Count and carrier stage
+
+NBY_CountDomains adds reached accumulator bounds, row/level preservation and
+imports the complete initialized count bound. NBY_L002 passes (4.241163903s,
+4429556KiB, swap0; standard axioms only). NBY_CarrierFold proves append on the
+same evolving carrier and outside-byte frame even when each next window source
+depends on its actual prestate. NBY_L003 passes (3.981524807s,4437684KiB,swap0;
+append has no axioms; outside_frame uses only standard axioms).
+
+K009/010 binary group scan/commit and K011/012 admitted initialization pass
+with failing controls, but are DIAGNOSTIC ONLY for native closure: they execute
+the small nested group scan / full admission iterator. The binding single-step
+method still requires the inherited scan/admission iteration bridges to be
+instantiated. They are not silently promoted to P6 passes. K013/014 checks the
+outer iterator transition and has the required failing control.
+
+K015/K016 full arbitrary row request/read/write frame TIME OUT at90s; neither
+has credit. The preconfigured control was submitted because our runner missed
+Kani's lowercase timeout message; repaired and recorded in NBY_REPAIRS.md.
+K017 separates the inside-write observation and omits redundant request-byte
+selectors, retaining the full scratch. It also TIME OUTS at90s; K018 is deferred,
+not launched. No unchanged positive retry, time increase or cap increase.
+Further row cuts must split the copy/return surface rather than rerun K017.
+All own solver temporary files were inspected/removed after terminal runs.

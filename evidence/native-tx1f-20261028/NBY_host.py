@@ -47,8 +47,8 @@ print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))''')
 if __name__=='__main__':
  a=sys.argv[1]; assert not (E/a/'receipt.json').exists()
  cfg0=json.loads((E/(a+'.json')).read_text())
- if cfg0['kind']=='kani':assert int(a.removeprefix('NBY_K'))<=80 and len(list(E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))<80,'STOP Kani budget exhausted'
- if cfg0['kind']=='lean':assert int(a.removeprefix('NBY_L'))<=60 and len(list(E.glob('NBY_L[0-9][0-9][0-9]/receipt.json')))<60,'STOP Lean budget exhausted'
+ if cfg0['kind']=='kani':assert len(list(E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))<80,'STOP Kani budget exhausted'
+ if cfg0['kind']=='lean':assert len(list(E.glob('NBY_L[0-9][0-9][0-9]/receipt.json')))<60,'STOP Lean budget exhausted'
  if json.loads((E/(a+'.json')).read_text()).get('deferred'):
   print('DEFERRED before admission: '+a);raise SystemExit(0)
  # Own wrapper safety check: a receipt must be terminal before the next scope.
