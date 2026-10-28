@@ -1,0 +1,46 @@
+{"attempt": "NCX_L022", "exit_status": 1, "wall_seconds": 2.333821928012185, "peak_rss_kib": "5584652", "swaps": "0", "print_axioms": ["'NCX_LengthRejection.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NCX_LengthRejection.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCX_generated/NCX_LengthRejection.lean:7:74: error: unsolved goals
+b : Slice U8
+length : (↑b).length ≠ 256
+h : b.len ≠ 256#usize
+⊢ (if b.len ≠ 256#usize then ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+    else do
+      let b_1 ← NCX_Reference.magic b NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_MAGIC
+      if b_1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ NCX_Reference.POOL_V1_VERIFIER_REGISTRY_V2_VERSION then
+              ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongVersion)
+            else do
+              let i2 ← b.index_usize 6#usize
+              if i2 ≠ NCX_Reference.POOL_V1_
+...
+lible.from_residual
+                                NCX_Reference.VerifierRegistryEntryV2
+                                (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            NCX_Reference.VerifierRegistryEntryV2
+                            (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+                    else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.NonZeroReserved)
+        else ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongMagic)) =
+    ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.WrongLength)
+NCX_generated/NCX_LengthRejection.lean:21:61: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_entry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_BYTES, ̲bne_iff_ne,h̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCX_generated/NCX_LengthRejection.lean:21:63: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCX_Reference.decode_verifier_registry_entry_v2,
+      NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_BYTES, ̲bne_iff_ne, ̲h,̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCX_LengthRejection.registry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCX_LengthRejection.entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rf8ae756845a6411682c25bd69ea99478.scope; invocation ID: 3b4514e0491f4d3194fd1be00da938c3

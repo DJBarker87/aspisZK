@@ -3,6 +3,7 @@ import subprocess,json,sys,shlex,hashlib
 import NCX_transport as t
 E=t.E;B=t.B
 def launch(a,kind,target,files,command,sources,timeout=180,extra=None):
+ if (E/'NCX_HOLD').exists():raise SystemExit('own queue held for shape review; no launch')
  assert not (E/a).exists(),'attempt already used'
  if kind in ['kani','lean']:
   count=sum(json.loads(l)['kind']==kind for l in (E/'NCX_ATTEMPTS.jsonl').read_text().splitlines());assert count<(40 if kind=='kani' else 60),'budget exhausted'
@@ -39,6 +40,17 @@ print(json.dumps(x))
  r=t.ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+shlex.quote(a+'.json'),submitted=True)
  (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
  rc=collect(a)
+ if kind=='kani':
+  import difflib
+  patch=''
+  for name,body in files.items():
+   if not name.startswith('NCX_src/'):continue
+   rel=name[len('NCX_src/'):]
+   old=subprocess.run(['git','show',t.REV+':'+rel],capture_output=True,text=True)
+   before=old.stdout if old.returncode==0 else ''
+   patch+=''.join(difflib.unified_diff(before.splitlines(True),body.splitlines(True),fromfile='a/'+rel if before else '/dev/null',tofile='b/'+rel))
+   (E/a/'sources'/name).unlink()
+  (E/a/'sources'/'NCX_harness.patch').write_text(patch)
  (E/'NCX_ACTIVE.json').unlink()
  print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
  print((E/a/'stdout.log').read_text()[-2300:],flush=True)

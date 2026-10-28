@@ -1,0 +1,130 @@
+NCX_generated/NCX_EntryFixture.lean:31:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ←
+      match 1#u8 with
+        | 0#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Pending)
+        | 1#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Active)
+        | 2#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Paused)
+        | 3#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Retired)
+        | x => ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ←
+          NCX_Reference.validate_verifier_registry_entry_v2
+              { status := val, statement_version := 1#u8, bump := 254#u8, pool := pool, verifier_program := verifier,
+                profile_binding := profile, release_binding := release, loader_program := loader,
+                programdata_address := programdata, programdata_bump := 254#u8, executable_hash := executable_hash,
+                expected_upgrade_authority := upgrade_authority, activation_slot := activation,
+                retirement_slot := retirement, policy_binding := policy }
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue a =>
+            ok
+              (core.result.Result.Ok
+                { status := val, statement_version := 1#u8, bump := 254#u8, pool := pool, verifier_program := verifier,
+                  profile_binding := profile, release_binding := release, loader_program := loader,
+                  programdata_address := programdata, programdata_bump := 254#u8, executable_hash := executable_hash,
+                  expected_upgrade_authority := upgrade_authority, activation_slot := activation,
+                  retirement_slot := retirement, policy_binding := policy })
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              NCX_Reference.VerifierRegistryEntryV2
+              (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          NCX_Reference.VerifierRegistryEntryV2 (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError)
+          residual
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Ok NCX_EntryValue.value)
+
+len : (↑JHb_DataEntry.value).length = 320
+size : JHb_DataEntry.value.len = 320#usize
+magic : NCX_Reference.magic JHb_DataEntry.value NCX_Reference.POOL_V1_VERIFIER_ENTRY_V2_MAGIC = ok true
+reserved :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) JHb_DataEntry.value
+      { start := 314#usize, «end» := 320#usize } =
+    ok (JHg_FieldRead.segment JHb_DataEntry.value (↑314#usize) (↑320#usize - ↑314#usize))
+zeros : NCX_Reference.zero (JHg_FieldRead.segment JHb_DataEntry.value 314 6) = ok true
+valid :
+  NCX_Reference.validate_verifier_registry_entry_v2
+      { status := NCX_Reference.VerifierEntryStatusV1.Active, statement_version := 1#u8, bump := 254#u8, pool := pool,
+        verifier_program := verifier, profile_binding := profile, release_binding := release, loader_program := loader,
+        programdata_address := programdata, programdata_bump := 254#u8, executable_hash := executable_hash,
+        expected_upgrade_authority := upgrade_authority, activation_slot := activation, retirement_slot := retirement,
+        policy_binding := policy } =
+    ok (core.result.Result.Ok ())
+⊢ (do
+      let r ←
+        match 1#u8 with
+          | 0#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Pending)
+          | 1#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Active)
+          | 2#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Paused)
+          | 3#8#uscalar => ok (core.result.Result.Ok NCX_Reference.VerifierEntryStatusV1.Retired)
+          | x => ok (core.result.Result.Err NCX_Reference.PoolV1VerifierRegistryFormatError.InvalidStatus)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ←
+            NCX_Reference.validate_verifier_registry_entry_v2
+                { status := val, statement_version := 1#u8, bump := 254#u8, pool := pool, verifier_program := verifier,
+                  profile_binding := profile, release_binding := release, loader_program := loader,
+                  programdata_address := programdata, programdata_bump := 254#u8, executable_hash := executable_hash,
+                  expected_upgrade_authority := upgrade_authority, activation_slot := activation,
+                  retirement_slot := retirement, policy_binding := policy }
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a =>
+              ok
+                (core.result.Result.Ok
+                  { status := val, statement_version := 1#u8, bump := 254#u8, pool := pool,
+                    verifier_program := verifier, profile_binding := profile, release_binding := release,
+                    loader_program := loader, programdata_address := programdata, programdata_bump := 254#u8,
+                    executable_hash := executable_hash, expected_upgrade_authority := upgrade_authority,
+                    activation_slot := activation, retirement_slot := retirement, policy_binding := policy })
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                NCX_Reference.VerifierRegistryEntryV2
+                (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            NCX_Reference.VerifierRegistryEntryV2
+            (core.convert.FromSame NCX_Reference.PoolV1VerifierRegistryFormatError) residual) =
+    ok (core.result.Result.Ok NCX_EntryValue.value)
+NCX_generated/NCX_EntryFixture.lean:30:4: warning: This simp argument is unused:
+  valid
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵C̵X̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵d̵e̵c̵o̵d̵e̵_̵v̵e̵r̵i̵f̵i̵e̵r̵_̵r̵e̵g̵i̵s̵t̵r̵y̵_̵e̵n̵t̵r̵y̵_̵v̵2̵,̵s̵i̵z̵e̵,̵N̵C̵X̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵P̵O̵O̵L̵_̵V̵1̵_̵V̵E̵R̵I̵F̵I̵E̵R̵_̵E̵N̵T̵R̵Y̵_̵V̵2̵_̵B̵Y̵T̵E̵S̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵C̵X̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵P̵O̵O̵L̵_̵V̵1̵_̵V̵E̵R̵I̵F̵I̵E̵R̵_̵E̵N̵T̵R̵Y̵_̵V̵2̵_̵V̵E̵R̵S̵I̵O̵N̵,̵N̵C̵X̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵P̵O̵O̵L̵_̵V̵1̵_̵V̵E̵R̵I̵F̵I̵E̵R̵_̵D̵E̵P̵L̵O̵Y̵M̵E̵N̵T̵_̵M̵O̵D̵E̵_̵I̵M̵M̵U̵T̵A̵B̵L̵E̵_̵L̵O̵A̵D̵E̵R̵_̵V̵3̵,̵
+  ̵ ̵ ̵ ̵ ̵m̵a̵g̵i̵c̵,̵r̵e̵s̵e̵r̵v̵e̵d̵,̵z̵e̵r̵o̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵r̵e̵a̵d̵_̵v̵e̵r̵s̵i̵o̵n̵,̵r̵e̵a̵d̵_̵s̵t̵a̵t̵u̵s̵,̵r̵e̵a̵d̵_̵s̵t̵a̵t̵e̵m̵e̵n̵t̵_̵v̵e̵r̵s̵i̵o̵n̵,̵r̵e̵a̵d̵_̵m̵o̵d̵e̵,̵r̵e̵a̵d̵_̵p̵o̵o̵l̵,̵r̵e̵a̵d̵_̵v̵e̵r̵i̵f̵i̵e̵r̵,̵r̵e̵a̵d̵_̵p̵r̵o̵f̵i̵l̵e̵,̵r̵e̵a̵d̵_̵r̵e̵l̵e̵a̵s̵e̵,̵r̵e̵a̵d̵_̵l̵o̵a̵d̵e̵r̵,̵r̵e̵a̵d̵_̵p̵r̵o̵g̵r̵a̵m̵d̵a̵t̵a̵,̵r̵e̵a̵d̵_̵e̵x̵e̵c̵u̵t̵a̵b̵l̵e̵_̵h̵a̵s̵h̵,̵r̵e̵a̵d̵_̵u̵p̵g̵r̵a̵d̵e̵_̵a̵u̵t̵h̵o̵r̵i̵t̵y̵,̵r̵e̵a̵d̵_̵a̵c̵t̵i̵v̵a̵t̵i̵o̵n̵,̵r̵e̵a̵d̵_̵r̵e̵t̵i̵r̵e̵m̵e̵n̵t̵,̵r̵e̵a̵d̵_̵p̵o̵l̵i̵c̵y̵,̵r̵e̵a̵d̵_̵b̵u̵m̵p̵,̵r̵e̵a̵d̵_̵p̵r̵o̵g̵r̵a̵m̵d̵a̵t̵a̵_̵b̵u̵m̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̵h̵o̵w̵[̲N̲C̲X̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲d̲e̲c̲o̲d̲e̲_̲v̲e̲r̲i̲f̲i̲e̲r̲_̲r̲e̲g̲i̲s̲t̲r̲y̲_̲e̲n̲t̲r̲y̲_̲v̲2̲,̲ ̲s̲i̲z̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲C̲X̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲P̲O̲O̲L̲_̲V̲1̲_̲V̲E̲R̲I̲F̲I̲E̲R̲_̲E̲N̲T̲R̲Y̲_̲V̲2̲_̲B̲Y̲T̲E̲S̲,̲ ̲N̲C̲X̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲P̲O̲O̲L̲_̲V̲1̲_̲V̲E̲R̲I̲F̲I̲E̲R̲_̲E̲N̲T̲R̲Y̲_̲V̲2̲_̲V̲E̲R̲S̲I̲O̲N̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲C̲X̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲P̲O̲O̲L̲_̲V̲1̲_̲V̲E̲R̲I̲F̲I̲E̲R̲_̲D̲E̲P̲L̲O̲Y̲M̲E̲N̲T̲_̲M̲O̲D̲E̲_̲I̲M̲M̲U̲T̲A̲B̲L̲E̲_̲L̲O̲A̲D̲E̲R̲_̲V̲3̲,̲ ̲m̲a̲g̲i̲c̲,̲ ̲r̲e̲s̲e̲r̲v̲e̲d̲,̲ ̲z̲e̲r̲o̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲e̲a̲d̲_̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲r̲e̲a̲d̲_̲s̲t̲a̲t̲u̲s̲,̲ ̲r̲e̲a̲d̲_̲s̲t̲a̲t̲e̲m̲e̲n̲t̲_̲v̲e̲r̲s̲i̲o̲n̲,̲ ̲r̲e̲a̲d̲_̲m̲o̲d̲e̲,̲ ̲r̲e̲a̲d̲_̲p̲o̲o̲l̲,̲ ̲r̲e̲a̲d̲_̲v̲e̲r̲i̲f̲i̲e̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲e̲a̲d̲_̲p̲r̲o̲f̲i̲l̲e̲,̲ ̲r̲e̲a̲d̲_̲r̲e̲l̲e̲a̲s̲e̲,̲ ̲r̲e̲a̲d̲_̲l̲o̲a̲d̲e̲r̲,̲ ̲r̲e̲a̲d̲_̲p̲r̲o̲g̲r̲a̲m̲d̲a̲t̲a̲,̲ ̲r̲e̲a̲d̲_̲e̲x̲e̲c̲u̲t̲a̲b̲l̲e̲_̲h̲a̲s̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲e̲a̲d̲_̲u̲p̲g̲r̲a̲d̲e̲_̲a̲u̲t̲h̲o̲r̲i̲t̲y̲,̲ ̲r̲e̲a̲d̲_̲a̲c̲t̲i̲v̲a̲t̲i̲o̲n̲,̲ ̲r̲e̲a̲d̲_̲r̲e̲t̲i̲r̲e̲m̲e̲n̲t̲,̲ ̲r̲e̲a̲d̲_̲p̲o̲l̲i̲c̲y̲,̲ ̲r̲e̲a̲d̲_̲b̲u̲m̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲r̲e̲a̲d̲_̲p̲r̲o̲g̲r̲a̲m̲d̲a̲t̲a̲_̲b̲u̲m̲p̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲s̲h̲o̲w̲ (320#usize != 3̵2̵0̵#̵u̵s̵i̵z̵e̵)̵=̵f̵a̵l̵s̵e̵3̲2̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from rfl,
+      show (3#u8 != 3̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵3̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from r̵f̵l̵,̵s̵h̵o̵w̵r̲f̲l̲,̲ ̲s̲h̲o̲w̲ (1#u8 != 1̵#̵u̵8̵)̵=̵f̵a̵l̵s̵e̵1̲#̲u̲8̲)̲ ̲=̲ ̲f̲a̲l̲s̲e̲ from rfl, B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵i̵t̵e̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵h̵o̵w̵ ̵(̵3̵1̵4̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵3̵1̵4̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵s̵h̵o̵w̵ ̵(̵3̵2̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵3̵2̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵N̵a̵t̵.̵r̵e̵d̵u̵c̵e̵S̵u̵b̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵C̵X̵_̵R̵e̵f̵e̵r̵e̵n̵c̵e̵.̵s̵t̵a̵t̵u̵s̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵v̵a̵l̵i̵d̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲t̲e̲_̲t̲r̲u̲e̲,̲ ̲s̲h̲o̲w̲ ̲(̲3̲1̲4̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲3̲1̲4̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲ ̲s̲h̲o̲w̲ ̲(̲3̲2̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲3̲2̲0̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲r̲e̲d̲u̲c̲e̲S̲u̲b̲,̲ ̲N̲C̲X̲_̲R̲e̲f̲e̲r̲e̲n̲c̲e̲.̲s̲t̲a̲t̲u̲s̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCX_EntryFixture.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
