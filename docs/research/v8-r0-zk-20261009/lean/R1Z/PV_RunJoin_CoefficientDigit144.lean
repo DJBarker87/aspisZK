@@ -12,19 +12,26 @@ theorem body (j out : Usize) :
       .ok (.cont ({ start := 2#usize, «end» := 5#usize },out ||| digit j)) := by
   have inc : Usize.wrapping_add 1#usize 1#usize = 2#usize := by
     apply UScalar.eq_of_val_eq
-    rw [PV_RunJoin_MergeLoop35.increment 1#usize (by decide)]
-    rfl
+    have h := PV_RunJoin_CoefficientRange44.advance_val 1#usize 5#usize (by decide)
+    exact h
   have hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize
       { start := 1#usize, «end» := 5#usize } =
       .ok (some 1#usize,{ start := 2#usize, «end» := 5#usize }) := by
     simpa only [PV_RunJoin_CoefficientRange44.next,PV_RunJoin_CoefficientRange44.between,
       PV_RunJoin_CoefficientRange44.advance,inc] using
       PV_RunJoin_CoefficientRange44.next_step 1#usize 5#usize (by decide)
-  have lo : (2#usize * 1#usize : Result Usize) = .ok 2#usize := by scalar_tac
-  have hi : (2#usize * 4#usize : Result Usize) = .ok 8#usize := by scalar_tac
+  have lo : (2#usize * 1#usize : Result Usize) = .ok 2#usize  := by
+    obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (Usize.mul_spec (x := 2#usize) (y := 1#usize) (by scalar_tac))
+    have he : z = 2#usize := by scalar_tac
+    exact hz.trans (congrArg Result.ok he)
+  have hi : (2#usize * 4#usize : Result Usize) = .ok 8#usize  := by
+    obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (Usize.mul_spec (x := 2#usize) (y := 4#usize) (by scalar_tac))
+    have he : z = 8#usize := by scalar_tac
+    exact hz.trans (congrArg Result.ok he)
   have tau : Array.index_usize transport.TAU 1#usize = .ok 4#usize := by rfl
   unfold transport.Variant.row_loop.body
   rw [hn]
+  dsimp only
   simp only [bind_tc_ok,lo]
   rw [PV_RunJoin_CheckedShift44.right j 2#usize (by decide)]
   simp only [bind_tc_ok,lift,tau,hi]
