@@ -29,8 +29,7 @@ theorem step (index : Nat) (s : State N L C) :
     cases status with
     | Err e => rfl
     | Ok secret =>
-      simp only [mapR,bind_tc_ok]
-      dsimp only
+      simp only [mapR,bind_tc_ok,Aeneas.Std.uncurry]
       rw [← body_step secret next]
       cases hb : bodyA secret next with
       | fail e => rfl
