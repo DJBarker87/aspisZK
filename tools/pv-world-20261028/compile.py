@@ -15,7 +15,8 @@ assert not (E/f'lean-{n}/receipt.json').exists()
 q=subprocess.run(['ssh',H,f'python3 {G}/reservation.py {D}/upload-{n}.json > {D}/upload-{n}.log 2>&1'],capture_output=True,text=True)
 s=subprocess.run(['ssh',H,f'cat {D}/upload-{n}.json'],capture_output=True,text=True)
 (E/f'upload-{n}.json').write_text(s.stdout)
-assert q.returncode==0 and json.loads(s.stdout)['allowed'] is True,(q.returncode,q.stderr,s.stdout)
+if q.returncode!=0 or json.loads(s.stdout).get('allowed') is not True:
+ print('UNCHARGED UPLOAD REFUSAL',n,q.returncode,json.loads(s.stdout).get('utc'));sys.exit(78)
 code=f'''from pathlib import Path
 import base64,hashlib
 p=Path({D+'/lean-sources/'+m+'.lean'!r});p.parent.mkdir(parents=True,exist_ok=True)

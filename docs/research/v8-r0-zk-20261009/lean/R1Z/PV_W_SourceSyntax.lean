@@ -78,7 +78,7 @@ def resultOutcome {A : Type} : Aeneas.Std.Result A → Outcome Aeneas.Std.Error 
   | .div => .div
 
 def sourceInterpreter (ops : ExternalFuns) : Interpreter Op Unit Unit Aeneas.Std.Error :=
-  fun op => lift (resultOutcome (op.source ops))
+  fun op => PV_W_Threading.lift (resultOutcome (op.source ops))
 
 theorem source_value {A : Type} (ops : ExternalFuns) (p : P A) :
     (eval (sourceInterpreter ops) p ()).outcome = resultOutcome (erase ops p) := by
@@ -88,9 +88,9 @@ theorem source_value {A : Type} (ops : ExternalFuns) (p : P A) :
   | diverge => rfl
   | call op k ih =>
     cases h : op.source ops with
-    | ok a => simpa only [eval,sourceInterpreter,lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind] using ih a
-    | fail e => simp only [eval,sourceInterpreter,lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind]
-    | div => simp only [eval,sourceInterpreter,lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind]
+    | ok a => simpa only [eval,sourceInterpreter,PV_W_Threading.lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind] using ih a
+    | fail e => simp only [eval,sourceInterpreter,PV_W_Threading.lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind]
+    | div => simp only [eval,sourceInterpreter,PV_W_Threading.lift,PV_W_Threading.bind,resultOutcome,h,erase,Aeneas.Std.bind]
 
 #print axioms erase_invoke
 #print axioms erase_thenDo

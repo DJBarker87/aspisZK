@@ -19,9 +19,16 @@ for p in git('ls-files','*.lean').decode().splitlines():
 for x in json.loads((E/'extraction-dependencies.json').read_text()):tracked[x['module']]=[x['path']]
 for m,x in json.loads((R/'evidence/pv-cbmid-20261027/LEAN-IMPORT-PROVENANCE.json').read_text()).items():tracked['R1Z.'+m]=[x['local_source']]
 # Explicit h5 module associations of git-tracked source roots (no name-hit substitution).
-tracked['ProverRwSampler.Funs']=['docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwSampler/Funs.lean']
-for stem in ['RawCircleSampleActualPolicyUnconditionalV1','RawCircleSampleActualFallbackCoordinatesV1']:
- tracked['AspisR1CircleSampleWrapper.'+stem]=['docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019/'+stem+'.lean']
+for suffix in ['Funs']:
+ tracked['ProverRwSampler.'+suffix]=['docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwSampler/'+suffix+'.lean']
+tracked['ProverRwSampler.Types']=['docs/research/100bit-spend-path-20261013/evidence/prover-rw-20261023/continuation/generated-sampler/ProverRwSampler/Types.lean']
+for path in git('ls-files','docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019/*.lean').decode().splitlines():
+ tracked['AspisR1CircleSampleWrapper.'+Path(path).stem]=[path]
+# This committed retained-source-input directory records module names in its
+# filenames; use it only where no canonical tracked module mapping exists.
+for path in git('ls-files','evidence/pv-rw19-resume-20261026/retained-source-inputs/*.lean.txt').decode().splitlines():
+ tracked.setdefault(Path(path).name[:-9],[path])
+
 def uncomment(s):
  # Preserve newlines while deleting nested block and line comments.
  out=[];i=0;depth=0
