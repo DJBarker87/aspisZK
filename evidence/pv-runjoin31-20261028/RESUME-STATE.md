@@ -215,3 +215,46 @@ inspect,99 in order. Never send a dependent of a failed audit. No additional
 focused IDs remain; all99 except97-99 already have actual compile receipts.
 Do not rerun unchanged compiles/differentials/measurements. Admission refusals
 stay uncharged, retry same ID after>=180s. Final report/tally/commits still pending.
+
+## Final audit continuation — latest state supersedes earlier notes
+
+97 original attempts recovered; no host job was rerun. Expanded endpoint and
+NativeSnapshot adapter source checks exposed unconfirmed/mismatched cache
+sources. FINAL-AUDIT-SCOPE.md records the stop. The typed adapter's source-law
+credit is withheld, despite its44685 compile. SnapshotAgreement remains checked.
+Canonical closure source checks are clean. Final audits narrowed accordingly.
+44697 CanonicalAudit failed on missing explicit LaneDenotation31 import; retained.
+44698 independent SnapshotAudit passed (standard axioms, swap0). FinalAudit31
+was rewritten at e1a5fbdb44 to import CanonicalCoverage31, LaneDenotation31 and
+accepted SnapshotAudit31 directly, with the canonical statements/axioms included.
+It does NOT import failed CanonicalAudit31 or unverified endpoint/native adapter.
+Current local resolve-admission.py process is active; no host scope is active.
+99charged(62accepted,37rejected),1remaining:44699 only. No Kani. No ID reset.
+Before99: collect resolver, verify-cache, verify-replay-reuse; external h4 check
+already passed5673objects on this continuation. Do not compile a dependency with
+an unmatched source. Then submit44699 once, collect receipt, final tally/integrity,
+interval audit, report+commit. If transport fails recover the original read-only.
+Rule m-prime applies: precompiler refusal uncharged, retry sameID after>=180s.
+All uncommitted work is evidence/final audit receipts; proof source is committed.
+No source change under crates/programs, no shared writes, no privacy claim.
+
+LATEST: the explicit LaneDenotation31 final-audit import also has source/cache
+mismatches; recovered check saved in recovery/lane-audit-cache-mismatches.json.
+No compiler launched on that closure. FinalAudit31 at6c4d44c404 now imports only
+CanonicalCoverage31 and accepted SnapshotAudit31, with canonical statements and
+axioms, no lane-denotation print. Local resolver is active; budget remains99,
+only44699 unlaunched. Native lane structural evidence retained but coherent
+source-law closure unconfirmed. Both source-cohort issues are final report gates,
+not permission to substitute old source variants. Recheck scoped closure, submit
+99 once, finalize receipts/report/commits. No own host scope currently active.
+
+## FINAL — budget exhausted
+
+All100 actual Lean attempts44600–44699 collected and hash-matched against200
+original host logs. Final read-only host inventory reports no running pv31 scope.
+63accepted,37rejected,0Kani; no budget/ID remains. SnapshotAudit44698 and corrected
+combined FinalAudit44699 passed; CanonicalAudit44697 retained failure. All accepted
+axioms standard; peak5,026,234,368bytes,swap0. All100receipt source blobs valid.
+FINAL-AUDIT-SCOPE.md states the native/lane/endpoint cohort findings and narrowed
+verified1434-module audit closure. Do not launch another compiler in this budget.
+REPORT.md is the final handoff; no privacy target claim, no endpoint field removed.

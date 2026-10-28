@@ -52,3 +52,9 @@ Quot.sound. Exact targets, exits, host/transport times, RSS, swap, source revisi
 blobs/hashes and axioms are retained per receipt. Caps unchanged; all swap counts0.
 No shipped implementation, protocol parameter, release ELF, key, observer or
 simulator was changed. No full frozen release replay is claimed by this stage.
+
+Final preflight qualification: the canonical theorem/coverage closure passes the
+source checks independently, but the separate LaneDenotation31 reference-proof
+closure has imported cohort discrepancies. Its structural/finite native evidence
+remains recorded; coherent release native-source law is unconfirmed. See
+FINAL-AUDIT-SCOPE.md. This does not remove a deployed V152–V154/native premise.

@@ -43,3 +43,11 @@ No semantic Admission, unconditional HonestInput, owner coverage or V038/V045
 closure is claimed. Endpoint premises removed/added/weakened remain 0/0/0.
 Reservation refusals are retired IDs and wait the full 180 seconds; tally.json
 and the individual receipts are the authoritative running resource record.
+
+## Final preflight qualification
+
+Expanded final LaneDenotation31 closure validation exposed imported source/cache
+discrepancies; see FINAL-AUDIT-SCOPE.md and recovery/lane-audit-cache-mismatches.json.
+The focused receipts, structural binding and finite differential remain evidence,
+but coherent native source-law closure is unconfirmed. No mismatched object was
+replaced or recompiled. No fresh lane closure audit is claimed.
