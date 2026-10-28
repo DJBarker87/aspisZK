@@ -14,7 +14,9 @@ theorem source (xs : List word) (s : word) :
   induction xs generalizing s with
   | nil => rfl
   | cons x xs ih =>
-    simp only [run,List.map_cons,foldSteps,m31_add,wrap,bind_tc_ok]
+    change (do let after ← aspis_core.field.M31.add (wrap s) (wrap x)
+               run (xs.map wrap) after)=ok (wrap (PV_L2C_NativeFold.fold xs (add s x)))
+    rw [m31_add]
     exact ih (add s x)
 #print axioms source
 
@@ -25,7 +27,7 @@ theorem zero_sum (xs : List word) (hc : ∀ x∈xs,canonical x)
   have hc' := PV_L2C_NativeFold.fold_canonical xs hc 0 h0
   have hd := PV_L2C_NativeFold.fold_zero_decode xs hc
   have he : PV_L2C_NativeFold.fold xs 0=0 := decode_injective _ _ hc' h0 (by rw [hd,hz]; rfl)
-  have hz' : wrap (0 : word)=aspis_core.field.M31.ZERO := rfl
+  have hz' : wrap (0 : word)=aspis_core.field.M31.ZERO := by unfold aspis_core.field.M31.ZERO; rfl
   rw [← hz',source,he]
 #print axioms zero_sum
 end PV_L2C_ExtractedM31Fold
