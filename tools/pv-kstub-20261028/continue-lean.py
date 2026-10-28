@@ -3,7 +3,9 @@ from pathlib import Path
 import json,subprocess,hashlib,time,sys,shlex
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-kstub-20261028';D='/home/dombarker/project-offloads/codex-pv-kstub-20261028';H='dombarker@100.108.41.90'
 names=['AppendDomain','CopyWindows','CopyEquality','AppendCoordinates','OptionCoordinates','SplitCoverage','AppendBridge','Final'];pins=[]
-for i,n in enumerate(names,44703):
+selected=list(enumerate(names,44703))
+if '--resume-parser-fix' in sys.argv:selected=list(enumerate(['AppendCoordinates','SplitCoverage','AppendBridge','Final'],44707))
+for i,n in selected:
  module='PV_KStub_'+n;p=R/'tools/pv-kstub-20261028'/(module+'.lean');rel=str(p.relative_to(R));data=p.read_bytes();tracked=subprocess.check_output(['git','show','HEAD:'+rel],cwd=R);assert data==tracked
  pins.append(dict(id=i,module=module,path=rel,blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],cwd=R,text=True).strip(),sha256=hashlib.sha256(data).hexdigest(),revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source=data.decode()))
 (E/'lean-continuation-plan.json').write_text(json.dumps([{k:v for k,v in p.items() if k!='source'} for p in pins],indent=2)+'\n')
@@ -32,10 +34,10 @@ for x in json.loads((D/'external-object-manifest.json').read_text()):
  if any(x['module']==prefix or x['module'].startswith(prefix+'/') for prefix in ['Init','Std','Lean','Lake']):
   h=hashlib.sha256(Path(x['path']).read_bytes()).hexdigest();assert h==x['object_sha256'],x['module'];checks.append(dict(module=x['module'],sha256=h,ok=True))
 private_cache=[]
-for module,expected in [('PV_KStub_CopyMeaning','2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'),('PV_KStub_WindowFrame','37fc1b48fa430b433b4c7e875fe7690fffb9eda336da549dc3570cd5a9c50911')]:
+for module,expected in [('PV_KStub_CopyWindows','b11bc91acb1d03e19707b0ff27cd0a7c1f96b551151bd803c75f0325ab50e778'),('PV_KStub_CopyEquality','edb89a4fc7f7f717d97605269f0e4a422c8b829c3053a00f96e04d02282e3af6'),('PV_KStub_CopyMeaning','2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'),('PV_KStub_WindowFrame','37fc1b48fa430b433b4c7e875fe7690fffb9eda336da549dc3570cd5a9c50911')]:
  source=D/(module+'.lean');obj=D/'lean-objects'/(module+'.olean')
  assert hashlib.sha256(source.read_bytes()).hexdigest()==expected
- private_cache.append(dict(module=module,source_sha256=expected,object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest(),original_receipt='44700' if module.endswith('CopyMeaning') else '44701'))
+ private_cache.append(dict(module=module,source_sha256=expected,object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest(),original_receipt={'PV_KStub_CopyMeaning':'44700','PV_KStub_WindowFrame':'44701','PV_KStub_CopyWindows':'44704','PV_KStub_CopyEquality':'44705'}[module]))
 for p in pins:
  assert hashlib.sha256(p['source'].encode()).hexdigest()==p['sha256'];(D/(p['module']+'.lean')).write_text(p['source'])
 env=json.loads((D/'env-J.json').read_text());env['LEAN_PATH']=str(D/'lean-objects')+':'+env['LEAN_PATH'];(D/'env-J-continuation.json').write_text(json.dumps(env,indent=2))
