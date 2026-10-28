@@ -54,6 +54,9 @@ theorem complete (w : W) (hs : w.variant=.S2) (k : Powers) (j : Usize) (hj : j.v
     dsimp only [PV_B2_F_CellFold.ordered,powerArray,row]
     rw [PV_RunJoin_WeightCellFold47.seven]
     apply PV_RunJoin_WeightReadFold47.map_read
+      (fun i => PV_B2_251c1.host_weights.raw_value w i j)
+      PV_B2_251c1.host_weights.mul_qm31
+      PV_B2_251c1.aspis_core.field.wide_exact.WideExact.add
     exact .cons ⟨rfl,h0⟩ (.cons ⟨rfl,h1⟩ (.cons ⟨rfl,h2⟩
       (.cons ⟨rfl,h3⟩ (.cons ⟨rfl,h4⟩ (.cons ⟨rfl,h5⟩ (.cons ⟨rfl,h6⟩ .nil))))))
   refine ⟨row,hr,hm,hc,?_⟩
