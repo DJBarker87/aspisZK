@@ -1,0 +1,131 @@
+[E0282]: type annotations needed
+   --> crates/aspis-r1-cost-probe/src/host_commitment.rs:258:40
+    |
+258 |             if messages[l].iter().any(|x| {
+    |                                        ^
+259 |                 x.to_limbs()[if l < 26 { 1 } else { 4 }..]
+    |                 - type must be known at this point
+    |
+help: consider giving this closure parameter an explicit type
+    |
+258 |             if messages[l].iter().any(|x: /* Type */| {
+    |                                         ++++++++++++
+
+error[E0282]: type annotations needed for `[_; 1024]`
+   --> crates/aspis-r1-cost-probe/src/host_commitment.rs:267:17
+    |
+267 |             let coefficients = variant.coefficients(&messages[l]);
+    |                 ^^^^^^^^^^^^
+268 |             words.push(if l < 26 {
+269 |                 Word::Base(domain.encode(&coefficients.map(|x| M31(x.to_limbs()[0])))?)
+    |                                                                    - type must be known at this point
+    |
+help: consider giving `coefficients` an explicit type, where the placeholders `_` are specified
+    |
+267 |             let coefficients: [T; 1024] = variant.coefficients(&messages[l]);
+    |                             +++++++++++
+
+error[E0282]: type annotations needed
+   --> crates/aspis-r1-cost-probe/src/host_commitment.rs:271:63
+    |
+271 |                 Word::Secure(domain.encode(&coefficients.map(|x| x.c0()))?)
+    |                                                               ^  - type must be known at this point
+    |
+help: consider giving this closure parameter an explicit type
+    |
+271 |                 Word::Secure(domain.encode(&coefficients.map(|x: /* Type */| x.c0()))?)
+    |                                                                ++++++++++++
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/fast_dots.rs:46:13
+   |
+46 |         let mut value = WideExact::from_limbs([
+   |             ----^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/r1_semantic.rs:232:71
+    |
+232 | fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges...
+    |                                                                       ----^^^^^^^^^^
+    |                                                                       |
+    |                                                                       help: remove this `mut`
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/prover.rs:117:9
+    |
+117 |     let mut value=hash(&[domain,seed,public,&[variant.tag()]]);
+    |         ----^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: value assigned to `state` is never read
+   --> crates/aspis-r1-cost-probe/src/dense.rs:136:76
+    |
+136 |     absorb(hash,&mut state,query_row+1,&[]);let block=hash(&[&state,&[1]]);state=hash(&[&state,&[2]]);
+    |                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/host_transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+warning: value assigned to `carry` is never read
+  --> crates/aspis-r1-cost-probe/src/host_weights.rs:21:117
+   |
+21 | ...]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));carry=bit_and_carry;
+   |                                                           ^^^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+warning: value assigned to `x` is never read
+  --> crates/aspis-r1-cost-probe/src/host_weights.rs:53:57
+   |
+53 |     let y=double(x);factors[3][4]=[K::ONE,x,y,x.mul(y)];x=double(y);
+   |                                                         ^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+warning: value assigned to `x` is never read
+  --> crates/aspis-r1-cost-probe/src/host_weights.rs:58:57
+   |
+58 |     let y=double(x);factors[4][4]=[K::ONE,x,y,x.mul(y)];x=double(y);
+   |                                                         ^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+
+Some errors have detailed explanations: E0277, E0282, E0432.
+For more information about an error, try `rustc --explain E0277`.
+warning: `aspis-r1-cost-probe` (lib) generated 43 warnings
+error: could not compile `aspis-r1-cost-probe` (lib) due to 6 previous errors; 43 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+warning: `aspis-statement` (lib) generated 104 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+warning: `aspis-prover` (lib) generated 35 warnings (run `cargo fix --lib -p aspis-prover` to apply 2 suggestions)
+exit 101
+
+{"exit": 101, "wall": "0:29.49", "peak_rss_kib": "524716", "swap": "0"}
