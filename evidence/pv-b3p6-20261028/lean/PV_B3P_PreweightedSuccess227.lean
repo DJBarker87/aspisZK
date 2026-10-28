@@ -103,13 +103,14 @@ theorem preweighted_total {N : Usize} (packed : Array aspis_core.field.QM31 24#u
   unfold reference_terminal.add_preweighted
   rw [hfirst]
   simp only [lift,bind_tc_ok]
+  simp only [finish,stop] at hlast
   rw [hlast]
   apply preweighted_loop_total _ _ _ _ _ hsum
   · change last.val<24
     have hf : finish.val<96 := by omega
     scalar_tac
   · have hle : start.val≤finish.val := by omega
-    have hdiv := Nat.div_le_div_right hle (k:=4)
+    have hdiv : start.val/4 ≤ finish.val/4 := Nat.div_le_div_right hle
     scalar_tac
 
 #print axioms preweighted_total
