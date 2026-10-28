@@ -64,4 +64,4 @@ for i in ids:
       @ExternalFuns.op{i} (Types base) ops := rfl
 #print axioms preserved_op{i}
 ''')
-out.append('end PV_B3P_Install227\n');(D/'PV_B3P_Install227.lean').write_text('\n'.join(out))
+out.append('end\nend PV_B3P_Install227\n');(D/'PV_B3P_Install227.lean').write_text('\n'.join(out))
