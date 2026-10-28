@@ -8,7 +8,7 @@ def body(s,needle):
   d+=(s[i]=='{')-(s[i]=='}')
   if d==0:return s[a:i+1]
 w=(S/'crates/aspis-r1-cost-probe/src/weights.rs').read_text();h=(S/'crates/aspis-r1-cost-probe/src/host_weights.rs').read_text();t=(S/'crates/aspis-r1-cost-probe/src/transport.rs').read_text();r=(S/'crates/aspis-core/src/state_only_prefix.rs').read_text()
-assert tokens(t[t.index('pub const TAU'):t.index(';',t.index('pub const TAU'))+1])==tokens('pub const TAU:[usize;5]=[3,4,2,0,1];')
+assert tokens(re.search(r'pub const TAU:[^=]+=\s*\[[^]]+\];',t)[0])==tokens('pub const TAU:[usize;5]=[3,4,2,0,1];')
 orig='''{let points=aspis_core::state_only_prefix::r0::statement_points(alpha);let extra=[alpha[8],alpha[9]];let mut factors=[[[K::ZERO;4];5];5];for k in 0..3 {for d in 0..5 {let a=points[k][9-2*TAU[d]];let b=points[k][8-2*TAU[d]];factors[k][d]=[K::ONE.sub(a).mul(K::ONE.sub(b)),a.mul(K::ONE.sub(b)),K::ONE.sub(a).mul(b),a.mul(b)];}}for k in 0..2 {factors[3+k][0]=[K::ONE,z[k].y,z[k].x,z[k].x.mul(z[k].y)];let mut x=double(z[k].x);for d in 1..5 {let y=double(x);factors[3+k][d]=[K::ONE,x,y,x.mul(y)];x=double(y);}}Ok(Self::box_from_parts(variant,factors,points,extra))}'''
 assert tokens(body(w,'pub fn new('))==tokens(orig)
 expected='{let points=state_only_statement_points(alpha);let extra=[alpha[8],alpha[9]];let mut factors=[[[K::ZERO;4];5];5];'
