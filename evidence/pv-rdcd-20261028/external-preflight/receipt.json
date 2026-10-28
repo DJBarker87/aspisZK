@@ -1,0 +1,38 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/external-preflight/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/external-preflight/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/preflight.py"
+  ],
+  "exit": 0,
+  "wall": "0:00.36",
+  "peak_rss_kib": "28152",
+  "swap": "0",
+  "source_revision": "6fe960c9476fd00f0e703872e1f98c7bbb6502d9",
+  "expected_phase": "source-object-preflight",
+  "axioms": "N/A native configuration/body audit",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  }
+}
