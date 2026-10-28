@@ -64,9 +64,13 @@ theorem null_is_allocation_error {World : Type}
     (nonzero : layout.size ≠ 0) (null : ptr.address = 0)
     (call : (if zeroed then zero layout world else allocate layout world)=ok (ptr,after)) :
     deployedGlobal allocate zero layout zeroed world = ok (.error (),after) := by
-  unfold deployedGlobal
-  rw [if_neg nonzero,call]
-  simp only [bind_tc_ok,Aeneas.Std.uncurry,null,↓reduceIte]
+  cases zeroed with
+  | false =>
+    have hc : allocate layout world = ok (ptr,after) := by simpa using call
+    simp [deployedGlobal,nonzero,hc,null]
+  | true =>
+    have hc : zero layout world = ok (ptr,after) := by simpa using call
+    simp [deployedGlobal,nonzero,hc,null]
 
 #print axioms allocate_complete
 #print axioms runtime_complete
