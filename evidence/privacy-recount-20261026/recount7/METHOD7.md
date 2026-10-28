@@ -44,3 +44,9 @@ endpoint, View/ROMView, metadata, observer map and RunJoin agreement types.
 
 The capped trust list stays exactly entropy_law, entropy_kernel, observation.
 Endpoint premises removed/added/weakened: 0/0/0. Target not yet established.
+
+Automatic relaunch 3 recovered the completed run2 report and commits through
+97ef6c0b23 (run2 ended codex-exit=0). Runs0/1 were interrupted; run2 completed
+the recount. Across all prior runs and this recovery, Lean remains0/20,
+Kani0/0 and no Env-J IDs consumed. Existing validation PASS is retained without
+an unchanged replay; this recovery changes provenance only.
