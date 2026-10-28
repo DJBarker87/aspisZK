@@ -7,6 +7,14 @@ plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['ch
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
+# Own-input gate: a newly staged dependency must have an accepted matching source.
+round_sources={m:v for m,v in plan['modules'].items() if m.endswith('44')}
+round_accepted={v['module']:v for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
+for m in mods:
+ for d in plan['modules'][m]['imports']:
+  if d in round_sources:
+   assert d in round_accepted and round_accepted[d]['source_sha256']==round_sources[d]['sha256'],('compile prerequisite first',m,d)
+
 def transport(cmd,**kw):
  for k in range(11):
   r=subprocess.run(cmd,**kw)
