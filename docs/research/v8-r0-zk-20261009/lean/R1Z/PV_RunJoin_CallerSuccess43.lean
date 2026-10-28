@@ -20,8 +20,9 @@ theorem success (ops : ExternalFuns) {H T1 T2 : Type}
         .ok (.Ok built,nextCommitments)) :
     built.bytes.length=13831 ∧ ∃ records, PV_RunJoin_SemanticDomain40.Domain ops
       (alloc.vec.Vec.deref built.bytes) 27#u8 32#usize 0#u8 records := by
-  exact PV_RunJoin_ResultPost41.success _ _ _
-    (PV_RunJoin_CallerDomain43.post ops hash helperInst commitInst public1 c1 d g padding
-      helper commitments initialHash variant) h
+  have hp := PV_RunJoin_CallerDomain43.post ops hash helperInst commitInst public1 c1 d g padding
+    helper commitments initialHash variant
+  rw [h] at hp
+  exact hp
 #print axioms success
 end R1Z.PV_RunJoin_CallerSuccess43
