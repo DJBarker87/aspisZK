@@ -24,7 +24,6 @@ theorem correct (d : Array U32 8#usize) (i : Usize) (hi : i.val ≤ 8) :
       · have hn : ¬d.val[i.val]! ≥ aspis_core.field.P := by
           simpa only [UScalar.le_equiv,aspis_core.field.P,UScalar.ofNatCore_val_eq,not_le] using hc
         rw [if_neg hn]
-        simp only [lift,bind_tc_ok]
         have hv := BuilderRecordsArray.next_val i (by omega)
         rw [ih (8-(Usize.wrapping_add i 1#usize).val) (by omega)
           (Usize.wrapping_add i 1#usize) (by omega) rfl]
