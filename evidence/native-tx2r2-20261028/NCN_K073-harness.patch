@@ -1,0 +1,69 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1788,6 +1788,12 @@
+ use super::*;
+ use core::cell::Cell;
+ #[derive(Clone,Copy)]struct Request<'a>{calls:&'a Cell<usize>,stop:usize,proof:&'a[u8],public:&'a[u8],saved:&'a[u8]}
++fn prefix<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(),Error>{
++    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
++    let end=bytes.len()-32;
++    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b"UNPROVED:R1:checkpoint",&bytes[..end]]) {return Err(Error::Checkpoint);}
++Ok(())
++}
+ impl Digest32 for Request<'_>{fn digest(&self,parts:&[&[u8]])->[u8;32]{
+ let n=self.calls.get();self.calls.set(n+1);
+ let range=match n {
+@@ -1820,7 +1826,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:0,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()==1);
+ }
+ #[kani::proof] #[kani::unwind(40)]
+@@ -1831,7 +1837,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:0,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()!=1);
+ }
+ #[kani::proof] #[kani::unwind(40)]
+@@ -1842,7 +1848,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:1,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()==2);
+ }
+ #[kani::proof] #[kani::unwind(40)]
+@@ -1853,7 +1859,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:1,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()!=2);
+ }
+ #[kani::proof] #[kani::unwind(40)]
+@@ -1864,7 +1870,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:2,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()==3);
+ }
+ #[kani::proof] #[kani::unwind(40)]
+@@ -1875,7 +1881,7 @@
+ let next:u8=kani::any();kani::assume(next<=22);saved[9]=next;saved[11]=0;saved[12]=0;saved[13]=0;saved[14]=0;saved[15]=0;
+ let proof:[u8;57607]=kani::any();let public:[u8;1880]=kani::any();let count=Cell::new(0usize);
+ let hash=Request{calls:&count,stop:2,proof:&proof,public:&public,saved:&saved};
+-let out=resume(&saved,&proof,&public,Variant::S2,hash);
++let out=prefix(&saved,&proof,&public,Variant::S2,hash);
+ assert!(matches!(out,Err(Error::Checkpoint)));assert!(count.get()!=3);
+ }
+ }

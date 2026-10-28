@@ -12,7 +12,8 @@ let range=match n {
 1=>{assert!(parts.len()==1&&parts[0].len()==1880&&parts[0].as_ptr()==self.public.as_ptr());48..80},
 2=>{assert!(parts.len()==2&&parts[0]==b"UNPROVED:R1:checkpoint"&&parts[1].len()==1736&&parts[1].as_ptr()==self.saved.as_ptr());1736..1768},
 _=>panic!("unreached suffix digest")};
-let mut reply:[u8;32]=self.saved[range].try_into().unwrap();if n==self.stop{reply[0]^=1;}reply
+let expected:[u8;32]=self.saved[range].try_into().unwrap();
+if n==self.stop{let reply:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);kani::assume(reply[j]!=expected[j]);reply}else{expected}
 }}
 '''
 q=[]

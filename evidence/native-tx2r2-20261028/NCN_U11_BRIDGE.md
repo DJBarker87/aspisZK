@@ -106,3 +106,50 @@ conditions and first bad-prefix rejection for the selected model queryLoop,
 reusing NCI's forward invariants. This is useful for native-step composition;
 it is not the missing native contains-prefix/Std association. L012 was a
 rejected propositional proof draft; its audit is excluded.
+
+## Final native prefix and query status
+
+K069 WHOLE resume on arbitrary checkpoint/proof/public mismatch inputs timed
+out90s. It has zero credit. K070–K075 instead prove/control only the exact
+frozen header+hash PREFIX, byte-pinned in NCN_PREFIX_SOURCE.json. The same
+harness names are retained but the target explicitly changes to the prefix
+Result<(),Error>, with no post-hash continuation. It is not a whole-resume pass.
+The complete proof57607/public1880/checkpoint1768 contents are arbitrary;
+proof→public→checksum short circuit, request pointers/lengths and checksum
+prefix1736/domain are checked. Earlier matching replies equal the stored slot;
+the first differing reply is arbitrary with an arbitrary mismatching-byte
+witness. NCN_MismatchWitness.mismatch_witness (L014) proves this covers every
+unequal same-length reply, rather than a single-bit corruption class. Digest
+VALUE and the actual SolanaDigest/syscall forwarding remain the existing U00
+runtime boundary, never a SHA implementation in Kani.
+
+K067 arbitrary-prefix out-of-range query step timed out. K076 split that shape
+with an unreachable-contains sentinel, but its first stub signature lacked the
+generic parameter and codegen failed. The OWN cfg-only stub repair at K077
+retains the harness name, adds T:PartialEq, and passes with the sentinel proved
+unreachable. **K077 HAS NO NATIVE CREDIT**: the matching negative control under
+that generic-stub configuration was not run before70/70 exhaustion. The trap
+has no promised semantics for any reached contains call. It must not replace
+contains in the live in-range/duplicate cases. The next worker must run the
+matching negative before relying even on this rejection class.
+
+| Member | Final native/cohort scope and remaining implementation work |
+|---|---|
+| F107 Reader::raw | Local full1768 windows for widths1/4/16 and all nine reached32-byte cursor classes pass with controls. Native account/saved-buffer region and enclosing operation installation remain OPEN; generic arbitrary-cursor raw32 is not claimed. |
+| F106 Reader::k | Full1768 bounded weak cursor contract admitted with Result controls; exact codec/raw child results reused. SAME-byte/source-to-installed-reader carrier association remains explicit, not supplied by that weak contract. |
+| F105 Reader::e | Exact raw32 reached-domain windows plus old closed decoder results; enclosing native reader/callee installation and saved-region association remain OPEN. |
+| F121 read_checkpoint_semantic_alpha | Complete native ten-call transport on arbitrary full checkpoint and all reply/error prefixes; corresponding model sections reused. Full same-byte Reader::k association/installed-port composition remains conditional. |
+| F122 read_checkpoint_weights | Arbitrary64-cell native iterator/writeback/reply/frame/error step and total successful/error model induction are checked. FilledK64 plus actual Vec borrow/deref/cleanup, same source-buffer ownership and enclosing loop association remain OPEN. |
+| F126 validate_checkpoint_queries | Exact model decision/first-error algebra checked. Native contains-prefix association and full outer22-step association remain OPEN; K077 is unpaired and unusable for native credit. |
+| F124 resume | Header/hash prefix only. Arbitrary accepted full result, allocation/Box/Vec ownership, all installed reader/validator ports, actual proof/public/saved provenance, syscall forwarding and native next10 caller association remain OPEN. |
+
+All remaining rows require native memory/iterator/call-site association or a
+named open lower bridge. Repackaging them as a whole-output equation in Lean
+would not discharge them. Native/body/source-to-ELF trust, RuntimePersistence,
+L154 statement parameter, narrowed D188 and RPx_Deployed.deployed are unchanged.
+The coherent dictionary's digest/error slots remain op43/op44.
+
+Final evidence summary:70/70 Kani and24/70 Lean;77-theorem co-import/axioms
+audit L024 passes with standard axioms. All94 scopes terminal and pins unchanged.
+For member-by-member reasons why remaining work needs native evidence despite
+unused Lean attempts, see NCN_HANDOFF.md. No enclosing U11 closure is claimed.

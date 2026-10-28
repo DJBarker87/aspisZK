@@ -1,0 +1,23 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1787,6 +1787,7 @@
+ #[cfg(kani)] mod NCN_resume {
+ use super::*;
+ use core::cell::Cell;
++fn contains_never(_: &[u32],_: &u32)->bool {assert!(false,"unreachable contains call");false}
+ #[derive(Clone,Copy)]struct Request<'a>{calls:&'a Cell<usize>,stop:usize,proof:&'a[u8],public:&'a[u8],saved:&'a[u8]}
+ fn prefix<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(),Error>{
+     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}
+@@ -1813,10 +1814,12 @@
+ #[kani::proof] #[kani::unwind(40)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::contains,contains_never)]
+ fn query_range_ok(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i<22&&queries[i]>=1<<18);let out=query_step(&queries,i);assert!(matches!(out,Err(Error::Checkpoint))==true);}
+ #[kani::proof] #[kani::unwind(40)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::contains,contains_never)]
+ fn query_range_wrong(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i<22&&queries[i]>=1<<18);let out=query_step(&queries,i);assert!(matches!(out,Err(Error::Checkpoint))!=true);}
+ #[kani::proof] #[kani::unwind(40)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]

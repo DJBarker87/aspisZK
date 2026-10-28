@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1719,7 +1719,7 @@
+ let source=rows[i][j];let frame=rows[k][j];let terms:usize=kani::any();
+ let state=BatchedWeights{raw:Vec::from(rows),terms};let ptr=state.raw.as_ptr();
+ let mut weights:[K;64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let old=weights[k];let count;{
+-let mut iter=weights[i..].iter_mut().enumerate();let (local,w)=iter.next().unwrap();count=local+i;*w=state.value(count);}
++let mut iter=weights.iter_mut().enumerate();if i>0{let _=iter.nth(i-1);}let (global,w)=iter.next().unwrap();count=global;*w=state.value(count);}
+ let value=weights[i];let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];
+ assert!((limbs[j] as u64)==source%2147483647);assert!(count==i&&weights[k]==old&&state.raw[k][j]==frame&&state.terms==terms);
+ }
+@@ -1733,7 +1733,7 @@
+ let source=rows[i][j];let frame=rows[k][j];let terms:usize=kani::any();
+ let state=BatchedWeights{raw:Vec::from(rows),terms};let ptr=state.raw.as_ptr();
+ let mut weights:[K;64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let old=weights[k];let count;{
+-let mut iter=weights[i..].iter_mut().enumerate();let (local,w)=iter.next().unwrap();count=local+i;*w=state.value(count);}
++let mut iter=weights.iter_mut().enumerate();if i>0{let _=iter.nth(i-1);}let (global,w)=iter.next().unwrap();count=global;*w=state.value(count);}
+ let value=weights[i];let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];
+ assert!((limbs[j] as u64)!=source%2147483647);assert!(count==i&&weights[k]==old&&state.raw[k][j]==frame&&state.terms==terms);
+ }

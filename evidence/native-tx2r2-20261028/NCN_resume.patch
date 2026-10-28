@@ -1,8 +1,8 @@
 --- a/crates/aspis-r1-cost-probe/src/verifier.rs
 +++ b/crates/aspis-r1-cost-probe/src/verifier.rs
-@@ -1747,3 +1747,98 @@
- assert!(flush!=(terms%4==3));
- }
+@@ -1783,3 +1783,99 @@
+ fn caller_wrong(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let state=BatchedWeights{raw:Vec::from(rows),terms:kani::any()};let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<4);let source=state.raw[index][j];let value=state.value(index);let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];assert!((limbs[j] as u64)!=source%2147483647);}
+ fn reduce(x:u64)->M31{let z:u32=kani::any();kani::assume(z as u64==x%2147483647);M31(z)}
  }
 +
 +#[cfg(kani)] mod NCN_resume {
@@ -16,7 +16,8 @@
 +1=>{assert!(parts.len()==1&&parts[0].len()==1880&&parts[0].as_ptr()==self.public.as_ptr());48..80},
 +2=>{assert!(parts.len()==2&&parts[0]==b"UNPROVED:R1:checkpoint"&&parts[1].len()==1736&&parts[1].as_ptr()==self.saved.as_ptr());1736..1768},
 +_=>panic!("unreached suffix digest")};
-+let mut reply:[u8;32]=self.saved[range].try_into().unwrap();if n==self.stop{reply[0]^=1;}reply
++let expected:[u8;32]=self.saved[range].try_into().unwrap();
++if n==self.stop{let reply:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);kani::assume(reply[j]!=expected[j]);reply}else{expected}
 +}}
 +fn query_step(queries:&[u32;22],mut i:usize)->Result<usize,Error>{
 +let q=queries[i];

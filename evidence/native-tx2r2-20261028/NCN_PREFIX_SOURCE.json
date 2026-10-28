@@ -1,0 +1,6 @@
+{
+  "frozen": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "prefix": "    if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b\"R1P2CKP2\"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}\n    let end=bytes.len()-32;\n    if bytes[16..48]!=hash.digest(&[proof])||bytes[48..80]!=hash.digest(&[public])||bytes[end..]!=hash.digest(&[b\"UNPROVED:R1:checkpoint\",&bytes[..end]]) {return Err(Error::Checkpoint);}",
+  "sha256": "cd5bae3ea7a71b0df78f91099e663f07d52133e2ec56dd6b04a3f4f5d6bb4c62",
+  "scope_change": "K069 full resume stop0 timed out. New target is exact header+hash prefix cut only. Existing harness names preserved, target type Result<(),Error>; this is not a whole-resume pass."
+}
