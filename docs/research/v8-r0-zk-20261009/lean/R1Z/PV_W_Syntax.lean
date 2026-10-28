@@ -44,56 +44,58 @@ theorem eval_thenDo (ops : Interpreter Op W C E)
 
 /-- Independent big-step execution judgment: each successful call hands its
 post-state to the selected continuation; failed/nonreturning calls stop it. -/
-inductive Executes (ops : Interpreter Op W C E) :
-    Program Op E A → W → Run W C E A → Prop where
-  | pure (a : A) (w : W) : Executes ops (.pure a) w ⟨.ok a,w,[]⟩
-  | failure (e : E) (w : W) : Executes ops (.failure e) w ⟨.fail e,w,[]⟩
-  | diverge (w : W) : Executes ops .diverge w ⟨.div,w,[]⟩
-  | call_ok {B : Type} (op : Op B) (k : B → Program Op E A)
-      (w : W) (a : B) (r : Run W C E A)
-      (returns : (ops op w).outcome = .ok a)
-      (rest : Executes ops (k a) (ops op w).world r) :
-      Executes ops (.call op k) w ⟨r.outcome,r.world,(ops op w).calls ++ r.calls⟩
-  | call_fail {B : Type} (op : Op B) (k : B → Program Op E A)
-      (w : W) (e : E) (returns : (ops op w).outcome = .fail e) :
-      Executes ops (.call op k) w ⟨.fail e,(ops op w).world,(ops op w).calls⟩
-  | call_div {B : Type} (op : Op B) (k : B → Program Op E A)
-      (w : W) (returns : (ops op w).outcome = .div) :
-      Executes ops (.call op k) w ⟨.div,(ops op w).world,(ops op w).calls⟩
+def Executes (ops : Interpreter Op W C E) :
+    Program Op E A → W → Run W C E A → Prop
+  | .pure a, w, r => r = ⟨.ok a,w,[]⟩
+  | .failure e, w, r => r = ⟨.fail e,w,[]⟩
+  | .diverge, w, r => r = ⟨.div,w,[]⟩
+  | .call op k, w, r =>
+    match (ops op w).outcome with
+    | .ok a => ∃ tail : Run W C E A,
+        Executes ops (k a) (ops op w).world tail ∧
+        r = ⟨tail.outcome,tail.world,(ops op w).calls ++ tail.calls⟩
+    | .fail e => r = ⟨.fail e,(ops op w).world,(ops op w).calls⟩
+    | .div => r = ⟨.div,(ops op w).world,(ops op w).calls⟩
 
 theorem execution_sound (ops : Interpreter Op W C E)
     {p : Program Op E A} {w : W} {r : Run W C E A}
     (h : Executes ops p w r) : eval ops p w = r := by
-  induction h with
-  | pure => rfl
-  | failure => rfl
-  | diverge => rfl
-  | call_ok op k w a r returns rest ih =>
-    change bind (ops op) (fun a => eval ops (k a)) w = _
-    rw [bind_ok _ _ _ _ returns,ih]
-  | call_fail op k w e returns => exact bind_fail _ _ _ _ returns
-  | call_div op k w returns => exact bind_div _ _ _ returns
+  induction p generalizing w r with
+  | pure a => exact h.symm
+  | failure e => exact h.symm
+  | diverge => exact h.symm
+  | call op k ih =>
+    cases returns : (ops op w).outcome with
+    | ok a =>
+      obtain ⟨tail,rest,eq⟩ := (show ∃ tail : Run W C E A,
+        Executes ops (k a) (ops op w).world tail ∧
+        r = ⟨tail.outcome,tail.world,(ops op w).calls ++ tail.calls⟩ by
+          simpa only [Executes,returns] using h)
+      change bind (ops op) (fun a => eval ops (k a)) w = _
+      rw [bind_ok _ _ _ _ returns,ih a rest]
+      exact eq.symm
+    | fail e =>
+      change bind (ops op) (fun a => eval ops (k a)) w = _
+      rw [bind_fail _ _ _ _ returns]
+      exact (show r = _ by simpa only [Executes,returns] using h).symm
+    | div =>
+      change bind (ops op) (fun a => eval ops (k a)) w = _
+      rw [bind_div _ _ _ returns]
+      exact (show r = _ by simpa only [Executes,returns] using h).symm
 
 theorem execution_complete (ops : Interpreter Op W C E)
     (p : Program Op E A) (w : W) : Executes ops p w (eval ops p w) := by
   induction p generalizing w with
-  | pure a => exact .pure a w
-  | failure e => exact .failure e w
-  | diverge => exact .diverge w
+  | pure a => rfl
+  | failure e => rfl
+  | diverge => rfl
   | call op k ih =>
     cases h : (ops op w).outcome with
     | ok a =>
-      change Executes ops (.call op k) w (bind (ops op) (fun a => eval ops (k a)) w)
-      rw [bind_ok _ _ _ _ h]
-      exact .call_ok op k w a _ h (ih a _)
-    | fail e =>
-      change Executes ops (.call op k) w (bind (ops op) (fun a => eval ops (k a)) w)
-      rw [bind_fail _ _ _ _ h]
-      exact .call_fail op k w e h
-    | div =>
-      change Executes ops (.call op k) w (bind (ops op) (fun a => eval ops (k a)) w)
-      rw [bind_div _ _ _ h]
-      exact .call_div op k w h
+      simp only [Executes,h]
+      exact ⟨eval ops (k a) (ops op w).world,ih a _,bind_ok _ _ _ _ h⟩
+    | fail e => simp only [Executes,eval,bind,h]
+    | div => simp only [Executes,eval,bind,h]
 
 theorem eval_valid (ops : Interpreter Op W C E) (step : W → C → W → Prop)
     (leaves : ∀ {B : Type} (op : Op B), Valid step (ops op))
