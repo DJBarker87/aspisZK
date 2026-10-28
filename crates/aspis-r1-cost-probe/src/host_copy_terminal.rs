@@ -6,9 +6,23 @@
 //! independent host compiler/reference boundary and is not linked on SBF.
 
 
+// Closure-free array construction, evaluated in increasing source index order.
+macro_rules! qm31_array {
+    ($n:expr, $index:ident, $body:expr) => {{
+        let mut output = [QM31::ZERO; $n];
+        let mut $index = 0usize;
+        while $index < $n {
+            output[$index] = $body;
+            $index += 1;
+        }
+        output
+    }};
+}
+
 #[cfg(any(test, feature = "optimized-terminal"))]
-use aspis_core::field::{qm31_sum_products2, qm31_sum_products3, qm31_sum_products4};
-use aspis_core::field::{PreparedQm31Multiplier, CM31, M31, QM31};
+use crate::host_terminal_field::{qm31_sum_products2, qm31_sum_products3, qm31_sum_products4};
+use crate::host_terminal_field::PreparedQm31Multiplier;
+use aspis_core::field::{CM31, M31, QM31};
 
 use aspis_statement::poseidon2::POSEIDON2_WIDTH;
 
@@ -140,28 +154,29 @@ pub(crate) struct Selectors {
 }
 
 impl Selectors {
-    fn expand<const N: usize>(coordinates: &[QM31]) -> [QM31; N] {
+    fn expand<const N: usize>(point: &[QM31; 10], start: usize, count: usize) -> [QM31; N] {
         let mut weights = [QM31::ZERO; N];
         weights[0] = QM31::ONE;
         let mut len = 1usize;
-        for coordinate in coordinates {
-            let prepared = PreparedQm31Multiplier::new(*coordinate);
-            for index in (0..len).rev() {
+        let mut coordinate = start;
+        while coordinate < start + count {
+            let prepared = PreparedQm31Multiplier::new(point[coordinate]);
+            let mut index = len;
+            while index > 0 {
+                index -= 1;
                 let parent = weights[index];
                 let right = prepared.mul(parent);
                 weights[2 * index] = parent.sub(right);
                 weights[2 * index + 1] = right;
             }
             len *= 2;
+            coordinate += 1;
         }
         weights
     }
 
     pub(crate) fn at_point(point: &[QM31; 10]) -> Self {
-        Self {
-            high: Self::expand(&point[..6]),
-            low: Self::expand(&point[6..]),
-        }
+        Self { high: Self::expand(point, 0, 6), low: Self::expand(point, 6, 4) }
     }
 
     #[inline(never)]
@@ -289,20 +304,20 @@ fn pattern_values_windowed(
         power = power.mul(lambda);
         slot += 1;
     }
-    let prepared: [PreparedQm31Multiplier; 8] = powers.map(PreparedQm31Multiplier::new);
-    let window = |start: usize| {
-        let mut value = QM31::ZERO;
-        let mut slot = 0usize;
-        while slot < 8 {
-            value = value.add(prepared[slot].mul(openings[start + slot]));
-            slot += 1;
-        }
-        value
-    };
-    let window_0 = window(0);
-    let window_1 = window(1);
-    let window_2 = window(2);
-    let window_8 = window(8);
+    let prepared = [
+        PreparedQm31Multiplier::new(powers[0]),
+        PreparedQm31Multiplier::new(powers[1]),
+        PreparedQm31Multiplier::new(powers[2]),
+        PreparedQm31Multiplier::new(powers[3]),
+        PreparedQm31Multiplier::new(powers[4]),
+        PreparedQm31Multiplier::new(powers[5]),
+        PreparedQm31Multiplier::new(powers[6]),
+        PreparedQm31Multiplier::new(powers[7]),
+    ];
+    let window_0 = pattern_window(openings, prepared, 0);
+    let window_1 = pattern_window(openings, prepared, 1);
+    let window_2 = pattern_window(openings, prepared, 2);
+    let window_8 = pattern_window(openings, prepared, 8);
     let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];
     result[0] = window_0.add(prepared[7].mul(window_8));
     result[1] = window_0;
@@ -872,21 +887,21 @@ fn finish_selector_tensor_basis(
             let mut coordinate = COPY_GROUP_LOCAL_GROUP_OFFSETS[group];
             while coordinate < end {
                 let count = core::cmp::min(4, end - coordinate);
-                let tag_values: [QM31; 4] = core::array::from_fn(|index| {
+                let tag_values: [QM31; 4] = qm31_array!(4, index, {
                     if index < count {
                         copy_tag_coordinate_value(scratch, coordinate + index, selectors)
                     } else {
                         QM31::ZERO
                     }
                 });
-                let weight_values: [QM31; 4] = core::array::from_fn(|index| {
+                let weight_values: [QM31; 4] = qm31_array!(4, index, {
                     if index < count {
                         scratch[COPY_SELECTOR_TENSOR_WEIGHT_OFFSET + coordinate + index]
                     } else {
                         QM31::ZERO
                     }
                 });
-                let lows: [QM31; 4] = core::array::from_fn(|index| {
+                let lows: [QM31; 4] = qm31_array!(4, index, {
                     if index < count {
                         selectors.low
                             [usize::from(COPY_GROUP_LOCAL_COORDINATE_LOCALS[coordinate + index])]
@@ -1147,4 +1162,15 @@ pub fn pool_v1_pair_forest_copy_lane_boolean_extraction_v1(
         append_index,
         variant,
     ))
+}
+
+#[inline(always)]
+fn pattern_window(openings: &[QM31; POSEIDON2_WIDTH], prepared: [PreparedQm31Multiplier; 8], start: usize) -> QM31 {
+    let mut value = QM31::ZERO;
+    let mut slot = 0usize;
+    while slot < 8 {
+        value = value.add(prepared[slot].mul(openings[start + slot]));
+        slot += 1;
+    }
+    value
 }

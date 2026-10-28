@@ -1,0 +1,35 @@
+theorem PV_B3_MaskRowBridge.op134_source : PV_B3_MaskRowBridge.translate
+    PV_B3_Forest_134.host_forest.pool_v1_pair_forest_copy_active_row_masks_v1 =
+  PV_CBM_ReferenceRaw.reference.masks :=
+Eq.mpr
+  (id
+    (congrArg (fun _a => PV_B3_MaskRowBridge.translate _a = PV_CBM_ReferenceRaw.reference.masks)
+      PV_B3_MaskRowExpected.op134_value))
+  (Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          PV_B3_MaskRowBridge.translate
+              (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok R1Z.PV_Op134_Masks.masks)) =
+            _a)
+        R1Z.PV_Op134_Masks.source))
+    (Eq.refl
+      (PV_B3_MaskRowBridge.translate
+        (Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok R1Z.PV_Op134_Masks.masks)))))
+theorem PV_B3_MaskRowBridge.row_bits : ∀ (block : Fin 64) (bit : Fin 16),
+  ∃ m,
+    PV_B3_Forest_134.host_forest.pool_v1_pair_forest_copy_active_row_masks_v1 =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok m) ∧
+      (↑m).length = 64 ∧
+        ((↑(↑m)[↑block]).testBit ↑bit = true ↔ 16 * ↑block + ↑bit ∈ List.map (fun r => ↑r) R1Z.PV_Op134_RowSpec.rows) :=
+fun block bit =>
+  Exists.intro R1Z.PV_Op134_Masks.masks
+    ⟨PV_B3_MaskRowExpected.op134_value, ⟨R1Z.PV_Op134_Masks.length, R1Z.PV_Op134_MaskSpec.bits block bit⟩⟩
+'PV_B3_MaskRowExpected.masks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskRowExpected.op134_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskRowExpected.nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskRowBridge.op134_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskRowBridge.row_bits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskUnion.dedup' depends on axioms: [propext, Quot.sound]
+'PV_B3_MaskSparseCapacity.p136' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_MaskSparseCapacity.c136' depends on axioms: [propext, Classical.choice, Quot.sound]

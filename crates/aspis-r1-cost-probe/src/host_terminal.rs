@@ -3,8 +3,23 @@
 //! packs Poseidon, 94 semantic source lanes and the 136-link Copy argument
 //! into the same 29 theta lanes as the one-tree payment terminal.
 
+
+// Closure-free array construction, evaluated in increasing source index order.
+macro_rules! qm31_array {
+    ($n:expr, $index:ident, $body:expr) => {{
+        let mut output = [QM31::ZERO; $n];
+        let mut $index = 0usize;
+        while $index < $n {
+            output[$index] = $body;
+            $index += 1;
+        }
+        output
+    }};
+}
+
+use crate::host_terminal_field::{qm31_pack_base4, PreparedQm31Multiplier};
 use aspis_core::{
-    field::{qm31_pack_base4, PreparedQm31Multiplier, CM31, M31, QM31},
+    field::{CM31, M31, QM31},
     state_only_hiding::STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,
 };
 
@@ -87,7 +102,7 @@ enum CompiledVariant {
 }
 
 #[derive(Clone, Copy)]
-struct SemanticPublic<'a> {
+struct SemanticPublic {
     variant: CompiledVariant,
     pool: [u8; 32],
     deployment_domain: [u8; 32],
@@ -97,7 +112,7 @@ struct SemanticPublic<'a> {
     recipient: Option<Digest>,
     change: Digest,
     withdrawal_amount: Option<u32>,
-    transition: &'a PoolV1PairLatePublicStatementV1,
+    transition: PoolV1PairLatePublicStatementV1,
 }
 
 #[inline(always)]
@@ -128,7 +143,7 @@ fn add_preweighted<const N: usize>(
     let first = start / 4;
     let last = (start + N - 1) / 4;
     for group in first..=last {
-        let lanes: [QM31; 4] = core::array::from_fn(|slot| {
+        let lanes: [QM31; 4] = qm31_array!(4, slot, {
             let source = 4 * group + slot;
             if source >= start && source < start + N {
                 values[source - start]
@@ -158,7 +173,7 @@ fn add_preweighted_shared_selector<const N: usize>(
     let first = start / 4;
     let last = (start + N - 1) / 4;
     for group in first..=last {
-        let lanes: [QM31; 4] = core::array::from_fn(|slot| {
+        let lanes: [QM31; 4] = qm31_array!(4, slot, {
             let source = 4 * group + slot;
             if source >= start && source < start + N {
                 values[source - start]
@@ -183,19 +198,24 @@ fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 {
 
 #[inline(always)]
 fn reconstruct_10(view: &[QM31; 16]) -> QM31 {
-    view[..9]
-        .iter()
-        .rev()
-        .fold(view[9], |acc, bit| acc.add(acc).add(*bit))
+    let mut acc = view[9];
+    let mut index = 9usize;
+    while index > 0 {
+        index -= 1;
+        acc = acc.add(acc).add(view[index]);
+    }
+    acc
 }
 
 #[inline(always)]
 fn empty_root(level: usize) -> Digest {
-    constants::POOL_V1_PAIR_EMPTY_ROOTS_V1[level].map(M31)
+    let words = constants::POOL_V1_PAIR_EMPTY_ROOTS_V1[level];
+    [M31(words[0]), M31(words[1]), M31(words[2]), M31(words[3]),
+     M31(words[4]), M31(words[5]), M31(words[6]), M31(words[7])]
 }
 
 fn validate_transition(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
 ) -> Result<(), PoolV1PairForestSemanticTerminalErrorV1> {
     let source = public.transition.live_snapshot;
     let after = public.transition.candidate_afterstate;
@@ -256,7 +276,7 @@ fn initial_variant_selectors(
 }
 
 fn semantic_initial_and_absorption(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> ([QM31; 16], [QM31; 16]) {
@@ -277,7 +297,7 @@ fn semantic_initial_and_absorption(
     let full = PreparedQm31Multiplier::new(full_initial_selector);
     let full_or_rate =
         PreparedQm31Multiplier::new(full_initial_selector.add(rate_initial_selector));
-    let mut initial = core::array::from_fn(|lane| {
+    let mut initial = qm31_array!(16, lane, {
         if lane < RATE {
             full_or_rate.mul(openings.z[lane])
         } else {
@@ -338,7 +358,7 @@ fn absorption_lanes_literal(
     nodes: QM31,
     openings: &[QM31; 16],
 ) -> [QM31; 16] {
-    core::array::from_fn(|lane| {
+    qm31_array!(16, lane, {
         let blocks = if lane < 2 {
             fixed
         } else if lane < RATE {
@@ -364,7 +384,7 @@ fn absorption_lanes_factored(
         PreparedQm31Multiplier::new(low.mul(fixed.add(chunk_two))),
         PreparedQm31Multiplier::new(low.mul(fixed.add(chunk_two).add(chunk_eight).add(nodes))),
     ];
-    core::array::from_fn(|lane| {
+    qm31_array!(16, lane, {
         let scale = if lane < 2 {
             scales[0]
         } else if lane < RATE {
@@ -398,7 +418,7 @@ fn add_digest_binding(
 #[inline(never)]
 fn add_schedule_lanes(
     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
@@ -486,7 +506,9 @@ fn add_value_lanes(
     selectors: &Selectors,
 ) {
     let value_selectors =
-        [0usize, 2, 4].map(|local| selectors.row(16 * VALUE_AUXILIARY_BLOCK + local));
+        [selectors.row(16 * VALUE_AUXILIARY_BLOCK),
+         selectors.row(16 * VALUE_AUXILIARY_BLOCK + 2),
+         selectors.row(16 * VALUE_AUXILIARY_BLOCK + 4)];
     let range_selector = QM31::ZERO
         .add(value_selectors[0])
         .add(value_selectors[1])
@@ -546,7 +568,7 @@ fn variant_expected_output(variant: CompiledVariant) -> M31 {
 #[inline(never)]
 fn add_occupancy_lanes(
     packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
@@ -624,7 +646,7 @@ fn occupancy_lanes_factored(
 #[inline(never)]
 #[cfg(any(test, not(feature = "optimized-terminal")))]
 fn public_digest_lanes(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS] {
@@ -728,7 +750,7 @@ fn add_digest_binding_packed(
     right_tweak: bool,
 ) {
     for group in 0..DIGEST_ELEMS / 4 {
-        let residuals: [QM31; 4] = core::array::from_fn(|slot| {
+        let residuals: [QM31; 4] = qm31_array!(4, slot, {
             let lane = 4 * group + slot;
             let mut target = expected[lane];
             if right_tweak && lane + 1 == DIGEST_ELEMS {
@@ -749,7 +771,7 @@ fn add_digest_binding_packed(
 ))]
 #[inline(never)]
 fn public_digest_packed_row_major(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1041,7 +1063,7 @@ fn optional_carry_packed_selector_tensor(
 ))]
 #[inline(never)]
 fn public_digest_packed_selector_tensor(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1125,7 +1147,7 @@ fn public_digest_packed_selector_tensor(
 #[cfg(any(test, feature = "optimized-terminal"))]
 #[inline(always)]
 fn public_digest_packed(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; DIGEST_ELEMS / 4] {
@@ -1158,7 +1180,7 @@ fn scalar_lanes(
 }
 
 fn semantic_packed(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) -> [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1] {
@@ -1216,14 +1238,10 @@ fn copy_variant(variant: CompiledVariant) -> PoolV1PairForestCompiledVariantV1 {
 }
 
 fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
-    let factor = |a: QM31, b: QM31| {
-        let ab = a.mul(b);
-        QM31::ONE.sub(a).sub(b).add(ab).add(ab)
-    };
-    let mut product = factor(left[0], right[0]);
+    let mut product = equality_factor(left[0], right[0]);
     let mut index = 1usize;
     while index < left.len() {
-        product = product.mul(factor(left[index], right[index]));
+        product = product.mul(equality_factor(left[index], right[index]));
         index += 1;
     }
     product
@@ -1231,7 +1249,7 @@ fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
 
 #[allow(clippy::type_complexity)]
 fn composition_parts(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
     point: &[QM31; 10],
     lambda: QM31,
@@ -1257,11 +1275,11 @@ fn composition_parts(
     }
     validate_transition(public)?;
     let openings = StateOnlyPoseidonOpenings {
-        z: core::array::from_fn(|column| selected_claim(claims, 0, column)),
-        succ_z: core::array::from_fn(|column| selected_claim(claims, 1, column)),
-        xor12_z: core::array::from_fn(|column| selected_claim(claims, 2, column)),
+        z: qm31_array!(16, column, selected_claim(claims, 0, column)),
+        succ_z: qm31_array!(16, column, selected_claim(claims, 1, column)),
+        xor12_z: qm31_array!(16, column, selected_claim(claims, 2, column)),
     };
-    let mask_only = core::array::from_fn(|column| {
+    let mask_only = qm31_array!(STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS, column, {
         selected_claim(
             claims,
             0,
@@ -1284,11 +1302,15 @@ fn composition_parts(
     );
     let prepared_theta = PreparedQm31Multiplier::new(theta);
     let mut composition = copy.residual;
-    for lane in semantic.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    let mut index = semantic.len();
+    while index > 0 {
+        index -= 1;
+        composition = prepared_theta.mul(composition).add(semantic[index]);
     }
-    for lane in poseidon.into_iter().rev() {
-        composition = prepared_theta.mul(composition).add(lane);
+    index = poseidon.len();
+    while index > 0 {
+        index -= 1;
+        composition = prepared_theta.mul(composition).add(poseidon[index]);
     }
     Ok((
         composition,
@@ -1301,7 +1323,7 @@ fn composition_parts(
 }
 
 fn terminal_parts(
-    public: SemanticPublic<'_>,
+    public: SemanticPublic,
     claims: &[QM31; POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_CLAIMS_V1],
     point: &[QM31; 10],
     lambda: QM31,
@@ -1330,7 +1352,7 @@ fn terminal_parts(
 fn private_public<'a>(
     public: &PoolV1PrivateTransferPublicV1,
     transition: &'a PoolV1PairLatePublicStatementV1,
-) -> SemanticPublic<'a> {
+) -> SemanticPublic {
     SemanticPublic {
         variant: CompiledVariant::PrivateTransfer,
         pool: public.pool,
@@ -1341,14 +1363,14 @@ fn private_public<'a>(
         recipient: Some(public.recipient_commitment),
         change: public.change_commitment,
         withdrawal_amount: None,
-        transition,
+        transition: *transition,
     }
 }
 
 fn withdrawal_public<'a>(
     public: &PoolV1WithdrawalPublicV1,
     transition: &'a PoolV1PairLatePublicStatementV1,
-) -> SemanticPublic<'a> {
+) -> SemanticPublic {
     SemanticPublic {
         variant: CompiledVariant::Withdrawal,
         pool: public.pool,
@@ -1359,7 +1381,7 @@ fn withdrawal_public<'a>(
         recipient: None,
         change: public.change_commitment,
         withdrawal_amount: Some(public.amount),
-        transition,
+        transition: *transition,
     }
 }
 
@@ -1477,14 +1499,14 @@ pub mod r0 {
         ),
     }
     impl<'a> Public<'a> {
-        fn semantic(self) -> SemanticPublic<'a> {
+        fn semantic(self) -> SemanticPublic {
             match self {
                 Self::Transfer(public, transition) => private_public(public, transition),
                 Self::Withdrawal(public, transition) => withdrawal_public(public, transition),
             }
         }
         pub fn transition(self) -> &'a PoolV1PairLatePublicStatementV1 {
-            self.semantic().transition
+            match self { Self::Transfer(_, t) | Self::Withdrawal(_, t) => t }
         }
         /// SPEC §9 declaration order. Pool/domain/sequence and source current
         /// root are not fields of R0P.Public and are not silently hashed here.
@@ -1623,3 +1645,9 @@ pub mod r0 {
 
 }
 
+
+#[inline(always)]
+fn equality_factor(a: QM31, b: QM31) -> QM31 {
+    let ab = a.mul(b);
+    QM31::ONE.sub(a).sub(b).add(ab).add(ab)
+}

@@ -12,3 +12,6 @@ pub mod host_arithmetic;
 
 #[path="../../../crates/aspis-prover/src/host_forest.rs"]
 pub mod host_forest;
+
+#[path="../../../crates/aspis-r1-cost-probe/src/host_terminal_field.rs"]
+mod host_terminal_field;

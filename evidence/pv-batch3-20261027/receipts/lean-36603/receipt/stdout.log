@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_SparseSet.lean:8:36: error: Type mismatch
+  array size (Function.update xs (↑i) z)
+has type
+  Std.Array A size
+but is expected to have type
+  _root_.Array A
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_SparseSet.lean:8:4: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_SparseSet.lean:8:4: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+A : Type
+size : Usize
+xs : ℕ → A
+i : Usize
+z : A
+⊢ ↑i < Array.size ?m.3
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_SparseSet.lean:8:14: error: Application type mismatch: The argument
+  array size xs
+has type
+  Std.Array A size
+but is expected to have type
+  _root_.Array A
+in the application
+  @Array.set A (array size xs)
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_SparseSet.lean:28:2: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (xs ↑i, (array size xs).set i) = (xs ↑i, fun z => array size (Function.update xs (↑i) z))
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.22} {β : α → Sort ?u.21} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+A : Type
+size : Usize
+xs : ℕ → A
+i : Usize
+hi : ↑i < ↑size
+⊢ (xs ↑i, (array size xs).set i) = (xs ↑i, fun z => array size (Function.update xs (↑i) z))
+'MonadStateOf.set' does not depend on any axioms
+'PV_B3_SparseSet.mutable_index' depends on axioms: [propext, sorryAx]

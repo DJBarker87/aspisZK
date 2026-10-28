@@ -1,0 +1,68 @@
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    core.iter.adapters.rev.Rev I → Result (Option Item × core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => ok (o, { iter := it })
+def Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst r => do
+  let lt ← StepInst.partialOrdInst.lt r.start r.end
+  if lt = true then do
+      let b ← StepInst.backward_checked r.end 1#usize
+      match b with
+        | none => fail Error.panic
+        | some e' => ok (some e', { start := r.start, «end» := e' })
+    else ok (none, r)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+def Aeneas.Std.core.iter.range.UScalarStep.backward_checked : {ty : UScalarTy} →
+  UScalar ty → Usize → Result (Option (UScalar ty)) :=
+fun {ty} start n => if h : ↑n ≤ ↑start then ok (some (UScalar.ofNatCore (↑start - ↑n) ⋯)) else ok none
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:40:16: error: Tactic `apply` failed: could not unify the conclusion of `@UScalar.eq_of_val_eq`
+  ?i = ?j
+with the goal
+  ↑n - 1 = (2 ^ UScalarTy.Usize.numBits - 1#usize.bv.toNat + n.bv.toNat) % 2 ^ UScalarTy.Usize.numBits
+
+Note: The full type of `@UScalar.eq_of_val_eq` is
+  ∀ {ty : UScalarTy} {i j : UScalar ty}, ↑i = ↑j → i = j
+
+case pos.e_fst
+n : Usize
+hn : 0 < ↑n
+hr : 0#usize < n
+hb : decide (0 < ↑n) = true
+hs : 1 ≤ ↑n
+⊢ ↑n - 1 = (2 ^ UScalarTy.Usize.numBits - 1#usize.bv.toNat + n.bv.toNat) % 2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:29:4: warning: This simp argument is unused:
+  core.ops.range.Range.Insts.DoubleEndedIterator
+
+Hint: Omit it from the simp argument list.
+  simp only [next, iter, core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next,
+      core.ops.range.Range.Insts.D̵o̵u̵b̵l̵e̵E̵n̵d̵e̵d̵I̵t̵e̵r̵a̵t̵o̵r̵,̵ ̵c̵o̵r̵e̵.̵o̵p̵s̵.̵r̵a̵n̵g̵e̵.̵R̵a̵n̵g̵e̵.̵I̵n̵s̵t̵s̵.̵CoreIterTraitsDoubleEndedIterator.next_back,
+      core.iter.range.StepUsize, core.iter.range.UScalarStep,
+  ̵  ̵ ̵ ̵core.cmp.impls.PartialOrdUsize.lt,
+  ̲  ̲ ̲ ̲liftFun2,
+  ̵  ̵ ̵ ̵core.iter.range.UScalarStep.backward_checked, lift, bind_tc_ok,
+      show (0#usize).val = 0 from rfl, show (1#usize).val = 1 from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_LinearsIterator.lean:32:50: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [next, iter, core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next,
+      core.ops.range.Range.Insts.DoubleEndedIterator,
+  ̲  ̲ ̲ ̲core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back,
+      core.iter.range.StepUsize, core.iter.range.UScalarStep,
+  ̵  ̵ ̵ ̵core.cmp.impls.PartialOrdUsize.lt,
+  ̲  ̲ ̲ ̲liftFun2,
+  ̵  ̵ ̵ ̵core.iter.range.UScalarStep.backward_checked, l̵i̵f̵t̵,̵ ̵bind_tc_ok,
+      show (0#usize).val = 0 from rfl, show (1#usize).val = 1 from rfl]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3_LinearsIterator.iter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_LinearsIterator.next' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_LinearsIterator.sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_LinearsIterator.next_source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

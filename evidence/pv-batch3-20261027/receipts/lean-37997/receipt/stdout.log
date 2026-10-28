@@ -1,0 +1,84 @@
+'PV_B3_Copy_117.host_arithmetic.accumulate_channels' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.reconstruct_component' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.reconstruct_channels' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.qm31_sum_products3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.evaluate_state_only_polynomial.block_value' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.evaluate_state_only_polynomial_loop.body' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.evaluate_state_only_polynomial_loop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PV_B3_Copy_117.host_arithmetic.evaluate_state_only_polynomial' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_AuditSourceD324.lean:353:4: error: Type mismatch: After simplification, term
+  eq
+ has type
+  (match translate r with
+    | ok (core.result.Result.Ok m) => ok (core.result.Result.Ok m)
+    | ok (core.result.Result.Err e) => ok (core.result.Result.Err (restoreError e))
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Ok m)
+but is expected to have type
+  r = ok (core.result.Result.Ok m)
+'PV_B3_AuditSourceD324.Errors134.restoreError' does not depend on any axioms
+'PV_B3_AuditSourceD324.Errors134.restore' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Errors134.error_roundtrip' does not depend on any axioms
+'PV_B3_AuditSourceD324.Errors134.reverse_error_roundtrip' does not depend on any axioms
+'PV_B3_AuditSourceD324.Errors134.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Errors134.reverse_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Errors134.injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Errors134.no_hidden_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_AuditSourceD324.lean:393:35: error: unsolved goals
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+⊢ (do
+      let __x ← host_arithmetic.selected_mask_linears point
+      let coefficients ←
+        PV_B3_Range117.scatter c1 host_arithmetic.FACTOR_EXPONENTS PV_B3_Range117.selectedIndices
+            (Array.repeat 27#usize aspis_core.field.QM31.ZERO)
+      let coefficients1 ←
+        PV_B3_Range117.scatter mask host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS PV_B3_Range117.maskIndices coefficients
+      let shared ←
+        do
+          let prepared ← host_arithmetic.PreparedQm31Multiplier.new __x.1
+          let shared ← coefficients1.index_usize aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
+          PV_B3_Range117.horner coefficients1 prepared PV_B3_Range117.hornerIndices shared
+      let q ← host_arithmetic.mask_power_26 __x.2
+      let q1 ← aspis_core.field.QM31.ONE.add q
+      let q2 ← q1.mul g
+      shared.add q2) =
+    do
+    let (linear, explicit_linear) ← host_arithmetic.selected_mask_linears point
+    let coefficients ←
+      PV_B3_Range117.scatter c1 host_arithmetic.FACTOR_EXPONENTS PV_B3_Range117.selectedIndices
+          (Array.repeat 27#usize aspis_core.field.QM31.ZERO)
+    let coefficients ←
+      PV_B3_Range117.scatter mask host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS PV_B3_Range117.maskIndices coefficients
+    let shared ←
+      do
+        let prepared ← host_arithmetic.PreparedQm31Multiplier.new linear
+        let shared ← Array.index_usize coefficients aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE
+        PV_B3_Range117.horner coefficients prepared PV_B3_Range117.hornerIndices shared
+    let power ← host_arithmetic.mask_power_26 explicit_linear
+    let factor ← aspis_core.field.QM31.ONE.add power
+    let explicit_value ← factor.mul g
+    aspis_core.field.QM31.add shared explicit_value
+'PV_B3_AuditSourceD324.Mask117.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Mask117.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-batch3-20261027/lean/PV_B3_AuditSourceD324.lean:421:4: warning: Try this: intro accumulator cf h
+'PV_B3_AuditSourceD324.Poly121.Progress' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.body_counter' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.rank' does not depend on any axioms
+'PV_B3_AuditSourceD324.Poly121.rank_step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.decreases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.loop_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3_AuditSourceD324.Poly121.source_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
