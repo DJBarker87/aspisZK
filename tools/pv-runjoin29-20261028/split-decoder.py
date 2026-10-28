@@ -28,7 +28,7 @@ for idx in range(len(indices)-1,-1,-1):
  n=indices[idx];nextn=indices[idx+1] if idx+1<len(indices) else None
  module='PV_RunJoin_DecoderStage'+str(n)+'29';ns='R1Z.'+module
  body=fragment(*bounds[n],nextn)
- imports='import R1Z.PV_RunJoin_HeadControl29\n'+('import R1Z.PV_RunJoin_DecoderStage'+str(nextn)+'29\n' if nextn is not None else '')
+ imports='import AspisR1TerminalDecoder.Funs\nimport R1Z.PV_RunJoin_HeadControl29\n'+('import R1Z.PV_RunJoin_DecoderStage'+str(nextn)+'29\n' if nextn is not None else '')
  # A small generic Try inversion is proved independently of the decoder.
  imports+='import R1Z.PV_RunJoin_ResultDomain28\n'
  theorem='''
@@ -42,6 +42,7 @@ theorem branch_continue {α ε : Type} (r : core.result.Result α ε) (a : α)
  implicit='{bytes : Slice U8} {'+' '.join(args(n))+' : Array U32 8#usize}'
  tail=('    | exact PV_RunJoin_DecoderStage'+str(nextn)+'29.validated h\n') if nextn is not None else ''
  text=f'''{imports}set_option autoImplicit false
+noncomputable section
 namespace {ns}
 open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
 open pool_v1.pair_tree_profile
@@ -78,6 +79,7 @@ end {ns}
 module='PV_RunJoin_DecoderPrefix29';ns='R1Z.'+module;body=fragment(0,len(lines),0)
 text=f'''import R1Z.PV_RunJoin_DecoderStage029
 set_option autoImplicit false
+noncomputable section
 namespace {ns}
 open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
 open pool_v1.pair_tree_profile R1Z.PV_RunJoin_DecoderStage2029

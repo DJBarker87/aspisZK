@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_DecoderStage029
 set_option autoImplicit false
+noncomputable section
 namespace R1Z.PV_RunJoin_DecoderPrefix29
 open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
 open pool_v1.pair_tree_profile R1Z.PV_RunJoin_DecoderStage2029
