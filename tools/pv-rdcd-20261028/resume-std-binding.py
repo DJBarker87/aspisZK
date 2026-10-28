@@ -27,7 +27,11 @@ for version in ['nightly-2026-06-01','1.94.1']:
    for n in ['wrapping_add','wrapping_sub','wrapping_mul','wrapping_shr']:
     v=body(s,'pub const fn '+n+'(');rec['bodies'][n]=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
   elif f=='convert/num.rs':
-   v=body(s,'fn from(small: $Small) -> Self');rec['bodies']['FromU32U64_macro_body']=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
+   marker='fn from(small: $Small) -> Self' if version=='1.94.1' else 'fn from(small: $small) -> Self'
+   v=body(s,marker);runtime=v
+   if version!='1.94.1':
+    runtime='\n'.join(line for line in runtime.splitlines() if 'debug_assert!(' not in line).replace('$small','$Small').replace('$large','$Large')
+   rec['bodies']['FromU32U64_macro_body']=dict(text=v,release_body=runtime,token_sha256=sha('\0'.join(tokens(runtime)).encode()),law='R1Z.PV_RDCD_Cast194.binding',qualification='old debug_assert lines disabled under recorded release profile; new deployed body is the primitive cast')
    assert 'impl_from!(u32 => u64,' in s
   else:
    for ty in ['u32','u64']:
