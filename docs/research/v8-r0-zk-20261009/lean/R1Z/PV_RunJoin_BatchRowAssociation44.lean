@@ -21,13 +21,17 @@ theorem complete (ops : ExternalFuns) (c : Nat → Nat → Raw) (p : Nat → Raw
   obtain ⟨y,hy,hcy,hdy⟩ := PV_RunJoin_BatchRowValue44.phase ops c p row hr
     (fun l hl => hc l hl row.val hr) hp 29 0#usize (by decide)
     ProverCommitGamma48.zero ProverCommitGamma48.zero_canonical
+  have hdy0 : value y = sum (fun l => c l row.val) p 29 0 := by
+    simpa only [ProverCommitGamma48.zero_value,zero_add] using hdy
   have same : y = z := PV_RunJoin_WideUnique44.unique y z hcy hcz
-    ((by simpa only [ProverCommitGamma48.zero_value,zero_add] using hdy).trans hdz.symm)
+    (hdy0.trans hdz.symm)
   subst y
   refine ⟨z,?_,hz,hcz,hdz⟩
   rw [@PV_RunJoin_BatchRowThread44.caller _ (ProverRwP6BodyCandidate.selected ops)]
   have zero : @aspis_core.field.wide_exact.WideExact.ZERO _ (ProverRwP6BodyCandidate.selected ops) =
-      .ok (current (source ProverCommitGamma48.zero)) := rfl
+      .ok (current (source ProverCommitGamma48.zero)) := by
+    change .ok (current AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) = _
+    rw [ProverCommitGamma48.source_zero]
   rw [zero]
   simp only [bind_tc_ok]
   exact hy
