@@ -77,6 +77,8 @@ theorem levels_shift (n : Nat) (xs : List Nat) :
     levels (n+1) xs = levels n (parents xs) := by
   induction n with
   | zero => rfl
-  | succ n ih => simp only [levels,ih]
+  | succ n ih =>
+    change parents (levels (n+1) xs) = parents (levels n (parents xs))
+    rw [ih]
 #print axioms levels_shift
 end PV_L2D_MerkleGeometry
