@@ -13048,3 +13048,31 @@ V228, V229, V241, V243, V244, V245, by the P6 route: owned references in a proof
 bounded Kani for control and indexing, the structural route where field arithmetic chains, then the
 reference law, installation and non-vacuity. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D344 (Stream B) 2026-10-28 02:08 UTC: integration gate on 03905a5259 passes the 1,000-pair differential; full cost projection +1.59% / +1.71%; pv-l2c launched for the level-2 guard branches
+
+pv-integ5 completed the integration gate on candidate 03905a5259 (no source change; Lean 0; IDs
+39500-39599 unused): three ELF pins match; client sha256 3a1b03d0… with the pinned 1.94.1 toolchain;
+fixture gate passes on the deterministic criterion (D328); the 1,000-pair whole-prover differential
+against the shipped prover c57a344726 (seeds 6000-6999) passes 1,000 of 1,000, with 600 complete proof
+pairs, 100 rejected-prefix pairs and four oracle-log pairs, canonical records and ledger bytes
+identical throughout. With op223's recorded whole-prover receipt and a scratch per-call measurement
+of batch 1 (op230 x2, op254 x1, op258 x1 per fixture), the cumulative projection is:
+
+| Fixture | Projected change | Percent of 14.38 s | Projected total |
+|---|---:|---:|---:|
+| Transfer | +0.229 s | +1.59% | 14.61 s |
+| Withdrawal | +0.245 s | +1.71% | 14.63 s |
+
+This is a projection, not a timing result. The quiet-window timing gate (median under 15 s, at most
++10%) is still to run, once, on the final candidate; the candidate has since merged batch 3
+(5fa2cc6781) and batch 2 may still change prover-local code, so this gate's ELF, fixture and
+differential results apply to 03905a5259 only. The gate branch was merged into the candidate
+(e461dca06a) and retired.
+
+New job pv-l2c (IDs 42600-42699; no source change): the level-2 guard branches N2-N6 (zero/sum guards,
+canonical-column guards, private balance equalities, helper-sum short circuits, sumcheck boundary
+checks), proving per site that the guard outcome is constant on every honest input with the honest
+prover's randomness, using runjoin's HonestInput predicate, toward rows V352, V354, V357, V360. An
+honest input on which a guard takes the other branch would be a real L2 leak and a stop. Rows removed
+outright: 0. Privacy target not yet established.
