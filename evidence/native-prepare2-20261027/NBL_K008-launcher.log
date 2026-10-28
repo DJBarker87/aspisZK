@@ -1,0 +1,52 @@
+{"attempt": "NBL_K008", "exit_status": 0, "wall_seconds": 49.123382528021466, "peak_rss_kib": "2693108", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+cs are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBL_opening_same_state` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:35:4
+   |
+35 | fn NBL_opening_same_state(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_opening_same_state`
+
+warning: creating a shared reference to mutable static
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:45:93
+   |
+45 |  assert!(matches!(result,Err(Error::Transcript)));assert_eq!(g[j],old[j]);unsafe{assert_eq!(NBL_STAGE,6);}
+   |                                                                                             ^^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.05s
+Checking harness verifier::candidate::NBL_candidate::NBL_opening_same_state...
+
+VERIFICATION RESULT:
+ ** 0 of 1662 failed (121 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 44.534004s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-raf132abf956247ff88e6a17771229e78.scope; invocation ID: 269e59f4602a49d08fe9a76bbed796a5

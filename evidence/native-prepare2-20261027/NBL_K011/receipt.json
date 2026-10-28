@@ -1,0 +1,81 @@
+{
+  "attempt": "NBL_K011",
+  "kind": "kani",
+  "module": "verifier::candidate::NBL_candidate::NBL_rho_init",
+  "sources": [
+    "NBL_src/crates/aspis-r1-cost-probe/src/NBL_candidate.rs",
+    "NBL_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBL_src/crates/aspis-core/src/r0_transcript.rs",
+    "NBL_src/crates/aspis-r1-cost-probe/src/sampler.rs",
+    "NBL_src/Cargo.toml",
+    "NBL_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NBL_gate.py",
+    "NBL_K011.json"
+  ],
+  "timeout": 180,
+  "source_revision": "6ab26f0d8e4870e096c6f4916c5ebebc73d4bfc1",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_tmp"
+  },
+  "deps_fingerprint": {
+    "scope": "frozen native source selected by NBL_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations"
+  },
+  "expected_time": "optimized Kani compilation then native call routing; no arithmetic elimination",
+  "reservation_retries": 0,
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027/NBL_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NBL_candidate::NBL_rho_init",
+    "--output-format",
+    "terse"
+  ],
+  "exit_status": 0,
+  "wall_seconds": 4.3402235910180025,
+  "peak_rss_kib": "342172",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r402f106897234b38b61b0bcacd667953.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "353902592",
+  "source_hashes": {
+    "NBL_src/crates/aspis-r1-cost-probe/src/NBL_candidate.rs": "fb8852c72c092b62485aa147accd15ca53870a9235fcff528cbb15b25154c62e",
+    "NBL_src/crates/aspis-r1-cost-probe/src/verifier.rs": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+    "NBL_src/crates/aspis-core/src/r0_transcript.rs": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+    "NBL_src/crates/aspis-r1-cost-probe/src/sampler.rs": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+    "NBL_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBL_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  },
+  "print_axioms": "N/A: kani"
+}
