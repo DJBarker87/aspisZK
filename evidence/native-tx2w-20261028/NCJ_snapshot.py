@@ -1,7 +1,7 @@
 from NCJ_host import *
 import difflib,sys
 name=sys.argv[1]
-paths=['crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/weights.rs','crates/aspis-r1-cost-probe/src/NCJ_weights.rs','KMX_stubs.rs']
+paths=['crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/weights.rs','crates/aspis-r1-cost-probe/src/NCJ_weights.rs','KMX_stubs.rs','crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/NCJ_relation.rs','crates/aspis-r1-cost-probe/src/fast_pairing.rs','crates/aspis-r1-cost-probe/src/NCJ_dot.rs']
 r=py(f'''from pathlib import Path
 import json
 s=Path({(B+'/NCJ_src')!r});print(json.dumps({{n:(s/n).read_text() for n in {paths!r}}}))

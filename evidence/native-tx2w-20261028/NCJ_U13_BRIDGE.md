@@ -1,20 +1,14 @@
-# U13 native bridge ledger
+# NCJ U13 bridge ledger
 
-OPEN: target not yet established. Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`.
+**OPEN.** No complete U13 native/cohort bridge or headline premise removal is claimed. Frozen Rust `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; adopted closure authority `AspisR1.RPx_Deployed.deployed` and coherent SInt2 objects. Every listed Lean name requires its green exact-source receipt in NCJ_FINAL_INDEX.json; a draft is not evidence.
 
-| Function | Native gate | Lean association | Status / obligation |
+| Function | Native evidence | Lean evidence | Exact remaining obligation |
 |---|---|---|---|
-| `finish_query_dot` | pending | pending | OPEN: Two224-byte degree6 polynomials, two alphas and claim from same resume; relation lhs=claim/4 then Horner; invoke U12 on SAME final message/kappa; final dot64 canonical weights, next=22 and actual=rhs; preserve errors and marks(None). |
-| `finish_relation` | pending | pending | OPEN: Two224-byte degree6 polynomials, two alphas and claim from same resume; relation lhs=claim/4 then Horner; invoke U12 on SAME final message/kappa; final dot64 canonical weights, next=22 and actual=rhs; preserve errors and marks(None). |
-| `finish_relation_round` | pending | pending | OPEN: Two224-byte degree6 polynomials, two alphas and claim from same resume; relation lhs=claim/4 then Horner; invoke U12 on SAME final message/kappa; final dot64 canonical weights, next=22 and actual=rhs; preserve errors and marks(None). |
-| `polynomial` | pending | pending | OPEN: Two224-byte degree6 polynomials, two alphas and claim from same resume; relation lhs=claim/4 then Horner; invoke U12 on SAME final message/kappa; final dot64 canonical weights, next=22 and actual=rhs; preserve errors and marks(None). |
+| `finish_query_dot` | K057/058 one actual public Dot push call fragment | NCJ_DotInduction; count64<4096 | OPEN: Complete same-message/weights source loop and exact U06 finish reply; no whole-buffer unwinding. |
+| `finish_relation` | NOT attempted whole parent: Option<fn> observer quarantine | Component canonicality, field32 bounds, polynomial source port | OPEN: Two rounds and claim from SAME resume; U12 SAME final/kappa; next22 and actual=rhs; all errors/marks. Native mark observer needs K-2 resolution; no renamed harness. |
+| `finish_relation_round` | K037/038 ACTUAL frozen helper under OPEN field/poly stubs | Field/scale/mul laws; Horner source-port induction | OPEN: Replace decoder and polynomial stubs by CLOSED same-byte callees; associate exact parent context (no separate adopted counterpart). Preserve lhs=claim/4 then Horner and errors. |
+| `polynomial` | K039/040 one literal Horner update; K065/066 actual field224; K067/068 actual field2048 windows | NCJ_HornerBytes; NCJ_PolynomialTotal; conditional adopted association if green in final index | OPEN: Native one-step-to-whole original closure association; exact primitive port mappings to adopted polynomial carrier and byte ownership still explicit. Source port alone is not adopted installation. |
 
-## Stage 4 native control results
+Each positive credited window has its matched failing control. KMX exact patch SHA256 `bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67`; pointer negative K002, slice negative K070, to_vec negative K069. Windows/fission fragments are not complete parent bridges. Canonical arithmetic products are opaque logs substituted only by the paired Lean theorems in NCJ_LPh_STUBS.md. No Kani multiplication, contracts, SHA implementation or new runtime assumption is used.
 
-K037 PASS / K038 FAIL: actual frozen finish_relation_round on SAME224-byte canonical polynomial, canonical alpha and claim, round0/1; two exact field indices0/4, same arbitrary selected source byte, lhs-vs-quarter reply, exact Relation error and no polynomial call on failure; same alpha/bytes and unchanged polynomial reply on success. Field decoder and polynomial are OPEN callee substitutions. This closes only local control routing, not the whole round.
-
-K039 PASS / K040 FAIL: one literal Horner closure update, arbitrary canonical prestate and scalar, arbitrary i<7 on canonical SAME224 bytes; exact operand/read routing and linear sum. Multiplication is an opaque logged reply with LPi_TowerValues.wide_mul; decoding retains the exact lower-field native association qualification. NCJ_HornerInduction.total (L017) supplies canonical induction. Full adopted polynomial port/source association is OPEN.
-
-finish_relation is not given native credit: its observer is Option<fn(Phase)> and rule14 remains binding. No harness was renamed to alter a verdict. No digest or function-pointer value was modeled.
-
-Stage6 K057 PASS / K058 FAIL is one actual final-dot push fragment: arbitrary valid raw prestate/count<64, exact scalar/value and byte-index routing, both raw reply updates and count+1. It uses the same explicit U06/U07 qualifications as the U12 dot fragments. Native same-final-message association and full finish_query_dot call/return remain OPEN.
+The next lane must retain explicit lower hypotheses until merged CLOSED results apply on these exact domains: `NCJ_FilledNative64` (actual successful zeroed64 Vec with same allocation/ownership and Result), `NCJ_Powers4Native` and `NCJ_Powers7Native` (same canonical argument/output carriers; powers29 does not imply these), `NCJ_U06DotNative` (same native receiver history, bounded count, raw accumulation, error/final reply), `NCJ_U01PrimitivePorts` (same native/add/sub canonicality and typed Result maps). These are **named open obligations**, not declarations or assumed CLOSED theorems. Field224/2048 single-window passes narrow decoder data flow; all-context exact callee/carrier/error mapping is still required. NBS/NCB/NBQ/NBG names are not wholesale closure claims.

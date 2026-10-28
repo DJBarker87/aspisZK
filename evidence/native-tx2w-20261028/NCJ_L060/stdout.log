@@ -1,0 +1,37 @@
+NCJ_generated/NCJ_ScalarFoldStep.lean:22:2: error: 'change' tactic failed, pattern
+  (do
+      let (o, nextIter) ← NCJ_ForwardRange.next iter
+      match o with
+        | none => ok (done v)
+        | some index => do
+          let (out, nextClosure) ← NCJ_ScalarCellTotal.call (p, f) (v, index)
+          ok (cont (nextIter, nextClosure, out))) =
+    ok (cont (rest, (p, f), out))
+is not definitionally equal to target
+  (do
+      let (o, self1) ← iterator.next iter
+      match o with
+        | none => ok (done v)
+        | some x => do
+          let (accum1, f1) ← fnmut.call_mut (p, f) (v, x)
+          ok (cont (self1, f1, accum1))) =
+    ok (cont (rest, (p, f), out))
+NCJ_generated/NCJ_ScalarFoldStep.lean:40:4: warning: This simp argument is unused:
+  iterator
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+      i̵t̵e̵r̵a̵t̵o̵r̵,̵core.iter.traits.iterator.IteratorRange, ̲next, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_ScalarFoldStep.lean:40:13: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorRange
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵.̵f̵o̵l̵d̵.̵d̵e̵f̵a̵u̵l̵t̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵i̵t̵e̵r̵a̵t̵o̵r̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵R̵a̵n̵g̵e̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲t̲r̲a̲i̲t̲s̲.̲i̲t̲e̲r̲a̲t̲o̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲.̲f̲o̲l̲d̲.̲d̲e̲f̲a̲u̲l̲t̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲t̲e̲r̲a̲t̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCJ_ScalarFoldStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_ScalarFoldStep.done' depends on axioms: [propext, Classical.choice, Quot.sound]

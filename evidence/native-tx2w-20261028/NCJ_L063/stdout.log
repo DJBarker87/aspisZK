@@ -1,0 +1,87 @@
+NCJ_generated/NCJ_ScalarFoldStep.lean:5:17: error: failed to set `[local reducible]` for `FIo_Native.weights.Weights.scalar_factor.closure`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+NCJ_generated/NCJ_ScalarFoldStep.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCJ_ScalarCellTotal.call (p, f) (v, iter.start)
+in the target expression
+  (do
+      let (accum1, f1) ←
+        FIo_Native.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut
+            (p, f) (v, iter.start)
+      ok (cont (rest, f1, accum1))) =
+    ok (cont (rest, (p, f), out))
+
+p : Std.Array NE 4#usize
+f : Std.Array NQ 4#usize
+hp : ∀ x ∈ ↑p, canonE x
+v : NE
+hv : canonE v
+iter : Iter
+finish : ↑iter.end = 4
+more : ↑iter.start < ↑iter.end
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some iter.start, rest)
+inc : ↑rest.start = ↑iter.start + 1
+last : rest.end = iter.end
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+call : NCJ_ScalarCellTotal.call (p, f) (v, iter.start) = ok (out, p, f)
+co : canonE out
+⊢ (do
+      let (accum1, f1) ←
+        FIo_Native.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut
+            (p, f) (v, iter.start)
+      ok (cont (rest, f1, accum1))) =
+    ok (cont (rest, (p, f), out))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (p, f)
+  has type
+    Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize ×
+      Std.Array FIo_Native.aspis_core.field.QM31 4#usize
+  but is expected to have type
+    FIo_Native.weights.Weights.scalar_factor.closure
+  in the application
+    FIo_Native.weights.Weights.scalar_factor.closure.Insts.CoreOpsFunctionFnMutPairWideExactUsizeWideExact.call_mut
+      (p, f)
+NCJ_generated/NCJ_ScalarFoldStep.lean:23:13: warning: This simp argument is unused:
+  fnmut
+
+Hint: Omit it from the simp argument list.
+  simp only [f̵n̵m̵u̵t̵,̵iterator, ̲core.iter.traits.iterator.IteratorRange]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_ScalarFoldStep.lean:23:19: warning: This simp argument is unused:
+  iterator
+
+Hint: Omit it from the simp argument list.
+  simp only [fnmut,i̵t̵e̵r̵a̵t̵o̵r̵,̵ ̲core.iter.traits.iterator.IteratorRange]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_ScalarFoldStep.lean:23:28: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorRange
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵n̵m̵u̵t̵,̵i̵t̵e̵r̵a̵t̵o̵r̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵R̵a̵n̵g̵e̵]̵[̲f̲n̲m̲u̲t̲,̲ ̲i̲t̲e̲r̲a̲t̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_ScalarFoldStep.lean:36:4: warning: This simp argument is unused:
+  iterator
+
+Hint: Omit it from the simp argument list.
+  simp only [body, ̲FIo_Native.core.iter.traits.iterator.Iterator.fold.default_loop.body,
+      i̵t̵e̵r̵a̵t̵o̵r̵,̵core.iter.traits.iterator.IteratorRange, ̲next, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCJ_generated/NCJ_ScalarFoldStep.lean:36:13: warning: This simp argument is unused:
+  core.iter.traits.iterator.IteratorRange
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵.̵f̵o̵l̵d̵.̵d̵e̵f̵a̵u̵l̵t̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵
+  ̵ ̵ ̵ ̵ ̵i̵t̵e̵r̵a̵t̵o̵r̵,̵c̵o̵r̵e̵.̵i̵t̵e̵r̵.̵t̵r̵a̵i̵t̵s̵.̵i̵t̵e̵r̵a̵t̵o̵r̵.̵I̵t̵e̵r̵a̵t̵o̵r̵R̵a̵n̵g̵e̵,̵n̵e̵x̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲o̲d̲y̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲c̲o̲r̲e̲.̲i̲t̲e̲r̲.̲t̲r̲a̲i̲t̲s̲.̲i̲t̲e̲r̲a̲t̲o̲r̲.̲I̲t̲e̲r̲a̲t̲o̲r̲.̲f̲o̲l̲d̲.̲d̲e̲f̲a̲u̲l̲t̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲i̲t̲e̲r̲a̲t̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲e̲x̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCJ_ScalarFoldStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCJ_ScalarFoldStep.done' depends on axioms: [propext, Classical.choice, Quot.sound]

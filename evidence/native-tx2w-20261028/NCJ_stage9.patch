@@ -1,0 +1,36 @@
+--- a/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
++++ b/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
+@@ -542,3 +542,33 @@
+ #[kani::stub(<[K]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+ #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+ fn NCJ_reject_negative(){reject_gate(true);}
++
++// Actual frozen decoder at one arbitrary32-byte window. All surrounding
++// bytes are arbitrary and are not traversed by the verifier helper.
++fn field_window_gate<const N:usize>(bad:bool){
++ let bytes:[u8;N]=kani::any();let j:usize=kani::any();kani::assume(j<N/32);
++ for k in 0..8{let o=32*j+4*k;let w=u32::from_le_bytes([bytes[o],bytes[o+1],bytes[o+2],bytes[o+3]]);kani::assume(w<2147483647);}
++ let out=field(&bytes,j);let limbs=out.to_limbs();let k:usize=kani::any();kani::assume(k<8);let o=32*j+4*k;
++ let expected=u32::from_le_bytes([bytes[o],bytes[o+1],bytes[o+2],bytes[o+3]]);
++ assert!(limbs[k]<2147483647);if bad{assert_ne!(limbs[k],expected);}else{assert_eq!(limbs[k],expected);}
++}
++#[kani::proof] #[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCJ_field_224_positive(){field_window_gate::<224>(false);}
++#[kani::proof] #[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCJ_field_224_negative(){field_window_gate::<224>(true);}
++#[kani::proof] #[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCJ_field_2048_positive(){field_window_gate::<2048>(false);}
++#[kani::proof] #[kani::unwind(2050)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCJ_field_2048_negative(){field_window_gate::<2048>(true);}
