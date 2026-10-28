@@ -1,6 +1,6 @@
 from pathlib import Path
 import re,json,lzma,subprocess,hashlib
-D=Path('/home/dombarker/project-offloads/codex-pv-rdea-20261028');B=D/'client-target/release/devnet_spend'
+D=Path('/home/dombarker/project-offloads/codex-pv-rdea-20261028');B=(D/'client-deployed-baseline') if (D/'client-deployed-baseline').exists() else (D/'client-target/release/devnet_spend')
 raw=subprocess.check_output(['nm','--defined-only',str(B)],text=True)
 dem=subprocess.check_output(['nm','-C','--defined-only',str(B)],text=True)
 byaddr={}
@@ -51,11 +51,15 @@ for p in sorted((D/'stdlib-ir').glob('*.ll.xz')):
     while loc is not None and loc not in visited:
      visited.add(loc);node=nodes.get(loc,'');s=program(ref(node,'scope'));parent=ref(node,'inlinedAt')
      if s in targets and parent is not None:
-      at=location(parent);key=(current,targets[s],at['file'],at['line'],at['column'])
+      at=location(parent);chain=[];cursor=parent;walked=set()
+      while cursor is not None and cursor not in walked:
+       walked.add(cursor);chain.append(location(cursor));cursor=ref(nodes.get(cursor,''),'inlinedAt')
+      origin=next((x for x in chain if not (x['program_name'] or '').startswith(('push<','join<'))),at)
+      key=(current,targets[s],tuple((x['file'],x['line'],x['column'],x['linkage']) for x in chain))
       if key not in seenkeys:
-       seenkeys.add(key);rows.append(dict(module=p.name,function=current,demangled=linked[current],function_address=addresses[current],target=targets[s],callsite=at,instruction=line.strip(),ir_line=no))
+       seenkeys.add(key);rows.append(dict(module=p.name,function=current,demangled=linked[current],function_address=addresses[current],target=targets[s],callsite=at,source_origin=origin,inline_chain=chain,instruction=line.strip(),ir_line=no))
      loc=parent
   if current and line.startswith('}'):current=None
  modules.append(dict(path=str(p),ir_sha256=hashlib.sha256(src.encode()).hexdigest(),target_debug_subprograms=len(targets),debug_nodes=len(nodes)))
 result=dict(binary_sha256=hashlib.sha256(B.read_bytes()).hexdigest(),class_='Compiler-emitted inline debug metadata from the exact rustc1.94.1 installed std/alloc bitcode; restricted to functions present in the linked client. A conservative site inventory, not proof that each source branch executes.',modules=modules,sites=rows)
-(D/'stdlib-inlined-sites.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(rows,indent=2))
+(D/'stdlib-inlined-sites-v2.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(rows,indent=2))
