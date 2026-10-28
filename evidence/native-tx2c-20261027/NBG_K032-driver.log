@@ -1,0 +1,143 @@
+{"attempt": "NBG_K032", "exit_status": 1, "wall_seconds": 96.55507836199831, "peak_rss_kib": "4582584", "swaps": "0"}
+r::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+  |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `hash::hashv` and `msg`
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:46:5
+   |
+46 |     hash::hashv, msg, program, program_error::ProgramError, pubkey::Pubkey, sysvar::Sysvar,
+   |     ^^^^^^^^^^^  ^^^
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+warning: function `first` is never used
+  --> programs/r1-cost-probe/src/lib.rs:42:4
+   |
+42 | fn first(public_bytes:&[u8],proof:&[u8],k:usize)->Result<Vec<u8>,ProgramError>{
+   |    ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `require_readonly_account` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:183:4
+    |
+183 | fn require_readonly_account(account: &AccountInfo<'_>, owner: &Pubkey) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_readonly_buffer` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:202:4
+    |
+202 | fn require_readonly_buffer(account: &AccountInfo<'_>) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_verifier_checkpoint` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:210:4
+    |
+210 | fn require_verifier_checkpoint(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_distinct_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:224:4
+    |
+224 | fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_invariant_release_registry` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:523:4
+    |
+523 | fn authenticate_invariant_release_registry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: function `runtime_hashv` is never used
+ --> programs/r1-cost-probe/src/NBG_runtime.rs:6:4
+  |
+6 | fn runtime_hashv(parts: &[&[u8]]) -> solana_program::hash::Hash {
+  |    ^^^^^^^^^^^^^
+
+warning: function `NBG_log` is never used
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:34:4
+   |
+34 | fn NBG_log(message:&str){unsafe{
+   |    ^^^^^^^
+
+warning: module `NBG_runtime` should have a snake case name
+   --> programs/r1-cost-probe/src/lib.rs:173:5
+    |
+173 | mod NBG_runtime;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_runtime`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBG_digest_reply` should have a snake case name
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:16:4
+   |
+16 | fn NBG_digest_reply() {
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_digest_reply`
+
+warning: function `NBG_log` should have a snake case name
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:34:4
+   |
+34 | fn NBG_log(message:&str){unsafe{
+   |    ^^^^^^^ help: convert the identifier to snake case: `nbg_log`
+
+warning: creating a shared reference to mutable static
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:35:25
+   |
+35 |  assert!(message.len()==NBG_EXPECTED_LOG.len());
+   |                         ^^^^^^^^^^^^^^^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+   = note: `#[warn(static_mut_refs)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+
+warning: creating a shared reference to mutable static
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:36:45
+   |
+36 |  assert!(message.as_bytes()[NBG_LOG_INDEX]==NBG_EXPECTED_LOG.as_bytes()[NBG_LOG_INDEX]);
+   |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBG_error_log` should have a snake case name
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:41:4
+   |
+41 | fn NBG_error_log(){
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_error_log`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.08s
+Checking harness NBG_runtime::NBG_error_log...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - NBG_runtime::NBG_error_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

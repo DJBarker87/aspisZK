@@ -1,6 +1,6 @@
 # Retained failures
 
-K001: owned runner omitted deploying the immutable S2W_run_host.py into the new owned workspace. Admission succeeded and a terminal systemd scope ran Python, which exited2 before any Kani/compiler launch. No proof receipt exists. Launcher log and unchanged after-lock retained. Fixed OWN runner to install and byte-check the existing backends from NBC_LAUNCHER_INPUTS; shared host infrastructure untouched. K002 is the first actual Kani submission. This is a missing-input repair, not a timed-out or memory-killed proof rerun.
+K001: owned runner omitted deploying the immutable S2W_run_host.py into the new owned workspace. Admission succeeded and a terminal systemd scope ran Python, which exited2 before any Kani/compiler launch. No proof receipt exists. Launcher log and unchanged after-lock retained. Fixed OWN runner to install and byte-check the existing backends from NBC_LAUNCHER_INPUTS; shared host infrastructure untouched. K003 is the first actual Kani submission. This is a missing-input repair, not a timed-out or memory-killed proof rerun.
 
 K002: setup-only JSON decoding error in own validation wrapper; no scope or Kani launched. Corrected serialization and added reverse dry-run verification to recognize the already-applied, byte-identical K001 patch. Validation is stricter than filename-based skipping.
 
@@ -42,3 +42,16 @@ L089: optimized CM31 square input product and canonical bounds all proved, but t
 L090: unfolding U64 size leaves the fixed power2^64, which is not definitionally the decimal bound. L092 uses targeted norm_num on this one fixed machine-width constant, as LPf_BaseMultiply.word_product does; no large recurrence/finite universe is reduced and no limit raised.
 
 L092: the generic size definition reduces to the still-opaque concrete U64.size. L093 adds U64.size/U64.numBits, exactly the existing LPf_BaseMultiply.word_product constant-normalisation list. No arithmetic domain changed.
+
+K032: the actual error formatter plus one runtime log stub exhausted the fixed
+90-second CBMC harness limit. Exit1, wall96.55507836199831s, peak4582584KiB,
+swap0; complete receipt retained. No error bridge closure and no rerun or limit
+increase. Future replacement must isolate enum Debug formatting/one formatter
+write on arbitrary state, associate the runtime log boundary, and account for
+allocation/failure/cleanup before composing actual op44 callers. Do not run this
+whole formatter shape again. Kani budget30 is exhausted.
+
+Final own evidence collector initially exceeded the remote shell single-argument
+limit before any remote execution. It now sends the identical audit code on stdin;
+all scope/source/tool/cache validations are unchanged. The successful collector
+removed only owned NBG_target and NBG_tmp after terminal scope checks.

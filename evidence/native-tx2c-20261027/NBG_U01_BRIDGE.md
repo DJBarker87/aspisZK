@@ -118,3 +118,11 @@ No shipped/cfg(kani) repository source change, so no ELF rebuild trigger.
 Inherited pins, not reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
 devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+
+Final checkpoint: NBG_L096 passes the new-module co-import/84 selected-root
+axiom audit with standard axioms only; exact receipt and source hashes retained.
+NBG_GRAPH_AUDIT.json covers every actual native run. Final K032 formatter gate
+timed out without error-bridge closure; no rerun or raised limit. Budget STOP:
+30 Kani and95 Lean invocations. NBG_HANDOFF.md is the final self-contained
+claim/trust/validation/blocker handoff; NBG_END.json records terminal scopes,
+unchanged start cache/Aeneas pins and owned target/solver cleanup.

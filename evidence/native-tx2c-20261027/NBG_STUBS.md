@@ -15,10 +15,12 @@ op43/op44; no op48/op49 digest/error attribution is made.
 
 The explicit `<P` assume in NBG_product is the already-proved output bound, not a stronger input contract. No field stub exists without its named emitted-ok theorem.
 
-Planned final K032 log stub: `NBG_runtime::NBG_log` replaces only
+Final K032 log stub: `NBG_runtime::NBG_log` replaces only
 `solana_program::log::sol_log`, checks full message length and an arbitrary
 selected byte, and counts exactly one call. `NBG_Error.message/transition`
 (L069) retains the source-shaped state transition and coherent error value.
 This is runtime-log abstraction, not a field stub. It does NOT prove formatter
 allocation/failure/cleanup or actual op44 caller installation; error remains
-OPEN even if the normal-message gate passes. Runtime log semantics retained.
+OPEN. K032 timed out at the unchanged90-second harness limit; no normal-message
+gate passed and no closure credit is taken. No rerun or timeout increase.
+Runtime log semantics retained.

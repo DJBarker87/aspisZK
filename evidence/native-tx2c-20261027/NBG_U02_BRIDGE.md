@@ -42,3 +42,11 @@ modules and closure. Replacement: one-word and rejecting-prefix lemmas, then
 composition. K019 remains a full native check, not a model bridge. Digest
 encoding K020 is only the arbitrary-state iteration; its model induction and
 enumerator association remain open. No codec success/desired output is assumed.
+
+Final checkpoint: NBG_L096 passes the new-module co-import/84 selected-root
+axiom audit with standard axioms only; exact receipt and source hashes retained.
+NBG_GRAPH_AUDIT.json covers every actual native run. Final K032 formatter gate
+timed out without error-bridge closure; no rerun or raised limit. Budget STOP:
+30 Kani and95 Lean invocations. NBG_HANDOFF.md is the final self-contained
+claim/trust/validation/blocker handoff; NBG_END.json records terminal scopes,
+unchanged start cache/Aeneas pins and owned target/solver cleanup.
