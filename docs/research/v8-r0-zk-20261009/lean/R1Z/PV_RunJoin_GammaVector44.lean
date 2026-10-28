@@ -21,12 +21,13 @@ theorem complete (ops : ExternalFuns) (c : Nat → Nat → Raw) (p : Nat → Raw
   obtain ⟨z,hz,hcz,hdz⟩ := ProverCommitGammaOutput53.all c hc p hp
   obtain ⟨out,hout,hv⟩ := PV_RunJoin_BatchLoopValue44.complete ops c p z hc hp hcz
     (fun j hj => hdz ⟨j,hj⟩) 1024 (alloc.vec.Vec.with_capacity W 1024#usize) 0#usize
-    (by rfl) (by have := ProverCommitPairCounter47.usize_large;change 0+1024 ≤ Usize.max;omega)
+    (by rfl) (by change 0+1024 ≤ Usize.max;scalar_tac)
   refine ⟨z,out,?_,hz,?_,hcz,hdz⟩
   · rw [@PV_RunJoin_BatchThread44.complete _ (ProverRwP6BodyCandidate.selected ops)
       (table c) (array 29#usize p) _ 0#usize 1024 (by rfl)]
     exact hout
   · apply Subtype.ext
+    dsimp only [Array.to_slice,alloc.vec.Vec.deref]
     change (array 1024#usize z).val = out.val
     rw [hv,PV_RunJoin_SourceArray44.payload]
     simp only [alloc.vec.Vec.with_capacity,List.nil_append,Nat.zero_add,array,ProverCommitArray49.array]
