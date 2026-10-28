@@ -18,8 +18,7 @@ theorem complete (base : ProverRwFull.ExternalTypes) (heap : Heap) (box : Box)
         PV_RunJoin_WeightConstructorShape46.seed=ok f ∧
       @ProverRwFull.ExternalFuns.op252 (types base) (selected base heap box ops) .S2 alpha z=
         (do let _ ← box .S2 alpha z
-            ok (.Ok (toWeight ({variant:=.S2,factors:=f,points:=p,
-              extra:=Array.make 2#usize [a8,a9]} : Weight)))) := by
+            ok (.Ok (toWeight ({variant := .S2, factors := f, points := p, extra := Array.make 2#usize [a8,a9]} : Weight)))) := by
   obtain ⟨p,a8,a9,f,hp,h8,h9,hf,hn⟩ :=
     PV_RunJoin_WeightConstructorShape46.complete .S2 (amap fromQ alpha) (amap fromPoint z)
   refine ⟨p,a8,a9,f,hp,h8,h9,hf,?_⟩
