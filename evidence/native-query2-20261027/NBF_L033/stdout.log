@@ -1,0 +1,101 @@
+NBF_generated/NBF_Advance.lean:34:3: error: Tactic `rfl` failed: The left-hand side
+  ↑{ raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }.terms
+is not definitionally equal to the right-hand side
+  ↑{ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize }.next
+
+case refl.terms
+ops : Ops
+p : verifier.Prepared
+a : verifier.Accumulator
+node : U32
+value : Stage2E
+b : verifier.BatchedWeights
+size : (↑a.weights).length = 64
+nextBound : ↑a.next < 10
+sync : b.terms = a.next
+progress : S7JoinRowsTrace.Progress (↑b.terms) 0 (Port3_RowsInstall.toBW b)
+hq : ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK a.power) k) < 2 ^ 31 - 1
+basis : Std.Array U32 256#usize
+mid : verifier.BatchedWeights
+hbasis : NBF_BasisDomain.source ops node = ok basis
+hrows :
+  verifier.accumulate_batched_with_node_loop1 (NBF_Accumulate.install ops) { start := 0#usize, «end» := 64#usize }
+      a.weights a.power a.next b 64#usize basis =
+    ok mid
+terms : mid.terms = b.terms
+len : (↑mid.raw).length = 64
+phase : ∀ (j : ℕ) (row : NBF_Frame.Row), (↑mid.raw)[j]? = some row → NBB_Sweep.Bound (↑b.terms + 1) row
+body :
+  verifier.accumulate_batched_with_node (NBF_Accumulate.install ops) p a node value b = do
+    let term ← lift (mid.terms.wrapping_add 1#usize)
+    let product ← ops.op3 value a.power
+    let rhs ← ops.op2 a.rhs product
+    (NBF_Accumulate.install ops).op15 11#u16 a.next rhs
+    let power ← ops.op9 a.power p.rho
+    let next ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := rhs, power := power, next := next }, { raw := mid.raw, terms := term })
+product : aspis_core.field.wide_exact.WideExact
+hproduct : ops.op3 value a.power = ok product
+rhs : aspis_core.field.wide_exact.WideExact
+hrhs : ops.op2 a.rhs product = ok rhs
+marked : Unit
+hmarked : (NBF_Accumulate.install ops).op15 11#u16 a.next rhs = ok marked
+power : aspis_core.field.QM31
+hpower : ops.op9 a.power p.rho = ok power
+run✝³ :
+  (do
+      let product ← ops.op3 value a.power
+      let rhs ← ops.op2 a.rhs product
+      (NBF_Accumulate.install ops).op15 11#u16 a.next rhs
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run✝² :
+  (do
+      let rhs ← ops.op2 a.rhs product
+      (NBF_Accumulate.install ops).op15 11#u16 a.next rhs
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run✝¹ :
+  (do
+      (NBF_Accumulate.install ops).op15 11#u16 a.next rhs
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run✝ :
+  (do
+      let power ← ops.op9 a.power p.rho
+      ok
+          ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+            { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+run :
+  ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }) =
+    ok
+      ({ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize },
+        { raw := mid.raw, terms := mid.terms.wrapping_add 1#usize })
+next : ↑(a.next.wrapping_add 1#usize) = ↑a.next + 1
+counter : mid.terms.wrapping_add 1#usize = a.next.wrapping_add 1#usize
+⊢ ↑{ raw := mid.raw, terms := mid.terms.wrapping_add 1#usize }.terms =
+    ↑{ weights := a.weights, rhs := rhs, power := power, next := a.next.wrapping_add 1#usize }.next
+NBF_generated/NBF_Advance.lean:38:3: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'NBF_Advance.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

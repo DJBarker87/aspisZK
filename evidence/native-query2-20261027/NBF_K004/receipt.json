@@ -1,0 +1,70 @@
+{
+  "source_revision": "c245b77706c59559f1eda26b409a45788dce164e",
+  "source_tree_dirty": true,
+  "sources": [
+    "NBF_src/Cargo.lock",
+    "NBF_src/Cargo.toml",
+    "NBF_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NBF_src/crates/aspis-r1-cost-probe/src/NBF_harness.rs"
+  ],
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "NBF_K004",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::NBF_harness::NBF_row_iteration_context",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation then NBF_row_iteration_context native single-call gate",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_check": "NBF_K004-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 48.01353553700028,
+  "peak_rss_kib": "1195408",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc0cfab52ff674f4d94f4a698b68dde98.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1250471936",
+  "source_hashes": {
+    "NBF_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBF_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBF_src/crates/aspis-r1-cost-probe/src/verifier.rs": "23c3de16ed408fadfa74d4597345b00da7285ee7b5c5df0058eb4dc6fb65d569",
+    "NBF_src/crates/aspis-r1-cost-probe/src/NBF_harness.rs": "707345967f001fa717019828c35dc12dca0610fa330725e17e8863115cac2af0"
+  },
+  "print_axioms": "N/A: kani"
+}

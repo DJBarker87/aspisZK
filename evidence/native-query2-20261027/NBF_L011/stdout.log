@@ -1,0 +1,55 @@
+NBF_generated/NBF_RowInstall.lean:31:14: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat Usize 64
+numerals are polymorphic in Lean, but the numeral `64` cannot be used in a context where the expected type is
+  Usize
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NBF_generated/NBF_RowInstall.lean:45:52: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑basis).length
+in the target expression
+  ↑iter.start < basis.length
+
+ops : Ops
+v : alloc.vec.Vec Q
+q : Q
+next : Usize
+basis : Std.Array U32 256#usize
+iter : core.ops.range.Range Usize
+b : verifier.BatchedWeights
+x : Fin 4 → U64
+width : ↑iter.end = 64
+active : ↑iter.start < 64
+v64 : (↑v).length = 64
+inv : NBB_Sweep.Inv (↑b.terms) (↑iter.start) b.raw
+read : (↑b.raw)[↑iter.start]? = some (S7Kani2OwnedRowRefinement.makeRow x)
+hq : ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK q) k) < 2 ^ 31 - 1
+hb : ∀ j < 64, ∀ (m : U32), basis.index_usize j = ok m → ↑m < 2 ^ 31 - 1
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+hr :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+⊢ ↑iter.start < basis.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NBF_generated/NBF_RowInstall.lean:47:71: error: Application type mismatch: The argument
+  active
+has type
+  ↑iter.start < 64
+but is expected to have type
+  iter.start < 64
+in the application
+  hb iter.start active
+NBF_generated/NBF_RowInstall.lean:60:14: error(lean.unknownIdentifier): Unknown constant `body`

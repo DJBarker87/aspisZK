@@ -1,0 +1,99 @@
+NBF_generated/NBF_RowInstall.lean:45:48: error: 'change' tactic failed, pattern
+  ↑iter.start < 256
+is not definitionally equal to target
+  ↑iter.start < basis.length
+NBF_generated/NBF_RowInstall.lean:59:1: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some iter.start, iter1)
+  match o with
+  | none => ok (done b)
+  | some j => do
+    let m ← basis.index_usize j
+    let weights1 ← Port3_NativeRowFrame.push b j q m
+    let _ ← core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref j
+    ok (cont (iter1, weights1))
+is not definitionally equal to the right-hand side
+  ok (cont (iter1, { raw := b.raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y), terms := b.terms }))
+
+ops : Ops
+v : alloc.vec.Vec Q
+q : Q
+next : Usize
+basis : Std.Array U32 256#usize
+iter : core.ops.range.Range Usize
+b : verifier.BatchedWeights
+x : Fin 4 → U64
+width : ↑iter.end = 64
+active : ↑iter.start < 64
+v64 : (↑v).length = 64
+inv : NBB_Sweep.Inv (↑b.terms) (↑iter.start) b.raw
+read : (↑b.raw)[↑iter.start]? = some (S7Kani2OwnedRowRefinement.makeRow x)
+hq : ∀ (k : Fin 4), ↑(S7Kani2OwnedRowRefinement.powerLimb (Port3_RowsInstall.toK q) k) < 2 ^ 31 - 1
+hb : ∀ (j : Usize), ↑j < 64 → ∀ (m : U32), basis.index_usize j = ok m → ↑m < 2 ^ 31 - 1
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+hr :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+m : U32
+hm : basis.index_usize iter.start = ok m
+hval : m = (↑basis)[↑iter.start]
+y : Fin 4 → U64
+hpush :
+  S7Kani2OwnedPush.push_owned (Port3_RowsInstall.toBW b) iter.start (Port3_RowsInstall.toK q) m =
+    ok
+      { raw := (Port3_RowsInstall.toBW b).raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y),
+        terms := (Port3_RowsInstall.toBW b).terms }
+hinv :
+  NBB_Sweep.Inv (↑(Port3_RowsInstall.toBW b).terms) (↑iter.start + 1)
+    ((Port3_RowsInstall.toBW b).raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y))
+frame :
+  ∀ (j : ℕ),
+    j ≠ ↑iter.start →
+      (↑((Port3_RowsInstall.toBW b).raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y)))[j]? =
+        (↑(Port3_RowsInstall.toBW b).raw)[j]?
+push :
+  Port3_NativeRowFrame.push b iter.start q m =
+    ok { raw := b.raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y), terms := b.terms }
+word : Q
+hw : v.index_usize iter.start = ok word
+hword : word = (↑v)[↑iter.start]
+hw' : core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref iter.start = ok word
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done b)
+    | some j => do
+      let m ← basis.index_usize j
+      let weights1 ← Port3_NativeRowFrame.push b j q m
+      let _ ← core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref j
+      ok (cont (iter1, weights1))) =
+    ok (cont (iter1, { raw := b.raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y), terms := b.terms }))
+NBF_generated/NBF_RowInstall.lean:57:72: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install,h̵m̵,̵ ̲push,
+  ̵  ̵ ̵hw', ̲lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_RowInstall.lean:57:75: warning: This simp argument is unused:
+  push
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install, ̲hm,p̵u̵s̵h̵,̵
+  ̵  ̵ ̵hw', ̲lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_RowInstall.lean:58:3: warning: This simp argument is unused:
+  hw'
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install, ̲hm, ̲push,
+  ̵  ̵ ̵h̵w̵'̵,̵lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBF_RowInstall.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

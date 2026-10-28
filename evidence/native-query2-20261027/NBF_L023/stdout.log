@@ -1,0 +1,162 @@
+NBF_generated/NBF_BasisOuter.lean:18:5: error: Type mismatch: After simplification, term
+  have this := fun a => levels_eq._proof_1 width n a;
+  this
+ has type
+  ¬↑n < ↑n
+but is expected to have type
+  ¬↑n < ↑width
+NBF_generated/NBF_BasisOuter.lean:45:37: error: unsolved goals
+ops : Ops
+width : Usize
+bound : ↑width ≤ 256
+k : ℕ
+ih :
+  ∀ (basis : Std.Array U32 256#usize) (node : U32) (n : Usize),
+    0 < ↑n →
+      ↑n * 2 ^ k = ↑width →
+        verifier.accumulate_batched_with_node_loop0 (NBF_BasisInstall.install ops) 1#u32 node width basis n =
+          levels k basis node n
+basis : Std.Array U32 256#usize
+node : U32
+n : Usize
+positive : 0 < ↑n
+schedule : ↑n * 2 ^ (k + 1) = ↑width
+power : 0 < 2 ^ k
+doubleBound : ↑n * 2 ≤ ↑width
+hn : ↑n ≤ 128
+active : n < width
+n1 : Usize := n.wrapping_mul 2#usize
+value : ↑n1 = ↑n * 2
+multiply : n * 2#usize = ok n1
+block :
+  verifier.accumulate_batched_with_node_loop0_loop0 (NBF_BasisInstall.install ops) { start := 0#usize, «end» := n } node
+      basis n =
+    S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+⊢ (do
+      let basis1 ←
+        verifier.accumulate_batched_with_node_loop0_loop0
+            { op0 := @Ops.op0 ops, op1 := ops.op1, op2 := ops.op2, op3 := ops.op3, op4 := ok 0#u32, op5 := ok 1#u32,
+              op6 := AspisR1Qm31ArithmeticProbe.field.M31.sub, op7 := AspisR1Qm31ArithmeticProbe.field.M31.mul,
+              op8 := fun x => AspisR1Qm31ArithmeticProbe.field.M31.add x x, op9 := ops.op9, op10 := ops.op10,
+              op11 := ops.op11, op12 := ops.op12, op13 := ops.op13, op14 := ops.op14, op15 := ops.op15,
+              op16 := ops.op16, op17 := ops.op17, op18 := ops.op18, op19 := ops.op19, op20 := ops.op20,
+              op21 := ops.op21, widePartialEq := ops.widePartialEq }
+            { start := 0#usize, «end» := n } node basis n
+      let m1 ← AspisR1Qm31ArithmeticProbe.field.M31.mul node node
+      let m2 ← AspisR1Qm31ArithmeticProbe.field.M31.add m1 m1
+      let node1 ← AspisR1Qm31ArithmeticProbe.field.M31.sub m2 1#u32
+      ok (cont (node1, basis1, n.wrapping_mul 2#usize))) =
+    do
+    let b1 ← S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+    let x ← AspisR1Qm31ArithmeticProbe.field.M31.mul node node
+    let x ← x.add x
+    let node1 ← AspisR1Qm31ArithmeticProbe.field.M31.sub x 1#u32
+    ok (cont (node1, b1, n1))
+NBF_generated/NBF_BasisOuter.lean:50:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node basis n
+in the target expression
+  (match
+      match (node, basis, n) with
+      | (node1, basis1, n1) =>
+        verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node1 basis1 n1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (node1, basis1, n1) =>
+              verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node1 basis1
+                n1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    levels (k + 1) basis node n
+
+case succ
+ops : Ops
+width : Usize
+bound : ↑width ≤ 256
+k : ℕ
+ih :
+  ∀ (basis : Std.Array U32 256#usize) (node : U32) (n : Usize),
+    0 < ↑n →
+      ↑n * 2 ^ k = ↑width →
+        verifier.accumulate_batched_with_node_loop0 (NBF_BasisInstall.install ops) 1#u32 node width basis n =
+          levels k basis node n
+basis : Std.Array U32 256#usize
+node : U32
+n : Usize
+positive : 0 < ↑n
+schedule : ↑n * 2 ^ (k + 1) = ↑width
+power : 0 < 2 ^ k
+doubleBound : ↑n * 2 ≤ ↑width
+hn : ↑n ≤ 128
+active : n < width
+n1 : Usize := n.wrapping_mul 2#usize
+value : ↑n1 = ↑n * 2
+multiply : n * 2#usize = ok n1
+block :
+  verifier.accumulate_batched_with_node_loop0_loop0 (NBF_BasisInstall.install ops) { start := 0#usize, «end» := n } node
+      basis n =
+    S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+body :
+  verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node basis n = do
+    let b1 ← S7Kani2BasisLoop.basis_block_owned AspisR1Qm31ArithmeticProbe.field.M31.mul basis node n 0#usize
+    let node1 ← t2 node
+    ok (cont (node1, b1, n1))
+⊢ (match
+      match (node, basis, n) with
+      | (node1, basis1, n1) =>
+        verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node1 basis1 n1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (node1, basis1, n1) =>
+              verifier.accumulate_batched_with_node_loop0.body (NBF_BasisInstall.install ops) 1#u32 width node1 basis1
+                n1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    levels (k + 1) basis node n
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NBF_generated/NBF_BasisOuter.lean:21:82: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵e̵r̵i̵f̵i̵e̵r̵.̵a̵c̵c̵u̵m̵u̵l̵a̵t̵e̵_̵b̵a̵t̵c̵h̵e̵d̵_̵w̵i̵t̵h̵_̵n̵o̵d̵e̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵i̵f̵_̵n̵e̵g̵ ̵d̵o̵n̵e̵,̵l̵e̵v̵e̵l̵s̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲v̲e̲r̲i̲f̲i̲e̲r̲.̲a̲c̲c̲u̲m̲u̲l̲a̲t̲e̲_̲b̲a̲t̲c̲h̲e̲d̲_̲w̲i̲t̲h̲_̲n̲o̲d̲e̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲i̲f̲_̲n̲e̲g̲ ̲d̲o̲n̲e̲,̲ ̲l̲e̲v̲e̲l̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_BasisOuter.lean:47:7: warning: This simp argument is unused:
+  block
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0.body, ̲if_pos active,
+         b̵l̵o̵c̵k̵,̵NBF_BasisInstall.install, ̲t2, ̲double, ̲multiply, ̲lift, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_BasisOuter.lean:47:48: warning: This simp argument is unused:
+  multiply
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0.body, ̲if_pos active,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵block,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲NBF_BasisInstall.install, ̲t2, ̲double,m̵u̵ ̲lt̵ip̵l̵y̵,̵l̵i̵ft, ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBF_BasisOuter.levels_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

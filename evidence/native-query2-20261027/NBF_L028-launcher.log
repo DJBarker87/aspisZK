@@ -1,0 +1,54 @@
+{"attempt": "NBF_L028", "exit_status": 1, "wall_seconds": 4.895596830989234, "peak_rss_kib": "4401908", "swaps": "0", "print_axioms": ["'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_Accumulate.lean:52:1: error: 'change' tactic failed, pattern
+  (do
+      let basis ←
+        do
+          let m ← (install ops).op4
+          let initial : Std.Array aspis_core.field.M31 256#usize := Array.repeat 256#usize m
+          let one ← (install ops).op5
+          let initialized ← initial.update 0#usize one
+          verifier.accumulate_batched_with_node_loop0 (install ops) one node 64#usize initialized 1#usize
+      let mid ←
+        verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+            a.power a.next b 64#usize basis
+      ?m.402 basis PUnit.unit mid PUnit.unit) =
+    ?m.309
+is not definitionally e
+...
+← (install ops).op5
+          let initialized ← initial.update 0#usize one
+          verifier.accumulate_batched_with_node_loop0 (install ops) one node 64#usize initialized 1#usize
+      let mid ←
+        verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := 64#usize } a.weights
+            a.power a.next b 64#usize basis
+      ?m.402 basis PUnit.unit mid PUnit.unit) =
+    ?m.309
+is not definitionally equal to target
+  (have width := 64#usize;
+    do
+    let m ← (install ops).op4
+    have basis : Std.Array aspis_core.field.M31 256#usize := Array.repeat 256#usize m
+    let m1 ← (install ops).op5
+    let basis1 ← basis.update 0#usize m1
+    let basis2 ← verifier.accumulate_batched_with_node_loop0 (install ops) m1 node width basis1 1#usize
+    let weights1 ←
+      verifier.accumulate_batched_with_node_loop1 (install ops) { start := 0#usize, «end» := width } a.weights a.power
+          a.next b width basis2
+    let i ← lift (weights1.terms.wrapping_add 1#usize)
+    let we ← (install ops).op3 value a.power
+    let we1 ← (install ops).op2 a.rhs we
+    (install ops).op15 11#u16 a.next we1
+    let q ← (install ops).op9 a.power p.rho
+    let i1 ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := we1, power := q, next := i1 }, { raw := weights1.raw, terms := i })) =
+    do
+    let term ← lift (mid.terms.wrapping_add 1#usize)
+    let product ← ops.op3 value a.power
+    let rhs ← ops.op2 a.rhs product
+    (install ops).op15 11#u16 a.next rhs
+    let power ← ops.op9 a.power p.rho
+    let next ← lift (a.next.wrapping_add 1#usize)
+    ok ({ weights := a.weights, rhs := rhs, power := power, next := next }, { raw := mid.raw, terms := term })
+'NBF_Accumulate.rows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1ce5e7b46b8d41419f225d32904041d4.scope; invocation ID: 4abef259ed114967b27a50968dc2ddd3
