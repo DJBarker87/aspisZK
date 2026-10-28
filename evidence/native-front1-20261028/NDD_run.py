@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode=True
+from NDD_sources import source
 """Lane-owned serial wrapper around unchanged S2W launchers."""
 from pathlib import Path
 import subprocess,json,sys,time,shlex,hashlib,os
@@ -40,7 +43,7 @@ if kind=='kani':
   sources+=['NDD_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDD_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDD_src/crates/aspis-r1-cost-probe/src/weights.rs','NDD_src/crates/aspis-r1-cost-probe/src/NDD_weights.rs']
 
 elif kind=='extract':
- files['NDD_extract.py']=(E/'NDD_extract.py').read_text();files['NDD_reference.rs']=(E/'NDD_reference.rs').read_text();sources=['NDD_extract.py','NDD_reference.rs'];native=[];command=['python3','NDD_extract.py']
+ files['NDD_extract.py']=(E/'NDD_extract.py').read_text();files['NDD_reference.rs']=source('NDD_reference.rs');sources=['NDD_extract.py','NDD_reference.rs'];native=[];command=['python3','NDD_extract.py']
 else:
  files['NDD_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDD_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDD_generated','-o','NDD_objects/'+target+'.olean',sources[0]]
@@ -49,11 +52,15 @@ if os.environ.get('NDD_EXTRACT_PARSER'):env['NDD_EXTRACT_PARSER']=os.environ['ND
 if os.environ.get('NDD_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NDD_RUST_CFG']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NDD_SOURCE.json','library_pinset':'NDD_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 if kind=='lean':
+ cfg['expected_time']='Focused Lean elaboration and standard-axiom audit against pinned objects'
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDD_SOURCE.json').read_text())['library'].items()}
  if target=='NDD_Audit':
   cfg['deps_fingerprint']['selected_objects']=json.loads((E/'NDD_AUDIT_PINS.json').read_text())['selected_objects']
   files['NDD_AUDIT_PINS.json']=(E/'NDD_AUDIT_PINS.json').read_text()
   sources.append('NDD_AUDIT_PINS.json')
+if kind=='lean' and os.environ.get('NDD_DEPS_ONLY')=='1':
+ cfg['command']=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','--deps',sources[0]]
+ cfg['expected_time']='Read-only Lean object-resolution inspection; no theorem or object emitted'
 files[a+'.json']=json.dumps(cfg,indent=2)
 # Upload after admission; snapshots permit exact local reconstruction.
 for n,s in files.items():

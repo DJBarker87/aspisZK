@@ -1,4 +1,4 @@
-import Aeneas
+import NDD_Reference.Funs
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace NDD_WellformedModel
@@ -10,6 +10,10 @@ theorem allM_total {α : Type} (predicate : α → Result Bool) (test : α → B
   induction xs with
   | nil => rfl
   | cons x xs ih =>
-    simp [List.allM,List.all,law,ih]
+    cases h : test x <;> simp [List.allM,List.all,law,ih,h] <;> rfl
+theorem native_step_reference (old : Bool) (a b : U32) :
+    NDD_Reference.wellformed_step_ref old a b = ok (old && decide (a < b)) := by
+  cases old <;> rfl
+#print axioms native_step_reference
 #print axioms allM_total
 end NDD_WellformedModel

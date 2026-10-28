@@ -1,0 +1,48 @@
+{"attempt": "NDD_L034", "exit_status": 1, "wall_seconds": 1.2030368009582162, "peak_rss_kib": "2638796", "swaps": "0", "print_axioms": ["'NDD_ScalarCanon.checked_add' depends on axioms: [propext, sorryAx]", "'NDD_ScalarCanon.checked_sub' depends on axioms: [propext, sorryAx]"]}
+NDD_generated/NDD_ScalarCanon.lean:14:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑x + ↑y) % 2 ^ 32
+in the target expression
+  ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.U32
+
+x y : U32
+bound : ↑x + ↑y < 2 ^ 32
+z : UScalar UScalarTy.U32
+hz : UScalar.tryMk UScalarTy.U32 (↑x + ↑y) = ok z
+hv : ↑z = ↑x + ↑y
+⊢ ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.U32
+NDD_generated/NDD_ScalarCanon.lean:17:2: error: Type mismatch: After simplification, term
+  hz
+ has type
+  UScalar.tryMk UScalarTy.U32 (↑x + ↑y) = ok z
+but is expected to have type
+  x + y = ok (x.wrapping_add y)
+NDD_generated/NDD_ScalarCanon.lean:27:2: error: Type mismatch: After simplification, term
+  h
+...
+NDD_generated/NDD_ScalarCanon.lean:14:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑x + ↑y) % 2 ^ 32
+in the target expression
+  ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.U32
+
+x y : U32
+bound : ↑x + ↑y < 2 ^ 32
+z : UScalar UScalarTy.U32
+hz : UScalar.tryMk UScalarTy.U32 (↑x + ↑y) = ok z
+hv : ↑z = ↑x + ↑y
+⊢ ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.U32
+NDD_generated/NDD_ScalarCanon.lean:17:2: error: Type mismatch: After simplification, term
+  hz
+ has type
+  UScalar.tryMk UScalarTy.U32 (↑x + ↑y) = ok z
+but is expected to have type
+  x + y = ok (x.wrapping_add y)
+NDD_generated/NDD_ScalarCanon.lean:27:2: error: Type mismatch: After simplification, term
+  hz
+ has type
+  UScalar.sub x y = ok z
+but is expected to have type
+  x - y = ok (x.wrapping_sub y)
+'NDD_ScalarCanon.checked_add' depends on axioms: [propext, sorryAx]
+'NDD_ScalarCanon.checked_sub' depends on axioms: [propext, sorryAx]
+
+Running as unit: run-r096903c1b4e34d8e8aeb6ee0b54c454c.scope; invocation ID: 156861cd50bf4e33b4b9d7599631efc0

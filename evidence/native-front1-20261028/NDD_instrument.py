@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode=True
+from NDD_sources import source
 """Scratch-only, cfg(kani) contract annotations; frozen bodies retained verbatim."""
 from pathlib import Path
 import subprocess,json,hashlib,difflib
@@ -64,9 +67,9 @@ h=h.replace('#[kani::proof_for_contract(', '#[kani::stub(core::ptr::copy_nonover
 widepath='crates/aspis-core/src/field/wide_exact.rs'
 wide=get(widepath).replace('pub fn neg(self) -> Self {', '#[cfg_attr(kani,kani::requires(super::NDD_field::wide_canonical(self)))]\n    #[cfg_attr(kani,kani::ensures(|r|super::NDD_field::verdict_wide(super::NDD_field::wide_limbs(*r)==super::NDD_field::reference::wide_neg_ref(super::NDD_field::wide_limbs(self)))))]\n    pub fn neg(self) -> Self {')
 h += '\n#[kani::proof] #[kani::unwind(3)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] fn pack_copy_window(){let src:[QM31;4]=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];let mut dst:[QM31;4]=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];let before=dst;let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<4&&j<4);unsafe{core::ptr::copy_nonoverlapping(src.as_ptr().add(i),dst.as_mut_ptr().add(i),1)};if cfg!(NDD_negative_copy){assert_ne!(dst[i],src[i]);}else{assert_eq!(dst[i],src[i]);if i!=j{assert_eq!(dst[j],before[j]);}}}\npub(super) fn wide_limbs(x:WideExact)->[u32;8]{let a=limbs(x.c0());let b=limbs(x.c1());[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]}\npub(super) fn wide_canonical(x:WideExact)->bool{canonical(x.c0())&&canonical(x.c1())}\npub(super) fn verdict_wide(v:bool)->bool{if cfg!(NDD_negative_wide){!v}else{v}}\n#[kani::proof_for_contract(WideExact::neg)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] fn wide_contract(){let a=qm(kani::any());let b=qm(kani::any());kani::assume(canonical(a)&&canonical(b));WideExact::new(a,b).neg();}\n'
-h += (E/'NDD_PackRaw.rs').read_text()
+h += source('NDD_PackRaw.rs')
 corelib='crates/aspis-core/src/lib.rs'
-files={widepath:wide,corelib:'#![cfg_attr(kani, feature(allocator_api))]\n'+get(corelib),field:s,'crates/aspis-core/src/field/NDD_field.rs':h,'crates/aspis-core/src/field/NDD_reference.rs':(E/'NDD_reference.rs').read_text()}
+files={widepath:wide,corelib:'#![cfg_attr(kani, feature(allocator_api))]\n'+get(corelib),field:s,'crates/aspis-core/src/field/NDD_field.rs':h,'crates/aspis-core/src/field/NDD_reference.rs':source('NDD_reference.rs')}
 patch=''
 for n,v in files.items():patch+=''.join(difflib.unified_diff(get(n).splitlines(True) if n in [field,corelib,widepath] else [],v.splitlines(True),fromfile='a/'+n if n in [field,corelib,widepath] else '/dev/null',tofile='b/'+n))
 (E/'NDD_SCRATCH.patch').write_text(patch)

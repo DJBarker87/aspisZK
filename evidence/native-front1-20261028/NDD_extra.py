@@ -1,3 +1,6 @@
+import sys
+sys.dont_write_bytecode=True
+from NDD_sources import source
 from pathlib import Path
 import subprocess,json,hashlib,difflib
 E=Path(__file__).resolve().parent
@@ -31,7 +34,7 @@ fn root_contract(){let x:[[u8;32];16]=kani::any();let r:[u8;32]=kani::any();root
 #[cfg(NDD_bits)] #[kani::proof_for_contract(Arity::bits)]
 fn bits_contract(){let x=if kani::any(){Arity::Eight}else{Arity::Two};x.bits();}
 '''
-files['crates/aspis-r1-cost-probe/src/NDD_multiproof.rs'] += (E/'NDD_digest.rs').read_text()+(E/'NDD_wellformed.rs').read_text()
+files['crates/aspis-r1-cost-probe/src/NDD_multiproof.rs'] += source('NDD_digest.rs')+source('NDD_wellformed.rs')
 n='crates/aspis-r1-cost-probe/src/weights.rs';s=get(n);sig='fn shared_two_point_guard(w:&Weights,folds:usize)->bool {'
 post='*r == NDD_weights::reference::guard_ref(w.variant==Variant::S2,folds,w.factors[0][2]==w.factors[2][2],w.factors[0][3]==w.factors[2][3])'
 s=s.replace(sig,'#[cfg_attr(kani,kani::ensures(|r| NDD_weights::verdict('+post+')))]\n'+sig)
@@ -48,10 +51,10 @@ factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|
 points:core::array::from_fn(|_|core::array::from_fn(|_|q())),extra:core::array::from_fn(|_|q())};
 shared_two_point_guard(&w,kani::any());}
 '''
-files['crates/aspis-r1-cost-probe/src/NDD_weights.rs'] += (E/'NDD_selector.rs').read_text()
+files['crates/aspis-r1-cost-probe/src/NDD_weights.rs'] += source('NDD_selector.rs')
 n='crates/aspis-r1-cost-probe/src/lib.rs';files[n]='#![cfg_attr(kani,feature(allocator_api))]\n'+get(n)+'\n#[cfg(kani)]\nmod NDD_controls;\n'
-files['crates/aspis-r1-cost-probe/src/NDD_controls.rs']=(E/'NDD_controls.rs').read_text()
-files['crates/aspis-r1-cost-probe/src/NDD_reference.rs']=(E/'NDD_reference.rs').read_text()
+files['crates/aspis-r1-cost-probe/src/NDD_controls.rs']=source('NDD_controls.rs')
+files['crates/aspis-r1-cost-probe/src/NDD_reference.rs']=source('NDD_reference.rs')
 patch=''
 for n,v in files.items():
  old=get(n) if not Path(n).name.startswith('NDD_') else ''
