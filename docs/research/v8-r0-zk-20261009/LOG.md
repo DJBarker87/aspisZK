@@ -13646,3 +13646,24 @@ native comparisons (finite validation); V243's whole-row binding and V228, V241,
 open. Merged into the prover candidate (1e826627aa, pushed); the branch was fast-forwarded to the
 candidate and continues as b3p6c (IDs 50500-50599; no Kani): V243, then V228, V241, V245, V244. V229
 enters the ledger at the next recount. Rows removed outright: 0. Privacy target not yet established.
+
+## D374 (Stream B) 2026-10-28 14:50 UTC: world3 result, world line parked on runjoin33; two side-channel jobs launched for unowned L1 and L2 rows
+
+world3 (100 attempts; no Kani; final audits pass; T unchanged) proved recursive source erasure of
+prove_masked_with_attempt and its reached helpers and a conditional world-threading theorem; native
+ownership and backend adequacy and the complete connection of the file-system and D159 events to the
+Observation producer remain open; no row closed. Evidence compacted as instructed (838 small files,
+about 1.4 MB). That remaining connection is the native observable agreement runjoin33 is proving for
+V038/V045, so the world line is parked (branch pushed, worktree kept) until runjoin33 delivers it, as
+the reachability and file-effects lines are.
+
+Two slots go to recount-7 OPEN rows that no job owned, both independent of the native associations:
+- pv-l2d (IDs 51500-51599; 6 control-flow Kani runs with failing controls; no source change): the
+  remaining level-2 sites V353, V355, V356, V358, V359, V361-V365, each as a simulatable trace on
+  honest inputs from successful canonical preparation, using pv-l2b's simulator laws; a site where an
+  honest secret changes the trace in a way simE cannot reproduce is a real leak and a stop.
+- pv-l1 (IDs 51600-51699; no Kani; no source change): the level-1 integration rows V347-V351, showing
+  that the native prover's observable counts and error outcomes on honest inputs are produced by the
+  D163 coupling model's event producer and simulatable by simE, with any native association kept as a
+  named open hypothesis.
+Rows removed outright: 0. Privacy target not yet established.
