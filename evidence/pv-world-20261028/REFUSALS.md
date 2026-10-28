@@ -23,3 +23,8 @@ The optional fxmem2 citation was not used. At 11:35 UTC the previously named
 fxmem branch ref was no longer available locally; the original witness's
 committed SHA pins remain retained, and no new reached-destructor proof is
 asserted from an unavailable/in-progress source.
+
+36052 retry 3 passed (1.31 s Lean). 36053 upload admission then refused at
+11:41:31.514564 UTC. Same-ID retry after 11:44:47 UTC passed, followed by
+36054 and 36055. 36056 scope admission refused at 11:47:21.293233 UTC; no
+compiler started. Retry is permitted after 11:50:21.293233 UTC.
