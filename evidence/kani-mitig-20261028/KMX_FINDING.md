@@ -2,9 +2,12 @@
 
 Frozen release revision: `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`. Frozen lock SHA-256: `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`. Pinned cargo-kani 0.67.0 / CBMC 6.8.0. Scratch-only work; no release-source changes or toolchain adoption.
 
+
+Summary: the one-u32 fixture exhibits a false-PASS on the pinned model. Six loop replacements have paired Kani controls, native differential checks and Lean value laws. Exposure replay outcomes: 5 PASS, 0 FAIL, 10 TIMEOUT, 19 NOT RUN, 24 EXCLUDED. TIMEOUT does not restore earlier proof credit.
+
 ## Configuration map
 
-Each row has independent expected-value and wrong-zero controls. Native R002 checks all 49 original shapes and the loop replacements. These are concrete last-element observations, not a universal characterization of all inputs or compiler lowering. Source lengths are symbolic but constrained to the listed size; destinations start zeroed. A short copy uses a matching destination subslice of a larger backing allocation.
+Each row has independent expected-value and wrong-zero controls. Native R002 checks all 49 original shapes and the loop replacements. R003 separately checks the three additional slice-parameter/literal shapes when its terminal receipt is present. These are concrete last-element observations, not a universal characterization of all inputs or compiler lowering. Source lengths are symbolic but constrained to the listed size, except slice_constant rows which use literal full-array copies; destinations start zeroed. A short copy uses a matching destination subslice of a larger backing allocation.
 
 | ID | Type | Bytes | API / destination | Offset / extra | Expected / wrong | Interpretation |
 |---|---|---:|---|---|---|---|
@@ -57,6 +60,9 @@ Each row has independent expected-value and wrong-zero controls. Native R002 che
 | c046 | `u32` | 64 | slice / array | 1 / 1 | FAIL K006 / PASS K006 | DISAGREES |
 | c047 | `u32` | 64 | slice / array | 3 / 5 | FAIL K006 / PASS K006 | DISAGREES |
 | c048 | `u32` | 64 | slice / vec | 0 / 0 | PASS K006 / FAIL K006 | agrees on fixture |
+| c049 | `u32` | 64 | slice_fn / slice | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
+| c050 | `u32` | 4 | slice_constant / array | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
+| c051 | `u32` | 64 | slice_constant / array | 0 / 0 | NOT RUN / NOT RUN | NOT RUN |
 
 The observed disagreement includes one u32 (4 bytes), so it is not restricted to the original 64-byte fixture. Flat byte copies and the tested Vec variants must not be generalized to untested shapes. For nested arrays, the original bounds counted outer elements and underbounded byte-level/equality loops; such failures do not establish a false-PASS. Larger typed-copy timeouts remain inconclusive. Internal model root cause remains open.
 
@@ -73,14 +79,14 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 | LPa_K004 | `compact::LPa_compact::LPa_expand_stage` | PASS KMX_K013  |
 | LPa_K005 | `compact::LPa_compact::LPa_expand_alignment` | EXCLUDED  Alignment rejection precedes the copy. No exposure on admitted domain; K023 PASS. |
 | LPa_K007 | `compact::LPa_compact::LPa_expand_length` | EXCLUDED  Length rejection precedes the copy. No copy exposure on admitted domain; K024 TIMEOUT, no new pass. |
-| LPa_K015 | `verifier::candidate::LPa_candidate::LPa_view_inactive` | NOT RUN   |
-| LPl_K015 | `compact::LPl_expand::LPl_fixed_probe` | NOT RUN   |
-| LPm_K001 | `verifier::LPm_verifier::weights_iterator` | NOT RUN   |
-| LPm_K003 | `verifier::LPm_verifier::selected_reference_write` | NOT RUN   |
-| LPm_K004 | `verifier::LPm_verifier::append32` | NOT RUN   |
-| LPm_K005 | `verifier::LPm_verifier::query_word_append` | NOT RUN   |
+| LPa_K015 | `verifier::candidate::LPa_candidate::LPa_view_inactive` | TIMEOUT KMX_K014  |
+| LPl_K015 | `compact::LPl_expand::LPl_fixed_probe` | PASS KMX_K016  |
+| LPm_K001 | `verifier::LPm_verifier::weights_iterator` | TIMEOUT KMX_K017  |
+| LPm_K003 | `verifier::LPm_verifier::selected_reference_write` | TIMEOUT KMX_K018  |
+| LPm_K004 | `verifier::LPm_verifier::append32` | TIMEOUT KMX_K019  |
+| LPm_K005 | `verifier::LPm_verifier::query_word_append` | TIMEOUT KMX_K020  |
 | LPn_K001 | `compact::LPn_expand::LPn_step_frame` | NOT RUN   |
-| LPn_K010 | `r1_wire::LPn_decode::LPn_nonvacuity` | NOT RUN   |
+| LPn_K010 | `r1_wire::LPn_decode::LPn_nonvacuity` | PASS KMX_K015  |
 | LPo_K002 | `verifier::candidate::LPo_candidate::LPo_read_round0` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPo_K003 | `verifier::candidate::LPo_candidate::LPo_read_root` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPo_K004 | `verifier::candidate::LPo_candidate::LPo_read_round1` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
@@ -90,13 +96,13 @@ Only rows with a reached copy require mitigation replay. Other audit rows are re
 | LPo_K009 | `verifier::candidate::LPo_candidate::LPo_inactive_copy` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPp_K004 | `transcript::LPp_usize_capture::LPp_usize_capture` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
 | LPp_K007 | `transcript::LPp_usize_capture::LPp_usize_capture` | EXCLUDED  Call-name overapproximation only: unrelated overloaded/helper names or field identifiers. Selected body does not call the reported copying helper. Not a small-bound memory-copy match. |
-| LPb_K016 | `LPb_harnesses::LPb_wide_six` | NOT RUN   |
-| LPe_K005 | `LPe_replay::LPe_wide_six` | NOT RUN   |
-| LPe_K015 | `LPe_replay::LPe_header_cut` | NOT RUN   |
-| LPe_K016 | `verifier::LPe_verifier::LPe_digest_prefix_cut` | NOT RUN   |
-| LPe_K017 | `verifier::LPe_verifier::LPe_roots_queries_cut` | NOT RUN   |
-| LPe_K018 | `verifier::LPe_verifier::LPe_private_put_cut` | NOT RUN   |
-| LPe_K019 | `verifier::LPe_verifier::LPe_semantic_z_cut` | NOT RUN   |
+| LPb_K016 | `LPb_harnesses::LPb_wide_six` | TIMEOUT KMX_K021  |
+| LPe_K005 | `LPe_replay::LPe_wide_six` | TIMEOUT KMX_K022  |
+| LPe_K015 | `LPe_replay::LPe_header_cut` | PASS KMX_K023  |
+| LPe_K016 | `verifier::LPe_verifier::LPe_digest_prefix_cut` | TIMEOUT KMX_K024  |
+| LPe_K017 | `verifier::LPe_verifier::LPe_roots_queries_cut` | TIMEOUT KMX_K025  |
+| LPe_K018 | `verifier::LPe_verifier::LPe_private_put_cut` | PASS KMX_K026  |
+| LPe_K019 | `verifier::LPe_verifier::LPe_semantic_z_cut` | TIMEOUT KMX_K027  |
 | LPf_K027 | `verifier::LPf_verifier::LPf_checksum_projection` | NOT RUN   |
 | LPg_K011 | `compact::LPg_compact::LPg_expand_low` | NOT RUN   |
 | LPg_K012 | `compact::LPg_compact::LPg_expand_high` | NOT RUN   |
@@ -137,6 +143,8 @@ Installation and reproducer pending. Latest published release lookup: [Kani 0.68
 
 K004 was our omitted-input launcher error: `KMX_native.rs` was uploaded after admission KMX_UPLOAD4. K005 continued successfully; K004 remains a failed pre-Kani attempt, not a verification result. K001/K003/K007 were failed setup drafts. K010 failed on missing harness imports/helpers. K011 exposed additional unused historical contract attributes and incomplete auxiliary stub snapshots; scratch overlays were corrected without changing any selected property. L001/L002 were failed Lean drafts. Receipts, source snapshots, graph validation and exact commands are retained per attempt.
 
-Conservative configured attempts: Kani 13/80; Lean 3/30; Rust 2/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
+Conservative configured attempts: Kani 27/80; Lean 3/30; Rust 2/15. Each admitted build uses MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, one scope at a time. Cargo graph is validated against the copied frozen lock offline before each gate; before/after hashes are recorded. Optimized Rust profile. Persistent cache retained; no keys touched; no push.
 
-**Confirmed earlier properties:** LPa_K004. No complete release-function confirmation is claimed beyond the selected passing properties.
+**Confirmed earlier properties:** LPa_K004, LPl_K015, LPn_K010, LPe_K015, LPe_K018. No complete release-function confirmation is claimed beyond the selected passing properties.
+
+The K006 outer timeout ended before its in-process after-lock check; this missing contemporaneous check is retained as a limitation. Subsequent graph checks found the pinned lock unchanged. No unchanged timeout was resubmitted. Detailed target, exit status, wall time, peak RSS/cgroup memory, swap, source revision/hashes and axioms are in `KMX_LEDGER.json` and the individual receipts.

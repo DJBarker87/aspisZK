@@ -28,12 +28,17 @@ assert out['allowed']
 cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',str(s/'crates/aspis-r1-cost-probe/Cargo.toml'),'--target-dir',str(b/'KMX_target'),'--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',harness,'--output-format','regular']+sys.argv[3:]
 if harness=='@native':
  cmd=['/home/dombarker/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/bin/rustc','--edition=2021','-C','opt-level=3','-C','overflow-checks=yes',str(s/'crates/aspis-r1-cost-probe/src/KMX_native.rs'),'-o',str(b/'KMX_native_bin')]
+if harness=='@native-extra':
+ cmd=['/home/dombarker/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/bin/rustc','--edition=2021','-C','opt-level=3','-C','overflow-checks=yes',str(b/'KMX_native_extra.rs'),'-o',str(b/'KMX_native_extra_bin')]
 if harness.startswith('@statement:'):
  cmd[cmd.index('--manifest-path')+1]=str(s/'crates/aspis-statement/Cargo.toml')
  cmd[cmd.index('--harness')+1]=harness.split(':',1)[1]
+if harness=='@latest':
+ latest=json.loads((b/'KMX_LATEST_INSTALL.json').read_text());os.environ.update(latest['env'])
+ cmd=[latest['driver'],str(b/'KMX_latest_probe.rs'),'--harness','KMX_latest_','--harness-timeout','90s','--output-format','regular','--cbmc-args','--unwinding-assertions']
 print(json.dumps(dict(command=cmd)),flush=True)
 r=subprocess.run(cmd,env=os.environ)
-if harness=='@native' and r.returncode==0:r=subprocess.run([str(b/'KMX_native_bin')],env=os.environ)
+if harness in ['@native','@native-extra'] and r.returncode==0:r=subprocess.run([str(b/('KMX_native_bin' if harness=='@native' else 'KMX_native_extra_bin'))],env=os.environ)
 after=hashlib.sha256(lock.read_bytes()).hexdigest();out.update(lock_after=after,unchanged=before==after,kani_exit=r.returncode)
 (b/(a+'-graph.json')).write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out),flush=True)
 assert after==before,'STOP frozen lock drift'
