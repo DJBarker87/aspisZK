@@ -30,8 +30,10 @@ theorem source {S : Type} (compress : S → List U8 → Result S) (state : S)
     PV_CBL_PadContentSource.source buffer pos suffix hp
   unfold reference
   rw [hpad]
-  simp only [bind_tc_ok]
-  dsimp only
+  change (do
+    let next ← PV_DL_CompressionTrace.run compress
+      (first.val::(second.map (fun a => a.val)).toList) state
+    ok (next,first.val,0)) = _
   rw [hfirst,hsecond]
   rfl
 
