@@ -28,3 +28,7 @@ as a singleton attempt. Every already accepted fresh object is retained and
 excluded from the new queue; there is no unchanged failed resubmission and no
 unchanged successful dependency replay. Caps and source authority order stay
 unchanged. The original build plan is retained as build-plan-before-import-fix.json.
+
+The isolated changed-source replacement passed as51327: exit0, scope wall1.95s (module wall1.91s),
+RSS4362846208bytes,swap0,standard axioms. The original51322 failure is
+superseded for this module, not deleted or relabelled as a pass.

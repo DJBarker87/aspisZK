@@ -1,0 +1,71 @@
+import R1Z.PV_RunJoin_NominalPublicData
+set_option autoImplicit false
+namespace R1Z.PV_RunJoin_NativePublicInverse32
+open PV_RunJoin_NominalPublicData
+
+def unTransfer (p : TargetTransfer) : BuilderPublicProjection.Transfer where
+  pool := p.pool
+  deployment_domain := p.deployment_domain
+  anchor_sequence := p.anchor_sequence
+  anchor_root := p.anchor_root
+  nullifier := p.nullifier
+  asset_id := p.asset_id
+  recipient_commitment := p.recipient_commitment
+  change_commitment := p.change_commitment
+
+def unWithdrawal (p : TargetWithdrawal) : BuilderPublicProjection.Withdrawal where
+  pool := p.pool
+  deployment_domain := p.deployment_domain
+  anchor_sequence := p.anchor_sequence
+  anchor_root := p.anchor_root
+  nullifier := p.nullifier
+  asset_id := p.asset_id
+  amount := p.amount
+  destination_token_account := p.destination_token_account
+  change_commitment := p.change_commitment
+
+theorem transfer_roundtrip (p : BuilderPublicProjection.Transfer) :
+    unTransfer (transfer p) = p := by cases p; rfl
+#print axioms transfer_roundtrip
+
+theorem withdrawal_roundtrip (p : BuilderPublicProjection.Withdrawal) :
+    unWithdrawal (withdrawal p) = p := by cases p; rfl
+#print axioms withdrawal_roundtrip
+
+theorem target_transfer_roundtrip (p : TargetTransfer) :
+    transfer (unTransfer p) = p := by cases p; rfl
+#print axioms target_transfer_roundtrip
+
+theorem target_withdrawal_roundtrip (p : TargetWithdrawal) :
+    withdrawal (unWithdrawal p) = p := by cases p; rfl
+#print axioms target_withdrawal_roundtrip
+
+def unPublic (base : ProverRwFull.ExternalTypes) (p : TargetPublic base) : PV_Src_Public.Input := by
+  letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
+  exact match p with
+    | .Transfer public transition => .transfer (unTransfer public)
+        (PV_RunJoin_NominalCompiledData.unTransition base transition)
+    | .Withdrawal public transition => .withdrawal (unWithdrawal public)
+        (PV_RunJoin_NominalCompiledData.unTransition base transition)
+
+theorem from_public_roundtrip (base : ProverRwFull.ExternalTypes) (p : PV_Src_Public.Input) :
+    unPublic base (fromPublicInput base p) = p := by
+  cases p <;> simp only [unPublic,fromPublicInput,transfer_roundtrip,
+    withdrawal_roundtrip,PV_RunJoin_NominalCompiledData.transition_roundtrip]
+#print axioms from_public_roundtrip
+
+theorem from_input_roundtrip (base : ProverRwFull.ExternalTypes) (i : PV_Src_NativeInput.Input) :
+    unPublic base (fromInput base i) = PV_Src_NativeInput.publicInput i := by
+  rw [selected_public,from_public_roundtrip]
+#print axioms from_input_roundtrip
+
+/-- A complete source public input survives nominal translation. In particular,
+pool/deployment, anchor sequence, withdrawal destination and transition fields
+are retained even where a later semantic projection omits them. -/
+theorem injective (base : ProverRwFull.ExternalTypes) :
+    Function.Injective (fromPublicInput base) := by
+  intro p q h
+  have same := congrArg (unPublic base) h
+  simpa only [from_public_roundtrip] using same
+#print axioms injective
+end R1Z.PV_RunJoin_NativePublicInverse32
