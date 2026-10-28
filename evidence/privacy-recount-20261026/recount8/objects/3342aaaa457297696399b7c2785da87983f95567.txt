@@ -1,0 +1,19 @@
+import R1Z.PV_RunJoin_Availability
+import R1Z.PV_RunJoin_ErrorViewObstruction
+set_option autoImplicit false
+set_option pp.universes false
+#check @R1Z.PV_RunJoin_FaultAudit.owner_os_error
+#check @R1Z.PV_RunJoin_FaultAudit.client_os_error
+#check @R1Z.PV_RunJoin_ErrorViewObstruction.empty_native_log_disagrees
+#print axioms R1Z.PV_RunJoin_FaultAudit.owner_os_error
+#print axioms R1Z.PV_RunJoin_FaultAudit.client_os_error
+#print axioms R1Z.PV_RunJoin_FaultAudit.E1_allows_total_failure
+#print axioms R1Z.PV_RunJoin_Availability.e1
+#print axioms R1Z.PV_RunJoin_Availability.normalized
+#print axioms R1Z.PV_RunJoin_Availability.nonnegative
+#print axioms R1Z.PV_RunJoin_Availability.total_failure
+#print axioms R1Z.PV_RunJoin_EncodingSupport.encode_nonempty
+#print axioms R1Z.PV_RunJoin_EncodingSupport.attempt_log_nonempty
+#print axioms R1Z.PV_RunJoin_EncodingSupport.real_success_log_nonempty
+#print axioms R1Z.PV_RunJoin_ErrorViewObstruction.reencoded_success_log_nonempty
+#print axioms R1Z.PV_RunJoin_ErrorViewObstruction.empty_native_log_disagrees

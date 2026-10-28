@@ -1,0 +1,328 @@
+{
+  "row": "V240",
+  "name": "op223 aspis_statement.logup.compress_tagged_tuple",
+  "disposition": "RESTORED",
+  "class_": "B",
+  "native_link_evidence_class": "structural (K-1 substitute)",
+  "deployed_native_receipt": "native-leaves/receipt.json",
+  "native_profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "toolchain": "rustc1.94.1",
+  "resolved_features_in_receipt": true,
+  "project_structural": "Actual host_semantic caller invokes prover_shared index-loop helper; five emitted arithmetic operations selected literally; arbitrary raw words and all slice lengths, Result errors/divergence retained.",
+  "exact_reason": "All required source/helper transports at the precise consumed boundary pass; compiler and privacy endpoint boundaries retained.",
+  "known_changed_functions": [
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::cast(_1: NonNull<T>) -> NonNull<U>",
+      "source_class": "B",
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn cast<U>(self) -> NonNull<U> {\n         // SAFETY: `self` is a `NonNull` pointer which is necessarily non-null\n-        unsafe { transmute(self.as_ptr() as *mut U) }\n+        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n     }",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 499,
+          "end_line": 502,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "512a67fb3b354ed3d5b1302e6a5fc9107e02cd1863f489d6ebcfffaa1dd5252c",
+          "item_sha256": "e9b65d4d18d4f7855f2e5db7b34be8a61af5bfab1a04be4f3a12f7758ef03fda",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 503,
+          "end_line": 506,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "80ebf7613d4a28d6c9e2a1a2c9112bc190cf694a00420c2c25811033f90590f4",
+          "item_sha256": "328b65c8285b5ec6a62866811b0e50f565e37a0bf2125c00bbd1512269545d8f",
+          "attrs": [
+            "#[inline]",
+            "#[must_use = \"this returns the result of the operation, \\\n                  without modifying the original\"]",
+            "#[rustc_const_stable(feature = \"const_nonnull_cast\", since = \"1.36.0\")]",
+            "#[stable(feature = \"nonnull_cast\", since = \"1.27.0\")]"
+          ]
+        }
+      }
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::from_ref(_1: &T) -> NonNull<T>",
+      "source_class": "B",
+      "diff": "--- evidence/library/core/src/ptr/non_null.rs\n+++ deployed/library/core/src/ptr/non_null.rs\n@@ -1,5 +1,5 @@\n impl<T: PointeeSized> NonNull<T> \n pub const fn from_ref(r: &T) -> Self {\n         // SAFETY: A reference cannot be null.\n-        unsafe { transmute(r as *const T) }\n+        unsafe { NonNull { pointer: r as *const T } }\n     }",
+      "source_evidence": {
+        "evidence": {
+          "key": "evidence/library/core/src/ptr/non_null.rs",
+          "line": 279,
+          "end_line": 282,
+          "file_sha256": "adba64467653633cfa3fe0bbe6eec6f6d723221396b529c92d51eb9e39ba8cdd",
+          "body_sha256": "1ccad83241e9127bd828e9cfa1b217f29598493c610aeb8a229dbad1a8e4fda3",
+          "item_sha256": "a895ff025a2bbe9c941f5d36824af359e5884261093582e2e6ad2b5a002d1f2e",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        },
+        "deployed": {
+          "key": "deployed/library/core/src/ptr/non_null.rs",
+          "line": 283,
+          "end_line": 286,
+          "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+          "body_sha256": "5b9ab0e40c66582f20255243065b8c32261f7af302898378ec7ecae5b496a87f",
+          "item_sha256": "1752de165220c75ef772b1d4f38ccbaaf7c03a4f2a1ebab8ba5e7327e4063986",
+          "attrs": [
+            "#[inline]",
+            "#[rustc_const_stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]",
+            "#[stable(feature = \"non_null_from_ref\", since = \"1.89.0\")]"
+          ]
+        }
+      }
+    }
+  ],
+  "partial_guard": "V240-source-gate.json.xz",
+  "unresolved_source_associations": [
+    {
+      "function": "aspis_core::ct::add(_1: u32, _2: u32) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::ct::sub(_1: u32, _2: u32) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::add(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::from_m31(_1: M31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::mul(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::mul_m31(_1: CM31, _2: M31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl CM31>::sub(_1: CM31, _2: CM31) -> CM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::add(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::double(_1: M31) -> M31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::mul(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::reduce_u64(_1: u64) -> M31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl M31>::sub(_1: M31, _2: M31) -> M31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::add(_1: QM31, _2: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::from_cm31(_1: CM31) -> QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::mul(_1: QM31, _2: QM31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::<crates/aspis-core/src/field.rs::impl QM31>::mul_m31(_1: QM31, _2: M31) -> QM31",
+      "reason": "same frozen project file; per-function cfg selection and historical source association not certified",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::field::mul_by_r(_1: CM31) -> CM31",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::reduce64(_1: u64) -> u32",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::reduce_u64(_1: u64) -> u32",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_core::subtract_p(_1: u32) -> u32",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_statement::compress_tagged_tuple(_1: aspis_core::field::M31, _2: &[aspis_core::field::M31], _3: aspis_core::field::QM31) -> aspis_core::field::QM31",
+      "reason": "same complete frozen source span in both compiled cohorts; no internal cfg selection",
+      "candidates": 0
+    },
+    {
+      "function": "aspis_statement::logup::lift(_1: aspis_core::field::M31) -> aspis_core::field::QM31",
+      "reason": "project function source span/cfg association unresolved",
+      "candidates": 0
+    },
+    {
+      "function": "core::assert_failed(_1: AssertKind, _2: &T, _3: &U, _4: Option<Arguments<'_>>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::assert_failed_inner(_1: AssertKind, _2: &dyn fmt::Debug, _3: &dyn fmt::Debug, _4: Option<Arguments<'_>>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::cast(_1: vector::Simd<*const T, N>) -> vector::Simd<*const U, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::const_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/const_ptr.rs::impl<T, const N: usize> SimdConstPtr for Simd<*const T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*const T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N> where     LaneCount<N>: SupportedLaneCount,>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::core_simd::simd::ptr::mut_ptr::<library/core/src/../../portable-simd/crates/core_simd/src/simd/ptr/mut_ptr.rs::impl<T, const N: usize> SimdMutPtr for Simd<*mut T, N>>::without_provenance(_1: vector::Simd<usize, N>) -> vector::Simd<*mut T, N>",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read(_1: NonNull<T>) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::non_null::<library/core/src/ptr/non_null.rs::impl<T: PointeeSized> NonNull<T>>::read_unaligned(_1: NonNull<T>) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::nonzero::<library/core/src/num/nonzero.rs::impl<T> NonZero<T> where     T: ZeroablePrimitive,>::get(_1: NonZero<T>) -> T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_add(_1: u32, _2: u32) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::num::<library/core/src/num/mod.rs::impl u32>::wrapping_sub(_1: u32, _2: u32) -> u32",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::ptr::mut_ptr::<library/core/src/ptr/mut_ptr.rs::impl<T: PointeeSized> *mut T>::add(_1: *mut T, _2: usize) -> *mut T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::ptr::read(_1: *const T) -> T",
+      "reason": "raw source identical, cfg attributes/macro selection needs resolution",
+      "candidates": 1
+    },
+    {
+      "function": "core::simd_cast_ptr(_1: T) -> U",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 0
+    },
+    {
+      "function": "core::without_provenance(_1: usize) -> *const T",
+      "reason": "source symbol or macro expansion not uniquely mapped",
+      "candidates": 2
+    }
+  ],
+  "prior_conservative_mir_residuals": [
+    "27 unresolved conservative-MIR edges retained"
+  ],
+  "before": "D388: deployed native association SUSPENDED; original Lean/model law retained.",
+  "after": "Deployed helper source association RESTORED in structural (K-1 substitute) class, at the stated original callback/domain boundary. No endpoint premise removed.",
+  "premises": {
+    "removed": 0,
+    "added": 0,
+    "changed": 0,
+    "trust": [
+      "entropy_law",
+      "entropy_kernel",
+      "observation"
+    ]
+  },
+  "finding": false,
+  "kani_runs": 0,
+  "source_revision": "608fb7ff933fe70390075e09dbc4bf5a4ce6053e",
+  "prior_D388_disposition": "SUSPENDED; historical known_changed_functions and unresolved associations below remain the conservative envelope, not the new precise consumed call boundary",
+  "resume_gate": {
+    "row": "V240",
+    "disposition": "RESTORED",
+    "finding": false,
+    "source_bindings": [
+      "V240-deployed-body-binding.json",
+      "V240-primitive-binding.json",
+      "V247-deployed-body-binding.json",
+      "V238-deployed-body-binding.json",
+      "stdlib-transports.json"
+    ],
+    "new_source_file_checks": 28,
+    "audit": 41198,
+    "focused_replay": 41199,
+    "endpoint_premises_removed": 0,
+    "endpoint_premises_added": 0,
+    "endpoint_premises_changed": 0,
+    "evidence_class": "structural (K-1 substitute)",
+    "law": "PV_RDB2_Compress.complete/installed",
+    "replay_law": "PV_RDB2_ResumeReplay.compressor",
+    "boundary": "Actual host_semantic caller invokes prover_shared index-loop helper; five emitted arithmetic operations selected literally; arbitrary raw words and all slice lengths, Result errors/divergence retained.",
+    "retained": "Rust reference/Copy/intrinsic and compiler-cohort correspondence boundary; E1/E2, RunJoin, proof-account route, L1/L2/L3; no endpoint credit"
+  }
+}

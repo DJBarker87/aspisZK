@@ -1,0 +1,136 @@
+{
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "features": [
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#proc-macro2@1.0.107",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "package": "path+file:///home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture#pv-rdcd-zeroize@0.0.0",
+      "features": []
+    },
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#quote@1.0.47",
+      "features": [
+        "default",
+        "proc-macro"
+      ]
+    },
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#syn@2.0.119",
+      "features": [
+        "clone-impls",
+        "default",
+        "derive",
+        "extra-traits",
+        "full",
+        "parsing",
+        "printing",
+        "proc-macro",
+        "visit"
+      ]
+    },
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#unicode-ident@1.0.27",
+      "features": []
+    },
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#zeroize@1.9.0",
+      "features": [
+        "alloc",
+        "default",
+        "zeroize_derive"
+      ]
+    },
+    {
+      "package": "registry+https://github.com/rust-lang/crates.io-index#zeroize_derive@1.5.0",
+      "features": []
+    }
+  ],
+  "deployed_features_sha256": "cb353d02ad7351df3f43bdfc8808432357518f29ea88a32bbcb9759b9af3f415",
+  "profile": {
+    "name": "release",
+    "opt_level": 3,
+    "debug_assertions": false,
+    "overflow_checks": false,
+    "panic": "unwind"
+  },
+  "commands": [
+    [
+      "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "-vV"
+    ],
+    [
+      "cargo",
+      "build",
+      "--offline",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/Cargo.toml",
+      "--release",
+      "-j",
+      "4",
+      "--message-format=json"
+    ],
+    [
+      "cargo",
+      "metadata",
+      "--offline",
+      "--manifest-path",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/Cargo.toml",
+      "--format-version",
+      "1"
+    ],
+    [
+      "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "-Copt-level=3",
+      "-Cdebug-assertions=false",
+      "-Coverflow-checks=false",
+      "-Cpanic=unwind",
+      "--edition=2021",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-native.rs",
+      "--extern",
+      "zeroize=/home/dombarker/project-offloads/codex-pv-rdcd-20261028/target/release/deps/libzeroize-8934fc4bcce04016.rlib",
+      "-L",
+      "dependency=/home/dombarker/project-offloads/codex-pv-rdcd-20261028/target/release/deps",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/zeroize-native"
+    ],
+    [
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/zeroize-native"
+    ],
+    [
+      "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "-Copt-level=3",
+      "-Cdebug-assertions=false",
+      "-Coverflow-checks=false",
+      "-Cpanic=unwind",
+      "--edition=2021",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-drop.rs",
+      "--extern",
+      "zeroize=/home/dombarker/project-offloads/codex-pv-rdcd-20261028/target/release/deps/libzeroize-8934fc4bcce04016.rlib",
+      "-L",
+      "dependency=/home/dombarker/project-offloads/codex-pv-rdcd-20261028/target/release/deps",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/zeroize-drop"
+    ],
+    [
+      "/home/dombarker/project-offloads/codex-pv-rdcd-20261028/zeroize-fixture/zeroize-drop"
+    ]
+  ],
+  "checks": [
+    {
+      "fixture": "zeroize-native.rs",
+      "sha256": "c75c5ef51245c57a9e3a884619120c9bc9cd9ae88fc4843bde4a204ce372cc71",
+      "output": "PASS 1280 array pairs and 1280 byte cases, all target bytes zero and adjacent frames intact; finite validation, not machine non-elision audit\n"
+    },
+    {
+      "fixture": "zeroize-drop.rs",
+      "sha256": "58bf1b1e1a38beb8e34d5b688df31f312d58b7529dd2157043e9ccd03391e1e5",
+      "output": "PASS 1024 paired actual Zeroizing<[u8;N]>::drop cases in live MaybeUninit storage, target zero and neighbors intact; finite validation of consumed destructor path, not full binary erasure\n"
+    }
+  ],
+  "evidence_class": "finite validation only; byte outputs and destructor observations; no machine non-elision claim"
+}

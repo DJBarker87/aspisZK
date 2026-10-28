@@ -1,0 +1,40 @@
+{
+  "row": "V187",
+  "name": "op36 Array.Insts.CoreConvertTryFromVecVec.try_from",
+  "status": "RESTORED",
+  "evidence_class": "structural (K-1 substitute)",
+  "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
+  "structural": "v187-deployed-binding.json",
+  "native": [
+    {
+      "receipt": "native-array/receipt.json",
+      "classification": "finite validation only"
+    }
+  ],
+  "source_audit": "source-audit.json#V187",
+  "features": "resolved-features.json",
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
+  "after": "Same unconstrained generic-T/N Vec-to-array complete Result and ownership law; shared finalization effects retained before projection",
+  "reason": "Complete deployed bulk-read source and forward IntoIter/from_fn helper bodies checked, including guard initialization writes, exact iterator count, ZST modulo end encoding, error length returning original Vec, and saved buffer/capacity/allocator reconstruction. Symbolic fill law transfers all elements and leaves no live payload; same finalization primitive invoked once on success, not invoked on rejection. No Copy/Clone/Inhabited or primitive success premise added.",
+  "findings": [],
+  "retained_premises": [
+    "runtime/carrier relation at existing library boundary",
+    "compiler and executable correspondence",
+    "E1/E2",
+    "real RunJoin",
+    "client route",
+    "L1/L2/L3"
+  ],
+  "new_trust_items": [],
+  "kani_credit": false,
+  "original_closing_theorem": "R1Z.PV_DL_ArrayNative.selected_native",
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim",
+  "lean": [
+    "54702-receipt.json",
+    "54709-receipt.json",
+    "54711-receipt.json"
+  ],
+  "before_after_statement": "For every T, N:Usize and representable Vec<T>, result is Ok(array with same elements) iff length=N, otherwise Err(original Vec). Native bulk ownership transfer equals sequential owned transfer; successful finalization preserves every Result variant of the shared allocator/world primitive. Original selected op36 value carrier unchanged."
+}

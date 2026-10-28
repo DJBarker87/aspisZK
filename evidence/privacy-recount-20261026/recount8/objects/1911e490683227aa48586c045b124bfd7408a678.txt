@@ -1,0 +1,58 @@
+{
+  "row": "V234",
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "sources": {
+    "digest-0.10.7/src/digest.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/digest.rs",
+      "sha256": "8beab74640774c9f6811daa6dac9b5a8867f5beeb0b552a9b5ddbc5cfc196ed0"
+    },
+    "digest-0.10.7/src/lib.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/lib.rs",
+      "sha256": "5128199102bf0f7638fba0bbcf42b23822e31065841fb0c4304b64f681fde961"
+    },
+    "digest-0.10.7/src/core_api/wrapper.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
+      "sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a"
+    },
+    "generic-array-0.14.7/src/impls.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/impls.rs",
+      "sha256": "18b285821421eea0cdbbcfcc896eef67bd55d72f8d85b5827cca6687e9c0fc27"
+    }
+  },
+  "generic_array_all_checksum_files_verified": 16,
+  "native_bodies": {
+    "blanket_digest": "{\n        FixedOutput::finalize_fixed(self)\n    }",
+    "fixed_default": "{\n        let mut out = Default::default();\n        self.finalize_into(&mut out);\n        out\n    }",
+    "core_wrapper": "{\n        let Self { core, buffer } = &mut self;\n        core.finalize_fixed_core(buffer, out);\n    }",
+    "decompose": "{\n        let Self { core, buffer } = self;\n        (core, buffer)\n    }",
+    "array_default": "{\n        Self::generate(|_| T::default())\n    }"
+  },
+  "owned_reference": {
+    "path": "tools/pv-dlib-20261028/digest-forward-native.rs",
+    "sha256": "88a9b5ccf2b2c60091e5233d74067b5ebe007c6c8549c2f46ed95695d0d71197",
+    "three_complete_bodies_token_checked": true,
+    "owned_fixed_helper": "tools/pv-dlib-20261028/fixed-forward-helper.rs",
+    "helper_sha256": "c1215d6655832ff24498f6c5bdced405b2af6859029b575433365beef750a810"
+  },
+  "dispatch_scope": "Generic forwarding retains finalize_fixed as a parameter. Typed default expansion is ONLY the frozen CoreWrapper implementation, whose full impl has no override; no native claim for arbitrary overriding external dictionaries.",
+  "differences": [
+    {
+      "native": "method call syntax and receiver self",
+      "reference": "UFCS call syntax and receiver d",
+      "proof": "PV_DL_DigestFinal.complete; same method dispatch by full token binding"
+    },
+    {
+      "native": "FixedOutput default initializes GenericArray then consumes self in finalize_into",
+      "reference": "same initialization and consuming callback order",
+      "proof": "PV_DL_DigestFinal.reference; original complete-Result callback retained, including its destructor behavior"
+    }
+  ],
+  "finite_validation": "wrappers-native-combined-resume4/receipt.json; 256 same-input Drop-core cases; finite validation only",
+  "compression": "forwarding preserves original core callback parameters; no compression evaluation law or backend equality assumed",
+  "v232_untouched": true,
+  "kani": false
+}

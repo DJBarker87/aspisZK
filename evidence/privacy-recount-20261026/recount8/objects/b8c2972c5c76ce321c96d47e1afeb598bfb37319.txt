@@ -1,0 +1,3 @@
+# Last bounded mapper-control retry review
+
+At09:11:13UTC, scope entered08:59:19UTC, active714s. Optimized compilation completed4.76s; remaining time is Kani verification. MemoryCurrent3222482944, MemoryPeak3222745088, MemorySwapCurrent0. This is the mandatory no-new-compiled-target review (observed after the ten-minute threshold). No cap, bound, taskset, assertion set or source change is made. Lead ruling(i)'s already-authorized single900s retry remains the hard deadline; no third run is planned. The harness checks19 control/indexing fields only and cannot establish the full mapper even if successful.

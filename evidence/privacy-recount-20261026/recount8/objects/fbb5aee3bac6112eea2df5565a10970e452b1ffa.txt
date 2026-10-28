@@ -1,0 +1,14 @@
+import R1Z.PV_RunJoin_CommonObserver32
+import R1Z.PV_RunJoin_WorldDecode33
+import R1Z.PV_RunJoin_SampleCanonical34
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_CommonSample32.complete_view
+#print R1Z.PV_RunJoin_CommonObserver32.complete_pair
+#print R1Z.PV_RunJoin_Deployed.Runtime
+#print axioms R1Z.PV_RunJoin_CommonObserver32.complete_pair
+#print axioms R1Z.PV_RunJoin_SampleDomain34.remaining_value
+#print axioms R1Z.PV_RunJoin_SampleDomain34.assignments_value
+#print axioms R1Z.PV_RunJoin_SampleDomain34.assignments_bound
+#print axioms R1Z.PV_RunJoin_SampleDomain34.count_value
+#print axioms R1Z.PV_RunJoin_SampleDomain34.domain
+#print axioms R1Z.PV_RunJoin_WorldDecode33.same_result

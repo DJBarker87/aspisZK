@@ -1,0 +1,11 @@
+# Concrete validator tables, source bank association still open
+
+Receipt 51191 proves `PV_RunJoin_FixtureBanks19.transfer_rows` and `withdrawal_rows`. Each consumes 57 named block certificates (`transfer_block00`–`56`, `withdrawal_block00`–`56`) through the existing symbolic `PV_RunJoin_BankAggregate18.rows` from 64adb93457. All 114 block results discharge actual Vec reads, eight source absorption adds/writes, eleven source round-pair returns and the three padding rows. The actual stable/late split is 34≤block<54. No whole-bank recurrence or 16,384-cell reduction is performed.
+
+The table constructors are explicit bounded tabulations from the fixture state data. Their 112 path/auxiliary rows remain an arbitrary `tail : Nat → State`; the Poseidon validator never consumes these rows. The exceptional withdrawal blocks 27–29 use the named symbolic zero-input certificate `BankZero19.certificate`, whose nonzero permutation outputs are obtained from proved source totality. The zero-input permutation is not claimed to have zero outputs, and no large zero recurrence is evaluated.
+
+**Boundary:** these are the target fixture tables, not yet the actual source `CopyRecords.banks` return. Their identification with the producer's `Parts.blocks` remains a P obligation. The source `Parts` and `CopyRecords.banks` totality proof is a separate next check. No compiler return, selected-i transition, deployed public binding or non-vacuity witness follows until actual bank validation is connected.
+
+Receipts 51147–51174 transport all 81 inherited one-round numeric cells into source indexed rounds/pairs. 51175/51179 prove the generic selected read/certificate rules. 51181–51189 prove the literal absorption certificates in nine groups. 51180/51190 handle the zero-input shape. 51191: exit 0, wall 5.121916124597192 s, peak RSS 4,949,590,016 bytes, swap 0; revision/dependency hashes and all axioms lines in receipt-51191.json. All accepted roots use only propext, Classical.choice, Quot.sound.
+
+V152–V154 compile_call is reduced by the table results, but no whole ledger row is discharged. V038/V045/V047 remain unchanged. Endpoint premises removed/added/weakened 0/0/0; no T field changed. Recount 5 remains 407 rows: 400 P, 3 T, 4 C, OPEN 93.

@@ -1,0 +1,11 @@
+# Mapper review after reference/root closure
+
+Read-only srcid commit0718aa31d73810e1998ae336aaf3f9536bf41896 supplied its checked root-helper closure. Consumer40960 imports it without copying or changing any upstream/shared source. Our independent source permutation bridge40959 also passed. Root-reference returned values and fixture primitive admission are checked separately. None identifies installed Records.
+
+Kani08 splits the19 non-empty fields, both actual fixture variants selected by one arbitrary bool. All20 original comparisons are still retained in the older exact harnesses; the new harness explicitly omits p.empty and claims partial evidence only. It timed out180.0266s (exit124, peak2185420800, swap0), no result, no counterexample. Actual optimized compilation5s; remaining time was verification, not a cold build. No stubs/contracts are present in retained metadata. One Kani verification remains.
+
+Native MIR03 adds cross-crate-inline-threshold=always, preserving the exact shipped records source. It completed83.634s, peak1676808192, swap0. Foreign Charon13 shows this really changes the wrapper body (~22MB structured JSON), but has_errors=true with unsupported union constants from deeply inlined standard-array code. It is rejected before Aeneas. Native MIR04 instead uses general/hint inline thresholds0 and forwarder threshold100000, so subsequent variant-adapter translations test selective inlining. Rust/Charon/Aeneas binaries remain unmodified.
+
+Direct RouteA failures now include escaping reference output, missing FnOnce/array functions, unsupported MaybeUninit unions, and (with monomorphization) multiple Option language items in nested-loop return lowering. Every input and exact diagnostic is retained. We have not used an older backend to bypass fail-closed guards, imported an opaque template, or promoted a projected/partial extraction.
+
+The remaining fact is still the complete shipped mapper identity. Reference-only equations are labelled Reference, and R_shipped remains undefined. The two native compiler equations and all downstream deployed/non-vacuity obligations are intentionally not claimed. No target established, no new T field, and no endpoint premise removed.

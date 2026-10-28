@@ -1,0 +1,168 @@
+{
+  "checks": [
+    {
+      "family": "Layout.from_size_alignment",
+      "old_key": "evidence/library/core/src/alloc/layout.rs",
+      "deployed_key": "deployed/library/core/src/alloc/layout.rs",
+      "old_file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+      "deployed_file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "old_body": "{\n        if Layout::is_size_alignment_valid(size, alignment) {\n            \n            Ok(Layout { size, align: alignment })\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "deployed_body": "{\n        if size > Self::max_size_for_align(align) {\n            return Err(LayoutError);\n        }\n\n        \n        Ok(Layout { size, align })\n    }",
+      "exact_expected_bodies": true,
+      "proof": "LayoutGuards.from_size_alignment/complete_effect; Alignment.allocator_argument",
+      "domain": "same valid alignment word; LayoutError retained as Err value"
+    },
+    {
+      "family": "Layout.is_size_align_valid",
+      "old_key": "evidence/library/core/src/alloc/layout.rs",
+      "deployed_key": "deployed/library/core/src/alloc/layout.rs",
+      "old_file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+      "deployed_file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "old_body": "{\n        let Some(alignment) = Alignment::new(align) else { return false };\n        Self::is_size_alignment_valid(size, alignment)\n    }",
+      "deployed_body": "{\n        let Some(align) = Alignment::new(align) else { return false };\n        if size > Self::max_size_for_align(align) {\n            return false;\n        }\n        true\n    }",
+      "exact_expected_bodies": true,
+      "proof": "LayoutGuards.is_size_align_valid",
+      "domain": "all input sizes and Alignment::new outcomes, including invalid alignment"
+    },
+    {
+      "family": "Layout.repeat",
+      "old_key": "evidence/library/core/src/alloc/layout.rs",
+      "deployed_key": "deployed/library/core/src/alloc/layout.rs",
+      "old_file_sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+      "deployed_file_sha256": "7bc98930cfa1ad8c04d24014ebe2293cf4b4fb8a0a0d46f2dc94ad72502c3974",
+      "old_body": "{\n        \n        let padded = self.pad_to_align();\n        let Ok(result) = (if let Some(k) = n.checked_sub(1) {\n            let Ok(repeated) = padded.repeat_packed(k) else {\n                return Err(LayoutError);\n            };\n            repeated.extend_packed(*self)\n        } else {\n            debug_assert!(n == 0);\n            self.repeat_packed(0)\n        }) else {\n            return Err(LayoutError);\n        };\n        Ok((result, padded.size()))\n    }",
+      "deployed_body": "{\n        let padded = self.pad_to_align();\n        if let Ok(repeated) = padded.repeat_packed(n) {\n            Ok((repeated, padded.size()))\n        } else {\n            Err(LayoutError)\n        }\n    }",
+      "exact_expected_bodies": true,
+      "proof": "LayoutRepeat.padded_complete/padded_effect; LayoutGeneral.before_success/after_success/before_after_size",
+      "domain": "equality on already-padded real-type layouts; explicit restated before/after law on unpadded layouts"
+    },
+    {
+      "family": "layout_array",
+      "old_key": "evidence/library/alloc/src/raw_vec/mod.rs",
+      "deployed_key": "deployed/library/alloc/src/raw_vec/mod.rs",
+      "old_file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "deployed_file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "old_body": "{\n    \n    \n    debug_assert!(elem_layout.size() == elem_layout.pad_to_align().size());\n\n    elem_layout.repeat_packed(cap).map_err(const |_| CapacityOverflow.into())\n}",
+      "deployed_body": "{\n    \n    match elem_layout.repeat(cap) {\n        Ok((layout, _pad)) => Ok(layout),\n        Err(_) => Err(CapacityOverflow.into()),\n    }\n}",
+      "exact_expected_bodies": true,
+      "proof": "LayoutRepeat.layout_array/checked_mul_layout",
+      "domain": "real-type padded layout; CapacityOverflow mapping and allocator-world frame retained"
+    },
+    {
+      "family": "RawVecInner.new_in",
+      "old_key": "evidence/library/alloc/src/raw_vec/mod.rs",
+      "deployed_key": "deployed/library/alloc/src/raw_vec/mod.rs",
+      "old_file_sha256": "0d884b28022c36443478717ef3f776a80d65f7f9742ec2ef6927a50ae94efe14",
+      "deployed_file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "old_body": "{\n        let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero_usize()));\n        \n        Self { ptr, cap: ZERO_CAP, alloc }\n    }",
+      "deployed_body": "{\n        let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero()));\n        \n        Self { ptr, cap: ZERO_CAP, alloc }\n    }",
+      "exact_expected_bodies": true,
+      "proof": "RawVec.new_in_complete/new_in_no_allocation; Alignment.nonzero_accessor_complete",
+      "domain": "valid alignment; no allocation call, cap0, allocator moved into unchanged owner"
+    },
+    {
+      "family": "Alignment representation",
+      "old_key": "evidence/library/core/src/mem/alignment.rs",
+      "deployed_key": "deployed/library/core/src/ptr/alignment.rs",
+      "exact64discriminants": true,
+      "representation": "transparent wrapper over repr(usize) enum",
+      "proof": "Alignment.positive/within_half_word/allocator_argument"
+    },
+    {
+      "family": "Alignment nonzero accessor",
+      "old_key": "evidence/library/core/src/mem/alignment.rs",
+      "deployed_key": "deployed/library/core/src/ptr/alignment.rs",
+      "old_file_sha256": "4a493ac5e8041f03d0ddc20430fbd5c476c1886bae2836df4f1c23fc80b3214b",
+      "deployed_file_sha256": "d484d2379ea9dfdf3f3610ad9612db5cd732a5e1bfc9496d33be0e102b7a2244",
+      "old_body": "{\n        \n        \n        \n        \n\n        \n        unsafe { mem::transmute::<Alignment, NonZero<usize>>(self) }\n    }",
+      "deployed_body": "{\n        \n        \n        \n        \n\n        \n        unsafe { mem::transmute::<Alignment, NonZero<usize>>(self) }\n    }",
+      "exact_expected_bodies": true,
+      "proof": "Alignment.nonzero_accessor_complete",
+      "domain": "the same 64-bit discriminant is exposed; no pointer provenance is invented"
+    },
+    {
+      "family": "AtomicPtr.new",
+      "old_body": "{\n        \n        \n        unsafe { transmute(p) }\n    }",
+      "deployed_body": "{\n        AtomicPtr { p: UnsafeCell::new(p) }\n    }",
+      "proof": "Atomic.new_complete",
+      "domain": "thin atomic pointer word, transparent cell representation; identical underlying atomic hook/order/effects"
+    },
+    {
+      "family": "AtomicPtr.load",
+      "old_body": "{\n        \n        unsafe { atomic_load(self.as_ptr(), order) }\n    }",
+      "deployed_body": "{\n        \n        unsafe { atomic_load(self.p.get(), order) }\n    }",
+      "proof": "Atomic.load_complete/new_then_load",
+      "domain": "thin atomic pointer word, transparent cell representation; identical underlying atomic hook/order/effects"
+    },
+    {
+      "family": "AtomicPtr.as_ptr",
+      "old_body": "{\n        self.v.get().cast()\n    }",
+      "deployed_body": "{\n        self.p.get()\n    }",
+      "proof": "PointerBridge.cast_complete; Atomic.load_complete",
+      "domain": "thin atomic pointer word, transparent cell representation; identical underlying atomic hook/order/effects"
+    },
+    {
+      "family": "Vec.as_mut_slice",
+      "old_body": "{\n        \n        \n\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            &mut *core::intrinsics::aggregate_raw_ptr::<*mut [T], _, _>(self.as_mut_ptr(), self.len)\n        }\n    }",
+      "deployed_body": "{\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            &mut *core::intrinsics::aggregate_raw_ptr::<*mut [T], _, _>(self.as_mut_ptr(), self.len)\n        }\n    }",
+      "body_tokens_identical": true,
+      "proof": "VecBorrow.complete_return/every_write/roundtrip/no_spare_exposure",
+      "scope": "Copy-element families; native slice metadata and restoration relationship must be instantiated per row"
+    },
+    {
+      "family": "Vec.truncate",
+      "old_body": "{\n        \n        \n\n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            \n            if len > self.len {\n                return;\n            }\n            let remaining_len = self.len - len;\n            let s = self.as_mut_ptr().add(len).cast_slice(remaining_len);\n            self.len = len;\n            ptr::drop_in_place(s);\n        }\n    }",
+      "deployed_body": "{\n        \n        \n        \n        \n        \n        \n        \n        unsafe {\n            \n            \n            \n            if len > self.len {\n                return;\n            }\n            let remaining_len = self.len - len;\n            let s = ptr::slice_from_raw_parts_mut(self.as_mut_ptr().add(len), remaining_len);\n            self.len = len;\n            ptr::drop_in_place(s);\n        }\n    }",
+      "exact_only_difference": "raw-slice constructor spelling",
+      "proof": "Truncate.complete/reduced_before_drop/no_drop_when_extending",
+      "effects": "length reduced before destructor; destructor errors and world evidence preserved"
+    },
+    {
+      "family": "Global.alloc_impl_runtime",
+      "old_key": "evidence/library/alloc/src/alloc.rs",
+      "deployed_key": "deployed/library/alloc/src/alloc.rs",
+      "old_file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "deployed_file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "old_body": "{\n        match layout.size() {\n            0 => Ok(layout.dangling_ptr().cast_slice(0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(ptr.cast_slice(size))\n            },\n        }\n    }",
+      "deployed_body": "{\n        match layout.size() {\n            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),\n            \n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(NonNull::slice_from_raw_parts(ptr, size))\n            },\n        }\n    }",
+      "exact_expected_bodies": true,
+      "proof": "GlobalAlloc.runtime_complete/zero_no_allocator_call/null_is_allocation_error; ConstructorEffects.slice_complete",
+      "domain": "same allocator hooks and error worlds; fresh-memory semantics of the concrete hook still require resource-family association"
+    },
+    {
+      "family": "Global.alloc",
+      "old_key": "evidence/library/alloc/src/alloc.rs",
+      "deployed_key": "deployed/library/alloc/src/alloc.rs",
+      "old_file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "deployed_file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "old_body": "{\n    unsafe {\n        \n        \n        __rust_no_alloc_shim_is_unstable_v2();\n\n        __rust_alloc(layout.size(), layout.alignment())\n    }\n}",
+      "deployed_body": "{\n    unsafe {\n        \n        \n        __rust_no_alloc_shim_is_unstable_v2();\n\n        __rust_alloc(layout.size(), layout.align())\n    }\n}",
+      "exact_expected_bodies": true,
+      "proof": "GlobalAlloc.allocate_complete; Alignment.allocator_argument",
+      "domain": "word encoding of alignment and all argument positions/call order preserved; allocator primitive not replaced"
+    },
+    {
+      "family": "Global.alloc_zeroed",
+      "old_key": "evidence/library/alloc/src/alloc.rs",
+      "deployed_key": "deployed/library/alloc/src/alloc.rs",
+      "old_file_sha256": "699c02fe7844cd9490905545e503fec56552be2a34d50a79242852739483889b",
+      "deployed_file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "old_body": "{\n    unsafe {\n        \n        \n        __rust_no_alloc_shim_is_unstable_v2();\n\n        __rust_alloc_zeroed(layout.size(), layout.alignment())\n    }\n}",
+      "deployed_body": "{\n    unsafe {\n        \n        \n        __rust_no_alloc_shim_is_unstable_v2();\n\n        __rust_alloc_zeroed(layout.size(), layout.align())\n    }\n}",
+      "exact_expected_bodies": true,
+      "proof": "GlobalAlloc.allocate_complete; Alignment.allocator_argument",
+      "domain": "word encoding of alignment and all argument positions/call order preserved; allocator primitive not replaced"
+    }
+  ],
+  "toolchain": "rustc1.94.1",
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "domains": "transport families only; no assumption added to capped trust record",
+  "pending": [
+    "Box::new intrinsic lowering to allocation+initialization",
+    "concrete allocator freshness/prefix guarantee and resource-family association",
+    "per-row concrete call/instantiation cone and complete project checker where still missing"
+  ],
+  "association_correction": "The old V258 RawVec<T,A>::new_in classification pointed at RawVecInner<A>::new_in. The Inner theorem is not promoted to the typed wrapper without its own binding.",
+  "unpadded_difference": "LayoutGeneral restates the true difference; native probe confirms before size1 vs deployed size8 for Layout(1,8). No assigned real-type padded-layout row is refuted.",
+  "restored_rows": []
+}

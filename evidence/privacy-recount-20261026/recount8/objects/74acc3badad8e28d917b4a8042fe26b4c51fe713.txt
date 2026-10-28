@@ -1,0 +1,18 @@
+import R1Z.PV_RunJoin_JoinedCausalHeadline
+import R1Z.PV_RunJoin_TrustFixtures
+import R1Z.PV_RunJoin_TrustSeparation
+#print R1Z.PV_RunJoin_TrustItems
+#print R1Z.PV_RunJoin_Deployed.Runtime
+#print R1Z.PV_RunJoin_Boundary.Data
+#print R1Z.PV_RunJoin_TrustEndpoint.ProofObligations
+#check @R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#check @R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.identity
+#print axioms R1Z.PV_RunJoin_JoinedInstallation.public_iff
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.proofs
+#print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.complete_view
+#print axioms R1Z.PV_RunJoin_TrustEndpoint.toPremises
+#print axioms R1Z.PV_RunJoin_TrustFixtures.both_fibres
+#print axioms R1Z.PV_RunJoin_TrustSeparation.trace_refinement_is_separate
+#print axioms R1Z.PV_RunJoin_TrustSeparation.no_implicit_availability

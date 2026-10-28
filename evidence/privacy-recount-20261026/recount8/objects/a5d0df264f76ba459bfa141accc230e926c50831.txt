@@ -1,0 +1,52 @@
+{
+  "row": "V181",
+  "name": "op30 alloc.string.String.with_capacity",
+  "status": "FINDING",
+  "evidence_class": "checked native counterexample to unconditional complete-Result promotion; structural repaired law",
+  "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
+  "structural": "v181-deployed-binding.json",
+  "native": [
+    {
+      "receipt": "v181-capacity-native/receipt.json",
+      "classification": "1027 finite Result/header pairs against repaired reference"
+    },
+    {
+      "receipt": "result-effect-witness/receipt.json",
+      "classification": "checked counterexample against original reference"
+    }
+  ],
+  "source_audit": "source-audit.json#V181",
+  "features": "resolved-features.json",
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
+  "after": "Full Result association to old empty reference rejected; repaired stateful reference proved, original selected callback unchanged",
+  "reason": "At n=9223372036854775808 deployed String::with_capacity panics before allocation while original String::new reference returns. The all-Usize callback equation remains a model theorem, not an unqualified native law. Historical bounded/returning empty-value qualification is not refuted.",
+  "findings": [
+    {
+      "input": "n=2^63 on deployed64-bit Linux",
+      "native": "panic capacity overflow before allocation",
+      "old_reference": "returns empty String",
+      "receipt": "result-effect-witness/receipt.json"
+    }
+  ],
+  "retained_premises": [
+    "runtime/carrier relation at existing library boundary",
+    "compiler and executable correspondence",
+    "E1/E2",
+    "real RunJoin",
+    "client route",
+    "L1/L2/L3"
+  ],
+  "new_trust_items": [],
+  "kani_credit": false,
+  "original_closing_theorem": "R1Z.PV_CBL_AppendBundle.op30_source",
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim",
+  "lean": [
+    "54734-receipt.json",
+    "54736-receipt.json"
+  ],
+  "before_after_statement": "Before selected.op30(n)=ok empty for all Usize, with native allocation/domain qualifications residual. After deployed constructor equals String::new+reserve_exact(n), retaining overflow/OOM/world; empty live value on returning cases. No equality to unconditional ok-empty is claimed.",
+  "premise_removed": null,
+  "next_deliverable": "Repair the endpoint capacity adapter to retain panic/abort outcomes and allocator effects, or discharge the actual reachable-capacity and allocation-success obligations. No existing proof/dictionary edited."
+}

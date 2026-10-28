@@ -1,0 +1,13 @@
+import R1Z.ProverRwBodyStore
+set_option autoImplicit false
+open ProverRwFull
+#check prover.fixed_k_column
+#check prover.audit_masks
+#check host_commitment.EncodingDomain
+#check aspis_prover.state_only_hiding.AppliedStateOnlyMasks
+#check aspis_statement.state_only_trace.StateOnlyTraceFoundation
+#check aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+#check prover.prove_masked_with_attempt
+#print axioms R1Z.ProverRwBodyStore.continuation
+#print ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+#print ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve

@@ -1,0 +1,12 @@
+import R1Z.PV_RunJoin_SamplePipeline38
+import R1Z.PV_RunJoin_SumcheckThread38
+import R1Z.PV_RunJoin_WideComplete38
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_SamplePipeline38.complete
+#print R1Z.PV_RunJoin_InterpolationComplete38.interpolate
+#print R1Z.PV_RunJoin_SumcheckThread38.source
+#print R1Z.PV_RunJoin_WideComplete38.encode
+#print axioms R1Z.PV_RunJoin_SamplePipeline38.complete
+#print axioms R1Z.PV_RunJoin_InterpolationComplete38.interpolate
+#print axioms R1Z.PV_RunJoin_SumcheckThread38.source
+#print axioms R1Z.PV_RunJoin_WideComplete38.encode
