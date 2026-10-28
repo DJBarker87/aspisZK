@@ -1,4 +1,3 @@
-import Mathlib.Algebra.GroupPower.Lemmas
 import Mathlib.Tactic
 set_option autoImplicit false
 namespace PV_L2C_InverseChain
