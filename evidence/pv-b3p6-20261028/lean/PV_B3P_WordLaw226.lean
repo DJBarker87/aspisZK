@@ -19,8 +19,7 @@ theorem complete_word (v : U32) : four v =
     else .ok (.Err E.Public) := by
   by_cases h : v < 2147483647#u32
   · simp only [h, ↓reduceIte, four, field_success v _ h, bindR,
-      PV_B3P_ByteLayout226.wordBytes]
-    rfl
+      PV_B3P_ByteLayout226.wordBytes] <;> rfl
   · simp only [h, ↓reduceIte, four, field_reject v _ h, bindR]
 
 #print axioms complete_word

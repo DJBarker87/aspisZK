@@ -8,7 +8,13 @@ pub mod reference133;
 #[cfg(kani)]
 mod proofs {
     #[kani::proof]
-    #[kani::unwind(32)]
+    #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+    #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+    #[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+    #[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+    #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+    #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+    #[kani::unwind(1026)]
     fn shipped_equals_reference133_pointwise() {
         let shipped = aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1();
         let expected = super::reference133::active_rows();
