@@ -1,0 +1,82 @@
+use aspis_core::{circle::{CirclePointError,SecureCirclePoint},
+    field::{CM31,QM31},r0_transcript::CircleRow};
+#[path="/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/sampler.rs"]
+pub mod shipped_sampler;
+
+// Same field calls, order and rejection priority as the frozen circle helpers.
+// Explicit matches replace ok_or/? and unwrap_or_else; no arithmetic is stubbed.
+pub fn map_parameter(parameter: QM31) -> Result<SecureCirclePoint,CirclePointError> {
+    let square=parameter.square();
+    let inverse_denominator=match QM31::ONE.add(square).try_inv() {
+        Some(value)=>value,
+        None=>return Err(CirclePointError::SingularParameter),
+    };
+    let point=SecureCirclePoint {
+        x:QM31::ONE.sub(square).mul(inverse_denominator),
+        y:parameter.add(parameter).mul(inverse_denominator),
+    };
+    if parameter.c1==CM31::ZERO {
+        return Err(CirclePointError::ParameterInCm31Subfield);
+    }
+    Ok(point)
+}
+
+pub const FALLBACK:[QM31;2]=[
+    QM31 {c0:CM31::ZERO,c1:CM31::ONE},
+    QM31 {c0:CM31::ONE,c1:CM31::ONE},
+];
+pub fn fallback(sample:usize)->SecureCirclePoint {
+    let parameter=FALLBACK[sample%2];
+    match map_parameter(parameter) {
+        Ok(point)=>point,
+        Err(_)=>SecureCirclePoint{x:QM31::ONE,y:QM31::ZERO},
+    }
+}
+pub fn circle_owned(block:&[u8;32],row:CircleRow)->SecureCirclePoint {
+    let parameter=shipped_sampler::qm31_sample(block);
+    match map_parameter(parameter) {
+        Ok(point)=>point,
+        Err(_)=>match row {
+            CircleRow::First=>fallback(0),
+            CircleRow::Second=>fallback(1),
+        },
+    }
+}
+
+#[cfg(test)]
+mod checks {
+    use super::*;
+    #[test]
+    fn native_owned_matches() {
+        let mut checked=0;let mut accepted=0;let mut rejected=0;
+        let mut check=|block:[u8;32]| {
+            let parameter=shipped_sampler::qm31_sample(&block);
+            assert_eq!(map_parameter(parameter),aspis_core::circle::secure_ood_circle_point_from_parameter(parameter));
+            for row in [CircleRow::First,CircleRow::Second] {
+                assert_eq!(circle_owned(&block,row),shipped_sampler::circle_sample(&block,row));
+                if map_parameter(parameter).is_ok() {accepted+=1;} else {rejected+=1;}
+                checked+=1;
+            }
+        };
+        check([0;32]);check([255;32]);
+        for rank in [aspis_core::field::P as u64,
+            (aspis_core::field::P as u64-1)*aspis_core::field::P as u64] {
+            let mut b=[0;32];b[..8].copy_from_slice(&rank.to_le_bytes());check(b);
+        }
+        for bit in 0..256 {let mut b=[0;32];b[bit/8]=1<<(bit%8);check(b);}
+        let mut seed=0x123456789abcdef0u64;
+        for _ in 0..4096 {
+            let mut b=[0;32];for byte in &mut b {seed=seed.wrapping_mul(6364136223846793005).wrapping_add(1);*byte=(seed>>32)as u8;}check(b);
+        }
+        for row in 0..2 {assert_eq!(fallback(row),aspis_core::transcript::circle_fallback_point(row));}
+        assert!(accepted>0 && rejected>0);
+        println!("owned-source checks={checked}, accepted={accepted}, rejected={rejected}");
+    }
+    #[test]
+    fn native_digit_fixtures() {
+        for block in [[0;32],[255;32]] {
+            let q=shipped_sampler::qm31_sample(&block);
+            println!("fixture {}: [{},{},{},{}]",block[0],q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0);
+        }
+    }
+}

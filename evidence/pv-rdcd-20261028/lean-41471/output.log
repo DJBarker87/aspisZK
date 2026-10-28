@@ -1,0 +1,84 @@
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : Aeneas.Std.core.iter.range.Step
+  (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.Usize) :=
+Aeneas.Std.core.iter.range.UScalarStep Aeneas.Std.UScalarTy.Usize Aeneas.Std.core.clone.CloneUsize
+  Aeneas.Std.core.cmp.PartialOrdUsize
+@[reducible] def Aeneas.Std.core.ops.range.Range.Insts.DoubleEndedIterator : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator (Aeneas.Std.core.ops.range.Range A) A :=
+fun {A} StepInst =>
+  { iteratorInst := Aeneas.Std.core.iter.traits.iterator.IteratorRange StepInst,
+    next_back := Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back StepInst }
+@[reducible] def Aeneas.Std.core.iter.traits.iterator.IteratorRange : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.iter.traits.iterator.Iterator (Aeneas.Std.core.ops.range.Range A) A :=
+fun {A} StepInst => { next := Aeneas.Std.core.iter.range.IteratorRange.next StepInst }
+def Aeneas.Std.core.iter.adapters.rev.Rev.Insts.CoreIterTraitsIteratorIterator.next : {I Item : Type} →
+  Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator I Item →
+    Aeneas.Std.core.iter.adapters.rev.Rev I →
+      Aeneas.Std.Result (Option Item × Aeneas.Std.core.iter.adapters.rev.Rev I) :=
+fun {I Item} DEInst self => do
+  let __x ← DEInst.next_back self.iter
+  match __x with
+    | (o, it) => Aeneas.Std.Result.ok (o, { iter := it })
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default : {Self Item0 Item1 : Type} →
+  Aeneas.Std.core.iter.traits.iterator.Iterator Self Item0 →
+    Aeneas.Std.core.iter.traits.double_ended.DoubleEndedIterator Self Item1 →
+      Self → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.rev.Rev Self) :=
+fun {Self Item0 Item1} _IteratorInst _DEInst => Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default
+structure Aeneas.Std.core.iter.range.Step (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.iter.range.Step.cloneInst : Aeneas.Std.core.clone.Clone Self
+  Aeneas.Std.core.iter.range.Step.partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self
+  Aeneas.Std.core.iter.range.Step.steps_between : Self →
+      Self → Aeneas.Std.Result (Aeneas.Std.Usize × Option Aeneas.Std.Usize)
+  Aeneas.Std.core.iter.range.Step.forward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)
+  Aeneas.Std.core.iter.range.Step.backward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)
+constructor:
+  Aeneas.Std.core.iter.range.Step.mk {Self : Type} (cloneInst : Aeneas.Std.core.clone.Clone Self)
+    (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self)
+    (steps_between : Self → Self → Aeneas.Std.Result (Aeneas.Std.Usize × Option Aeneas.Std.Usize))
+    (forward_checked backward_checked : Self → Aeneas.Std.Usize → Aeneas.Std.Result (Option Self)) :
+    Aeneas.Std.core.iter.range.Step Self
+structure Aeneas.Std.core.ops.range.Range.{u} (Idx : Type u) : Type u
+number of parameters: 1
+fields:
+  Aeneas.Std.core.ops.range.Range.start : Idx
+  Aeneas.Std.core.ops.range.Range.end : Idx
+constructor:
+  Aeneas.Std.core.ops.range.Range.mk.{u} {Idx : Type u} (start «end» : Idx) : Aeneas.Std.core.ops.range.Range Idx
+def Aeneas.Std.core.iter.range.UScalarStep : (ty : Aeneas.Std.UScalarTy) →
+  Aeneas.Std.core.clone.Clone (Aeneas.Std.UScalar ty) →
+    Aeneas.Std.core.cmp.PartialOrd (Aeneas.Std.UScalar ty) (Aeneas.Std.UScalar ty) →
+      Aeneas.Std.core.iter.range.Step (Aeneas.Std.UScalar ty) :=
+fun ty cloneInst partialOrdInst =>
+  { cloneInst := cloneInst, partialOrdInst := partialOrdInst,
+    steps_between := Aeneas.Std.core.iter.range.UScalarStep.steps_between,
+    forward_checked := Aeneas.Std.core.iter.range.UScalarStep.forward_checked,
+    backward_checked := Aeneas.Std.core.iter.range.UScalarStep.backward_checked }
+def Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.ops.range.Range A → Aeneas.Std.Result (Option A × Aeneas.Std.core.ops.range.Range A) :=
+fun {A} StepInst r => do
+  let lt ← StepInst.partialOrdInst.lt r.start r.end
+  if lt = true then do
+      let b ← StepInst.backward_checked r.end 1#usize
+      match b with
+        | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+        | some e' => Aeneas.Std.Result.ok (some e', { start := r.start, «end» := e' })
+    else Aeneas.Std.Result.ok (none, r)
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  Aeneas.Std.core.iter.range.Step A →
+    Aeneas.Std.core.ops.range.Range A → Aeneas.Std.Result (Option A × Aeneas.Std.core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+        | some n => Aeneas.Std.Result.ok (some range', { start := n, «end» := range.end })
+    else Aeneas.Std.Result.ok (none, range)
+def Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default : {Self : Type} →
+  Self → Aeneas.Std.Result (Aeneas.Std.core.iter.adapters.rev.Rev Self) :=
+fun {Self} self => Aeneas.Std.Result.ok { iter := self }

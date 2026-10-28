@@ -1,0 +1,47 @@
+inductive Aeneas.Std.Result.{u} : Type u → Type u
+number of parameters: 1
+constructors:
+Aeneas.Std.Result.ok : {α : Type u} → α → Result α
+Aeneas.Std.Result.fail : {α : Type u} → Error → Result α
+Aeneas.Std.Result.div : {α : Type u} → Result α
+def Aeneas.Std.core.array.equality.PartialEqArray.eq : {T U : Type} →
+  {N : Usize} → core.cmp.PartialEq T U → Std.Array T N → Std.Array U N → Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 =>
+  if a0.length = a1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Result.ok (decide ¬b = true))
+      ((↑a0).zip ↑a1)
+  else Result.ok false
+structure Aeneas.Std.core.cmp.PartialEq (Self Rhs : Type) : Type
+number of parameters: 2
+fields:
+  Aeneas.Std.core.cmp.PartialEq.eq : Self → Rhs → Result Bool
+  Aeneas.Std.core.cmp.PartialEq.ne : Self → Rhs → Result Bool :=
+    fun self_1 other => do
+      let __do_lift ← self.eq self_1 other
+      Result.ok !__do_lift
+constructor:
+  Aeneas.Std.core.cmp.PartialEq.mk {Self Rhs : Type} (eq ne : Self → Rhs → Result Bool) : core.cmp.PartialEq Self Rhs
+List.drop_eq_getElem_cons.{u_1} {α : Type u_1} {i : ℕ} {l : List α} (h : i < l.length) :
+  List.drop i l = l[i] :: List.drop (i + 1) l
+List.getElem?_eq_getElem.{u_1} {α : Type u_1} {l : List α} {i : ℕ} (h : i < l.length) : l[i]? = some l[i]
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_SliceInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `List.drop_succ`
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_SliceInspect.lean:9:7: error(lean.unknownIdentifier): Unknown constant `List.drop_eq_nil_iff_le`
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_SliceInspect.lean:10:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_tc_ok`
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | Result.ok r =>
+        match r with
+        | ControlFlow.cont x => f x
+        | ControlFlow.done x => Result.ok x
+      | Result.fail e => Result.fail e
+      | Result.div => Result.div)
+    ⋯
