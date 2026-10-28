@@ -166,3 +166,8 @@ No further admission before03:14:41.640Z. All focused IDs42200–42296 are used;
 42297 audit refused; remaining reserved IDs42298,42299 only. Corrected
 EncoderMutation source was not compiled; LengthEncoding, BatchPlan,
 BatchBoundary and ArrayOwnership remain drafts.
+
+Final: audit42298 and replay42299 exit0, standard axioms only. All100IDs
+used;85 chargedLean,15refused IDs;6Kani. Five uncompiled drafts excluded.
+Stop: authorized ID block exhausted, not a row counterexample or ELF mismatch.
+All8row residuals unchanged; no deployed premise or trust change.
