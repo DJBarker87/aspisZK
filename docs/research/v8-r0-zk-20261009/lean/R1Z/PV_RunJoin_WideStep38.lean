@@ -14,7 +14,7 @@ def input (size : Usize) (f : Nat → W) :=
 
 theorem input_size (size : Usize) (f : Nat → W) : Slice.len (input size f)=size := by
   apply UScalar.eq_of_val_eq
-  simp only [input,Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn]
+  simp only [input,Slice.len,Array.to_slice,ProverCommitArray49.array,List.length_ofFn,UScalar.ofNatCore_val_eq]
 
 theorem increment (size k : Usize) (hk : k.val<size.val) :
     (Usize.wrapping_add k 1#usize).val=k.val+1 := by
@@ -47,8 +47,14 @@ theorem step (ops : ExternalFuns) (size : Usize) (f : Nat → W)
   refine ⟨next,?_,hval⟩
   unfold prover.encoded_slice_loop.body
   simp only [input_size,show k<size from hk,↓reduceIte]
-  rw [PV_RunJoin_MergeArray35.slice_values size f k hk]
-  simp only [bind_tc_ok,PV_RunJoin_FlatBytes35.installed,lift,hnext]
+  have hread : Slice.index_usize (input size f) k=.ok (f k.val) :=
+    PV_RunJoin_MergeArray35.slice_values size f k hk
+  rw [hread]
+  simp only [bind_tc_ok]
+  have hw : @aspis_core.field.wide_exact.WideExact.to_le_bytes _
+      (ProverRwP6BodyCandidate.selected ops) (f k.val)=
+      .ok (PV_RunJoin_FlatBytes35.wire (f k.val)) := PV_RunJoin_FlatBytes35.installed ops _
+  simp only [hw,bind_tc_ok,lift,hnext]
 
 #print axioms input_size
 #print axioms increment
