@@ -25,7 +25,9 @@ theorem body_in_range (a : Frontier) (i : Usize) (hi : i.val < 20) :
   unfold validate_pool_v1_pair_live_snapshot_v1_loop.body
   simp only [Array.to_slice,Slice.len,lift,bind_tc_ok]
   rw [if_pos (by simpa [UScalar.lt_equiv] using hi)]
-  rw [index_ok_gen a i (by simpa using hi),digest_result]
+  rw [index_ok_gen a i (by simpa using hi)]
+  simp only [bind_tc_ok]
+  rw [digest_result]
   simp only [bind_tc_ok,decide_eq_true_eq]
 #print axioms body_in_range
 
