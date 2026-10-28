@@ -1,0 +1,50 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -906,3 +906,47 @@
+  #[kani::proof] #[kani::unwind(4)] #[kani::stub(M31::mul,mul)]
+  fn multiply(){let value=M31(kani::any());let mut product=M31(kani::any());unsafe{LEFT=product.0;RIGHT=value.0;CALLS=0;}product=product.mul(value);unsafe{assert!(CALLS==1&&product.0==REPLY);}}
+ }
++
++#[cfg(kani)] mod NCB_geometry_steps {
++use super::*;
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn query_value(){
++let queries:[u32;22]=kani::any();let start:usize=kani::any();let current:usize=kani::any();let end:usize=kani::any();kani::assume(start<=current&&current<end&&end<=22);
++ let mut iter=queries[current..end].iter();let reference=iter.next().unwrap();let query=*reference;
++ assert!(query==queries[current]);assert!(core::ptr::eq(reference,&queries[current]));
++}
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn query_cursor(){
++let queries:[u32;22]=kani::any();let start:usize=kani::any();let current:usize=kani::any();let end:usize=kani::any();kani::assume(start<=current&&current<end&&end<=22);
++ let mut iter=queries[current..end].iter();let reference=iter.next().unwrap();let query=*reference;
++ assert!(iter.as_slice().len()==end-current-1);assert!(core::ptr::eq(iter.as_slice().as_ptr(),queries[current+1..end].as_ptr()));
++}
++#[kani::proof] #[kani::unwind(64)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn query_geometry(){
++let queries:[u32;22]=kani::any();let start:usize=kani::any();let current:usize=kani::any();let end:usize=kani::any();kani::assume(start<=current&&current<end&&end<=22);
++ let mut iter=queries[current..end].iter();let reference=iter.next().unwrap();let query=*reference;
++ let rows=current-start;assert!(rows<22&&(rows+1)*5<=110);assert!((current+1)-start==rows+1);
++}
++#[kani::proof] #[kani::unwind(4)] fn query_end(){let queries:[u32;22]=kani::any();let end:usize=kani::any();kani::assume(end<=22);let mut it=queries[end..end].iter();assert!(it.next()==None);assert!(it.as_slice().is_empty());}
++ #[kani::proof] #[kani::unwind(4)] fn reverse_active(){let remaining:usize=kani::any();kani::assume(remaining>0&&remaining<=110);let mut it=(0usize..remaining).rev();assert!(it.next()==Some(remaining-1));assert!(it.size_hint()==(remaining-1,Some(remaining-1)));}
++ #[kani::proof] #[kani::unwind(4)] fn reverse_done(){let mut it=(0usize..0).rev();assert!(it.next()==None);assert!(it.size_hint()==(0,Some(0)));}
++ #[kani::proof] #[kani::unwind(4)] fn row_group(){let rows:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();kani::assume(rows<=22&&i<rows&&j<5);let at=5*i+j;assert!(at<5*rows&&at<110);}
++}

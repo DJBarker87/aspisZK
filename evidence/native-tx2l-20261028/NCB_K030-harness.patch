@@ -1,0 +1,90 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs
+@@ -318,3 +318,9 @@
+  fn source(){let n:usize=kani::any();kani::assume(n>=4096);let mut s=NBQ_state(n);let a=canonical::NBQ_sums(&s.c0);let b=canonical::NBQ_sums(&s.c1);
+  assert!(s.push(E::ZERO,QM31::ZERO).is_err());let j:usize=kani::any();kani::assume(j<4);assert!(canonical::NBQ_sums(&s.c0)[j]==a[j]);assert!(canonical::NBQ_sums(&s.c1)[j]==b[j]);assert!(s.count==n);}
+ }
++
++#[cfg(kani)] pub(crate) fn NCB_invariant(s:&EbyKDot)->bool {
++ let a=canonical::NBQ_sums(&s.c0);let b=canonical::NBQ_sums(&s.c1);
++ let limit=(s.count as u64)*10737418238;
++ s.count<=4096&&a[0]<=limit&&a[1]<=limit&&a[2]<=limit&&a[3]<=limit&&b[0]<=limit&&b[1]<=limit&&b[2]<=limit&&b[3]<=limit
++}
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -530,3 +530,75 @@
+  #[kani::proof] #[kani::unwind(4)] fn outer_next(){let n:usize=kani::any();kani::assume(n<6);let start=4*n;let mut it=(start..26).step_by(4);assert!(it.next()==Some(start));assert!(it.next()==Some(start+4));assert!(it.size_hint()==(5-n,Some(5-n)));}
+  #[kani::proof] #[kani::unwind(4)] fn outer_last(){let mut it=(24usize..26).step_by(4);assert!(it.next()==Some(24));assert!(it.next()==None);assert!(it.size_hint()==(0,Some(0)));}
+ }
++
++#[cfg(kani)] mod NCB_tail_step {
++ use super::*;
++ static mut PTR:*mut EbyKDot=core::ptr::null_mut();static mut COUNT:usize=0;static mut CALLS:usize=0;
++ static mut G:[u32;8]=[0;8];static mut Q:[u32;4]=[0;4];
++ fn word(q:&[u8;608],at:usize)->u32{u32::from_le_bytes([q[at],q[at+1],q[at+2],q[at+3]])}
++ fn push(t:&mut EbyKDot,v:WideExact,k:QM31)->Result<(),()>{unsafe{
++  assert!(core::ptr::eq(t,PTR));assert!(CALLS==0);CALLS=1;
++  assert!(crate::fast_pairing::NBQ_count(t)==COUNT&&COUNT<3);assert!(crate::fast_pairing::NCB_invariant(t));
++  let limbs=v.to_limbs();let j:usize=kani::any();kani::assume(j<8);assert!(limbs[j]==G[j]&&limbs[j]<2147483647);
++  assert!(k.c0.a.0==Q[0]&&k.c0.b.0==Q[1]&&k.c1.a.0==Q[2]&&k.c1.b.0==Q[3]);
++  assert!(k.c0.a.0<2147483647&&k.c0.b.0<2147483647&&k.c1.a.0<2147483647&&k.c1.b.0<2147483647);
++  crate::fast_pairing::NBQ_advance(t);kani::assume(crate::fast_pairing::NCB_invariant(t));Ok(())
++ }}
++fn cut0(q:&[u8;608],g:&[WideExact;29],slot:usize,tail:&mut EbyKDot){tail.push(g[28],QM31::from_le_bytes(&q[slot*120+104..slot*120+120]).unwrap()).unwrap();}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(EbyKDot::push,push)]
++fn push0(){
++let q:[u8;608]=kani::any();let raw:[[u32;8];29]=kani::any();let mut g:[WideExact;29]=unsafe{core::mem::transmute(raw)};
++ let slot:usize=kani::any();kani::assume(slot<4);let limbs:[u32;8]=kani::any();for j in 0..8{kani::assume(limbs[j]<2147483647);}
++ g[28]=WideExact::from_limbs(limbs).unwrap();let at=slot*120+104;
++let input=[word(&q,at),word(&q,at+4),word(&q,at+8),word(&q,at+12)];for j in 0..4{kani::assume(input[j]<2147483647);}
++ let mut tail=crate::fast_pairing::NBQ_state(0);kani::assume(crate::fast_pairing::NCB_invariant(&tail));
++unsafe{PTR=&mut tail;COUNT=0;CALLS=0;G=limbs;Q=input;}
++cut0(&q,&g,slot,&mut tail);
++unsafe{assert!(CALLS==1);}assert!(crate::fast_pairing::NBQ_count(&tail)==1);assert!(crate::fast_pairing::NCB_invariant(&tail));
++}
++fn cut1(q:&[u8;608],g:&[WideExact;29],slot:usize,tail:&mut EbyKDot){let offset0=480+slot*32+0*16;tail.push(g[0 + 26], QM31::from_le_bytes(&q[offset0..offset0 + 16]).unwrap()).unwrap();}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(EbyKDot::push,push)]
++fn push1(){
++let q:[u8;608]=kani::any();let raw:[[u32;8];29]=kani::any();let mut g:[WideExact;29]=unsafe{core::mem::transmute(raw)};
++ let slot:usize=kani::any();kani::assume(slot<4);let limbs:[u32;8]=kani::any();for j in 0..8{kani::assume(limbs[j]<2147483647);}
++ g[26]=WideExact::from_limbs(limbs).unwrap();let at=480+slot*32+0;
++let input=[word(&q,at),word(&q,at+4),word(&q,at+8),word(&q,at+12)];for j in 0..4{kani::assume(input[j]<2147483647);}
++ let mut tail=crate::fast_pairing::NBQ_state(1);kani::assume(crate::fast_pairing::NCB_invariant(&tail));
++unsafe{PTR=&mut tail;COUNT=1;CALLS=0;G=limbs;Q=input;}
++cut1(&q,&g,slot,&mut tail);
++unsafe{assert!(CALLS==1);}assert!(crate::fast_pairing::NBQ_count(&tail)==2);assert!(crate::fast_pairing::NCB_invariant(&tail));
++}
++fn cut2(q:&[u8;608],g:&[WideExact;29],slot:usize,tail:&mut EbyKDot){let offset1=480+slot*32+1*16;tail.push(g[1 + 26], QM31::from_le_bytes(&q[offset1..offset1 + 16]).unwrap()).unwrap();}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++#[kani::stub(EbyKDot::push,push)]
++fn push2(){
++let q:[u8;608]=kani::any();let raw:[[u32;8];29]=kani::any();let mut g:[WideExact;29]=unsafe{core::mem::transmute(raw)};
++ let slot:usize=kani::any();kani::assume(slot<4);let limbs:[u32;8]=kani::any();for j in 0..8{kani::assume(limbs[j]<2147483647);}
++ g[27]=WideExact::from_limbs(limbs).unwrap();let at=480+slot*32+16;
++let input=[word(&q,at),word(&q,at+4),word(&q,at+8),word(&q,at+12)];for j in 0..4{kani::assume(input[j]<2147483647);}
++ let mut tail=crate::fast_pairing::NBQ_state(2);kani::assume(crate::fast_pairing::NCB_invariant(&tail));
++unsafe{PTR=&mut tail;COUNT=2;CALLS=0;G=limbs;Q=input;}
++cut2(&q,&g,slot,&mut tail);
++unsafe{assert!(CALLS==1);}assert!(crate::fast_pairing::NBQ_count(&tail)==3);assert!(crate::fast_pairing::NCB_invariant(&tail));
++}
++}
