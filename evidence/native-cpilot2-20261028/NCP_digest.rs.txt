@@ -6,14 +6,14 @@ pub fn NCP_ref_encode(d:&Digest)->[u8;32]{
  while i<8 {let x=d[i].0;out[4*i]=(x&255) as u8;out[4*i+1]=((x>>8)&255) as u8;out[4*i+2]=((x>>16)&255) as u8;out[4*i+3]=(x>>24) as u8;i+=1;}out
 }
 pub fn NCP_ref_decode(b:&[u8;32])->Result<Digest,AtomicStatementError>{
- let x0=(b[0] as u32)|((b[1] as u32)<<8)|((b[2] as u32)<<16)|((b[3] as u32)<<24);if x0>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x1=(b[4] as u32)|((b[5] as u32)<<8)|((b[6] as u32)<<16)|((b[7] as u32)<<24);if x1>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x2=(b[8] as u32)|((b[9] as u32)<<8)|((b[10] as u32)<<16)|((b[11] as u32)<<24);if x2>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x3=(b[12] as u32)|((b[13] as u32)<<8)|((b[14] as u32)<<16)|((b[15] as u32)<<24);if x3>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x4=(b[16] as u32)|((b[17] as u32)<<8)|((b[18] as u32)<<16)|((b[19] as u32)<<24);if x4>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x5=(b[20] as u32)|((b[21] as u32)<<8)|((b[22] as u32)<<16)|((b[23] as u32)<<24);if x5>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x6=(b[24] as u32)|((b[25] as u32)<<8)|((b[26] as u32)<<16)|((b[27] as u32)<<24);if x6>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
- let x7=(b[28] as u32)|((b[29] as u32)<<8)|((b[30] as u32)<<16)|((b[31] as u32)<<24);if x7>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x0=u32::from_le_bytes([b[0],b[1],b[2],b[3]]);if x0>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x1=u32::from_le_bytes([b[4],b[5],b[6],b[7]]);if x1>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x2=u32::from_le_bytes([b[8],b[9],b[10],b[11]]);if x2>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x3=u32::from_le_bytes([b[12],b[13],b[14],b[15]]);if x3>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x4=u32::from_le_bytes([b[16],b[17],b[18],b[19]]);if x4>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x5=u32::from_le_bytes([b[20],b[21],b[22],b[23]]);if x5>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x6=u32::from_le_bytes([b[24],b[25],b[26],b[27]]);if x6>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x7=u32::from_le_bytes([b[28],b[29],b[30],b[31]]);if x7>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
  Ok([M31(x0),M31(x1),M31(x2),M31(x3),M31(x4),M31(x5),M31(x6),M31(x7)])
 }
 fn NCP_any_digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
@@ -93,3 +93,69 @@ fn NCP_decode_caller(){let b:[u8;32]=kani::any();assert_eq!(crate::atomic_statem
 #[kani::unwind(10)]
 #[kani::stub_verified(crate::atomic_statement::decode_digest_canonical)]
 fn NCP_decode_caller_negative(){let b:[u8;32]=kani::any();assert_ne!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b));}
+
+impl kani::Arbitrary for AtomicStatementError {fn any()->Self {let tag:u8=kani::any();kani::assume(tag<7);match tag {0=>Self::NonCanonicalDigest,1=>Self::NonCanonicalAssetId,2=>Self::FeeOutOfRange,3=>Self::PathDepthMismatch,4=>Self::InsertionIndexOutOfRange,5=>Self::CurrentAnchorMismatch,_=>Self::OutputAnchorMismatch}}}
+
+#[kani::ensures(|r: &Result<Digest,AtomicStatementError>| *r != NCP_ref_decode(b))]
+fn NCP_digest_inverted(b:&[u8;32])->Result<Digest,AtomicStatementError>{crate::atomic_statement::decode_digest_canonical(b)}
+#[kani::ensures(|_: &Result<Digest,AtomicStatementError>| true)]
+fn NCP_digest_weak(b:&[u8;32])->Result<Digest,AtomicStatementError>{crate::atomic_statement::decode_digest_canonical(b)}
+#[kani::requires(a.len()==1 && z.len()==1)]
+#[kani::modifies(a)]
+#[kani::ensures(|_: &Result<Digest,AtomicStatementError>| true)]
+fn NCP_digest_frame(a:&mut [u8],z:&mut [u8],b:&[u8;32])->Result<Digest,AtomicStatementError>{a[0]=1;z[0]=2;crate::atomic_statement::decode_digest_canonical(b)}
+#[kani::proof_for_contract(NCP_digest_inverted)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_digest_inverted_check(){let b:[u8;32]=kani::any();let _=NCP_digest_inverted(&b);}
+#[kani::proof_for_contract(NCP_digest_weak)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_digest_weak_check(){let b:[u8;32]=kani::any();let _=NCP_digest_weak(&b);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_digest_real(){let b:[u8;32]=kani::any();assert_eq!(NCP_digest_weak(&b),NCP_ref_decode(&b));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+#[kani::stub_verified(NCP_digest_weak)]
+fn NCP_digest_stub(){let b:[u8;32]=kani::any();assert_eq!(NCP_digest_weak(&b),NCP_ref_decode(&b));}
+#[kani::proof_for_contract(NCP_digest_frame)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_digest_frame_check(){let b:[u8;32]=kani::any();let mut a=[0u8];let mut z=[0u8];let _=NCP_digest_frame(&mut a,&mut z,&b);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_digest_frame_real(){let b:[u8;32]=kani::any();let mut a=[0u8];let mut z=[0u8];assert_eq!(NCP_digest_frame(&mut a,&mut z,&b),NCP_ref_decode(&b));assert!(a[0]==1 && z[0]==2);}

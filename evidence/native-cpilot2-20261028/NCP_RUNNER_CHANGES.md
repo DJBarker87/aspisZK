@@ -1,1 +1,5 @@
 Own runner fixes: frozen graph read through git show because sparse checkout omits LPm file. G001 metadata already completed and is reused read-only; no Kani launch occurred before the fix. Validation still compares all package identities and dependency edges.
+
+Reference-v2 change: use safe u32::from_le_bytes instead of spelling out shifts/OR. This follows the selected cohort primitive and avoids introducing a separate bitvector identity at every cell. Preserve v1 extraction and proof evidence; reprove the actual decoder contract against the changed reference before credit. Function/harness names unchanged.
+
+K028-K031 own environment-input failure: setting RUSTFLAGS to the empty string causes this cargo-kani version to pass an empty filename to rustc. Remove RUSTFLAGS from the environment entirely for non-loop harnesses. No proof reached CBMC in these attempts. New attempts use the SAME harness names and changed environment; neither timeout nor counterexample is being renamed.

@@ -1,0 +1,117 @@
+NCP_G016 0 0.18816301494371146 100640
+NCP_K016 0 13.560536361066625 743840
+ction `NCP_vec_weak_check` should have a snake case name
+  --> crates/aspis-statement/src/NCP_controls.rs:93:4
+   |
+93 | fn NCP_vec_weak_check(){let x:u8=kani::any();let _=NCP_vec_weak(x);}
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_weak_check`
+
+warning: function `NCP_vec_real` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:102:4
+    |
+102 | fn NCP_vec_real(){let x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+    |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_real`
+
+warning: function `NCP_vec_stub` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:112:4
+    |
+112 | fn NCP_vec_stub(){let x:u8=kani::any();let v=NCP_vec_weak(x).unwrap();assert!(v.len()==1 && v[0]==x);}
+    |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_stub`
+
+warning: function `NCP_vec_frame_check` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:121:4
+    |
+121 | fn NCP_vec_frame_check(){let mut a=[0u8];let mut b=[0u8];let _=NCP_vec_frame(&mut a,&mut b);}
+    |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_check`
+
+warning: function `NCP_vec_frame_real` should have a snake case name
+   --> crates/aspis-statement/src/NCP_controls.rs:130:4
+    |
+130 | fn NCP_vec_frame_real(){let mut a=[0u8];let mut b=[0u8];let v=NCP_vec_frame(&mut a,&mut b).unwrap();assert!(a[0]==1 && b[0]==2 && v...
+    |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_vec_frame_real`
+
+warning: function `NCP_ref_encode` should have a snake case name
+ --> crates/aspis-statement/src/NCP_digest.rs:4:8
+  |
+4 | pub fn NCP_ref_encode(d:&Digest)->[u8;32]{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_encode`
+
+warning: function `NCP_ref_decode` should have a snake case name
+ --> crates/aspis-statement/src/NCP_digest.rs:8:8
+  |
+8 | pub fn NCP_ref_decode(b:&[u8;32])->Result<Digest,AtomicStatementError>{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_decode`
+
+warning: function `NCP_any_digest` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:19:4
+   |
+19 | fn NCP_any_digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M...
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_any_digest`
+
+warning: function `NCP_encode_contract` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:28:4
+   |
+28 | fn NCP_encode_contract(){let d=NCP_any_digest();let _=crate::atomic_statement::encode_digest_canonical(&d);}
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_encode_contract`
+
+warning: function `NCP_decode_contract` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:37:4
+   |
+37 | fn NCP_decode_contract(){let b:[u8;32]=kani::any();let _=crate::atomic_statement::decode_digest_canonical(&b);}
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_decode_contract`
+
+warning: function `NCP_encode_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:46:4
+   |
+46 | fn NCP_encode_negative(){let d=NCP_any_digest();let j:usize=kani::any();kani::assume(j<32);let out=crate::atomic_statement::encode_d...
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_encode_negative`
+
+warning: function `NCP_decode_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:55:4
+   |
+55 | fn NCP_decode_negative(){let b:[u8;32]=kani::any();assert_ne!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b...
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_decode_negative`
+
+warning: function `NCP_encode_caller` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:65:4
+   |
+65 | fn NCP_encode_caller(){let d=NCP_any_digest();assert_eq!(crate::atomic_statement::encode_digest_canonical(&d),NCP_ref_encode(&d));}
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_encode_caller`
+
+warning: function `NCP_encode_caller_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:75:4
+   |
+75 | fn NCP_encode_caller_negative(){let d=NCP_any_digest();let j:usize=kani::any();kani::assume(j<32);assert_eq!(crate::atomic_statement...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_encode_caller_negative`
+
+warning: function `NCP_decode_caller` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:85:4
+   |
+85 | fn NCP_decode_caller(){let b:[u8;32]=kani::any();assert_eq!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b));}
+   |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_decode_caller`
+
+warning: function `NCP_decode_caller_negative` should have a snake case name
+  --> crates/aspis-statement/src/NCP_digest.rs:95:4
+   |
+95 | fn NCP_decode_caller_negative(){let b:[u8;32]=kani::any();assert_ne!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_de...
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_decode_caller_negative`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 11.13s
+Checking harness NCP_digest::NCP_decode_caller...
+
+VERIFICATION RESULT:
+ ** 0 of 438 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.90219504s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

@@ -1,0 +1,88 @@
+use super::*;
+pub fn NCP_exact_ref<const N:usize>(bytes:&[u8])->Result<[u8;N],PoolV1PairVerifierTransportErrorV1>{bytes.try_into().map_err(|_|PoolV1PairVerifierTransportErrorV1::WrongLength)}
+#[kani::proof_for_contract(super::exact::<8>)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_exact8_contract(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);let _=super::exact::<8>(&b[..n]);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_exact8_negative(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_ne!(super::exact::<8>(&b[..n]),NCP_exact_ref::<8>(&b[..n]));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(super::exact::<8>)]
+fn NCP_exact8_caller(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_eq!(super::exact::<8>(&b[..n]),NCP_exact_ref::<8>(&b[..n]));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(super::exact::<8>)]
+fn NCP_exact8_caller_negative(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_ne!(super::exact::<8>(&b[..n]),NCP_exact_ref::<8>(&b[..n]));}
+#[kani::proof_for_contract(super::exact::<32>)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_exact32_contract(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);let _=super::exact::<32>(&b[..n]);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+fn NCP_exact32_negative(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_ne!(super::exact::<32>(&b[..n]),NCP_exact_ref::<32>(&b[..n]));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(super::exact::<32>)]
+fn NCP_exact32_caller(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_eq!(super::exact::<32>(&b[..n]),NCP_exact_ref::<32>(&b[..n]));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(super::exact::<32>)]
+fn NCP_exact32_caller_negative(){let b:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33);assert_ne!(super::exact::<32>(&b[..n]),NCP_exact_ref::<32>(&b[..n]));}
+
+impl kani::Arbitrary for PoolV1PairVerifiedAfterstateV1 {fn any()->Self {Self{next_pair_index:kani::any(),next_root:kani::any(),next_frontier:kani::any()}}}
+pub fn NCP_after_prefix(a:&PoolV1PairVerifiedAfterstateV1,n:usize)->bool {(n<=0||crate::NCP_scalar::NCP_canon(&a.next_frontier[0]))&&(n<=1||crate::NCP_scalar::NCP_canon(&a.next_frontier[1]))&&(n<=2||crate::NCP_scalar::NCP_canon(&a.next_frontier[2]))&&(n<=3||crate::NCP_scalar::NCP_canon(&a.next_frontier[3]))&&(n<=4||crate::NCP_scalar::NCP_canon(&a.next_frontier[4]))&&(n<=5||crate::NCP_scalar::NCP_canon(&a.next_frontier[5]))&&(n<=6||crate::NCP_scalar::NCP_canon(&a.next_frontier[6]))&&(n<=7||crate::NCP_scalar::NCP_canon(&a.next_frontier[7]))&&(n<=8||crate::NCP_scalar::NCP_canon(&a.next_frontier[8]))&&(n<=9||crate::NCP_scalar::NCP_canon(&a.next_frontier[9]))&&(n<=10||crate::NCP_scalar::NCP_canon(&a.next_frontier[10]))&&(n<=11||crate::NCP_scalar::NCP_canon(&a.next_frontier[11]))&&(n<=12||crate::NCP_scalar::NCP_canon(&a.next_frontier[12]))&&(n<=13||crate::NCP_scalar::NCP_canon(&a.next_frontier[13]))&&(n<=14||crate::NCP_scalar::NCP_canon(&a.next_frontier[14]))&&(n<=15||crate::NCP_scalar::NCP_canon(&a.next_frontier[15]))&&(n<=16||crate::NCP_scalar::NCP_canon(&a.next_frontier[16]))&&(n<=17||crate::NCP_scalar::NCP_canon(&a.next_frontier[17]))&&(n<=18||crate::NCP_scalar::NCP_canon(&a.next_frontier[18]))&&(n<=19||crate::NCP_scalar::NCP_canon(&a.next_frontier[19]))}
+pub fn NCP_after_ref(a:&PoolV1PairVerifiedAfterstateV1)->Result<(),PoolV1PairVerifierTransportErrorV1>{if a.next_pair_index==0 || a.next_pair_index>super::super::POOL_V1_PAIR_CAPACITY {Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex)} else if !crate::NCP_scalar::NCP_canon(&a.next_root)||!NCP_after_prefix(a,20){Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)}else{Ok(())}}
+#[kani::proof_for_contract(super::validate_verified_afterstate)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+fn NCP_after_contract(){let a:PoolV1PairVerifiedAfterstateV1=kani::any();let _=super::validate_verified_afterstate(&a);}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+fn NCP_after_negative(){let a:PoolV1PairVerifiedAfterstateV1=kani::any();assert_ne!(super::validate_verified_afterstate(&a),NCP_after_ref(&a));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+#[kani::stub_verified(super::validate_verified_afterstate)]
+fn NCP_after_caller(){let a:PoolV1PairVerifiedAfterstateV1=kani::any();assert_eq!(super::validate_verified_afterstate(&a),NCP_after_ref(&a));}
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::unwind(35)]
+#[kani::stub_verified(crate::pool_v1::pair_tree_profile::digest_is_canonical)]
+#[kani::stub_verified(super::validate_verified_afterstate)]
+fn NCP_after_caller_negative(){let a:PoolV1PairVerifiedAfterstateV1=kani::any();assert_ne!(super::validate_verified_afterstate(&a),NCP_after_ref(&a));}

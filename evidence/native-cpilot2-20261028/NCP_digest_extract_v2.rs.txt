@@ -1,0 +1,107 @@
+use crate::poseidon2::Digest;
+use aspis_core::field::M31;
+use crate::atomic_statement::AtomicStatementError;
+pub fn NCP_ref_encode(d:&Digest)->[u8;32]{
+ let mut out=[0u8;32];let mut i=0;
+ while i<8 {let x=d[i].0;out[4*i]=(x&255) as u8;out[4*i+1]=((x>>8)&255) as u8;out[4*i+2]=((x>>16)&255) as u8;out[4*i+3]=(x>>24) as u8;i+=1;}out
+}
+pub fn NCP_ref_decode(b:&[u8;32])->Result<Digest,AtomicStatementError>{
+ let x0=u32::from_le_bytes([b[0],b[1],b[2],b[3]]);if x0>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x1=u32::from_le_bytes([b[4],b[5],b[6],b[7]]);if x1>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x2=u32::from_le_bytes([b[8],b[9],b[10],b[11]]);if x2>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x3=u32::from_le_bytes([b[12],b[13],b[14],b[15]]);if x3>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x4=u32::from_le_bytes([b[16],b[17],b[18],b[19]]);if x4>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x5=u32::from_le_bytes([b[20],b[21],b[22],b[23]]);if x5>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x6=u32::from_le_bytes([b[24],b[25],b[26],b[27]]);if x6>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ let x7=u32::from_le_bytes([b[28],b[29],b[30],b[31]]);if x7>=2147483647{return Err(AtomicStatementError::NonCanonicalDigest)}
+ Ok([M31(x0),M31(x1),M31(x2),M31(x3),M31(x4),M31(x5),M31(x6),M31(x7)])
+}
+#[cfg(kani)]
+fn NCP_any_digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
+#[cfg(kani)]
+#[kani::proof_for_contract(crate::atomic_statement::encode_digest_canonical)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_encode_contract(){let d=NCP_any_digest();let _=crate::atomic_statement::encode_digest_canonical(&d);}
+#[cfg(kani)]
+#[kani::proof_for_contract(crate::atomic_statement::decode_digest_canonical)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_decode_contract(){let b:[u8;32]=kani::any();let _=crate::atomic_statement::decode_digest_canonical(&b);}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_encode_negative(){let d=NCP_any_digest();let j:usize=kani::any();kani::assume(j<32);let out=crate::atomic_statement::encode_digest_canonical(&d);assert_eq!(out[j],NCP_ref_encode(&d)[j]^1);}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+fn NCP_decode_negative(){let b:[u8;32]=kani::any();assert_ne!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b));}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+#[kani::stub_verified(crate::atomic_statement::encode_digest_canonical)]
+fn NCP_encode_caller(){let d=NCP_any_digest();assert_eq!(crate::atomic_statement::encode_digest_canonical(&d),NCP_ref_encode(&d));}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+#[kani::stub_verified(crate::atomic_statement::encode_digest_canonical)]
+fn NCP_encode_caller_negative(){let d=NCP_any_digest();let j:usize=kani::any();kani::assume(j<32);assert_eq!(crate::atomic_statement::encode_digest_canonical(&d)[j],NCP_ref_encode(&d)[j]^1);}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+#[kani::stub_verified(crate::atomic_statement::decode_digest_canonical)]
+fn NCP_decode_caller(){let b:[u8;32]=kani::any();assert_eq!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b));}
+#[cfg(kani)]
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(10)]
+#[kani::stub_verified(crate::atomic_statement::decode_digest_canonical)]
+fn NCP_decode_caller_negative(){let b:[u8;32]=kani::any();assert_ne!(crate::atomic_statement::decode_digest_canonical(&b),NCP_ref_decode(&b));}
+
+#[cfg(kani)]
+impl kani::Arbitrary for AtomicStatementError {fn any()->Self {let tag:u8=kani::any();kani::assume(tag<7);match tag {0=>Self::NonCanonicalDigest,1=>Self::NonCanonicalAssetId,2=>Self::FeeOutOfRange,3=>Self::PathDepthMismatch,4=>Self::InsertionIndexOutOfRange,5=>Self::CurrentAnchorMismatch,_=>Self::OutputAnchorMismatch}}}

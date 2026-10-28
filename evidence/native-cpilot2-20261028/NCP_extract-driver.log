@@ -1,0 +1,108 @@
+NCP_X001 0 114.90651474299375 638476
+--> crates/aspis-statement/src/poseidon2.rs:480:15
+    |
+480 | pub(crate) fn merkle_node_sponge_v2(left: &Digest, right: &Digest) -> Digest {
+    |               ^^^^^^^^^^^^^^^^^^^^^
+
+warning: fields `row`, `slot`, `present`, and `columns` are never read
+  --> crates/aspis-statement/src/state_only_terminal.rs:81:5
+   |
+80 | struct CompiledCopyEndpoint {
+   |        -------------------- fields in this struct
+81 |     row: u16,
+   |     ^^^
+82 |     slot: u8,
+   |     ^^^^
+83 |     present: u16,
+   |     ^^^^^^^
+84 |     columns: u64,
+   |     ^^^^^^^
+   |
+   = note: `CompiledCopyEndpoint` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: fields `tag`, `producer`, and `consumer` are never read
+  --> crates/aspis-statement/src/state_only_terminal.rs:89:5
+   |
+88 | struct CompiledCopyLink {
+   |        ---------------- fields in this struct
+89 |     tag: u32,
+   |     ^^^
+90 |     producer: CompiledCopyEndpoint,
+   |     ^^^^^^^^
+91 |     consumer: CompiledCopyEndpoint,
+   |     ^^^^^^^^
+   |
+   = note: `CompiledCopyLink` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `append_link` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1017:4
+     |
+1017 | fn append_link(
+     |    ^^^^^^^^^^^
+
+warning: function `append_intra_permutation_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1048:4
+     |
+1048 | fn append_intra_permutation_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_sponge_continuation_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1067:4
+     |
+1067 | fn append_sponge_continuation_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_merkle_level_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1090:4
+     |
+1090 | fn append_merkle_level_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_semantic_ingress_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1107:4
+     |
+1107 | fn append_semantic_ingress_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_absorption_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1163:4
+     |
+1163 | fn append_absorption_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `append_value_reconstruction_links` is never used
+    --> crates/aspis-statement/src/trace_v4.rs:1190:4
+     |
+1190 | fn append_value_reconstruction_links(layout: &mut CopyLayout) {
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `NCP_digest` should have a snake case name
+   --> crates/aspis-statement/src/lib.rs:215:39
+    |
+215 | #[cfg(any(kani,ncp_extract))] pub mod NCP_digest;
+    |                                       ^^^^^^^^^^ help: convert the identifier to snake case: `ncp_digest`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NCP_ref_encode` should have a snake case name
+ --> crates/aspis-statement/src/NCP_digest.rs:4:8
+  |
+4 | pub fn NCP_ref_encode(d:&Digest)->[u8;32]{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_encode`
+
+warning: function `NCP_ref_decode` should have a snake case name
+ --> crates/aspis-statement/src/NCP_digest.rs:8:8
+  |
+8 | pub fn NCP_ref_decode(b:&[u8;32])->Result<Digest,AtomicStatementError>{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_decode`
+
+warning: `aspis-statement` (lib) generated 120 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 52s
+COMMAND ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NCP_Extracted", "-dest", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted", "-subdir", "NCP_Extracted", "-split-files", "-emit-json", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_decode.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_decode.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted/Funs.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/translation.json
+[[92mInfo[39m ] Total execution time: 1.621983 seconds
+

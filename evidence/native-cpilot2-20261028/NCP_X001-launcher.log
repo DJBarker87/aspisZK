@@ -1,0 +1,26 @@
+{"attempt": "NCP_X001", "exit_status": 0, "wall_seconds": 114.90651474299375, "peak_rss_kib": "638476", "swaps": "0", "print_axioms": "N/A: extraction"}
+COMMAND ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--start-from", "crate::NCP_digest::NCP_ref_decode", "--dest-file", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_decode.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_src/crates/aspis-statement/Cargo.toml", "--locked", "--offline", "--release", "--lib", "--jobs", "1"]
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_src/
+...
+/aspis-statement/src/NCP_digest.rs:4:8
+  |
+4 | pub fn NCP_ref_encode(d:&Digest)->[u8;32]{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_encode`
+
+warning: function `NCP_ref_decode` should have a snake case name
+ --> crates/aspis-statement/src/NCP_digest.rs:8:8
+  |
+8 | pub fn NCP_ref_decode(b:&[u8;32])->Result<Digest,AtomicStatementError>{
+  |        ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncp_ref_decode`
+
+warning: `aspis-statement` (lib) generated 120 warnings (run `cargo fix --lib -p aspis-statement` to apply 6 suggestions)
+    Finished `release` profile [optimized] target(s) in 1m 52s
+COMMAND ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NCP_Extracted", "-dest", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted", "-subdir", "NCP_Extracted", "-split-files", "-emit-json", "/home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_decode.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_decode.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/NCP_Extracted/Funs.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-native-cpilot2-20261028/NCP_extracted/translation.json
+[[92mInfo[39m ] Total execution time: 1.621983 seconds
+
+Running as unit: run-rfe6a61ba58e544bf87d1ba8989ab16af.scope; invocation ID: da30e8aa8c184e499ffbc5aa32f834a6

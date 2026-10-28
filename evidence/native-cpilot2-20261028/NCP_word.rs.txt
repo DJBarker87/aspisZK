@@ -1,0 +1,12 @@
+use crate::field::M31;
+pub fn NCP_word_ref(x:u32)->[u8;4]{[x as u8,(x>>8) as u8,(x>>16) as u8,(x>>24) as u8]}
+#[kani::proof_for_contract(crate::field::M31::to_le_bytes)]
+fn NCP_word_contract(){let x:u32=kani::any();let _=M31(x).to_le_bytes();}
+#[kani::proof]
+fn NCP_word_negative(){let x:u32=kani::any();assert_ne!(M31(x).to_le_bytes(),NCP_word_ref(x));}
+#[kani::proof]
+#[kani::stub_verified(crate::field::M31::to_le_bytes)]
+fn NCP_word_caller(){let x:u32=kani::any();assert_eq!(M31(x).to_le_bytes(),NCP_word_ref(x));}
+#[kani::proof]
+#[kani::stub_verified(crate::field::M31::to_le_bytes)]
+fn NCP_word_caller_negative(){let x:u32=kani::any();assert_ne!(M31(x).to_le_bytes(),NCP_word_ref(x));}
