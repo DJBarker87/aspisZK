@@ -30,7 +30,7 @@ theorem source_insert (x : Nat) (xs : List Nat) : sourceInsert x xs = insert x x
     · simp only [sourceInsert,seek,h,ite_true]
       rw [Nat.add_comm 1 (seek x ys),List.getElem?_cons_succ,List.insertIdx_succ_cons]
       rw [insert,if_pos h,← ih]
-      unfold sourceInsert
+      simp only [sourceInsert]
       split_ifs <;> rfl
     · by_cases he : y=x
       · simp [sourceInsert,seek,insert,h,he]
