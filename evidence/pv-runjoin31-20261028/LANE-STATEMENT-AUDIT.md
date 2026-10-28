@@ -10,7 +10,7 @@ The owned reference changes ownership of the Copy witness, extracts the
 conditional parent call into an owned helper, unrolls exactly the twenty
 levels, and types those fixed counts as u32. Every difference is explicit.
 `LaneCounts31.shift` checks the usize/u32 count conversion for every level in
-Fin20. `LaneOrientation31.step_original` is the proposed checked transport of
+Fin20. `LaneOrientation31.step_original` is the checked transport of
 all branch conditions and operand order. `LaneFold31.fold_append` gives full
 Result composition of successive lists of levels. No hash is evaluated to
 prove any of these claims.
@@ -31,11 +31,11 @@ of a successful call, retaining the actual returned root.
 
 `LaneField31` fixes the existing external-layer dictionary and transports
 actual parent source results into any field K with characteristic P. It is
-symbolic induction on the finite sequence of parents. The proposed
+symbolic induction on the finite sequence of parents. The checked
 `LaneRootField31.successful_root` assumes only the successful native call and
 canonical membership siblings; it concludes canonical root words and their
 field denotation. It neither assumes semantic Admission nor HonestInput.
-`LaneCanonical31` is the intended specialization to the actual decoded
+`LaneCanonical31` is the checked specialization to the actual decoded
 snapshot -> frozen outer wrapper route, deriving the sibling guards from
 successful native runtime validation on that same witness.
 

@@ -34,7 +34,7 @@ theorem recipient [ExternalLinear] [Records]
     (publicInput : pair_forest_trace.ForestPublic) (anchor : Array U32 8#usize)
     (snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1)
     (compiled : pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
-    (expected : Array U32 8#usize) (shape : publicInput.recipient = some expected)
+    (expected : Array U32 8#usize) (shape : publicInput.recipient_commitment = some expected)
     (h : pair_forest_trace.compile_forest_from_copies input out recipient change
       publicInput anchor snapshot = ok (.Ok compiled)) :
     ∃ records, pair_forest_copy_builder.CopyRecords.new input out recipient change snapshot publicInput.asset = ok records ∧

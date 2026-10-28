@@ -1,4 +1,4 @@
-# Native lane-root correspondence — in progress
+# Native lane-root correspondence — checked
 
 The frozen body is `crates/aspis-statement/src/pool_v1/pair_forest_trace.rs:93`.
 It validates/hashes the pair leaf, maps its error, traverses membership siblings
@@ -31,8 +31,10 @@ swap. The uniquely named enum/child/body cohort is checked at 44610, 44618 and
 44621. Denotation now normalizes only explicit Result binds and twenty array
 reads; it never unfolds a hash.
 
-Pending: the installed native lane dictionary, parent-fold field meaning, successful
-leaf transport, complete root field meaning, and the canonical-route bridge.
+Checked: installed native dictionary (44652), symbolic parent fold (44653),
+successful leaf transport (44654), complete root field meaning (44655), and
+the canonical-route transfer/withdrawal specialization (44658). The last target
+passed in 5.174 seconds, peak RSS 5,010,776,064 bytes, zero swap, standard axioms.
 Signed-shift, import/discriminant, bound/name and Result sequencing failures
 are retained. The signed-shift failure was replaced by regenerated Rust and
 emission, never by an executable Lean body edit.
