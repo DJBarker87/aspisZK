@@ -27,8 +27,8 @@ theorem update {α : Type} {n : Usize} (xs : Array α n) (i : Usize)
   have hlen : i.val<xs.val.length := by simpa only [xs.property] using hi
   unfold Aeneas.Std.Array.update
   change (match xs.val[i.val]? with
-    | none => .fail Error.arrayOutOfBounds
-    | some _ => .ok (Aeneas.Std.Array.set xs i value)) = .ok (Aeneas.Std.Array.set xs i value)
+    | none => Result.fail Error.arrayOutOfBounds
+    | some _ => Result.ok (Aeneas.Std.Array.set xs i value)) = Result.ok (Aeneas.Std.Array.set xs i value)
   rw [List.getElem?_eq_getElem hlen]
 
 theorem restored_value {α : Type} {n : Usize} (xs : Array α n) (i : Usize)
