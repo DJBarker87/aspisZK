@@ -6,7 +6,7 @@ R=Path(__file__).resolve().parents[2];P=R/'docs/research/v8-r0-zk-20261009/lean/
 modules=[];source_paths={}
 for p in E.glob('lean-*/receipt.json'):
  j=json.loads(p.read_text())
- if j['exit']==0 and j.get('module') and int(j['attempt'])<60597:
+ if j['exit']==0 and j.get('module') and int(j['attempt'])<=60598:
   module=j['module'];src=R/j['source_path']
   if __import__('hashlib').sha256(src.read_bytes()).hexdigest()==j['source_sha256']:modules.append(module);source_paths[module]=src
 modules=sorted(set(modules));names=[]

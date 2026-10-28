@@ -3111,7 +3111,7 @@ theorem constructor_projection {S : Type} (oom : Error) (allocation : Result (Op
     cases p <;> simp only [eraseBox,PV_RDB2C_PrimitiveResults.boxed,
       PV_B2_F_ConstructorEffect.copied,hvalue,bind_tc_ok,bind_tc_fail,
       PV_B2_F_ConstructorEffect.finish,boxDecision,PV_RDB2C_V259.finish,
-      PV_RDB2C_Box.lowered]
+      PV_RDB2C_Box.lowered] <;> rfl
 
 #print axioms materialize_projection
 #print axioms constructor_projection
