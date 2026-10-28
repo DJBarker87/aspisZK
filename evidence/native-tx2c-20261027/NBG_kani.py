@@ -29,16 +29,25 @@ print(p.read_text() if p.exists() else '{{}}');sys.exit(r.returncode)
  if not ad and retry==0:time.sleep(30);continue
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
-patch=(E/'NBG_harness.patch').read_text()
+patch=Path(sys.argv[4]).read_text()
+extra=None
 setup=f'''from pathlib import Path
 import subprocess,hashlib,json
-b=Path({B!r});s=Path({S!r});p=b/'NBG_harness.patch'
+b=Path({B!r});s=Path({S!r})
+launchers=json.loads({(E/'NBG_LAUNCHER_INPUTS.json').read_text()!r})
+for n in ['S2W_run_host.py','S2W_lean_host.py','lakefile.toml','lean-toolchain','lake-manifest.json']:
+ q=b/n;t=launchers[n]
+ if q.exists():assert q.read_text()==t,(n,'backend differs')
+ else:q.write_text(t)
+p=b/{(a+'-harness.patch')!r}
 patch={patch!r}
 if p.exists():assert p.read_text()==patch,'scratch patch changed'
 else:
  p.write_text(patch)
- r=subprocess.run(['patch','-p1','--batch','--forward','-i',str(p)],cwd=s,capture_output=True,text=True)
- assert r.returncode==0,r.stdout+r.stderr
+ r=subprocess.run(['git','apply','--reverse','--check',str(p)],cwd=s,capture_output=True,text=True)
+ if r.returncode!=0:
+  r=subprocess.run(['git','apply',str(p)],cwd=s,capture_output=True,text=True)
+  assert r.returncode==0,r.stdout+r.stderr
 print(hashlib.sha256((s/'Cargo.lock').read_bytes()).hexdigest())
 '''
 r=ssh('python3 -c '+shlex.quote(setup));assert r.returncode==0,r.stdout+r.stderr
@@ -46,10 +55,16 @@ if extra:
  extension=extra.read_text()
  code=f'''from pathlib import Path
 import subprocess
-b=Path({B!r});s=Path({S!r});p=b/{extra.name!r}
+b=Path({B!r});s=Path({S!r})
+launchers=json.loads({(E/'NBG_LAUNCHER_INPUTS.json').read_text()!r})
+for n in ['S2W_run_host.py','S2W_lean_host.py','lakefile.toml','lean-toolchain','lake-manifest.json']:
+ q=b/n;t=launchers[n]
+ if q.exists():assert q.read_text()==t,(n,'backend differs')
+ else:q.write_text(t)
+p=b/{extra.name!r}
 assert not p.exists(),'do not reapply an extension'
 p.write_text({extension!r})
-r=subprocess.run(['patch','-p1','--batch','--forward','-i',str(p)],cwd=s,capture_output=True,text=True)
+r=subprocess.run(['git','apply',str(p)],cwd=s,capture_output=True,text=True)
 assert r.returncode==0,r.stdout+r.stderr
 '''
  q=ssh('python3 -c '+shlex.quote(code));assert q.returncode==0,q.stdout+q.stderr
@@ -73,8 +88,7 @@ for p in m['packages']:
   if not any((bits:=label.split(' '))[0]==q['name'] and (len(bits)<2 or bits[1]==q['version']) and (len(bits)<3 or bits[2].strip('()')==q.get('source')) for label in f[key(p)].get('dependencies',[])):errors.append([key(p),key(q)])
 graph=dict(resolved_packages=len(actual),new_package_tuples=added,edge_errors=errors,graph_matches_frozen=not added and not errors,graph_sha256=hashlib.sha256(json.dumps(m,sort_keys=True).encode()).hexdigest(),lock_sha256=locksha)
 (E/(a+'-graph-check.json')).write_text(json.dumps(graph,indent=2)+'\n');assert graph['graph_matches_frozen']
-modified=['crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/verifier/NBG_runtime.rs','programs/r1-cost-probe/src/lib.rs','programs/r1-cost-probe/src/NBG_runtime.rs']
-if extra:modified+=['crates/aspis-core/src/field/wide_exact.rs','crates/aspis-core/src/field/wide_exact/NBG_runtime.rs']
+modified=[line[6:] for line in patch.splitlines() if line.startswith('+++ b/')]
 cfg=dict(attempt=a,kind='kani',timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,reservation_retries=retry,sources=['NBG_src/'+p for p in ['Cargo.toml','Cargo.lock']+modified],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',S+'/'+crate+'/Cargo.toml','--target-dir',B+'/NBG_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse'],env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NBG_tmp'},deps_fingerprint={'frozen_source':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph':graph,'harness_patch_sha256':hashlib.sha256(patch.encode()).hexdigest(),'extra_patch_sha256':hashlib.sha256(extension.encode()).hexdigest() if extra else None},expected_time='optimized dependency compilation then native release leaf '+harness)
 if crate.startswith('programs/'):
  cfg['command']+=['--features','pool-adapter,private-leaf-salts']

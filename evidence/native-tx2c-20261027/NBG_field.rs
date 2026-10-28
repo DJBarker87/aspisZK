@@ -1,0 +1,68 @@
+use super::*;
+fn any_m() -> M31 { let x:u32=kani::any(); kani::assume(x<P); M31(x) }
+fn any_c() -> CM31 { CM31::new(any_m(),any_m()) }
+fn any_q() -> QM31 { QM31{c0:any_c(),c1:any_c()} }
+fn add(a:u32,b:u32)->u32 {let s=a as u64+b as u64; (if s>=P as u64{s-P as u64}else{s}) as u32}
+fn sub(a:u32,b:u32)->u32 {let s=a as u64+P as u64-b as u64; (if s>=P as u64{s-P as u64}else{s}) as u32}
+#[kani::proof]
+fn NBG_m31_add_sub_double() {
+ let x=any_m();let y=any_m();
+ assert!(x.add(y).0==add(x.0,y.0));
+ assert!(x.sub(y).0==sub(x.0,y.0));
+ assert!(x.double().0==add(x.0,x.0));
+ assert!(x.add(y).0<P && x.sub(y).0<P && x.double().0<P);
+ kani::cover!(x.0==P-1 && y.0==0);
+}
+#[kani::proof]
+fn NBG_cm_add_sub_double_r() {
+ let x=any_c();let y=any_c();
+ let a=x.add(y);let b=x.sub(y);let d=x.double();let r=super::mul_by_r(x);
+ assert!(a.a.0==add(x.a.0,y.a.0) && a.b.0==add(x.b.0,y.b.0));
+ assert!(b.a.0==sub(x.a.0,y.a.0) && b.b.0==sub(x.b.0,y.b.0));
+ assert!(d.a.0==add(x.a.0,x.a.0) && d.b.0==add(x.b.0,x.b.0));
+ assert!(r.a.0==sub(add(x.a.0,x.a.0),x.b.0));
+ assert!(r.b.0==add(x.a.0,add(x.b.0,x.b.0)));
+ kani::cover!(x.a.0==P-1);
+}
+#[kani::proof]
+fn NBG_qm_add_sub() {
+ let x=any_q();let y=any_q();let a=x.add(y);let b=x.sub(y);
+ assert!(a.c0.a.0==add(x.c0.a.0,y.c0.a.0) && a.c0.b.0==add(x.c0.b.0,y.c0.b.0));
+ assert!(a.c1.a.0==add(x.c1.a.0,y.c1.a.0) && a.c1.b.0==add(x.c1.b.0,y.c1.b.0));
+ assert!(b.c0.a.0==sub(x.c0.a.0,y.c0.a.0) && b.c0.b.0==sub(x.c0.b.0,y.c0.b.0));
+ assert!(b.c1.a.0==sub(x.c1.a.0,y.c1.a.0) && b.c1.b.0==sub(x.c1.b.0,y.c1.b.0));
+ kani::cover!(x.c1.b.0==P-1);
+}
+#[kani::proof]
+fn NBG_m31_bytes() {
+ let b:[u8;4]=kani::any();let w=u32::from_le_bytes(b);
+ let out=M31::from_le_bytes(b);
+ match out {None=>assert!(w>=P),Some(x)=>{assert!(w<P);assert!(x.0==w);}}
+ let x:u32=kani::any(); let bytes=M31(x).to_le_bytes();
+ let i:usize=kani::any();kani::assume(i<4);
+ assert!(bytes[i]==((x>>(8*i))&255) as u8);
+ kani::cover!(w==P);
+}
+#[kani::proof]
+fn NBG_cm_bytes() {
+ let b:[u8;8]=kani::any();let a=u32::from_le_bytes([b[0],b[1],b[2],b[3]]);let c=u32::from_le_bytes([b[4],b[5],b[6],b[7]]);
+ match CM31::from_le_bytes(&b) { None=>assert!(a>=P || c>=P),Some(x)=>{assert!(a<P && c<P);assert!(x.a.0==a && x.b.0==c);}}
+ let x=CM31{a:M31(kani::any()),b:M31(kani::any())};let mut out:[u8;8]=kani::any();x.write_le_bytes(&mut out);
+ let i:usize=kani::any();kani::assume(i<8);let word=if i<4{x.a.0}else{x.b.0};assert!(out[i]==((word>>(8*(i%4)))&255) as u8);
+ kani::cover!(a==P && c==0);
+}
+#[kani::proof]
+fn NBG_qm_bytes() {
+ let b:[u8;16]=kani::any();let a=u32::from_le_bytes([b[0],b[1],b[2],b[3]]);let c=u32::from_le_bytes([b[4],b[5],b[6],b[7]]);let d=u32::from_le_bytes([b[8],b[9],b[10],b[11]]);let e=u32::from_le_bytes([b[12],b[13],b[14],b[15]]);
+ match QM31::from_le_bytes(&b) { None=>assert!(a>=P || c>=P || d>=P || e>=P),Some(x)=>{assert!(a<P && c<P && d<P && e<P);assert!(x.c0.a.0==a && x.c0.b.0==c && x.c1.a.0==d && x.c1.b.0==e);}}
+ let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};let mut out:[u8;16]=kani::any();x.write_le_bytes(&mut out);
+ let words=[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0];let i:usize=kani::any();kani::assume(i<16);assert!(out[i]==((words[i/4]>>(8*(i%4)))&255) as u8);
+ kani::cover!(a==P);
+}
+#[kani::proof]
+fn NBG_constructors() {
+ let a=M31(kani::any());let b=M31(kani::any());let c=CM31::new(a,b);
+ assert!(c.a.0==a.0 && c.b.0==b.0);
+ let q=QM31::from_cm31(c);assert!(q.c0.a.0==a.0 && q.c0.b.0==b.0);assert!(q.c1.a.0==0 && q.c1.b.0==0);
+ kani::cover!(a.0==u32::MAX);
+}
