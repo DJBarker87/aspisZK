@@ -11,12 +11,7 @@ theorem comp {A B C : Type} {n : Usize} (f : A → B) (g : B → C) (a : Array A
   change (a.val.map f).map g=a.val.map (fun x => g (f x))
   simp only [List.map_map,Function.comp_def]
 
-theorem id {A : Type} {n : Usize} (a : Array A n) : amap (fun x => x) a=a := by
-  apply Subtype.ext
-  change a.val.map (fun x => x)=a.val
-  simp only [List.map_id]
-
-theorem repeat {A B : Type} (n : Usize) (f : A → B) (x : A) :
+theorem replicate {A B : Type} (n : Usize) (f : A → B) (x : A) :
     amap f (Array.repeat n x)=Array.repeat n (f x) := by
   apply Subtype.ext
   change (List.replicate n.val x).map f=List.replicate n.val (f x)
@@ -27,7 +22,6 @@ theorem result_comp {A B C : Type} (f : A → B) (g : B → C) (r : Result A) :
   cases r <;> rfl
 
 #print axioms comp
-#print axioms id
-#print axioms repeat
+#print axioms replicate
 #print axioms result_comp
 end R1Z.PV_RunJoin_WeightArray46

@@ -22,21 +22,21 @@ theorem complete (w : W) (hs : w.variant=.S2) (j : Usize) :
   rw [hr]
   simp only [bind_tc_ok]
   cases hd : r / 16#usize with
-  | fail e => simp only [hd,mapResult,bind_tc_fail]
-  | div => simp only [hd,mapResult,bind_tc_div]
+  | fail e => simp only [hd,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_fail]
+  | div => simp only [hd,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_div]
   | ok d =>
     simp only [hd,bind_tc_ok]
     cases hm : Array.index_usize AspisR1InactiveOwner49.owned.MASKS d with
-    | fail e => simp only [hm,mapResult,bind_tc_fail]
-    | div => simp only [hm,mapResult,bind_tc_div]
+    | fail e => simp only [hm,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_fail]
+    | div => simp only [hm,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_div]
     | ok m =>
       simp only [hm,bind_tc_ok]
       cases hb : r % 16#usize with
-      | fail e => simp only [hb,mapResult,bind_tc_fail]
-      | div => simp only [hb,mapResult,bind_tc_div]
+      | fail e => simp only [hb,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_fail]
+      | div => simp only [hb,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_div]
       | ok b =>
         simp only [hb,lift,bind_tc_ok]
-        split <;> simp only [mapResult,PV_RunJoin_WeightQuartic46.one,
+        split <;> simp only [mapResult,PV_B2_E_OrdinaryOriginal.mapResult,PV_RunJoin_WeightQuartic46.one,
           PV_RunJoin_WeightQuartic46.zero]
 #print axioms masks
 #print axioms complete
