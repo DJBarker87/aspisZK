@@ -28,6 +28,8 @@ for version in ['nightly-2026-06-01','1.94.1']:
     v=body(s,'pub const fn '+n+'(');rec['bodies'][n]=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()))
    v=body(s,'pub const unsafe fn unchecked_shr(self, rhs: u32) -> Self')
    rec['bodies']['unchecked_shr']=dict(text=v,token_sha256=sha('\0'.join(tokens(v)).encode()),precondition_law='R1Z.PV_RDCD_ShiftBound.mask_bound')
+   assert 'pub const BITS: u32 = Self::MAX.count_ones();' in s
+   rec['bits_constant']='pub const BITS: u32 = Self::MAX.count_ones();; u32/u64 intrinsic widths32/64 retained at compiler-cohort boundary; macro BITS argument is also recorded'
   elif f=='convert/num.rs':
    marker='fn from(small: $Small) -> Self' if version=='1.94.1' else 'fn from(small: $small) -> Self'
    v=body(s,marker);runtime=v
@@ -47,7 +49,7 @@ for version in ['nightly-2026-06-01','1.94.1']:
 for c in out:
  for ty,bits in [('u32',32),('u64',64)]:
   text=c['bodies']['uint_impl! '+ty]['text']
-  assert re.search(r'\b'+ty+r'\s*,',text) and re.search(r'\b'+str(bits)+r'\s*,',text),(ty,text)
+  assert re.search(r'\b'+ty+r'\s*,',text) and re.search(r'\bBITS\s*=\s*'+str(bits)+r'\s*,',text),(ty,text)
   c['bodies']['reached macro binding '+ty]=dict(text=ty+':BITS='+str(bits),token_sha256=sha((ty+':BITS='+str(bits)).encode()))
 comparisons={k:out[0]['bodies'][k]['token_sha256']==out[1]['bodies'][k]['token_sha256'] for k in out[0]['bodies']}
 result=dict(cohorts=out,identical= comparisons,qualification='Exact typed Option methods and selected wrapping method bodies; macro invocation difference must be reviewed before whole-row transfer. Rust intrinsic semantics remain a compiler boundary, no intrinsic implementation is proved by this source comparison.')
