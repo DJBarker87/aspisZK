@@ -51,6 +51,7 @@ imports=re.findall(r'^import (\S+)',p.read_text(),re.M);assert not any(x.startsw
 for imp in imports:
  q=next((Path(x)/(imp.replace('.','/')+'.olean') for x in search if (Path(x)/(imp.replace('.','/')+'.olean')).exists()),None)
  deps[imp]=dict(path=str(q) if q else None,sha256=hashlib.sha256(q.read_bytes()).hexdigest() if q else 'missing')
+assert all(d['path'] for d in deps.values()), ('missing dependency object; compile predecessor first',deps)
 context=dict(deps)
 if '.' in module: context['private_output_parent']={'path':str(outfile.parent),'exists':outfile.parent.is_dir(),'reason':'created nested private output directory after charged 37968 write failure'}
 fp=hashlib.sha256(json.dumps(context,sort_keys=True).encode()).hexdigest();key=srcsha+':'+fp

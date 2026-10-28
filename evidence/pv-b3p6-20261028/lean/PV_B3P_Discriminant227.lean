@@ -1,4 +1,5 @@
 import PV_B3P_CompleteTypes227
+import Aeneas.Data.Discriminant
 namespace PV_B3P_Discriminant227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
