@@ -1,5 +1,5 @@
 {
-  "source_revision": "d35239a823cc9abe0898d35ce345c8cda69605d4",
+  "source_revision": "8e45fcd46cd6320e45cd73669561dc7d38131571",
   "bodies": [
     {
       "path": "crates/aspis-core/src/field.rs",
@@ -47,6 +47,11 @@
       "sha256": "e15014c952d294abfb5677ba7a061ae79512d9ff7de48322ca972cc0e31a2588"
     },
     {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "start": "pub fn host_hashv(",
+      "sha256": "f9f7cc6b026d72a12ddae62e0c2e8c46315cd04ee667e58eff57d6cf6fcee209"
+    },
+    {
       "path": "crates/aspis-prover/src/prover_commit_reference.rs",
       "start": "pub(crate) fn next(",
       "sha256": "b5ebc19de6282ae556ce2c55da84b64636a72c74652f45b8ae57cc698518a4eb"
@@ -62,14 +67,14 @@
       "sha256": "41ee9e5ecb0f03bfd262c79701aec6953789b5f82269a678a7381d1aa9d0d800"
     }
   ],
-  "harness_sha256": "fb2bedeed822f7f3aba3957b5a18b7f8dfb7f1560c449cbbfb5986cbc2154e44",
+  "harness_sha256": "331d37ba00883dfc8ad36955bce0e957ddfc5091e0c870ff2e6d1b8d88cc4430",
   "zeroize_version": "1.8.1",
   "evidence_class": "finite validation preparation; no deployed hash or whole-row trace credit",
   "differences": [
     "nominal enclosing aspis_core module; exact scalar/tower field declarations and CM31 constructor",
     "public P constant has same 0x7fffffff value",
     "extra Debug/Eq derives for comparisons; no source function body changed",
-    "test uses deterministic synthetic HashFn families, not HOST_HASH",
+    "test uses synthetic HashFn families plus 64 source-identical host_hashv cases under sha2 0.10.9; no ELF credit",
     "reference next uses explicit four-byte array, source next uses slice try_into",
     "reference scalar uses range loop; source scalar uses counted while",
     "reference QM31 construction is delayed; source construction is nested; these observations need the separate trace model"

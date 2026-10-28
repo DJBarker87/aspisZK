@@ -21,6 +21,7 @@ fields.append('pub const P:u32=0x7fff_ffff;')
 err='#[derive(Clone,Copy,Debug,PartialEq,Eq)]\n'+take(ep,'pub enum StateOnlyMaskBuildError {')
 source='\n'.join([take(sp,'struct Profile21SourceExpander {'),take(sp,'impl Profile21SourceExpander {'),take(sp,'impl Drop for Profile21SourceExpander {'),take(sp,'fn profile21_source_expander_block(')])
 state='#[derive(Clone,Copy,Debug,PartialEq,Eq)]\n'+take(rp,'pub(crate) struct State {')
+host_hash=take(R/'crates/aspis-prover/src/lib.rs','pub fn host_hashv(')
 reference='mod reference { use super::*;use crate::aspis_core;\n'+state+'\n'+'\n'.join(take(rp,sign) for sign in ['pub(crate) fn next(','pub(crate) fn limb_caller(','pub(crate) fn qm31_caller('])+'\n}'
 header='''#![allow(unexpected_cfgs,dead_code)]
 use zeroize::{Zeroize,Zeroizing};
@@ -87,6 +88,13 @@ fn main(){
   assert_eq!(a.word,if words%8==0 {8}else{words%8});
   assert_eq!(log().len(),(words+7)/8);
  }
+ for seed_case in 0..64 {
+  let seed=std::array::from_fn(|i|(seed_case*17+i) as u8);
+  let s=reference::State{seed,counter:0,block:[0;32],word:8};
+  let mut a=Profile21SourceExpander::new(host_hashv,seed);
+  let got=a.qm31();let (expected,after)=reference::qm31_caller(host_hashv,PROFILE21_SOURCE_EXPAND_DOMAIN,s);
+  assert_eq!(got,expected);assert_eq!(snapshot(&a),after);assert!(got.is_ok());checks+=1;
+ }
  if std::env::args().any(|a|a=="negative") {
   reset(0);let mut a=Profile21SourceExpander::new(hash,[2;32]);
   assert_eq!(a.m31(),Err(StateOnlyMaskBuildError::MaskSampleExhausted),"matched false control: all-zero words accept");
@@ -94,6 +102,6 @@ fn main(){
  println!("{{\"method_checks\":{},\"directed_limb_failure_controls\":4,\"failed\":0}}",checks);
 }
 '''
-out=R/'tools/pv-l2d-20261028/expander-native/src/main.rs';out.write_text(header+source+'\n'+reference+'\n'+tests)
-(E/'expander-native-freeze.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),bodies=rows,harness_sha256=hashlib.sha256(out.read_bytes()).hexdigest(),zeroize_version='1.8.1',evidence_class='finite validation preparation; no deployed hash or whole-row trace credit',differences=['nominal enclosing aspis_core module; exact scalar/tower field declarations and CM31 constructor','public P constant has same 0x7fffffff value','extra Debug/Eq derives for comparisons; no source function body changed','test uses deterministic synthetic HashFn families, not HOST_HASH','reference next uses explicit four-byte array, source next uses slice try_into','reference scalar uses range loop; source scalar uses counted while','reference QM31 construction is delayed; source construction is nested; these observations need the separate trace model'],fidelity='next/refill use direct owned-state writes, no iterator backward continuation; reference emissions not claimed by this script',source_modifications_under_crates=False),indent=2)+'\n')
+out=R/'tools/pv-l2d-20261028/expander-native/src/main.rs';out.write_text(header+source+'\n'+host_hash+'\n'+reference+'\n'+tests)
+(E/'expander-native-freeze.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),bodies=rows,harness_sha256=hashlib.sha256(out.read_bytes()).hexdigest(),zeroize_version='1.8.1',evidence_class='finite validation preparation; no deployed hash or whole-row trace credit',differences=['nominal enclosing aspis_core module; exact scalar/tower field declarations and CM31 constructor','public P constant has same 0x7fffffff value','extra Debug/Eq derives for comparisons; no source function body changed','test uses synthetic HashFn families plus 64 source-identical host_hashv cases under sha2 0.10.9; no ELF credit','reference next uses explicit four-byte array, source next uses slice try_into','reference scalar uses range loop; source scalar uses counted while','reference QM31 construction is delayed; source construction is nested; these observations need the separate trace model'],fidelity='next/refill use direct owned-state writes, no iterator backward continuation; reference emissions not claimed by this script',source_modifications_under_crates=False),indent=2)+'\n')
 print('expander bodies frozen',len(rows),'bytes',out.stat().st_size)

@@ -103,6 +103,14 @@ impl Drop for Profile21SourceExpander {
 fn profile21_source_expander_block(hash: HashFn, seed: [u8;32], counter: u64) -> [u8;32] {
     hash(&[PROFILE21_SOURCE_EXPAND_DOMAIN, &seed, &counter.to_le_bytes()])
 }
+pub fn host_hashv(inputs: &[&[u8]]) -> [u8; 32] {
+    use sha2::{Digest, Sha256};
+    let mut hasher = Sha256::new();
+    for input in inputs {
+        hasher.update(input);
+    }
+    hasher.finalize().into()
+}
 mod reference { use super::*;use crate::aspis_core;
 #[derive(Clone,Copy,Debug,PartialEq,Eq)]
 pub(crate) struct State {
@@ -201,6 +209,13 @@ fn main(){
   assert_eq!(a.counter,((words+7)/8) as u64);
   assert_eq!(a.word,if words%8==0 {8}else{words%8});
   assert_eq!(log().len(),(words+7)/8);
+ }
+ for seed_case in 0..64 {
+  let seed=std::array::from_fn(|i|(seed_case*17+i) as u8);
+  let s=reference::State{seed,counter:0,block:[0;32],word:8};
+  let mut a=Profile21SourceExpander::new(host_hashv,seed);
+  let got=a.qm31();let (expected,after)=reference::qm31_caller(host_hashv,PROFILE21_SOURCE_EXPAND_DOMAIN,s);
+  assert_eq!(got,expected);assert_eq!(snapshot(&a),after);assert!(got.is_ok());checks+=1;
  }
  if std::env::args().any(|a|a=="negative") {
   reset(0);let mut a=Profile21SourceExpander::new(hash,[2;32]);
