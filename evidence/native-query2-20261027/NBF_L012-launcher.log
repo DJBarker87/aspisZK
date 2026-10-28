@@ -1,0 +1,61 @@
+{"attempt": "NBF_L012", "exit_status": 1, "wall_seconds": 3.5502914339886047, "peak_rss_kib": "4403560", "swaps": "0", "print_axioms": ["'NBF_RowInstall.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBF_generated/NBF_RowInstall.lean:45:48: error: 'change' tactic failed, pattern
+  ↑iter.start < 256
+is not definitionally equal to target
+  ↑iter.start < basis.length
+NBF_generated/NBF_RowInstall.lean:59:1: error: Tactic `rfl` failed: The left-hand side
+  let (o, iter1) := (some iter.start, iter1)
+  match o with
+  | none => ok (done b)
+  | some j => do
+    let m ← basis.index_usize j
+    let weights1 ← Port3_NativeRowFrame.push b j q m
+    let _ ← core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref j
+    ok (cont (iter1, weights1))
+is not definitionally equal to the right-hand side
+  ok (cont (iter1, { raw := b.raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow 
+...
+2OwnedRowRefinement.makeRow y), terms := b.terms }
+word : Q
+hw : v.index_usize iter.start = ok word
+hword : word = (↑v)[↑iter.start]
+hw' : core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref iter.start = ok word
+⊢ (let (o, iter1) := (some iter.start, iter1)
+    match o with
+    | none => ok (done b)
+    | some j => do
+      let m ← basis.index_usize j
+      let weights1 ← Port3_NativeRowFrame.push b j q m
+      let _ ← core.slice.index.Slice.index (core.slice.index.SliceIndexUsizeSlice Q) v.deref j
+      ok (cont (iter1, weights1))) =
+    ok (cont (iter1, { raw := b.raw.set iter.start (S7Kani2OwnedRowRefinement.makeRow y), terms := b.terms }))
+NBF_generated/NBF_RowInstall.lean:57:72: warning: This simp argument is unused:
+  hm
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install,h̵m̵,̵ ̲push,
+  ̵  ̵ ̵hw', ̲lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_RowInstall.lean:57:75: warning: This simp argument is unused:
+  push
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install, ̲hm,p̵u̵s̵h̵,̵
+  ̵  ̵ ̵hw', ̲lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBF_generated/NBF_RowInstall.lean:58:3: warning: This simp argument is unused:
+  hw'
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop1.body, ̲hr, ̲install, ̲hm, ̲push,
+  ̵  ̵ ̵h̵w̵'̵,̵lift,
+  ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBF_RowInstall.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0768d28d3b7e41ab93270e2d9c77fb90.scope; invocation ID: 64daa51617b64a70ab4d1e7d9e814a3d

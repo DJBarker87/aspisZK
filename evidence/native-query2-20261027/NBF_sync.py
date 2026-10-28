@@ -17,3 +17,19 @@ p.write_text(expected+marker)
 (b/'crates/aspis-r1-cost-probe/src/NBF_harness.rs').write_text({harness!r})
 ''')
 assert r.returncode==0,r.stderr
+
+# Additional cfg(kani)-only child module at the actual private candidate cut.
+f2='crates/aspis-r1-cost-probe/src/candidate.rs'
+o2=subprocess.check_output(['git','show',rev+':'+f2],text=True)
+m2='\n#[cfg(kani)] #[path="NBF_query.rs"] mod NBF_query;\n'
+h2=(E/'NBF_query.rs.txt').read_text() if (E/'NBF_query.rs.txt').exists() else ''
+if h2:
+ patch+=''.join(difflib.unified_diff(o2.splitlines(True),(o2+m2).splitlines(True),fromfile='a/'+f2,tofile='b/'+f2))
+ patch+=''.join(difflib.unified_diff([],h2.splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBF_query.rs'))
+ (E/'NBF_harness.patch').write_text(patch)
+ r=py(f"""from pathlib import Path
+b=Path({(B+'/NBF_src')!r})
+p=b/{f2!r};s=p.read_text();assert s=={o2!r} or s=={(o2+m2)!r}
+p.write_text({(o2+m2)!r});(b/'crates/aspis-r1-cost-probe/src/NBF_query.rs').write_text({h2!r})
+ """)
+ assert r.returncode==0,r.stderr

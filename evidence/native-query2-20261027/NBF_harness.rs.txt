@@ -82,3 +82,14 @@ fn NBF_row_iteration_context() {
  assert_eq!(a.next,next);assert_eq!(a.weights.len(),64);
  kani::cover!(j==0);kani::cover!(j==63);kani::cover!(next==9);
 }
+
+#[kani::proof]
+#[kani::unwind(9)]
+fn NBF_embeddings() {
+ let p:[u32;4]=kani::any();for x in p {kani::assume(x<2147483647);}
+ let q=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
+ assert_eq!(E::from_qm31(q).to_limbs(),[p[0],p[1],p[2],p[3],0,0,0,0]);
+ let m:u32=kani::any();kani::assume(m<2147483647);
+ assert_eq!(E::from_m31(M31(m)).to_limbs(),[m,0,0,0,0,0,0,0]);
+ kani::cover!(m==2147483646);kani::cover!(p[3]==2147483646);
+}
