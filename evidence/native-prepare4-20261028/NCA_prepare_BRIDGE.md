@@ -19,3 +19,7 @@ whole-frame K012 timeout and uncompiled K030 earn no credit.
 Locally CLOSED-CONDITIONAL: NCA_K004 one native actual-zip body on arbitrary full32 prestate and K005 failing control; NCA_SerializerWindow.frame/induction reuse exact full-carrier model induction. NCA_InactiveModel.source/words gives the complete installed Result and byte order. NCA_InactiveDomain.source proves canonicality from THAT wide-view producer. NCA_K006/K007 actual Prepared::new reached serializer-argument position/control fixes K030's ownership error. Exact source/metrics/axioms are in NCA_ATTEMPTS.jsonl and per-attempt receipts.
 
 Retained dependencies: wide_view's merged mitigated native bridge; scalar's established native/model bridge on rows27/28; U00 runtime/digest association. Neither a free successful serializer observation nor caller canonicality is added. Statement5 does not close statements2/4/6/7.
+
+## Statement4: accepted scan
+
+Model association checked by NCA_AcceptedScan.source (L007): SAME accepted cut -> exact compactInput LPt check_values success; NCA_BytePort and NCA_CheckPort connect the nominal word/chunk models. No independent successful check is supplied. Native statement4 remains OPEN: K008..K012 expose missing definitions on actual mark/generic prefix calls, and historical Op4P whole-loop native evidence is not refreshed automatically under current copy/one-iteration rules. No deployed/native closure from model success.
