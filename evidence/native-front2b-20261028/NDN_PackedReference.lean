@@ -74,6 +74,7 @@ theorem matrix (input : FJb_RawRowCallbacks.Input) (row limb : Usize)
   simp only [ha,hb,hc,hd,ha0,hb0,hc0,hd0,bind_tc_ok,NDE_Reference11.matrix_cell_ref,lift]
   split <;> simp_all only [bind_tc_ok,bind_tc_fail,bind_assoc_eq]
 
+#print axioms after
 #print axioms matrix
 end NDN_PackedReference
 end

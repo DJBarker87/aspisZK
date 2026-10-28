@@ -69,7 +69,38 @@
      }
      debug_assert!(all_local_limbs_bounded);
  
-@@ -1239,3 +1265,7 @@
+@@ -413,6 +439,7 @@
+ }
+ 
+ #[inline(always)]
++#[cfg(not(all(kani,any(NDN_interpolation_factors,NDN_interpolation_sum))))]
+ fn interpolate_three_constant_limb(
+     weight0: u32,
+     weight1: u32,
+@@ -425,6 +452,22 @@
+         u64::from(weight0) * u64::from(constant0)
+             + u64::from(weight1) * u64::from(constant1)
+             + u64::from(weight2) * u64::from(constant2),
++    )
++}
++
++#[cfg(all(kani,any(NDN_interpolation_factors,NDN_interpolation_sum)))]
++fn interpolate_three_constant_limb(
++    weight0: u32,
++    weight1: u32,
++    weight2: u32,
++    constant0: u32,
++    constant1: u32,
++    constant2: u32,
++) -> M31 {
++    M31::reduce_u64(
++        NDN_native::product(0,u64::from(weight0),u64::from(constant0))
++            + NDN_native::product(1,u64::from(weight1),u64::from(constant1))
++            + NDN_native::product(2,u64::from(weight2),u64::from(constant2)),
+     )
+ }
+ 
+@@ -1239,3 +1282,10 @@
          );
      }
  }
@@ -77,25 +108,107 @@
 +#[cfg(kani)]
 +#[path="NDE_poseidon.rs"]
 +mod NDE_native;
++
++#[cfg(kani)]
++#[path="NDN_state_native.rs"] mod NDN_native;
+--- a/crates/aspis-statement/src/NDN_state_native.rs
++++ b/crates/aspis-statement/src/NDN_state_native.rs
+@@ -0,0 +1,23 @@
++use super::*;
++pub(super) static mut RAW:[u64;3]=[0;3];
++pub(super) static mut FACTORS:[(u64,u64);3]=[(0,0);3];
++pub(super) fn product(n:usize,a:u64,b:u64)->u64{unsafe{FACTORS[n]=(a,b);RAW[n]}}
++#[cfg(NDN_interpolation_factors)]
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn interpolation_factors(){
++ let w:[u32;3]=kani::any();let c:[u32;3]=kani::any();unsafe{RAW=[0;3];}
++ let _=super::interpolate_three_constant_limb(w[0],w[1],w[2],c[0],c[1],c[2]);
++ let good=unsafe{FACTORS[0]==(u64::from(w[0]),u64::from(c[0]))&&FACTORS[1]==(u64::from(w[1]),u64::from(c[1]))&&FACTORS[2]==(u64::from(w[2]),u64::from(c[2]))};
++ assert!(good!=cfg!(NDN_invert));
++}
++#[cfg(NDN_interpolation_sum)]
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn interpolation_sum(){
++ let r:[u64;3]=kani::any();for x in r {kani::assume(x<=2147483646u64*2147483646u64);}
++ unsafe{RAW=r;}
++ let out=super::interpolate_three_constant_limb(0,0,0,0,0,0);
++ let expected=super::NDE_native::reference::reduce_ref(r[0]+r[1]+r[2]);
++ assert!((out.0==expected)!=cfg!(NDN_invert));
++}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
-@@ -198,6 +198,7 @@
+@@ -198,6 +198,8 @@
          const MASKS: [u16; 7] = [6144, 6145, 4097, 2048, 2049, 26214, 1749];
          let mut high_sums = [QM31::ZERO; MASKS.len()];
          let mut block = 0usize;
-+        #[cfg(all(kani,NDN_active_high))] {high_sums=unsafe{NDN_native::PRE};block=unsafe{NDN_native::BLOCK};}
++        #[cfg(all(kani,NDN_active_low))] {block=64;}
++        #[cfg(all(kani,any(NDN_active_high,NDN_active_route,NDN_active_sparse)))] {high_sums=unsafe{NDN_native::PRE};block=unsafe{NDN_native::BLOCK};}
          while block < constants::ACTIVE_ROW_MASKS.len() {
              let mask = constants::ACTIVE_ROW_MASKS[block];
              let coordinate = match mask {
-@@ -212,6 +213,7 @@
+@@ -210,11 +212,14 @@
+                 1749 => 6,
+                 _ => unreachable!("generated Copy active mask outside frozen basis"),
              };
++            #[cfg(all(kani,NDN_active_route))] {unsafe{NDN_native::COORD=coordinate;NDN_native::LEFT=high_sums[coordinate];NDN_native::RIGHT=self.high[block];}return QM31::ZERO;}
              high_sums[coordinate] = high_sums[coordinate].add(self.high[block]);
              block += 1;
-+            #[cfg(all(kani,NDN_active_high))] {unsafe{NDN_native::AFTER=high_sums;NDN_native::NEXT=block;}return QM31::ZERO;}
++            #[cfg(all(kani,any(NDN_active_high,NDN_active_route,NDN_active_sparse)))] {unsafe{NDN_native::AFTER=high_sums;NDN_native::NEXT=block;}return QM31::ZERO;}
          }
          let mut sum = QM31::ZERO;
          let mut coordinate = 0usize;
-@@ -1541,3 +1543,6 @@
++        #[cfg(all(kani,NDN_active_low))] {coordinate=unsafe{NDN_native::COORD};}
+         while coordinate < MASKS.len() {
+             let low_sum = match coordinate {
+                 0 => self.low[11].add(self.low[12]),
+@@ -228,6 +233,7 @@
+                     .add(self.low[7]).add(self.low[9]).add(self.low[10]),
+                 _ => unreachable!("coordinate outside frozen active-mask basis"),
+             };
++            #[cfg(all(kani,NDN_active_low))] {unsafe{NDN_native::LOW_REPLY=low_sum;}return QM31::ZERO;}
+             sum = sum.add(high_sums[coordinate].mul(low_sum));
+             coordinate += 1;
+         }
+@@ -350,6 +356,7 @@
+     consumer_weights: [QM31; 2],
+ }
+ 
++#[cfg(not(all(kani,NDN_residual_cut)))]
+ fn copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31) -> QM31 {
+     let denominators = [
+         chi.sub(row.producer_values[0]),
+@@ -368,6 +375,28 @@
+     producer_denominator
+         .mul(helper.mul(consumer_denominator).add(consumer_numerator))
+         .sub(consumer_denominator.mul(producer_numerator))
++}
++
++#[cfg(all(kani,NDN_residual_cut))]
++fn copy_residual(row: CopyRowExtension, helper: QM31, chi: QM31) -> QM31 {
++    #[cfg(all(kani,NDN_residual_cut))] use NDN_native::CutMul;
++    let denominators = [
++        chi.sub(row.producer_values[0]),
++        chi.sub(row.producer_values[1]),
++        chi.sub(row.consumer_values[0]),
++        chi.sub(row.consumer_values[1]),
++    ];
++    let producer_denominator = denominators[0].NDN_mul(denominators[1]);
++    let consumer_denominator = denominators[2].NDN_mul(denominators[3]);
++    let producer_numerator = row.producer_weights[0]
++        .NDN_mul(denominators[1])
++        .add(row.producer_weights[1].NDN_mul(denominators[0]));
++    let consumer_numerator = row.consumer_weights[0]
++        .NDN_mul(denominators[3])
++        .add(row.consumer_weights[1].NDN_mul(denominators[2]));
++    producer_denominator
++        .NDN_mul(helper.NDN_mul(consumer_denominator).add(consumer_numerator))
++        .sub(consumer_denominator.NDN_mul(producer_numerator))
+ }
+ 
+ #[inline(always)]
+@@ -1541,3 +1570,6 @@
          );
      }
  }
@@ -104,7 +217,7 @@
 +#[path="NDN_copy_native.rs"] mod NDN_native;
 --- a/crates/aspis-statement/src/pool_v1/NDN_copy_native.rs
 +++ b/crates/aspis-statement/src/pool_v1/NDN_copy_native.rs
-@@ -0,0 +1,23 @@
+@@ -0,0 +1,91 @@
 +use super::*;
 +#[path="NDN_reference.rs"] mod reference;
 +fn canon(q:QM31)->bool {q.c0.a.0<0x7fff_ffff&&q.c0.b.0<0x7fff_ffff&&q.c1.a.0<0x7fff_ffff&&q.c1.b.0<0x7fff_ffff}
@@ -128,12 +241,94 @@
 + let expected=if j==coordinate{let a=words(pre[j]);let b=words(selectors.high[block]);core::array::from_fn(|i|reference::add_word(a[i],b[i]))}else{words(pre[j])};
 + assert!((unsafe{words(AFTER[j])==expected&&NEXT==block+1}) != cfg!(NDN_invert));
 +}
++pub(super) static mut COORD:usize=0;
++pub(super) static mut LEFT:QM31=QM31::ZERO;
++pub(super) static mut RIGHT:QM31=QM31::ZERO;
++pub(super) static mut LOW_REPLY:QM31=QM31::ZERO;
++#[cfg(NDN_active_route)]
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn active_route_window(){
++ let selectors=Selectors{high:kani::any(),low:kani::any()};let pre:[QM31;7]=kani::any();let block:usize=kani::any();kani::assume(block<64);
++ unsafe{PRE=pre;BLOCK=block;}
++ let c=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);
++ let _=selectors.active_mask_basis();
++ assert!((unsafe{COORD==c&&LEFT==pre[c]&&RIGHT==selectors.high[block]})!=cfg!(NDN_invert));
++}
++#[cfg(NDN_active_sparse)]
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn active_add_window(){
++ let a:QM31=kani::any();let b:QM31=kani::any();kani::assume(canon(a)&&canon(b));
++ let selectors=Selectors{high:[b;64],low:[QM31::ZERO;16]};let block:usize=kani::any();let j:usize=kani::any();kani::assume(block<64&&j<7);
++ unsafe{PRE=[a;7];BLOCK=block;}
++ let c=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);let _=selectors.active_mask_basis();
++ let aw=words(a);let bw=words(b);let expected=core::array::from_fn(|i|reference::active_high_word(aw[i],bw[i],j==c));
++ assert!((unsafe{words(AFTER[j])==expected&&NEXT==block+1})!=cfg!(NDN_invert));
++}
++fn coordinate()->usize {if cfg!(NDN_coord0){0}else if cfg!(NDN_coord1){1}else if cfg!(NDN_coord2){2}else if cfg!(NDN_coord3){3}else if cfg!(NDN_coord4){4}else if cfg!(NDN_coord5){5}else{6}}
++#[cfg(NDN_active_low)]
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn active_low_window(){
++ let low:[QM31;16]=kani::any();for q in low {kani::assume(canon(q));}
++ let selectors=Selectors{high:[QM31::ZERO;64],low};let c=coordinate();unsafe{COORD=c;}
++ let mut expected=[0u32;4];let mut t=0usize;
++ while t<reference::low_count(c){let w=words(low[reference::low_index(c,t)]);for i in 0..4 {expected[i]=reference::add_word(expected[i],w[i]);}t+=1;}
++ let _=selectors.active_mask_basis();
++ assert!((unsafe{words(LOW_REPLY)==expected})!=cfg!(NDN_invert));
++}
++pub(super) static mut PRIORS:[QM31;9]=[QM31::ZERO;9];
++pub(super) static mut CALL:usize=0;
++pub(super) static mut SELECTED:usize=0;
++pub(super) static mut LOG_LEFT:QM31=QM31::ZERO;
++pub(super) static mut LOG_RIGHT:QM31=QM31::ZERO;
++pub(super) static mut LOG_REPLY:QM31=QM31::ZERO;
++pub(super) fn cut_mul(x:QM31,y:QM31)->QM31{
++ let n=unsafe{CALL};unsafe{CALL=n+1;}
++ if n==unsafe{SELECTED}{
++  let out=crate::NDE_field::qm31(x,y);
++  unsafe{LOG_LEFT=x;LOG_RIGHT=y;LOG_REPLY=out;}out
++ }else{unsafe{PRIORS[n]}}
++}
++#[cfg(NDN_residual_cut)]
++#[kani::proof] #[kani::unwind(24)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
++fn residual_call_window(){
++ let v:[QM31;10]=kani::any();for q in v {kani::assume(canon(q));}
++ let prior:[QM31;9]=kani::any();for q in prior {kani::assume(canon(q));}
++ let selected=if cfg!(NDN_call0){0}else if cfg!(NDN_call1){1}else if cfg!(NDN_call2){2}else if cfg!(NDN_call3){3}else if cfg!(NDN_call4){4}else if cfg!(NDN_call5){5}else if cfg!(NDN_call6){6}else if cfg!(NDN_call7){7}else{8};
++ unsafe{PRIORS=prior;CALL=0;SELECTED=selected;}
++ let d=[v[9].sub(v[0]),v[9].sub(v[1]),v[9].sub(v[2]),v[9].sub(v[3])];
++ let (left,right)=match selected{0=>(d[0],d[1]),1=>(d[2],d[3]),2=>(v[4],d[1]),3=>(v[5],d[0]),4=>(v[6],d[3]),5=>(v[7],d[2]),6=>(v[8],prior[1]),7=>(prior[0],prior[6].add(prior[4].add(prior[5]))),_=>(prior[1],prior[2].add(prior[3]))};
++ let row=CopyRowExtension{producer_values:[v[0],v[1]],consumer_values:[v[2],v[3]],producer_weights:[v[4],v[5]],consumer_weights:[v[6],v[7]]};
++ let _=super::copy_residual(row,v[8],v[9]);
++ let good=unsafe{CALL==9&&LOG_LEFT==left&&LOG_RIGHT==right&&LOG_REPLY==crate::NDE_field::NDE_REPLY};
++ assert!(good!=cfg!(NDN_invert));
++}
++
++pub(super) trait CutMul {fn NDN_mul(self,y:Self)->Self;}
++impl CutMul for QM31 {fn NDN_mul(self,y:Self)->Self{cut_mul(self,y)}}
 --- a/crates/aspis-statement/src/pool_v1/NDN_reference.rs
 +++ b/crates/aspis-statement/src/pool_v1/NDN_reference.rs
-@@ -0,0 +1,6 @@
+@@ -0,0 +1,20 @@
 +pub fn active_coordinate(mask:u16)->usize{match mask{6144=>0,6145=>1,4097=>2,2048=>3,2049=>4,26214=>5,1749=>6,_=>panic!("outside active basis")}}
 +pub fn add_word(a:u32,b:u32)->u32{let s=a+b;if s>=2147483647{s-2147483647}else{s}}
 +pub fn active_high_word(old:u32,high:u32,selected:bool)->u32{if selected{add_word(old,high)}else{old}}
 +pub fn pattern_word(old:u32,product:u32,selected:bool)->u32{if selected{add_word(old,product)}else{old}}
 +pub fn eq_factor_word(a:u32,b:u32,ab:u32)->u32{let p=2147483647u64;let s=(1u64+p-u64::from(a))%p;let s=(s+p-u64::from(b))%p;((s+u64::from(ab)+u64::from(ab))%p)as u32}
 +pub fn fields_word(value:u32)->Result<[u8;4],u8>{if value>=2147483647{Err(0)}else{Ok(value.to_le_bytes())}}
++pub fn low_index(coordinate:usize,term:usize)->usize{let row=match coordinate{0=>[11,12,0,0,0,0,0,0],1=>[0,11,12,0,0,0,0,0],2=>[0,12,0,0,0,0,0,0],3=>[11,0,0,0,0,0,0,0],4=>[0,11,0,0,0,0,0,0],5=>[1,2,5,6,9,10,13,14],6=>[0,2,4,6,7,9,10,0],_=>panic!("coordinate")};row[term]}
++pub fn low_count(coordinate:usize)->usize{[2,3,2,1,2,8,7][coordinate]}
++pub fn add_product(raw:u64,product:u64)->u64{raw+product}
++pub fn chunk_end(index:usize,end:usize)->usize{core::cmp::min(index+4,end)}
++pub fn next_index(index:usize)->usize{index+1}
++pub fn sub_word(a:u32,b:u32)->u32{((u64::from(a)+2147483647-u64::from(b))%2147483647)as u32}
++pub fn factor_sum(first:u32,ab:u32)->u32{add_word(add_word(first,ab),ab)}
++pub fn field_byte(value:u32,index:usize)->u8{value.to_le_bytes()[index]}
++pub fn field_canonical(value:u32)->bool{value<2147483647}
++pub fn header_gate(bytes:[u8;8],length:usize)->u8{if length!=320{1}else if bytes[0]!=65||bytes[1]!=83||bytes[2]!=81||bytes[3]!=56{2}else if bytes[4]!=1{3}else if bytes[5]!=0&&bytes[5]!=1{4}else if bytes[6]!=1{5}else if bytes[7]!=0{6}else{0}}
++pub fn range_index(start:usize,end:usize,index:usize)->usize{assert!(start<=index&&index<end);index-start}
++pub fn binding_matches(kind:bool,master:bool,lane:bool,output:bool,nullifier:bool,after:bool)->bool{kind&&master&&lane&&output&&nullifier&&after}
++pub fn prefix_survives(index:usize,old_length:usize)->bool{index<old_length}
++pub fn output_header(index:usize,kind:u8,lane:u8)->u8{match index{0=>65,1=>83,2=>82,3=>56,4=>1,5=>kind,6=>1,7=>lane,_=>panic!("header index")}}

@@ -53,6 +53,8 @@ expected=['pool-v1-kernel','r0','pool-v1-pair-forest-packed-digest-selector-tens
 assert next(p['features'] for p in features if p['name']=='aspis-statement')==sorted(expected)
 assert next(p['features'] for p in features if p['name']=='aspis-core')==['r0']
 out['isolated_deployed_features']=features
+out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in m['packages']]
+out['proof_target_scope']='statement helper; exact isolated deployed expansion; no program entry/no-entrypoint claim'
 out['workspace_features_are_overunified']=True
 out['native_feature_selection']=x['native_command'][x['native_command'].index('--features')+1]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
