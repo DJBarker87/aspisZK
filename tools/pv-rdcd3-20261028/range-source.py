@@ -1,4 +1,4 @@
-"""Exact token/body checks for four deployed range/fold records, NOT a full row checker.
+"""Exact token/body checks for eight deployed range/fold/index records, NOT a full row checker.
 The structural law is the separately compiled owned Lean loop reference.
 """
 from pathlib import Path
@@ -41,16 +41,38 @@ checks=[
     accum
   }''', 'R1Z.PV_RDCD3_RangeLoop.all_endpoints; callback Result retains panic/divergence'),
 ]
+checks += [
+ ('array/mod.rs','const Index<I> for [T; N]', 'fn index(&self, index: I) -> &Self::Output',
+  'fn index(&self, index: I) -> &Self::Output { Index::index(self as &[T], index) }',
+  'R1Z.PV_RDCD3_Index194.array_complete; array/slice preserve backing elements and length'),
+ ('slice/index.rs','const ops::Index<I> for [T]', 'fn index(&self, index: I) -> &I::Output',
+  'fn index(&self, index: I) -> &I::Output { index.index(self) }',
+  'Concrete I=usize dispatch to the following record; no alternate index dictionary'),
+ ('slice/index.rs','const SliceIndex<[T]> for usize', 'fn index(self, slice: &[T]) -> &T',
+  'fn index(self, slice: &[T]) -> &T { &(*slice)[self] }',
+  'R1Z.PV_RDCD3_Index194.slice_complete/success/failure; Rust intrinsic indexing is the retained compiler semantic boundary'),
+ ('iter/traits/collect.rs','impl<I: Iterator> IntoIterator for I', 'fn into_iter(self) -> I',
+  'fn into_iter(self) -> I { self }',
+  'Identity on the entire iterator state; not allocation, a copy builtin, or a callback'),
+]
+
 out=[]
 for path,context,marker,expected,law in checks:
  p=root/path;s=p.read_text();actual=span(s,context,marker)
  assert tokens(actual)==tokens(expected),(path,marker,actual)
  # A changed constant or operation must be rejected by the same equality check.
  mutated=expected
- for old,new in [('1)', '2)'),('self.spec_next()', 'self.spec_next_back()'),('unchecked_add','unchecked_sub'),('self.next()', 'self.next_back()')]:
+ for old,new in [('1)', '2)'),('self.spec_next()', 'self.spec_next_back()'),('unchecked_add','unchecked_sub'),('self.next()', 'self.next_back()'),('index.index(self)','index.index_mut(self)'),('Index::index','IndexMut::index_mut'),('&(*slice)[self]','&(*slice)[0]'),('{ self }','{ changed }')]:
   if old in mutated:
    mutated=mutated.replace(old,new,1);break
  assert tokens(actual)!=tokens(mutated),'negative structural control unexpectedly accepted'
  out.append(dict(path=str(p),file_sha256=sha(p.read_bytes()),context=context,source_body=actual,source_token_sha256=sha('\0'.join(tokens(actual)).encode()),owned_rust_body=expected,law=law,matched_negative_control='rejected'))
-result=dict(toolchain='1.94.1',records=out,profile=dict(release=True,debug_assertions=False,overflow_checks=False),scope='Four source records only; not a complete V260 cone and not a full native-body equivalence checker',feature_argument='Selected core records have no cfg/cfg! in their bodies; concrete usize instantiation is independent of client crate features',composition_trust='Structural source-to-owned-reference reclassification within existing Rust/Lean/compiler tool trust; no endpoint premise removed')
-(D/'range-source-result.json').write_text(json.dumps(result,indent=2)+'\n');print('Four exact body checks and four rejecting mutation controls passed; partial cone only')
+# Check usize TrustedStep specialization and that Range does not override fold.
+s=(root/'iter/range.rs').read_text()
+assert re.search(r'unsafe_impl_trusted_step!\[[^]]*\busize\b',s)
+assert '[usize isize]' in s
+context='impl<A: Step> Iterator for ops::Range<A>'
+block=span(s,context,context)
+assert 'fn fold' not in block and 'impl_fold_via_try_fold!' not in block
+result=dict(dispatch_checks='usize TrustedStep declared; usize Step macro invocation selected; Range iterator does not override fold',toolchain='1.94.1',records=out,profile=dict(release=True,debug_assertions=False,overflow_checks=False),scope='Eight source records only; not a complete V260 cone and not a full native-body equivalence checker',feature_argument='Selected core records have no cfg/cfg! in their bodies; concrete usize instantiation is independent of client crate features',composition_trust='Structural source-to-owned-reference reclassification within existing Rust/Lean/compiler tool trust; no endpoint premise removed')
+(D/'range-source-result.json').write_text(json.dumps(result,indent=2)+'\n');print('Eight exact body checks and eight rejecting mutation controls passed; partial cone only')
