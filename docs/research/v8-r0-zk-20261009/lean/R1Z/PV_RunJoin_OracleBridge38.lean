@@ -14,7 +14,7 @@ abbrev Terminal :=
 /-- Source continuation with an explicit terminal reference. All error layers,
 actual caller claims, mask call, eta product and extra column remain in order.
 This is a conditional source bridge, not a security-oracle identification. -/
-def withTerminal
+def withTerminal [ExternalFuns]
   (terminal : Terminal)
   (self : host_semantic.SemanticOracle)
   (point : Array aspis_core.field.QM31 10#usize) :
@@ -71,10 +71,8 @@ theorem selected_callback (ops : ExternalFuns) (terminal : Terminal)
   cases cf with
   | Break residual => rfl
   | Continue claims =>
-    change (do
-      let r1 ← ops.op227 self.«public» claims point self.challenges
-      _) = _
-    rw [op227 claims]
+    simp only [aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31,
+      op227 claims]
 
 #print axioms selected_callback
 end R1Z.PV_RunJoin_OracleBridge38
