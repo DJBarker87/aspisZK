@@ -2,6 +2,580 @@
   "translator_source_sha256": "97f4783426216bb7e4f68bcc74b3f6484737f7a96123285aed9e884cc79cd62f",
   "modules": [
     {
+      "module": "R1Z.PV_RJDec_Parser00",
+      "source_function": "pool_v1.pair_forest_terminal.transition_kind",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "3c93ce45ddc6e9719efe10e936587e0c59f76f4672183dc64ee39af39ab6652d",
+      "calls": [
+        {
+          "label": "1#u8",
+          "expression": "1#u8 + 0#u8"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .U8 i)"
+        },
+        {
+          "label": "2#u8",
+          "expression": "2#u8 + 0#u8"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .U8 i2)"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser01",
+      "source_function": "pool_v1.payment_relation.decode_common",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "be1edb50bd359009004c2f70cfc0729cd03019f71044f45f1be8f5c28fb5b678",
+      "calls": [
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ASSET_ID_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.POOL_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r1"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r2"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 8#usize core.marker.CopyU8) r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U64.from_le_bytes a3)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.NULLIFIER_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s4"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r4"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "expression": "atomic_statement.decode_digest_canonical a4"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r5 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.NULLIFIER_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ASSET_ID_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s5"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r7"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "expression": "atomic_statement.decode_digest_canonical a5"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r8 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "expression": "pool_v1.payment_relation.validate_common { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val, nullifier := val1, asset_id := asset }"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser02",
+      "source_function": "pool_v1.payment_relation.require_header",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "e3ec00b51d1ae599f28bbc74ccb62649721cc751831b45fa98bb34fa2ae24300",
+      "calls": [
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) bytes { \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) magic { start := 0#usize, \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 4#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 5#usize"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .U8 kind1)"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 6#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 7#usize"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser03",
+      "source_function": "atomic_statement.decode_digest_canonical",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "8edbbe7441fa426bbb10d61433700c163ecf350ad7aeb76296d4b6fd5fe3c839",
+      "calls": [
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 0#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 1#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 2#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 3#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i, i1, i2, i3 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 4#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 5#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 6#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 7#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i4, i5, i6, i7 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o1 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 8#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 9#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 10#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 11#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i8, i9, i10, i11 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o2 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 12#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 13#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 14#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 15#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i12, i13, i14, i15 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o3 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 16#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 17#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 18#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 19#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i16, i17, i18, i19 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o4 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 20#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 21#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 22#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 23#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i20, i21, i22, i23 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o5 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 24#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 25#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 26#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 27#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i24, i25, i26, i27 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o6 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 28#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 29#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 30#usize"
+        },
+        {
+          "label": "Array.index_usize",
+          "expression": "Array.index_usize bytes 31#usize"
+        },
+        {
+          "label": "aspis_core.field.M31.from_le_bytes",
+          "expression": "aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i28, i29, i30, i31 ])"
+        },
+        {
+          "label": "core.option.Option.ok_or",
+          "expression": "core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r7"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser04",
+      "source_function": "pool_v1.payment_relation.validate_common",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "74682f2bcc848ce81d2f8af4f3897bbe82b72c977f49be2dab63821f84a2c0d4",
+      "calls": [
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 common.pool a"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 common.deployment_domain a1"
+        },
+        {
+          "label": "pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY",
+          "expression": "pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical common.anchor_root"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical common.nullifier"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser05",
+      "source_function": "pool_v1.pair_terminal.validate_verified_afterstate",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "ebb497d18fb16dae839369b99061df6336296d5caefd980419a62450396464e0",
+      "calls": [
+        {
+          "label": "pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY",
+          "expression": "pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.digest_is_canonical",
+          "expression": "pool_v1.pair_tree_profile.digest_is_canonical afterstate.next_root"
+        },
+        {
+          "label": "pool_v1.pair_terminal.validate_verified_afterstate_loop",
+          "expression": "pool_v1.pair_terminal.validate_verified_afterstate_loop afterstate.next_frontier 0#usize"
+        }
+      ]
+    },
+    {
       "module": "R1Z.PV_RJDec_Parser06",
       "source_function": "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
       "source_pin": {
@@ -95,6 +669,169 @@
         {
           "label": "core.result.Result.map_err",
           "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransitionConstructor)"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser09",
+      "source_function": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "6b115bd37a0c224d57beaf356cfcffbcf73ce04746b419a35c6bcfed930b43d4",
+      "calls": [
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.HISTORICAL_ANCHOR_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.LATE_STATEMENT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "expression": "atomic_statement.decode_digest_canonical val"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairForestTerminalFormatErrorV1 r2 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.LATE_STATEMENT_OFFSET, \u00abend\u00bb := i }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1",
+          "expression": "pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1 s1"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.MASTER_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.CHECKPOINT_ACCOUNT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_2.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r5 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.CHECKPOINT_ACCOUNT_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.SELECTED_LANE_ACCOUNT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_3.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r7 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.SELECTED_LANE_ACCOUNT_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.CHECKPOINT_SEQUENCE_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s4"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r9 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 7#usize"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.CHECKPOINT_SEQUENCE_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.HISTORICAL_ANCHOR_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s5"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_5.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r11 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r12"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U64.from_le_bytes val6)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
         }
       ]
     },
@@ -222,6 +959,53 @@
         {
           "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
           "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser11",
+      "source_function": "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "140da4fb98011ba14678b5e5c8ece83446a751b3d37383a7c89bc61bb81339db",
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.withdrawal_common",
+          "expression": "pool_v1.payment_relation.withdrawal_common public1"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "expression": "pool_v1.payment_relation.validate_common cpv"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "spend.VALUE_LIMIT",
+          "expression": "spend.VALUE_LIMIT"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 public1.destination_token_account a"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.change_commitment"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
         }
       ]
     },
@@ -992,6 +1776,45 @@
         {
           "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
           "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser14",
+      "source_function": "pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "1f0e5b46e36d990b1e199dbbc33ec56f38f38e0b61192518bf0b9b6855fc07fa",
+      "calls": [
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.pool a"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.deployment_domain a1"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY",
+          "expression": "pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.digest_is_canonical",
+          "expression": "pool_v1.pair_tree_profile.digest_is_canonical snapshot.current_root"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop",
+          "expression": "pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop snapshot.frontier 0#usize"
         }
       ]
     },
@@ -1927,61 +2750,572 @@
           "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
         }
       ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser18",
+      "source_function": "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "44b0bda0806cb1ea3be836768c682c414227865a5fe42c0739e8dedc6e93a2c2",
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.transfer_common",
+          "expression": "pool_v1.payment_relation.transfer_common public1"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "expression": "pool_v1.payment_relation.validate_common cpv"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.recipient_commitment"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.change_commitment"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser19",
+      "source_function": "pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "e93f2a50e755e82f218c62f9cccbf706437b64bf1a26752a706d0e63ef3f8971",
+      "calls": [
+        {
+          "label": "pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES",
+          "expression": "pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes { \u00abend\u00bb := 8#usize }"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC { start := 0#usize, \u00abend\u00bb := 8#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 8#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 9#usize"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 10#usize, \u00abend\u00bb := 12#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 2#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 2#usize core.marker.CopyU8) r"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U16.from_le_bytes a)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i4)"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 12#usize, \u00abend\u00bb := 16#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r1"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a1)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i6)"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 16#usize, \u00abend\u00bb := 20#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s4"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r2"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a2)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i8)"
+        },
+        {
+          "label": "pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES",
+          "expression": "pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 20#usize, \u00abend\u00bb := 24#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s5"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a3)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i11)"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 24#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 25#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 26#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 27#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 28#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 29#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 30#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 31#usize"
+        },
+        {
+          "label": "32#usize",
+          "expression": "32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 32#usize, \u00abend\u00bb := i21 }"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1",
+          "expression": "pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1 s6"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i21 }"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
+          "expression": "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1 s7"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (U64.checked_add val.next_pair_index 1#u64)"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) o (some val1.next_pair_index)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser20",
+      "source_function": "pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "157f86cdfe9e1b03e342c0c7194c96728a519c3240c68c3f66efab20ca1bc74f",
+      "calls": [
+        {
+          "label": "pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES",
+          "expression": "pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes { \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC { start := 0#usize, \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 4#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 5#usize"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.transition_kind",
+          "expression": "pool_v1.pair_forest_terminal.transition_kind i3"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 6#usize"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+          "expression": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1 bytes"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i5 }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1",
+          "expression": "pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1 val1 s2"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+          "expression": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 val2"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i5 }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1",
+          "expression": "pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1 val1 s2"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+          "expression": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 val2"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_Parser21",
+      "source_function": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+      "source_pin": {
+        "tracked_conflicts": [],
+        "authority": "evidence/envj-rebuild-20261026/EJR_final-inventory.json",
+        "path": "docs/research/100bit-spend-path-20261013/evidence/actual-echeck-extraction-20261016/source-kit/option-ok-or-model/TerminalDecoder-Funs.lean",
+        "git_blob": "01663199c3018ddf046e9967aef9d2a43f4c7ffe",
+        "sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+        "imports": [
+          "Aeneas",
+          "AspisR1TerminalDecoder.Types",
+          "AspisR1TerminalDecoder.FunsExternal"
+        ]
+      },
+      "body_sha256": "568ad926f520475661447e1ea44bd4bf7e35d162016f9c84b21b9805949993cf",
+      "calls": [
+        {
+          "label": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common",
+          "expression": "pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common statement"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 common.master_account a"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 common.checkpoint_account a1"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 common.selected_lane_account a2"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.convert.num.FromUsizeU8.from common.output_lane)"
+        },
+        {
+          "label": "pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1",
+          "expression": "pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 public1"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.statement_public_common",
+          "expression": "pool_v1.pair_forest_terminal.statement_public_common statement"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool common.master_account"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment common.lane_transition.live_snapshot.deployment_domain"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 common.lane_transition.live_snapshot.pool common.master_account"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor common.historical_global_anchor"
+        },
+        {
+          "label": "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1",
+          "expression": "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 r2 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (Array.to_slice_mut late_bytes)"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1",
+          "expression": "pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 common.lane_transition s"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 r4 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1",
+          "expression": "pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 public1"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1 r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.statement_public_common",
+          "expression": "pool_v1.pair_forest_terminal.statement_public_common statement"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 pool common.master_account"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 deployment common.lane_transition.live_snapshot.deployment_domain"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 common.lane_transition.live_snapshot.pool common.master_account"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.ne",
+          "expression": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor common.historical_global_anchor"
+        },
+        {
+          "label": "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1",
+          "expression": "pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 nullifier"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1 r2 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (Array.to_slice_mut late_bytes)"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1",
+          "expression": "pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 common.lane_transition s"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 r4 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
     }
   ],
-  "unsupported": [
-    {
-      "function": "pool_v1.pair_forest_terminal.transition_kind",
-      "error": "AssertionError(['    let i2 \u2190 2#u8 + 0#u8', '       let i3 \u2190 lift (UScalar.cast .U8 i2)', '       if byte = i3', '       then', '         ok (core.result.Result.Ok pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal)', '       else', '         ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind)'])"
-    },
-    {
-      "function": "pool_v1.payment_relation.decode_common",
-      "error": "AssertionError(['        let r10 \u2190 pool_v1.payment_relation.validate_common { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val, nullifier := val1, asset_id := asset }', '                                                           let cf2 \u2190 core.result.Result.Insts.CoreOpsTry.branch r10', '                                                           match cf2 with', '                                                           | core.ops.control_flow.ControlFlow.Continue _ =>', '                                                             ok (core.result.Result.Ok { pool := a1, deployment_domain := a2, anchor_sequence := i, anchor_root := val, nullifier := val1, asset_id := asset })', '                                                           | core.ops.control_flow.ControlFlow.Break residual =>', '                                                             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual'])"
-    },
-    {
-      "function": "pool_v1.payment_relation.require_header",
-      "error": "AssertionError(['    let i \u2190 Array.index_usize bytes 4#usize', '       if i != pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_VERSION', '       then', '         ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongVersion)', '       else', '         let i1 \u2190 Array.index_usize bytes 5#usize', '            let kind1 := read_discriminant kind', '            let i2 \u2190 lift (UScalar.cast .U8 kind1)', '            if i1 != i2', '            then', '              ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongTransitionKind)', '            else', '              let i3 \u2190 Array.index_usize bytes 6#usize', '                 if i3 != pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION', '                 then', '                   ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.WrongDigestEncoding)', '                 else', '                   let i4 \u2190 Array.index_usize bytes 7#usize', '                      if i4 != 0#u8', '                      then', '                        ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonZeroReserved)', '                      else', '                        ok (core.result.Result.Ok ())'])"
-    },
-    {
-      "function": "atomic_statement.decode_digest_canonical",
-      "error": "AssertionError(['                let i28 \u2190 Array.index_usize bytes 28#usize', '                                                                   let i29 \u2190 Array.index_usize bytes 29#usize', '                                                                   let i30 \u2190 Array.index_usize bytes 30#usize', '                                                                   let i31 \u2190 Array.index_usize bytes 31#usize', '                                                                   let o7 \u2190 aspis_core.field.M31.from_le_bytes (Array.make 4#usize [ i28, i29, i30, i31 ])', '                                                                   let r7 \u2190 core.option.Option.ok_or o7 atomic_statement.AtomicStatementError.NonCanonicalDigest', '                                                                   let cf7 \u2190 core.result.Result.Insts.CoreOpsTry.branch r7', '                                                                   match cf7 with', '                                                                   | core.ops.control_flow.ControlFlow.Continue val7 =>', '                                                                     ok (core.result.Result.Ok (Array.make 8#usize [ val, val1, val2, val3, val4, val5, val6, val7 ]))', '                                                                   | core.ops.control_flow.ControlFlow.Break residual =>', '                                                                     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Array aspis_core.field.M31 8#usize) (core.convert.FromSame atomic_statement.AtomicStatementError) residual'])"
-    },
-    {
-      "function": "pool_v1.payment_relation.validate_common",
-      "error": "AssertionError(['      let i \u2190 pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY', '         if common.anchor_sequence > i', '         then', '           ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidAnchorSequence)', '         else', '           let b2 \u2190 pool_v1.payment_relation.digest_is_canonical common.anchor_root', '              if b2', '              then', '                let b3 \u2190 pool_v1.payment_relation.digest_is_canonical common.nullifier', '                   if b3', '                   then', '                     let i1 := common.asset_id', '                        if i1 >= aspis_core.field.P', '                        then', '                          ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId)', '                        else', '                          ok (core.result.Result.Ok ())', '                   else', '                     ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)', '              else', '                ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)'])"
-    },
-    {
-      "function": "pool_v1.pair_terminal.validate_verified_afterstate",
-      "error": "AssertionError(['    let i \u2190 pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY', '       if afterstate.next_pair_index > i', '       then', '         ok (core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)', '       else', '         let b \u2190 pool_v1.pair_tree_profile.digest_is_canonical afterstate.next_root', '            if b', '            then', '              pool_v1.pair_terminal.validate_verified_afterstate_loop afterstate.next_frontier 0#usize', '            else', '              ok (core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate)'])"
-    },
-    {
-      "function": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
-      "error": "AssertionError(['                let i2 \u2190 lift (core.num.U64.from_le_bytes val6)', '                                                                   ok (core.result.Result.Ok { master_account := val3, checkpoint_account := val4, selected_lane_account := val5, output_lane := i1, checkpoint_sequence := i2, historical_global_anchor := val1, lane_transition := val2 })'])"
-    },
-    {
-      "function": "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
-      "error": "AssertionError(('if public1.amount = 0#u32', ['                                                                     ok (core.result.Result.Ok ())', '                                                                   else', '                                                                     ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)']))"
-    },
-    {
-      "function": "pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1",
-      "error": "AssertionError(['    let a1 := Array.repeat 32#usize 0#u8', '       let b1 \u2190 core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.deployment_domain a1', '       if b1', '       then', '         ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)', '       else', '         if snapshot.sequence != snapshot.next_pair_index', '            then', '              ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch)', '            else', '              let i \u2190 pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY', '                 if snapshot.next_pair_index >= i', '                 then', '                   ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.TreeFull)', '                 else', '                   let b2 \u2190 pool_v1.pair_tree_profile.digest_is_canonical snapshot.current_root', '                      if b2', '                      then', '                        pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop snapshot.frontier 0#usize', '                      else', '                        ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)'])"
-    },
-    {
-      "function": "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
-      "error": "AssertionError(['    let b \u2190 pool_v1.payment_relation.digest_is_canonical public1.recipient_commitment', '                                                    if b', '                                                    then', '                                                      let b1 \u2190 pool_v1.payment_relation.digest_is_canonical public1.change_commitment', '                                                         if b1', '                                                         then', '                                                           ok (core.result.Result.Ok ())', '                                                         else', '                                                           ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)', '                                                    else', '                                                      ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)'])"
-    },
-    {
-      "function": "pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
-      "error": "AssertionError(['                                      let o \u2190 lift (U64.checked_add val.next_pair_index 1#u64)', '                                                                                         let b1 \u2190 core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) o (some val1.next_pair_index)', '                                                                                         if b1', '                                                                                         then', '                                                                                           ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch)', '                                                                                         else', '                                                                                           ok (core.result.Result.Ok { live_snapshot := val, candidate_afterstate := val1 })'])"
-    },
-    {
-      "function": "pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1",
-      "error": "AssertionError(['                  let r3 \u2190 pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 val2', '                                                                     let cf3 \u2190 core.result.Result.Insts.CoreOpsTry.branch r3', '                                                                     match cf3 with', '                                                                     | core.ops.control_flow.ControlFlow.Continue _ =>', '                                                                       ok (core.result.Result.Ok val2)', '                                                                     | core.ops.control_flow.ControlFlow.Break residual =>', '                                                                       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual'])"
-    },
-    {
-      "function": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
-      "error": "AssertionError(['                            let late_bytes := Array.repeat 1520#usize 0#u8', '                               let (s, _) \u2190 lift (Array.to_slice_mut late_bytes)', '                               let (r4, _) \u2190 pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 common.lane_transition s', '                               let r5 \u2190 core.result.Result.map_err pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1 r4 ()', '                               let cf2 \u2190 core.result.Result.Insts.CoreOpsTry.branch r5', '                               match cf2 with', '                               | core.ops.control_flow.ControlFlow.Continue _ =>', '                                 ok (core.result.Result.Ok ())', '                               | core.ops.control_flow.ControlFlow.Break residual =>', '                                 core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual'])"
-    }
-  ],
+  "unsupported": [],
   "evidence_class": "complete Result source reification; native primitive/helper and complete ROMView associations remain obligations"
 }

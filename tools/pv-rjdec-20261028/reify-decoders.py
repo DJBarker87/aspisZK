@@ -8,6 +8,24 @@ plan=json.loads((E/'build-plan.json').read_text());pin=plan['modules']['AspisR1T
 old=subprocess.check_output(['git','show','HEAD:tools/pv-world-20261028/reify-recursive.py'],text=True)
 nodes=[n for n in ast.parse(old).body if isinstance(n,(ast.FunctionDef,ast.ClassDef))]
 ns=dict(re=re,json=json,s=s);exec(compile(ast.Module(body=nodes,type_ignores=[]),'pv-world-pinned-translator','exec'),ns)
+# Preserve the emitted RHS column when a then/else/match arm starts inline.
+# Later statements of that arm are aligned to that column by Lean's printer.
+def normalize_columns(body):
+ lines=body.splitlines();out=[];i=0
+ while i<len(lines):
+  line=lines[i];i+=1
+  if not line.strip():continue
+  pad=' '*ns['indent'](line);t=line.strip()
+  if t=='|':t+=' '+lines[i].strip();i+=1
+  if t.startswith('| '):
+   while '=>' not in t:t+=' '+lines[i].strip();i+=1
+   pattern,rhs=t.split('=>',1);out.append(pad+pattern.strip()+' =>')
+   if rhs.strip():out.append(' '*(len(pad)+t.index('=>')+3)+rhs.strip())
+  elif t.startswith(('then ','else ')):
+   word,rest=t.split(' ',1);out += [pad+word,' '*(len(pad)+len(word)+1)+rest]
+  else:out.append(line)
+ return out
+ns['normalize']=normalize_columns
 names=re.findall(r'^def (\S+).*',s,re.M);selected=[n for n in names if not any(x in n for x in ['.closure','.Insts.','_loop']) and any(x in n for x in ['decode_','validate_','transition_kind','require_header'])]
 selected.sort(key=lambda n:(n!='pool_v1.pair_forest_terminal.transition_kind',len(n)))
 out=[];fail=[]

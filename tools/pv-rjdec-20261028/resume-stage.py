@@ -12,7 +12,7 @@ def visit(m):
  path=matches[0];b=read(path);imports=re.findall(r'^(?:public )?import\s+(\S+)',b.decode(),re.M)
  pin=dict(authority='h5 own git-tracked HEAD',path=path,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),sha256=hashlib.sha256(b).hexdigest(),imports=imports,revision=rev,tracked_conflicts=[])
  # New RDCD/RJDec prefixes are not historic EJR/freeze modules.
- assert m.startswith(('R1Z.PV_RDCD_','R1Z.PV_RJDec_'))
+ assert m.startswith(('R1Z.PV_RDCD_','R1Z.PV_RJDec_','R1Z.PV_W_'))
  data[m]=(pin,b.decode())
  for d in imports:visit(d)
  order.append(m)
