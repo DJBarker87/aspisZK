@@ -56,7 +56,7 @@ theorem compiler_pair_canonical [ExternalLinear] [Records]
     | Ok d => exact leaf_canonical input.pair.pair_leaf d hl
     | Err e =>
       pv_peel h with mapped hmap
-      unfold core.result.Result.map_err at hmap
+      unfold R1Z.BuilderForestStd.mapErr at hmap
       pv_peel hmap with mappedError he
       cases Result.ok.inj hmap
       pv_peel h with flow hflow
