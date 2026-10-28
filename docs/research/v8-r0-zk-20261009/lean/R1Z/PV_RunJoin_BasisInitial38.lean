@@ -19,8 +19,9 @@ theorem source (ops : ExternalFuns) (i : Usize) (hi : i.val<28) :
     (Array.update (Array.repeat 28#usize AspisR1ProducerRelease47.field.M31.ZERO)
       0#usize AspisR1ProducerRelease47.field.M31.ONE))
   funext basis
-  exact PV_RunJoin_BasisFactors38.source ops 28 i 0#usize 0#usize 28#u8 hi rfl rfl
-    (by simp [ProverCommitInterpolationSchedule48.degree]) basis _
+  have cz : UScalar.cast .U8 (0#usize)=0#u8 := by scalar_tac
+  simpa only [cz] using PV_RunJoin_BasisFactors38.source ops 28 i 0#usize 0#usize 28#u8 hi rfl rfl
+    (by simp [ProverCommitInterpolationSchedule48.degree]) basis AspisR1ProducerRelease47.field.M31.ONE
 
 /-- All 27 factors of the actual emitted basis helper yield a canonical,
 nonzero denominator. No concrete denominator or large array is reduced. -/
