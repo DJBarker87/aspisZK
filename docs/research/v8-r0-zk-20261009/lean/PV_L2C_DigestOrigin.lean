@@ -23,7 +23,7 @@ theorem canonical (d : Array U32 8#usize) (h : Origin d) : Canon8 d := by
   | decoded bytes returned =>
     intro j hj
     apply PV_L2C_DigestRange.digest_success bytes d returned
-    have hb : j < d.val.length := by simpa only [d.property] using hj
+    have hb : j < d.val.length := by simpa only [d.property,UScalar.ofNatCore_val_eq] using hj
     rw [getElem!_pos d.val j hb]
     exact List.getElem_mem hb
   | generated prior returned =>
