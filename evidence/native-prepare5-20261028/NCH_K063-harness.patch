@@ -1,0 +1,301 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCH_candidate.rs
+@@ -0,0 +1,298 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NCH_live<const N:usize>()->Vec<u8>{
++ assert!(N<=256);let mut storage=Box::new([core::mem::MaybeUninit::<u8>::uninit();256]);let mut j=0;while j<N{storage[j].write(kani::any());j+=1;}let p=Box::into_raw(storage).cast::<u8>();unsafe{Vec::from_raw_parts(p,N,256)}
++}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_first(){let mut v=NCH_live::<32>();let ptr=v.as_ptr();let j:usize=kani::any();kani::assume(j<32);let old=v[j];let value:u8=kani::any();v.reserve(224);v.push(value);assert_eq!(v.len(),33);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[32],value);assert_eq!(v[j],old);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_first_wrong(){let mut v=NCH_live::<32>();v.reserve(224);v.push(1);assert_eq!(v[32],0);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_last(){let mut v=NCH_live::<255>();let ptr=v.as_ptr();let j:usize=kani::any();kani::assume(j<255);let old=v[j];let value:u8=kani::any();v.reserve(1);v.push(value);assert_eq!(v.len(),256);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[255],value);assert_eq!(v[j],old);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_last_wrong(){let mut v=NCH_live::<255>();v.reserve(1);v.push(1);assert_eq!(v[255],0);}
++fn NCH_full_init(n:usize)->Vec<u8>{assert!(n<=256);let b=Box::new(kani::any::<[u8;256]>());unsafe{Vec::from_raw_parts(Box::into_raw(b).cast::<u8>(),n,256)}}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_reserve_metadata(){let n:usize=kani::any();let remaining:usize=kani::any();kani::assume(n<=256&&remaining<=256-n);let mut v=NCH_full_init(n);let ptr=v.as_ptr();v.reserve(remaining);assert_eq!(v.len(),n);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_reserve_metadata_wrong(){let mut v=NCH_full_init(32);v.reserve(224);assert_eq!(v.capacity(),512);}
++#[kani::proof]#[kani::unwind(3)]
++fn NCH_constructor_capacity(){let v=Vec::<u8>::with_capacity(32+224);assert_eq!(v.len(),0);assert_eq!(v.capacity(),256);}
++#[kani::proof]#[kani::unwind(3)]
++fn NCH_constructor_capacity_wrong(){let v=Vec::<u8>::with_capacity(32+224);assert_eq!(v.capacity(),0);}
++
++fn NCH_static_prestate(n:usize)->Vec<u8>{assert!(n<=256);let mut storage=Box::new([core::mem::MaybeUninit::<u8>::uninit();256]);
++ if n>0 {storage[0].write(kani::any());}
++ if n>1 {storage[1].write(kani::any());}
++ if n>2 {storage[2].write(kani::any());}
++ if n>3 {storage[3].write(kani::any());}
++ if n>4 {storage[4].write(kani::any());}
++ if n>5 {storage[5].write(kani::any());}
++ if n>6 {storage[6].write(kani::any());}
++ if n>7 {storage[7].write(kani::any());}
++ if n>8 {storage[8].write(kani::any());}
++ if n>9 {storage[9].write(kani::any());}
++ if n>10 {storage[10].write(kani::any());}
++ if n>11 {storage[11].write(kani::any());}
++ if n>12 {storage[12].write(kani::any());}
++ if n>13 {storage[13].write(kani::any());}
++ if n>14 {storage[14].write(kani::any());}
++ if n>15 {storage[15].write(kani::any());}
++ if n>16 {storage[16].write(kani::any());}
++ if n>17 {storage[17].write(kani::any());}
++ if n>18 {storage[18].write(kani::any());}
++ if n>19 {storage[19].write(kani::any());}
++ if n>20 {storage[20].write(kani::any());}
++ if n>21 {storage[21].write(kani::any());}
++ if n>22 {storage[22].write(kani::any());}
++ if n>23 {storage[23].write(kani::any());}
++ if n>24 {storage[24].write(kani::any());}
++ if n>25 {storage[25].write(kani::any());}
++ if n>26 {storage[26].write(kani::any());}
++ if n>27 {storage[27].write(kani::any());}
++ if n>28 {storage[28].write(kani::any());}
++ if n>29 {storage[29].write(kani::any());}
++ if n>30 {storage[30].write(kani::any());}
++ if n>31 {storage[31].write(kani::any());}
++ if n>32 {storage[32].write(kani::any());}
++ if n>33 {storage[33].write(kani::any());}
++ if n>34 {storage[34].write(kani::any());}
++ if n>35 {storage[35].write(kani::any());}
++ if n>36 {storage[36].write(kani::any());}
++ if n>37 {storage[37].write(kani::any());}
++ if n>38 {storage[38].write(kani::any());}
++ if n>39 {storage[39].write(kani::any());}
++ if n>40 {storage[40].write(kani::any());}
++ if n>41 {storage[41].write(kani::any());}
++ if n>42 {storage[42].write(kani::any());}
++ if n>43 {storage[43].write(kani::any());}
++ if n>44 {storage[44].write(kani::any());}
++ if n>45 {storage[45].write(kani::any());}
++ if n>46 {storage[46].write(kani::any());}
++ if n>47 {storage[47].write(kani::any());}
++ if n>48 {storage[48].write(kani::any());}
++ if n>49 {storage[49].write(kani::any());}
++ if n>50 {storage[50].write(kani::any());}
++ if n>51 {storage[51].write(kani::any());}
++ if n>52 {storage[52].write(kani::any());}
++ if n>53 {storage[53].write(kani::any());}
++ if n>54 {storage[54].write(kani::any());}
++ if n>55 {storage[55].write(kani::any());}
++ if n>56 {storage[56].write(kani::any());}
++ if n>57 {storage[57].write(kani::any());}
++ if n>58 {storage[58].write(kani::any());}
++ if n>59 {storage[59].write(kani::any());}
++ if n>60 {storage[60].write(kani::any());}
++ if n>61 {storage[61].write(kani::any());}
++ if n>62 {storage[62].write(kani::any());}
++ if n>63 {storage[63].write(kani::any());}
++ if n>64 {storage[64].write(kani::any());}
++ if n>65 {storage[65].write(kani::any());}
++ if n>66 {storage[66].write(kani::any());}
++ if n>67 {storage[67].write(kani::any());}
++ if n>68 {storage[68].write(kani::any());}
++ if n>69 {storage[69].write(kani::any());}
++ if n>70 {storage[70].write(kani::any());}
++ if n>71 {storage[71].write(kani::any());}
++ if n>72 {storage[72].write(kani::any());}
++ if n>73 {storage[73].write(kani::any());}
++ if n>74 {storage[74].write(kani::any());}
++ if n>75 {storage[75].write(kani::any());}
++ if n>76 {storage[76].write(kani::any());}
++ if n>77 {storage[77].write(kani::any());}
++ if n>78 {storage[78].write(kani::any());}
++ if n>79 {storage[79].write(kani::any());}
++ if n>80 {storage[80].write(kani::any());}
++ if n>81 {storage[81].write(kani::any());}
++ if n>82 {storage[82].write(kani::any());}
++ if n>83 {storage[83].write(kani::any());}
++ if n>84 {storage[84].write(kani::any());}
++ if n>85 {storage[85].write(kani::any());}
++ if n>86 {storage[86].write(kani::any());}
++ if n>87 {storage[87].write(kani::any());}
++ if n>88 {storage[88].write(kani::any());}
++ if n>89 {storage[89].write(kani::any());}
++ if n>90 {storage[90].write(kani::any());}
++ if n>91 {storage[91].write(kani::any());}
++ if n>92 {storage[92].write(kani::any());}
++ if n>93 {storage[93].write(kani::any());}
++ if n>94 {storage[94].write(kani::any());}
++ if n>95 {storage[95].write(kani::any());}
++ if n>96 {storage[96].write(kani::any());}
++ if n>97 {storage[97].write(kani::any());}
++ if n>98 {storage[98].write(kani::any());}
++ if n>99 {storage[99].write(kani::any());}
++ if n>100 {storage[100].write(kani::any());}
++ if n>101 {storage[101].write(kani::any());}
++ if n>102 {storage[102].write(kani::any());}
++ if n>103 {storage[103].write(kani::any());}
++ if n>104 {storage[104].write(kani::any());}
++ if n>105 {storage[105].write(kani::any());}
++ if n>106 {storage[106].write(kani::any());}
++ if n>107 {storage[107].write(kani::any());}
++ if n>108 {storage[108].write(kani::any());}
++ if n>109 {storage[109].write(kani::any());}
++ if n>110 {storage[110].write(kani::any());}
++ if n>111 {storage[111].write(kani::any());}
++ if n>112 {storage[112].write(kani::any());}
++ if n>113 {storage[113].write(kani::any());}
++ if n>114 {storage[114].write(kani::any());}
++ if n>115 {storage[115].write(kani::any());}
++ if n>116 {storage[116].write(kani::any());}
++ if n>117 {storage[117].write(kani::any());}
++ if n>118 {storage[118].write(kani::any());}
++ if n>119 {storage[119].write(kani::any());}
++ if n>120 {storage[120].write(kani::any());}
++ if n>121 {storage[121].write(kani::any());}
++ if n>122 {storage[122].write(kani::any());}
++ if n>123 {storage[123].write(kani::any());}
++ if n>124 {storage[124].write(kani::any());}
++ if n>125 {storage[125].write(kani::any());}
++ if n>126 {storage[126].write(kani::any());}
++ if n>127 {storage[127].write(kani::any());}
++ if n>128 {storage[128].write(kani::any());}
++ if n>129 {storage[129].write(kani::any());}
++ if n>130 {storage[130].write(kani::any());}
++ if n>131 {storage[131].write(kani::any());}
++ if n>132 {storage[132].write(kani::any());}
++ if n>133 {storage[133].write(kani::any());}
++ if n>134 {storage[134].write(kani::any());}
++ if n>135 {storage[135].write(kani::any());}
++ if n>136 {storage[136].write(kani::any());}
++ if n>137 {storage[137].write(kani::any());}
++ if n>138 {storage[138].write(kani::any());}
++ if n>139 {storage[139].write(kani::any());}
++ if n>140 {storage[140].write(kani::any());}
++ if n>141 {storage[141].write(kani::any());}
++ if n>142 {storage[142].write(kani::any());}
++ if n>143 {storage[143].write(kani::any());}
++ if n>144 {storage[144].write(kani::any());}
++ if n>145 {storage[145].write(kani::any());}
++ if n>146 {storage[146].write(kani::any());}
++ if n>147 {storage[147].write(kani::any());}
++ if n>148 {storage[148].write(kani::any());}
++ if n>149 {storage[149].write(kani::any());}
++ if n>150 {storage[150].write(kani::any());}
++ if n>151 {storage[151].write(kani::any());}
++ if n>152 {storage[152].write(kani::any());}
++ if n>153 {storage[153].write(kani::any());}
++ if n>154 {storage[154].write(kani::any());}
++ if n>155 {storage[155].write(kani::any());}
++ if n>156 {storage[156].write(kani::any());}
++ if n>157 {storage[157].write(kani::any());}
++ if n>158 {storage[158].write(kani::any());}
++ if n>159 {storage[159].write(kani::any());}
++ if n>160 {storage[160].write(kani::any());}
++ if n>161 {storage[161].write(kani::any());}
++ if n>162 {storage[162].write(kani::any());}
++ if n>163 {storage[163].write(kani::any());}
++ if n>164 {storage[164].write(kani::any());}
++ if n>165 {storage[165].write(kani::any());}
++ if n>166 {storage[166].write(kani::any());}
++ if n>167 {storage[167].write(kani::any());}
++ if n>168 {storage[168].write(kani::any());}
++ if n>169 {storage[169].write(kani::any());}
++ if n>170 {storage[170].write(kani::any());}
++ if n>171 {storage[171].write(kani::any());}
++ if n>172 {storage[172].write(kani::any());}
++ if n>173 {storage[173].write(kani::any());}
++ if n>174 {storage[174].write(kani::any());}
++ if n>175 {storage[175].write(kani::any());}
++ if n>176 {storage[176].write(kani::any());}
++ if n>177 {storage[177].write(kani::any());}
++ if n>178 {storage[178].write(kani::any());}
++ if n>179 {storage[179].write(kani::any());}
++ if n>180 {storage[180].write(kani::any());}
++ if n>181 {storage[181].write(kani::any());}
++ if n>182 {storage[182].write(kani::any());}
++ if n>183 {storage[183].write(kani::any());}
++ if n>184 {storage[184].write(kani::any());}
++ if n>185 {storage[185].write(kani::any());}
++ if n>186 {storage[186].write(kani::any());}
++ if n>187 {storage[187].write(kani::any());}
++ if n>188 {storage[188].write(kani::any());}
++ if n>189 {storage[189].write(kani::any());}
++ if n>190 {storage[190].write(kani::any());}
++ if n>191 {storage[191].write(kani::any());}
++ if n>192 {storage[192].write(kani::any());}
++ if n>193 {storage[193].write(kani::any());}
++ if n>194 {storage[194].write(kani::any());}
++ if n>195 {storage[195].write(kani::any());}
++ if n>196 {storage[196].write(kani::any());}
++ if n>197 {storage[197].write(kani::any());}
++ if n>198 {storage[198].write(kani::any());}
++ if n>199 {storage[199].write(kani::any());}
++ if n>200 {storage[200].write(kani::any());}
++ if n>201 {storage[201].write(kani::any());}
++ if n>202 {storage[202].write(kani::any());}
++ if n>203 {storage[203].write(kani::any());}
++ if n>204 {storage[204].write(kani::any());}
++ if n>205 {storage[205].write(kani::any());}
++ if n>206 {storage[206].write(kani::any());}
++ if n>207 {storage[207].write(kani::any());}
++ if n>208 {storage[208].write(kani::any());}
++ if n>209 {storage[209].write(kani::any());}
++ if n>210 {storage[210].write(kani::any());}
++ if n>211 {storage[211].write(kani::any());}
++ if n>212 {storage[212].write(kani::any());}
++ if n>213 {storage[213].write(kani::any());}
++ if n>214 {storage[214].write(kani::any());}
++ if n>215 {storage[215].write(kani::any());}
++ if n>216 {storage[216].write(kani::any());}
++ if n>217 {storage[217].write(kani::any());}
++ if n>218 {storage[218].write(kani::any());}
++ if n>219 {storage[219].write(kani::any());}
++ if n>220 {storage[220].write(kani::any());}
++ if n>221 {storage[221].write(kani::any());}
++ if n>222 {storage[222].write(kani::any());}
++ if n>223 {storage[223].write(kani::any());}
++ if n>224 {storage[224].write(kani::any());}
++ if n>225 {storage[225].write(kani::any());}
++ if n>226 {storage[226].write(kani::any());}
++ if n>227 {storage[227].write(kani::any());}
++ if n>228 {storage[228].write(kani::any());}
++ if n>229 {storage[229].write(kani::any());}
++ if n>230 {storage[230].write(kani::any());}
++ if n>231 {storage[231].write(kani::any());}
++ if n>232 {storage[232].write(kani::any());}
++ if n>233 {storage[233].write(kani::any());}
++ if n>234 {storage[234].write(kani::any());}
++ if n>235 {storage[235].write(kani::any());}
++ if n>236 {storage[236].write(kani::any());}
++ if n>237 {storage[237].write(kani::any());}
++ if n>238 {storage[238].write(kani::any());}
++ if n>239 {storage[239].write(kani::any());}
++ if n>240 {storage[240].write(kani::any());}
++ if n>241 {storage[241].write(kani::any());}
++ if n>242 {storage[242].write(kani::any());}
++ if n>243 {storage[243].write(kani::any());}
++ if n>244 {storage[244].write(kani::any());}
++ if n>245 {storage[245].write(kani::any());}
++ if n>246 {storage[246].write(kani::any());}
++ if n>247 {storage[247].write(kani::any());}
++ if n>248 {storage[248].write(kani::any());}
++ if n>249 {storage[249].write(kani::any());}
++ if n>250 {storage[250].write(kani::any());}
++ if n>251 {storage[251].write(kani::any());}
++ if n>252 {storage[252].write(kani::any());}
++ if n>253 {storage[253].write(kani::any());}
++ if n>254 {storage[254].write(kani::any());}
++ if n>255 {storage[255].write(kani::any());}
++ let ptr=Box::into_raw(storage).cast::<u8>();unsafe{Vec::from_raw_parts(ptr,n,256)}
++}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_append_static_prestate(){let round:bool=kani::any();let i:usize=kani::any();let width=if round{224}else{32};kani::assume(i<width);let n=if round{32+i}else{i};let source:[u8;224]=kani::any();let mut v=NCH_static_prestate(n);let ptr=v.as_ptr();let k:usize=kani::any();kani::assume(k<=n);let old=if k<n{v[k]}else{0};v.reserve(width-i);v.push(source[i]);assert_eq!(v.len(),n+1);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[k],if k==n{source[i]}else{old});kani::cover!(round&&i==223,"last round iteration");kani::cover!(!round&&i==31,"last root iteration");}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_append_static_wrong(){let round:bool=kani::any();let i:usize=kani::any();let width=if round{224}else{32};kani::assume(i<width);let n=if round{32+i}else{i};let mut v=NCH_static_prestate(n);v.reserve(width-i);v.push(1);if round{assert_eq!(v[n],0,"round wrong appended byte");}else{assert_eq!(v[n],0,"root wrong appended byte");}}
++// Split K062's new-byte/metadata properties from its arbitrary-prefix frame.
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_append_values(){let round:bool=kani::any();let i:usize=kani::any();let width=if round{224}else{32};kani::assume(i<width);let n=if round{32+i}else{i};let source:[u8;224]=kani::any();let mut v=NCH_static_prestate(n);let ptr=v.as_ptr();v.reserve(width-i);v.push(source[i]);assert_eq!(v.len(),n+1);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[n],source[i]);kani::cover!(round&&i==223,"last round iteration");kani::cover!(!round&&i==31,"last root iteration");}

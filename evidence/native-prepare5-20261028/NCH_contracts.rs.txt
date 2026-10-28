@@ -1,0 +1,37 @@
+#[kani::requires(src.len()==32 && dst.len()==32 && j<32)]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| dst[j]==src[j])]
+fn NCH_copy32(src:&[u8],dst:&mut[u8],j:usize){dst.copy_from_slice(src);}
+#[kani::proof_for_contract(NCH_copy32)]#[kani::unwind(35)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCH_contract32(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let j:usize=kani::any();NCH_copy32(&src,&mut dst,j);}
+#[kani::requires(src.len()==32 && dst.len()==32 && j<32)]
+#[kani::modifies(dst)]
+#[kani::ensures(|_| dst[j]!=src[j])]
+fn NCH_invert32(src:&[u8],dst:&mut[u8],j:usize){dst.copy_from_slice(src);}
+#[kani::proof_for_contract(NCH_invert32)]#[kani::unwind(35)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCH_inverted32(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let j:usize=kani::any();NCH_invert32(&src,&mut dst,j);}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub_verified(NCH_copy32)]
+fn NCH_unimplied32(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();NCH_copy32(&src,&mut dst,0);assert_eq!(dst[31],src[31],"contract says only byte0");}
+#[kani::proof]#[kani::unwind(35)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCH_real32(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();NCH_copy32(&src,&mut dst,0);assert_eq!(dst[31],src[31]);}
+#[kani::requires(src.len()==32 && dst.len()==32 && j<32)]
+#[kani::modifies(&mut dst[..16])]
+#[kani::ensures(|_| dst[j]==src[j])]
+fn NCH_badframe32(src:&[u8],dst:&mut[u8],j:usize){dst.copy_from_slice(src);}
+#[kani::proof_for_contract(NCH_badframe32)]#[kani::unwind(35)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NCH_modifies32(){let src:[u8;32]=kani::any();let mut dst:[u8;32]=kani::any();let j:usize=kani::any();NCH_badframe32(&src,&mut dst,j);}
+#[kani::proof]#[kani::unwind(2)]
+#[kani::stub_verified(NCH_copy32)]
+fn NCH_root_frame_contract(){
+ let input:[u8;7015]=kani::any();let mut logical:[u8;14759]=kani::any();let j:usize=kani::any();kani::assume(j>=32&&j<14759);let old=logical[j];
+ NCH_copy32(&input[..32],&mut logical[..32],0);assert_eq!(logical[j],old);kani::cover!(j==14758,"same y1 suffix");
+}

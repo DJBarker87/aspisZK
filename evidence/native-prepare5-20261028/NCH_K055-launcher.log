@@ -1,0 +1,19 @@
+{"attempt": "NCH_K055", "exit_status": 1, "wall_seconds": 1.8682866230374202, "peak_rss_kib": "219436", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+get/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_core-243cad49f7d55dbe.rmeta --extern aspis_statement=/home/dombarker/project-offloads/codex-cx-native-prepare5-20261028/NCH_target/kani/x86_64-unknown-linux-gnu/debug/deps/libaspis_statement-819af74962c7279c.rmeta '-Cllvm-args=--reachability=harnesses --log-level=warn --assertion-reach-checks --enable-stubbing --harness verifier::candidate::NCH_candidate::NCH_first_unimplied --exact -Z unstable-options -Z function-contracts -Z stubbing' -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z 'crate-attr=feature(register_tool)' -Z 'crate-attr=register_tool(kanitool)' --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern 'noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib' -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers '--check-cfg=cfg(kani)' -Clinker=echo --kani-compiler -Cllvm-args=--check-version=0.67.0` (exit status: 101)
+error: Failed to compile `aspis_r1_cost_probe` due to an internal compiler error.: error: internal compiler error: Kani unexpectedly panicked at panicked at kani-compiler/src/kani_middle/reachability.rs:419:69:
+                                called `Result::unwrap()` on an `Err` value: Error("Failed to resolve `FnDef(DefId { id: 85, name: \"kani::Arbitrary::any\" })` with `GenericArgs([Type(Ty { id: 59, kind: RigidTy(Adt(AdtDef(DefId { id: 1216, name: \"alloc::vec::Vec\" }), GenericArgs([Type(Ty { id: 63, kind: RigidTy(Uint(U8)) }), Type(Ty { id: 84, kind: RigidTy(Adt(AdtDef(DefId { id: 1623, name: \"alloc::alloc::Global\" }), GenericArgs([]))) })]))) })])`").
+
+
+
+Running as unit: run-r7c63fcf4b22a44e28a7b00d8f4b134ce.scope; invocation ID: 8361dd41d9874166ba79679df81c57e6

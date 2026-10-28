@@ -1,0 +1,18 @@
+--- a/crates/aspis-r1-cost-probe/src/r1_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/r1_wire.rs
+@@ -848,3 +848,7 @@
+         finite(row,tail,value.wrapping_add(1),remaining.wrapping_sub(1))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NCH_wire.rs"]
++pub(crate) mod NCH_wire;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCH_wire.rs
+@@ -0,0 +1,5 @@
++use super::*;
++pub(crate) fn prefix<'a>(root:&'a[u8;32],records:[&'a[u8];27])->Prefix<'a>{Prefix{c1_root:root,records}}
++pub(crate) fn transcript<H:Digest32>(hash:H,state:[u8;32],next_row:u8)->SemanticTranscript<H>{SemanticTranscript{state,hash,next_row}}
++pub(crate) fn update<H:Digest32>(t:&mut SemanticTranscript<H>,state:[u8;32],next_row:u8){t.state=state;t.next_row=next_row;}
++pub(crate) fn into_hash<H:Digest32>(t:SemanticTranscript<H>)->H{t.hash}

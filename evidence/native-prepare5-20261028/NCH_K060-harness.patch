@@ -1,0 +1,31 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCH_candidate.rs
+@@ -0,0 +1,28 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++fn NCH_live<const N:usize>()->Vec<u8>{
++ assert!(N<=256);let mut storage=Box::new([core::mem::MaybeUninit::<u8>::uninit();256]);let mut j=0;while j<N{storage[j].write(kani::any());j+=1;}let p=Box::into_raw(storage).cast::<u8>();unsafe{Vec::from_raw_parts(p,N,256)}
++}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_first(){let mut v=NCH_live::<32>();let ptr=v.as_ptr();let j:usize=kani::any();kani::assume(j<32);let old=v[j];let value:u8=kani::any();v.reserve(224);v.push(value);assert_eq!(v.len(),33);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[32],value);assert_eq!(v[j],old);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_first_wrong(){let mut v=NCH_live::<32>();v.reserve(224);v.push(1);assert_eq!(v[32],0);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_last(){let mut v=NCH_live::<255>();let ptr=v.as_ptr();let j:usize=kani::any();kani::assume(j<255);let old=v[j];let value:u8=kani::any();v.reserve(1);v.push(value);assert_eq!(v.len(),256);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);assert_eq!(v[255],value);assert_eq!(v[j],old);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_round_last_wrong(){let mut v=NCH_live::<255>();v.reserve(1);v.push(1);assert_eq!(v[255],0);}
++fn NCH_full_init(n:usize)->Vec<u8>{assert!(n<=256);let b=Box::new(kani::any::<[u8;256]>());unsafe{Vec::from_raw_parts(Box::into_raw(b).cast::<u8>(),n,256)}}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_reserve_metadata(){let n:usize=kani::any();let remaining:usize=kani::any();kani::assume(n<=256&&remaining<=256-n);let mut v=NCH_full_init(n);let ptr=v.as_ptr();v.reserve(remaining);assert_eq!(v.len(),n);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),ptr);}
++#[kani::proof]#[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++fn NCH_reserve_metadata_wrong(){let mut v=NCH_full_init(32);v.reserve(224);assert_eq!(v.capacity(),512);}
++#[kani::proof]#[kani::unwind(3)]
++fn NCH_constructor_capacity(){let v=Vec::<u8>::with_capacity(32+224);assert_eq!(v.len(),0);assert_eq!(v.capacity(),256);}
++#[kani::proof]#[kani::unwind(3)]
++fn NCH_constructor_capacity_wrong(){let v=Vec::<u8>::with_capacity(32+224);assert_eq!(v.capacity(),0);}
