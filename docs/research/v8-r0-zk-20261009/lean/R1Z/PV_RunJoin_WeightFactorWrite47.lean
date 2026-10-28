@@ -28,7 +28,7 @@ theorem read_set (fs : Factors) (slot : Usize) (m : Matrix) (hs : slot.val<5) :
   rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by scalar_tac)]
   apply congrArg Result.ok
   change (fs.val.set slot.val m)[slot.val]'_=m
-  exact List.getElem_set_self (by rw [fs.property];exact hs)
+  exact List.getElem_set_self (by rw [List.length_set,fs.property];exact hs)
 #print axioms read_set
 
 theorem overwrite (fs : Factors) (slot : Usize) (m m1 : Matrix) :
