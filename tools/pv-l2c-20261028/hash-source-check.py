@@ -82,12 +82,16 @@ out={'revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=Tr
 receipt=E/'decoder-probe2/receipt.json'
 if receipt.exists():
     r=json.loads(receipt.read_text()); assert r['exit']==0
+    invocation=json.loads((E/'decoder-probe2-invocation.json').read_text())
     for name in ['main.rs','hash_reference.rs','domain_constants.rs']:
-        assert r['source_sha256'][name]==hashlib.sha256((D/name).read_bytes()).hexdigest(),name
+        executed=subprocess.check_output(['git','show',invocation['revision']+':'+str((D/name).relative_to(R))],cwd=R)
+        assert r['source_sha256'][name]==hashlib.sha256(executed).hexdigest(),name
+        if name!='main.rs':assert executed==(D/name).read_bytes(),name
     log=(E/'decoder-probe2/out.log').read_text()
     assert 'same_input_native_owned_external_hash_comparisons=512' in log
     out['native_differential']={'receipt':str(receipt.relative_to(R)),
       'receipt_sha256':hashlib.sha256(receipt.read_bytes()).hexdigest(),'comparisons':512,
+      'executed_source_revision':invocation['revision'],
       'classification':'finite same-input validation; actual public hash APIs versus same native hash bodies at one owned external substitution',
       'modes':['owner key','note commitment','nullifier','node compression']}
 else:out['native_differential']='pending; no structural credit before collection'

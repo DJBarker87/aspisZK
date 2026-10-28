@@ -1,4 +1,5 @@
 import PV_L2C_HashLoopRange
+import R1Z.PV_RunJoin_EnumerateTrace
 set_option autoImplicit false
 namespace PV_L2C_AbsorbRange
 open Aeneas Aeneas.Std Result R1Z R0Z.WriterRefine BuilderStdModels
@@ -17,10 +18,12 @@ theorem trace (i : Iter) (pairs : List (Usize × U32))
     ∃ out, poseidon2.hash_fields_with_trace_loop0_loop0 i s = ok out ∧ Canonical out := by
   induction ht generalizing s with
   | done i j hn =>
+    simp only [iterator,core.iter.traits.iterator.IteratorEnumerate] at hn
     refine ⟨s,?_,hc⟩
     rw [poseidon2.hash_fields_with_trace_loop0_loop0.eq_1,hn]
     rfl
   | step i j p ps hn tail ih =>
+    simp only [iterator,core.iter.traits.iterator.IteratorEnumerate] at hn
     obtain ⟨hindex,hword⟩ := hb p (by simp)
     obtain ⟨z,hadd,_,hz⟩ := PV_Src_PortAddition.canonical
       s.val[p.1.val]! p.2 (hc ⟨p.1.val,hindex⟩) hword
