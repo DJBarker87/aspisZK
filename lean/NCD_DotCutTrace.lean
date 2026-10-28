@@ -11,7 +11,7 @@ inductive Cuts (q : Array U8 608#usize) (g : Array FIo_Install.NE 29#usize)
   | done (n iter sums) (stop : iter.end.val ≤ iter.start.val) :
       Cuts q g slot n iter sums sums
   | step (n iter next before after final wide coefficient scalar)
-      (active : iter.start.val<iter.end.val) (small : n<4)
+      (active : iter.start.val < iter.end.val) (small : n<4)
       (increment : next.start.val=iter.start.val+1) (ending : next.end=iter.end)
       (scalarRead : JFr_TX2_ScalarRead.read q slot iter.start=ok scalar)
       (wideRead : Array.index_usize g iter.start=ok wide)
@@ -41,9 +41,13 @@ theorem associated (q : Array U8 608#usize) (g : Array FIo_Install.NE 29#usize)
   | done n iter sums stop =>
     have terminal : FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body q g slot iter sums=
         ok (done sums) := by
-      unfold FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0.body
-      step*
-      all_goals scalar_tac
+      obtain ⟨⟨o,next⟩,run,none,_⟩ := WP.spec_imp_exists
+        (core.iter.range.IteratorRange.next_UScalar_none_spec
+          (ty:=.Usize) (cloneInst:=core.clone.CloneUsize)
+          (partialOrdInst:=core.cmp.PartialOrdUsize) (by intro a b;rfl) iter stop)
+      subst o
+      rw [JFr_TX2_DotStep.body]
+      simp only [JFr_TX2_DotStep.step,run,bind_tc_ok,Aeneas.Std.uncurry]
     unfold FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0
     rw [Aeneas.Std.loop.eq_def]
     simp only [Aeneas.Std.uncurry,terminal]
@@ -60,7 +64,9 @@ theorem associated (q : Array U8 608#usize) (g : Array FIo_Install.NE 29#usize)
           dsimp only at inc he increment ending
           have ac : a=c := UScalar.eq_of_val_eq (inc.trans increment.symm)
           have bd : b=d := he.trans ending.symm
-          subst c;subst d;rfl
+          cases ac
+          cases bd
+          rfl
     rw [same] at body
     unfold FIp_NativeDots.fast_dots.four_dots_one_loop0_loop0
     rw [Aeneas.Std.loop.eq_def]

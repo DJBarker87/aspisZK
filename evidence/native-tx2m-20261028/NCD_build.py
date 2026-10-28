@@ -2,12 +2,12 @@
 Batches transfer/recovery to avoid repeated flaky connections. No backend edits.
 """
 from pathlib import Path
-import subprocess,sys,json,time,shlex,hashlib
+import subprocess,sys,json,time,shlex,hashlib,re
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2m-20261028';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X=C+'/objects'
+assert not (E/'NCD_BATCH_ACTIVE').exists() and not (E/'NCD_NATIVE_BATCH_ACTIVE').exists(),'owned serial batch active'
 a,local,module=sys.argv[1:];local=Path(local);src='NCD_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-tx2mid-cache-20261028/'+module.replace('.','/')+'.olean'
 if (E/'NCD_PAUSE').exists():raise SystemExit('paused before admission')
-assert int(a.rsplit('L',1)[1])<=120
-assert len(list(E.glob('NCD_L*/receipt.json')))<120
+assert sum(bool(re.fullmatch(r'NCD_L[0-9]+\.json',p.name)) for p in E.iterdir())<120
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False,stdin=None):
  argv=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]

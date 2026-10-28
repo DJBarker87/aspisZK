@@ -1,20 +1,20 @@
 import Lean
 -- Inherited co-import audit; no theorem bodies are reproved.
-import NBS_Audit
-import NBQ_Audit
-import NCB_ResizeStep
-import NCB_Filled14759
-import NCB_DigestTotal
+import NCD_B_NBS_Audit
+import NCD_B_NBQ_Audit
+import NCD_B_NCB_ResizeStep
+import NCD_B_NCB_Filled14759
+import NCD_B_NCB_DigestTotal
 import NCB_ScalarDomains
 import NCB_TailOffsets
 import NCB_DotNativeStep
-import NCB_PrefixNativeStep
+import NCD_B_NCB_PrefixNativeStep
 import NCB_TailDomains
 import NCB_CoefficientDomains
-import NCB_PrefixCutTrace
+import NCD_B_NCB_PrefixCutTrace
 import NCB_FourDomains
 import NCB_TailFinal
-import NCB_ChronologicalBlock
+import NCD_B_NCB_ChronologicalBlock
 #print axioms NCB_ResizeStep.next
 #print axioms NCB_Filled14759.model
 #print axioms NCB_Filled14759.selected

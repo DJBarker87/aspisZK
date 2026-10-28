@@ -1,0 +1,59 @@
+Running as unit: run-r76ac8314206e4580949846dc18d1bed6.scope; invocation ID: f6acc3bb9c7945d2b380dd622a6a6530
+{"attempt": "NCD_K008", "exit_status": 0, "wall_seconds": 31.068817924009636, "peak_rss_kib": "3371996", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+recheck_37(){
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_37`
+
+warning: function `NBS_recheck_35` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:668:4
+    |
+668 | fn NBS_recheck_35(){
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_35`
+
+warning: function `NBS_recheck_39` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:686:4
+    |
+686 | fn NBS_recheck_39(){let n:usize=kani::any();kani::assume(n>0&&n<=110);let mut it=(0..n).rev();assert!(it.next()==Some(n-1));}
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_39`
+
+warning: function `NBS_recheck_32` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:710:4
+    |
+710 | fn NBS_recheck_32(){
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_32`
+
+warning: function `NBS_recheck_33` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:741:4
+    |
+741 | fn NBS_recheck_33(){
+    |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_33`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.08s
+Checking harness transcript::NCD_query_pair::block_cell...
+
+VERIFICATION RESULT:
+ ** 0 of 346 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 29.487906s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

@@ -25,4 +25,9 @@ def expected(request):
   before={**manifest,**{n:hashlib.sha256((Path(d)/n).read_bytes()).hexdigest() for n in paths if (Path(d)/n).is_file()}}
   if needed:apply(request)
   after={**manifest,**{n:hashlib.sha256((Path(d)/n).read_bytes()).hexdigest() for n in paths if (Path(d)/n).is_file()}}
- return dict(before=before,after=after,apply=needed,patch_chain=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in chain+([request] if needed else [])])
+ kmx=subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'])
+ kmx_hash=hashlib.sha256(kmx).hexdigest()
+ assert kmx_hash=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+ for name in ['crates/aspis-core/src/NBS_copy.rs','crates/aspis-r1-cost-probe/src/NBS_copy.rs']:
+  assert after[name]=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9',('KMX body drift',name)
+ return dict(kmx_patch_sha256=kmx_hash,before=before,after=after,apply=needed,patch_chain=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in chain+([request] if needed else [])])

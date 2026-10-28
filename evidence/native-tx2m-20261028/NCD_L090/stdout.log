@@ -1,0 +1,34 @@
+NCD_generated/NCD_FillFrame.lean:49:12: error: unexpected token 'at'; expected term
+NCD_generated/NCD_FillFrame.lean:44:49: error: unsolved goals
+case pos
+α : Type
+value : α
+s out : Carrier α
+n k : Nat
+middle : Carrier α
+count : Nat
+trace : Trace value s count middle
+spare : middle.length < middle.capacity
+ih : middle.storage k = if s.address + s.length ≤ k ∧ k < s.address + s.length + count then value else s.storage k
+fields : middle.address = s.address ∧ middle.capacity = s.capacity ∧ middle.length = s.length + count
+h✝ : sorry
+⊢ (if k = s.address + (s.length + count) then value else middle.storage k) =
+    if s.address + s.length ≤ k ∧ k < s.address + s.length + (count + 1) then value else s.storage k
+
+case neg
+α : Type
+value : α
+s out : Carrier α
+n k : Nat
+middle : Carrier α
+count : Nat
+trace : Trace value s count middle
+spare : middle.length < middle.capacity
+ih : middle.storage k = if s.address + s.length ≤ k ∧ k < s.address + s.length + count then value else s.storage k
+fields : middle.address = s.address ∧ middle.capacity = s.capacity ∧ middle.length = s.length + count
+h✝ : ¬sorry
+⊢ (if k = s.address + (s.length + count) then value else middle.storage k) =
+    if s.address + s.length ≤ k ∧ k < s.address + s.length + (count + 1) then value else s.storage k
+'NCD_FillFrame.metadata' depends on axioms: [propext, Quot.sound]
+'NCD_FillFrame.storage' depends on axioms: [propext, sorryAx, Quot.sound]
+'NCD_FillFrame.initialized14759' depends on axioms: [propext, sorryAx, Quot.sound]

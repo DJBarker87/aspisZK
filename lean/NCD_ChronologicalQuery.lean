@@ -1,5 +1,5 @@
-import NCB_DigestTotal
-import NBL_MaterialTrace
+import NCD_B_NCB_DigestTotal
+import NCD_B_NBL_MaterialTrace
 set_option autoImplicit false
 noncomputable section
 namespace AspisR1.NCD_ChronologicalQuery

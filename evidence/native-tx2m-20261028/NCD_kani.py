@@ -1,14 +1,14 @@
 """Own validation wrapper; immutable S2W backend; one scoped native run."""
 from pathlib import Path
-import subprocess,sys,json,time,shlex,hashlib,tomllib,zlib,base64
+import subprocess,sys,json,time,shlex,hashlib,tomllib,zlib,base64,re
 from NCD_expected import expected
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-native-tx2m-20261028';S=B+'/NCD_src'
+assert not (E/'NCD_BATCH_ACTIVE').exists() and not (E/'NCD_NATIVE_BATCH_ACTIVE').exists(),'owned serial batch active'
 a,crate,harness=sys.argv[1:4]
 if (E/'NCD_HOLD').exists():raise SystemExit('Own queue hold before admission; no launch')
 extra=Path(sys.argv[4]) if len(sys.argv)>4 else None
-assert len(list(E.glob('NCD_K*/receipt.json')))<50
-assert len(list(E.glob('NCD_L*/receipt.json')))<120
+assert sum(bool(re.fullmatch(r'NCD_K[0-9]+\.json',p.name)) for p in E.iterdir())<50
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False,stdin=None):
  args=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]
@@ -100,7 +100,7 @@ graph=dict(resolved_packages=len(actual),new_package_tuples=added,edge_errors=er
 (E/(a+'-graph-check.json')).write_text(json.dumps(graph,indent=2)+'\n');assert graph['graph_matches_frozen']
 frozen_sources=json.loads((E.parent/'native-tx2h-20261028/NBQ_SCRATCH_MANIFEST.json').read_text())
 modified=sorted(name for name,h in validated['after'].items() if frozen_sources.get(name)!=h)
-cfg=dict(attempt=a,kind='kani',timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,reservation_retries=retry,sources=['NCD_src/'+p for p in ['Cargo.toml','Cargo.lock']+modified],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',S+'/'+crate+'/Cargo.toml','--target-dir',B+'/NCD_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse'],env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NCD_tmp'},deps_fingerprint={'frozen_source':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph':graph,'harness_patch_sha256':hashlib.sha256(patch.encode()).hexdigest(),'extra_patch_sha256':hashlib.sha256(extension.encode()).hexdigest() if extra else None,'scratch_source_manifest_sha256':hashlib.sha256(json.dumps(validated['after'],sort_keys=True).encode()).hexdigest(),'cfg_patch_chain':validated['patch_chain']},expected_time='optimized dependency compilation then native release leaf '+harness)
+cfg=dict(attempt=a,kind='kani',timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,reservation_retries=retry,sources=['NCD_src/'+p for p in ['Cargo.toml','Cargo.lock']+modified],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',S+'/'+crate+'/Cargo.toml','--target-dir',B+'/NCD_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse'],env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NCD_tmp'},deps_fingerprint={'kmx_patch_sha256':validated['kmx_patch_sha256'],'frozen_source':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph':graph,'harness_patch_sha256':hashlib.sha256(patch.encode()).hexdigest(),'extra_patch_sha256':hashlib.sha256(extension.encode()).hexdigest() if extra else None,'scratch_source_manifest_sha256':hashlib.sha256(json.dumps(validated['after'],sort_keys=True).encode()).hexdigest(),'cfg_patch_chain':validated['patch_chain']},expected_time='optimized dependency compilation then native release leaf '+harness)
 if crate.startswith('programs/'):
  cfg['command']+=['--features','pool-adapter,private-leaf-salts']
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
@@ -111,16 +111,22 @@ b=Path({B!r});(b/'NCD_tmp').mkdir(exist_ok=True)
 '''
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 # Submission is never repeated; post-submission transport failures recover read-only.
-r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+shlex.quote(a+'.json'),submitted=True)
+launch='B='+repr(B)+'\na='+repr(a)+'\nbackend=\'S2W_run_host.py\'\n'+(E/'NCD_detach.txt').read_text()
+r=ssh('python3',stdin=launch,submitted=True)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});s=Path({S!r})
-names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r}]
+names=[{(a+'/receipt.json')!r},{(a+'/stdout.log')!r},{(a+'/time.log')!r},{(a+'-submission.log')!r},{(a+'-submitted.json')!r}]
 print(json.dumps(dict(files={{n:(b/n).read_text() for n in names if (b/n).is_file()}},lock_after=hashlib.sha256((s/'Cargo.lock').read_bytes()).hexdigest())))
 '''
-r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
-out=json.loads(r.stdout);(E/(a+'-lock-after.log')).write_text(out['lock_after']+'\n');assert out['lock_after']==locksha,'STOP lock drift'
+for poll in range(61):
+ r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
+ out=json.loads(r.stdout)
+ if a+'/receipt.json' in out['files']:break
+ if r.returncode==0 and a+'-submitted.json' not in out['files']:break
+ if poll<60:time.sleep(5)
+(E/(a+'-lock-after.log')).write_text(out['lock_after']+'\n');assert out['lock_after']==locksha,'STOP lock drift'
 for n,t in out['files'].items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 assert a+'/receipt.json' in out['files'],'STOP missing submitted receipt'
 rc=json.loads(out['files'][a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print('\n'.join(out['files'][a+'/stdout.log'].splitlines()[-26:]))

@@ -26,7 +26,7 @@ theorem metadata {α : Type} {value : α} {s out : Carrier α} {n : Nat}
     out.address=s.address ∧ out.capacity=s.capacity ∧ out.length=s.length+n := by
   induction trace with
   | zero => exact ⟨rfl,rfl,by omega⟩
-  | @next s middle final count trace spare same ih =>
+  | @next middle final count trace spare same ih =>
     subst final
     simp only [step]
     exact ⟨ih.1,ih.2.1,by omega⟩
@@ -41,26 +41,26 @@ theorem storage {α : Type} {value : α} {s out : Carrier α} {n : Nat}
   | zero =>
     have h : ¬(s.address+s.length ≤ k ∧ k < s.address+s.length+0) := by omega
     simp only [if_neg h]
-  | @next s middle final count trace spare same ih =>
-    have meta := metadata trace
+  | @next middle final count trace spare same ih =>
+    have fields :=  metadata trace
     subst final
     change KMX_CopyMeaning.write middle.storage (middle.address+middle.length) value k = _
-    simp only [KMX_CopyMeaning.write,meta.1,meta.2.2]
-    by_cases at : k=s.address+(s.length+count)
+    simp only [KMX_CopyMeaning.write,fields.1,fields.2.2]
+    by_cases hit : k=s.address+(s.length+count)
     · have yes : s.address+s.length ≤ k ∧ k < s.address+s.length+(count+1) := by omega
-      simp only [if_pos at,if_pos yes]
-    · rw [if_neg at,ih]
+      simp only [if_pos hit,if_pos yes]
+    · rw [if_neg hit,ih]
       have eq : (s.address+s.length ≤ k ∧ k < s.address+s.length+count) ↔
           (s.address+s.length ≤ k ∧ k < s.address+s.length+(count+1)) := by omega
-      rw [eq]
+      simp only [eq]
 
 theorem initialized14759 {α : Type} {value : α} {s out : Carrier α}
     (empty : s.length=0) (capacity : s.capacity=14759)
     (trace : Trace value s 14759 out) :
     out.address=s.address ∧ out.capacity=14759 ∧ out.length=14759 ∧
     (∀ k, out.storage k=if s.address≤k ∧ k<s.address+14759 then value else s.storage k) := by
-  have meta := metadata trace
-  refine ⟨meta.1,meta.2.1.trans capacity,by omega,?_⟩
+  have fields :=  metadata trace
+  refine ⟨fields.1,fields.2.1.trans capacity,by omega,?_⟩
   intro k
   simpa only [empty,Nat.add_zero] using storage trace k
 

@@ -1,3 +1,4 @@
+import NCD_B_NBS_GeometryDomains
 import NBS_GeometryInstall
 set_option autoImplicit false
 noncomputable section
