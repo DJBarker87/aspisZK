@@ -64,3 +64,45 @@ and shrink/split the bounded harness before another run. The frozen original
 collects at most272 endpoints; a273 unwind split can test whether the1026
 bound created pathological symbolic sort expansion, with unwinding assertions
 still enabled. A failed candidate is retained and is not a row counterexample.
+
+
+## Checked op133 proof packet and gate refinement
+
+42500 accepts the raw reference.42501 retains a syntax/default-simp recursion
+failure in the independent literal table;42502 accepts the explicit rfl length
+certificate and Array.length_eq, without changing Lean limits.42503–42505
+compile the original ExternalTypes/Types/ExternalFuns privately from h5 tracked
+sources.42506 retains an opaque-Usize bound and do-syntax draft failure;
+42507 accepts scalar bounds, the complete-Result reference equation, successful
+non-vacuity and261 other-field frames (264 axiom reports, all standard).
+No inherited source or shared object changed. Native133-01 passes the one
+same-input original/reference inventory test, explicitly finite validation:
+exit0,18.716s,567520KiB RSS,swap0. The native/ref bodies remain unchanged.
+
+Kani133-03 times out at901.119s after4.40s optimized compilation. Its
+/usr/bin/time peak15644KiB measures the terminated timeout-parent collection,
+not the full child set; cgroup.memory.peak is6840975360bytes and swap0.
+Do not interpret that small RSS number as CBMC's memory use.
+Kani133-04 changes the global bound to273; resource review stops only this
+job's verified CBMC PID at347.062s, exit1,6607208KiB RSS,swap0,
+cgroup peak6784745472bytes. It had not reached the SAT solver. This is a
+retained failed candidate, not a source counterexample or a job stop.
+
+Loops133-01 is a capped read-only goto loop inventory, no symbolic proof
+run (exit0,.485s,55316KiB RSS,swap0). The46 candidate per-loop bounds are
+recorded in bounds133.json, with unwinding assertions retained. Iterator
+inner traversals get3, source traversals get their literal lengths, and
+sorting/dedup/recursion get separate bounds. A new explicit214-word equality
+loop avoids the old428-byte memcmp. Kani133-05 is the changed candidate;
+no stubs or input restrictions are introduced, and it has no correctness
+credit until all assertions pass. Eight charged Lean attempts and five Kani
+runs submitted; the loop inventory is not counted as a Kani proof run.
+
+Kani133-05 also grows to6GiB before SAT; the own CBMC is stopped after
+395.116s (exit1,6584124KiB RSS,swap0). The next candidate enables the bundled
+CBMC's documented path-at-a-time lifo strategy and dereference caching,
+with identical source, assertions, bounds and caps. Kani133-06 is refused by
+the outer reservation (exit78,allowedfalse; zero Kani runs). After the full
+180s cooldown,06-r1 passes outer admission but the inside barrier refuses
+because another scope races into the reservation; no compiler starts. Wait
+another180s and retry a fresh label. Counts remain8 charged Lean/5 Kani.
