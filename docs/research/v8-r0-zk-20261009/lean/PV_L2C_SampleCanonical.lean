@@ -24,8 +24,10 @@ theorem scalar_canonical (fuel : Nat) (xs : List word) (v : word) (rest : List w
       dsimp only at h
       split at h
       · rename_i hc
-        have he := congrArg Prod.fst (Option.some.inj h)
-        exact he ▸ hc
+        have he : (w &&& BitVec.ofNat 32 p)=v := congrArg Prod.fst (Option.some.inj h)
+        unfold canonical
+        rw [← he]
+        exact hc
       · exact ih ws h
 #print axioms scalar_canonical
 
