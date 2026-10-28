@@ -53,7 +53,6 @@ for item in RECORDS:
  if r.returncode:sys.exit(r.returncode)
 '''.replace('DIR',repr(D)).replace('RECORDS',repr(records)).replace('OLD',repr(old)).replace('NAME',repr(name))
 # Use real newlines in files written by the host driver.
-code=code.replace("+'\\\\n'","+'\\n'")
 p=E/(name+'-runner.py');p.write_text(code)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/'+name+'/runner.py'],check=True)
 r=subprocess.run([sys.executable,str(R/'tools/pv-dlib-20261028/scope.py'),name,'sequential focused Lean compiles; separate IDs and per-file receipts','python3',D+'/'+name+'/runner.py'])
