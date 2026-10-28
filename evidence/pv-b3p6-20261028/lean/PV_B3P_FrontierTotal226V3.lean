@@ -38,7 +38,8 @@ theorem success (a : Array (Array U32 8#usize) 20#usize) (i : Usize)
   have hsl : s.val < row.val.length := by simpa [row.property] using hsb
   have hcanonical := hc row (List.getElem_mem hql)
     (row.val[s.val]'hsl) (List.getElem_mem hsl)
-  refine ⟨_,?_⟩
+  refine ⟨UScalar.cast .U8 (U32.wrapping_shr (row.val[s.val]'hsl)
+    (U32.wrapping_mul 8#u32 (UScalar.cast .U32 t))), ?_⟩
   unfold frontierAt
   rw [hq]
   simp only [bind_tc_ok]

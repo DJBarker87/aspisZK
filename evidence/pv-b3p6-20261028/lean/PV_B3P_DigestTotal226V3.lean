@@ -25,7 +25,8 @@ theorem success (a : Array U32 8#usize) (i : Usize) (hi : i.val < 32)
     omega
   have hlen : q.val < a.val.length := by simpa [a.property] using hqbound
   have hcanonical := hc (a.val[q.val]'hlen) (List.getElem_mem hlen)
-  refine ⟨_,?_⟩
+  refine ⟨UScalar.cast .U8 (U32.wrapping_shr (a.val[q.val]'hlen)
+    (U32.wrapping_mul 8#u32 (UScalar.cast .U32 r))), ?_⟩
   unfold digestAt
   rw [hq]
   simp only [bind_tc_ok]
