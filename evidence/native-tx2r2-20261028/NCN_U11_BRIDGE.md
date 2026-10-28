@@ -81,3 +81,28 @@ Still OPEN: native Vec owner/allocation association, full query contains-prefix
 association, resume/proof/public/syscall/same-save pairing and all parent
 installations. This stage removes the sparse64-byte and one-slot limitations
 from the stated native windows; it does not close U11 or the deployed theorem.
+
+## Slice-returning contract limitation and model totality
+
+K048 inverted-ensures FAIL; K049 modifies violation FAIL; K050 weak length
+contract PASS; K051 real byte-implied assertion PASS. K052 stub_unimplied is
+CODEGEN-FAILED: `&[u8]` does not implement kani::Arbitrary. K053/K054 are unrun.
+The required third fidelity control did not execute, so this slice-returning
+shape is NOT admitted for call-site composition. No pointer-word output carrier,
+foreign reference fabrication, unsafe Arbitrary impl or renamed harness is used.
+This is an interface limitation, not a proved source bug or a host fault.
+The direct raw/iterator window route remains available independently.
+
+NCN_ReaderTotal.section_total (L010) proves every bounded scalar section returns
+Ok with either decoded values or the first checkpoint error; it does not assume
+native/model equality. NCN_WeightTotal.loop_total/weights_total (L011) compose
+existing successful writeback induction and the new error induction, obtaining
+the exact selected readWeights totality for every bounded Vec length, hence64
+at cursor712 in a1768-byte checkpoint. Only standard axioms. L008/L009 were
+rejected drafts; their sorryAx audits are excluded.
+
+NCN_QueryDecision.accepts_iff, append and reject_at (L013) give exact acceptance
+conditions and first bad-prefix rejection for the selected model queryLoop,
+reusing NCI's forward invariants. This is useful for native-step composition;
+it is not the missing native contains-prefix/Std association. L012 was a
+rejected propositional proof draft; its audit is excluded.

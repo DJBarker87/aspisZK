@@ -32,3 +32,20 @@ arbitrary other-cell frame under raw<=MAX-product. NCN_ReaderDomains.word_add_do
 (L003) obtains that precondition from the existing cadence bound. The primitive
 product remains OPEN natively; no multiplier body or new field-product stub
 is credited. Existing NCI checked word arithmetic and induction remain reused.
+
+## Native Vec64 and the next split
+
+K055 failed a harness-setup unwind assertion in generic Arbitrary array64
+construction, not a source assertion. NCN_setup_fix.patch expands the SAME64
+arbitrary rows as a literal (no domain change, no cap/unwind/timeout increase).
+The unchanged harness names are retained. K056/K057 then PASS/FAIL as required:
+actual Vec index on a valid arbitrary64-row allocation returns the selected
+four-U64 row, with source frame, terms and Vec pointer/length unchanged.
+This establishes the successful valid-allocation index window; it does not
+prove heap::filled failure/initialization/ownership or arbitrary SDK heaps.
+
+K058 full64 native value with original-array copy plus modulo reference timed
+out90s. Zero credit; no unchanged rerun. Next split is a pure-record Vec row
+function contract, then the actual value body through stub_verified. Its matched
+contract/caller controls are required before credit. The contract wrapper's
+cfg erasure restores the exact frozen self.raw[index] expression.
