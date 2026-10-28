@@ -1,0 +1,35 @@
+use super::*;
+static mut NDM_BASE:*const u8=core::ptr::null();
+static mut NDM_LENGTH:usize=0;
+pub fn enter(remaining:&[u8]) {unsafe{NDM_BASE=remaining.as_ptr();NDM_LENGTH=remaining.len();}}
+pub fn advance(remaining:&[u8]) {
+ let good=unsafe{NDM_LENGTH>0 && super::super::NDM_native::reference::zero_tail_ref(*NDM_BASE,false)==2 && *NDM_BASE==0 && remaining.len()==NDM_LENGTH-1 && remaining.as_ptr()==NDM_BASE.add(1)};
+ assert_eq!(good,!cfg!(NDM_negative));
+ if !remaining.is_empty() {
+  let k:usize=kani::any();kani::assume(k<remaining.len());
+  let same=unsafe{remaining[k]==*NDM_BASE.add(k+1)};
+  assert_eq!(same,!cfg!(NDM_negative));
+ }
+ // Cut after the ACTUAL frozen tail assignment; the NDG induction handles recurrence.
+ kani::assume(false);
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(2)]
+fn zero_advance(){
+ let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let end:usize=kani::any();
+ kani::assume(start<end && end<=1768);kani::assume(bytes[start]==0);
+ let _=require_zero(&bytes[start..end]);
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(2)]
+fn zero_reject(){
+ let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let end:usize=kani::any();
+ kani::assume(start<end && end<=1768);kani::assume(bytes[start]!=0);
+ let good=super::super::NDM_native::reference::zero_tail_ref(bytes[start],false)==1 && matches!(require_zero(&bytes[start..end]),Err(ProgramError::AccountAlreadyInitialized));
+ assert_eq!(good,!cfg!(NDM_negative));
+}
+#[kani::proof]
+#[kani::unwind(2)]
+fn zero_terminal(){let good=super::super::NDM_native::reference::zero_tail_ref(0,true)==0 && require_zero(&[]).is_ok();assert_eq!(good,!cfg!(NDM_negative));}

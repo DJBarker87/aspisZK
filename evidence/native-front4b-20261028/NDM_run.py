@@ -13,6 +13,7 @@ if kind=='kani' and os.environ.get('NDM_INVERT'):
   content=log.read_text().lower()
   assert not any(x in content for x in ['timed out','timeout after','time out','killed by signal','out of memory']), 'split timed-out shape before control'
 
+while kind=='kani' and (E/'NDM_PAUSE_KANI').exists():time.sleep(1)
 active=E/'NDM_ACTIVE.json';assert not active.exists(),active
 active.write_text(json.dumps(dict(attempt=a)))
 def ssh(code,stdin=None,submitted=False):

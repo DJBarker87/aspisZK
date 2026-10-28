@@ -10,7 +10,12 @@ pub fn reference_tuple(a:&AuthenticatedAsq8Accounts,c:&aspis_statement::pool_v1:
 }
 // Every raw carrier below has only integer/array/struct fields: every bit pattern is a valid Rust value.
 fn account()->AuthenticatedAsq8Accounts {
- let master:PoolV1PairForestMasterV1=unsafe{core::mem::zeroed()};
+ let master=PoolV1PairForestMasterV1 {
+  bump:kani::any(),
+  identity:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolIdentityV1>()]>())},
+  verifier_policy:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::VerifierPolicyV1>()]>())},
+  initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
+ };
  let checkpoint:PoolV1PairForestCheckpointV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestCheckpointV1>()]>())};
  let selected_lane:PoolV1PairForestLaneStateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestLaneStateV1>()]>())};
  let live_snapshot:PoolV1PairLiveSnapshotV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairLiveSnapshotV1>()]>())};
