@@ -12,6 +12,7 @@ import R1Z.PV_RunJoin_PublicDigest29
 import R1Z.PV_RunJoin_PairChecks29
 import R1Z.PV_RunJoin_DecodedPackage29
 import R1Z.PV_RunJoin_SnapshotDomain29
+import R1Z.PV_RunJoin_DecodedDomain29
 
 #print R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
 #print R1Z.PV_RunJoin_SnapshotDomain29.Domain
@@ -48,3 +49,9 @@ import R1Z.PV_RunJoin_SnapshotDomain29
 #print axioms R1Z.PV_RunJoin_SnapshotDomain29.success_iff
 #print axioms R1Z.PV_RunJoin_HonestIdentification26.identification
 #print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+
+#print axioms R1Z.PV_RunJoin_SnapshotRejections29.zero_binding
+#print axioms R1Z.PV_RunJoin_SnapshotRejections29.sequence
+#print axioms R1Z.PV_RunJoin_SnapshotRejections29.full
+#print axioms R1Z.PV_RunJoin_SnapshotRejections29.digest
+#print axioms R1Z.PV_RunJoin_DecodedDomain29.domain
