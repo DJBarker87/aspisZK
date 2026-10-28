@@ -52,7 +52,7 @@ for p in E.glob('pv28-*/receipt.json'):
 zero=E/'pv28-zero-recipient-01/out.log'
 if zero.is_file():assert 'zero_recipient=Err(Conservation)' in zero.read_text()
 if not partial:assert zero.is_file(), 'zero recipient native receipt missing'
-required=['CompilerDomainProof28','RejectionProof28','FrontierHonesty28','PairValidity28','ZeroRecipient28','ActiveFrontier28','PreparedPayload28','CanonicalFrontier28','DomainAudit28']
+required=['CompilerDomainProof28','RejectionProof28','FrontierHonesty28','PairValidity28','ZeroRecipient28','DomainSupport28','DomainAudit28']
 pending=[n for n in required if 'R1Z/PV_RunJoin_'+n not in accepted]
 if not partial:assert not pending,pending
 cache=json.loads((E/'focused-project-cache-check.json').read_text())
