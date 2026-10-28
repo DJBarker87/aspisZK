@@ -1,0 +1,31 @@
+{"attempt": "NBR_L005", "exit_status": 0, "wall_seconds": 1.6663387709995732, "peak_rss_kib": "4715992", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Usize → alloc.vec.Vec T :=
+fun T x => alloc.vec.Vec.new T
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+
+...
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | ok s' => ok ⟨↑v ++ ↑s', ⋯⟩
+    | fail e => fail e
+    | div => div
+  else fail Error.panic
+def Aeneas.Std.alloc.vec.Vec.with_capacity : (T : Type) → Usize → alloc.vec.Vec T :=
+fun T x => alloc.vec.Vec.new T
+@[reducible] def Aeneas.Std.core.clone.CloneU8 : core.clone.Clone U8 :=
+{ clone := liftFun1 core.clone.impls.CloneU8.clone }
+
+Running as unit: run-rb0cff3d8e6594672bd21d19757a1133d.scope; invocation ID: 6d44a7bffe374cae94be764921102720
