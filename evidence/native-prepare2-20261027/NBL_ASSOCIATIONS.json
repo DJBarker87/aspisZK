@@ -1,0 +1,47 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "current_revision": "0f0a300840d0d6aa390a89ac20521b9c81e9fee2",
+  "checks": [
+    {
+      "name": "K012 after-wide-view suffix",
+      "same": true,
+      "source": "candidate::prepare from let sem through Prepared::new",
+      "rewrites": [
+        "cut receives &View; remove redundant & at Prepared::new"
+      ],
+      "native_sha256": "d7a6142ecf05092ff5a62c7c17df1570d0c14dbb2fab1a612ecb6f225187ec3e",
+      "cut_sha256": "1a36502f48bd7234dbaf821309c1c85a8e3412d93b3334d2bde1f204128f4387",
+      "credit": "error routing only; semantic producer not proved"
+    },
+    {
+      "name": "NBA tail cut",
+      "same": true,
+      "source": "Prepared::new from scratch overwrite to return",
+      "rewrites": [
+        "Self -> Prepared"
+      ],
+      "native_sha256": "99f520a7deebb84866ad2103ebefbe5de1fde3fcf1cf76131fcb20d412b989de",
+      "cut_sha256": "ef94779a4600a30ad95ac592ddb37e8e501b844724a106c5609a67c3ac43951a",
+      "credit": "read-only inherited cut, local source association; not trace construction"
+    },
+    {
+      "name": "K011 qm31 initialization ONE iteration",
+      "same": true,
+      "rewrites": [
+        "loop index local -> mutable index reference",
+        "ignore trailing array comma"
+      ],
+      "native_sha256": "1b8fdad718f8a270be241cd76aff08d8ba33d19b16065a89a274fc29eb76bcd1",
+      "cut_sha256": "e167b65ab88574b453bc9eb407aa4a66185abd6dd62ab93613b34f50a02f2238",
+      "credit": "one iteration frame; NBL_InitTrace.rho gives ordered input after induction"
+    }
+  ],
+  "all_cut_token_checks": true,
+  "frozen_files": 497,
+  "frozen_source_differences": [],
+  "limitations": [
+    "No Rust interpreter/source refinement follows from token equality alone.",
+    "Closed native callee bridges are cited with domains; missing caller native producers remain explicit dependencies.",
+    "No XRn_Join correspondence kit is used."
+  ]
+}

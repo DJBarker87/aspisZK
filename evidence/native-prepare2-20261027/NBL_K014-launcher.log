@@ -1,0 +1,48 @@
+{"attempt": "NBL_K014", "exit_status": 1, "wall_seconds": 94.36323037697002, "peak_rss_kib": "1734008", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+t while the shared reference lives
+
+warning: creating a shared reference to mutable static
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:54:52
+   |
+54 |  assert_eq!(kappa,NBL_KAPPA);assert_eq!(g.as_ptr(),NBL_GPTR);assert_eq!(g[NBL_SLOT],NBL_G[NBL_SLOT]);NBL_STAGE=9;
+   |                                                    ^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBL_success_carrier_to_claim` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/NBL_candidate.rs:63:4
+   |
+63 | fn NBL_success_carrier_to_claim(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbl_success_carrier_to_claim`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.01s
+Checking harness verifier::candidate::NBL_candidate::NBL_success_carrier_to_claim...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBL_candidate::NBL_success_carrier_to_claim
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r092fcd6fe69c4f3ea6e8d6b9413f446c.scope; invocation ID: 91327dfcf3f54d71a1fdaf568b0d2f63
