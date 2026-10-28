@@ -1,0 +1,146 @@
+--- a/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
++++ b/crates/aspis-r1-cost-probe/src/NCJ_weights.rs
+@@ -200,3 +200,143 @@
+ #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+ fn NCJ_low_negative(){low_gate(true);}
++
++// One statement-point successor iteration, after the source z[coordinate] read.
++fn successor_gate(bad:bool){
++ let z=[cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq()];let mut successor=[cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq()];
++ let old=successor;let carry=cq();let coordinate:usize=kani::any();kani::assume(coordinate<10);reset();
++ let bit=z[coordinate];let bit_and_carry=bit.mul(carry);successor[coordinate]=bit.add(carry).sub(bit_and_carry.add(bit_and_carry));let after_carry=bit_and_carry;
++ unsafe{assert_eq!(NCJ_QN,1);assert_eq!(NCJ_QL[0].0,z[coordinate]);assert_eq!(NCJ_QL[0].1,carry);assert_eq!(after_carry,NCJ_QL[0].2);let expected=bit.add(carry).sub(NCJ_QL[0].2.add(NCJ_QL[0].2));assert_eq!(successor[coordinate],if bad{expected.add(K::ONE)}else{expected});}
++ let other:usize=kani::any();kani::assume(other<10 && other!=coordinate);assert_eq!(successor[other],old[other]);
++}
++fn absorption_gate(bad:bool){
++ let z=[cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq(),cq()];let mut absorption=z;
++ absorption[7]=K::ONE.sub(absorption[7]);absorption[6]=K::ONE.sub(absorption[6]);
++ let i:usize=kani::any();kani::assume(i<10);let expected=if i==6||i==7{K::ONE.sub(z[i])}else{z[i]};assert_eq!(absorption[i],if bad{expected.add(K::ONE)}else{expected});
++}
++// Native GROUPS index and one coefficient update, after the field-read cut.
++fn group_coefficient_gate(bad:bool){
++ let mut coefficients=[E::ZERO;12];for i in 0..12{coefficients[i]=ce();}let old=coefficients;
++ let j:usize=kani::any();kani::assume(j<64);let coefficient=ce();let group=S2_INACTIVE_GROUPS[j] as usize;
++ assert!(group<12);coefficients[group]=coefficients[group].add(coefficient);
++ let i:usize=kani::any();kani::assume(i<12);let expected=if i==group{old[i].add(coefficient)}else{old[i]};assert_eq!(coefficients[i],if bad{expected.add(E::ONE)}else{expected});
++}
++fn subset_gate(bad:bool){
++ let mut low=[E::ZERO;16];for i in 0..16{low[i]=ce();}let weight=ce();let group:usize=kani::any();let bit:usize=kani::any();kani::assume(group<12&&bit<16);
++ let mut after=weight;let challenge=low[bit];if S2_INACTIVE_MASKS[group]&(1<<bit)!=0{after=after.add(challenge);}
++ let selected=((u32::from(S2_INACTIVE_MASKS[group])>>bit)&1)==1;
++ let expected=if selected{weight.add(low[bit])}else{weight};assert_eq!(after,if bad{expected.add(E::ONE)}else{expected});
++}
++fn group_pair_gate(bad:bool){let pair=ce();let coefficient=ce();let weight=ce();reset();let out=pair.add(coefficient.mul(weight));unsafe{assert_eq!(NCJ_EN,1);assert_eq!(NCJ_EL[0].0,coefficient);assert_eq!(NCJ_EL[0].1,weight);let expected=pair.add(NCJ_EL[0].2);assert_eq!(out,if bad{expected.add(E::ONE)}else{expected});}}
++fn kappa_gate(bad:bool){
++ let sum=ce();let k=ce();let part=ce();reset();let out=sum.add(k.mul(part));
++ unsafe{assert_eq!(NCJ_EN,1);assert_eq!(NCJ_EL[0].0,k);assert_eq!(NCJ_EL[0].1,part);let expected=sum.add(NCJ_EL[0].2);assert_eq!(out,if bad{expected.add(E::ONE)}else{expected});}
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_successor_positive(){successor_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_successor_negative(){successor_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_absorption_positive(){absorption_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_absorption_negative(){absorption_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_group_coefficient_positive(){group_coefficient_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_group_coefficient_negative(){group_coefficient_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_subset_positive(){subset_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_subset_negative(){subset_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_group_pair_positive(){group_pair_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_group_pair_negative(){group_pair_gate(true);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_kappa_positive(){kappa_gate(false);}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,NCJ_qmul)]
++#[kani::stub(E::mul,NCJ_emul)]
++#[kani::stub(E::mul_qm31,NCJ_eqmul)]
++#[kani::stub(E::mul_m31,NCJ_emmul)]
++#[kani::stub(M31::mul,NCJ_quarter_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn NCJ_kappa_negative(){kappa_gate(true);}

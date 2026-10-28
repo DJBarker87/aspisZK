@@ -15,6 +15,7 @@ fn kind_index_gate(bad:bool){
  let k=if kind<4{kind-1}else{kind-2};
  assert!(k<5);let expected=match kind{1=>0,2=>1,3=>2,5=>3,_=>4};assert_eq!(k,expected+if bad{1}else{0});
 }
+fn reverse_gate(bad:bool){let e:usize=kani::any();kani::assume(e<=16);let mut it=(0..e).rev();let result=it.next();if bad{assert_eq!(result,Some(e));}else{assert_eq!(result,if e==0{None}else{Some(e-1)});assert_eq!(it.len(),if e==0{0}else{e-1});}}
 fn box_window_gate(mode:u8,bad:bool){
  let mut factors=[[[K::ZERO;4];5];5];let mut points=[[K::ZERO;10];3];let mut extra=[K::ZERO;2];let value=cq();
  let k:usize=kani::any();let d:usize=kani::any();let lane:usize=kani::any();kani::assume(k<5&&d<5&&lane<4);
@@ -29,7 +30,7 @@ attrs='''#[kani::proof] #[kani::unwind(66)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
 '''
-for name in ['factor_address','kind_index']:
+for name in ['factor_address','reverse']:
  for bad in [False,True]:extra+=attrs+f'fn NCJ_{name}_{"negative" if bad else "positive"}(){{{name}_gate({str(bad).lower()});}}\n'
 for mode in range(3):
  for bad in [False,True]:extra+=attrs+f'fn NCJ_box_{mode}_{"negative" if bad else "positive"}(){{box_window_gate({mode},{str(bad).lower()});}}\n'

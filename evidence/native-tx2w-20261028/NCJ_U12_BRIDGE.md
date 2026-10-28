@@ -29,3 +29,5 @@ OPEN: target not yet established. Frozen source `4bb3b3f51e16b4525f1d10336e2b0bc
 All positive/negative pairs passed/failed as intended: K013/014 frozen `double`, K015/016 one arbitrary tensor iteration (width 1/4/16, arbitrary 64-entry canonical prestate, arbitrary frame coordinate), K017/018 scalar-factor closure step, K019/020 statement factor cell, K021/022 shared common cell, K023/024 low tensor cell. K012 was a worker harness compile error (missing CodeField import), replaced by the changed-source K013. No timeout, memory kill or unchanged rerun.
 
 These are exact local fragments (or full loop-free double/guard), not full enclosing source/cohort bridges. Native fission-to-loop association, whole caller argument transport and the same-final-message composition remain OPEN. The field substitution table is NCJ_LPh_STUBS.md.
+
+Stage3 K025/026 successor step, K027/028 absorption, K029/030 group coefficient update, K031/032 mask subset step, K033/034 grouped contraction step, K035/036 kappa sum step all PASS/FAIL as intended. These remain named local windows with the caller/source association OPEN, including the post-decoder cut.

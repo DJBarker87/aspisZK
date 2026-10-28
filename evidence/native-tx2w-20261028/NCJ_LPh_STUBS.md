@@ -28,3 +28,5 @@ in the scratch root; `NCJ_KMX_SHA256.txt` pins its SHA256. No custom copy stub
 was written. K002 is the matching pointer negative control (FAIL); K003 is
 positive (PASS). Every reached copy family needs its corresponding matched
 control before credit; additional families are not inferred from pointer credit.
+
+U13 additions: NCJ_scale is the same WideExact::mul_m31 replacement paired with NBG_FieldDischarge.wide_scale; NCJ_mul is paired with LPi_TowerValues.wide_mul. NCJ_field is an OPEN decoder callee overapproximation, with exact byte/index logs and canonical outputs; its model value/Result is NBQ_FieldTotal.range plus NBG_WideBytes.bytes_result, while the general native slice association remains an exact lower obligation. NCJ_poly is an OPEN whole-polynomial substitution. No pass of the enclosing control gate discharges that callee bridge.
