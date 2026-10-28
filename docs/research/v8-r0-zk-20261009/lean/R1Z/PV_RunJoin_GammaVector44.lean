@@ -31,5 +31,6 @@ theorem complete (ops : ExternalFuns) (c : Nat → Nat → Raw) (p : Nat → Raw
     change (array 1024#usize z).val = out.val
     rw [hv,PV_RunJoin_SourceArray44.payload]
     simp only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val = 0 from rfl,Nat.zero_add,array,ProverCommitArray49.array]
+    rfl
 #print axioms complete
 end R1Z.PV_RunJoin_GammaVector44
