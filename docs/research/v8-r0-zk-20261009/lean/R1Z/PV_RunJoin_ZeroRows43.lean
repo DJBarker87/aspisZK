@@ -56,7 +56,7 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
       intro zc1
       simp only [lift,bind_tc_ok]
       have next := ih (Usize.wrapping_add i 1#usize) t o zc1
-        (by rw [inc];omega) (by rw [olen];omega)
+        (by rw [inc];omega) (by rw [olen];change out.length+5+0+5*n≤Usize.max;omega)
       have transformed := PV_RunJoin_PostMap43.mono next (q := Good out (n+1)) (by
         intro result hr
         rcases result with ⟨t1,o1,z1,pending⟩
@@ -67,9 +67,7 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
           convert h using 1 <;> omega
         | some status =>
           cases status with
-        | Err e =>
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-      trivial
+          | Err e => trivial
           | Ok value =>
             change Ext out.val o1.val (5*(n+1))
             have h := PV_RunJoin_ByteExtension43.trans hprefix hr
