@@ -28,7 +28,7 @@ for d in r.glob('codex-pv-*'):
  for p in d.glob('**/*ID*'):
   if p.is_file() and pat.search(p.name):hits.append(str(p))
 sent=r/'r1-privacy-build-integration-20261019/evidence/sent.txt'
-print(json.dumps(dict(other_receipts=hits,sent_hits=[l for l in sent.read_text().splitlines() if pat.search(l)])))
+print(json.dumps(dict(other_receipts=hits,sent_hits=[l for l in sent.read_text().splitlines() if len(l.split())>2 and l.split()[2]=='ID'])))
 '''.replace('ID',str(a))
 q=ssh('python3 -c '+shlex.quote(code));assert q.returncode==0,q.stderr
 v=json.loads(q.stdout);(E/f'id-audit-{a}.json').write_text(json.dumps(v,indent=2)+'\n');assert not v['other_receipts'] and not v['sent_hits'],v

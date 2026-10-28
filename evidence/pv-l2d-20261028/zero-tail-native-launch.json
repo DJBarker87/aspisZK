@@ -1,0 +1,39 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=pv-l2d-zero-tail-native",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-l2d-20261028/time-zero-tail-native.log",
+    "sh",
+    "-c",
+    "rustc -O --edition=2021 /home/dombarker/project-offloads/codex-pv-l2d-20261028/zero-tail-native.rs -o /home/dombarker/project-offloads/codex-pv-l2d-20261028/zero-tail-native && /home/dombarker/project-offloads/codex-pv-l2d-20261028/zero-tail-native"
+  ],
+  "source_revision": "bd5a89e6a3f6b567a023d538fe7c8380bf58fc8c",
+  "source_sha256": "f0cbce0fa0225fe48191a27f33455b2ffacc74d0dffe25ce26cd04d68f9489cc",
+  "expected_time": "tiny optimized Rust compilation followed by 29,216 scalar control-flow comparisons; no field elimination",
+  "admission": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T15:02:28.001438+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 27783069696,
+    "projected_reserved_bytes": 36373004288
+  },
+  "print_axioms": "N/A: native finite validation"
+}
