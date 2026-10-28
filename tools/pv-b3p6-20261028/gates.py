@@ -14,9 +14,11 @@ if kind in ('kani133','kmxcontrols','kani133_nofield','kmxcontrols_nofield','kan
  stubs=P/'kmx/KMX_stubs.rs'
  patch_sha=hashlib.sha256(patch.read_bytes()).hexdigest()
  stubs_sha=hashlib.sha256(stubs.read_bytes()).hexdigest()
+ definitions_sha=hashlib.sha256(stubs.read_text().split('#[cfg(kani)]',1)[0].encode()).hexdigest()
+ assert definitions_sha=='c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9'
  assert patch_sha=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
  assert stubs_sha=='ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138'
- (H/('copy-patch-preflight-'+kind+'.json')).write_text(json.dumps(dict(patch_sha256=patch_sha,stubs_sha256=stubs_sha,source_revision=(H/'revision').read_text().strip(),business_function_stubs=False),indent=2)+'\n')
+ (H/('copy-patch-preflight-'+kind+'.json')).write_text(json.dumps(dict(patch_sha256=patch_sha,stubs_sha256=stubs_sha,definitions_only_sha256=definitions_sha,source_revision=(H/'revision').read_text().strip(),business_function_stubs=False),indent=2)+'\n')
 if kind in ('kani133','kani133_nofield'):
  (H/'tmp').mkdir(exist_ok=True)
  bounds=json.loads((H/'bounds133.json').read_text())
@@ -88,5 +90,5 @@ if kind=='native226v3':
 
 if kind=='kani226v3':
  (H/'tmp').mkdir(exist_ok=True)
- cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--harness','native226::both_variants','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--symex-cache-dereferences','--reachability-slice-fb','--no-array-field-sensitivity']
+ cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--harness','native226::both_variants','--solver','kissat','--output-format','terse','-j','1','-Z','unstable-options','-Z','stubbing','--cbmc-args','--unwinding-assertions','--symex-cache-dereferences','--reachability-slice-fb','--no-array-field-sensitivity']
  sys.exit(run(admission_label('kani226-v3-both-01'),cmd,'optimized compilation then positive complete-Result serializer equality plus matched wrong-byte negative control for both variants in one invocation; universal auxiliary u16 index, unwind2049 covers reallocation byte prefixes; exact KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 with checked negative growth control under same array model; no business stubs or chained field arithmetic',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
