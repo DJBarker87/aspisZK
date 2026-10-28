@@ -60,3 +60,9 @@ for slot,key,fun in [(33,'registry','decode_verifier_registry_v2'),(34,'entry','
   cases NCX_Reference.{fun} b <;> rfl
 '''
 s+='\n'.join('#print axioms '+n for n in ['selected','sdk_selected','ncv_retained','op33_result','op34_result'])+'\nend NCX_Install\nend\n';(L/'NCX_Install.lean').write_text(s)
+s=s.replace('import NCV_InstallationSupport','import NCV_Install')
+a=s.index('def configure');b=s.index('theorem selected',a);configuration=s[a:b];s=s[:a]+s[b:]
+a=s.index('theorem sdk_selected');b=s.index('theorem op33_result',a);config_theorems=s[a:b];s=s[:a]+s[b:]
+s=s.replace('#print axioms sdk_selected\n','').replace('#print axioms ncv_retained\n','').replace('open Aeneas Aeneas.Std Result AspisR1','open Aeneas Aeneas.Std Result')
+(L/'NCX_Install.lean').write_text(s)
+(L/'NCX_Configuration.lean').write_text('import NCX_Install\nimport NCV_InstallationSupport\nset_option autoImplicit false\nnoncomputable section\nnamespace NCX_Install\nopen Aeneas Aeneas.Std Result AspisR1\n'+configuration+config_theorems+'#print axioms sdk_selected\n#print axioms ncv_retained\nend NCX_Install\nend\n')

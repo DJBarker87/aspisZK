@@ -40,4 +40,7 @@ theorem source : NCX_Reference.{fun} JHb_Data{family}.value=
 #print axioms source
 end NCX_{family}Fixture
 '''
+ s=s.replace(f'    · exact JHg_Audit{family}.magic',f'    · simpa only [JHb_Data{family}.value,Array.make,List.drop_zero,NCX_Reference.{prefix}MAGIC] using JHg_Audit{family}.magic')
+ s=s.replace('  simp only [NCX_Reference.decode_',f'  have valid:=NCX_{family}Value.valid\n  unfold NCX_{family}Value.value at valid\n  simp only [NCX_Reference.decode_').replace(f'NCX_{family}Value.valid,core.result','valid,core.result')
+ if key=='entry':s=s.replace('import NCX_EntryValue','import NCX_EntryValue\nimport NCX_Status').replace('NCX_Reference.status,core.result','NCX_Status.active,core.result')
  (L/f'NCX_{family}Fixture.lean').write_text(s)

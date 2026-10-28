@@ -16,7 +16,7 @@ def files():
  enums=['PoolV1VerifierRegistryFormatError','VerifierEntryStatusV1']
  for name in enums:
   variants=re.findall(r'^    (\w+)',ref.split('pub enum '+name+' {')[1].split('}')[0],re.M)
-  n+=f'fn eq_{name}(a:&{name},b:&R::{name})->bool {{match (a,b){{'+''.join(f'({name}::{v},R::{name}::{v})=>true,' for v in variants)+'_=>false}}\n'
+  n+=f'pub fn eq_{name}(a:&{name},b:&R::{name})->bool {{match (a,b){{'+''.join(f'({name}::{v},R::{name}::{v})=>true,' for v in variants)+'_=>false}}\n'
  for key,name in [('registry','VerifierRegistryV2'),('entry','VerifierRegistryEntryV2')]:
   fs=re.findall(r'pub (\w+)\s*:',ref.split('pub struct '+name+' {')[1].split('\n}')[0]);fields[name]=fs
   expr=[]
@@ -58,6 +58,7 @@ def files():
   if negative:prop='!('+prop+')'
   attrs=f'#[cfg_attr(kani,kani::modifies())]\n#[cfg_attr(kani,kani::ensures(|r:&Result<(),PoolV1VerifierRegistryFormatError>|{prop}))]\n'
   s=s.replace('pub fn '+fun+'(',attrs+'pub fn '+fun+'(',1)
+ s+='\n#[cfg(kani)] pub fn NCX_zero_native(value:&[u8;32])->bool {required_binding_is_zero(value)}\n'
  d[p]=s
  p='programs/r1-cost-probe/src/lib.rs' ;s=orig(p);s=s.replace('use aspis_r1_cost_probe::verifier','#![cfg_attr(kani, feature(allocator_api))]\n#[cfg(kani)] extern crate alloc;\nuse aspis_r1_cost_probe::verifier',1)
  s+='\n#[cfg(kani)] #[path="../../../KMX_stubs.rs"] mod NCX_KMX;\n#[cfg(kani)] mod NCX_native;\n';d[p]=s
@@ -90,6 +91,13 @@ def files():
   prop='!*r' if negative else '*r'
   n+=f'#[kani::requires(b.len()=={size} && field<{len(fields[name])} && j<32)]\n#[kani::modifies()]\n#[kani::ensures(|r:&bool|{prop})]\nfn NCX_{key}_window(b:&[u8],field:usize,j:usize)->bool{{aspis_statement::NCX_native::eq_{key}_coord(&{fun}(b),&aspis_statement::NCX_reference::{fun}(b),field,j)}}\n'
   n+=f'#[kani::proof_for_contract(NCX_{key}_window)]\n'+attrs+f'#[kani::unwind(34)]\nfn NCX_{key}_window_contract(){{let b:[u8;{size}]=kani::any();let f:usize=kani::any();let j:usize=kani::any();kani::assume(f<{len(fields[name])} && j<32);let _=NCX_{key}_window(&b,f,j);}}\n'
+  if os.environ.get('NCX_VALIDATED'):
+   field=int(os.environ.get('NCX_FIELD','0'));assert field<len(fields[name])
+   n=n.replace(f'b.len()=={size} && field<{len(fields[name])} && j<32',f'b.len()=={size} && field=={field} && j<32')
+   n=n.replace(f'let f:usize=kani::any();let j:usize=kani::any();kani::assume(f<{len(fields[name])} && j<32);',f'let f:usize={field};let j:usize=kani::any();kani::assume(j<32);')
+   validator='validate_verifier_registry_v2' if key=='registry' else 'validate_verifier_registry_entry_v2'
+   n=n.replace(f'#[kani::proof_for_contract(NCX_{key}_window)]',f'#[kani::proof_for_contract(NCX_{key}_window)]\n#[kani::stub_verified(aspis_statement::pool_v1::verifier_registry::{validator})]')
+
  for kind,size,width in [('read',64,32),('word',16,8)]:
   rhs='aspis_statement::NCX_reference::read32(b,p)' if kind=='read' else 'aspis_statement::NCX_reference::word(b,p)'
   expr='a[j]==r[j]' if kind=='read' else 'a==r'
@@ -97,6 +105,11 @@ def files():
   prop='!*r' if negative else '*r'
   n+=f'#[kani::requires(p<={size-width} && j<{width})]\n#[kani::modifies()]\n#[kani::ensures(|r:&bool|{prop})]\nfn NCX_{kind}_window(b:&[u8;{size}],p:usize,j:usize)->bool{{{native}let r={rhs};{expr}}}\n'
   n+=f'#[kani::proof_for_contract(NCX_{kind}_window)]\n'+attrs+f'#[kani::unwind(34)]\nfn NCX_{kind}_window_check(){{let b:[u8;{size}]=kani::any();let p:usize=kani::any();let j:usize=kani::any();kani::assume(p<={size-width} && j<{width});let _=NCX_{kind}_window(&b,p,j);}}\n'
+ prop='!*r' if negative else '*r'
+ n+=f'#[kani::modifies()]\n#[kani::ensures(|r:&bool|{prop})]\nfn NCX_status_step(v:u8)->bool{{match (VerifierEntryStatusV1::try_from(v),aspis_statement::NCX_reference::status(v)){{(Ok(a),Ok(b))=>aspis_statement::NCX_native::eq_VerifierEntryStatusV1(&a,&b),(Err(a),Err(b))=>aspis_statement::NCX_native::eq_PoolV1VerifierRegistryFormatError(&a,&b),_=>false}}}}\n'
+ n+='#[kani::proof_for_contract(NCX_status_step)]\n'+attrs+'#[kani::unwind(34)]\nfn NCX_status_step_check(){let v:u8=kani::any();let _=NCX_status_step(v);}\n'
+ n+=f'#[kani::modifies()]\n#[kani::ensures(|r:&bool|{prop})]\nfn NCX_zero_step(v:&[u8;32])->bool{{aspis_statement::pool_v1::verifier_registry::NCX_zero_native(v)==aspis_statement::NCX_reference::required_binding_is_zero(v)}}\n'
+ n+='#[kani::proof_for_contract(NCX_zero_step)]\n'+attrs+'#[kani::unwind(34)]\nfn NCX_zero_step_check(){let v:[u8;32]=kani::any();let _=NCX_zero_step(&v);}\n'
  shape=os.environ.get('NCX_SHAPE','registry')
  ty='VerifierRegistryV2' if shape=='registry' else 'VerifierRegistryEntryV2'
  flag='bump' # common scalar, unmodified but weaker than complete record
@@ -114,6 +127,7 @@ def files():
  n+='#[kani::proof_for_contract(NCX_unit)]\n'+attrs+'#[kani::unwind(34)]\nfn NCX_unit_contract(){let mut x=kani::any();let mut y=kani::any();let _=NCX_unit(&mut x,&mut y);}\n'
  n+='#[kani::proof]\n'+attrs+'#[kani::unwind(34)]\nfn NCX_unit_real(){let mut x=kani::any();let mut y=kani::any();let r=NCX_unit(&mut x,&mut y);assert!(r==Err(PoolV1VerifierRegistryFormatError::InvalidStatus));}\n'
  n+='#[kani::proof]\n#[kani::stub_verified(NCX_unit)]\n'+attrs+'#[kani::unwind(34)]\nfn NCX_unit_stub(){let mut x=kani::any();let mut y=kani::any();let r=NCX_unit(&mut x,&mut y);assert!(r==Err(PoolV1VerifierRegistryFormatError::InvalidStatus));}\n'
+ if os.environ.get('NCX_BAD_BOUND'):n=n.replace('p<=32 && j<32','p<=33 && j<32')
  d['programs/r1-cost-probe/src/NCX_native.rs']=n
  return d
 if __name__=='__main__':

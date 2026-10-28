@@ -52,3 +52,36 @@ NCX_Observations gives full record extensionality from arbitrary coordinates
 
 K016 combined entry rejection split timed out; no credit, no paired replay.
 The following smaller native shapes remain independent.
+
+Stage 4: Kani exhausted at 40/40. Totals: 15 local PASS, 19 intended failing
+controls/domain probes, 6 TIMEOUT (K003/K013/K016/K031/K032/K033). No whole
+native decoder/P6 bridge is claimed. K032/K033 are scalar-coordinate caller
+splits under the passing actual validator contracts; both timed out, excluded.
+The Result<Unit,FormatError> calibration K022–026 precedes those substitutions.
+K017–021 similarly calibrate Result<EntryV2,FormatError>. No slice/Vec/Box
+return is used with stub_verified.
+
+K027/028: native 32-byte range/cast vs read32 at arbitrary p≤32 within64 bytes,
+arbitrary j<32. K029/030: native eight-byte LE word vs word at p≤8 in16 bytes.
+K034/035: native TryFrom<u8> vs status for every u8, exact status/error.
+K036/037: actual private required_binding_is_zero vs the safe zero scan on
+EVERY32-byte array. K038/039: actual entry decoder/ref equality at empty length0.
+K040 deliberately weakens the K027 bound to p≤33: the slice panic is detected.
+That negative domain probe is not a shipped decoder bug or an enlarged domain.
+Every passing contract has its matched failing control with exact KMX/features.
+
+Native window backing-size domains are LOCAL FRAGMENTS. The actual decoder
+buffers are256/320 bytes; no upper bound64/16 is imposed on their callers.
+NCX_WindowFrames proves symbolic reference locality, exact KMX disjoint-copy
+and outside framing laws for the current field offsets. NCX_CallerDomains
+proves every array/word/header/reserved and binding-scan bound from the actual
+format-length guard. The remaining native slice/cast/record call association
+is OPEN: those value/domain laws do not silently close it.
+
+NCX_ParsedBodies assembles both parsers from explicit field observations,
+including the validator's exact success/error/fail/div result; it assumes no
+validation success. NCX_StatusSpec covers all status values. NCX_Observations
+and NCX_ResultObservations recover full records and exact Result equality from
+all valid coordinate observations. These are symbolic model composition laws.
+NCX_JHuObservations exports the exact two observations in JHu's NCV-before-NCX
+order, proves dictionary commutation, and retains op38/op43/op44 and NCV slots.

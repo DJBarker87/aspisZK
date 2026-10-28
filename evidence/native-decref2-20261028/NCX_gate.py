@@ -16,7 +16,13 @@ assert hashlib.sha256((S/'KMX_stubs.rs').read_bytes()).hexdigest()=='ad8efb63d8f
 for name,expected_hash in {'KMX_native.rs':'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880','KMX_CopyMeaning.lean':'2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}.items():assert hashlib.sha256((S/name).read_bytes()).hexdigest()==expected_hash
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',str(S/'programs/r1-cost-probe/Cargo.toml'),'--features','pool-adapter,private-leaf-salts','--locked','--offline','--format-version','1'],capture_output=True,text=True)
 (B/(a+'-metadata.stderr')).write_text(r.stderr);assert r.returncode==0,r.stderr
-m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{') and '"packages"' in l));k={p['id']:json.dumps([p['name'],p['version'],p.get('source')],separators=(',',':')) for p in m['packages']}
+m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{') and '"packages"' in l))
+byname={p['name']:next(n['features'] for n in m['resolve']['nodes'] if n['id']==p['id']) for p in m['packages']}
+assert set(byname['aspis-r1-cost-probe'])=={'default','private-leaf-salts','optimized-terminal','program-build'},'STOP verifier feature mismatch'
+assert {'pool-adapter','private-leaf-salts'} <= set(byname['aspis-r1-cost-probe-program']),'STOP program feature mismatch'
+assert {'r0','pool-v1-kernel'} <= set(byname['aspis-statement']),'STOP statement feature mismatch'
+assert sum(f.startswith('pool-v1-pair-forest-') for f in byname['aspis-statement'])==12,'STOP optimized feature mismatch'
+k={p['id']:json.dumps([p['name'],p['version'],p.get('source')],separators=(',',':')) for p in m['packages']}
 graph={'packages':sorted(k.values()),'edges':sorted([k[n['id']],sorted(k[d] for d in n['dependencies'])] for n in m['resolve']['nodes'])}
 expected=(B/'NCX_frozen_graph.sha256').read_text().strip()
 actual=hashlib.sha256(json.dumps(graph,sort_keys=True,separators=(',',':')).encode()).hexdigest()
