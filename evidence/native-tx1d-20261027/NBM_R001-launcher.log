@@ -1,0 +1,33 @@
+{"attempt": "NBM_R001", "exit_status": 1, "wall_seconds": 199.57135452399962, "peak_rss_kib": "587668", "swaps": "0", "print_axioms": "N/A: rust"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5e2e1ccce89b7a7f2eff485a734902daff56137a3e76bd8b0a426f43cfa9727e", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "playback", "-Z", "concrete-playback", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1d-20261027/NBM_src/crates/aspis-r1-cost-probe/Cargo.toml", "--lib", "--", "--exact", "multiproof::NBM_copy::kani_concrete_playback_NBJ_count_copy_prefix_8053088788365222636", "--nocapture"]}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/co
+...
+                                             ----^^^^^^^^^^
+    |                                                                       |
+    |                                                                       help: remove this `mut`
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0583`.
+warning: `aspis-r1-cost-probe` (lib test) generated 12 warnings
+error: could not compile `aspis-r1-cost-probe` (lib test) due to 1 previous error; 12 warnings emitted
+error: /home/dombarker/.kani/kani-0.67.0/toolchain/bin/cargo exited with status exit status: 101
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5e2e1ccce89b7a7f2eff485a734902daff56137a3e76bd8b0a426f43cfa9727e", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-ra3f75ad28a5c4c0bbdc56d3d2cdbf8dc.scope; invocation ID: 4e7a32598b384bda9014aca1339cb03d
