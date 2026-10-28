@@ -3,6 +3,9 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib
 B=Path(__file__).resolve().parent
 spec=json.loads((B/sys.argv[1]).read_text());items=[dict(spec['base'],**target) for target in spec['targets']]
+status=B/(sys.argv[1]+'.status.json');summary=[]
+def save(state): status.write_text(json.dumps(dict(state=state,summary=summary)))
+save('running')
 for cfg in items:
  a=cfg['attempt'];assert not (B/a/'receipt.json').exists(),('already submitted',a)
  for n in range(11):
@@ -26,5 +29,8 @@ for cfg in items:
  result={n:(B/n).read_text() for n in names if (B/n).is_file()}
  print(json.dumps(dict(event='result',attempt=a,files=result,launcher=r.stdout+r.stderr)),flush=True)
  rc=json.loads(result[a+'/receipt.json'])
+ summary.append({k:rc[k] for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib']});save('running')
  if rc['exit_status'] not in [0,1]:raise SystemExit('STOP exceptional exit; inspect and split')
  if not json.loads(result[a+'-graph.json']).get('lock_unchanged'):raise SystemExit('STOP lock mismatch')
+
+save('complete')

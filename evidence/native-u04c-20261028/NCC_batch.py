@@ -16,17 +16,18 @@ for trial in range(11):
  if r.returncode!=255:break
  if trial<10:time.sleep(60)
 assert r.returncode==0,r.stderr
-cmd='cd '+shlex.quote(m.B)+' && python3 NCC_batch_host.py '+shlex.quote(name)
-with (E/('NCC_BATCH'+str(start)+'-ssh.stderr')).open('w') as err:
- p=subprocess.Popen(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',m.H,cmd],stdout=subprocess.PIPE,stderr=err,text=True)
- for line in p.stdout:
-  x=json.loads(line)
-  with (E/'NCC_BATCH_EVENTS.jsonl').open('a') as f:f.write(json.dumps({k:v for k,v in x.items() if k not in ['files','launcher']})+'\n')
-  a=x['attempt']
-  if x['event']=='admission':(E/(a+'-admission-'+str(x['trial'])+'.json')).write_text(json.dumps(x,indent=2))
-  elif x['event']=='result':
-   for n,s in x['files'].items():q=E/n;q.parent.mkdir(parents=True,exist_ok=True);q.write_text(s)
-   (E/(a+'-launcher.log')).write_text(x['launcher']);rc=json.loads(x['files'][a+'/receipt.json'])
-   with (E/'NCC_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
-   print(a,rc['exit_status'],rc['wall_seconds'],rc['peak_rss_kib'],flush=True)
- assert p.wait()==0,'STOP batch transport/controller; recover read-only, never resubmit'
+cmd='cd '+shlex.quote(m.B)+' && nohup python3 NCC_batch_host.py '+shlex.quote(name)+' > '+shlex.quote(name+'.host.log')+' 2>&1 < /dev/null &'
+# This is the only submission. Never retry it, even if transport is lost.
+r=m.ssh(cmd,submitted=True)
+(E/(name+'-submission.json')).write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr,command=cmd),indent=2))
+while True:
+ r=m.py('from pathlib import Path; import json; p=Path('+repr(m.B+'/'+name+'.status.json')+'); print(p.read_text() if p.exists() else json.dumps(dict(state="unresolved")))')
+ assert r.returncode==0,r.stderr
+ try:x=json.loads(r.stdout)
+ except json.JSONDecodeError:raise SystemExit('STOP incomplete status transport: recover read-only')
+ (E/(name+'.status.json')).write_text(json.dumps(x,indent=2))
+ print(json.dumps(x),flush=True)
+ if x['state']=='complete':break
+ if x['state']=='unresolved':raise SystemExit('STOP unresolved submission: inspect read-only, never resubmit')
+ time.sleep(60)
+subprocess.run([sys.executable,str(E/'NCC_recover.py')]+[x['attempt'] for x in items],check=True)
