@@ -18,7 +18,7 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_poseidon::internal_linear_lazy::SHIFTS]
     Source: 'reference_poseidon.rs', lines 341:4-341:81 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_poseidon.internal_linear_lazy.SHIFTS : Array Std.U8 15#usize :=
   Array.make 15#usize [
     0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 10#u8, 12#u8, 13#u8,

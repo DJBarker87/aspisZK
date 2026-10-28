@@ -19,7 +19,7 @@ namespace PV_B3P_227
 /-- [pv_b3p6_reference227::reference_terminal::constants::POOL_V1_PAIR_EMPTY_ROOTS_V1]
     Source: 'host_terminal_constants.rs', lines 2:0-24:2
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.constants.POOL_V1_PAIR_EMPTY_ROOTS_V1
   : Array (Array Std.U32 8#usize) 21#usize :=
   Array.make 21#usize [

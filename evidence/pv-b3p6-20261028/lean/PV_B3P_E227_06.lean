@@ -18,7 +18,7 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_copy_terminal::constants::COPY_PATTERNS]
     Source: 'host_copy_terminal_constants.rs', lines 10:0-25:2 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_copy_terminal.constants.COPY_PATTERNS
   : Array reference_copy_terminal.CompiledPoolV1PairForestPattern 14#usize :=
   let a := Array.repeat 16#usize 1#u8

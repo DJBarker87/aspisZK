@@ -18,7 +18,7 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_poseidon::EXTERNAL_INITIAL]
     Source: 'reference_poseidon.rs', lines 9:0-30:2 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_poseidon.EXTERNAL_INITIAL
   : Array (Array Std.U32 16#usize) 4#usize :=
   Array.make 4#usize [
@@ -50,7 +50,7 @@ def reference_poseidon.EXTERNAL_INITIAL
 
 /-- [pv_b3p6_reference227::reference_poseidon::EXTERNAL_FINAL]
     Source: 'reference_poseidon.rs', lines 31:0-52:2 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_poseidon.EXTERNAL_FINAL
   : Array (Array Std.U32 16#usize) 4#usize :=
   Array.make 4#usize [
@@ -82,7 +82,7 @@ def reference_poseidon.EXTERNAL_FINAL
 
 /-- [pv_b3p6_reference227::reference_poseidon::INTERNAL]
     Source: 'reference_poseidon.rs', lines 53:0-56:2 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_poseidon.INTERNAL : Array Std.U32 14#usize :=
   Array.make 14#usize [
     2139014335#u32, 69309039#u32, 1368974953#u32, 886780232#u32,

@@ -19,7 +19,7 @@ namespace PV_B3P_227
 /-- [pv_b3p6_reference227::reference_copy_terminal::POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1]
     Source: 'reference_copy_terminal.rs', lines 29:0-29:66
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1
   : Std.Usize :=
   1024#usize
@@ -27,7 +27,7 @@ def reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_ROWS_V1
 /-- [pv_b3p6_reference227::reference_copy_terminal::POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1]
     Source: 'reference_copy_terminal.rs', lines 31:0-31:66
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1
   : Std.Usize :=
   136#usize
@@ -35,7 +35,7 @@ def reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_LINKS_V1
 /-- [pv_b3p6_reference227::reference_copy_terminal::POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1]
     Source: 'reference_copy_terminal.rs', lines 32:0-32:68
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1
   : Std.Usize :=
   14#usize

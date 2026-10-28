@@ -18,25 +18,25 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_terminal::DOMAIN_OWNER_KEY]
     Source: 'reference_terminal.rs', lines 72:0-72:44 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.DOMAIN_OWNER_KEY : aspis_core.field.M31 :=
   1095958529#u32
 
 /-- [pv_b3p6_reference227::reference_terminal::DOMAIN_NULLIFIER]
     Source: 'reference_terminal.rs', lines 73:0-73:44 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.DOMAIN_NULLIFIER : aspis_core.field.M31 :=
   1095958530#u32
 
 /-- [pv_b3p6_reference227::reference_terminal::DOMAIN_NOTE]
     Source: 'reference_terminal.rs', lines 74:0-74:39 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.DOMAIN_NOTE : aspis_core.field.M31 := 1095958531#u32
 
 /-- [pv_b3p6_reference227::reference_terminal::POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1]
     Source: 'reference_terminal.rs', lines 77:0-77:65
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
   : Std.Usize :=
   16#usize
@@ -44,7 +44,7 @@ def reference_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1
 /-- [pv_b3p6_reference227::reference_terminal::POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1]
     Source: 'reference_terminal.rs', lines 79:0-80:92
     Visibility: public -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1
   : Result Std.Usize := do
   let i ←
@@ -54,33 +54,33 @@ def reference_terminal.POOL_V1_PAIR_FOREST_SELECTED_TERMINAL_COLUMNS_V1
 
 /-- [pv_b3p6_reference227::reference_terminal::SELECTED_H1_COLUMN]
     Source: 'reference_terminal.rs', lines 104:0-105:88 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.SELECTED_H1_COLUMN : Result Std.Usize :=
   reference_terminal.POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1 +
     aspis_core.state_only_hiding.STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS
 
 /-- [pv_b3p6_reference227::reference_terminal::SELECTED_G_COLUMN]
     Source: 'reference_terminal.rs', lines 106:0-106:56 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.SELECTED_G_COLUMN : Result Std.Usize := do
   let i ← reference_terminal.SELECTED_H1_COLUMN
   i + 1#usize
 
 /-- [pv_b3p6_reference227::reference_terminal::VALUE_AUXILIARY_BLOCK]
     Source: 'reference_terminal.rs', lines 107:0-107:40 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.VALUE_AUXILIARY_BLOCK : Std.Usize := 63#usize
 
 /-- [pv_b3p6_reference227::reference_terminal::INPUT_OCCUPANCY_ROW]
     Source: 'reference_terminal.rs', lines 108:0-108:47 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.INPUT_OCCUPANCY_ROW : Result Std.Usize := do
   let i ← 63#usize * 16#usize
   i + 9#usize
 
 /-- [pv_b3p6_reference227::reference_terminal::OUTPUT_OCCUPANCY_ROW]
     Source: 'reference_terminal.rs', lines 109:0-109:49 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_terminal.OUTPUT_OCCUPANCY_ROW : Result Std.Usize := do
   let i ← 63#usize * 16#usize
   i + 10#usize

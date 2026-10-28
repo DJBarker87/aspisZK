@@ -11,6 +11,7 @@ for m in re.finditer(r'Array\.make\s+\d+#usize\s+\[',s[start:]):
   depth+=(s[i]=='[')-(s[i]==']');i+=1
  changes.append(i)
 for i in sorted(changes,reverse=True):s=s[:i]+' (by simp only [List.length_cons, List.length_nil]; rfl)'+s[i:]
+s=s[:start]+s[start:].replace('@[global_simps, irreducible]', '@[irreducible]')
 q=D/'ported227-arrayproof-resume5.lean.txt';q.write_text(s)
-(D/'arrayproof227-resume5.json').write_text(json.dumps(dict(input_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),output_sha256=hashlib.sha256(q.read_bytes()).hexdigest(),proof_arguments=len(changes),data_edits=False,reason='42027 controlled SIGTERM after COPY_PATTERNS RSS8791936KiB; expose literal length proof with symbolic List.length_cons/length_nil instead of implicit default tactic',unchanged_prefix='first six declaration chunks'),indent=2)+'\n')
+(D/'arrayproof227-resume5.json').write_text(json.dumps(dict(input_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),output_sha256=hashlib.sha256(q.read_bytes()).hexdigest(),proof_arguments=len(changes),data_edits=False,metadata_change='omit global_simps registration; unchanged irreducible definitions',reason='42027 controlled SIGTERM after COPY_PATTERNS RSS8791936KiB; expose literal length proof with symbolic List.length_cons/length_nil instead of implicit default tactic',unchanged_prefix='first six declaration chunks'),indent=2)+'\n')
 print(len(changes))

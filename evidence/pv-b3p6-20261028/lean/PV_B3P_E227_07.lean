@@ -18,7 +18,7 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_copy_terminal::constants::COPY_LINKS]
     Source: 'host_copy_terminal_constants.rs', lines 27:0-164:2 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_copy_terminal.constants.COPY_LINKS
   : Array reference_copy_terminal.CompiledPoolV1PairForestLink 136#usize :=
   Array.make 136#usize [

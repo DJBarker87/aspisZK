@@ -18,7 +18,7 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_poseidon::EXTERNAL_LOCAL_LIMB_MODULUS_BOUND]
     Source: 'reference_poseidon.rs', lines 134:0-134:60 -/
-@[global_simps, irreducible]
+@[irreducible]
 def reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND : Result Std.U64 := do
   let i ← lift (UScalar.cast .U64 aspis_core.field.P)
   7#u64 * i
