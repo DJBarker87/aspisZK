@@ -62,7 +62,7 @@ def visit(m):
    ps=[p for p in tracked if p.endswith('/'+m.split('.')[-1]+'.lean.txt') and ('namespace '+m) in git(head+':'+p).decode()]
   if not ps:
    explicit={
-    **{m:'evidence/pv-rw19-resume-20261026/retained-source-inputs/'+m+'.lean.txt' for m in ['AspisR1CircleFallback.FunsExternal','AspisR1CircleFallback.Types','AspisR1CircleSampleWrapper.Funs','AspisR1CircleSampleWrapper.FunsExternal']},
+    **{m:'evidence/pv-rw19-resume-20261026/retained-source-inputs/'+m+'.lean.txt' for m in ['AspisR1CircleFallback.FunsExternal','AspisR1CircleFallback.Types','AspisR1CircleSampleWrapper.Funs','AspisR1CircleSampleWrapper.FunsExternal','AspisR1CircleSampleWrapper.Types']},
     'AspisR1CircleFallback.Funs':'evidence/pv-rw19-resume-20261026/retained-source-inputs/AspisR1CircleFallback.Funs.lean.txt',
     'AspisR1CircleFallback.RawCircleFallbackOutputBridge':'evidence/pv-rw19-resume-20261026/retained-source-inputs/AspisR1CircleFallback.RawCircleFallbackOutputBridge.lean.txt',
     **{'AspisR1CircleSampleWrapper.'+n:'docs/research/100bit-spend-path-20261013/lean-candidates/current-circle-wrapper-20261019/'+n+'.lean' for n in ['RawCircleSampleActualFallbackResultV4','RawCircleSampleActualPolicyV2','RawCircleSampleActualSamplerCanonicalV1','RawCircleSampleActualSecureBridgeV1','RawCircleSampleActualFallbackCircleV2','RawCircleSampleEmittedWrapperLaw']}}
