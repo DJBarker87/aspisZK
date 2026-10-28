@@ -20,7 +20,7 @@ def fieldsVec (out : alloc.vec.Vec U8) : List U32 →
   | v::xs => if v < 2147483647#u32 then do
       let out' ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (wordSlice v)
       fieldsVec out' xs
-    else .ok (.Err E.Public)
+    else .ok (.Err aspis_core.state_only_prefix.r0.Error.Public)
 
 set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (out : alloc.vec.Vec U8) (xs : List U32)
@@ -43,6 +43,8 @@ theorem complete_result (out : alloc.vec.Vec U8) (xs : List U32)
       simp only [fieldsVec,hc,↓reduceIte,hout',bind_tc_ok]
       rw [ih out' hb',PV_B3P_AppendFields226.nativeFields]
       simp only [hc,↓reduceIte,hval,word_slice_value]
+
+    · simp only [fieldsVec,hc,↓reduceIte,mapR,bindR,PV_B3P_AppendFields226.nativeFields]
 
 #print axioms word_slice_value
 #print axioms complete_result
