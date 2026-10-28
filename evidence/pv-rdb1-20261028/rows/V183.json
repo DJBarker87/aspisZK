@@ -1,0 +1,42 @@
+{
+  "row": "V183",
+  "name": "op32 alloc.vec.Vec.try_reserve_exact",
+  "status": "RESTORED",
+  "evidence_class": "structural (K-1 substitute)",
+  "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
+  "structural": "v183-deployed-binding.json",
+  "native": [
+    {
+      "receipt": "native-reserve/receipt.json",
+      "classification": "finite validation only"
+    }
+  ],
+  "source_audit": "source-audit.json#V183",
+  "features": "resolved-features.json",
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
+  "after": "Same complete reserve Result and buffer/world law; deployed Layout::repeat and pointer constructors satisfy needed original layout/allocation laws",
+  "reason": "Symbolic bitvector padding-mask identity and repeated-layout Result law proved; complete deployed reserve/grow/allocation/error helpers bound, including NonNull nullable allocation mapping, checked size guards, exact pointer/capacity installation only on success, same-align realloc and original snapshot-copy primitive. Arbitrary allocator private physical bytes/external effects are retained even on null return.",
+  "findings": [],
+  "retained_premises": [
+    "runtime/carrier relation at existing library boundary",
+    "compiler and executable correspondence",
+    "E1/E2",
+    "real RunJoin",
+    "client route",
+    "L1/L2/L3"
+  ],
+  "new_trust_items": [],
+  "kani_credit": false,
+  "original_closing_theorem": "R1Z.PV_FXM_ReserveSelected.complete",
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim",
+  "lean": [
+    "54713-receipt.json",
+    "54714-receipt.json",
+    "54715-receipt.json"
+  ],
+  "model_embedding": "v183-model-embedding.json",
+  "before_after_statement": "For every valid buffer, actual padded Rust element layout, initial world and arbitrary raw allocation/reallocation step: native reserve_exact equals owned reference in returned capacityOverflow/AllocError/Ok, buffer header/value, logical memory/liveness and allocator physical/private/external state. No success, zero-effect allocator, or new trust premise. Original shape/ABI/runtime and allocator primitive boundary retained.",
+  "premise_removed": "V183 deployed native-to-owned-reference association at its existing qualified library/source-law boundary; endpoint native-world/compiler premises remain"
+}
