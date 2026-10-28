@@ -8,7 +8,7 @@ e=json.load(open('/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/J.
 roots=[pathlib.Path('/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects')]+[pathlib.Path(x) for x in e['LEAN_PATH'].split(':')]
 for r in rows:
  rel=r['module'].replace('.','/')+'.olean'
- p=next((root/rel for root in roots if (root/rel).is_file()),pathlib.Path(r['path']))
+ p=next((root/rel for root in roots if (root/rel).exists() or (root/rel).is_symlink()),pathlib.Path('/NO_SELECTED_OBJECT'))
  h=hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
  out.append(dict(module=r['module'],path=str(p),sha256=h,expected=r['object_sha256'],match=h==r['object_sha256']))
 print(json.dumps(out))
