@@ -1,5 +1,5 @@
 import R1Z.PV_RunJoin_WeightPointRowStages47
-import R1Z.PV_RunJoin_WeightPairBind47
+import R1Z.PV_RunJoin_WeightFactorWriteCps47
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_WeightPointRowSource047
 open Aeneas Aeneas.Std Result
@@ -12,7 +12,8 @@ theorem complete (fs : Factors) (points : Points) : row0 fs points=(do
     let p ← Array.index_usize points 0#usize
     stage0 p fs 0#usize) := by
   simp only [row0,stage0,stage1,stage2,stage3,stage4,
-    PV_RunJoin_WeightPointFactor46.run,PV_RunJoin_WeightFactorWrite47.write,
-    PV_RunJoin_WeightPairBind47.complete,bind_assoc,bind_tc_ok]
+    PV_RunJoin_WeightPointFactor46.run,PV_RunJoin_WeightFactorWriteCps47.complete,
+    bind_assoc,bind_tc_ok]
+  simp only [PV_RunJoin_WeightFactorWrite47.write]
 #print axioms complete
 end R1Z.PV_RunJoin_WeightPointRowSource047
