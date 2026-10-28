@@ -1,0 +1,56 @@
+{
+  "script_sha256": "9ba29f2e9597283e2e3b03a8e07e7912b8f4caec325059f3d899477c81fcaba7",
+  "controls": [
+    {
+      "control": "omit-write",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+        "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs', 'impl<Z> Zeroize for Z', '{\\n    fn zeroize(&mut self) {\\n        let _ = Z::default();\\n        optimization_barrier(self);\\n    }\\n}')"
+    },
+    {
+      "control": "duplicate-drop-delegate",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs', 'impl<Z> Drop for Zeroizing<Z>', '{\\n    fn drop(&mut self) {\\n        self.0.zeroize(); self.0.zeroize();\\n    }\\n}')"
+    },
+    {
+      "control": "nomem-barrier",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/barrier.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/barrier.rs', 'pub fn optimization_barrier<T: ?Sized>', '{\\n    #[cfg(all(\\n        not(miri),\\n        any(\\n            target_arch = \"aarch64\",\\n            target_arch = \"arm\",\\n            target_arch = \"arm64ec\",\\n            target_arch = \"loongarch64\",\\n            target_arch = \"riscv32\",\\n            target_arch = \"riscv64\",\\n            target_arch = \"s390x\",\\n            target_arch = \"x86\",\\n            target_arch = \"x86_64\",\\n        )\\n    ))]\\n    unsafe {\\n        core::arch::asm!(\\n            \"# {}\",\\n            in(reg) core::ptr::from_ref::<T>(val).cast::<()>(),\\n            options(nomem, preserves_flags, nostack),\\n        );\\n    }\\n    #[cfg(not(all(\\n        not(miri),\\n      "
+    },
+    {
+      "control": "nonzero-u8-default",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/default.rs",
+        "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/default.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/default.rs', 'default_impl! { u8,', '{ u8, 1, \"Returns the default value of `0`\" }')"
+    },
+    {
+      "control": "repeat-iterator-byte",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs', 'fn next(&mut self) -> Option<$elem>', '{\\n                \\n                \\n\\n                let ptr = self.ptr;\\n                let end_or_len = self.end_or_len;\\n                \\n                \\n                unsafe {\\n                    if T::IS_ZST {\\n                        let len = end_or_len.addr();\\n                        if len == 0 {\\n                            return None;\\n                        }\\n                        \\n                        \\n                        \\n                        \\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\\n                    } else {\\n                  "
+    },
+    {
+      "control": "shift-cast-address",
+      "status": "EXPECTED_REJECTION",
+      "source_reads": [
+        "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs"
+      ],
+      "diagnostic": "('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs', 'pub const fn cast<U>', '{\\n        \\n        unsafe { NonNull { pointer: self.as_ptr().wrapping_add(1) as *mut U } }\\n    }')"
+    }
+  ],
+  "source_mutations": "In memory only; native source directories never changed; these are structural tamper controls, not Kani controls or native counterexamples"
+}
