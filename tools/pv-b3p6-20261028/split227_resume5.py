@@ -1,7 +1,7 @@
 """Exact declaration partition after the monolithic memory-review stop."""
 from pathlib import Path
 import re,json,hashlib,sys
-D=Path('evidence/pv-b3p6-20261028');p=D/'ported227-pure-resume5.lean.txt';s=p.read_text();canonical=s.split('\n#print axioms ')[0];canonical=re.sub(r'\nend PV_B3P_227\s*$','',canonical)
+D=Path('evidence/pv-b3p6-20261028');p=D/'ported227-arraytypes-resume5.lean.txt';s=p.read_text();canonical=s.split('\n#print axioms ')[0];canonical=re.sub(r'\nend PV_B3P_227\s*$','',canonical)
 bs=re.split(r'(?=^/-- \[)',canonical,flags=re.M);header=bs[0];decls=bs[1:];names=[]
 for b in decls:
  m=re.search(r'^def\s+(\S+)',b,re.M);assert m,b[:150];names.append(m[1])
@@ -20,6 +20,6 @@ for i,(a,b)in enumerate(zip(cuts,cuts[1:])):
 agg='import '+prev+'\n\n#print axioms PV_B3P_227.reference_terminal.reference227\n';q=D/'lean/PV_B3P_CompleteEmission227.lean'
 if check:assert q.read_text()==agg
 else:q.write_text(agg)
-record=dict(canonical_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),body_edits=False,explicit_array_size_proofs='arrayproof227-resume5.json',constant_let_lifting='constant227-resume5.json',type_annotations='typed227-resume5.json',pure_bind_normalization='pure227-resume5.json',partition='ordered complete declaration blocks; metadata header/options preserved; previous-chunk import only',chunks=rows,monolithic_stop=dict(attempt=42017,reason='controlled SIGTERM after RSS8923448KiB in six-minute review; no cap increase; isolate declarations instead of retrying aggregation'),aggregator_sha256=hashlib.sha256(agg.encode()).hexdigest())
+record=dict(canonical_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),body_edits=False,explicit_array_size_proofs='arrayproof227-resume5.json',constant_let_lifting='constant227-resume5.json',type_annotations='typed227-resume5.json',pure_bind_normalization='pure227-resume5.json',array_type_annotations='arraytypes227-resume5.json',partition='ordered complete declaration blocks; metadata header/options preserved; previous-chunk import only',chunks=rows,monolithic_stop=dict(attempt=42017,reason='controlled SIGTERM after RSS8923448KiB in six-minute review; no cap increase; isolate declarations instead of retrying aggregation'),aggregator_sha256=hashlib.sha256(agg.encode()).hexdigest())
 if not check:(D/'split227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
 print(json.dumps(dict(chunks=len(rows),definitions=len(names),checked=check)))
