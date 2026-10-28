@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_FromSemantics.lean:13:3: warning: Variable name `public1` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_FromSemantics.lean:50:74: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+⊢ (do
+      let a ← prover.prepare_opening variant hash backend sem
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let r1 ←
+              observe R1Z.SideChannelL1AttemptRecord.Call.saltDerivation 2
+                  (prover.derive_private_salts reserved context hash 114#u8)
+            let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let r2 ←
+                  observe R1Z.SideChannelL1AttemptRecord.Call.opening 1 (prover.finish_opening variant hash val val1)
+                let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 =>
+                    observe R1Z.SideChannelL1AttemptRecord.Call.publication 0 (prover.publish_compact variant val2)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    PV_L1_Logged.lift
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                PV_L1_Logged.lift
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                    (core.convert.FromSame verifier.Error) residual)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            PV_L1_Logged.lift
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))) =
+    let (reserved, context) := (reserved, context)
+    do
+    let r ← prover.prepare_opening variant hash backend sem
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let r1 ← prover.derive_private_salts reserved context hash 114#u8
+        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let r2 ← prover.finish_opening variant hash val val1
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => prover.publish_compact variant val2
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                  (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+'PV_L1_FromSemantics.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

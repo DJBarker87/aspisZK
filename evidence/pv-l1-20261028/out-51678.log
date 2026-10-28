@@ -1,0 +1,194 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:106:10: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:106:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.23
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+x✝ : ?m.23
+⊢ (if k ≥ prover.ATTEMPT_CAP then ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
+    else do
+      let a ← coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k
+      let a_1 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+      erase
+          (match a_1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let __x ← PV_L1_Source_070.produce public1 compiled variant hash val nonce_store
+            match __x.1 with
+              | core.result.Result.Ok p => do
+                let i ← PV_L1_Logged.lift (Std.lift (k.wrapping_add 1#usize))
+                Pure.pure (core.result.Result.Ok { proof := p.1, audit := p.2, attempts := i }, __x.2)
+              | core.result.Result.Err e =>
+                match e with
+                | verifier.Error.Parse => Pure.pure (core.result.Result.Err verifier.Error.Parse, __x.2)
+                | verifier.Error.Semantic => Pure.pure (core.result.Result.Err verifier.Error.Semantic, __x.2)
+                | verifier.Error.Transcript => Pure.pure (core.result.Result.Err verifier.Error.Transcript, __x.2)
+                | verifier.Error.Relation => Pure.pure (core.result.Result.Err verifier.Error.Relation, __x.2)
+                | verifier.Error.Merkle => Pure.pure (core.result.Result.Err verifier.Error.Merkle, __x.2)
+                | verifier.Error.Query => Pure.pure (core.result.Result.Err verifier.Error.Query, __x.2)
+                | verifier.Error.Checkpoint => Pure.pure (core.result.Result.Err verifier.Error.Checkpoint, __x.2)
+                | verifier.Error.Allocation => Pure.pure (core.result.Result.Err verifier.Error.Allocation, __x.2)
+                | verifier.Error.Rejected => do
+                  let i ← PV_L1_Logged.lift (Std.lift (k.wrapping_add 1#usize))
+                  PV_L1_Logged.lift
+                      (prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
+                        public1 compiled variant hash __x.2 a.2 i)
+                | verifier.Error.AttemptsExhausted =>
+                  Pure.pure (core.result.Result.Err verifier.Error.AttemptsExhausted, __x.2)
+                | verifier.Error.Entropy => Pure.pure (core.result.Result.Err verifier.Error.Entropy, __x.2)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              PV_L1_Logged.lift
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    prover.RetriedProof (core.convert.FromSame verifier.Error) residual)
+            Pure.pure (r1, nonce_store))) =
+    if k ≥ prover.ATTEMPT_CAP then ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
+    else do
+      let (r, next_attempt1) ←
+        coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+          match r1 with
+            | core.result.Result.Ok p =>
+              let (proof, audit) := p
+              do
+              let i ← Std.lift (k.wrapping_add 1#usize)
+              ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+            | core.result.Result.Err e =>
+              match e with
+              | verifier.Error.Parse => ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+              | verifier.Error.Semantic => ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+              | verifier.Error.Transcript => ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+              | verifier.Error.Relation => ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+              | verifier.Error.Merkle => ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+              | verifier.Error.Query => ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+              | verifier.Error.Checkpoint => ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+              | verifier.Error.Allocation => ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+              | verifier.Error.Rejected => do
+                let i ← Std.lift (k.wrapping_add 1#usize)
+                prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1
+                    compiled variant hash nonce_store1 next_attempt1 i
+              | verifier.Error.AttemptsExhausted =>
+                ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+              | verifier.Error.Entropy => ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+                (core.convert.FromSame verifier.Error) residual
+          ok (r1, nonce_store)
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:99:36: warning: This simp argument is unused:
+  PV_L1_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲7̲0̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:99:121: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok, ̲erase_bind,
+  ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure, ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:99:142: warning: This simp argument is unused:
+  PV_L1_Source_070.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲P̲V̲_̲L̲1̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:27: warning: This simp argument is unused:
+  PV_L1_EraseIf.erase_if
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲7̲0̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:50: warning: This simp argument is unused:
+  PV_L1_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲7̲0̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:77: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲P̲V̲_̲L̲1̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲7̲0̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:99: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:110: warning: This simp argument is unused:
+  erase_observe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:124: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:135: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:145: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1_EraseIf.erase_if, ̲PV_L1_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_070.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_071.lean:102:156: warning: This simp argument is unused:
+  PV_L1_Source_070.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵7̵0̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲P̲V̲_̲L̲1̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1_Source_071.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

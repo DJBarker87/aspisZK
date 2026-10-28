@@ -1,0 +1,118 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:64:265: error: unsolved goals
+case h_1
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F : Type
+aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H
+OracleInst : host_sumcheck.Oracle F
+transcript : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+oracle : F
+h✝ : ¬round = 10#usize
+value✝ :
+  core.result.Result (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) r1_wire.Error ×
+    host_wire.SemanticTranscript H × alloc.vec.Vec U8
+called✝¹ :
+  host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point running round
+      oracle =
+    ok value✝
+cf✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+val✝ : Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31
+called✝ : core.result.Result.Insts.CoreOpsTry.branch value✝.1 = ok (core.ops.control_flow.ControlFlow.Continue val✝)
+value : Usize
+called : Std.lift (round.wrapping_add 1#usize) = ok value
+⊢ (if value = 10#usize then do
+      let r ← OracleInst.evaluate oracle val✝.1
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val val✝.2
+          if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, value✝.2.1, value✝.2.2)
+            else ok (core.result.Result.Ok (val✝.1, val✝.2), value✝.2.1, value✝.2.2)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, value✝.2.1, value✝.2.2)
+    else do
+      let (r, transcript1, output1) ←
+        host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst value✝.2.1 value✝.2.2 val✝.1 val✝.2
+            value oracle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (point1, running1) := val
+          do
+          let i ← Std.lift (value.wrapping_add 1#usize)
+          host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript1 output1 point1
+              running1 i oracle
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, transcript1, output1)) =
+    host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst value✝.2.1 value✝.2.2 val✝.1 val✝.2
+      value oracle
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:66:60: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲PV_L1_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:66:71: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲PV_L1_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:66:81: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲PV_L1_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:66:92: warning: This simp argument is unused:
+  PV_L1_Source_041.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵1̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:71:27: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵1̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲4̲1̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:71:60: warning: This simp argument is unused:
+  erase_observe
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵1̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲1̲_̲S̲o̲u̲r̲c̲e̲_̲0̲4̲1̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_Source_042.lean:71:85: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1_Source_042.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

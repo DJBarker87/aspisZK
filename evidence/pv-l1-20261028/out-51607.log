@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_EntropyProducer.lean:45:2: error: Tactic `rfl` failed: The left-hand side
+  let (after, status) := (after, status)
+  ok ((drawEvents p (↑after.used - ↑p.used), status), after)
+is not definitionally equal to the right-hand side
+  ok
+    ((List.flatMap
+          (fun a =>
+            [SideChannelL1AttemptRecord.Event.call SideChannelL1AttemptRecord.Call.rng a,
+              SideChannelL1AttemptRecord.Event.rngReturn (statusOf (↑p.replies)[a]?)])
+          (List.range' (↑p.used) (drawCount states)),
+        status),
+      after)
+
+inst✝ : ErasureFns
+nonce : Std.Array U8 32#usize
+p after : Tape
+status : Status
+executed : owner nonce p = ok (after, status)
+states : List State
+oldPath : OwnerReplay (oldBody nonce) Prod.swap nonce p states (after, status)
+path : OwnerReplay (newBody nonce) id nonce p states (after, status)
+replies : after.replies = p.replies
+cursor : ↑after.used = ↑p.used + drawCount states
+bound : drawCount states ≤ 16
+history :
+  events states =
+    List.map (fun index => (Array.repeat 64#usize 0#u8, index, (↑p.replies)[index]?))
+      (List.range' (↑p.used) (drawCount states))
+available : ∀ event ∈ events states, event.2.2.isSome = true
+suffix : List.drop ↑after.used ↑after.replies = List.drop (↑p.used + drawCount states) ↑p.replies
+count : ↑after.used - ↑p.used = drawCount states
+⊢ (let (after, status) := (after, status)
+    ok ((drawEvents p (↑after.used - ↑p.used), status), after)) =
+    ok
+      ((List.flatMap
+            (fun a =>
+              [SideChannelL1AttemptRecord.Event.call SideChannelL1AttemptRecord.Call.rng a,
+                SideChannelL1AttemptRecord.Event.rngReturn (statusOf (↑p.replies)[a]?)])
+            (List.range' (↑p.used) (drawCount states)),
+          status),
+        after)
+/home/dombarker/project-offloads/codex-pv-l1-20261028/sources/PV_L1_EntropyProducer.lean:44:41: warning: This simp argument is unused:
+  count
+
+Hint: Omit it from the simp argument list.
+  simp only [produce, ̲executed, ̲bind_tc_ok,c̵o̵u̵n̵t̵,̵ ̲replayEvents, ̲history, ̲List.flatMap_map]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1_EntropyProducer.source_replay' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
