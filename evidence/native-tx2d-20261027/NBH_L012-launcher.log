@@ -1,0 +1,72 @@
+{"attempt": "NBH_L012", "exit_status": 1, "wall_seconds": 2.608611428993754, "peak_rss_kib": "2640316", "swaps": "0", "print_axioms": ["'NBH_ArrayEq.list_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NBH_ArrayEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBH_generated/NBH_ArrayEq.lean:28:8: error: Type mismatch: After simplification, term
+  ih ys tail
+ has type
+  @Eq (Result Bool)
+    (List.allM
+      (fun x => do
+        let b ← liftFun2 core.cmp.impls.PartialEqU8.ne x.1 x.2
+        ok (decide ¬b = true))
+      (xs.zip ys))
+    (ok (decide (xs = ys)))
+but is expected to have type
+  @Eq (Result Bool) (List.allM (fun x => ok (decide ¬core.cmp.impls.PartialEqU8.ne x.1 x.2 = true)) (xs.zip ys))
+    (ok (decide (xs = ys)))
+NBH_generated/NBH_ArrayEq.lean:13:34: warning: This simp argument is unused:
+  List.allM
+
+Hint: Omit it from the simp argument list.
+  simp_all [L̵i̵s̵t̵.̵a̵l̵l̵M̵,̵pure]
+
+Note: This linter can be disabled with `set_option lin
+...
+: error: don't know how to synthesize implicit argument `xs`
+  @Array.ext ?m.67 ?m.68 ?m.69
+context:
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ _root_.Array ?m.67
+NBH_generated/NBH_ArrayEq.lean:37:39: error: don't know how to synthesize implicit argument `α`
+  @Array.ext ?m.67 ?m.68 ?m.69
+context:
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ Type ?u.27
+NBH_generated/NBH_ArrayEq.lean:37:8: error: don't know how to synthesize implicit argument `b`
+  @propext (Array.size ?m.68 = Array.size ?m.69)
+    ((∀ (i : ℕ) (hi₁ : i < Array.size ?m.68) (hi₂ : i < Array.size ?m.69), ?m.68[i] = ?m.69[i]) → ?m.68 = ?m.69)
+    { mp := ?mp, mpr := ?mpr }
+context:
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ Prop
+NBH_generated/NBH_ArrayEq.lean:37:8: error: don't know how to synthesize implicit argument `a`
+  @propext (Array.size ?m.68 = Array.size ?m.69)
+    ((∀ (i : ℕ) (hi₁ : i < Array.size ?m.68) (hi₂ : i < Array.size ?m.69), ?m.68[i] = ?m.69[i]) → ?m.68 = ?m.69)
+    { mp := ?mp, mpr := ?mpr }
+context:
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ Prop
+NBH_generated/NBH_ArrayEq.lean:37:17: error: unsolved goals
+case mp
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ Array.size ?m.68 = Array.size ?m.69 →
+    (∀ (i : ℕ) (hi₁ : i < Array.size ?m.68) (hi₂ : i < Array.size ?m.69), ?m.68[i] = ?m.69[i]) → ?m.68 = ?m.69
+
+case mpr
+n : Usize
+a b : Std.Array U8 n
+length : a.length = b.length
+⊢ ((∀ (i : ℕ) (hi₁ : i < Array.size ?m.68) (hi₂ : i < Array.size ?m.69), ?m.68[i] = ?m.69[i]) → ?m.68 = ?m.69) →
+    Array.size ?m.68 = Array.size ?m.69
+'NBH_ArrayEq.list_eq' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBH_ArrayEq.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r74e9fcb81f3245088f295ecb11b45a69.scope; invocation ID: c404c99c91334b8a9e6be2c9d245884f

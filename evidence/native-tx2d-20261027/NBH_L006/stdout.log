@@ -1,0 +1,48 @@
+NBH_generated/NBH_Validators.lean:27:15: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+NBH_generated/NBH_Validators.lean:26:52: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+NBH_generated/NBH_Validators.lean:26:64: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+NBH_generated/NBH_Validators.lean:24:42: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+NBH_generated/NBH_Validators.lean:21:42: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+NBH_generated/NBH_Validators.lean:32:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Afterstate
+h✝ : a.next_pair_index = 0#u64
+⊢ sorry () = core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex
+NBH_generated/NBH_Validators.lean:32:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+a : Afterstate
+cap : U64
+_ : [> let cap ← 1#u64 <<< 20#usize <]
+h✝ : ¬↑a.next_pair_index = 0
+cap_post1 : ↑cap = 1048576 % U64.size
+cap_post2 : cap.bv = 1048576#64
+⊢ sorry () =
+    if 1048576 < ↑a.next_pair_index then
+      core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex
+    else
+      if Canonical a.next_root ∧ CanonicalFrom a.next_frontier 0 then core.result.Result.Ok ()
+      else core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+'NBH_Validators.afterstate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

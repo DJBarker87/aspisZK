@@ -1,0 +1,51 @@
+{
+  "attempt": "NBH_K016",
+  "kind": "kani",
+  "module": "terse",
+  "sources": [
+    "NBH_src/Cargo.lock",
+    "NBH_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/NBH_after.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/NBH_live.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/verifier_registry.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/NBH_registry.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/format.rs",
+    "NBH_src/crates/aspis-statement/src/pool_v1/NBH_format.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2d-20261027/NBH_src/crates/aspis-statement/Cargo.toml",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::verifier_registry::NBH_registry::NBH_decode_verifier_registry_entry_v2_gate",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "source_revision": "35b9f309b51287bebf1bd771b961dbeccca6c499",
+  "source_tree_dirty": true,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-native-tx2d-20261027/NBH_target",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2d-20261027/NBH_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387"
+  },
+  "expected_time": "Optimized native compilation then named solver gate; no field multiplication"
+}

@@ -1,0 +1,70 @@
+NBH_generated/NBH_Frontier.lean:23:4: error: unsolved goals
+case hbound
+a : Frontier
+i : Usize
+bound : ↑i ≤ 20
+eqv : CanonicalFrom a 0 ↔ CanonicalFrom a ↑i
+s : Slice (Std.Array U32 8#usize)
+_ : [> let s ← lift (Array.to_slice a) <]
+s_post : s = Array.to_slice a
+h✝ : i < s.len
+⊢ ↑i < Array.length a
+
+a : Frontier
+i : Usize
+bound : ↑i ≤ 20
+eqv : CanonicalFrom a 0 ↔ CanonicalFrom a ↑i
+s : Slice (Std.Array U32 8#usize)
+_✝ : [> let s ← lift (Array.to_slice a) <]
+s_post : s = Array.to_slice a
+h✝ : i < s.len
+a1 : Std.Array U32 8#usize
+_ : [> let a1 ← Array.index_usize a i <]
+a1_post : a1 = (↑a)[↑i]
+⊢ (do
+      let b ← pool_v1.pair_tree_profile.digest_is_canonical a1
+      if b = true then do
+          let level1 ← i + 1#usize
+          ok (ControlFlow.cont level1)
+        else
+          ok
+            (ControlFlow.done
+              (core.result.Result.Err
+                pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate))) ⦃
+    r =>
+    match r with
+    | ControlFlow.done y =>
+      y =
+        if CanonicalFrom a 0 then core.result.Result.Ok ()
+        else core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+    | ControlFlow.cont x' => ↑x' ≤ 20 ∧ (CanonicalFrom a 0 ↔ CanonicalFrom a ↑x') ∧ 20 - ↑x' < 20 - ↑i ⦄
+
+case h2
+a : Frontier
+i : Usize
+bound : ↑i ≤ 20
+eqv : CanonicalFrom a 0 ↔ CanonicalFrom a ↑i
+s : Slice (Std.Array U32 8#usize)
+_ : [> let s ← lift (Array.to_slice a) <]
+s_post : s = Array.to_slice a
+h✝ : ¬i < s.len
+⊢ core.result.Result.Ok () =
+    if CanonicalFrom a 0 then core.result.Result.Ok ()
+    else core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate
+NBH_generated/NBH_Frontier.lean:17:89: error: unsolved goals
+case refine_2
+a : Frontier
+⊢ ↑0#usize ≤ 20 ∧ (CanonicalFrom a 0 ↔ CanonicalFrom a ↑0#usize)
+NBH_generated/NBH_Frontier.lean:15:79: error: unsolved goals
+a : Frontier
+spec :
+  pool_v1.pair_terminal.validate_verified_afterstate_loop a 0#usize ⦃ r =>
+    r =
+      if CanonicalFrom a 0 then core.result.Result.Ok ()
+      else core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate ⦄
+⊢ pool_v1.pair_terminal.validate_verified_afterstate_loop a 0#usize =
+    ok
+      (if CanonicalFrom a 0 then core.result.Result.Ok ()
+      else core.result.Result.Err pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate)
+NBH_generated/NBH_Frontier.lean:26:12: error: unexpected token 'only'; expected command
+'NBH_Frontier.afterstate_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

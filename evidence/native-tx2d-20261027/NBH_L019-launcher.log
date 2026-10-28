@@ -1,0 +1,23 @@
+{"attempt": "NBH_L019", "exit_status": 0, "wall_seconds": 2.559593973972369, "peak_rss_kib": "2625108", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α →
+...
+def Aeneas.Std.core.array.TryFromArrayCopySlice.try_from : {T : Type} →
+  (N : Usize) →
+    core.marker.Copy T → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N _copyInst s =>
+  if h0 : s.length = ↑N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Usize) → Slice T → Result (core.result.Result (Std.Array T N) core.array.TryFromSliceError) :=
+fun {T} N s => if h : s.len = N then ok (core.result.Result.Ok ⟨↑s, ⋯⟩) else ok (core.result.Result.Err ())
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Slice α → Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+
+Running as unit: run-re4b271e277bd48dcb54751821f8b2982.scope; invocation ID: df0667387ec1498289eca70f7ad45fcc

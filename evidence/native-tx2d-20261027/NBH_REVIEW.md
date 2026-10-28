@@ -1,0 +1,13 @@
+# Dynamic store review and split
+
+K024 (ASJA688) timed out in CBMC at the existing90-second harness limit: exit1, wall104.897897435s, peakRSS6457144KiB, swap0. No write/frame claim follows. The source shape bit-blasts a dynamic32-byte destination, arbitrary688-byte initial buffer, arbitrary level and arbitrary queried byte together.
+
+The serial runner returned process exit0 even after recording a verification exit1, so its batch had already submitted K025 (the distinct800-byte live store) before review. K025 also timed out: exit1, wall100.913156220s, peakRSS6452568KiB, swap0. This second broad shape should have been reviewed before submission; no credit is taken. NBH_PAUSE prevented the next process before admission, and both scopes are terminal. Neither timed-out target was rerun, and caps/timeouts were not increased.
+
+Own runner repair: NBH_native.py now propagates the captured prover exit AFTER validating the unchanged frozen lock; a failed verification therefore stops serial batching. NBH_PAUSE is checked before any admission/submission. Shared S2W/S2H tools remain unchanged. These changes strengthen control/validation and are permitted by the worker-scripts ruling.
+
+Replacement: K026/K027 only check one source iteration's exact arithmetic, in-bounds range borrow,32-byte range length and typed pointer identity on arbitrary output/level<20. The copy step is split at the existing TrustedStd copy_from_slice contract and existing Lean S2K.SourceStore.store_exact / S2K.LoopStep.body_write. The encoded32-byte argument remains the SAME child's result and its lower native DigestEncode bridge remains explicitly OPEN. This avoids a whole native dynamic array update. It is range/argument evidence, not a substitute passing whole-store theorem. K028 is independent late-index/length preflight and unchanged output before any children; K029 is the fixed ASF8 prefix; K030 covers arbitrary-usize first length guards. ASR8 emission remains unattempted because op53 is universal and it has no soundness need here.
+
+Own solver scratch is cleaned after both terminal timeouts (NBH_TIMEOUT_CLEANUP.json) before new gates; the persistent cache is retained. Budget before replacements:25 Kani,22 Lean. Five native runs remain; no further Lean compile is required after the green L022 audit.
+
+Replacement results: K026 ASJA range exit0,wall12.884193147s,peakRSS617644KiB; K027 live range exit0,wall11.983638754s,peakRSS617356KiB. K028 late preflight exit0,wall14.857008292s,peakRSS631228KiB. All swap0. The own controller explicitly refuses both retired full dynamic-store harness names; future repair must stay split. Native copy/encoder member closure is still OPEN.

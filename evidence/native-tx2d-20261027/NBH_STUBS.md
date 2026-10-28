@@ -1,0 +1,5 @@
+# Native callee contracts
+
+No field multiplication is run or stubbed. The single-iteration/prefix probes replace only digest_is_canonical with NBH_digest: fresh arbitrary Boolean constrained to the conjunction of all eight raw-u32 bounds `<2147483647`. Paired theorem: NBD_DigestInduction.source; NBD_DigestInduction.same_scanner also covers the account scanner. Domain: EVERY eight raw-u32 array, including noncanonical limbs. Closed native child: NBD_K006 and NBD_DigestNativeStep.source/compose, NBD_DIGEST_BRIDGE.md. No caller canonicality assumption is needed. The transformation is explicit (rather than an implicit harness attribute); NBH_NATIVE_PROBES.json retains the frozen body and changes. Frontier loop invariant is level<=20; initialization zero, each continuation level+1, termination at20 are proved by NBH_Frontier.afterstate_loop and NBH_LiveFrontier.live_loop.
+
+Prefix probes expose `None` only as a pending frontier suffix. They do not mistake it for native success. Full validator conclusions require prefix plus native one-iteration plus Lean induction and exact model Result association.
