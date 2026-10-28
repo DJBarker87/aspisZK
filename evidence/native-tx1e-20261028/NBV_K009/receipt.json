@@ -1,0 +1,65 @@
+{
+  "attempt": "NBV_K009",
+  "kind": "kani",
+  "sources": [
+    "NBV_src/Cargo.lock",
+    "NBV_gate.py",
+    "NBV_src/KMX_stubs.rs",
+    "NBV_KMX_copy_stubs.patch",
+    "NBV_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_multiproof.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_keys.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/multiproof.rs",
+    "NBV_src/crates/aspis-r1-cost-probe/src/candidate.rs"
+  ],
+  "command": [
+    "python3",
+    "NBV_gate.py",
+    "NBV_K009",
+    "multiproof::NBV_multiproof::NBV_admitted_count_copy",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1e-20261028/NBV_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NBV_K009-graph.json"
+  },
+  "expected_time": "optimized compilation then one native helper/atomic-step SAT gate, no SHA or multiplication",
+  "reservation_retries": 0,
+  "source_revision": "1672ab0c0a8a445bb8481c4c94bc44118f68108a",
+  "source_tree_dirty": true,
+  "exit_status": 0,
+  "wall_seconds": 46.87078727997141,
+  "peak_rss_kib": "990612",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r640ec1fdac2d4ec19846bf9520f8f516.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1061892096",
+  "source_hashes": {
+    "NBV_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBV_gate.py": "7c53567517485d07202df3eed495ca4aef79c46f1c521cb71a5dbc51b11e10cd",
+    "NBV_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBV_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NBV_src/crates/aspis-r1-cost-probe/src/lib.rs": "45cce6cb4f913f1aaff5554160798b4fe970ecc944aff526b99d7b2f1756c10b",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_multiproof.rs": "acd95220132d6ba5ad27f773c13aaf341473fe30206b7b8a9f7eb6ae1ac60ff6",
+    "NBV_src/crates/aspis-r1-cost-probe/src/NBV_keys.rs": "740f6810e3fe29f64319fa4f82dfd742665f1d312ff852ef634fec1e22be8ebd",
+    "NBV_src/crates/aspis-r1-cost-probe/src/multiproof.rs": "ddffab49dd7632ae2014d014dcef881b5c5bf12e26aefd5aa17a0a67421f27ac",
+    "NBV_src/crates/aspis-r1-cost-probe/src/candidate.rs": "da5f08ec359c5b6baa054b5d8f4d3d2762368985c1c2909ab46281a8c21332e1"
+  },
+  "print_axioms": "N/A: kani"
+}
