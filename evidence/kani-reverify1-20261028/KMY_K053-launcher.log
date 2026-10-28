@@ -1,0 +1,36 @@
+{"attempt": "KMY_K053", "exit_status": 0, "wall_seconds": 12.393465312023181, "peak_rss_kib": "315920", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMY_scalar_stage3", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition name: `feature`
+  --
+...
+-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:533:23 in function alloc::raw_vec::RawVecInner::current_memory
+
+Check 369: alloc::raw_vec::RawVecInner::current_memory.pointer_dereference.18
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:533:23 in function alloc::raw_vec::RawVecInner::current_memory
+
+Check 370: alloc::raw_vec::RawVecInner::current_memory.pointer_dereference.19
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:524:13 in function alloc::raw_vec::RawVecInner::current_memory
+
+Check 371: alloc::raw_vec::handle_error.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:845:11 in function alloc::raw_vec::handle_error
+
+
+SUMMARY:
+ ** 0 of 371 failed (7 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 7.3839135s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rd482c0c07dee487794619e330096b4f5.scope; invocation ID: 662eacd467d944b488ccf73ce1c3404a

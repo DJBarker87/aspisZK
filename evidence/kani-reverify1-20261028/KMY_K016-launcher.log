@@ -1,0 +1,25 @@
+{"attempt": "KMY_K016", "exit_status": 1, "wall_seconds": 8.75008709600661, "peak_rss_kib": "473092", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMY_weights_copy_window", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: unexpected `cfg` condition name: `feature
+...
+::<[u32; 4], std::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, std::iter::Map<std::array::drain::Drain<'_, ()>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<(), {closure@<[u32; 4] as kani::Arbitrary>::any_array<66>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+
+SUMMARY:
+ ** 1 of 221 failed (220 undetermined)
+Failed Checks: unwinding assertion loop 0
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs", line 897, in std::array::try_from_fn_erased::<[u32; 4], std::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, std::iter::Map<std::array::drain::Drain<'_, ()>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<(), {closure@<[u32; 4] as kani::Arbitrary>::any_array<66>::{closure#0}}>::{closure#0}}>>::{closure#0}}>
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 5.647318s
+
+Manual Harness Summary:
+Verification failed for - KMY_weights_copy_window
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-rb5aec72651eb4c9b9fed52136182eada.scope; invocation ID: 6188aa8fcb3e40beb6477eecce26ba5a

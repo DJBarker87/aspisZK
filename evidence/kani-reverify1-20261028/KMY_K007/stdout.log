@@ -1,0 +1,296 @@
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMY_expand_zero_window", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.67.0 (standalone)
+warning: function `KMX_copy_nonoverlapping` is never used
+ --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `KMX_clone_from_slice` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_extend_from_slice` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `KMX_to_vec` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^
+
+warning: function `KMX_realloc` is never used
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^
+
+warning: crate `KMY_windows` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `kmy_windows`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `KMX_stubs` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs:3:5
+  |
+3 | mod KMX_stubs;
+  |     ^^^^^^^^^ help: convert the identifier to snake case: `kmx_stubs`
+
+warning: function `KMY_expand_copy_window` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs:7:4
+  |
+7 | fn KMY_expand_copy_window() {
+  |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmy_expand_copy_window`
+
+warning: function `KMY_expand_zero_window` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs:16:4
+   |
+16 | fn KMY_expand_zero_window() {
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmy_expand_zero_window`
+
+warning: function `KMY_expand_metadata` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows.rs:24:4
+   |
+24 | fn KMY_expand_metadata() {
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmy_expand_metadata`
+
+warning: function `KMX_copy_nonoverlapping` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:4:15
+  |
+4 | pub unsafe fn KMX_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+  |               ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_nonoverlapping`
+
+warning: function `KMX_copy_from_slice` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:8:8
+  |
+8 | pub fn KMX_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+  |        ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_copy_from_slice`
+
+warning: function `KMX_clone_from_slice` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:12:8
+   |
+12 | pub fn KMX_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){KMX_copy_from_slice(dst,src)}
+   |        ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_clone_from_slice`
+
+warning: function `KMX_extend_from_slice` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:14:8
+   |
+14 | pub fn KMX_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+   |        ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_from_slice`
+
+warning: function `KMX_to_vec` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:18:8
+   |
+18 | pub fn KMX_to_vec<T: Copy>(src:&[T])->Vec<T>{
+   |        ^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec`
+
+warning: function `KMX_realloc` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMX_stubs.rs:23:15
+   |
+23 | pub unsafe fn KMX_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+   |               ^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_realloc`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: 17 warnings emitted
+
+Checking harness KMY_expand_zero_window...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KMY_windows__RNvCsg9v5VjWUeTj_11KMY_windows22KMY_expand_zero_window.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 448 column 5 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani_core/src/models.rs line 176 column 17 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani/src/lib.rs line 57 column 1 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/work/kani/kani/library/kani/src/lib.rs line 57 column 1 function <usize as kani::rustc_intrinsics::ToISize>::to_isize thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 40 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 49 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 58 column 9 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 68 column 5 function core::slice::index::slice_index_fail::do_panic::runtime thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/intrinsics/mod.rs line 2449 column 9 function core::slice::index::slice_index_fail::do_panic thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panic.rs line 178 column 9 function core::slice::index::slice_index_fail thread 0
+aborting path on assume(false) at file /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs line 456 column 13 function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut thread 0
+Runtime Symex: 0.0746096s
+size of program expression: 3549 steps
+slicing removed 2186 assignments
+Generated 30 VCC(s), 22 remaining after simplification
+Runtime Postprocess Equation: 0.00081175s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.023584s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 0.00163614s
+Solving with CaDiCaL 2.0.0
+26094 variables, 63139 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.00607225s
+Runtime decision procedure: 0.0300726s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+26095 variables, 63140 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 0.00127191s
+Runtime decision procedure: 0.00143047s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+26096 variables, 63141 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 0.326086s
+Runtime decision procedure: 0.326231s
+
+RESULTS:
+Check 1: core::slice::index::slice_index_fail::do_panic::runtime.assertion.1
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:58:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 2: kani::mem::cbmc::same_allocation.unsupported_construct.1
+	 - Status: SUCCESS
+	 - Description: "Kani does not support reasoning about pointer to unallocated memory"
+	 - Location: ../../../runner/work/kani/kani/library/kani/src/lib.rs:57:1 in function kani::mem::cbmc::same_allocation
+
+Check 3: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset in bytes overflows isize"
+	 - Location: ../../../runner/work/kani/kani/library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 4: kani::rustc_intrinsics::offset::<u8, *mut u8, usize>.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "Offset result and original pointer must point to the same allocation"
+	 - Location: ../../../runner/work/kani/kani/library/kani/src/lib.rs:57:1 in function kani::rustc_intrinsics::offset::<u8, *mut u8, usize>
+
+Check 5: core::slice::index::slice_index_fail::do_panic::runtime.assertion.2
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:49:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 6: core::slice::index::slice_index_fail::do_panic::runtime.assertion.3
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:68:5 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 7: <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "`dst` must be properly aligned"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/specialize.rs:34:13 in function <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill
+
+Check 8: <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "write_bytes: attempt to compute number in bytes which would overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/specialize.rs:34:13 in function <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill
+
+Check 9: KMY_expand_zero_window.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMY_windows.rs:18:53 in function KMY_expand_zero_window
+
+Check 10: KMY_expand_zero_window.assertion.2
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KMY_windows.rs:19:10 in function KMY_expand_zero_window
+
+Check 11: KMY_expand_zero_window.assertion.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMY_windows.rs:20:13 in function KMY_expand_zero_window
+
+Check 12: KMY_expand_zero_window.assertion.4
+	 - Status: SUCCESS
+	 - Description: "attempt to add with overflow"
+	 - Location: KMY_windows.rs:20:34 in function KMY_expand_zero_window
+
+Check 13: KMY_expand_zero_window.assertion.5
+	 - Status: SUCCESS
+	 - Description: "assertion failed: dst[j] == if at<=j && j<at+16 {0} else {old}"
+	 - Location: KMY_windows.rs:20:2 in function KMY_expand_zero_window
+
+Check 14: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:448:5 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut
+
+Check 15: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer to reference cast: address must be a multiple of its type's alignment"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:454:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut
+
+Check 16: <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:454:22 in function <std::ops::Range<usize> as std::slice::SliceIndex<[u8]>>::index_mut
+
+Check 17: core::slice::index::slice_index_fail::do_panic::runtime.assertion.4
+	 - Status: SUCCESS
+	 - Description: "This is a placeholder message; Kani doesn't support message formatted at runtime"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs:40:9 in function core::slice::index::slice_index_fail::do_panic::runtime
+
+Check 18: core::num::<impl usize>::checked_sub.arithmetic_overflow.1
+	 - Status: SUCCESS
+	 - Description: "attempt to compute `unchecked_sub` which would overflow"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs:812:31 in function core::num::<impl usize>::checked_sub
+
+Check 19: <usize as kani::rustc_intrinsics::ToISize>::to_isize.unreachable.1
+	 - Status: SUCCESS
+	 - Description: "unreachable code"
+	 - Location: ../../../runner/work/kani/kani/library/kani_core/src/models.rs:176:17 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 20: <usize as kani::rustc_intrinsics::ToISize>::to_isize.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "Offset value overflows isize"
+	 - Location: ../../../runner/work/kani/kani/library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 21: <usize as kani::rustc_intrinsics::ToISize>::to_isize.assertion.1
+	 - Status: SUCCESS
+	 - Description: "internal error: entered unreachable code"
+	 - Location: ../../../runner/work/kani/kani/library/kani/src/lib.rs:57:1 in function <usize as kani::rustc_intrinsics::ToISize>::to_isize
+
+Check 22: <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "memset destination region writeable"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/specialize.rs:34:13 in function <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill
+
+Check 23: KMY_expand_zero_window.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMY_windows.rs:18:53 in function KMY_expand_zero_window
+
+Check 24: KMY_expand_zero_window.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: KMY_windows.rs:20:13 in function KMY_expand_zero_window
+
+
+SUMMARY:
+ ** 0 of 24 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.5712166s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
