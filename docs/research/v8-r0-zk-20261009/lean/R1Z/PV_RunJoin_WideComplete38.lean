@@ -16,7 +16,7 @@ theorem encode (ops : ExternalFuns) (size : Usize) (f : Nat → W)
       bytes.val=payload f 0 size.val ∧ bytes.val.length=32*size.val := by
   obtain ⟨bytes,hbytes,hval⟩ := complete ops size f size.val 0#usize
     (alloc.vec.Vec.with_capacity U8 (Usize.wrapping_mul 32#usize size))
-    (by change 0+size.val=size.val;rfl) (by exact room)
+    (by change 0+size.val=size.val;omega) (by change 0+32*size.val≤Usize.max;omega)
   refine ⟨bytes,?_,?_,?_⟩
   · unfold prover.encoded_slice
     rw [input_size]
