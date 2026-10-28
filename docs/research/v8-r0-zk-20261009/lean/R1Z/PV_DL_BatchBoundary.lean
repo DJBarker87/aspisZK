@@ -11,7 +11,8 @@ def observeBatch (state : Nat) (batch : List Unit) : Result Nat :=
 batched callback. Retain the byte-fold model only under a proved fold law. -/
 theorem boundary_counterexample :
     PV_DL_CompressionTrace.run observeBatch [[(),()]] 0 ≠
-      PV_DL_CompressionTrace.run observeBatch [[()],[()]] 0 := by decide
+      PV_DL_CompressionTrace.run observeBatch [[()],[()]] 0 := by
+  simp [PV_DL_CompressionTrace.run,observeBatch,bind_tc_ok]
 
 #print axioms observeBatch
 #print axioms boundary_counterexample
