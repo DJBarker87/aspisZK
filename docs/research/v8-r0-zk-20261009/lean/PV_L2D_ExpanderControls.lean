@@ -10,7 +10,7 @@ theorem zero_accepts (s : State) (h : ∀ i, s.cache i=0) (n retry : Nat) :
     (sample (next (constant 0)) (n+1) retry s).consumed=1 := by
   have hw : (next (constant 0) s).word=0 := by
     simp only [next,constant]
-    split <;> simp_all
+    split <;> simp_all [constant]
   simp [sample,hw,PV_L2B_SourceWords.candidate]
 #print axioms zero_accepts
 
@@ -18,7 +18,7 @@ theorem zero_after (s : State) (h : ∀ i, s.cache i=0) :
     ∀ i, (next (constant 0) s).after.cache i=0 := by
   intro i
   simp only [next,constant]
-  split <;> simp_all
+  split <;> simp_all [constant]
 #print axioms zero_after
 
 theorem zero_four (s : State) (h : ∀ i, s.cache i=0) :
