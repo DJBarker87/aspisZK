@@ -19,7 +19,7 @@ theorem block_coordinate (n i j : Nat) (hi : i<n/64) (hj : j<64) :
 theorem reassembles (v : Slice U8) :
     v.val.take ((v.val.length/64)*64)++v.val.drop ((v.val.length/64)*64)=v.val :=
   List.take_append_drop _ _
-theorem nonvacuous : nativeViews (Slice.new U8)=ok ([],[]) := rfl
+theorem nonvacuous : nativeViews (⟨[],by simp⟩ : Slice U8)=ok ([],[]) := rfl
 #print axioms complete
 #print axioms bounds
 #print axioms no_overlap
