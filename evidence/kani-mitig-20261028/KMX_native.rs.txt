@@ -1,0 +1,31 @@
+extern crate alloc;
+include!("KMX_stubs.rs");
+fn differential<T:Copy+Eq+core::fmt::Debug>(src:&[T],seed:T)->usize{
+ let mut checks=0;
+ for offset in [0,1,3] {
+  let mut real=vec![seed;src.len()+offset+2];let mut stub=real.clone();
+  real[offset..offset+src.len()].copy_from_slice(src);KMX_copy_from_slice(&mut stub[offset..offset+src.len()],src);assert_eq!(real,stub);checks+=1;
+  real.fill(seed);stub.fill(seed);real[offset..offset+src.len()].clone_from_slice(src);KMX_clone_from_slice(&mut stub[offset..offset+src.len()],src);assert_eq!(real,stub);checks+=1;
+  real.fill(seed);stub.fill(seed);unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),real.as_mut_ptr().add(offset),src.len());KMX_copy_nonoverlapping(src.as_ptr(),stub.as_mut_ptr().add(offset),src.len())};assert_eq!(real,stub);checks+=1;
+ }
+ for capacity in [0,1,src.len(),src.len()+3] {
+  let mut real=Vec::with_capacity(capacity);real.push(seed);let mut stub=Vec::with_capacity(capacity);stub.push(seed);
+  real.extend_from_slice(src);KMX_extend_from_slice(&mut stub,src);assert_eq!(real,stub);checks+=1;
+ }
+ assert_eq!(src.to_vec(),KMX_to_vec(src));checks+1
+}
+fn random(state:&mut u64)->u64{*state^=*state<<13;*state^=*state>>7;*state^=*state<<17;*state}
+#[derive(Clone,Copy,Eq,PartialEq,Debug)]struct Pair{a:u32,b:u32}
+fn main(){
+ let mut checks=0usize;let vals=[0u32,1,255,256,512];
+ for n in 0..=6 {for mut code in 0..5usize.pow(n as u32) {let mut src=vec![0u32;n];for x in &mut src{*x=vals[code%5];code/=5;}checks+=differential(&src,0);}}
+ let mut state=0x1234567812345678u64;
+ for n in [0,1,2,3,4,7,8,15,16,31,32,63,64,127,128,1024,1736,1768] {for _ in 0..16 {
+  let a:Vec<u8>=(0..n).map(|_|random(&mut state) as u8).collect();checks+=differential(&a,0);
+  let a:Vec<u32>=(0..n).map(|_|random(&mut state) as u32).collect();checks+=differential(&a,0);
+  let a:Vec<u64>=(0..n).map(|_|random(&mut state)).collect();checks+=differential(&a,0);
+  let a:Vec<[u8;32]>=(0..n).map(|_|{let mut x=[0;32];for b in &mut x{*b=random(&mut state) as u8;}x}).collect();checks+=differential(&a,[0;32]);
+  let a:Vec<Pair>=(0..n).map(|_|Pair{a:random(&mut state) as u32,b:random(&mut state) as u32}).collect();checks+=differential(&a,Pair{a:0,b:0});
+ }}
+ println!("KMX_NATIVE_PASS checks={checks} seed=0x1234567812345678 exhaustive_u32_alphabet=0,1,255,256,512 max_exhaustive_len=6 random_trials_per_type_len=16");
+}

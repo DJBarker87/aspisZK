@@ -12,7 +12,8 @@ for op in ['ptr','clone','extend','to_vec','realloc']:
 for offset,extra in [(0,1),(1,1),(3,5)]:
  configs.append(dict(ty='u32',width=4,n=16,op='slice',offset=offset,extra=extra,dest='array'))
 configs.append(dict(ty='u32',width=4,n=16,op='slice',offset=0,extra=0,dest='vec'))
-s='''#[derive(Clone,Copy,PartialEq,Eq,Debug)]\nstruct KMX_Pair {a:u32,b:u32}\n'''
+s='''use alloc::{vec,vec::Vec};
+#[derive(Clone,Copy,PartialEq,Eq,Debug)]\nstruct KMX_Pair {a:u32,b:u32}\n'''
 for i,c in enumerate(configs):
  c['id']=f'c{i:03}';ty=c['ty'];n=c['n'];off=c['offset'];cap=n+off+c['extra']
  zero={'u8':'0u8','u32':'0u32','u64':'0u64','[u8;32]':'[0u8;32]','KMX_Pair':'KMX_Pair{a:0,b:0}'}[ty]
