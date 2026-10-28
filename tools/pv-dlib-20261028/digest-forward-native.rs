@@ -35,8 +35,7 @@ fn default_fixed<D:FixedOutput>(d:D)->Output<D> {
     let mut out=Default::default();FixedOutput::finalize_into(d,&mut out);out
 }
 fn owned_fixed(d:CoreWrapper<Core>,out:&mut Output<CoreWrapper<Core>>) {
-    let (mut core,mut buffer)=d.decompose();
-    core.finalize_fixed_core(&mut buffer,out);
+    d.pv_dl_owned_finalize_into(out);
 }
 fn run(seed:[u8;32],bytes:[u8;64],pos:u8,initial:[u8;32],mode:u8)->([u8;32],Vec<(u8,u8)>) {
     let events=Rc::new(RefCell::new(Vec::new()));

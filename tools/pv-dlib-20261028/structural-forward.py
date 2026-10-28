@@ -45,16 +45,18 @@ assert tokens(gadefault)==tokens('{Self::generate(|_|T::default())}')
 p=R/'tools/pv-dlib-20261028/digest-forward-native.rs';s=p.read_text()
 assert tokens(body(s,'fn owned_digest'))==tokens('{FixedOutput::finalize_fixed(d)}')
 assert tokens(body(s,'fn default_fixed'))==tokens('{let mut out=Default::default();FixedOutput::finalize_into(d,&mut out);out}')
-assert tokens(body(s,'fn owned_fixed'))==tokens('{let(mut core,mut buffer)=d.decompose();core.finalize_fixed_core(&mut buffer,out);}')
+assert tokens(body(s,'fn owned_fixed'))==tokens('{d.pv_dl_owned_finalize_into(out);}')
+helper=R/'tools/pv-dlib-20261028/fixed-forward-helper.rs'
+assert tokens(body(helper.read_text(),'pub fn pv_dl_owned_finalize_into'))==tokens(forward),'owned core wrapper body differs'
 out=dict(row=row,evidence_class='structural (K-1 substitute)',rulings=['r',"k'"],
  sources={n:{k:v for k,v in a.items() if k!='source'} for n,a in files.items()},
  generic_array_all_checksum_files_verified=j['generic_array_all_checksum_files_verified'],
  native_bodies=dict(blanket_digest=digest,fixed_default=fixed,core_wrapper=forward,decompose=decompose,array_default=gadefault),
- owned_reference=dict(path=str(p.relative_to(R)),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),three_complete_bodies_token_checked=True),
+ owned_reference=dict(path=str(p.relative_to(R)),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),three_complete_bodies_token_checked=True,owned_fixed_helper=str(helper.relative_to(R)),helper_sha256=hashlib.sha256(helper.read_bytes()).hexdigest()),
  dispatch_scope='Generic Digest forwarding preserves finalize_fixed overrides; default expansion is tied to shipped CoreWrapper impl, which has no override. Typed installation is the frozen32-byte output carrier.',
  differences=[dict(native='method call syntax and receiver self',reference='UFCS call syntax and receiver d',proof='PV_DL_DigestFinal.complete; same method dispatch by full token binding'),
  dict(native='FixedOutput default initializes GenericArray then consumes self in finalize_into',reference='same initialization and consuming callback order',proof='PV_DL_DigestFinal.reference; original complete-Result callback retained, including its destructor behavior'),
- dict(native='borrow fields in consumed wrapper',reference='move same fields through decompose; call same core method; drop them once',proof='PV_DL_FixedFinal.complete (V235); byte buffer has no destructor; same core destructor after updated state')],
+ dict(native='borrow fields in consumed wrapper',reference='identical consumed-self field borrows and core call in owned helper; same implicit destructor',proof='PV_DL_OwnershipEffects.complete_result (V235); complete world is retained on callback failure and destructor sees changed state')],
  finite_validation='digest-forward-native-finite-resume/receipt.json; required before credit; finite validation only',
  compression='forwarding preserves original core callback parameters; no compression evaluation law or backend equality assumed',
  v232_untouched=True,kani=False)

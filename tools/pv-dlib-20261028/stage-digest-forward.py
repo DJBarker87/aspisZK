@@ -5,11 +5,13 @@ name=sys.argv[1];assert name.replace('-','').isalnum()
 r=subprocess.run(['ssh',H,f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission.json > {D}/{name}/reservation.log 2>&1'],capture_output=True,text=True)
 a=subprocess.check_output(['ssh',H,f'cat {D}/{name}/admission.json'],text=True);(E/(name+'.json')).write_text(a)
 if r.returncode!=0 or json.loads(a).get('allowed') is not True:sys.exit(78)
-p=R/'tools/pv-dlib-20261028/digest-forward-native.rs'
-subprocess.run(['scp','-q',str(p),H+':'+D+'/wrapper-proof/digest-forward-native.rs'],check=True)
+for f in ['digest-forward-native.rs','fixed-forward-helper.rs']:
+ subprocess.run(['scp','-q',str(R/'tools/pv-dlib-20261028'/f),H+':'+D+'/wrapper-proof/'+f],check=True)
 code='''from pathlib import Path
 import json,hashlib
-p=Path('/home/dombarker/project-offloads/codex-pv-dlib-20261028/wrapper-proof/Cargo.toml');s=p.read_text();assert 'digest_forward_native' not in s
+b=Path('/home/dombarker/project-offloads/codex-pv-dlib-20261028');w=b/'native/digest-0.10.7/src/core_api/wrapper.rs';ws=w.read_text();assert 'pv_dl_owned_finalize_into' not in ws
+w.write_text(ws+'\\n'+(b/'wrapper-proof/fixed-forward-helper.rs').read_text())
+p=b/'wrapper-proof/Cargo.toml';s=p.read_text();assert 'digest_forward_native' not in s
 p.write_text(s+'\\n[[test]]\\nname="digest_forward_native"\\npath="digest-forward-native.rs"\\n')
 print(json.dumps(dict(manifest_sha256=hashlib.sha256(p.read_bytes()).hexdigest())))
 '''
