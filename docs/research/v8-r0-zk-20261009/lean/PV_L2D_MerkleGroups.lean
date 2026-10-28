@@ -41,10 +41,15 @@ theorem counted_equals_emitted (fuel : Nat) (indices : List Nat)
     | cons x xs =>
       have ht : xs.Pairwise (· < ·) := (List.pairwise_cons.mp ordered).2
       have hh : ∀ y ∈ xs, x<y := (List.pairwise_cons.mp ordered).1
-      rw [countedLevel,level,group_test x xs hh]
-      split
-      · rw [ih xs.tail ht.tail]
-      · rw [ih xs ht]
+      by_cases hp : xs.head? = some (2*(x/2)+1) ∧ x%2=0
+      · have hc := (group_test x xs hh).mpr hp
+        simp only [countedLevel,level,hc,hp,ite_true]
+        rw [ih xs.tail ht.tail]
+      · have hc : xs.head?.map (fun y => y/2) ≠ some (x/2) := by
+          intro hc
+          exact hp ((group_test x xs hh).mp hc)
+        simp only [countedLevel,level,hc,hp,ite_false]
+        rw [ih xs ht]
 #print axioms counted_equals_emitted
 
 /-- All control inputs retained: count and every source-ordered read. There
