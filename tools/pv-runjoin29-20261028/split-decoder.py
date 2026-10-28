@@ -1,8 +1,9 @@
+import subprocess
 """Factor unchanged extracted decoder continuations at named digest returns."""
 from pathlib import Path
 import re,json,hashlib,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin29-20261028';L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
-s=json.loads((E/'focused-project-sources.json').read_text())['AspisR1TerminalDecoder.Funs'];fn='pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1'
+pin=json.loads((E/'focused-resolution.json').read_text())['resolved']['AspisR1TerminalDecoder.Funs'];s=subprocess.check_output(['git','cat-file','blob',pin['git_blob']]).decode();assert hashlib.sha256(s.encode()).hexdigest()==pin['sha256'];fn='pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1'
 a=s.index('def '+fn+' (');b=s.index('\n/--',a);original=s[a:b];lines=original.split(' := do\n',1)[1].splitlines()
 indices=[0,4,8,12,16,20];bounds={}
 for n in indices:

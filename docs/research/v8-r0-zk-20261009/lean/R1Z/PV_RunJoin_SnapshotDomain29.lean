@@ -21,7 +21,9 @@ def result (s : PoolV1PairLiveSnapshotV1) : core.result.Result Unit PoolV1PairLi
   else if Canon8 s.current_root ∧ (∀ l : Fin 20, Canon8 s.frontier.val[l.val]!) then .Ok ()
   else .Err .NonCanonicalDigest
 
-theorem capacity : POOL_V1_PAIR_CAPACITY = ok 1048576#u64 := by rfl
+theorem capacity : POOL_V1_PAIR_CAPACITY = ok 1048576#u64 := by
+  simp only [POOL_V1_PAIR_CAPACITY,POOL_V1_PAIR_TREE_DEPTH,pool_v1.format.POOL_V1_TREE_DEPTH]
+  rfl
 #print axioms capacity
 
 theorem frontier_result (a : PV_RunJoin_DecoderFrontier29.Frontier) :
@@ -34,6 +36,7 @@ theorem frontier_result (a : PV_RunJoin_DecoderFrontier29.Frontier) :
     · intro h l; exact h l.val (by change 0 ≤ l.val;omega) l.isLt
     · intro h l _ hl; exact h ⟨l,hl⟩
   rw [propext he]
+  split_ifs <;> rfl
 #print axioms frontier_result
 
 /-- Exact success and first-error guard normal form of the actual extracted
@@ -54,5 +57,6 @@ theorem success_iff (s : PoolV1PairLiveSnapshotV1) :
   rw [source_result]
   unfold result Domain
   split_ifs <;> simp_all
+  all_goals first | tauto | (apply UScalar.eq_of_val_eq; assumption)
 #print axioms success_iff
 end R1Z.PV_RunJoin_SnapshotDomain29

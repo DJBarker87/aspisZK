@@ -1,8 +1,9 @@
+import subprocess
 """Emit exact success paths of EJR-resolved native statement validators."""
 from pathlib import Path
 import json,re,hashlib,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin29-20261028'
-s=json.loads((E/'focused-project-sources.json').read_text())['AspisR1TerminalDecoder.Funs']
+pin=json.loads((E/'focused-resolution.json').read_text())['resolved']['AspisR1TerminalDecoder.Funs'];s=subprocess.check_output(['git','cat-file','blob',pin['git_blob']]).decode();assert hashlib.sha256(s.encode()).hexdigest()==pin['sha256']
 rows=[]
 for label,fn,typ in [('Common','validate_common','CommonPublicV1'),('Withdrawal','validate_pool_v1_withdrawal_public_v1','PoolV1WithdrawalPublicV1'),('Transfer','validate_pool_v1_private_transfer_public_v1','PoolV1PrivateTransferPublicV1')]:
  start=s.index('def pool_v1.payment_relation.'+fn+' (');end=s.index('\n/--',start);original=s[start:end];body=original.split(' := do\n',1)[1]
