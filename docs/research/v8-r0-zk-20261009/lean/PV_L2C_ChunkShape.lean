@@ -31,8 +31,8 @@ theorem step (i : Iter) (hs : i.iter.size = 8)
     BuilderForestStd.chunksNext,hb,Bool.false_eq_true,ite_false,bind_tc_ok]
   rw [PV_RunJoin_EnumerateTrace.checked_next i.count hc]
   simp only [bind_tc_ok]
-  cases i
-  simp only [advance,head,tail,hs]
+  simp only [advance,head,tail]
+  rw [hs]
 #print axioms step
 
 theorem head_length (s : Slice U32) : (head s).val.length ≤ 8 := by
