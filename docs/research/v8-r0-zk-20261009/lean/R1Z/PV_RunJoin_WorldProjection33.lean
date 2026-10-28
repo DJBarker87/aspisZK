@@ -19,17 +19,15 @@ theorem project_bind (world : W → V) (tag : C → D)
     (head : ∀ w, project world tag (left w) = right (world w))
     (tail : ∀ a w, project world tag (next a w) = target a (world w)) (w : W) :
     project world tag (bind left next w) = bind right target (world w) := by
+  unfold bind
   rw [← head w]
   cases h : (left w).outcome with
-  | fail e => simp only [bind,project,h]
-  | div => simp only [bind,project,h]
+  | fail e => simp only [project,h]
+  | div => simp only [project,h]
   | ok a =>
-    have t := tail a (left w).world
-    cases l : next a (left w).world with
-    | mk outcome after calls =>
-      simp only [project,l] at t
-      rw [← t]
-      simp only [bind,project,h,l,List.map_append]
+    simp only [project,h]
+    rw [← tail a (left w).world]
+    simp only [project,List.map_append]
 
 /-- A local complete-run law composes on pv-world's existing syntax. This
 requires the local source/security-model laws, not just matching values. -/

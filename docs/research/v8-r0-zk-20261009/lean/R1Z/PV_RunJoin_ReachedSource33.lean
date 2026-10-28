@@ -45,6 +45,7 @@ theorem associated (base : ExternalTypes)
         (liftHash (d.hash s)) secret s.ledger) =
       PV_RunJoin_PureSourceLift.native d s secret := by
   letI : ExternalTypes := PDict_CodecDictionary.native base
+  dsimp only
   intro secret
   exact entry _ _ _ _ _ _
 
