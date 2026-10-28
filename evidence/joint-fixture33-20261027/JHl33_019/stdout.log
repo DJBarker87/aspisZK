@@ -1,0 +1,103 @@
+JHl_AccumulateSums.lean:59:42: error: Application type mismatch: The argument
+  nv
+has type
+  ↑(a.next.wrapping_add 1#usize) = ↑a.next + 1
+but is expected to have type
+  ↑a.next = ↑a.next + 1
+in the application
+  And.intro nv
+JHl_AccumulateSums.lean:59:45: error: Application type mismatch: The argument
+  crhs'
+has type
+  Port4C_QueryArithmetic.CanonE rhs
+but is expected to have type
+  Port4C_QueryArithmetic.CanonE a.rhs
+in the application
+  And.intro crhs'
+JHl_AccumulateSums.lean:59:51: error: Application type mismatch: The argument
+  cpower'
+has type
+  Port3_FlushInstall.Canonical power
+but is expected to have type
+  Port3_FlushInstall.Canonical a.power
+in the application
+  And.intro cpower'
+JHl_AccumulateSums.lean:32:62: error: unsolved goals
+seed : Port3_NativeQueryBody.Ops
+p : verifier.Prepared
+old : S8OwnedP6Finish.Weights
+a : verifier.Accumulator
+b : verifier.BatchedWeights
+sum : S7Kani3CallerTrace.Sum
+t : ℕ
+node : U32
+value : SAQ_WideABI.E
+size : (↑a.weights).length = 64
+next : ↑a.next ≤ 22
+terms : t < 22
+crhs : Port4C_QueryArithmetic.CanonE a.rhs
+cpower : Port3_FlushInstall.Canonical a.power
+crho : Port3_FlushInstall.Canonical p.rho
+canonical : Port4C_QueryArithmetic.CanonE value
+history : PushTrace old (toBW b) sum
+phase : Progress t 0 (toBW b)
+basis : Port4C_BasisMeaning.Basis
+hbasis : Port4C_BasisMeaning.source (JFn_ArrayBuilder.ops seed) node = ok basis
+cbasis : S7JoinBasisCanonical.Canonical basis
+meaning :
+  ∀ (i : Fin 64),
+    S7JoinBasisMachine.decode (S7JoinBasisBlock.cell basis ↑i) =
+      AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) ↑i
+cp : S7JoinBackendCarriers.Canonical (toK a.power)
+rows : S7Kani2AccumulatorLoop.BatchedWeights
+sumOut : S7Kani3CallerTrace.Sum
+hrows :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1
+      (Port4C_RowStd.install (Port5Q1_QueryPorts.install (SAQ_Decoder.install seed)))
+      { start := 0#usize, «end» := 64#usize } a.weights a.power a.next b 64#usize basis =
+    ok (fromBW rows)
+trace : PushTrace old rows sumOut
+progress : Progress t 64 rows
+sums :
+  ∀ (i : ℕ) (k : Fin 4),
+    sumOut i k =
+      if i < 64 then sum i k + ↑(S7Kani2OwnedRowRefinement.powerLimb (toK a.power) k) * ↑(S7JoinBasisBlock.cell basis i)
+      else sum i k
+rowsCall :
+  Port3_NativeQueryBody.verifier.accumulate_batched_with_node_loop1 (JFn_ArrayBuilder.ops seed)
+      { start := 0#usize, «end» := 64#usize } a.weights a.power a.next b 64#usize basis =
+    ok (fromBW rows)
+product : SAQ_WideABI.E
+hproduct : SAQ_MixedSource.mulE value a.power = ok product
+cproduct : Port4C_QueryArithmetic.CanonE product
+rhs : SAQ_WideABI.E
+hrhs : SAQ_Arithmetic.add a.rhs product = ok rhs
+crhs' : Port4C_QueryArithmetic.CanonE rhs
+power : SAQ_WideABI.K
+hpower : SAQ_Arithmetic.mulK a.power p.rho = ok power
+cpower' : Port3_FlushInstall.Canonical power
+hp : (JFn_ArrayBuilder.ops seed).op3 value a.power = ok product
+hr : (JFn_ArrayBuilder.ops seed).op2 a.rhs product = ok rhs
+hq : (JFn_ArrayBuilder.ops seed).op9 a.power p.rho = ok power
+inc : Usize := (fromBW rows).terms.wrapping_add 1#usize
+hv : ↑inc = t + 1
+nv : ↑(a.next.wrapping_add 1#usize) = ↑a.next + 1
+⊢ ∃ basis out after sumOut,
+    (∀ (i : Fin 64),
+        S7JoinBasisMachine.decode (S7JoinBasisBlock.cell basis ↑i) =
+          AspisCircleTensorBinding.naturalLineValue (S7JoinBasisMachine.decode node) ↑i) ∧
+      Port3_NativeQueryBody.verifier.accumulate_batched_with_node (JFn_ArrayBuilder.ops seed) p a node value b =
+          ok (out, after) ∧
+        out.weights = a.weights ∧
+          ↑out.next = ↑a.next + 1 ∧
+            Port4C_QueryArithmetic.CanonE out.rhs ∧
+              Port3_FlushInstall.Canonical out.power ∧
+                PushTrace old (toBW after) sumOut ∧
+                  Progress (t + 1) 0 (toBW after) ∧
+                    ∀ (i : ℕ) (k : Fin 4),
+                      sumOut i k =
+                        if i < 64 then
+                          sum i k +
+                            ↑(S7Kani2OwnedRowRefinement.powerLimb (toK a.power) k) * ↑(S7JoinBasisBlock.cell basis i)
+                        else sum i k
+'AspisR1.JHl_AccumulateSums.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

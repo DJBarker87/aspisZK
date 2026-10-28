@@ -1,0 +1,31 @@
+JHl_FlushSum.lean:18:85: error: unexpected token '('; expected ')', ',' or ':'
+JHl_FlushSum.lean:18:12: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+JHl_FlushSum.lean:15:40: error: unsolved goals
+old : Slice aspis_core.field.QM31
+b : verifier.BatchedWeights
+out : Slice aspis_core.field.QM31
+sum : S7Kani3CallerTrace.Sum
+size : (↑old).length = 64
+length : (↑b.raw).length = 64
+history : PushTrace (Port3_PendingInstall.owned old) (Port3_RowsInstall.toBW b) sum
+flush : Port3_FlushInstall.flush b old = ok out
+j : Fin 64
+actual : S8Kani2MutableExtraction.batched_weights.FinishSlice
+run :
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish
+      { raw := (Port3_RowsInstall.toBW b).raw, terms := (Port3_RowsInstall.toBW b).terms }
+      (S8Kani2FinishReferenceJoin.toSlice (Port3_PendingInstall.owned old)) =
+    ok actual
+cells :
+  ∀ (i : Usize),
+    ↑i < alloc.vec.Vec.length (Port3_PendingInstall.owned old) →
+      ∃ q,
+        Slice.index_usize actual i = ok q ∧
+          ∀ (k : Fin 4),
+            ↑(S8Kani2CallerJoin.coordinate q k) = sum (↑i) k % 2147483647 ∧
+              ↑(S8Kani2CallerJoin.coordinate q k) < 2147483647
+sameRun : Port3_FlushInstall.flush b old = ok (Port3_FlushInstall.fromSlice actual)
+⊢ ∃ q, (↑out)[↑j]? = some q ∧ CheckpointBytes5Output.ofK q = value sum ↑j ∧ Port3_FlushInstall.Canonical q
+'AspisR1.JHl_FlushSum.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

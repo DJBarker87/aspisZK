@@ -1,0 +1,63 @@
+{"attempt": "JHl33_040", "exit_status": 1, "wall_seconds": 3.416296740004327, "peak_rss_kib": "6384664", "swaps": "0", "print_axioms": ["'AspisR1.JHl_FlushSum.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHl_FlushSum.lean:19:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish
+    { raw := (Port3_RowsInstall.toBW b).raw, terms := (Port3_RowsInstall.toBW b).terms }
+    (S8Kani2FinishReferenceJoin.toSlice (Port3_PendingInstall.owned old))
+in the target expression
+  (do
+      let out ←
+        S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish { raw := b.raw, terms := b.terms }
+            (S8Kani2FinishReferenceJoin.toSlice (Port3_FlushInstall.toWeights old))
+      ok (Port3_FlushInstall.fromSlice out)) =
+    ok (Port3_FlushInstall.fromSlice actual)
+
+old : Slice aspis_core.field.QM31
+b : verifi
+...
+ength (Port3_PendingInstall.owned old)
+JHl_FlushSum.lean:26:33: error: Application type mismatch: The argument
+  read
+has type
+  fail Error.arrayOutOfBounds = ok q
+but is expected to have type
+  ok ?m.202 = ok ?m.203
+in the application
+  ok.inj read
+JHl_FlushSum.lean:29:4: error: unsolved goals
+case h_2.refl
+old : Slice aspis_core.field.QM31
+b : verifier.BatchedWeights
+out : Slice aspis_core.field.QM31
+sum : S7Kani3CallerTrace.Sum
+size : (↑old).length = 64
+length : (↑b.raw).length = 64
+history : PushTrace (Port3_PendingInstall.owned old) (Port3_RowsInstall.toBW b) sum
+flush : Port3_FlushInstall.flush b old = ok out
+j : Fin 64
+actual : S8Kani2MutableExtraction.batched_weights.FinishSlice
+run :
+  S8Kani2MutableExtraction.batched_weights.BatchedWeights.finish
+      { raw := (Port3_RowsInstall.toBW b).raw, terms := (Port3_RowsInstall.toBW b).terms }
+      (S8Kani2FinishReferenceJoin.toSlice (Port3_PendingInstall.owned old)) =
+    ok actual
+cells :
+  ∀ (i : Usize),
+    ↑i < alloc.vec.Vec.length (Port3_PendingInstall.owned old) →
+      ∃ q,
+        Slice.index_usize actual i = ok q ∧
+          ∀ (k : Fin 4),
+            ↑(S8Kani2CallerJoin.coordinate q k) = sum (↑i) k % 2147483647 ∧
+              ↑(S8Kani2CallerJoin.coordinate q k) < 2147483647
+sameRun : Port3_FlushInstall.flush b old = ok (Port3_FlushInstall.fromSlice actual)
+eq : out = Port3_FlushInstall.fromSlice actual
+idx : Usize := (↑j)#usize
+q : S8Kani2MutableValue.F.Q
+words :
+  ∀ (k : Fin 4),
+    ↑(S8Kani2CallerJoin.coordinate q k) = sum (↑idx) k % 2147483647 ∧ ↑(S8Kani2CallerJoin.coordinate q k) < 2147483647
+x✝ : Option S8Kani2MutableExtraction.aspis_core.field.QM31
+heq✝ : actual[idx]? = some q
+⊢ (↑actual)[↑j]? = some q
+'AspisR1.JHl_FlushSum.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1c392bd729c349f7afe721a017a46efe.scope; invocation ID: f24dc5bbf16e4c36a587f02876976674

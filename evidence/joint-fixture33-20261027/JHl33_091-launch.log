@@ -1,0 +1,54 @@
+{"attempt": "JHl33_091", "exit_status": 0, "wall_seconds": 2.9136302749975584, "peak_rss_kib": "6392156", "swaps": "0", "print_axioms": ["'AspisR1.JHl_KnownFields.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.JHl_KnownFields.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'AspisR1.JHl_KnownFields.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.JHl_KnownFields.inhabited' depends on axioms: [propext, Classical.choice, Quot.sound]
+structure AspisR1.JHl_KnownFields.Fields (p : AspisR1CurrentCaller.verifier.Prepared)
+  (a : AspisR1CurrentCaller.verifier.Accumulator) : Prop
+number of parameters: 2
+fields:
+  AspisR1.JHl_KnownFields.Fields.inherited : AspisR1.JHk_KnownFields.Fields p a
+  AspisR1.JHl_KnownFields.Fields.semantic : List.map AspisR1.CheckpointBytes5Writer.u8
+        (List.flatMap AspisR1.WAdm_SourceBody.putK ↑(AspisR1.JHe_CurrentWriterImage.prepared p).semantic_alpha) =
+      AspisR1.JFq_Sem00.bytes ++ AspisR1.JFq_Sem01.bytes 
+...
+m04.bytes ++
+                  AspisR1.JFq_Sem05.bytes ++
+                AspisR1.JFq_Sem06.bytes ++
+              AspisR1.JFq_Sem07.bytes ++
+            AspisR1.JFq_Sem08.bytes ++
+          AspisR1.JFq_Sem09.bytes)
+    (z :
+      List.map AspisR1.CheckpointBytes5Writer.u8
+          (List.flatMap (fun z => AspisR1.WAdm_SourceBody.putK z.x ++ AspisR1.WAdm_SourceBody.putK z.y)
+            ↑(AspisR1.JHe_CurrentWriterImage.prepared p).z) =
+        AspisR1.JFq_Z0.bytes ++ AspisR1.JFq_Z1.bytes ++ AspisR1.JFq_Z2.bytes ++ AspisR1.JFq_Z3.bytes)
+    (weights :
+      List.map AspisR1.CheckpointBytes5Writer.u8
+          (List.flatMap AspisR1.WAdm_SourceBody.putK ↑(AspisR1.JHe_CurrentWriterImage.accumulator a).weights) =
+        List.take 1024 (List.drop 712 ↑AspisR1.JFx_NativeBytes.checkpoint)) :
+    AspisR1.JHl_KnownFields.Fields p a
+theorem AspisR1.JHl_KnownFields.inhabited : ∃ p out after flushed,
+  AspisR1.JGr_Geometry.installed.op17 after out.weights.deref = Aeneas.Std.Result.ok flushed ∧
+    AspisR1.JHl_KnownFields.Fields p
+      { weights := ⟨↑flushed, ⋯⟩, rhs := out.rhs, power := out.power, next := out.next } :=
+let ⟨p, h✝⟩ := AspisR1.JHc_InstalledQuery.inhabited
+let ⟨scratch, h✝¹⟩ := h✝
+let ⟨initial, h✝²⟩ := h✝¹
+let ⟨out, h✝³⟩ := h✝²
+let ⟨pending, h✝⁴⟩ := h✝³
+let ⟨after, h✝⁵⟩ := h✝⁴
+let ⟨g, h✝⁶⟩ := h✝⁵
+let ⟨flushed, h✝⁷⟩ := h✝⁶
+let ⟨prepare, right✝⟩ := h✝⁷
+let ⟨init, right✝¹⟩ := right✝
+let ⟨pend, right✝²⟩ := right✝¹
+let ⟨geo, right✝³⟩ := right✝²
+let ⟨query, flush⟩ := right✝³
+Exists.intro p
+  (Exists.intro out
+    (Exists.intro after
+      (Exists.intro flushed
+        ⟨flush,
+          AspisR1.JHl_KnownFields.source p (Aeneas.Std.Array.repeat 29#usize AspisR1.JGp_TX1Initial.zero) scratch
+            initial out pending after g flushed prepare init pend geo query flush⟩)))
+
+Running as unit: run-rbd3f3e83cce74ee1b0cd149f9e686fb0.scope; invocation ID: 1305aa16efd543e094e76bdc9ce06207
