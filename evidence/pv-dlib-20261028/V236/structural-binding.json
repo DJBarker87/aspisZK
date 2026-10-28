@@ -35,7 +35,7 @@
     {
       "native": "borrowed core/buffer, slice copy",
       "reference": "owned state/buffer and element cursor copy",
-      "proof": "UpdateCopy.copy/cells_value/bounds; UpdatePlan.shape; all retained bytes preserved"
+      "proof": "UpdateCopy.copy/cells_value/bounds; UpdatePlan.shape; StorageIdentity.rebuild; all retained bytes preserved"
     },
     {
       "native": "first input split_at(rem), then Eager split_blocks of remaining bytes",
@@ -45,10 +45,10 @@
     {
       "native": "compress receives borrowed sequence of native64-byte blocks",
       "reference": "compress receives the same contiguous bytes, exact call boundaries",
-      "proof": "UpdateViews.count/joined/native_bulk; UpdatePlan.complete for arbitrary batched Result callback; no singleton-fold premise introduced"
+      "proof": "UpdateViews.count/joined/native_bulk; UpdateCarrier.decoded_blocks/compression_call; UpdatePlan.complete for arbitrary batched Result callback; no singleton-fold premise introduced"
     }
   ],
-  "guard": "Original SHA-cohort Eager64 safe private pos<64, native byte-slice size bound; no guard changed. All checked subtraction/range paths discharged symbolically.",
+  "guard": "Original SHA-cohort Eager64 safe private pos<64, native byte-slice size bound; generated Eager dictionary selected by UpdateSelected.native_kind/bufferKind and retained_kind (not by erased Unit marker type); native size discharged by native_size; no guard changed. All checked subtraction/range paths discharged symbolically.",
   "complete_result": "PV_DL_UpdatePlan.complete",
   "finite_validation": "../wrappers-native-combined-resume4/receipt.json",
   "finite_scope": "99328 paired same-input native/reference cases; exact batch boundaries and bytes, counter including wrap, all retained64buffer bytes and cursor; finite validation only",
