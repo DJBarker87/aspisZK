@@ -38,7 +38,9 @@ theorem sep_requests_prefix {S F : Type} (step : Request → S → Option Nat ×
       rw [hist]
       change Prefix (sizes w.history ++ PV_RDEA_PathSchedule.appendWord
         ⟨b.values.length,b.capacity⟩ 1) _
-      exact right _ _ _ (refl _)
+      exact ⟨PV_RDEA_PathSchedule.appendWord
+        (PV_RDEA_PathSchedule.afterAppend ⟨b.values.length,b.capacity⟩ 1) path.length,
+        List.append_assoc _ _ _⟩
     | ok next =>
       simp only [PV_RDEA_StatefulPath.bind]
       have hh := PV_RDEA_ExecutionHeaders.append_header step shape b [47#u8] w next
@@ -47,7 +49,7 @@ theorem sep_requests_prefix {S F : Type} (step : Request → S → Option Nat ×
       simp only [hh.1,hh.2,List.length_append,List.length_cons,List.length_nil,Nat.add_zero]
       unfold PV_RDEA_PathSchedule.appendWord PV_RDEA_PathSchedule.afterAppend
       simp only [List.append_assoc]
-      exact refl _
+      exact PV_RDEA_PrefixWords.refl _
 
 /-- Every possible failure terminates after a prefix of a public size/order
 word. Failure's dependence on prior allocator state is retained under rdea-1. -/
@@ -57,10 +59,10 @@ theorem push_requests_prefix {S F : Type} (step : Request → S → Option Nat �
     Prefix (sizes (sourcePush (PV_RDEA_AppendExecution.append step shape) absolute needSep b path w).2.history)
       (sizes w.history ++ pushWord ⟨b.values.length,b.capacity⟩ path.length absolute needSep) := by
   cases absolute with
-  | true => rw [absolute_requests step shape width]; exact refl _
+  | true => rw [absolute_requests step shape width]; exact PV_RDEA_PrefixWords.refl _
   | false =>
     cases needSep with
-    | false => rw [no_sep_requests step shape width]; exact refl _
+    | false => rw [no_sep_requests step shape width]; exact PV_RDEA_PrefixWords.refl _
     | true => exact sep_requests_prefix step shape width b path w
 
 #print axioms absolute_requests
