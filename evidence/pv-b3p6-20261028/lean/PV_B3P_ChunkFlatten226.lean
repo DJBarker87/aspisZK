@@ -5,7 +5,7 @@ open Aeneas Aeneas.Std PV_B3P_ByteOutput226
 set_option autoImplicit false
 
 theorem flatten_cell (chunks : Chunks) (i : Nat) (hi : i < 1472) :
-    (flatten chunks)[i]? = chunks.val[i/64]'(by rw [chunks.property]; scalar_tac).val[i%64]? := by
+    (flatten chunks)[i]? = (chunks.val[i/64]'(by rw [chunks.property]; scalar_tac)).val[i%64]? := by
   have hq : i/64 < chunks.val.length := by rw [chunks.property]; scalar_tac
   have hr : i%64 < 64 := by omega
   have h := PV_B3P_LayoutCells226V3.flat_cell 64
