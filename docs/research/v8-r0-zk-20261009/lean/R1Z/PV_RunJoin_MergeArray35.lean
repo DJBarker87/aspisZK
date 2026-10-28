@@ -12,7 +12,7 @@ theorem read (p : Nat → Q) (i : Usize) (hi : i.val<28) :
 
 theorem write (p : Nat → Q) (i : Usize) (hi : i.val<28) (q : Q) :
     Array.update (array p) i q = .ok (array (Function.update p i.val q)) :=
-  ProverCommitArray49.update _ _ i hi q
+  ProverCommitArray49.update 28#usize p i hi q
 
 /-- Array-to-slice reads retain exactly the same index failure boundary. -/
 theorem slice_read {A : Type} {n : Usize} (a : Array A n) (i : Usize) :
