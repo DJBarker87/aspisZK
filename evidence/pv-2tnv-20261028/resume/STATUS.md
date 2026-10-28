@@ -17,3 +17,21 @@ No theorem credit. The next input selects the existing read-only Stream B
 runjoin16 std-cache prefix (no host files repaired), after rechecking its
 external object hashes against h4. This changes the environment and dependency
 fingerprint; it is not an unchanged rerun.
+
+Focused progress: 60901–60921 passed (literal byte carriers, field windows,
+same-payment equality, byte-derived statement index, and checked exclusion of
+the old index-zero witness). 60922 failed on a missing Nat.zero_add rewrite;
+60923 is its changed-proof replacement and passed. 60924–60943 passed all
+20 new transfer-13 append-node certificates: each isolates 23 scalar rounds,
+with a named node-input equation. No hash recurrence was kernel-normalized.
+The existing runjoin output-pair certificate is reused read-only, not duplicated.
+The 696-project-module source/object closure and all 5673 external objects were
+checked against their pinned authority before the relevant imports. Thirteen
+historical runjoin source paths are absent on the host; their exact recorded
+source hashes were checked through the pinned passing receipt snapshots.
+No Stream A object directory is in this job's search path. The original native
+byte modules were rebuilt privately from their pinned committed source.
+
+These are helper results only. The exact runtime-conditional joint implication,
+its same-wrapper execution association and a deployed runtime dictionary are
+still absent. FixturePdaRuntime remains NOT discharged. No AGG16 request exists.

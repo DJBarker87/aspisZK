@@ -30,7 +30,7 @@ idcheck=json.loads(r.stdout);(E/f'id-{a}.json').write_text(json.dumps(idcheck,in
 subprocess.run(['scp','-q',str(s),host+':'+H+'/sources/'+m+'.lean'],check=True)
 code=f'''from pathlib import Path
 import json,hashlib,re
-h=Path({H!r});e=json.load(open('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json'));e['LEAN_PATH']=str(h/'objects')+':/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/std-cache:'+e['LEAN_PATH'];(h/'J.json').write_text(json.dumps(e));roots=[Path(x) for x in e['LEAN_PATH'].split(':')];out={{}}
+h=Path({H!r});e=json.load(open('/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/J.json' if {m!r}.startswith('PV_2TNV_') else '/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json'));e['LEAN_PATH']=str(h/'objects')+':/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin16-lean/std-cache:'+e['LEAN_PATH'];(h/'J.json').write_text(json.dumps(e));roots=[Path(x) for x in e['LEAN_PATH'].split(':')];out={{}}
 for imp in re.findall(r'^import\\s+(\\S+)',(h/'sources'/{(m+'.lean')!r}).read_text(),re.M):
  rel=imp.replace('.','/')+'.olean';p=next((r/rel for r in roots if (r/rel).is_file()),None);out[imp]=dict(path=str(p),sha256=hashlib.file_digest(p.open('rb'),'sha256').hexdigest()) if p else None
 print(json.dumps(out))
