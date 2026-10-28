@@ -11,7 +11,7 @@ abbrev FrontierM := Array DigestM 20#usize
 theorem recipient_cps {β : Type} (recipient : Option DigestM) (output : DigestQ)
     (opened : Array aspis_core.field.QM31 16#usize) (selectors : reference_copy_terminal.Selectors)
     (f : DigestQ → Result β) (hf : ∀ next, Success (f next)) :
-    Success (match recipient with
+    Success (match (generalizing := false) recipient with
     | none => f output
     | some expected => do
       let base ← lift (Usize.wrapping_mul 29#usize 16#usize)
@@ -106,7 +106,7 @@ theorem public_digest_success (p : reference_terminal.SemanticPublic)
   apply bind
   · apply total_reference_terminal_add_digest_binding <;> scalar_tac
   intro digests1
-  apply recipient_cps
+  apply recipient_cps p.recipient digests1 openings.z selectors
   intro digests2
   apply lift_total
   apply lift_total
