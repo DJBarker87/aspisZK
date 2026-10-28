@@ -94,7 +94,7 @@ attribution is incomplete after outer timeout; its cgroup peak is retained.
 These are focused coherent-object results, not a frozen release replay.
 No unchanged full regression or unrelated runtime/adversarial suite is run.
 
-The final Lean-only work continues after native exhaustion: RowCarrier.installed_bytes
+The final Lean-only work was completed after native exhaustion: RowCarrier.installed_bytes
 constructs the exact cohort Array.set byte coordinates from the same flat
 copy windows; CountCarry.rows_shift/carry_eq/initialized constructs Rust's
 global accumulator across levels and connects it to the inherited source count.
@@ -127,9 +127,16 @@ Final stage and handoff commits follow the retained stage commits; no push.
 Stage commits before final sealing:
 
 ```
+3031684388 Validate byte-copy carriers and the global count accumulator
 8d224ddc0e Check leaf write and padding cuts and compose byte windows
 6e7d660d37 Check key iteration returns and full scratch rejection frames
 3db94ce216 Bound reached count states and record arbitrary carrier frame splits
 08608548d0 Check indexed opening loads and compose same-carrier value laws
 5d84d940b9 Record binary authentication continuation and validation rules
 ```
+
+Local disk filled at final sealing.645 byte-identical receipt-source snapshots
+were hardlinked within this evidence directory; all682 source hashes were
+revalidated, every path retained. No other worktree/cache/key was changed.
+
+The final sealing commit follows. No push.
