@@ -22,6 +22,7 @@ theorem input (r : CopyRecords) (pub : R0P.Public K)
   cases Result.ok.inj hd
   rw [PV_Src_Forest_AuxContent.input_digest] at hr
   obtain ⟨out,ho,hm,_⟩ := PV_RunJoin_LeafLift16.input (wordWitness r.w) (wordPublic r.p) pub hp.asset hw
+  simp only [UScalar.ofNatCore_val_eq] at hr
   rw [hr] at ho
   cases Result.ok.inj ho
   exact funext hm
@@ -38,6 +39,7 @@ theorem nullifier (r : CopyRecords) (pub : R0P.Public K)
   cases Result.ok.inj hd
   rw [PV_Src_Forest_AuxContent.note_digest] at hr
   obtain ⟨out,ho,hm,_⟩ := PV_RunJoin_NullifierLift16.nullifier (wordWitness r.w) (wordPublic r.p) pub hp.asset hw
+  simp only [UScalar.ofNatCore_val_eq] at hr
   rw [hr] at ho
   cases Result.ok.inj ho
   exact funext hm
@@ -57,6 +59,7 @@ theorem membership (r : CopyRecords) (pub : R0P.Public K)
   cases Result.ok.inj hd
   rw [PV_Src_Forest_TreeArguments.tree _ _ _ (by decide)] at hr
   obtain ⟨out,ho,hm,_⟩ := PV_RunJoin_TreeLift16.tree (wordWitness r.w) (wordPublic r.p) pub hp.asset hw 24 (by omega)
+  simp only [UScalar.ofNatCore_val_eq] at hr
   rw [hr] at ho
   cases Result.ok.inj ho
   have hmean := funext hm
