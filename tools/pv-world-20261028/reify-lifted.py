@@ -45,11 +45,11 @@ def info(header):
  for name in re.findall(r'\((\w+)\s*:\s*aspis_prover\.state_only_hiding\.StateOnlyMaskNonceStore T0\)',header):result.append((name,'Store'))
  return result
 
-def emit(node,n=2):
+def emit(node,n=2,inBind=False):
  pad=' '*n;k=node.kind
  if k=='let':return spaces('\n'.join(x.strip() for x in node.text.splitlines()),n)+'\n'+emit(node.next,n)
  if k=='bind':
-  exp=emit(node.expr,n+2);structured=node.expr.kind not in ['call','pure']
+  exp=emit(node.expr,n+2,True);structured=node.expr.kind not in ['call','pure']
   if structured:
    return pad+'PV_W_StructuredBinds.join (do\n'+exp+') (fun '+node.var+' => do\n'+emit(node.next,n+2)+')'
   return pad+'let '+node.var+' ← '+exp.lstrip()+'\n'+emit(node.next,n)
@@ -63,7 +63,7 @@ def emit(node,n=2):
   imports.add(inline);expr='PV_W_R_'+inline+'.program'+expr[len(label):]
   for d,target in DICT.items():
    if d in expr:imports.add(target);expr=expr.replace(d,'PV_W_R_'+target+'.store')
-  return spaces(expr,n)
+  return spaces(expr,n) if inBind or '\n' not in expr else pad+'('+expr.replace('\n','\n'+pad+'  ')+')'
  if label=='hash':return spaces(expr,n)
  if label.endswith('.«reserve»') and any(label.startswith(x+'.') for x,t in callbacks if t=='Store'):
   return spaces(expr.replace('.«reserve»','.reserve'),n)

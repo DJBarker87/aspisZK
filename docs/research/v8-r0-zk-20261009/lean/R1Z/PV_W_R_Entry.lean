@@ -84,9 +84,9 @@ def program
         let hash := sourceHash ops hash
         Aeneas.Std.lift (Array.to_slice (Array.make 4#usize [ s2, s3, s4, s5 ])))
     let binding ← hash s6
-    PV_W_R_MaskedWithAttempt.program
-    PV_W_R_DurableReserve.store
-    public1 compiled variant hash context binding attempt nonce_store
+    (PV_W_R_MaskedWithAttempt.program
+      PV_W_R_DurableReserve.store
+      public1 compiled variant hash context binding attempt nonce_store)
   | core.ops.control_flow.ControlFlow.Break residual =>
     let r2 ← invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
         letI : ExternalFuns := ops
