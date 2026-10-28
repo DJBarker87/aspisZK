@@ -1,5 +1,6 @@
 import PV_L1_ResultCoercion
 import PV_L1_Projection
+import PV_L1_EraseIf
 import R1Z.ProverRwFullFuns
 set_option autoImplicit false
 noncomputable section
@@ -63,19 +64,19 @@ theorem complete_result
   erase (produce blocks advances accepted n draws) = host_transcript.scan_query_words blocks advances accepted n draws := by
   unfold produce
   conv_rhs => unfold host_transcript.scan_query_words
-  simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   all_goals
     cases value
     repeat' first
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+      | split <;> simp only [PV_L1_EraseIf.erase_if,PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
     all_goals rfl
 #print axioms complete_result
 end PV_L1_Source_012
