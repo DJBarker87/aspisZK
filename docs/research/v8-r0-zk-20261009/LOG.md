@@ -13755,3 +13755,16 @@ compiled object with (h6)-style hash checks, else the variant the importer's own
 produced (by hash chain), else a reported cohort gap that stops only the step needing it. runjoin36
 (IDs 54000-54099) applies it, then continues the whole-body Result comparison and the runtime and
 decoder installation. Rows removed outright: 0. Privacy target not yet established.
+
+## D380 (Stream B) 2026-10-28 16:43 UTC: pv-l1 result: no level-1 leak found; V347-V351 open on the same whole-body and native dependencies; line parked
+
+pv-l1 (100 attempts; no Kani; audits 51697-51699 with standard axioms; no source change; merged the
+runjoin branch cleanly) proves source and model results for entropy counts and statuses, the ordered
+17-digest query prefix including transcript errors, the sampler joint kernels, and their application
+to inputs from successful canonical preparation. No honest-native level-1 leak was found. V347-V351
+stay OPEN on the full-body event composition and the native V163/V167 associations, which the runjoin
+line is building. Merged into the prover candidate (618c5138c5, pushed); the line is parked with its
+worktree, as are the reachability, file-effects, world and level-2 guard lines, all waiting on the
+runjoin line's whole-body comparison and native associations. Recount 8 follows pv-fscan's feature
+audit so that its verdicts are included. Rows removed outright: 0. Privacy target not yet
+established.
