@@ -16,8 +16,9 @@ theorem copied (w : W) (hs : w.variant=.S2) (k : Powers) :
   unfold AspisR1ProducerRelease47.weights_material53.all
   rw [PV_RunJoin_WeightCellIndices46.zero,←PV_RunJoin_WeightArray46.replicate]
   rw [PV_RunJoin_WeightFill46.complete w hs _ 1024 _ _ 1024#u16 rfl]
-  rw [PV_RunJoin_WeightMutation47.remaining w hs k 1024 _ 0#usize (by decide)
-    PV_B2_F_AllocationTransport.zero_suffix]
+  exact congrArg (mapResult (amap toWide))
+    (PV_RunJoin_WeightMutation47.remaining w hs k 1024 _ 0#usize (by decide)
+      PV_B2_F_AllocationTransport.zero_suffix)
 #print axioms copied
 
 theorem original (w : W) (hs : w.variant=.S2) (k : Powers) :
