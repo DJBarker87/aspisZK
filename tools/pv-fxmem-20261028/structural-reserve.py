@@ -29,4 +29,17 @@ j=dict(evidence_class='structural (K-1 substitute)',checks=rows,emitted_calls=ca
  allocation_world='The raw allocator step is explicit and may change its private state even when returning null. Returning null preserves buffer/header/data. Counts and ordered allocator requests are retained. Successful realloc moves the old allocation bytes in memoryAfter, including uninitialized slots, and invalidates old allocation identity if moved.',
  differences='Reference combines three ordered pure rejection tests into a disjunction after the no-growth test; source_reference proves harmlessness. Nat subtraction corresponds to wrapping_sub only for valid len<=capacity; same-type layouts share alignment, so Global grow fallback for changed alignment is unreachable. New allocations are nonzero sized. zeroed=false, so no zero-fill branch is taken.',
  retained='No theorem about libc internals, arbitrary allocator nonreturn, deployed binary, or side-channel equivalence. These remain P and are not new T fields. Finite native validation recorded separately.')
+layout=json.loads((E/'LAYOUT-SOURCE.json').read_text())
+layout_expected={
+ 'pub const fn repeat_packed(':'{if let Some(size) = self.size.checked_mul(n) {Layout::from_size_alignment(size, self.align)} else {Err(LayoutError)}}',
+ 'fn max_size_for_alignment(':'{unsafe {unchecked_sub(isize::MAX as usize + 1, alignment.as_usize())}}',
+ 'const fn is_size_alignment_valid(':'{size <= Self::max_size_for_alignment(alignment)}',
+ 'const fn from_size_alignment(':'{if Layout::is_size_alignment_valid(size, alignment) {Ok(Layout {size, align: alignment})} else {Err(LayoutError)}}'}
+assert len(layout['bodies'])==len(layout_expected)
+for x in layout['bodies']:
+ assert tokens(x['body'])==tokens(layout_expected[x['anchor']]),x
+ x['complete_tokens_match']=True
+j['layout']=layout
+j['symbolic_differences']='PV_FXM_ReserveLayout.aligned_limit proves padded alignment guard equivalence; product_error combines checked-mul overflow with the smaller byte bound; wrapped_available proves valid-buffer wrapping subtraction equals Nat subtraction; same_alignment excludes Global changed-alignment fallback.'
+j['physical_boundary']='World.memory is a logical allocation snapshot, whose validity is governed by live. PV_FXM_Physical retains actual raw bytes and arbitrary allocator-accessible external effects inside Runtime. No preservation of physical freed storage is claimed.'
 (E/'STRUCTURAL-RESERVE-GATE.json').write_text(json.dumps(j,indent=2)+'\n');print('PASS 10 complete pinned bodies and 4 emitted fresh-vector call sites')

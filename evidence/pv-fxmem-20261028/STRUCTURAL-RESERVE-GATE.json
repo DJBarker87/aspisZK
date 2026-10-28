@@ -96,5 +96,32 @@
   "allocation_world": "The raw allocator step is explicit and may change its private state even when returning null. Returning null preserves buffer/header/data. Counts and ordered allocator requests are retained. Successful realloc moves the old allocation bytes in memoryAfter, including uninitialized slots, and invalidates old allocation identity if moved.",
   "differences": "Reference combines three ordered pure rejection tests into a disjunction after the no-growth test; source_reference proves harmlessness. Nat subtraction corresponds to wrapping_sub only for valid len<=capacity; same-type layouts share alignment, so Global grow fallback for changed alignment is unreachable. New allocations are nonzero sized. zeroed=false, so no zero-fill branch is taken.",
   "retained": "No theorem about libc internals, arbitrary allocator nonreturn, deployed binary, or side-channel equivalence. These remain P and are not new T fields. Finite native validation recorded separately.",
-  "physical_boundary": "World.memory is the initialized/allocation snapshot; World.live governs its validity. Complete physical bytes and arbitrary allocator-accessible external effects are retained in allocator Runtime by PV_FXM_Physical. No physical preservation of freed bytes is asserted."
+  "layout": {
+    "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs",
+    "sha256": "19119ede8a60d1a989f907118f9e7f36e24434b8e931875f66a379b856784124",
+    "bodies": [
+      {
+        "anchor": "pub const fn repeat_packed(",
+        "body": "{\n        if let Some(size) = self.size.checked_mul(n) {\n            \n            Layout::from_size_alignment(size, self.align)\n        } else {\n            Err(LayoutError)\n        }\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "fn max_size_for_alignment(",
+        "body": "{\n        \n\n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n        \n\n        \n        \n        unsafe { unchecked_sub(isize::MAX as usize + 1, alignment.as_usize()) }\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const fn is_size_alignment_valid(",
+        "body": "{\n        size <= Self::max_size_for_alignment(alignment)\n    }",
+        "complete_tokens_match": true
+      },
+      {
+        "anchor": "const fn from_size_alignment(",
+        "body": "{\n        if Layout::is_size_alignment_valid(size, alignment) {\n            \n            Ok(Layout { size, align: alignment })\n        } else {\n            Err(LayoutError)\n        }\n    }",
+        "complete_tokens_match": true
+      }
+    ]
+  },
+  "symbolic_differences": "PV_FXM_ReserveLayout.aligned_limit proves padded alignment guard equivalence; product_error combines checked-mul overflow with the smaller byte bound; wrapped_available proves valid-buffer wrapping subtraction equals Nat subtraction; same_alignment excludes Global changed-alignment fallback.",
+  "physical_boundary": "World.memory is a logical allocation snapshot, whose validity is governed by live. PV_FXM_Physical retains actual raw bytes and arbitrary allocator-accessible external effects inside Runtime. No preservation of physical freed storage is claimed."
 }
