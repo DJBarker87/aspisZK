@@ -13573,3 +13573,14 @@ These are narrower than the generic readings of their rows (one type, a world-in
 actual dictionaries); the next recount decides whether each row's recorded text is met. Merged into
 the prover candidate (46a2203505, pushed); worktree and branch removed. Rows removed outright: 0.
 Privacy target not yet established.
+
+## D369 (Stream B) 2026-10-28 11:29 UTC: level-2 guard line unparked on runjoin's honest-preparation result
+
+The level-2 line was parked (D357) until the runjoin line proved that successful preparation yields
+an honest input; PV_RunJoin_CanonicalHonest31 and PV_RunJoin_CanonicalCoverage31 (D367) now do. l2c3
+(fresh 100 attempts; IDs 50300-50399; no Kani) merges the runjoin branch, then proves per guard site
+N2-N6 that on every honest input from a successful canonical preparation, with the honest prover's
+randomness, the guard takes its constant branch or lies in an already-charged bad event, with native
+links by extraction or the structural route, toward V352, V354, V357 and V360. The reachability line
+stays parked on runjoin33's native associations (V045/V038) and the file-effects line on pv-world2's
+threading theorem. Rows removed outright: 0. Privacy target not yet established.
