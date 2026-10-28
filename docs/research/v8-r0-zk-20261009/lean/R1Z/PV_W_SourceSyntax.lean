@@ -55,7 +55,7 @@ theorem source_bind_congr {A B : Type} (m : Aeneas.Std.Result A)
     Aeneas.Std.bind m left = Aeneas.Std.bind m right :=
   congrArg (Aeneas.Std.bind m) (funext h)
 
-/-- Restrict proof search to a syntactic bind on both sides. Unrestricted
+/- Restrict proof search to a syntactic bind on both sides. Unrestricted
 higher-order congrArg search can invent binds and loop at a non-bind goal. -/
 open Lean Elab Tactic in
 elab "pv_source_bind" : tactic => do
