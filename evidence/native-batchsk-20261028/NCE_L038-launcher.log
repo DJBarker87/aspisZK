@@ -1,0 +1,67 @@
+{"attempt": "NCE_L038", "exit_status": 1, "wall_seconds": 2.06282397499308, "peak_rss_kib": "4407544", "swaps": "0", "print_axioms": ["'AspisR1.NCE_VerifierCuts.rejected_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCE_VerifierCuts.level_exit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCE_VerifierCuts.finish_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCE_sources/NCE_VerifierCuts.lean:26:7: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Decidable
+    (↑s.scratch.n = 1 ∧ ↑(↑s.scratch.idx)[0]! = 0 ∧ (↑s.scratch.val)[0]! = root ∧ ↑s.scratch.at = (↑physical).length)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NCE_sources/NCE_VerifierCuts.lean:32:63: error: unsolved goals
+entry : Entry
+exit : Exit
+finish : Finish
+cut : NCE_Native_Verifier entry exit finish
+s : Carrier
+bytes : ℕ
+size : bytes ≤ 5504
+⊢ entry s bytes false = (false, s)
+NCE_sources/NCE_VerifierCuts.lean:45:59: error: unsolved goals
+entry : Entry
+exit : Exit
+finish : Fini
+...
+s.scratch.idx)[0]! = 0 ∧ (↑s.scratch.val)[0]! = root ∧ ↑s.scratch.at = (↑physical).length)
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NCE_sources/NCE_VerifierCuts.lean:32:63: error: unsolved goals
+entry : Entry
+exit : Exit
+finish : Finish
+cut : NCE_Native_Verifier entry exit finish
+s : Carrier
+bytes : ℕ
+size : bytes ≤ 5504
+⊢ entry s bytes false = (false, s)
+NCE_sources/NCE_VerifierCuts.lean:45:59: error: unsolved goals
+entry : Entry
+exit : Exit
+finish : Finish
+cut : NCE_Native_Verifier entry exit finish
+s : Carrier
+w : Usize
+bound : ↑w ≤ 16
+⊢ (exit s w).scratch.idx = s.scratch.idx ∧
+    (exit s w).scratch.val = s.scratch.val ∧
+      (exit s w).scratch.at = s.scratch.at ∧
+        (exit s w).scratch.n = w ∧
+          (exit s w).prepared = s.prepared ∧ (exit s w).proof = s.proof ∧ (exit s w).log = s.log
+NCE_sources/NCE_VerifierCuts.lean:58:80: error: unsolved goals
+entry : Entry
+exit : Exit
+finish : Finish
+cut : NCE_Native_Verifier entry exit finish
+s : Carrier
+root : Digest
+physical : Slice U8
+small : ↑s.scratch.n ≤ 16
+cursor : ↑s.scratch.at ≤ (↑physical).length
+size : (↑physical).length ≤ 5504
+⊢ finish s root physical =
+    (MultiproofConeRootGuard.modelRoot (AspisV8R19.SqueezeOracleBridge.decodeState root)
+        (some
+          (MultiproofConePhysicalViews.live s.scratch 0 ↑s.scratch.n,
+            MultiproofConePhysicalViews.remaining physical s.scratch.at)),
+      s)
+'AspisR1.NCE_VerifierCuts.rejected_entry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_VerifierCuts.level_exit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_VerifierCuts.finish_model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6086014d05ce452ebf7b18e7b61bf058.scope; invocation ID: ad22a9c6210e4ac1a6e94b35323b10fa

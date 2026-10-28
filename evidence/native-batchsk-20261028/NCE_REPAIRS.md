@@ -115,3 +115,65 @@ named scalar frames; use only remaining goals. Expose the initialized cursor
 projection before arithmetic and use Nat.zero_add in the final constructed
 copy carrier. The source/index/window domains are unchanged; no native copy
 pass is claimed, and the failed module is excluded.
+
+L035 initialization passes, including the same-frame KMX-to-NBV association.
+L036's level induction audits standard-only, but the full initialized theorem
+used decide on a projected zero depth containing free variables. Expose0+18
+before arithmetic. No theorem statement or native domain changed; L036 excluded.
+
+L037 initialized eighteen-level count passes. L038 requires the same local
+Classical.propDecidable instance as its imported root-guard model for the
+finite-array equality. Add that local instance; no cut or guard is changed.
+No new axiom is declared; printed audits still gate every final root.
+
+L039 verifier control and L040 three-tree control pass. L041 admission:
+use kernel reduction only for the singleton base; expose the named list
+successor equation before rewriting adjacent (avoids rewriting a one-element
+unknown-tail occurrence); explicitly reduce if True on empty input. Domains
+and failure behavior unchanged. The failed admission module is excluded.
+
+L042: parenthesize the Bool RHS of the adjacent successor equation; otherwise
+Lean's Bool-to-Prop coercion parses equality-and as another Bool expression.
+L043: supply the concrete initialized KeyState and its canonicality explicitly
+instead of unconstrained rewrite metavariables under a source let. No cut or
+conclusion changed. Both failed modules remain excluded.
+
+L045 admission and L046 raw-producer/native-sort composition pass. L044:
+the existing toChunksExact_chunk_length theorem proves <=8, not =8. Retain
+the exact8 native domain and prove exact_chunk_lengths from the real recursive
+constructor (short remainder excluded), then consume it for each physical
+chunk. This fixes a proof/domain justification; it does not weaken the cut.
+
+L048 verifier-admission composition passes. L047's exact-chunk-length root
+audited standard-only; its consumer accidentally referred to a shadowed mem
+binder. Rename the attached-list member rawMember and use that proof. Exact8
+is retained, and the failed module is excluded.
+
+L049 physical padding and L050 strengthened SAME-caller native sort pass.
+L051's getter/cursor roots audited standard-only; its prefix consumer needed
+an explicitly Nat-typed16-element length before min/omega. Expose that length
+and retain the original prefix/read domains. L052's earlier queue position was
+UNLAUNCHED because L051 failed; the next actual submission uses L052.
+
+L052 getter, L053 SAME-caller producer/sort/getter join and L054 effect-carrier
+annotation pass. L055's short rejection root audited standard-only; the two
+new branch statements had multiline record-layout errors. Keep each single
+record update on one line. No branch/request/frame specification changed;
+L055 is excluded as a module pass.
+
+L056 all three full-caller binary-row observations pass. L057's key/opening
+join reached the recursion-depth guard at its final reflexivity, after its
+symbolic address/byte lemmas had rewritten successfully. Do not increase any
+resource option. Keep the832-byte image and packed word locally irreducible,
+then use the explicit successful-bind rewrite before reflexivity. This avoids
+concrete reduction, leaves the statement/domain unchanged, and is a changed
+proof. L057 is excluded; it was not a memory kill or timeout.
+
+L058 key/opening join passes without any cap increase or concrete-image
+reduction. L059's first OWN input preflight imported RPx_Deployed, absent from
+the pinned cache/SInt2 object inventory. It failed dependency validation before
+any Lean launch/config/receipt; it uses no compile slot. Preserve that source
+and precheck receipt. The focused statement-audit input now imports only its
+available actual dependency union. The retained headline replay source was
+read immutably and pinned separately; NO joint headline replay is claimed.
+This is an own-input coverage correction, not a host infrastructure repair.

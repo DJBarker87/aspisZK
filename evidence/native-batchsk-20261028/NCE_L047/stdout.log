@@ -1,0 +1,21 @@
+NCE_sources/NCE_PaddingPhysical.lean:38:48: error: Application type mismatch: The argument
+  mem
+has type
+  (match ⟨bytes, mem✝⟩ with
+    | ⟨c, hc⟩ => ⟨c, ⋯⟩) ∈
+    {
+        chunks :=
+          List.map
+            (fun x =>
+              match x with
+              | ⟨c, hc⟩ => ⟨c, ⋯⟩)
+            (List.toChunksExact (↑8#usize) positive ↑padding).1.attach,
+        remainder := ⟨(List.toChunksExact (↑8#usize) positive ↑padding).2, ⋯⟩ }.chunks
+but is expected to have type
+  bytes ∈ (List.toChunksExact 8 ⋯ ↑padding).1
+in the application
+  exact_chunk_lengths (↑padding) bytes mem
+'AspisR1.NCE_PaddingPhysical.exact_chunk_lengths' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCE_PaddingPhysical.chunk_sizes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCE_PaddingPhysical.counted_suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCE_PaddingPhysical.physical_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
