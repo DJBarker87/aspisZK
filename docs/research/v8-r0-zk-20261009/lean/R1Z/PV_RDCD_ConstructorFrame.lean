@@ -16,7 +16,6 @@ theorem frame {Value World : Type} (ctor : World → Result (Value × World))
     repeated ctor n world = ok (List.replicate n value,world) := by
   induction n with
   | zero => rfl
-  | succ n ih => simpa [repeated,h] using congrArg
-      (fun p : List Value × World => ok (value::p.1,p.2)) ih
+  | succ n ih => simp [repeated,h,ih,List.replicate_succ]
 #print axioms frame
 end R1Z.PV_RDCD_ConstructorFrame
