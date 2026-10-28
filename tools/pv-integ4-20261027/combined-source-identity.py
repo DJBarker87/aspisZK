@@ -17,5 +17,5 @@ for p,h in rows.items():
  if hashlib.sha256(data).hexdigest()!=h:bad.append(p)
 proc.stdin.close();proc.wait()
 report=dict(revision=subprocess.check_output(['git','rev-parse',sys.argv[2]],text=True).strip(),files=rows,disagreements=bad,passed=not bad)
-(E/('combined-'+sys.argv[1]+'-source-identity.json')).write_text(json.dumps(report,indent=2)+'\n');print(len(rows),'files; disagreements:',bad)
+(E/('combined-'+sys.argv[1]+('-'+sys.argv[3] if len(sys.argv)>3 else '')+'-source-identity.json')).write_text(json.dumps(report,indent=2)+'\n');print(len(rows),'files; disagreements:',bad)
 assert not bad

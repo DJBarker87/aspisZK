@@ -11,7 +11,7 @@ with tarfile.open(fileobj=sys.stdout.buffer,mode='w|') as t:
   for f in ([p] if p.is_file() else p.rglob('*')):
    r=f.relative_to(H)
    if not f.is_file() or 'keypair' in f.name:continue
-   if f.suffix not in ('.json','.log','.txt'):continue
+   if f.suffix not in ('.json','.jsonl','.log','.txt'):continue
    if any(x in r.parts for x in ['compiler-output','artifacts','source','native-target','bin']):continue
    t.add(f,arcname=str(r),recursive=False)
 '''.replace('ROOT',repr(D)).replace('LABELS',repr(sys.argv[1:]))

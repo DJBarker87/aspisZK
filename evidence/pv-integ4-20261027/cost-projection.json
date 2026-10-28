@@ -1,6 +1,15 @@
 {
-  "method": "Sum recorded projections only. Batch3 table is cumulative within batch3: do not sum its successive tables. Batch2 retains inclusive nested-call overlap. Inputs have different coins (batch2 coin100; batch3 coin0). This is a finite mixed-fixture analytical projection, not whole-prover timing or a formal bound.",
+  "complete": true,
+  "method": "Add op223 recorded whole-prover median differences (D286/D289 receipt) and batches1/2/3 observed-call projections. Batch3 final table is already cumulative within batch3. Batch2 retains inclusive materialize/raw overlap. Inputs mix op223 coins100\u2013104, batch1/3 coin0 and batch2 coin100. This is a finite mixed-fixture projection, not independent whole-prover timing, a worst-case/formal cost bound, or the merged-candidate quiet timing gate.",
   "inputs": [
+    {
+      "path": "evidence/pv-quiet-20261027/comparison.json",
+      "sha256": "2c4533734d2f6d85a0d7308daf70e39f4135063748602282ffb6bce2e72d22a4"
+    },
+    {
+      "path": "evidence/pv-integ4-20261027/batch1-projection.json",
+      "sha256": "73a97f51b63420d33d2dafa58773e1a5304a2933a7c9cefbc3b63be0106bf561"
+    },
     {
       "path": "evidence/pv-batch2-20261027/call-counts/projection.json",
       "sha256": "876a746fbe7dab1a40e1bb237afd0e220c136ab1703ba1f17141b26489c793a0"
@@ -13,31 +22,29 @@
   "rows": [
     {
       "fixture": "transfer",
-      "batch2_delta_us": -12.49644059000003,
-      "batch3_delta_us": 235335.88460999983,
-      "known_subtotal_delta_us": 235323.38816940982,
-      "known_subtotal_seconds": 0.23532338816940981,
-      "percent_of_14_38s": 1.6364630609833786,
-      "full_cumulative_delta_us": null,
-      "missing_terms": [
-        "op223",
-        "batch1:230,254,258"
-      ]
+      "op223_control_median_seconds": 14.384269323,
+      "op223_candidate_median_seconds": 14.377724028,
+      "op223_ratio": 0.9995449685449413,
+      "op223_measured_delta_seconds": -0.006545295000000451,
+      "batch1_delta_seconds": -7.161592599999999e-07,
+      "batch2_delta_seconds": -1.2496440590000031e-05,
+      "batch3_delta_seconds": 0.23533588460999982,
+      "cumulative_delta_seconds": 0.22877737701014939,
+      "percent_of_14_38s": 1.5909414256616787,
+      "projected_seconds_from_14_38": 14.608777377010151
     },
     {
       "fixture": "withdrawal",
-      "batch2_delta_us": -12.49644059000003,
-      "batch3_delta_us": 236124.3749599998,
-      "known_subtotal_delta_us": 236111.8785194098,
-      "known_subtotal_seconds": 0.2361118785194098,
-      "percent_of_14_38s": 1.6419463040292754,
-      "full_cumulative_delta_us": null,
-      "missing_terms": [
-        "op223",
-        "batch1:230,254,258"
-      ]
+      "op223_control_median_seconds": 14.239355475,
+      "op223_candidate_median_seconds": 14.248478673,
+      "op223_ratio": 1.0006407030160893,
+      "op223_measured_delta_seconds": 0.009123197999999277,
+      "batch1_delta_seconds": -7.161592599999999e-07,
+      "batch2_delta_seconds": -1.2496440590000031e-05,
+      "batch3_delta_seconds": 0.2361243749599998,
+      "cumulative_delta_seconds": 0.2452343603601491,
+      "percent_of_14_38s": 1.705384981642205,
+      "projected_seconds_from_14_38": 14.62523436036015
     }
-  ],
-  "complete": false,
-  "missing": "No per-call cost tables found in inherited op223/batch1 evidence, route2 packet, or design. Missing values are unknown, never zero. Full op223+batches1\u20133 sum cannot be established from available recorded tables; no timing run authorized or performed."
+  ]
 }

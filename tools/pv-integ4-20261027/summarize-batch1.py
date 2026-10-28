@@ -1,6 +1,6 @@
 """Summarize finite original-vs-copy samples and observed fixture call counts."""
 from pathlib import Path
-import json,statistics,hashlib
+import json,statistics
 E=Path('evidence/pv-integ4-20261027');rows=[];round_id=None
 for line in (E/'batch1-cost-run/receipt/stdout.log').read_text().splitlines():
  if line.startswith('ROUND '):round_id=int(line.split()[1]);continue
@@ -14,7 +14,6 @@ for op in [230,254,258]:
 fixtures=[]
 for fixture in ['transfer','withdrawal']:
  record=json.loads((E/f'batch1-counts/fixtures/{fixture}-0/result.json').read_text());counts=record['batch1_counts_230_254_258'];assert record['status']=='Ok'
- previous=json.loads((E/'fixture-comparison.json').read_text())
  fs=[]
  for p,n in zip(parts,counts):fs.append(dict(**p,copy_calls=n,projected_delta_us=n*p['delta_us_per_call']))
  us=sum(p['projected_delta_us'] for p in fs)

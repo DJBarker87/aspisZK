@@ -2,7 +2,7 @@
 
 Source `03905a52594fadc50a1c00ab3f240a79632e8ffd`; branch `codex/pv-integ4-20261027`. No implementation source edits. Target not yet established.
 
-Resumed under the lead elapsed-time ruling; stage 3 and the 1,000-pair differential PASS; cost projection pending. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
+Resumed under the lead elapsed-time ruling; stage 3 and the 1,000-pair differential PASS; full cost projection complete. Timing gate was expressly excluded from execution by the task. All native builds use serial capped scopes (6G/8G, swap0, TasksMax64), optimized -j4; preflight and in-scope admission require allowed:true and exit0. IDs39500–39599 reserved but no Lean compilation planned. Kani0.
 
 ## Stage 1: verifier ELFs — PASS
 
@@ -38,22 +38,32 @@ Proof/public/ledger bytes and deterministic canonical result records match for b
 
 ## Stage 4: 1,000-pair whole-prover differential — PASS
 
-Fresh coins6000–6999 against shipped `c57a344726745387efb38d1571d885c69ce829ee`, candidate runtime source `03905a52594fadc50a1c00ab3f240a79632e8ffd`. The inherited command in TIMING-PLAN.md completed exit0,12,610.878s,620,468KiB peak process RSS,6,444,756,992-byte cgroup peak,swap0. Caps6G/8G/swap0/TasksMax64; maximum3 prover processes. Resource final: no OOM or task-limit events. Twenty ten-minute resource reviews record continuing completed cases under the original cap.
+Fresh coins6000–6999 against shipped `c57a344726745387efb38d1571d885c69ce829ee`, candidate runtime source `03905a52594fadc50a1c00ab3f240a79632e8ffd`. The inherited command in TIMING-PLAN.md completed exit0,12,610.878s,620,468KiB peak process RSS,6,444,756,992-byte cgroup peak,swap0. Caps6G/8G/swap0/TasksMax64; maximum3 prover processes. Resource final: no OOM or task-limit events. Twenty-one ten-minute resource reviews record continuing completed cases under the original cap.
 
 All1,000 pairs passed:600 complete proof pairs,100 rejected-prefix pairs (within600),400 matched error-result pairs,4 complete oracle-log pairs(6006,6007,6010,6011). Public/proof/oracle bytes and deterministic records match. `combined/record-ledger-audit.json` additionally confirms1,000 canonical record and ledger pairs; all1,000 raw result records are byte-identical too. The differential harness emits no elapsed field. The harness and comparator are byte-identical between revisions. Both exported source sets match git (6,521/7,290 files); build/toolchain/binary/runner pins, comparisons, records, logs and resource receipts are retained under `combined/`.
 
 No case was rerun. A separate post-run audit failed before reading the corpus because its script upload had been refused (exit78, overlooked when a following progress command returned0). The cooldown elapsed while the admitted differential continued; a fresh upload admission succeeded, supplying the missing inputs before the distinct successful audit. Failed/refused receipts remain in `audit-corpus-scope-001/`, `upload-final-tools/`; successful receipts are `audit-corpus-inputs-present-002/`, `upload-final-tools-retry/`. This was not a differential disagreement or a repeated differential cohort.
 
-## Stage 5: recorded cost projection — PARTIAL; no timing run
+## Stage 5: full cumulative cost projection — COMPLETE; quiet timing unrun
 
-`cost-projection.json` and `tools/pv-integ4-20261027/project-cost.py` reconcile the committed tables only. Batch3 final mask-expanded table already includes its predecessor groups/successors; they must not be summed again. Batch2 adds−12.49644059us per fixture. The known batch2+batch3 subtotals are:
+`cost-projection.json` and `tools/pv-integ4-20261027/project-cost.py` add the recorded op223 whole-prover median differences to the observed-call projections for batches1–3. Op223's exact receipt is `evidence/pv-quiet-20261027/comparison.json` (D286 gate, lead D289 acceptance), with scope receipt `measurement-scope/receipt/receipt.json` in that packet. Ratios are0.9995449685449413 /1.0006407030160893; measured median deltas are−0.006545295s /+0.009123198s. `OP223-COST.md` retains control/candidate pins and medians. No new op223 whole-prover timing ran.
 
-|Fixture|Known delta seconds|Percent of14.38s|
-|---|---:|---:|
-|transfer|+0.235323388169|+1.636463061%|
-|withdrawal|+0.236111878519|+1.641946304%|
+Batch1 was measured in a job-private scratch package, with no implementation committed under crates/. Original helper_sum/powers remain the frozen public functions; original pole is exact c57a344726 source. The copied functions are imported from the pinned candidate. The optimized probe uses five ordered original/copy rounds on fixed inputs (helper/pole1024 rows, powersN29), retains every sample and takes the median of the paired per-call deltas. `batch1-projection.json` and `batch1-cost-run/receipt/stdout.log` retain the data; `scratch/batch1-cost/pins.json` pins all inputs, Cargo.lock and the probe binary, with rustc1.94.1 recorded. Build/run receipts are `batch1-cost-build-001/` and `batch1-cost-run/` (exit0,38.403s /4.200s,565,248 /2,112KiB RSS,swap0).
 
-Full op223+batch1+batch2+batch3 projection is **unknown**: no per-call timing table for op223 or batch1(230/254/258) is present in their inherited packets, route2 or design. Available per-call JSON tables in inherited evidence cover only batches2/3. Those missing terms are not assumed zero. Batch2 inclusive materialize/raw accounting overlaps; tables also use different fixture coins. The subtotal is a mixed-fixture projection, neither an independent whole-prover measurement nor a worst-case/formal cost bound. No new benchmark was launched.
+|Op|Original median µs|Copy median µs|Median paired delta µs/call|Transfer calls|Withdrawal calls|
+|---|---:|---:|---:|---:|---:|
+|230|1.01413366|1.01235540|−0.00217324|2|2|
+|254|1.08328650|1.09597640|+0.01348860|1|1|
+|258|3.43373745|2.69876205|−0.72530138|1|1|
+
+Paired-delta medians need not equal the difference of the two displayed marginal medians. Each coin0 fixture used one proof attempt. Counts cover the complete prover call before verification; instrumented elapsed times are not performance results. Batch1 contributes−0.71615926µs per fixture. Counter-source manifests, exact instrumented text, binary pin, output records and byte/ledger equivalence are in `batch1-counts/`. The added counter field is excluded only from the instrumentation consistency check; all original deterministic fields match. `restored.json` and `combined-candidate-post-cost-source-identity.json` confirm exact restoration of all7,290 exported source files. No instrumented source or binary is used as the candidate gate artifact.
+
+|Fixture|Op223 Δs|Batch1 Δs|Batch2 Δs|Batch3 Δs|Cumulative Δs|Percent of14.38s|14.38s + projection|
+|---|---:|---:|---:|---:|---:|---:|---:|
+|transfer|−0.006545295|−0.000000716159|−0.000012496441|+0.235335884610|+0.228777377010|+1.590941426%|14.608777377010s|
+|withdrawal|+0.009123198|−0.000000716159|−0.000012496441|+0.236124374960|+0.245234360360|+1.705384982%|14.625234360360s|
+
+Batch3's final mask-expanded table already includes its predecessor groups; they are not added again. Batch2 retains its inclusive materialize/raw overlap. Inputs mix op223 coins100–104, batch1/3 coin0 and batch2 coin100. This is a finite mixed-fixture projection with microbenchmark noise, not a measured merged-candidate median, a universal/worst-case cost bound, or a timing-gate pass.
 
 ## Stage 6: timing plan, cleanup and premise accounting
 
