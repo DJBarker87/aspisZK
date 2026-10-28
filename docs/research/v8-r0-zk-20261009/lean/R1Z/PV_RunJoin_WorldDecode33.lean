@@ -45,7 +45,7 @@ conditional obstruction, not a checked counterexample to deployed code. -/
 theorem no_decoder (observe : Run W C Aeneas.Std.Error A → View)
     (left right : Run W C Aeneas.Std.Error A) (same : returned left = returned right)
     (different : observe left ≠ observe right) :
-    ¬ ∃ decode, ∀ r, decode (returned r) = observe r := by
+    ¬ ∃ decode : Aeneas.Std.Result (A × W) → View, ∀ r, decode (returned r) = observe r := by
   intro ⟨decode,law⟩
   exact different (same_result decode observe law left right same)
 

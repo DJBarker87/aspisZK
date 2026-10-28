@@ -1,0 +1,52 @@
+import R1Z.PV_RunJoin_WorldDecode33
+import R1Z.PV_RunJoin_EntrySimulation33
+import R1Z.PV_RunJoin_AttemptProjection32
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_RunJoin_RunBody33
+open Aeneas Aeneas.Std Result PV_W_Threading PV_W_Syntax
+open ProverCommitSemanticTransport26 PV_RunJoin_WorldProjection33
+variable {W V C D A : Type}
+
+/-- Exact map from the complete run to the existing Result-valued callback
+interface. The full call trace remains a separate obligation of each decoder. -/
+theorem returned_project (world : W → V) (tag : C → D)
+    (r : Run W C Aeneas.Std.Error A) :
+    mapR (fun out => (out.1,world out.2)) (PV_RunJoin_WorldDecode33.returned r) =
+      PV_RunJoin_WorldDecode33.returned (project world tag r) := by
+  cases h : r.outcome <;> simp only [PV_RunJoin_WorldDecode33.returned,project,h,mapR,Aeneas.Std.bind]
+
+variable [ProverRwFull.ExternalTypes]
+variable [ProverRwRngCaller.NativeTypes] [ProverRwRngCaller.ErasureFns]
+variable {N L Client N' L' Client' : Type}
+local notation "StateA" => PV_RunJoin_UnifiedRetry.State N L Client
+local notation "StateB" => PV_RunJoin_UnifiedRetry.State N' L' Client'
+local notation "Status" => core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error
+
+/-- This constructs only the callback interface; native installation and both
+complete observation laws are intentionally not inferred by construction. -/
+def body (ops : Interpreter PV_W_ReachedEffects.Op StateA C Aeneas.Std.Error)
+    (program : ProverRwRetryModel.Secret → PV_W_ReachedEffects.P Status) :
+    PV_RunJoin_UnifiedRetry.Body StateA := fun secret state =>
+  PV_RunJoin_WorldDecode33.returned (eval ops (program secret) state)
+
+/-- The precise body-step premise consumed by CommonSample32 is a consequence
+of complete-run simulation. Nothing about initialization or decoder adequacy
+is packed into this implication. -/
+theorem body_step (world : StateA → StateB) (tag : C → D)
+    (left : Interpreter PV_W_ReachedEffects.Op StateA C Aeneas.Std.Error)
+    (right : Interpreter PV_W_ReachedEffects.Op StateB D Aeneas.Std.Error)
+    (local_law : ∀ {B : Type} (op : PV_W_ReachedEffects.Op B) state,
+      project world tag (left op state) = right op (world state))
+    (program : ProverRwRetryModel.Secret → PV_W_ReachedEffects.P Status)
+    (secret : ProverRwRetryModel.Secret) (state : StateA) :
+    mapR (fun out => (out.1,world out.2)) (body left program secret state) =
+      body right program secret (world state) := by
+  unfold body
+  rw [returned_project]
+  exact congrArg PV_RunJoin_WorldDecode33.returned
+    (eval_project world tag left right local_law _ state)
+
+#print axioms returned_project
+#print axioms body_step
+end R1Z.PV_RunJoin_RunBody33
