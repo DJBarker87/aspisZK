@@ -37,7 +37,6 @@ theorem complete_result : ∃ out : Array reference132.Cell 3803#usize,
   have hcap : (0#usize).val + (columns pick (0#usize).val 16).length ≤ 3803 := by
     simp only [show (0#usize).val = 0 from rfl]
     rw [PV_B3P_MaskCapacity132.full_count]
-    omega
   obtain ⟨out,k,hloop,hcount,hvalue⟩ := PV_B3P_MaskOuter132.outer pick hp 16 initial 0#usize 0#usize
     (by simp) hcap
   simp only [show (0#usize).val = 0 from rfl] at hcount hvalue
