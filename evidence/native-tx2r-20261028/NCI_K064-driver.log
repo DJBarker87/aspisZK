@@ -1,0 +1,27 @@
+{"attempt": "NCI_K064", "exit_status": 1, "wall_seconds": 17.903079463983886, "peak_rss_kib": "1256832", "swaps": "0"}
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.78s
+Checking harness verifier::NCI_contracts::bad_modifies_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 106 failed
+Failed Checks: Check that self->at is assignable
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 344, in verifier::Reader::<'_>::raw::<16>
+
+VERIFICATION:- FAILED
+Verification Time: 14.236782s
+
+Manual Harness Summary:
+Verification failed for - verifier::NCI_contracts::bad_modifies_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

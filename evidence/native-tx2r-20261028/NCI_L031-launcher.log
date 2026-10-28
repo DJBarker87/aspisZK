@@ -1,0 +1,13 @@
+{"attempt": "NCI_L031", "exit_status": 0, "wall_seconds": 1.0017183780437335, "peak_rss_kib": "2624576", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+
+...
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+
+Running as unit: run-rb04b3543667141f1ad3ddc67d4bee83c.scope; invocation ID: fb42a99df4fb40fc87d4275a6f30fee0

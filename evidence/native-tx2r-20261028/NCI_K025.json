@@ -1,0 +1,94 @@
+{
+  "attempt": "NCI_K025",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "e7911f46eb9da3ce07e945f0f61fdbb1feb1381e",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NCI_src/Cargo.toml",
+    "NCI_src/Cargo.lock",
+    "NCI_src/KMX_CopyMeaning.lean",
+    "NCI_src/KMX_native.rs",
+    "NCI_src/KMX_stubs.rs",
+    "NCI_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NCI_src/crates/aspis-r1-cost-probe/src/verifier.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2r-20261028/NCI_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2r-20261028/NCI_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::NCI_helpers::weight_step_wrong",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2r-20261028/NCI_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "10aaf5b0503e5ae8ac2803e945175f2ddaf8ac64a55fbedfb31aa0c8be202e30",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "6b7458591f5a64d8d1848933826f9dc57cedf6e8dba2b5346f346cbd12ca1d4c",
+    "extra_patch_sha256": null,
+    "scratch_source_manifest_sha256": "13ea8ef229ceb585b9028288dcbb1136509c0c65abf487c5b27e136be13bdc40",
+    "cfg_patch_chain": [
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K001-harness.patch",
+        "sha256": "712797f3cce016165c734dfdadd065c27016af1a72e838466fe31b9627f0c596"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K002-harness.patch",
+        "sha256": "16ccaeec1132377e830757a34b10549f07ec55d39067e28e2c8a81cbaf08e4d9"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K010-harness.patch",
+        "sha256": "90e55c6de7c5221b02fb5734c9741852b5eee9b1a77b2b05e7bbbff4da8967c2"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K011-harness.patch",
+        "sha256": "7dde537a75a1c5e0c8b3cbfc4c926ab119d4b571402581afb7418c36f164d929"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K015-harness.patch",
+        "sha256": "2bef3cecd02ac5fbc4560b11489100ec59e72b7d8d4098a25df0e6389e92ee39"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K023-harness.patch",
+        "sha256": "f35b5f31d94571d784cc535e5c8488cc56cb52816086b6dc616864da12fad02b"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2r/evidence/native-tx2r-20261028/NCI_K024-harness.patch",
+        "sha256": "6b7458591f5a64d8d1848933826f9dc57cedf6e8dba2b5346f346cbd12ca1d4c"
+      }
+    ]
+  },
+  "expected_time": "optimized dependency compilation then native release leaf verifier::NCI_helpers::weight_step_wrong"
+}

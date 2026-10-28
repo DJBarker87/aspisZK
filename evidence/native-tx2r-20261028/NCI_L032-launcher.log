@@ -1,0 +1,21 @@
+{"attempt": "NCI_L032", "exit_status": 0, "wall_seconds": 1.029556265915744, "peak_rss_kib": "2624620", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+def Aeneas.Std.UScalar.tryMkOpt : (ty : Aeneas.Std.UScalarTy) → ℕ → Option (Aeneas.Std.UScalar ty) :=
+fun ty x => if h : Aeneas.Std.UScalar.check_bounds ty x = true then some (Aeneas.Std.UScalar.ofNatCore x ⋯) else none
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : Aeneas.Std.UScalarTy} →
+  (x : ℕ) → autoParam (x
+...
+def Aeneas.Std.UScalar.tryMk : (ty : Aeneas.Std.UScalarTy) → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun ty x => Aeneas.Std.Result.ofOption (Aeneas.Std.UScalar.tryMkOpt ty x) Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.ofNatCore : {ty : Aeneas.Std.UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → Aeneas.Std.UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+def Aeneas.Std.UScalar.tryMkOpt : (ty : Aeneas.Std.UScalarTy) → ℕ → Option (Aeneas.Std.UScalar ty) :=
+fun ty x => if h : Aeneas.Std.UScalar.check_bounds ty x = true then some (Aeneas.Std.UScalar.ofNatCore x ⋯) else none
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : Aeneas.Std.UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ Aeneas.Std.UScalar.cMax ty) Aeneas.Std.UScalar.ofNat._auto_1 → Aeneas.Std.UScalar ty :=
+fun {ty} x hInBounds => Aeneas.Std.UScalar.ofNatCore x ⋯
+
+Running as unit: run-rc0e36d5be22a47689a4593e75d3c7efe.scope; invocation ID: 163fdd8360d149ac9e219d792b5bbf4b

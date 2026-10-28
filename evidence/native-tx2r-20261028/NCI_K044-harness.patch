@@ -1,0 +1,51 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -910,3 +910,48 @@
+ let expected=[w.c0.a.0 as u64,w.c0.b.0 as u64,w.c1.a.0 as u64,w.c1.b.0 as u64];assert!(out.raw[0][i]!=expected[i]);
+ }
+ }
++
++#[cfg(kani)] mod NCI_value {
++use super::*;
++fn reduce(x:u64)->M31{let z:u32=kani::any();kani::assume(z as u64==x%2147483647);M31(z)}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn value_ok(){
++let row:[u64;4]=kani::any();let mut raw=Vec::with_capacity(1);raw.push(row);let terms:usize=kani::any();let state=BatchedWeights{raw,terms};
++let out=state.value(0);
++let values=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];let j:usize=kani::any();kani::assume(j<4);
++assert!((values[j] as u64)==row[j]%2147483647);assert!(state.terms==terms&&state.raw[0][j]==row[j]);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn value_wrong(){
++let row:[u64;4]=kani::any();let mut raw=Vec::with_capacity(1);raw.push(row);let terms:usize=kani::any();let state=BatchedWeights{raw,terms};
++let out=state.value(0);
++let values=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];let j:usize=kani::any();kani::assume(j<4);
++assert!((values[j] as u64)!=row[j]%2147483647);assert!(state.terms==terms&&state.raw[0][j]==row[j]);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn finish_ok(){
++let row:[u64;4]=kani::any();let mut raw=Vec::with_capacity(1);raw.push(row);let terms:usize=kani::any();let state=BatchedWeights{raw,terms};
++let mut weights=[K::ZERO];state.finish(&mut weights);let out=weights[0];
++let values=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];let j:usize=kani::any();kani::assume(j<4);
++assert!((values[j] as u64)==row[j]%2147483647);assert!(state.terms==terms&&state.raw[0][j]==row[j]);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn finish_wrong(){
++let row:[u64;4]=kani::any();let mut raw=Vec::with_capacity(1);raw.push(row);let terms:usize=kani::any();let state=BatchedWeights{raw,terms};
++let mut weights=[K::ZERO];state.finish(&mut weights);let out=weights[0];
++let values=[out.c0.a.0,out.c0.b.0,out.c1.a.0,out.c1.b.0];let j:usize=kani::any();kani::assume(j<4);
++assert!((values[j] as u64)!=row[j]%2147483647);assert!(state.terms==terms&&state.raw[0][j]==row[j]);
++}
++}

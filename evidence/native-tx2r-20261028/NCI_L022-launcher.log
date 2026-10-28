@@ -1,0 +1,68 @@
+{"attempt": "NCI_L022", "exit_status": 1, "wall_seconds": 2.1122526199324057, "peak_rss_kib": "4396084", "swaps": "0", "print_axioms": ["'AspisR1.NCI_BasisModelStep.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCI_generated/NCI_BasisModelStep.lean:16:36: error: unsolved goals
+ops : Ops
+node old product : aspis_core.field.M31
+n j target : Usize
+iter nextIter : core.ops.range.Range Usize
+basis after : Std.Array aspis_core.field.M31 256#usize
+Next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some j, nextIter)
+Read : basis.index_usize j = ok old
+Mul : ops.op7 old node = ok product
+Index : lift (n.wrapping_add j) = ok target
+Write : basis.update target product = ok after
+⊢ (let (o, iter1) := (some j, nextIter)
+    match o with
+    | none => ok (done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← ops.op7 m node
+      let i ← lift (n.wrapping_add j
+...
+atch o with
+    | none => ok (done basis)
+    | some j => do
+      let m ← basis.index_usize j
+      let m1 ← ops.op7 m node
+      let i ← lift (n.wrapping_add j)
+      let basis1 ← basis.update i m1
+      ok (cont (iter1, basis1))) =
+    ok (cont (nextIter, after))
+NCI_generated/NCI_BasisModelStep.lean:18:4: warning: This simp argument is unused:
+  Read
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0_loop0.body, ̲Next, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵R̵e̵a̵d̵,̵Mul, ̲Index,
+  ̲ ̲ ̲ ̲ ̲Write]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCI_generated/NCI_BasisModelStep.lean:18:9: warning: This simp argument is unused:
+  Mul
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0_loop0.body, ̲Next, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵Read,M̵u̵l̵,̵ ̲Index,
+  ̲ ̲ ̲ ̲ ̲Write]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCI_generated/NCI_BasisModelStep.lean:18:13: warning: This simp argument is unused:
+  Index
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0_loop0.body, ̲Next, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵Read, ̲Mul,I̵n̵d̵e̵x̵,̵
+  ̲ ̲ ̲ ̲ ̲Write]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCI_generated/NCI_BasisModelStep.lean:18:19: warning: This simp argument is unused:
+  Write
+
+Hint: Omit it from the simp argument list.
+  simp only [verifier.accumulate_batched_with_node_loop0_loop0.body, ̲Next, ̲bind_tc_ok,
+  ̵  ̵ ̵ ̵Read, ̲Mul,
+  ̲ ̲ ̲ ̲ ̲Index,̵W̵r̵i̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCI_BasisModelStep.source_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r86f5d1427793443fa825320902510f22.scope; invocation ID: 46da2b3faad246e6ac9a69062a167ede
