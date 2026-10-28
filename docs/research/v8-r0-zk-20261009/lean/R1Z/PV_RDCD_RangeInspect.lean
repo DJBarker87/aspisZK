@@ -7,5 +7,7 @@ set_option autoImplicit false
 #print Aeneas.Std.core.iter.traits.iterator.Iterator.rev.trait_default
 #print Aeneas.Std.core.iter.range.Step
 #print Aeneas.Std.core.ops.range.Range
-#print Aeneas.Std.Usize.sub
-#print Aeneas.Std.Usize.add
+#print Aeneas.Std.core.iter.range.UScalarStep
+#print Aeneas.Std.core.ops.range.Range.Insts.CoreIterTraitsDoubleEndedIterator.next_back
+#print Aeneas.Std.core.iter.range.IteratorRange.next
+#print Aeneas.Std.core.iter.traits.iterator.Iterator.rev.default
