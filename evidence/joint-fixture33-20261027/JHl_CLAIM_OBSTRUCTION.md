@@ -1,0 +1,5 @@
+# Claim frontier inspected before weight continuation
+
+The remaining32-byte claim is the return of closedHashBoundaries.claim on the SAME actual semantic return, y1/inactive, gamma powers and kappa. The existing JGi_PreparedClaim and JGi_ClaimTotal prove totality/canonicality, not its numeric value. Canonicality cannot identify the claim with checkpoint bytes. CurrentClaimSourceAggregation.successful_claim_source_gamma_kappa_sum supplies a source scalar-selection sum law on the concrete source, but concrete six29-step dot/power certificates and current-carrier transport are still required. LPq's implementation includes XRn_Join carriers and is not imported under the direct-native route ruling.
+
+Weight work below is independent of claim identity. No claim/output/body identity is added to SHARealization or any new assumption container. Full body1736 and saved1768 remain blocked on this field even if all weights close. Continue useful independent weight proofs, then return to the claim frontier with the remaining compile budget.
