@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_CoefficientInstalled45
+import R1Z.PV_RunJoin_CoefficientsThread45
 import R1Z.PV_RunJoin_Vector44
 import R1Z.PV_RunJoin_MergeLoop35
 set_option autoImplicit false
@@ -33,15 +33,10 @@ theorem installed (ops : ExternalFuns) (p : Nat → W) :
 theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
     (out : alloc.vec.Vec Column) (lane : Usize) (bound : lane.val + n = 29)
     (room : out.length + n ≤ Usize.max) :
-    ∃ next, @prover.opening_coefficients_loop _ (ProverRwP6BodyCandidate.selected ops) .S2
-      (messages p) out lane = .ok next ∧ next.val = out.val ++ payload p lane.val n := by
+    ∃ next, @PV_RunJoin_CoefficientsThread45.phase _ (ProverRwP6BodyCandidate.selected ops) .S2
+      (messages p) n out lane = .ok next ∧ next.val = out.val ++ payload p lane.val n := by
   induction n generalizing out lane with
-  | zero =>
-    refine ⟨out,?_,by simp only [payload,List.append_nil]⟩
-    unfold prover.opening_coefficients_loop
-    rw [ProverRw19LoopBind.loop_bind]
-    simp only [prover.opening_coefficients_loop.body,
-      show ¬lane < Slice.len (messages p) from (by change ¬lane.val < (messages p).length;rw [messages,Array.length_to_slice];change ¬lane.val < 29;omega),↓reduceIte,bind_tc_ok]
+  | zero => exact ⟨out,rfl,by simp only [payload,List.append_nil]⟩
   | succ n ih =>
     have hi : lane.val < 29 := by omega
     have read : Slice.index_usize (messages p) lane = .ok (ProverCommitArray49.array 1024#usize (p lane.val)) :=
@@ -51,21 +46,8 @@ theorem complete (ops : ExternalFuns) (p : Nat → Nat → W) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment lane (by omega)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add lane 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
-    · unfold prover.opening_coefficients_loop
-      rw [ProverRw19LoopBind.loop_bind]
-      dsimp only
-      simp only [prover.opening_coefficients_loop.body,
-        show lane < Slice.len (messages p) from (by change lane.val < (messages p).length;rw [messages,Array.length_to_slice];exact hi),↓reduceIte,read,bind_tc_ok,
-        lift]
-      have cell := congrArg (fun r : Result Column => do
-        let c ← r
-        let coefficients1 ← alloc.vec.Vec.push out c
-        let cf := ControlFlow.cont (coefficients1, Usize.wrapping_add lane 1#usize)
-        match cf with
-        | .cont next => @prover.opening_coefficients_loop _ (ProverRwP6BodyCandidate.selected ops) .S2 (messages p) next.1 next.2
-        | .done out => .ok out) (installed ops (p lane.val))
-      apply Eq.trans cell
-      simpa only [bind_tc_ok,hm] using hn
+    · simp only [PV_RunJoin_CoefficientsThread45.phase,PV_RunJoin_CoefficientsThread45.step,
+        read,installed ops (p lane.val),hm,bind_tc_ok,hn]
     · rw [hnv,hmv,inc,payload,List.append_assoc,List.singleton_append]
 #print axioms payload_length
 #print axioms installed

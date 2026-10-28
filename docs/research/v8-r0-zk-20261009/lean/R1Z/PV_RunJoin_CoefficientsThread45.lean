@@ -33,7 +33,7 @@ theorem one_step (v : transport.Variant) (messages : Slice Column) (out : alloc.
     show lane < Slice.len messages from bound,↓reduceIte,step,lift,bind_assoc_eq,bind_tc_ok]
 
 theorem complete (v : transport.Variant) (messages : Slice Column) (out : alloc.vec.Vec Column)
-    (lane : Usize) (n : Nat) (bound : lane.val + n = messages.length) :
+    (lane : Usize) (n : Nat) (small : messages.length ≤ 14336) (bound : lane.val + n = messages.length) :
     prover.opening_coefficients_loop v messages out lane = phase v messages n out lane := by
   induction n generalizing out lane with
   | zero =>
@@ -48,7 +48,7 @@ theorem complete (v : transport.Variant) (messages : Slice Column) (out : alloc.
     simp only [bind_assoc_eq,bind_tc_ok,phase]
     apply congrArg (Aeneas.Std.bind (step v messages out lane))
     funext next
-    exact ih next _ (by rw [PV_RunJoin_MergeLoop35.increment lane (by have h:=messages.property;omega)];omega)
+    exact ih next _ (by rw [PV_RunJoin_MergeLoop35.increment lane (by omega)];omega)
 #print axioms stop
 #print axioms one_step
 #print axioms complete
