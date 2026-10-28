@@ -33,6 +33,30 @@ def original {S : Type} (allocate : Request → S → Option Nat × S)
     (w : host_weights.Weights) (kappa : E) (world : World S) :=
   run (PV_B2_F_MaterializeRequest.original (ok .supplied)) allocate w kappa world
 
+/-- Source order keeps the total, effect-free powers computation before the
+public allocation. Every allocation outcome remains explicit. -/
+def source {S : Type} (allocate : Request → S → Option Nat × S)
+    (w : host_weights.Weights) (kappa : E) (world : World S) :
+    Result RustResult × World S :=
+  match host_weights.powers7 kappa with
+  | .fail e => (fail e,world)
+  | .div => (div,world)
+  | .ok k =>
+    match lowered allocate request PV_B2_F_AllocationTransport.zeros world with
+    | (.allocationAbort,after) => (ok (.Err verifier.Error.Allocation),after)
+    | (.returned p _,after) =>
+      let r : Result RustResult := do
+        let out ← PV_B2_F_MaterializeFrozen.remaining w k 1024 0#usize
+          PV_B2_F_AllocationTransport.zeros
+        ok (.Ok out)
+      (r,restore p r after)
+
+theorem source_order {S : Type} (allocate : Request → S → Option Nat × S)
+    (w : host_weights.Weights) (kappa : E) (world : World S) :
+    source allocate w kappa world=original allocate w kappa world := by
+  obtain ⟨k,hk⟩ := PV_B2_C_Powers7Total.source kappa
+  simp only [source,hk,original,run,PV_B2_F_MaterializeRequest.original,bind_tc_ok]
+
 theorem complete {S : Type} (allocate : Request → S → Option Nat × S)
     (w : host_weights.Weights) (kappa : E) (world : World S) :
     copied allocate w kappa world=original allocate w kappa world := by
@@ -55,6 +79,7 @@ theorem public_request (left right : host_weights.Weights) (a b : E) :
     (fun (_ : host_weights.Weights) (_ : E) => request) left a =
     (fun (_ : host_weights.Weights) (_ : E) => request) right b := rfl
 
+#print axioms source_order
 #print axioms complete
 #print axioms allocation_failure
 #print axioms public_request
