@@ -1,0 +1,17 @@
+LAUNCH 42933 R1Z/PV_RunJoin_FlattenTrace30
+'R1Z.PV_RunJoin_FlattenTrace30.same_next' does not depend on any axioms
+'R1Z.PV_RunJoin_FlattenTrace30.inner_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FlattenTrace30.flatten_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    ok (some x, it)
+  else ok (none, it)
+def Aeneas.Std.SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (core.slice.iter.Iter T) :=
+fun {T} {N} a => ok { slice := ⟨↑a, ⋯⟩, i := 0 }
+
+RECEIPT {"attempt": 42933, "exit": 0, "wall_seconds": 1.4500421667471528, "peak_rss_bytes": 2661060608, "swaps": 0, "accepted": true}

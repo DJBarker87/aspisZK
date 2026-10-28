@@ -1,0 +1,23 @@
+LAUNCH 42978 R1Z/PV_RunJoin_DigestIdentity30
+'R1Z.PV_RunJoin_DigestIdentity30.map_loop' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_DigestIdentity30.lean:24:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if (↑d).length = ↑8#usize then ?m.24 else ?m.25
+in the target expression
+  (if h : (↑d).length = ↑8#usize then ok ⟨↑d, ⋯⟩ else fail Error.panic) = ok d
+
+d : Std.Array U32 8#usize
+⊢ (if h : (↑d).length = ↑8#usize then ok ⟨↑d, ⋯⟩ else fail Error.panic) = ok d
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_DigestIdentity30.digest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+RECEIPT {"attempt": 42978, "exit": 1, "wall_seconds": 1.2655886667780578, "peak_rss_bytes": 2654478336, "swaps": 0, "accepted": false}

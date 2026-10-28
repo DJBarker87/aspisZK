@@ -1,0 +1,135 @@
+def Aeneas.Std.core.slice.Slice.contains : {T : Type} →
+  Aeneas.Std.core.cmp.PartialEq T T → Aeneas.Std.Slice T → T → Aeneas.Std.Result Bool :=
+fun {T} partialEqInst s x => List.anyM (partialEqInst.eq x) ↑s
+def Aeneas.Std.core.array.equality.PartialEqArray.ne : {T U : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Array T N → Aeneas.Std.Array U N → Aeneas.Std.Result Bool :=
+fun {T U} {N} partialEqInst a0 a1 => do
+  let b ← Aeneas.Std.core.array.equality.PartialEqArray.eq partialEqInst a0 a1
+  Aeneas.Std.Result.ok (decide ¬b = true)
+def Aeneas.Std.core.cmp.PartialEq.ne.trait_default : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool :=
+fun {Self Rhs} PartialEqInst self other => Aeneas.Std.core.cmp.PartialEq.ne.default PartialEqInst.eq self other
+@[reducible] def AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 : Aeneas.Std.core.cmp.PartialEq
+  AspisBuilderAdmissionSource.aspis_core.field.M31 AspisBuilderAdmissionSource.aspis_core.field.M31 :=
+{ eq := AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+  ne := fun self other =>
+    Aeneas.Std.core.cmp.PartialEq.ne.default
+      AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq self other }
+def AspisBuilderAdmissionSource.pool_v1.pair_trace.validate_common : Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+  Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+    Aeneas.Std.U64 →
+      Aeneas.Std.Array AspisBuilderAdmissionSource.aspis_core.field.M31 8#usize →
+        Aeneas.Std.Array AspisBuilderAdmissionSource.aspis_core.field.M31 8#usize →
+          AspisBuilderAdmissionSource.aspis_core.field.M31 →
+            AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1 →
+              AspisBuilderAdmissionSource.pool_v1.payment_relation.PoolV1PaymentRelationContextV1 →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit
+                    AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1) :=
+fun public_pool public_domain anchor_sequence anchor nullifier asset input context => do
+  let b ←
+    Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8 context.runtime_binding.pool
+        public_pool
+  if b = true then
+      Aeneas.Std.Result.ok
+        (Aeneas.Std.core.result.Result.Err
+          AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.RuntimeBinding)
+    else do
+      let b1 ←
+        Aeneas.Std.core.array.equality.PartialEqArray.ne Aeneas.Std.core.cmp.PartialEqU8
+            context.runtime_binding.deployment_domain public_domain
+      if b1 = true then
+          Aeneas.Std.Result.ok
+            (Aeneas.Std.core.result.Result.Err
+              AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.RuntimeBinding)
+        else
+          if (context.runtime_binding.anchor_sequence != anchor_sequence) = true then
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.core.result.Result.Err
+                AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.RuntimeBinding)
+          else do
+            let b2 ←
+              Aeneas.Std.core.array.equality.PartialEqArray.ne
+                  AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                  context.runtime_binding.anchor_root anchor
+            if b2 = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.core.result.Result.Err
+                    AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.RuntimeBinding)
+              else do
+                let b3 ←
+                  Aeneas.Std.core.cmp.PartialEq.ne.trait_default
+                      AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+                      context.runtime_binding.asset_id asset
+                if b3 = true then
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.core.result.Result.Err
+                        AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.RuntimeBinding)
+                  else do
+                    let b4 ←
+                      Aeneas.Std.core.slice.Slice.contains
+                          (AspisBuilderAdmissionSource.Array.Insts.CoreCmpPartialEqArray 8#usize
+                            AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31)
+                          context.spent_nullifiers nullifier
+                    if b4 = true then
+                        Aeneas.Std.Result.ok
+                          (Aeneas.Std.core.result.Result.Err
+                            AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.NullifierAlreadySpent)
+                      else do
+                        let b5 ← AspisBuilderAdmissionSource.pool_v1.pair_trace.digest_canonical input.nullifier_key
+                        if b5 = true then do
+                            let b6 ← AspisBuilderAdmissionSource.pool_v1.pair_trace.digest_canonical input.salt
+                            if b6 = true then do
+                                let s ← Aeneas.Std.lift input.membership.siblings.to_slice
+                                let i ← Aeneas.Std.core.slice.Slice.iter s
+                                let __x ←
+                                  AspisBuilderAdmissionSource.core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                                      AspisBuilderAdmissionSource.pool_v1.pair_trace.validate_common.closure.Insts.CoreOpsFunctionFnMutTupleSharedArrayM318Bool
+                                      i ()
+                                match __x with
+                                  | (b7, snd) =>
+                                    if b7 = true then
+                                      Aeneas.Std.Result.ok
+                                        (Aeneas.Std.core.result.Result.Err
+                                          AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                                    else
+                                      if input.value = 0#u32 then
+                                        Aeneas.Std.Result.ok
+                                          (Aeneas.Std.core.result.Result.Err
+                                            AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                      else do
+                                        let i1 ← AspisBuilderAdmissionSource.spend.VALUE_LIMIT
+                                        if input.value ≥ i1 then
+                                            Aeneas.Std.Result.ok
+                                              (Aeneas.Std.core.result.Result.Err
+                                                AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                          else do
+                                            let i2 ← Aeneas.Std.lift (Aeneas.Std.U32.wrapping_shl 1#u32 20#u32)
+                                            if input.membership.index ≥ i2 then
+                                                Aeneas.Std.Result.ok
+                                                  (Aeneas.Std.core.result.Result.Err
+                                                    AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.ValueOutOfRange)
+                                              else do
+                                                let r ← input.pair_leaf.require_selected_spendable input.selected_second
+                                                AspisBuilderAdmissionSource.core.result.Result.map_err
+                                                    (Aeneas.Std.BuiltinFnOnce
+                                                      AspisBuilderAdmissionSource.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+                                                      AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1)
+                                                    r
+                                                    AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
+                              else
+                                Aeneas.Std.Result.ok
+                                  (Aeneas.Std.core.result.Result.Err
+                                    AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+                          else
+                            Aeneas.Std.Result.ok
+                              (Aeneas.Std.core.result.Result.Err
+                                AspisBuilderAdmissionSource.pool_v1.pair_trace.PoolV1PairTraceErrorV1.WitnessDigest)
+def R1Z.BuilderAdmissionStd.iterScan : {T C : Type} →
+  Aeneas.Std.core.ops.function.FnMut C T Bool →
+    Bool → Aeneas.Std.core.slice.iter.Iter T → C → Aeneas.Std.Result (Bool × Aeneas.Std.core.slice.iter.Iter T) :=
+fun {T C} f stop it c => do
+  let __x ← R1Z.BuilderAdmissionStd.scan f stop (List.drop it.i ↑it.slice) c
+  match __x with
+    | (b, n) => Aeneas.Std.Result.ok (b, { slice := it.slice, i := it.i + n })
