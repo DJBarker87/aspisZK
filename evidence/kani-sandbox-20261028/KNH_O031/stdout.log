@@ -1,0 +1,54 @@
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_for_positive --exact -Z unstable-options -Z stubbing -Z loop-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kani/kani-0.67.0/lib/libstd.rlib -C opt-level=1 -C overflow-checks=on -C link-arg=-Wl,--threads=1 -C panic=abort -C symbol-mangling-version=v0 -Z panic_abort_tests=yes -Z mir-enable-passes=-RemoveStorageMarkers --check-cfg=cfg(kani) -Clinker=echo --kani-compiler /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs --out-dir /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old --crate-name KNH_probe --crate-type lib`
+warning: type `KNH_Record` should have an upper camel case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:14:8
+   |
+14 | struct KNH_Record<'a> {bytes:&'a [u8]}
+   |        ^^^^^^^^^^ help: convert the identifier to upper camel case: `KnhRecord`
+   |
+   = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: crate `KNH_probe` should have a snake case name
+  |
+  = help: convert the identifier to snake case: `knh_probe`
+  = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `KNH_for_positive` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:3:4
+  |
+3 | fn KNH_for_positive(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_positive`
+
+warning: function `KNH_for_negative` should have a snake case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:9:4
+  |
+9 | fn KNH_for_negative(){let a:[u8;4]=kani::any();let mut count:usize=0;
+  |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_for_negative`
+
+warning: function `KNH_borrowed_positive` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:16:4
+   |
+16 | fn KNH_borrowed_positive(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_positive`
+
+warning: function `KNH_borrowed_negative` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:22:4
+   |
+22 | fn KNH_borrowed_negative(){let bytes:[u8;4]=kani::any();let n:usize=kani::any();kani::assume(n<=4);let record=KNH_Record{bytes:&byte...
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `knh_borrowed_negative`
+
+
+thread 'rustc' (2220906) panicked at kani-compiler/src/kani_middle/transform/loop_contracts.rs:394:44:
+called `Option::unwrap()` on a `None` value
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] no current codegen item.
+[Kani] no current codegen location.
+warning: 6 warnings emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.046741076s
+error: /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler exited with status exit status: 101

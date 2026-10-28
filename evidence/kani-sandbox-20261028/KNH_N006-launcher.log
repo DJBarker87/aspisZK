@@ -1,0 +1,50 @@
+{"attempt": "KNH_N006", "exit_status": 0, "wall_seconds": 0.3184069460257888, "peak_rss_kib": "146728", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_slice_frame_real --exact -Z unstable-options -Z stubbing -Z function-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool
+...
+lid integer address"
+	 - Location: library/kani_core/src/lib.rs:723:45 in function kani::internal::exit_contract_clause
+
+Check 65: kani::internal::exit_contract_clause.pointer_dereference.7
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 66: kani::internal::exit_contract_clause.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 67: kani::internal::exit_contract_clause.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 68: kani::internal::exit_contract_clause.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 69: kani::internal::exit_contract_clause.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 70: kani::internal::exit_contract_clause.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+
+SUMMARY:
+ ** 0 of 70 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.035759717s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r69426f3360f94ed3af1aa8bd2a7c3cd3.scope; invocation ID: 228448c9c0d34be5be2710b5dcff4987

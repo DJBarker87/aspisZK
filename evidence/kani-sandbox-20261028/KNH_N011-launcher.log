@@ -1,0 +1,37 @@
+{"attempt": "KNH_N011", "exit_status": 1, "wall_seconds": 0.1583889180328697, "peak_rss_kib": "145504", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_result_slice_frame --exact -Z unstable-options -Z stubbing -Z function-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanito
+...
+^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000740759s
+
+thread 'rustc' (2129642) panicked at kani-compiler/src/codegen_cprover_gotoc/codegen/contract.rs:135:32:
+Function '_RNCNCNvCsej4CisbYaIV_9KNH_probe9KNH_frames0_0s_0B5_' is not declared
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+Kani unexpectedly panicked during compilation.
+Please file an issue here: https://github.com/model-checking/kani/issues/new?labels=bug&template=bug_report.md
+
+[Kani] no current codegen item.
+[Kani] no current codegen location.
+warning: 39 warnings emitted
+
+Finished /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler in 0.15124546s
+error: /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler exited with status exit status: 101
+
+Running as unit: run-racd383e20ad144b9899c58123580880c.scope; invocation ID: 02f3d48605c9495bb06941efa78fa1ec

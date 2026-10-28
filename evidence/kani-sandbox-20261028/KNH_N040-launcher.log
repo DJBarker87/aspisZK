@@ -1,0 +1,35 @@
+{"attempt": "KNH_N040", "exit_status": 1, "wall_seconds": 0.6457979970145971, "peak_rss_kib": "137396", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KMX_pending_c000_correct --harness KMX_pending_c000_wrong --harness KMX_pending_c001_correct --harness KMX_pending_c001_wrong --harness KMX_pending_c002_correct --harness KMX_pending_c002_wrong --harness KMX_pending_c003_correct --harness KMX_pending_c003_wrong --harness KMX_pending_c004_
+...
+_target_new --crate-name KNH_probe --crate-type lib`
+warning: type `KMX_Pair` should have an upper camel case name
+ --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:5:49
+  |
+5 | #[derive(Clone,Copy,PartialEq,Eq,Debug)] struct KMX_Pair {a:u32,b:u32}
+  |                                                 ^^^^^^^^ help: convert the identifier to upper camel case: `KmxPair`
+  |
+  = note: `#[warn(non_camel_case_types)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+error[E0425]: cannot find function, tuple struct or tuple variant `KMX_slice_destination` in this scope
+   --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:797:129
+    |
+797 | ... n:usize=kani::any();kani::assume(n==16);KMX_slice_destination(&mut level[..n],&input[..n]);assert_eq!(level[15],512);}
+    |                                             ^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function, tuple struct or tuple variant `KMX_slice_destination` in this scope
+   --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:805:127
+    |
+805 | ... n:usize=kani::any();kani::assume(n==16);KMX_slice_destination(&mut level[..n],&input[..n]);assert_eq!(level[15],0);}
+    |                                             ^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error: aborting due to 2 previous errors; 1 warning emitted
+
+For more information about this error, try `rustc --explain E0425`.
+Finished /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler in 0.38145897s
+error: /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler exited with status exit status: 101
+
+Running as unit: run-r17b2dfa36118497bb8b8daa82fd2403b.scope; invocation ID: 4b423dd6595f4b9dbfb933af22e1ecfc

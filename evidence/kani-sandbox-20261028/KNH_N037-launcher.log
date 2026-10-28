@@ -1,0 +1,45 @@
+{"attempt": "KNH_N037", "exit_status": 1, "wall_seconds": 0.4401110359467566, "peak_rss_kib": "127632", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness verifier::candidate::NBZ_native::NBZ_return_carriers --exact -Z unstable-options -Z stubbing --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z 
+...
+ers
+
+Check 33: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: KNH_scratch/KNH_probe.rs:22:20 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 34: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: KNH_scratch/KNH_probe.rs:22:20 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 35: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: KNH_scratch/KNH_probe.rs:22:20 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 36: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: KNH_scratch/KNH_probe.rs:22:20 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 2 of 36 failed (2 unreachable)
+Failed Checks: assertion failed: obs.is_none()
+ File: "/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs", line 11, in verifier::candidate::NBZ_native::NBZ_mark_none
+Failed Checks: assertion failed: i >= 10
+ File: "/home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs", line 12, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.030877477s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rc48d84ca1dfd4edfbb4019144bc8561a.scope; invocation ID: ee1a22513c904408b19c111eb7762c4d

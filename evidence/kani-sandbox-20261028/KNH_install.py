@@ -1,0 +1,26 @@
+from pathlib import Path
+import urllib.request,json,hashlib,subprocess,os,shutil
+b=Path(__file__).resolve().parent
+root=b/'KNH_install';root.mkdir(exist_ok=True)
+url='https://api.github.com/repos/model-checking/kani/releases/latest'
+release=json.load(urllib.request.urlopen(url));(b/'KNH_RELEASE.json').write_text(json.dumps(release,indent=2)+'\n')
+assert release['tag_name']=='kani-0.68.0', 'review changed candidate before installing'
+a=next(a for a in release['assets'] if a['name'].endswith('x86_64-unknown-linux-gnu.tar.gz'))
+p=root/a['name'];urllib.request.urlretrieve(a['browser_download_url'],p)
+sha=hashlib.sha256(p.read_bytes()).hexdigest();assert a['digest']=='sha256:'+sha
+subprocess.run(['tar','zxf',str(p),'-C',str(root)],check=True)
+bundle=root/release['tag_name'];version=(bundle/'rust-toolchain-version').read_text().strip()
+env=os.environ.copy();env.update(RUSTUP_HOME=str(root/'rustup'),RUSTUP_TOOLCHAIN=version)
+subprocess.run(['/home/dombarker/.cargo/bin/rustup','toolchain','install',version,'--profile','minimal'],env=env,check=True)
+actual=next((root/'rustup/toolchains').glob(version+'*'));(bundle/'toolchain').symlink_to(actual)
+env.update(PATH=str(bundle/'bin')+':/home/dombarker/.cargo/bin:/usr/bin:/bin')
+ver=subprocess.check_output([str(bundle/'bin/kani-driver'),'--version'],env=env,text=True)
+files={str(p.relative_to(root)):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in root.rglob('*') if p.is_file() and not p.is_symlink()}
+(b/'KNH_INSTALL_FILES.json').write_text(json.dumps(files,indent=2)+'\n')
+out=dict(source_url=a['browser_download_url'],release_api=url,archive_sha256=sha,version=ver,toolchain=version,toolchain_source='https://static.rust-lang.org/dist/'+version.removeprefix('nightly-').split('-x86_64')[0]+'/channel-rust-nightly.toml',env={k:env[k] for k in ['RUSTUP_HOME','RUSTUP_TOOLCHAIN','PATH']},driver=str(bundle/'bin/kani-driver'))
+(b/'KNH_INSTALL.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out))
+# An independent retained cache is created by copying, never linking/mutating seed.
+seed=Path('/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027');cache=Path('/home/dombarker/project-offloads/codex-cx-kanisbx-cache-20261028')
+assert not cache.exists();shutil.copytree(seed,cache)
+pins={str(p.relative_to(cache)):dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for p in cache.rglob('*') if p.is_file()}
+(b/'KNH_CACHE_IMPORT.json').write_text(json.dumps(dict(source=str(seed),destination=str(cache),files=pins),indent=2)+'\n')

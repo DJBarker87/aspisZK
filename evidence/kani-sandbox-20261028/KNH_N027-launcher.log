@@ -1,0 +1,56 @@
+{"attempt": "KNH_N027", "exit_status": 0, "wall_seconds": 0.7108670850284398, "peak_rss_kib": "154400", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+using rustc 1.100.0-nightly (8925ea358 2026-08-20) (commit 8925ea35 2026-08-20) with LLVM 23.1.0
+CBMC 6.11.0
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_install/kani-0.68.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness KNH_box_real --exact -Z unstable-options -Z stubbing -Z function-contracts --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=registe
+...
+dereference failure: invalid integer address"
+	 - Location: library/kani_core/src/lib.rs:723:21 in function kani::internal::exit_contract_clause
+
+Check 134: __rust_dealloc.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "free argument must be NULL or valid pointer"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 135: __rust_dealloc.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "free argument must be dynamic object"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 136: __rust_dealloc.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "free argument has offset zero"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 137: __rust_dealloc.precondition_instance.4
+	 - Status: SUCCESS
+	 - Description: "double free"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 138: __rust_dealloc.precondition_instance.5
+	 - Status: SUCCESS
+	 - Description: "free called for new[] object"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 139: __rust_dealloc.precondition_instance.6
+	 - Status: SUCCESS
+	 - Description: "free called for stack-allocated object"
+	 - Location: KNH_install/kani-0.68.0/library/kani/kani_lib.c:87 in function __rust_dealloc
+
+Check 140: calloc.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: <builtin-library-calloc>:14 in function calloc
+
+
+SUMMARY:
+ ** 0 of 140 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.068661526s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r48481858e80b4580a23ea564c1e292cc.scope; invocation ID: 83ef06801a7245268b93c85e0680819d

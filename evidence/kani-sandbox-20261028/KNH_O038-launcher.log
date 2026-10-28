@@ -1,0 +1,54 @@
+{"attempt": "KNH_O038", "exit_status": 1, "wall_seconds": 0.3083319530123845, "peak_rss_kib": "130460", "swaps": "0", "print_axioms": "N/A: kani"}
+KNH_STRICT_GRAPH_MATCH
+Kani Rust Verifier 0.67.0 (standalone)
+[Kani] Running: `RUSTC_BOOTSTRAP="1" /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler "-Cllvm-args=--log-level=info --assertion-reach-checks --enable-stubbing --harness verifier::candidate::KNC_native::NBZ_return_carriers --exact -Z unstable-options -Z stubbing --reachability=harnesses" -C overflow-checks=on -Z unstable-options -Z trim-diagnostic-paths=no -Z human_readable_cgu_names -Z always-encode-mir --cfg=kani -Z crate-attr=feature(register_tool) -Z crate-attr=register_tool(kanitool) --sysroot /home/dombarker/.kani/kani-0.67.0 -L /home/dombarker/.kani/kani-0.67.0/lib --extern kani --extern noprelude:std=/home/dombarker/.kan
+...
+28/KNH_scratch/KNH_probe.rs:10:4
+   |
+10 | fn NBZ_mark_none(obs:Observer,phase:Phase) {
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbz_mark_none`
+
+warning: function `NBZ_return_carriers` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_scratch/KNH_probe.rs:18:4
+   |
+18 | fn NBZ_return_carriers() {
+   |    ^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbz_return_carriers`
+
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen reachability analysis in 0.000325966s
+INFO kani_compiler::codegen_cprover_gotoc::compiler_interface Finished codegen in 0.006483181s
+====== Reachability Analysis Result =======
+Total # items: 16
+Total # statements: 75
+Total # expressions: 20
+
+Reachable Items:
+  - function: 14
+  - static item: 2
+
+Statements:
+  - Return: 11
+  - Assign: 20
+  - SwitchInt: 1
+  - Ignored: 24
+  - Assert: 1
+  - Goto: 4
+  - Call: 14
+
+Expressions:
+  - Use: 9
+  - CheckedBinaryOp: 1
+  - UnaryOp: 1
+  - Discriminant: 2
+  - Aggregate: 1
+  - Ref: 2
+  - BinaryOp: 4
+
+-------------------------------------------
+warning: 5 warnings emitted
+
+Finished /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler in 0.051179606s
+[Kani] Running: `goto-cc /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvNtNtNtCs5ilCFO4bgRj_9KNH_probe8verifier9candidate10KNC_native19NBZ_return_carriers.symtab.out /home/dombarker/.kani/kani-0.67.0/library/kani/kani_lib.c -o /home/dombarker/project-offloads/codex-cx-kani-sandbox-20261028/KNH_target_old/KNH_probe__RNvNtNtNtCs5ilCFO4bgRj_9KNH_probe8verifier9candidate10KNC_native19NBZ_return_carriers.out`
+Finished goto-cc in 0.000152971s
+error: Failed to invoke goto-cc: No such file or directory (os error 2)
+
+Running as unit: run-r0097829e9e044582b34c6e381517e94c.scope; invocation ID: 0f55126d574342eab9198c83b58ac0f3
