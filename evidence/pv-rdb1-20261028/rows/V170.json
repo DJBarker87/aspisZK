@@ -1,10 +1,10 @@
 {
   "row": "V170",
   "name": "op4 core.mem.drop",
-  "status": "SUSPENDED",
-  "evidence_class": "no deployed-link credit",
+  "status": "RESTORED",
+  "evidence_class": "structural (K-1 substitute)",
   "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
-  "structural": "classify-structural/results.json#V170",
+  "structural": "v170-deployed-binding.json",
   "native": [
     {
       "receipt": "native-drop/receipt.json",
@@ -16,8 +16,8 @@
   "toolchain": "1.94.1",
   "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
   "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
-  "after": "Suspension retained; no law weakened and no behavioural counterexample claimed",
-  "reason": "Historical full Drop gate rejects the deployed Vec destructor: drop_in_place(slice_from_raw_parts_mut(...)) replaces cast_slice(...).drop_in_place(). The returning Vec<u32>/Global world model is unchanged, but a proved deployed pointer/slice-construction binding into that model is absent. Finite deallocation traces do not supply it.",
+  "after": "Same Vec<u32,Global> complete unit Result and full deallocation-world law at original returning-allocator library boundary",
+  "reason": "Deployed fat-pointer constructor and free-function drop call are bound to complete source bodies; nightly method is exactly the same fat-pointer constructor. Pointer cast representation law is proved. Full deployed RawVec/Global deallocation chain checked: zero capacity does not free; nonzero capacity frees (address,4*capacity,4) exactly once, preserves allocator private state updates and invalidates allocation identity; no element destructor or byte-clearing claim.",
   "findings": [],
   "retained_premises": [
     "runtime/carrier relation at existing library boundary",
@@ -30,5 +30,11 @@
   "new_trust_items": [],
   "kani_credit": false,
   "original_closing_theorem": null,
-  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim"
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim",
+  "lean": [
+    "54702-receipt.json",
+    "54707-receipt.json"
+  ],
+  "model_embedding": "v170-model-embedding.json",
+  "before_after_statement": "For every valid owned u32 buffer and arbitrary initial world and returning free primitive: native drop = owned reference = ok((),release free buffer world). No carrier/quantifier/failure-event changes; selected op4 projection and caller post-world stay unchanged."
 }
