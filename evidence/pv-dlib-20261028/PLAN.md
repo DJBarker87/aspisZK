@@ -117,3 +117,9 @@ The post-timeout scope check found the recorded own cgroup removed and no
 remaining processes. GNU-time RSS is retained; aggregate peak was unavailable
 after scope removal. Next candidate: same input bounds, symbolic coordinates,
 unwind 70, same caps. No unchanged retry and no cap/timeout increase.
+
+Encoder native finite differential is staged in source only: 128 dense M31/
+QM31 native-versus-owned comparisons plus changed-write/sparse q[2] witnesses.
+Its dependency core's 89 Rust/TOML files byte-match this branch; it uses a
+read-only source dependency and this job's own optimized target directory.
+It is not a Kani gate and will run only after the active scope finishes.
