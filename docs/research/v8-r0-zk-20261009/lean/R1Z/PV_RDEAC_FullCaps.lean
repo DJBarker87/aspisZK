@@ -42,9 +42,7 @@ theorem clone {S F : Type} (step : Request → S → Option Nat × S)
   split at h <;> rename_i hr
   · rw [hr] at h
     cases h
-  · split <;> rename_i hr2
-    · rw [hr] at hr2;cases hr2
-    · exact PV_RDEAC_CapacityBounds.constructor step shape width address base.length w hr
+  · exact PV_RDEAC_CapacityBounds.constructor step shape width address base.length w hr
 
 theorem advance {S F : Type} (e : Execution U8 S F)
     (next : Buffer U8 → World S F → Execution U8 S F) (first : Capped e)

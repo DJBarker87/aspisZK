@@ -6,21 +6,26 @@ namespace R1Z.PV_RDEAC_PublishedTail
 open PV_CBL_CallbackBundle PV_CBL_StringBytesAdapter PV_RDEAC_NameText
 noncomputable section
 
+def directory (base : ExternalTypes)
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) : String :=
+  @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.directory (AppendTypes base) self
+
+
 theorem append_idempotent (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base)) :
     @PV_CBL_AppendSource.selected (AppendTypes base) (selectedJoin base ops)=selectedJoin base ops := rfl
 
 theorem join_tail (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
     (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (s : String) :
     @PV_RDEAC_AfterCapacity.joinTail (AppendTypes base) (selectedJoin base ops) self s=
-      PV_CBL_JoinAdapter.reference self.directory s := rfl
+      PV_CBL_JoinAdapter.reference (directory base self) s := rfl
 
 theorem source (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
     (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base))
-    (digest : Array U8 32#usize) (bound : (encodeList self.directory).length+70≤Usize.max) :
+    (digest : Array U8 32#usize) (bound : (encodeList (directory base self)).length+70≤Usize.max) :
     letI : ExternalTypes := AppendTypes base
     letI : ExternalFuns := selectedJoin base ops
     PV_RDEA_ActualEndpointConsumer.afterCapacity self digest ""=
-      ok (PV_RDEAC_JoinString.joinedText self.directory (basenameText digest.val)) := by
+      ok (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val)) := by
   letI : ExternalTypes := AppendTypes base
   letI : ExternalFuns := selectedJoin base ops
   have capacity : (encodeList "").length+69≤Usize.max := by
@@ -30,13 +35,12 @@ theorem source (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
   rw [append_idempotent] at hs
   simp only [String.empty_append] at hs
   rw [hs,join_tail]
-  apply PV_RDEAC_JoinString.reference self.directory (basenameText digest.val)
-  · exact PV_RDEAC_JoinString.basename_positive _
-  · exact PV_RDEAC_JoinString.basename_relative _
-  · rw [name_length,digest.property]
-    omega
+  exact PV_RDEAC_JoinString.reference (directory base self) (basenameText digest.val)
+    (PV_RDEAC_JoinString.basename_positive _) (PV_RDEAC_JoinString.basename_relative _)
+    (by rw [name_length,digest.property]; simp only [UScalar.ofNatCore_val_eq]; omega)
 
 #print axioms append_idempotent
 #print axioms join_tail
 #print axioms source
+end
 end R1Z.PV_RDEAC_PublishedTail
