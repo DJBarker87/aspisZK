@@ -50,7 +50,7 @@ theorem complete (w : W) (hs : w.variant=.S2) (k : Powers) (j : Usize) (hj : j.v
       PV_RunJoin_WeightCell46.finite 7 (powerArray (k0,k1,k2,k3,k4,k5,k6)) row 0#usize
         PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO := by
     unfold PV_B2_251c1.host_weights.materialize_cell
-    rw [powers_elim]
+    dsimp only
     simp only [powerArray,row,PV_RunJoin_WeightCell46.finite,h0,h1,h2,h3,h4,h5,h6,
       PV_RunJoin_WeightCellIndices46.index0,PV_RunJoin_WeightCellIndices46.index1,PV_RunJoin_WeightCellIndices46.index2,PV_RunJoin_WeightCellIndices46.index3,PV_RunJoin_WeightCellIndices46.index4,PV_RunJoin_WeightCellIndices46.index5,PV_RunJoin_WeightCellIndices46.index6,
       PV_RunJoin_WeightCounters46.add0,PV_RunJoin_WeightCounters46.add1,PV_RunJoin_WeightCounters46.add2,PV_RunJoin_WeightCounters46.add3,
