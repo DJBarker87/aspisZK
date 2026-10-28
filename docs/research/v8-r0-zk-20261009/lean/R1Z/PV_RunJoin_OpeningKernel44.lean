@@ -35,6 +35,7 @@ theorem complete (ops : ExternalFuns) (q w : Nat → Raw)
       Array.to_slice (array 64#usize fin) = alloc.vec.Vec.deref vf ∧
       (∀ j, j < 7 → canonical (c0 j) ∧ canonical (c1 j)) ∧ (∀ j, j < 64 → canonical (fin j)) := by
   obtain ⟨c0,hc0,holdc0,hcc0⟩ := PV_RunJoin_RoundAssociation44.complete ops 1024#usize (by decide) q w hq hw
+  change ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w) = _ at holdc0
   obtain ⟨q1,vq,hq1,holdq1,hiq,hcq1,hdq1⟩ := PV_RunJoin_PrimalFirst44.complete ops q hq a ha
   obtain ⟨w1,vw,hw1,holdw1,hiw,hcw1,hdw1⟩ := PV_RunJoin_DualFirst44.complete ops w hw a ha
   obtain ⟨c1,hc1,holdc1,hcc1⟩ := PV_RunJoin_RoundSecond44.complete ops q1 w1 hcq1 hcw1
