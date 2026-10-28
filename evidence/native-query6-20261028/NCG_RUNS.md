@@ -72,3 +72,15 @@ All positive rows are local-domain results, subject to their matching controls a
 | NCG_K071 | EXPECTED_CONTROL_FAIL | 27.587 | 881840 | `verifier::candidate::NCG_native::NCG_coefficient3_negative` |
 | NCG_K072 | PASS_LOCAL_DOMAIN_ONLY | 23.331 | 663084 | `fast_pairing::canonical::NCG_tail::NCG_tail_0` |
 | NCG_K073 | EXPECTED_CONTROL_FAIL | 22.071 | 663868 | `fast_pairing::canonical::NCG_tail::NCG_tail_0_negative` |
+| NCG_K074 | PASS_LOCAL_DOMAIN_ONLY | 15.942 | 663584 | `fast_pairing::canonical::NCG_tail::NCG_tail_1` |
+| NCG_K075 | EXPECTED_CONTROL_FAIL | 22.341 | 663480 | `fast_pairing::canonical::NCG_tail::NCG_tail_1_negative` |
+| NCG_K076 | PASS_LOCAL_DOMAIN_ONLY | 19.346 | 663724 | `fast_pairing::canonical::NCG_tail::NCG_tail_2` |
+| NCG_K077 | EXPECTED_CONTROL_FAIL | 17.545 | 663812 | `fast_pairing::canonical::NCG_tail::NCG_tail_2_negative` |
+| NCG_K078 | PASS_LOCAL_DOMAIN_ONLY | 19.188 | 651996 | `fast_pairing::canonical::NCG_tail::NCG_finish` |
+| NCG_K079 | EXPECTED_CONTROL_FAIL | 18.153 | 652000 | `fast_pairing::canonical::NCG_tail::NCG_finish_negative` |
+| NCG_K080 | PASS_LOCAL_DOMAIN_ONLY | 16.849 | 651840 | `fast_pairing::canonical::NCG_tail::NCG_finish_add` |
+| NCG_K081 | EXPECTED_CONTROL_FAIL | 18.719 | 652000 | `fast_pairing::canonical::NCG_tail::NCG_finish_add_negative` |
+| NCG_K082 | PASS_LOCAL_DOMAIN_ONLY | 45.953 | 2226136 | `fast_pairing::canonical::NCG_tail::NCG_three_push` |
+| NCG_K083 | EXPECTED_CONTROL_FAIL | 48.262 | 2179068 | `fast_pairing::canonical::NCG_tail::NCG_three_push_negative` |
+| NCG_K084 | PASS_LOCAL_DOMAIN_ONLY | 19.898 | 657212 | `verifier::candidate::NCG_native::NCG_log_index` |
+| NCG_K085 | EXPECTED_CONTROL_FAIL | 21.161 | 662084 | `verifier::candidate::NCG_native::NCG_log_index_negative` |
