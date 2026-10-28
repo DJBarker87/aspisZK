@@ -1,0 +1,24 @@
+NBG_generated/NBG_FieldSquare.lean:43:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b) % 18446744073709551616
+in the target expression
+  (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b) % UScalar.size UScalarTy.U64 = (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b)
+
+x : NC
+hx : canonC x
+a : U64 := core.convert.num.FromU64U32.from x.a
+b : U64 := core.convert.num.FromU64U32.from x.b
+p : U64 := core.convert.num.FromU64U32.from FIo_Native.aspis_core.field.P
+av : ↑a = ↑x.a
+bv : ↑b = ↑x.b
+pv : ↑p = 2147483647
+sv : ↑(a.wrapping_add b) = ↑x.a + ↑x.b
+ap : ↑(a.wrapping_add p) = ↑x.a + 2147483647
+dv : ↑((a.wrapping_add p).wrapping_sub b) = ↑x.a + 2147483647 - ↑x.b
+hs : ↑x.a + ↑x.b < 4294967296
+hd : ↑x.a + 2147483647 - ↑x.b < 4294967296
+product : (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b) < 18446744073709551616
+⊢ (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b) % UScalar.size UScalarTy.U64 = (↑x.a + ↑x.b) * (↑x.a + 2147483647 - ↑x.b)
+'NBG_FieldSquare.sub_word' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBG_FieldSquare.input_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBG_FieldSquare.cm_square' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBG_FieldSquare.qm_square' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

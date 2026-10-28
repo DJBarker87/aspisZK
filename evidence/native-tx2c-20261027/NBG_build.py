@@ -6,6 +6,7 @@ import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X=C+'/objects'
 a,local,module=sys.argv[1:];local=Path(local);src='NBG_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027/'+module.replace('.','/')+'.olean'
 if (E/'NBG_PAUSE').exists():raise SystemExit('paused before admission')
+assert int(a.rsplit('L',1)[1])<=100
 assert len(list(E.glob('NBG_L*/receipt.json')))<100
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False):

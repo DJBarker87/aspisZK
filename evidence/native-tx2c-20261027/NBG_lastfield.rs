@@ -2,6 +2,7 @@ static mut NBG_PRODUCT:u32=0;
 static mut NBG_MUL_CALLS:usize=0;
 fn NBG_product(x:super::M31,y:super::M31)->super::M31{
  let r:u32=kani::any();
+ kani::assume(r<super::P);
  kani::assume((r as u64)==((x.0 as u64)*(y.0 as u64))%(super::P as u64));
  unsafe{NBG_PRODUCT=r;NBG_MUL_CALLS+=1;}
  super::M31(r)

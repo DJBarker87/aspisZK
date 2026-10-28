@@ -1,0 +1,60 @@
+{"attempt": "NBG_K030", "exit_status": 0, "wall_seconds": 12.11628155602375, "peak_rss_kib": "670904", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+^^^^^^^^ help: convert the identifier to snake case: `nbg_constructors`
+
+warning: function `NBG_reduce_all_u64` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:71:4
+   |
+71 | fn NBG_reduce_all_u64(){
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_reduce_all_u64`
+
+warning: function `NBG_product` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:85:4
+   |
+85 | fn NBG_product(x:super::M31,y:super::M31)->super::M31{
+   |    ^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_product`
+
+warning: function `NBG_square_iteration` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:94:4
+   |
+94 | fn NBG_square_iteration(){
+   |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_square_iteration`
+
+warning: function `NBG_scalar_embedding` should have a snake case name
+   --> crates/aspis-core/src/field/NBG_runtime.rs:109:4
+    |
+109 | fn NBG_scalar_embedding(){
+    |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_scalar_embedding`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 7.68s
+Checking harness field::wide_exact::NBG_runtime::NBG_wide_writer_iteration...
+
+VERIFICATION RESULT:
+ ** 0 of 49 failed (4 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 2.4772062s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r9031cc5db1f74cc2ab3a142e232d03fe.scope; invocation ID: ededb8a3617f49a889615fe4080905cf

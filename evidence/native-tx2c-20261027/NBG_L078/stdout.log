@@ -1,0 +1,68 @@
+NBG_generated/NBG_PaymentValidators.lean:36:3: error: unknown tactic
+NBG_generated/NBG_PaymentValidators.lean:33:25: error: unsolved goals
+p : T
+⊢ (do
+      let r ←
+        pool_v1.payment_relation.validate_common
+            { pool := p.pool, deployment_domain := p.deployment_domain, anchor_sequence := p.anchor_sequence,
+              anchor_root := p.anchor_root, nullifier := p.nullifier, asset_id := p.asset_id }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let b ← pool_v1.payment_relation.digest_is_canonical p.recipient_commitment
+          if b = true then do
+              let b1 ← pool_v1.payment_relation.digest_is_canonical p.change_commitment
+              if b1 = true then ok (core.result.Result.Ok ())
+                else
+                  ok
+                    (core.result.Result.Err
+                      pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+            else
+              ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual) =
+    ok (transfer p)
+NBG_generated/NBG_PaymentValidators.lean:65:3: error: unknown tactic
+NBG_generated/NBG_PaymentValidators.lean:62:27: error: unsolved goals
+p : W
+⊢ (do
+      let r ←
+        pool_v1.payment_relation.validate_common
+            { pool := p.pool, deployment_domain := p.deployment_domain, anchor_sequence := p.anchor_sequence,
+              anchor_root := p.anchor_root, nullifier := p.nullifier, asset_id := p.asset_id }
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          if p.amount = 0#u32 then
+            ok
+              (core.result.Result.Err
+                pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+          else do
+            let i ← spend.VALUE_LIMIT
+            if p.amount ≥ i then
+                ok
+                  (core.result.Result.Err
+                    pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount)
+              else do
+                let b ←
+                  core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 p.destination_token_account
+                      (Array.repeat 32#usize 0#u8)
+                if b = true then
+                    ok
+                      (core.result.Result.Err
+                        pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidDestination)
+                  else do
+                    let b1 ← pool_v1.payment_relation.digest_is_canonical p.change_commitment
+                    if b1 = true then ok (core.result.Result.Ok ())
+                      else
+                        ok
+                          (core.result.Result.Err
+                            pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual) =
+    ok (withdrawal p)
+'NBG_PaymentValidators.transfer_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBG_PaymentValidators.value_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBG_PaymentValidators.withdrawal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

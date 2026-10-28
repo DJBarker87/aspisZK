@@ -85,7 +85,7 @@ assert not added,added
 for p in m['packages']:
  for dep in nodes[p['id']]['dependencies']:
   q=pkgs[dep]
-  if not any((bits:=label.split(' '))[0]==q['name'] and (len(bits)<2 or bits[1]==q['version']) and (len(bits)<3 or bits[2].strip('()')==q.get('source')) for label in f[key(p)].get('dependencies',[])):errors.append([key(p),key(q)])
+  if not any((bits:=label.split(' '))[0]==q['name'] and (len(bits)>1 or sum(k[0]==q['name'] for k in f)==1) and (len(bits)<2 or bits[1]==q['version']) and (len(bits)<3 or bits[2].strip('()')==q.get('source')) for label in f[key(p)].get('dependencies',[])):errors.append([key(p),key(q)])
 graph=dict(resolved_packages=len(actual),new_package_tuples=added,edge_errors=errors,graph_matches_frozen=not added and not errors,graph_sha256=hashlib.sha256(json.dumps(m,sort_keys=True).encode()).hexdigest(),lock_sha256=locksha)
 (E/(a+'-graph-check.json')).write_text(json.dumps(graph,indent=2)+'\n');assert graph['graph_matches_frozen']
 modified=[line[6:] for line in patch.splitlines() if line.startswith('+++ b/')]
