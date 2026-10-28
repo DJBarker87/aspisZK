@@ -6,13 +6,32 @@ set_option autoImplicit false
 /-- A symbolic family satisfying the append validator: arbitrary public bytes
 and roots are retained, sequence/index are0/0 ->1, both frontiers are empty. -/
 def valid_public (p : reference_terminal.SemanticPublic) : reference_terminal.SemanticPublic :=
-  {p with withdrawal_amount := none,
+  {
+    variant := p.variant
+    pool := p.pool
+    deployment_domain := p.deployment_domain
+    anchor := p.anchor
+    nullifier := p.nullifier
+    asset_id := p.asset_id
+    recipient := p.recipient
+    change := p.change
+    withdrawal_amount := none
     transition := {
-      live_snapshot := {p.transition.live_snapshot with pool := p.pool,
-        deployment_domain := p.deployment_domain,
-        sequence := 0#u64, next_pair_index := 0#u64, frontier := empty_frontier},
-      candidate_afterstate := {p.transition.candidate_afterstate with
-        next_pair_index := 1#u64, next_frontier := empty_frontier}}}
+      live_snapshot := {
+        pool := p.pool
+        deployment_domain := p.deployment_domain
+        sequence := 0#u64
+        next_pair_index := 0#u64
+        current_root := p.transition.live_snapshot.current_root
+        frontier := empty_frontier
+      }
+      candidate_afterstate := {
+        next_pair_index := 1#u64
+        next_root := p.transition.candidate_afterstate.next_root
+        next_frontier := empty_frontier
+      }
+    }
+  }
 
 /-- Genuine Rust Ok of the full emitted public-transition validator. This does
 not establish successful terminal/reference evaluation. -/
