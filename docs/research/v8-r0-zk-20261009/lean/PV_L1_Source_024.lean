@@ -17,7 +17,7 @@ def produce
   := do
   let _ ← observe .opening 0 (ok ())
   let i := Slice.len coefficients
-  let i1 ← Aeneas.Std.lift (Std.Usize.wrapping_mul 32#usize i)
+  let i1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 32#usize i))
   let bytes := alloc.vec.Vec.with_capacity Std.U8 i1
   prover.opening_claim_bytes_loop coefficients z1 bytes 0#usize
 

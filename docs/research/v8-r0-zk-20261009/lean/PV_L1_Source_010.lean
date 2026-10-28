@@ -17,7 +17,7 @@ def produce
   let _ ← observe .queryScan 0 (ok ())
   if i < n
   then
-    let i1 ← Array.index_usize accepted i
+    let i1 ← PV_L1_Logged.lift (Array.index_usize accepted i)
     if i1 = candidate
     then ok (done (some true))
     else let i2 ← Aeneas.Std.lift (Std.Usize.wrapping_add i 1#usize)

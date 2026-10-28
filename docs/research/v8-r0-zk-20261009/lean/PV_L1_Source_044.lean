@@ -18,30 +18,26 @@ def produce
     (host_wire.SemanticTranscript H) × (alloc.vec.Vec Std.U8))
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let r ← host_wire.record row payload
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (host_wire.record row payload)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     let s := alloc.vec.Vec.deref val
-    let (r1, transcript1) ←
-      host_wire.SemanticTranscript.semantic aspis_coredigestDigest32Inst
-        transcript row s
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let (r1, transcript1) ← PV_L1_Logged.lift (host_wire.SemanticTranscript.semantic aspis_coredigestDigest32Inst
+        transcript row s)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
       let s1 := alloc.vec.Vec.deref val
-      let bytes1 ←
-        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1
+      let bytes1 ← PV_L1_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes s1)
       ok (core.result.Result.Ok val1, transcript1, bytes1)
     | core.ops.control_flow.ControlFlow.Break residual =>
-      let r2 ←
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-          aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual
+      let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
       ok (r2, transcript1, bytes)
   | core.ops.control_flow.ControlFlow.Break residual =>
-    let r1 ←
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-        aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual
+    let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual)
     ok (r1, transcript, bytes)
 
 theorem complete_result

@@ -17,27 +17,27 @@ def produce
   Logged (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error)
   := do
   let _ ← observe .publication 0 (ok ())
-  let r ← prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let r1 ← prover.append_node_slot val cc1 cc2 tree queries 0#usize 1#usize
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let r1 ← PV_L1_Logged.lift (prover.append_node_slot val cc1 cc2 tree queries 0#usize 1#usize)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
       let r2 ←
         PV_L1_Source_005.produce val1 cc1 cc2 tree queries 0#usize 2#usize
-      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
         let r3 ←
           PV_L1_Source_005.produce val2 cc1 cc2 tree queries 1#usize 0#usize
-        let cf3 ← core.result.Result.Insts.CoreOpsTry.branch r3
+        let cf3 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r3)
         match cf3 with
         | core.ops.control_flow.ControlFlow.Continue val3 =>
           let r4 ←
             PV_L1_Source_005.produce val3 cc1 cc2 tree queries 1#usize 1#usize
-          let cf4 ← core.result.Result.Insts.CoreOpsTry.branch r4
+          let cf4 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r4)
           match cf4 with
           | core.ops.control_flow.ControlFlow.Continue val4 =>
             PV_L1_Source_005.produce val4 cc1 cc2 tree queries 1#usize 2#usize

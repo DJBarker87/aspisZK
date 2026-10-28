@@ -14,10 +14,9 @@ def produce
   Logged verifier.Error
   := do
   let _ ← observe .opening 0 (ok ())
-  let b ←
-    aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Insts.CoreCmpPartialEqStateOnlyMaskBuildError.eq
+  let b ← PV_L1_Logged.lift (aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Insts.CoreCmpPartialEqStateOnlyMaskBuildError.eq
       e
-      aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted
+      aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted)
   if b
   then ok verifier.Error.Rejected
   else ok verifier.Error.Semantic

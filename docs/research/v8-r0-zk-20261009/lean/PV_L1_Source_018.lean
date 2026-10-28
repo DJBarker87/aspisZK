@@ -20,9 +20,9 @@ def produce
   let (a, self1) ←
     PV_L1_Source_017.produce aspis_coredigestDigest32Inst self row
       payload
-  let out ← sampler.qm31_sample a
-  let i ← Aeneas.Std.lift (UScalar.cast .Usize row)
-  let we ← aspis_core.field.wide_exact.WideExact.from_qm31 out
+  let out ← PV_L1_Logged.lift (sampler.qm31_sample a)
+  let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .Usize row))
+  let we ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 out)
   trace.value 4#u16 i we
   ok (out, self1)
 

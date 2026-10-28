@@ -24,48 +24,41 @@ def produce
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   := do
   let _ ← observe .callback 0 (ok ())
-  let r ←
-    aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
-      public1
-  let r1 ←
-    core.result.Result.map_err
+  let r ← PV_L1_Logged.lift (aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
+      public1)
+  let r1 ← PV_L1_Logged.lift (core.result.Result.map_err
       prover.prove_masked_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
-      r ()
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      r ())
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     let s := alloc.vec.Vec.deref val
-    let s1 ← Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ s ]))
-    let a ← hash s1
-    let a1 ←
-      aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce
-        attempt
-    let context ←
-      aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1
-        a a1
-    let s2 ←
-      Aeneas.Std.lift (Array.to_slice
+    let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ s ])))
+    let a ← PV_L1_Logged.lift (hash s1)
+    let a1 ← PV_L1_Logged.lift (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.impl.mask_nonce
+        attempt)
+    let context ← PV_L1_Logged.lift (aspis_core.state_only_hiding.StateOnlyHidingContext.pool_v1_pair_forest_v1
+        a a1)
+    let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice
         (Array.make 30#usize [
           85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
           49#u8, 58#u8, 80#u8, 51#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8,
           84#u8, 69#u8, 45#u8, 65#u8, 84#u8, 84#u8, 69#u8, 77#u8, 80#u8, 84#u8
-          ]))
+          ])))
     let s3 := alloc.vec.Vec.deref val
-    let i ← transport.Variant.tag variant
-    let s4 ← Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ i ]))
-    let a2 ←
-      aspis_core.state_only_hiding.StateOnlyHidingContext.encode context
-    let s5 ← Aeneas.Std.lift (Array.to_slice a2)
-    let s6 ← Aeneas.Std.lift (Array.to_slice (Array.make 4#usize [ s2, s3, s4, s5 ]))
-    let binding ← hash s6
+    let i ← PV_L1_Logged.lift (transport.Variant.tag variant)
+    let s4 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ i ])))
+    let a2 ← PV_L1_Logged.lift (aspis_core.state_only_hiding.StateOnlyHidingContext.encode context)
+    let s5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice a2))
+    let s6 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 4#usize [ s2, s3, s4, s5 ])))
+    let binding ← PV_L1_Logged.lift (hash s6)
     PV_L1_Source_069.produce
       aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore
       public1 compiled variant hash context binding attempt nonce_store
   | core.ops.control_flow.ControlFlow.Break residual =>
-    let r2 ←
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+    let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         ((alloc.vec.Vec Std.U8) × prover.MaskedFixtureAudit)
-        (core.convert.FromSame verifier.Error) residual
+        (core.convert.FromSame verifier.Error) residual)
     ok (r2, nonce_store)
 
 theorem complete_result

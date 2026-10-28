@@ -17,20 +17,17 @@ def produce
   Logged (core.result.Result host_commitment.PrivateSalts verifier.Error)
   := do
   let _ ← observe .saltDerivation 0 (ok ())
-  let count ← aspis_core.r0.FIBRE_COUNT
-  let (r, salts) ←
-    alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (Array Std.U8
-      32#usize)) count
-  let r1 ←
-    core.result.Result.map_err
+  let count ← PV_L1_Logged.lift (aspis_core.r0.FIBRE_COUNT)
+  let (r, salts) ← PV_L1_Logged.lift (alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (Array Std.U8
+      32#usize)) count)
+  let r1 ← PV_L1_Logged.lift (core.result.Result.map_err
       prover.derive_private_salts.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError
-      r ()
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      r ())
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue _ =>
-    let result ←
-      prover.derive_private_salts_loop reserved context hash tag count
-        (core.result.Result.Ok salts) 0#usize
+    let result ← PV_L1_Logged.lift (prover.derive_private_salts_loop reserved context hash tag count
+        (core.result.Result.Ok salts) 0#usize)
     core.result.Result.map (BuiltinFnOnce (alloc.vec.Vec (Array Std.U8
       32#usize)) host_commitment.PrivateSalts) result
       (host_commitment.PrivateSalts.new)

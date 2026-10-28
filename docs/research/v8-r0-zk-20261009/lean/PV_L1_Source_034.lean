@@ -14,7 +14,7 @@ def produce
   Logged aspis_core.field.M31
   := do
   let _ ← observe .balanceAudit 0 (ok ())
-  let sum ← aspis_core.field.M31.ZERO
+  let sum ← PV_L1_Logged.lift (aspis_core.field.M31.ZERO)
   prover.inactive_sum_m31_loop values masks sum 0#usize
 
 theorem complete_result

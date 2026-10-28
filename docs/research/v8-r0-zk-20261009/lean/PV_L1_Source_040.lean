@@ -16,21 +16,19 @@ def produce
   Logged (core.result.Result Bool r1_wire.Error)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let r ← host_semantic.lean_copy_row_values compiled.trace lambda
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (host_semantic.lean_copy_row_values compiled.trace lambda)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let r1 ←
-      aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1
-    let r2 ←
-      core.result.Result.map_err
+    let r1 ← PV_L1_Logged.lift (aspis_statement.pool_v1.pair_forest_hiding.pool_v1_pair_forest_copy_active_row_masks_v1)
+    let r2 ← PV_L1_Logged.lift (core.result.Result.map_err
         host_semantic.no_pole.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
-        r1 ()
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        r1 ())
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
       let s := alloc.vec.Vec.deref val
-      let b ← ct_pole.all_slots_clear s val1 chi
+      let b ← PV_L1_Logged.lift (ct_pole.all_slots_clear s val1 chi)
       ok (core.result.Result.Ok b)
     | core.ops.control_flow.ControlFlow.Break residual =>
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual

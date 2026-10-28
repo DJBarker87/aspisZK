@@ -27,10 +27,9 @@ def produce
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   := do
   let _ ← observe .callback 0 (ok ())
-  let b ←
-    core.cmp.PartialEq.ne.trait_default
+  let b ← PV_L1_Logged.lift (core.cmp.PartialEq.ne.trait_default
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
-      transport.Variant.S2
+      transport.Variant.S2)
   if b
   then ok (core.result.Result.Err verifier.Error.Semantic, nonce_store)
   else

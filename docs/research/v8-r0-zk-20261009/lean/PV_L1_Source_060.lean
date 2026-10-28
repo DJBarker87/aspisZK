@@ -18,7 +18,7 @@ def produce
   if i != 1024#usize
   then ok (core.result.Result.Err r1_wire.Error.Public)
   else
-    let pending_return ← host_semantic.check_base_column_loop column 0#usize
+    let pending_return ← PV_L1_Logged.lift (host_semantic.check_base_column_loop column 0#usize)
     match pending_return with
     | none => ok (core.result.Result.Ok ())
     | some r => ok r

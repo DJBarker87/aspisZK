@@ -15,7 +15,7 @@ def produce
   Logged aspis_core.field.QM31
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← Array.index_usize dc offset
+  let q ← PV_L1_Logged.lift (Array.index_usize dc offset)
   PV_L1_Source_053.produce dc offset 0#usize q
 
 theorem complete_result

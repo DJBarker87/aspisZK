@@ -16,15 +16,14 @@ def produce
   Logged (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error)
   := do
   let _ ← observe .publication 0 (ok ())
-  let begin1 ← if batch = 0#usize
+  let begin1 ← PV_L1_Logged.lift (if batch = 0#usize
                  then ok 0#usize
-                 else ok compact.SPLIT
-  let end1 ← if batch = 0#usize
+                 else ok compact.SPLIT)
+  let end1 ← PV_L1_Logged.lift (if batch = 0#usize
                then ok compact.SPLIT
-               else ok 22#usize
-  let idx ← prover.publication_indices queries begin1 end1 (t = 2#usize)
-  let o ←
-    match t.val with
+               else ok 22#usize)
+  let idx ← PV_L1_Logged.lift (prover.publication_indices queries begin1 end1 (t = 2#usize))
+  let o ← PV_L1_Logged.lift (match t.val with
     | 0 =>
       let s := alloc.vec.Vec.deref idx
       host_commitment.Commitment.multiproof cc1 s
@@ -33,25 +32,25 @@ def produce
       host_commitment.Commitment.multiproof cc2 s
     | _ =>
       let s := alloc.vec.Vec.deref idx
-      host_tree.BinaryTree.multiproof tree s
-  let r ← core.option.Option.ok_or o verifier.Error.Allocation
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      host_tree.BinaryTree.multiproof tree s)
+  let r ← PV_L1_Logged.lift (core.option.Option.ok_or o verifier.Error.Allocation)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let a ← compact.SLOT_NODES
-    let i ← Aeneas.Std.lift (Std.Usize.wrapping_mul 3#usize batch)
-    let i1 ← Aeneas.Std.lift (Std.Usize.wrapping_add i t)
-    let i2 ← Array.index_usize a i1
-    let cap ← Aeneas.Std.lift (Std.Usize.wrapping_mul 32#usize i2)
+    let a ← PV_L1_Logged.lift (compact.SLOT_NODES)
+    let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 3#usize batch))
+    let i1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add i t))
+    let i2 ← PV_L1_Logged.lift (Array.index_usize a i1)
+    let cap ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 32#usize i2))
     let i3 := alloc.vec.Vec.len val
     massert (i3 <= cap)
     let s := alloc.vec.Vec.deref val
-    let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s
+    let out1 ← PV_L1_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s)
     let i4 := alloc.vec.Vec.len out1
-    let i5 ← Aeneas.Std.lift (Std.Usize.wrapping_add i4 cap)
+    let i5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add i4 cap))
     let i6 := alloc.vec.Vec.len val
-    let padded ← Aeneas.Std.lift (Std.Usize.wrapping_sub i5 i6)
-    let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+    let padded ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_sub i5 i6))
+    let out2 ← PV_L1_Logged.lift (alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8)
     ok (core.result.Result.Ok out2)
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual

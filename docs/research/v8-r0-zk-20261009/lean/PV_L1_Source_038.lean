@@ -14,7 +14,7 @@ def produce
   Logged (Array aspis_core.field.QM31 1024#usize)
   := do
   let _ ← observe .opening 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let out := Array.repeat 1024#usize q
   prover.fixed_k_column_loop values out 0#usize
 

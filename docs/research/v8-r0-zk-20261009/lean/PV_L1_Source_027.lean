@@ -19,24 +19,22 @@ def produce
   Logged (core.result.Result prover.PreparedOpening verifier.Error)
   := do
   let _ ← observe .opening 0 (ok ())
-  let b ←
-    core.cmp.PartialEq.ne.trait_default
+  let b ← PV_L1_Logged.lift (core.cmp.PartialEq.ne.trait_default
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
-      transport.Variant.S2
+      transport.Variant.S2)
   if b
   then ok (core.result.Result.Err verifier.Error.Semantic)
   else
     let s := alloc.vec.Vec.deref backend.messages
-    let coefficients ← prover.opening_coefficients variant s
-    let scp ← Array.index_usize sem.z 1#usize
-    let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
-    let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+    let coefficients ← PV_L1_Logged.lift (prover.opening_coefficients variant s)
+    let scp ← PV_L1_Logged.lift (Array.index_usize sem.z 1#usize)
+    let we ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 scp.x)
+    let we1 ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 scp.y)
     let s1 := alloc.vec.Vec.deref coefficients
-    let y1 ← prover.opening_claim_bytes s1 { x := we, y := we1 }
-    let a ←
-      host_wire.SemanticTranscript.impl.state
+    let y1 ← PV_L1_Logged.lift (prover.opening_claim_bytes s1 { x := we, y := we1 })
+    let a ← PV_L1_Logged.lift (host_wire.SemanticTranscript.impl.state
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
-        sem.transcript
+        sem.transcript)
     let transcript ←
       PV_L1_Source_026.produce
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a
@@ -47,47 +45,45 @@ def produce
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         transcript 27#u8 s2 true
     let s3 := alloc.vec.Vec.deref coefficients
-    let q ← prover.opening_batch s3 gamma
-    let r ← weights.Weights.new variant sem.alpha sem.z
-    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    let q ← PV_L1_Logged.lift (prover.opening_batch s3 gamma)
+    let r ← PV_L1_Logged.lift (weights.Weights.new variant sem.alpha sem.z)
+    let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val =>
       let s4 := alloc.vec.Vec.deref q
-      let inactive ← prover.opening_inactive s4 val
-      let a1 ← aspis_core.field.wide_exact.WideExact.to_le_bytes inactive
-      let s5 ← Aeneas.Std.lift (Array.to_slice a1)
+      let inactive ← PV_L1_Logged.lift (prover.opening_inactive s4 val)
+      let a1 ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.to_le_bytes inactive)
+      let s5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice a1))
       let (kappa, transcript2) ←
         PV_L1_Source_019.produce
           aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
           transcript1 28#u8 s5 false
-      let r1 ← weights.Weights.materialize val kappa
-      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      let r1 ← PV_L1_Logged.lift (weights.Weights.materialize val kappa)
+      let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
       match cf1 with
       | core.ops.control_flow.ControlFlow.Continue val1 =>
         let s6 := alloc.vec.Vec.deref q
         let s7 := alloc.vec.Vec.deref val1
-        let c0 ← prover.round s6 s7
-        let s8 ← Aeneas.Std.lift (Array.to_slice c0)
-        let c0bytes ← prover.encoded_slice s8
+        let c0 ← PV_L1_Logged.lift (prover.round s6 s7)
+        let s8 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice c0))
+        let c0bytes ← PV_L1_Logged.lift (prover.encoded_slice s8)
         let s9 := alloc.vec.Vec.deref c0bytes
         let (alpha0, transcript3) ←
           PV_L1_Source_019.produce
             aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
             transcript2 29#u8 s9 false
         let s10 := alloc.vec.Vec.deref q
-        let q1 ← prover.fold s10 alpha0 false
+        let q1 ← PV_L1_Logged.lift (prover.fold s10 alpha0 false)
         let s11 := alloc.vec.Vec.deref val1
-        let w1 ← prover.fold s11 alpha0 true
+        let w1 ← PV_L1_Logged.lift (prover.fold s11 alpha0 true)
         let s12 := alloc.vec.Vec.deref q1
-        let r2 ←
-          host_commitment.EncodingDomain.evaluate
+        let r2 ← PV_L1_Logged.lift (host_commitment.EncodingDomain.evaluate
             aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField
-            backend.domain s12 0#usize
-        let r3 ←
-          core.result.Result.map_err
+            backend.domain s12 0#usize)
+        let r3 ← PV_L1_Logged.lift (core.result.Result.map_err
             prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
-            r2 ()
-        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            r2 ())
+        let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r3)
         match cf2 with
         | core.ops.control_flow.ControlFlow.Continue val2 =>
           ok (core.result.Result.Ok

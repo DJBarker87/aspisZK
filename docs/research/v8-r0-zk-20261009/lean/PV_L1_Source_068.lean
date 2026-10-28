@@ -28,28 +28,26 @@ def produce
     × T1)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let s ← Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1)
+  let s ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
   let i := Slice.len s
   if i != 16#usize
   then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
   else
-    let s1 ← Aeneas.Std.lift (Array.to_slice compiled.semantic_c1.c1)
+    let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice compiled.semantic_c1.c1))
     let i1 := Slice.len s1
     if i1 != 16#usize
     then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
     else
-      let pvplpsv ←
-        aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition
-          public1
-      let b ←
-        core.cmp.impls.PartialEqShared.ne
+      let pvplpsv ← PV_L1_Logged.lift (aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.transition
+          public1)
+      let b ← PV_L1_Logged.lift (core.cmp.impls.PartialEqShared.ne
           aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1
-          compiled.public_statement pvplpsv
+          compiled.public_statement pvplpsv)
       if b
       then ok (core.result.Result.Err r1_wire.Error.Public, commitments)
       else
-        let s2 ← Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1)
-        let c1 ← host_semantic.clone_semantic_columns s2 mask_only
+        let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
+        let c1 ← PV_L1_Logged.lift (host_semantic.clone_semantic_columns s2 mask_only)
         PV_L1_Source_067.produce aspis_coredigestDigest32Inst
           (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error
           aspis_coredigestDigest32Inst CommitmentsInst) CommitmentsInst public1

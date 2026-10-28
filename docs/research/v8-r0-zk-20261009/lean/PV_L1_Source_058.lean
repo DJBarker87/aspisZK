@@ -14,7 +14,7 @@ def produce
   Logged (core.result.Result Unit r1_wire.Error)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let pending_return ← host_semantic.check_secure_column_loop column 0#usize
+  let pending_return ← PV_L1_Logged.lift (host_semantic.check_secure_column_loop column 0#usize)
   match pending_return with
   | none => ok (core.result.Result.Ok ())
   | some r => ok r

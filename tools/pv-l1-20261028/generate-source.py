@@ -57,6 +57,18 @@ for k,n in enumerate(selected):
   if dep==n or dep.endswith('.body') or dep.endswith('_loop'):continue
   if re.search(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',body):
    body=re.sub(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',lambda m:m[1]+dm+'.produce',body);deps.append(dm)
+ # Explicit lifts let dependent-array sizes be inferred from the source action
+ # before the Logged bind elaborates its continuation.
+ lines=body.splitlines()
+ for at in reversed(range(len(lines))):
+  line=lines[at]
+  if '←' not in line or not re.match(r'\s*let\b',line):continue
+  indent=len(line)-len(line.lstrip());end=at+1
+  while end<len(lines) and (not lines[end].strip() or len(lines[end])-len(lines[end].lstrip())>indent):end+=1
+  prefix,first=line.split('←',1);expr='\n'.join([first.strip()]+lines[at+1:end]).strip()
+  if re.match(r'PV_L1_Source_\d+\.produce\b',expr):continue
+  lines[at:end]=[(prefix+'← PV_L1_Logged.lift ('+expr+')')]
+ body='\n'.join(lines)
  applications=' '.join(('('+x+' := '+x+')') if kind=='{' else x for x,kind in args)
  result_sig=ret.replace('\n  Result','\n  Logged',1)
  # Parenthesize the parameterized Call.boundary constructor.

@@ -23,39 +23,36 @@ def produce
   let _ ← observe (.boundary 0) 0 (ok ())
   if round = 10#usize
   then
-    let r ← OracleInst.evaluate oracle point
-    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    let r ← PV_L1_Logged.lift (OracleInst.evaluate oracle point)
+    let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val =>
-      let b ←
-        core.cmp.PartialEq.ne.trait_default
-          aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+      let b ← PV_L1_Logged.lift (core.cmp.PartialEq.ne.trait_default
+          aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running)
       if b
       then
         ok (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
       else ok (core.result.Result.Ok (point, running), transcript, output)
     | core.ops.control_flow.ControlFlow.Break residual =>
-      let r1 ←
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
-          (core.convert.FromSame r1_wire.Error) residual
+          (core.convert.FromSame r1_wire.Error) residual)
       ok (r1, transcript, output)
   else
     let (r, transcript1, output1) ←
       PV_L1_Source_041.produce aspis_coredigestDigest32Inst
         OracleInst transcript output point running round oracle
-    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val =>
       let (point1, running1) := val
-      let i ← Aeneas.Std.lift (Std.Usize.wrapping_add round 1#usize)
+      let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add round 1#usize))
       host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst
         OracleInst transcript1 output1 point1 running1 i oracle
     | core.ops.control_flow.ControlFlow.Break residual =>
-      let r1 ←
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
-          (core.convert.FromSame r1_wire.Error) residual
+          (core.convert.FromSame r1_wire.Error) residual)
       ok (r1, transcript1, output1)
 
 theorem complete_result

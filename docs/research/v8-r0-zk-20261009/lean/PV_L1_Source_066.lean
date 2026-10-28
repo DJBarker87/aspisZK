@@ -16,20 +16,20 @@ def produce
     3#usize) r1_wire.Error)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let points ← r1_wire.statement_points point
-  let a ← Array.index_usize points 0#usize
-  let r ← host_semantic.claims_at_point columns a
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let points ← PV_L1_Logged.lift (r1_wire.statement_points point)
+  let a ← PV_L1_Logged.lift (Array.index_usize points 0#usize)
+  let r ← PV_L1_Logged.lift (host_semantic.claims_at_point columns a)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let a1 ← Array.index_usize points 1#usize
-    let r1 ← host_semantic.claims_at_point columns a1
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let a1 ← PV_L1_Logged.lift (Array.index_usize points 1#usize)
+    let r1 ← PV_L1_Logged.lift (host_semantic.claims_at_point columns a1)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
-      let a2 ← Array.index_usize points 2#usize
-      let r2 ← host_semantic.claims_at_point columns a2
-      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      let a2 ← PV_L1_Logged.lift (Array.index_usize points 2#usize)
+      let r2 ← PV_L1_Logged.lift (host_semantic.claims_at_point columns a2)
+      let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
         ok (core.result.Result.Ok (Array.make 3#usize [ val, val1, val2 ]))

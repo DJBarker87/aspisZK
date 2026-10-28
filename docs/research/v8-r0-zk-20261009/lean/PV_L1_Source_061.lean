@@ -18,18 +18,17 @@ def produce
   let _ ← observe .semanticCanonical 0 (ok ())
   if lane < 26#usize
   then
-    let v ← Array.index_usize c1 lane
+    let v ← PV_L1_Logged.lift (Array.index_usize c1 lane)
     let s := alloc.vec.Vec.deref v
-    let r ← host_semantic.check_base_column s
-    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    let r ← PV_L1_Logged.lift (host_semantic.check_base_column s)
+    let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue _ =>
-      let lane1 ← Aeneas.Std.lift (Std.Usize.wrapping_add lane 1#usize)
+      let lane1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add lane 1#usize))
       ok (cont lane1)
     | core.ops.control_flow.ControlFlow.Break residual =>
-      let r1 ←
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-          Unit (core.convert.FromSame r1_wire.Error) residual
+      let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          Unit (core.convert.FromSame r1_wire.Error) residual)
       ok (done (some r1))
   else ok (done none)
 

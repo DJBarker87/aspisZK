@@ -17,12 +17,12 @@ def produce
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
   let bytes := alloc.vec.Vec.with_capacity Std.U8 3712#usize
-  let a ← Array.index_usize claims 0#usize
-  let bytes1 ← host_semantic.append_claim_bytes bytes a
-  let a1 ← Array.index_usize claims 1#usize
-  let bytes2 ← host_semantic.append_claim_bytes bytes1 a1
-  let a2 ← Array.index_usize claims 2#usize
-  let bytes3 ← host_semantic.append_claim_bytes bytes2 a2
+  let a ← PV_L1_Logged.lift (Array.index_usize claims 0#usize)
+  let bytes1 ← PV_L1_Logged.lift (host_semantic.append_claim_bytes bytes a)
+  let a1 ← PV_L1_Logged.lift (Array.index_usize claims 1#usize)
+  let bytes2 ← PV_L1_Logged.lift (host_semantic.append_claim_bytes bytes1 a1)
+  let a2 ← PV_L1_Logged.lift (Array.index_usize claims 2#usize)
+  let bytes3 ← PV_L1_Logged.lift (host_semantic.append_claim_bytes bytes2 a2)
   PV_L1_Source_046.produce bytes3 extras
 
 theorem complete_result

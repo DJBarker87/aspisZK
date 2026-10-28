@@ -15,28 +15,24 @@ def produce
   Logged aspis_core.field.QM31
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let semantic := Array.repeat 16#usize q
   let mask_only := Array.repeat 10#usize q
-  let (s, to_slice_mut_back) ← Aeneas.Std.lift (Array.to_slice_mut semantic)
-  let s1 ←
-    core.array.Array.index (core.ops.index.IndexSlice
+  let (s, to_slice_mut_back) ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice_mut semantic))
+  let s1 ← PV_L1_Logged.lift (core.array.Array.index (core.ops.index.IndexSlice
       (core.slice.index.SliceIndexRangeToUsizeSlice aspis_core.field.QM31))
-      claims { «end» := 16#usize }
-  let s2 ←
-    core.slice.Slice.copy_from_slice aspis_core.field.QM31.Insts.CoreMarkerCopy
-      s s1
+      claims { «end» := 16#usize })
+  let s2 ← PV_L1_Logged.lift (core.slice.Slice.copy_from_slice aspis_core.field.QM31.Insts.CoreMarkerCopy
+      s s1)
   let semantic1 := to_slice_mut_back s2
-  let (s3, to_slice_mut_back1) ← Aeneas.Std.lift (Array.to_slice_mut mask_only)
-  let s4 ←
-    core.array.Array.index (core.ops.index.IndexSlice
+  let (s3, to_slice_mut_back1) ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice_mut mask_only))
+  let s4 ← PV_L1_Logged.lift (core.array.Array.index (core.ops.index.IndexSlice
       (core.slice.index.SliceIndexRangeUsizeSlice aspis_core.field.QM31))
-      claims { start := 16#usize, «end» := 26#usize }
-  let s5 ←
-    core.slice.Slice.copy_from_slice aspis_core.field.QM31.Insts.CoreMarkerCopy
-      s3 s4
+      claims { start := 16#usize, «end» := 26#usize })
+  let s5 ← PV_L1_Logged.lift (core.slice.Slice.copy_from_slice aspis_core.field.QM31.Insts.CoreMarkerCopy
+      s3 s4)
   let mask_only1 := to_slice_mut_back1 s5
-  let q1 ← Array.index_usize claims 27#usize
+  let q1 ← PV_L1_Logged.lift (Array.index_usize claims 27#usize)
   aspis_core.state_only_hiding.state_only_selected_mask_value semantic1
     mask_only1 q1 point
 

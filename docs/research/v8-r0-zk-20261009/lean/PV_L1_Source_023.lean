@@ -15,7 +15,7 @@ def produce
   Logged (alloc.vec.Vec aspis_core.field.wide_exact.WideExact)
   := do
   let _ ← observe .opening 0 (ok ())
-  let gp ← weights.powers 29#usize gamma
+  let gp ← PV_L1_Logged.lift (weights.powers 29#usize gamma)
   let q :=
     alloc.vec.Vec.with_capacity aspis_core.field.wide_exact.WideExact
       1024#usize

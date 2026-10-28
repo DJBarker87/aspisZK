@@ -15,10 +15,9 @@ def produce
   Logged (Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let c1 ←
-    core.default.DefaultArray.default 26#usize
-      (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.M31)
-  let (c11, i) ← host_semantic.clone_semantic_columns_loop0 noised c1 0#usize
+  let c1 ← PV_L1_Logged.lift (core.default.DefaultArray.default 26#usize
+      (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.M31))
+  let (c11, i) ← PV_L1_Logged.lift (host_semantic.clone_semantic_columns_loop0 noised c1 0#usize)
   host_semantic.clone_semantic_columns_loop1 mask_only c11 i
 
 theorem complete_result

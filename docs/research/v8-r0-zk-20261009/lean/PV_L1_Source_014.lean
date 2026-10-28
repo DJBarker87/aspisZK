@@ -16,12 +16,11 @@ def produce
   let _ ← observe .queryScan 0 (ok ())
   if i < 22#usize
   then
-    let i1 ← Array.index_usize q i
-    let we ←
-      aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31
-        i1
+    let i1 ← PV_L1_Logged.lift (Array.index_usize q i)
+    let we ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.from_m31
+        i1)
     trace.value 5#u16 i we
-    let i2 ← Aeneas.Std.lift (Std.Usize.wrapping_add i 1#usize)
+    let i2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add i 1#usize))
     ok (cont i2)
   else ok (done ())
 

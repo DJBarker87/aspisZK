@@ -22,52 +22,50 @@ def produce
   := do
   let _ ← observe .opening 0 (ok ())
   let s := alloc.vec.Vec.deref prepared.folded_word
-  let leaves ← prover.folded_leaves hash s folded_salts
-  let o ←
-    host_tree.BinaryTree.new
-      aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash leaves
-  let r ← core.option.Option.ok_or o verifier.Error.Allocation
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let leaves ← PV_L1_Logged.lift (prover.folded_leaves hash s folded_salts)
+  let o ← PV_L1_Logged.lift (host_tree.BinaryTree.new
+      aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash leaves)
+  let r ← PV_L1_Logged.lift (core.option.Option.ok_or o verifier.Error.Allocation)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let root ← host_tree.BinaryTree.root val
+    let root ← PV_L1_Logged.lift (host_tree.BinaryTree.root val)
     let s1 := alloc.vec.Vec.deref prepared.q1
     let s2 := alloc.vec.Vec.deref prepared.w1
-    let c1 ← prover.round s1 s2
-    let s3 ← Aeneas.Std.lift (Array.to_slice c1)
-    let c1bytes ← prover.encoded_slice s3
-    let s4 ← Aeneas.Std.lift (Array.to_slice root)
-    let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 s4
+    let c1 ← PV_L1_Logged.lift (prover.round s1 s2)
+    let s3 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice c1))
+    let c1bytes ← PV_L1_Logged.lift (prover.encoded_slice s3)
+    let s4 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice root))
+    let payload ← PV_L1_Logged.lift (alloc.slice.Slice.to_vec core.clone.CloneU8 s4)
     let s5 := alloc.vec.Vec.deref c1bytes
-    let payload1 ←
-      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload s5
+    let payload1 ← PV_L1_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload s5)
     let s6 := alloc.vec.Vec.deref payload1
     let (alpha1, transcript) ←
       PV_L1_Source_019.produce
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         prepared.transcript 30#u8 s6 false
     let s7 := alloc.vec.Vec.deref prepared.q1
-    let final_message ← prover.fold s7 alpha1 false
+    let final_message ← PV_L1_Logged.lift (prover.fold s7 alpha1 false)
     let s8 := alloc.vec.Vec.deref final_message
-    let fbytes ← prover.encoded_slice s8
+    let fbytes ← PV_L1_Logged.lift (prover.encoded_slice s8)
     let s9 := alloc.vec.Vec.deref fbytes
     let (r1, transcript1) ←
       PV_L1_Source_016.produce
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         transcript 31#u8 s9
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
-      let s10 ← Aeneas.Std.lift (Array.to_slice (Std.Array.empty Std.U8))
+      let s10 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Std.Array.empty Std.U8)))
       let _ ←
         PV_L1_Source_018.produce
           aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
           transcript1 32#u8 s10
-      let scp ← Array.index_usize prepared.sem.z 0#usize
-      let scp1 ← Array.index_usize prepared.sem.z 1#usize
-      let s11 ← Aeneas.Std.lift (Array.to_slice val1)
-      let v ← alloc.slice.Slice.to_vec core.clone.CloneU32 s11
-      let a ← Array.index_usize prepared.sem.roots 0#usize
+      let scp ← PV_L1_Logged.lift (Array.index_usize prepared.sem.z 0#usize)
+      let scp1 ← PV_L1_Logged.lift (Array.index_usize prepared.sem.z 1#usize)
+      let s11 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice val1))
+      let v ← PV_L1_Logged.lift (alloc.slice.Slice.to_vec core.clone.CloneU32 s11)
+      let a ← PV_L1_Logged.lift (Array.index_usize prepared.sem.roots 0#usize)
       let r2 ←
         PV_L1_Source_008.produce variant
           {
@@ -83,7 +81,7 @@ def produce
             alpha1,
             queries := v
           } a
-      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue _ =>
         ok (core.result.Result.Ok

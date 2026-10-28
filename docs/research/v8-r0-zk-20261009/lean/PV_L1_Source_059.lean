@@ -17,7 +17,7 @@ def produce
   let _ ← observe .semanticCanonical 0 (ok ())
   if row < 1024#usize
   then
-    let m ← Slice.index_usize column row
+    let m ← PV_L1_Logged.lift (Slice.index_usize column row)
     if m >= aspis_core.field.P
     then ok (done (some (core.result.Result.Err r1_wire.Error.Public)))
     else let row1 ← Aeneas.Std.lift (Std.Usize.wrapping_add row 1#usize)

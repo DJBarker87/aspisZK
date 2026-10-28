@@ -20,7 +20,7 @@ def produce
     × (alloc.vec.Vec Std.U8))
   := do
   let _ ← observe (.boundary 0) 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let a := Array.repeat 10#usize q
   PV_L1_Source_042.produce aspis_coredigestDigest32Inst OracleInst
     transcript output a initial_claim 0#usize oracle

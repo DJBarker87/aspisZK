@@ -17,12 +17,12 @@ def produce
   Logged (core.result.Result Unit r1_wire.Error)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let r ← host_semantic.check_base_columns c1
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (host_semantic.check_base_columns c1)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue _ =>
-    let r1 ← host_semantic.check_secure_column d
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let r1 ← PV_L1_Logged.lift (host_semantic.check_secure_column d)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue _ =>
       PV_L1_Source_058.produce g

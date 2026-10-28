@@ -16,15 +16,13 @@ def produce
   Logged (core.result.Result Unit verifier.Error)
   := do
   let _ ← observe .checker 0 (ok ())
-  let b ←
-    core.cmp.PartialEq.ne.trait_default
+  let b ← PV_L1_Logged.lift (core.cmp.PartialEq.ne.trait_default
       transport.Variant.Insts.CoreCmpPartialEqVariant variant
-      transport.Variant.S2
+      transport.Variant.S2)
   if b
   then ok (core.result.Result.Err verifier.Error.Semantic)
   else
-    let (accepted, _) ←
-      aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.p_r1_check challenges
+    let (accepted, _) ← PV_L1_Logged.lift (aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.p_r1_check challenges)
     if accepted
     then ok (core.result.Result.Ok ())
     else ok (core.result.Result.Err verifier.Error.Rejected)

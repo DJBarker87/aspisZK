@@ -21,39 +21,38 @@ def produce
   then
     if n = 22#usize
     then
-      let a ← Array.index_usize advances 7#usize
+      let a ← PV_L1_Logged.lift (Array.index_usize advances 7#usize)
       ok (core.result.Result.Ok (accepted, a))
     else ok (core.result.Result.Err verifier.Error.Transcript)
   else
-    let k ← draws / 8#usize
+    let k ← PV_L1_Logged.lift (draws / 8#usize)
     if n = 22#usize
     then
-      let a ← Array.index_usize advances k
+      let a ← PV_L1_Logged.lift (Array.index_usize advances k)
       ok (core.result.Result.Ok (accepted, a))
     else
-      let i ← draws % 8#usize
-      let at1 ← Aeneas.Std.lift (Std.Usize.wrapping_mul 4#usize i)
-      let a ← Array.index_usize blocks k
-      let i1 ← Array.index_usize a at1
-      let i2 ← Aeneas.Std.lift (Std.Usize.wrapping_add at1 1#usize)
-      let i3 ← Array.index_usize a i2
-      let i4 ← Aeneas.Std.lift (Std.Usize.wrapping_add at1 2#usize)
-      let i5 ← Array.index_usize a i4
-      let i6 ← Aeneas.Std.lift (Std.Usize.wrapping_add at1 3#usize)
-      let i7 ← Array.index_usize a i6
-      let i8 ←
-        Aeneas.Std.lift (core.num.U32.from_le_bytes
-          (Array.make 4#usize [ i1, i3, i5, i7 ]))
-      let candidate ← Aeneas.Std.lift (i8 &&& 262143#u32)
-      let b ← host_transcript.query_contains accepted n candidate
+      let i ← PV_L1_Logged.lift (draws % 8#usize)
+      let at1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 4#usize i))
+      let a ← PV_L1_Logged.lift (Array.index_usize blocks k)
+      let i1 ← PV_L1_Logged.lift (Array.index_usize a at1)
+      let i2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add at1 1#usize))
+      let i3 ← PV_L1_Logged.lift (Array.index_usize a i2)
+      let i4 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add at1 2#usize))
+      let i5 ← PV_L1_Logged.lift (Array.index_usize a i4)
+      let i6 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add at1 3#usize))
+      let i7 ← PV_L1_Logged.lift (Array.index_usize a i6)
+      let i8 ← PV_L1_Logged.lift (Aeneas.Std.lift (core.num.U32.from_le_bytes
+          (Array.make 4#usize [ i1, i3, i5, i7 ])))
+      let candidate ← PV_L1_Logged.lift (Aeneas.Std.lift (i8 &&& 262143#u32))
+      let b ← PV_L1_Logged.lift (host_transcript.query_contains accepted n candidate)
       if b
       then
-        let i9 ← Aeneas.Std.lift (Std.Usize.wrapping_add draws 1#usize)
+        let i9 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add draws 1#usize))
         host_transcript.scan_query_words blocks advances accepted n i9
       else
-        let accepted1 ← Array.update accepted n candidate
-        let i9 ← Aeneas.Std.lift (Std.Usize.wrapping_add n 1#usize)
-        let i10 ← Aeneas.Std.lift (Std.Usize.wrapping_add draws 1#usize)
+        let accepted1 ← PV_L1_Logged.lift (Array.update accepted n candidate)
+        let i9 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add n 1#usize))
+        let i10 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add draws 1#usize))
         host_transcript.scan_query_words blocks advances accepted1 i9 i10
 
 theorem complete_result

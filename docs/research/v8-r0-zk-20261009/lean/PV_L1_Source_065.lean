@@ -16,10 +16,9 @@ def produce
     r1_wire.Error)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let claims := Array.repeat 29#usize q
-  let (claims1, pending_return) ←
-    host_semantic.claims_at_point_loop columns point claims 0#usize
+  let (claims1, pending_return) ← PV_L1_Logged.lift (host_semantic.claims_at_point_loop columns point claims 0#usize)
   match pending_return with
   | none => ok (core.result.Result.Ok claims1)
   | some r => ok r

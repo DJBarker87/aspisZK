@@ -18,10 +18,10 @@ def produce
   if j = 28#usize
   then ok sum
   else
-    let i ← Aeneas.Std.lift (Std.Usize.wrapping_add offset j)
-    let q ← Array.index_usize dc i
-    let next ← aspis_core.field.QM31.add sum q
-    let i1 ← Aeneas.Std.lift (Std.Usize.wrapping_add j 1#usize)
+    let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add offset j))
+    let q ← PV_L1_Logged.lift (Array.index_usize dc i)
+    let next ← PV_L1_Logged.lift (aspis_core.field.QM31.add sum q)
+    let i1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add j 1#usize))
     host_semantic.d_tail_sum dc offset i1 next
 
 theorem complete_result

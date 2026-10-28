@@ -24,14 +24,13 @@ def produce
   let _ ← observe .saltDerivation 0 (ok ())
   if index < count
   then
-    let result1 ←
-      match result with
+    let result1 ← PV_L1_Logged.lift (match result with
       | core.result.Result.Ok salts =>
         do
-        let i ← Aeneas.Std.lift (UScalar.cast .U32 index)
+        let i ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .U32 index))
         PV_L1_Source_028.produce reserved context hash tag i salts
-      | core.result.Result.Err _ => ok result
-    let index1 ← Aeneas.Std.lift (Std.Usize.wrapping_add index 1#usize)
+      | core.result.Result.Err _ => ok result)
+    let index1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add index 1#usize))
     ok (cont (result1, index1))
   else ok (done result)
 

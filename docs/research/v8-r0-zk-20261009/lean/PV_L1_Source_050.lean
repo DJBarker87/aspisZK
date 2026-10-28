@@ -15,18 +15,15 @@ def produce
   Logged aspis_core.field.QM31
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let point ← host_semantic.boolean_point row
-  let q ← aspis_core.field.QM31.ZERO
+  let point ← PV_L1_Logged.lift (host_semantic.boolean_point row)
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let semantic := Array.repeat 16#usize q
   let mask_only := Array.repeat 10#usize q
-  let semantic1 ←
-    host_semantic.initial_mask_value_loop0 columns row semantic 0#usize
-  let mask_only1 ←
-    host_semantic.initial_mask_value_loop1 columns row mask_only 0#usize
-  let v ← Array.index_usize columns 27#usize
-  let q1 ←
-    alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
-      aspis_core.field.QM31) v row
+  let semantic1 ← PV_L1_Logged.lift (host_semantic.initial_mask_value_loop0 columns row semantic 0#usize)
+  let mask_only1 ← PV_L1_Logged.lift (host_semantic.initial_mask_value_loop1 columns row mask_only 0#usize)
+  let v ← PV_L1_Logged.lift (Array.index_usize columns 27#usize)
+  let q1 ← PV_L1_Logged.lift (alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice
+      aspis_core.field.QM31) v row)
   aspis_core.state_only_hiding.state_only_selected_mask_value semantic1
     mask_only1 q1 point
 

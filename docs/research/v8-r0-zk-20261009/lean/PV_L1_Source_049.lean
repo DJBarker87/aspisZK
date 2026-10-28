@@ -16,7 +16,7 @@ def produce
   Logged (Array aspis_core.field.QM31 29#usize)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let extras := Array.repeat 29#usize q
   host_semantic.extra_claims_loop columns variant a b extras 0#usize
 

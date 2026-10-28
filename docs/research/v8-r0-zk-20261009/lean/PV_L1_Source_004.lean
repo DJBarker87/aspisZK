@@ -15,7 +15,7 @@ def produce
   Logged (alloc.vec.Vec Std.U32)
   := do
   let _ ← observe .publication 0 (ok ())
-  let i ← Aeneas.Std.lift (Std.Usize.wrapping_sub end1 begin1)
+  let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_sub end1 begin1))
   let out := alloc.vec.Vec.with_capacity Std.U32 i
   prover.publication_indices_loop0 queries end1 folded out begin1
 

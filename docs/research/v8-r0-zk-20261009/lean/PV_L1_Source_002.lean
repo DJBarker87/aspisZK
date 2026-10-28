@@ -15,17 +15,17 @@ def produce
   Logged (alloc.vec.Vec Std.U8)
   := do
   let _ ← observe .publication 0 (ok ())
-  let a ← Array.index_usize opening.values 0#usize
-  let out1 ← prover.append_opening_base_row out a
-  let a1 ← Array.index_usize opening.values 1#usize
-  let out2 ← prover.append_opening_base_row out1 a1
-  let a2 ← Array.index_usize opening.values 2#usize
-  let out3 ← prover.append_opening_base_row out2 a2
-  let a3 ← Array.index_usize opening.values 3#usize
-  let out4 ← prover.append_opening_base_row out3 a3
-  let out5 ← prover.append_opening_secure_row out4 a
-  let out6 ← prover.append_opening_secure_row out5 a1
-  let out7 ← prover.append_opening_secure_row out6 a2
+  let a ← PV_L1_Logged.lift (Array.index_usize opening.values 0#usize)
+  let out1 ← PV_L1_Logged.lift (prover.append_opening_base_row out a)
+  let a1 ← PV_L1_Logged.lift (Array.index_usize opening.values 1#usize)
+  let out2 ← PV_L1_Logged.lift (prover.append_opening_base_row out1 a1)
+  let a2 ← PV_L1_Logged.lift (Array.index_usize opening.values 2#usize)
+  let out3 ← PV_L1_Logged.lift (prover.append_opening_base_row out2 a2)
+  let a3 ← PV_L1_Logged.lift (Array.index_usize opening.values 3#usize)
+  let out4 ← PV_L1_Logged.lift (prover.append_opening_base_row out3 a3)
+  let out5 ← PV_L1_Logged.lift (prover.append_opening_secure_row out4 a)
+  let out6 ← PV_L1_Logged.lift (prover.append_opening_secure_row out5 a1)
+  let out7 ← PV_L1_Logged.lift (prover.append_opening_secure_row out6 a2)
   PV_L1_Source_000.produce out7 a3
 
 theorem complete_result

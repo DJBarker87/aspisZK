@@ -15,13 +15,12 @@ def produce
   Logged (alloc.vec.Vec Std.U8)
   := do
   let _ ← observe .publication 0 (ok ())
-  let out1 ← prover.append_opening_base_row_loop out row 0#usize
-  let we ← Array.index_usize row 28#usize
-  let bytes ← aspis_core.field.wide_exact.WideExact.to_le_bytes we
-  let s ←
-    core.array.Array.index (core.ops.index.IndexSlice
+  let out1 ← PV_L1_Logged.lift (prover.append_opening_base_row_loop out row 0#usize)
+  let we ← PV_L1_Logged.lift (Array.index_usize row 28#usize)
+  let bytes ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.to_le_bytes we)
+  let s ← PV_L1_Logged.lift (core.array.Array.index (core.ops.index.IndexSlice
       (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) bytes
-      { «end» := 16#usize }
+      { «end» := 16#usize })
   alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 s
 
 theorem complete_result

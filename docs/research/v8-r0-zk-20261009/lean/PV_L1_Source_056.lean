@@ -18,11 +18,10 @@ def produce
     Std.U8))
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← aspis_core.field.QM31.ZERO
+  let q ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   let zc := Array.repeat 10#usize q
-  let (transcript1, bytes1, zc1, pending_return) ←
-    host_semantic.zc_rows_loop aspis_coredigestDigest32Inst transcript bytes zc
-      0#usize
+  let (transcript1, bytes1, zc1, pending_return) ← PV_L1_Logged.lift (host_semantic.zc_rows_loop aspis_coredigestDigest32Inst transcript bytes zc
+      0#usize)
   match pending_return with
   | none => ok (core.result.Result.Ok zc1, transcript1, bytes1)
   | some r => ok (r, transcript1, bytes1)

@@ -14,7 +14,7 @@ def produce
   Logged aspis_core.field.QM31
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let sum ← aspis_core.field.QM31.ZERO
+  let sum ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
   host_semantic.initial_mask_sum_loop columns sum 0#usize
 
 theorem complete_result

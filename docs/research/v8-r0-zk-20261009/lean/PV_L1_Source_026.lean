@@ -16,18 +16,17 @@ def produce
   Logged (host_transcript.Transcript H)
   := do
   let _ ← observe .opening 0 (ok ())
-  let domain ←
-    Aeneas.Std.lift (Array.to_slice
+  let domain ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice
       (Array.make 29#usize [
         85#u8, 78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8,
         49#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8, 65#u8, 84#u8, 69#u8, 45#u8,
         83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8
-        ]))
-  let i ← transport.Variant.tag variant
-  let s ← Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ i ]))
-  let s1 ← Aeneas.Std.lift (Array.to_slice semantic_state)
-  let s2 ← Aeneas.Std.lift (Array.to_slice (Array.make 3#usize [ domain, s, s1 ]))
-  let a ← aspis_coredigestDigest32Inst.digest hash s2
+        ])))
+  let i ← PV_L1_Logged.lift (transport.Variant.tag variant)
+  let s ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ i ])))
+  let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice semantic_state))
+  let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 3#usize [ domain, s, s1 ])))
+  let a ← PV_L1_Logged.lift (aspis_coredigestDigest32Inst.digest hash s2)
   ok { state := a, hash }
 
 theorem complete_result

@@ -20,74 +20,66 @@ def produce
     × (alloc.vec.Vec Std.U8))
   := do
   let _ ← observe (.boundary 0) 0 (ok ())
-  let remaining ← Aeneas.Std.lift (Std.Usize.wrapping_sub 9#usize round)
-  let _ ← aspis_core.field.QM31.ZERO
-  let assignments ← Aeneas.Std.lift (Std.Usize.wrapping_shl 1#usize (UScalar.cast .U32 remaining))
-  let i ← Aeneas.Std.lift (Std.Usize.wrapping_add 100#usize round)
-  let i1 ← Aeneas.Std.lift (Std.Usize.wrapping_mul 28#usize assignments)
-  let evaluations ←
-    host_work.map
+  let remaining ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_sub 9#usize round))
+  let _ ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
+  let assignments ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_shl 1#usize (UScalar.cast .U32 remaining)))
+  let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add 100#usize round))
+  let i1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_mul 28#usize assignments))
+  let evaluations ← PV_L1_Logged.lift (host_work.map
       (host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error
       aspis_coredigestDigest32Inst OracleInst) i i1 (oracle, point, round,
-      assignments)
+      assignments))
   let s := alloc.vec.Vec.deref evaluations
-  let r ← host_sumcheck.merge_evaluations s assignments
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (host_sumcheck.merge_evaluations s assignments)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let polynomial ← host_sumcheck.interpolate val
-    let q ← aspis_core.state_only_sumcheck.state_only_boundary_sum polynomial
-    let b ←
-      core.cmp.PartialEq.ne.trait_default
-        aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q running
+    let polynomial ← PV_L1_Logged.lift (host_sumcheck.interpolate val)
+    let q ← PV_L1_Logged.lift (aspis_core.state_only_sumcheck.state_only_boundary_sum polynomial)
+    let b ← PV_L1_Logged.lift (core.cmp.PartialEq.ne.trait_default
+        aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q running)
     if b
     then
       ok (core.result.Result.Err (r1_wire.Error.Boundary round), transcript,
         output)
     else
-      let polynomial_bytes ← host_sumcheck.encode_polynomial polynomial
-      let i2 ← Aeneas.Std.lift (UScalar.cast .U8 round)
-      let i3 ← Aeneas.Std.lift (Std.U8.wrapping_add 15#u8 i2)
+      let polynomial_bytes ← PV_L1_Logged.lift (host_sumcheck.encode_polynomial polynomial)
+      let i2 ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .U8 round))
+      let i3 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.U8.wrapping_add 15#u8 i2))
       let s1 := alloc.vec.Vec.deref polynomial_bytes
-      let r1 ← host_wire.record i3 s1
-      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+      let r1 ← PV_L1_Logged.lift (host_wire.record i3 s1)
+      let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
       match cf1 with
       | core.ops.control_flow.ControlFlow.Continue val1 =>
-        let i4 ← Aeneas.Std.lift (UScalar.cast .U8 round)
-        let i5 ← Aeneas.Std.lift (Std.U8.wrapping_add 15#u8 i4)
+        let i4 ← PV_L1_Logged.lift (Aeneas.Std.lift (UScalar.cast .U8 round))
+        let i5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.U8.wrapping_add 15#u8 i4))
         let s2 := alloc.vec.Vec.deref val1
-        let (r2, transcript1) ←
-          host_wire.SemanticTranscript.semantic aspis_coredigestDigest32Inst
-            transcript i5 s2
-        let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+        let (r2, transcript1) ← PV_L1_Logged.lift (host_wire.SemanticTranscript.semantic aspis_coredigestDigest32Inst
+            transcript i5 s2)
+        let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
         match cf2 with
         | core.ops.control_flow.ControlFlow.Continue val2 =>
-          let point1 ← Array.update point round val2
+          let point1 ← PV_L1_Logged.lift (Array.update point round val2)
           let s3 := alloc.vec.Vec.deref val1
-          let output1 ←
-            alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output s3
-          let q1 ← Array.index_usize point1 round
-          let running1 ←
-            aspis_core.state_only_sumcheck.evaluate_state_only_polynomial
-              polynomial q1
+          let output1 ← PV_L1_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output s3)
+          let q1 ← PV_L1_Logged.lift (Array.index_usize point1 round)
+          let running1 ← PV_L1_Logged.lift (aspis_core.state_only_sumcheck.evaluate_state_only_polynomial
+              polynomial q1)
           ok (core.result.Result.Ok (point1, running1), transcript1, output1)
         | core.ops.control_flow.ControlFlow.Break residual =>
-          let r3 ←
-            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          let r3 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
               ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
-              (core.convert.FromSame r1_wire.Error) residual
+              (core.convert.FromSame r1_wire.Error) residual)
           ok (r3, transcript1, output)
       | core.ops.control_flow.ControlFlow.Break residual =>
-        let r2 ←
-          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        let r2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
-            (core.convert.FromSame r1_wire.Error) residual
+            (core.convert.FromSame r1_wire.Error) residual)
         ok (r2, transcript, output)
   | core.ops.control_flow.ControlFlow.Break residual =>
-    let r1 ←
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+    let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
         ((Array aspis_core.field.QM31 10#usize) × aspis_core.field.QM31)
-        (core.convert.FromSame r1_wire.Error) residual
+        (core.convert.FromSame r1_wire.Error) residual)
     ok (r1, transcript, output)
 
 theorem complete_result

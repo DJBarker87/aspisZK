@@ -31,10 +31,9 @@ def produce
   then
     ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)
   else
-    let (r, next_attempt1) ←
-      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut
-        next_attempt k
-    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    let (r, next_attempt1) ← PV_L1_Logged.lift (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut
+        next_attempt k)
+    let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val =>
       let (r1, nonce_store1) ←
@@ -43,7 +42,7 @@ def produce
       match r1 with
       | core.result.Result.Ok p =>
         let (proof, audit) := p
-        let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+        let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))
         ok (core.result.Result.Ok { proof, audit, attempts := i },
           nonce_store1)
       | core.result.Result.Err e =>
@@ -65,7 +64,7 @@ def produce
         | verifier.Error.Allocation =>
           ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
         | verifier.Error.Rejected =>
-          let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+          let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))
           prover.retry_attempt
             coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
             public1 compiled variant hash nonce_store1 next_attempt1 i
@@ -75,9 +74,8 @@ def produce
         | verifier.Error.Entropy =>
           ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
     | core.ops.control_flow.ControlFlow.Break residual =>
-      let r1 ←
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-          prover.RetriedProof (core.convert.FromSame verifier.Error) residual
+      let r1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          prover.RetriedProof (core.convert.FromSame verifier.Error) residual)
       ok (r1, nonce_store)
 
 theorem complete_result

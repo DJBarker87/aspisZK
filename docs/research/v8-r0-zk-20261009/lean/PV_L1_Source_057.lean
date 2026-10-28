@@ -18,12 +18,12 @@ def produce
   if row < 1024#usize
   then
     let b := Array.repeat 16#usize 0#u8
-    let q ← Array.index_usize column row
-    let (s, to_slice_mut_back) ← Aeneas.Std.lift (Array.to_slice_mut b)
-    let s1 ← aspis_core.field.QM31.write_le_bytes q s
+    let q ← PV_L1_Logged.lift (Array.index_usize column row)
+    let (s, to_slice_mut_back) ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice_mut b))
+    let s1 ← PV_L1_Logged.lift (aspis_core.field.QM31.write_le_bytes q s)
     let b1 := to_slice_mut_back s1
-    let s2 ← Aeneas.Std.lift (Array.to_slice b1)
-    let o ← aspis_core.field.QM31.from_le_bytes s2
+    let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice b1))
+    let o ← PV_L1_Logged.lift (aspis_core.field.QM31.from_le_bytes s2)
     let b2 := core.option.Option.is_none o
     if b2
     then ok (done (some (core.result.Result.Err r1_wire.Error.Public)))

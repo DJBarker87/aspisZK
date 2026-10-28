@@ -16,7 +16,7 @@ def produce
   Logged (alloc.vec.Vec (Array Std.U8 32#usize))
   := do
   let _ ← observe .opening 0 (ok ())
-  let i ← Aeneas.Std.lift (Std.Usize.wrapping_shl 1#usize 18#u32)
+  let i ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_shl 1#usize 18#u32))
   let leaves := alloc.vec.Vec.with_capacity (Array Std.U8 32#usize) i
   prover.folded_leaves_loop0 hash word salts leaves 0#usize
 

@@ -22,16 +22,16 @@ def produce
   := do
   let _ ← observe .opening 0 (ok ())
   let (reserved, context) := salts
-  let r ← prover.prepare_opening variant hash backend sem
-  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+  let r ← PV_L1_Logged.lift (prover.prepare_opening variant hash backend sem)
+  let cf ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let r1 ← prover.derive_private_salts reserved context hash 114#u8
-    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+    let r1 ← PV_L1_Logged.lift (prover.derive_private_salts reserved context hash 114#u8)
+    let cf1 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
-      let r2 ← prover.finish_opening variant hash val val1
-      let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+      let r2 ← PV_L1_Logged.lift (prover.finish_opening variant hash val val1)
+      let cf2 ← PV_L1_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r2)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
         PV_L1_Source_007.produce variant val2

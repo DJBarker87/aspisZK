@@ -14,7 +14,7 @@ def produce
   Logged aspis_core.field.wide_exact.WideExact
   := do
   let _ ← observe .opening 0 (ok ())
-  let inactive ← aspis_core.field.wide_exact.WideExact.ZERO
+  let inactive ← PV_L1_Logged.lift (aspis_core.field.wide_exact.WideExact.ZERO)
   prover.opening_inactive_loop q w inactive 0#usize
 
 theorem complete_result

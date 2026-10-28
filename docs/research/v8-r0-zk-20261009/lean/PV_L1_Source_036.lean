@@ -18,17 +18,16 @@ def produce
   let _ ← observe .balanceAudit 0 (ok ())
   if column < 10#usize
   then
-    let v ← Array.index_usize mask_only column
+    let v ← PV_L1_Logged.lift (Array.index_usize mask_only column)
     let s := alloc.vec.Vec.deref v
-    let m ← prover.inactive_sum_m31 s masks
-    let m1 ← aspis_core.field.M31.ZERO
-    let b ← aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m m1
-    let mask_only_columns_inactive_balanced1 ←
-      if b
+    let m ← PV_L1_Logged.lift (prover.inactive_sum_m31 s masks)
+    let m1 ← PV_L1_Logged.lift (aspis_core.field.M31.ZERO)
+    let b ← PV_L1_Logged.lift (aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq m m1)
+    let mask_only_columns_inactive_balanced1 ← PV_L1_Logged.lift (if b
       then
         ok (Std.Usize.wrapping_add mask_only_columns_inactive_balanced 1#usize)
-      else ok mask_only_columns_inactive_balanced
-    let column1 ← Aeneas.Std.lift (Std.Usize.wrapping_add column 1#usize)
+      else ok mask_only_columns_inactive_balanced)
+    let column1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Std.Usize.wrapping_add column 1#usize))
     ok (cont (column1, mask_only_columns_inactive_balanced1))
   else ok (done mask_only_columns_inactive_balanced)
 

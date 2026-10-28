@@ -19,20 +19,18 @@ def produce
   Logged prover.MaskedFixtureAudit
   := do
   let _ ← observe .balanceAudit 0 (ok ())
-  let c1_columns_inactive_balanced ←
-    prover.audit_masks_loop0 c1 masks 0#usize 0#usize
-  let mask_only_columns_inactive_balanced ←
-    prover.audit_masks_loop1 mask_only masks 0#usize 0#usize
-  let s ← Aeneas.Std.lift (Array.to_slice d)
-  let q ← prover.inactive_sum_k s masks
-  let q1 ← aspis_core.field.QM31.ZERO
-  let b ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q q1
-  let s1 ← Aeneas.Std.lift (Array.to_slice g)
-  let q2 ← prover.inactive_sum_k s1 masks
-  let b1 ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q2 q1
-  let s2 ← Aeneas.Std.lift (Array.to_slice h1_padding)
-  let q3 ← prover.inactive_sum_k s2 masks
-  let b2 ← aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q3 q1
+  let c1_columns_inactive_balanced ← PV_L1_Logged.lift (prover.audit_masks_loop0 c1 masks 0#usize 0#usize)
+  let mask_only_columns_inactive_balanced ← PV_L1_Logged.lift (prover.audit_masks_loop1 mask_only masks 0#usize 0#usize)
+  let s ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice d))
+  let q ← PV_L1_Logged.lift (prover.inactive_sum_k s masks)
+  let q1 ← PV_L1_Logged.lift (aspis_core.field.QM31.ZERO)
+  let b ← PV_L1_Logged.lift (aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q q1)
+  let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice g))
+  let q2 ← PV_L1_Logged.lift (prover.inactive_sum_k s1 masks)
+  let b1 ← PV_L1_Logged.lift (aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q2 q1)
+  let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice h1_padding))
+  let q3 ← PV_L1_Logged.lift (prover.inactive_sum_k s2 masks)
+  let b2 ← PV_L1_Logged.lift (aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq q3 q1)
   ok
     {
       c1_columns_inactive_balanced,

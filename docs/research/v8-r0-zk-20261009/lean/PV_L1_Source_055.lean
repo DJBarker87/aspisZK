@@ -15,11 +15,11 @@ def produce
   Logged aspis_core.field.QM31
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let q ← host_semantic.d_tail_side dc 0#usize
-  let first ← aspis_core.field.QM31.mul_m31 q 512#u32
-  let mask_sum1 ← aspis_core.field.QM31.add mask_sum first
-  let q1 ← host_semantic.d_tail_side dc 28#usize
-  let second ← aspis_core.field.QM31.mul_m31 q1 512#u32
+  let q ← PV_L1_Logged.lift (host_semantic.d_tail_side dc 0#usize)
+  let first ← PV_L1_Logged.lift (aspis_core.field.QM31.mul_m31 q 512#u32)
+  let mask_sum1 ← PV_L1_Logged.lift (aspis_core.field.QM31.add mask_sum first)
+  let q1 ← PV_L1_Logged.lift (host_semantic.d_tail_side dc 28#usize)
+  let second ← PV_L1_Logged.lift (aspis_core.field.QM31.mul_m31 q1 512#u32)
   aspis_core.field.QM31.add mask_sum1 second
 
 theorem complete_result

@@ -20,14 +20,14 @@ def produce
   let self1 ←
     PV_L1_Source_015.produce aspis_coredigestDigest32Inst self row
       payload
-  let s ← Aeneas.Std.lift (Array.to_slice self1.state)
-  let s1 ← Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ 1#u8 ]))
-  let s2 ← Aeneas.Std.lift (Array.to_slice (Array.make 2#usize [ s, s1 ]))
-  let block ← aspis_coredigestDigest32Inst.digest self1.hash s2
-  let s3 ← Aeneas.Std.lift (Array.to_slice self1.state)
-  let s4 ← Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ 2#u8 ]))
-  let s5 ← Aeneas.Std.lift (Array.to_slice (Array.make 2#usize [ s3, s4 ]))
-  let a ← aspis_coredigestDigest32Inst.digest self1.hash s5
+  let s ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice self1.state))
+  let s1 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ 1#u8 ])))
+  let s2 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 2#usize [ s, s1 ])))
+  let block ← PV_L1_Logged.lift (aspis_coredigestDigest32Inst.digest self1.hash s2)
+  let s3 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice self1.state))
+  let s4 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 1#usize [ 2#u8 ])))
+  let s5 ← PV_L1_Logged.lift (Aeneas.Std.lift (Array.to_slice (Array.make 2#usize [ s3, s4 ])))
+  let a ← PV_L1_Logged.lift (aspis_coredigestDigest32Inst.digest self1.hash s5)
   ok (block, { self1 with state := a })
 
 theorem complete_result
