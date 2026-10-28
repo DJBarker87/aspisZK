@@ -81,8 +81,8 @@ fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
 #[inline(never)]
 fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     let mut group = 0usize;
-    while group < 4 {
-        let start = 4 * group;
+    
+        let start = 4 * 0usize;
         let input = [
             state[start],
             state[start + 1],
@@ -91,25 +91,220 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
         ];
         let input = [extension_limbs(input[0]),extension_limbs(input[1]),extension_limbs(input[2]),extension_limbs(input[3])];
         let mut output = 0usize;
-        while output < 4 {
+        
             let raw = array4!(limb, {
                 let a = u64::from(input[0][limb]);
                 let b = u64::from(input[1][limb]);
                 let c = u64::from(input[2][limb]);
                 let d = u64::from(input[3][limb]);
-                match output {
-                    0 => 2 * a + 3 * b + c + d,
-                    1 => a + 2 * b + 3 * c + d,
-                    2 => a + b + 2 * c + 3 * d,
-                    3 => 3 * a + b + c + 2 * d,
-                    _ => unreachable!(),
-                }
+                raw_limb227(0usize,a,b,c,d)
             });
-            state[start + output] = extension_from_raw_limbs(raw);
-            output += 1;
-        }
-        group += 1;
-    }
+            state[start + 0usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(1usize,a,b,c,d)
+            });
+            state[start + 1usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(2usize,a,b,c,d)
+            });
+            state[start + 2usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(3usize,a,b,c,d)
+            });
+            state[start + 3usize] = extension_from_raw_limbs(raw);
+            
+        
+        
+    
+
+        let start = 4 * 1usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = [extension_limbs(input[0]),extension_limbs(input[1]),extension_limbs(input[2]),extension_limbs(input[3])];
+        let mut output = 0usize;
+        
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(0usize,a,b,c,d)
+            });
+            state[start + 0usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(1usize,a,b,c,d)
+            });
+            state[start + 1usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(2usize,a,b,c,d)
+            });
+            state[start + 2usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(3usize,a,b,c,d)
+            });
+            state[start + 3usize] = extension_from_raw_limbs(raw);
+            
+        
+        
+    
+
+        let start = 4 * 2usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = [extension_limbs(input[0]),extension_limbs(input[1]),extension_limbs(input[2]),extension_limbs(input[3])];
+        let mut output = 0usize;
+        
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(0usize,a,b,c,d)
+            });
+            state[start + 0usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(1usize,a,b,c,d)
+            });
+            state[start + 1usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(2usize,a,b,c,d)
+            });
+            state[start + 2usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(3usize,a,b,c,d)
+            });
+            state[start + 3usize] = extension_from_raw_limbs(raw);
+            
+        
+        
+    
+
+        let start = 4 * 3usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        let input = [extension_limbs(input[0]),extension_limbs(input[1]),extension_limbs(input[2]),extension_limbs(input[3])];
+        let mut output = 0usize;
+        
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(0usize,a,b,c,d)
+            });
+            state[start + 0usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(1usize,a,b,c,d)
+            });
+            state[start + 1usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(2usize,a,b,c,d)
+            });
+            state[start + 2usize] = extension_from_raw_limbs(raw);
+            
+        
+
+            let raw = array4!(limb, {
+                let a = u64::from(input[0][limb]);
+                let b = u64::from(input[1][limb]);
+                let c = u64::from(input[2][limb]);
+                let d = u64::from(input[3][limb]);
+                raw_limb227(3usize,a,b,c,d)
+            });
+            state[start + 3usize] = extension_from_raw_limbs(raw);
+            
+        
+        
+    
     let sums: [[u64; 4]; 4] = array4!(column, {
         array4!(limb, {
             u64::from(extension_limbs(state[column])[limb])
@@ -119,13 +314,118 @@ fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
         })
     });
     let mut index = 0usize;
-    while index < POSEIDON2_WIDTH {
-        let limbs = extension_limbs(state[index]);
-        state[index] = extension_from_raw_limbs(array4!(limb, {
-            u64::from(limbs[limb]) + sums[index & 3][limb]
+    
+        let limbs = extension_limbs(state[0usize]);
+        state[0usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[0usize & 3][limb]
         }));
-        index += 1;
-    }
+        
+    
+
+        let limbs = extension_limbs(state[1usize]);
+        state[1usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[1usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[2usize]);
+        state[2usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[2usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[3usize]);
+        state[3usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[3usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[4usize]);
+        state[4usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[4usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[5usize]);
+        state[5usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[5usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[6usize]);
+        state[6usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[6usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[7usize]);
+        state[7usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[7usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[8usize]);
+        state[8usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[8usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[9usize]);
+        state[9usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[9usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[10usize]);
+        state[10usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[10usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[11usize]);
+        state[11usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[11usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[12usize]);
+        state[12usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[12usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[13usize]);
+        state[13usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[13usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[14usize]);
+        state[14usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[14usize & 3][limb]
+        }));
+        
+    
+
+        let limbs = extension_limbs(state[15usize]);
+        state[15usize] = extension_from_raw_limbs(array4!(limb, {
+            u64::from(limbs[limb]) + sums[15usize & 3][limb]
+        }));
+        
+    
 }
 
 // Every row of the four-lane external matrix has coefficient sum seven.
@@ -160,25 +460,91 @@ fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] {
             let b = u64::from(input[1][limb]);
             let c = u64::from(input[2][limb]);
             let d = u64::from(input[3][limb]);
-            match output {
-                0 => 2 * a + 3 * b + c + d,
-                1 => a + 2 * b + 3 * c + d,
-                2 => a + b + 2 * c + 3 * d,
-                3 => 3 * a + b + c + 2 * d,
-                _ => unreachable!(),
-            }
+            raw_limb227(output,a,b,c,d)
         })
     });
     let mut all_local_limbs_bounded = true;
     let mut output = 0usize;
-    while output < 4 {
+    
         let mut limb = 0usize;
-        while limb < 4 {
-            all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
-            limb += 1;
-        }
-        output += 1;
-    }
+        
+            all_local_limbs_bounded &= local[0usize][0usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[0usize][1usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[0usize][2usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[0usize][3usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+        
+    
+
+        let mut limb = 0usize;
+        
+            all_local_limbs_bounded &= local[1usize][0usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[1usize][1usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[1usize][2usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[1usize][3usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+        
+    
+
+        let mut limb = 0usize;
+        
+            all_local_limbs_bounded &= local[2usize][0usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[2usize][1usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[2usize][2usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[2usize][3usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+        
+    
+
+        let mut limb = 0usize;
+        
+            all_local_limbs_bounded &= local[3usize][0usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[3usize][1usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[3usize][2usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+
+            all_local_limbs_bounded &= local[3usize][3usize] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
+            
+        
+        
+    
     debug_assert!(all_local_limbs_bounded);
 
     let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;
@@ -219,17 +585,50 @@ fn external_local_packed(input: [QM31; 4]) -> QM31 {
 fn external_linear_packed(state: [QM31; POSEIDON2_WIDTH]) -> [QM31; 4] {
     let mut local_packed = [QM31::ZERO; 4];
     let mut group = 0usize;
-    while group < 4 {
-        let start = 4 * group;
+    
+        let start = 4 * 0usize;
         let input = [
             state[start],
             state[start + 1],
             state[start + 2],
             state[start + 3],
         ];
-        local_packed[group] = external_local_packed(input);
-        group += 1;
-    }
+        local_packed[0usize] = external_local_packed(input);
+        
+    
+
+        let start = 4 * 1usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        local_packed[1usize] = external_local_packed(input);
+        
+    
+
+        let start = 4 * 2usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        local_packed[2usize] = external_local_packed(input);
+        
+    
+
+        let start = 4 * 3usize;
+        let input = [
+            state[start],
+            state[start + 1],
+            state[start + 2],
+            state[start + 3],
+        ];
+        local_packed[3usize] = external_local_packed(input);
+        
+    
     let sum = QM31::ZERO
         .add(local_packed[0])
         .add(local_packed[1])
@@ -244,15 +643,321 @@ fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) {
     let old_zero = extension_limbs(state[0]);
     let mut part_sum = [0u64; 4];
     let mut lane = 1usize;
-    while lane < POSEIDON2_WIDTH {
-        let limbs = extension_limbs(state[lane]);
+    
+        let limbs = extension_limbs(state[1usize]);
         let mut limb = 0usize;
-        while limb < 4 {
-            part_sum[limb] += u64::from(limbs[limb]);
-            limb += 1;
-        }
-        lane += 1;
-    }
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[2usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[3usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[4usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[5usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[6usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[7usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[8usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[9usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[10usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[11usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[12usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[13usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[14usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
+
+        let limbs = extension_limbs(state[15usize]);
+        let mut limb = 0usize;
+        
+            part_sum[0usize] += u64::from(limbs[0usize]);
+            
+        
+
+            part_sum[1usize] += u64::from(limbs[1usize]);
+            
+        
+
+            part_sum[2usize] += u64::from(limbs[2usize]);
+            
+        
+
+            part_sum[3usize] += u64::from(limbs[3usize]);
+            
+        
+        
+    
     let full_sum: [u64; 4] =
         array4!(limb, part_sum[limb] + u64::from(old_zero[limb]));
     state[0] = extension_from_raw_limbs(array4!(limb, {
@@ -711,24 +1416,24 @@ fn interpolate_three_constant_columns(
 ) -> [QM31; POSEIDON2_WIDTH] {
     let mut output = [QM31::ZERO; POSEIDON2_WIDTH];
     let mut lane = 0usize;
-    while lane < POSEIDON2_WIDTH {
-        output[lane] = QM31 {
+    
+        output[0usize] = QM31 {
             c0: CM31::new(
                 interpolate_three_constant_limb(
                     weights[0].c0.a.0,
                     weights[1].c0.a.0,
                     weights[2].c0.a.0,
-                    column0[lane],
-                    column1[lane],
-                    column2[lane],
+                    column0[0usize],
+                    column1[0usize],
+                    column2[0usize],
                 ),
                 interpolate_three_constant_limb(
                     weights[0].c0.b.0,
                     weights[1].c0.b.0,
                     weights[2].c0.b.0,
-                    column0[lane],
-                    column1[lane],
-                    column2[lane],
+                    column0[0usize],
+                    column1[0usize],
+                    column2[0usize],
                 ),
             ),
             c1: CM31::new(
@@ -736,22 +1441,637 @@ fn interpolate_three_constant_columns(
                     weights[0].c1.a.0,
                     weights[1].c1.a.0,
                     weights[2].c1.a.0,
-                    column0[lane],
-                    column1[lane],
-                    column2[lane],
+                    column0[0usize],
+                    column1[0usize],
+                    column2[0usize],
                 ),
                 interpolate_three_constant_limb(
                     weights[0].c1.b.0,
                     weights[1].c1.b.0,
                     weights[2].c1.b.0,
-                    column0[lane],
-                    column1[lane],
-                    column2[lane],
+                    column0[0usize],
+                    column1[0usize],
+                    column2[0usize],
                 ),
             ),
         };
-        lane += 1;
-    }
+        
+    
+
+        output[1usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[1usize],
+                    column1[1usize],
+                    column2[1usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[1usize],
+                    column1[1usize],
+                    column2[1usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[1usize],
+                    column1[1usize],
+                    column2[1usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[1usize],
+                    column1[1usize],
+                    column2[1usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[2usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[2usize],
+                    column1[2usize],
+                    column2[2usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[2usize],
+                    column1[2usize],
+                    column2[2usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[2usize],
+                    column1[2usize],
+                    column2[2usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[2usize],
+                    column1[2usize],
+                    column2[2usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[3usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[3usize],
+                    column1[3usize],
+                    column2[3usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[3usize],
+                    column1[3usize],
+                    column2[3usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[3usize],
+                    column1[3usize],
+                    column2[3usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[3usize],
+                    column1[3usize],
+                    column2[3usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[4usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[4usize],
+                    column1[4usize],
+                    column2[4usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[4usize],
+                    column1[4usize],
+                    column2[4usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[4usize],
+                    column1[4usize],
+                    column2[4usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[4usize],
+                    column1[4usize],
+                    column2[4usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[5usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[5usize],
+                    column1[5usize],
+                    column2[5usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[5usize],
+                    column1[5usize],
+                    column2[5usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[5usize],
+                    column1[5usize],
+                    column2[5usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[5usize],
+                    column1[5usize],
+                    column2[5usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[6usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[6usize],
+                    column1[6usize],
+                    column2[6usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[6usize],
+                    column1[6usize],
+                    column2[6usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[6usize],
+                    column1[6usize],
+                    column2[6usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[6usize],
+                    column1[6usize],
+                    column2[6usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[7usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[7usize],
+                    column1[7usize],
+                    column2[7usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[7usize],
+                    column1[7usize],
+                    column2[7usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[7usize],
+                    column1[7usize],
+                    column2[7usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[7usize],
+                    column1[7usize],
+                    column2[7usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[8usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[8usize],
+                    column1[8usize],
+                    column2[8usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[8usize],
+                    column1[8usize],
+                    column2[8usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[8usize],
+                    column1[8usize],
+                    column2[8usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[8usize],
+                    column1[8usize],
+                    column2[8usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[9usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[9usize],
+                    column1[9usize],
+                    column2[9usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[9usize],
+                    column1[9usize],
+                    column2[9usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[9usize],
+                    column1[9usize],
+                    column2[9usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[9usize],
+                    column1[9usize],
+                    column2[9usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[10usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[10usize],
+                    column1[10usize],
+                    column2[10usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[10usize],
+                    column1[10usize],
+                    column2[10usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[10usize],
+                    column1[10usize],
+                    column2[10usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[10usize],
+                    column1[10usize],
+                    column2[10usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[11usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[11usize],
+                    column1[11usize],
+                    column2[11usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[11usize],
+                    column1[11usize],
+                    column2[11usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[11usize],
+                    column1[11usize],
+                    column2[11usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[11usize],
+                    column1[11usize],
+                    column2[11usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[12usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[12usize],
+                    column1[12usize],
+                    column2[12usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[12usize],
+                    column1[12usize],
+                    column2[12usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[12usize],
+                    column1[12usize],
+                    column2[12usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[12usize],
+                    column1[12usize],
+                    column2[12usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[13usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[13usize],
+                    column1[13usize],
+                    column2[13usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[13usize],
+                    column1[13usize],
+                    column2[13usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[13usize],
+                    column1[13usize],
+                    column2[13usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[13usize],
+                    column1[13usize],
+                    column2[13usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[14usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[14usize],
+                    column1[14usize],
+                    column2[14usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[14usize],
+                    column1[14usize],
+                    column2[14usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[14usize],
+                    column1[14usize],
+                    column2[14usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[14usize],
+                    column1[14usize],
+                    column2[14usize],
+                ),
+            ),
+        };
+        
+    
+
+        output[15usize] = QM31 {
+            c0: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c0.a.0,
+                    weights[1].c0.a.0,
+                    weights[2].c0.a.0,
+                    column0[15usize],
+                    column1[15usize],
+                    column2[15usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c0.b.0,
+                    weights[1].c0.b.0,
+                    weights[2].c0.b.0,
+                    column0[15usize],
+                    column1[15usize],
+                    column2[15usize],
+                ),
+            ),
+            c1: CM31::new(
+                interpolate_three_constant_limb(
+                    weights[0].c1.a.0,
+                    weights[1].c1.a.0,
+                    weights[2].c1.a.0,
+                    column0[15usize],
+                    column1[15usize],
+                    column2[15usize],
+                ),
+                interpolate_three_constant_limb(
+                    weights[0].c1.b.0,
+                    weights[1].c1.b.0,
+                    weights[2].c1.b.0,
+                    column0[15usize],
+                    column1[15usize],
+                    column2[15usize],
+                ),
+            ),
+        };
+        
+    
     output
 }
 
@@ -886,3 +2206,7 @@ pub fn evaluate_state_only_poseidon_oracle_projected(
     })
 }
 
+
+fn raw_limb227(output:usize,a:u64,b:u64,c:u64,d:u64)->u64 {
+    match output {0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>unreachable!()}
+}

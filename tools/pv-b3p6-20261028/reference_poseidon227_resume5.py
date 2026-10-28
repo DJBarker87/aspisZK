@@ -38,3 +38,21 @@ s='use crate::reference_field::{qm31_m31_dot,qm31_pack_base4,qm31_sum_products3_
 s=re.sub(r'&((?:openings\.)?\w+)\[start\.\.start \+ 4\]',lambda m:'&['+','.join(f'{m[1]}[start+{i}]'for i in range(4))+']',s)
 (P/'reference_poseidon.rs').write_text(s)
 p=Path('evidence/pv-b3p6-20261028/reference-poseidon227-resume5.json');r=json.loads(p.read_text());r['reference_sha256']=hashlib.sha256(s.encode()).hexdigest();r['field_helper_change']='owned fixed3/fixed7 field helpers; four-element slices replaced by same-order four copied values';p.write_text(json.dumps(r,indent=2)+'\n')
+# Isolate scalar raw-matrix dispatch before unrolling surrounding array writes.
+pattern=r'match output \{\s*0 => 2 \* a \+ 3 \* b \+ c \+ d,\s*1 => a \+ 2 \* b \+ 3 \* c \+ d,\s*2 => a \+ b \+ 2 \* c \+ 3 \* d,\s*3 => 3 \* a \+ b \+ c \+ 2 \* d,\s*_ => unreachable!\(\),\s*\}'
+s,n=re.subn(pattern,'raw_limb227(output,a,b,c,d)',s);assert n==2,n
+s+='''
+fn raw_limb227(output:usize,a:u64,b:u64,c:u64,d:u64)->u64 {
+    match output {0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>unreachable!()}
+}
+'''
+while True:
+ matches=list(re.finditer(r'while (group|output|index|lane|limb) < (4|POSEIDON2_WIDTH) \{',s))
+ if not matches:break
+ m=matches[-1];var=m[1];count=4 if m[2]=='4' else 16
+ starts=list(re.finditer(r'(?:let mut )?\b'+var+r'\s*=\s*(\d+)(?:usize)?;',s[:m.start()]));assert starts,(var,m.start());first=int(starts[-1][1])
+ a=m.start();bs=s.index('{',a)+1;depth=1;end=bs
+ while depth:depth+=(s[end]=='{')-(s[end]=='}');end+=1
+ body=s[bs:end-1].replace(f'{var} += 1;','');s=s[:a]+'\n'.join(re.sub(r'\b'+var+r'\b',str(i)+'usize',body)for i in range(first,count))+s[end:]
+(P/'reference_poseidon.rs').write_text(s)
+p=Path('evidence/pv-b3p6-20261028/reference-poseidon227-resume5.json');r=json.loads(p.read_text());r['reference_sha256']=hashlib.sha256(s.encode()).hexdigest();r['fixed_loop_change']='unroll fixed4/fixed16 while loops from their original initial counter; isolate same scalar raw-matrix match';p.write_text(json.dumps(r,indent=2)+'\n')

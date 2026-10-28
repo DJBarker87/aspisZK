@@ -2381,7 +2381,7 @@ pub mod r0 {
         ),
     }
     impl<'a> Public<'a> {
-        fn semantic(self) -> SemanticPublic {
+        pub(super) fn semantic(self) -> SemanticPublic {
             match self {
                 Self::Transfer(public, transition) => private_public(public, transition),
                 Self::Withdrawal(public, transition) => withdrawal_public(public, transition),
@@ -2579,3 +2579,7 @@ fn absorption_lane227(lane:usize,low:QM31,fixed:QM31,chunk_two:QM31,chunk_eight:
 fn checked_next227(index:u64,next:u64)->bool { match index.checked_add(1) { Some(value)=>value!=next,None=>true } }
 
 use crate::reference_poseidon::evaluate_state_only_poseidon_oracle_projected;
+
+pub fn native227(public:r0::Public<'_>,claims:&[[QM31;29];3],alpha:&[QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<QM31,aspis_core::state_only_prefix::r0::Error> {
+    reference227(public.semantic(),*claims,*alpha,*c)
+}

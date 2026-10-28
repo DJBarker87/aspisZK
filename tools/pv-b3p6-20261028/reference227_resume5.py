@@ -259,3 +259,13 @@ s=s+'\nuse crate::reference_poseidon::evaluate_state_only_poseidon_oracle_projec
 record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
 record['poseidon_change']='owned projected Poseidon copy; source and structural change records in reference-poseidon227-resume5.json and reference-field227-resume5.json'
 Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
+s=s.replace('        fn semantic(self) -> SemanticPublic {','        pub(super) fn semantic(self) -> SemanticPublic {')
+s+='''
+pub fn native227(public:r0::Public<'_>,claims:&[[QM31;29];3],alpha:&[QM31;10],c:&aspis_core::state_only_prefix::r0::Challenges)->Result<QM31,aspis_core::state_only_prefix::r0::Error> {
+    reference227(public.semantic(),*claims,*alpha,*c)
+}
+'''
+(P/'reference_terminal.rs').write_text(s)
+record['reference_sha256']=hashlib.sha256(s.encode()).hexdigest()
+record['native_entry']='copy public.semantic/claims/alpha/challenges into owned entry; semantic visibility only widened within parent'
+Path('evidence/pv-b3p6-20261028/reference227-resume5.json').write_text(json.dumps(record,indent=2)+'\n')
