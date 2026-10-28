@@ -11,6 +11,11 @@ D=Path('evidence/pv-b3p6-20261028');L=D/'lean';mapping={
  'Array.index_usize':'index','Array.update':'update','Array.index_mut_usize':'borrow','lift':'ok','ok':'ok'}
 mapping['host_terminal_field.qm31_pack_base4_loop']='host_pack_loop_total'
 mapping['reference_field.qm31_pack_base4_loop']='ref_pack_loop_total'
+mapping.update({'reference_terminal.read227':'read_total',
+ 'reference_terminal.sum_interval227':'interval_total',
+ 'reference_terminal.initial_variant_selectors':'initial_variant_total',
+ 'reference_terminal.initial_lane227':'initial_lane_total',
+ 'reference_terminal.absorption_lane227':'absorption_lane_total'})
 records=[]
 def extract(mod):
  text=(L/(mod+'.lean')).read_text();blocks=re.split(r'(?=^def )',text,flags=re.M)[1:];out=[]
@@ -54,7 +59,7 @@ def emit(mod,source_mod,names,imports):
    call=expr.split()[0];assert call in mapping,(name,call,expr)
    target=mapping[call]
    if target in ['index','update','borrow']:return 'apply '+target+' <;> scalar_tac'
-   if target in ['host_pack_loop_total','ref_pack_loop_total']:return 'apply '+target+' <;> scalar_tac'
+   if target in ['host_pack_loop_total','ref_pack_loop_total','read_total','interval_total']:return 'apply '+target+' <;> scalar_tac'
    if target=='ok':return 'exact ok _'
    return 'apply '+target
   for j,m in enumerate(lets):
@@ -92,5 +97,6 @@ emit('PV_B3P_PoseidonBaseSuccess227','PV_B3P_P227_02',[
  'reference_poseidon.pow5','reference_poseidon.extension_limbs','reference_poseidon.extension_from_raw_limbs','reference_poseidon.add_global227','reference_poseidon.global_sums227'],['PV_B3P_P227_02'])
 emit('PV_B3P_HostPackSuccess227','PV_B3P_E227_10',['host_terminal_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 emit('PV_B3P_RefPackSuccess227','PV_B3P_E227_19',['reference_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
+emit('PV_B3P_AbsorptionSuccess227','PV_B3P_P227_09',['reference_terminal.absorption_lanes_literal','reference_terminal.semantic_initial_and_absorption'],['PV_B3P_SemanticBasicsSuccess227'])
 if '--check'not in sys.argv:(D/'resume6/success-generator.json').write_text(json.dumps(records,indent=2)+'\n')
 print(json.dumps(dict(theorems=len(records),check='--check'in sys.argv)))

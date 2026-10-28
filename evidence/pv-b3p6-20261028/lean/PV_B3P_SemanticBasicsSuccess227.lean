@@ -3,6 +3,11 @@ namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
 
+theorem read_total {N : Usize} (xs : Array aspis_core.field.QM31 N) (i : Usize)
+    (hi : i.val<N.val) : Success (reference_terminal.read227 xs i) := index xs i hi
+
+#print axioms read_total
+
 theorem lift_m31_total (value : aspis_core.field.M31) :
     Success (reference_terminal.lift_m31 value) := by
   unfold reference_terminal.lift_m31
