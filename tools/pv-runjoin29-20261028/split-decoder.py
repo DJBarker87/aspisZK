@@ -78,6 +78,7 @@ end {ns}
 # outer residual branches intact. Only the extracted suffix is factored.
 module='PV_RunJoin_DecoderPrefix29';ns='R1Z.'+module;body=fragment(0,len(lines),0)
 text=f'''import R1Z.PV_RunJoin_DecoderStage029
+import R1Z.PV_RunJoin_KernelRefl29
 set_option autoImplicit false
 noncomputable section
 namespace {ns}
@@ -90,7 +91,7 @@ def run (bytes : Slice U8) : Result (core.result.Result PoolV1PairLiveSnapshotV1
 /-- Pure continuation factoring of the authoritative decoder, for all bytes.
 No native body or primitive operation is replaced. -/
 theorem source (bytes : Slice U8) : run bytes = decode_pool_v1_pair_live_snapshot_v1 bytes := by
-  rfl
+  pv_kernel_refl
 #print axioms source
 
 theorem validated {{bytes : Slice U8}} {{snapshot : PoolV1PairLiveSnapshotV1}}
