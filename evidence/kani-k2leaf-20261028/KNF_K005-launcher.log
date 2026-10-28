@@ -1,0 +1,46 @@
+{"attempt": "KNF_K005", "exit_status": 1, "wall_seconds": 3.905867723049596, "peak_rss_kib": "174708", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNF_harness.rs", "-Z", "unstable-options", "--verbose", "--harness-timeout", "90s", "--harness", "parts_store", "--output-format", "regular", "--solver", "kissat", "-Z", "concrete-playback", "--concrete-playback", "print", "--cbmc-args", "--unwinding-assertions", "--slice-formula"]}
+{"owne
+...
+exRange::start.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs:40:9 in function std::ops::index_range::IndexRange::start
+
+
+SUMMARY:
+ ** 1 of 95 failed (1 unreachable)
+Failed Checks: assertion failed: actual == expected ^ KNF_XOR
+ File: "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNF_harness.rs", line 18, in KNF_expect
+
+VERIFICATION:- FAILED
+Verification Time: 3.2221725s
+
+Concrete playback unit test for `parts_store`:
+```
+/// Test generated for harness `parts_store` 
+///
+/// Check for `assertion`: "assertion failed: actual == expected ^ KNF_XOR"
+
+#[test]
+fn kani_concrete_playback_parts_store_6633695851490968322() {
+    let concrete_vals: Vec<Vec<u8>> = vec![
+        // 0
+        vec![0, 0, 0, 0, 0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0, 0, 0, 0, 0],
+        // 0
+        vec![0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+    kani::concrete_playback_run(concrete_vals, parts_store);
+}
+```
+INFO: To automatically add the concrete playback unit test(s) to the src code, run Kani with `--concrete-playback=inplace`.
+Manual Harness Summary:
+Verification failed for - parts_store
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"owned_temp_removed": true}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r99773d50724d4515a5d85b9c17556b59.scope; invocation ID: 0bd7a473f2f04eb58289b645ce36a605

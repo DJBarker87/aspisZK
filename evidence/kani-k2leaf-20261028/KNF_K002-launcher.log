@@ -1,0 +1,38 @@
+{"attempt": "KNF_K002", "exit_status": 1, "wall_seconds": 0.4222888050135225, "peak_rss_kib": "151552", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.kani/kani-0.67.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNF_harness.rs", "-Z", "unstable-options", "--harness-timeout", "90s", "--harness", "parts_store", "--output-format", "regular", "--solver", "kissat", "-Z", "concrete-playback", "--concrete-playback", "print", "--cbmc-args", "--unwinding-assertions", "--slice-formula"]}
+{"owned_temp": "/ho
+...
+          ^^^^^^^^
+   |
+  --> /home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/mod.rs:622:7
+   |
+   = note: the method is available for `[u8]` here
+   |
+   = help: items from traits can only be used if the trait is in scope
+   = note: 'std::convert::TryInto' is included in the prelude starting in Edition 2021
+help: trait `TryInto` which provides `try_into` is implemented but not in scope; perhaps you want to import it
+   |
+ 2 + use std::convert::TryInto;
+   |
+help: there is a method `into` with a similar name
+   |
+55 -     u32::from_le_bytes(b[4*i..4*i+4].try_into().unwrap())
+55 +     u32::from_le_bytes(b[4*i..4*i+4].into().unwrap())
+   |
+
+error[E0282]: type annotations needed
+  --> /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNF_harness.rs:66:87
+   |
+66 |         Some(e)=>{assert!(valid);let i:usize=kani::any();kani::assume(i<8);KNF_expect(e.to_limbs()[i],w[i]);}
+   |                                                                                       ^ cannot infer type
+
+error: aborting due to 18 previous errors; 40 warnings emitted
+
+Some errors have detailed explanations: E0282, E0432, E0433, E0599.
+For more information about an error, try `rustc --explain E0282`.
+error: /home/dombarker/.kani/kani-0.67.0/bin/kani-compiler exited with status exit status: 101
+{"owned_temp_removed": true}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "d7dfc49f8aa43d031486bf76c00be889357267ec3f9badcbf633a265258d96f0", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-ra3ef64d2025145fd9c14a19f11839ae4.scope; invocation ID: ba676ddcb6db421e98094186e1972b10
