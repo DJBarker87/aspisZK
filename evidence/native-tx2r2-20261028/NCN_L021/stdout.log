@@ -1,0 +1,14 @@
+NCN_generated/NCN_FoldWord.lean:27:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?x >>> ?i).toNat
+in the target expression
+  (x.bv.ushiftRight 31).toNat = ↑x / 2147483648
+
+x : U64
+hx : ↑x < 18446744073709551616
+low : ↑(x &&& 2147483647#u64) = ↑x % 2147483648
+hiBound : ↑x / 2147483648 < 18446744073709551616
+hi : U64
+left✝ : UScalar.tryMk UScalarTy.U64 (↑x / 2147483648) = ok hi
+hiVal : ↑hi = ↑x / 2147483648
+⊢ (x.bv.ushiftRight 31).toNat = ↑x / 2147483648
+'AspisR1.NCN_FoldWord.source_ok' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,80 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -228,8 +228,12 @@
+ 
+ 
+ #[inline(always)]
++#[cfg_attr(kani,kani::requires(index<4))]
++#[cfg_attr(kani,kani::ensures(|out:&u64| *out==row[index]))]
+ fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}
+ #[inline(always)]
++#[cfg_attr(kani,kani::requires(index<4))]
++#[cfg_attr(kani,kani::ensures(|out:&u32| *out==limbs[index]))]
+ fn power_limb_at(limbs:&[u32;4],index:usize)->u32 {limbs[index]}
+ #[inline(always)]
+ fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {
+@@ -1207,3 +1211,64 @@
+ assert!(out[j]!=want);assert!(r.at==start+32);assert!(r.bytes.as_ptr()==ptr);assert!(r.bytes.len()==1768);assert!(r.bytes[k]==frame);
+ }
+ }
++
++#[cfg(kani)] mod NCN_getters {
++use super::*;
++#[kani::requires(index<4)]
++#[kani::ensures(|out:&u64| *out!=row[index])]
++fn residue_limb_at_inverted(row:&[u64;4],index:usize)->u64{residue_limb_at(row,index)}
++#[kani::proof_for_contract(residue_limb_at)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn residue_limb_at_contract(){let xs:[u64;4]=kani::any();let index:usize=kani::any();let _=residue_limb_at(&xs,index);}
++#[kani::proof_for_contract(residue_limb_at_inverted)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn residue_limb_at_control(){let xs:[u64;4]=kani::any();let index:usize=kani::any();let _=residue_limb_at_inverted(&xs,index);}
++#[kani::requires(index<4)]
++#[kani::ensures(|out:&u32| *out!=limbs[index])]
++fn power_limb_at_inverted(limbs:&[u32;4],index:usize)->u32{power_limb_at(limbs,index)}
++#[kani::proof_for_contract(power_limb_at)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn power_limb_at_contract(){let xs:[u32;4]=kani::any();let index:usize=kani::any();let _=power_limb_at(&xs,index);}
++#[kani::proof_for_contract(power_limb_at_inverted)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn power_limb_at_control(){let xs:[u32;4]=kani::any();let index:usize=kani::any();let _=power_limb_at_inverted(&xs,index);}
++}
++
++#[cfg(kani)] mod NCN_update {
++use super::*;
++fn iteration(row:&mut[u64;4],limbs:&[u32;4],basis:M31,j:usize){
++        let old=residue_limb_at(row,j);
++        let limb=power_limb_at(&limbs,j);
++        row[j]=old+u64::from(limb)*u64::from(basis.0);
++}
++#[kani::stub_verified(residue_limb_at)]
++#[kani::stub_verified(power_limb_at)]
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn step_ok(){
++let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
++kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
++kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
++iteration(&mut row,&limbs,basis,j);
++assert!(row[j]==old+product);assert!(row[k]==frame);
++}
++#[kani::stub_verified(residue_limb_at)]
++#[kani::stub_verified(power_limb_at)]
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn step_wrong(){
++let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
++kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
++kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
++iteration(&mut row,&limbs,basis,j);
++assert!(row[j]!=old+product);assert!(row[k]==frame);
++}
++}

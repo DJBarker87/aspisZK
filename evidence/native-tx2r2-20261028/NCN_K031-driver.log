@@ -1,0 +1,27 @@
+{"attempt": "NCN_K031", "exit_status": 1, "wall_seconds": 1.7960496449377388, "peak_rss_kib": "230820", "swaps": "0"}
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: function `Reader_k_contract` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1345:4
+     |
+1345 | fn Reader_k_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=r...
+     |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `reader_k_contract`
+
+    Finished `dev` profile [optimized] target(s) in 1.38s
+Checking harness verifier::NCN_arith::add_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 17 failed (1 unreachable)
+Failed Checks: assertion failed: row[j] != before + product
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 1397, in verifier::NCN_arith::add_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.05593762s
+
+Manual Harness Summary:
+Verification failed for - verifier::NCN_arith::add_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

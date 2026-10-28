@@ -1,0 +1,28 @@
+{"attempt": "NCN_L020", "exit_status": 0, "wall_seconds": 1.0186583279864863, "peak_rss_kib": "2624888", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.shiftRight_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftRight s.toNat else Result.fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftRight : {ty : Aeneas.Std.UScalarTy} →
+  (x : Aeneas.Std.UScalar ty) → (s : Nat) → Aeneas.Std.Result.{0} (Aeneas.Std.UScalar ty) :=
+fun {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty) (s : Nat) =>
+  @ite.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar ty))
+    (@LT.lt.{0} Nat instLTNat s (Aeneas.Std.UScalarTy.numBits ty)) (Nat.decLt s (Aeneas.Std.UScalarTy.numBits ty))
+    (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.UScalar ty)
+      (
+...
+def Aeneas.Std.UScalar.shiftRight_IScalar : {ty : UScalarTy} →
+  {tys : IScalarTy} → UScalar ty → IScalar tys → Result (UScalar ty) :=
+fun {ty} {tys} x s => if ↑s ≥ 0 then x.shiftRight s.toNat else Result.fail Error.integerOverflow
+def Aeneas.Std.UScalar.shiftRight : {ty : Aeneas.Std.UScalarTy} →
+  (x : Aeneas.Std.UScalar ty) → (s : Nat) → Aeneas.Std.Result.{0} (Aeneas.Std.UScalar ty) :=
+fun {ty : Aeneas.Std.UScalarTy} (x : Aeneas.Std.UScalar ty) (s : Nat) =>
+  @ite.{1} (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar ty))
+    (@LT.lt.{0} Nat instLTNat s (Aeneas.Std.UScalarTy.numBits ty)) (Nat.decLt s (Aeneas.Std.UScalarTy.numBits ty))
+    (@Aeneas.Std.Result.ok.{0} (Aeneas.Std.UScalar ty)
+      (@Aeneas.Std.UScalar.mk ty
+        (@BitVec.ushiftRight (Aeneas.Std.UScalarTy.numBits ty) (@Aeneas.Std.UScalar.bv ty x) s)))
+    (@Aeneas.Std.Result.fail.{0} (Aeneas.Std.UScalar ty) Aeneas.Std.Error.integerOverflow)
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+
+Running as unit: run-r4fce094169874089948bb9d5e2635f26.scope; invocation ID: befdd837313b4010afe1f27c9ff20003

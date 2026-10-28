@@ -1,0 +1,27 @@
+{"attempt": "NCN_K017", "exit_status": 1, "wall_seconds": 10.663113419082947, "peak_rss_kib": "1054208", "swaps": "0"}
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.62s
+Checking harness verifier::NCN_raw32::prefix_wrong...
+
+VERIFICATION RESULT:
+ ** 1 of 78 failed (2 unreachable)
+Failed Checks: assertion failed: out[j] != want
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 1296, in verifier::NCN_raw32::prefix_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 8.031493s
+
+Manual Harness Summary:
+Verification failed for - verifier::NCN_raw32::prefix_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.

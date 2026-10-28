@@ -1,0 +1,37 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1207,3 +1207,34 @@
+ assert!(out[j]!=want);assert!(r.at==start+32);assert!(r.bytes.as_ptr()==ptr);assert!(r.bytes.len()==1768);assert!(r.bytes[k]==frame);
+ }
+ }
++
++#[cfg(kani)] mod NCN_update {
++use super::*;
++fn iteration(row:&mut[u64;4],limbs:&[u32;4],basis:M31,j:usize){
++        let old=residue_limb_at(row,j);
++        let limb=power_limb_at(&limbs,j);
++        row[j]=old+u64::from(limb)*u64::from(basis.0);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn step_ok(){
++let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
++kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
++kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
++iteration(&mut row,&limbs,basis,j);
++assert!(row[j]==old+product);assert!(row[k]==frame);
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn step_wrong(){
++let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
++kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
++kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
++iteration(&mut row,&limbs,basis,j);
++assert!(row[j]!=old+product);assert!(row[k]==frame);
++}
++}

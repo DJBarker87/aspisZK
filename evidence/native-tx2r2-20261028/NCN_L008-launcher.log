@@ -1,0 +1,62 @@
+{"attempt": "NCN_L008", "exit_status": 1, "wall_seconds": 1.8445421559736133, "peak_rss_kib": "4324044", "swaps": "0", "print_axioms": ["'AspisR1.NCN_ReaderTotal.section_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCN_generated/NCN_ReaderTotal.lean:24:12: error: unsolved goals
+case succ.Err
+n : ℕ
+ih :
+  ∀ (r : verifier.Reader),
+    ↑r.at + 16 * n ≤ (↑r.bytes).length → ∃ result, readList CheckpointBytes3Reader.readK n r = ok result
+r : verifier.Reader
+bound : ↑r.at + 16 * (n + 1) ≤ (↑r.bytes).length
+bound1 : ↑r.at + 16 ≤ (↑r.bytes).length
+b : Std.Array U8 16#usize
+out : verifier.Reader
+left✝ : ↑b = List.take 16 (List.drop ↑r.at ↑r.bytes)
+advanced : ↑out.at = ↑r.at + 16
+backing : out.bytes = r.bytes
+run :
+  CheckpointBytes3Reader.readK r =
+    ok
+      (CheckpointBytes3Reader.optionK
+          (Option.map CheckpointBytes3KDecode.rawK
+            (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.b
+...
+ointBytes3Reader.optionK
+          (Option.map CheckpointBytes3KDecode.rawK
+            (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b))),
+        out)
+value : core.result.Result aspis_core.field.QM31 verifier.Error :=
+  CheckpointBytes3Reader.optionK
+    (Option.map CheckpointBytes3KDecode.rawK (ExactLeafFieldCodec.decodeQM31 (MultiproofConeCanonical.bytesOf ↑b)))
+step : CheckpointBytes3Reader.readK r = ok (value, out)
+x : aspis_core.field.QM31
+hv : value = core.result.Result.Ok x
+restBound : ↑out.at + 16 * n ≤ (↑out.bytes).length
+xs : List K
+last : verifier.Reader
+rest : readList CheckpointBytes3Reader.readK n out = ok (core.result.Result.Ok (xs, last))
+⊢ (let (value, out) := (core.result.Result.Ok x, out)
+    match value with
+    | core.result.Result.Err e => ok (core.result.Result.Err e)
+    | core.result.Result.Ok x => do
+      let rest ← readList CheckpointBytes3Reader.readK n out
+      match rest with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok (xs, last) => ok (core.result.Result.Ok (x :: xs, last))) =
+    ok (core.result.Result.Ok (x :: xs, last))
+NCN_generated/NCN_ReaderTotal.lean:33:47: warning: This simp argument is unused:
+  rest
+
+Hint: Omit it from the simp argument list.
+  simp only [readList, ̲step, ̲bind_tc_ok, ̲hv,̵r̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCN_generated/NCN_ReaderTotal.lean:37:47: warning: This simp argument is unused:
+  rest
+
+Hint: Omit it from the simp argument list.
+  simp only [readList, ̲step, ̲bind_tc_ok, ̲hv,̵r̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCN_ReaderTotal.section_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb9cd419161af4a6fbb6a3a70430f1f3f.scope; invocation ID: 8f9ac72f36a44f2b8e256408fb7ba3f0

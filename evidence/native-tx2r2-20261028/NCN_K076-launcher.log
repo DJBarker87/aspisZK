@@ -1,0 +1,42 @@
+{"attempt": "NCN_K076", "exit_status": 1, "wall_seconds": 1.884475531987846, "peak_rss_kib": "254236", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+|    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: function `Reader_k_contract` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1348:4
+     |
+1348 | fn Reader_k_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=r...
+     |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `reader_k_contract`
+
+error: mismatch in the number of generic parameters: original function/method `core::slice::<impl [T]>::contains` takes 1 generic parameters(s), stub `verifier::NCN_resume::contains_never` takes 0
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1818:1
+     |
+1818 | fn query_range_ok(){let queries:[u32;22]=kani::any();let i:usize=kani::any();kani::assume(i<22&&queries[i]>=1<<18);let out=query_s...
+     | ^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 126 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r4ae8ca64f56a4c369e83916a2694acd7.scope; invocation ID: dfd12a0f76794a99bb7f29cd3b68d0b7

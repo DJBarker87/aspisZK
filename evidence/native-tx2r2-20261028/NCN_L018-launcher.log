@@ -1,0 +1,40 @@
+{"attempt": "NCN_L018", "exit_status": 1, "wall_seconds": 1.0010686799651012, "peak_rss_kib": "2618564", "swaps": "0", "print_axioms": []}
+fun (x : Aeneas.Std.U64) =>
+  @HShiftRight.hShiftRight.{0, 0, 0} Aeneas.Std.U64 (Aeneas.Std.IScalar Aeneas.Std.IScalarTy.I32)
+    (Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U64))
+    (@Aeneas.Std.instHShiftRightUScalarIScalarResult Aeneas.Std.UScalarTy.U64 Aeneas.Std.IScalarTy.I32) x
+    (Aeneas.Std.I32.ofInt (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+      (@of_decide_eq_true
+        (And
+          (@LE.le.{0} Int Int.instLEInt (Aeneas.Std.IScalar.cMin Aeneas.Std.IScalarTy.I32)
+            (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31))))
+          (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+...
+
+          (Int.decLe (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+            (Aeneas.Std.IScalar.cMax Aeneas.Std.IScalarTy.I32)))
+        (@id.{0}
+          (@Eq.{1} Bool
+            (@Decidable.decide
+              (And
+                (@LE.le.{0} Int Int.instLEInt (Aeneas.Std.IScalar.cMin Aeneas.Std.IScalarTy.I32)
+                  (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31))))
+                (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+                  (Aeneas.Std.IScalar.cMax Aeneas.Std.IScalarTy.I32)))
+              (@instDecidableAnd
+                (@LE.le.{0} Int Int.instLEInt (Aeneas.Std.IScalar.cMin Aeneas.Std.IScalarTy.I32)
+                  (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31))))
+                (@LE.le.{0} Int Int.instLEInt (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+                  (Aeneas.Std.IScalar.cMax Aeneas.Std.IScalarTy.I32))
+                (Int.decLe (Aeneas.Std.IScalar.cMin Aeneas.Std.IScalarTy.I32)
+                  (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31))))
+                (Int.decLe (@OfNat.ofNat.{0} Int (nat_lit 31) (@instOfNat (nat_lit 31)))
+                  (Aeneas.Std.IScalar.cMax Aeneas.Std.IScalarTy.I32))))
+            Bool.true)
+          (@Eq.refl.{1} Bool
+            Bool.true)))) : (x : Aeneas.Std.U64) → Aeneas.Std.Result.{0} (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U64)
+def Aeneas.Std.UScalar.shiftRight : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then Result.ok (x.bv.ushiftRight s#uscalar) else Result.fail Error.integerOverflow
+NCN_generated/NCN_InspectShift.lean:6:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shift_right`
+
+Running as unit: run-r69e8dd36af2e4219bd1219183b89f986.scope; invocation ID: f200de3280bb48a99ae0a7965a7a3937

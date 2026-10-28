@@ -1,0 +1,15 @@
+NCN_generated/NCN_FoldWord.lean:25:40: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x : U64
+hx : ↑x < 18446744073709551616
+low : ↑(x &&& 2147483647#u64) = ↑x % 2147483648
+hiBound : ↑x / 2147483648 < 18446744073709551616
+hi : U64
+left✝ : UScalar.tryMk UScalarTy.U64 (↑x / 2147483648) = ok hi
+hiVal : ↑hi = ↑x / 2147483648
+⊢ x >>> 31#i32 = ok hi
+'AspisR1.NCN_FoldWord.source_ok' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

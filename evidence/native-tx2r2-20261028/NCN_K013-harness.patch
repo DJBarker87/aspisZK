@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1253,7 +1253,7 @@
+ fn step_ok(){
+ let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
+ kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
+-kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++kani::assume(row[j]<17179869184+((terms%4) as u64)*4611686009837453316);
+ let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
+ iteration(&mut row,&limbs,basis,j);
+ assert!(row[j]==old+product);assert!(row[k]==frame);
+@@ -1266,7 +1266,7 @@
+ fn step_wrong(){
+ let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis=M31(kani::any());let j:usize=kani::any();let k:usize=kani::any();let terms:usize=kani::any();
+ kani::assume(j<4&&k<4&&k!=j);kani::assume(limbs[j]<2147483647&&basis.0<2147483647);
+-kani::assume(row[j]<17179869184+(terms%4)*4611686009837453316);
++kani::assume(row[j]<17179869184+((terms%4) as u64)*4611686009837453316);
+ let old=row[j];let frame=row[k];let product=u64::from(limbs[j])*u64::from(basis.0);
+ iteration(&mut row,&limbs,basis,j);
+ assert!(row[j]!=old+product);assert!(row[k]==frame);

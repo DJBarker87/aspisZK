@@ -1,0 +1,11 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -1787,7 +1787,7 @@
+ #[cfg(kani)] mod NCN_resume {
+ use super::*;
+ use core::cell::Cell;
+-fn contains_never(_: &[u32],_: &u32)->bool {assert!(false,"unreachable contains call");false}
++fn contains_never<T:PartialEq>(_: &[T],_: &T)->bool {assert!(false,"unreachable contains call");false}
+ #[derive(Clone,Copy)]struct Request<'a>{calls:&'a Cell<usize>,stop:usize,proof:&'a[u8],public:&'a[u8],saved:&'a[u8]}
+ fn prefix<H:Digest32>(bytes:&[u8],proof:&[u8],public:&[u8],v:Variant,hash:H)->Result<(),Error>{
+     if bytes.len()!=checkpoint_size(v)||&bytes[..8]!=b"R1P2CKP2"||bytes[8]!=v.tag()||bytes[9]>22||bytes[10]!=1||bytes[11..16].iter().any(|&b|b!=0) {return Err(Error::Checkpoint);}

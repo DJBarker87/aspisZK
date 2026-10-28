@@ -1,0 +1,59 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -348,6 +348,9 @@
+     fn raw<const N:usize>(&mut self)->[u8;N] {let b=self.bytes[self.at..self.at+N].try_into().unwrap();self.at+=N;b}
+     fn e(&mut self)->Result<E,Error>{E::from_le_bytes(&self.raw::<32>()).ok_or(Error::Checkpoint)}
+     #[inline(always)]
++    #[cfg_attr(kani,kani::requires(self.bytes.len()==1768 && self.at<=1752))]
++    #[cfg_attr(kani,kani::modifies(&mut self.at))]
++    #[cfg_attr(kani,kani::ensures(|_: &Result<K,Error>| self.at==old(self.at)+16))]
+     fn k(&mut self)->Result<K,Error>{K::from_le_bytes(&self.raw::<16>()).ok_or(Error::Checkpoint)}
+ }
+ 
+@@ -1316,3 +1319,46 @@
+ assert!(out[j]!=want);assert!(r.at==start+32);assert!(r.bytes.as_ptr()==ptr);assert!(r.bytes.len()==1768);assert!(r.bytes[k]==frame);
+ }
+ }
++
++#[cfg(kani)] mod NCN_result {
++use super::*;
++#[kani::requires(r.bytes.len()==1768&&r.at<=1752)]
++#[kani::modifies(&mut r.at)]
++#[kani::ensures(|_:&Result<K,Error>| r.at!=old(r.at)+16)]
++fn inverted(r:&mut Reader<'_>)->Result<K,Error>{r.k()}
++#[kani::requires(r.bytes.len()==1768&&r.at<=1752)]
++#[kani::modifies()]
++#[kani::ensures(|_:&Result<K,Error>| r.at==old(r.at)+16)]
++fn bad_modifies(r:&mut Reader<'_>)->Result<K,Error>{r.k()}
++#[kani::proof_for_contract(inverted)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn inverted_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=inverted(&mut r);}
++#[kani::proof_for_contract(bad_modifies)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn bad_modifies_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=bad_modifies(&mut r);}
++#[kani::proof_for_contract(Reader::k)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn Reader_k_contract(){let bytes:[u8;1768]=kani::any();let start:usize=kani::any();let mut r=Reader{bytes:&bytes,at:start};let _=r.k();}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn real_implied(){let bytes=[0u8;1768];let start:usize=kani::any();kani::assume(start<=1752);let mut r=Reader{bytes:&bytes,at:start};let out=r.k();assert!(out.is_ok());}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn stub_unimplied(){let bytes=[0u8;1768];let start:usize=kani::any();kani::assume(start<=1752);let mut r=Reader{bytes:&bytes,at:start};let out=r.k();assert!(out.is_ok());}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn stub_cursor(){let bytes=[0u8;1768];let start:usize=kani::any();kani::assume(start<=1752);let mut r=Reader{bytes:&bytes,at:start};let out=r.k();assert!(r.at==start+16);}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(Reader::k)]
++fn stub_cursor_wrong(){let bytes=[0u8;1768];let start:usize=kani::any();kani::assume(start<=1752);let mut r=Reader{bytes:&bytes,at:start};let out=r.k();assert!(r.at!=start+16);}
++}

@@ -1,0 +1,27 @@
+{"attempt": "NCN_K009", "exit_status": 1, "wall_seconds": 1.170717527042143, "peak_rss_kib": "199104", "swaps": "0"}
+1013 | ...{bytes:&bytes,at:start};let out=weak(&mut r,index);let j=index;assert!(r.at==start+16);}
+     |                                ^^^ help: if this is intentional, prefix it with an underscore: `_out`
+     |
+     = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `j`
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1013:222
+     |
+1013 | ...et out=weak(&mut r,index);let j=index;assert!(r.at==start+16);}
+     |                                  ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+warning: unused variable: `out`
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1018:201
+     |
+1018 | ...{bytes:&bytes,at:start};let out=weak(&mut r,index);let j=index;assert!(r.at!=start+16);}
+     |                                ^^^ help: if this is intentional, prefix it with an underscore: `_out`
+
+warning: unused variable: `j`
+    --> crates/aspis-r1-cost-probe/src/verifier.rs:1018:228
+     |
+1018 | ...et out=weak(&mut r,index);let j=index;assert!(r.at!=start+16);}
+     |                                  ^ help: if this is intentional, prefix it with an underscore: `_j`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 2 previous errors; 12 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
