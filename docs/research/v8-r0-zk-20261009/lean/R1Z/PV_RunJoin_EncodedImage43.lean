@@ -9,14 +9,14 @@ open ProverCommitWideOps48 PV_RunJoin_WideImage43
 variable [ExternalTypes]
 
 def values (count : Usize) (p : Nat → Raw) : Slice W :=
-  Array.to_slice (ProverCommitArray49.array count (fun i => source (p i)))
+  Array.to_slice (ProverCommitArray49.array count (fun i => PV_RunJoin_WideImage43.source (p i)))
 
 theorem entry (count : Usize) (p : Nat → Raw) (i : Nat) (hi : i<count.val) :
-    PV_RunJoin_EncodedStep41.entry (values count p) i=source (p i) := by
-  change (List.ofFn (fun j : Fin count.val => source (p j.val)))[i]?.getD _=source (p i)
+    PV_RunJoin_EncodedStep41.entry (values count p) i=PV_RunJoin_WideImage43.source (p i) := by
+  change (List.ofFn (fun j : Fin count.val => PV_RunJoin_WideImage43.source (p j.val)))[i]?.getD _=PV_RunJoin_WideImage43.source (p i)
   simp only [List.getElem?_ofFn,hi,↓reduceDIte,Option.getD_some]
 
-def image (n start : Nat) (p : Nat → Raw) (hc : ∀ i, start≤i → i<start+n → canonical (p i)) : List UInt8 :=
+def image (n start : Nat) (p : Nat → Raw) (hc : ∀ (i : Nat), start ≤ i → i < start + n → canonical (p i)) : List UInt8 :=
   (List.ofFn (fun i : Fin n => List.ofFn
     (ProverCommitWideBytes48.sourceCell (p (start+i.val))
       (hc _ (by omega) (by have := i.isLt;omega))))).flatten
