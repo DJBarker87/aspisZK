@@ -15,7 +15,15 @@ for x in MANIFEST:
  p=D/'lean-objects'/(x['module']+'.olean');p.parent.mkdir(parents=True,exist_ok=True)
  if p.is_symlink() or p.exists():assert hashlib.sha256(p.read_bytes()).hexdigest()==x['object_sha256'],str(p)
  else:p.symlink_to(a)
- rows.append(dict(module=x['module'],selected_path=str(p),authority_path=str(a),sha256=x['object_sha256']))
+ companions={}
+ for suffix in ['.server','.private']:
+  source=Path(str(a)+suffix);dest=Path(str(p)+suffix)
+  if source.exists():
+   h=hashlib.sha256(source.read_bytes()).hexdigest()
+   if dest.exists():assert hashlib.sha256(dest.read_bytes()).hexdigest()==h
+   else:dest.symlink_to(source)
+   companions[suffix]=dict(path=str(source),sha256=h)
+ rows.append(dict(module=x['module'],selected_path=str(p),authority_path=str(a),sha256=x['object_sha256'],companions=companions))
 print(json.dumps(dict(ok=True,mode='private read-only h4 object links; no external/project rebuild or shared mutation',rows=rows)))
 '''.replace('MANIFEST',repr(manifest))
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True)
