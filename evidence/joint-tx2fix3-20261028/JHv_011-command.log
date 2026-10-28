@@ -1,0 +1,37 @@
+Running as unit: run-r52f85bf58f504db3937295cd83de92c7.scope; invocation ID: 771037c1e6334aa381171c854423417d
+{"attempt": "JHv_011", "exit_status": 1, "wall_seconds": 3.27304882905446, "peak_rss_kib": "5688864", "swaps": "0", "print_axioms": ["'AspisR1.JHv_RegistryDecoded.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+JHv_RegistryDecoded.lean:22:2: error: 'change' tactic failed, pattern
+  ok JHj_Seeds.key >>= ?m.43 = ?m.45
+is not definitionally equal to target
+  (do
+      let p ← ok (JHb_World.e2.snapshot 1 384 384).key
+      let s ← (JHd_ReferenceSlots.install base).op40 p
+      let s1 ← lift (Array.make 1#usize [JHj_RegistryValue.registry.bump] ⋯).to_slice
+      let s2 ← lift (Array.make 3#usize [r1_pool_adapter.VERIFIER_REGISTRY_V2_SEED, s, s1] ⋯).to_slice
+      let r6 ← (JHd_ReferenceSlots.install base).op38 s2 JHb_Programs.registry
+      let r7 ←
+        core.result.Result.map_err
+            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_2.Insts.CoreOpsFunctionFnOnceTuplePubke
+...
+        | core.ops.control_flow.ControlFlow.Break residual =>
+                                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            Unit
+                                                            (core.convert.FromSame solana_program_error.ProgramError)
+                                                            residual
+                                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        Unit (core.convert.FromSame solana_program_error.ProgramError)
+                                                        residual
+                                            else
+                                              ok
+                                                (core.result.Result.Err
+                                                  solana_program_error.ProgramError.InvalidAccountData)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame solana_program_error.ProgramError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.JHv_RegistryDecoded.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
