@@ -7,14 +7,14 @@ import R1Z.PV_RunJoin_CanonicalFrontier28
 import R1Z.PV_RunJoin_ProvenanceAudit27
 
 #print R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
-#print R1Z.PV_RunJoin_CompilerDomainProof28.success_iff
-#print R1Z.PV_RunJoin_RejectionProof28.error_iff
+#check @R1Z.PV_RunJoin_CompilerDomainProof28.success_iff
+#check @R1Z.PV_RunJoin_RejectionProof28.error_iff
 #print R1Z.PV_RunJoin_PreparedPayload28.package
-#print R1Z.PV_RunJoin_PreparedPayload28.cached_return
-#print R1Z.PV_RunJoin_PreparedPayload28.honest_iff
-#print R1Z.PV_RunJoin_FrontierHonesty28.every_payload_not_honest
+#check @R1Z.PV_RunJoin_PreparedPayload28.cached_return
+#check @R1Z.PV_RunJoin_PreparedPayload28.honest_iff
+#check @R1Z.PV_RunJoin_FrontierHonesty28.every_payload_not_honest
 #print R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement
-#print R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
 #print axioms R1Z.PV_RunJoin_ResultDomain28.bind_wp
 #print axioms R1Z.PV_RunJoin_ResultDomain28.ok_wp
 #print axioms R1Z.PV_RunJoin_ResultDomain28.isRustOk_ok
