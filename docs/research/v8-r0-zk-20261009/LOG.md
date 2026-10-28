@@ -13933,3 +13933,21 @@ the remaining budget and proves the missing deployed laws (pointer and slice ope
 and world binding for V170, and the rest) against the pinned 1.94.1 library sources before re-running
 the gates. V186 enters the ledger at the next recount. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D390 (Stream B) 2026-10-28 18:08 UTC: ruling (x) made extraction impossible with the pinned tools; refined as (x'); b3p6f takes V244 again
+
+b3p6e (no Lean attempts used; no Kani; no source change) could not extract op227 under ruling (x): the
+pinned Charon is built on rustc 1.98 nightly and fails with E0514 against the required 1.94.1 standard
+library, and the worker correctly refused to substitute a toolchain. Its deployed-configuration native
+differential for op227 passed 64 cases (32 successes, 32 public errors) comparing the host function,
+the owned copy and the statement implementation (finite validation). V244 stays OPEN; V241 and V245
+unchanged.
+
+Lead correction: ruling (x) as written required the deployed toolchain for extraction, which the
+pinned extractor cannot use. Ruling (x') keeps the extractor's own pinned toolchain for extraction but
+requires the deployed features, release profile settings and deployed dependency versions; every
+reached standard-library body is then compared at source level with 1.94.1, identical bodies resting
+on the compiler-cohort boundary already with the owner (D381/D386) and differing bodies needing a
+separate 1.94.1 law (the re-verification jobs' method); Kani and native differentials stay on 1.94.1.
+b3p6f (its unspent 100 attempts; IDs 42000-42099) takes V244 first under (x'), then V241 and V245.
+Rows removed outright: 0. Privacy target not yet established.
