@@ -19,7 +19,7 @@ theorem project_bind (world : W → V) (tag : C → D)
     (head : ∀ w, project world tag (left w) = right (world w))
     (tail : ∀ a w, project world tag (next a w) = target a (world w)) (w : W) :
     project world tag (bind left next w) = bind right target (world w) := by
-  unfold bind
+  unfold PV_W_Threading.bind
   rw [← head w]
   cases h : (left w).outcome with
   | fail e => simp only [project,h]
