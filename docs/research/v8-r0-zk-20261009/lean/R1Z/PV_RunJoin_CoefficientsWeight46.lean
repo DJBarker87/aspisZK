@@ -48,8 +48,7 @@ theorem complete (ops : @ExternalFuns (types base)) (p : Nat → Nat → W) (n :
     have inc := PV_RunJoin_MergeLoop35.increment lane (by omega)
     obtain ⟨next,hn,hnv⟩ := ih mid (Usize.wrapping_add lane 1#usize) (by rw [inc];omega) (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
-    · dsimp only [column] at hm
-      have hs : @PV_RunJoin_CoefficientsThread45.step (types base) (selected base heap box ops)
+    · have hs : @PV_RunJoin_CoefficientsThread45.step (types base) (selected base heap box ops)
           .S2 (messages p) out lane=alloc.vec.Vec.push out (column (p lane.val)) := by
         unfold PV_RunJoin_CoefficientsThread45.step
         rw [read]
