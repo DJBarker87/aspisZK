@@ -16,8 +16,9 @@ for x in MANIFEST:
  if p.is_symlink() or p.exists():assert hashlib.sha256(p.read_bytes()).hexdigest()==x['object_sha256'],str(p)
  else:p.symlink_to(a)
  companions={}
- for suffix in ['.server','.private']:
-  source=Path(str(a)+suffix);dest=Path(str(p)+suffix)
+ for suffix in ['.server','.private','.ir']:
+  source=a.with_suffix('.ir') if suffix == '.ir' else Path(str(a)+suffix)
+  dest=p.with_suffix('.ir') if suffix == '.ir' else Path(str(p)+suffix)
   if source.exists():
    h=hashlib.sha256(source.read_bytes()).hexdigest()
    if dest.exists():assert hashlib.sha256(dest.read_bytes()).hexdigest()==h

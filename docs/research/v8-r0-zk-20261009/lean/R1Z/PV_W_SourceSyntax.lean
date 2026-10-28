@@ -1,0 +1,76 @@
+import R1Z.PV_W_Syntax
+import R1Z.ProverRwFullFuns
+set_option autoImplicit false
+noncomputable section
+namespace R1Z.PV_W_SourceSyntax
+open PV_W_Syntax PV_W_Threading
+open ProverRwFull
+variable [ExternalTypes]
+
+/-- A call thunk retains its arguments before evaluation. The world
+interpreter is independent of erase: evaluating this thunk under a fixed
+ExternalFuns dictionary is used ONLY for the source-syntax correspondence. -/
+structure Op (A : Type) where
+  name : String
+  source : ExternalFuns → Aeneas.Std.Result A
+
+abbrev P (A : Type) := Program Op Aeneas.Std.Error A
+
+instance : Monad P where
+  pure := Program.pure
+  bind := thenDo
+
+def invoke {A : Type} (name : String) (f : ExternalFuns → Aeneas.Std.Result A) : P A :=
+  .call ⟨name,f⟩ .pure
+
+def erase (ops : ExternalFuns) {A : Type} : P A → Aeneas.Std.Result A
+  | .pure a => .ok a
+  | .failure e => .fail e
+  | .diverge => .div
+  | .call op k => Aeneas.Std.Result.bind (op.source ops) (fun a => erase ops (k a))
+
+theorem erase_invoke {A : Type} (ops : ExternalFuns) (name : String)
+    (f : ExternalFuns → Aeneas.Std.Result A) : erase ops (invoke name f) = f ops := by
+  cases h : f ops <;> simp only [erase,invoke,h,Aeneas.Std.Result.bind]
+
+theorem erase_thenDo {A B : Type} (ops : ExternalFuns)
+    (p : P A) (k : A → P B) :
+    erase ops (thenDo p k) =
+      Aeneas.Std.Result.bind (erase ops p) (fun a => erase ops (k a)) := by
+  induction p with
+  | pure a => rfl
+  | failure e => rfl
+  | diverge => rfl
+  | call op next ih =>
+    cases h : op.source ops <;> simp only [thenDo,erase,h,Aeneas.Std.Result.bind,ih]
+
+theorem erase_pure {A : Type} (ops : ExternalFuns) (a : A) :
+    erase ops (Program.pure a : P A) = .ok a := rfl
+
+/-- The source-side dictionary is used at each syntactic call. This theorem
+asserts a faithful value erasure, never native purity of the call thunk. -/
+def resultOutcome {A : Type} : Aeneas.Std.Result A → Outcome Aeneas.Std.Error A
+  | .ok a => .ok a
+  | .fail e => .fail e
+  | .div => .div
+
+def sourceInterpreter (ops : ExternalFuns) : Interpreter Op Unit Unit Aeneas.Std.Error :=
+  fun op => lift (resultOutcome (op.source ops))
+
+theorem source_value {A : Type} (ops : ExternalFuns) (p : P A) :
+    (eval (sourceInterpreter ops) p ()).outcome = resultOutcome (erase ops p) := by
+  induction p with
+  | pure a => rfl
+  | failure e => rfl
+  | diverge => rfl
+  | call op k ih =>
+    cases h : op.source ops with
+    | ok a => simpa only [eval,sourceInterpreter,lift,bind,resultOutcome,h,erase,Aeneas.Std.Result.bind] using ih a
+    | fail e => simp only [eval,sourceInterpreter,lift,bind,resultOutcome,h,erase,Aeneas.Std.Result.bind]
+    | div => simp only [eval,sourceInterpreter,lift,bind,resultOutcome,h,erase,Aeneas.Std.Result.bind]
+
+#print axioms erase_invoke
+#print axioms erase_thenDo
+#print axioms erase_pure
+#print axioms source_value
+end R1Z.PV_W_SourceSyntax
