@@ -1,0 +1,5 @@
+use aspis_core::field::M31;
+pub const DOMAIN_OWNER_KEY: M31 = M31(0x4153_0001);
+pub const DOMAIN_NULLIFIER: M31 = M31(0x4153_0002);
+pub const DOMAIN_NOTE: M31 = M31(0x4153_0003);
+pub const DOMAIN_MERKLE_NODE: M31 = M31(0x4153_0005);

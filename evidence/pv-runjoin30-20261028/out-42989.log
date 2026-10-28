@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_SemanticChange30.lean:30:97: error: unsolved goals
+case transfer
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+success : run i = ok (core.result.Result.Ok i.compiled)
+checked : PV_Src_RecordReference.Checked i
+frontier : ∀ (l : Fin 20), Canon8 (↑i.snapshot.frontier)[↑l]!
+r : BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords
+hr :
+  BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords.new i.witness (outputValue i.request)
+      (recipient i.request) i.change i.snapshot (forestPublic i.request).asset =
+    ok r
+hchange : r.change = ok (forestPublic i.request).change_commitment
+hrecords : newRecords i = ok r
+hw : WitnessOk (PV_Src_Forest_PrimitiveArguments.wordWitness r.w)
+hp : PubCorr (PV_Src_Forest_PrimitiveArguments.wordPublic r.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput i)))
+publicInput✝ : BuilderPublicProjection.Transfer
+recipient✝ : BuilderForestAdmissionPort.pool_v1.payment_relation.PoolV1OutputNoteWitnessV1
+hreq : i.request = Request.transfer publicInput✝ recipient✝
+j : Fin 8
+⊢ ↑↑(↑publicInput✝.change_commitment)[↑j]! =
+    ↑↑(↑(forestPublic (Request.transfer publicInput✝ recipient✝)).change_commitment)[↑j]!
+
+case withdrawal
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+success : run i = ok (core.result.Result.Ok i.compiled)
+checked : PV_Src_RecordReference.Checked i
+frontier : ∀ (l : Fin 20), Canon8 (↑i.snapshot.frontier)[↑l]!
+r : BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords
+hr :
+  BuilderForestAdmissionPort.pool_v1.pair_forest_copy_builder.CopyRecords.new i.witness (outputValue i.request)
+      (recipient i.request) i.change i.snapshot (forestPublic i.request).asset =
+    ok r
+hchange : r.change = ok (forestPublic i.request).change_commitment
+hrecords : newRecords i = ok r
+hw : WitnessOk (PV_Src_Forest_PrimitiveArguments.wordWitness r.w)
+hp : PubCorr (PV_Src_Forest_PrimitiveArguments.wordPublic r.p) (mapPub (PV_Src_Public.canonicalPublic (publicInput i)))
+publicInput✝ : BuilderPublicProjection.Withdrawal
+hreq : i.request = Request.withdrawal publicInput✝
+j : Fin 8
+⊢ ↑↑(↑publicInput✝.change_commitment)[↑j]! =
+    ↑↑(↑(forestPublic (Request.withdrawal publicInput✝)).change_commitment)[↑j]!
+'R1Z.PV_RunJoin_SemanticChange30.change' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,20 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else fail Error.panic
+'PV_L2C_ParserSlices.copy_array' depends on axioms: [propext, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ParserSlices.lean:16:63: error: unexpected identifier; expected '⟩'
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ParserSlices.lean:16:16: error: unsolved goals
+a b : Std.Array U8 4#usize
+ha : (↑a).length = ↑4#usize
+hb : (↑b).length = ↑4#usize
+⊢ (↑a ++ ↑b).length ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ParserSlices.lean:24:57: warning: declaration uses `sorry`
+'PV_L2C_ParserSlices.left' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ParserSlices.lean:29:22: error: unsolved goals
+a b : Std.Array U8 4#usize
+ha : (↑a).length = 4
+hb : (↑b).length = 4
+⊢ ⟨List.take 4 ↑b, ⋯⟩ = ⟨↑b, ⋯⟩
+'PV_L2C_ParserSlices.right' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

@@ -1,0 +1,85 @@
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RecordInputLift31.lean:13:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_RecordInputLift31.input`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'R1Z.PV_RunJoin_RecordInputLift31.input' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RecordInputLift31.lean:41:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) ↑26#usize
+in the target expression
+  noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) 26 = ok out
+
+case refl
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+r : CopyRecords
+pub : R0P.Public K
+hw : WitnessOk (wordWitness r.w)
+hp : PubCorr (wordPublic r.p) pub
+d : Std.Array U32 8#usize
+hr : noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) ↑26#usize = ok d
+hd : ok d = ok d
+out : Std.Array U32 8#usize
+ho : noteDigestR (chunksOf (wordWitness r.w) (wordPublic r.p)) 26 = ok out
+hm : DigestLift out (R0P.nullifierHash (toModel (wordWitness r.w)).sk (toModel (wordWitness r.w)).salt)
+right✝ : Canon8 out
+⊢ digK d = R0P.nullifierHash (toModel (wordWitness r.w)).sk (toModel (wordWitness r.w)).salt
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_RecordInputLift31.nullifier' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_RecordInputLift31.lean:60:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  treeCurR (wordWitness r.w) (wordPublic r.p) ↑24#usize
+in the target expression
+  treeCurR (wordWitness r.w) (wordPublic r.p) 24 = ok out
+
+case refl
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+r : CopyRecords
+pub : R0P.Public K
+hw : WitnessOk (wordWitness r.w)
+hp : PubCorr (wordPublic r.p) pub
+d : Std.Array U32 8#usize
+hr : treeCurR (wordWitness r.w) (wordPublic r.p) ↑24#usize = ok d
+hd : ok d = ok d
+out : Std.Array U32 8#usize
+ho : treeCurR (wordWitness r.w) (wordPublic r.p) 24 = ok out
+hm : DigestLift out (treeCur (toModel (wordWitness r.w)) (inputLeaf pub (toModel (wordWitness r.w))) 24)
+right✝ : Canon8 out
+⊢ digK d =
+    R0P.merkleRoot
+      (R0P.noteCommitment (R0P.ownerKey (toModel (wordWitness r.w)).sk) (↑↑(toModel (wordWitness r.w)).inputValue)
+        pub.assetId (toModel (wordWitness r.w)).salt)
+      (toModel (wordWitness r.w)).path
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_RecordInputLift31.membership' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

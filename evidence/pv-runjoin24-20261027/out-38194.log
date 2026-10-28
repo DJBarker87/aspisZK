@@ -1,0 +1,120 @@
+structure R1Z.BuilderSource.SourceIdentification {K : Type} [Field K] [CharP K 2147483647]
+  (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance) : Prop
+number of parameters: 5
+fields:
+  R1Z.BuilderSource.SourceIdentification.public_eq : ∀ (w : source.Instance),
+      source.public w = R1Z.BuilderSource.prover.public (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.build_eq : ∀ (w : source.Instance),
+      source.build w = R1Z.BuilderSource.prover.build (toInstance w)
+  R1Z.BuilderSource.SourceIdentification.transport_eq : source.transport = R1Z.BuilderSource.π
+constructor:
+  R1Z.BuilderSource.SourceIdentification.mk {K : Type} [Field K] [CharP K 2147483647]
+    {source : R0Z.ZkStatement.HonestProver K} {toInstance : source.Instance → R1Z.BuilderCanonical.Instance}
+    (public_eq : ∀ (w : source.Instance), source.public w = R1Z.BuilderSource.prover.public (toInstance w))
+    (build_eq : ∀ (w : source.Instance), source.build w = R1Z.BuilderSource.prover.build (toInstance w))
+    (transport_eq : source.transport = R1Z.BuilderSource.π) : R1Z.BuilderSource.SourceIdentification source toInstance
+theorem R1Z.BuilderSource.builder_refinement_D46_D51 : ∀ {K CommitHandle : Type} [inst : Field K] [inst_1 : Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  4096 < Fintype.card K →
+    ∀ (F : Subfield K) (B : R0P.PackBasis F) (x : R0Z.ZkStatement.Statement K CommitHandle)
+      (source : R0Z.ZkStatement.HonestProver K) (toInstance : source.Instance → R1Z.BuilderCanonical.Instance),
+      R1Z.BuilderSource.SourceIdentification source toInstance → R0Z.HonestValidity.BuilderSoundOn source B x :=
+fun {K CommitHandle} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K]
+    [CharP K 2147483647] hcard F B x source toInstance identification w hw =>
+  Eq.mpr (id (congrArg (fun _a => R0Z.HonestValidity.HonestBuilderSound F x.1 B _a) (identification.build_eq w)))
+    (R1Z.BuilderSource.builderSoundOn hcard F B x (toInstance w) (Eq.trans (Eq.symm (identification.public_eq w)) hw))
+theorem R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  R1Z.PV_RunJoin_PremiseTruth24.raw.public R1Z.PV_RunJoin_AdmissionBoundary23.bad =
+    R1J.SpendWitnessMap.mapPub
+      (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput R1Z.PV_RunJoin_AdmissionBoundary23.bad)) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] =>
+  R1Z.PV_RunJoin_UniversalPublic22.projection (fun i => i) R1Z.PV_Src_Transport.transport
+    R1Z.PV_RunJoin_AdmissionBoundary23.bad
+theorem R1Z.PV_RunJoin_PremiseTruth24.bad_public_eq_false_of_witness : ∀ {K : Type} [inst : Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647]
+  (f : R1Z.PV_Src_NativeInput.Input → R1Z.BuilderCanonical.Instance),
+  (↑(f R1Z.PV_RunJoin_AdmissionBoundary23.bad)).2 =
+      R1Z.BuilderRecordCanonical.witness
+        (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness
+          (R1Z.PV_RunJoin_UniversalBuild22.records R1Z.PV_RunJoin_AdmissionBoundary23.bad).w) →
+    R1Z.PV_RunJoin_PremiseTruth24.raw.public R1Z.PV_RunJoin_AdmissionBoundary23.bad ≠
+      R1Z.BuilderSource.prover.public (f R1Z.PV_RunJoin_AdmissionBoundary23.bad) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] f hw hp =>
+  have h := (f R1Z.PV_RunJoin_AdmissionBoundary23.bad).property;
+  id
+    (fun h =>
+      R1Z.PV_RunJoin_AdmissionBoundary23.bad_not_admitted
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              R1Z.BuilderSpendRelation.RspendPlus
+                (R1J.SpendWitnessMap.mapPub
+                  (R1Z.PV_Src_Public.canonicalPublic
+                    (R1Z.PV_Src_NativeInput.publicInput R1Z.PV_RunJoin_AdmissionBoundary23.bad)))
+                (R1Z.BuilderCanonical.liftWitness _a))
+            hw)
+          (Eq.mp
+            (congrArg
+              (fun _a =>
+                R1Z.BuilderSpendRelation.RspendPlus _a
+                  (R1Z.BuilderCanonical.liftWitness (↑(f R1Z.PV_RunJoin_AdmissionBoundary23.bad)).2))
+              R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection)
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  R1Z.BuilderSpendRelation.RspendPlus _a
+                    (R1Z.BuilderCanonical.liftWitness (↑(f R1Z.PV_RunJoin_AdmissionBoundary23.bad)).2))
+                (Eq.symm hp))
+              h))))
+    h
+theorem R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K] [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  R1Z.PV_RunJoin_PremiseTruth24.raw.build R1Z.PV_RunJoin_AdmittedReturnCounterexample23.counterexample =
+    R1Z.BuilderSource.prover.build
+      (R1Z.PV_RunJoin_UniversalBuild22.toInstance
+        (fun x => R1Z.PV_RunJoin_AdmittedReturnCounterexample23.counterexample) ⋯ ()) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] =>
+  R1Z.PV_RunJoin_UniversalBuild22.build_eq (fun x => R1Z.PV_RunJoin_AdmittedCarrier23.transfer)
+    R1Z.PV_Src_Transport.transport (fun x => R1Z.PV_RunJoin_AdmittedCarrier23.transfer_admitted)
+    (fun x => R1Z.PV_RunJoin_AdmittedCarrier23.transfer_return)
+    (fun x => R1Z.PV_RunJoin_AdmittedCarrier23.transfer_checked)
+    (fun x => R1Z.PV_RunJoin_AdmittedCarrier23.transfer_frontier) ()
+theorem R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq : ∀ {K : Type} [inst : Field K] [inst_1 : Fintype K]
+  [inst_2 : DecidableEq K] [inst_3 : Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  R1Z.PV_RunJoin_PremiseTruth24.raw.public R1Z.PV_RunJoin_AdmittedReturnCounterexample23.counterexample =
+    R1Z.BuilderSource.prover.public
+      (R1Z.PV_RunJoin_UniversalBuild22.toInstance
+        (fun x => R1Z.PV_RunJoin_AdmittedReturnCounterexample23.counterexample) ⋯ ()) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] =>
+  R1Z.PV_RunJoin_UniversalBuild22.public_eq (fun x => R1Z.PV_RunJoin_AdmittedReturnCounterexample23.counterexample)
+    R1Z.PV_Src_Transport.transport (fun x => R1Z.PV_RunJoin_AdmittedReturnCounterexample23.admitted) ()
+'R1Z.PV_RunJoin_PremiseTruth24.bad_public_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.bad_public_eq_false_of_witness' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.variant_build_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.variant_public_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PremiseTruth24.raw_transport_eq' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RunJoin_CanonicalMapBoundary24.bad_no_canonical_record : ∀ {K : Type} [inst : Field K] [Fintype K]
+  [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647],
+  ¬∃ w,
+      (↑w).2 =
+        R1Z.BuilderRecordCanonical.witness
+          (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness
+            (R1Z.PV_RunJoin_UniversalBuild22.records R1Z.PV_RunJoin_AdmissionBoundary23.bad).w) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] a =>
+  let ⟨w, hw⟩ := a
+  have balance := w.property.left.right.right.left;
+  id (fun balance => R1Z.PV_RunJoin_CanonicalMapBoundary24.bad_no_canonical_record._proof_1 balance)
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          ↑(R1Z.BuilderCanonical.liftWitness _a).inputValue =
+            ↑(R1Z.BuilderCanonical.liftWitness _a).outputValue + ↑(R1Z.BuilderCanonical.liftWitness _a).changeValue)
+        hw)
+      balance)
+'R1Z.PV_RunJoin_CanonicalMapBoundary24.bad_no_canonical_record' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'R1Z.PV_RunJoin_CanonicalMapBoundary24.no_raw_record_map' depends on axioms: [propext, Classical.choice, Quot.sound]

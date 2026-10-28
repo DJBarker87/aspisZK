@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ComplexParser.lean:12:2: error: 'change' tactic failed, pattern
+  (do
+      let a ←
+        core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 4#usize }
+            (pair (core.num.U32.to_le_bytes x) (core.num.U32.to_le_bytes y))
+      let aa ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 a
+      ?m.53 a PUnit.unit aa PUnit.unit) =
+    ?m.20
+is not definitionally equal to target
+  (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+            (pair (core.num.U32.to_le_bytes x) (core.num.U32.to_le_bytes y)) { start := 0#usize, «end» := 4#usize }
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+      match r with
+        | core.result.Result.Ok value => do
+          let o ← aspis_core.field.M31.from_le_bytes value
+          let cf ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let s1 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                    (pair (core.num.U32.to_le_bytes x) (core.num.U32.to_le_bytes y))
+                    { start := 4#usize, «end» := 8#usize }
+              let r1 ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s1
+              match r1 with
+                | core.result.Result.Ok value1 => do
+                  let o1 ← aspis_core.field.M31.from_le_bytes value1
+                  let cf1 ← core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { a := val, b := val1 })
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                        aspis_core.field.CM31 residual
+                | core.result.Result.Err a => ok none
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual aspis_core.field.CM31
+                residual
+        | core.result.Result.Err a => ok none) =
+    ok (some { a := x, b := y })
+'PV_L2C_ComplexParser.parse' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

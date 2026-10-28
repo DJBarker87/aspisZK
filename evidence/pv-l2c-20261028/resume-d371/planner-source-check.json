@@ -1,0 +1,57 @@
+{
+  "revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "evidence_class": "structural (K-1 substitute), generated/decoded field-origin cut; full route association incomplete",
+  "pins": {
+    "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+    "crates/aspis-statement/src/spend.rs": "16a340ea7fd1c69d83c4720fa63c096f060c2ce58f91b8c6e793ffb7913546a4",
+    "crates/aspis-statement/src/pool_v1/format.rs": "209bf45ab1fbf03fa6a5b524e6b2079068537368b02837e320d708ca5128f88d",
+    "crates/aspis-r1-cost-probe/src/RealR1_client.rs": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1"
+  },
+  "direct_prove_json_reads": [
+    "note",
+    "proof_dir",
+    "withdrawal"
+  ],
+  "remaining_M31_constructors": [
+    "77",
+    "77",
+    "77",
+    "77",
+    "77",
+    "77",
+    "77",
+    "77"
+  ],
+  "checked_selected_statements": [
+    "let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);",
+    "let change=PoolV1OutputNoteWitnessV1{owner_key:derive_owner_key(&digest(500+n)),salt:digest(600+n),value:if withdrawal{750}else{400}};",
+    "let recipient=PoolV1OutputNoteWitnessV1{owner_key:derive_owner_key(&digest(300)),salt:digest(400),value:600};",
+    "let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,\"lane_bytes\"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;",
+    "let cp=decode_pool_v1_pair_forest_checkpoint_v1(&bytes(q,\"checkpoint_bytes\")).map_err(err)?;",
+    "let live=PoolV1PairLiveSnapshotV1{pool:master.to_bytes(),deployment_domain:[5;32],sequence:lane.tree.next_leaf_index,next_pair_index:lane.tree.next_leaf_index,current_root:lane.tree.root,frontier:lane.tree.frontier};",
+    "let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;"
+  ],
+  "complete_result_laws": [
+    "PV_L2C_GeneratedRange.remainder_result",
+    "PV_L2C_PlannerOutputs.owner_total",
+    "PV_L2C_PlannerOutputs.outputs",
+    "PV_L2C_DigestRange.digest_success"
+  ],
+  "composition": [
+    "decoder-source-check.json",
+    "hash-source-check.json",
+    "account-source-check.json"
+  ],
+  "finite_validation": [
+    "decoder-probe1/receipt.json",
+    "decoder-probe2/receipt.json",
+    "account-probe4/receipt.json"
+  ],
+  "differences": [
+    "Lean names the planner generator as eight U32 wrapping operations followed by final remainder. Debug overflow rejects before compilation; release wrapping is covered by arbitrary U32 seed/prior bounds.",
+    "Native derive_owner_key wrapper is unfolded into domain 1095958529 and exactly eight input words; no error or branch is removed by unfolding these infallible wrappers.",
+    "The planner constructs a snapshot directly from lane decoding; it does not call the different 800-byte snapshot decoder. Its bridge to the canonical-preparation carrier still requires a codec encoding/roundtrip association.",
+    "RealR1_client is a generic compiled-column API. This cut proves no canonicality for arbitrary direct Rust callers; D370 remains admitted there."
+  ],
+  "result": "No unchecked raw-limb source found in selected JSON planner. Domain/record/compiler/mask transport must be completed before universal N3 credit."
+}

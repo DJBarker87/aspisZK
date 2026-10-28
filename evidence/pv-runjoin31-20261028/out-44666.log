@@ -1,0 +1,60 @@
+'R1Z.PV_RunJoin_WitnessViews31.pair_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WitnessViews31.pair_second' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WitnessViews31.pair_occupied' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_WitnessViews31.pair_inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_WitnessViews31.lean:48:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(BuilderRecordsPath.bits ?m.56))[↑0#usize]!
+in the target expression
+  decide (↑(↑(BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i.witness)))[0]! ≠ 0) =
+    i.witness.pair.selected_second
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+⊢ decide (↑(↑(BuilderRecordsPath.bits (PV_Src_NativeDirections.reference i.witness)))[0]! ≠ 0) =
+    i.witness.pair.selected_second
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_WitnessViews31.first_direction' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_WitnessViews31.lean:61:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(BuilderRecordsArray.tabulate 24#usize ?m.65))[0]!
+in the target expression
+  digK (↑(BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference i.witness)))[0]! =
+    if i.witness.pair.selected_second = true then digK i.witness.pair.pair_leaf.first_commitment
+    else digK i.witness.pair.pair_leaf.second_commitment
+
+K : Type
+inst✝⁴ : Field K
+inst✝³ : Fintype K
+inst✝² : DecidableEq K
+inst✝¹ : Algebra (ZMod AspisCircleGroupOrder.P) K
+inst✝ : CharP K 2147483647
+i : Input
+⊢ digK (↑(BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference i.witness)))[0]! =
+    if i.witness.pair.selected_second = true then digK i.witness.pair.pair_leaf.first_commitment
+    else digK i.witness.pair.pair_leaf.second_commitment
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference i.witness)
+  has type
+    BuilderRecordsPath.Matrix24
+  but is expected to have type
+    { l // l.length = ↑24#usize }
+  in the application
+    ↑(BuilderRecordsPath.siblings (PV_Src_NativeDirections.reference i.witness))
+'R1Z.PV_RunJoin_WitnessViews31.first_sibling' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

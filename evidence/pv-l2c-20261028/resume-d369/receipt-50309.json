@@ -1,0 +1,63 @@
+{
+  "attempt": 50309,
+  "module": "PV_L2C_ChunkStep",
+  "source_sha256": "81d9cb49e55e5f9d63cb52aa83534b1364263893dd39046e990cdf6b8f4c9f03",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_ChunkStep.lean",
+    "git_blob": "2ef22ac76305b152bd6bda0cb965d4df42b53fe7",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "2822ff395a68fa322081b7bdc65cfa8514eecd88",
+  "exit": 1,
+  "wall_seconds": 1.511125601013191,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T12:32:33.045633+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 25635586048,
+    "projected_reserved_bytes": 34225520640
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50309",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50309"
+  ],
+  "dependencies": {
+    "R1Z.PV_RunJoin_HashCallback17": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/PV_RunJoin_HashCallback17.olean",
+      "sha256": "1fa694168d41e20c9140ce4a54827c69dbc75b64c339050bd69763f78f761c5c"
+    },
+    "R1Z.PV_RunJoin_HeadControl29": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/PV_RunJoin_HeadControl29.olean",
+      "sha256": "d2d582e59bb901f0c74f686805b569b2b4ab7ce8073dbde92490131f22bf3e17"
+    }
+  },
+  "deps_fingerprint": "67d09e77494b8f7bf2f9fcb51f77be5cc01cc48aa2fae7434a44703633004502",
+  "axioms": [
+    "'PV_L2C_ChunkStep.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 4218830848,
+  "swaps": "0",
+  "host_wall": "0:01.51",
+  "accepted": false
+}

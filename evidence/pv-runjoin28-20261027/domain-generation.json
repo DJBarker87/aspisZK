@@ -1,0 +1,255 @@
+{
+  "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/BuilderForestAdmissionPort.lean",
+  "source_sha256": "686fa0a27352f516f972ffe2e08f04d57af75aa2ee5fdb30e020ff2a3291d420",
+  "target": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_CompilerDomain28.lean",
+  "stages": [
+    {
+      "variable": "records",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.new input out_value recipient change snapshot public1.asset"
+    },
+    {
+      "variable": "a",
+      "operation": "pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.selected_commitment input.pair.pair_leaf input.pair.selected_second"
+    },
+    {
+      "variable": "a1",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.input_leaf records"
+    },
+    {
+      "variable": "b",
+      "operation": "core.cmp.impls.PartialEqShared.ne (Array.Insts.CoreCmpPartialEqArray 8#usize aspis_core.field.M31.Insts.CoreCmpPartialEqM31) a a1"
+    },
+    {
+      "variable": "a2",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.path_digest records 1#usize"
+    },
+    {
+      "variable": "r",
+      "operation": "pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.leaf_digest input.pair.pair_leaf"
+    },
+    {
+      "variable": "r1",
+      "operation": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 pool_v1.pair_trace.PoolV1PairTraceErrorV1) r (pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor)"
+    },
+    {
+      "variable": "cf",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r1"
+    },
+    {
+      "variable": "b1",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a2 val"
+    },
+    {
+      "variable": "a3",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.path_digest records 21#usize"
+    },
+    {
+      "variable": "b2",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 a3 lane_anchor"
+    },
+    {
+      "variable": "nullifier",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.nullifier records"
+    },
+    {
+      "variable": "b3",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier public1.nullifier"
+    },
+    {
+      "variable": "a4",
+      "operation": "pool_v1.format.pool_v1_nullifier input.pair.nullifier_key input.pair.salt"
+    },
+    {
+      "variable": "b4",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 nullifier a4"
+    },
+    {
+      "variable": "change_commitment",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.change records"
+    },
+    {
+      "variable": "b5",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment public1.change_commitment"
+    },
+    {
+      "variable": "r2",
+      "operation": "pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.single_output change_commitment"
+    },
+    {
+      "variable": "r3",
+      "operation": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 pool_v1.pair_trace.PoolV1PairTraceErrorV1) r2 (pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor)"
+    },
+    {
+      "variable": "cf1",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r3"
+    },
+    {
+      "variable": "output_pair",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.output_pair records"
+    },
+    {
+      "variable": "r4",
+      "operation": "pool_v1.pair_forest_trace.late_append records snapshot output_pair"
+    },
+    {
+      "variable": "cf2",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r4"
+    },
+    {
+      "variable": "s",
+      "operation": "lift (Array.to_slice input.super_root_siblings)"
+    },
+    {
+      "variable": "i",
+      "operation": "core.slice.Slice.iter s"
+    },
+    {
+      "variable": "f",
+      "operation": "core.iter.traits.iterator.Iterator.flatten.default (core.iter.traits.iterator.IteratorSliceIter (Array aspis_core.field.M31 8#usize)) (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) i"
+    },
+    {
+      "variable": "(b6, _)",
+      "operation": "core.iter.traits.iterator.Iterator.any.default (core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator (core.iter.traits.iterator.IteratorSliceIter (Array aspis_core.field.M31 8#usize)) (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)) pool_v1.pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool f ()"
+    },
+    {
+      "variable": "anchor",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.path_digest records 24#usize"
+    },
+    {
+      "variable": "b7",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor public1.anchor"
+    },
+    {
+      "variable": "o",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.banks records"
+    },
+    {
+      "variable": "r5",
+      "operation": "core.option.Option.ok_or o pool_v1.pair_trace.PoolV1PairTraceErrorV1.Shape"
+    },
+    {
+      "variable": "cf3",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r5"
+    },
+    {
+      "variable": "r6",
+      "operation": "pool_v1.pair_forest_trace.validate_forest_poseidon_rows val2"
+    },
+    {
+      "variable": "cf4",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r6"
+    },
+    {
+      "variable": "private_directions",
+      "operation": "core.array.from_fn 24#usize pool_v1.pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 (input.pair, input)"
+    },
+    {
+      "variable": "a5",
+      "operation": "pool_v1.pair_trace.value_bits input.pair.value"
+    },
+    {
+      "variable": "a6",
+      "operation": "pool_v1.pair_trace.value_bits out_value"
+    },
+    {
+      "variable": "a7",
+      "operation": "pool_v1.pair_trace.value_bits change.value"
+    },
+    {
+      "variable": "recipient_commitment",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.recipient records"
+    },
+    {
+      "variable": "b5",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 recipient_commitment expected"
+    },
+    {
+      "variable": "b6",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 change_commitment public1.change_commitment"
+    },
+    {
+      "variable": "r2",
+      "operation": "pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.two_outputs recipient_commitment change_commitment"
+    },
+    {
+      "variable": "r3",
+      "operation": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 pool_v1.pair_trace.PoolV1PairTraceErrorV1) r2 (pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor)"
+    },
+    {
+      "variable": "cf1",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r3"
+    },
+    {
+      "variable": "output_pair",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.output_pair records"
+    },
+    {
+      "variable": "r4",
+      "operation": "pool_v1.pair_forest_trace.late_append records snapshot output_pair"
+    },
+    {
+      "variable": "cf2",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r4"
+    },
+    {
+      "variable": "s",
+      "operation": "lift (Array.to_slice input.super_root_siblings)"
+    },
+    {
+      "variable": "i",
+      "operation": "core.slice.Slice.iter s"
+    },
+    {
+      "variable": "f",
+      "operation": "core.iter.traits.iterator.Iterator.flatten.default (core.iter.traits.iterator.IteratorSliceIter (Array aspis_core.field.M31 8#usize)) (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) i"
+    },
+    {
+      "variable": "(b7, _)",
+      "operation": "core.iter.traits.iterator.Iterator.any.default (core.iter.adapters.flatten.Flatten.Insts.CoreIterTraitsIteratorIterator (core.iter.traits.iterator.IteratorSliceIter (Array aspis_core.field.M31 8#usize)) (SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter aspis_core.field.M31 8#usize) (core.iter.traits.iterator.IteratorSliceIter aspis_core.field.M31)) pool_v1.pair_forest_trace.compile_forest_from_copies.closure.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool f ()"
+    },
+    {
+      "variable": "anchor",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.path_digest records 24#usize"
+    },
+    {
+      "variable": "b8",
+      "operation": "core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor public1.anchor"
+    },
+    {
+      "variable": "o",
+      "operation": "pool_v1.pair_forest_copy_builder.CopyRecords.banks records"
+    },
+    {
+      "variable": "r5",
+      "operation": "core.option.Option.ok_or o pool_v1.pair_trace.PoolV1PairTraceErrorV1.Shape"
+    },
+    {
+      "variable": "cf3",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r5"
+    },
+    {
+      "variable": "r6",
+      "operation": "pool_v1.pair_forest_trace.validate_forest_poseidon_rows val2"
+    },
+    {
+      "variable": "cf4",
+      "operation": "core.result.Result.Insts.CoreOpsTry.branch r6"
+    },
+    {
+      "variable": "private_directions",
+      "operation": "core.array.from_fn 24#usize pool_v1.pair_forest_trace.compile_forest_from_copies.closure_1.Insts.CoreOpsFunctionFnMutTupleUsizeM31 (input.pair, input)"
+    },
+    {
+      "variable": "a5",
+      "operation": "pool_v1.pair_trace.value_bits input.pair.value"
+    },
+    {
+      "variable": "a6",
+      "operation": "pool_v1.pair_trace.value_bits out_value"
+    },
+    {
+      "variable": "a7",
+      "operation": "pool_v1.pair_trace.value_bits change.value"
+    }
+  ]
+}

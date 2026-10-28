@@ -1,0 +1,107 @@
+def R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput : {K : Type} →
+  [inst : Field K] → [CharP K 2147483647] → R1Z.PV_Src_NativeInput.Input → Prop :=
+fun {K} [Field K] [CharP K 2147483647] i =>
+  R1Z.PV_RunJoin_UniversalBuild22.Admission i ∧
+    R1Z.PV_Src_NativeInput.run i = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok i.compiled) ∧
+      R1Z.PV_Src_RecordReference.Checked i ∧ ∀ (l : Fin 20), R0Z.WriterRefine.Canon8 (↑i.snapshot.frontier)[↑l]!
+theorem R1Z.PV_RunJoin_CanonicalHonest31.transfer : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647] (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+  (w : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestPrivateTransferWitnessV1)
+  (context : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1)
+  (snapshot : R1Z.PV_RunJoin_CodecOuter30.Snapshot)
+  (c : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1),
+  R1Z.PV_RunJoin_CodecOuter30.run bytes
+        (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 p w
+          context) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c)) →
+    ∃ root,
+      PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+        R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+          (R1Z.PV_RunJoin_OuterChecked30.transferInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] bytes p w
+    context snapshot c h =>
+  let ⟨root, h✝⟩ := R1Z.PV_RunJoin_CanonicalHonesty30.transfer_payload bytes p w context snapshot c h
+  let ⟨hr, right✝⟩ := h✝
+  let ⟨hs, right✝¹⟩ := right✝
+  let ⟨hc, hf⟩ := right✝¹
+  let ⟨other, h✝¹⟩ := R1Z.PV_RunJoin_CanonicalInput31.transfer bytes p w context snapshot c h
+  let ⟨ho, hin⟩ := h✝¹
+  have he := Aeneas.Std.core.result.Result.Ok.inj (Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hr) ho));
+  let ⟨⟩ := other
+  he
+theorem R1Z.PV_RunJoin_CanonicalHonest31.withdrawal : ∀ {K : Type} [inst : Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] [inst_4 : CharP K 2147483647] (bytes : Aeneas.Std.Slice Aeneas.Std.U8)
+  (p : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1WithdrawalPublicV1)
+  (w : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestWithdrawalWitnessV1)
+  (context : PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1)
+  (snapshot : R1Z.PV_RunJoin_CodecOuter30.Snapshot)
+  (c : PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1),
+  R1Z.PV_RunJoin_CodecOuter30.run bytes
+        (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 p w context) =
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c)) →
+    ∃ root,
+      PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+        R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+          (R1Z.PV_RunJoin_OuterChecked30.withdrawalInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c) :=
+fun {K} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647] bytes p w
+    context snapshot c h =>
+  let ⟨root, h✝⟩ := R1Z.PV_RunJoin_CanonicalHonesty30.withdrawal_payload bytes p w context snapshot c h
+  let ⟨hr, right✝⟩ := h✝
+  let ⟨hs, right✝¹⟩ := right✝
+  let ⟨hc, hf⟩ := right✝¹
+  let ⟨other, h✝¹⟩ := R1Z.PV_RunJoin_CanonicalInput31.withdrawal bytes p w context snapshot c h
+  let ⟨ho, hin⟩ := h✝¹
+  have he := Aeneas.Std.core.result.Result.Ok.inj (Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hr) ho));
+  let ⟨⟩ := other
+  he
+def R1Z.PV_RunJoin_CanonicalCoverage31.TransferCovered : {K : Type} →
+  [inst : Field K] →
+    [CharP K 2147483647] →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 →
+          PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestPrivateTransferWitnessV1 →
+            PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1 → Prop :=
+fun {K} [Field K] [CharP K 2147483647] bytes p w context =>
+  ∃ snapshot c root,
+    R1Z.PV_RunJoin_CodecOuter30.run bytes
+          (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 p w
+            context) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c)) ∧
+      PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+        R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+          (R1Z.PV_RunJoin_OuterChecked30.transferInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c)
+def R1Z.PV_RunJoin_CanonicalCoverage31.WithdrawalCovered : {K : Type} →
+  [inst : Field K] →
+    [CharP K 2147483647] →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1WithdrawalPublicV1 →
+          PV_RunJoin_Outer30.pool_v1.pair_forest_trace.PoolV1PairForestWithdrawalWitnessV1 →
+            PV_RunJoin_Outer30.pool_v1.payment_relation.PoolV1PaymentRelationContextV1 → Prop :=
+fun {K} [Field K] [CharP K 2147483647] bytes p w context =>
+  ∃ snapshot c root,
+    R1Z.PV_RunJoin_CodecOuter30.run bytes
+          (PV_RunJoin_Outer30.pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_withdrawal_merged_c1_v1 p w
+            context) =
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (snapshot, c)) ∧
+      PV_RunJoin_Outer30.pool_v1.pair_forest_trace.lane_root w.input.pair =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok root) ∧
+        R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+          (R1Z.PV_RunJoin_OuterChecked30.withdrawalInput p w root (R1Z.PV_RunJoin_CodecOuter30.snapshot snapshot) c)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin24-lean/sources/R1Z/PV_RunJoin_CanonicalAudit31.lean:7:14: error(lean.unknownIdentifier): Unknown constant `R1Z.PV_RunJoin_LaneDenotation31.complete_result`
+'R1Z.PV_RunJoin_CanonicalInput31.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalInput31.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticAppendRoot31.root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticAppendCarry31.carry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_AppendBinding31.append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticRecipient31.recipient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticSentinel31.sentinel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_HonestPackage31.honest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalHonest31.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalHonest31.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalCoverage31.transfer_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CanonicalCoverage31.withdrawal_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_HonestIdentification26.identification' depends on axioms: [propext, Classical.choice, Quot.sound]

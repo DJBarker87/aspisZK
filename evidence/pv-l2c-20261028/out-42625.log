@@ -1,0 +1,15 @@
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+def Aeneas.Std.core.num.U32.to_le_bytes : U32 → Std.Array U8 4#usize :=
+fun x => ⟨List.map UScalar.mk x.bv.toLEBytes, ⋯⟩
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+@[irreducible] def BitVec.toLEBytes : {w : ℕ} → BitVec w → List Byte :=
+fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+
+exit=0

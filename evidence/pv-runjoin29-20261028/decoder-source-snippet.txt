@@ -1,0 +1,75 @@
+def pool_v1.pair_tree_profile.digest_is_canonical_loop.body (value : Array aspis_core.field.M31 8#usize) (i : Std.Usize) : Result (ControlFlow Std.Usize Bool) := do
+                    let s ← lift (Array.to_slice value)
+                    let i1 := Slice.len s
+                    if i < i1
+                    then let m ← Array.index_usize value i
+                         if m >= aspis_core.field.P
+                         then ok (done false)
+                         else let i2 ← i + 1#usize
+                              ok (cont i2)
+                    else ok (done true)
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::digest_is_canonical]: loop 0:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 107:4-114:1 -/
+@[rust_loop] def pool_v1.pair_tree_profile.digest_is_canonical_loop (value : Array aspis_core.field.M31 8#usize) (i : Std.Usize) : Result Bool := do
+               loop
+                 (fun i1 => pool_v1.pair_tree_profile.digest_is_canonical_loop.body value i1)
+                 i
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::digest_is_canonical]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 105:0-114:1 -/
+@[reducible] def pool_v1.pair_tree_profile.digest_is_canonical (value : Array aspis_core.field.M31 8#usize) : Result Bool := do
+               pool_v1.pair_tree_profile.digest_is_canonical_loop value 0#usize
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::POOL_V1_PAIR_TREE_DEPTH]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 33:0-33:62
+    Visibility: public -/
+@[global_simps, irreducible] def pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH : Std.Usize := pool_v1.format.POOL_V1_TREE_DEPTH
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::POOL_V1_PAIR_CAPACITY]
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 35:0-35:71
+    Visibility: public -/
+@[global_simps, irreducible] def pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY : Result Std.U64 := 1#u64 <<< pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_DEPTH
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1]: loop body 0:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 466:4-473:1 -/
+@[rust_loop_body] def pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop.body (a : Array (Array aspis_core.field.M31 8#usize) 20#usize) (level : Std.Usize) : Result (ControlFlow Std.Usize (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)) := do
+                    let s ← lift (Array.to_slice a)
+                    let i := Slice.len s
+                    if level < i
+                    then let a1 ← Array.index_usize a level
+                         let b ← pool_v1.pair_tree_profile.digest_is_canonical a1
+                         if b
+                         then let level1 ← level + 1#usize
+                              ok (cont level1)
+                         else ok (done (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest))
+                    else ok (done (core.result.Result.Ok ()))
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1]: loop 0:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 466:4-473:1 -/
+@[rust_loop] def pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop (a : Array (Array aspis_core.field.M31 8#usize) 20#usize) (level : Std.Usize) : Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) := do
+               loop
+                 (fun level1 => pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop.body a level1)
+                 level
+
+/-- [aspis_statement::pool_v1::pair_tree_profile::validate_pool_v1_pair_live_snapshot_v1]:
+    Source: 'crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 450:0-473:1 -/
+def pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1 (snapshot : pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1) : Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) := do
+  let a := Array.repeat 32#usize 0#u8
+  let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.pool a
+  if b
+  then ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+  else let a1 := Array.repeat 32#usize 0#u8
+       let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 snapshot.deployment_domain a1
+       if b1
+       then ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.ZeroRequiredBinding)
+       else if snapshot.sequence != snapshot.next_pair_index
+            then ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.SequenceIndexMismatch)
+            else let i ← pool_v1.pair_tree_profile.POOL_V1_PAIR_CAPACITY
+                 if snapshot.next_pair_index >= i
+                 then ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.TreeFull)
+                 else let b2 ← pool_v1.pair_tree_profile.digest_is_canonical snapshot.current_root
+                      if b2
+                      then pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop snapshot.frontier 0#usize
+                      else ok (core.result.Result.Err pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1.NonCanonicalDigest)
+

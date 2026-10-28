@@ -1,0 +1,575 @@
+{
+  "attempt": 50397,
+  "module": "PV_L2C_D371CombinedAudit",
+  "source_sha256": "0ebed362eae6ddd9cd426ec8e6ef3caf95967a7e56b00eb158872d38e03e87a3",
+  "origin": {
+    "tracked_conflicts": [],
+    "authority": "h5 own git-tracked HEAD",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_D371CombinedAudit.lean",
+    "git_blob": "23ca2b5870288cbe907a37a3d53ba19b5228ac0d",
+    "sha256": "0ebed362eae6ddd9cd426ec8e6ef3caf95967a7e56b00eb158872d38e03e87a3",
+    "imports": [
+      "PV_L2C_CombinedAudit",
+      "PV_L2C_AbsorbRange",
+      "PV_L2C_AccountEncode",
+      "PV_L2C_AccountLayout",
+      "PV_L2C_AccountOrigins",
+      "PV_L2C_AdmissionPairRange",
+      "PV_L2C_AuxRange",
+      "PV_L2C_BaseGuard",
+      "PV_L2C_BlockRange",
+      "PV_L2C_CanonicalFixtureDomain",
+      "PV_L2C_ChunkRange",
+      "PV_L2C_ChunkShape",
+      "PV_L2C_ChunkStep",
+      "PV_L2C_ClientRoute",
+      "PV_L2C_CompilerRange",
+      "PV_L2C_ComputedDigestRange",
+      "PV_L2C_DecodeRange",
+      "PV_L2C_DecoderRoute",
+      "PV_L2C_DigestEncode",
+      "PV_L2C_DigestList",
+      "PV_L2C_DigestOrigin",
+      "PV_L2C_DigestRange",
+      "PV_L2C_DigestRoundtrip",
+      "PV_L2C_DirectCompilerRange",
+      "PV_L2C_ExternalGeometry",
+      "PV_L2C_FixtureOrigins",
+      "PV_L2C_GeneratedRange",
+      "PV_L2C_HashLoopRange",
+      "PV_L2C_HashRange",
+      "PV_L2C_HashTotal",
+      "PV_L2C_HelperReturn",
+      "PV_L2C_InterpolationDenominator",
+      "PV_L2C_InterpolationNodes",
+      "PV_L2C_InverseChain",
+      "PV_L2C_InverseField",
+      "PV_L2C_ListOrigins",
+      "PV_L2C_MaskRange",
+      "PV_L2C_MaterialN3",
+      "PV_L2C_N3Guard",
+      "PV_L2C_N4Control",
+      "PV_L2C_NativeInverse",
+      "PV_L2C_NativeMultiply",
+      "PV_L2C_NativeReduce",
+      "PV_L2C_OccRange",
+      "PV_L2C_OutputDecode",
+      "PV_L2C_PaddingComplete",
+      "PV_L2C_PairRange",
+      "PV_L2C_PathRange",
+      "PV_L2C_PlannerOutputs",
+      "PV_L2C_RecordRange",
+      "PV_L2C_RouteBaseGuard",
+      "PV_L2C_SampledBase",
+      "PV_L2C_SampledMaskOnly",
+      "PV_L2C_SampledSecure",
+      "PV_L2C_SamplerFill",
+      "PV_L2C_SecureGuard",
+      "PV_L2C_StateSampler",
+      "PV_L2C_SumcheckControl",
+      "PV_L2C_TraceRange",
+      "PV_L2C_ValueRange",
+      "PV_L2C_WriterChainRange",
+      "PV_L2C_WriterEndsRange"
+    ]
+  },
+  "source_revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "exit": 0,
+  "wall_seconds": 1.842686482006684,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T14:37:50.795655+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 25635586048,
+    "projected_reserved_bytes": 34225520640
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50397",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50397"
+  ],
+  "dependencies": {
+    "PV_L2C_AbsorbRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AbsorbRange.olean",
+      "sha256": "4e8f64a50dda52eb5d8f1047a250521912220364b6c00249a67fe8eea2ca318b"
+    },
+    "PV_L2C_AccountEncode": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AccountEncode.olean",
+      "sha256": "c53d35b51996d5e9b742956a12ae7aca29f2cd5dab00dd240aace16e5b1cded8"
+    },
+    "PV_L2C_AccountLayout": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AccountLayout.olean",
+      "sha256": "1ecd347902d3eb62ea800cadcb48a2f15eb4d6fb93dffd8b07925183f730cb45"
+    },
+    "PV_L2C_AccountOrigins": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AccountOrigins.olean",
+      "sha256": "89c5e71727382a280b7f93d07edefe142d7fe1e8051a23ebf8ad2eff8d4bba14"
+    },
+    "PV_L2C_AdmissionPairRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AdmissionPairRange.olean",
+      "sha256": "ac594002830e5c2fddb023b13df83c52c3367a33bfd34638bef9a9b90c3c5ae6"
+    },
+    "PV_L2C_AuxRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AuxRange.olean",
+      "sha256": "eb6d9ca7b1016c00488acb55b7cce8a9712735703380d2f1ced790cf19538521"
+    },
+    "PV_L2C_BaseGuard": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_BaseGuard.olean",
+      "sha256": "df0378b63343cfd77a1dc937d1096976a3918043e2036348485406c796d2a0ab"
+    },
+    "PV_L2C_BlockRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_BlockRange.olean",
+      "sha256": "1c5b9a194d24a957280245c51b347652ba405749ded392a4caba5a344d8ece98"
+    },
+    "PV_L2C_CanonicalFixtureDomain": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CanonicalFixtureDomain.olean",
+      "sha256": "9329b84c44addda9e294ee1dc4c9424bce7e1a0e7c6ea80e682b46a2175c872b"
+    },
+    "PV_L2C_ChunkRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ChunkRange.olean",
+      "sha256": "73217aa3ae289b6281c46fc431cb03e8fcbc8cd6d4428a3013bac43a5086ee77"
+    },
+    "PV_L2C_ChunkShape": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ChunkShape.olean",
+      "sha256": "172a278285937f5cc0f0e1180d5471220737a587c1d428c998b8a18ee2425334"
+    },
+    "PV_L2C_ChunkStep": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ChunkStep.olean",
+      "sha256": "d0feb50cfcffffd8166e4c078705fd9b99e0e66e7b699cfd143ac9723f420120"
+    },
+    "PV_L2C_ClientRoute": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ClientRoute.olean",
+      "sha256": "7171df14a1002023b9370d11ffaa7cda06c02aa6362ff1b865d23d1210486fa8"
+    },
+    "PV_L2C_CombinedAudit": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CombinedAudit.olean",
+      "sha256": "5b4eaf6aebf44d8214be48d8c6dc89dab8f3131cc1696bdee210ed08c2e504bf"
+    },
+    "PV_L2C_CompilerRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CompilerRange.olean",
+      "sha256": "acb76cc388211b3b8924a752c443e480008dcf13282cf19160943f3b5d3be76b"
+    },
+    "PV_L2C_ComputedDigestRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ComputedDigestRange.olean",
+      "sha256": "4818095244cf62ac2fe3e7caf0e723f27573ec14961d4df4a8455a68c05590ab"
+    },
+    "PV_L2C_DecodeRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DecodeRange.olean",
+      "sha256": "f8cbdddac80836851b550e7d7e3387c9b31a6e392757ac3f074d5084b3d00792"
+    },
+    "PV_L2C_DecoderRoute": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DecoderRoute.olean",
+      "sha256": "0133c6cbcd4aa65f4d584095da471f322bde8b5b4d2931f10f53474f06624195"
+    },
+    "PV_L2C_DigestEncode": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DigestEncode.olean",
+      "sha256": "a4de24af3ec0dca95c452579f35c75f4070bdc59cd29ba8ab919d230498ff3fe"
+    },
+    "PV_L2C_DigestList": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DigestList.olean",
+      "sha256": "723f5eebc42c2d2a362218a2e129cf27c31cecad1d3dcf956b201576e22c778f"
+    },
+    "PV_L2C_DigestOrigin": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DigestOrigin.olean",
+      "sha256": "7dd1581963eed12e5e80df979ceba50e4f5a200b492b1d416feff7ec5bb86bbb"
+    },
+    "PV_L2C_DigestRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DigestRange.olean",
+      "sha256": "15482b45dd4302b74ca72eb25a6f0ba09a5fd5a408541f0cdd8b98e4ab92bd03"
+    },
+    "PV_L2C_DigestRoundtrip": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DigestRoundtrip.olean",
+      "sha256": "08af62e05e1537c002bef37dc9e1994077518a3f96e5602ff2aad44d196de82e"
+    },
+    "PV_L2C_DirectCompilerRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DirectCompilerRange.olean",
+      "sha256": "0ef9f8b5d16522fc0fa563d344878469b23318ba1ab13a10d16a2a6ce44af687"
+    },
+    "PV_L2C_ExternalGeometry": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExternalGeometry.olean",
+      "sha256": "0200e556614fc15577b147ef82499f0ba7fd5f9f7365df17ed878e461168e4bf"
+    },
+    "PV_L2C_FixtureOrigins": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_FixtureOrigins.olean",
+      "sha256": "70395ec114520c9f163c9ed35eaed581114a6ce72bd6651c1e8bd4315a32a043"
+    },
+    "PV_L2C_GeneratedRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_GeneratedRange.olean",
+      "sha256": "ba1feaf3bbb52fb41962276dfe29f1c8ae7aeef1136125c976955982d7abe48f"
+    },
+    "PV_L2C_HashLoopRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HashLoopRange.olean",
+      "sha256": "8ebee82bf70770544f8c4dea525b76d3cb67b10df2721b9448635543cc28ca6b"
+    },
+    "PV_L2C_HashRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HashRange.olean",
+      "sha256": "679d03f28c925524d8c6ef54a5de207f6c5f023c9e484a30dfa08d9c48a89608"
+    },
+    "PV_L2C_HashTotal": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HashTotal.olean",
+      "sha256": "e723eadd06f716f31f18ea8c6c7a67e236f89505f00859d9ff24f209efc6a310"
+    },
+    "PV_L2C_HelperReturn": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HelperReturn.olean",
+      "sha256": "3a85e7c9117ce933545dcf6727ac5d37d4ce2edddd16315cefce706f65dcc056"
+    },
+    "PV_L2C_InterpolationDenominator": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_InterpolationDenominator.olean",
+      "sha256": "703f96e66e76b039afbf69e7753878e11321cbc76b571d7ba1afb0e770ce530f"
+    },
+    "PV_L2C_InterpolationNodes": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_InterpolationNodes.olean",
+      "sha256": "7d9ea15c179548ddb8b7cbcc322d3c1a0310f17dff2634addd898cff80af11d0"
+    },
+    "PV_L2C_InverseChain": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_InverseChain.olean",
+      "sha256": "76c1feadbb9ae64fb88c455c69e8bfb4e57133eb5c75b02f503744bd26bdda40"
+    },
+    "PV_L2C_InverseField": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_InverseField.olean",
+      "sha256": "1f25ba094ca15518311dd17f887ffa3837f59e78a108b05db5ea31732bcb29f7"
+    },
+    "PV_L2C_ListOrigins": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ListOrigins.olean",
+      "sha256": "1b8d1ccd899a38cca20e20854de4a2514de519c625b7537d1d7536b330e69883"
+    },
+    "PV_L2C_MaskRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_MaskRange.olean",
+      "sha256": "87f1f92e2cce519ddc9817f56666f2ee2dec54ae51bd6ec6fb5a7ef4d05a0b94"
+    },
+    "PV_L2C_MaterialN3": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_MaterialN3.olean",
+      "sha256": "17943af35ffa7b26f39e8f6248a6e03f0c5997f05adf9d2d40023f9cb45c94b8"
+    },
+    "PV_L2C_N3Guard": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_N3Guard.olean",
+      "sha256": "bd9cc13305f34660b23c922b181c126d01ecd9b036c683e4ccb68cbf92349136"
+    },
+    "PV_L2C_N4Control": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_N4Control.olean",
+      "sha256": "813e94f927ba40e7bc54d22a484c33d314f161fb7127ffdd69877e7e7a87ea48"
+    },
+    "PV_L2C_NativeInverse": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeInverse.olean",
+      "sha256": "effa980d804096610358c5ff0d309833b63beece235b7a71dea6eaf4274314e8"
+    },
+    "PV_L2C_NativeMultiply": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeMultiply.olean",
+      "sha256": "50a5c0d5f5d9202d39f65764fdc1cbfd7270450c90f2f5bfd0824efc0987a2ac"
+    },
+    "PV_L2C_NativeReduce": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeReduce.olean",
+      "sha256": "29d35188cab5f3ff651a804a4a8224e165ef8742c9f9084eca341eb3a6e664ee"
+    },
+    "PV_L2C_OccRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_OccRange.olean",
+      "sha256": "6c32daec36dfe820c8827ed0a4f1283bfc46e3f1db97e6a975e6f660bde252dc"
+    },
+    "PV_L2C_OutputDecode": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_OutputDecode.olean",
+      "sha256": "d7223b24a04fd130fce8aa6b669ec834b25c8837658426adcc0ef61eb425b9a5"
+    },
+    "PV_L2C_PaddingComplete": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingComplete.olean",
+      "sha256": "9e88bd1263d0b68f889b42dd5dcbd110c05b1cbd179d1d8d11b68e07809b3eab"
+    },
+    "PV_L2C_PairRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PairRange.olean",
+      "sha256": "63ee670fef9507306cf62fdb8b0d8691d063e364e625f12cd66bbe1a2e178f89"
+    },
+    "PV_L2C_PathRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PathRange.olean",
+      "sha256": "56e2538f6eafdd3cd9deff197f222f02d6d93c9b2c1a7f9af138cefdd06e0006"
+    },
+    "PV_L2C_PlannerOutputs": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PlannerOutputs.olean",
+      "sha256": "43f9b04e0628aba6fdbb121b60d4d6b771e91a4d98daead56bff8127c27ee679"
+    },
+    "PV_L2C_RecordRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_RecordRange.olean",
+      "sha256": "b610b97b08deeab551542cf5cb6fe79b246b2154291aa7167a6f196ba6c02e30"
+    },
+    "PV_L2C_RouteBaseGuard": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_RouteBaseGuard.olean",
+      "sha256": "3c1b27446acf52a8708cfa4f751c73addabc3fcd2c1708428c57c2e0b0c16a3d"
+    },
+    "PV_L2C_SampledBase": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SampledBase.olean",
+      "sha256": "f492b41556420d56c6502daa171ef99d9b558ccff79aa89d9a8e054b2af3197e"
+    },
+    "PV_L2C_SampledMaskOnly": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SampledMaskOnly.olean",
+      "sha256": "b4b16b66c62b5b13417a7e817804aebe265201add9a98d51f4d0c4e920e911cb"
+    },
+    "PV_L2C_SampledSecure": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SampledSecure.olean",
+      "sha256": "7bb61aff54eaed8e2f7c7658485d3e29a526faf5580d2e23a25cffa69a90a737"
+    },
+    "PV_L2C_SamplerFill": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SamplerFill.olean",
+      "sha256": "b55b695a1b05b3a82db4057154368a4718c866b12c1c834641a7b1af2eb729e0"
+    },
+    "PV_L2C_SecureGuard": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SecureGuard.olean",
+      "sha256": "b7f77ab9b7cb659e21c9cc240d762d883a3ae475f19bd022ee0a2eeaaf6473b6"
+    },
+    "PV_L2C_StateSampler": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_StateSampler.olean",
+      "sha256": "917965c29fbcecb8416e76a4b61c392823d566700a6260519898d92b0f6f2808"
+    },
+    "PV_L2C_SumcheckControl": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SumcheckControl.olean",
+      "sha256": "407848b6faedd993860a9fa2c244fef466b545d88c53f29721395f3ce88e6a84"
+    },
+    "PV_L2C_TraceRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_TraceRange.olean",
+      "sha256": "063d4d859c6f53b732fde7772460f60ad8e83e30148e1566adb6b6e093656c16"
+    },
+    "PV_L2C_ValueRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ValueRange.olean",
+      "sha256": "67c360ebf859905c1c965d2e430265e466e1f70d9067520625c15d2bb5cc8096"
+    },
+    "PV_L2C_WriterChainRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_WriterChainRange.olean",
+      "sha256": "d7134c70ab25cef6e287e389430d1f49ebcab06039d3b243318612ccb57d7e12"
+    },
+    "PV_L2C_WriterEndsRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_WriterEndsRange.olean",
+      "sha256": "3f51a102518682a99b617ceb370b210641c7bf0e2ee71e496b442b9c7d7c61bf"
+    }
+  },
+  "deps_fingerprint": "d9256835fd2e93b43fbd2fc87ccb0f33d75a0e7f0f5115ab78073bc5ab50a39d",
+  "axioms": [
+    "'PV_L2C_AbsorbRange.trace' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AbsorbRange.labels_range' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AbsorbRange.entry' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountEncode.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountEncode.tree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountLayout.bounds' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_AccountLayout.frontier_offset' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_AccountLayout.lane_bounds' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_AccountLayout.source_field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountLayout.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountOrigins.lookup' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountOrigins.root' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AccountOrigins.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AdmissionPairRange.coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.inverse' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_AuxRange.input' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.output' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.aux' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_AuxRange.path' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BaseGuard.loop_ok' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BaseGuard.expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BaseGuard.rejects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.zeros' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.block' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.sponge_digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.node_digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_BlockRange.sponge_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.tree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.rawP_excluded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.both' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkRange.note2' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkRange.note3' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkRange.chunks' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkRange.ordered' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkRange.children' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkShape.done' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkShape.step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkShape.head_length' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ChunkShape.tail_shorter' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ChunkShape.advance_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ChunkShape.head_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ChunkShape.tail_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ChunkStep.returned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.transfer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.withdrawal_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.transfer_columns' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.withdrawal_columns' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CompilerRange.records_public' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CompilerRange.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.fallback' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.owner' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.note' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.tree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.output_pair' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComputedDigestRange.append' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DecodeRange.scalar_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DecodeRange.scalar_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DecodeRange.rejects_P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DecoderRoute.transfer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DecoderRoute.withdrawal_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestEncode.byte' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestEncode.limb_encoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestEncode.scalar' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestList.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestList.field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestOrigin.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestOrigin.excludes_P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestRange.scalar_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestRange.scalar_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestRange.ok_or_return' does not depend on any axioms",
+    "'PV_L2C_DigestRange.digest_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestRoundtrip.decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DigestRoundtrip.origin' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DirectCompilerRange.records_public' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_DirectCompilerRange.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.group_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.disjoint_groups' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.column_mask' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.matrix_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.lane_bound' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ExternalGeometry.sum_four' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.key' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.salt' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.recipient_owner' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.recipient_salt' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.transfer_change' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.withdrawal_change' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.transfer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.withdrawal_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FixtureOrigins.both' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_GeneratedRange.remainder_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_GeneratedRange.remainder_val' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_GeneratedRange.remainder_range' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_GeneratedRange.generated_digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_GeneratedRange.rejects_raw_P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashLoopRange.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashRange.initial_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashRange.digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashRange.shape' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashRange.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashTotal.loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HashTotal.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HelperReturn.expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HelperReturn.rejects_shape' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_HelperReturn.honest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.raw_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.raw_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.canonical_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationNodes.distinct' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationNodes.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InverseChain.exponent' depends on axioms: [propext]",
+    "'PV_L2C_InverseField.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InverseField.complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ListOrigins.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ListOrigins.field' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaskRange.put_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_MaskRange.applied' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_MaskRange.balanced' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaskRange.application' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaterialN3.expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaterialN3.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaterialN3.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_N3Guard.base_expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_N3Guard.expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_N4Control.fold_count' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_N4Control.counted' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_N4Control.complete' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeInverse.square_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeInverse.canonical_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeInverse.decoded_chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeInverse.zero' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeInverse.success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeMultiply.widened' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeMultiply.product_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeMultiply.canonical_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeMultiply.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.mask_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.fold_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.narrowed_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.canonical_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.field_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NativeReduce.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OccRange.cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OccRange.row' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OutputDecode.success_iff' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OutputDecode.range' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_OutputDecode.no_raw_P' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingComplete.scan' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingComplete.complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PairRange.coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PathRange.cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PathRange.loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PlannerOutputs.generated_origin' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PlannerOutputs.generated_range' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PlannerOutputs.owner_total' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PlannerOutputs.outputs' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RecordRange.optional_owner' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RecordRange.optional_salt' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RecordRange.records' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RouteBaseGuard.bank_expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RouteBaseGuard.transfer_bank' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RouteBaseGuard.withdrawal_bank' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RouteBaseGuard.transfer_masked' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RouteBaseGuard.withdrawal_masked' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampledBase.attached' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SampledBase.returned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampledMaskOnly.sampled' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SampledMaskOnly.guard' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampledSecure.sampled' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampledSecure.guard' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampledSecure.audit' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SamplerFill.returned' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SamplerFill.scalar' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SamplerFill.secure' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SecureGuard.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SecureGuard.expected' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SecureGuard.column' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_StateSampler.canonical_result' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_StateSampler.bind_returned' depends on axioms: [propext]",
+    "'PV_L2C_StateSampler.secure_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.initial' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.chained' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.final' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.block' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.stable' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.late' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.merge' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_TraceRange.merged' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ValueRange.outer' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ValueRange.final' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ValueRange.block' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterChainRange.pre' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterChainRange.chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterChainRange.records' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterEndsRange.init' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterEndsRange.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterEndsRange.node_pre' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_WriterEndsRange.node_absorb' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 5019103232,
+  "swaps": "0",
+  "host_wall": "0:01.84",
+  "accepted": true
+}

@@ -1,0 +1,103 @@
+{
+  "revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "classification": "script-checked codec/generator source association; not full route structural proof",
+  "pins": {
+    "tools/r1-cost-probe/src/bin/devnet_spend.rs": {
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "unchanged_from_entry": true
+    },
+    "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs": {
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "unchanged_from_entry": true
+    },
+    "tools/r1-cost-probe/src/bin/pv_client_gate.rs": {
+      "sha256": "99cb15ba538723b65f3c076b4754401779c956e54da83e9a1bc40c150f3a549c",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-r1-cost-probe/src/RealR1_client.rs": {
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-core/src/field.rs": {
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-core/src/field/ct.rs": {
+      "sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/atomic_statement.rs": {
+      "sha256": "c73fc9a55dd3493ae264231eaaf495c886c42cf0e58412bdb11053a191eb860a",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/spend.rs": {
+      "sha256": "16a340ea7fd1c69d83c4720fa63c096f060c2ce58f91b8c6e793ffb7913546a4",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/poseidon2.rs": {
+      "sha256": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs": {
+      "sha256": "1992026c00dbced3a0c475b6e2be0a72fae1a7e859dd041e741707384e727ba3",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/pool_v1/incremental_merkle.rs": {
+      "sha256": "1b32061871f52a74ddbc2a9cdaa6a884ec6dd04b41fec55926631496506faa81",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-statement/src/pool_v1/pair_forest_trace.rs": {
+      "sha256": "c8fb171a18b3cfb276fac6b428bc9ab8e411b464bf7d8bf00c71e84178ba8723",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-pool-wallet-v1/src/live_pool_witness_adapter_v2.rs": {
+      "sha256": "e20f9a139b36eddee234ddf8e2f0f51fb178891042e26a8339683eb4743e88cf",
+      "unchanged_from_entry": true
+    },
+    "crates/aspis-pool-wallet-v1/src/lib.rs": {
+      "sha256": "81986c456eaac532091e3ec07e15f63d2c5a421a859346df9424e7687b0c12e5",
+      "unchanged_from_entry": true
+    }
+  },
+  "request_keys": [
+    "action",
+    "pool",
+    "mint",
+    "payer",
+    "registry",
+    "verifier",
+    "note",
+    "withdrawal",
+    "destination",
+    "checkpoint",
+    "lane_bytes",
+    "checkpoint_bytes",
+    "proof_dir",
+    "proof_accounts",
+    "public_account",
+    "verifier_checkpoint"
+  ],
+  "scalar_body_sha256": "fa55632b8773c72b01e1a602d6808340bab9638e242abd2b467400f21f95b4ee",
+  "digest_body_sha256": "9e38363b48724f371bb1a32f65d131ccb615043d28ffb110cb024c917bd6aa70",
+  "generator_body_sha256": "8149c10665a703b227c50f99527332df875df7750125de7dc7a065986cc7a615",
+  "terminal_decoder_emission_sha256": "74e3d045178376a88ae58b57e29c6aad13afaa2b69e463e119ce0cda8e755504",
+  "theorems": [
+    "PV_L2C_DecodeRange.scalar_result",
+    "PV_L2C_DecodeRange.scalar_success",
+    "PV_L2C_DecodeRange.rejects_P",
+    "PV_L2C_DigestRange.digest_success",
+    "PV_L2C_GeneratedRange.remainder_result",
+    "PV_L2C_GeneratedRange.remainder_range"
+  ],
+  "axioms": "see raw compile receipts 50303,50306,50307; no Kani credit",
+  "differences": [
+    "M31 newtype erased to U32 in extraction",
+    "Rust Option::ok_or and ? retained as complete nested Result/control-flow branches",
+    "generator theorem covers final remainder on arbitrary prior U32; seed arithmetic not assumed unbounded"
+  ],
+  "remaining": [
+    "account codec composition",
+    "hash-output native association",
+    "compiler and mask canonical preservation"
+  ]
+}

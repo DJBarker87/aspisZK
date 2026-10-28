@@ -1,0 +1,169 @@
+{
+  "attempt": 42699,
+  "module": "PV_L2C_FocusedReplay",
+  "source_sha256": "6b09345d5322dcc207ef86e19892b803e9333ea9839010979d64457d0ab56035",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_FocusedReplay.lean",
+    "git_blob": "b88d80058dd751bfac13dc15dc39ef6f276bc6a8",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "2f5ee682982914fac34957758880b04c4e997c65",
+  "exit": 1,
+  "wall_seconds": 1.3870455650030635,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T06:17:49.451201+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 42815455232,
+    "projected_reserved_bytes": 51405389824
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-42699",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in re.findall(r'^import\\s+(\\S+)',x['source'],re.M):\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "42699"
+  ],
+  "dependencies": {
+    "PV_L2C_ByteInspect": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ByteInspect.olean",
+      "sha256": "44f90bca19c1fb52b549ec077c5f8db1da63baa25c4b9a15bb4a811bc968c368"
+    },
+    "PV_L2C_CanonicalParser": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CanonicalParser.olean",
+      "sha256": "31902f03c5685b3a4410d4345f6447692ab1cab048a37fa65026772c17ff02b4"
+    },
+    "PV_L2C_ExtractedFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedFold.olean",
+      "sha256": "05cc361fbf6badd762537dae8102fac3a231e0cb3a002f9b2c6588422852c1b8"
+    },
+    "PV_L2C_ExtractedM31Fold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedM31Fold.olean",
+      "sha256": "d44d6b701f5e91f32ef604ec25d20709ef8c11f99517dc6a8ac856615b8a612f"
+    },
+    "PV_L2C_ExtractedRows": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedRows.olean",
+      "sha256": "d740f08f4c4c2dda01a36e952a87235ffb82d611dcf4aafb6577e64c4c6cd375"
+    },
+    "PV_L2C_FirstInactive": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_FirstInactive.olean",
+      "sha256": "cbd31a4e8b77d7ef5c0a14c37cbb596aaece9d584800ccc7af893c58a20ccf87"
+    },
+    "PV_L2C_M31": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_M31.olean",
+      "sha256": "f6a461f6ccb55749123b68194bea4f844f529bedb55ded9d057d3702f9a47389"
+    },
+    "PV_L2C_NativeBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeBalance.olean",
+      "sha256": "acd6c16842bd700c90f11fc7cfedb33c353e10fcb255bbcce7ad78be4edf9d57"
+    },
+    "PV_L2C_NativeFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeFold.olean",
+      "sha256": "6a34376749a18acd02cff5ddaaa8d3fc5d4a816e352112b4cb6012093a5b9046"
+    },
+    "PV_L2C_NativeQ": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeQ.olean",
+      "sha256": "5741a65a0a7fa9283c7c86357b506069fb11cd006b23b630cb98c21bb4eb734d"
+    },
+    "PV_L2C_NormalizeSource": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NormalizeSource.olean",
+      "sha256": "342e4b9e1ed2049254ac88fc3711097285efbb5a7ef8431cbb164394b81c8de5"
+    },
+    "PV_L2C_PackedMasks": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PackedMasks.olean",
+      "sha256": "6a2b25724fddac5672a2f5dafeb6f1462b05e6b27a36b3128070f91e10add314"
+    },
+    "PV_L2C_PaddingConsumer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingConsumer.olean",
+      "sha256": "cebaa15268b3000e876087415d87eedcf9e4649fd1946e9075de6ada09585692"
+    },
+    "PV_L2C_PaddingNative": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingNative.olean",
+      "sha256": "8e87513dbf9cc731f38d5dd3c31d1e1a55ef687d56327c0933409fa65202d95f"
+    },
+    "PV_L2C_PaddingProducer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingProducer.olean",
+      "sha256": "5bac7acdbfd921668a92f38b1e6b9570899f5e2bbf8f82032ca916de37232400"
+    },
+    "PV_L2C_QBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_QBalance.olean",
+      "sha256": "ee9f718329a2d55977ca1fb6a879dc70a356b0cb19b0fa4e3d9c0a858f600241"
+    },
+    "PV_L2C_QFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_QFold.olean",
+      "sha256": "422950e1ce775e5c93d02b764a73146e4a1f686e6438acfb793675f155c0ab55"
+    },
+    "PV_L2C_Reducer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_Reducer.olean",
+      "sha256": "98ad71c7b840b2d3230418e296507c2966c06f5d92a7d015b8dded88b7275094"
+    },
+    "PV_L2C_ReferenceArithmetic": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceArithmetic.olean",
+      "sha256": "b06c9b8735f2ed3236a3df67914dd2021f49f394d1513e5c71fa02dd7b1d0fa4"
+    },
+    "PV_L2C_ReferenceQ": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceQ.olean",
+      "sha256": "b271c1f4cbaabc87876ded4fd539585877aaaad1d8ef38edbf6734213cec70bc"
+    },
+    "PV_L2C_ReferenceSub": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceSub.olean",
+      "sha256": "377acb47469e5ec4ba6d68662d0ee36c7aaabb7a796636630a01f1caf7854af9"
+    },
+    "PV_L2C_SampleCanonical": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SampleCanonical.olean",
+      "sha256": "a7613e8a909a509e37f6d866f7d358899485f188618bcd967e5ed78c1394839a"
+    },
+    "PV_L2C_SparseFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SparseFold.olean",
+      "sha256": "0eaf1d76d19d6238c7e60ccbfe2448b06ff6728180ba15a82ca184aedd656317"
+    },
+    "PV_L2C_SubPrimitive": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SubPrimitive.olean",
+      "sha256": "206d358b6754ced151076a7067f349ae799c15be17a076ca0cb5057c2fb561ef"
+    },
+    "PV_L2C_VecInspect": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecInspect.olean",
+      "sha256": "75ee0610c6825b9b53cbb5c978466987592f68392ec5e480bd552e58e723fc4d"
+    },
+    "PV_L2C_VecRead": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecRead.olean",
+      "sha256": "66a2688e5505943624c6f4001f3af3dd86d479dd4a8dad33c834cbc8741376a9"
+    },
+    "PV_L2C_VecShape": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecShape.olean",
+      "sha256": "fe6b17a4283adbc23ec3001084020869a95513f11455491ef12aa3a09f43a3e2"
+    },
+    "PV_L2C_VecWrite": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecWrite.olean",
+      "sha256": "b955b20a59bd09e7eddbab02c0995946d9768bccc3c13e5cd55a5e6ee59ad4b2"
+    },
+    "R1Z.PV_RunJoin_ConsumerBoundary25": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/PV_RunJoin_ConsumerBoundary25.olean",
+      "sha256": "f3aa68c84e87e722d14989adbbacfa278ffbe4ee8dfe9c0232dbe393a21cbd2b"
+    }
+  },
+  "deps_fingerprint": "7d12f5fe9774019687e44cc9ba37e68e6060f74534ae2c46fc00b4c3085792ca",
+  "axioms": [],
+  "peak_rss_bytes": 1360113664,
+  "swaps": "0",
+  "host_wall": "0:01.38",
+  "accepted": false
+}

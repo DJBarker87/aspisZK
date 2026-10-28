@@ -1,0 +1,8 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if r.start ≤ r.end ∧ ↑r.end ≤ s.length then ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else fail Error.panic
+'PV_L2C_ParserSlices.copy_array' depends on axioms: [propext, Quot.sound]
+'PV_L2C_ParserSlices.left' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2C_ParserSlices.right' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit=0

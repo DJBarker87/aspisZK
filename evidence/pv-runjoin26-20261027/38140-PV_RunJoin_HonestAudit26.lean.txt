@@ -1,0 +1,46 @@
+import R1Z.PV_RunJoin_HonestFixtures26
+import R1Z.PV_RunJoin_FinalAudit24
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_HonestIdentification26.Honest
+#print R1Z.PV_RunJoin_ConsumerBoundary25.HonestInput
+#print R1Z.PV_RunJoin_HonestIdentification26.source_honest
+#print R1Z.PV_RunJoin_HonestIdentification26.target
+#print R1Z.BuilderSource.SourceIdentification
+#print R1Z.PV_RunJoin_HonestIdentification26.identification
+#print R1Z.PV_RunJoin_HonestConsumer26.consumer
+#print R1Z.PV_RunJoin_HonestConsumer26.protocol_join
+#print R1Z.PV_RunJoin_HonestFixtures26.association
+#print R1Z.PrivacyR1HeadlineDeployedReal.input
+#print R1Z.PrivacyR1HeadlineDeployedReal.RustRealRefinement
+#check @R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.admitted
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.success
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.public_eq
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.build_eq
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.transport_eq
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.identification
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.transition
+#print axioms R1Z.PV_RunJoin_HonestIdentification26.compiler_frame
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.consumer
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.source_sound
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.protocol_join
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.sound_of_join
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.at_honest_input
+#print axioms R1Z.PV_RunJoin_HonestConsumer26.canonical_fibre
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.inhabited
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.transfer_identified
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.withdrawal_identified
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.fibre
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.transfer_fibre
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.withdrawal_fibre
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.fixture_consumers
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.transfer_public
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.withdrawal_public
+#print axioms R1Z.PV_RunJoin_HonestFixtures26.association
+#print axioms R1Z.PV_RunJoin_ConsumerBoundary25.transfer_honest
+#print axioms R1Z.PV_RunJoin_ConsumerBoundary25.withdrawal_honest
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.identification_unsatisfiable
+#print axioms R1Z.PV_RunJoin_PaddingCounterexample24.admitted_identification_unsatisfiable
+#print axioms R1Z.PV_RunJoin_FinalAudit24.endpoint_input_is_canonical
+#print axioms R1Z.PV_RunJoin_FinalAudit24.canonical_identification
+#print axioms R1Z.PrivacyR1HeadlineDeployedReal.privacy_headline_deployed

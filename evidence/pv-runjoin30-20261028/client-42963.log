@@ -1,0 +1,104 @@
+LAUNCH 42963 R1Z/PV_RunJoin_OuterTransferComposed30
+ifier := public1.nullifier,
+                        asset_id := public1.asset_id, recipient_commitment := public1.recipient_commitment,
+                        change_commitment := public1.change_commitment } =
+                    ok r1 ∧
+                  ∃ r2,
+                    core.result.Result.map_err
+                          (BuiltinFnOnce pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+                            pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1)
+                          r1 pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.StatementCtor =
+                        ok r2 ∧
+                      ∃ cf1,
+                        core.result.Result.Insts.CoreOpsTry.branch r2 = ok cf1 ∧
+                          match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue a =>
+                            ∃ pvprcv,
+                              pool_v1.pair_forest_trace.temporary_context context val = ok pvprcv ∧
+                                ∃ r3,
+                                  pool_v1.pair_trace.validate_common public1.pool public1.deployment_domain
+                                        public1.anchor_sequence val public1.nullifier public1.asset_id
+                                        witness.input.pair pvprcv =
+                                      ok r3 ∧
+                                    ∃ cf2,
+                                      core.result.Result.Insts.CoreOpsTry.branch r3 = ok cf2 ∧
+                                        match cf2 with
+                                        | core.ops.control_flow.ControlFlow.Continue a =>
+                                          ∃ b,
+                                            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 snapshot.pool
+                                                  public1.pool =
+                                                ok b ∧
+                                              if b = true then
+                                                pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch =
+                                                  error
+                                              else
+                                                ∃ b1,
+                                                  core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8
+                                                        snapshot.deployment_domain public1.deployment_domain =
+                                                      ok b1 ∧
+                                                    if b1 = true then
+                                                      pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.SnapshotBindingMismatch =
+                                                        error
+                                                    else
+                                                      if witness.recipient.value = 0#u32 then
+                                                        pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation =
+                                                          error
+                                                      else
+                                                        if witness.change.value = 0#u32 then
+                                                          pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation =
+                                                            error
+                                                        else
+                                                          ∃ i,
+                                                            spend.VALUE_LIMIT = ok i ∧
+                                                              if witness.recipient.value ≥ i then
+                                                                pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation =
+                                                                  error
+                                                              else
+                                                                if witness.change.value ≥ i then
+                                                                  pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation =
+                                                                    error
+                                                                else
+                                                                  ∃ o,
+                                                                    lift
+                                                                          (witness.recipient.value.checked_add
+                                                                            witness.change.value) =
+                                                                        ok o ∧
+                                                                      ∃ b2,
+                                                                        core.option.Option.Insts.CoreCmpPartialEqOption.ne
+                                                                              core.cmp.PartialEqU32 o
+                                                                              (some witness.input.pair.value) =
+                                                                            ok b2 ∧
+                                                                          if b2 = true then
+                                                                            pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1.Conservation =
+                                                                              error
+                                                                          else
+                                                                            PV_RunJoin_OuterInnerPath30.ErrorPath
+                                                                              witness.input witness.recipient.value
+                                                                              (some witness.recipient) witness.change
+                                                                              { anchor := public1.anchor_root,
+                                                                                nullifier := public1.nullifier,
+                                                                                recipient_commitment :=
+                                                                                  some public1.recipient_commitment,
+                                                                                change_commitment :=
+                                                                                  public1.change_commitment,
+                                                                                asset := public1.asset_id }
+                                                                              val snapshot error
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                              (core.convert.FromSame pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1)
+                                              residual =
+                                            ok (core.result.Result.Err error)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                                (core.convert.FromSame pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1) residual =
+                              ok (core.result.Result.Err error)
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+                  (core.convert.FromSame pool_v1.pair_trace.PV30_PoolV1PairTraceErrorV1) residual =
+                ok (core.result.Result.Err error)
+'R1Z.PV_RunJoin_OuterTransferComposed30.error_iff' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+RECEIPT {"attempt": 42963, "exit": 1, "wall_seconds": 2.236801458057016, "peak_rss_bytes": 4261171200, "swaps": 0, "accepted": false}

@@ -1,0 +1,64 @@
+{
+  "attempt": 50391,
+  "module": "PV_L2C_InterpolationDenominator",
+  "source_sha256": "836594df7ad07bd6ee2a4b3bacdf3815c0d232a28dd5641dd3eaa364cee1b7b3",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_InterpolationDenominator.lean",
+    "git_blob": "ec6d1426d8e66fcb513700857bf594c1fe25c970",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "55652756e0dd057c012f8d3b94546ea89f3f0d8a",
+  "exit": 0,
+  "wall_seconds": 1.7756751619745046,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T14:31:39.884260+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 17045651456,
+    "projected_reserved_bytes": 25635586048
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50391",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50391"
+  ],
+  "dependencies": {
+    "PV_L2C_InterpolationNodes": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_InterpolationNodes.olean",
+      "sha256": "7d9ea15c179548ddb8b7cbcc322d3c1a0310f17dff2634addd898cff80af11d0"
+    }
+  },
+  "deps_fingerprint": "ac4937acb2977b3fead14b0391066d8adc6f4c343ed69e3380e20f52260bb802",
+  "axioms": [
+    "'PV_L2C_InterpolationDenominator.raw_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.raw_decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.canonical_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.decoded' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.nonzero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 4234022912,
+  "swaps": "0",
+  "host_wall": "0:01.77",
+  "accepted": true
+}

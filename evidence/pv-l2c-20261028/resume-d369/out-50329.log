@@ -1,0 +1,31 @@
+'PV_L2C_ChunkShape.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ChunkShape.lean:24:68: error: unsolved goals
+case mk
+iter✝ : core.slice.iter.Chunks U32
+count✝ : Usize
+hs : { iter := iter✝, count := count✝ }.iter.size = 8
+hne : ↑{ iter := iter✝, count := count✝ }.iter.remaining ≠ []
+hc : ↑{ iter := iter✝, count := count✝ }.count < 24
+hb : (↑{ iter := iter✝, count := count✝ }.iter.remaining).isEmpty = false
+⊢ ok
+      (some (count✝, ⟨List.take iter✝.size ↑iter✝.remaining, ⋯⟩),
+        { iter := { remaining := ⟨List.drop iter✝.size ↑iter✝.remaining, ⋯⟩, size := iter✝.size },
+          count := count✝.wrapping_add 1#usize }) =
+    ok
+      (some (count✝, ⟨List.take 8 ↑iter✝.remaining, ⋯⟩),
+        { iter := { remaining := ⟨List.drop 8 ↑iter✝.remaining, ⋯⟩, size := 8 }, count := count✝.wrapping_add 1#usize })
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ChunkShape.lean:35:31: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [advance, ̲head, ̲tail,̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_ChunkShape.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_L2C_ChunkShape.head_length' depends on axioms: [propext, Quot.sound]
+'PV_L2C_ChunkShape.tail_shorter' depends on axioms: [propext, Quot.sound]
+'PV_L2C_ChunkShape.advance_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2C_ChunkShape.head_canonical' depends on axioms: [propext, Quot.sound]
+'PV_L2C_ChunkShape.tail_canonical' depends on axioms: [propext, Quot.sound]
+
+exit=1

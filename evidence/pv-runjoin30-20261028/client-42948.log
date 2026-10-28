@@ -1,0 +1,10 @@
+LAUNCH 42948 R1Z/PV_RunJoin_CheckedAddInspect30
+def Aeneas.Std.U32.checked_add : Aeneas.Std.U32 → Aeneas.Std.U32 → Option Aeneas.Std.U32 :=
+fun x y => Aeneas.Std.core.num.checked_add_UScalar x y
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU32 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U32 Aeneas.Std.U32 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU32.ne }
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU32.ne : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool :=
+fun x y => decide ¬x = y
+
+RECEIPT {"attempt": 42948, "exit": 0, "wall_seconds": 1.809741957578808, "peak_rss_bytes": 4252909568, "swaps": 0, "accepted": true}

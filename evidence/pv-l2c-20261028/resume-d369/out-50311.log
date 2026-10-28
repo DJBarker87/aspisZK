@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ChunkStep.lean:20:21: error: 'change' tactic failed, pattern
+  (do
+      let __x ← BuilderForestStd.chunksNext i.iter
+      match __x with
+        | (o, it) =>
+          match o with
+          | none => ok (none, { iter := it, count := i.count })
+          | some x => do
+            let n ← i.count + 1#usize
+            ok (some (i.count, x), { iter := it, count := n })) =
+    ok (some p, j)
+is not definitionally equal to target
+  (do
+      let __x ← BuilderForestStd.chunksNext i.iter
+      match __x.1 with
+        | none => ok (none, { iter := __x.2, count := i.count })
+        | some a => do
+          let count' ← i.count + 1#usize
+          ok (some (i.count, a), { iter := __x.2, count := count' })) =
+    ok (some p, j)
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ChunkStep.lean:18:13: warning: This simp argument is unused:
+  core.slice.iter.Chunks.Insts.CoreIterTraitsIteratorIteratorSharedASlice
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵C̵h̵u̵n̵k̵s̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵I̵t̵e̵r̵T̵r̵a̵i̵t̵s̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵a̵t̵o̵r̵S̵h̵a̵r̵e̵d̵A̵S̵l̵i̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵s̵l̵i̵c̵e̵.̵i̵t̵e̵r̵.̵C̵h̵u̵n̵k̵s̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵I̵t̵e̵r̵T̵r̵a̵i̵t̵s̵I̵t̵e̵r̵a̵t̵o̵r̵I̵t̵e̵r̵a̵t̵o̵r̵S̵h̵a̵r̵e̵d̵A̵S̵l̵i̵c̵e̵.̵n̵e̵x̵t̵]̵[̲c̲o̲r̲e̲.̲s̲l̲i̲c̲e̲.̲i̲t̲e̲r̲.̲C̲h̲u̲n̲k̲s̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲I̲t̲e̲r̲T̲r̲a̲i̲t̲s̲I̲t̲e̲r̲a̲t̲o̲r̲I̲t̲e̲r̲a̲t̲o̲r̲S̲h̲a̲r̲e̲d̲A̲S̲l̲i̲c̲e̲.̲n̲e̲x̲t̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_ChunkStep.returned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

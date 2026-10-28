@@ -1,0 +1,24 @@
+def R1Z.PV_RunJoin_HonestyResidual30.Remaining : {K : Type} →
+  [inst : Field K] → [CharP K 2147483647] → R1Z.PV_Src_NativeInput.Input → Prop :=
+fun {K} [Field K] [CharP K 2147483647] i =>
+  AspisR1.InputWitnessCore.Relation (R1Z.PV_RunJoin_SemanticChange30.statement i)
+      (↑↑(R1Z.PV_RunJoin_SemanticChange30.witness i).inputValue) (R1Z.PV_RunJoin_SemanticChange30.witness i).sk
+      (R1Z.PV_RunJoin_SemanticChange30.witness i).salt (R1Z.PV_RunJoin_SemanticChange30.witness i).path
+      (R1Z.PV_RunJoin_SemanticChange30.witness i).pair ∧
+    AspisR1.SpendRelation.variantOutput (R1Z.PV_RunJoin_SemanticChange30.statement i)
+        (R1Z.PV_RunJoin_SemanticChange30.witness i) ∧
+      AspisR1.SpendRelation.AppendBinding (R1Z.PV_RunJoin_SemanticChange30.statement i) ∧
+        ((R1Z.PV_RunJoin_SemanticChange30.statement i).variant = R0P.Variant.privateTransfer →
+          (R1Z.PV_RunJoin_SemanticChange30.statement i).change 7 ≠ 0)
+def R1Z.PV_RunJoin_UniversalBuild22.Admission : {K : Type} →
+  [inst : Field K] → [CharP K 2147483647] → R1Z.PV_Src_NativeInput.Input → Prop :=
+fun {K} [Field K] [CharP K 2147483647] i =>
+  R1Z.BuilderSpendRelation.RspendPlus
+    (R1J.SpendWitnessMap.mapPub (R1Z.PV_Src_Public.canonicalPublic (R1Z.PV_Src_NativeInput.publicInput i)))
+    (R1Z.BuilderCanonical.liftWitness
+      (R1Z.BuilderRecordCanonical.witness
+        (R1Z.PV_Src_Forest_PrimitiveArguments.wordWitness (R1Z.PV_RunJoin_UniversalBuild22.records i).w)))
+'R1Z.PV_RunJoin_HonestyResidual30.honest_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticOptions30.withdrawal_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticOptions30.withdrawal_variant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticChange30.change' depends on axioms: [propext, Classical.choice, Quot.sound]

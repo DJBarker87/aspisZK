@@ -1,0 +1,8 @@
+import R1Z.PV_RunJoin_OuterTypes30
+set_option autoImplicit false
+namespace PV_RunJoin_Lane31
+abbrev aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError :=
+  R1Z.BuilderForestAdmissionPort.pool_v1.incremental_merkle.PoolV1TreeError
+abbrev aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError :=
+  PV_RunJoin_Outer30.pool_v1.payment_relation.PV30_PoolV1PaymentStatementFormatError
+end PV_RunJoin_Lane31
