@@ -1,0 +1,48 @@
+{"attempt": "NCA_K068", "exit_status": 0, "wall_seconds": 3.4292944429907948, "peak_rss_kib": "371880", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+_align
+
+Check 324: core::alloc::Layout::size_rounded_up_to_custom_align.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:305:27 in function core::alloc::Layout::size_rounded_up_to_custom_align
+
+Check 325: core::alloc::Layout::size_rounded_up_to_custom_align.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:305:27 in function core::alloc::Layout::size_rounded_up_to_custom_align
+
+Check 326: core::alloc::Layout::size_rounded_up_to_custom_align.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:305:27 in function core::alloc::Layout::size_rounded_up_to_custom_align
+
+Check 327: core::alloc::Layout::size_rounded_up_to_custom_align.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/alloc/layout.rs:305:27 in function core::alloc::Layout::size_rounded_up_to_custom_align
+
+
+SUMMARY:
+ ** 0 of 326 failed (8 unreachable)
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.3680582s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r5c895ae7ae6447808ce3b8e5e2883bbf.scope; invocation ID: 63e96ea7bd354eebb12fdef72b1096d9

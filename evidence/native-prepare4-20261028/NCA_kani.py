@@ -22,7 +22,7 @@ if (E/'NCA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NCA_K[0-9][0-9][0-9].json')))<70
 assert not (E/a/'receipt.json').exists()
 def ssh(code,submitted=False,stdin=None):
- argv=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]
+ argv=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-o','ControlMaster=auto','-o','ControlPersist=600','-o','ControlPath=/private/tmp/NCA_ssh_%C',H,code]
  for n in range(11):
   r=subprocess.run(argv,capture_output=True,text=True,input=stdin)
   with (E/'NCA_STEP_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,trial=n,exit=r.returncode,stdout=r.stdout,stderr=r.stderr,submitted=submitted,argv=argv))+'\n')

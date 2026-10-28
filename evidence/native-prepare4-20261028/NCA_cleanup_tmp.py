@@ -15,7 +15,8 @@ for p in t.iterdir():
  else:p.unlink()
 print(json.dumps(dict(own_tmp=str(t),deleted=before,live=live,other_tmp_untouched=True,persistent_cache_untouched=True),indent=2))
 '''
-r=subprocess.run(['ssh','-o','ConnectTimeout=15','dombarker@100.108.41.90','python3'],input=code,text=True,capture_output=True)
+# Mutating cleanup is submitted exactly once, never retried on transport failure.
+r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2','-o','ControlMaster=auto','-o','ControlPersist=600','-o','ControlPath=/private/tmp/NCA_ssh_%C','dombarker@100.108.41.90','python3'],input=code,text=True,capture_output=True)
 (E/(sys.argv[1]+'-cleanup.log')).write_text(r.stdout+r.stderr)
 assert r.returncode==0,r.stderr
 (E/(sys.argv[1]+'-cleanup.json')).write_text(json.dumps(json.loads(r.stdout),indent=2)+'\n')
