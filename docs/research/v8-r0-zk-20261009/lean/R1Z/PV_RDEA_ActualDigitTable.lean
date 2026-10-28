@@ -9,9 +9,10 @@ def table : Array Str 16#usize := Array.make 16#usize [
           ]
 
 theorem entry_length (i : Fin 16) : (table.val[i.val]'(by have h:=i.isLt; change i.val<16; exact h)).val.length=1 := by
-  revert i
-  decide
+  fin_cases i <;> rfl
 
+#print toStr
+#print Array.make
 #print Array.index_usize
 #print Slice.index_usize
 #print axioms entry_length
