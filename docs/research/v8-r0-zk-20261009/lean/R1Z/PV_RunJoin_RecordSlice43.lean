@@ -11,8 +11,9 @@ theorem payload (before header body tail : List U8) (hlen : header.length=5) :
   simp only [Nat.add_sub_cancel_left,List.drop_eq_nil_of_le (by omega : before.length≤before.length+5),
     List.nil_append]
   rw [List.append_assoc header body tail,List.drop_append]
-  simp only [hlen,Nat.sub_self_eq_zero,List.drop_length,List.drop_zero,List.nil_append,
-    List.take_append,List.take_length,Nat.sub_self_eq_zero,List.take_zero,List.append_nil]
+  rw [List.drop_eq_nil_of_le (by omega : header.length≤5),hlen,Nat.sub_self,
+    List.drop_zero,List.nil_append]
+  simp only [List.take_append,List.take_length,Nat.sub_self,List.take_zero,List.append_nil]
 
 theorem preserved (before tail : List U8) (at1 size : Nat) (bound : at1+size≤before.length) :
     (((before++tail).drop at1).take size)=(before.drop at1).take size := by
