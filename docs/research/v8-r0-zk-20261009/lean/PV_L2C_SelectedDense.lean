@@ -70,6 +70,6 @@ theorem output_eq (table : Fin 1024 → Q) (active : Fin 1024 → Bool) (d : Fin
   unfold output rebalance
   rw [selected_sum table active d hc,index_val]
   have he : (i.val=d.val)↔i=d := Fin.ext_iff.symm
-  rw [he]
+  simp only [he]
 #print axioms output_eq
 end PV_L2C_SelectedDense
