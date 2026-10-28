@@ -62,3 +62,12 @@ explicitly; it has no mutable data-borrow restoration. No new Rust-source law
 for a mutable-iterator write body is claimed. Existing source/helper fidelity
 associations are reused as recorded in the predecessor reports; no XR source
 or object is imported or copied.
+
+Optional active_slot_skipped draft: attempts38175/38176/38178 failed because
+kernel reduction cannot evaluate the platform-sized scalar representation.
+The latest symbolic scalar-value draft was not launched (38179 refused).
+It is retained under drafts/PV_RunJoin_ActiveFrontier28-symbolic.lean.txt and
+is NOT an accepted theorem. It is omitted from DomainSupport28, which checks
+the independent fresh-payload and canonical-encoding lemmas. The source guard
+inspection, native validation result and checked frontier exclusion do not
+rely on this draft. This ordinary candidate failure is not the stopping reason.

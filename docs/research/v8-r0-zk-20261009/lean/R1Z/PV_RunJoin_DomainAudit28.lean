@@ -39,7 +39,6 @@ import R1Z.PV_RunJoin_ProvenanceAudit27
 #print axioms R1Z.PV_RunJoin_FrontierHonesty28.noncanonical_excludes
 #print axioms R1Z.PV_RunJoin_FrontierHonesty28.raw_word
 #print axioms R1Z.PV_RunJoin_FrontierHonesty28.every_payload_not_honest
-#print axioms R1Z.PV_RunJoin_ActiveFrontier28.active_slot_skipped
 #print axioms R1Z.PV_RunJoin_PreparedPayload28.cached_return
 #print axioms R1Z.PV_RunJoin_PreparedPayload28.honest_iff
 #print axioms R1Z.PV_RunJoin_CanonicalFrontier28.frontier_of_encoding
