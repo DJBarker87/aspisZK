@@ -15,7 +15,6 @@ theorem pre (r : RustChunks) (n : Nat) (s : Array U32 16#usize)
   | (pv_peel hs with prior hp
      pv_peel hs with prior2 hp2
      exact sponge_step _ _ _ _ hs)
-  | (cases hs; exact zeros 16#usize)
 #print axioms pre
 
 theorem chain (v : R0P.Variant) (r : RustChunks) (n : Nat)
@@ -44,6 +43,7 @@ theorem records (w : RustWitness) (p : RustPublic)
     (n : Nat) (hn : n < 57) (b : Array U32 256#usize)
     (hb : RustWriterChain p.variant (rustChunks w p) n = ok b) : Canonical b := by
   have hchildren := PV_L2C_ChunkRange.children w p hw.shape hf he n hn
-  exact chain _ _ _ hchildren.1 hchildren.2 (PV_L2C_ChunkRange.chunks w p hw ha n) b hb
+  exact chain p.variant (rustChunks w p) n hchildren.1 hchildren.2
+    (PV_L2C_ChunkRange.chunks w p hw ha n) b hb
 #print axioms records
 end PV_L2C_WriterChainRange
