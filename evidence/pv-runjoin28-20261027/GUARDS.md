@@ -39,3 +39,10 @@ snapshot codec validator DOES check all frontier words; it is not called by
 these compiler wrappers. This is source inspection, not a checked successful
 preparation counterexample. Do not infer the required HonestInput frontier
 property merely from the word “NonCanonicalFrontier” in the tree error enum.
+
+A focused optimized native GUARD probe is prepared to investigate the active
+frontier issue at index1 with frontier[0]=[P;8], a freshly reconstructed
+matching root, original positive input/amount/change, and no cached payload
+mutation. It calls the actual outer withdrawal compiler and snapshot codec.
+This is investigation of requirements1–2, not native RunJoin/refinement work
+under requirement4. No outcome has yet been observed.
