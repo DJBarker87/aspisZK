@@ -21,3 +21,11 @@ LPa_K015 remains OPEN. KMY_K009 explicitly reaches the validated loop but the ar
 KMY_K011 PASS: actual frozen WideExact serializer, canonical arbitrary eight limbs, all 32 encoded bytes, then a validated 32-byte copy into arbitrary pre-state at arbitrary offset in a 64-byte parent. Every exterior byte is framed. KMY_K012 PASS: arbitrary four-byte limb window and shift/byte projection. KMY_L003 compiles `wide_six`: six 32-byte windows give exactly `raw[j/32][(j%32)/4][j%4]` for every j<192. It also compiles append length/value and joined-digest composition. All axioms accepted.
 
 The source overlays are generated from the frozen revision by KMY_prepare_serializers.py; only the module path and explicit validated copy calls change. Original and overlay SHA-256 values are in KMY_serializer_sources.json. These remain value-level composition results; allocation/growth integration is still a separate obligation for the Vec harnesses.
+
+## Stage 5: checkpoint value compositions
+
+KMY_L006 compiles the exact local byte formulas for append32, query-word append, selected reference at 712+16*i, put_k/put_e at arbitrary prefixes, checksum projection, digest prefix, roots/queries and semantic/z. KMY_L005 proves translation of local windows to arbitrary global origins; the global frame law is unbounded in KMY_L002. Each theorem has accepted axioms only. KMY_L004 was a failed draft (reserved identifier and unavailable Mathlib tactic), corrected without changing statements.
+
+KMY_K013/K014: full 1768-byte parent windows16/32 TIMEOUT; KMY_K015: window4 PASS. KMY_K016 failed only the destination initializer's unwind assertion (66 elements with bound65), leaving all value checks undetermined. A corrected actual-QM31 window is KMY_K028. This is a setup-bound failure, not an original-property counterexample. KMY_K017 actual arbitrary-bit QM31 serializer window16 PASS. KMY_K018 local arbitrary-source window32 PASS.
+
+The first three full-array invalid-limb view cases also timed out (K020–K022); K023–K027 were deferred before admission after identifying the shared full-array graph. Replacement splits are local parse acceptance and constant-data pointer metadata (K030/K031).

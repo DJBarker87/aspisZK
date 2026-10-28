@@ -110,13 +110,14 @@ fn byte_window<const N:usize>() {
 #[kani::proof] #[kani::unwind(17)] fn KMY_checkpoint_window16(){byte_window::<16>();}
 #[kani::proof] #[kani::unwind(33)] fn KMY_checkpoint_window32(){byte_window::<32>();}
 #[kani::proof] #[kani::unwind(5)] fn KMY_checkpoint_window4(){byte_window::<4>();}
-#[kani::proof] #[kani::unwind(65)]
+#[kani::proof] #[kani::unwind(67)]
 fn KMY_weights_copy_window(){
- let src:[[u32;4];64]=kani::any();let mut dst:[[u32;4];66]=kani::any();
+ let raw:[[u32;4];64]=kani::any();
+ let src=raw.map(|r|K{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}});
+ let mut dst:[K;66]=core::array::from_fn(|_|{let r:[u32;4]=kani::any();K{c0:CM31{a:M31(r[0]),b:M31(r[1])},c1:CM31{a:M31(r[2]),b:M31(r[3])}}});
  let pos:usize=kani::any();kani::assume(pos<=2);let j:usize=kani::any();kani::assume(j<66);
- let limb:usize=kani::any();kani::assume(limb<4);let old=dst[j][limb];
- KMX_stubs::KMX_copy_from_slice(&mut dst[pos..pos+64],&src);
- assert_eq!(dst[j][limb],if pos<=j && j<pos+64{src[j-pos][limb]}else{old});
+ let old=dst[j];KMX_stubs::KMX_copy_from_slice(&mut dst[pos..pos+64],&src);
+ assert_eq!(dst[j],if pos<=j && j<pos+64{src[j-pos]}else{old});
 }
 #[kani::proof] #[kani::unwind(17)]
 fn KMY_scalar_one_window(){
@@ -126,4 +127,69 @@ fn KMY_scalar_one_window(){
  let j:usize=kani::any();kani::assume(j<48);let old=dst[j];
  KMX_stubs::KMX_copy_from_slice(&mut dst[pos..pos+16],&src);
  assert_eq!(dst[j],if pos<=j && j<pos+16{let b=j-pos;raw[b/4].to_le_bytes()[b%4]}else{old});
+}
+
+#[kani::proof] #[kani::unwind(33)]
+fn KMY_local_window32(){
+ let src:[u8;32]=kani::any();let mut dst:[u8;64]=kani::any();
+ let pos:usize=kani::any();kani::assume(pos<=32);let j:usize=kani::any();kani::assume(j<64);let old=dst[j];
+ KMX_stubs::KMX_copy_from_slice(&mut dst[pos..pos+32],&src);
+ assert_eq!(dst[j],if pos<=j && j<pos+32{src[j-pos]}else{old});
+}
+#[kani::proof] #[kani::unwind(33)]
+fn KMY_view_accept_layout(){
+ let e=any_e();let b=e.to_le_bytes();let mut proof=[0u8;57607];
+ for j in 0..32 {proof[compact::OFF_INACTIVE+j]=b[j];}
+ let semantic=[0u8;13831];let y1=[0u8;928];let v=wide_view(&proof,&semantic,&y1).unwrap();
+ assert_eq!(v.inactive,e);assert_eq!(v.variant,Variant::S2);
+ assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
+ assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
+ assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
+ assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
+ assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
+ assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
+ assert_eq!(v.query_bytes.len(),0);
+}
+fn view_reject<const BAD:usize>(){
+ let mut raw:[u32;8]=kani::any();kani::assume(raw[BAD]>=0x7fff_ffff);
+ let mut proof=[0u8;57607];for limb in 0..8{for byte in 0..4{proof[compact::OFF_INACTIVE+4*limb+byte]=raw[limb].to_le_bytes()[byte];}}
+ assert!(matches!(wide_view(&proof,&[],&[]),Err(Error::Parse)));
+}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject0(){view_reject::<0>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject1(){view_reject::<1>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject2(){view_reject::<2>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject3(){view_reject::<3>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject4(){view_reject::<4>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject5(){view_reject::<5>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject6(){view_reject::<6>();}
+#[kani::proof] #[kani::unwind(9)] fn KMY_view_reject7(){view_reject::<7>();}
+#[kani::proof] #[kani::unwind(193)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn KMY_wide_append_one(){
+ let initial:[u8;160]=kani::any();let slot:usize=kani::any();kani::assume(slot<6);let len=32*slot;
+ let e=any_e();let raw=e.to_limbs();let encoded=e.to_le_bytes();
+ let mut out=KMX_stubs::KMX_to_vec(&initial[..len]);
+ KMX_stubs::KMX_extend_from_slice(&mut out,&encoded);
+ assert_eq!(out.len(),len+32);let j:usize=kani::any();kani::assume(j<out.len());
+ assert_eq!(out[j],if j<len{initial[j]}else{let b=j-len;raw[b/4].to_le_bytes()[b%4]});
+}
+#[kani::proof] #[kani::unwind(33)]
+fn KMY_parse_accept(){
+ let e=any_e();let encoded=e.to_le_bytes();let mut local=[0u8;32];
+ KMX_stubs::KMX_copy_from_slice(&mut local,&encoded);
+ assert_eq!(E::from_le_bytes(&local),Some(e));
+}
+#[kani::proof] #[kani::unwind(9)]
+fn KMY_view_metadata_zero(){
+ let proof=[0u8;57607];let semantic=[0u8;13831];let y1=[0u8;928];
+ let v=wide_view(&proof,&semantic,&y1).unwrap();
+ assert_eq!(v.variant,Variant::S2);assert_eq!(v.inactive,E::ZERO);
+ assert!(core::ptr::eq(v.semantic.as_ptr(),semantic.as_ptr()));assert_eq!(v.semantic.len(),semantic.len());
+ assert!(core::ptr::eq(v.y1.as_ptr(),y1.as_ptr()));assert_eq!(v.y1.len(),y1.len());
+ assert!(core::ptr::eq(v.round0.as_ptr(),proof[compact::OFF_ROUND0..].as_ptr()));assert_eq!(v.round0.len(),224);
+ assert!(core::ptr::eq(v.folded_root.unwrap().as_ptr(),proof[compact::OFF_FOLDED_ROOT..].as_ptr()));
+ assert!(core::ptr::eq(v.round1.as_ptr(),proof[compact::OFF_ROUND1..].as_ptr()));assert_eq!(v.round1.len(),224);
+ assert!(core::ptr::eq(v.final_message.as_ptr(),proof[compact::OFF_FINAL..].as_ptr()));assert_eq!(v.final_message.len(),2048);
+ assert_eq!(v.query_bytes.len(),0);
 }
