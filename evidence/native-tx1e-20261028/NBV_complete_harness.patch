@@ -1,0 +1,632 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![feature(allocator_api)]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,7 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod KMX_stubs;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,23 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBV_keys.rs"]
++mod NBV_keys;
++
++#[cfg(kani)]
++#[path="NBV_replay_keys.rs"]
++mod NBV_replay_keys;
++
++#[cfg(kani)]
++#[path="NBV_leaf_rows.rs"]
++mod NBV_leaf_rows;
++
++#[cfg(kani)]
++#[path="NBV_posthash.rs"]
++mod NBV_posthash;
++
++#[cfg(kani)]
++#[path="NBV_parent.rs"]
++mod NBV_parent;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,11 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBV_multiproof.rs"]
++mod NBV_multiproof;
++
++#[cfg(kani)]
++#[path="NBV_row_windows.rs"]
++mod NBV_row_windows;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_multiproof.rs
+@@ -0,0 +1,81 @@
++use super::*;
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_count_copy_wrong(){let mut input=[0u32;16];input[7]=1;input[15]=512;let n=16;let k=15;let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],0);}
++
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct Port<'a>{left:*const u8,right:*const u8,c:usize,l:u8,r:u8,answer:[u8;32],calls:&'a Cell<usize>}
++impl Digest32 for Port<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{assert_eq!(p.len(),3);assert_eq!(p[0],&[0x12]);assert_eq!(p[1].len(),32);assert_eq!(p[2].len(),32);assert_eq!(p[1].as_ptr(),self.left);assert_eq!(p[2].as_ptr(),self.right);assert_eq!(p[1][self.c],self.l);assert_eq!(p[2][self.c],self.r);self.calls.set(self.calls.get()+1);self.answer}}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_pair_carrier(){
++ let val:[[u8;32];16]=kani::any();let i:usize=kani::any();let c:usize=kani::any();kani::assume(i<15&&c<32);
++ let sibling:[u8;32]=kani::any();let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++let left=&val[i];let right=&val[i+1];let hash=Port{left:left.as_ptr(),right:right.as_ptr(),c,l:left[c],r:right[c],answer,calls:&calls};let out=occupied_binary_parent(hash,&val,i);assert_eq!(out[c],answer[c]);assert_eq!(calls.get(),1);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_supply_left_carrier(){
++ let val:[[u8;32];16]=kani::any();let i:usize=kani::any();let c:usize=kani::any();kani::assume(i<16&&c<32);
++ let sibling:[u8;32]=kani::any();let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++let left=&val[i];let right=&sibling;let hash=Port{left:left.as_ptr(),right:right.as_ptr(),c,l:left[c],r:right[c],answer,calls:&calls};let out=sibling_binary_parent(hash,&val,i,&sibling,true);assert_eq!(out[c],answer[c]);assert_eq!(calls.get(),1);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_supply_right_carrier(){
++ let val:[[u8;32];16]=kani::any();let i:usize=kani::any();let c:usize=kani::any();kani::assume(i<16&&c<32);
++ let sibling:[u8;32]=kani::any();let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++let left=&sibling;let right=&val[i];let hash=Port{left:left.as_ptr(),right:right.as_ptr(),c,l:left[c],r:right[c],answer,calls:&calls};let out=sibling_binary_parent(hash,&val,i,&sibling,false);assert_eq!(out[c],answer[c]);assert_eq!(calls.get(),1);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_row_store_frame(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<16&&k<16&&c<32);let old_i=idx[k];let old_v=val[k][c];let parent:u32=kani::any();let digest:[u8;32]=kani::any();idx[w]=parent;val[w]=digest;assert_eq!(idx[k],if k==w{parent}else{old_i});assert_eq!(val[k][c],if k==w{digest[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_row_store_wrong(){let mut val=[[0u8;32];16];let digest=[1u8;32];val[15]=digest;assert_eq!(val[15][31],0);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_admitted_count_copy(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);kani::assume(well_formed(&input[..n]));let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);let live_n=n;let count=0usize;assert_eq!(live_n,n);assert_eq!(count,0);assert_eq!(level[k],if k<n{input[k]}else{0});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_parent_reply_wrong(){let val=[[0u8;32];16];let answer=[1u8;32];let calls=Cell::new(0);let hash=Port{left:val[0].as_ptr(),right:val[1].as_ptr(),c:31,l:0,r:0,answer,calls:&calls};let out=occupied_binary_parent(hash,&val,0);assert_eq!(out[31],0);}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_admitted_copy_wrong(){let mut input=[0u32;16];for i in 0..16{input[i]=i as u32;}assert!(well_formed(&input));let mut level=[0u32;16];level[..16].copy_from_slice(&input);assert_eq!(level[15],0);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_count_native_step(){let mut level:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let j:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();let count:usize=kani::any();kani::assume(i<=j&&j<=n&&i<n&&n<=16&&w<=i&&k<16&&count<=288);let parent=index_at(&level,i)>>Arity::Two.bits();let old=level[k];let mut next_j=j;if next_j<n&&index_at(&level,next_j)>>Arity::Two.bits()==parent{next_j+=1;}assert_eq!(next_j,j+usize::from(j<n&&level[j]/2==parent));assert!(next_j<=n);if j>i&&j-i<=2{let next_count=count+Arity::Two.width()-(j-i);level[w]=parent;assert_eq!(level[k],if k==w{parent}else{old});assert_eq!(next_count,count+2-(j-i));}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_level_continuation(){let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(0<n&&n<=16&&w<=i&&i<=n);if i==n{let next_n=w;let next_i=0usize;let next_w=0usize;assert!(next_n<=16&&next_w<=next_i&&next_i<=next_n);}else{assert!(i<16&&w<16)}}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_final_carrier(){let values:[[u8;32];16]=kani::any();let root:[u8;32]=kani::any();let idx:[u32;16]=kani::any();let n:usize=kani::any();let at:usize=kani::any();let len:usize=kani::any();let actual=n==1&&index_at(&idx,0)==0&&root_matches(&values,&root)&&at==len;assert_eq!(actual,n==1&&idx[0]==0&&values[0]==root&&at==len);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_keys.rs
+@@ -0,0 +1,16 @@
++use super::*;
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_opening_pointer_global(){let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof.as_ptr().wrapping_add(10055+832*i));}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_opening_window_pointer(){let proof:[u8;57607]=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(i<22&&w<26);let q=opening(&proof,i);let selected=&q[32*w..32*(w+1)];assert_eq!(selected.len(),32);assert_eq!(selected.as_ptr(),proof.as_ptr().wrapping_add(10055+832*i+32*w));}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_padding_guard(){let count:usize=kani::any();let s:usize=kani::any();kani::assume(s<6);if count>SLOT_NODES[s]{let out:Result<(),Error>=Err(Error::Parse);assert!(matches!(out,Err(Error::Parse)));}else{assert!(32*count<=32*SLOT_NODES[s]);assert!(32*SLOT_NODES[s]<=5504);assert_eq!((32*SLOT_NODES[s]-32*count)%8,0);}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_padding_continuation(){let scan:bool=kani::any();let verified:bool=kani::any();let mut calls=0;let result=if scan{Err(Error::Parse)}else{calls+=1;if !verified{Err(Error::Merkle)}else{Ok(())}};assert_eq!(calls,if scan{0}else{1});if scan{assert!(matches!(result,Err(Error::Parse)))}else if verified{assert!(result.is_ok())}else{assert!(matches!(result,Err(Error::Merkle)))}}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_padding_word_native(){let nodes:[u8;5504]=kani::any();let count:usize=kani::any();let cap:usize=kani::any();let k:usize=kani::any();kani::assume(count<=cap&&cap<=172&&k<4*(cap-count));let at=32*count+8*k;let q=&nodes[at..at+8];let word=u64::from_le_bytes(q.try_into().unwrap());assert_eq!(word==0,(0..8).all(|j|nodes[at+j]==0));}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_opening_byte_window(){let proof:[u8;57607]=kani::any();let w:usize=kani::any();kani::assume(w<26);let q=opening(&proof,0);let selected=&q[32*w..32*w+32];assert_eq!(selected[0],proof[10055+32*w]);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_replay_keys.rs
+@@ -0,0 +1,124 @@
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]struct Hash<'a>{q:&'a [u8;832],tree:usize,c:usize,answer:[u8;32],calls:&'a Cell<usize>}
++impl Digest32 for Hash<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{
++ assert_eq!(p.len(),3);assert_eq!(p[0].len(),2);assert_eq!(p[0][0],0x10);
++ let (tag,start,len,salt)=if self.tree==0{(0x71,0,480,608)}else if self.tree==1{(0xf1,480,128,640)}else{(0x72,672,128,800)};
++ assert_eq!(p[0][1],tag);assert_eq!(p[1].len(),len);assert_eq!(p[2].len(),32);
++ assert_eq!(p[1][self.c%len],self.q[start+self.c%len]);assert_eq!(p[2][self.c%32],self.q[salt+self.c%32]);
++ self.calls.set(self.calls.get()+1);self.answer
++}}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_R_leaf(){
++ let q:[u8;832]=kani::any();let tree:usize=kani::any();let c:usize=kani::any();
++ kani::assume(tree<3 && c<480);let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++ let out=batch_leaf(Hash{q:&q,tree,c,answer,calls:&calls},tree,&q);
++ assert_eq!(out[c%32],answer[c%32]);assert_eq!(calls.get(),1);
++}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_R_views(){
++ let proof=[0u8;57607];let i:usize=kani::any();let s:usize=kani::any();kani::assume(i<22 && s<6);
++ let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());
++ let nodes=slot(&proof,s);assert_eq!(nodes.len(),32*SLOT_NODES[s]);
++ assert_eq!(nodes.as_ptr(),proof[compact::slot_offset(s)..].as_ptr());
++}
++
++fn NBV_R_sort_step(mut keys:[u64;16],mut j:usize)->([u64;16],usize){
++        if j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {
++            keys.swap(j - 1, j);
++            j -= 1;
++        }
++(keys,j)
++}
++
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_R_sort(){
++ let keys:[u64;16]=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16 && k<16);
++ let (out,next)=NBV_R_sort_step(keys,j);
++ if j>0 && keys[j-1]>keys[j]{
++ assert_eq!(next,j-1);assert_eq!(out[k],if k==j{keys[j-1]}else if k==j-1{keys[j]}else{keys[k]});
++ }else{assert_eq!(next,j);assert_eq!(out[k],keys[k]);}
++}
++
++fn NBV_R_key_step(queries:&[u32;22],lo:usize,j:usize,tree:usize,keys:&mut [u64;16]){
++        let u = queries[lo + j];
++        let index = if tree == 2 { u / 4 } else { u };
++        keys[j] = (u64::from(index) << 8) | j as u64;
++}
++
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_R_key(){
++ let queries:[u32;22]=kani::any();let mut keys:[u64;16]=kani::any();let old=keys;
++ let batch:usize=kani::any();let tree:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();
++ kani::assume(batch<2 && tree<3 && k<16);let lo=if batch==0{0}else{10};let n=if batch==0{10}else{12};kani::assume(j<n);
++ let u=queries[lo+j];kani::assume(u<262144);
++ NBV_R_key_step(&queries,lo,j,tree,&mut keys);
++ let index=if tree==2{u/4}else{u};let expected=u64::from(index)*256+j as u64;
++ assert_eq!(keys[k],if k==j{expected}else{old[k]});assert_eq!(keys[j]>>8,u64::from(index));assert_eq!(keys[j]&255,j as u64);
++}
++
++fn NBV_R_offset_step(mut at:usize,mut i:usize)->(usize,usize){
++        at += 32 * SLOT_NODES[i];
++        i += 1;
++(at,i)
++}
++
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_R_offset(){
++ let at:usize=kani::any();let i:usize=kani::any();kani::assume(at<=57607 && i<6);
++ let (next,j)=NBV_R_offset_step(at,i);
++ let cap=match i{0=>146,1=>146,2=>128,3=>172,4=>172,_=>150};
++ assert_eq!(next,at+32*cap);assert_eq!(j,i+1);
++}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_R_leaf_wrong(){
++ let q:[u8;832]=kani::any();let tree:usize=kani::any();let c:usize=kani::any();
++ kani::assume(tree<3 && c<480);let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++ let out=batch_leaf(Hash{q:&q,tree,c,answer,calls:&calls},tree,&q);
++ assert_ne!(out[c%32],answer[c%32]);assert_eq!(calls.get(),1);
++}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_R_key_wrong(){
++ let queries:[u32;22]=kani::any();let mut keys:[u64;16]=kani::any();let old=keys;
++ let batch:usize=kani::any();let tree:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();
++ kani::assume(batch<2 && tree<3 && k<16);let lo=if batch==0{0}else{10};let n=if batch==0{10}else{12};kani::assume(j<n);
++ let u=queries[lo+j];kani::assume(u<262144);
++ NBV_R_key_step(&queries,lo,j,tree,&mut keys);
++ let index=if tree==2{u/4}else{u};let expected=u64::from(index)*256+j as u64;
++ assert_ne!(keys[k],if k==j{expected}else{old[k]});assert_eq!(keys[j]>>8,u64::from(index));assert_eq!(keys[j]&255,j as u64);
++}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_R_sort_wrong(){
++ let keys:[u64;16]=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16 && k<16);
++ let (out,next)=NBV_R_sort_step(keys,j);
++ if j>0 && keys[j-1]>keys[j]{
++ assert_eq!(next,j-1);assert_ne!(out[k],if k==j{keys[j-1]}else if k==j-1{keys[j]}else{keys[k]});
++ }else{assert_eq!(next,j);assert_ne!(out[k],keys[k]);}
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_leaf_rows.rs
+@@ -0,0 +1,124 @@
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]struct NBV_LeafPort<'a>{q:&'a[u8;832],tree:usize,c:usize,answer:[u8;32],calls:&'a Cell<usize>,wrong:bool}
++impl Digest32 for NBV_LeafPort<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{let (tag,start,len,salt)=if self.tree==0{(0x71,0,480,608)}else if self.tree==1{(0xf1,480,128,640)}else{(0x72,672,128,800)};assert_eq!(p.len(),3);assert_eq!(p[0],&[0x10,tag]);assert_eq!(p[1].len(),len);assert_eq!(p[2].len(),32);assert_eq!(p[1].as_ptr(),self.q[start..].as_ptr());assert_eq!(p[1][self.c%len],self.q[start+self.c%len]);if self.wrong{assert_ne!(p[2][self.c%32],self.q[salt+self.c%32])}else{assert_eq!(p[2][self.c%32],self.q[salt+self.c%32])};self.calls.set(self.calls.get()+1);self.answer}}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_0_new(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:0,c,answer,calls:&calls,wrong:false},0,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_0_new_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:0,c,answer,calls:&calls,wrong:true},0,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_0_duplicate(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:0,c,answer,calls:&calls,wrong:false},0,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_0_duplicate_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:0,c,answer,calls:&calls,wrong:true},0,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_1_new(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:1,c,answer,calls:&calls,wrong:false},1,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_1_new_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:1,c,answer,calls:&calls,wrong:true},1,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_1_duplicate(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:1,c,answer,calls:&calls,wrong:false},1,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_1_duplicate_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:1,c,answer,calls:&calls,wrong:true},1,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_2_new(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:2,c,answer,calls:&calls,wrong:false},2,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_2_new_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d==0||idx[d-1]!=index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:2,c,answer,calls:&calls,wrong:true},2,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,0);assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{answer[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_2_duplicate(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:2,c,answer,calls:&calls,wrong:false},2,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_leaf_row_2_duplicate_wrong(){
++let q:[u8;832]=kani::any();let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let answer:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12&&k<16&&c<32&&index<262144);let old_d=d;let old_i=idx[k];let old_v=val[k][c];
++kani::assume(d>0&&idx[d-1]==index);let calls=Cell::new(0);let leaf=batch_leaf(NBV_LeafPort{q:&q,tree:2,c,answer,calls:&calls,wrong:true},2,&q);let mut outcome=0u8;if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){outcome=1;}else{outcome=2;}}else{idx[d]=index;val[d]=leaf;d+=1;}
++assert_eq!(calls.get(),1);
++assert_eq!(outcome,if val[old_d-1]==answer{2}else{1});assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_posthash.rs
+@@ -0,0 +1,53 @@
++use super::*;
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_decision(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];let result=if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){1u8}else{2u8}}else{0u8};assert_eq!(result,if d>0&&idx[d-1]==index{if val[d-1]!=leaf{1}else{2}}else{0});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_decision_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];let result=if d>0&&same_batch_index(&idx,d-1,index){if !same_batch_leaf(&val,d-1,leaf){1u8}else{2u8}}else{0u8};assert_ne!(result,if d>0&&idx[d-1]==index{if val[d-1]!=leaf{1}else{2}}else{0});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_new(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d<12&&(d==0||idx[d-1]!=index));idx[d]=index;val[d]=leaf;d+=1;assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_eq!(val[k][c],if k==old_d{leaf[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_new_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d<12&&(d==0||idx[d-1]!=index));idx[d]=index;val[d]=leaf;d+=1;assert_eq!(d,old_d+1);assert_eq!(idx[k],if k==old_d{index}else{old_i});assert_ne!(val[k][c],if k==old_d{leaf[c]}else{old_v});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_equal(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d>0&&idx[d-1]==index);kani::assume(val[d-1]==leaf);let result=if !same_batch_leaf(&val,d-1,leaf){Err(Error::Merkle)}else{Ok(())};assert_eq!(result.is_ok(),true);assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_equal_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d>0&&idx[d-1]==index);kani::assume(val[d-1]==leaf);let result=if !same_batch_leaf(&val,d-1,leaf){Err(Error::Merkle)}else{Ok(())};assert_ne!(result.is_ok(),true);assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_unequal(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d>0&&idx[d-1]==index);kani::assume(val[d-1]!=leaf);let result=if !same_batch_leaf(&val,d-1,leaf){Err(Error::Merkle)}else{Ok(())};assert_eq!(result.is_ok(),false);assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_posthash_unequal_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let leaf:[u8;32]=kani::any();let index:u32=kani::any();let mut d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<=12&&k<16&&c<32);let old_d=d;let old_i=idx[k];let old_v=val[k][c];kani::assume(d>0&&idx[d-1]==index);kani::assume(val[d-1]!=leaf);let result=if !same_batch_leaf(&val,d-1,leaf){Err(Error::Merkle)}else{Ok(())};assert_ne!(result.is_ok(),false);assert_eq!(d,old_d);assert_eq!(idx[k],old_i);assert_eq!(val[k][c],old_v);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_rebased_key_domain(){let queries:[u32;22]=kani::any();let batch:usize=kani::any();let j:usize=kani::any();let tree:usize=kani::any();kani::assume(batch<2&&tree<3);let (lo,n)=if batch==0{(0,10)}else{(10,12)};kani::assume(j<n);let u=queries[lo+j];kani::assume(u<262144);let index=if tree==2{u/4}else{u};let key=(u64::from(index)<<8)|j as u64;let selected=lo+(key&255)as usize;assert_eq!(selected,lo+j);assert!(selected<22);assert_eq!((key>>8)as u32,index);assert!(index<262144);if tree==2{assert!(index<65536);}}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_binary_arity(){assert_eq!(Arity::Two.bits(),1);assert_eq!(Arity::Two.width(),2);assert_eq!(Arity::Two.levels(),18);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_row_windows.rs
+@@ -0,0 +1,123 @@
++
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct Hash<'a>{answer:[u8;32],left:&'a[u8],right:&'a[u8],c:usize,calls:&'a Cell<usize>}
++impl Digest32 for Hash<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{
++ assert_eq!(p.len(),3);assert_eq!(p[0],&[0x12]);assert_eq!(p[1].len(),32);assert_eq!(p[2].len(),32);
++ assert_eq!(p[1][self.c],self.left[self.c]);assert_eq!(p[2][self.c],self.right[self.c]);
++ self.calls.set(self.calls.get()+1);self.answer
++}}
++fn NBV_W_row<H:Digest32>(hash:H,idx:&mut[u32;16],val:&mut[[u8;32];16],n:usize,nodes:&[u8],mut at:usize,mut w:usize,mut i:usize)->(bool,usize,usize,usize){
++ let parent=index_at(idx,i)>>Arity::Two.bits();
++ let digest=if i+1<n && index_at(idx,i+1)==index_at(idx,i)^1{
++  let d=occupied_binary_parent(hash,val,i);i+=2;d
++ }else{
++  let Some(sibling)=nodes.get(at..at+32)else{return(false,at,w,i)};
++  at+=32;let d=sibling_binary_parent(hash,val,i,sibling,index_at(idx,i)&1==0);i+=1;d
++ };
++ idx[w]=parent;val[w]=digest;w+=1;(true,at,w,i)
++}
++
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_pair_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;idx[1]=a^1;val[0]=left;val[1]=right;let calls=Cell::new(0);
++ let out=NBV_W_row(Hash{answer:reply,left:&left,right:&right,c,calls:&calls},&mut idx,&mut val,2,&[],0,0,0);
++ assert_eq!(out,(true,0,1,2));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_eq!(val[0][c],reply[c]);
++}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_supply_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let sibling:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;val[0]=value;let calls=Cell::new(0);let left=a&1==0;
++ let out=NBV_W_row(Hash{answer:reply,left:if left{&value}else{&sibling},right:if left{&sibling}else{&value},c,calls:&calls},&mut idx,&mut val,1,&sibling,0,0,0);
++ assert_eq!(out,(true,32,1,1));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_eq!(val[0][c],reply[c]);
++}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_short_window(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let len:usize=kani::any();let c:usize=kani::any();kani::assume(c<32&&len<32);let nodes:[u8;32]=kani::any();let calls=Cell::new(0);
++ idx[0]=a;val[0]=value;let reply:[u8;32]=kani::any();
++ let out=NBV_W_row(Hash{answer:reply,left:&value,right:&nodes,c,calls:&calls},&mut idx,&mut val,1,&nodes[..len],0,0,0);
++ assert_eq!(out,(false,0,0,0));assert_eq!(calls.get(),0);assert_eq!(idx[0],a);assert_eq!(val[0][c],value[c]);
++}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_level_iterator(){let level:usize=kani::any();kani::assume(level<=18);let mut it=level..Arity::Two.levels() as usize;let next=it.next();assert_eq!(next,if level<18{Some(level)}else{None});if next.is_some(){assert_eq!(it.start,level+1);}}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_admission_window_iterator(){
++ let indices:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<=n&&n<=16);
++ let mut it=indices[j..n].windows(2);let next=it.next();if n-j>=2{let pair=next.unwrap();assert_eq!(pair[0],indices[j]);assert_eq!(pair[1],indices[j+1]);assert_eq!(it.len(),n-j-2+1-1);}else{assert!(next.is_none());}
++}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_admission_value_iterator(){let indices:[u32;16]=kani::any();let n:usize=kani::any();let j:usize=kani::any();kani::assume(j<=n&&n<=16);let mut it=indices[j..n].iter();let next=it.next();if j<n{assert_eq!(*next.unwrap(),indices[j]);assert_eq!(it.len(),n-j-1)}else{assert!(next.is_none())}}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_count_zero(){let level=[0u32;16];let k:usize=kani::any();kani::assume(k<16);assert_eq!(level[k],0);let count=0usize;assert_eq!(count,0);}
++
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_count_copy_prefix(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_level_terminal(){let idx:[u32;16]=kani::any();let val:[[u8;32];16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let at:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(n>0&&n<=16&&i==n&&w>0&&w<=i&&at<=5504&&k<16&&c<32);let mut next_n=n;let old_idx=idx[k];let old_val=val[k][c];if i>=n{next_n=w;}assert_eq!(next_n,w);assert_eq!(idx[k],old_idx);assert_eq!(val[k][c],old_val);assert_eq!(at,at);}
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::proof] #[kani::unwind(34)]
++fn NBV_W_count_guard(){let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();kani::assume(n<=16&&w<=i&&i<=n);if i<n{assert!(i<16&&w<16);let j=i;assert!(j<=n);}else{assert_eq!(i,n);assert!(w<=16)}}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_W_pair_window_wrong(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let left:[u8;32]=kani::any();let right:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;idx[1]=a^1;val[0]=left;val[1]=right;let calls=Cell::new(0);
++ let out=NBV_W_row(Hash{answer:reply,left:&left,right:&right,c,calls:&calls},&mut idx,&mut val,2,&[],0,0,0);
++ assert_eq!(out,(true,0,1,2));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_ne!(val[0][c],reply[c]);
++}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_W_supply_window_wrong(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let sibling:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let c:usize=kani::any();kani::assume(c<32);
++ idx[0]=a;val[0]=value;let calls=Cell::new(0);let left=a&1==0;
++ let out=NBV_W_row(Hash{answer:reply,left:if left{&value}else{&sibling},right:if left{&sibling}else{&value},c,calls:&calls},&mut idx,&mut val,1,&sibling,0,0,0);
++ assert_eq!(out,(true,32,1,1));assert_eq!(calls.get(),1);assert_eq!(idx[0],a/2);assert_ne!(val[0][c],reply[c]);
++}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_W_short_window_wrong(){
++ let mut idx=[0u32;16];let mut val=[[0u8;32];16];let a:u32=kani::any();let value:[u8;32]=kani::any();let len:usize=kani::any();let c:usize=kani::any();kani::assume(c<32&&len<32);let nodes:[u8;32]=kani::any();let calls=Cell::new(0);
++ idx[0]=a;val[0]=value;let reply:[u8;32]=kani::any();
++ let out=NBV_W_row(Hash{answer:reply,left:&value,right:&nodes,c,calls:&calls},&mut idx,&mut val,1,&nodes[..len],0,0,0);
++ assert_eq!(out,(false,0,0,0));assert_eq!(calls.get(),0);assert_eq!(idx[0],a);assert_ne!(val[0][c],value[c]);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBV_parent.rs
+@@ -0,0 +1,33 @@
++use super::*;
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_roots(){let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let t:usize=kani::any();let c:usize=kani::any();kani::assume(t<3&&c<32);let [root0,root1]=roots;let forwarded=[root0,root1,folded];assert_eq!(forwarded[t][c],if t==2{folded[c]}else{roots[t][c]});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_roots_wrong(){let roots:[[u8;32];2]=kani::any();let folded:[u8;32]=kani::any();let t:usize=kani::any();let c:usize=kani::any();kani::assume(t<3&&c<32);let [root0,root1]=roots;let forwarded=[root0,root1,folded];assert_ne!(forwarded[t][c],if t==2{folded[c]}else{roots[t][c]});}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_opening_installed_window(){let mut proof=[0u8;57607];let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let bytes:[u8;32]=kani::any();kani::assume(i<22&&w<26&&c<32);let at=10055+832*i+32*w;proof[at..at+32].copy_from_slice(&bytes);let q=opening(&proof,i);assert_eq!(q[32*w+c],bytes[c]);}
++
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_opening_installed_window_wrong(){let mut proof=[0u8;57607];let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let bytes:[u8;32]=kani::any();kani::assume(i<22&&w<26&&c<32);let at=10055+832*i+32*w;proof[at..at+32].copy_from_slice(&bytes);let q=opening(&proof,i);assert_ne!(q[32*w+c],bytes[c]);}
++#[kani::proof] #[kani::unwind(2)]
++fn NBV_parent_prefix_guard(){let count:usize=kani::any();let s:usize=kani::any();let d:usize=kani::any();kani::assume(s<6&&d>0&&d<=12);let observed=Some(count).ok_or(Error::Merkle);assert!(matches!(observed,Ok(x) if x==count));if count>SLOT_NODES[s]{assert!(count>SLOT_NODES[s]);}else{let width=32*count;assert!(width<=32*SLOT_NODES[s]&&width<=5504);let n=d;assert!(n>0&&n<=16);}}
++
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBV_padding_word_wrong(){let nodes:[u8;5504]=kani::any();let count:usize=kani::any();let cap:usize=kani::any();let j:usize=kani::any();kani::assume(count<=cap&&cap<=172&&j<4*(cap-count));let at=32*count+8*j;let q=&nodes[at..at+8];let word=u64::from_le_bytes(q.try_into().unwrap());assert_ne!(word==0,(0..8).all(|c|nodes[at+c]==0));}

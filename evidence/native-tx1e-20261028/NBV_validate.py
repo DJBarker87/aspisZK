@@ -1,6 +1,10 @@
 from pathlib import Path
 import json,re,hashlib,subprocess
 E=Path(__file__).resolve().parent;R=E.parents[1]
+patch=(R/'evidence/kani-mitig-20261028/KMX_copy_stubs.patch').read_text()
+block=patch.split('+++ b/KMX_stubs.rs\n',1)[1].split('diff --git',1)[0]
+stub=''.join(l[1:] for l in block.splitlines(True) if l.startswith('+') and not l.startswith('+++'))
+stub_sha=hashlib.sha256(stub.encode()).hexdigest();patch_sha=hashlib.sha256(patch.encode()).hexdigest()
 NEG={2,8,14,15,17,19,21,29,31,33,35,37,41,43,45,47,49,50}
 rows=[];errors=[]
 for p in sorted(E.glob('NBV_[KL][0-9][0-9][0-9]/receipt.json')):
@@ -14,6 +18,8 @@ for p in sorted(E.glob('NBV_[KL][0-9][0-9][0-9]/receipt.json')):
   assert hashlib.sha256(snapshot.read_bytes()).hexdigest()==digest,(a,f)
  status='pass' if rc['exit_status']==0 else 'excluded'
  if kind=='kani':
+  assert rc['source_hashes']['NBV_src/KMX_stubs.rs']==stub_sha,(a,'KMX Rust replacement drift')
+  assert rc['source_hashes']['NBV_KMX_copy_stubs.patch']==patch_sha,(a,'KMX patch drift')
   g=json.loads((E/(a+'-graph.json')).read_text());assert g['allowed'] and not g['new_packages'] and not g['edge_errors'] and g['unchanged'],a
   assert g['lock_before']==g['lock_after']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef',a
   timed='timed out' in text.lower() or rc['exit_status']==124
