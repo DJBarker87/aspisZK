@@ -66,3 +66,30 @@ The trust inventory should record that Kani 0.67.0 is trusted for P6 bridges
 only for harnesses with no reached copy builtin, or with copies replaced by
 validated element-wise stubs. Recommendation: adopt that narrowing; it adds
 no trust and keeps the pinned toolchain.
+
+## Mitigation result (KMX_, 2026-10-28 03:45 UTC)
+
+evidence/kani-mitig-20261028/KMX_FINDING.md:
+- Configuration map: of 55 copy configurations tested, 34 disagree with
+  native execution, 17 agree on their fixtures and 4 time out. The
+  divergence is broad, not one corner case.
+- The divergence persists on Kani 0.68.0 / CBMC 6.11.0, so a version upgrade
+  is not a fix. No upgrade is adopted.
+- Six element-wise copy replacements are VALIDATED
+  (evidence/kani-mitig-20261028/KMX_copy_stubs.patch): paired Kani controls
+  (the expected value passes, the negative control fails), 1,466,538 native
+  differential checks and Lean value laws.
+- Exposure replay with the stubs: 18 PASS, 16 TIMEOUT, 0 FAIL (24 excluded as
+  call-name collisions). No credited earlier pass was shown to be false; the
+  16 timeouts remain unconfirmed.
+
+Leaf status after the replay:
+- decode_k: all exposed harnesses confirmed, so credit is RESTORED.
+- expand_values: SUSPENDED; all confirmed except LPn_K001 (timeout).
+- checkpoint: SUSPENDED; LPe_K015/K018 confirmed, while LPm_K001/K003/K004/
+  K005, LPe_K016/K017/K019, LPf_K027 and LPi_K012/K013/K017 timed out.
+- wide_view: SUSPENDED (LPa_K015 timeout).
+- prepared_claim: SUSPENDED (LPb_K016, LPe_K005 timeouts).
+Tally: 9 of 13 leaves CLOSED, 4 SUSPENDED. Next, KMY_ re-verifies the 16
+timeouts with the stubs, by window (one window per harness plus a Lean frame
+proof), never rerunning an unchanged shape.
