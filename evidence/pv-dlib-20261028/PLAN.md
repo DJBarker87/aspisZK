@@ -150,3 +150,11 @@ Ruling (r) appended to common file and read after 42244: Kani padding PASS5
 is suspended (reached copies); constructor PASS1/2 conservatively suspended
 pending reached-copy audit. Sixth copy-dependent wrapper gate will not run.
 Continue structural/extraction Lean work; no row credited removed.
+
+Kani budget exhausted at run6: exact shipped generic empty Vec<Token> TryFrom
+N=0/N=1, Token has Drop and is non-Copy. PASS0/136,7unreachable,wall0.35s,
+RSS134664KiB,swap0. This tests zero-element length/ownership branches only;
+no arbitrary populated Vec native-link credit is claimed.
+Direct shipped generic entry extraction: Charon0, Aeneas2 (structured Drop
+requires destructor semantics). Unlike prior candidate adapters this entry
+is exactly v.try_into() for unconstrained T,N. No extractor guard bypass.
