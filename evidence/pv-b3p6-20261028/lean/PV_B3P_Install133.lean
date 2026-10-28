@@ -5,11 +5,12 @@ open Aeneas Aeneas.Std Result ProverRwFull
 set_option autoImplicit false
 noncomputable section
 
-def value : alloc.vec.Vec U16 := ⟨PV_B3P_Law133.rows.val, by
-  rw [PV_B3P_Law133.length]
-  decide⟩
+def toVec (r : Array U16 214#usize) : alloc.vec.Vec U16 :=
+  ⟨r.val, by have h := Array.length_eq r; scalar_tac⟩
 
-def selected (base : ExternalTypes) (ops : @ExternalFuns base) : @ExternalFuns base :=
+def value : alloc.vec.Vec U16 := toVec PV_B3P_Law133.rows
+
+@[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns base) : @ExternalFuns base :=
   letI := base
   {ops with op133 := ok (.Ok value)}
 
@@ -17,9 +18,9 @@ theorem source (base : ExternalTypes) (ops : @ExternalFuns base) :
     @ExternalFuns.op133 base (selected base ops) = ok (.Ok value) := rfl
 
 theorem reference (base : ExternalTypes) (ops : @ExternalFuns base) :
-    @ExternalFuns.op133 base (selected base ops) = do
+    @ExternalFuns.op133 base (selected base ops) = (do
       let r ← PV_B3P_133.reference133.active_rows
-      ok (.Ok (⟨r.val, by have := r.property; omega⟩ : alloc.vec.Vec U16)) := by
+      ok (.Ok (toVec r))) := by
   rw [PV_B3P_Law133.source]
   rfl
 
