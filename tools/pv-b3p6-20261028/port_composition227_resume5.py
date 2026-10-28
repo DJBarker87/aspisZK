@@ -4,6 +4,7 @@ through the new helper and composition, preserving the root definition itself.
 """
 from pathlib import Path
 import re,json,hashlib
+check='--check'in __import__('sys').argv
 D=Path('evidence/pv-b3p6-20261028');R=D/'raw227-composition-resume5';O=D/'raw227-parts-resume5'
 blocks=lambda s:re.split(r'(?=^/-- \[)',s,flags=re.M)
 def name(b):
@@ -31,7 +32,11 @@ for kind in ('Types','Funs'):
   edits.append((i,' (PV_B3P_Length227.size16 '+ ' '.join('('+x+')'for x in xs)+')'))
  for i,text in sorted(edits,reverse=True):code=code[:i]+text+code[i:]
  code+='\nend PV_B3P_227\n\n'+''.join('#print axioms PV_B3P_227.'+n+'\n'for n in added+changed)
- q=D/'lean/PV_B3P_P227_13b.lean';q.write_text(code)
- p=D/'lean/PV_B3P_P227_14.lean';before=p.read_text();after=before.replace('import PV_B3P_P227_13\n','import PV_B3P_P227_13b\n');assert before==after or before.count('import PV_B3P_P227_13\n')==1;p.write_text(after)
- (D/'port-composition227-resume5.json').write_text(json.dumps(dict(raw_funs_sha256=hashlib.sha256((R/'Funs.lean').read_bytes()).hexdigest(),types_all_identical=True,changed=changed,added=added,all_other_bodies_identical=True,module_sha256=hashlib.sha256(code.encode()).hexdigest(),named_literal_proofs=len(edits),root_body_unchanged=True,root_import='PV_B3P_P227_13b',root_sha256=hashlib.sha256(after.encode()).hexdigest(),numeric_ports=[],raw_modified=False),indent=2)+'\n')
+ q=D/'lean/PV_B3P_P227_13b.lean'
+ if check:assert q.read_text()==code
+ else:q.write_text(code)
+ p=D/'lean/PV_B3P_P227_14.lean';before=p.read_text();after=before.replace('import PV_B3P_P227_13\n','import PV_B3P_P227_13b\n');assert before==after or before.count('import PV_B3P_P227_13\n')==1;
+ if check:assert p.read_text()==after
+ else:p.write_text(after)
+ if not check:(D/'port-composition227-resume5.json').write_text(json.dumps(dict(raw_funs_sha256=hashlib.sha256((R/'Funs.lean').read_bytes()).hexdigest(),types_all_identical=True,changed=changed,added=added,all_other_bodies_identical=True,module_sha256=hashlib.sha256(code.encode()).hexdigest(),named_literal_proofs=len(edits),root_body_unchanged=True,root_import='PV_B3P_P227_13b',root_sha256=hashlib.sha256(after.encode()).hexdigest(),numeric_ports=[],raw_modified=False),indent=2)+'\n')
  print('new helper and composition ported; all other bodies identical')
