@@ -23,8 +23,8 @@ set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwFullSampler.install ProverRwCallerBinding.install ProverRwOuterContext.install ProverRwOuterTag.install ProverRwOuterTag.selected ProverRwOuterGuardLeaves.selected ProverRwSuccessHeapInstall.selected ProverRwSuccessErrorInstall.selected ProverRwSuccessNativeNegInstall.selected ProverRwSuccessNativeWideInstall.selected ProverRwBodyNativeWideInstall.selected ProverRwP6TransitionInstall.selected ProverRwP6FlatInstall.selected ProverRwP6BoundaryInstall.selected ProverRwSuccessBodyInterpretation.selected
 
 theorem fingerprints (ops : ExternalFuns) {T : Type} :
-    @ExternalFuns.op255 _ {ops with op112 := ProverRwOuterGuardLeaves.mask,
-      op113 := ProverRwOuterGuardLeaves.factor} T = @ExternalFuns.op255 _ ops T := rfl
+    @ExternalFuns.op255 _ ({ops with op112 := ProverRwOuterGuardLeaves.mask,
+      op113 := ProverRwOuterGuardLeaves.factor}) T = @ExternalFuns.op255 _ ops T := rfl
 
 theorem guards (ops : ExternalFuns) {T : Type} :
     @ExternalFuns.op255 _ (ProverRwOuterGuardLeaves.selected ops) T = @ExternalFuns.op255 _ ops T := by
