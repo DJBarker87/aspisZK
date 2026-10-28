@@ -1,6 +1,6 @@
 # D350 merged candidate adoption gate
 
-In progress. Candidate `82566acdfb488183022f41ac564c11df22c9404f`, branch `codex/pv-gate6-20261028`, exact worktree `/Users/dominic/ZK/.worktrees/pv-gate6`. Host directory `/home/dombarker/project-offloads/codex-pv-gate6-20261028/`.
+Candidate `82566acdfb488183022f41ac564c11df22c9404f`, branch `codex/pv-gate6-20261028`, exact worktree `/Users/dominic/ZK/.worktrees/pv-gate6`. Host directory `/home/dombarker/project-offloads/codex-pv-gate6-20261028/`.
 
 Stage A: fresh default/devnet/Pool ELF rebuild and pin comparison; pinned 1.94.1 devnet_spend client; fixed coin0 against retained SHA-checked 37e5e133f8 control; fresh seeds6000–6999 whole-prover differential against c57a344726 using pv-integ4's harness, comparator, concurrency and scope recipe. D328 criterion compares proof, public, ledger and canonical result bytes, excluding elapsed seconds only.
 
@@ -23,3 +23,30 @@ Initial upload was refused on the55GiB aggregate reservation; first180s retry al
 Fresh seeds 6000–6999: 1,000/1,000 pairs PASS against shipped `c57a344726`, using pv-integ4’s unchanged harness/comparator and three-process pipeline. This includes 600 complete proof pairs, 100 rejected-prefix pairs and four oracle-logged pairs. Canonical result records and ledger files match for all 1,000 pairs; proof/public bytes match wherever produced. Elapsed seconds alone are excluded. No discrepancy found. Full coverage, source, resource and byte-comparison receipts are under `combined/`; `stage-a-validation.json` checks the collected evidence.
 
 Recovery after capacity error reused the still-running differential scope, without resubmission. Before recovery eight native scopes had completed and one differential scope was active; Lean/Kani attempts remain zero. No numeric native-attempt budget was specified. Refusals and cooldowns are retained; refusals started no compiler.
+
+## Adoption gate outcome
+
+Stage A PASS: all three ELF pins, pinned client, fixed coin0 deterministic bytes, and seeds6000–6999 differential. The inherited harness covers600 complete proof pairs,100 rejected prefixes and4 oracle-log pairs across1000 paired cases; all1000 canonical records and ledger pairs match. No completed workload was repeated during recovery.
+
+Optimized timing binary SHA256s:
+- control: `1975a5d1bbdf3ca3378bd3b905f6f387862937bf019321f6f3d315c9b2cdfea6` (2570904 bytes).
+- candidate: `1ee2411fadb901fa14420c9bdf719012e3012836993e7af26a3d8a1f9eb92dc7` (2972720 bytes).
+
+Timing results (seconds; ratio of candidate/control medians):
+- transfer: **INCOMPLETE**.
+  all: 7 pairs; candidate median 13.971136, p10/p90 13.475419/14.587534; control median 14.010553, p10/p90 13.343688/14.288541; ratio 0.997187.
+  unthrottled: 0 pairs.
+  throttled: 7 pairs; candidate median 13.971136, p10/p90 13.475419/14.587534; control median 14.010553, p10/p90 13.343688/14.288541; ratio 0.997187.
+- withdrawal: **INCOMPLETE**.
+  all: 7 pairs; candidate median 14.073057, p10/p90 13.511129/14.309894; control median 13.884076, p10/p90 13.512598/14.617606; ratio 1.013611.
+  unthrottled: 0 pairs.
+  throttled: 7 pairs; candidate median 14.073057, p10/p90 13.511129/14.309894; control median 13.884076, p10/p90 13.512598/14.617606; ratio 1.013611.
+
+Planned/completed pairs: 10/7; unthrottled 0, throttled 7; minimum unthrottled5. Measurement error: `AssertionError(('foreign capped job', 'pair-7-candidate-after'))`.
+Window marker written 2026-10-28T07:34:17.558432+00:00, immutable expiry 2026-10-28T07:59:17.558432+00:00; measurement start/end 2026-10-28T07:34:27.981418+00:00/2026-10-28T07:41:30.494969+00:00; marker removed 2026-10-28T07:41:30.534168+00:00. Full package temperatures, throttle deltas and guards are in measurement/.
+Native charged scopes: 14; Lean0, Kani0. Refusals consume no attempts. Every receipt records target, revision, exit, wall, peak RSS, swap, limits and axioms N/A. Task-owned Cargo target cleanup is recorded in cleanup.json; keys and raw fixture evidence retained.
+Stage B INCOMPLETE: a foreign pv-b3p6-lean-42574.scope appeared during the active marker, so the guard stopped measurement. Seven completed pairs are retained; partial pair7 candidate outputs are excluded. All seven completed pairs throttled; zero unthrottled pairs, below the required five. No new window or unchanged measurement rerun was launched. Next deliverable: lead repair of cross-job quiet-window enforcement and a separately authorized timing run under a reliably quiet, thermally suitable window.
+
+No formal premise was removed or changed. This report supplies finite functional and timing evidence for lead adoption review. Target not yet established.
+
+Timing stopped on the guard after candidate execution in pair8 (zero-based pair7): foreign `pv-b3p6-lean-42574.scope` was populated despite our marker. Pair8 is excluded from statistics and its partial files are retained. Seven complete pairs remain, all throttled; no unthrottled gate verdict is supported. No measurement was restarted. Next concrete deliverable: lead repair/review of quiet-window admission, then a newly justified timing run with enough unthrottled pairs.

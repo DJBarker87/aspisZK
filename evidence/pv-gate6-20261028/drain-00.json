@@ -1,0 +1,44 @@
+{
+  "utc": 1793172857.6641955,
+  "loadavg": "1.91 3.41 7.95 2/1337 3650526",
+  "load": [
+    1.91357421875,
+    3.40625,
+    7.94970703125
+  ],
+  "self_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/session-353239.scope",
+  "other_capped_user_jobs": [
+    {
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-re1020b88804047c7babb756656147968.scope",
+      "memory_max": 8589934592,
+      "processes": [
+        {
+          "pid": "3647000",
+          "args": "/usr/bin/python3 S2W_run_host.py KNA_K027.json"
+        },
+        {
+          "pid": "3647019",
+          "args": "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNA_K027/time.log timeout 180 python3 KNA_gate.py KNA_K027 KNA_body_1120_1280"
+        },
+        {
+          "pid": "3647020",
+          "args": "timeout 180 python3 KNA_gate.py KNA_K027 KNA_body_1120_1280"
+        },
+        {
+          "pid": "3647022",
+          "args": "python3 KNA_gate.py KNA_K027 KNA_body_1120_1280"
+        },
+        {
+          "pid": "3647050",
+          "args": "/home/dombarker/.kani/kani-0.67.0/bin/kani-driver /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNA_windows.rs -Z unstable-options -Z stubbing --harness-timeout 90s --harness KNA_body_1120_1280 --output-format regular --solver kissat --cbmc-args --unwinding-assertions --slice-formula"
+        },
+        {
+          "pid": "3647092",
+          "args": "cbmc --no-malloc-may-fail --no-undefined-shift-check --no-signed-overflow-check --nan-check --no-self-loops-to-assumptions --no-pointer-primitive-check --object-bits 16 --unwind 1769 --external-sat-solver kissat --slice-formula --unwinding-assertions --slice-formula /home/dombarker/project-offloads/codex-cx-kani-reverify1-20261028/KNA_windows__RNvCse3KR5DclXbl_11KNA_windows18KNA_body_1120_1280.out --verbosity 9 --json-ui"
+        }
+      ]
+    }
+  ],
+  "quiet": false,
+  "inspection": "All users: populated finite-memory cgroups under user.slice, including descendants, excluding only this timing scope and its ancestors; OS services are not build jobs"
+}

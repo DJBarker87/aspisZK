@@ -15,7 +15,11 @@ out['differential'] = dict(passed=True, seeds=[6000,6999], pairs=1000,
 out['timing_binary_pins'] = load('timing-binary-pins.json')
 t = load('measurement/comparison.json')
 out['timing'] = t
-out['stage_b'] = 'PASS' if t['passed'] else 'FAIL or INCOMPLETE; see fixture verdicts'
+out['stage_b'] = 'PASS' if t['passed'] else ('INCOMPLETE' if any(r['verdict']=='INCOMPLETE' for r in t['timing']) else 'FAIL')
+out['all_pairs_numeric_thresholds'] = {r['fixture']: dict(
+    median_under_15=r['groups']['all']['statistics']['candidate'].get('median',float('inf'))<15,
+    ratio_at_most_1_10=(r['groups']['all']['ratio_candidate_control'] or float('inf'))<=1.10,
+    qualification='Includes thermally throttled pairs; does not supply the missing unthrottled sample count') for r in t['timing']}
 out['window'] = dict(clock=load('window-clock.json'), cleanup=load('window-cleanup.json'))
 assert out['window']['cleanup']['removed']
 out['cleanup'] = load('cleanup.json')
@@ -29,7 +33,7 @@ out['target_established'] = False
 out['premise_effect'] = 'removed 0; added 0; weakened 0; changed 0; finite validation only'
 (E/'comparison.json').write_text(json.dumps(out,indent=2)+'\n')
 utc=lambda n:datetime.datetime.fromtimestamp(n,datetime.timezone.utc).isoformat()
-lines=['\n## Completed adoption gate\n',
+lines=['\n## Adoption gate outcome\n',
     'Stage A PASS: all three ELF pins, pinned client, fixed coin0 deterministic bytes, and seeds6000–6999 differential. The inherited harness covers600 complete proof pairs,100 rejected prefixes and4 oracle-log pairs across1000 paired cases; all1000 canonical records and ledger pairs match. No completed workload was repeated during recovery.\n',
     'Optimized timing binary SHA256s:']
 for w,p in out['timing_binary_pins'].items():lines.append(f"- {w}: `{p['sha256']}` ({p['bytes']} bytes).")
@@ -44,6 +48,7 @@ clock=out['window']['clock'];clean=out['window']['cleanup']
 lines += ['',f"Planned/completed pairs: {t['planned_pairs']}/{t['completed_pairs']}; unthrottled {t['unthrottled_pairs']}, throttled {t['throttled_pairs']}; minimum unthrottled5. Measurement error: `{t['error']}`.",
     f"Window marker written {utc(clock['start'])}, immutable expiry {utc(clock['until'])}; measurement start/end {utc(t['start'])}/{utc(t['end'])}; marker removed {utc(clean['marker_removal_time'])}. Full package temperatures, throttle deltas and guards are in measurement/.",
     f"Native charged scopes: {len(receipts)}; Lean0, Kani0. Refusals consume no attempts. Every receipt records target, revision, exit, wall, peak RSS, swap, limits and axioms N/A. Task-owned Cargo target cleanup is recorded in cleanup.json; keys and raw fixture evidence retained.",
+    'Stage B INCOMPLETE: a foreign pv-b3p6-lean-42574.scope appeared during the active marker, so the guard stopped measurement. Seven completed pairs are retained; partial pair7 candidate outputs are excluded. All seven completed pairs throttled; zero unthrottled pairs, below the required five. No new window or unchanged measurement rerun was launched. Next deliverable: lead repair of cross-job quiet-window enforcement and a separately authorized timing run under a reliably quiet, thermally suitable window.\n',
     'No formal premise was removed or changed. This report supplies finite functional and timing evidence for lead adoption review. Target not yet established.']
-p=E/'README.md';s=p.read_text().replace('In progress. Candidate','Candidate');s=s.split('\n## Completed adoption gate')[0];p.write_text(s+'\n'.join(lines)+'\n')
+p=E/'README.md';s=p.read_text().replace('In progress. Candidate','Candidate');s=s.split('\n## Adoption gate outcome')[0];p.write_text(s+'\n'.join(lines)+'\n')
 print('Assembled retained-receipt report:',out['stage_a'],out['stage_b'])

@@ -1,0 +1,525 @@
+{
+  "reason": "automatic capacity relaunch 2",
+  "utc": 1793172884.8166442,
+  "head": "80c3699f7a",
+  "completed_native_launches": 13,
+  "native_budget": "No numeric native budget specified",
+  "lean_attempts": 0,
+  "kani_attempts": 0,
+  "receipts": [
+    {
+      "path": "build-client/receipt/receipt.json",
+      "sha256": "165bbac70544dab54c2e739264c256d88484ef133eb4d8144e3b35f4c985b8f8",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "--features",
+        "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+        "--bin",
+        "devnet_spend"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source/tools/r1-cost-probe",
+      "expected_time": "optimized compilation",
+      "exit_status": 0,
+      "wall_seconds": 140.266,
+      "peak_rss_kib": 640276,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rede5dc7102044b96826d87018b7f54a2.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 2082803712,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "build-default/receipt/receipt.json",
+      "sha256": "dcbc69e3cce7ea15900dee6d31e862583b1ae78b6cd296cfb80c789ecf080fb2",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "timeout",
+        "600",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/build-default/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized SBF compilation and diagnostic emission",
+      "exit_status": 0,
+      "wall_seconds": 47.223,
+      "peak_rss_kib": 684472,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rbb1dae0de48e4a64a8af5f68e29cf7bd.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 1771188224,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/sbf-target-verifier",
+        "CARGO_BUILD_JOBS": null,
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "build-devnet/receipt/receipt.json",
+      "sha256": "b0eff608391b089da48b6883d0d128106ec706000c0a0b5a05e23e0b470e0c2e",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "timeout",
+        "600",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source/programs/r1-cost-probe/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/build-devnet/artifacts",
+        "--features",
+        "pool-adapter,private-leaf-salts",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized SBF compilation and diagnostic emission",
+      "exit_status": 0,
+      "wall_seconds": 33.067,
+      "peak_rss_kib": 687096,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r36387c15d1104ff68eb30dc8f976415f.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 1182855168,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/sbf-target-verifier",
+        "CARGO_BUILD_JOBS": null,
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "build-fixture/receipt/receipt.json",
+      "sha256": "c17aafe0a244982ddd13b069fc5c7fbcb46dc06d24c10308eae29a1dfca9a7e9",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_gate",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized compilation",
+      "exit_status": 0,
+      "wall_seconds": 57.447,
+      "peak_rss_kib": 570808,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rad6090d954cc44d88e37e45a80980ca4.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 1055051776,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "build-pool/receipt/receipt.json",
+      "sha256": "883512806c16fdd1eb595c60c53c0d90523fa5e396a6c491acc60b6bbe93108e",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "timeout",
+        "600",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "/home/dombarker/.local/share/solana/install/releases/3.1.13/solana-release/bin/cargo-build-sbf",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source/programs/aspis-pool/Cargo.toml",
+        "--sbf-out-dir",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/build-pool/artifacts",
+        "--features",
+        "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+        "--skip-tools-install",
+        "--offline",
+        "-j",
+        "4",
+        "--",
+        "--locked"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized SBF compilation and diagnostic emission",
+      "exit_status": 0,
+      "wall_seconds": 55.832,
+      "peak_rss_kib": 676608,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc8ee447dd20f46a0af618278ccf94eec.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 1339400192,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/sbf-target-pool",
+        "CARGO_BUILD_JOBS": null,
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/baseline/build-differential/receipt/receipt.json",
+      "sha256": "0bfba204d375549319fd1938c22a520034b45b9c3abccfcf3b45b17fd981b9fb",
+      "source_revision": "c57a344726745387efb38d1571d885c69ce829ee",
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_differential",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/source",
+      "expected_time": "optimized compilation",
+      "exit_status": 0,
+      "wall_seconds": 43.423,
+      "peak_rss_kib": 563124,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r65ba07cc7628465cbfb082c7c3a3638a.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 940072960,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/baseline/build-timing/receipt/receipt.json",
+      "sha256": "33f550b4bfca993ec84840d266527d1cb4da7d9b85a6140f071c1699b9f9606f",
+      "source_revision": "c57a344726745387efb38d1571d885c69ce829ee",
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_gate",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/source",
+      "expected_time": "optimized compilation",
+      "exit_status": 0,
+      "wall_seconds": 0.455,
+      "peak_rss_kib": 178892,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2852dafbe8ba4fbab7103efcffb5b3a5.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 167665664,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/baseline/preflight-99/receipt/receipt.json",
+      "sha256": "c5ad68dcb0d95c2c6c6dd7200402bd1be2bb968661df91cb55bf6c38ac5a4e6a",
+      "source_revision": "c57a344726745387efb38d1571d885c69ce829ee",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/bin/prover_rw_gate",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/preflight/control",
+        "99",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/source",
+      "expected_time": "optimized complete retry-owner proof generation and P_R1 elimination",
+      "exit_status": 0,
+      "wall_seconds": 27.182,
+      "peak_rss_kib": 667928,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r796f10a37ae54d8bbf136fda0d4fe44e.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 704819200,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/candidate/build-differential/receipt/receipt.json",
+      "sha256": "6e689e9e88dab1661b9c026d89d27f2f4ffd92cdcfc5ebfe8771872f1eaa7e4e",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "cargo",
+        "build",
+        "--release",
+        "--offline",
+        "--locked",
+        "-j",
+        "4",
+        "-p",
+        "aspis-r1-cost-probe",
+        "--example",
+        "prover_rw_differential",
+        "--features",
+        "optimized-terminal,r1p-check,ct-host-prover"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized compilation",
+      "exit_status": 0,
+      "wall_seconds": 0.889,
+      "peak_rss_kib": 188392,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r59c07f09da48469191faad5f0ae10576.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 131477504,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/candidate/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/combined-differential-001-retry-01/receipt/receipt.json",
+      "sha256": "2f4b1ec8dd29ed74e68d1d75650d255300e3512b12bca4eb2d5dab4d5da2eafa",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "python3",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/corpus.py"
+      ],
+      "cwd": "/home/dombarker",
+      "expected_time": "combined-differential-001-retry-01",
+      "exit_status": 0,
+      "wall_seconds": 12619.781,
+      "peak_rss_kib": 618156,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r84c2d6a4395148269edab3487fdedb7b.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 6443819008,
+      "env": {
+        "CARGO_TARGET_DIR": null,
+        "CARGO_BUILD_JOBS": null,
+        "CARGO_NET_OFFLINE": null,
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "combined/record-ledger-audit/receipt/receipt.json",
+      "sha256": "16efd20f776cca2964f5a3a41ff70a2c4ea2624d3f0b6f156687e3daf39e364b",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "python3",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/audit-corpus.py"
+      ],
+      "cwd": "/home/dombarker",
+      "expected_time": "record-ledger-audit",
+      "exit_status": 0,
+      "wall_seconds": 0.285,
+      "peak_rss_kib": 21984,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rf8d1128f069542de9da6889d33903f33.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 27443200,
+      "env": {
+        "CARGO_TARGET_DIR": null,
+        "CARGO_BUILD_JOBS": null,
+        "CARGO_NET_OFFLINE": null,
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "fixture-fixed-retry-01/receipt/receipt.json",
+      "sha256": "b7dbc61335934a58c70d1c1fff7af00b61c2b31cd60392bc05780f9b8d5cddb2",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/bin/prover_rw_gate",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/fixtures-candidate",
+        "0",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized complete retry-owner proof generation and P_R1 elimination",
+      "exit_status": 0,
+      "wall_seconds": 30.434,
+      "peak_rss_kib": 668612,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r357ed42eccda4bf1a750285d70220c3c.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 704684032,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    },
+    {
+      "path": "preflight-99/receipt/receipt.json",
+      "sha256": "1792af0c4604c99c2c1f492d0b31072d49b2bdc68ecb29226ad83ec864db5a3d",
+      "source_revision": "82566acdfb488183022f41ac564c11df22c9404f",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/bin/prover_rw_gate",
+        "/home/dombarker/project-offloads/codex-pv-gate6-20261028/preflight/candidate",
+        "99",
+        "1"
+      ],
+      "cwd": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/source",
+      "expected_time": "optimized complete retry-owner proof generation and P_R1 elimination",
+      "exit_status": 0,
+      "wall_seconds": 27.691,
+      "peak_rss_kib": 675076,
+      "swaps": 0,
+      "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r0a1a0347fdac4bf28211166a38384582.scope",
+      "limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "cgroup_memory_peak_bytes": 711008256,
+      "env": {
+        "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-gate6-20261028/native-target",
+        "CARGO_BUILD_JOBS": "4",
+        "CARGO_NET_OFFLINE": "true",
+        "SBF_TRACE_DIR": null
+      },
+      "print_axioms": "N/A: no Lean compilation"
+    }
+  ],
+  "recovery": "All Stage A and Stage B preparation receipts recovered read-only; no workload repeated",
+  "quiet_window": "single launch submitted; collecting status"
+}
