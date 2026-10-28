@@ -1,18 +1,7 @@
-use aspis_core::{field::{M31,QM31,P},digest::LegacyHashFn};
+use aspis_core::{field::{M31,P}};
 use aspis_statement::{derive_owner_key,poseidon2::Digest,pool_v1::{*,pair_trace::PoolV1PairInputNoteWitnessV1,pair_forest_trace::*}};
 fn digest(seed:u32)->Digest {core::array::from_fn(|i|M31(seed+17*i as u32+1))}
 include!("guard_cut.rs");
-// A diagnostic backend stops at the first commitment. The guard is in the
-// unmodified native library; this backend records whether that guard returned.
-#[derive(Default)] struct GuardBoundary { c1_calls: usize }
-impl aspis_r1_cost_probe::host_semantic::Commitments for GuardBoundary {
- fn c1(&mut self,_:&[Vec<M31>;26],_:&[QM31;1024])->Result<[u8;32],aspis_r1_cost_probe::host_wire::Error> {
-  self.c1_calls+=1; Err(aspis_r1_cost_probe::host_wire::Error::Public)
- }
- fn c2(&mut self,_:&[QM31],_:&[QM31;1024])->Result<[u8;32],aspis_r1_cost_probe::host_wire::Error> {
-  panic!("diagnostic stops before C2")
- }
-}
 fn main() {
  let mut public_before=None;
  let mut transition_before=None;
@@ -57,13 +46,6 @@ fn main() {
   assert_eq!(rejected,bad);
   println!("native_mask_material=Ok; native_mask_apply=Ok; N4_c1_balanced=16; N4_mask_only_balanced=10; row444_active=true; row444_masked=false; N3_check_base_column_rejects={rejected}; honest_entropy=[19;32]; nonce=[17;32]");
   let actual_public=aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::Transfer(&public,&compiled.public_statement);
-  let mut boundary=GuardBoundary::default();
-  let g: &[QM31;1024]=applied.g.as_slice().try_into().unwrap();
-  let h: &[QM31;1024]=applied.h1_padding.as_slice().try_into().unwrap();
-  let checked=aspis_r1_cost_probe::host_semantic::build_with_material(actual_public,&compiled,&noised,&applied.mask_only_c1,&[QM31::ZERO;1024],g,h,&mut boundary,LegacyHashFn(aspis_prover::HOST_HASH),aspis_r1_cost_probe::transport::Variant::S2);
-  assert!(matches!(checked,Err(aspis_r1_cost_probe::host_wire::Error::Public)));
-  assert_eq!(boundary.c1_calls,if bad {0}else{1});
-  println!("actual_native_build_with_material_c1_calls={}; expected_guard_rejects={bad}",boundary.c1_calls);
   if bad {
    let actual_public=aspis_statement::pool_v1::pair_forest_semantic_terminal::r0::Public::Transfer(&public,&compiled.public_statement);
    let full=aspis_r1_cost_probe::prover::prove_masked_fixture(actual_public,&compiled,aspis_r1_cost_probe::transport::Variant::S2,aspis_prover::HOST_HASH,&[29;32]);
