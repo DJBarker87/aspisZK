@@ -5,8 +5,10 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-fxmem-20261028'
 pre=json.loads((E/'PREFLIGHT.json').read_text());assert pre['ok']
 n=int(sys.argv[1]) if len(sys.argv)>1 else 35500
 assert 35500 <= n < 35597
-m='R1Z/PV_FXM_DropCounterexample'
+m=sys.argv[2] if len(sys.argv)>2 else 'R1Z/PV_FXM_DropCounterexample'
+assert m.startswith('R1Z/PV_FXM_')
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
+assert re.findall(r'^import (\S+)',p.read_text(),re.M)==['Init']
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads';D=B+'/codex-pv-fxmem-20261028'
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 def prelaunch(args):
