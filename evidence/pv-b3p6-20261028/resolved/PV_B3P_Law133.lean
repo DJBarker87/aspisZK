@@ -41,6 +41,7 @@ theorem nonvacuity : ∃ r : Array U16 214#usize,
     PV_B3P_133.reference133.active_rows = ok r ∧ r.val.length = 214 :=
   ⟨rows, source, length⟩
 
+#print axioms PV_B3P_133.reference133.active_rows
 #print axioms source
 #print axioms length
 #print axioms nonvacuity

@@ -5,8 +5,15 @@ kind=sys.argv[1]
 P=H/'source/tools/pv-b3p6-20261028'
 if kind=='kani133':
  (H/'tmp').mkdir(exist_ok=True)
- cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions']
- sys.exit(run('kani133-04',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, unwind273, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+ bounds=json.loads((H/'bounds133.json').read_text())
+ cmd=['timeout','900','taskset','--cpu-list','0-3','cargo','kani','--manifest-path',str(P/'Cargo.toml'),'--lib','--exact','--harness','proofs::shipped_equals_reference133','--solver','kissat','--output-format','terse','-j','4','-Z','unstable-options','--cbmc-args','--unwinding-assertions','--unwindset',','.join(k+':'+str(v['bound']) for k,v in bounds['loops'].items())]
+ sys.exit(run('kani133-05',cmd,'optimized compilation then bounded control-flow/index/sort/dedup equality; no stubs, default unwind32 with per-loop bounds, no field multiplication',{'RUSTFLAGS':'--cfg kani','CARGO_PROFILE_DEV_OPT_LEVEL':'3','TMPDIR':str(H/'tmp')}))
+if kind=='loops133':
+ artifacts=list((H/'target/kani').glob('**/*shipped_equals_reference133.out'))
+ assert len(artifacts)==1,artifacts
+ cbmc='/home/dombarker/.kani/kani-0.67.0/bin/cbmc'
+ cmd=['timeout','60','taskset','--cpu-list','0-3',cbmc,'--show-loops',str(artifacts[0])]
+ sys.exit(run('loops133-01',cmd,'read-only loop inventory of the existing Kani goto artifact; no symbolic execution or SAT'))
 if kind=='native133':
  cmd=['timeout','180','taskset','--cpu-list','0-3','cargo','test','--release','--manifest-path',str(P/'Cargo.toml'),'--lib','finite_native133','--','--exact','--nocapture']
  sys.exit(run('native133-01',cmd,'optimized native same-input differential; finite validation, not symbolic proof'))
