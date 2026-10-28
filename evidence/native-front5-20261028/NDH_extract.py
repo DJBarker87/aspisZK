@@ -5,12 +5,10 @@ C=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa
 A=Path('/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended')
 S=B/'NDH_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'Cargo.toml').write_text('[package]\nname="ndh_reference"\nversion="0.1.0"\nedition="2021"\n[workspace]\n')
-(S/'src/lib.rs').write_bytes((B/'NDH_src/programs/r1-cost-probe/src/NDH_reference.rs').read_bytes())
+(S/'src/lib.rs').write_bytes((B/'NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-roots=['crate::identity_key_ref','crate::readonly_buffer_ref','crate::readonly_ref','crate::pool_id_ref','crate::registry_id_ref']
+roots=['crate::table_ref','crate::fibre_get_ref','crate::fibre_valid_ref','crate::slot_ref','crate::flag_ref','crate::retirement_ref','crate::status_ref','crate::admitted_ref']
 namespace='NDH_Reference'
-if os.environ.get('NDH_EXTRA'):
- roots=['crate::length_ref','crate::data_ref','crate::zero_step_ref'];namespace='NDH_ReferenceExtra'
 dest=B/'NDH_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]

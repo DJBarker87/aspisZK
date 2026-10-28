@@ -36,10 +36,14 @@ if kind=='kani':
  (E/a).mkdir(exist_ok=True)
  (E/a/'NDH_harness.patch').write_text((E/'NDH_native.patch').read_text())
  sources=['NDH_gate.py','NDH_graph.py','NDH_SOURCE_PINS.json']+list(n for n in files if n.endswith('.rs'))+['NDH_src/Cargo.lock','NDH_src/Cargo.toml']
- native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDH_src/programs/r1-cost-probe/Cargo.toml','--target-dir',B+'/NDH_target','--lib','--features','pool-adapter,private-leaf-salts','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
+ native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDH_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NDH_target','--lib','--features','private-leaf-salts,optimized-terminal,program-build','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
+ root=os.environ.get('NDH_ROOT')
+ if root:
+  native[native.index('--manifest-path')+1]=B+'/NDH_src/crates/'+root+'/Cargo.toml'
+  native[native.index('--features')+1]='r0' if root=='aspis-core' else 'r0,pool-v1-kernel'
  command=['python3','NDH_gate.py',a+'.json']
 elif kind=='extract':
- files['NDH_extract.py']=(E/'NDH_extract.py').read_text();files['NDH_src/programs/r1-cost-probe/src/NDH_reference.rs']=(E/'NDH_reference.rs.txt').read_text();sources=['NDH_extract.py','NDH_src/programs/r1-cost-probe/src/NDH_reference.rs'];native=[];command=['python3','NDH_extract.py']
+ files['NDH_extract.py']=(E/'NDH_extract.py').read_text();files['NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs']=(E/'NDH_reference.rs.txt').read_text();sources=['NDH_extract.py','NDH_src/crates/aspis-r1-cost-probe/src/NDH_reference.rs'];native=[];command=['python3','NDH_extract.py']
 else:
  files['NDH_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDH_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDH_generated','-o','NDH_objects/'+target+'.olean',sources[0]]
@@ -50,6 +54,8 @@ if os.environ.get('NDH_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NDH_RU
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=240,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'source_pinset':'NDH_SOURCE.json','library_pinset':'NDH_SOURCE.json:library'},expected_time='optimized compile then one contract/shape proof; no field multiplication',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 if kind=='lean':
  cfg['deps_fingerprint']['selected_objects']={p:dict(path=p,sha256=h) for p,h in json.loads((E/'NDH_SOURCE.json').read_text())['library'].items()}
+ cfg['deps_fingerprint']['selected_objects'].update(json.loads((E/'NDH_COHERENT_OBJECT_PINS.json').read_text()))
+ cfg['deps_fingerprint']['selected_objects'].update({p.replace('/codex-cx-cpilot-cache-20261028/','/codex-cx-front5-cache-20261028/').replace('/codex-cx-leaf-cache-20261027/','/codex-cx-front5-cache-20261028/'):dict(path=p.replace('/codex-cx-cpilot-cache-20261028/','/codex-cx-front5-cache-20261028/').replace('/codex-cx-leaf-cache-20261027/','/codex-cx-front5-cache-20261028/'),sha256=h['selected_sha256']) for p,h in json.loads((E/'NDH_SOURCE.json').read_text())['cache_imports'].items()})
  cfg['deps_fingerprint']['coherent_object_manifest_sha256']=__import__('hashlib').sha256((E/'NDH_COHERENT_OBJECT_PINS.json').read_bytes()).hexdigest()
  pins=json.loads((E/'NDH_COHERENT_OBJECT_PINS.json').read_text())
  if target=='NDH_Audit':
@@ -87,7 +93,8 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
-with (E/'NDH_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+summary=dict(rc);summary['deps_fingerprint']={'receipt':a+'/receipt.json','receipt_sha256':hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest()}
+with (E/'NDH_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-1800:],flush=True)

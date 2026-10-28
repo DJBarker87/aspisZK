@@ -1,0 +1,9 @@
+# NDH frontier inventory findings
+
+The two `pool_route::admitted` counterparts listed by NBI2 are unrelated theorem-name matches. `AspisR1.ARW_AdmittedQueries.admitted` equates issued-query length with adversary work under an accepted-run support witness. `AspisR1.F3T_Decision.admitted` proves an oracle admission transform is the identity on a decision program. Neither defines the native instruction predicate `data == [3,10] || data == [3,11] || data.starts_with(b"ASQ8")`. Do not credit either as that function's emitted body. Native/reference work can still be useful but a concrete dictionary/call-site association must be identified.
+
+The native `slot_offset` loop indexes SLOT_NODES through `slot-1`; slot=6 is valid (the final boundary) and slot>6 panics. Its caller domain must include slot≤6, rather than implicitly treating every usize as total. The initial native contract packet checks only slot≤1 (zero or one loop iteration); that packet alone does not close all six slots.
+
+K047 disproves the all-u32 identity proposed for sampler::decode8: WideExact::new canonicalizes every limb modulo P. The adopted emitted definition is only a direct constructor, so its natural bridge domain is all eight digits<P. The actual ordinary sampler establishes this through the CLOSED LPk low-base-P packet; the actual qm31 sampler establishes each digit through remainder<P in its pass. K047 is retained as a specification-domain finding, not a shipped bug. The replacement native contract explicitly requires eight canonical digits and its caller-domain proof must be cited; no arbitrary-u32 bridge is claimed.
+
+K051/K052 hit the comparison library's bytewise memcmp unwind while comparing 22-u32 return arrays. The replacement compares the same fixed 22 coordinates explicitly (no changed result specification, timeout, or cap). No time-out occurred. K052's failure is not a matched semantic control until the comparison shape is repaired and rechecked.

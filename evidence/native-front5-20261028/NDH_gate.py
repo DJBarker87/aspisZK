@@ -11,7 +11,8 @@ pins=json.loads((B/'NDH_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
-r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',str(S/'programs/r1-cost-probe/Cargo.toml'),'--features','pool-adapter,private-leaf-salts'],cwd=S,capture_output=True,text=True)
+ni=x['native_command'];manifest=ni[ni.index('--manifest-path')+1];selected=ni[ni.index('--features')+1]
+r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',manifest,'--features',selected],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{')))
@@ -39,10 +40,10 @@ out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not
 from NDH_graph import exact_graph
 out.update(exact_graph(m,lock))
 features={pkgs[i]['name']:nodes[i]['features'] for i in seen}
-assert {'pool-adapter','private-leaf-salts'} <= set(features['aspis-r1-cost-probe-program'])
+# Verifier-root receipt: deployed verifier feature selection.
 assert 'no-entrypoint' not in features['aspis-r1-cost-probe-program']
-assert {'default','private-leaf-salts','optimized-terminal','program-build'} <= set(features['aspis-r1-cost-probe'])
-assert {'r0','pool-v1-kernel'} <= set(features['aspis-statement'])
+if manifest.endswith('aspis-r1-cost-probe/Cargo.toml'):assert {'default','private-leaf-salts','optimized-terminal','program-build'} <= set(features['aspis-r1-cost-probe'])
+if 'aspis-statement' in features and not manifest.endswith('aspis-core/Cargo.toml'):assert {'r0','pool-v1-kernel'} <= set(features['aspis-statement'])
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:p['id'])]

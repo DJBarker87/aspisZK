@@ -1,0 +1,38 @@
+{"attempt": "NDH_K042", "exit_status": 1, "wall_seconds": 3.770351017010398, "peak_rss_kib": "452292", "swaps": "0", "print_axioms": "N/A: kani"}
+owth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NDH_public.rs:10:19
+   |
+10 | fn new_contract(){aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn new_contract(){let _ = aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   +++++++
+
+    Finished `dev` profile [optimized] target(s) in 2.34s
+Checking harness NDH_public::verifierregistryentryv1_has_no_retirement_slot...
+
+VERIFICATION RESULT:
+ ** 1 of 55 failed
+Failed Checks: |r| (*r == (crate::NDH_reference::retirement_ref(self.retirement_slot))) !=
+true
+ File: "/home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-statement/src/pool_v1/verifier_registry.rs", line 213, in aspis_statement::pool_v1::VerifierRegistryEntryV1::has_no_retirement_slot::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.11097654s
+
+Manual Harness Summary:
+Verification failed for - NDH_public::verifierregistryentryv1_has_no_retirement_slot
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
