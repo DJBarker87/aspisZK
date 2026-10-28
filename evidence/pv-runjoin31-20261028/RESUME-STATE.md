@@ -167,3 +167,17 @@ refused10:05:07UTC before launch, full180s wait, SAME ID retry under m-prime.
 Budget79charged(48accepted,31rejected),21remaining before45. Next46
 SemanticSentinel31,47 HonestPackage31,48 CanonicalHonest31,49 coverage; preserve
 97-99 audits, then only after coverage V038/V045. No endpoint premise change.
+
+CompilerSentinel31 passed45; SemanticSentinel31 failed46(Fin8 index), changed
+at86a378489e and passed47. Current single driver48 HonestPackage31: reservation
+refused10:12:08UTC before compiler, full180s retry sameID. Budget82charged
+(50accepted,32rejected),18remaining before48. Then49 CanonicalHonest31,50
+coverage sentence/ready equivalence, only after that V038/V045; preserve97-99.
+All semantic component obligations now checked, but unconditional canonical
+HonestInput and exact coverage still require their checked compositions.
+
+HonestPackage31.honest passed44648 after cooldown (standard axioms,swap0).
+Current single driver44649 CanonicalHonest31. Budget83charged(51accepted,
+32rejected),17remaining before49. CanonicalHonest31 is the sole unchecked
+existing source candidate. After it passes, write/check exact ready↔prepared
+coverage and owner sentence, then V038/V045. Preserve97-99 audit IDs.
