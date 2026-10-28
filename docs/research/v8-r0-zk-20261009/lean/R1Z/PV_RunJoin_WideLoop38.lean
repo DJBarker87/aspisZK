@@ -16,6 +16,7 @@ theorem payload_length (f : Nat → W) (start n : Nat) :
   | zero => rfl
   | succ n ih =>
     rw [payload,List.length_append,(PV_RunJoin_FlatBytes35.wire (f start)).property,ih]
+    change 32+32*n=32*(n+1)
     omega
 
 theorem complete (ops : ExternalFuns) (size : Usize) (f : Nat → W) (n : Nat)
@@ -39,6 +40,7 @@ theorem complete (ops : ExternalFuns) (size : Usize) (f : Nat → W) (n : Nat)
       omega)
     have hlen : mid.val.length=bytes.val.length+32 := by
       rw [hval,List.length_append,(PV_RunJoin_FlatBytes35.wire (f k.val)).property]
+      rfl
     obtain ⟨next,hnext,hbytes⟩ := ih (Usize.wrapping_add k 1#usize) mid
       (by rw [inc];omega) (by rw [hlen];omega)
     refine ⟨next,?_,?_⟩
