@@ -42,6 +42,7 @@ theorem append_requests {S F : Type} (step : Request → S → Option Nat × S)
     sizes (source step wordMax byteMax shape b tail w).world.history =
       sizes w.history ++ requests wordMax byteMax b.values.length b.capacity tail.length := by
   unfold source appendAfter
+  dsimp only
   split <;> exact reserve_requests step wordMax byteMax shape width b tail.length w
 
 /-- Same public header/count gives the same request schedule even when live
@@ -61,17 +62,19 @@ theorem reserve_success_capacity {S F : Type} (step : Request → S → Option N
     (success : (reserve step wordMax byteMax shape b count w).returned=.ok ()) :
     (reserve step wordMax byteMax shape b count w).buffer.capacity=
       nextCapacity b.values.length b.capacity count := by
-  unfold reserve at success ⊢
-  unfold nextCapacity
-  split <;> try rfl
-  split
-  · cases success
-  · split
-    · cases success
-    · unfold finishAt at success ⊢
-      dsimp only at success ⊢
-      cases h : step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity count,shape⟩ w.allocator with
-      | mk p s => cases p <;> simp [h] at success ⊢
+  by_cases h0 : count≤b.capacity-b.values.length
+  · simp only [reserve,nextCapacity,h0,ite_true]
+  · by_cases h1 : b.values.length+count>wordMax
+    · simp only [reserve,h0,h1,ite_false,ite_true] at success
+      cases success
+    · by_cases h2 : growthCapacity b.values.length b.capacity count*shape.width>byteMax
+      · simp only [reserve,h0,h1,h2,ite_false,ite_true] at success
+        cases success
+      · simp only [reserve,nextCapacity,h0,h1,h2,ite_false] at success ⊢
+        unfold finishAt at success ⊢
+        dsimp only at success ⊢
+        cases h : step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity count,shape⟩ w.allocator with
+        | mk p s => cases p <;> simp [h] at success ⊢
 
 #print axioms finishAt_sizes
 #print axioms reserve_requests
