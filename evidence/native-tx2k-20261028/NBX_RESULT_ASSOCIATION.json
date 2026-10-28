@@ -1,0 +1,14 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+  "native_body": "{\n    if result.master_account == [0u8; 32] || result.selected_lane_account == [0u8; 32] {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    let expected = pool_v1_pair_forest_output_lane_v1(&result.nullifier)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if result.output_lane != expected {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n    encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?;\n    Ok(())\n}",
+  "cut_body": "{\n    if result.master_account == [0u8; 32] || result.selected_lane_account == [0u8; 32] {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    let expected = lane(&result.nullifier)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if result.output_lane != expected {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n    after(&result.verified_afterstate)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?;\n    Ok(())\n}",
+  "substitutions": {
+    "pool_v1_pair_forest_output_lane_v1": "lane",
+    "encode_pool_v1_pair_verified_afterstate_v1": "after"
+  },
+  "normalized_body_equal": true,
+  "native_source_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+  "cut_source_sha256": "358d321a12ef8ef3cfe550770fae8a3d72ef35bf30a01168fc89b23549e44bef",
+  "claim": "exact source body under two named closed-callee substitutions; no adapter law or successful-child premise"
+}
