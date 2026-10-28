@@ -37,6 +37,9 @@ theorem lifted_capture {P W I V : Type} (body : P → W → I → Result V)
     (p : P) (w : W) (i : I) :
     (fun j => body p w j) i = body p w i := rfl
 
+theorem arity3 : 2 ≤ (3 : Nat) ∧ 3 ≤ 4 := by decide
+
+#print axioms arity3
 #print axioms three
 #print axioms append
 #print axioms lifted_capture
