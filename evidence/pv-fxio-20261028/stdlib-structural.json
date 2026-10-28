@@ -1,0 +1,32 @@
+{
+  "toolchain": "nightly-2026-06-01",
+  "files": {
+    "std/src/fs.rs": {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/fs.rs",
+      "sha256": "60cccd79862f4d29b11b9e6239a091ac56b88c797fa7cc506de71eff12c15ef9",
+      "evidence_path": "std_src_fs.rs.txt"
+    },
+    "std/src/sys/fs/unix.rs": {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/fs/unix.rs",
+      "sha256": "d8ac733504b4bc30fc49b8db22eb8001e9850a179f9f3548cb681b35f2cef952",
+      "evidence_path": "std_src_sys_fs_unix.rs.txt"
+    },
+    "std/src/io/error.rs": {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error.rs",
+      "sha256": "6b6127919e98b35a41610e750edc601de89f8f8475a399d37d49b50365e3b730",
+      "evidence_path": "std_src_io_error.rs.txt"
+    }
+  },
+  "checks": {
+    "OpenOptions.open delegates to _open(path.as_ref)": true,
+    "_open delegates to platform File.open and preserves Result.map": true,
+    "platform File.open delegates through C path": true,
+    "open_c uses creation flags": true,
+    "open_c reaches open64 with flags/mode and propagates error": true,
+    "create_new selects O_CREAT and O_EXCL": true,
+    "Error.kind decodes OS errno": true
+  },
+  "ok": true,
+  "evidence_class": "structural (K-1 substitute), partial obstruction evidence only; not a universal OS primitive proof",
+  "scope": "V175 wrapper to open64, plus Error.kind OS branch; no closure credit for other rows"
+}
