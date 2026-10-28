@@ -12,6 +12,7 @@ def specification (r : aspis_statement.logup.CopyLogUpRow) (chi : aspis_core.fie
     (zero r.consumer_values,zero r.consumer_weights)
     (one r.consumer_values,one r.consumer_weights)
 
+set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (r : aspis_statement.logup.CopyLogUpRow) (chi : aspis_core.field.QM31) :
     reference224.one_row r chi = specification r chi := by
   rw [specification,PV_B3P_HelperOrder224.four_endpoints]
