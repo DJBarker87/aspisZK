@@ -3,7 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_W_ProverEntry
 open ProverRwFull PV_W_TypedEffects PV_W_Syntax PV_W_Threading
-open Aeneas.Std
+open Aeneas Aeneas.Std
 variable [ExternalTypes]
 open PV_W_SourceSyntax (source_bind_congr)
 

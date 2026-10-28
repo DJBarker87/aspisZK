@@ -22,7 +22,7 @@ typed='--typed' in sys.argv or entry
 constructors={'std.fs.File.open':'fileOpen','std.fs.File.sync_all':'fileSync','std.fs.OpenOptions.open':'optionsOpen','std.io.error.Error.kind':'errorKind','std.fs.File.Insts.StdIoWrite.write_all':'writeAll'}
 if typed:
  output=[output[0].replace('PV_W_SourceSyntax','PV_W_TypedEffects').replace('namespace R1Z.PV_W_Reservation','namespace R1Z.PV_W_TypedReservation')+'open PV_W_SourceSyntax (source_bind_congr)\n']
-if entry:output=[output[0].replace('PV_W_TypedReservation','PV_W_ProverEntry')]
+if entry:output=[output[0].replace('PV_W_TypedReservation','PV_W_ProverEntry').replace('open Aeneas.Std\n','open Aeneas Aeneas.Std\n')]
 rows=[];proofs={}
 for name,new,header in zip(names,short,headers):
  mat=re.search(r'\ndef\s+'+re.escape(name)+r'\s*\(',s);assert mat,name
