@@ -1,0 +1,49 @@
+use super::*;
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_index_and_byte(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();idx[w]=parent;unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(idx[k]==if k==w{parent}else{old_i}&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v});}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_index_and_byte_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();idx[w]=parent;unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(!(idx[k]==if k==w{parent}else{old_i}&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v}));}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_byte_inside(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();kani::assume(k==w&&z==c);unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(idx[k]==old_i&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v});}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_byte_inside_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();kani::assume(k==w&&z==c);unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(!(idx[k]==old_i&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v}));}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_byte_outside(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();kani::assume(k!=w||z!=c);unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(idx[k]==old_i&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v});}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_byte_outside_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();kani::assume(k!=w||z!=c);unsafe{crate::KMX_stubs::KMX_copy_nonoverlapping(reply.as_ptr().wrapping_add(c),val[w].as_mut_ptr().wrapping_add(c),1)};assert!(!(idx[k]==old_i&&val[k][z]==if k==w&&z==c{reply[c]}else{old_v}));}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_pointer_geometry(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();let p=val[w].as_mut_ptr().wrapping_add(c);let q=&mut val[w][c] as *mut u8;assert!(p==q&&idx[k]==old_i&&val[k][z]==old_v);}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+fn NBY_write_pointer_geometry_wrong(){let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let w:usize=kani::any();let c:usize=kani::any();let k:usize=kani::any();let z:usize=kani::any();kani::assume(i<16&&w<=i&&c<32&&k<16&&z<32);let old_i=idx[k];let old_v=val[k][z];let parent=index_at(&idx,i)>>Arity::Two.bits();let p=val[w].as_mut_ptr().wrapping_add(c);let q=&mut val[w][c] as *mut u8;assert!(!(p==q&&idx[k]==old_i&&val[k][z]==old_v));}

@@ -1,0 +1,66 @@
+{
+  "attempt": "NBY_K081",
+  "kind": "kani",
+  "sources": [
+    "NBY_src/Cargo.lock",
+    "NBY_gate.py",
+    "NBY_src/KMX_stubs.rs",
+    "NBY_KMX_copy_stubs.patch",
+    "NBY_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_opening.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_write_windows.rs",
+    "NBY_src/crates/aspis-r1-cost-probe/src/multiproof.rs"
+  ],
+  "command": [
+    "python3",
+    "NBY_gate.py",
+    "NBY_K081",
+    "multiproof::NBY_write_windows::NBY_write_index_and_byte",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NBY_K081-graph.json"
+  },
+  "expected_time": "optimized compilation then one native helper/atomic-step SAT gate, no SHA or multiplication",
+  "expected_negative": false,
+  "reservation_retries": 0,
+  "source_revision": "8d224ddc0eb0059e8348e678d05c300656e4fe53",
+  "source_tree_dirty": true,
+  "exit_status": 0,
+  "wall_seconds": 58.33210801304085,
+  "peak_rss_kib": "2148168",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r4a9ca6a44cd8428cb89a443363e23836.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2255044608",
+  "source_hashes": {
+    "NBY_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBY_gate.py": "47dc4d065105836e062adf1f3bc11e42411c3966088763a30e6b86162748f495",
+    "NBY_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NBY_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NBY_src/crates/aspis-r1-cost-probe/src/lib.rs": "45cce6cb4f913f1aaff5554160798b4fe970ecc944aff526b99d7b2f1756c10b",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_opening.rs": "7054741e2b5163858f9a0af1a44818d069a7dd09da8e7378bd3501e01e1fe425",
+    "NBY_src/crates/aspis-r1-cost-probe/src/candidate.rs": "224e47c50c6b5250cc41c2759ed222f2766eff79643c3e1f968fda87db2bc6ec",
+    "NBY_src/crates/aspis-r1-cost-probe/src/NBY_write_windows.rs": "b76cc4c22bdea4acfd2cb4f4f4ee29cf330feabdaa6f21c8b6f19add433f4cc6",
+    "NBY_src/crates/aspis-r1-cost-probe/src/multiproof.rs": "78690f358b3136d692a381efc3357c7b775c79ffbd85c9d5f804f5b2a3ce3eb3"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,33 @@
+{"attempt": "NBY_K056", "exit_status": 1, "wall_seconds": 7.89058909896994, "peak_rss_kib": "355856", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--exact", "--harness", "verifier::candidate:
+...
+ailure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:1923:32 in function <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::size_hint
+
+Check 133: <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::size_hint.division-by-zero.1
+	 - Status: SUCCESS
+	 - Description: "division by zero"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:1923:17 in function <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::size_hint
+
+
+SUMMARY:
+ ** 1 of 133 failed (3 unreachable)
+Failed Checks: assertion failed: !(match out {
+            Some(w) =>
+                j < 4 * (cap - count) &&
+                            w.as_ptr() == nodes.as_ptr().wrapping_add(at) &&
+                        w.len() == 8 && it.len() == 4 * (cap - count) - j - 1,
+            None => j == 4 * (cap - count),
+        })
+ File: "crates/aspis-r1-cost-probe/src/NBY_padding.rs", line 25, in verifier::candidate::NBY_padding::NBY_padding_arbitrary_cursor_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 1.4792457s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBY_padding::NBY_padding_arbitrary_cursor_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r02efde3157d2401c80227f362c365918.scope; invocation ID: 8d576b7dd0f64adb86c0d494cae29e1f

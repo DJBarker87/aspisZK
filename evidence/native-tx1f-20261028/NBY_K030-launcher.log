@@ -1,0 +1,42 @@
+{"attempt": "NBY_K030", "exit_status": 1, "wall_seconds": 4.705340693006292, "peak_rss_kib": "229592", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--exact", "--harness", "verifier::candidate:
+...
+ith CaDiCaL 2.0.0
+133 variables, 140 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 7.3663e-05s
+Runtime decision procedure: 0.000358392s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+134 variables, 141 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 1.3033e-05s
+Runtime decision procedure: 2.7264e-05s
+
+RESULTS:
+Check 1: verifier::candidate::NBY_keys::NBY_keys_init_return_wrong.assertion.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: crates/aspis-r1-cost-probe/src/NBY_keys.rs:13:142 in function verifier::candidate::NBY_keys::NBY_keys_init_return_wrong
+
+Check 2: verifier::candidate::NBY_keys::NBY_keys_init_return_wrong.assertion.2
+	 - Status: FAILURE
+	 - Description: "assertion failed: !(returned[k] == 0)"
+	 - Location: crates/aspis-r1-cost-probe/src/NBY_keys.rs:13:132 in function verifier::candidate::NBY_keys::NBY_keys_init_return_wrong
+
+
+SUMMARY:
+ ** 1 of 2 failed
+Failed Checks: assertion failed: !(returned[k] == 0)
+ File: "crates/aspis-r1-cost-probe/src/NBY_keys.rs", line 13, in verifier::candidate::NBY_keys::NBY_keys_init_return_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 0.023885904s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBY_keys::NBY_keys_init_return_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-rf96753fb6881460199865221e33a31ec.scope; invocation ID: f3392ba304af445390244968793fab83

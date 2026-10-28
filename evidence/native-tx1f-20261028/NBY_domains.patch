@@ -1,0 +1,96 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBY_domains.rs
+@@ -0,0 +1,55 @@
++use super::*;
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_parent_read_then_write(){let mut idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();kani::assume(i<n&&n<=16&&w<=i&&k<16);let before=idx[k];let source=idx[i];let parent=index_at(&idx,i)>>Arity::Two.bits();idx[w]=parent;assert!(parent==source/2&&idx[k]==if k==w{source/2}else{before});}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_parent_read_then_write_wrong(){let mut idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();kani::assume(i<n&&n<=16&&w<=i&&k<16);let before=idx[k];let source=idx[i];let parent=index_at(&idx,i)>>Arity::Two.bits();idx[w]=parent;assert!(!(parent==source/2&&idx[k]==if k==w{source/2}else{before}));}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_binary_branch_group_domain(){let idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();kani::assume(i<n&&n<=16);if i+1<n{kani::assume(idx[i]<idx[i+1]);}let paired=i+1<n&&index_at(&idx,i+1)==index_at(&idx,i)^1;let parent=index_at(&idx,i)>>Arity::Two.bits();let next_i=if paired{i+2}else{i+1};assert!(paired==(i+1<n&&idx[i+1]/2==idx[i]/2)&&parent==idx[i]/2&&next_i<=n&&next_i>i);}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_binary_branch_group_domain_wrong(){let idx:[u32;16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();kani::assume(i<n&&n<=16);if i+1<n{kani::assume(idx[i]<idx[i+1]);}let paired=i+1<n&&index_at(&idx,i+1)==index_at(&idx,i)^1;let parent=index_at(&idx,i)>>Arity::Two.bits();let next_i=if paired{i+2}else{i+1};assert!(!(paired==(i+1<n&&idx[i+1]/2==idx[i]/2)&&parent==idx[i]/2&&next_i<=n&&next_i>i));}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_node_get_carrier_domain(){let nodes:[u8;5504]=kani::any();let length:usize=kani::any();let at:usize=kani::any();kani::assume(length<=5504&&at<=5504);let selected=nodes[..length].get(at..at+32);assert!(match selected{Some(w)=>at+32<=length&&w.len()==32&&w.as_ptr()==nodes.as_ptr().wrapping_add(at),None=>at+32>length});}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_node_get_carrier_domain_wrong(){let nodes:[u8;5504]=kani::any();let length:usize=kani::any();let at:usize=kani::any();kani::assume(length<=5504&&at<=5504);let selected=nodes[..length].get(at..at+32);assert!(!(match selected{Some(w)=>at+32<=length&&w.len()==32&&w.as_ptr()==nodes.as_ptr().wrapping_add(at),None=>at+32>length}));}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_empty_level_transition(){let idx:[u32;16]=kani::any();let values:[[u8;32];16]=kani::any();let n:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<=n&&n<=16&&k<16&&c<32);let old_i=idx[k];let old_v=values[k][c];let i=n;let mut next_n=n;if !(i<n){next_n=w;}let next_i=0usize;let next_w=0usize;assert!(next_n==w&&next_n<=16&&next_w<=next_i&&next_i<=next_n&&idx[k]==old_i&&values[k][c]==old_v);}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_empty_level_transition_wrong(){let idx:[u32;16]=kani::any();let values:[[u8;32];16]=kani::any();let n:usize=kani::any();let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<=n&&n<=16&&k<16&&c<32);let old_i=idx[k];let old_v=values[k][c];let i=n;let mut next_n=n;if !(i<n){next_n=w;}let next_i=0usize;let next_w=0usize;assert!(!(next_n==w&&next_n<=16&&next_w<=next_i&&next_i<=next_n&&idx[k]==old_i&&values[k][c]==old_v));}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_binary_arity_wrong(){assert!(!(Arity::Two.bits()==1&&Arity::Two.width()==2&&Arity::Two.levels()==18));}
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,35 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBV_multiproof.rs"]
++mod NBV_multiproof;
++
++#[cfg(kani)]
++#[path="NBV_row_windows.rs"]
++mod NBV_row_windows;
++
++#[cfg(kani)]
++#[path="NBY_count.rs"]
++mod NBY_count;
++
++#[cfg(kani)]
++#[path="NBY_row.rs"]
++mod NBY_row;
++
++#[cfg(kani)]
++#[path="NBY_frames.rs"]
++mod NBY_frames;
++
++#[cfg(kani)]
++#[path="NBY_levels.rs"]
++mod NBY_levels;
++
++#[cfg(kani)]
++#[path="NBY_write_windows.rs"]
++mod NBY_write_windows;
++
++#[cfg(kani)]
++#[path="NBY_domains.rs"]
++mod NBY_domains;
