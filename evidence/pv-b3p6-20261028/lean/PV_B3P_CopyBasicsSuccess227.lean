@@ -13,7 +13,7 @@ theorem widen_u16 (x : U16) : (core.convert.num.FromUsizeU16.from x).val=x.val :
 theorem row_high (row : Usize) (hr : row.val<1024) :
     (Usize.wrapping_shr row 4#u32).val<64 := by
   change (row.bv.ushiftRight ((4#u32).val % UScalarTy.Usize.numBits)).toNat<64
-  rw [BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
+  rw [BitVec.ushiftRight_eq,BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
   have hmod : (4#u32).val % UScalarTy.Usize.numBits=4 := by
     rw [UScalarTy.Usize_numBits_eq]
     rcases System.Platform.numBits_eq with h | h <;> rw [h] <;> rfl
