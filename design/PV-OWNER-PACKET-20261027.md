@@ -132,3 +132,26 @@ evidence/pv-runjoin28-20261027/). Option (A) therefore reads: the honest-user do
 preparation succeeds, which today means positive change for both transfers and withdrawals; users
 cannot spend a note's entire value in one transaction through the shipped client. The lead's
 recommendation is unchanged.
+
+## Decision: prover timing evidence on a continuously throttled build host (LOG D359, 2026-10-28)
+
+**Question.** The adoption timing gate (median under 15 s and candidate/shipped ratio at most 1.10,
+per fixture) was pre-registered to be judged only on unthrottled, interference-free pairs. In a
+clean quiet window on the merged candidate 82566acdfb, all 10 paired runs were valid (no foreign
+scope in 50 inventories) and all 10 were thermally throttled: transfer median 13.89 s vs 13.92 s
+shipped (ratio 0.998), withdrawal 13.90 s vs 13.85 s (ratio 1.004). The host has throttled about a
+third of its uptime and on every pair in this window. Evidence: codex/pv-gate6-20261028,
+evidence/pv-gate6-20261028/README.md and comparison.json (per-pair thermal counters).
+
+**Options.** (A) Accept paired, alternating, throttled runs as the timing evidence: throttling only
+lowers the clock, so a throttled median is an upper bound on the unthrottled time (13.9 s is under
+15 s), and pairing under the same throttling makes the ratio a fair comparison. (B) Restore the
+host's cooling (or use another x86_64 host with the same toolchain) and repeat the window until ten
+unthrottled pairs exist. (C) Keep the gate undecided.
+
+**Lead recommendation.** (A) for the ratio and the 15 s bound, recorded as "measured under
+throttling, paired", with (B) as a later confirmation if the host's cooling is fixed. The lead does
+not change the pre-registered criterion itself; this is the owner's call.
+
+**Unblocks.** The prover candidate's adoption gates (stage A already passes: three ELF pins, pinned
+client, fixtures, 1,000/1,000 differential).
