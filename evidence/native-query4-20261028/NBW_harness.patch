@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBW_native.rs
-@@ -0,0 +1,1125 @@
+@@ -0,0 +1,1229 @@
 +extern crate alloc;
 +include!("KMX_stubs.rs");
 +use super::*;
@@ -1126,6 +1126,110 @@
 + assert_eq!(raw[0][k],reply[k]);assert_eq!(raw.len(),1);assert_eq!(raw.capacity(),cap);assert_eq!(raw.as_ptr(),ptr);
 + kani::cover!(cap==64);kani::cover!(cap>64);kani::cover!(k==3);
 +}
++
++// Inherited NBB one-step cuts, exact prefix rename plus KMX configuration.
++use super::*;
++use aspis_core::field::CM31;
++static mut NBW_NBB_OLD:[u64;4]=[0;4];
++static mut NBW_NBB_OUT:[u64;4]=[0;4];
++static mut NBW_NBB_POWER:[u32;4]=[0;4];
++static mut NBW_NBB_BASIS:u32=0;
++static mut NBW_NBB_FLUSH:bool=false;
++static mut NBW_NBB_CALLS:usize=0;
++
++// Overapproximation of the row leaf; NBW_NBB_Row.source proves totality and the
++// unique actual value on the caller's phase/canonical domain. No multiply runs.
++fn NBW_NBB_row_reply(row:&mut[u64;4],power:K,basis:M31,flush:bool) {
++    unsafe {
++        NBW_NBB_OLD=*row;
++        NBW_NBB_POWER=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
++        NBW_NBB_BASIS=basis.0;NBW_NBB_FLUSH=flush;NBW_NBB_CALLS+=1;
++        let out:[u64;4]=kani::any();NBW_NBB_OUT=out;*row=out;
++    }
++}
++fn NBW_NBB_add(old:u64,limb:u32,basis:M31)->u64 {old+u64::from(limb)*u64::from(basis.0)}
++static mut NBW_NBB_RAW:u64=0;
++static mut NBW_NBB_LIMB:u32=0;
++static mut NBW_NBB_REPLY:u64=0;
++fn NBW_NBB_add_reply(old:u64,limb:u32,basis:M31)->u64 {
++    unsafe {NBW_NBB_RAW=old;NBW_NBB_LIMB=limb;NBW_NBB_BASIS=basis.0;let out=kani::any();NBW_NBB_REPLY=out;out}
++}
++// Literal one-iteration body, factoring only the checked integer scalar leaf.
++fn NBW_NBB_add_iteration(row:&mut[u64;4],limbs:&[u32;4],basis:M31,j:usize) {
++    let old=residue_limb_at(row,j);
++    let limb=power_limb_at(limbs,j);
++    row[j]=NBW_NBB_add(old,limb,basis);
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(NBW_NBB_add,NBW_NBB_add_reply)]
++fn NBW_NBB_add_frame() {
++    let mut row:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();
++    let j:usize=kani::any();kani::assume(j<4);
++    let k:usize=kani::any();kani::assume(k<4);
++    let basis:u32=kani::any();let old=row[j];let before=row[k];
++    NBW_NBB_add_iteration(&mut row,&limbs,M31(basis),j);
++    unsafe {assert_eq!(NBW_NBB_RAW,old);assert_eq!(NBW_NBB_LIMB,limbs[j]);assert_eq!(NBW_NBB_BASIS,basis);
++        assert_eq!(row[k],if k==j {NBW_NBB_REPLY} else {before});}
++    kani::cover!(j==0);kani::cover!(j==3);kani::cover!(j!=k);
++}
++fn NBW_NBB_fold(value:u64)->u64 {(value&0x7fff_ffff)+(value>>31)}
++fn NBW_NBB_fold_reply(value:u64)->u64 {
++    unsafe {NBW_NBB_RAW=value;let out=kani::any();NBW_NBB_REPLY=out;out}
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(5)]
++#[kani::stub(NBW_NBB_fold,NBW_NBB_fold_reply)]
++fn NBW_NBB_fold_frame() {
++    let mut row:[u64;4]=kani::any();let before=row;
++    let j:usize=kani::any();kani::assume(j<4);
++    let k:usize=kani::any();kani::assume(k<4);
++    let mut it=row.iter_mut();
++    for _ in 0..j {let _=it.next().unwrap();}
++    let limb=it.next().unwrap();*limb=NBW_NBB_fold(*limb);
++    unsafe {assert_eq!(NBW_NBB_RAW,before[j]);assert_eq!(row[k],if j==k {NBW_NBB_REPLY} else {before[k]});}
++    kani::cover!(j==0);kani::cover!(j==3);kani::cover!(j!=k);
++}
++
++// The native continuation after Vec's checked indexed borrow. The Vec borrow
++// itself uses the retained standard-library interpretation; no64-row loop runs.
++fn NBW_NBB_push_selected(row:&mut[u64;4],terms:usize,power:K,basis:M31) {
++    let flush=terms&3==3;
++    update_residue_row(row,power,basis,flush);
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(super::update_residue_row,NBW_NBB_row_reply)]
++fn NBW_NBB_push_selected_frame() {
++    let mut row:[u64;4]=kani::any();let before=row;
++    let p:[u32;4]=kani::any();let basis:u32=kani::any();let terms:usize=kani::any();
++    let limb:usize=kani::any();kani::assume(limb<4);
++    let power=K{c0:CM31{a:M31(p[0]),b:M31(p[1])},c1:CM31{a:M31(p[2]),b:M31(p[3])}};
++    NBW_NBB_push_selected(&mut row,terms,power,M31(basis));
++    unsafe {
++        assert_eq!(NBW_NBB_CALLS,1);assert_eq!(NBW_NBB_OLD[limb],before[limb]);
++        assert_eq!(NBW_NBB_POWER[limb],p[limb]);assert_eq!(NBW_NBB_BASIS,basis);
++        assert_eq!(NBW_NBB_FLUSH,terms&3==3);assert_eq!(row[limb],NBW_NBB_OUT[limb]);
++    }
++    kani::cover!(terms&3==3);kani::cover!(terms&3!=3);
++}
++
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/KMX_stubs.rs
 @@ -0,0 +1,76 @@
