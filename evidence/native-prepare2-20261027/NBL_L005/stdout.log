@@ -1,0 +1,119 @@
+NBL_generated/NBL_PrepareControl.lean:40:47: error(lean.unknownIdentifier): Unknown constant `AspisR1.NBL_PrepareControl.PE.ZERO`
+NBL_generated/NBL_PrepareControl.lean:50:40: error: Function expected at
+  #[]
+but this term has type
+  _root_.Array ?m.44
+
+Note: Expected a function because this term is being applied to the argument
+  U8
+NBL_generated/NBL_PrepareControl.lean:79:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+old : Scratch
+x : Std.Array U8 32#usize
+⊢ (do
+      let t ← transcript.Transcript.new D hash x v.variant
+      let (gamma, t1) ← PreparedModel.scalar B.sampling D t 27#u8 v.y1 true
+      let a1 ← B.sampling.toBytes v.inactive
+      let s ← lift a1.to_slice
+      let (kappa, t2) ← PreparedModel.scalar B.sampling D t1 28#u8 s false
+      let (alpha0, t3) ← PreparedModel.scalar B.sampling D t2 29#u8 v.round0 false
+      let i ← v.variant.folds
+      if i = 2#usize then do
+          let i1 ← 32#usize + 224#usize
+          let a2 ← core.option.Option.unwrap v.folded_root
+          let s1 ← lift a2.to_slice
+          let bytes1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 i1) s1
+          let bytes2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes1 v.round1
+          let (we, t4) ← PreparedModel.scalar B.sampling D t3 30#u8 bytes2.deref false
+          let (r, t5) ← B.sampling.queries D t4 31#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i2 ← 31#u8 + 1#u8
+              let s3 ← lift (Std.Array.empty U8).to_slice
+              let (rho, t6) ← PreparedModel.scalar_k B.sampling D t5 i2 s3
+              let g1 ← B.powers 29#usize gamma
+              let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                        { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                          alpha := Array.make 2#usize [alpha0, we] ⋯, rho := rho, queries := val,
+                          semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t6.state },
+                      g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r2, g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, old)
+        else do
+          let (r, t4) ← B.sampling.queries D t3 30#u8 v.final_message
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let i1 ← 30#u8 + 1#u8
+              let s1 ← lift (Std.Array.empty U8).to_slice
+              let (rho, t5) ← PreparedModel.scalar_k B.sampling D t4 i1 s1
+              let g1 ← B.powers 29#usize gamma
+              let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 =>
+                  ok
+                    (core.result.Result.Ok
+                        { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                          alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := rho,
+                          queries := val, semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := t5.state },
+                      g1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r2 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                        (core.convert.FromSame verifier.Error) residual
+                  ok (r2, g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, old)) =
+    do
+    let x ← transcript.Transcript.new D hash x v.variant
+    let x ← PreparedModel.scalar B.sampling D x 27#u8 v.y1 true
+    let o ←
+      do
+        let bytes ← B.sampling.toBytes v.inactive
+        let payload ← lift bytes.to_slice
+        let (kappa, t2) ← PreparedModel.scalar B.sampling D x.2 28#u8 payload false
+        let (alpha0, t3) ← PreparedModel.scalar B.sampling D t2 29#u8 v.round0 false
+        let folds ← v.variant.folds
+        if folds = 2#usize then do
+            let capacity ← 32#usize + 224#usize
+            let root ← core.option.Option.unwrap v.folded_root
+            let payload ← lift root.to_slice
+            let b1 ←
+              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 capacity) payload
+            let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+            let (alpha1, t4) ← PreparedModel.scalar B.sampling D t3 30#u8 b2.deref false
+            ok
+                { gamma := x.1, kappa := kappa, alpha := Array.make 2#usize [alpha0, alpha1] ⋯, transcript := t4,
+                  row := 31#u8 }
+          else
+            ok
+              { gamma := x.1, kappa := kappa, alpha := Array.make 2#usize [alpha0, sorry] ⋯, transcript := t3,
+                row := 30#u8 }
+    continuation B D sem v old o
+'AspisR1.NBL_PrepareControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,57 @@
+{"attempt": "NBL_L005", "exit_status": 1, "wall_seconds": 4.4139447240158916, "peak_rss_kib": "4728832", "swaps": "0", "print_axioms": ["'AspisR1.NBL_PrepareControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBL_generated/NBL_PrepareControl.lean:40:47: error(lean.unknownIdentifier): Unknown constant `AspisR1.NBL_PrepareControl.PE.ZERO`
+NBL_generated/NBL_PrepareControl.lean:50:40: error: Function expected at
+  #[]
+but this term has type
+  _root_.Array ?m.44
+
+Note: Expected a function because this term is being applied to the argument
+  U8
+NBL_generated/NBL_PrepareControl.lean:79:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+B : PreparedScratchModel.Boundaries
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+old : Scra
+...
+ore.convert.FromSame verifier.Error) residual
+                  ok (r2, g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r1 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual
+              ok (r1, old)) =
+    do
+    let x ← transcript.Transcript.new D hash x v.variant
+    let x ← PreparedModel.scalar B.sampling D x 27#u8 v.y1 true
+    let o ←
+      do
+        let bytes ← B.sampling.toBytes v.inactive
+        let payload ← lift bytes.to_slice
+        let (kappa, t2) ← PreparedModel.scalar B.sampling D x.2 28#u8 payload false
+        let (alpha0, t3) ← PreparedModel.scalar B.sampling D t2 29#u8 v.round0 false
+        let folds ← v.variant.folds
+        if folds = 2#usize then do
+            let capacity ← 32#usize + 224#usize
+            let root ← core.option.Option.unwrap v.folded_root
+            let payload ← lift root.to_slice
+            let b1 ←
+              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 capacity) payload
+            let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+            let (alpha1, t4) ← PreparedModel.scalar B.sampling D t3 30#u8 b2.deref false
+            ok
+                { gamma := x.1, kappa := kappa, alpha := Array.make 2#usize [alpha0, alpha1] ⋯, transcript := t4,
+                  row := 31#u8 }
+          else
+            ok
+              { gamma := x.1, kappa := kappa, alpha := Array.make 2#usize [alpha0, sorry] ⋯, transcript := t3,
+                row := 30#u8 }
+    continuation B D sem v old o
+'AspisR1.NBL_PrepareControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r44eb8214103c41f6b1a9f5f1f33a8b9d.scope; invocation ID: 4d2bbc6c303f44f294db296f0e966522
