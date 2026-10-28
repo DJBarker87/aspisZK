@@ -1,0 +1,48 @@
+{"attempt": "NCK_L008", "exit_status": 1, "wall_seconds": 1.2268503569066525, "peak_rss_kib": "2632464", "swaps": "0", "print_axioms": ["'AspisR1.NCK_Stage2Cuts.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCK_generated/NCK_Stage2Cuts.lean:49:150: error: unexpected token ','; expected ']'
+NCK_generated/NCK_Stage2Cuts.lean:49:4: error(lean.unknownIdentifier): Unknown identifier `AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_forest_terminal_POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES`
+NCK_generated/NCK_Stage2Cuts.lean:42:65: error: unsolved goals
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+slot : core.result.Result U64 PE
+validated : ValidatedAsqa
+pa ca : Account
+raw cp selected magic : Slice U8
+headPart : Option (Slice U8)
+pub : Std.Array U8 1880#usize
+finish : Usize
+count : accounts.len = 7#usize
+getPrefix :
+  core.slice.Sl
+...
+ != i3) = true then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else do
+              let s3 ←
+                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) raw
+                    { start := 688#usize, «end» := finish }
+              let o2 ← AdapterRw.observer ops
+              let r6 ← ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) ⟨↑val4, ⋯⟩ s3 cp () o2
+              let r7 ←
+                AdapterRw.core.result.Result.map_err
+                    (BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error
+                      AdapterRw.solana_program_error.ProgramError)
+                    r6 ops.op44
+              let cf5 ←
+                match r7 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf5 with
+                | core.ops.control_flow.ControlFlow.Continue a => ops.op53 validated.statement
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+'AspisR1.NCK_Stage2Cuts.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re91297673cae476ea0bd7933ffe68761.scope; invocation ID: 02b3c90194ee45a08acd7d43e83ac284

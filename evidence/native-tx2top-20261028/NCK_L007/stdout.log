@@ -1,0 +1,197 @@
+NCK_generated/NCK_Stage2Cuts.lean:22:8: error(lean.unknownIdentifier): Unknown identifier `core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice`
+NCK_generated/NCK_Stage2Cuts.lean:25:8: error(lean.unknownIdentifier): Unknown identifier `core.option.Option.Insts.CoreCmpPartialEqOption`
+NCK_generated/NCK_Stage2Cuts.lean:46:4: error(lean.unknownIdentifier): Unknown identifier `AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES`
+NCK_generated/NCK_Stage2Cuts.lean:47:12: error(lean.unknownIdentifier): Unknown identifier `core.option.Option.ok_or`
+NCK_generated/NCK_Stage2Cuts.lean:41:65: error: unsolved goals
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+slot : core.result.Result U64 PE
+validated : ValidatedAsqa
+pa ca : Account
+raw cp selected magic : Slice U8
+headPart : Option (Slice U8)
+pub : Std.Array U8 1880#usize
+finish : Usize
+count : accounts.len = 7#usize
+getPrefix :
+  core.slice.Slice.get (core.slice.index.SliceIndexRangeToUsizeSlice U8) data { «end» := 4#usize } = ok headPart
+getMagic :
+  core.array.Array.index (core.ops.index.IndexSlice sorry)
+      AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC () =
+    ok magic
+sameMagic : core.cmp.PartialEq.ne.trait_default sorry headPart (some magic) = ok false
+auth : validate_asq8 ops program accounts data slot = ok (core.result.Result.Ok validated)
+proofAccount : accounts.index_usize 0#usize = ok pa
+checkpointAccount : accounts.index_usize 6#usize = ok ca
+proofData : OwnedAccount.data ops pa = ok (core.result.Result.Ok raw)
+checkpointData : OwnedAccount.data ops ca = ok (core.result.Result.Ok cp)
+extent : Usize.checked_add 688#usize validated.proof_length = some finish
+rawLength : raw.len = finish
+encode : ops.op22 validated.statement = ok (core.result.Result.Ok pub)
+selection :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) raw
+      { start := 688#usize, «end» := finish } =
+    ok selected
+tx2 :
+  ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) pub.to_slice selected cp () none =
+    ok (core.result.Result.Ok ())
+emit : ops.op53 validated.statement = ok (core.result.Result.Ok ())
+⊢ (do
+      let s ←
+        core.array.Array.index
+            (core.ops.index.IndexSlice
+              (AdapterRw.core.ops.range.RangeFull.Insts.CoreSliceIndexSliceIndexSliceSlice ops U8))
+            AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_REQUEST_MAGIC ()
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (AdapterRw.core.option.Option.Insts.CoreCmpPartialEqOption ops
+              (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+            headPart (some s)
+      if b = true then ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+        else do
+          let proof_start ← AdapterRw.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES ops
+          let o1 ← lift (proof_start.checked_add validated.proof_length)
+          let r3 ← AdapterRw.core.option.Option.ok_or o1 AdapterRw.solana_program_error.ProgramError.InvalidAccountData
+          let cf3 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf3 with
+            | core.ops.control_flow.ControlFlow.Continue val3 =>
+              if (finish != val3) = true then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              else do
+                let s1 ← lift pub.to_slice
+                let i3 ←
+                  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES
+                      ops
+                if (s1.len != i3) = true then
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+                  else do
+                    let s2 ← lift pub.to_slice
+                    let s3 ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) raw
+                          { start := proof_start, «end» := val3 }
+                    let r6 ← ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) s2 s3 cp () none
+                    let r7 ←
+                      match r6 with
+                        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                        | core.result.Result.Err e => do
+                          let t ←
+                            (BuiltinFnOnce AdapterRw.aspis_r1_cost_probe.verifier.Error
+                                    AdapterRw.solana_program_error.ProgramError).call_once
+                                ops.op44 e
+                          ok (core.result.Result.Err t)
+                    let cf5 ←
+                      match r7 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf5 with
+                      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AdapterRw.solana_program_error.ProgramError) residual) =
+    ok (core.result.Result.Ok ())
+NCK_generated/NCK_Stage2Cuts.lean:43:15: warning: This simp argument is unused:
+  getMagic
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵getPrefix,
+  ̲ g̵e̵t̵M̵a̵g̵i̵c̵,̵  ̲ ̲sameMagic, bind_tc_ok, auth,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData,
+  ̵  ̵ ̵ ̵checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, core.option.Option.ok_or, rawLength, encode,
+      _root_.AdapterRw.core.result.Result.map_err,
+      _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError,
+      selection, _root_.AdapterRw.observer, tx2, emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_Stage2Cuts.lean:43:25: warning: This simp argument is unused:
+  sameMagic
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵getPrefix,
+  ̲  ̲ ̲ ̲getMagic, s̵a̵m̵e̵M̵a̵g̵i̵c̵,̵ ̵bind_tc_ok, auth,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, proofAccount, proofData,
+      checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, core.option.Option.ok_or, rawLength, encode,
+      _root_.AdapterRw.core.result.Result.map_err,
+      _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError,
+      selection, _root_.AdapterRw.observer, tx2, emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_Stage2Cuts.lean:47:4: warning: This simp argument is unused:
+  extent
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵getPrefix,
+  ̲  ̲ ̲ ̲getMagic, sameMagic, bind_tc_ok, auth,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData,
+  ̵  ̵ ̵ ̵checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      e̵x̵t̵e̵n̵t̵,̵ ̵core.option.Option.ok_or, rawLength, encode,
+  ̵  ̵ ̵ ̵_root_.AdapterRw.core.result.Result.map_err,
+      _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError,
+      selection, _root_.AdapterRw.observer, tx2, emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_Stage2Cuts.lean:49:4: warning: This simp argument is unused:
+  _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte, getPrefix,
+  ̲  ̲ ̲ ̲getMagic, sameMagic, bind_tc_ok, auth, core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData, checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, core.option.Option.ok_or, rawLength, encode,
+      _root_.AdapterRw.core.result.Result.map_err, _̵r̵o̵o̵t̵_̵.̵A̵d̵a̵p̵t̵e̵r̵R̵w̵.̵r̵1̵_̵p̵o̵o̵l̵_̵a̵d̵a̵p̵t̵e̵r̵.̵o̵w̵n̵e̵d̵.̵s̵t̵a̵g̵e̵2̵_̵o̵w̵n̵e̵d̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵F̵o̵r̵e̵s̵t̵T̵e̵r̵m̵i̵n̵a̵l̵F̵o̵r̵m̵a̵t̵E̵r̵r̵o̵r̵V̵1̵P̵r̵o̵g̵r̵a̵m̵E̵r̵r̵o̵r̵,̵selection, _root_.AdapterRw.observer, tx2, emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_Stage2Cuts.lean:50:4: warning: This simp argument is unused:
+  selection
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵getPrefix,
+  ̲  ̲ ̲ ̲getMagic, sameMagic, bind_tc_ok, auth,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData,
+  ̵  ̵ ̵ ̵checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, core.option.Option.ok_or, rawLength, encode,
+      _root_.AdapterRw.core.result.Result.map_err,
+      _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError,
+      s̵e̵l̵e̵c̵t̵i̵o̵n̵,̵ ̵_root_.AdapterRw.observer, tx2, emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_Stage2Cuts.lean:50:42: warning: This simp argument is unused:
+  tx2
+
+Hint: Omit it from the simp argument list.
+  simp only [stage2_owned, count, bne_self_eq_false, Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵getPrefix,
+  ̲  ̲ ̲ ̲getMagic, sameMagic, bind_tc_ok, auth,
+  ̵  ̵ ̵ ̵core.result.Result.Insts.CoreOpsTry.branch, proofAccount,
+  ̲  ̲ ̲ ̲proofData,
+  ̵  ̵ ̵ ̵checkpointAccount, checkpointData,
+      AdapterRw.Constants.constant_aspis_statement_pool_v1_pair_terminal_POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES,
+      extent, core.option.Option.ok_or, rawLength, encode,
+      _root_.AdapterRw.core.result.Result.map_err,
+      _root_.AdapterRw.r1_pool_adapter.owned.stage2_owned.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError,
+      selection, _root_.AdapterRw.observer, t̵x̵2̵,̵ ̵emit]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCK_Stage2Cuts.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
