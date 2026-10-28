@@ -1,4 +1,5 @@
 import R1Z.PV_RDCD_Defaults194
+import R1Z.PV_RDCD_CpopLiteral
 set_option autoImplicit false
 namespace R1Z.PV_RDCD_EmptyRaw194
 open Aeneas Aeneas.Std Result
@@ -21,8 +22,9 @@ def rawNew {World : Type} (a : Usize) (world : World) : Result (EmptyRaw × Worl
   ok (⟨align,0#usize⟩,world)
 
 theorem power_four : powerOfTwo 4#usize = true := by
-  rcases System.Platform.numBits_eq with h | h <;>
-    simp [powerOfTwo,UScalar.ofNat,UScalar.ofNatCore,UScalarTy.numBits,h,BitVec.cpop,BitVec.cpopNatRec]
+  unfold powerOfTwo
+  rw [PV_RDCD_CpopLiteral.usize_four]
+  rfl
 
 theorem alignment_valid (a : Usize) (h : powerOfTwo a = true) : alignmentOf a = ok a := by
   simp [alignmentOf,h]
