@@ -16,7 +16,8 @@ theorem pair_result (a b : U32) (out : List U8) :
     pairCopies a b out = words a b ++ out.drop 8 := by
   change copies out 0 [chunk a,chunk b] = words a b ++ out.drop 8
   have h := copies_result [chunk a,chunk b] [] out
-  have hf : [chunk a,chunk b].flatten = words a b := rfl
+  have hf : [chunk a,chunk b].flatten = words a b := by
+    simp only [List.flatten_cons,List.flatten_nil,List.append_nil,chunk,words]
   simpa only [List.nil_append,List.length_nil,hf,words_length] using h
 
 theorem two_pairs_result (a b c d : U32) (out : List U8) :
@@ -24,7 +25,8 @@ theorem two_pairs_result (a b c d : U32) (out : List U8) :
       words a b ++ words c d ++ out.drop 16 := by
   rw [pair_result]
   have h := copies_result [chunk c,chunk d] (words a b) (out.drop 8)
-  have hf : [chunk c,chunk d].flatten = words c d := rfl
+  have hf : [chunk c,chunk d].flatten = words c d := by
+    simp only [List.flatten_cons,List.flatten_nil,List.append_nil,chunk,words]
   simpa only [hf,words_length,List.drop_drop] using h
 
 def native (a b c d : U32) (out : List U8) : Execution :=
