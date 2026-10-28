@@ -32,6 +32,9 @@ visit('RPx_Deployed',x['rpx_paths'],'headline')
 headline=set(seen)
 # Joint selection must use the coherent headline objects wherever they overlap.
 visit('JHx_Joint',x['joint_paths'],'joint')
+# Independently preserve the joint predecessor selection; never silently
+# overwrite a shared module name with different headline bytes.
+union_seen=seen;seen={};visit('JHx_Joint',x['joint_paths'],'joint');joint_seen=seen;seen=union_seen
 collisions=[]
 for m in headline:
  q=select(m,x['joint_paths'])
@@ -41,19 +44,20 @@ assert not missing,missing[:30]
 # Differences are not silently repaired. Record before any compile; lead review
 # can distinguish root-unique names from a genuinely shared incompatible object.
 rows=[]
-for m,v in seen.items():
- p=Path(v['original']);rel=Path(m.replace('.','/'));dst=B/'objects'/rel.with_suffix('.olean');dst.parent.mkdir(parents=True,exist_ok=True)
- artifacts=[]
- for src,dest in [(p,dst),(Path(str(p)+'.server'),Path(str(dst)+'.server')),(Path(str(p)+'.private'),Path(str(dst)+'.private')),(p.with_suffix('.ir'),dst.with_suffix('.ir'))]:
-  if not src.is_file():continue
-  h=sha(src)
-  if dest.exists():assert sha(dest)==h, str(dest)
-  else:shutil.copyfile(src,dest)
-  artifacts.append(dict(original=str(src),path=str(dest),sha256=h,bytes=dest.stat().st_size))
- v.update(path=str(dst),artifacts=artifacts);rows.append(v)
-out=dict(roots=['RPx_Deployed','JHx_Joint'],headline_count=len(headline),union_count=len(rows),objects=rows,alternate_joint_path_differences=collisions,missing=missing)
+for cohort,items in [('union',seen),('joint',joint_seen)]:
+ for m,v in items.items():
+  p=Path(v['original']);rel=Path(m.replace('.','/'));dst=B/('joint_objects' if cohort=='joint' else 'objects')/rel.with_suffix('.olean');dst.parent.mkdir(parents=True,exist_ok=True)
+  artifacts=[]
+  for src,dest in [(p,dst),(Path(str(p)+'.server'),Path(str(dst)+'.server')),(Path(str(p)+'.private'),Path(str(dst)+'.private')),(p.with_suffix('.ir'),dst.with_suffix('.ir'))]:
+   if not src.is_file():continue
+   h=sha(src)
+   if dest.exists():assert sha(dest)==h, str(dest)
+   else:shutil.copyfile(src,dest)
+   artifacts.append(dict(original=str(src),path=str(dest),sha256=h,bytes=dest.stat().st_size))
+  v=dict(v,path=str(dst),artifacts=artifacts,selection=cohort);rows.append(v)
+out=dict(roots=['RPx_Deployed','JHx_Joint'],headline_count=len(headline),union_count=len(seen),joint_count=len(joint_seen),objects=rows,alternate_joint_path_differences=collisions,missing=missing)
 (B/'NDJ_CACHE_PINS.json').write_text(json.dumps(out,indent=2)+'\n')
-print(json.dumps(dict(headline_count=len(headline),union_count=len(rows),alternate_joint_path_differences=len(collisions),missing=missing)))
+print(json.dumps(dict(headline_count=len(headline),union_count=len(seen),joint_count=len(joint_seen),alternate_joint_path_differences=len(collisions),missing=missing)))
 # Copy unchanged existing lead-owned launchers.
 for n in ['S2W_run_host.py','S2W_lean_host_agg16.py','S2W_run_host_agg16.py','reservation_agg16.py']:
  p=Path('/home/dombarker/project-offloads/codex-cx-sha453-cache-20261028')/n
