@@ -48,7 +48,7 @@ theorem caller_columns {N C : Type} (base : ProverRwFull.ExternalTypes)
     (hash : Slice (Slice U8) → Result (Array U8 32#usize))
     (i : Honest (K := K)) (s : PV_RunJoin_NativeSelectedInputs.SourceState base N C) :
     letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
-    columns PV_Src_Forest_Columns.read
+    PV_Src_NativeInput.columns PV_Src_Forest_Columns.read
       ((PV_RunJoin_NativeSelectedInputs.inputs base ops hash i.val).compiled s).semantic_c1.c1 =
       BuilderSource.prover.build (target i) := by
   letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
