@@ -1,3 +1,5 @@
 # Own input repairs
 
 NCI_K001 did not reach reservation or submit Kani: the adapted own wrapper retained the predecessor date 20261027 in B. Both preflight logs show own-path FileNotFoundError, not an infrastructure fault. Corrected to this lane 20261028 (rule 11). No overlap with L004 scope occurred because K001 never launched. The draft raw-reader precondition was also reordered to bound start before any checked addition; no native attempt had run. The later job allocation is 70 Kani/80 Lean, superseding the earlier total; runner enforces that final allocation.
+
+K010 timed out at the fixed90s harness limit on a1768-byte fully symbolic array with an arbitrary scalar offset; no credit, no timeout change. The replacement splits to an arbitrary64-byte window and bounded offset≤32; original harness names are retained. NCI_WindowFrame is the separate list-byte frame obligation. Full native1768 storage/ownership association is not claimed by the smaller gate. Own solver temp cleanup is recorded. Large transport stdout is now losslessly zlib/base64 encoded within own transport JSONL; prior large transport is .xz with uncompressed SHA256.

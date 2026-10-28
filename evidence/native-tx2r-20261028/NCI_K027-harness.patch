@@ -1,0 +1,20 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -774,7 +774,7 @@
+ #[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
+ fn weight_step_ok(){
+ let bytes:[u8;64]=kani::any();let start:usize=kani::any();kani::assume(start<=48);
+-let expected=K::from_le_bytes(&bytes[start..start+16].try_into().unwrap());
++let expected=K::from_le_bytes(&bytes[start..start+16]);
+ let mut weights=Vec::with_capacity(1);weights.push(K::ZERO);
+ let out=read_checkpoint_weights(&bytes,start,weights);
+ assert!(out.is_ok()==expected.is_some());
+@@ -785,7 +785,7 @@
+ #[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
+ fn weight_step_wrong(){
+ let bytes:[u8;64]=kani::any();let start:usize=kani::any();kani::assume(start<=48);
+-let expected=K::from_le_bytes(&bytes[start..start+16].try_into().unwrap());
++let expected=K::from_le_bytes(&bytes[start..start+16]);
+ let mut weights=Vec::with_capacity(1);weights.push(K::ZERO);
+ let out=read_checkpoint_weights(&bytes,start,weights);
+ assert!(out.is_ok()!=expected.is_some());

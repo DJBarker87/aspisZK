@@ -1,0 +1,58 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -611,3 +611,55 @@
+ assert!(out[k]!=bytes[start+k]);
+ }
+ }
++
++#[cfg(kani)] mod NCI_scalars {
++use super::*;
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn k_ok(){
++let bytes:[u8;1768]=kani::any();let start:usize=kani::any();kani::assume(start<=1736);
++let expected=[u32::from_le_bytes([bytes[start+0],bytes[start+1],bytes[start+2],bytes[start+3]]),u32::from_le_bytes([bytes[start+4],bytes[start+5],bytes[start+6],bytes[start+7]]),u32::from_le_bytes([bytes[start+8],bytes[start+9],bytes[start+10],bytes[start+11]]),u32::from_le_bytes([bytes[start+12],bytes[start+13],bytes[start+14],bytes[start+15]])];let valid=expected.iter().all(|x|*x<0x7fff_ffff);
++let mut r=Reader{bytes:&bytes,at:start};let out=r.k();
++assert!(r.at==start+16);assert!(r.bytes.as_ptr()==bytes.as_ptr()&&r.bytes.len()==1768);
++assert!(out.is_ok()==valid);
++if let Ok(x)=out {let got=[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0];
++let j:usize=kani::any();kani::assume(j<4);assert!(got[j]==expected[j]);}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn k_wrong(){
++let bytes:[u8;1768]=kani::any();let start:usize=kani::any();kani::assume(start<=1736);
++let expected=[u32::from_le_bytes([bytes[start+0],bytes[start+1],bytes[start+2],bytes[start+3]]),u32::from_le_bytes([bytes[start+4],bytes[start+5],bytes[start+6],bytes[start+7]]),u32::from_le_bytes([bytes[start+8],bytes[start+9],bytes[start+10],bytes[start+11]]),u32::from_le_bytes([bytes[start+12],bytes[start+13],bytes[start+14],bytes[start+15]])];let valid=expected.iter().all(|x|*x<0x7fff_ffff);
++let mut r=Reader{bytes:&bytes,at:start};let out=r.k();
++assert!(r.at==start+16);assert!(r.bytes.as_ptr()==bytes.as_ptr()&&r.bytes.len()==1768);
++assert!(out.is_ok()!=valid);
++if let Ok(x)=out {let got=[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0];
++let j:usize=kani::any();kani::assume(j<4);assert!(got[j]==expected[j]);}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn e_ok(){
++let bytes:[u8;1768]=kani::any();let start:usize=kani::any();kani::assume(start<=1736);
++let expected=[u32::from_le_bytes([bytes[start+0],bytes[start+1],bytes[start+2],bytes[start+3]]),u32::from_le_bytes([bytes[start+4],bytes[start+5],bytes[start+6],bytes[start+7]]),u32::from_le_bytes([bytes[start+8],bytes[start+9],bytes[start+10],bytes[start+11]]),u32::from_le_bytes([bytes[start+12],bytes[start+13],bytes[start+14],bytes[start+15]]),u32::from_le_bytes([bytes[start+16],bytes[start+17],bytes[start+18],bytes[start+19]]),u32::from_le_bytes([bytes[start+20],bytes[start+21],bytes[start+22],bytes[start+23]]),u32::from_le_bytes([bytes[start+24],bytes[start+25],bytes[start+26],bytes[start+27]]),u32::from_le_bytes([bytes[start+28],bytes[start+29],bytes[start+30],bytes[start+31]])];let valid=expected.iter().all(|x|*x<0x7fff_ffff);
++let mut r=Reader{bytes:&bytes,at:start};let out=r.e();
++assert!(r.at==start+32);assert!(r.bytes.as_ptr()==bytes.as_ptr()&&r.bytes.len()==1768);
++assert!(out.is_ok()==valid);
++if let Ok(x)=out {let got=x.to_limbs();
++let j:usize=kani::any();kani::assume(j<8);assert!(got[j]==expected[j]);}
++}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NCI_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NCI_kmx::KMX_copy_from_slice)]
++fn e_wrong(){
++let bytes:[u8;1768]=kani::any();let start:usize=kani::any();kani::assume(start<=1736);
++let expected=[u32::from_le_bytes([bytes[start+0],bytes[start+1],bytes[start+2],bytes[start+3]]),u32::from_le_bytes([bytes[start+4],bytes[start+5],bytes[start+6],bytes[start+7]]),u32::from_le_bytes([bytes[start+8],bytes[start+9],bytes[start+10],bytes[start+11]]),u32::from_le_bytes([bytes[start+12],bytes[start+13],bytes[start+14],bytes[start+15]]),u32::from_le_bytes([bytes[start+16],bytes[start+17],bytes[start+18],bytes[start+19]]),u32::from_le_bytes([bytes[start+20],bytes[start+21],bytes[start+22],bytes[start+23]]),u32::from_le_bytes([bytes[start+24],bytes[start+25],bytes[start+26],bytes[start+27]]),u32::from_le_bytes([bytes[start+28],bytes[start+29],bytes[start+30],bytes[start+31]])];let valid=expected.iter().all(|x|*x<0x7fff_ffff);
++let mut r=Reader{bytes:&bytes,at:start};let out=r.e();
++assert!(r.at==start+32);assert!(r.bytes.as_ptr()==bytes.as_ptr()&&r.bytes.len()==1768);
++assert!(out.is_ok()!=valid);
++if let Ok(x)=out {let got=x.to_limbs();
++let j:usize=kani::any();kani::assume(j<8);assert!(got[j]==expected[j]);}
++}
++}

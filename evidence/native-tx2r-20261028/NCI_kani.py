@@ -14,7 +14,7 @@ def ssh(code,submitted=False,stdin=None):
  args=['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code]
  for n in range(11):
   r=subprocess.run(args,capture_output=True,text=True,input=stdin)
-  with (E/'NCI_K_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,trial=n,exit=r.returncode,stdout=r.stdout,stderr=r.stderr,submitted=submitted))+'\n')
+  with (E/'NCI_K_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,trial=n,exit=r.returncode,stdout=r.stdout if len(r.stdout)<100000 else None,stdout_zlib_base64=base64.b64encode(zlib.compress(r.stdout.encode())).decode() if len(r.stdout)>=100000 else None,stdout_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),stderr=r.stderr,submitted=submitted))+'\n')
   if r.returncode!=255 or submitted:return r
   if n<10:time.sleep(60)
  raise SystemExit('STOP transport exhausted')
