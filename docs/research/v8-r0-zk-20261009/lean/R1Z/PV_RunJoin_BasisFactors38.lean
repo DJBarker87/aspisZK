@@ -7,8 +7,6 @@ namespace R1Z.PV_RunJoin_BasisFactors38
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_BasisCell38 ProverCommitInterpolationSchedule48
 variable [ExternalTypes]
-attribute [local irreducible] host_sumcheck.interpolation_basis_steps
-  AspisR1ProducerRelease47.basis_factors
 
 /-- Complete source basis-factor recurrence, including the omitted node and
 all descending writes. The degree invariant discharges every counter bound. -/
@@ -25,7 +23,8 @@ theorem source (ops : ExternalFuns) (n : Nat) (i j d : Usize) (left : U8)
     have lz : left=0#u8 := by scalar_tac
     subst j
     subst left
-    rw [PV_RunJoin_BasisEquation38.step,AspisR1ProducerRelease47.basis_factors]
+    rw [@PV_RunJoin_BasisEquation38.step _ (ProverRwP6BodyCandidate.selected ops) basis den d i 28#usize,
+      AspisR1ProducerRelease47.basis_factors]
     simp only [↓reduceIte]
   | succ n ih =>
     have hj : j.val<28 := by omega
@@ -35,7 +34,8 @@ theorem source (ops : ExternalFuns) (n : Nat) (i j d : Usize) (left : U8)
     have decl : (U8.wrapping_sub left 1#u8).val=n := by
       rw [ProverCommitBasisCounter47.sub_one left (by omega)]
       omega
-    rw [PV_RunJoin_BasisEquation38.step,AspisR1ProducerRelease47.basis_factors]
+    rw [@PV_RunJoin_BasisEquation38.step _ (ProverRwP6BodyCandidate.selected ops) basis den d i j,
+      AspisR1ProducerRelease47.basis_factors]
     simp only [jn,ln,↓reduceIte]
     by_cases he : i=j
     · have hcast : UScalar.cast .U8 i=UScalar.cast .U8 j := congrArg _ he
