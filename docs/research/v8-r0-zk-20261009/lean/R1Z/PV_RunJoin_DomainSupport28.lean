@@ -24,7 +24,12 @@ theorem active_slot_skipped
   simp only [format.POOL_V1_TREE_DEPTH]
   rw [if_pos (by decide)]
   simp only [core.result.Result.is_ok,bind_tc_ok,lift,Bool.true_eq,if_true]
-  rfl
+  have active : BuilderStdModels.shift64 1#u64 0#usize &&& 1#u64 ≠ 0#u64 := by
+    with_unfolding_all decide
+  rw [if_neg active]
+  have next : Usize.wrapping_add 0#usize 1#usize = 1#usize := by
+    with_unfolding_all rfl
+  rw [next]
 #print axioms active_slot_skipped
 end R1Z.PV_RunJoin_ActiveFrontier28
 namespace R1Z.PV_RunJoin_PreparedPayload28
