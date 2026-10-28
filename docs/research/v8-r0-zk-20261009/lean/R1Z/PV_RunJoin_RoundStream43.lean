@@ -7,7 +7,6 @@ open Aeneas Aeneas.Std PV_RunJoin_RoundRecord43 PV_RunJoin_ByteExtension43
 theorem added_length {a b : List U8} (h : Added a b) : b.length=a.length+901 := by
   obtain ⟨header,body,hlen,blen,hz,hb⟩ := h
   rw [hb,List.length_append,List.length_append,hlen,blen]
-  omega
 
 inductive Stream : List U8 → Nat → List U8 → Prop where
   | nil (bytes : List U8) : Stream bytes 0 bytes
@@ -40,7 +39,9 @@ theorem canonical {before after : List U8} {n : Nat} (h : Stream before n after)
       obtain ⟨suffix,sl,hs⟩ := extension tail
       have slice := PV_RunJoin_RecordSlice43.payload before header body suffix hlen
       rw [hs,hb]
-      simpa only [Nat.mul_zero,Nat.add_zero,blen,slice] using hz
+      simp only [Nat.mul_zero,Nat.add_zero]
+      rw [←blen,PV_RunJoin_RecordSlice43.payload before header body suffix hlen]
+      exact hz
     | succ k =>
       have ml := added_length head
       have off : before.length+901*(k+1)+5=middle.length+901*k+5 := by omega
