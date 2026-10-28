@@ -9,7 +9,7 @@ variable [ExternalTypes]
 
 /-- Source-only powers installation. Native callback association remains a
 separate obligation; no runtime or deployment credit follows from this definition. -/
-def inputs (ops : ExternalFuns) : ExternalFuns := { ops with op254 := ProverRwP6PowersInstall.powers ops }
+@[reducible] def inputs (ops : ExternalFuns) : ExternalFuns := { ops with op254 := ProverRwP6PowersInstall.powers ops }
 abbrev dict (ops : ExternalFuns) := ProverRwP6BodyCandidate.selected (inputs ops)
 
 theorem gamma (ops : ExternalFuns) (g : Raw) (hg : canonical g) :
@@ -20,9 +20,11 @@ theorem gamma (ops : ExternalFuns) (g : Raw) (hg : canonical g) :
   obtain ⟨p,hp,hcp,hdp⟩ := ProverCommitGamma48.gamma_exact g hg
   refine ⟨p,?_,hcp,hdp⟩
   change ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) = _
-  rw [ProverRwP6PowersGammaSource.gamma ops (current (source g))]
+  have bridge := ProverRwP6PowersGammaSource.gamma ops (current (source g))
+  change ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) = _ at bridge
+  rw [bridge]
   rw [ProverRwDictionaryTower.native_w_roundtrip,hp]
-  change .ok (ProverRwP6ArrayMap.map current (sourceArray 29#usize p)) = _
+  change Result.ok (ProverRwP6ArrayMap.map current (sourceArray 29#usize p)) = _
   rw [PV_RunJoin_SourceArray44.map]
 #print axioms gamma
 end R1Z.PV_RunJoin_GammaPowers44
