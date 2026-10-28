@@ -1,0 +1,59 @@
+{
+  "attempt": "KMX_K005",
+  "kind": "kani",
+  "sources": [
+    "KMX_src/Cargo.lock",
+    "KMX_gate.py",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_trigger.rs",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_native.rs"
+  ],
+  "command": [
+    "python3",
+    "KMX_gate.py",
+    "KMX_K005",
+    "KMX_stubs::KMX_checks::KMX_slice",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 600,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_TEST_OPT_LEVEL": "3",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "KMX_K005-graph.json"
+  },
+  "expected_time": "optimized focused copy controls; codegen then named CBMC property; no leaf claim",
+  "reservation_retries": 0,
+  "source_revision": "f2d89b798776125eff0d4cd6a4a3eb3f12346416",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 3.2591091729700565,
+  "peak_rss_kib": "370028",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r56d4fd9463ae4d87a8f3e3c99f2560e6.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "352067584",
+  "source_hashes": {
+    "KMX_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "KMX_gate.py": "effc790c3572e263f604c4adaf4ae7bac4f125977ae1d28e23b0feb8b6e268b6",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_trigger.rs": "a5d45647be55e5ecc1b3a0660fc02f786b6a1f39790413b57d7ce3049c8e53b1",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs": "cbd9ec84b30be02b78f5944dc2c8a7dcf04bcd00ad45f8028b4e961c33086d81",
+    "KMX_src/crates/aspis-r1-cost-probe/src/KMX_native.rs": "2b711b2e5062eaa968c366a814f4c3ce117cc4dfb3922279794670f3c74ca9e4"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,105 @@
+//! Lean-discharged byte stubs. Pairing: KMX_LPi_WriterValues.
+use aspis_core::field::{CM31,QM31,M31};
+fn word(x:M31)->[u8;4] { [x.0 as u8,(x.0>>8) as u8,(x.0>>16) as u8,(x.0>>24) as u8] }
+pub fn mbytes(x:M31)->[u8;4] {
+ let b:[u8;4]=kani::any();kani::assume(b==word(x));b
+}
+pub fn cbytes(x:CM31,out:&mut[u8]) {
+ assert!(out.len()==8);
+ let a=word(x.a);let b=word(x.b);let v:[u8;8]=kani::any();
+ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]);
+ out.copy_from_slice(&v);
+}
+pub fn qbytes(x:QM31,out:&mut[u8]) {
+ assert!(out.len()==16);
+ let a=word(x.c0.a);let b=word(x.c0.b);let c=word(x.c1.a);let d=word(x.c1.b);
+ let v:[u8;16]=kani::any();
+ kani::assume(v==[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3],c[0],c[1],c[2],c[3],d[0],d[1],d[2],d[3]]);
+ out.copy_from_slice(&v);
+}
+fn q(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+fn check_q<const N:usize,const AT:usize>() {
+ let x:[u32;4]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
+ q(x).write_le_bytes(&mut buf[AT..AT+16]);
+ let j:usize=kani::any();kani::assume(j<N);
+ if j>=AT&&j<AT+16 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
+ else {assert_eq!(buf[j],before[j]);}
+ kani::cover!(j==AT+15);kani::cover!(x[0]==u32::MAX);
+}
+macro_rules! qcase {($name:ident,$n:expr,$at:expr)=>{
+ #[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::stub(CM31::write_le_bytes,cbytes)] #[kani::unwind(70)]
+ fn $name(){check_q::<$n,$at>();}
+}}
+qcase!(q_owned16,16,0);
+qcase!(q_parent32_left,32,0);
+qcase!(q_parent32_right,32,16);
+qcase!(q_parent32_middle,32,8);
+qcase!(q_parent48_middle,48,16);
+qcase!(q_parent48_right,48,32);
+fn check_c<const N:usize,const AT:usize>() {
+ let x:[u32;2]=kani::any();let mut buf:[u8;N]=kani::any();let before=buf;
+ CM31{a:M31(x[0]),b:M31(x[1])}.write_le_bytes(&mut buf[AT..AT+8]);
+ let j:usize=kani::any();kani::assume(j<N);
+ if j>=AT&&j<AT+8 {let k=j-AT;assert_eq!(buf[j],(x[k/4]>>((k%4)*8)) as u8);}
+ else {assert_eq!(buf[j],before[j]);}
+ kani::cover!(j==AT+7);kani::cover!(x[1]==u32::MAX);
+}
+macro_rules! ccase {($name:ident,$n:expr,$at:expr)=>{
+ #[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+
+ #[kani::stub(M31::to_le_bytes,mbytes)] #[kani::unwind(70)]
+ fn $name(){check_c::<$n,$at>();}
+}}
+ccase!(c_parent16_left,16,0);
+ccase!(c_parent16_right,16,8);
+ccase!(c_parent32_middle,32,16);
+pub fn ebytes(x:aspis_core::field::WideExact)->[u8;32] {
+ let words=x.to_limbs();let bytes:[u8;32]=kani::any();
+ for i in 0..32 {kani::assume(bytes[i]==(words[i/4]>>((i%4)*8)) as u8);}
+ bytes
+}
+// Natural-coordinate specifications paired with KMX_LPi_FieldValues/TowerValues/MixedValues.
+const P:u64=2147483647;
+fn add(a:u32,b:u32)->u32 {((u64::from(a)+u64::from(b))%P) as u32}
+fn sub(a:u32,b:u32)->u32 {((u64::from(a)+P-u64::from(b))%P) as u32}
+fn cmul(a:[u32;2],b:[u32;2])->[u32;2] {
+ let m0=((u64::from(a[0])*u64::from(b[0]))%P) as u32;
+ let m1=((u64::from(a[1])*u64::from(b[1]))%P) as u32;
+ let m2=(((u64::from(a[0])+u64::from(a[1]))*(u64::from(b[0])+u64::from(b[1])))%P) as u32;
+ [sub(m0,m1),sub(sub(m2,m0),m1)]
+}
+fn ca(a:[u32;2],b:[u32;2])->[u32;2]{[add(a[0],b[0]),add(a[1],b[1])]}
+fn cs(a:[u32;2],b:[u32;2])->[u32;2]{[sub(a[0],b[0]),sub(a[1],b[1])]}
+fn cr(a:[u32;2])->[u32;2]{[sub(add(a[0],a[0]),a[1]),add(a[0],add(a[1],a[1]))]}
+fn qmul(a:[u32;4],b:[u32;4])->[u32;4] {
+ let ac=cmul([a[0],a[1]],[b[0],b[1]]);let bd=cmul([a[2],a[3]],[b[2],b[3]]);
+ let cross=cmul(ca([a[0],a[1]],[a[2],a[3]]),ca([b[0],b[1]],[b[2],b[3]]));
+ let lo=ca(ac,cr(bd));let hi=cs(cs(cross,ac),bd);[lo[0],lo[1],hi[0],hi[1]]
+}
+fn qa(a:[u32;4],b:[u32;4])->[u32;4]{[add(a[0],b[0]),add(a[1],b[1]),add(a[2],b[2]),add(a[3],b[3])]}
+fn qs(a:[u32;4],b:[u32;4])->[u32;4]{[sub(a[0],b[0]),sub(a[1],b[1]),sub(a[2],b[2]),sub(a[3],b[3])]}
+fn qu(a:[u32;4])->[u32;4]{let r=cr([a[2],a[3]]);[r[0],r[1],a[0],a[1]]}
+fn emul_spec(a:[u32;8],b:[u32;8])->[u32;8] {
+ let a0=[a[0],a[1],a[2],a[3]];let a1=[a[4],a[5],a[6],a[7]];
+ let b0=[b[0],b[1],b[2],b[3]];let b1=[b[4],b[5],b[6],b[7]];
+ let ac=qmul(a0,b0);let bd=qmul(a1,b1);let cross=qmul(qa(a0,a1),qa(b0,b1));
+ let lo=qa(ac,qu(bd));let hi=qs(qs(cross,ac),bd);[lo[0],lo[1],lo[2],lo[3],hi[0],hi[1],hi[2],hi[3]]
+}
+pub fn emul(a:aspis_core::field::WideExact,b:aspis_core::field::WideExact)->aspis_core::field::WideExact {
+ let w:[u32;8]=kani::any();for x in w{kani::assume(u64::from(x)<P);}
+ kani::assume(w==emul_spec(a.to_limbs(),b.to_limbs()));aspis_core::field::WideExact::from_limbs(w).unwrap()
+}

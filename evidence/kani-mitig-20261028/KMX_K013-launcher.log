@@ -1,0 +1,30 @@
+{"attempt": "KMX_K013", "exit_status": 0, "wall_seconds": 10.536521779955365, "peak_rss_kib": "577272", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "KMX_LPa_compact::KMX_LPa_expand_s
+...
+up/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1903:59 in function core::cmp::impls::<impl core::cmp::PartialOrd for usize>::lt
+
+Check 282: core::panicking::assert_failed_inner.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:433:11 in function core::panicking::assert_failed_inner
+
+Check 283: <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "memset destination region writeable"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/specialize.rs:34:13 in function <[u8] as core::slice::specialize::SpecFill<u8>>::spec_fill
+
+
+SUMMARY:
+ ** 0 of 283 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 5.5961637s
+
+WARNING: Kani could not produce a concrete playback for `compact::KMX_LPa_compact::KMX_LPa_expand_stage` because there were no failing panic checks or satisfiable cover statements.
+INFO: The concrete playback feature never generated unit tests because there were no failing harnesses.
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rfb3e334092cd400db104ce9d698b6970.scope; invocation ID: cb14d1c4d0174d889eaee97baf6ccd31

@@ -1,0 +1,30 @@
+{"attempt": "KMX_K015", "exit_status": 0, "wall_seconds": 7.113914918969385, "peak_rss_kib": "419192", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--harness", "r1_wire::KMX_LPn_decode::KMX_LPn_
+...
+/iter.rs:1916:13 in function <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::next
+
+Check 349: <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::next.pointer_dereference.30
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:1916:13 in function <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::next
+
+Check 350: <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::next.pointer_dereference.31
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs:1916:13 in function <core::slice::ChunksExact<'_, u8> as core::iter::Iterator>::next
+
+
+SUMMARY:
+ ** 0 of 350 failed (6 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 3.2057102s
+
+WARNING: Kani could not produce a concrete playback for `r1_wire::KMX_LPn_decode::KMX_LPn_nonvacuity` because there were no failing panic checks or satisfiable cover statements.
+INFO: The concrete playback feature never generated unit tests because there were no failing harnesses.
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rc4aa3234a5844c93b3bf8f48eb7126c4.scope; invocation ID: 2f9d82e721634c878df65e560d2d7950

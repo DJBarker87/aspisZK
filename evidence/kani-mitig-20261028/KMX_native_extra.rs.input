@@ -1,0 +1,11 @@
+#[inline(never)] fn KMX_slice_destination(dst:&mut[u32],src:&[u32]){dst.copy_from_slice(src);}
+fn main(){
+ let mut input=[0u32;16];input[15]=512;let mut level=[0u32;16];
+ KMX_slice_destination(&mut level,&input);assert_eq!(level[15],512);assert_ne!(level[15],0);
+ println!("KMX_NATIVE_CONFIG_PASS c049 slice-parameter last=512 wrong-zero=false");
+ let input=[512u32];let mut level=[0u32];level.copy_from_slice(&input);assert_eq!(level[0],512);assert_ne!(level[0],0);
+ println!("KMX_NATIVE_CONFIG_PASS c050 literal-one-u32 last=512 wrong-zero=false");
+ let mut input=[0u32;16];input[15]=512;let mut level=[0u32;16];level.copy_from_slice(&input);assert_eq!(level[15],512);assert_ne!(level[15],0);
+ println!("KMX_NATIVE_CONFIG_PASS c051 literal-sixteen-u32 last=512 wrong-zero=false");
+ for v in [1u32,255,256]{let input=[v];let n=std::hint::black_box(1usize);let mut dst=[0u32];dst[..n].copy_from_slice(&input[..n]);assert_eq!(dst[0],v);assert_ne!(dst[0],0);println!("KMX_NATIVE_VALUE_PASS {v}");}
+}

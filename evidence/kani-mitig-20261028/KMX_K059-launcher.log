@@ -1,0 +1,36 @@
+{"attempt": "KMX_K059", "exit_status": 1, "wall_seconds": 2.583722523006145, "peak_rss_kib": "280812", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_latest/kani-0.68.0/bin/kani-driver", "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_latest_probe.rs", "--verbose", "-Z", "unstable-options", "--harness", "KMX_latest_", "--harness-timeout", "90s", "--output-format", "regular", "--cbmc-args", "--unwinding-assertions"]}
+Kani Rust Verifier 0.68.0 (kani-0.68.0) (standalone)
+u
+...
+r::copy_nonoverlapping::<u32>.precondition_instance.1
+	 - Status: SUCCESS
+	 - Description: "memcpy src/dst overlap"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:574:14 in function std::ptr::copy_nonoverlapping::<u32>
+
+Check 38: std::ptr::copy_nonoverlapping::<u32>.precondition_instance.2
+	 - Status: SUCCESS
+	 - Description: "memcpy source region readable"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:574:14 in function std::ptr::copy_nonoverlapping::<u32>
+
+Check 39: std::ptr::copy_nonoverlapping::<u32>.precondition_instance.3
+	 - Status: SUCCESS
+	 - Description: "memcpy destination region writeable"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2026-08-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:574:14 in function std::ptr::copy_nonoverlapping::<u32>
+
+
+SUMMARY:
+ ** 1 of 39 failed (4 unreachable)
+Failed Checks: assertion failed: level[0] == 512
+ File: "/home/dombarker/project-offloads/codex-cx-kani-mitig-20261028/KMX_latest_probe.rs", line 8, in KMX_latest_correct
+
+VERIFICATION:- FAILED
+Verification Time: 0.17544416s
+
+Manual Harness Summary:
+Verification failed for - KMX_latest_correct
+Complete - 1 successfully verified harnesses, 1 failures, 2 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "5516b1cb0f9da9b56615421c27d437265c888b0c6e4db777e676194e3ae0a666", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r3bf7528760824c2b8562b0ca84ddd153.scope; invocation ID: 1335d877da694fd28ddcf24a8114ab7b
