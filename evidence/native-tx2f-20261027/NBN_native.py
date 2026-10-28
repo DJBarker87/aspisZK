@@ -69,7 +69,7 @@ elif sys.argv[1]=='run':
  a,harness=sys.argv[2:];assert len(list(E.glob('NBN_K*/receipt.json')))<40
  assert not harness.endswith(('::NBN_store688_gate','::NBN_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
- sources=['NBN_src/Cargo.lock','NBN_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_codecs.rs']
+ sources=['NBN_src/Cargo.lock','NBN_src/crates/aspis-statement/src/lib.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_codecs.rs','NBN_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBN_src/crates/aspis-statement/src/pool_v1/NBN_more.rs']
  g=a.replace('_K','_G');rc=launch(g,'metadata',['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/NBN_src/Cargo.toml','--locked','--offline','--format-version','1'],sources,120);assert rc['exit_status']==0
  # Cargo diagnostics are not JSON; parse the complete JSON output line only.
  lines=(E/g/'stdout.log').read_text().splitlines();m=next(json.loads(s) for s in lines if s.startswith('{') and '"packages"' in s)
@@ -82,5 +82,5 @@ elif sys.argv[1]=='run':
  meta=E/g/'stdout.log'; (E/g/'NBN_METADATA_OUTPUT_PIN.json').write_text(json.dumps({'sha256':hashlib.sha256(meta.read_bytes()).hexdigest(),'bytes':meta.stat().st_size,'raw_output_retained_on_host':B+'/'+g+'/stdout.log','normalized_graph_matches_frozen':True},indent=2)+'\n'); meta.unlink()
  rc=launch(a,'kani',['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NBN_src/crates/aspis-statement/Cargo.toml','--lib','-j','1','-Z','unstable-options','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse'],sources,600)
  after=ssh('sha256sum '+B+'/NBN_src/Cargo.lock').stdout.split()[0];check.update(lock_after_sha256=after,lock_unchanged=after==before);(E/(a+'-graph.json')).write_text(json.dumps(check,indent=2)+'\n');assert after==before,'STOP lock drift'
- print((E/a/'stdout.log').read_text()[-4000:])
+ print((E/a/'stdout.log').read_text()[-900:])
  sys.exit(rc['exit_status'])
