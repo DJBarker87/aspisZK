@@ -9,8 +9,13 @@ m=json.loads((P/'machine-stdlib-callers.json').read_text());sites=json.loads((P/
 U=set(g['functions'].values());assert set(g['edges'])<=U
 assert all(set(ds)<=U for ds in g['edges'].values())
 # Full-image overapproximation deliberately retains otherwise unresolved register callbacks.
-covered=[dict(caller=r['caller'],instruction=r['instruction'],target_domain='ALL_IMAGE_FUNCTION_ENTRIES_OR_DYNAMIC_IMPORTS') for r in m['unresolved_indirect']]
+covered=[dict(caller=r['caller'],instruction=r['instruction'],target_domain='ALL_EXECUTABLE_IMAGE_BYTE_ADDRESSES_OR_DYNAMIC_IMPORTS') for r in m['unresolved_indirect']]
 assert all(r['caller'] in U for r in covered)
+sections=subprocess.check_output(['readelf','-SW',str(b)],text=True)
+rx=[]
+for name,addr,offset,size,flags in re.findall(r'^\s*\[\s*\d+\]\s+(\S+)\s+\S+\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)\s+([0-9a-fA-F]+)\s+\S+\s+([A-Z]+)',sections,re.M):
+ if 'X' in flags:rx.append(dict(section=name,start=int(addr,16),end=int(addr,16)+int(size,16),file_offset=int(offset,16)))
+assert rx and any(r['section']=='.text' for r in rx)
 needed=subprocess.check_output(['readelf','-dW',str(b)],text=True)
 imports=subprocess.check_output(['nm','-D','--undefined-only',str(b)],text=True)
 ldd=subprocess.check_output(['ldd',str(b)],text=True)
@@ -23,7 +28,7 @@ for p in dict.fromkeys(paths):
  note=subprocess.check_output(['readelf','-nW',str(p)],text=True)
  ids=re.findall(r'Build ID: ([0-9a-f]+)',note)
  public.append(dict(path=str(p),sha256=sha(p),size=p.stat().st_size,build_ids=ids,build_id_bytes=[len(s)//2 for s in ids],locate_build_id_capacity=[23+6+2*(len(s)//2)+1 for s in ids]))
-result=dict(binary_sha256=sha(b),image_function_count=len(g['functions']),unique_demangled_names=len(U),original_direct_reachable=len(g['reachable']),all_image_function_entries=g['functions'],all_image_indirect_sites=covered,dynamic_needed=needed,dynamic_imports=imports,ldd=ldd,public_loaded_artifacts=public,method='Conservative whole-image callback target domain; no function is excluded because a register call is unresolved or a direct path is absent.',closed_scope='Every function entry in the statically linked client image and its recorded dynamic imports is retained. This removes unresolved register calls as a reason to omit an image function.',complete_source_reachability_certificate=False,remaining='Source-site/inline completeness and per-invocation guard/header provenance are separate obligations. This overapproximation does not establish that each retained function is reachable or that its invocation guard is public.',source_inventory_sha256=sha(P/'site-reconciliation.json'))
+result=dict(binary_sha256=sha(b),image_function_count=len(g['functions']),unique_demangled_names=len(U),original_direct_reachable=len(g['reachable']),all_image_function_entries=g['functions'],executable_image_ranges=rx,all_image_indirect_sites=covered,dynamic_needed=needed,dynamic_imports=imports,ldd=ldd,public_loaded_artifacts=public,method='Conservative whole-image executable-address target domain, including interior jump-table destinations; no function is excluded because a register call is unresolved or a direct path is absent.',closed_scope='Every byte address in an executable section of the statically linked client image and its recorded dynamic imports is retained. This removes unresolved register calls as a reason to omit an image function.',complete_source_reachability_certificate=False,remaining='Source-site/inline completeness and per-invocation guard/header provenance are separate obligations. This overapproximation does not establish that each retained function is reachable or that its invocation guard is public.',source_inventory_sha256=sha(P/'site-reconciliation.json'))
 (D/'indirect-closure.json').write_text(json.dumps(result,indent=2)+'\n')
 # Classify every retained source candidate without treating missing provenance as a witness.
 classify={
