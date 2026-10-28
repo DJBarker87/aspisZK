@@ -10,6 +10,7 @@ theorem checked_success (links : List Link) (n : Nat) (hlen : links.length = n)
 theorem checked_shape (links : List Link) (n : Nat) (hlen : links.length ≠ n) :
     checked n links = .error .shape := by
   simp [checked,hlen]
+  rfl
 
 theorem checked_capacity (links : List Link) (n row : Nat) (hlen : links.length = n)
     (hcap : checkEndpoints links [] [] = .error (.endpointCapacity row)) :
@@ -28,8 +29,9 @@ theorem check_bounds (links : List Link) (ps cs : List Nat)
     · split at h
       · contradiction
       · rename_i hp hc
-        have hp' : head.producer < 1024 := by simpa using (Bool.or_eq_false_iff.mp hp).1
-        have hc' : head.consumer < 1024 := by simpa using (Bool.or_eq_false_iff.mp hc).1
+        simp only [Bool.or_eq_true,decide_eq_true_eq,not_or,Nat.not_le] at hp hc
+        have hp' : head.producer < 1024 := hp.1
+        have hc' : head.consumer < 1024 := hc.1
         intro x hx
         rcases List.mem_cons.mp hx with rfl | hx
         · exact ⟨hp',hc'⟩
