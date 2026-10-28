@@ -9,3 +9,7 @@ Correction: stop dependent launches, wait until at least20:13:58.971224Z, retry 
 ## Second cooldown violation
 
 41466 was refused at2026-10-28T20:32:03.765928Z and resubmitted at approximately20:34:10Z, about127s later, rather than180s. Both host checks admitted it; the unchanged helper module compiled successfully with standard axioms. The early submission is a worker timing violation, not an admission bypass or proof failure. No proof evidence is hidden. Submissions paused until after20:35:04Z. The own scope wrapper now checks the latest recorded job-wide admission/barrier refusal and rejects locally until180s has elapsed; no host infrastructure, caps or reservation rules were changed.
+
+## Dependency receipt correction
+
+The private runner's earlier individual receipts captured source/blob/toolchain and the external preflight, but did not snapshot each attempt's private import object hashes at submission. The original receipts are preserved; a final coherent full source/object/import DAG is a separately labelled final measurement, not a retroactive at-launch measurement. Before41489 onward the own wrapper now snapshots actual private transitive import objects, source hashes, environment and the h4 external-manifest hash before submission. Earlier successful modules must all pass the final coherent DAG check before final row credit. Failed attempts receive no retrospective proof credit.

@@ -18,6 +18,32 @@ assert not a and not b,(a,b)
 '''.replace('ID',str(n))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True);(E/f'{n}-id-check.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr),indent=2));assert r.returncode==0,r.stderr
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
+# Capture actual private dependency objects before submission. Earlier receipts
+# retain their original fields; final closure verification is separately labelled.
+code = """from pathlib import Path
+import json,hashlib,re
+D=Path('/home/dombarker/project-offloads/codex-pv-rdcd-20261028')
+env=json.load(open(D/'env-J.json'));roots=[Path(x) for x in env['LEAN_PATH'].split(':')];seen={}
+def go(module):
+ if module in seen:return
+ obj=next((r/(module+'.olean') for r in roots if (r/(module+'.olean')).exists()),None)
+ source=D/'lean-sources'/(module+'.lean')
+ seen[module]=dict(object_path=str(obj),object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest() if obj else None)
+ if source.exists() and module.startswith('R1Z/'):
+  seen[module]['source_sha256']=hashlib.sha256(source.read_bytes()).hexdigest()
+  deps=re.findall(r'^import\\s+(\\S+)',source.read_text(),re.M);seen[module]['imports']=[x.replace('.','/') for x in deps]
+  for dep in seen[module]['imports']:go(dep)
+source=D/'lean-sources'/(MODULE+'.lean')
+imports=re.findall(r'^import\\s+(\\S+)',source.read_text(),re.M)
+for dep in imports:go(dep.replace('.','/'))
+print(json.dumps(dict(module=MODULE,environment=env,objects=seen,external_manifest_sha256=hashlib.sha256((D/'external-object-manifest.json').read_bytes()).hexdigest()),sort_keys=True))
+""".replace('MODULE',repr(m))
+r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True)
+assert r.returncode==0,r.stderr
+deps=json.loads(r.stdout);assert deps['objects'],deps
+(E/f'{n}-dependencies.json').write_text(json.dumps(deps,indent=2)+'\n')
+meta['dependencies_sha256']=hashlib.sha256((E/f'{n}-dependencies.json').read_bytes()).hexdigest()
+meta['dependencies_snapshot']=f'{n}-dependencies.json'
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 c=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
 r=subprocess.run([sys.executable,str(R/'tools/pv-rdcd-20261028/scope.py'),'lean-'+str(n),'Lean',*c])
