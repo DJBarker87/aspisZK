@@ -92,6 +92,12 @@ terminal+='''    let choose: bool = kani::any();
     } else {
       (PoolV1PairForestTerminalStatementV1::Withdrawal { common, public: withdrawal },PoolV1PairForestTerminalPaymentV1::Withdrawal(withdrawal),PoolV1TransitionKind::Withdrawal,withdrawal.nullifier,withdrawal.pool,withdrawal.deployment_domain,withdrawal.anchor_sequence,withdrawal.anchor_root,withdrawal.asset_id)
     };
+    let common_ref = match &s { PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,..} | PoolV1PairForestTerminalStatementV1::Withdrawal{common,..} => common };
+    let nullifier_ref = match &s { PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..} => &public.nullifier, PoolV1PairForestTerminalStatementV1::Withdrawal{public,..} => &public.nullifier };
+    let payment_ref = match &p { PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => &public.nullifier, PoolV1PairForestTerminalPaymentV1::Withdrawal(public) => &public.nullifier };
+    assert!(core::ptr::eq(s.common(),common_ref));
+    assert!(core::ptr::eq(s.nullifier(),nullifier_ref));
+    assert!(core::ptr::eq(p.nullifier(),payment_ref));
     assert_eq!(*s.common(),common);
     assert_eq!(s.transition_kind(),kind);
     assert_eq!(*s.nullifier(),n);

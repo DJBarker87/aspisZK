@@ -1,0 +1,11 @@
+# Terminal projection member bridges
+
+Three local members CLOSED: Statement::common, statement_public_common, and transition_kind(byte). Frozen member bodies and hashes are NBD_MEMBERS.json/NBD_FROZEN_MEMBERS.md. Target cohort is AspisR1TerminalDecoder.Funs, exact module object pinned by L013.
+
+NBD_K008 checked every control/field value of both statement/payment variants. The arbitrary constructors generate EVERY field independently, including both20-digest frontiers and all raw u32 limbs; no canonicality, fixture, or validation-success restriction is used. K009 strengthens that native gate with three pointer-identity assertions for the common/statement-nullifier/payment-nullifier references. It is a changed-source gate, not an unchanged repeated regression. Final success/check count is recorded in K009's receipt/stdout.
+
+NBD_TerminalProjection.source_common and source_parts identify the complete emitted Result with the SAME selected variant fields. source_kind covers ALL256 discriminant bytes:1→PrivateTransfer,2→Withdrawal,others→InvalidTransitionKind; no parse-success hypothesis. nullifier_same identifies the fifth field of that SAME public tuple. Arrays/scalars are related by their exact ordered elements and raw u8/u32/u64 values; neither field reduction nor hashing occurs. Native reference outputs retain identity with the selected field; the cohort's immutable-value projection erases only that read reference.
+
+Native getter checks also cover Payment::nullifier/transition_kind and Statement::nullifier/transition_kind. These four lack separate definitions in this selected cohort. They remain OPEN as enclosing caller associations; a passing native projection test alone is not credited as their complete bridge. The same restriction applies to registry getter native gates. Their future caller must associate the SAME variant and fields, not a fresh public/common record.
+
+No loop, multiplication, stub, lower NBC unit, security premise or runtime law is used by these three local projection/discriminant results. L013 prints standard axioms for all four theorems. This is not ASF8/ASR8 codec closure or headline-premise removal; exact remaining U05 members are in NBD_U05_BRIDGE.md.
