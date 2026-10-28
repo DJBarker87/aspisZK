@@ -13,9 +13,12 @@ if prior_refusals:
   sys.exit(77)
 
 def transport(cmd, **kw):
+ must_check=kw.pop('check',False)
  for retry in range(11):
   r=subprocess.run(cmd, **kw)
-  if r.returncode!=255:return r
+  if r.returncode!=255:
+   if must_check:r.check_returncode()
+   return r
   with (E/'transport-retries.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=A,retry=retry,command=cmd,stderr=r.stderr))+'\n')
   if retry==10:raise RuntimeError('ten transient transport retries exhausted')
   print('transient SSH transport; retry in 60 seconds',flush=True);time.sleep(60)
