@@ -8,7 +8,7 @@
 +#[cfg(kani)] mod NBA_verifier { include!("NBA_verifier.rs"); }
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBA_verifier.rs
-@@ -0,0 +1,204 @@
+@@ -0,0 +1,252 @@
 +use super::*;
 +// Exact frozen continuing suffix; only Self is renamed to its concrete owner.
 +fn NBA_tail<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,g:&mut[E;29],gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],t:Transcript<H>)->Result<Box<Prepared>,Error>{
@@ -60,7 +60,7 @@
 +fn scalar_k<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->K{
 + unsafe{assert_eq!(EVENT,5);assert_eq!(row,32);assert!(payload.is_empty());EVENT+=1;t.state=kani::any();LAST=t.state;RHO=any_k();RHO}
 +}
-+fn powers29<const N:usize>(x:E)->[E;N]{unsafe{assert_eq!(N,29);assert_eq!(EVENT,6);assert_eq!(x,SCALARS[0]);if MID_ONLY{kani::cover!(true,"success reaches powers before scratch write");kani::assume(false);}EVENT+=1;let raw:[u8;928]=kani::any();let out=*(&raw as *const [u8;928] as *const [E;N]);POWERS=*(&out as *const [E;N] as *const [E;29]);out}}
++fn powers29<const N:usize>(x:E)->[E;N]{unsafe{assert_eq!(N,29);assert_eq!(EVENT,6);assert_eq!(x,SCALARS[0]);if MID_ONLY{kani::cover!(true,"success reaches powers before scratch write");kani::assume(false);}EVENT+=1;let fields:[E;29]=core::mem::transmute::<[u8;928],[E;29]>(kani::any());let out=*(&fields as *const [E;29] as *const [E;N]);POWERS=fields;out}}
 +fn claim<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,y1:&[u8],inactive:E,g:&[E;29],kappa:E)->Result<E,Error>{
 + unsafe{assert_eq!(EVENT,7);EVENT+=1;assert_eq!(sem as *const _ as *const (),SEM_PTR as *const ());assert_eq!(y1.as_ptr(),YPTR);assert_eq!(y1.len(),YLEN);assert_eq!(inactive,INACTIVE);assert_eq!(kappa,SCALARS[1]);let i:usize=kani::any();kani::assume(i<29);assert_eq!(g[i],POWERS[i]);if CLAIM_ONLY{kani::cover!(true,"same-carrier native claim call reached");kani::assume(false);}CLAIM=any_e();CERR=kani::any();if CERR{Err(Error::Parse)}else{Ok(CLAIM)}}
 +}
@@ -213,6 +213,54 @@
 +#[kani::proof] #[kani::unwind(33)]
 +#[kani::stub(prepared_claim::<NBA_Digest>,claim)]
 +fn NBA_claim_call(){context::<11>()}
++
++#[derive(Clone,Copy)] struct NBA_QueryDigest;
++static mut QE:usize=100;
++static mut QI:usize=0;
++static mut QPAY:*const u8=core::ptr::null();
++static mut QOLD:[u8;32]=[0;32];
++static mut QR:[[u8;32];17]=[[0;32];17];
++static mut QRESULT:[u32;22]=[0;22];
++static mut QSTATE:[u8;32]=[0;32];
++static mut QFAIL:bool=false;
++static mut QTERM:bool=false;
++impl Digest32 for NBA_QueryDigest{
++ fn digest(&self,parts:&[&[u8]])->[u8;32]{unsafe{
++  if QE==100{return kani::any();}
++  let i=QI;
++  if QE==0{assert_eq!(parts.len(),4);assert_eq!(parts[0].len(),32);assert_eq!(parts[0][i],QOLD[i]);assert_eq!(parts[1].len(),2);assert_eq!(parts[1][0],0);assert_eq!(parts[1][1],0xa0+31);assert_eq!(parts[2].len(),4);assert_eq!(u32::from_le_bytes(parts[2].try_into().unwrap()),2048);assert_eq!(parts[3].len(),2048);assert_eq!(parts[3].as_ptr(),QPAY);}
++  else{assert!(QE<=16);assert_eq!(parts.len(),2);assert_eq!(parts[0].len(),32);let source=if QE%2==1{QE-1}else{QE-2};assert_eq!(parts[0][i],QR[source][i]);assert_eq!(parts[1].len(),1);assert_eq!(parts[1][0],if QE%2==1{1}else{2});}
++  let out=QR[QE];QE+=1;out
++ }}
++}
++fn NBA_query_decode(blocks:&[[u8;32];8],advances:&[[u8;32];8])->Result<([u32;22],[u8;32]),aspis_core::transcript::QuerySampleError>{unsafe{
++ assert_eq!(QE,17);let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<32);assert_eq!(blocks[k][j],QR[2*k+1][j]);assert_eq!(advances[k][j],QR[2*k+2][j]);
++ kani::cover!(true,"all eight eager digest pairs reach decoder");if QTERM{kani::assume(false);}
++ QRESULT=core::mem::transmute::<[u8;88],[u32;22]>(kani::any());QSTATE=kani::any();QFAIL=kani::any();
++ if QFAIL{Err(aspis_core::transcript::QuerySampleError::DrawLimitExhausted{accepted:0,max_draws:64})}else{Ok((QRESULT,QSTATE))}
++}}
++fn NBA_query_context(terminal:bool){
++ let payload:[u8;2048]=kani::any();let i:usize=kani::any();kani::assume(i<32);
++ unsafe{QE=100;let mut t=Transcript::new(NBA_QueryDigest,kani::any(),Variant::S2);QTERM=terminal;QI=i;QPAY=payload.as_ptr();QOLD=kani::any();QR=core::mem::transmute::<[u8;544],[[u8;32];17]>(kani::any());t.state=QOLD;QE=0;
++ let result=t.queries(31,&payload);assert_eq!(QE,17);
++ if QFAIL{assert!(matches!(result,Err(Error::Transcript)));assert_eq!(t.state[i],QR[0][i]);kani::cover!(true,"query error retains absorbed state");}
++ else{let out=result.unwrap();let j:usize=kani::any();kani::assume(j<22);assert_eq!(out[j],QRESULT[j]);assert_eq!(t.state[i],QSTATE[i]);kani::cover!(true,"query success uses selected decoder state");}
++ }
++}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,NBA_query_decode)]
++fn NBA_query_materialize(){NBA_query_context(true)}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(aspis_core::r0_transcript::queries_from_pairs,NBA_query_decode)]
++fn NBA_query_result(){NBA_query_context(false)}
++
++#[derive(Clone,Copy)] struct NBA_SeedDigest;
++static mut SI:usize=0;static mut SJ:usize=0;static mut SS:[u8;32]=[0;32];static mut SR:[u8;32]=[0;32];static mut SN:usize=0;
++impl Digest32 for NBA_SeedDigest{fn digest(&self,parts:&[&[u8]])->[u8;32]{unsafe{
++ assert_eq!(SN,0);SN+=1;assert_eq!(parts.len(),3);assert_eq!(parts[0].len(),29);assert_eq!(parts[0][SJ],b"UNPROVED:R1:PRIVATE-SALTED:P3"[SJ]);assert_eq!(parts[1].len(),1);assert_eq!(parts[1][0],2);assert_eq!(parts[2].len(),32);assert_eq!(parts[2][SI],SS[SI]);SR
++}}}
++#[kani::proof] #[kani::unwind(3)]
++fn NBA_transcript_seed(){let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<32&&j<29);unsafe{SI=i;SJ=j;SS=kani::any();SR=kani::any();SN=0;let t=Transcript::new(NBA_SeedDigest,SS,Variant::S2);assert_eq!(SN,1);assert_eq!(t.state[i],SR[i]);kani::cover!(true,"S2 seed framing and arbitrary reply");}}
 --- a/crates/aspis-core/src/r0_transcript.rs
 +++ b/crates/aspis-core/src/r0_transcript.rs
 @@ -319,3 +319,5 @@
@@ -258,4 +306,32 @@
 +#[kani::proof] #[kani::unwind(3)]
 +fn NBA_driver_step(){
 + let advances:[[u8;32];8]=unsafe{core::mem::transmute::<[u8;256],[[u8;32];8]>(kani::any())};let old:[u8;32]=kani::any();let mut selected=old;let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<32);let stop:bool=kani::any();let result=NBA_outer_step(k,stop,&advances,&mut selected);assert_eq!(result,stop);assert_eq!(selected[j],if stop{advances[k][j]}else{old[j]});kani::cover!(stop,"first stop selects this same advance");kani::cover!(!stop,"continuing iteration preserves selection");
++}
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -228,3 +228,5 @@
+         }
+     }
+ }
++
++#[cfg(kani)] mod NBA_sampler { include!("NBA_sampler.rs"); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBA_sampler.rs
+@@ -0,0 +1,17 @@
++use super::*;
++// Exactly ONE iteration of add_small_base_p on an arbitrary native pre-state.
++fn NBA_add_digit(digit:&mut u32,addend:&mut u32){
++ let sum=u64::from(*digit)+u64::from(*addend);
++ *digit=(sum%u64::from(P)) as u32;
++ *addend=(sum/u64::from(P)) as u32;
++}
++#[kani::proof] #[kani::unwind(3)]
++fn NBA_add_step(){
++ let mut d:[u32;8]=unsafe{core::mem::transmute::<[u8;32],[u32;8]>(kani::any())};let old=d;let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<8&&j<8);let before:u32=kani::any();kani::assume(before<=257&&d[i]<P);let mut carry=before;let sum=u64::from(d[i])+u64::from(before);
++ NBA_add_digit(&mut d[i],&mut carry);
++ assert_eq!(carry,if sum>=u64::from(P){1}else{0});assert_eq!(u64::from(d[i]),if sum>=u64::from(P){sum-u64::from(P)}else{sum});assert!(d[i]<P);assert_eq!(d[j],if j==i{d[i]}else{old[j]});kani::cover!(carry==0,"no carry");kani::cover!(carry==1,"carry");
++}
++#[kani::proof] #[kani::unwind(3)]
++fn NBA_decode8(){
++ let d:[u32;8]=unsafe{core::mem::transmute::<[u8;32],[u32;8]>(kani::any())};kani::assume(d[0]<P&&d[1]<P&&d[2]<P&&d[3]<P&&d[4]<P&&d[5]<P&&d[6]<P&&d[7]<P);let value=decode8(d);let j:usize=kani::any();kani::assume(j<8);assert_eq!(value.to_limbs()[j],d[j]);kani::cover!(true,"canonical digit packing");
 +}

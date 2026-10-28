@@ -1,0 +1,56 @@
+{"attempt": "NBA_K019", "exit_status": 0, "wall_seconds": 74.16412418999244, "peak_rss_kib": "1161884", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+c
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:234:47
+    |
+234 |  let result=t.queries(31,&payload);assert_eq!(QE,17);
+    |                                               ^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBA_query_materialize` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:241:4
+    |
+241 | fn NBA_query_materialize(){NBA_query_context(true)}
+    |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_query_materialize`
+
+warning: function `NBA_query_result` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:244:4
+    |
+244 | fn NBA_query_result(){NBA_query_context(false)}
+    |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_query_result`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 3.28s
+Checking harness verifier::NBA_verifier::NBA_claim_call...
+
+VERIFICATION RESULT:
+ ** 0 of 2132 failed (163 unreachable)
+
+ ** 1 of 4 cover properties satisfied (3 unreachable)
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 63.766224s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r417c6e814a4b45b895c95548c0add116.scope; invocation ID: c7e4b339f3134c769349c819f6f1591f

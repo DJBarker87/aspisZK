@@ -22,11 +22,11 @@ for line in records.splitlines():
  info,name=line.split('\t');mode,kind,sha=info.split()
  if name not in available:continue
  files[name]=sha
- if available[name]!=sha or name in ['Cargo.lock','crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-core/src/r0_transcript.rs']:
+ if available[name]!=sha or name in ['Cargo.lock','crates/aspis-r1-cost-probe/src/verifier.rs','crates/aspis-r1-cost-probe/src/candidate.rs','crates/aspis-core/src/r0_transcript.rs','crates/aspis-r1-cost-probe/src/sampler.rs']:
   replacements[name]=base64.b64encode(subprocess.check_output(['git','cat-file','blob',sha])).decode()
 for name in ['Cargo.toml','Cargo.lock','.cargo/config.toml','crates/aspis-r1-cost-probe/src/verifier.rs']:
  assert name in files,name
-payload={'files':files,'private':replacements,'harness':__import__('NBA_harness').source(),'core':__import__('NBA_harness').source('crates/aspis-core/src/NBA_query_core.rs')}
+payload={'files':files,'private':replacements,'harness':__import__('NBA_harness').source(),'core':__import__('NBA_harness').source('crates/aspis-core/src/NBA_query_core.rs'),'sampler':__import__('NBA_harness').source('crates/aspis-r1-cost-probe/src/NBA_sampler.rs')}
 code=f'''from pathlib import Path
 import json,base64,hashlib,difflib
 b=Path({B!r});s=Path({S!r});dst=b/'NBA_src';x=json.loads({json.dumps(json.dumps(payload))})
@@ -47,6 +47,10 @@ p=dst/'crates/aspis-core/src/r0_transcript.rs';old=p.read_text();p.write_text(ol
 h=dst/'crates/aspis-core/src/NBA_query_core.rs';h.write_text(x['core'])
 patch+=''.join(difflib.unified_diff(old.splitlines(True),p.read_text().splitlines(True),fromfile='a/crates/aspis-core/src/r0_transcript.rs',tofile='b/crates/aspis-core/src/r0_transcript.rs'))
 patch+=''.join(difflib.unified_diff([],h.read_text().splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-core/src/NBA_query_core.rs'))
+p=dst/'crates/aspis-r1-cost-probe/src/sampler.rs';old=p.read_text();p.write_text(old+'\\n#[cfg(kani)] mod NBA_sampler {{ include!("NBA_sampler.rs"); }}\\n')
+h=dst/'crates/aspis-r1-cost-probe/src/NBA_sampler.rs';h.write_text(x['sampler'])
+patch+=''.join(difflib.unified_diff(old.splitlines(True),p.read_text().splitlines(True),fromfile='a/crates/aspis-r1-cost-probe/src/sampler.rs',tofile='b/crates/aspis-r1-cost-probe/src/sampler.rs'))
+patch+=''.join(difflib.unified_diff([],h.read_text().splitlines(True),fromfile='/dev/null',tofile='b/crates/aspis-r1-cost-probe/src/NBA_sampler.rs'))
 (b/'NBA_harness.patch').write_text(patch)
 print(json.dumps(dict(files=len(x['files']),private=len(x['private']),patch=patch,source_sha256={{rel:hashlib.sha256((dst/rel).read_bytes()).hexdigest() for rel in x['files']}})))
 '''
