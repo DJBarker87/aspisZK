@@ -13,10 +13,14 @@ def ssh(c):
   time.sleep(60)
 prior=ssh(f'test ! -f {D}/{name}/time.log')
 if prior.returncode!=0:raise RuntimeError('Host time.log already exists: recover read-only, never resubmit')
+def collect(names):
+ code='import pathlib,json; d=pathlib.Path('+repr(D+'/'+name)+'); print(json.dumps({n:(d/n).read_text() if (d/n).exists() else "" for n in '+repr(names)+'}))'
+ q=ssh(shlex.join(['python3','-c',code]))
+ if q.returncode:raise RuntimeError('Read-only collection failed; never resubmit an existing target')
+ for filename,data in json.loads(q.stdout).items():(out/filename).write_text(data)
 for k in range(11):
  r=ssh(f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
- for f in ['admission-before.json','reservation.log']:
-  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout)
+ collect(['admission-before.json','reservation.log'])
  ad=json.loads((out/'admission-before.json').read_text())
  with (out/'admission-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=r.returncode,admission=ad))+'\n')
  if ad.get('error'):
@@ -45,8 +49,7 @@ if r.returncode==255:
  else:raise RuntimeError('submitted result unresolved; do not rerun')
  status=int(q.stdout.split(':')[-1])
 else:status=r.returncode
-for f in ['admission-barrier.json','output.log','time.log']:
- q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout)
+collect(['admission-barrier.json','output.log','time.log'])
 bar=json.loads((out/'admission-barrier.json').read_text())
 with (out/'barrier-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=status,admission=bar))+'\n')
 if bar.get('allowed') is not True:
