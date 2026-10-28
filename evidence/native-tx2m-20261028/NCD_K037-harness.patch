@@ -1,0 +1,146 @@
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -626,3 +626,143 @@
+   unsafe{assert!(CALLS==1);assert!(u64::from(out[j])==(u64::from(raw[j])+u64::from(OUTPUT[j]))%2147483647);}
+  }
+ }
++
++#[cfg(kani)] mod NCD_dot_windows {
++use super::*;
++#[kani::proof] #[kani::unwind(1024)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn decode_success_full(){
++let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);
++ let at=slot*120+term*4;let j:usize=kani::any();kani::assume(j<608);let old=q[j];let ptr=q.as_ptr();
++ let view=&q[slot*120+term*4..slot*120+term*4+4];let bytes:[u8;4]=view.try_into().unwrap();
++ let word=u32::from_le_bytes(bytes);let decoded=M31::from_le_bytes(bytes);
++if let Some(x)=decoded{assert!(x.0==word&&x.0<2147483647);}
++}
++#[kani::proof] #[kani::unwind(1024)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn decode_reject_full(){
++let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);
++ let at=slot*120+term*4;let j:usize=kani::any();kani::assume(j<608);let old=q[j];let ptr=q.as_ptr();
++ let view=&q[slot*120+term*4..slot*120+term*4+4];let bytes:[u8;4]=view.try_into().unwrap();
++ let word=u32::from_le_bytes(bytes);let decoded=M31::from_le_bytes(bytes);
++assert!(decoded.is_none()==(word>=2147483647));
++}
++#[kani::proof] #[kani::unwind(1024)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn source_slice(){
++let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);
++ let at=slot*120+term*4;let j:usize=kani::any();kani::assume(j<608);let old=q[j];let ptr=q.as_ptr();
++ let view=&q[slot*120+term*4..slot*120+term*4+4];let bytes:[u8;4]=view.try_into().unwrap();
++ let word=u32::from_le_bytes(bytes);let decoded=M31::from_le_bytes(bytes);
++let k:usize=kani::any();kani::assume(k<4);assert!(view.as_ptr()==unsafe{q.as_ptr().add(at)}&&view.len()==4&&bytes[k]==q[at+k]);
++}
++#[kani::proof] #[kani::unwind(1024)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn decode_readonly(){
++let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);
++ let at=slot*120+term*4;let j:usize=kani::any();kani::assume(j<608);let old=q[j];let ptr=q.as_ptr();
++ let view=&q[slot*120+term*4..slot*120+term*4+4];let bytes:[u8;4]=view.try_into().unwrap();
++ let word=u32::from_le_bytes(bytes);let decoded=M31::from_le_bytes(bytes);
++assert!(q[j]==old&&q.as_ptr()==ptr);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fold_eight_values(){
++let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let n:u64=kani::any();kani::assume(n<7);for i in 0..8{kani::assume(limbs[i]<=n*10737418238);}
++ let j:usize=kani::any();kani::assume(j<8);let before=limbs[j];let sum=sums[j];let lp=limbs.as_ptr();let sp=sums.as_ptr();
++limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);
++limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);
++limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);
++limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);
++limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);
++limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);
++limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);
++limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);
++assert!(limbs[j]==before+(sum%2147483648)+(sum/2147483648));
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fold_eight_bound(){
++let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let n:u64=kani::any();kani::assume(n<7);for i in 0..8{kani::assume(limbs[i]<=n*10737418238);}
++ let j:usize=kani::any();kani::assume(j<8);let before=limbs[j];let sum=sums[j];let lp=limbs.as_ptr();let sp=sums.as_ptr();
++limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);
++limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);
++limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);
++limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);
++limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);
++limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);
++limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);
++limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);
++assert!(limbs[j]<=(n+1)*10737418238&&limbs[j]>=before);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fold_sum_readonly(){
++let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let n:u64=kani::any();kani::assume(n<7);for i in 0..8{kani::assume(limbs[i]<=n*10737418238);}
++ let j:usize=kani::any();kani::assume(j<8);let before=limbs[j];let sum=sums[j];let lp=limbs.as_ptr();let sp=sums.as_ptr();
++limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);
++limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);
++limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);
++limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);
++limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);
++limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);
++limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);
++limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);
++assert!(sums[j]==sum&&sums.as_ptr()==sp);
++}
++#[kani::proof] #[kani::unwind(512)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fold_metadata(){
++let sums:[u64;8]=kani::any();let mut limbs:[u64;8]=kani::any();let n:u64=kani::any();kani::assume(n<7);for i in 0..8{kani::assume(limbs[i]<=n*10737418238);}
++ let j:usize=kani::any();kani::assume(j<8);let before=limbs[j];let sum=sums[j];let lp=limbs.as_ptr();let sp=sums.as_ptr();
++limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);
++limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);
++limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);
++limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);
++limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);
++limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);
++limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);
++limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);
++assert!(limbs.len()==8&&sums.len()==8&&limbs.as_ptr()==lp&&sums.as_ptr()==sp);
++}
++}

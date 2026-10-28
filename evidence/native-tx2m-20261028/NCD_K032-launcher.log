@@ -1,0 +1,56 @@
+Running as unit: run-rde27cf56286a498bb990a91934565de5.scope; invocation ID: 39f6df98902a4b73a088aeb70404fed9
+{"attempt": "NCD_K032", "exit_status": 0, "wall_seconds": 4.8772172430180945, "peak_rss_kib": "579760", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2m-20261028/NCD_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+ame
+   --> crates/aspis-core/src/r0/heap.rs:433:18
+    |
+433 | #[cfg(kani)] mod NCD_byte_window {
+    |                  ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `ncd_byte_window`
+
+warning: function `NBS_recheck_26` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:48:4
+   |
+48 | fn NBS_recheck_26() {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_26`
+
+warning: function `NBS_recheck_25` should have a snake case name
+  --> crates/aspis-core/src/r0/heap.rs:88:4
+   |
+88 | fn NBS_recheck_25(){
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbs_recheck_25`
+
+warning: returned pointer of `as_ptr` call is never null, so checking it for null will always return false
+   --> crates/aspis-core/src/r0/heap.rs:203:110
+    |
+203 | ...=>{assert!(out.len()==0&&out.capacity()>=n);assert!(!out.as_ptr().is_null());kani::cover!(true);},Err(_)=>{assert!(out.len()==0&...
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(useless_ptr_null_checks)]` on by default
+
+warning: returned pointer of `as_ptr` call is never null, so checking it for null will always return false
+   --> crates/aspis-core/src/r0/heap.rs:214:110
+    |
+214 | ...=>{assert!(out.len()==0&&out.capacity()>=n);assert!(!out.as_ptr().is_null());kani::cover!(true);},Err(_)=>{assert!(out.len()==0&...
+    |                                                         ^^^^^^^^^^^^^^^^^^^^^^
+
+    Finished `dev` profile [optimized] target(s) in 4.41s
+Checking harness r0::heap::NCD_byte_window::store_new...
+
+VERIFICATION RESULT:
+ ** 0 of 21 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.09075491s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

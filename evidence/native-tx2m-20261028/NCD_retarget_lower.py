@@ -32,7 +32,7 @@ def visit(m):
  return name
 roots=['NBQ_RawCell','NBQ_Powers29','NBQ_TailDomain','NBQ_U06']+imports(Path('lean/NCD_Audit.lean').read_text())+['NBS_GeometryDomains']
 for p in L.glob('NCD_*.lean'):
- if not p.stem.startswith(('NCD_B_','NCD_R_')):
+ if p.stem!='NCD_Audit' and not p.stem.startswith(('NCD_B_','NCD_R_')):
   roots += [m for m in imports(p.read_text()) if not m.startswith('NCD_')]
 for m in roots:visit(m)
 (E/'NCD_LOWER_RETARGET_PLAN.json').write_text(json.dumps(new,indent=2)+'\n')
@@ -43,7 +43,7 @@ for row in json.loads((E/'NCD_RETARGET_PLAN.json').read_text()):
  p.write_text(s)
 (E/'NCD_LOWER_RETARGET_MAP.json').write_text(json.dumps({a:b for a,b in seen.items() if a!=b},indent=2)+'\n')
 for p in L.glob('NCD_*.lean'):
- if not p.stem.startswith(('NCD_B_','NCD_R_')):
+ if p.stem!='NCD_Audit' and not p.stem.startswith(('NCD_B_','NCD_R_')):
   s=p.read_text()
   for a,b in seen.items():
    if a!=b:s=re.sub(r'^import '+re.escape(a)+r'$',lambda _: 'import '+b,s,flags=re.M)

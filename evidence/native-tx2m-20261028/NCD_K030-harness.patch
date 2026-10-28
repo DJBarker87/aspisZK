@@ -1,0 +1,75 @@
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -429,3 +429,72 @@
+  assert!(out.len()==n&&out.capacity()==110&&out.as_ptr()==ptr);
+ }
+ }
++
++#[cfg(kani)] mod NCD_byte_window {
++use super::*;
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn store_new(){
++let mut storage=core::mem::MaybeUninit::<[u8;32]>::uninit();let ptr=storage.as_mut_ptr() as *mut u8;
++ let base:usize=kani::any();kani::assume(base<14759);let len:usize=kani::any();kani::assume(len>0&&len<=32);kani::assume(base+len<=14759);
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<len&&j<len);let old:u8=kani::any();let value:u8=kani::any();
++ unsafe{ptr.add(j).write(old);ptr.add(i).write(value);assert!(*ptr.add(i)==value);}
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn store_frame(){
++let mut storage=core::mem::MaybeUninit::<[u8;32]>::uninit();let ptr=storage.as_mut_ptr() as *mut u8;
++ let base:usize=kani::any();kani::assume(base<14759);let len:usize=kani::any();kani::assume(len>0&&len<=32);kani::assume(base+len<=14759);
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<len&&j<len);let old:u8=kani::any();let value:u8=kani::any();
++ unsafe{ptr.add(j).write(old);ptr.add(i).write(value);if j!=i{assert!(*ptr.add(j)==old);}}
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fill_new(){
++let mut storage=core::mem::MaybeUninit::<[u8;32]>::uninit();let ptr=storage.as_mut_ptr() as *mut u8;
++ let base:usize=kani::any();kani::assume(base<14759);let len:usize=kani::any();kani::assume(len>0&&len<=32);kani::assume(base+len<=14759);
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<len&&j<len);let old:u8=kani::any();let value:u8=kani::any();
++ unsafe{ptr.add(j).write(old);core::ptr::write_bytes(ptr.add(i),value,1);assert!(*ptr.add(i)==value);}
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn fill_frame(){
++let mut storage=core::mem::MaybeUninit::<[u8;32]>::uninit();let ptr=storage.as_mut_ptr() as *mut u8;
++ let base:usize=kani::any();kani::assume(base<14759);let len:usize=kani::any();kani::assume(len>0&&len<=32);kani::assume(base+len<=14759);
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<len&&j<len);let old:u8=kani::any();let value:u8=kani::any();
++ unsafe{ptr.add(j).write(old);core::ptr::write_bytes(ptr.add(i),value,1);if j!=i{assert!(*ptr.add(j)==old);}}
++}
++#[kani::proof] #[kani::unwind(32)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NBS_copy::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NBS_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::NBS_copy::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NBS_copy::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::NBS_copy::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::NBS_copy::KMX_realloc)]
++fn bounds(){
++let mut storage=core::mem::MaybeUninit::<[u8;32]>::uninit();let ptr=storage.as_mut_ptr() as *mut u8;
++ let base:usize=kani::any();kani::assume(base<14759);let len:usize=kani::any();kani::assume(len>0&&len<=32);kani::assume(base+len<=14759);
++ let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<len&&j<len);let old:u8=kani::any();let value:u8=kani::any();
++ unsafe{ptr.add(j).write(old);ptr.add(i).write(value);assert!(base+i<14759&&base+j<14759&&i<32&&j<32);}
++}
++}

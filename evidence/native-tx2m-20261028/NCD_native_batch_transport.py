@@ -19,7 +19,7 @@ if mode=='prepare':
  (E/('NCD_native_'+tag+'_plan.json')).write_text(json.dumps(plan,indent=2)+'\n')
 elif mode=='submit':
  assert not (E/'NCD_BATCH_ACTIVE').exists() and not (E/'NCD_NATIVE_BATCH_ACTIVE').exists()
- plan=json.loads((E/('NCD_native_'+tag+'_plan.json')).read_text());blob=base64.b64encode(zlib.compress(json.dumps(plan).encode())).decode()
+ plan=json.loads((E/('NCD_native_'+tag+'_plan.json')).read_text());assert sum(bool(re.fullmatch(r'NCD_K[0-9]+\.json',p.name)) for p in E.iterdir())+len(plan['rows'])<=50,'budget reserved by earlier scopes';blob=base64.b64encode(zlib.compress(json.dumps(plan).encode())).decode()
  code=f'''from pathlib import Path
 import subprocess,json,zlib,base64,sys
 b=Path({B!r});p=b/{('NCD_native_'+tag+'_initial_reservation.json')!r}
