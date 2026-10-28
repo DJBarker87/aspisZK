@@ -27,25 +27,27 @@ siblings, global anchor, bank existence and row validation.
 Guard failures return the first encountered error, not necessarily that of
 a later failing guard. Converse lemmas must include prior-prefix success.
 
-Additional semantic rejection candidate: ZeroRecipient28 keeps positive
-change and the original checked change sentinel, but admits a zero recipient.
-Its Lean admission is pending compilation. No native outcome is yet claimed.
+Additional checked semantic rejection: ZeroRecipient28 keeps positive change
+and the original checked change sentinel, but admits a zero recipient
+(Lean38173). The optimized native400/0/400 transfer probe returns
+Err(Conservation); see pv28-zero-recipient-01/receipt.json.
 
-Potential representation issue requiring investigation: `late_append` uses
+Checked raw-wrapper representation issue (FINDING.md): `late_append` uses
 `IncrementalMerkleTreeV1::from_parts_with_empty_roots`, whose validator checks
 inactive frontier slots against empty roots and reconstructs the root. It
 has no explicit canonical-digest test for active frontier words. The separate
 snapshot codec validator DOES check all frontier words; it is not called by
-these compiler wrappers. This is source inspection, not a checked successful
-preparation counterexample. Do not infer the required HonestInput frontier
-property merely from the word “NonCanonicalFrontier” in the tree error enum.
+these compiler wrappers. The native probe confirms successful preparation, and Lean38158 proves
+exclusion from HonestInput for every payload with this raw frontier. This
+does not show that a canonical encoder produces such arguments. Do not infer
+canonical limbs from the tree error name “NonCanonicalFrontier”.
 
-A focused optimized native GUARD probe is prepared to investigate the active
+The focused optimized native GUARD probe investigated the active
 frontier issue at index1 with frontier[0]=[P;8], a freshly reconstructed
 matching root, original positive input/amount/change, and no cached payload
 mutation. It calls the actual outer withdrawal compiler and snapshot codec.
 This is investigation of requirements1–2, not native RunJoin/refinement work
-under requirement4. No outcome has yet been observed.
+under requirement4. It passed with a fresh successful compilation and separate codec rejection.
 
 Retained resource failure38162: direct reuse of pair_valid for a first-
 commitment update caused kernel memory exhaustion at ZeroRecipient28.valid
@@ -57,7 +59,7 @@ raised, and the failed source is not rerun unchanged.
 D188 per-function boundary: the new compiler-domain/error proofs split only
 the already identified extracted compiler control flow. Its super-root scan
 reads shared elements; dropping the exhausted iterator state does not discard
-a data write. The one-step tree validator theorem threads the local result
+a data write. The archived one-step tree validator draft threads the local result
 explicitly; it has no mutable data-borrow restoration. No new Rust-source law
 for a mutable-iterator write body is claimed. Existing source/helper fidelity
 associations are reused as recorded in the predecessor reports; no XR source
