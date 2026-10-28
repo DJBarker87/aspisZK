@@ -1,6 +1,6 @@
 """Own transport/admission wrapper; never modifies the shared launchers."""
 from pathlib import Path
-import subprocess,json,shlex,time,hashlib
+import subprocess,json,shlex,time,hashlib,zlib,base64
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-kani-diag2-20261028'
@@ -46,10 +46,11 @@ b=Path({B!r});cfg=json.loads({json.dumps(json.dumps(cfg))});p=b/(cfg['attempt']+
  r=py(f'''from pathlib import Path
 import json
 b=Path({B!r})/{cfg['attempt']!r}
-print(json.dumps({{n:(b/n).read_text() for n in ['receipt.json','stdout.log','time.log'] if (b/n).is_file()}}))
+import base64,zlib
+print(base64.b64encode(zlib.compress(json.dumps({{n:(b/n).read_text() for n in ['receipt.json','stdout.log','time.log'] if (b/n).is_file()}}).encode())).decode())
 ''')
  assert r.returncode==0,r.stderr
- out=json.loads(r.stdout)
+ out=json.loads(zlib.decompress(base64.b64decode(r.stdout)))
  for n,s in out.items():p=E/cfg['attempt']/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
  if 'receipt.json' not in out:raise SystemExit('STOP missing receipt after submission; do not resubmit')
  rc=json.loads(out['receipt.json']);
