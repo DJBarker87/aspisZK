@@ -19,7 +19,8 @@ for version in ['nightly-2026-06-01','1.94.1']:
  }.items():
   p=root/file;s=p.read_text();r['files'][file]=dict(path=str(p),sha256=sha(p.read_bytes()))
   for key,marker,after in items:
-   b=span(s,marker,after);r['bodies'][key]=dict(text=b,token_sha256=sha('\0'.join(tok(b)).encode()))
+   marker = marker.replace('Option<I::Item>','Option<<I as Iterator>::Item>') if version!='1.94.1' and key=='rev_next' else marker
+   b=span(s,marker,after);canonical=b.replace('<I as Iterator>::Item','I::Item');r['bodies'][key]=dict(text=b,type_projection_normalization='<I as Iterator>::Item = I::Item on Iterator impl',token_sha256=sha('\0'.join(tok(canonical)).encode()))
  s=(root/'iter/range.rs').read_text();assert re.search(r'step_integer_impls!\s*\{[\s\S]*?usize',s)
  if version=='1.94.1':
   assert tok(r['bodies']['trusted_back']['text'])==tok('''fn spec_next_back(&mut self) -> Option<T> { if self.start < self.end { self.end = unsafe { Step::backward_unchecked(self.end, 1) }; Some(self.end) } else { None } }''')
