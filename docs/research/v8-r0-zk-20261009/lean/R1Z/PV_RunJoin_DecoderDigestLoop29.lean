@@ -58,7 +58,7 @@ theorem correct (d : Array U32 8#usize) (i : Usize) (hi : i.val ≤ 8) :
 theorem canonical_iff (d : Array U32 8#usize) :
     digest_is_canonical d = ok true ↔ Canon8 d := by
   rw [digest_is_canonical,correct d 0#usize (by decide)]
-  simp only [Result.ok.injEq,decide_eq_true_eq,Tail]
-  exact ⟨fun h j hj => h j (by omega) hj,fun h j _ hj => h j hj⟩
+  simp only [Result.ok.injEq,decide_eq_true_eq,Tail, UScalar.ofNatCore_val_eq]
+  exact ⟨fun h j hj => h j (Nat.zero_le j) hj,fun h j _ hj => h j hj⟩
 #print axioms canonical_iff
 end R1Z.PV_RunJoin_DecoderDigestLoop29
