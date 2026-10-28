@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_SelectedCoordinates32
+import R1Z.PV_Src_NativeIdentification
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_HonestPremises32
@@ -10,7 +11,7 @@ variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
 
 /-- All five native-source conditions are derived on the same honest family;
 none is an additional hypothesis and the original record type is unchanged. -/
-def premises : PV_Src_NativeIdentification.PV_Src_Premises (K := K)
+theorem premises : PV_Src_NativeIdentification.PV_Src_Premises (K := K)
     (inputs (K := K)) PV_Src_Transport.transport where
   compile_call := success
   words := fun i r hr => PV_RunJoin_UniversalRecords22.words (inputs i) i.property.2.2.1 r hr
