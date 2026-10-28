@@ -2,7 +2,7 @@
 -- [pv_b3p6_reference227]: function definitions
 import Aeneas.Std
 import Aeneas.Tactic.RustAttributes
-import PV_B3P_P227_13
+import PV_B3P_P227_13b
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false
 set_option linter.hashCommand false
