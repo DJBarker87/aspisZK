@@ -22,3 +22,4 @@ for row in rows:
  print(r.stdout[-4500:] if r.returncode else r.stdout[-800:],flush=True)
  if r.returncode:print('REVIEW',a,m,'exit',r.returncode,flush=True);sys.exit(r.returncode)
  a+=1
+ if m=='PV_L1_Source_072' and '--priority-only' in sys.argv:break
