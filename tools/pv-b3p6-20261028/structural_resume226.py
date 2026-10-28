@@ -163,3 +163,62 @@ assert list(map(int,re.findall(r'chunk\(p, (\d+)\)\?',encode)))==list(range(0,14
 record=dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),evidence_class='symbolic structural schedule audit; supporting evidence only',native_sha256=sha(native_path),owned_sha256=sha(T/'owned226.rs'),reference_sha256=sha(T/'reference226.rs'),symbolic_variants=checked,word_values='arbitrary symbolic labels; no concrete field fixtures',index_domain='all bytes in both finite serializer layouts plus padding',native_link_credit=False,row_closed=False,retained_obligations=['checked application of the region/Result/Vec/grouping laws to this structural schedule and complete row binding','both-variant nonvacuity and final closure audit'],warning='This source-schedule audit does not itself prove native execution equality or grant closure credit.')
 (D/'symbolic-schedule226-resume2.json').write_text(json.dumps(record,indent=2)+'\n')
 print(json.dumps(dict(schedule_match=True,variants=checked,native_link_credit=False)))
+# Exact emitted-source provenance: reproduce only the authorized metadata/import
+# port in memory. No emitted or previously proved file is rewritten here.
+port=json.loads((D/'port226v3.json').read_text())
+t=(D/'raw226-v3/Types.lean').read_text();f=(D/'raw226-v3/Funs.lean').read_text()
+pt=t.replace('import Aeneas\n','import Aeneas.Std\nimport Aeneas.Tactic.RustAttributes\n').replace('@[discriminant isize, rust_type','@[rust_type').replace('@[discriminant isize]\n','')
+pf=f.replace('import Aeneas\n','import Aeneas.Std\nimport Aeneas.Tactic.RustAttributes\n')
+pf=re.sub(r'^import \S+\.Types$', 'import PV_B3P_BytesV3Types226',pf,flags=re.M)
+pf+='\n'+''.join('#print axioms PV_B3P_226V3.'+n+'\n' for n in re.findall(r'^def (\S+)',f,re.M))
+assert (D/'lean/PV_B3P_BytesV3Types226.lean').read_text()==pt
+assert (D/'lean/PV_B3P_BytesV3Emission226.lean').read_text()==pf
+assert not re.search(r'index_mut|iter_mut|next_back|index_mut_back',f)
+assert re.search(r'pub const P: u32 = 0x7fff_ffff;', (R/'crates/aspis-core/src/field.rs').read_text())
+record['emission_fidelity']=dict(body_edits=False,mutable_writes=0,raw_types_sha256=sha(D/'raw226-v3/Types.lean'),raw_funs_sha256=sha(D/'raw226-v3/Funs.lean'),ported_types_sha256=sha(D/'lean/PV_B3P_BytesV3Types226.lean'),ported_funs_sha256=sha(D/'lean/PV_B3P_BytesV3Emission226.lean'))
+record['differences_and_lean_laws']=[
+ dict(difference='Read-only native references and semantic Option fields become copied owned fields; unused pool/domain metadata does not occur in the checked native main',laws=['PV_B3P_ProjectV3Law226.project_exact','PV_B3P_PublicCarrier226V3.roundtrip','PV_B3P_PublicCarrier226V3.reverse_roundtrip']),
+ dict(difference='Locally mutated Vec becomes owned Vec state threaded through identical push/extend operations; partial error buffers are unobservable because native returns Err and the Vec is local',laws=['PV_B3P_NativeFieldsVec226.complete_result','PV_B3P_NativeSteps226.complete_result','PV_B3P_NativePlan226.complete_result']),
+ dict(difference='The two explicit twenty-row frontier call chains become flattened field sequences, in identical row/lane order',laws=['PV_B3P_ReadTwenty226.same','PV_B3P_NativeIdentities226.frontier_groups','PV_B3P_NativeGroups226.complete_result']),
+ dict(difference='Absent optional recipient/amount calls become empty field lists',laws=['PV_B3P_NativeIdentities226.fields_empty','PV_B3P_NativePlan226.payload_value']),
+ dict(difference='One canonicality guard and four-byte native endian append become four identical guards followed by individual byte lanes; every failure is Error.Public',laws=['PV_B3P_WordLaw226V3.complete_word','PV_B3P_AppendFields226.repeated_byte_checks','PV_B3P_EndianVerified226V3.word_bytes','PV_B3P_NativeFieldByte226V3.complete_result']),
+ dict(difference='Native U64 endian append becomes eight width-bounded shifted byte lanes',laws=['PV_B3P_IndexLane226.native_value','PV_B3P_EndianVerified226V3.index_bytes','PV_B3P_ScalarValue226.index']),
+ dict(difference='Reference fixed chunk staging groups the identical sequential byte-check spine into 8/64/1472 cells; all array reads are in bounds',laws=['PV_B3P_ChunkV3Law226.complete_result','PV_B3P_Chunk64Law226.complete_result','PV_B3P_EncodeLaw226.complete_result','PV_B3P_ResultSpine226.collect_append','PV_B3P_BlockProjection226.success_cell','PV_B3P_EncodeSuccess226.success_chunk']),
+ dict(difference='Reference evaluates17/45 extra zero padding cells and trims their successful suffix; preceding error/failure/divergence tags are unchanged',laws=['PV_B3P_Padding226.value','PV_B3P_ResultSpine226.padding','PV_B3P_EncodeLength226.success_length','PV_B3P_WholeBuffer226.value']),
+ dict(difference='Byte regions use direct indexed projections rather than native nested fields calls; every symbolic cell has the same source field and lane and all dynamic guards have the same order',laws=['PV_B3P_DigestRegionValue226V3.anchor','PV_B3P_DigestRegionValue226V3.nullifier','PV_B3P_LateValue226.recipient','PV_B3P_LateValue226.change','PV_B3P_LateValue226.frontier','PV_B3P_LateValue226.next_root','PV_B3P_LateValue226.next_frontier','PV_B3P_ScalarValue226.asset','PV_B3P_ScalarValue226.amount','PV_B3P_ScalarValue226.index','PV_B3P_Regions226V3.discriminant','PV_B3P_ScalarRegions226.recipient_tag','PV_B3P_ScalarRegions226.withdrawal_tag']),
+ dict(difference='Install the callback in the original ProverRwFull carrier, preserving every other operation and both success variants',laws=['PV_B3P_Closure226.complete_result','PV_B3P_Closure226.value','PV_B3P_Closure226.nonvacuity','PV_B3P_Install226V3.source_complete','PV_B3P_Install226V3.error_tag','PV_B3P_Install226V3.fail_tag','PV_B3P_Install226V3.div_tag'])]
+if '--finalize' in __import__('sys').argv:
+ resolution=json.loads((D/'project-resolution.json').read_text())
+ needed=set()
+ def visit(m):
+  if m in needed or m not in resolution['modules']:return
+  needed.add(m)
+  for n in resolution['modules'][m]['imports']:visit(n)
+ visit('PV_B3P_Closure226')
+ assert 'PV_B3P_NativePlan226' in needed
+ receipts=[]
+ for p in (D/'receipts-resume2').glob('lean-*/receipt/receipt.json'):
+  r=json.loads(p.read_text());r['_file']=str(p.relative_to(R));receipts.append(r)
+ checked=[]
+ for module in sorted(needed):
+  a=resolution['modules'][module];assert sha(R/a['path'])==a['sha256']
+  good=[r for r in receipts if r['module']==module and r['source_sha256']==a['sha256'] and r['exit_status']==0]
+  assert good,('missing exact accepted proof',module)
+  r=max(good,key=lambda r:r['attempt']);log=(R/r['_file']).parent/'stdout.log'
+  assert 'sorryAx' not in log.read_text()
+  assert r['swaps']==0
+  checked.append(dict(module=module,source_sha256=a['sha256'],blob=a['blob'],receipt=r['_file'],attempt=r['attempt'],axioms=r['print_axioms']))
+ for item in record['differences_and_lean_laws']:
+  for law in item['laws']:
+   module=law.rsplit('.',1)[0]
+   assert module in needed,(law,module)
+   entry=next(r for r in checked if r['module']==module)
+   log=(R/entry['receipt']).parent/'stdout.log'
+   assert "'"+law+"' depends on axioms:" in log.read_text() or "'"+law+"' does not depend on any axioms" in log.read_text(),('law was not audited',law)
+ native_receipt=D/'receipts-resume/native226-structural-resume/receipt/receipt.json'
+ nr=json.loads(native_receipt.read_text());assert nr['exit_status']==0 and nr['swaps']==0
+ assert 'test result: ok' in (native_receipt.parent/'stdout.log').read_text()
+ for path,h in json.loads((D/'native226-resume-source-pins.json').read_text()).items():assert sha(R/path)==h,path
+ record.update(evidence_class='structural (K-1 substitute)',native_link_credit=True,row_closed=True,row='V243',op=226,checked_lean_modules=checked,retained_obligations=[],finite_validation=dict(classification='same-input native differential; finite validation',comparisons=2884,receipt=str(native_receipt.relative_to(R)),receipt_sha256=sha(native_receipt),reused_unchanged=True),universal_native_machine_equality_claimed=False,trusted_items_added=[],endpoint_scope='Selected callback/source/value requirement only. V165/V167, E1/E2, real RunJoin, client proof-account route and L1/L2/L3 remain substantive.',warning='Structural source argument under ruling(k\u2032), not a Lean theorem of native machine execution or Kani evidence. Compiler/standard-library source reading is explicit; no native equality axiom is introduced.')
+(D/'structural226-resume2.json').write_text(json.dumps(record,indent=2)+'\n')
+print(json.dumps(dict(finalized=record['row_closed'],class_name=record['evidence_class'])))
