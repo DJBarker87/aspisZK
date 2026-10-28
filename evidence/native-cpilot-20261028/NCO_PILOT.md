@@ -102,3 +102,19 @@ the one-iteration rule, and enforce callee proof/control/domain closure in the
 runner. Then repeat one complete vertical slice. Do not use raw-byte output
 adapters, Option<fn> renaming, or a successful caller run under an unproved
 contract as a substitute.
+
+## Final audit and disposition
+
+L060/NCO_Audit PASS: exit0, wall1.119898627 s, peakRSS2635468KiB,
+swap0; exact source revision/hash/command and767 selected object pins in its
+receipt. All52 explicit new top theorems have only standard axioms. Budgets:
+70/70 Kani,60/60 Lean,6 extraction attempts. Final classifications and
+per-proof times are NCO_RESULTS.json; no further proof was launched.
+
+Postflight: all767 pins unchanged, no own process, own cache retained, own
+Rust targets (about1.14GB) and temp directory removed; shared /tmp untouched.
+Source audit:496 frozen paths,491 exact,3 cfg-only scratch changes,2 inherited
+missing disabled client files. Shipped repository files did not change; ELF
+pins are inherited, not reproduced. Full remaining native AND mathematical
+obligations and exact next deliverables are in NCO_HANDOFF.md. The pilot does
+not provide a complete vertical slice or establish the deployed100-bit target.
