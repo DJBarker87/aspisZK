@@ -19,6 +19,7 @@ def columns (xs : Array (alloc.vec.Vec U32) 16#usize) : Array (Array (Option U32
 def fromTrace (base : ProverRwFull.ExternalTypes)
     (trace : @ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestTraceV1 (Types base)) :
     PV_B3P_224Prefix.prefix224.View :=
+  letI : ProverRwFull.ExternalTypes := Types base
   { stable := columns trace.stable.c1
     late := columns trace.late
     withdrawal := trace.variant }
