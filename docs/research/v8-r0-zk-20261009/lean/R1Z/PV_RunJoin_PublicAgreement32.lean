@@ -18,7 +18,7 @@ theorem raw (base : ProverRwFull.ExternalTypes) (a b : Input)
     (ht : a.compiled.public_statement=b.compiled.public_statement) :
     PV_RunJoin_NominalPublicData.fromInput base a=PV_RunJoin_NominalPublicData.fromInput base b := by
   cases a with
-  | mk ar aw ac al as ap =>
+  | mk ar aw ac al snapA ap =>
     cases b with
     | mk br bw bc bl bs bp =>
       cases ar <;> cases br <;> cases hh
