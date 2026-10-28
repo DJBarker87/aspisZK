@@ -1,6 +1,6 @@
 from pathlib import Path
 import re,json,hashlib
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin31-20261028';L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z';G=E/'pv31-lane-reference-aeneas-06-generated'
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin31-20261028';L=R/'docs/research/v8-r0-zk-20261009/lean/R1Z';G=E/'pv31-lane-reference-aeneas-07-generated'
 (L/'PV_RunJoin_LaneTypesExternal31.lean').write_text('''import R1Z.PV_RunJoin_OuterTypes30
 set_option autoImplicit false
 namespace PV_RunJoin_Lane31
@@ -11,7 +11,7 @@ abbrev aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatErro
 end PV_RunJoin_Lane31
 ''')
 for kind in ['Types','Funs']:
- s=(G/(kind+'.lean')).read_text().replace('import Pv31-lane-reference-names-03.TypesExternal','import R1Z.PV_RunJoin_LaneTypesExternal31').replace('import Pv31-lane-reference-names-03.Types','import R1Z.PV_RunJoin_LaneTypes31').replace('import Pv31-lane-reference-names-03.FunsExternal','import R1Z.PV_RunJoin_LaneExternal31')
+ s=(G/(kind+'.lean')).read_text().replace('import Pv31-lane-reference-names-04.TypesExternal','import R1Z.PV_RunJoin_LaneTypesExternal31').replace('import Pv31-lane-reference-names-04.Types','import R1Z.PV_RunJoin_LaneTypes31').replace('import Pv31-lane-reference-names-04.FunsExternal','import R1Z.PV_RunJoin_LaneExternal31')
  if kind=='Funs':s=s.replace('namespace PV_RunJoin_Lane31','namespace PV_RunJoin_Lane31\nvariable [R1Z.BuilderForestAdmissionPort.ExternalLinear]')
  (L/('PV_RunJoin_Lane'+kind+'31.lean')).write_text(s)
 leaf='aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1'

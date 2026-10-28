@@ -64,83 +64,83 @@ def lane_root
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
     let a ← Array.index_usize input.membership.siblings 0#usize
-    let i ← lift (Std.U32.wrapping_shr input.membership.index 0#i32)
+    let i ← lift (Std.U32.wrapping_shr input.membership.index 0#u32)
     let i1 ← lift (i &&& 1#u32)
     let current ← step val a (i1 != 0#u32)
     let a1 ← Array.index_usize input.membership.siblings 1#usize
-    let i2 ← lift (Std.U32.wrapping_shr input.membership.index 1#i32)
+    let i2 ← lift (Std.U32.wrapping_shr input.membership.index 1#u32)
     let i3 ← lift (i2 &&& 1#u32)
     let current1 ← step current a1 (i3 != 0#u32)
     let a2 ← Array.index_usize input.membership.siblings 2#usize
-    let i4 ← lift (Std.U32.wrapping_shr input.membership.index 2#i32)
+    let i4 ← lift (Std.U32.wrapping_shr input.membership.index 2#u32)
     let i5 ← lift (i4 &&& 1#u32)
     let current2 ← step current1 a2 (i5 != 0#u32)
     let a3 ← Array.index_usize input.membership.siblings 3#usize
-    let i6 ← lift (Std.U32.wrapping_shr input.membership.index 3#i32)
+    let i6 ← lift (Std.U32.wrapping_shr input.membership.index 3#u32)
     let i7 ← lift (i6 &&& 1#u32)
     let current3 ← step current2 a3 (i7 != 0#u32)
     let a4 ← Array.index_usize input.membership.siblings 4#usize
-    let i8 ← lift (Std.U32.wrapping_shr input.membership.index 4#i32)
+    let i8 ← lift (Std.U32.wrapping_shr input.membership.index 4#u32)
     let i9 ← lift (i8 &&& 1#u32)
     let current4 ← step current3 a4 (i9 != 0#u32)
     let a5 ← Array.index_usize input.membership.siblings 5#usize
-    let i10 ← lift (Std.U32.wrapping_shr input.membership.index 5#i32)
+    let i10 ← lift (Std.U32.wrapping_shr input.membership.index 5#u32)
     let i11 ← lift (i10 &&& 1#u32)
     let current5 ← step current4 a5 (i11 != 0#u32)
     let a6 ← Array.index_usize input.membership.siblings 6#usize
-    let i12 ← lift (Std.U32.wrapping_shr input.membership.index 6#i32)
+    let i12 ← lift (Std.U32.wrapping_shr input.membership.index 6#u32)
     let i13 ← lift (i12 &&& 1#u32)
     let current6 ← step current5 a6 (i13 != 0#u32)
     let a7 ← Array.index_usize input.membership.siblings 7#usize
-    let i14 ← lift (Std.U32.wrapping_shr input.membership.index 7#i32)
+    let i14 ← lift (Std.U32.wrapping_shr input.membership.index 7#u32)
     let i15 ← lift (i14 &&& 1#u32)
     let current7 ← step current6 a7 (i15 != 0#u32)
     let a8 ← Array.index_usize input.membership.siblings 8#usize
-    let i16 ← lift (Std.U32.wrapping_shr input.membership.index 8#i32)
+    let i16 ← lift (Std.U32.wrapping_shr input.membership.index 8#u32)
     let i17 ← lift (i16 &&& 1#u32)
     let current8 ← step current7 a8 (i17 != 0#u32)
     let a9 ← Array.index_usize input.membership.siblings 9#usize
-    let i18 ← lift (Std.U32.wrapping_shr input.membership.index 9#i32)
+    let i18 ← lift (Std.U32.wrapping_shr input.membership.index 9#u32)
     let i19 ← lift (i18 &&& 1#u32)
     let current9 ← step current8 a9 (i19 != 0#u32)
     let a10 ← Array.index_usize input.membership.siblings 10#usize
-    let i20 ← lift (Std.U32.wrapping_shr input.membership.index 10#i32)
+    let i20 ← lift (Std.U32.wrapping_shr input.membership.index 10#u32)
     let i21 ← lift (i20 &&& 1#u32)
     let current10 ← step current9 a10 (i21 != 0#u32)
     let a11 ← Array.index_usize input.membership.siblings 11#usize
-    let i22 ← lift (Std.U32.wrapping_shr input.membership.index 11#i32)
+    let i22 ← lift (Std.U32.wrapping_shr input.membership.index 11#u32)
     let i23 ← lift (i22 &&& 1#u32)
     let current11 ← step current10 a11 (i23 != 0#u32)
     let a12 ← Array.index_usize input.membership.siblings 12#usize
-    let i24 ← lift (Std.U32.wrapping_shr input.membership.index 12#i32)
+    let i24 ← lift (Std.U32.wrapping_shr input.membership.index 12#u32)
     let i25 ← lift (i24 &&& 1#u32)
     let current12 ← step current11 a12 (i25 != 0#u32)
     let a13 ← Array.index_usize input.membership.siblings 13#usize
-    let i26 ← lift (Std.U32.wrapping_shr input.membership.index 13#i32)
+    let i26 ← lift (Std.U32.wrapping_shr input.membership.index 13#u32)
     let i27 ← lift (i26 &&& 1#u32)
     let current13 ← step current12 a13 (i27 != 0#u32)
     let a14 ← Array.index_usize input.membership.siblings 14#usize
-    let i28 ← lift (Std.U32.wrapping_shr input.membership.index 14#i32)
+    let i28 ← lift (Std.U32.wrapping_shr input.membership.index 14#u32)
     let i29 ← lift (i28 &&& 1#u32)
     let current14 ← step current13 a14 (i29 != 0#u32)
     let a15 ← Array.index_usize input.membership.siblings 15#usize
-    let i30 ← lift (Std.U32.wrapping_shr input.membership.index 15#i32)
+    let i30 ← lift (Std.U32.wrapping_shr input.membership.index 15#u32)
     let i31 ← lift (i30 &&& 1#u32)
     let current15 ← step current14 a15 (i31 != 0#u32)
     let a16 ← Array.index_usize input.membership.siblings 16#usize
-    let i32 ← lift (Std.U32.wrapping_shr input.membership.index 16#i32)
+    let i32 ← lift (Std.U32.wrapping_shr input.membership.index 16#u32)
     let i33 ← lift (i32 &&& 1#u32)
     let current16 ← step current15 a16 (i33 != 0#u32)
     let a17 ← Array.index_usize input.membership.siblings 17#usize
-    let i34 ← lift (Std.U32.wrapping_shr input.membership.index 17#i32)
+    let i34 ← lift (Std.U32.wrapping_shr input.membership.index 17#u32)
     let i35 ← lift (i34 &&& 1#u32)
     let current17 ← step current16 a17 (i35 != 0#u32)
     let a18 ← Array.index_usize input.membership.siblings 18#usize
-    let i36 ← lift (Std.U32.wrapping_shr input.membership.index 18#i32)
+    let i36 ← lift (Std.U32.wrapping_shr input.membership.index 18#u32)
     let i37 ← lift (i36 &&& 1#u32)
     let current18 ← step current17 a18 (i37 != 0#u32)
     let a19 ← Array.index_usize input.membership.siblings 19#usize
-    let i38 ← lift (Std.U32.wrapping_shr input.membership.index 19#i32)
+    let i38 ← lift (Std.U32.wrapping_shr input.membership.index 19#u32)
     let i39 ← lift (i38 &&& 1#u32)
     let current19 ← step current18 a19 (i39 != 0#u32)
     ok (core.result.Result.Ok current19)
