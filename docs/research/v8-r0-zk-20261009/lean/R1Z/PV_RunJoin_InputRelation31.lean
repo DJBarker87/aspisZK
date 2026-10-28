@@ -21,7 +21,6 @@ theorem pair_equal (i : Input) : (witness (K := K) i).pair =
   unfold PV_RunJoin_PairValidation31.model
   rw [← PV_RunJoin_WitnessViews31.pair_first i,← PV_RunJoin_WitnessViews31.pair_second i,
     ← PV_RunJoin_WitnessViews31.pair_occupied i,← PV_RunJoin_WitnessViews31.pair_inverse i]
-  rfl
 #print axioms pair_equal
 
 theorem valid (i : Input) (success : run i = ok (.Ok i.compiled)) :
