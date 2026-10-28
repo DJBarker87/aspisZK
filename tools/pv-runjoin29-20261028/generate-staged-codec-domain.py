@@ -6,7 +6,7 @@ nums=[20,16,12,8,4,0,'Prefix']
 for k,n in enumerate(nums):
  source='PV_RunJoin_Decoder'+('Prefix29' if n=='Prefix' else 'Stage'+str(n)+'29')
  module='PV_RunJoin_Codec'+('Prefix' if n=='Prefix' else 'Stage'+str(n))+'Domain29';ns='R1Z.'+module
- s=(L/(source+'.lean')).read_text();start=s.index('def run ');end=s.index('\n\ntheorem',start) if '\n\ntheorem' in s[start:] else -1
+ s=(L/(source+'.lean')).read_text();start=s.index('def run ');end=start+re.search(r'\n\n(?:/--|theorem )',s[start:]).start()
  original=s[start:end];header,body=original.split(' := do\n',1)
  # Stage20 has an adjacent branch lemma, which is outside the executable body.
  body=body.rstrip()

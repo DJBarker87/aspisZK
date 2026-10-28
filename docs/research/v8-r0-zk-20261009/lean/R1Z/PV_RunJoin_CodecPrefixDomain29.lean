@@ -72,12 +72,6 @@ def Path (bytes : Slice U8) : Prop :=
                           PV_RunJoin_CodecStage0Domain29.Path bytes val
                         | core.ops.control_flow.ControlFlow.Break residual => False
 
-/-- Pure continuation factoring of the authoritative decoder, for all bytes.
-No native body or primitive operation is replaced. -/
-theorem source (bytes : Slice U8) : run bytes = decode_pool_v1_pair_live_snapshot_v1 bytes := by
-  pv_kernel_refl
-#print axioms source
-
 /-- Every first-error path retains its entire successful prefix. -/
 def ErrorPath (bytes : Slice U8) (error : PoolV1PairLiveSnapshotErrorV1) : Prop :=
   let i := Slice.len bytes
@@ -139,12 +133,6 @@ def ErrorPath (bytes : Slice U8) (error : PoolV1PairLiveSnapshotErrorV1) : Prop 
                         | core.ops.control_flow.ControlFlow.Continue val =>
                           PV_RunJoin_CodecStage0Domain29.ErrorPath bytes val error
                         | core.ops.control_flow.ControlFlow.Break residual => (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) residual) = ok (.Err error)
-
-/-- Pure continuation factoring of the authoritative decoder, for all bytes.
-No native body or primitive operation is replaced. -/
-theorem source (bytes : Slice U8) : run bytes = decode_pool_v1_pair_live_snapshot_v1 bytes := by
-  pv_kernel_refl
-#print axioms source
 
 theorem success_iff (bytes : Slice U8) : (∃ snapshot, PV_RunJoin_DecoderPrefix29.run bytes = ok (.Ok snapshot)) ↔ Path bytes := by
   rw [R1Z.PV_RunJoin_ResultDomain28.success_wp]
