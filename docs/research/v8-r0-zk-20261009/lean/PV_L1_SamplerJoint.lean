@@ -1,4 +1,5 @@
 import PV_L2B_JointTransport
+import Mathlib.Algebra.BigOperators.Ring.Finset
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1_SamplerJoint
