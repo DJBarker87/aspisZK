@@ -18,3 +18,5 @@ scanListLoop Result. NBA_QueryConstruct.construct (L026) builds a trace from
 EVERY bounded state and finite word list; no scan result hypothesis occurs.
 The from_fn/masked-byte totality and first-stop driver ports are being completed
 before decoder substitution may receive CLOSED credit. No XRn kit is used.
+
+Final update: K023/K024 eager wrapper and both Result/state branches PASS; NBA_Materialize.source and NBA_QueryJoin.source PASS. The complete native query child association remains part of the OPEN composite join. See NBA_prepare_BRIDGE.md.

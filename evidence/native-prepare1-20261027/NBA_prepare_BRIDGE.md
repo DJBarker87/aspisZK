@@ -66,7 +66,8 @@ K007 checks the actual block method's three digest calls. K023/K024 check
 actual eager queries and both decoder Result/state branches. K026 checks the
 actual S2 salted seed. K030 checks actual gamma/ordinary/rho scalar routing;
 K027 checks one arbitrary-prestate carry update; K028 actual canonical digit
-packing; K031 sampler callee routing, including the wrapped second-add cut.
+packing; K031 sampler callee routing, including the wrapped second-add cut. K032/K033
+check ONE native rho division iteration and ONE outer digit callback/frame.
 
 NBA_ASSOCIATION.json records eight exact lexical fragment checks and each
 explicit transformation: named local parameters, mutable-reference exposure,
@@ -115,3 +116,40 @@ K026/K030 contain the repairs. K018 is superseded by aligned K022.
 
 No shipped file changes, ELF rebuild, release-root replay, cryptographic
 assumption, security-game amendment or headline premise delta is claimed.
+
+
+## Mandatory budget-stop handoff
+
+Final counts: **68/100 actual Lean** (36 PASS,32 FAIL), **30/30 actual Kani**
+(22 PASS,8 FAIL). K001/K010/K011 and L039 are preflight-only and excluded.
+Kani failures are2 compile errors,2 unwind failures,4 unchanged90-second-limit
+shape timeouts; none was rerun unchanged. Lean has31 local/recursion/elaboration
+errors and1 fixed kernel-memory failure. No swap or cap increase occurred.
+
+The single final co-import/axioms audit L069 checks all78 new theorem roots:
+exit0,4.676322530 s,peak5252304 KiB,swap0,revision5cd1c644f7f69585b4d88152dacb504174391228.
+K033: exit0,8.669258643 s,peak346136 KiB,swap0,same revision. Exact commands,
+source/dependency hashes, cgroups, full diagnostics and axiom lines are retained.
+NBA_VERIFICATION.json has zero structural audit errors and explicit historical
+source-inventory qualifications; its status remains OPEN.
+
+The earlier K002-K009 runner retained source hashes/setup manifests but did
+not create a fresh full-source-scan receipt before each run. Graph/lock checks
+were fresh before/after every actual Kani run. K002 is a rejected compile with
+no full patch retained, and receives no proof credit. Do not invent these
+missing historical scans. Later K012 onward has the stricter fresh source scan.
+
+Persistent leaf-cache end snapshot:148 initial files unchanged,188 additions
+(35 this job:31 NBA objects and4 unchanged dependencies;153 concurrent-worker
+additions),336 total. Every file is hashed at start/end; cache retained.
+All219 main Aeneas objects match initial pins; the3 sidecars were captured later,
+matched inherited SInt2 pins, and all222 complete pins match at end. No original-
+start freshness is claimed for those3 sidecars. Scratch sources remain on host;
+only this job's NBA_target and NBA_tmp were removed. No key was created/deleted.
+
+Repository crates/, programs/ and Cargo.lock remain byte-identical to4bb3b3f5.
+No ELF gate was triggered. Historical pins only: default
+f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4;
+devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
+Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
+No binary, compiled object, tarball or ELF is committed; no push or merge.

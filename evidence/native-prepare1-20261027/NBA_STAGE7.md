@@ -21,8 +21,8 @@ reused at n=4, with no modification to LPk sources or another cache.
 K026 salted S2 seed, K027 arbitrary carry step/full array frame, K028 actual
 canonical packing, K030 actual gamma/ordinary/rho scalar routing and K031
 sampler callee routing all PASS. K032 descending rho division step PASS with
-full sparse-constant reconstruction and array frame. K033 is the remaining
-planned native outer-driver step and will exhaust the30-run Kani budget.
+full sparse-constant reconstruction and array frame. K033 native outer-driver step PASS (8.669258643 s;346136 KiB;swap0).
+It exhausts the30-run Kani budget; no further proof launch is authorized.
 
 K025 compile failure came from a nonexistent QM31 to_le_bytes method in a
 new assertion; repaired with all-four-limb equality. K029 unwind failure came

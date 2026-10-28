@@ -1,5 +1,6 @@
 from pathlib import Path
-import json,hashlib,subprocess,shlex,time
+import json,hashlib,subprocess,shlex,time,sys
+assert sys.argv[1:]==["END"],"Use END only; initial inventories are immutable"
 E=Path(__file__).resolve().parent
 host='dombarker@100.108.41.90'
 code='''from pathlib import Path
@@ -21,5 +22,11 @@ for retry in range(11):
  if r.returncode!=255 or retry==10:raise SystemExit(r.stderr)
  time.sleep(60)
 remote=json.loads(r.stdout)
-(E/'NBA_CACHE_START.json').write_text(json.dumps(remote['cache'],indent=2)+'\n')
-(E/'NBA_LIBRARY_START.json').write_text(json.dumps(remote['aeneas'],indent=2)+'\n')
+(E/'NBA_CACHE_END.json').write_text(json.dumps(remote['cache'],indent=2)+'\n')
+(E/'NBA_LIBRARY_END.json').write_text(json.dumps(remote['aeneas'],indent=2)+'\n')
+
+start=json.loads((E/'NBA_CACHE_START.json').read_text());end=remote['cache']
+errors=[p for p,h in start.items() if end.get(p)!=h]
+assert not errors,errors
+(E/'NBA_CACHE_CHECK.json').write_text(json.dumps(dict(initial=len(start),final=len(end),unchanged=len(start),added=sorted(set(end)-set(start)),errors=errors,persistent_cache_retained=True),indent=2)+'\n')
+print(json.dumps(dict(initial=len(start),final=len(end),unchanged=len(start),added=len(set(end)-set(start)),errors=errors)))

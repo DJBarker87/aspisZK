@@ -10,6 +10,7 @@ package='aspis-core' if core else 'aspis-r1-cost-probe'
 rel='crates/'+package+'/src/'+('NBA_query_core.rs' if core else 'NBA_sampler.rs' if module.startswith('sampler::NBA_sampler::') else 'NBA_verifier.rs')
 src='NBA_src/'+rel;local=__import__('NBA_harness').path(rel);obj='/dev/null'
 
+if (E/'NBA_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
 if (E/'NBA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NBA_K*/receipt.json')))<30
 assert not (E/a/'receipt.json').exists()

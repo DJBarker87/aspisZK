@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
 a,local,module=sys.argv[1:];local=Path(local);src='NBA_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027/'+module.replace('.','/')+'.olean'
+if (E/'NBA_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
 if (E/'NBA_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NBA_L*/receipt.json')))<100
 assert not (E/a/'receipt.json').exists()
