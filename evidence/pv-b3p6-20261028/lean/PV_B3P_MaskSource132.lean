@@ -45,7 +45,6 @@ theorem translated_value (r c : Nat) (lo : 1008 ≤ r) (hi : r < 1024) (hc : c <
   simp only [legacyUsed,hp,false_or,legacyValue,exists_three,occupancy,valueUsed]
   norm_num only
   simp
-  trace_state
   omega
 
 -- The original forest predicate follows the same ordered path helper, then
@@ -59,7 +58,7 @@ theorem native_free (r c : Nat) (hr : r < 1024) (hc : c < 16) : nativeFree r c �
   · simp [nativeFree,free,h0]
   · by_cases h1 : r < 1008
     · simp only [nativeFree,free,h0,h1,↓reduceIte,false_and,false_or,not_false_eq_true,true_and]
-      exact not_congr (PV_B3P_MaskPath132.used_iff r c (by omega) h1).symm
+      exact not_congr (PV_B3P_MaskPath132.used_iff r c (by omega) h1)
     · simp only [nativeFree,free,h0,h1,↓reduceIte,false_and,false_or,not_false_eq_true,true_and]
       exact not_congr (translated_value r c (by omega) hr hc)
 
