@@ -721,3 +721,51 @@ fn NBU_asf8_ranges(){let mut out:[u8;1880]=kani::any();let ptr=out.as_mut_ptr();
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 #[kani::unwind(34)]
 fn NBU_asf8_ranges_negative(){let mut out:[u8;1880]=kani::any();let ptr=out.as_mut_ptr();let field:usize=kani::any();kani::assume(field<7);let (start,len)=match field{0=>(MASTER_OFFSET,32),1=>(CHECKPOINT_ACCOUNT_OFFSET,32),2=>(SELECTED_LANE_ACCOUNT_OFFSET,32),3=>(CHECKPOINT_SEQUENCE_OFFSET,8),4=>(HISTORICAL_ANCHOR_OFFSET,32),5=>(LATE_STATEMENT_OFFSET,POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES),_=>(PAYMENT_STATEMENT_OFFSET,POOL_V1_PAYMENT_STATEMENT_BYTES)};let expected_start=[8,40,72,104,112,144,1664][field];let expected_len=[32,32,32,8,32,1520,216][field];let view=&mut out[start..start+len];assert_ne!(view.len(),expected_len);assert_eq!(view.as_mut_ptr(),ptr.wrapping_add(expected_start));}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_projection(){let s=NBU_statement();
+match &s {
+PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{assert!(core::ptr::eq(s.nullifier(),&public.nullifier));assert_eq!(s.transition_kind(),PoolV1TransitionKind::PrivateTransfer);let p=PoolV1PairForestTerminalPaymentV1::PrivateTransfer(*public);if let PoolV1PairForestTerminalPaymentV1::PrivateTransfer(q)=&p{assert!(core::ptr::eq(p.nullifier(),&q.nullifier));assert_eq!(p.transition_kind(),PoolV1TransitionKind::PrivateTransfer);}else{assert!(false);}},
+PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{assert!(core::ptr::eq(s.nullifier(),&public.nullifier));assert_eq!(s.transition_kind(),PoolV1TransitionKind::Withdrawal);let p=PoolV1PairForestTerminalPaymentV1::Withdrawal(*public);if let PoolV1PairForestTerminalPaymentV1::Withdrawal(q)=&p{assert!(core::ptr::eq(p.nullifier(),&q.nullifier));assert_eq!(p.transition_kind(),PoolV1TransitionKind::Withdrawal);}else{assert!(false);}}
+}}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_projection_negative(){let s=NBU_statement();
+match &s {
+PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{assert!(!core::ptr::eq(s.nullifier(),&public.nullifier));assert_eq!(s.transition_kind(),PoolV1TransitionKind::PrivateTransfer);let p=PoolV1PairForestTerminalPaymentV1::PrivateTransfer(*public);if let PoolV1PairForestTerminalPaymentV1::PrivateTransfer(q)=&p{assert!(core::ptr::eq(p.nullifier(),&q.nullifier));assert_eq!(p.transition_kind(),PoolV1TransitionKind::PrivateTransfer);}else{assert!(false);}},
+PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{assert!(!core::ptr::eq(s.nullifier(),&public.nullifier));assert_eq!(s.transition_kind(),PoolV1TransitionKind::Withdrawal);let p=PoolV1PairForestTerminalPaymentV1::Withdrawal(*public);if let PoolV1PairForestTerminalPaymentV1::Withdrawal(q)=&p{assert!(core::ptr::eq(p.nullifier(),&q.nullifier));assert_eq!(p.transition_kind(),PoolV1TransitionKind::Withdrawal);}else{assert!(false);}}
+}}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_parts(){let s=NBU_statement();let k:usize=kani::any();kani::assume(k<32);let d:usize=kani::any();kani::assume(d<8);let (pool,deployment,sequence,anchor,nullifier,asset)=statement_public_common(&s);match &s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{assert_eq!(pool[k],public.pool[k]);assert_eq!(deployment[k],public.deployment_domain[k]);assert_eq!(sequence,public.anchor_sequence);assert_eq!(anchor[d],public.anchor_root[d]);assert_eq!(nullifier[d],public.nullifier[d]);assert_eq!(asset,public.asset_id);},PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{assert_eq!(pool[k],public.pool[k]);assert_eq!(deployment[k],public.deployment_domain[k]);assert_eq!(sequence,public.anchor_sequence);assert_eq!(anchor[d],public.anchor_root[d]);assert_eq!(nullifier[d],public.nullifier[d]);assert_eq!(asset,public.asset_id);}}}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_parts_negative(){let s=NBU_statement();let k:usize=kani::any();kani::assume(k<32);let d:usize=kani::any();kani::assume(d<8);let (pool,deployment,sequence,anchor,nullifier,asset)=statement_public_common(&s);match &s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{assert_ne!(pool[k],public.pool[k]);assert_eq!(deployment[k],public.deployment_domain[k]);assert_eq!(sequence,public.anchor_sequence);assert_eq!(anchor[d],public.anchor_root[d]);assert_eq!(nullifier[d],public.nullifier[d]);assert_eq!(asset,public.asset_id);},PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{assert_ne!(pool[k],public.pool[k]);assert_eq!(deployment[k],public.deployment_domain[k]);assert_eq!(sequence,public.anchor_sequence);assert_eq!(anchor[d],public.anchor_root[d]);assert_eq!(nullifier[d],public.nullifier[d]);assert_eq!(asset,public.asset_id);}}}

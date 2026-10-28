@@ -50,8 +50,9 @@ Installed path (all paths are definition names in the replayed cohort):
 fields (e.g. CPP_Install installs op35/op36); the requested fields are retained.
 `NBK_DeployedCallbackSelection.registry/policy_accounts` and
 `NBN_AccountCallbackObstruction.request_unconstrained` independently establish
-SDK field retention for any Configuration. Stage 2 will kernel-check retention
-through the actual installed configuration; stage 1 is statement inspection.
+SDK field retention for any Configuration. The inherited SDK retention lemmas are kernel-checked; the outer installed
+configuration path here is read-only statement/definition inspection. No fresh
+whole-headline replay is claimed.
 
 For EVERY following row, exact per-slot excerpt is
 `(missing : IDa_Deployed.Uninstalled CoreError)` + `adapter := missing.adapter`
@@ -92,3 +93,5 @@ Validation: read-only kernel/source/retention inspection; 0 Lean compile
 attempts, 0 Kani runs. No new top theorem at this stage; axioms audit N/A.
 No source, feature, wire-format, toolchain or release artifact changed.
 Headline security target remains not established.
+
+The replay packet intentionally retains the historical FJv descriptive comment: RPx_HANDOFF.md and RPx_statement-comparison.json certify the complete RPx kernel type is byte-identical. The quantified payload, not that comment, is the authority.

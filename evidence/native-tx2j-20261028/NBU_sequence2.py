@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess,json
 E=Path(__file__).resolve().parent
-pairs=[('decode',n) for n in ['exact32','exact8','decode_window','decode_prefix','after_header','live_header']]+[('more',n) for n in ['asf8_header','asf8_ranges','late_header_gate','fill_iteration','frontier_iterator_step','late_length_index','late_ranges','first_byte_cut','lane_control','late_results','encoder_control']]+[('more',f'rows_{family}_{side}') for family in ['after','live'] for side in ['inside','before','after']]+[('more','result_control')]+[('codecs',n) for n in ['after_00','live_00']]
+pairs=[('decode',n) for n in ['exact32','exact8','decode_window','decode_prefix','after_header','live_header']]+[('more',n) for n in ['asf8_header','asf8_ranges','projection','late_header_gate','fill_iteration','frontier_iterator_step','parts','late_length_index','late_ranges','first_byte_cut','lane_control','late_results','encoder_control']]+[('more',f'rows_{family}_{side}') for family in ['after','live'] for side in ['inside','before','after']]+[('more','result_control')]+[('codecs',n) for n in ['after_00','live_00']]
 count=5
 for mod,name in pairs:
  timedout=False

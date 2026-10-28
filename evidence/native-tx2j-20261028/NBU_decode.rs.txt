@@ -294,3 +294,13 @@ let mut output:[u8;160]=[0;160];let pool:[u8;32]=kani::any();let domain:[u8;32]=
 output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);output[8]=POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;
 output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);output[48..80].copy_from_slice(&pool);output[80..112].copy_from_slice(&domain);output[112..120].copy_from_slice(&sequence.to_le_bytes());output[120..128].copy_from_slice(&index.to_le_bytes());output[128..160].copy_from_slice(&root);
 let j:usize=kani::any();kani::assume(j<160);assert_ne!(output[j],if j<8{POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[j]}else if j==8{1}else if j<16{0}else if j<48{POOL_V1_PAIR_TREE_FORMAT_BINDING[j-16]}else if j<80{pool[j-48]}else if j<112{domain[j-80]}else if j<120{sequence.to_le_bytes()[j-112]}else if j<128{index.to_le_bytes()[j-120]}else{root[j-128]});}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_exact_reject(){let raw:[u8;33]=kani::any();let n:usize=kani::any();kani::assume(n<=33 && n!=32);assert_eq!(exact::<32>(&raw[..n]),Err(PoolV1PairVerifierTransportErrorV1::WrongLength));}
