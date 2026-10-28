@@ -13398,3 +13398,50 @@ original carrier, non-vacuity, labelled native differential):
   owner trust item rather than assumed.
 V225 (getrandom.fill) stays with the entropy trust fields and the E1/E2 associations. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D362 (Stream B) 2026-10-28 10:09 UTC: recount 7 merged (OPEN 86 -> 77); the observer omits deployed on-chain logs (owner); drop cannot be modelled generically; kstub recovered; Kani K-2 quarantine; contracts admitted with controls
+
+Recount 7 (statement checks only; no IDs) re-derived all 407 rows and confirmed every closure since
+recount 6: V230, V239, V217, V220 and V256-V260 at their selected callback scope; V178, V179, V182,
+V195 and V233 keep closure as structural (K-1 substitute) with their copy-dependent Kani links
+suspended; V184 stands structurally. V152-V154: the raw-family identification is unsatisfiable, the
+honest-family handoff is discharged, and "successful canonical preparation yields HonestInput"
+remains open. Totals:
+
+| Measure | Recount 6 | Recount 7 |
+|---|---:|---:|
+| OPEN | 86 | 77 |
+| CLOSED-ON-CANDIDATE | 44 | 53 |
+| Buckets a / b / c / d | 6 / 56 / 5 / 19 | 2 / 56 / 5 / 14 |
+
+D348 is settled as a COVERAGE GAP: the endpoint's observer model does not include the deployed
+verifier's on-chain program logs and error text, which D159 counts as observed; this cannot be closed
+by proof inside the current statement and is in the owner packet. The merge conflicted only in the
+owner packet (both sides appended sections; both kept). dlib2's eight closures (D360) post-date the
+recount's pins and are confirmed at the next recount. Merged into research (ffc8a51561); branch and
+worktree removed.
+
+Network: from about 09:05 to 10:05 UTC the coordinating Mac's link degraded again (1-8 s round trips,
+uploads near 5 KB/s); every research push timed out (HTTP 408) and research reached 41 commits ahead
+with Stream A's work. After recovery the lead pushed the recount branch commit by commit and then
+research in twelve first-parent steps; origin/research..research is empty.
+
+pv-fxmem (2 attempts) proved PV_FXM_DropCounterexample.no_world_free_callback: no world-free callback
+T -> Result Unit can equal native core::mem::drop for every T and every world, because a destructor can
+read and write external state (a zero-sized type whose Drop panics on an external flag; 32 native
+paired cases agree). This refutes the generic reading of the op4 installation, not privacy. fxmem2
+restates V170 at the finite set of types the prover actually drops, gives zeroize an explicit
+world-indexed effect (V221/V222), and treats V183 with the allocator world.
+
+pv-kstub had died at 06:49 on the full disk without an exit marker (missed by the lead's first ENOSPC
+sweep); it is resumed with a recovery prompt (head 03984c6b6e, 51 uncommitted files to reconcile).
+
+Stream A findings adopted: Kani K-2 (research evidence/kani-diag2-20261028/KNB_FINDING.md): a literal
+None of type Option<fn(Phase)> is reported not-None (a false FAILURE; harness-name sensitive); whether
+it can produce a false PASS is under test (KNC_). Ruling (r'') quarantines any Kani PASS depending on
+a function-pointer Option, value or comparison, and forbids varying harness names. Kani function
+contracts passed all three fidelity controls in Stream A's pilot; ruling (s) admits them for call-site
+composition with a matched failing control per use, never in place of KMX_ copies or field
+multiplication, and only on interface shapes whose controls were re-run. Stream A's owner-approved
+16 GiB compile (JHq_) reduces host headroom; ruling (m') handles the extra refusals. Rows removed
+outright: 0. Privacy target not yet established.
