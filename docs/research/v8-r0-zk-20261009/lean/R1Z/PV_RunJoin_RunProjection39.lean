@@ -17,6 +17,7 @@ theorem bind (world : W → V) (event : W → C → D)
     (hk : ∀ a w, receipt world event (k a w) = l a (world w)) (w : W) :
     receipt world event (PV_W_Threading.bind m k w) =
       PV_W_Threading.bind n l (world w) := by
+  unfold PV_W_Threading.bind
   rw [← hm w]
   cases h : (m w).outcome with
   | fail e => simp only [PV_W_Threading.bind,receipt,h]
