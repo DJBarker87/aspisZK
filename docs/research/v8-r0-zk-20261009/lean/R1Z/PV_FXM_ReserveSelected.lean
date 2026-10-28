@@ -38,7 +38,7 @@ def returned (encode : PV_FXM_ReserveWorld.Error → alloc.collections.TryReserv
     (w : World S F) : ExternalFuns :=
   {ops with op32 := fun {T} _ v n =>
     let e := native step wordMax byteMax (shape T) (buffer v (metadata v)) n.val w
-    .ok (returned encode e.returned,v)}
+    Result.ok (returned encode e.returned,v)}
 
 theorem other_fields {S F : Type} (ops : ExternalFuns)
     (step : Request → S → Option Nat × S) (wordMax byteMax : Nat)
@@ -76,6 +76,7 @@ theorem execution {T S F A : Type} (ops : ExternalFuns) (Allocator : Type)
         (buffer v (metadata v)) n.val w).returned) v
         (reference step wordMax byteMax (shape T) (buffer v (metadata v)) n.val w).world := by
   simp only [complete,bind_tc_ok,source_reference]
+  rfl
 
 #print axioms other_fields
 #print axioms error_payload
