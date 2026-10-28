@@ -118,3 +118,24 @@ incomplete. No new native interpreter or execution-join stand-in was added.
 L004 passed: source, dependency/Aeneas pins, scoped resource fields and all
 five standard-only axiom reports are in `NCE_L004/receipt.json`. Budget after
 recovery: 4/60 Lean, 0/70 Kani (also within the earlier 120/50 ceiling).
+
+### Typed count scan fragment (L009)
+
+`NCE_CountCuts.NCE_Native_CountScan native` is a separately named, prospective
+ONE-test/advance hypothesis. It is NOT the entire item-1 `NCE_Native_Count`.
+On `ScanDomain s` it requires the source predicate, cursor update, pointwise
+unchanged keys, unchanged n/parent and unchanged arbitrary caller frame.
+Domain: cursor<=n<=16, parent<262144 and each live key<262144.
+`entry_domain` derives that domain with parent=key[i]/2 from the admitted
+live-key range; `initialized_entry_domain` consumes NBV's existing copied
+prefix. `scan_step_domain` preserves it. `scan_run_eq` composes the cut along
+its actual returned state and identifies the inherited NBI scan recurrence.
+`scan_run_group` consumes NBI's existing group theorem, including width1/2.
+No count accumulator, count result, success or log equality is assumed.
+A native harness would execute one inner while-test/advance on arbitrary
+level/cursor/parent, select one arbitrary exterior coordinate and frame the
+remaining caller state. Actual Rust/P6 association remains OPEN.
+
+L005-L007 failed, retained and excluded. L008 checked the four initial roots;
+L009 checks the final renamed interface plus two entry-domain roots. All six
+L009 roots use standard axioms only. See NCE_REPAIRS.md and per-attempt receipts.
