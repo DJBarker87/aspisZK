@@ -14218,3 +14218,21 @@ The finding does add a release obligation. The privacy target is stated for the 
 pv-rjdec (head 75d6250108) stopped after 13 of 100 Lean attempts and 2 native scopes, with no Kani. It proved lower decoder-factorization criteria and complete interpreter records for reserve, drop and zeroization. The combined audits and focused replay passed with standard axioms only and zero swap. Both native obligations of runjoin step (3) remain OPEN, and no identifying theorem for the parked pv-2tnv V047 remainder was supplied. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs.
 
 Its stopping obstruction was a checked source and LLVM mismatch. Deployed zeroize 1.9.0 calls optimization_barrier, an assembly barrier, after volatile writes, whereas the inherited runjoin-side model records compilerFence. This is not a privacy counterexample. pv-rdcd already proved exactly this zeroize 1.9.0 volatile-write and assembly-barrier source and world law when it restored V221 and V222 (D393, D403). That law is in the candidate, but the runjoin branch, from which rjdec was cut, predates that merge. The lead merged candidate fa856065f3 into codex/pv-rjdec-20261028 (b31649ce7f), with no conflicts and no change to shipped code. pv-rjdecb relaunched with the remaining 87 Lean and 38 native attempts. Its tasks are to use the V221/V222 law in place of the compilerFence record, with before/after statements, then to finish the two ROMView decoder laws, the helper-effect associations and the V047 identifying theorem. Rows removed: 0. Privacy target not yet established.
+
+## D418 (Stream B) 2026-10-28 23:26 UTC: pv-rdeac results; V178 and V181 parked under the D348 error and diagnostic channel; recount 8 launched
+
+pv-rdeac (head 17f74c2c8b) used all 100 Lean attempts, 5 native scopes and no Kani. Statement audit 61197 and axioms audit 61198 passed (108 theorem outputs, standard axioms only). Final replay 61199 failed on an unqualified name, and the one-line correction is uncompiled because the budget was spent. The worker found no admission or cooldown violation.
+
+- V181: the concrete constructor and name simulation now keeps errors, worlds and frames.
+- V178: the actual op26 returning values are connected to the clone-first physical handlers, including partial-buffer and owned-argument cleanup.
+
+Both rows remain SUSPENDED, and there is no checked witness-dependent finding. The supporting work was merged into the candidate as de194795b3 and pushed (shipped-code diff empty; no forbidden constructs; no file over 5 MB). The worktree was removed.
+
+The remaining obligation is privacy-relevant in its own right. The 23 recorded reaching contexts (8 runtime MIR candidates and 15 std inline contexts, not an exhaustive callsite certificate) include error and diagnostic rendering in the deployed client:
+- anyhow::ensure message formatting with formatted operand lengths;
+- fmt::estimated_capacity;
+- strerror-derived and UTF-8-lossy error strings;
+- backtrace symbolization (build-id sizing, captured-PC and module selection, debuglink, debugaltlink and split-DWARF paths, addr2line).
+Whether these outputs can occur on an honest run, and whether their occurrence or content depends on witness data, is not established. Together with the core::fmt glue found in the op227 cone (D414), this is the client-side half of the D348 log and error observer coverage gap. V178 and V181 are parked on it after 300 attempts across three rounds. They resume when that question is either answered by a reachability and provenance proof or decided by the owner.
+
+Recount 8 launched (pv-recount8, sparse worktree from research 19c1bd58b7; IDs 61600-61699; statement checks only). It re-derives every row at pins (candidate de194795b3 and the live branches) and independently confirms or rejects each restoration since recount 7. It applies the fifth-amendment reclassification rule and rulings rdea-1, rdcd3-1 and (t). It records D414 to D417, adds the deployed-verifier release item, and extends the owner packet's D348 item with the client-side error, formatting and backtrace evidence. Rows removed outright: 0. Privacy target not yet established.
