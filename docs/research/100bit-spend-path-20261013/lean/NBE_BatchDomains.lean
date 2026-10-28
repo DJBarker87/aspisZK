@@ -1,0 +1,55 @@
+import Port4B_Bounds
+
+set_option autoImplicit false
+namespace AspisR1.NBE_BatchDomains
+open Aeneas Aeneas.Std
+
+/-- Both actual transaction splits, without restricting the second to ten. -/
+theorem split_domain (batch : Usize) :
+    0 < (Port4B_TreeCuts.count batch).val ∧
+    (Port4B_TreeCuts.count batch).val ≤ 16 ∧
+    (Port4B_TreeCuts.lo batch).val + (Port4B_TreeCuts.count batch).val = 22 ∨
+    (Port4B_TreeCuts.lo batch).val = 0 ∧
+    (Port4B_TreeCuts.count batch).val = 10 := by
+  obtain ⟨hc,hl⟩ := Port4B_Bounds.count batch
+  by_cases zero : batch = 0#usize
+  · right
+    subst batch
+    exact ⟨hl, hc⟩
+  · left
+    have nz : batch.val ≠ 0 := by
+      intro h
+      exact zero (UScalar.eq_of_val_eq h)
+    rw [if_neg zero] at hc
+    rw [if_neg nz] at hl
+    omega
+
+/-- Every actual key iteration reads an existing query and writes a live
+scratch cell; rebased low-byte positions stay in the same batch. -/
+theorem key_domain (batch : Usize) (j : Nat)
+    (active : j < (Port4B_TreeCuts.count batch).val) :
+    j < 16 ∧ j < 256 ∧ (Port4B_TreeCuts.lo batch).val + j < 22 := by
+  obtain ⟨hc,hl⟩ := Port4B_Bounds.count batch
+  by_cases zero : batch = 0#usize
+  · subst batch
+    simp only [show (0#usize).val = 0 from rfl, ite_true] at hc hl
+    omega
+  · have nz : batch.val ≠ 0 := by
+      intro h
+      exact zero (UScalar.eq_of_val_eq h)
+    rw [if_neg zero] at hc
+    rw [if_neg nz] at hl
+    omega
+
+/-- The slot selected by either caller is one of the six physical slots. -/
+theorem slot_domain (batch tree : Usize) (hb : batch.val < 2)
+    (ht : tree.val < 3) :
+    (Port4B_TreeCuts.slot batch tree).val = 3*batch.val + tree.val ∧
+    (Port4B_TreeCuts.slot batch tree).val < 6 := by
+  have h := Port4B_Bounds.slot batch tree hb ht
+  exact ⟨h, by rw [h]; omega⟩
+
+#print axioms split_domain
+#print axioms key_domain
+#print axioms slot_domain
+end AspisR1.NBE_BatchDomains

@@ -1,0 +1,120 @@
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,7 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NBE_multiproof.rs"]
++mod NBE_multiproof;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,7 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBE_keys.rs"]
++mod NBE_keys;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBE_multiproof.rs
+@@ -0,0 +1,36 @@
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]
++struct Hash<'a> {answer:[u8;32],left:&'a [u8],right:&'a [u8],coordinate:usize,calls:&'a Cell<usize>}
++impl Digest32 for Hash<'_> {
++ fn digest(&self,p:&[&[u8]])->[u8;32] {
++  assert_eq!(p.len(),3);assert_eq!(p[0].len(),1);assert_eq!(p[0][0],0x12);
++  assert_eq!(p[1].len(),32);assert_eq!(p[2].len(),32);
++  assert_eq!(p[1][self.coordinate],self.left[self.coordinate]);
++  assert_eq!(p[2][self.coordinate],self.right[self.coordinate]);
++  self.calls.set(self.calls.get()+1);self.answer
++ }
++}
++#[kani::proof] #[kani::unwind(34)]
++fn NBE_parent() {
++ let values:[[u8;32];16]=kani::any();let sibling:[u8;32]=kani::any();
++ let index:usize=kani::any();let c:usize=kani::any();let left:bool=kani::any();
++ kani::assume(index<15 && c<32);
++ let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++ let hash=Hash{answer,left:&values[index],right:&values[index+1],coordinate:c,calls:&calls};
++ assert_eq!(occupied_binary_parent(hash,&values,index)[c],answer[c]);assert_eq!(calls.get(),1);
++ calls.set(0);
++ let hash=Hash{answer,left:if left {&values[index]}else{&sibling},right:if left{&sibling}else{&values[index]},coordinate:c,calls:&calls};
++ assert_eq!(sibling_binary_parent(hash,&values,index,&sibling,left)[c],answer[c]);assert_eq!(calls.get(),1);
++}
++#[derive(Clone,Copy)]struct NoHash;
++impl Digest32 for NoHash {fn digest(&self,_:&[&[u8]])->[u8;32]{assert!(false,"no digest on rejected admission");[0;32]}}
++#[kani::proof] #[kani::unwind(18)]
++fn NBE_zero_reject() {
++ let mut idx:[u32;16]=kani::any();let mut val:[[u8;32];16]=kani::any();
++ let before_idx=idx;let before_val=val;let root:[u8;32]=kani::any();
++ let n:usize=kani::any();kani::assume(n==0 || n>16);
++ assert!(!verify_in_place(NoHash,Arity::Two,&root,&mut idx,&mut val,n,&[]));
++ let i:usize=kani::any();let c:usize=kani::any();kani::assume(i<16 && c<32);
++ assert_eq!(idx[i],before_idx[i]);assert_eq!(val[i][c],before_val[i][c]);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBE_keys.rs
+@@ -0,0 +1,58 @@
++use super::*;
++use core::cell::Cell;
++#[derive(Clone,Copy)]struct Hash<'a>{q:&'a [u8;832],tree:usize,c:usize,answer:[u8;32],calls:&'a Cell<usize>}
++impl Digest32 for Hash<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{
++ assert_eq!(p.len(),3);assert_eq!(p[0].len(),2);assert_eq!(p[0][0],0x10);
++ let (tag,start,len,salt)=if self.tree==0{(0x71,0,480,608)}else if self.tree==1{(0xf1,480,128,640)}else{(0x72,672,128,800)};
++ assert_eq!(p[0][1],tag);assert_eq!(p[1].len(),len);assert_eq!(p[2].len(),32);
++ assert_eq!(p[1][self.c%len],self.q[start+self.c%len]);assert_eq!(p[2][self.c%32],self.q[salt+self.c%32]);
++ self.calls.set(self.calls.get()+1);self.answer
++}}
++#[kani::proof] #[kani::unwind(34)]
++fn NBE_leaf(){
++ let q:[u8;832]=kani::any();let tree:usize=kani::any();let c:usize=kani::any();
++ kani::assume(tree<3 && c<480);let answer:[u8;32]=kani::any();let calls=Cell::new(0);
++ let out=batch_leaf(Hash{q:&q,tree,c,answer,calls:&calls},tree,&q);
++ assert_eq!(out[c%32],answer[c%32]);assert_eq!(calls.get(),1);
++}
++#[kani::proof] #[kani::unwind(8)]
++fn NBE_views(){
++ let proof=[0u8;57607];let i:usize=kani::any();let s:usize=kani::any();kani::assume(i<22 && s<6);
++ let q=opening(&proof,i);assert_eq!(q.len(),832);assert_eq!(q.as_ptr(),proof[10055+832*i..].as_ptr());
++ let nodes=slot(&proof,s);assert_eq!(nodes.len(),32*SLOT_NODES[s]);
++ assert_eq!(nodes.as_ptr(),proof[compact::slot_offset(s)..].as_ptr());
++}
++
++fn NBE_sort_step(mut keys:[u64;16],mut j:usize)->([u64;16],usize){
++        if j > 0 && batch_key_at(&keys, j - 1) > batch_key_at(&keys, j) {
++            keys.swap(j - 1, j);
++            j -= 1;
++        }
++(keys,j)
++}
++
++#[kani::proof] #[kani::unwind(18)]
++fn NBE_sort(){
++ let keys:[u64;16]=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(j<16 && k<16);
++ let (out,next)=NBE_sort_step(keys,j);
++ if j>0 && keys[j-1]>keys[j]{
++ assert_eq!(next,j-1);assert_eq!(out[k],if k==j{keys[j-1]}else if k==j-1{keys[j]}else{keys[k]});
++ }else{assert_eq!(next,j);assert_eq!(out[k],keys[k]);}
++}
++
++fn NBE_key_step(queries:&[u32;22],lo:usize,j:usize,tree:usize,keys:&mut [u64;16]){
++        let u = queries[lo + j];
++        let index = if tree == 2 { u / 4 } else { u };
++        keys[j] = (u64::from(index) << 8) | j as u64;
++}
++
++#[kani::proof] #[kani::unwind(18)]
++fn NBE_key(){
++ let queries:[u32;22]=kani::any();let mut keys:[u64;16]=kani::any();let old=keys;
++ let batch:usize=kani::any();let tree:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();
++ kani::assume(batch<2 && tree<3 && k<16);let lo=if batch==0{0}else{10};let n=if batch==0{10}else{12};kani::assume(j<n);
++ let u=queries[lo+j];kani::assume(u<262144);
++ NBE_key_step(&queries,lo,j,tree,&mut keys);
++ let index=if tree==2{u/4}else{u};let expected=u64::from(index)*256+j as u64;
++ assert_eq!(keys[k],if k==j{expected}else{old[k]});assert_eq!(keys[j]>>8,u64::from(index));assert_eq!(keys[j]&255,j as u64);
++}
