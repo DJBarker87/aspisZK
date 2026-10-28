@@ -25,10 +25,10 @@ def reference {T W : Type} (N : Usize) (v : alloc.vec.Vec T) (w : W)
     Result (core.result.Result (Array T N) (alloc.vec.Vec T) × W) :=
   if v.val.length=N.val then do
     let (owned, remaining) ← PV_RDB1_V187Iterator.fill N.val v.val []
-    if h : owned.length=N.val then
+    (if h : owned.length=N.val then do
       let w' ← finish w
       ok (.Ok ⟨owned,h⟩,w')
-    else fail .panic
+    else fail .panic)
   else ok (.Err v,w)
 
 theorem complete {T W : Type} (N : Usize) (v : alloc.vec.Vec T) (w : W)
