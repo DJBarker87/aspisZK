@@ -1,3 +1,6 @@
+import PV_L2C_ExtractedM31Fold
+import PV_L2C_ExtractedRows
+import PV_L2C_VecWrite
 import PV_L2C_PaddingProducer
 import PV_L2C_PaddingConsumer
 import PV_L2C_M31
@@ -112,3 +115,10 @@ import PV_L2C_ExtractedFold
 #print axioms PV_L2C_ExtractedFold.source
 #print axioms PV_L2C_ExtractedFold.canonical_sum
 #print axioms PV_L2C_ExtractedFold.zero_sum
+#print axioms PV_L2C_VecWrite.index_mut
+#print axioms PV_L2C_VecWrite.write
+#print axioms PV_L2C_ExtractedRows.row_source
+#print axioms PV_L2C_ExtractedRows.read_step
+#print axioms PV_L2C_ExtractedRows.fold_source
+#print axioms PV_L2C_ExtractedM31Fold.source
+#print axioms PV_L2C_ExtractedM31Fold.zero_sum
