@@ -1,0 +1,59 @@
+{
+  "attempt": "KNA_R004",
+  "kind": "rust",
+  "sources": [
+    "KNA_native.rs",
+    "KNA_native_gate.py",
+    "KMX_stubs.rs",
+    "KMY_field.rs",
+    "KMY_wide_exact.rs",
+    "KMY_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "KNA_native_gate.py",
+    "KNA_R004",
+    "append16"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.kani/kani-0.67.0/bin:/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-C opt-level=3 --edition=2021",
+    "CARGO_BUILD_JOBS": "1",
+    "RUSTC_BOOTSTRAP": "1"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "KMY_K001-graph.json"
+  },
+  "expected_time": "optimized rustc compilation then concrete append16 comparisons; no elimination",
+  "reservation_retries": 0,
+  "source_revision": "842c8a4e6946a5c081ee04dc97695eaed4c6b9d6",
+  "source_tree_dirty": true,
+  "negative_control_witness": true,
+  "note": "Native corroboration only. It does not replace symbolic Kani heap gates; native Vec uses native allocator internals. The body case separately invokes the unchanged KMX_realloc on initialized bytes.",
+  "kmx_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "kmx_stub_file_sha256": "c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9",
+  "exit_status": 0,
+  "wall_seconds": 1.021979418990668,
+  "peak_rss_kib": "153644",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rc91c5a7dd9b948ea970bd6602037b241.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "98734080",
+  "source_hashes": {
+    "KNA_native.rs": "2bbdb796a803d962a05e8ecbb05239bd3a00cd3b8e6694afb86276d6d6486a8a",
+    "KNA_native_gate.py": "f776d178d87af578eeac4c7cdf407a9b75189302292358a04f8bef28070b0cec",
+    "KMX_stubs.rs": "c282a1272676cd56fd2702f60b17009bac9d252e495b1508459b01d6ed1cf9d9",
+    "KMY_field.rs": "7c3116213fdd58507a52c300deece7526e8d7e04b1b31cc9f7e9a53719a4d5a0",
+    "KMY_wide_exact.rs": "7a778b6afbf38c770402e5c1a4e84e5e91374a8bc0aa53dd4b1152109c53cd80",
+    "KMY_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  },
+  "print_axioms": "N/A: rust"
+}
