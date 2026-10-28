@@ -13,15 +13,15 @@ All CLOSED labels below are local on the stated domain. The composed S2 and 100-
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::link_weight` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs::selected_binary_weight` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::bounded_append_carry` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::copy_variant` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
+| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::copy_variant` | CLOSED locally | both variants, no word or state restriction; NDE_VariantResults.copy_variant; E003, L014, K016/K017 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::empty_root` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::equality_value` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::initial_variant_selectors` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
+| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::initial_variant_selectors` | CLOSED locally | all three high QM31 inputs canonical; NDE_VariantResults.initial_selectors; E003, L014, K012/K013 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::lift_m31` | CLOSED | every u32, including noncanonical words; NDE_LiftBridge.semantic_lift |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::private_public` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::r0::Public<'a>::public_bytes::fields` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::reconstruct_10` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
-| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::scalar_lanes` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
+| `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::scalar_lanes` | CLOSED locally | output scalar and both branch terms canonical; input asset unrestricted; NDE_ScalarResult.scalar_lanes; E003, L015, K014/K015 |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::selected_claim` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::sum_high` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs::variant_expected_output` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
@@ -45,3 +45,5 @@ Deployed statement features: r0/pool-v1-kernel and all twelve optimized features
 No repository crates/programs/ or existing Lean file changed. ELF rebuild trigger did not fire. Release pins remain inherited, not reproduced.
 
 Raw-limb stage: K010 passes, K011 fails its one inverted ensures check. L006/L007 are excluded elaboration failures; L008 passes with standard axioms only. The reference uses the exact folded reduction already in the cohort; this is an extracted-reference equality for a statement helper, not a duplicate native core-field result.
+
+Variant stage: L011 establishes exact extracted-reference addition transport without claiming a native core-field bridge. L012/L013 are excluded initial-selector drafts; L014 and L015 pass with standard axioms. K012/K014/K016 pass, each matched K013/K015/K017 fails exactly one intended ensures check. No contextual substitution is used.

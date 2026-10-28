@@ -75,7 +75,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDE_EXTRACTION_PINS.json','NDE_extracted/NDE_Reference/Types.lean','NDE_extracted/NDE_Reference/Funs.lean','NDE_extracted2/NDE_Reference2/Types.lean','NDE_extracted2/NDE_Reference2/Funs.lean','NDE_extracted3/NDE_Reference3/Types.lean','NDE_extracted3/NDE_Reference3/Funs.lean']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDE_EXTRACTION_PINS.json','NDE_extracted/NDE_Reference/Types.lean','NDE_extracted/NDE_Reference/Funs.lean','NDE_extracted2/NDE_Reference2/Types.lean','NDE_extracted2/NDE_Reference2/Funs.lean','NDE_extracted3/NDE_Reference3/Types.lean','NDE_extracted3/NDE_Reference3/Funs.lean','NDE_extracted4/NDE_Reference4/Types.lean','NDE_extracted4/NDE_Reference4/Funs.lean','NDE_extracted5/NDE_Reference5/Types.lean','NDE_extracted5/NDE_Reference5/Funs.lean']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr
@@ -83,7 +83,10 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
-with (E/'NDE_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+summary=json.loads(json.dumps(rc))
+selected=summary.get('deps_fingerprint',{}).pop('selected_objects',None)
+if selected:summary['deps_fingerprint']['selected_objects_summary']=dict(count=len(selected),sha256=hashlib.sha256(json.dumps(selected,sort_keys=True).encode()).hexdigest(),full_receipt=a+'/receipt.json')
+with (E/'NDE_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(summary)+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-1800:],flush=True)

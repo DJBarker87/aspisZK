@@ -1,0 +1,62 @@
+{"attempt": "NDE_L013", "exit_status": 1, "wall_seconds": 1.2547716490225866, "peak_rss_kib": "2634288", "swaps": "0", "print_axioms": ["'NDE_VariantResults.initial_selectors' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDE_VariantResults.copy_variant' does not depend on any axioms"]}
+NDE_generated/NDE_VariantResults.lean:11:48: error: unsolved goals
+case PrivateTransfer.ok
+a b c : Q
+v✝ : NDE_Reference3.Q
+hab : NDE_Reference3.add_ref a b = ok v✝
+⊢ toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } } =
+    { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }
+
+case Withdrawal.ok
+a b c : Q
+v✝ : NDE_Reference3.Q
+hab : NDE_Reference3.add_ref a b = ok v✝
+⊢ (do
+      let x ← NDE_Reference3.add_ref v✝ c
+      ok
+          (toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }, toNative x,
+            toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+            toNative { c0 := {
+...
+32, b := 0#u32 } }
+
+case Withdrawal.ok
+a b c : Q
+v✝ : NDE_Reference3.Q
+hab : NDE_Reference3.add_ref a b = ok v✝
+⊢ (do
+      let x ← NDE_Reference3.add_ref v✝ c
+      ok
+          (toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }, toNative x,
+            toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+            toNative { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })) =
+    do
+    let q1 ←
+      match NDE_Reference3.add_ref v✝ c with
+        | ok x => ok (toNative x)
+        | fail e => fail e
+        | div => div
+    ok
+        ({ c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } }, q1,
+          { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } },
+          { c0 := { a := 0#u32, b := 0#u32 }, c1 := { a := 0#u32, b := 0#u32 } })
+NDE_generated/NDE_VariantResults.lean:19:12: warning: This simp argument is unused:
+  hab
+
+Hint: Omit it from the simp argument list.
+  simp [h̵a̵b̵,̵ ̵NDE_LiftBridge.mapResult, mapFour,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵FIq_Native.field.QM31.ZERO,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲FIq_Native.field.CM31.ZERO, ← add_reference]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDE_generated/NDE_VariantResults.lean:20:36: warning: This simp argument is unused:
+  FIq_Native.field.CM31.ZERO
+
+Hint: Omit it from the simp argument list.
+  simp [hab, NDE_LiftBridge.mapResult, mapFour, FIq_Native.field.QM31.ZERO, F̵I̵q̵_̵N̵a̵t̵i̵v̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵Z̵E̵R̵O̵,̵ ̵← add_reference]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDE_VariantResults.initial_selectors' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDE_VariantResults.copy_variant' does not depend on any axioms
+
+Running as unit: run-r8b055a9831664e5eb4fa257f6e943a1b.scope; invocation ID: e2c4cb54c8ee4b31997225a211a63a05

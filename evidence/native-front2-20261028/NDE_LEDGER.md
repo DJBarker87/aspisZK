@@ -1,15 +1,15 @@
 # Native composition ledger
 
-Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `a4766282f2`.
+Frozen source `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; merged evidence snapshot `c9aca4ca91`.
 Headline `AspisR1.RPx_Deployed.deployed`. **The deployed 100-bit target remains unestablished.**
 
 This is a machine-validated evidence ledger and conservative call-graph argument. It does not supply new native bridges or Lean caller-domain certificates. Owner amendment fifth is reported as a P6/D188 tool-trust reclassification, never premise removal.
 
 | Inventory | Rows | Local conditional bridges | Local OPEN | Quarantined | Composed OPEN | Trust only |
 |---|---:|---:|---:|---:|---:|---:|
-| TX1 | 345 | 109 | 234 | 2 | 345 | 0 |
+| TX1 | 345 | 110 | 233 | 2 | 345 | 0 |
 | TX2 | 242 | 107 | 133 | 2 | 242 | 0 |
-| all_rows | 587 | 216 | 367 | 4 | 587 | 0 |
+| all_rows | 587 | 217 | 366 | 4 | 587 | 0 |
 
 Unique functions: 434. Shared TX1/TX2 bodies count once only in the union graph; transaction rows keep separate edges/domains.
 
@@ -34,9 +34,9 @@ Every terminal open SCC needs its own representative; no other open SCC can be r
 | `crates/aspis-core/src/field.rs::qm31_pack_base4` | 29 |
 | `crates/aspis-core/src/field.rs::CM31::square` | 28 |
 | `crates/aspis-core/src/field/wide_exact.rs::WideExact::square` | 28 |
-| `crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs` | 27 |
 | `crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits` | 26 |
 | `crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums` | 23 |
+| `crates/aspis-r1-cost-probe/src/candidate.rs::opening` | 23 |
 
 Minimum reachability-cover frontier: **132 SCC representatives**. Full members and all graph cycles are in JSON.
 
@@ -179,6 +179,6 @@ Minimum reachability-cover frontier: **132 SCC representatives**. Full members a
 
 `python3 evidence/native-compledger-20261028/NCZ_validate.py` recomputes bodies, edges, claims, feature/re-credit overlays, receipt hashes, coverage and frontier, then compares the entire ledger and this summary. `--write` deliberately regenerates derived files; it does not make new evidence pass. Present sparse-worktree files must match the pinned Git blobs, and tracked deletions fail. Unmaterialized sparse files are read from immutable Git objects. Each cited artifact is SHA256-pinned. New/changed merged reports require an explicit refreshed snapshot; no silent credit from later branches.
 
-Discovery searched **5222** top-level merged/legacy evidence and design reports. Documentary mentions are discovery pointers, not semantic adoption. Unindexed CLOSED mentions and unresolved historical reference pointers are retained in JSON for audit; an unresolved pointer is never presented as a valid citation. Every cited row artifact must exist and match. The validator checks indexed evidence consistency; it is not a natural-language theorem prover and cannot detect a contradiction hidden in arbitrary new prose without an explicit evidence/schema update.
+Discovery searched **5223** top-level merged/legacy evidence and design reports. Documentary mentions are discovery pointers, not semantic adoption. Unindexed CLOSED mentions and unresolved historical reference pointers are retained in JSON for audit; an unresolved pointer is never presented as a valid citation. Every cited row artifact must exist and match. The validator checks indexed evidence consistency; it is not a natural-language theorem prover and cannot detect a contradiction hidden in arbitrary new prose without an explicit evidence/schema update.
 
 No Rust/Lean/Kani/SBF job ran; no new theorem or axioms. 0/10 Lean status attempts, 0/0 Kani. No shipped files changed, so ELF rebuild was not triggered. No host/cache/key operation. Prior ELF pins remain inherited, not reproduced.
