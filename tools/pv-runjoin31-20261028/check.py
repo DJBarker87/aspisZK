@@ -23,7 +23,16 @@ def transport(cmd, **kw):
 
 rows=[json.loads(p.read_text()) for d in [E] for p in d.glob('receipt-[0-9]*.json')];charged=sum(r.get('exit') is not None for r in rows)
 assert charged<100
-assert not (E/f'used-{A}.json').exists() or (False and not (E/f'receipt-{A}.json').exists() and not any(json.loads(l).get('attempt')==A for l in (E/'launches.jsonl').read_text().splitlines())), 'ID retired'
+# Ruling (p-prime): a vanished cgroup before launch keeps the same unlaunched ID.
+prior_admission=json.loads((E/f'refusal-{A}.json').read_text()) if (E/f'refusal-{A}.json').exists() else {}
+scan_race=bool(re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',prior_admission.get('error','')))
+launched=any(json.loads(l).get('attempt')==A for l in (E/'launches.jsonl').read_text().splitlines()) if (E/'launches.jsonl').exists() else False
+assert not (E/f'used-{A}.json').exists() or (scan_race and not launched and not (E/f'receipt-{A}.json').exists()), 'ID retired'
+if scan_race:
+ races=list(E.glob(f'barrier-race-{A}-*.json'))
+ assert len(races)<=3,'fourth transient scan race: stop and report'
+ with (E/'barrier-race-retries.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=A,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),ruling='p-prime',previous_admission=prior_admission,compiler_was_launched=False))+'\n')
+
 # Read-only cross-job collision check before consuming each subsequent ID.
 id_code = r"""import pathlib,re,json
 root=pathlib.Path('/home/dombarker/project-offloads');hits=[]
@@ -43,14 +52,20 @@ assert not id_audit['other_receipt_hits'] and not id_audit['sent_hits'],id_audit
 S=R/'docs/research/v8-r0-zk-20261009/lean'/(M+'.lean')
 if len(sys.argv)>3:S=R/sys.argv[3]
 assert S.is_file();sha=hashlib.sha256(S.read_bytes()).hexdigest()
-(E/f'used-{A}.json').write_text(json.dumps(dict(attempt=A,target=M,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
+if not (E/f'used-{A}.json').exists(): (E/f'used-{A}.json').write_text(json.dumps(dict(attempt=A,target=M,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
 
 def ssh(c):return transport(['ssh',host,c],capture_output=True,text=True)
 r=ssh(f'python3 {H}/reservation-existing.py {H}/evidence/pv31-reservation-{A}.json > {H}/evidence/pv31-reservation-{A}.log 2>&1\nreservation_status=$?\ncat {H}/evidence/pv31-reservation-{A}.log\nexit $reservation_status')
 (E/f'reservation-{A}.log').write_text(r.stdout+r.stderr)
 admission=json.loads(r.stdout.strip().splitlines()[-1])
 if r.returncode != 0 or not admission['allowed']:
- (E/f'refusal-{A}.json').write_text(json.dumps(admission,indent=2)+'\n');print('REFUSED',admission);sys.exit(78)
+ (E/f'refusal-{A}.json').write_text(json.dumps(admission,indent=2)+'\n')
+ if re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',admission.get('error','')):
+  index=len(list(E.glob(f'barrier-race-{A}-*.json')))
+  (E/f'barrier-race-{A}-{index}.json').write_text(json.dumps(dict(attempt=A,admission=admission,classification='p-prime unlaunched scan race',retry_same_id=True,full_180_second_cooldown=True),indent=2)+'\n')
+  (E/f'barrier-race-{A}-{index}.log').write_text(r.stdout+r.stderr)
+  print('UNLAUNCHED SCAN RACE; same ID after cooldown',admission);sys.exit(79)
+ print('REFUSED',admission);sys.exit(78)
 transport(['scp','-q',f'{host}:{H}/evidence/pv31-reservation-{A}.json',str(E/f'reservation-{A}.json')],check=True)
 code=f'''import pathlib,json,hashlib,re
 p=pathlib.Path({P!r});(p/'sources'/pathlib.Path({M!r}).parent).mkdir(parents=True,exist_ok=True);(p/'objects'/pathlib.Path({M!r}).parent).mkdir(parents=True,exist_ok=True)
