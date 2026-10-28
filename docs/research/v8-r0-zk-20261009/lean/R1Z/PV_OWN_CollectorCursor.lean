@@ -7,7 +7,7 @@ theorem before_unread (width read write next : Nat) (compact:write≤read) (unre
  write*width+width≤next*width := by
  have a:=Nat.mul_le_mul_right width (Nat.succ_le_succ compact)
  have b:=Nat.mul_le_mul_right width unread
- simp only [Nat.succ_mul] at a
+ simp only [Nat.succ_mul] at a b
  omega
 
 theorem future_byte (old value : Bytes) (width read write next j : Nat)

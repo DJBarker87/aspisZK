@@ -12,7 +12,7 @@ theorem view {T : Type} (k : Codec T) (m : Memory) (v : Vector T) (n : Nat)
  · intro i x hi
    apply repr i x
    have hin:i<n := by
-     have lt:=List.lt_length_of_getElem? hi
+     have lt:=(List.getElem_of_getElem? hi).choose
      simp only [truncate,List.length_take] at lt
      omega
    simpa only [truncate,List.getElem?_take_of_lt hin] using hi
