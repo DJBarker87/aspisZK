@@ -21,6 +21,9 @@ theorem active_slot_skipped
     incremental_merkle.tree_reference.validate_owned_loop
       1#u64 frontier empty (.Ok ()) 1#usize := by
   conv_lhs => rw [incremental_merkle.tree_reference.validate_owned_loop]
+  simp only [format.POOL_V1_TREE_DEPTH]
+  rw [if_pos (by decide)]
+  simp only [core.result.Result.is_ok,bind_tc_ok,lift,Bool.true_eq,if_true]
   rfl
 #print axioms active_slot_skipped
 end R1Z.PV_RunJoin_ActiveFrontier28
