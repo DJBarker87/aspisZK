@@ -75,13 +75,13 @@ for k,n in enumerate(selected):
  result_sig=ret.replace('\n  Result','\n  Logged',1)
  # Parenthesize the parameterized Call.boundary constructor.
  marker='('+('.'+site)+')' if ' ' in site else '.'+site
- code='import PV_L1_ResultCoercion\nimport R1Z.ProverRwFullFuns\n'+''.join('import '+d+'\n' for d in sorted(set(deps)))
+ code='import PV_L1_ResultCoercion\nimport PV_L1_Projection\nimport R1Z.ProverRwFullFuns\n'+''.join('import '+d+'\n' for d in sorted(set(deps)))
  code+='set_option autoImplicit false\nnoncomputable section\nnamespace '+mod+'\nopen Aeneas Aeneas.Std Result ControlFlow ProverRwFull\nopen PV_L1_Logged\nvariable [ExternalTypes] [ExternalFuns]\n'
  code+='\n/-- Source-parametric phase entry and complete Result. Remaining loop and\nopaque/native event edges are recorded in source-frontier.json. -/\n'
  code+='def produce'+params+result_sig+'\n  := do\n  let _ ← observe '+marker+' 0 (ok ())\n'+body+'\n\n'
  code+='theorem complete_result'+params.rstrip().removesuffix(':').rstrip()+' :\n  erase (produce '+applications+') = '+n+' '+applications+' := by\n'
  code+='  unfold produce\n  conv_rhs => unfold '+n+'\n'
- lemmas=['Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
+ lemmas=['PV_L1_Projection.prod_case','Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'
  code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'
  code+="  all_goals\n    cases value\n    rfl\n"

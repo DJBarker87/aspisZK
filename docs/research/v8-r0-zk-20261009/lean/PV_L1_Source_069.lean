@@ -1,4 +1,5 @@
 import PV_L1_ResultCoercion
+import PV_L1_Projection
 import R1Z.ProverRwFullFuns
 import PV_L1_Source_030
 import PV_L1_Source_031
@@ -275,12 +276,12 @@ theorem complete_result
   erase (produce (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store) = prover.prove_masked_with_attempt (T0 := T0) aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store := by
   unfold produce
   conv_rhs => unfold prover.prove_masked_with_attempt
-  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
+  simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
   repeat' first
     | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
+    | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
   all_goals
     cases value
     rfl

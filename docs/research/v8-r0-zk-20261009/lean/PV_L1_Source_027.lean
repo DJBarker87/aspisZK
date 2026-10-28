@@ -1,4 +1,5 @@
 import PV_L1_ResultCoercion
+import PV_L1_Projection
 import R1Z.ProverRwFullFuns
 import PV_L1_Source_019
 import PV_L1_Source_026
@@ -121,12 +122,12 @@ theorem complete_result
   erase (produce variant hash backend sem) = prover.prepare_opening variant hash backend sem := by
   unfold produce
   conv_rhs => unfold prover.prepare_opening
-  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
+  simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
   repeat' first
     | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
+    | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_019.complete_result,PV_L1_Source_026.complete_result]
   all_goals
     cases value
     rfl

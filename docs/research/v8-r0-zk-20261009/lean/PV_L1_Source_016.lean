@@ -1,4 +1,5 @@
 import PV_L1_ResultCoercion
+import PV_L1_Projection
 import R1Z.ProverRwFullFuns
 import PV_L1_Source_015
 set_option autoImplicit false
@@ -131,12 +132,12 @@ theorem complete_result
   erase (produce (H := H) aspis_coredigestDigest32Inst self row payload) = host_transcript.Transcript.queries (H := H) aspis_coredigestDigest32Inst self row payload := by
   unfold produce
   conv_rhs => unfold host_transcript.Transcript.queries
-  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
+  simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
   repeat' first
     | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
+    | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_015.complete_result]
   all_goals
     cases value
     rfl

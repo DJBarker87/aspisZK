@@ -1,4 +1,5 @@
 import PV_L1_ResultCoercion
+import PV_L1_Projection
 import R1Z.ProverRwFullFuns
 set_option autoImplicit false
 noncomputable section
@@ -23,12 +24,12 @@ theorem complete_result
   erase (produce values) = prover.fixed_k_column values := by
   unfold produce
   conv_rhs => unfold prover.fixed_k_column
-  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+  simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
+    | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   all_goals
     cases value
     rfl
