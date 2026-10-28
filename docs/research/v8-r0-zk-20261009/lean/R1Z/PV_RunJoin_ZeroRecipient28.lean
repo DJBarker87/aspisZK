@@ -41,6 +41,7 @@ theorem admitted : BuilderSpendRelation.RspendPlus statement witness := by
   refine ⟨⟨⟨rfl,rfl⟩,input_relation,?_,rfl,rfl,append⟩,?_⟩
   · decide
   · intro _
+    change noteCommitment (digest 500) 400 77 (digest 600) 7 ≠ 0
     exact PV_RunJoin_TransferSentinel.nonzero
 #print axioms admitted
 
