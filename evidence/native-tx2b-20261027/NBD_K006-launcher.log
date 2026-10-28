@@ -1,0 +1,50 @@
+{"attempt": "NBD_K006", "exit_status": 0, "wall_seconds": 14.472654420009349, "peak_rss_kib": "619220", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 10.16s
+Checking harness pool_v1::pair_tree_profile::NBD_digest::NBD_digest_iteration...
+
+VERIFICATION RESULT:
+ ** 0 of 221 failed (3 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.4573708s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r10d0177f7c554e54800b91edc7161042.scope; invocation ID: 6b4d051b0a264cd6926f8fa3d16846d9

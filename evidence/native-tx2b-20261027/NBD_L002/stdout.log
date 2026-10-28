@@ -1,0 +1,45 @@
+NBD_generated/NBD_DigestInduction.lean:44:16: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d : Std.Array U32 8#usize
+i : Usize
+bound : ↑i ≤ 8
+s : Slice U32
+_✝ : [> let s ← lift d.to_slice <]
+s_post : s = d.to_slice
+h✝¹ : i < s.len
+m : U32
+_ : [> let m ← d.index_usize i <]
+eqv : (∀ (j : Fin 8), ↑(↑d)[↑j] < 2147483647) ↔ ∀ (j : Fin 8), ↑i ≤ ↑j → ↑(↑d)[↑j] < 2147483647
+m_post : m = (↑d)[↑i]
+h✝ : 2147483647 ≤ ↑(↑d)[↑i]
+⊢ ∃ x, ↑i ≤ ↑x ∧ 2147483647 ≤ ↑(↑d)[↑x]
+NBD_generated/NBD_DigestInduction.lean:44:16: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d : Std.Array U32 8#usize
+i : Usize
+bound : ↑i ≤ 8
+s : Slice U32
+_✝¹ : [> let s ← lift d.to_slice <]
+s_post : s = d.to_slice
+h✝¹ : i < s.len
+m : U32
+_✝ : [> let m ← d.index_usize i <]
+i2 : Usize
+_ : [> let i2 ← i + 1#usize <]
+eqv : (∀ (j : Fin 8), ↑(↑d)[↑j] < 2147483647) ↔ ∀ (j : Fin 8), ↑i ≤ ↑j → ↑(↑d)[↑j] < 2147483647
+m_post : m = (↑d)[↑i]
+h✝ : ↑(↑d)[↑i] < 2147483647
+i2_post : ↑i2 = ↑i + 1
+⊢ ↑i < 8 ∧
+    ((∀ (j : Fin 8), ↑i ≤ ↑j → ↑(↑d)[↑j] < 2147483647) ↔ ∀ (j : Fin 8), ↑i < ↑j → ↑(↑d)[↑j] < 2147483647) ∧
+      7 - ↑i < 8 - ↑i
+'NBD_DigestInduction.same_scanner' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBD_DigestInduction.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

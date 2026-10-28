@@ -1,0 +1,55 @@
+{"attempt": "NBD_L011", "exit_status": 1, "wall_seconds": 5.021893748024013, "peak_rss_kib": "2648792", "swaps": "0", "print_axioms": ["'NBD_DigestNativeStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NBD_DigestNativeStep.compose' depends on axioms: [propext, Quot.sound]"]}
+NBD_generated/NBD_DigestNativeStep.lean:31:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d : Std.Array U32 8#usize
+i : Usize
+hi : ↑i ≤ 8
+s : Slice U32
+_✝¹ : [> let s ← lift d.to_slice <]
+s_post : s = d.to_slice
+h✝¹ : i < s.len
+m : U32
+_✝ : [> let m ← d.index_usize i <]
+m_post : m = (↑d)[↑i]
+i2 : Usize
+_ : [> let i2 ← i + 1#usize <]
+h✝ : ↑(↑d)[↑i] < 2147483647
+i2_post : ↑i2 = ↑i + 1
+⊢ (true, ↑i + 1, decide (↑i = 7)) =
+    if ↑i < 8 then
+      if 2147483647 ≤ if h : ↑i < 8 then ↑(↑d)[↑i] else 0 then (false, ↑i, true) else (true, ↑i + 1, decide (↑i = 7))
+    else (true, ↑i, true)
+'NBD_DigestNativeStep.
+...
+NBD_generated/NBD_DigestNativeStep.lean:31:14: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+d : Std.Array U32 8#usize
+i : Usize
+hi : ↑i ≤ 8
+s : Slice U32
+_✝¹ : [> let s ← lift d.to_slice <]
+s_post : s = d.to_slice
+h✝¹ : i < s.len
+m : U32
+_✝ : [> let m ← d.index_usize i <]
+m_post : m = (↑d)[↑i]
+i2 : Usize
+_ : [> let i2 ← i + 1#usize <]
+h✝ : ↑(↑d)[↑i] < 2147483647
+i2_post : ↑i2 = ↑i + 1
+⊢ (true, ↑i + 1, decide (↑i = 7)) =
+    if ↑i < 8 then
+      if 2147483647 ≤ if h : ↑i < 8 then ↑(↑d)[↑i] else 0 then (false, ↑i, true) else (true, ↑i + 1, decide (↑i = 7))
+    else (true, ↑i, true)
+'NBD_DigestNativeStep.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBD_DigestNativeStep.compose' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-rca4ea86edb444be6abac0c507c4c7f38.scope; invocation ID: 95a616e7aaa84d2abe4ea78a7d7fabf0
