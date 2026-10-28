@@ -1,81 +1,79 @@
-# L2C honest-run guard association work
+# L2C D355 continuation — target not established
 
-Branch `codex/pv-l2c-20261028`; worktree exactly
-`/Users/dominic/ZK/.worktrees/pv-l2c`; candidate base
-`e461dca06a993d32f4ebca368003e46add1ea884`. The expressly authorized runjoin
-merge was conflict-free, includes runjoin24–29, and changed no crates/programs.
-The exact history is `git log --oneline e461dca06a..HEAD` in this branch.
+Branch `codex/pv-l2c-20261028`, worktree exactly
+`/Users/dominic/ZK/.worktrees/pv-l2c`. Candidate base `e461dca06a`;
+D355 handoff `d95d7236cd`. The conflict-free authorized runjoin merge already
+contained runjoin24–29; no second merge was needed. Full candidate history:
+`resume-d355/commits-from-candidate.txt`; continuation history:
+`resume-d355/commits-d355.txt` (proof-source revision d8ce511a00).
 
-**Target not established. No privacy ledger row or endpoint premise removed.**
-V352, V354, V357, V360 remain OPEN/P in bucket b. See PREMISES.md for the
-before/after table and SITES.md for each theorem's scope and remaining caller
-transport. The endpoint `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed`
-and its observer/simE are unchanged. T remains exactly its three existing
-fields. No uncharged bad event or replacement honest-input predicate was added.
+**V352, V354, V357, V360 remain OPEN/P, bucket b. Zero endpoint/deployment
+premises removed, added, changed or weakened. Target not yet established.**
+T remains exactly entropy_law, entropy_kernel, observation. Observer, simE,
+HonestInput and frozen Rust are unchanged. No checked honest-input guard
+counterexample was found. The raw-P diagnostic below is not an honest input.
 
-## Proved / measured / proposed
+## Proved and audited
 
-The accepted-current-source entries in RESULTS.json identify proved modules;
-raw receipt-*.json records exact target, source revision/SHA, direct import
-fingerprints, exit, wall time, peak RSS, swap and printed axioms. Accepted axioms
-are only propext, Classical.choice, Quot.sound. The strongest local laws cover
-literal canonical M31/Q arithmetic and decoded sums, arbitrary canonical
-padding values, actual extracted scalar byte parser, exact extracted arithmetic
-and addition folds, first-inactive selection, source vector reads and retained
-writes, and the extracted selected-row traversal. Later caller/packing results
-have credit only if their matching current source has an accepted receipt.
+`PV_L2C_HonestCaller.identification`, `returned_bank`, `builder_sound` use
+precisely ConsumerBoundary25.HonestInput: admission, actual full compiler return
+matching cached payload, Checked and frontier canonicality. Both original
+fixtures, including the concrete proof field, pass FixtureAudit. This is
+compiler/decoded-trace transport, not the missing transport to every guard.
 
-These laws do not assert every shipped guard is constant on the requested
-HonestInput/randomness family. Honest compiler/native table association,
-canonical C1/D caller facts, helper multiset/inverse boundary, native
-oracle/interpolation/running-claim provenance and E1/E2 stream/failed-prefix
-coupling remain P. The inherited ConsumerBoundary25 source provides both original fixture honesty
-theorems. This job prepared exact-carrier aliases, including the concrete field,
-but the final audit failed before checking them; the aliases are unverified
-audit fragments and no new fixture audit success is claimed. The runjoin27 failed full withdrawal
-is outside that carrier and is not used as an honest guard counterexample.
+N2/N4: OwnedBalance and ScalarBalance prove complete extracted Result/table
+returns with the mutation restoration retained. RowEnumeration and
+SelectedDense relate ascending traversal to the excluded sum.
+ExtractedGuard.padding_result proves the actual owned QM31 balance return
+and both raw rejection predicates false on arbitrary canonical sampled tables
+and an inactive dependent row. ScalarCanonical proves preserved raw ranges.
 
-Kani: six charged invocations; CLI failure, cfg(kani) dependency type failure,
-three 180-second control timeouts, and one native codec PASS. The PASS is
-SUSPENDED under K-1 because it reaches copy_from_slice. KANI-COPY-REVIEW.md
-also records the erroneous unchanged duplicate timeout. No row closure relies
-on any Kani run. The unrun scalar-lane draft carries zero proof credit.
+The script-checked balance cut is **structural (K-1 substitute)**, scoped to
+length-1024 M31/QM31 balancing with an in-range inactive dependent row.
+`resume-d355/balance-structural.json` records twelve checked native/reference
+bodies, the row constant, every control/representation difference and its
+Lean law. The earlier optimized native differential is reused unchanged:
+128 complete same-input output comparisons, 128 changed dependent writes,
+30.654 seconds, 639696896 bytes sampled aggregate RSS, zero swap. It is finite
+validation, not honest-fixture or whole-site proof. No observation-trace
+refinement is asserted for the owned reference.
 
-Native value binding checks the three literal straight-line ct.rs kernels.
-The native/owned balancing differential cut pins 14 verbatim declarations.
-native-after-42695/receipt.json and out.log record 128 successful full-vector
-comparisons, all with changed dependent writes: 30.654 seconds, 639696896 bytes
-sampled aggregate RSS, swap zero, optimized release build. A whole
-structural (K-1 substitute) link requires the complete Result law, all source
-control/representation differences, and finite same-input validation; source
-pinning alone is not such a link. Native workspace checks retain both matches
-and mismatches; other jobs' directories were read-only.
+N3: actual extracted M31/CM31/QM31 parsers accept concatenated scalar byte
+encodings of arbitrary canonical words, retaining copy, Result and Option
+branches. This does not prove native QM31 write_le_bytes roundtrip or raw
+compiler column canonicality. CanonicalityBoundary proves why equality after
+field projection cannot supply raw range: raw P and zero decode identically.
 
-## Verification and limitations
+N5: HonestHelper proves total and inactive decoded helper sums on every exact
+honest compiler input, without assuming the desired sums. HonestValidity
+uses the existing NoPole condition, with no new bad event. N6: HonestSumcheck
+proves decoded prepared-oracle initial/chain/terminal laws on that carrier.
+These are decoded/model results, not native helper/inverse/oracle provenance.
 
-Every host compilation uses private source/objects, unchanged run2.py, env J,
-Lean -M7000 and one scope at a time, MemoryHigh=6G/MemoryMax=8G/swap=0/TasksMax=64.
-External objects resolve through the 5,673-entry h4 replay manifest, project
-sources through EJR/freeze/tracked HEAD; h6 cache reuse was fingerprinted on an incomplete parsed graph.
-The final audit exposed an omitted public import; the complete-closure claim
-is withdrawn (PUBLIC-IMPORT-FINDING.md). PREFLIGHT-NOTE.md candidly records the late path-selection check,
-dangling Aeneas alias and missing-IR corrections. No substituted external bytes
-were found and no failed inspection is accepted. No XR import or shared write.
+## Validation and stop
 
-Memory failures 42649/42650 (about 7.34 GB process RSS, swap zero) are retained;
-42651 replaces concrete nested subtraction normalization with symbolic
-intermediates at the same cap, and 42652 composes the actual subtraction law.
-No cap, heartbeat or recursion-limit increase was used. The length-proof
-simplification failure at 42675 is likewise replaced by List.length_ofFn.
-There is no complete frozen endpoint regression claim; the final requested
-validation is the combined local-law audit, exact fixture audit and one focused
-replay, with raw receipts determining their outcome.
+The corrected public/private import parser was used. Final combined audit
+44897, exact-carrier fixture audit 44898 and focused replay 44899 passed.
+`resume-d355/final-closure-check.json` matches all 1456 selected objects,
+complete direct/transitive import fingerprints, source authorities and
+toolchain. h4 external preflight preceded compilation. All successful printed
+axioms are subsets of propext, Classical.choice, Quot.sound.
 
-No change under crates/ or programs/, no deployment/push, and no key/wallet
-creation or deletion. The next concrete deliverable is the universal native
-producer/caller transport on HonestInput, followed by helper/inverse and
-sumcheck provenance; local algebra and finite fixtures cannot replace it.
+`resume-d355/RESULTS.json` records 72 charged continuation Lean compiles:
+55 passed, 17 failed; zero remaining; zero new Kani. Together with the prior
+68, this is 140 total Lean compiles. One refused admission consumed zero
+compiles and was retried with the same ID 44800 after cooldown. Attempt
+44834 mistakenly reused stale resolution text; it remains a charged failure.
+The wrapper now rejects stale tracked sources. No memory cap increase or
+killed-job rerun occurred. Per-target raw receipts record target, exit, wall,
+RSS, swap, revision/source/import hashes and axioms.
 
-Final disposition is recorded in RESULTS.json and STOP.md. The final audit
-failed before its declarations on the omitted project import; its source and
-all uncompiled continuations are archived with no proof credit.
+Stopped on compile-budget exhaustion. Native honest sampler/table/geometry
+transport, raw C1/D canonicality, helper materialization/inverse boundary,
+native oracle/interpolation/running claim, and E1/E2 stream/failed-prefix
+coupling remain P. Next: prove these transports, starting with the sampler
+and returned raw-bank range invariant. See PREMISES.md and SITES.md.
+
+No crates/programs edits, pushes, deployment or wallet/key operations.
+Pinned private host cache is retained for dependent replay; no further
+compile or unchanged full regression is requested or claimed.

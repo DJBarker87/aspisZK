@@ -27,3 +27,30 @@ Non-vacuity: FixtureAudit states both exact ConsumerBoundary25.HonestInput
 fixtures, including the concrete deployed proof field. This shows the carrier
 is inhabited; it does not add the guard outcome to its definition or certify
 a missing native caller refinement.
+
+## D355 accepted additions and remaining site boundary
+
+* N2: ExtractedGuard.padding_result now composes the complete owned QM31
+  Result with both raw predicate outcomes. Native sampler/table and consumer
+  transport from each HonestInput/random tape is still missing.
+* N3: ComplexParser.parse and QParser.parse now prove the actual extracted
+  parser on concatenated canonical scalar-byte encodings. Native secure-word
+  writer roundtrip and raw C1/D compiler range transport remain. The decoded
+  equality obstruction is formally witnessed by CanonicalityBoundary; this
+  is not an honest-input counterexample.
+* N4: OwnedBalance.complete_result, ScalarBalance.complete_result and
+  ScalarCanonical.output_canonical pass. balance-structural.py binds both
+  native cuts to the owned references, with twelve checked bodies and the
+  existing finite native differential. The classification is structural
+  (K-1 substitute), confined to the balance cut, not every honest caller.
+* N5: HonestCaller and HonestHelper now derive total and inactive decoded
+  helper cancellation on the exact carrier without a helper-sum assumption.
+  Native materialization, channel/table origin and inverse implementation
+  boundary remain. HonestValidity uses only the pre-existing NoPole condition.
+* N6: HonestSumcheck derives decoded prepared-oracle degree and initial,
+  chain and terminal laws on the exact carrier; native SemanticOracle,
+  produced interpolation coefficients and running-claim association remain.
+
+Every added theorem is covered by its successful source-matching receipt and
+the final combined audit. All 1456 selected source/object/import fingerprints
+match. No whole site or row subtraction is asserted.

@@ -36,3 +36,22 @@ This is a diagnostic of a missing implication, NOT an honest-input guard
 counterexample and NOT a reason to stop the requested counterexample search.
 Checked's digest bounds and the native compiler's raw arithmetic/write range
 invariant must be transported through the real returned bank/column pipeline.
+
+## D355 final accounting (supersedes the historical audit status)
+
+All four before/after rows above remain OPEN/P, bucket b. Universal
+HonestInput compiler/returned-bank/decoded-trace identification is now proved
+by HonestCaller; total/inactive decoded helper sums and pole-free decoded
+validity are proved by HonestHelper/HonestValidity. These reduce local proof
+work, without removing the native caller/materialization obligations.
+The complete extracted balancing returns, parser composition and decoded
+sumcheck boundaries pass the corrected combined audit and focused replay.
+
+For V352/V354, E1/E2 streams, retries and failed prefixes remain. For V357,
+the actual native table, raw compiler C1/D ranges, native helper/inverse and
+oracle/interpolation provenance remain. For V360, the native public mask
+geometry, every audited native column's origin, complete guard caller and
+observation/certificate transport remain. No premise is relabelled as trust
+or as a new charged failure event. Final receipts: 44897–44899; complete
+fingerprints: resume-d355/final-closure-check.json. See REPORT.md for exact
+result classes. No whole native per-site constancy theorem is claimed.

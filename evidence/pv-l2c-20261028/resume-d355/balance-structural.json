@@ -1,7 +1,7 @@
 {
   "evidence_class": "structural (K-1 substitute)",
-  "scope": "QM31 balancing cut only; length=1024, dependent<1024, dependent inactive; no honest sampler/caller association",
-  "source_revision": "a37609a4dfadf9a5dd38cc85a1d265f70f7333d2",
+  "scope": "M31 and QM31 balancing cuts only; length=1024, dependent<1024, dependent inactive; no honest sampler/caller association",
+  "source_revision": "d8ce511a005d7ad491ab51bfa1fdcfff08cf34ab",
   "checks": [
     {
       "path": "crates/aspis-prover/src/state_only_hiding.rs",
@@ -32,6 +32,36 @@
       "path": "crates/aspis-prover/src/prover_commit_reference.rs",
       "function": "balance_qm31_step",
       "body_sha256": "60826dbb0f395e9e787ca68024a4a024f902fc92b560d563aa962595340a7234"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "balance_m31_copy_inactive",
+      "body_sha256": "765e2192a1de2fa4ff9d4f9a4a4c38b3cd2331eace9e36a82d3426d39b460eef"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "sum_m31_copy_inactive",
+      "body_sha256": "5f577d8c744b295594075c80cca040c9c2e0bd8db10af8cf8bdded7a23d3599e"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "function": "inactive_m31_step",
+      "body_sha256": "14b8f3a67694a495b5f1225c8f8c63e2bdc81cde35af8fdd9de96aa92f2e0db5"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_owned",
+      "body_sha256": "e81ec4abb2e6623b732080b0d3d2b84e9bc115e249066f1ebfabcfde50347dc9"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_rows",
+      "body_sha256": "d8902cf5874026cfe5e0d8728138e5771778239d14124c6555d85299c7dbfcb5"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "function": "balance_m31_step",
+      "body_sha256": "60826dbb0f395e9e787ca68024a4a024f902fc92b560d563aa962595340a7234"
     }
   ],
   "differences": [
@@ -56,7 +86,10 @@
       "law": "Same aspis_core field type, constant checked =1024"
     }
   ],
-  "complete_Result_law": "PV_L2C_OwnedBalance.complete_result",
+  "complete_Result_law": [
+    "PV_L2C_OwnedBalance.complete_result",
+    "PV_L2C_ScalarBalance.complete_result"
+  ],
   "guard_law": "PV_L2C_ExtractedGuard.padding_result",
   "finite_validation": {
     "receipt": "evidence/pv-l2c-20261028/native-after-42695/receipt.json",

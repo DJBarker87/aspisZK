@@ -1,3 +1,14 @@
+## D355 resolution (2026-10-28)
+
+The original failure and withdrawn claim below remain historical evidence.
+The corrected parser includes public/private imports and every module on an
+import line. Final attempts 44897 (CombinedAudit), 44898 (FixtureAudit) and
+44899 (FocusedReplay) all passed. The complete focused source/object/import
+fingerprint audit is `resume-d355/final-closure-check.json`; external objects
+are checked against h4 and the toolchain is unchanged. This restores credit
+to the audited local laws and fixture facts, not to a universal native
+HonestInput guard refinement or the privacy endpoint.
+
 # Final audit failure: incomplete project import parser
 
 Attempt 42699 (the only launched final combined audit/replay) exited 1 before

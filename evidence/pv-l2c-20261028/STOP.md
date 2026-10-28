@@ -1,37 +1,27 @@
-# Final status: allocation exhausted, target not established
+# D355 stop: 72 continuation Lean attempts exhausted
 
-All Env-J IDs 42600–42699 have been consumed. Exactly 68 Lean compiles were
-launched: 34 passed and 34 failed. Exactly 32 IDs were retired by reservation
-refusals and charged zero compiles. The 100-compile ceiling therefore has 32
-compiles unspent, but there is no authorized fresh ID in the assigned range.
-An asynchronous request for an additional lead-allocated block received no
-answer during this turn. No outside ID was used and no refused ID was reused.
+All 72 authorized Lean compiles were actually launched and have recovered
+receipts: 55 passed, 17 failed. IDs 44800–44868 and 44897–44899 were consumed;
+44869–44896 remain unused. Prior work launched 68, for a total of 140. Zero
+new Kani runs; the prior six remain historical, with no usable copy-dependent
+PASS credited. Refusal at 44800 consumed neither its ID nor a compile; the
+same ID was retried after cooldown, in accordance with (m').
 
-Six Kani invocations were used. There is no usable positive Kani native link:
-three control timeouts, CLI/dependency failures, and a copy-dependent codec
-PASS suspended by K-1. The duplicate unchanged timeout is explicitly retained.
+Final combined/fixture/focused audits 44897/44898/44899 all passed. The final
+1456-object public/private import closure fingerprint check passed, with
+unchanged toolchain and only permitted standard axioms. This supersedes the
+historical failed audit described in PUBLIC-IMPORT-FINDING.md.
 
-The optimized native balancing differential passed 128 complete-output
-comparisons, with changed dependent writes in every case (30.654 seconds,
-639696896 bytes sampled aggregate RSS, zero swap, same 6G/8G/0/64 scope).
-This is finite validation; these synthetic tables are not asserted to be the
-requested honest fixtures or full guard executions.
+Target not established. V352/V354/V357/V360 remain OPEN/P bucket b. Zero
+premises removed, added or weakened. No checked honest-input guard
+counterexample was found. CanonicalityBoundary is a diagnostic on arbitrary
+raw words, not such a counterexample. No new bad event or trust field.
 
-The final combined audit/fixture/focused replay at 42699 failed before checking
-its declarations on a missing project object. PUBLIC-IMPORT-FINDING.md records
-the own-parser defect and withdraws the complete-closure claim. The strict h4
-external check passed all 5673 objects. No final fixture/axioms audit success
-or complete release replay is claimed. The unverified audit and caller drafts
-are archived as text, outside the importable proof directory.
+Next deliverable: universal native sampler/producer and consumer association
+on precisely ConsumerBoundary25.HonestInput, raw compiler bank canonicality,
+helper materialization/inverse boundary and native sumcheck provenance.
+E1/E2 complete streams and failed-prefix observation coupling remain P.
 
-V352, V354, V357, V360 remain OPEN/P; zero endpoint/deployment premises removed,
-added, changed or weakened. No checked honest-input guard counterexample was
-found. No new bad event or trust field. No crates/programs changes, push,
-deployment, wallet/key creation, or wallet/key deletion.
-
-Next: obtain a fresh lead allocation; resolve and fingerprint the omitted
-public-import project closure; name the Vec-typed mutation backward function
-to finish the owned balance law; compose the archived row/sum/guard drafts;
-then prove native sampler/producer and HonestInput caller association. The
-native compiler raw canonicality invariant, helper/inverse and sumcheck
-provenance, and E1/E2 complete stream/failed-prefix associations remain P.
+No frozen implementation change, deployment, push or wallet/key operation.
+Raw receipts, failed inputs and current-source accepted index are retained
+under resume-d355/. The pinned private cache remains for dependent reuse.
