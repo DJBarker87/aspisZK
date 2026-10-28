@@ -52,11 +52,28 @@ full raw reply and pre-world event. Native initial-state association and the
 joint law of these completion inputs remain P obligations. No full Runtime or
 either complete ROMView decoder has been installed.
 
-FlatBytes35 is a pending source serializer proof, with no credit until compiled.
+FlatBytes35.encode proves the flat reference's complete Result equals the
+explicit 32-byte array: eight source limbs in order, each in little-endian
+four-byte order. installed connects that image to the source candidate's op51.
+Forty bounded symbolic array reads prove the equation without evaluating byte
+arithmetic. This is a source-reference serialization law, not the complete proof
+serialization/security-model equation or a new deployed native binding.
+MergeInstall35 additionally identifies the actual source candidate dictionary's
+entire merge helper with the discharged source helper and installs MergeActual35
+there without an additional dictionary-equality premise.
 Newly compiled inherited body/dictionary/serialization prerequisites are reported
 as dependency evidence only; their existing hypotheses are not discharged by an
 import. Whole interpolation, round threading, commitments/openings and final
 serialized proof comparison with the independent model are still required.
+
+## Release source identity
+
+stage-A-source-identity.json records exit 0 and empty output for the exact diff
+from 82566acdfb through HEAD under crates/, programs/ and tools/r1-cost-probe.
+The lead-verified pv-gate6 stage-A pins, client, fixtures and 1,000/1,000 finite
+differential therefore retain applicability to those unchanged subtrees. No ELF,
+native test or expanded theorem was run. Deployed features/profile/ABI and D188
+fidelity obligations stay explicit. K-1/K-2 quarantines are unchanged.
 
 ## Premises and limits
 
