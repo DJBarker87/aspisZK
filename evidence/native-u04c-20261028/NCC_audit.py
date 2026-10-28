@@ -34,5 +34,5 @@ for i,row in enumerate(rows):
  same=same and all(positive['source_hashes'][k]==row['source_hashes'][k] for k in keys)
  intended=row['status']=='COUNTEREXAMPLE' and 'unwind' not in row['diagnostic'].lower() and 'overflow' not in row['diagnostic'].lower()
  pairs.append(dict(positive=positive['attempt'],negative=row['attempt'],same_configuration=same,controlled=positive['status']=='PASS' and intended and same))
-(E/'NCC_AUDIT.json').write_text(json.dumps(dict(kani_used=len(rows),lean_used=len(list(E.glob('NCC_L*/receipt.json'))),rows=rows,pairs=pairs,all_pairs_controlled=all(x['controlled'] for x in pairs)),indent=2)+'\n')
+(E/'NCC_AUDIT.json').write_text(json.dumps(dict(kani_used=len(rows),lean_used=len(list(E.glob('NCC_L*/receipt.json'))),rows=rows,pairs=pairs,all_pairs_controlled=all(x['controlled'] for x in pairs),all_pairs_with_passing_positive_controlled=all(x['controlled'] for x in pairs if next(r for r in rows if r['attempt']==x['positive'])['status']=='PASS'),excluded_nonpassing_pairs=[x for x in pairs if next(r for r in rows if r['attempt']==x['positive'])['status']!='PASS']),indent=2)+'\n')
 print(json.dumps(dict(kani_used=len(rows),statuses={k:sum(r['status']==k for r in rows) for k in ['PASS','COUNTEREXAMPLE','UNWIND','TIMEOUT','ERROR']},controlled_pairs=sum(p['controlled'] for p in pairs))))

@@ -116,3 +116,11 @@ devnet 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299;
 Pool 121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548.
 No wallet/key action, session A worktree/candidate edit, other worker prefix
 edit, binary/object/ELF/archive commit, push or merge.
+
+## Final focused Lean reuse audit
+
+NCC_L002 / NCC_ReuseAudit: exit0, wall2.125393630s, peakRSS5,580,244KiB, swap0; source revision bb2ac643ca24facb072417224e2b6a15552ed182 plus the exact dirty source hash in its receipt. All54 inherited NBX roots use only propext/Classical.choice/Quot.sound or none (NCC_AXIOMS.json). All NBX modules are imported without re-proving them. No new theorem, slot witness or extraction premise discharge is added. Actual resolved Aeneas objects are pinned; this is a focused reuse audit, not a new release manifest replay.
+
+Budget: 60/60 Kani; one successful Lean compile, with two submission slots conservatively charged out of60 (L001 transport/no host setup observed; never resubmitted). Every remaining row above requires new native/P6 evidence, so there is no independent new Lean-only closure left to attempt. No further Kani launch is authorized.
+
+Final retention/freeze: all584 imported private-cache files and all219 resolved Aeneas objects remain unchanged; the retained cache now has585 files, adding only NCC_ReuseAudit.olean. No own prover/controller is live. Own1,765,790,485-byte Rust target and empty temporary directory were removed; cache, source snapshots and receipts remain (NCC_CACHE_END.json / NCC_CLEANUP.json). Final repository audit confirms all496 crate/program files and root Cargo.toml/lock equal frozen source; host audit confirms492 unchanged files plus the four exact cfg-instrumented parent hashes used by K060 (NCC_FROZEN_FINAL.json / NCC_HOST_SOURCE_AUDIT.json). No evidence file exceeds20MB, no binary/object/ELF is committed, and no wallet/key operation or push occurred.
