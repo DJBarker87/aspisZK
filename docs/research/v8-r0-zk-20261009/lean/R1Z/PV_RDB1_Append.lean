@@ -15,6 +15,10 @@ theorem growth_fits (len cap additional : Nat) : len ≤ growthCapacity len cap 
   unfold growthCapacity
   omega
 
+theorem growth_required (len cap additional : Nat) :
+    len+additional ≤ growthCapacity len cap additional :=
+  le_trans (Nat.le_max_right _ _) (Nat.le_max_right _ _)
+
 def finishAt {S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (b : Buffer U8) (additional : Nat) (w : World S F) : Execution U8 S F :=
   let cap := growthCapacity b.values.length b.capacity additional
@@ -46,6 +50,34 @@ theorem reserve_values {S F : Type} (step : Request → S → Option Nat × S)
   cases step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity n,shape⟩ w.allocator with
   | mk p s => cases p <;> rfl
 
+theorem reserve_zero {S F : Type} (step : Request → S → Option Nat × S)
+    (wordMax byteMax : Nat) (shape : Shape) (b : Buffer U8) (w : World S F) :
+    reserve step wordMax byteMax shape b 0 w = ⟨.ok (),b,w⟩ := by
+  simp only [reserve,Nat.zero_le,ite_true]
+
+theorem reserve_capacity {S F : Type} (step : Request → S → Option Nat × S)
+    (wordMax byteMax : Nat) (shape : Shape) (b : Buffer U8)
+    (n : Nat) (w : World S F) :
+    let e := reserve step wordMax byteMax shape b n w
+    e.returned=.ok () → b.values.length+n ≤ e.buffer.capacity := by
+  dsimp only
+  unfold reserve
+  split
+  · intro h
+    have hf := b.fits
+    omega
+  · split
+    · intro h; cases h
+    · split
+      · intro h; cases h
+      · unfold finishAt
+        dsimp only
+        cases hs : step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity n,shape⟩ w.allocator with
+        | mk p s =>
+          cases p with
+          | none => intro h; cases h
+          | some address => intro _; exact growth_required _ _ _
+
 /-- Native raw copy observes the already-reserved pointer and unchanged live
 length. Its source is a nonaliasing immutable byte slice. -/
 def writeTail (address oldLen : Nat) (tail : List U8)
@@ -55,7 +87,7 @@ def writeTail (address oldLen : Nat) (tail : List U8)
   else memory a
 
 structure Appended (S F : Type) where
-  returned : Except Error Unit
+  returned : Except PV_RDB1_V183_ReserveWorld.Error Unit
   address : Nat
   capacity : Nat
   values : List U8
@@ -88,19 +120,17 @@ theorem complete {S F : Type} (step : Request → S → Option Nat × S)
     (w : World S F) : source step wordMax byteMax shape b tail w =
       reference step wordMax byteMax shape b tail w := rfl
 
-theorem error_no_copy {S F : Type} (e : Execution U8 S F) (tail : List U8) (err : Error)
+theorem error_no_copy {S F : Type} (e : Execution U8 S F) (tail : List U8) (err : PV_RDB1_V183_ReserveWorld.Error)
     (h : e.returned=.error err) :
     (appendAfter e tail).values=e.buffer.values ∧ (appendAfter e tail).world=e.world := by
-  simp only [appendAfter,h]
-  exact ⟨rfl,rfl⟩
+  simp [appendAfter,h]
 
 theorem success_values {S F : Type} (e : Execution U8 S F) (tail : List U8)
     (h : e.returned=.ok ()) :
     (appendAfter e tail).values=e.buffer.values++tail ∧
     (appendAfter e tail).address=e.buffer.address ∧
     (appendAfter e tail).capacity=e.buffer.capacity := by
-  simp only [appendAfter,h]
-  exact ⟨rfl,rfl,rfl⟩
+  simp [appendAfter,h]
 
 theorem memory_frame (address oldLen : Nat) (tail : List U8)
     (memory : Nat → Option Nat) (a : Nat)
@@ -114,6 +144,9 @@ theorem copy_bounds (len count cap : Nat) (fits : len+count≤cap) :
 
 theorem doubled_cap_no_wrap (cap half : Nat) (h : cap<half) : 2*cap<2*half := by omega
 
+#print axioms growth_required
+#print axioms reserve_zero
+#print axioms reserve_capacity
 #print axioms growth_fits
 #print axioms reserve_values
 #print axioms complete
