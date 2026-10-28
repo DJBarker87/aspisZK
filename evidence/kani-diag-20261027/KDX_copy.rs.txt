@@ -1,0 +1,32 @@
+#[kani::proof] #[kani::unwind(17)]
+fn KDX_attr17(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
+#[kani::proof]
+fn KDX_default17(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
+#[kani::proof] #[kani::unwind(2)]
+fn KDX_checks2(){let input:[u32;16]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n>0&&n<=16&&k<16);let mut level=[0u32;16];level[..n].copy_from_slice(&input[..n]);assert_eq!(level[k],if k<n{input[k]}else{0});}
+#[kani::proof] #[kani::unwind(2)]
+fn KDX_cells2(){let mut input=[0u32;16];input[7]=1;input[15]=512;let mut level=[0u32;16];let n:usize=kani::any();kani::assume(n==16);level[..n].copy_from_slice(&input[..n]);
+assert!(level[0]==input[0], "KDX_cell_00");
+assert!(level[1]==input[1], "KDX_cell_01");
+assert!(level[2]==input[2], "KDX_cell_02");
+assert!(level[3]==input[3], "KDX_cell_03");
+assert!(level[4]==input[4], "KDX_cell_04");
+assert!(level[5]==input[5], "KDX_cell_05");
+assert!(level[6]==input[6], "KDX_cell_06");
+assert!(level[7]==input[7], "KDX_cell_07");
+assert!(level[8]==input[8], "KDX_cell_08");
+assert!(level[9]==input[9], "KDX_cell_09");
+assert!(level[10]==input[10], "KDX_cell_10");
+assert!(level[11]==input[11], "KDX_cell_11");
+assert!(level[12]==input[12], "KDX_cell_12");
+assert!(level[13]==input[13], "KDX_cell_13");
+assert!(level[14]==input[14], "KDX_cell_14");
+assert!(level[15]==input[15], "KDX_cell_15");
+}
+
+// Negative control: this assertion is FALSE in native Rust on the retained fixture.
+#[kani::proof] #[kani::unwind(17)]
+fn KDX_false_zero(){let mut input=[0u32;16];input[7]=1;input[15]=512;let mut level=[0u32;16];let n:usize=kani::any();kani::assume(n==16);level[..n].copy_from_slice(&input[..n]);assert!(level[15]==0);}
+// Constant whole-array slice control; same element width and source domain.
+#[kani::proof] #[kani::unwind(17)]
+fn KDX_constant_copy(){let input:[u32;16]=kani::any();let mut level=[0u32;16];level.copy_from_slice(&input);let k:usize=kani::any();kani::assume(k<16);assert_eq!(level[k],input[k]);}

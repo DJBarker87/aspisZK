@@ -1,0 +1,36 @@
+{"attempt": "KDX_K021", "exit_status": 0, "wall_seconds": 3.3633007259923033, "peak_rss_kib": "382852", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "8512bceddf114b2917d13a8c5ae4cf755d7b3b8515db84e8d640e26e6033f9ae", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-kani-diag-20261027/KDX_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-kani-diag-20261027/KDX_target", "--lib", "-j", "1", "-Z", "unstable-options", "--harness-timeout", "90s", "--exact", "--harness", "r1_wire::KDX_R_LPn_K010::KDX_LPn_nonvacuit
+...
+_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/r1_wire.rs:132:10 in function r1_wire::ValidatedRecord::<'_>::payload
+
+Check 345: r1_wire::ValidatedRecord::<'_>::payload.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/r1_wire.rs:132:10 in function r1_wire::ValidatedRecord::<'_>::payload
+
+Check 346: core::option::Option::<&[u8]>::ok_or::<r1_wire::Error>.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:1338:15 in function core::option::Option::<&[u8]>::ok_or::<r1_wire::Error>
+
+Check 347: core::slice::<impl [u8]>::split_at.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs:1950:15 in function core::slice::<impl [u8]>::split_at
+
+
+SUMMARY:
+ ** 0 of 347 failed (8 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.0739231s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "8512bceddf114b2917d13a8c5ae4cf755d7b3b8515db84e8d640e26e6033f9ae", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 0}
+
+Running as unit: run-rb04ab8d794d14be98dc49e4ed29c31f9.scope; invocation ID: 37a9b92f21fe42c8a032741e519ff722

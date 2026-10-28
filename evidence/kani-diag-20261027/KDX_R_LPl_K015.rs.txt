@@ -1,0 +1,10 @@
+use super::*;
+use aspis_core::field::CM31;
+#[kani::proof]
+#[kani::unwind(33)]
+fn KDX_LPl_fixed_probe(){fixed::<1>()}
+fn fixed<const ROW:usize>(){
+ let input:[u8;16]=kani::any();let mut out:[u8;3712]=kani::any();let j:usize=kani::any();kani::assume(j<3712);
+ let old=out[j];let at=32*ROW;assert_eq!(expand_values(&input,&mut out[at..at+32]),Ok(()));
+ assert_eq!(out[j],if j>=at&&j<at+16{input[j-at]}else if j>=at+16&&j<at+32{0}else{old});
+}

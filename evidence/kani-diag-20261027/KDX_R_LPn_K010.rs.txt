@@ -1,0 +1,13 @@
+use super::*;
+use aspis_core::field::CM31;
+#[kani::proof]
+#[kani::unwind(33)]
+fn KDX_LPn_nonvacuity(){
+ let mut b=[0u8;37];let high:[u8;16]=kani::any();b[21..].copy_from_slice(&high);
+ let got=ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0).unwrap();eq_q(got[0],QM31::ZERO);
+ b[5]=255;b[6]=255;b[7]=255;b[8]=127;
+ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(0),Err(Error::NonCanonical{row:25,value:0}));
+ assert_eq!(ValidatedRecord{row:0,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::InvalidRow));
+ assert_eq!(ValidatedRecord{row:25,framed:&b}.decode_k::<1>(usize::MAX),Err(Error::Length{row:25}));
+}
+fn eq_q(a:QM31,b:QM31){assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);}
