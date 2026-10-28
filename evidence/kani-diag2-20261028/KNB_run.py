@@ -32,6 +32,7 @@ assert graph==json.loads((E/'KNB_frozen_graph.json').read_text()),'STOP frozen g
 check=dict(exact_frozen_resolved_graph_match=True,frozen_graph_sha256=hashlib.sha256((E/'KNB_frozen_graph.json').read_bytes()).hexdigest(),metadata_receipt=meta+'/receipt.json',lock_before_sha256=expected,lock_after_sha256=None)
 (E/(attempt+'-graph-check.json')).write_text(json.dumps(check,indent=2)+'\n')
 cmd=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/KNB_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/KNB_target','--lib','-j','1','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--exact','--harness',(harness if '::' in harness else 'verifier::candidate::KNB_native::'+harness),'-Z','concrete-playback','--concrete-playback','print','--output-format','regular']
+for more in json.loads(os.getenv('KNB_MORE_HARNESSES','[]')):cmd+=['--harness',more]
 r=launch(dict(base,attempt=attempt,kind='kani',command=cmd,timeout=600,expected_time='Optimized compilation then '+harness+' native single-call gate',deps_fingerprint={'frozen_revision':'4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','graph_check':attempt+'-graph-check.json'}))
 after=ssh('sha256sum '+B+'/KNB_src/Cargo.lock');assert after.returncode==0
 check['lock_after_sha256']=after.stdout.split()[0];check['lock_unchanged']=check['lock_after_sha256']==expected

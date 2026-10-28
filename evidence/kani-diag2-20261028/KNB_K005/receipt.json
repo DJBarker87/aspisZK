@@ -1,0 +1,82 @@
+{
+  "source_revision": "ee0f49546f3151e7e7d7a3bcb41425df736eb862",
+  "source_tree_dirty": true,
+  "sources": [
+    "KNB_src/Cargo.lock",
+    "KNB_src/Cargo.toml",
+    "KNB_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "KNB_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "KNB_src/crates/aspis-r1-cost-probe/src/KNB_native.rs",
+    "KNB_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs",
+    "KNB_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "KNB_src/crates/aspis-r1-cost-probe/src/NBZ_native.rs"
+  ],
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-kani-diag2-20261028/KNB_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "KNB_K005",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-kani-diag2-20261028/KNB_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-kani-diag2-20261028/KNB_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NBZ_native::NBZ_return_carriers",
+    "-Z",
+    "concrete-playback",
+    "--concrete-playback",
+    "print",
+    "--output-format",
+    "regular"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation then verifier::candidate::NBZ_native::NBZ_return_carriers native single-call gate",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_check": "KNB_K005-graph-check.json"
+  },
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 6.820089204004034,
+  "peak_rss_kib": "425936",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rdcc297a8161a42ad919d6effe76be178.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "414085120",
+  "source_hashes": {
+    "KNB_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "KNB_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "KNB_src/crates/aspis-r1-cost-probe/src/verifier.rs": "23c3de16ed408fadfa74d4597345b00da7285ee7b5c5df0058eb4dc6fb65d569",
+    "KNB_src/crates/aspis-r1-cost-probe/src/candidate.rs": "e0d1d56c76442ff8bed1aad95d1c46c39c80b8d985c50eb508766b3125550ddf",
+    "KNB_src/crates/aspis-r1-cost-probe/src/KNB_native.rs": "83b889a97ee2c47663bfe1808b32126de5ae33f3cbaf648da0733dccbaf07732",
+    "KNB_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "KNB_src/crates/aspis-r1-cost-probe/src/lib.rs": "04db82c4b8b5d9e46688b1d28f1ad9933b4598e1e144b10dd7cd642b36ab1c87",
+    "KNB_src/crates/aspis-r1-cost-probe/src/NBZ_native.rs": "a884084421537a5b948a35aa0ff030b0b9dd600f55e85a9fd5cff680b9ba4044"
+  },
+  "print_axioms": "N/A: kani"
+}
