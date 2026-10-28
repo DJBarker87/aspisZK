@@ -273,3 +273,12 @@ the route change; the owner may narrow it.
    harnesses, not about the deployed ELF bytes.
 
 Deployed 100-bit target: not yet established.
+
+## Owner-approved amendment, 2026-10-28 (fourth)
+
+Owner message, 2026-10-28 ~06:45 UTC: "i acceot yiour recommendations". This adopts the lead's two open recommendations.
+
+1. Kani trust narrowing (finding K-1, KANI-FIDELITY-FINDING-20261028.md). A Kani result counts as evidence only for a harness that either reaches no copy builtin, or runs with exactly the validated KMX_ element-wise copy stubs (KMX_copy_stubs.patch, sha256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67) and has its matched negative control fail in the identical configuration (lead ruling (r'), shared with Stream B). A timeout gives no credit. This narrows the existing Kani trust row; it adds no new trust item and changes no security bound, metric or game.
+2. One aggregation scope above the standing 8 GiB cap. A single job on the build host: MemoryMax 16G, MemoryHigh 14G, MemorySwapMax 0, Lean -M15000, one run, recording target, exit status, wall time, peak RSS, swap, source revision and #print axioms. Its only target is JHn_TX1.accepted1_saved, the join of the two separately compiled halves, which failed at import at 7.27 GB under -M7000 (AGENTS resource rule 4, legitimate final aggregation). The same scope may be reused for the later TX1+TX2 joint assembly, recorded the same way. It may not be reused for any reduction-shaped failure; those are split.
+
+Deployed 100-bit target: not yet established.

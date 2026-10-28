@@ -93,3 +93,8 @@ Leaf status after the replay:
 Tally: 9 of 13 leaves CLOSED, 4 SUSPENDED. Next, KMY_ re-verifies the 16
 timeouts with the stubs, by window (one window per harness plus a Lean frame
 proof), never rerunning an unchanged shape.
+
+
+## Owner decision (2026-10-28)
+
+APPROVED by the owner ("i acceot yiour recommendations"); recorded as contract amendment (fourth), item 1. Kani evidence is limited to harnesses that reach no copy builtin, or that run with exactly the validated KMX_ stubs and have their matched negative control fail.
