@@ -1,0 +1,6 @@
+define void @rjdec_zeroize_byte(ptr noalias noundef align 1 dereferenceable(1) %byte) unnamed_addr #1 {
+start:
+  store volatile i8 0, ptr %byte, align 1
+  tail call void asm sideeffect inteldialect "# ${0:q}", "r,~{memory}"(ptr nonnull %byte) #2, !srcloc !9
+  ret void
+}

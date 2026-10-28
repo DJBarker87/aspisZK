@@ -1,0 +1,36 @@
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_RangeForward.lean:13:70: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  b ≥ 0
+  b - d ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+  a - c ≤ -1
+where
+ a := ↑↑r.end
+ b := ↑↑r.start
+ c := ↑2 ^ UScalarTy.Usize.numBits
+ d := ↑(UScalar.max UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_RangeForward.lean:18:2: error: unsolved goals
+case pos
+r : Range
+h : ↑r.start < ↑r.end
+hb : ↑r.start + 1 ≤ UScalar.max UScalarTy.Usize
+⊢ (do
+      let n ←
+        if h : ↑r.start < UScalar.max UScalarTy.Usize then ok (some (UScalar.ofNatCore (↑r.start + 1) ⋯)) else ok none
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some r.start, { start := n, «end» := r.end })) =
+    ok (some r.start, { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end })
+/home/dombarker/project-offloads/codex-pv-rdcd-20261028/lean-sources/R1Z/PV_RDCD_RangeForward.lean:21:71: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp [core.iter.range.IteratorRange.next, ̲core.iter.range.StepUsize,
+        core.iter.range.UScalarStep, ̲core.iter.range.UScalarStep.forward_checked,
+        core.cmp.impls.PartialOrdUsize.lt, ̲core.clone.CloneUsize, ̲source, ̲h,̵h̵b̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD_RangeForward.forward_bound' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RDCD_RangeForward.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

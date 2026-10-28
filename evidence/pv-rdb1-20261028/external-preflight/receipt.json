@@ -1,0 +1,51 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/external-preflight/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/external-preflight/time.log",
+    "python3",
+    "-c",
+    "from pathlib import Path\nimport json,hashlib\nD=Path('/home/dombarker/project-offloads/codex-pv-rdb1-20261028')\ne=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text());roots=list(map(Path,e['LEAN_PATH'].split(':')))\nmanifest=json.loads((D/'external-object-manifest.json').read_text());checks=[]\nfor x in manifest:\n rel=x['module']+'.olean'; p=next((r/rel for r in roots if (r/rel).exists()),None)\n h=hashlib.sha256(p.read_bytes()).hexdigest() if p else None\n checks.append(dict(module=x['module'],selected_path=str(p),expected=x['object_sha256'],actual=h,ok=h==x['object_sha256']))\nj=dict(ok=all(x['ok'] for x in checks),checks=checks,errors=[x for x in checks if not x['ok']],env=e)\n(D/'preflight.json').write_text(json.dumps(j,indent=2));print(json.dumps(dict(ok=j['ok'],checked=len(checks),errors=j['errors'])))"
+  ],
+  "exit": 0,
+  "wall": "0:00.92",
+  "peak_rss_kib": "40844",
+  "swap": "0",
+  "source_revision": "b91fffbd49770614c287a09c25e28ad1902ae126",
+  "expected_phase": "verify env-J external hashes before Lean",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "command_sha256": "1686140e564f13ccd33b154cb766b1abc175aef201eed2be2b0c7f0ffdf7a698"
+}

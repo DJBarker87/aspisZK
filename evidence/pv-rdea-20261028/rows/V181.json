@@ -1,0 +1,22 @@
+{
+  "status": "SUSPENDED",
+  "witness_dependent_finding": false,
+  "premises_removed": [],
+  "new_trust_items": [],
+  "retained_allocator_item": "runtime/allocator primitive adequacy",
+  "T": [
+    "entropy_law",
+    "entropy_kernel",
+    "observation"
+  ],
+  "row": "V181",
+  "before": "Old value projection: op30(n)=ok empty for every Usize, with native execution/world association residual. Its unconditional native-success interpretation is superseded by rdea-1.",
+  "after": "Native with_capacity(n) equals String::new; reserve_exact(n) with the complete Result, buffer and post-world. At n=69 the consumer explicitly sends allocation failure to failure(err, postWorld), and success to next(buffer, postWorld). Constructor plus the fixed 32-byte hexadecimal fill issues exactly one (oldCapacity=0,newCapacity=69,width=1) request. No allocation success or prior allocator-state equality is assumed.",
+  "blocker": "The actual extracted reservation_path is factored and its op30(69) consumer identified, but its Result String callback ABI is not yet related to the physical Buffer/World interpretation, including the actual op31 fill and native error/unwind handlers. Public classification and complete indirect reachability remain unproved for std::fmt::format_inner, String::from_utf8_lossy and backtrace build-id constructor paths. These are source/correspondence obligations, not allocation-failure noninterference blockers.",
+  "lean": [
+    "R1Z.PV_RDEA_V181ConsumedLaw",
+    "R1Z.PV_RDEA_ActualEndpointConsumer"
+  ],
+  "next": "Prove the concrete op30/op31 representation-and-world simulation at ActualEndpointConsumer.afterCapacity, then certify the diagnostic invocation guards and argument provenance over the binary dispatch closure.",
+  "inventory": "site-reconciliation.json"
+}

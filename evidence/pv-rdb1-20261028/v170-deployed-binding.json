@@ -1,0 +1,207 @@
+{
+  "row": "V170",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "Drop for Vec<T, A>",
+      "complete_body": "{\n    fn drop(&mut self) {\n        unsafe {\n            \n            \n            \n            ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.as_mut_ptr(), self.len))\n        }\n        \n    }\n}",
+      "selected_release_body": "{\n    fn drop(&mut self) {\n        unsafe {\n            \n            \n            \n            ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.as_mut_ptr(), self.len))\n        }\n        \n    }\n}",
+      "tokens_equal": true,
+      "law": "slice_drop_complete; u32_slice_drops; then RawVec field glue"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "anchor": "pub const fn slice_from_raw_parts_mut<T>",
+      "complete_body": "{\n    from_raw_parts_mut(data, len)\n}",
+      "selected_release_body": "{\n    from_raw_parts_mut(data, len)\n}",
+      "tokens_equal": true,
+      "law": "slice_drop_complete: fat pointer data and live length"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/metadata.rs",
+      "file_sha256": "97d94065abf5054505768dcccbe09a07b71570dddb4c1d7775d5d09e605e26a9",
+      "anchor": "pub const fn from_raw_parts_mut<T:",
+      "complete_body": "{\n    aggregate_raw_ptr(data_pointer, metadata)\n}",
+      "selected_release_body": "{\n    aggregate_raw_ptr(data_pointer, metadata)\n}",
+      "tokens_equal": true,
+      "law": "SlicePtr data/len representation; no offset/copy/allocation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "anchor": "pub const unsafe fn drop_in_place<T:",
+      "complete_body": "{\n    \n    \n\n    \n    unsafe { drop_in_place(to_drop) }\n}",
+      "selected_release_body": "{\n    \n    \n\n    \n    unsafe { drop_in_place(to_drop) }\n}",
+      "tokens_equal": true,
+      "law": "rustc drop glue intrinsic; u32 no destructor; slice glue user-drop count zero"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "Drop for RawVec<T, A>",
+      "complete_body": "{\n    \n    fn drop(&mut self) {\n        \n        unsafe { self.inner.deallocate(T::LAYOUT) }\n    }\n}",
+      "selected_release_body": "{\n    \n    fn drop(&mut self) {\n        \n        unsafe { self.inner.deallocate(T::LAYOUT) }\n    }\n}",
+      "tokens_equal": true,
+      "law": "V170_World.native: field drop order"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "unsafe fn deallocate(&mut self, elem_layout: Layout)",
+      "complete_body": "{\n        \n        if let Some((ptr, layout)) = unsafe { self.current_memory(elem_layout) } {\n            unsafe {\n                self.alloc.deallocate(ptr, layout);\n            }\n        }\n    }",
+      "selected_release_body": "{\n        \n        if let Some((ptr, layout)) = unsafe { self.current_memory(elem_layout) } {\n            unsafe {\n                self.alloc.deallocate(ptr, layout);\n            }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V170_World.release: None/no free or Some/exact one free"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "const unsafe fn current_memory(",
+      "complete_body": "{\n        if elem_layout.size() == 0 || self.cap.as_inner() == 0 {\n            None\n        } else {\n            \n            \n            \n            \n            unsafe {\n                let alloc_size = elem_layout.size().unchecked_mul(self.cap.as_inner());\n                let layout = Layout::from_size_align_unchecked(alloc_size, elem_layout.align());\n                Some((self.ptr.into(), layout))\n            }\n        }\n    }",
+      "selected_release_body": "{\n        if elem_layout.size() == 0 || self.cap.as_inner() == 0 {\n            None\n        } else {\n            \n            \n            \n            \n            unsafe {\n                let alloc_size = elem_layout.size().unchecked_mul(self.cap.as_inner());\n                let layout = Layout::from_size_align_unchecked(alloc_size, elem_layout.align());\n                Some((self.ptr.into(), layout))\n            }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "u32 LAYOUT=(4,4); valid allocation bounds ensure size multiplication representable; capacity=0 iff None"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout)",
+      "complete_body": "{\n        \n        unsafe { self.deallocate_impl(ptr, layout) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { self.deallocate_impl(ptr, layout) }\n    }",
+      "tokens_equal": true,
+      "law": "same deallocation primitive with pointer/layout"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "const unsafe fn deallocate_impl(&self, ptr: NonNull<u8>, layout: Layout)",
+      "complete_body": "{\n        core::intrinsics::const_eval_select(\n            (ptr, layout),\n            Global::deallocate_impl_const,\n            Global::deallocate_impl_runtime,\n        )\n    }",
+      "selected_release_body": "{\n        core::intrinsics::const_eval_select(\n            (ptr, layout),\n            Global::deallocate_impl_const,\n            Global::deallocate_impl_runtime,\n        )\n    }",
+      "tokens_equal": true,
+      "law": "runtime selects runtime body; no constant evaluation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "fn deallocate_impl_runtime(ptr:",
+      "complete_body": "{\n        if layout.size() != 0 {\n            \n            \n            \n            \n            \n            \n            \n            \n            unsafe { dealloc(ptr.as_ptr(), layout) }\n        }\n    }",
+      "selected_release_body": "{\n        if layout.size() != 0 {\n            \n            \n            \n            \n            \n            \n            \n            \n            unsafe { dealloc(ptr.as_ptr(), layout) }\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V170_World.release; u32 nonzero cap => size positive"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "file_sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "anchor": "pub unsafe fn dealloc(",
+      "complete_body": "{\n    unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }\n}",
+      "selected_release_body": "{\n    unsafe { __rust_dealloc(ptr, layout.size(), layout.align()) }\n}",
+      "tokens_equal": true,
+      "law": "retained global allocator primitive with (address,4*capacity,4); arbitrary private allocator state retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs",
+      "file_sha256": "ad70d291fcddf9bd91e7b3d75d6d432d1473e078ab92bf21741fc1d47f786b78",
+      "anchor": "pub const fn drop<T>(_x: T)",
+      "complete_body": "{\n}",
+      "selected_release_body": "{\n}",
+      "tokens_equal": true,
+      "law": "argument consumed; drop glue for Vec<u32,Global>"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+      "anchor": "pub const fn as_mut_ptr(",
+      "complete_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "selected_release_body": "{\n        \n        \n        self.buf.ptr()\n    }",
+      "tokens_equal": true,
+      "law": "same raw buffer pointer as previous pop source binding"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "pub(crate) const fn ptr(",
+      "complete_body": "{\n        self.inner.ptr()\n    }",
+      "selected_release_body": "{\n        self.inner.ptr()\n    }",
+      "tokens_equal": true,
+      "law": "NonNull cast_complete; transparent pointer wrappers"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn ptr<T>",
+      "complete_body": "{\n        self.non_null::<T>().as_ptr()\n    }",
+      "selected_release_body": "{\n        self.non_null::<T>().as_ptr()\n    }",
+      "tokens_equal": true,
+      "law": "NonNull cast_complete; transparent pointer wrappers"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "anchor": "fn non_null<T>",
+      "complete_body": "{\n        self.ptr.cast().as_non_null_ptr()\n    }",
+      "selected_release_body": "{\n        self.ptr.cast().as_non_null_ptr()\n    }",
+      "tokens_equal": true,
+      "law": "NonNull cast_complete; transparent pointer wrappers"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+      "file_sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        \n        Unique { pointer: self.pointer.cast(), _marker: PhantomData }\n    }",
+      "selected_release_body": "{\n        \n        \n        Unique { pointer: self.pointer.cast(), _marker: PhantomData }\n    }",
+      "tokens_equal": true,
+      "law": "cast_complete"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/unique.rs",
+      "file_sha256": "5fc859c1d29cd48ce15d675401fbf87a60f88c25d2658e2fac67bba757b4031e",
+      "anchor": "pub const fn as_non_null_ptr",
+      "complete_body": "{\n        self.pointer\n    }",
+      "selected_release_body": "{\n        self.pointer\n    }",
+      "tokens_equal": true,
+      "law": "transparent projection"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "cast_complete; no deallocation or mutation"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn as_ptr",
+      "complete_body": "{\n        \n\n        \n        \n        \n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "selected_release_body": "{\n        \n\n        \n        \n        \n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "tokens_equal": true,
+      "law": "repr transparent, original primitive boundary retained"
+    }
+  ],
+  "changed_slice_construction": {
+    "old_method": "{\n        slice_from_raw_parts_mut(self, len)\n    }",
+    "deployed": "ptr::slice_from_raw_parts_mut(self.as_mut_ptr(), self.len)",
+    "law": "PV_RDB1_V170.slice_drop_complete"
+  },
+  "Result_effect_laws": [
+    "PV_RDB1_V170.complete",
+    "PV_RDB1_V170_World.effects",
+    "PV_RDB1_V170_World.allocated",
+    "PV_RDB1_V170.u32_slice_drops"
+  ],
+  "retained_domain": "Vec<u32,Global>; valid owned runtime allocation, returning allocator primitive with explicit private state. Compiler/drop-glue intrinsic, machine correspondence, side channels retained as before.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "native_validation": "native-drop/receipt.json (260 paired cases); reused unchanged",
+  "no_new_trust": true,
+  "kani_credit": false
+}

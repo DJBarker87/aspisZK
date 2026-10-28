@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean:68:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if zeroed = true then zero layout world else allocate layout world
+in the target expression
+  (have __do_jp := fun __x =>
+      match __x with
+      | (ptr, world) =>
+        if ptr.address = 0 then ok (Except.error (), world)
+        else ok (Except.ok (sliceFromRawParts ptr layout.size), world);
+    if zeroed = true then do
+      let __x ← zero layout world
+      __do_jp __x
+    else do
+      let __x ← allocate layout world
+      __do_jp __x) =
+    ok (Except.error (), after)
+
+World : Type
+allocate zero : Layout → World → Result (Raw × World)
+layout : Layout
+zeroed : Bool
+world after : World
+ptr : Raw
+nonzero : layout.size ≠ 0
+null : ptr.address = 0
+call : (if zeroed = true then zero layout world else allocate layout world) = ok (ptr, after)
+⊢ (have __do_jp := fun __x =>
+      match __x with
+      | (ptr, world) =>
+        if ptr.address = 0 then ok (Except.error (), world)
+        else ok (Except.ok (sliceFromRawParts ptr layout.size), world);
+    if zeroed = true then do
+      let __x ← zero layout world
+      __do_jp __x
+    else do
+      let __x ← allocate layout world
+      __do_jp __x) =
+    ok (Except.error (), after)
+'R1Z.PV_RDB2_GlobalAlloc.allocate_complete' does not depend on any axioms
+'R1Z.PV_RDB2_GlobalAlloc.runtime_complete' does not depend on any axioms
+'R1Z.PV_RDB2_GlobalAlloc.zero_no_allocator_call' depends on axioms: [propext]
+'R1Z.PV_RDB2_GlobalAlloc.null_is_allocation_error' depends on axioms: [sorryAx]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41184/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-41184/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-objects/R1Z/PV_RDB2_GlobalAlloc.olean", "/home/dombarker/project-offloads/codex-pv-rdb2-20261028/lean-sources/R1Z/PV_RDB2_GlobalAlloc.lean", "7000"], "exit": 1, "wall": "0:01.12", "peak_rss_kib": "2592808", "swap": "0", "source_revision": "82157dfcc42df477e0ca59aa06e666c8e2d358e1", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

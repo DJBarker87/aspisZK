@@ -1,0 +1,51 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/deployed-unit-graph/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/deployed-unit-graph/time.log",
+    "python3",
+    "-c",
+    "from pathlib import Path\nimport subprocess,os,json,hashlib\nD=Path('/home/dombarker/project-offloads/codex-pv-rdb1-20261028');F=D.parent/'codex-pv-fscan-20261028';S=F/'src'\nenv=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH'],RUSTUP_TOOLCHAIN='1.94.1',RUSTC_BOOTSTRAP='1',CARGO_TARGET_DIR=str(D/'unit-target'))\ncmd=['cargo','build','--release','--locked','--manifest-path',str(S/'tools/r1-cost-probe/Cargo.toml'),'-p','aspis-r1-cu-probe','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--bin','devnet_spend','-j','4','-Z','unstable-options','--unit-graph']\nr=subprocess.run(cmd,env=env,capture_output=True,text=True);(D/'unit-graph.stderr').write_text(r.stderr);assert r.returncode==0,r.stderr\nj=json.loads(r.stdout);(D/'unit-graph.json').write_text(r.stdout)\nfeatures=[dict(package_id=x['pkg_id'],features=x['features'],profile=x['profile'],target=x['target']) for x in j['units']];(D/'resolved-features.json').write_text(json.dumps(features,indent=2))\nold=json.loads((F/'units-client-bin/unit-graph.json').read_text());assert j==old,'deployed feature graph changed'\nprint('Exact client unit graph reproduced:',len(features),'units; rustc 1.94.1; release; explicit client features')"
+  ],
+  "exit": 0,
+  "wall": "0:00.22",
+  "peak_rss_kib": "90660",
+  "swap": "0",
+  "source_revision": "e4208bb8b594431dba7f0fa186d71cab946e8371",
+  "expected_phase": "resolve exact deployed client graph; no code generation",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "command_sha256": "27f0e2e67aa195fb894a54bdad9e7e848bd10396c39ab5231a8b37333c3f84ce"
+}

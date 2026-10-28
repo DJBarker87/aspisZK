@@ -1,0 +1,70 @@
+{
+  "attempt": 50361,
+  "module": "PV_L2C_ClientRoute",
+  "source_sha256": "e62d114b9768d0a07bac9ca384bc1ff78ec9055567633067503df52d0636ad24",
+  "origin": {
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_ClientRoute.lean",
+    "git_blob": "6e3e182c9c4f4ab08e044964eee09f53e5c94b0f",
+    "authority": "h5 own git-tracked HEAD"
+  },
+  "source_revision": "d7f36eb9f11c69b5c85a7569d626aeb5a09f2dc8",
+  "exit": 0,
+  "wall_seconds": 2.5854912330396473,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T14:00:21.411657+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 42815455232,
+    "projected_reserved_bytes": 51405389824
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50359",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50359"
+  ],
+  "dependencies": {
+    "PV_L2C_AccountOrigins": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_AccountOrigins.olean",
+      "sha256": "89c5e71727382a280b7f93d07edefe142d7fe1e8051a23ebf8ad2eff8d4bba14"
+    },
+    "PV_L2C_DecoderRoute": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DecoderRoute.olean",
+      "sha256": "0133c6cbcd4aa65f4d584095da471f322bde8b5b4d2931f10f53474f06624195"
+    },
+    "PV_L2C_DirectCompilerRange": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_DirectCompilerRange.olean",
+      "sha256": "0ef9f8b5d16522fc0fa563d344878469b23318ba1ab13a10d16a2a6ce44af687"
+    }
+  },
+  "deps_fingerprint": "aa8c450a99f6b43691499033b4f80747b569e0a483ee88eb039cab2be5eca541",
+  "axioms": [
+    "'PV_L2C_ClientRoute.transfer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.withdrawal_fields' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.transfer_columns' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.withdrawal_columns' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 5044416512,
+  "swaps": "0",
+  "host_wall": "0:02.58",
+  "accepted": true
+}

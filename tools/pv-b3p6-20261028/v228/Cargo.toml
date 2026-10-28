@@ -1,0 +1,14 @@
+[package]
+name="pv-b3p6-reference132"
+version="0.0.0"
+edition="2021"
+[workspace]
+[lib]
+path="lib.rs"
+[dependencies]
+aspis-statement={path="../../../crates/aspis-statement",features=["r0","pool-v1-kernel"]}
+aspis-prover={path="../../../crates/aspis-prover",features=["r0","prover","ct-host-prover","insecure-spend-fixture"]}
+aspis-r1-cost-probe={path="../../../crates/aspis-r1-cost-probe",features=["r1p-check","ct-host-prover"]}
+[profile.release]
+opt-level=3
+overflow-checks=false

@@ -1,0 +1,123 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:23:32: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [h̵,̵attempted, ̲succeeded, ̲sizes, ̲width]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:33:22: warning: This simp argument is unused:
+  sizes
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵s̵i̵z̵e̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:34:22: warning: This simp argument is unused:
+  sizes
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵s̵i̵z̵e̵s̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:45:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+S F : Type
+step : Request → S → Option ℕ × S
+wordMax byteMax : ℕ
+shape : Shape
+width : shape.width = 1
+b : Buffer U8
+tail : List U8
+w : World S F
+⊢ sizes
+      (have count := tail.length;
+          have reserved := reserve step wordMax byteMax shape b count w;
+          match reserved.returned with
+          | Except.error err =>
+            { returned := Except.error err, address := reserved.buffer.address, capacity := reserved.buffer.capacity,
+              values := reserved.buffer.values, world := reserved.world }
+          | Except.ok PUnit.unit =>
+            { returned := Except.ok (), address := reserved.buffer.address, capacity := reserved.buffer.capacity,
+              values := reserved.buffer.values ++ tail,
+              world :=
+                have __src := reserved.world;
+                { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+                  deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+                  successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+                  memory := writeTail reserved.buffer.address reserved.buffer.values.length tail reserved.world.memory,
+                  live := __src.live, frame := __src.frame } }).world.history =
+    sizes w.history ++ requests wordMax byteMax b.values.length b.capacity tail.length
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:68:4: error: Dependent elimination failed: Failed to solve equation
+  Except.ok () =
+    (if count ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+      else
+        if b.values.length + count > wordMax then
+          { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+        else
+          if growthCapacity b.values.length b.capacity count * shape.width > byteMax then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else finishAt step shape b count w).1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:70:6: error: Dependent elimination failed: Failed to solve equation
+  Except.ok () =
+    (if count ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+      else
+        if b.values.length + count > wordMax then
+          { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+        else
+          if growthCapacity b.values.length b.capacity count * shape.width > byteMax then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else finishAt step shape b count w).1
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_AppendRequests.lean:74:15: error: unsolved goals
+case isFalse.isFalse.isFalse.mk.none
+S F : Type
+step : Request → S → Option ℕ × S
+wordMax byteMax : ℕ
+shape : Shape
+b : Buffer U8
+count : ℕ
+w : World S F
+h✝² : ¬count ≤ b.capacity - b.values.length
+h✝¹ : ¬b.values.length + count > wordMax
+h✝ : ¬growthCapacity b.values.length b.capacity count * shape.width > byteMax
+s : S
+h :
+  step
+      { address := b.address, oldCapacity := b.capacity, newCapacity := growthCapacity b.values.length b.capacity count,
+        shape := shape }
+      w.allocator =
+    (none, s)
+success :
+  (if count ≤ b.capacity - b.values.length then { returned := Except.ok (), buffer := b, world := w }
+      else
+        if wordMax < b.values.length + count then
+          { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+        else
+          if byteMax < growthCapacity b.values.length b.capacity count * shape.width then
+            { returned := Except.error Error.capacityOverflow, buffer := b, world := w }
+          else
+            {
+              returned :=
+                Except.error
+                  (Error.allocError
+                    { size := usize (growthCapacity b.values.length b.capacity count * shape.width),
+                      align := shape.align }),
+              buffer := b,
+              world :=
+                attempted
+                  { address := b.address, oldCapacity := b.capacity,
+                    newCapacity := growthCapacity b.values.length b.capacity count, shape := shape }
+                  none s w }).returned =
+    Except.ok ()
+⊢ b.capacity = growthCapacity b.values.length b.capacity count
+'R1Z.PV_RDEA_AppendRequests.finishAt_sizes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_AppendRequests.reserve_requests' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_AppendRequests.append_requests' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_AppendRequests.public_request_word' does not depend on any axioms
+'R1Z.PV_RDEA_AppendRequests.reserve_success_capacity' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

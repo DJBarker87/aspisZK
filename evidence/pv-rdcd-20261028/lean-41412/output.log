@@ -1,0 +1,25 @@
+inductive Aeneas.Std.core.convert.Infallible : Type
+number of parameters: 0
+constructors:
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.UScalar.wrapping_sub : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv - y.bv)#uscalar
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+@[reducible] def Aeneas.Std.UScalar.ofNat : {ty : UScalarTy} →
+  (x : ℕ) → autoParam (x ≤ UScalar.cMax ty) UScalar.ofNat._auto_1 → UScalar ty :=
+fun {ty} x hInBounds => UScalar.ofNatCore x ⋯
+def Aeneas.Std.core.num.U32.wrapping_add : U32 → U32 → U32 :=
+UScalar.wrapping_add
+def Aeneas.Std.core.num.U32.wrapping_sub : U32 → U32 → U32 :=
+UScalar.wrapping_sub
+def Aeneas.Std.core.num.U64.wrapping_mul : U64 → U64 → U64 :=
+UScalar.wrapping_mul
+inductive Aeneas.Std.core.ops.control_flow.ControlFlow : Type → Type → Type
+number of parameters: 2
+constructors:
+Aeneas.Std.core.ops.control_flow.ControlFlow.Continue : {B C : Type} → C → core.ops.control_flow.ControlFlow B C
+Aeneas.Std.core.ops.control_flow.ControlFlow.Break : {B C : Type} → B → core.ops.control_flow.ControlFlow B C

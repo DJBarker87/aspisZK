@@ -1,0 +1,45 @@
+@R1Z.PV_RDCD_TakeBinding.original_reference : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  {T : Type} (inst_1 : Aeneas.Std.core.default.Default T) (x : T),
+  ProverRwFull.ExternalFuns.op3 inst_1 x = PV_CB_TakeRef.reference.take inst_1 x
+@R1Z.PV_RDCD_Op107Audit.retained_importer : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.QM31),
+  ProverRwFull.ExternalFuns.op107 x = do
+    let value ←
+      PV_CB_ShippedOp107.aspis_core.field.QM31.Insts.Aspis_coreR0ScalarCodeField.try_inv
+          (R1Z.PV_CB_Op107Transport.encode x)
+    Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op107Transport.decode value)
+@R1Z.PV_RDCD_Op109Audit.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+  ProverRwFull.ExternalFuns.op109 x = do
+    let value ←
+      PV_CB_ShippedOp109.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.try_inv
+          (R1Z.PV_CB_Op109Transport.encodeW x)
+    Aeneas.Std.Result.ok (Option.map R1Z.PV_CB_Op109Transport.decodeW value)
+@R1Z.PV_RDCD_ContextInstall.op114_complete : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (a b : R1Z.PV_RDCD_ContextInstall.Native), ProverRwFull.ExternalFuns.op114 a b = Aeneas.Std.Result.ok (decide (a = b))
+@R1Z.PV_RDCD_Op118Audit.source : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+  (x : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize),
+  ProverRwFull.ExternalFuns.op118 x = do
+    let value ←
+      PV_CB_ShippedOp118.aspis_core.state_only_prefix.r0.statement_points (R1Z.PV_CB_Op118Transport.encodeArray x)
+    Aeneas.Std.Result.ok (R1Z.PV_CB_Op118Transport.decodePoints value)
+@R1Z.PV_RDCD_Audit.v221 : ∀ [inst : ProverRwFull.ExternalTypes] {F A : Type} (ops : ProverRwFull.ExternalFuns)
+  (N : Aeneas.Std.Usize) (a : Aeneas.Std.Array Aeneas.Std.U8 N) (address : ℕ) (w : R1Z.PV_RDCD_ZeroWorld.World F)
+  (caller : Aeneas.Std.Array Aeneas.Std.U8 N → R1Z.PV_RDCD_ZeroWorld.World F → Aeneas.Std.Result A),
+  (do
+      let a' ←
+        (ProverRwFull.Array.Insts.ZeroizeZeroize N
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes)).zeroize
+            a
+      caller a' (R1Z.PV_RDCD_ZeroWorld.native address (↑N) w)) =
+    caller (Aeneas.Std.Array.repeat N 0#u8) (R1Z.PV_RDCD_ZeroWorld.indexed address 0 (↑N) w)
+@R1Z.PV_RDCD_Audit.v222 : ∀ [inst : ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns) (x : Aeneas.Std.U8),
+  (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes).zeroize x =
+    Aeneas.Std.Result.ok 0#u8
+R1Z.PV_RDCD_StatementBridge.source : ∀ (a b : R1Z.PV_RDCD_StatementBridge.OldLate),
+  PV_RDCD_V246.public_eq (R1Z.PV_RDCD_StatementBridge.encode a) (R1Z.PV_RDCD_StatementBridge.encode b) =
+    PV_CB_ShippedOp229.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1.Insts.CoreCmpPartialEqPoolV1PairLatePublicStatementV1.eq
+      a b
+'R1Z.PV_RDCD_Audit.v221' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD_Op109Audit.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD_Op118Audit.source' depends on axioms: [propext, Classical.choice, Quot.sound]

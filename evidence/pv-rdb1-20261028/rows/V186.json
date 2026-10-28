@@ -1,0 +1,43 @@
+{
+  "row": "V186",
+  "name": "op35 alloc.vec.Vec.Insts.CoreDefaultDefault.default",
+  "status": "RESTORED",
+  "evidence_class": "structural (K-1 substitute)",
+  "scope": "Existing candidate callback/library source-law boundary; no whole-machine, compiler, binary or endpoint claim",
+  "structural": "v186-structural.json",
+  "native": [
+    {
+      "receipt": "native-std-extra/receipt.json",
+      "classification": "finite validation only"
+    }
+  ],
+  "source_audit": "source-audit.json#V186",
+  "features": "resolved-features.json",
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "before": "Native-link credit suspended for deployed-configuration transfer; original Lean/model law not refuted",
+  "after": "Existing op35 Result/value law restored through exact shared deployed Vec::new call; empty carrier follows from zero live length",
+  "reason": "Both complete native Default and owned reference bodies are exactly Vec::new() at the same generic instantiation in the same sysroot. Constructor semantics are shared, so no historical/deployed constructor-equivalence premise is needed. The checked constructor sets len=0; empty_from_zero_length discharges the value observation independently of dangling pointer/capacity representation.",
+  "findings": [],
+  "retained_premises": [
+    "runtime/carrier relation at existing library boundary",
+    "compiler and executable correspondence",
+    "E1/E2",
+    "real RunJoin",
+    "client route",
+    "L1/L2/L3"
+  ],
+  "new_trust_items": [],
+  "kani_credit": false,
+  "laws": [
+    "R1Z.PV_RDB1_V186.complete",
+    "R1Z.PV_RDB1_V186.selected_result",
+    "R1Z.PV_RDB1_V186.empty_from_zero_length",
+    "R1Z.PV_RDB1_V186.constructor_value"
+  ],
+  "lean_receipt": "54701-receipt.json",
+  "prior_selected_law": "R1Z.PV_CBL_Op35Source.default_empty: selected ops .op35 T = ok (alloc.vec.Vec.new T)",
+  "premise_removed": "V186 deployed native Default-to-owned-reference association, at its existing library source-law boundary only",
+  "original_closing_theorem": "R1Z.PV_CBL_AppendBundle.op35_source",
+  "original_scope": "Original complete-Result/value/domain/callback/world qualifications retained; no new endpoint or machine-adequacy claim"
+}

@@ -1,0 +1,135 @@
+{
+  "cohorts": [
+    {
+      "toolchain": "nightly-2026-06-01",
+      "files": {
+        "option.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+          "sha256": "7cf61204b05d98a95bc2e322d5fbfc1f4f91505109971917d9a7fb47151c50e6"
+        },
+        "num/uint_macros.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+          "sha256": "27b60f61c397a3e42930743c72fdbd01497f3d04bd5ab8cc65a53747fa236454"
+        },
+        "num/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/mod.rs",
+          "sha256": "f0820f9dfb94999440c8cb4a349736fa21df7e5668e19b6b49e016ff67c05ce3"
+        }
+      },
+      "bodies": {
+        "fn branch(self) -> ControlFlow<Self::Residual, Self::Output>": {
+          "text": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            Some(v) => ControlFlow::Continue(v),\n            None => ControlFlow::Break(None),\n        }\n    }",
+          "token_sha256": "0f21df1e74b48d97c9818fa6d0c8d043b6e7edcb44c04b12f5c2b832a17c1460"
+        },
+        "fn from_residual(residual: Option<convert::Infallible>) -> Self": {
+          "text": "fn from_residual(residual: Option<convert::Infallible>) -> Self {\n        match residual {\n            None => None,\n        }\n    }",
+          "token_sha256": "0aa0e7be2b578a27653e5254ec03ab591da3c566d5625bcc7abddae90c078e7f"
+        },
+        "wrapping_add": {
+          "text": "pub const fn wrapping_add(self, rhs: Self) -> Self {\n            intrinsics::wrapping_add(self, rhs)\n        }",
+          "token_sha256": "9b71268efb98c07f0a604cb7ededeedc646c5d92b030a80f072f638b0621ec18"
+        },
+        "wrapping_sub": {
+          "text": "pub const fn wrapping_sub(self, rhs: Self) -> Self {\n            intrinsics::wrapping_sub(self, rhs)\n        }",
+          "token_sha256": "0689dabbb74ce99e8c31faaa4ec9fe2de45715bb4e359e3c9b92e68490919629"
+        },
+        "wrapping_mul": {
+          "text": "pub const fn wrapping_mul(self, rhs: Self) -> Self {\n            intrinsics::wrapping_mul(self, rhs)\n        }",
+          "token_sha256": "d542f038016872e922857f2c0789946e37447176ef6c44ce792efdfe5e5a1318"
+        },
+        "wrapping_shr": {
+          "text": "pub const fn wrapping_shr(self, rhs: u32) -> Self {\n            // SAFETY: the masking by the bitsize of the type ensures that we do not shift\n            // out of bounds\n            unsafe {\n                self.unchecked_shr(rhs & (Self::BITS - 1))\n            }\n        }",
+          "token_sha256": "de2f56d886db31f862a34eb84cf2d230f7fe87cf2027fcb0df75658cd3012cac"
+        },
+        "uint_impl! u32": {
+          "text": "uint_impl! {\n        Self = u32,\n        ActualT = u32,\n        SignedT = i32,\n        BITS = 32,\n        BITS_MINUS_ONE = 31,\n        MAX = 4294967295,\n        rot = 8,\n        rot_op = \"0x10000b3\",\n        rot_result = \"0xb301\",\n        fsh_op = \"0x2fe78e45\",\n        fshl_result = \"0xb32f\",\n        fshr_result = \"0xb32fe78e\",\n        clmul_lhs = \"0x56789012\",\n        clmul_rhs = \"0xf52ecd34\",\n        clmul_result = \"0x9b980928\",\n        swap_op = \"0x12345678\",\n        swapped = \"0x78563412\",\n        reversed = \"0x1e6a2c48\",\n        le_bytes = \"[0x78, 0x56, 0x34, 0x12]\",\n        be_bytes = \"[0x12, 0x34, 0x56, 0x78]\",\n        to_xe_bytes_doc = \"\",\n        from_xe_bytes_doc = \"\",\n        bound_condition = \"\",\n    }",
+          "token_sha256": "bbe787236dd66850396b349ec2cb691cf211df67568f7a47f8dfab6b62a136d1"
+        },
+        "uint_impl! u64": {
+          "text": "uint_impl! {\n        Self = u64,\n        ActualT = u64,\n        SignedT = i64,\n        BITS = 64,\n        BITS_MINUS_ONE = 63,\n        MAX = 18446744073709551615,\n        rot = 12,\n        rot_op = \"0xaa00000000006e1\",\n        rot_result = \"0x6e10aa\",\n        fsh_op = \"0x2fe78e45983acd98\",\n        fshl_result = \"0x6e12fe\",\n        fshr_result = \"0x6e12fe78e45983ac\",\n        clmul_lhs = \"0x7890123456789012\",\n        clmul_rhs = \"0xdd358416f52ecd34\",\n        clmul_result = \"0xa6299579b980928\",\n        swap_op = \"0x1234567890123456\",\n        swapped = \"0x5634129078563412\",\n        reversed = \"0x6a2c48091e6a2c48\",\n        le_bytes = \"[0x56, 0x34, 0x12, 0x90, 0x78, 0x56, 0x34, 0x12]\",\n        be_bytes = \"[0x12, 0x34, 0x56, 0x78, 0x90, 0x12, 0x34, 0x56]\",\n        to_xe_bytes_doc = \"\",\n        from_xe_bytes_doc = \"\",\n        bound_condition = \"\",\n    }",
+          "token_sha256": "77cb841cddd19945d86c88ea930e182ca843c47e5cf819eb3109d831ccf52306"
+        },
+        "reached macro binding u32": {
+          "text": "u32:BITS=32",
+          "token_sha256": "cbd916cbd0ec975f50f79cacea0f635819bd015e35ecf9a42abcf4776ee38346"
+        },
+        "reached macro binding u64": {
+          "text": "u64:BITS=64",
+          "token_sha256": "8875ab76dd3ab6ef68df660fb3ada571b947f3bf26b313d9ae58a986a9343db4"
+        }
+      }
+    },
+    {
+      "toolchain": "1.94.1",
+      "files": {
+        "option.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+          "sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002"
+        },
+        "num/uint_macros.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+          "sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465"
+        },
+        "num/mod.rs": {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/mod.rs",
+          "sha256": "8289fb308a092aff72689b70238477e5fbbbcfbcf0f60639ff89f9a0159b055d"
+        }
+      },
+      "bodies": {
+        "fn branch(self) -> ControlFlow<Self::Residual, Self::Output>": {
+          "text": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            Some(v) => ControlFlow::Continue(v),\n            None => ControlFlow::Break(None),\n        }\n    }",
+          "token_sha256": "0f21df1e74b48d97c9818fa6d0c8d043b6e7edcb44c04b12f5c2b832a17c1460"
+        },
+        "fn from_residual(residual: Option<convert::Infallible>) -> Self": {
+          "text": "fn from_residual(residual: Option<convert::Infallible>) -> Self {\n        match residual {\n            None => None,\n        }\n    }",
+          "token_sha256": "0aa0e7be2b578a27653e5254ec03ab591da3c566d5625bcc7abddae90c078e7f"
+        },
+        "wrapping_add": {
+          "text": "pub const fn wrapping_add(self, rhs: Self) -> Self {\n            intrinsics::wrapping_add(self, rhs)\n        }",
+          "token_sha256": "9b71268efb98c07f0a604cb7ededeedc646c5d92b030a80f072f638b0621ec18"
+        },
+        "wrapping_sub": {
+          "text": "pub const fn wrapping_sub(self, rhs: Self) -> Self {\n            intrinsics::wrapping_sub(self, rhs)\n        }",
+          "token_sha256": "0689dabbb74ce99e8c31faaa4ec9fe2de45715bb4e359e3c9b92e68490919629"
+        },
+        "wrapping_mul": {
+          "text": "pub const fn wrapping_mul(self, rhs: Self) -> Self {\n            intrinsics::wrapping_mul(self, rhs)\n        }",
+          "token_sha256": "d542f038016872e922857f2c0789946e37447176ef6c44ce792efdfe5e5a1318"
+        },
+        "wrapping_shr": {
+          "text": "pub const fn wrapping_shr(self, rhs: u32) -> Self {\n            // SAFETY: the masking by the bitsize of the type ensures that we do not shift\n            // out of bounds\n            unsafe {\n                self.unchecked_shr(rhs & (Self::BITS - 1))\n            }\n        }",
+          "token_sha256": "de2f56d886db31f862a34eb84cf2d230f7fe87cf2027fcb0df75658cd3012cac"
+        },
+        "uint_impl! u32": {
+          "text": "uint_impl! {\n        Self = u32,\n        ActualT = u32,\n        SignedT = i32,\n        BITS = 32,\n        BITS_MINUS_ONE = 31,\n        MAX = 4294967295,\n        rot = 8,\n        rot_op = \"0x10000b3\",\n        rot_result = \"0xb301\",\n        fsh_op = \"0x2fe78e45\",\n        fshl_result = \"0xb32f\",\n        fshr_result = \"0xb32fe78e\",\n        swap_op = \"0x12345678\",\n        swapped = \"0x78563412\",\n        reversed = \"0x1e6a2c48\",\n        le_bytes = \"[0x78, 0x56, 0x34, 0x12]\",\n        be_bytes = \"[0x12, 0x34, 0x56, 0x78]\",\n        to_xe_bytes_doc = \"\",\n        from_xe_bytes_doc = \"\",\n        bound_condition = \"\",\n    }",
+          "token_sha256": "2ec719f0a460b3addb511b9f6c5c9659492d327e4168b3f3a414711a24d8a294"
+        },
+        "uint_impl! u64": {
+          "text": "uint_impl! {\n        Self = u64,\n        ActualT = u64,\n        SignedT = i64,\n        BITS = 64,\n        BITS_MINUS_ONE = 63,\n        MAX = 18446744073709551615,\n        rot = 12,\n        rot_op = \"0xaa00000000006e1\",\n        rot_result = \"0x6e10aa\",\n        fsh_op = \"0x2fe78e45983acd98\",\n        fshl_result = \"0x6e12fe\",\n        fshr_result = \"0x6e12fe78e45983ac\",\n        swap_op = \"0x1234567890123456\",\n        swapped = \"0x5634129078563412\",\n        reversed = \"0x6a2c48091e6a2c48\",\n        le_bytes = \"[0x56, 0x34, 0x12, 0x90, 0x78, 0x56, 0x34, 0x12]\",\n        be_bytes = \"[0x12, 0x34, 0x56, 0x78, 0x90, 0x12, 0x34, 0x56]\",\n        to_xe_bytes_doc = \"\",\n        from_xe_bytes_doc = \"\",\n        bound_condition = \"\",\n    }",
+          "token_sha256": "27fbbd54aa45c33de793e9693c5ebd25b49420a86f41048c2d042a49daf6ad79"
+        },
+        "reached macro binding u32": {
+          "text": "u32:BITS=32",
+          "token_sha256": "cbd916cbd0ec975f50f79cacea0f635819bd015e35ecf9a42abcf4776ee38346"
+        },
+        "reached macro binding u64": {
+          "text": "u64:BITS=64",
+          "token_sha256": "8875ab76dd3ab6ef68df660fb3ada571b947f3bf26b313d9ae58a986a9343db4"
+        }
+      }
+    }
+  ],
+  "identical": {
+    "fn branch(self) -> ControlFlow<Self::Residual, Self::Output>": true,
+    "fn from_residual(residual: Option<convert::Infallible>) -> Self": true,
+    "wrapping_add": true,
+    "wrapping_sub": true,
+    "wrapping_mul": true,
+    "wrapping_shr": true,
+    "uint_impl! u32": false,
+    "uint_impl! u64": false,
+    "reached macro binding u32": true,
+    "reached macro binding u64": true
+  },
+  "qualification": "Exact typed Option methods and selected wrapping method bodies; macro invocation difference must be reviewed before whole-row transfer. Rust intrinsic semantics remain a compiler boundary, no intrinsic implementation is proved by this source comparison."
+}

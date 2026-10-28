@@ -1,0 +1,39 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/alloc-binding/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/alloc-binding/time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/bind-alloc.py"
+  ],
+  "exit": 1,
+  "wall": "0:00.57",
+  "peak_rss_kib": "169164",
+  "swap": "0",
+  "source_revision": "ab62d912fa9bf5f5dca33b773f4ee90fa302c5ff",
+  "expected_phase": "typed RawVec and Box/public allocation source checks",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "associated_deployed_configuration": "configuration.json"
+}

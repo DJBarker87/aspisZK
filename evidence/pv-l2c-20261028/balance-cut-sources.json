@@ -1,0 +1,89 @@
+{
+  "revision": "cc6abd7bf28820a923a9afe54de25c2ddd3c7150",
+  "classification": "verbatim finite differential source cut, not a universal native-link proof",
+  "declarations": [
+    {
+      "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "body": "pub const STATE_ONLY_POSEIDON_TRACE_ROWS: usize = 1 << 10;",
+      "body_sha256": "5499408226a2108e84c645fb6225408cb1c0675d8e67deb6589fae30c5bbf7c9"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 65,
+      "body_sha256": "4d84ccb44fb712d77d55e7b4ec2df8bf61f122dea3a147a8f434559ae12975ae",
+      "body": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub enum StateOnlyMaskBuildError {\n    ZeroPrivateEntropy,\n    ReusedMaskNonce,\n    MaskSampleExhausted,\n    TraceShape,\n    Layout,\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 192,
+      "body_sha256": "b6d3430676e20f5b42ad3958ec44d6cafb3ef6e67144edaabdf4020f21dd57e8",
+      "body": "fn balance_m31_copy_inactive(\n    table: &mut [M31],\n    dependent: usize,\n    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],\n) -> Result<(), StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {\n        return Err(StateOnlyMaskBuildError::TraceShape);\n    }\n    let sum=sum_m31_copy_inactive(table,dependent,active);\n    let value=M31::ZERO.sub(sum);\n    table[dependent]=value;\n    Ok(())\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 224,
+      "body_sha256": "74451196d690e566667abde5cc45fb2ebfa971695e5c9b7416ba6078a950d958",
+      "body": "fn sum_m31_copy_inactive(table:&[M31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->M31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n    let mut sum=M31::ZERO;\n    let mut row=0;\n    while row<rows {\n        sum=inactive_m31_step(sum,table,dependent,active,row);\n        row+=1;\n    }\n    sum\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 247,
+      "body_sha256": "11d6796ff4539882d1415fba34e4d7ca89e159f4bd2aa16a67adfc9718f03201",
+      "body": "fn inactive_m31_step(sum:M31,table:&[M31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->M31 {\n    if !active[row] && row!=dependent {sum.add(table[row])} else {sum}\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 208,
+      "body_sha256": "0a886d7c56ce2cd41dd14746ac83661c147ff6838519f3e00f5dbc5b759180d4",
+      "body": "fn balance_qm31_copy_inactive(\n    table: &mut [QM31],\n    dependent: usize,\n    active: &[bool; STATE_ONLY_POSEIDON_TRACE_ROWS],\n) -> Result<(), StateOnlyMaskBuildError> {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n\n    if table.len() != STATE_ONLY_POSEIDON_TRACE_ROWS || active[dependent] {\n        return Err(StateOnlyMaskBuildError::TraceShape);\n    }\n    let sum=sum_qm31_copy_inactive(table,dependent,active);\n    let value=QM31::ZERO.sub(sum);\n    table[dependent]=value;\n    Ok(())\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 235,
+      "body_sha256": "b194357b35594207687cfe6a9f3f16eae52dc70595ccff9a3029448182a9ef8d",
+      "body": "fn sum_qm31_copy_inactive(table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS])->QM31 {\n    let rows=STATE_ONLY_POSEIDON_TRACE_ROWS;\n    let mut sum=QM31::ZERO;\n    let mut row=0;\n    while row<rows {\n        sum=inactive_qm31_step(sum,table,dependent,active,row);\n        row+=1;\n    }\n    sum\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "line": 252,
+      "body_sha256": "eea0f9cb340eaed1875bfcc739785ae2035cf1e1052f3dfd5593a076182f805b",
+      "body": "fn inactive_qm31_step(sum:QM31,table:&[QM31],dependent:usize,active:&[bool;STATE_ONLY_POSEIDON_TRACE_ROWS],row:usize)->QM31 {\n    if !active[row] && row!=dependent {sum.add(table[row])} else {sum}\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 114,
+      "body_sha256": "a7b59f93efeb50c7ca956f4acd292816d9917f5ad9c61942fcbdae93e5ee66ff",
+      "body": "pub(crate) fn balance_m31_owned(mut table: Vec<M31>, dependent: usize,\n    active: &[bool; 1024]) -> (Result<(), StateOnlyMaskBuildError>, Vec<M31>)\n{\n    if table.len() != 1024 || active[dependent] {\n        return (Err(StateOnlyMaskBuildError::TraceShape), table);\n    }\n    let sum = balance_m31_rows(&table, dependent, active, 0, M31::ZERO);\n    table[dependent] = M31::ZERO.sub(sum);\n    (Ok(()), table)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 225,
+      "body_sha256": "08ddf3140a8589d65d581ceeb1ce806ba72473013be6753d4e8def285f22a022",
+      "body": "pub(crate) fn balance_m31_rows(table: &[M31], dependent: usize,\n    active: &[bool; 1024], row: usize, sum: M31) -> M31\n{\n    if row < 1024 {\n        let after = balance_m31_step(sum, table[row], active[row], row, dependent);\n        balance_m31_rows(table, dependent, active, row + 1, after)\n    } else { sum }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 213,
+      "body_sha256": "4c667aecaec642fab5dfb5a03fe2bf6106a144013575253a776c3c91eb9b1693",
+      "body": "pub(crate) fn balance_m31_step(sum: M31, value: M31, active: bool,\n    row: usize, dependent: usize) -> M31 {\n    if !active && row != dependent { sum.add(value) } else { sum }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 125,
+      "body_sha256": "8354aff58f7642bbc098dc84fddb94a94211095eeb430a34f4c8b73d414104b9",
+      "body": "pub(crate) fn balance_qm31_owned(mut table: Vec<aspis_core::field::QM31>, dependent: usize,\n    active: &[bool; 1024]) -> (Result<(), StateOnlyMaskBuildError>, Vec<aspis_core::field::QM31>)\n{\n    if table.len() != 1024 || active[dependent] {\n        return (Err(StateOnlyMaskBuildError::TraceShape), table);\n    }\n    let sum = balance_qm31_rows(&table, dependent, active, 0, aspis_core::field::QM31::ZERO);\n    table[dependent] = aspis_core::field::QM31::ZERO.sub(sum);\n    (Ok(()), table)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 236,
+      "body_sha256": "afcfb1f133936502795ac4be1c67db79b71eceba8407bd489dae1ea0f0228fb0",
+      "body": "pub(crate) fn balance_qm31_rows(table: &[aspis_core::field::QM31], dependent: usize,\n    active: &[bool; 1024], row: usize, sum: aspis_core::field::QM31) -> aspis_core::field::QM31\n{\n    if row < 1024 {\n        let after = balance_qm31_step(sum, table[row], active[row], row, dependent);\n        balance_qm31_rows(table, dependent, active, row + 1, after)\n    } else { sum }\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "line": 217,
+      "body_sha256": "8b2d1cc163f4a9a96b9615a4ee2c565b608594a74caf1299178037057c2376e0",
+      "body": "pub(crate) fn balance_qm31_step(sum: aspis_core::field::QM31,\n    value: aspis_core::field::QM31, active: bool, row: usize, dependent: usize)\n    -> aspis_core::field::QM31 {\n    if !active && row != dependent { sum.add(value) } else { sum }\n}"
+    }
+  ]
+}

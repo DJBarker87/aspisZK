@@ -1,0 +1,14 @@
+/home/dombarker/project-offloads/codex-pv-2tnv-20261028/sources/PV_2TNV_PublicWindows.lean:21:2: error: Tactic `rfl` failed: The left-hand side
+  ↑(PV_2TNV_ByteEncoding.littleEndian (List.take 4 (List.drop (4 * ↑i) literal)))
+is not definitionally equal to the right-hand side
+  ↑(PV_2TNV_ByteEncoding.littleEndian (List.take 4 (List.drop (0 + 4 * ↑i) literal)))
+
+bytes literal : List U8
+off : ℕ
+selected : List.take 32 (List.drop off bytes) = literal
+i : Fin 8
+h : List.take 4 (List.drop (4 * ↑i) (List.take 32 (List.drop off bytes))) = List.take 4 (List.drop (off + 4 * ↑i) bytes)
+⊢ ↑(PV_2TNV_ByteEncoding.littleEndian (List.take 4 (List.drop (4 * ↑i) literal))) =
+    ↑(PV_2TNV_ByteEncoding.littleEndian (List.take 4 (List.drop (0 + 4 * ↑i) literal)))
+'AspisR1.PV_2TNV_PublicWindows.nested' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.PV_2TNV_PublicWindows.digest_window' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

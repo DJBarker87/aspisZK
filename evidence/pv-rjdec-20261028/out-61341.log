@@ -1,0 +1,40 @@
+START 61341 R1Z.PV_RJDec_MemoryInstalled
+DONE 61341 R1Z.PV_RJDec_MemoryInstalled exit 1 wall 1.31 RSS 2708185088
+/home/dombarker/project-offloads/codex-pv-rjdec-20261028/sources/R1Z/PV_RJDec_MemoryInstalled.lean:9:0: warning: Definition `R1Z.PV_RJDec_MemoryInstalled.selected` of class type must be marked with `@[reducible]` or `@[implicit_reducible]`
+/home/dombarker/project-offloads/codex-pv-rjdec-20261028/sources/R1Z/PV_RJDec_MemoryInstalled.lean:17:17: warning: Variable name `ops` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-rjdec-20261028/sources/R1Z/PV_RJDec_MemoryInstalled.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op130 (Array.Insts.ZeroizeZeroize N (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) v
+in the target expression
+  (algebra base m z).zeroArray N v w =
+    {
+      outcome :=
+        PV_W_SourceSyntax.resultOutcome
+          (ExternalFuns.op130 (Array.Insts.ZeroizeZeroize N (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            v),
+      world := z.commit w (PV_RDCD_ZeroWorld.indexed (z.arrayAddress w v) 0 (↑N) (z.view w)), calls := [(w, none)] }
+
+inst✝ : ExternalTypes
+W S F D DF ZF AF C : Type
+ops : ExternalFuns
+base : PV_W_TypedEffects.Algebra W (Option C) Error
+m : PV_RunJoin_RuntimeMemory38.Memory W S F D DF ZF
+z : PV_RJDec_AsmMemory.Memory W AF
+N : Usize
+v : Std.Array U8 N
+w : W
+⊢ (algebra base m z).zeroArray N v w =
+    {
+      outcome :=
+        PV_W_SourceSyntax.resultOutcome
+          (ExternalFuns.op130 (Array.Insts.ZeroizeZeroize N (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            v),
+      world := z.commit w (PV_RDCD_ZeroWorld.indexed (z.arrayAddress w v) 0 (↑N) (z.view w)), calls := [(w, none)] }
+'R1Z.PV_RJDec_MemoryInstalled.reserve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJDec_MemoryInstalled.drop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJDec_MemoryInstalled.base_unchanged' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJDec_MemoryInstalled.array_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

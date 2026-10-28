@@ -1,0 +1,1085 @@
+{
+  "modules": [
+    {
+      "module": "R1Z.PV_RJDec_ParserR01",
+      "source_function": "pool_v1.payment_relation.decode_common",
+      "spliced": [
+        "atomic_statement.decode_digest_canonical",
+        "pool_v1.payment_relation.validate_common"
+      ],
+      "calls": [
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ASSET_ID_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.POOL_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r1"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.DEPLOYMENT_DOMAIN_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r2"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ANCHOR_SEQUENCE_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 8#usize core.marker.CopyU8) r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U64.from_le_bytes a3)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.ANCHOR_ROOT_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.NULLIFIER_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s4"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r4"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r5 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) bytes { start := pool_v1.payment_relation.NULLIFIER_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.ASSET_ID_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s5"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r7"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r8 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "spliced": "R1Z.PV_RJDec_Parser04"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.CommonPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR15",
+      "source_function": "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+      "chunked": true
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR06",
+      "source_function": "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
+      "spliced": [
+        "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR15"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) r (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateConstructor)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR12",
+      "source_function": "pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
+      "chunked": true
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR07",
+      "source_function": "pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1",
+      "spliced": [
+        "pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR12"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) r (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.SnapshotConstructor)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR19",
+      "source_function": "pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+      "spliced": [
+        "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
+        "pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES",
+          "expression": "pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes { \u00abend\u00bb := 8#usize }"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) pool_v1.pair_tree_profile.POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC { start := 0#usize, \u00abend\u00bb := 8#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 8#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 9#usize"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 10#usize, \u00abend\u00bb := 12#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 2#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 2#usize core.marker.CopyU8) r"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U16.from_le_bytes a)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i4)"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 12#usize, \u00abend\u00bb := 16#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r1"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a1)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i6)"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 16#usize, \u00abend\u00bb := 20#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s4"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r2"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a2)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i8)"
+        },
+        {
+          "label": "pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES",
+          "expression": "pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 20#usize, \u00abend\u00bb := 24#usize }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s5"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r3"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a3)"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (UScalar.cast .Usize i11)"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 24#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 25#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 26#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 27#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 28#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 29#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 30#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 31#usize"
+        },
+        {
+          "label": "32#usize",
+          "expression": "32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 32#usize, \u00abend\u00bb := i21 }"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR07"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i21 }"
+        },
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR06"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r5"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (U64.checked_add val.next_pair_index 1#u64)"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64) o (some val1.next_pair_index)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR08",
+      "source_function": "pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1",
+      "spliced": [
+        "pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR19"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransitionConstructor)"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR09",
+      "source_function": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+      "spliced": [
+        "atomic_statement.decode_digest_canonical",
+        "pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1"
+      ],
+      "calls": [
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.HISTORICAL_ANCHOR_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.LATE_STATEMENT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairForestTerminalFormatErrorV1 r2 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.LATE_STATEMENT_OFFSET, \u00abend\u00bb := i }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR08"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r4"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.MASTER_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.CHECKPOINT_ACCOUNT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s2"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_2.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r5 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.CHECKPOINT_ACCOUNT_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.SELECTED_LANE_ACCOUNT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s3"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_3.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r7 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.SELECTED_LANE_ACCOUNT_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.CHECKPOINT_SEQUENCE_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s4"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_4.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r9 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 7#usize"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := pool_v1.pair_forest_terminal.CHECKPOINT_SEQUENCE_OFFSET, \u00abend\u00bb := pool_v1.pair_forest_terminal.HISTORICAL_ANCHOR_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 s5"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1.closure_5.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PairForestTerminalFormatErrorV1 r11 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r12"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U64.from_le_bytes val6)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR11",
+      "source_function": "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+      "spliced": [
+        "pool_v1.payment_relation.validate_common"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.withdrawal_common",
+          "expression": "pool_v1.payment_relation.withdrawal_common public1"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "spliced": "R1Z.PV_RJDec_Parser04"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "spend.VALUE_LIMIT",
+          "expression": "spend.VALUE_LIMIT"
+        },
+        {
+          "label": "core.array.equality.PartialEqArray.eq",
+          "expression": "core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 public1.destination_token_account a"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.change_commitment"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR10",
+      "source_function": "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+      "spliced": [
+        "atomic_statement.decode_digest_canonical",
+        "pool_v1.payment_relation.decode_common",
+        "pool_v1.payment_relation.require_header",
+        "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1"
+      ],
+      "calls": [
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 216#usize bytes"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PaymentStatementFormatError r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.payment_relation.require_header",
+          "spliced": "R1Z.PV_RJDec_Parser02"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "pool_v1.payment_relation.decode_common",
+          "spliced": "R1Z.PV_RJDec_ParserR01"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 4#usize core.marker.CopyU8) r4"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.from_le_bytes a)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromArrayCopySlice.try_from",
+          "expression": "core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Array.Insts.CoreMarkerCopy 32#usize core.marker.CopyU8) r5"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r6"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r7 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r8"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_pool_v1_withdrawal_public_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR11"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1WithdrawalPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR18",
+      "source_function": "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+      "spliced": [
+        "pool_v1.payment_relation.validate_common"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.transfer_common",
+          "expression": "pool_v1.payment_relation.transfer_common public1"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_common",
+          "spliced": "R1Z.PV_RJDec_Parser04"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.recipient_commitment"
+        },
+        {
+          "label": "pool_v1.payment_relation.digest_is_canonical",
+          "expression": "pool_v1.payment_relation.digest_is_canonical public1.change_commitment"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR17",
+      "source_function": "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+      "spliced": [
+        "atomic_statement.decode_digest_canonical",
+        "pool_v1.payment_relation.decode_common",
+        "pool_v1.payment_relation.require_header",
+        "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1"
+      ],
+      "calls": [
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 216#usize bytes"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromSliceErrorPoolV1PaymentStatementFormatError r ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.payment_relation.require_header",
+          "spliced": "R1Z.PV_RJDec_Parser02"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET }"
+        },
+        {
+          "label": "lift",
+          "expression": "lift (core.num.U32.to_le_bytes pool_v1.payment_relation.POOL_V1_CANONICAL_FEE)"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) a { start := 0#usize, \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "pool_v1.payment_relation.decode_common",
+          "spliced": "R1Z.PV_RJDec_ParserR01"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET, \u00abend\u00bb := pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s2"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r4"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r5 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r6"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) val { start := pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }"
+        },
+        {
+          "label": "core.array.TryFromSharedArraySlice.try_from",
+          "expression": "core.array.TryFromSharedArraySlice.try_from 32#usize s3"
+        },
+        {
+          "label": "atomic_statement.unwrap_fixed_slice",
+          "expression": "atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r7"
+        },
+        {
+          "label": "atomic_statement.decode_digest_canonical",
+          "spliced": "R1Z.PV_RJDec_Parser03"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1.closure_2.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError r8 ()"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r9"
+        },
+        {
+          "label": "pool_v1.payment_relation.validate_pool_v1_private_transfer_public_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR18"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r10"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR13",
+      "source_function": "pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1",
+      "spliced": [
+        "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.decode_pool_v1_private_transfer_public_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR17"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.payment_relation.PoolV1PaymentStatementFormatError pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.PaymentConstructor)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR16",
+      "source_function": "pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1",
+      "spliced": [
+        "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.payment_relation.decode_pool_v1_withdrawal_public_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR10"
+        },
+        {
+          "label": "core.result.Result.map_err",
+          "expression": "core.result.Result.map_err (BuiltinFnOnce pool_v1.payment_relation.PoolV1PaymentStatementFormatError pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) r (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.PaymentConstructor)"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    },
+    {
+      "module": "R1Z.PV_RJDec_ParserR20",
+      "source_function": "pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1",
+      "spliced": [
+        "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+        "pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1",
+        "pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1",
+        "pool_v1.pair_forest_terminal.transition_kind",
+        "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1"
+      ],
+      "calls": [
+        {
+          "label": "pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES",
+          "expression": "pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8) bytes { \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.array.Array.index",
+          "expression": "core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC { start := 0#usize, \u00abend\u00bb := 4#usize }"
+        },
+        {
+          "label": "core.cmp.PartialEq.ne.trait_default",
+          "expression": "core.cmp.PartialEq.ne.trait_default (Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8) s s1"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 4#usize"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 5#usize"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.transition_kind",
+          "spliced": "R1Z.PV_RJDec_Parser00"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r"
+        },
+        {
+          "label": "Slice.index_usize",
+          "expression": "Slice.index_usize bytes 6#usize"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR09"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r1"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i5 }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR13"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+          "spliced": "R1Z.PV_RJDec_Parser21"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET",
+          "expression": "pool_v1.pair_forest_terminal.PAYMENT_STATEMENT_OFFSET"
+        },
+        {
+          "label": "core.slice.index.Slice.index",
+          "expression": "core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8) bytes { start := i5 }"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1",
+          "spliced": "R1Z.PV_RJDec_ParserR16"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r2"
+        },
+        {
+          "label": "pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1",
+          "spliced": "R1Z.PV_RJDec_Parser21"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTry.branch",
+          "expression": "core.result.Result.Insts.CoreOpsTry.branch r3"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        },
+        {
+          "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+          "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual"
+        }
+      ]
+    }
+  ],
+  "order": [
+    "R1Z.PV_RJDec_ParserR01",
+    "R1Z.PV_RJDec_ParserR15",
+    "R1Z.PV_RJDec_ParserR06",
+    "R1Z.PV_RJDec_ParserR12",
+    "R1Z.PV_RJDec_ParserR07",
+    "R1Z.PV_RJDec_ParserR19",
+    "R1Z.PV_RJDec_ParserR08",
+    "R1Z.PV_RJDec_ParserR09",
+    "R1Z.PV_RJDec_ParserR11",
+    "R1Z.PV_RJDec_ParserR10",
+    "R1Z.PV_RJDec_ParserR18",
+    "R1Z.PV_RJDec_ParserR17",
+    "R1Z.PV_RJDec_ParserR13",
+    "R1Z.PV_RJDec_ParserR16",
+    "R1Z.PV_RJDec_ParserR20"
+  ]
+}

@@ -1,0 +1,396 @@
+{
+  "attempt": 44897,
+  "module": "PV_L2C_CombinedAudit",
+  "source_sha256": "7aa9be8abfc2a4ee7fc574733cdeef742b0004a44db5d2c0122c788e68ea1242",
+  "origin": {
+    "authority": "h5 own git-tracked HEAD",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_CombinedAudit.lean",
+    "git_blob": "47e2f3099f906434aff8d7659995929c825f4c4a",
+    "sha256": "7aa9be8abfc2a4ee7fc574733cdeef742b0004a44db5d2c0122c788e68ea1242",
+    "imports": [
+      "PV_L2C_HonestCaller",
+      "PV_L2C_HonestHelper",
+      "PV_L2C_HonestValidity",
+      "PV_L2C_HonestSumcheck",
+      "PV_L2C_VecBack",
+      "PV_L2C_OwnedBalance",
+      "PV_L2C_RowEnumeration",
+      "PV_L2C_SelectedDense",
+      "PV_L2C_ExtractedGuard",
+      "PV_L2C_ParserSlices",
+      "PV_L2C_ComplexParser",
+      "PV_L2C_ParserHalves8",
+      "PV_L2C_QParser",
+      "PV_L2C_ScalarBalance",
+      "PV_L2C_ScalarCanonical",
+      "PV_L2C_CanonicalityBoundary",
+      "R1Z.PV_RunJoin_ConsumerBoundary25",
+      "PV_L2C_VecShape",
+      "PV_L2C_PackedMasks",
+      "PV_L2C_ExtractedM31Fold",
+      "PV_L2C_ExtractedRows",
+      "PV_L2C_VecWrite",
+      "PV_L2C_PaddingProducer",
+      "PV_L2C_PaddingConsumer",
+      "PV_L2C_M31",
+      "PV_L2C_NativeFold",
+      "PV_L2C_NativeBalance",
+      "PV_L2C_NativeQ",
+      "PV_L2C_QBalance",
+      "PV_L2C_Reducer",
+      "PV_L2C_SampleCanonical",
+      "PV_L2C_CanonicalParser",
+      "PV_L2C_QFold",
+      "PV_L2C_PaddingNative",
+      "PV_L2C_SparseFold",
+      "PV_L2C_ReferenceArithmetic",
+      "PV_L2C_SubPrimitive",
+      "PV_L2C_NormalizeSource",
+      "PV_L2C_ReferenceSub",
+      "PV_L2C_ReferenceQ",
+      "PV_L2C_FirstInactive",
+      "PV_L2C_VecRead",
+      "PV_L2C_ExtractedFold"
+    ],
+    "tracked_conflicts": []
+  },
+  "source_revision": "d8ce511a005d7ad491ab51bfa1fdcfff08cf34ab",
+  "exit": 0,
+  "wall_seconds": 4.708960164047312,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T07:06:37.111745+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 42815455232,
+    "projected_reserved_bytes": 51405389824
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-44897",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "44897"
+  ],
+  "dependencies": {
+    "PV_L2C_CanonicalParser": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CanonicalParser.olean",
+      "sha256": "31902f03c5685b3a4410d4345f6447692ab1cab048a37fa65026772c17ff02b4"
+    },
+    "PV_L2C_CanonicalityBoundary": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_CanonicalityBoundary.olean",
+      "sha256": "7126a699792743ad50cfac58fcb06b69046ecc433f4109330d9e1861aaf15459"
+    },
+    "PV_L2C_ComplexParser": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ComplexParser.olean",
+      "sha256": "191c2910b4ccbef544ee616ad6e65f4773549443b05e077bcb775847e08e2e8b"
+    },
+    "PV_L2C_ExtractedFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedFold.olean",
+      "sha256": "05cc361fbf6badd762537dae8102fac3a231e0cb3a002f9b2c6588422852c1b8"
+    },
+    "PV_L2C_ExtractedGuard": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedGuard.olean",
+      "sha256": "1e137c856d47d18576904227c4ed2bda5d7994a0858dc5e4182c03191517c2a9"
+    },
+    "PV_L2C_ExtractedM31Fold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedM31Fold.olean",
+      "sha256": "d44d6b701f5e91f32ef604ec25d20709ef8c11f99517dc6a8ac856615b8a612f"
+    },
+    "PV_L2C_ExtractedRows": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ExtractedRows.olean",
+      "sha256": "d740f08f4c4c2dda01a36e952a87235ffb82d611dcf4aafb6577e64c4c6cd375"
+    },
+    "PV_L2C_FirstInactive": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_FirstInactive.olean",
+      "sha256": "cbd31a4e8b77d7ef5c0a14c37cbb596aaece9d584800ccc7af893c58a20ccf87"
+    },
+    "PV_L2C_HonestCaller": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HonestCaller.olean",
+      "sha256": "a8701f732eae885f36e0eaa3c0ee4858dfa9e971040d4742fa6ae1f0ec0d344f"
+    },
+    "PV_L2C_HonestHelper": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HonestHelper.olean",
+      "sha256": "12b97341bfdad54594843ec0be6e9411ba96d8358d1b150774cb998e921bc109"
+    },
+    "PV_L2C_HonestSumcheck": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HonestSumcheck.olean",
+      "sha256": "f88b1a64b34b3db637d9cd0509644fb9d8b93d3ee4e22316c11646509b3d00c8"
+    },
+    "PV_L2C_HonestValidity": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_HonestValidity.olean",
+      "sha256": "2f2e0a03f01076a81ddcf583cc0960544cb4e417ae239732273d8d652daf3a6a"
+    },
+    "PV_L2C_M31": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_M31.olean",
+      "sha256": "f6a461f6ccb55749123b68194bea4f844f529bedb55ded9d057d3702f9a47389"
+    },
+    "PV_L2C_NativeBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeBalance.olean",
+      "sha256": "acd6c16842bd700c90f11fc7cfedb33c353e10fcb255bbcce7ad78be4edf9d57"
+    },
+    "PV_L2C_NativeFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeFold.olean",
+      "sha256": "6a34376749a18acd02cff5ddaaa8d3fc5d4a816e352112b4cb6012093a5b9046"
+    },
+    "PV_L2C_NativeQ": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NativeQ.olean",
+      "sha256": "5741a65a0a7fa9283c7c86357b506069fb11cd006b23b630cb98c21bb4eb734d"
+    },
+    "PV_L2C_NormalizeSource": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_NormalizeSource.olean",
+      "sha256": "342e4b9e1ed2049254ac88fc3711097285efbb5a7ef8431cbb164394b81c8de5"
+    },
+    "PV_L2C_OwnedBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_OwnedBalance.olean",
+      "sha256": "96ec372748ba2bcc7fc1d3751c86ed2c5b154cf109ae359d6c24d0d63bcf1bac"
+    },
+    "PV_L2C_PackedMasks": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PackedMasks.olean",
+      "sha256": "6a2b25724fddac5672a2f5dafeb6f1462b05e6b27a36b3128070f91e10add314"
+    },
+    "PV_L2C_PaddingConsumer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingConsumer.olean",
+      "sha256": "cebaa15268b3000e876087415d87eedcf9e4649fd1946e9075de6ada09585692"
+    },
+    "PV_L2C_PaddingNative": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingNative.olean",
+      "sha256": "8e87513dbf9cc731f38d5dd3c31d1e1a55ef687d56327c0933409fa65202d95f"
+    },
+    "PV_L2C_PaddingProducer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_PaddingProducer.olean",
+      "sha256": "5bac7acdbfd921668a92f38b1e6b9570899f5e2bbf8f82032ca916de37232400"
+    },
+    "PV_L2C_ParserHalves8": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ParserHalves8.olean",
+      "sha256": "a95836ebd0f5da96f804abd40f6f826ef51828d5e15703ce1ac7ba69125d60dd"
+    },
+    "PV_L2C_ParserSlices": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ParserSlices.olean",
+      "sha256": "21414dfad80915fb985f61c03128fa43b3e86a31a8055da094d685d2ff9f21d9"
+    },
+    "PV_L2C_QBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_QBalance.olean",
+      "sha256": "ee9f718329a2d55977ca1fb6a879dc70a356b0cb19b0fa4e3d9c0a858f600241"
+    },
+    "PV_L2C_QFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_QFold.olean",
+      "sha256": "422950e1ce775e5c93d02b764a73146e4a1f686e6438acfb793675f155c0ab55"
+    },
+    "PV_L2C_QParser": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_QParser.olean",
+      "sha256": "84b9a0d6e60afdc7d9adf8a0c061a3902ec07acab6c37b32b40b8a7befda3222"
+    },
+    "PV_L2C_Reducer": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_Reducer.olean",
+      "sha256": "98ad71c7b840b2d3230418e296507c2966c06f5d92a7d015b8dded88b7275094"
+    },
+    "PV_L2C_ReferenceArithmetic": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceArithmetic.olean",
+      "sha256": "b06c9b8735f2ed3236a3df67914dd2021f49f394d1513e5c71fa02dd7b1d0fa4"
+    },
+    "PV_L2C_ReferenceQ": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceQ.olean",
+      "sha256": "b271c1f4cbaabc87876ded4fd539585877aaaad1d8ef38edbf6734213cec70bc"
+    },
+    "PV_L2C_ReferenceSub": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ReferenceSub.olean",
+      "sha256": "377acb47469e5ec4ba6d68662d0ee36c7aaabb7a796636630a01f1caf7854af9"
+    },
+    "PV_L2C_RowEnumeration": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_RowEnumeration.olean",
+      "sha256": "2f8285f9f53c32d2cb22d99b85fcd97f7ecdf15074c17ccbdd15eb1bade892be"
+    },
+    "PV_L2C_SampleCanonical": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SampleCanonical.olean",
+      "sha256": "a7613e8a909a509e37f6d866f7d358899485f188618bcd967e5ed78c1394839a"
+    },
+    "PV_L2C_ScalarBalance": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ScalarBalance.olean",
+      "sha256": "e0b983bf1687ad3cc41cc5dcf736bf566867e4999161888678279e7bc411bbed"
+    },
+    "PV_L2C_ScalarCanonical": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_ScalarCanonical.olean",
+      "sha256": "160d81b6e2e52f1816359c7b31ad0a231b30d73e1a384197a471becc855ed333"
+    },
+    "PV_L2C_SelectedDense": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SelectedDense.olean",
+      "sha256": "4c915f53198a47c809d3bf36c42f0418cc69140d0711a7387f6c84a8ae5bb3cb"
+    },
+    "PV_L2C_SparseFold": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SparseFold.olean",
+      "sha256": "0eaf1d76d19d6238c7e60ccbfe2448b06ff6728180ba15a82ca184aedd656317"
+    },
+    "PV_L2C_SubPrimitive": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_SubPrimitive.olean",
+      "sha256": "206d358b6754ced151076a7067f349ae799c15be17a076ca0cb5057c2fb561ef"
+    },
+    "PV_L2C_VecBack": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecBack.olean",
+      "sha256": "77d5053c4bd55c249bb51914467fa7352316203725f545ab7079147a034b1474"
+    },
+    "PV_L2C_VecRead": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecRead.olean",
+      "sha256": "66a2688e5505943624c6f4001f3af3dd86d479dd4a8dad33c834cbc8741376a9"
+    },
+    "PV_L2C_VecShape": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecShape.olean",
+      "sha256": "fe6b17a4283adbc23ec3001084020869a95513f11455491ef12aa3a09f43a3e2"
+    },
+    "PV_L2C_VecWrite": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_VecWrite.olean",
+      "sha256": "b955b20a59bd09e7eddbab02c0995946d9768bccc3c13e5cd55a5e6ee59ad4b2"
+    },
+    "R1Z.PV_RunJoin_ConsumerBoundary25": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/R1Z/PV_RunJoin_ConsumerBoundary25.olean",
+      "sha256": "f3aa68c84e87e722d14989adbbacfa278ffbe4ee8dfe9c0232dbe393a21cbd2b"
+    }
+  },
+  "deps_fingerprint": "0be624ad19efbf32244436d031c2f071eae5d555087d4f60141de21482779bc7",
+  "axioms": [
+    "'PV_L2C_PaddingProducer.sampled_active' depends on axioms: [propext]",
+    "'PV_L2C_PaddingProducer.balanced_active' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingProducer.balanced_sum' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingProducer.padding_guards' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingConsumer.active_branch' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingConsumer.sum_branch' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingConsumer.scan_false' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_PaddingConsumer.all_active_branches' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_M31.subtractP_branch' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.subtractP_nat' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.subtractP_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.add_nat' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.add_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.add_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.subtractP_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.sub_input_nat' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.sub_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.sub_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.decode_injective' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_M31.zero_guard' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeFold.fold_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeFold.fold_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeFold.fold_zero_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeFold.negate_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeBalance.rebalance_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeBalance.rebalance_decode_sum' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeBalance.audit_zero' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeBalance.audit_branch' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.zero_canonical' does not depend on any axioms",
+    "'PV_L2C_NativeQ.add_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.sub_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.add_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.sub_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.decode_injective' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.zero_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_NativeQ.zero_guard' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_QBalance.fold_component' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QBalance.rebalance_component' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QBalance.rebalance_audit' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QBalance.rebalance_branch' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_Reducer.first_bound' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_Reducer.second_bound' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_Reducer.fold_decode' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_Reducer.reduction_bound' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SampleCanonical.scalar_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SampleCanonical.tuple_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SampleCanonical.secure_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalParser.word_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalParser.scalar_parse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_QFold.canonical_fold' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QFold.decode_fold' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QFold.tableSum_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_QFold.tableSum_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_QFold.inactive_canonical' depends on axioms: [propext]",
+    "'PV_L2C_QFold.inactive_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_QFold.native_add_zero' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_PaddingNative.without_canonical' depends on axioms: [propext]",
+    "'PV_L2C_PaddingNative.excluded_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_PaddingNative.rebalance_canonical' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_PaddingNative.excluded_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingNative.rebalance_decode' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingNative.raw_sum_zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingNative.sample_canonical' depends on axioms: [propext]",
+    "'PV_L2C_PaddingNative.active_zero' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_PaddingNative.guard_outcomes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SparseFold.dense_projection' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_SparseFold.source_sum' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ReferenceArithmetic.m31_add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SubPrimitive.wrapped_sub' does not depend on any axioms",
+    "'PV_L2C_SubPrimitive.wrapped_add' does not depend on any axioms",
+    "'PV_L2C_NormalizeSource.wrap_eta' does not depend on any axioms",
+    "'PV_L2C_NormalizeSource.modulus' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NormalizeSource.normalize_native' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NormalizeSource.sub_input' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_NormalizeSource.sub_cut' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceSub.m31_sub' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.source_roundtrip' depends on axioms: [propext]",
+    "'PV_L2C_ReferenceQ.model_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.source_zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.add_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.sub_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.add_actual' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ReferenceQ.sub_actual' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_FirstInactive.returned' depends on axioms: [propext]",
+    "'PV_L2C_FirstInactive.table_returned' depends on axioms: [propext]",
+    "'PV_L2C_VecRead.bound1024' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_VecRead.read' depends on axioms: [propext]",
+    "'PV_L2C_VecRead.read_active' depends on axioms: [propext]",
+    "'PV_L2C_ExtractedFold.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedFold.canonical_sum' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedFold.zero_sum' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_VecWrite.index_mut' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_VecWrite.write' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_ExtractedRows.row_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedRows.read_step' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedRows.fold_source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedM31Fold.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedM31Fold.zero_sum' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PackedMasks.inserted_bit' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PackedMasks.put_contains' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PackedMasks.packed_contains' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_VecShape.length' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_VecShape.active_read' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestCaller.identification' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestCaller.returned_bank' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestCaller.builder_sound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestHelper.total' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestHelper.inactive' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestValidity.valid' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestSumcheck.initial' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestSumcheck.chain' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HonestSumcheck.terminal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_VecBack.index_mut' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_VecBack.write' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_OwnedBalance.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_RowEnumeration.enumeration' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SelectedDense.selected_sum' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ExtractedGuard.padding_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ComplexParser.parse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_QParser.parse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ScalarBalance.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ScalarCanonical.output_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalityBoundary.decoded_equality_insufficient' depends on axioms: [propext, Quot.sound]"
+  ],
+  "peak_rss_bytes": 4979679232,
+  "swaps": "0",
+  "host_wall": "0:04.70",
+  "accepted": true
+}

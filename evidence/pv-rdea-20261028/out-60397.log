@@ -1,0 +1,142 @@
+theorem R1Z.PV_RDEA_V181.reachable_bound : R1Z.PV_RDEA_V181.reservationCapacity < 9223372036854775807 :=
+id (Decidable.byContradiction fun a => R1Z.PV_RDEA_V181.reachable_bound._proof_1 a)
+theorem R1Z.PV_RDEA_V181.reachable_constructor : ∀ {S F : Type}
+  (step : R1Z.PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S) (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F),
+      R1Z.PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+          R1Z.PV_RDEA_V181.reservationCapacity w =
+        R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address)
+          R1Z.PV_RDEA_V181.reservationCapacity w :=
+fun {S F} step shape width address w =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (ite_congr (Eq.refl (69 > 18446744073709551615))
+            (fun a =>
+              Eq.refl
+                { returned := Except.error R1Z.PV_RDB1_V183_ReserveWorld.Error.capacityOverflow,
+                  buffer := R1Z.PV_RDB1_V181.empty address, world := w })
+            fun a =>
+            ite_congr
+              (congrFun' (congrArg GT.gt (Eq.trans (congrArg (HMul.hMul 69) width) (Nat.mul_one 69)))
+                9223372036854775807)
+              (fun a =>
+                Eq.refl
+                  { returned := Except.error R1Z.PV_RDB1_V183_ReserveWorld.Error.capacityOverflow,
+                    buffer := R1Z.PV_RDB1_V181.empty address, world := w })
+              fun a =>
+              ite_congr (Eq.refl (69 = 0))
+                (fun a => Eq.refl { returned := Except.ok (), buffer := R1Z.PV_RDB1_V181.empty address, world := w })
+                fun a =>
+                Eq.refl (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+        (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+    (Decidable.casesOn (Nat.decLt 18446744073709551615 69)
+      (fun h =>
+        Eq.mpr
+          (id
+            (congrFun' (congrArg Eq (if_neg h))
+              (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+          (Decidable.casesOn (Nat.decLt 9223372036854775807 69)
+            (fun h =>
+              Eq.mpr
+                (id
+                  (congrFun' (congrArg Eq (if_neg h))
+                    (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+                (Eq.refl
+                  (if 69 = 0 then { returned := Except.ok (), buffer := R1Z.PV_RDB1_V181.empty address, world := w }
+                  else R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+            fun h =>
+            Eq.mpr
+              (id
+                (congrFun' (congrArg Eq (if_pos h))
+                  (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+              (Classical.byContradiction fun a => R1Z.PV_RDEA_V181.reachable_constructor._proof_3 shape h)))
+      fun h =>
+      Eq.mpr
+        (id
+          (congrFun' (congrArg Eq (if_pos h))
+            (R1Z.PV_RDB1_V183_ReserveWorld.finish step shape (R1Z.PV_RDB1_V181.empty address) 69 w)))
+        (Classical.byContradiction fun a => R1Z.PV_RDEA_V181.reachable_constructor._proof_2 shape h))
+theorem R1Z.PV_RDEA_V181.consumer : ∀ {S F R : Type} (step : R1Z.PV_RDB1_V183_ReserveWorld.Request → S → Option ℕ × S)
+  (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F)
+      (consume : R1Z.PV_RDB1_V183_ReserveWorld.Execution Aeneas.Std.U8 S F → Aeneas.Std.Result R),
+      consume
+          (R1Z.PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+            R1Z.PV_RDEA_V181.reservationCapacity w) =
+        consume
+          (R1Z.PV_RDB1_V181.reference step 18446744073709551615 9223372036854775807 shape address
+            R1Z.PV_RDEA_V181.reservationCapacity w) :=
+fun {S F R} step shape width address w consume =>
+  R1Z.PV_RDB1_V181.with_handlers step 18446744073709551615 9223372036854775807 shape width address
+    R1Z.PV_RDEA_V181.reservationCapacity w consume
+theorem R1Z.PV_RDEA_V181.null_allocator_rejects : ∀ {S F : Type} (shape : R1Z.PV_RDB1_V183_ReserveWorld.Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : R1Z.PV_RDB1_V183_ReserveWorld.World S F),
+      (R1Z.PV_RDB1_V181.deployed (fun x s => (none, s)) 18446744073709551615 9223372036854775807 shape address
+            R1Z.PV_RDEA_V181.reservationCapacity w).returned ≠
+        Except.ok () :=
+fun {S F} shape width address w =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a.returned ≠ Except.ok ())
+        (R1Z.PV_RDEA_V181.reachable_constructor (fun x s => (none, s)) shape width address w)))
+    (of_eq_true
+      (Eq.trans (congrArg Not (eq_false' fun h => False.elim (noConfusion_of_Nat Except.ctorIdx h))) not_false_eq_true))
+theorem R1Z.PV_RDEA_V178.consumer : ∀ {P W R : Type} (asRef : P → Aeneas.Std.Result (List Aeneas.Std.U8))
+  (clone : List Aeneas.Std.U8 → W → Aeneas.Std.Result (R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 × W))
+  (append :
+    R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 →
+      List Aeneas.Std.U8 → W → Aeneas.Std.Result (R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 × W))
+  (absolute needSep : Bool) (base : List Aeneas.Std.U8) (arg : P) (w : W)
+  (consume : Aeneas.Std.Result (R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 × W) → R),
+  R1Z.PV_RDEA_V178.adapter asRef clone append absolute needSep base arg w consume =
+    consume do
+      let path ← asRef arg
+      let (b, w') ← clone base w
+      R1Z.PV_RDB1_V178.repairedPush append absolute needSep b path w' :=
+fun {P W R} asRef clone append absolute needSep base arg w consume =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg consume
+            (congrArg (bind (asRef arg))
+              (funext fun path => R1Z.PV_RDB1_V178.join_repaired clone append absolute needSep base path w))))
+        (consume do
+          let path ← asRef arg
+          let (b, w') ← clone base w
+          R1Z.PV_RDB1_V178.repairedPush append absolute needSep b path w'))
+      (eq_self
+        (consume do
+          let path ← asRef arg
+          let (b, w') ← clone base w
+          R1Z.PV_RDB1_V178.repairedPush append absolute needSep b path w')))
+theorem R1Z.PV_RDEA_V178.clone_rejection : ∀ {W : Type}
+  (append :
+    R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 →
+      List Aeneas.Std.U8 → W → Aeneas.Std.Result (R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 × W))
+  (absolute needSep : Bool) (base path : List Aeneas.Std.U8) (w : W)
+  (returned : R1Z.PV_RDB1_V183_ReserveWorld.Buffer Aeneas.Std.U8 × W),
+  R1Z.PV_RDB1_V178.sourceJoin (fun x x_1 => Aeneas.Std.Result.fail Aeneas.Std.Error.panic) append absolute needSep base
+      path w ≠
+    Aeneas.Std.Result.ok returned :=
+fun {W} append absolute needSep base path w returned =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a ≠ Aeneas.Std.Result.ok returned)
+        (R1Z.PV_RDB1_V178.clone_failure append absolute needSep base path w)))
+    fun h =>
+    let ⟨⟩ := Aeneas.Std.Result.ok returned
+    h
+'R1Z.PV_RDEA_V181.reachable_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDEA_V181.reachable_constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_V181.consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_V181.null_allocator_rejects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_V178.consumer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEA_V178.clone_rejection' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=0
+window=0 slot=global env=J launcher=run-joint.sh

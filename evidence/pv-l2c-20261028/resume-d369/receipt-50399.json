@@ -1,0 +1,86 @@
+{
+  "attempt": 50399,
+  "module": "PV_L2C_D371FocusedReplay",
+  "source_sha256": "e376250f1da0e57c9a3a10d3843add2bcd21a1bb9d7c4d279b0c305db402f852",
+  "origin": {
+    "tracked_conflicts": [],
+    "authority": "h5 own git-tracked HEAD",
+    "path": "docs/research/v8-r0-zk-20261009/lean/PV_L2C_D371FocusedReplay.lean",
+    "git_blob": "d2292378f8d87ca2d9089d4b3714a13c8af59a1c",
+    "sha256": "e376250f1da0e57c9a3a10d3843add2bcd21a1bb9d7c4d279b0c305db402f852",
+    "imports": [
+      "PV_L2C_D371CombinedAudit",
+      "PV_L2C_D371FixtureAudit",
+      "PV_L2C_FocusedReplay"
+    ]
+  },
+  "source_revision": "08f44c5482f9c30befd8685918e936003b09fac9",
+  "exit": 0,
+  "wall_seconds": 1.7000024300068617,
+  "reservation": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T14:37:50.795655+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 25635586048,
+    "projected_reserved_bytes": 34225520640
+  },
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=l2c-batch-50397",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "-u",
+    "-c",
+    "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+    "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+    "50397"
+  ],
+  "dependencies": {
+    "PV_L2C_D371CombinedAudit": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_D371CombinedAudit.olean",
+      "sha256": "c9f73f6ab2d5348f9c697644f784d15a0a689ddbf10ebda7b6b3460754c990a6"
+    },
+    "PV_L2C_D371FixtureAudit": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_D371FixtureAudit.olean",
+      "sha256": "ef696880f3c96f9aa6a5b105c65f6a62d4e2bb43a058749dbc04acdd7b012019"
+    },
+    "PV_L2C_FocusedReplay": {
+      "path": "/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/objects/PV_L2C_FocusedReplay.olean",
+      "sha256": "148d361139818509226210c5c32b279bdb69dd0ccaeba0d4d709790481e87cb4"
+    }
+  },
+  "deps_fingerprint": "6c2b00864a137cae426eef69e31a8116278a5e53e1e948761c5f634cf2d16705",
+  "axioms": [
+    "'PV_L2C_ClientRoute.transfer_columns' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_ClientRoute.withdrawal_columns' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaterialN3.transfer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_MaterialN3.withdrawal' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_PaddingComplete.complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_N4Control.complete' depends on axioms: [propext, Quot.sound]",
+    "'PV_L2C_InverseField.complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_InterpolationDenominator.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_HelperReturn.honest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.initial' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.chained' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_SumcheckControl.final' depends on axioms: [propext, Classical.choice, Quot.sound]",
+    "'PV_L2C_CanonicalFixtureDomain.both' depends on axioms: [propext, Classical.choice, Quot.sound]"
+  ],
+  "peak_rss_bytes": 5019381760,
+  "swaps": "0",
+  "host_wall": "0:01.69",
+  "accepted": true
+}

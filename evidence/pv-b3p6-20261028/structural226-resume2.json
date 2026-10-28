@@ -1,0 +1,1253 @@
+{
+  "revision": "1d827058fcce06bfe207930866e8415bb088a3a0",
+  "evidence_class": "structural (K-1 substitute)",
+  "native_sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e",
+  "owned_sha256": "d6c9763ef468d75606961a78cafbb762e52470c6564269bdcb43de34e9263d8c",
+  "reference_sha256": "a320e7cb4a293b3f64ae3cd84cdee2cfc25f5fd8cb91392d4b5b9ee869a3e205",
+  "symbolic_variants": [
+    {
+      "withdrawal": false,
+      "bytes": 1455,
+      "padding": 17,
+      "field_words": 361,
+      "symbolic_events_sha256": "602887e6a4548e77edd57bc88aee26150ad2fb4e9100637551225d68e8d2dbaf"
+    },
+    {
+      "withdrawal": true,
+      "bytes": 1427,
+      "padding": 45,
+      "field_words": 354,
+      "symbolic_events_sha256": "297a314afb908f8756248f142c1e0a4292a5e59cee522a8047c9588f79cea153"
+    }
+  ],
+  "word_values": "arbitrary symbolic labels; no concrete field fixtures",
+  "index_domain": "all bytes in both finite serializer layouts plus padding",
+  "native_link_credit": true,
+  "row_closed": true,
+  "retained_obligations": [],
+  "warning": "Structural source argument under ruling(k\u2032), not a Lean theorem of native machine execution or Kani evidence. Compiler/standard-library source reading is explicit; no native equality axiom is introduced.",
+  "checker_source_path": "tools/pv-b3p6-20261028/structural_resume226.py",
+  "checker_sha256": "d8eb1b4f582a1fdadb85a5b6916ebeaf9e08ff37292ad8aa15b06c5fe407783e",
+  "emission_fidelity": {
+    "body_edits": false,
+    "mutable_writes": 0,
+    "raw_types_sha256": "4e3df4c22b5afed771be7804f0f0d93dcc2fbb3c8248d30568576e9d88ccba0a",
+    "raw_funs_sha256": "feb475ad7815aa497d1b5c6dfc4a337e1744ccc2eba1c457499ce3f9cd64bb1c",
+    "ported_types_sha256": "18a708f3dc60c289b6596c90d4ecee27da928eeda2e9427a01e7726429660528",
+    "ported_funs_sha256": "b85d4765283287307b51f96c882291ca3bf4a6c4db059b68fff02513bed8d1df"
+  },
+  "native_plan_source_tokens_match": true,
+  "differences_and_lean_laws": [
+    {
+      "difference": "Read-only native references and semantic Option fields become copied owned fields; unused pool/domain metadata does not occur in the checked native main",
+      "laws": [
+        "PV_B3P_ProjectV3Law226.project_exact",
+        "PV_B3P_PublicCarrier226V3.roundtrip",
+        "PV_B3P_PublicCarrier226V3.reverse_roundtrip"
+      ]
+    },
+    {
+      "difference": "Locally mutated Vec becomes owned Vec state threaded through identical push/extend operations; partial error buffers are unobservable because native returns Err and the Vec is local",
+      "laws": [
+        "PV_B3P_NativeFieldsVec226.complete_result",
+        "PV_B3P_NativeSteps226.complete_result",
+        "PV_B3P_NativePlan226.complete_result"
+      ]
+    },
+    {
+      "difference": "The two explicit twenty-row frontier call chains become flattened field sequences, in identical row/lane order",
+      "laws": [
+        "PV_B3P_ReadTwenty226.same",
+        "PV_B3P_NativeIdentities226.frontier_groups",
+        "PV_B3P_NativeGroups226.complete_result"
+      ]
+    },
+    {
+      "difference": "Absent optional recipient/amount calls become empty field lists",
+      "laws": [
+        "PV_B3P_NativeIdentities226.fields_empty",
+        "PV_B3P_NativePlan226.payload_value"
+      ]
+    },
+    {
+      "difference": "One canonicality guard and four-byte native endian append become four identical guards followed by individual byte lanes; every failure is Error.Public",
+      "laws": [
+        "PV_B3P_WordLaw226V3.complete_word",
+        "PV_B3P_AppendFields226.repeated_byte_checks",
+        "PV_B3P_EndianVerified226V3.word_bytes",
+        "PV_B3P_NativeFieldByte226V3.complete_result"
+      ]
+    },
+    {
+      "difference": "Native U64 endian append becomes eight width-bounded shifted byte lanes",
+      "laws": [
+        "PV_B3P_IndexLane226.native_value",
+        "PV_B3P_EndianVerified226V3.index_bytes",
+        "PV_B3P_ScalarValue226.index"
+      ]
+    },
+    {
+      "difference": "Reference fixed chunk staging groups the identical sequential byte-check spine into 8/64/1472 cells; all array reads are in bounds",
+      "laws": [
+        "PV_B3P_ChunkV3Law226.complete_result",
+        "PV_B3P_Chunk64Law226.complete_result",
+        "PV_B3P_EncodeLaw226.complete_result",
+        "PV_B3P_ResultSpine226.collect_append",
+        "PV_B3P_BlockProjection226.success_cell",
+        "PV_B3P_EncodeSuccess226.success_chunk"
+      ]
+    },
+    {
+      "difference": "Reference evaluates17/45 extra zero padding cells and trims their successful suffix; preceding error/failure/divergence tags are unchanged",
+      "laws": [
+        "PV_B3P_Padding226.value",
+        "PV_B3P_ResultSpine226.padding",
+        "PV_B3P_EncodeLength226.success_length",
+        "PV_B3P_WholeBuffer226.value"
+      ]
+    },
+    {
+      "difference": "Byte regions use direct indexed projections rather than native nested fields calls; every symbolic cell has the same source field and lane and all dynamic guards have the same order",
+      "laws": [
+        "PV_B3P_DigestRegionValue226V3.anchor",
+        "PV_B3P_DigestRegionValue226V3.nullifier",
+        "PV_B3P_LateValue226.recipient",
+        "PV_B3P_LateValue226.change",
+        "PV_B3P_LateValue226.frontier",
+        "PV_B3P_LateValue226.next_root",
+        "PV_B3P_LateValue226.next_frontier",
+        "PV_B3P_ScalarValue226.asset",
+        "PV_B3P_ScalarValue226.amount",
+        "PV_B3P_ScalarValue226.index",
+        "PV_B3P_Regions226V3.discriminant",
+        "PV_B3P_ScalarRegions226.recipient_tag",
+        "PV_B3P_ScalarRegions226.withdrawal_tag"
+      ]
+    },
+    {
+      "difference": "Install the callback in the original ProverRwFull carrier, preserving every other operation and both success variants",
+      "laws": [
+        "PV_B3P_Closure226.complete_result",
+        "PV_B3P_Closure226.value",
+        "PV_B3P_Closure226.nonvacuity",
+        "PV_B3P_Install226V3.source_complete",
+        "PV_B3P_Install226V3.error_tag",
+        "PV_B3P_Install226V3.fail_tag",
+        "PV_B3P_Install226V3.div_tag"
+      ]
+    }
+  ],
+  "row": "V243",
+  "op": 226,
+  "checked_lean_modules": [
+    {
+      "module": "PV_B3P_AppendFields226",
+      "source_sha256": "e08b763598444dcf14dc29f7ed1e52f4a1fb65b1bf8ce15b0399cf2213e29f1c",
+      "blob": "305ab7dd43e8f915c88a601915273bea9a73ec35",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50553/receipt/receipt.json",
+      "attempt": 50553,
+      "axioms": [
+        "'PV_B3P_AppendFields226.append_segments_value' depends on axioms: [propext]",
+        "'PV_B3P_AppendFields226.native_fields_complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_AppendFields226.repeated_byte_checks' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ArrayEight226",
+      "source_sha256": "b3abfbc8aa54de43102486046c195404e1f352057f38fb924a11adc31863acc9",
+      "blob": "e98b8c50109224b1e7ce65d2238b8b04e6ab6b47",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50508/receipt/receipt.json",
+      "attempt": 50508,
+      "axioms": [
+        "'PV_B3P_ArrayEight226.values' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_BlockProjection226",
+      "source_sha256": "5783385b254fae0cb8dcf8920c0a9f14e407ebd4f4d3a6d3879d99a2dcb50b56",
+      "blob": "1da932f6d679e8a71e9ac51b0fc7adbafa960ae8",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50519/receipt/receipt.json",
+      "attempt": 50519,
+      "axioms": [
+        "'PV_B3P_BlockProjection226.offset_val' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_BlockProjection226.success_blocks' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_BlockProjection226.success_cell' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ByteCellValue226",
+      "source_sha256": "4affd5049778c1be1b412e9b00c246a6c0653c58469a88e68142e0ace1c8b0fe",
+      "blob": "dc829f62825772644069336fef58d99593577f7d",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50545/receipt/receipt.json",
+      "attempt": 50545,
+      "axioms": [
+        "'PV_B3P_ByteCellValue226.success_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ByteLayout226V3",
+      "source_sha256": "a9d3dd0013beab4d03ef5e783648be1c60b95b887b71bd71d79ac5ddc70f7c6d",
+      "blob": "6e62e5c74a6b8d8f84219bdadebfc3f890e78d0d",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50515/receipt/receipt.json",
+      "attempt": 50515,
+      "axioms": [
+        "'PV_B3P_ByteLayout226V3.fields_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteLayout226V3.frontier_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteLayout226V3.layout_length' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ByteOutput226",
+      "source_sha256": "c820cb6c16d4a5e2890ea9e6685c85bee39f7b3e54858192612dff41e4c90d42",
+      "blob": "211684b533d46779784192e414aff86e9ccb43e1",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50547/receipt/receipt.json",
+      "attempt": 50547,
+      "axioms": [
+        "'PV_B3P_ByteOutput226.flatten_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteOutput226.bytes_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteOutput226.bytes_length' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ByteScalar226V3",
+      "source_sha256": "0663208df411c966444f93463401b3d3f2cd5548db0c3c03e04b8e1c49f38459",
+      "blob": "00102165fb3e12bbd42e996e44e1f13f34553f50",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50524/receipt/receipt.json",
+      "attempt": 50524,
+      "axioms": [
+        "'PV_B3P_ByteScalar226V3.canonical_yes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteScalar226V3.canonical_no' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteScalar226V3.field_reject' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteScalar226V3.field_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteScalar226V3.padding' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ByteTotal226V3",
+      "source_sha256": "524a8bad67c0bae3f84ca337de651436c289bf85db2e4edd9f91bac529d33c6d",
+      "blob": "c5efe3a9d669ea573d5ca6ffd8e1641b9e82fd72",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50575/receipt/receipt.json",
+      "attempt": 50575,
+      "axioms": [
+        "'PV_B3P_ByteTotal226V3.field_total' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ByteTotal226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_BytesV3Emission226",
+      "source_sha256": "b85d4765283287307b51f96c882291ca3bf4a6c4db059b68fff02513bed8d1df",
+      "blob": "793d4af83cc2c180e917340516cf78d628aa3adc",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50501/receipt/receipt.json",
+      "attempt": 50501,
+      "axioms": [
+        "'PV_B3P_226V3.aspis_core.field.M31.ZERO' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.field_byte' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.byte_at' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.chunk8' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.chunk' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.encode_owned' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.project' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_226V3.reference226.public_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_BytesV3Types226",
+      "source_sha256": "18a708f3dc60c289b6596c90d4ecee27da928eeda2e9427a01e7726429660528",
+      "blob": "84446a4293adca3e1e024772b5146e4d7a74a41c",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50500/receipt/receipt.json",
+      "attempt": 50500,
+      "axioms": []
+    },
+    {
+      "module": "PV_B3P_Chunk64Law226",
+      "source_sha256": "f2483a07c2c9441696bbf0ac5b99e35ba9ec03e573ef8aa6d929f1738ba38eb5",
+      "blob": "036783ab8c2a36022c2b6ab8cbd36251d0403712",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50513/receipt/receipt.json",
+      "attempt": 50513,
+      "axioms": [
+        "'PV_B3P_Chunk64Law226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Chunk64Success226V3",
+      "source_sha256": "e54674f5dbda71b0443b343b34e0dd44f8ed08c95584667cdbd7f66df5e3b1a8",
+      "blob": "8be86eb21873d881971f8baef00af7d3897897f2",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50577/receipt/receipt.json",
+      "attempt": 50577,
+      "axioms": [
+        "'PV_B3P_Chunk64Success226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Chunk8Projection226",
+      "source_sha256": "9f5d24b20d84d99be9d030004661a03b67de346eb025fc0a6eb30e659a4244fa",
+      "blob": "c7346441c8b8cd4a68ee9559743c2f47f2bab913",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50505/receipt/receipt.json",
+      "attempt": 50505,
+      "axioms": [
+        "'PV_B3P_Chunk8Projection226.success_cell' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ChunkFlatten226",
+      "source_sha256": "c0a1fd1b0ab5a1557fb977629ca61dffaca3de04b7125a315ad0721c3d299d34",
+      "blob": "ab19c24aeabbe308a9b0682fbba9cbe898164a9d",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50548/receipt/receipt.json",
+      "attempt": 50548,
+      "axioms": [
+        "'PV_B3P_ChunkFlatten226.flatten_cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ChunkFlatten226.take_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ChunkFlatten226.take_from_chunk_cells' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ChunkSuccess226V3",
+      "source_sha256": "61696a50582e5cbacbe995da652919a9990e1f4fac23eff25c8ba59b44653f1e",
+      "blob": "a65c187fdd712f6ff22ed0dce6e1f2454f3e9749",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50576/receipt/receipt.json",
+      "attempt": 50576,
+      "axioms": [
+        "'PV_B3P_ChunkSuccess226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ChunkV3Law226",
+      "source_sha256": "acdd7edc8366362fd39666d8cc37181d8c0beeb12d70d9591f08043b40a192ca",
+      "blob": "67422895d5c111dce07a2ba9424a2cbb4bef2931",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50504/receipt/receipt.json",
+      "attempt": 50504,
+      "axioms": [
+        "'PV_B3P_ChunkV3Law226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Closure226",
+      "source_sha256": "ca08331c099e525369df3e97c98a17e13d57fb6b43f3e672e4e6dc2e1b1d73f0",
+      "blob": "674635032bb9e9083cca065727775a4eba3f7f74",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50585/receipt/receipt.json",
+      "attempt": 50585,
+      "axioms": [
+        "'PV_B3P_Closure226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Closure226.value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Closure226.nonvacuity' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_DigestRegionValue226V3",
+      "source_sha256": "559b43e398522d7d9468a5b0b03a4400deccce04a2b7e1a153a5bedd162c2da5",
+      "blob": "fe04640fe8c8cbd5a2f64135ecc7aae1931c22e3",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50542/receipt/receipt.json",
+      "attempt": 50542,
+      "axioms": [
+        "'PV_B3P_DigestRegionValue226V3.anchor' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_DigestRegionValue226V3.nullifier' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_DigestRegions226V3",
+      "source_sha256": "b9f27094064d36cdcc525356a9ef013bc14d1ecb7165c5e83c1cc1ef9f1493a8",
+      "blob": "6757716270e8107fb775e76008ff4cbb1052b0e5",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50541/receipt/receipt.json",
+      "attempt": 50541,
+      "axioms": [
+        "'PV_B3P_DigestRegions226V3.anchor' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_DigestRegions226V3.anchor_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_DigestRegions226V3.nullifier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_DigestRegions226V3.nullifier_success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_DigestTotal226V3",
+      "source_sha256": "949d8b2fbf47621f571d37a8eb7e6ddf75859fb5ed7dbede6c5adcdb93d3d2d9",
+      "blob": "74955a46024b9c417e73be56c51382451567064c",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50529/receipt/receipt.json",
+      "attempt": 50529,
+      "axioms": [
+        "'PV_B3P_DigestTotal226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_DigestValue226V3",
+      "source_sha256": "841fab39f7d2bfe06f270cec5f68a0e9967239e93b05db7643ee4d4bd954cc40",
+      "blob": "1e04306a23d586001f1087a26fba1682d4e1b266",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50530/receipt/receipt.json",
+      "attempt": 50530,
+      "axioms": [
+        "'PV_B3P_DigestValue226V3.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EncodeLaw226",
+      "source_sha256": "c71aae726595d723a9d0f33c44a11b05a3b0fb0aa1230678b420a99f16f55a18",
+      "blob": "c25f698c15253b8ac1976bf7b7468174b5d3ca46",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50514/receipt/receipt.json",
+      "attempt": 50514,
+      "axioms": [
+        "'PV_B3P_EncodeLaw226.update_eq' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_EncodeLaw226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EncodeLength226",
+      "source_sha256": "3930df0c998987fece1ecf25cebe115241430c862c78f55dad8425aef5f61b66",
+      "blob": "b8793c059da03df4df21e466c7ee32202d6328a9",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50546/receipt/receipt.json",
+      "attempt": 50546,
+      "axioms": [
+        "'PV_B3P_EncodeLength226.success_length' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EncodeSuccess226",
+      "source_sha256": "7040bac4af8c755586d3801d402376787fdbabc875890353d550d35b8e667304",
+      "blob": "6e7e3f4801a591907690aa14b7b78d2ec319050a",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50520/receipt/receipt.json",
+      "attempt": 50520,
+      "axioms": [
+        "'PV_B3P_EncodeSuccess226.start_val' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_EncodeSuccess226.success_chunk' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EncodeSuccess226V3",
+      "source_sha256": "4e60287f6e51deaeeb65857825d0de322d2bca64fef6ea27a586b8c7fc6e50a0",
+      "blob": "bdd8e764f48821d6d9f2a2066f55761b99e9454b",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50578/receipt/receipt.json",
+      "attempt": 50578,
+      "axioms": [
+        "'PV_B3P_EncodeSuccess226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EndianLane226V3",
+      "source_sha256": "e2af9861f9d4f2533b7e0eb8caab67e750b79591292e929c305b33c9a09ab139",
+      "blob": "7545a4f15391a3fe32d09a922400ed2cf09ae700",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50526/receipt/receipt.json",
+      "attempt": 50526,
+      "axioms": [
+        "'PV_B3P_EndianLane226V3.lane' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_EndianVerified226V3",
+      "source_sha256": "74df721f5312dd42fcf303c2d4d8ee203befb71694b74b9c20e45a16fe8053bf",
+      "blob": "8d12755d7453d08be4ade97f99fc54e62f906ad4",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50527/receipt/receipt.json",
+      "attempt": 50527,
+      "axioms": [
+        "'PV_B3P_EndianVerified226V3.word_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_EndianVerified226V3.index_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_EndianVerified226V3.lane_nat' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_FieldResult226V3",
+      "source_sha256": "ba9efd932113dab3f03d19eae2c9bd04f7d1889b3ae26046be8f60b4fd0b2a05",
+      "blob": "cd538e348053cb1bcb27a09276653b0d288634b3",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50531/receipt/receipt.json",
+      "attempt": 50531,
+      "axioms": [
+        "'PV_B3P_FieldResult226V3.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_FieldResult226V3.no_outer_failure' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_FrontierOutcome226V3",
+      "source_sha256": "fa433f3cbebce7aba08272eb904a42ca8cb47f25b5faef9f7700e972b7e36746",
+      "blob": "c07038e145abea38589cfd44d8f7340fa6cf88d2",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50532/receipt/receipt.json",
+      "attempt": 50532,
+      "axioms": [
+        "'PV_B3P_FrontierOutcome226V3.no_outer_failure' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_FrontierTotal226V3",
+      "source_sha256": "5ea2f5d6fecb32bf6083a3fc568aba4df273213493ee37de25882d96f4fff876",
+      "blob": "db392ffbb6de341c3f7a6224b0cad88341458c84",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50574/receipt/receipt.json",
+      "attempt": 50574,
+      "axioms": [
+        "'PV_B3P_FrontierTotal226V3.success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_FrontierValue226",
+      "source_sha256": "82dbcea7737b1596590690d1b5ce8aa0018520d2e22c001ef400772e1fd7d785",
+      "blob": "2d69aa893c3b7604cdb57ebf2c041c2338f51b43",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50534/receipt/receipt.json",
+      "attempt": 50534,
+      "axioms": [
+        "'PV_B3P_FrontierValue226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_GuardedWords226V3",
+      "source_sha256": "eb2ede8625b13da3e5716a4c02425c9eb8633da9837d1092b913922e98db1c10",
+      "blob": "15c2ab7f4b0a938a7548eb876a37ea8ac0c3d28c",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50552/receipt/receipt.json",
+      "attempt": 50552,
+      "axioms": [
+        "'PV_B3P_GuardedWords226V3.complete_words' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_GuardedWords226V3.complete_byte_fields' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_IndexLane226",
+      "source_sha256": "c167ec3619beca6213bc53665790ffaab3124620f7469cace5b395e765de068f",
+      "blob": "1c4771a846fedecb27218415687a36aa415923e0",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50539/receipt/receipt.json",
+      "attempt": 50539,
+      "axioms": [
+        "'PV_B3P_IndexLane226.shift_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_IndexLane226.native_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Install226V3",
+      "source_sha256": "de46ab41e5fc5fe822559793ab8ee5a6fc94e22a774596b566a4bddc87c400bc",
+      "blob": "13ebb60ea4031e9ad6c13b40b1128883c6fa7dfd",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50566/receipt/receipt.json",
+      "attempt": 50566,
+      "axioms": [
+        "'PV_B3P_Install226V3.source' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.source_complete' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.error_tag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.fail_tag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.div_tag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op2' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op3' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op5' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op6' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op7' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op8' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op9' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op10' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op11' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op12' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op13' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op14' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op15' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op16' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op17' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op18' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op19' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op20' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op21' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op22' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op23' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op24' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op25' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op26' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op27' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op28' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op29' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op30' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op31' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op32' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op33' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op34' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op35' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op36' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op37' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op38' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op39' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op40' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op41' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op42' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op43' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op44' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op45' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op46' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op47' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op48' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op49' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op50' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op51' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op52' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op53' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op54' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op55' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op56' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op57' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op58' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op59' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op60' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op61' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op62' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op63' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op64' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op65' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op66' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op67' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op68' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op69' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op70' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op71' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op72' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op73' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op74' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op75' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op76' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op77' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op78' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op79' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op80' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op81' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op82' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op83' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op84' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op85' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op86' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op87' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op88' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op89' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op90' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op91' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op92' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op93' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op94' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op95' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op96' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op97' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op98' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op99' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op100' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op101' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op102' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op103' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op104' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op105' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op106' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op107' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op108' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op109' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op110' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op111' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op112' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op113' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op114' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op115' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op116' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op117' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op118' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op119' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op120' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op121' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op122' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op123' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op124' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op125' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op126' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op127' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op128' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op129' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op130' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op131' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op132' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op133' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op134' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op135' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op136' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op137' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op138' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op139' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op140' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op141' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op142' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op143' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op144' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op145' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op146' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op147' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op148' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op149' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op150' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op151' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op152' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op153' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op154' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op155' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op156' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op157' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op158' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op159' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op160' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op161' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op162' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op163' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op164' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op165' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op166' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op167' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op168' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op169' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op170' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op171' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op172' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op173' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op174' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op175' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op176' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op177' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op178' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op179' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op180' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op181' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op182' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op183' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op184' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op185' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op186' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op187' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op188' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op189' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op190' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op191' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op192' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op193' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op194' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op195' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op196' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op197' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op198' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op199' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op200' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op201' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op202' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op203' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op204' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op205' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op206' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op207' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op208' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op209' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op210' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op211' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op212' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op213' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op214' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op215' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op216' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op217' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op218' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op219' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op220' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op221' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op222' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op223' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op224' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op225' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op227' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op228' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op229' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op230' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op231' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op232' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op233' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op234' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op235' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op236' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op237' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op238' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op239' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op240' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op241' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op242' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op243' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op244' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op245' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op246' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op247' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op248' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op249' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op250' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op251' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op252' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op253' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op254' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op255' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op256' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op257' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op258' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op259' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op260' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Install226V3.preserved_op261' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_InstalledBuffer226",
+      "source_sha256": "a0df1e5615dc1e8f37d714ad4a856ffc5b76ab4d370612d70ec7c3b5b8761d02",
+      "blob": "3adfc91d37a801fc0833d7d1088d6e8946a9bd9b",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50568/receipt/receipt.json",
+      "attempt": 50568,
+      "axioms": [
+        "'PV_B3P_InstalledBuffer226.reference_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_InstalledBuffer226.installed_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LateRegions226",
+      "source_sha256": "12d2d2c41ed5edf7ab990117feb916998ea2adf18c0d78e6d344bb36ff778847",
+      "blob": "6adb3275f6b1f874b8869b2335c63a0973eb950d",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50533/receipt/receipt.json",
+      "attempt": 50533,
+      "axioms": [
+        "'PV_B3P_LateRegions226.recipient' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateRegions226.change' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateRegions226.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateRegions226.next_root' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateRegions226.next_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LateValue226",
+      "source_sha256": "39a83956b1a3a1da5a20552a1b39eabdc1bb6eaa57bb7f216a7bdf2694bc1535",
+      "blob": "53ab990c23000c4f719f88742b4825cca68afbac",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50536/receipt/receipt.json",
+      "attempt": 50536,
+      "axioms": [
+        "'PV_B3P_LateValue226.recipient' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateValue226.change' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateValue226.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateValue226.next_root' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LateValue226.next_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LayoutCells226V3",
+      "source_sha256": "cee0e13ccec0754a1b3694fa4933d43a1199093c37b02bed7c79395d268ebc41",
+      "blob": "9ba21eb05832b5f1825dbb43fd9bf9d655571487",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50516/receipt/receipt.json",
+      "attempt": 50516,
+      "axioms": [
+        "'PV_B3P_LayoutCells226V3.flat_cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutCells226V3.fields_cell' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutCells226V3.frontier_cell' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LayoutIndex226",
+      "source_sha256": "c0efbe64c133ee71b79df19b9725847e85caaff4dd8577a1583d446f5b3a56b7",
+      "blob": "97bda606b3aab823b5b8bd696554a96e97cdd835",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50521/receipt/receipt.json",
+      "attempt": 50521,
+      "axioms": [
+        "'PV_B3P_LayoutIndex226.at_segment' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LayoutOffsets226",
+      "source_sha256": "6b4ff0a313eb5ae8f75cbad37eb0778debb0d94cf72c945c5c5b3cb5af4d82ac",
+      "blob": "a8bcbcf0defce986c58395c9566b769bb5584755",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50523/receipt/receipt.json",
+      "attempt": 50523,
+      "axioms": [
+        "'PV_B3P_LayoutOffsets226.fixed_add' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c2' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c3' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c5' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c6' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c7' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c8' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutOffsets226.c9' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_LayoutRegions226",
+      "source_sha256": "d1c78e4a557d6efe9420e94c1b4bc9e3eaec5dde166dcaeebbbff9dc1a22cb0f",
+      "blob": "2fabd89fc98bc9e4065d5fc75db037c7379bf363",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50522/receipt/receipt.json",
+      "attempt": 50522,
+      "axioms": [
+        "'PV_B3P_LayoutRegions226.variant' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.recipient_flag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.withdrawal_flag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.anchor' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.nullifier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.asset' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.recipient' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.change' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.amount' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.index' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.frontier' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.next_root' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_LayoutRegions226.next_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeFieldByte226V3",
+      "source_sha256": "2a0dcbc946ce81ff8d91433b426a018edb093f1132b4a30ed97a2ac123d2ce12",
+      "blob": "6f49690e3a27539dcc57de60469323d7fa0a67e9",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50528/receipt/receipt.json",
+      "attempt": 50528,
+      "axioms": [
+        "'PV_B3P_NativeFieldByte226V3.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeFieldsVec226",
+      "source_sha256": "a536159b1a1356256f108a432678135dd06db3ec55c8310561b029de6ef2f400",
+      "blob": "f85caeb9fa54993222edab0f286508a94210f715",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50554/receipt/receipt.json",
+      "attempt": 50554,
+      "axioms": [
+        "'PV_B3P_NativeFieldsVec226.word_slice_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativeFieldsVec226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeGroups226",
+      "source_sha256": "9874da505af95be342d411d33adf7e9c7aa19b7cdb3a8ac851785e194c265b8d",
+      "blob": "31ea202eff3e5748e9fcc5cbc496fd54135d3b2c",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50559/receipt/receipt.json",
+      "attempt": 50559,
+      "axioms": [
+        "'PV_B3P_NativeGroups226.fields_append' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativeGroups226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeIdentities226",
+      "source_sha256": "7b0f19bfd41bccce5679b874dcbe29e0b678e49773a1e9f7ff8d0d346b24b939",
+      "blob": "b4492aa8856c4af36983f9a091397b654a00ee12",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50584/receipt/receipt.json",
+      "attempt": 50584,
+      "axioms": [
+        "'PV_B3P_NativeIdentities226.fields_empty' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativeIdentities226.frontier_groups' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeList226",
+      "source_sha256": "a4fd84e1636cc19ae00aeb309cdb189a4547451a45c806a9bbff0e5b412a7c03",
+      "blob": "8080e3ac3e6cfb54a7c526f716e36075b6e9e6a3",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50556/receipt/receipt.json",
+      "attempt": 50556,
+      "axioms": [
+        "'PV_B3P_NativeList226.payload_length' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativeList226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativePlan226",
+      "source_sha256": "aa4cf67deb664e4c60ab6b80691f76ab54644392a6feaef47ec5f72a83f8dd34",
+      "blob": "0a03c8ea848a372e718d6b86fb41551b9372b821",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50558/receipt/receipt.json",
+      "attempt": 50558,
+      "axioms": [
+        "'PV_B3P_NativePlan226.index_slice_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativePlan226.payload_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativePlan226.budget_bound' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_NativePlan226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NativeSteps226",
+      "source_sha256": "fb3c90fef40c85088056ba02e09117e2d167c97c91d53d33dc75274665966c78",
+      "blob": "5001a357909feeb1400d818c0c67dac98c637a16",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50555/receipt/receipt.json",
+      "attempt": 50555,
+      "axioms": [
+        "'PV_B3P_NativeSteps226.complete_result' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_NestedOffset226V3",
+      "source_sha256": "806e99c6eed3afc19c380be8f9f8afc52cf7246ce42d2f84aaf5c77d433bd61c",
+      "blob": "e193464994e4665f79f12fbf3e674e2afaed6a50",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50535/receipt/receipt.json",
+      "attempt": 50535,
+      "axioms": [
+        "'PV_B3P_NestedOffset226V3.sub_sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Nonvacuity226V3",
+      "source_sha256": "f96b8bc3c181423b31e5631f0a3b903a815051adfbba3158be773e5228627d0a",
+      "blob": "3e167950ba92f61a99a1ac79b50e8a27de1f6218",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50580/receipt/receipt.json",
+      "attempt": 50580,
+      "axioms": [
+        "'PV_B3P_Nonvacuity226V3.canonical' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Nonvacuity226V3.reference_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Nonvacuity226V3.installed_success' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Offset226V3",
+      "source_sha256": "0c235ad5f91d30c6dfdc80798963ceab5f3be849a315dbadc71003ecd9388657",
+      "blob": "3ad4e3f265cb4dae1023d38c950f27ec8cfafbd3",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50517/receipt/receipt.json",
+      "attempt": 50517,
+      "axioms": [
+        "'PV_B3P_Offset226V3.sub_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Offset226V3.add_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Padding226",
+      "source_sha256": "8560f3562190989546583906af80e57fca4d5fec2bdf911ffea41bba0fa6ff5f",
+      "blob": "14dbaf75651cce815ba156c0fbb681f021b9a0ac",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50561/receipt/receipt.json",
+      "attempt": 50561,
+      "axioms": [
+        "'PV_B3P_Padding226.value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ProjectV3Law226",
+      "source_sha256": "68716312cf7611501bda9465b436032bac140c1603b6bee5d6678ca06e93a966",
+      "blob": "2b97b02a20248e8f9f354484b2816908a5fd26bd",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50567/receipt/receipt.json",
+      "attempt": 50567,
+      "axioms": [
+        "'PV_B3P_ProjectV3Law226.project_exact' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ProjectV3Law226.project_success' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ProjectV3Law226.complete_source' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_PublicCarrier226V3",
+      "source_sha256": "20286f612887f41fa537b7760b01ca18b5f9046926b317f23bf013a9026a41f0",
+      "blob": "64f4ef0966bf297a92af98066e70f3cf79f41c73",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50565/receipt/receipt.json",
+      "attempt": 50565,
+      "axioms": [
+        "'PV_B3P_PublicCarrier226V3.snapshot_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.snapshot_reverse' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.reverse_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type0' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type1' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type2' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type3' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type4' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type5' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type7' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type8' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type9' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type10' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type11' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type12' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type13' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type14' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type15' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type16' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type17' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type18' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type19' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type23' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type24' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type25' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type26' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_PublicCarrier226V3.preserved_type27' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ReadTwenty226",
+      "source_sha256": "996f951c2cb4434815a6d160888d30be69d5a4c951fc52a04ea5b96f57cae3f7",
+      "blob": "e05a952e0e75c34765adb94a4d3addd384d7f0ab",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50570/receipt/receipt.json",
+      "attempt": 50570,
+      "axioms": [
+        "'PV_B3P_ReadTwenty226.same' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Regions226V3",
+      "source_sha256": "ab1a9af6b1e8484f6242fc87d587a16770809f29624242dea260975be237559c",
+      "blob": "fc42dac9cace395868b23b5d8424a844b7872195",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50537/receipt/receipt.json",
+      "attempt": 50537,
+      "axioms": [
+        "'PV_B3P_Regions226V3.discriminant' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Regions226V3.asset' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Regions226V3.asset_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_Repeat226",
+      "source_sha256": "67d89677691337d438ef29efed00d22cbd9256442f5f16afa898c1eacdbbae7c",
+      "blob": "41f2fda27a82946d27ba1c4f95d2f922478e81c9",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50507/receipt/receipt.json",
+      "attempt": 50507,
+      "axioms": [
+        "'PV_B3P_Repeat226.index_value' depends on axioms: [propext]",
+        "'PV_B3P_Repeat226.repeat_index' depends on axioms: [propext]",
+        "'PV_B3P_Repeat226.repeat_set' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Repeat226.repeat_update' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_Repeat226.repeat_borrow' depends on axioms: [propext]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ResultSpine226",
+      "source_sha256": "ea8f57a99703c6f81b104ec985b2fbdebc3c787f1af57777fafac467b4452d9e",
+      "blob": "f2c55f9ee11f6d93f61439ac57d09da5c05c1774",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50573/receipt/receipt.json",
+      "attempt": 50573,
+      "axioms": [
+        "'PV_B3P_ResultSpine226.collect_append' does not depend on any axioms",
+        "'PV_B3P_ResultSpine226.collect_pure' depends on axioms: [propext]",
+        "'PV_B3P_ResultSpine226.padding' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ResultSuccess226",
+      "source_sha256": "f26c384383fe3875ecbd8da20cf43da7fb7755d822426a526b0980027312ab08",
+      "blob": "17370dbe39212f68424d666cbb9b1df19338cab1",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50503/receipt/receipt.json",
+      "attempt": 50503,
+      "axioms": [
+        "'PV_B3P_ResultSuccess226.bind_success' depends on axioms: [propext, Quot.sound]",
+        "'PV_B3P_ResultSuccess226.collect_success' depends on axioms: [propext]",
+        "'PV_B3P_ResultSuccess226.collect_length' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_RustResult",
+      "source_sha256": "5de140171cd08a98ea399a32330f67f29640f3379aa0dcab4fedbf071db06738",
+      "blob": "6a609c528f2b0c51a53a1a02457a05d30cc18c1b",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50502/receipt/receipt.json",
+      "attempt": 50502,
+      "axioms": [
+        "'PV_B3P_RustResult.bindR_assoc' does not depend on any axioms",
+        "'PV_B3P_RustResult.bindR_outer' does not depend on any axioms",
+        "'PV_B3P_RustResult.mapR_outer' does not depend on any axioms",
+        "'PV_B3P_RustResult.try_eq' does not depend on any axioms",
+        "'PV_B3P_RustResult.try_bind_eq' does not depend on any axioms",
+        "'PV_B3P_RustResult.mapR_bindR' does not depend on any axioms",
+        "'PV_B3P_RustResult.fail_tag' does not depend on any axioms",
+        "'PV_B3P_RustResult.div_tag' does not depend on any axioms",
+        "'PV_B3P_RustResult.error_tag' does not depend on any axioms"
+      ]
+    },
+    {
+      "module": "PV_B3P_ScalarRegions226",
+      "source_sha256": "1da7861fbad9d1fbadffb5fa4e87aa876757cfb2f716562cd941871ae6a345ce",
+      "blob": "92380afcba37a0748d97efc968eeaedc98d72a63",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50538/receipt/receipt.json",
+      "attempt": 50538,
+      "axioms": [
+        "'PV_B3P_ScalarRegions226.recipient_tag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarRegions226.withdrawal_tag' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarRegions226.amount' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarRegions226.index' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarRegions226.padding' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ScalarValue226",
+      "source_sha256": "2363340bc48caa8b1a9b0a639218db9a728b8a7dcd85832bf5458f6d658b4fea",
+      "blob": "5b40ef8d1a5c7f909065a0e27a51016d48c9340f",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50540/receipt/receipt.json",
+      "attempt": 50540,
+      "axioms": [
+        "'PV_B3P_ScalarValue226.word_byte' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarValue226.asset' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarValue226.amount' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarValue226.index_list' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ScalarValue226.index' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_SelectedValue226",
+      "source_sha256": "83ea92e7d19df7258dd59ca5f185ab78744577e3a477166b07570a8b96e4886b",
+      "blob": "e9b600c728cf1abfaf2ad00448b181a0e2517315",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50569/receipt/receipt.json",
+      "attempt": 50569,
+      "axioms": [
+        "'PV_B3P_SelectedValue226.success_value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_VecValue226",
+      "source_sha256": "46dbf64979c9f1ea8068c029b57a7c57aa31ff0ecbe88a283b725981e15b48e3",
+      "blob": "08da3882f3d0baa3b22abbcab292bef000defb30",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50551/receipt/receipt.json",
+      "attempt": 50551,
+      "axioms": [
+        "'PV_B3P_VecValue226.push_value' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_VecValue226.extend_value' depends on axioms: [propext, Quot.sound]",
+        "'PV_B3P_VecValue226.mapM_id' depends on axioms: [propext, Quot.sound]",
+        "'PV_B3P_VecValue226.u8_clone' depends on axioms: [propext, Quot.sound]",
+        "'PV_B3P_VecValue226.u8_extend' depends on axioms: [propext, Quot.sound]",
+        "'PV_B3P_VecValue226.extend_failure' depends on axioms: [propext, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_WholeBuffer226",
+      "source_sha256": "bb92c737651411e7dc15572976f26e410dbf1fdc4d098d13d14264da669aa9fc",
+      "blob": "32fc7c3de6da2d2adc0fc521696a962a684be8bd",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50550/receipt/receipt.json",
+      "attempt": 50550,
+      "axioms": [
+        "'PV_B3P_WholeBuffer226.cells' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_WholeBuffer226.value' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_WordLaw226V3",
+      "source_sha256": "8cd5de22760bc0a4042951f578835c9193f5c81efdaf954d9786dc083b1b349f",
+      "blob": "305305d20fffa526760b2c566721ed63460b75f0",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50525/receipt/receipt.json",
+      "attempt": 50525,
+      "axioms": [
+        "'PV_B3P_WordLaw226V3.complete_word' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "PV_B3P_ZeroSource226V3",
+      "source_sha256": "eca2d7694c1957a8f4953565c7c8fc2170528d4baaa8b5aea3132dbb17368524",
+      "blob": "5440ae442a39edcbc3c513af57c0c40c81712d64",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50579/receipt/receipt.json",
+      "attempt": 50579,
+      "axioms": [
+        "'PV_B3P_ZeroSource226V3.projection' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ZeroSource226V3.canonical_digest' depends on axioms: [propext, Classical.choice, Quot.sound]",
+        "'PV_B3P_ZeroSource226V3.canonical_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+    },
+    {
+      "module": "R1Z.ProverRwFullExternalFuns",
+      "source_sha256": "ba71e3be7eab2c4c59fe09d6f859ab323e74ca207b66fdf44b770382bfb8faf1",
+      "blob": "9ece3cef02e474dd4fed1fc9a611d46ff84537da",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50564/receipt/receipt.json",
+      "attempt": 50564,
+      "axioms": []
+    },
+    {
+      "module": "R1Z.ProverRwFullExternalTypes",
+      "source_sha256": "1b60aa197f0e133f77e0e8d2786dd31370fb8cfb6174d35845c88cd8fc53d680",
+      "blob": "b5e7526b9f8fbdb960c2395ab33dd0f15828ab20",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50562/receipt/receipt.json",
+      "attempt": 50562,
+      "axioms": []
+    },
+    {
+      "module": "R1Z.ProverRwFullTypes",
+      "source_sha256": "9795daef882f580b47bc2e847e0fb1e41126d41ab1c2f9327d53f016f3ef5c2e",
+      "blob": "707fca4344b711cad79c0a3fcf88cae65fb3737d",
+      "receipt": "evidence/pv-b3p6-20261028/receipts-resume2/lean-50563/receipt/receipt.json",
+      "attempt": 50563,
+      "axioms": []
+    }
+  ],
+  "finite_validation": {
+    "classification": "same-input native differential; finite validation",
+    "comparisons": 2884,
+    "receipt": "evidence/pv-b3p6-20261028/receipts-resume/native226-structural-resume/receipt/receipt.json",
+    "receipt_sha256": "6f0180a5cd650acf6dc041a4a1f9a12020c2d32f2b7cb02cf457019ed28ab959",
+    "reused_unchanged": true
+  },
+  "universal_native_machine_equality_claimed": false,
+  "trusted_items_added": [],
+  "endpoint_scope": "Selected callback/source/value requirement only. V165/V167, E1/E2, real RunJoin, client proof-account route and L1/L2/L3 remain substantive."
+}

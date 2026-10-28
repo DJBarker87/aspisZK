@@ -1,0 +1,32 @@
+{
+  "command": [
+    "timeout",
+    "900",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/tools/pv-b3p6-20261028/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "KMX_stubs::KMX_checks::KMX_growth_wrong",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--cbmc-args",
+    "--unwinding-assertions",
+    "--no-array-field-sensitivity"
+  ],
+  "revision": "e55c9106ab8bfc8374fe5ec4b05db3563c327024",
+  "expected_time": "exact lead KMX patch intended-negative growth control; optimized compilation, no business-function replacement; positive-control evidence is lead K008, not rerun here"
+}

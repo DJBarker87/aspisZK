@@ -1,0 +1,48 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_PublicationTrace.lean:25:35: error: Ambiguous term
+  insert
+Possible interpretations:
+  PV_L2D_PublicationIndices.insert x out : List ℕ
+  
+  Insert.insert x out : List ℕ
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_PublicationTrace.lean:32:36: error: Ambiguous term
+  insert
+Possible interpretations:
+  PV_L2D_PublicationIndices.insert (if folded = true then x / 4 else x) out : List ℕ
+  
+  Insert.insert (if folded = true then x / 4 else x) out : List ℕ
+'PV_L2D_PublicationTrace.erases' depends on axioms: [sorryAx]
+'PV_L2D_PublicationTrace.full_replay' depends on axioms: [sorryAx]
+'PV_L2D_PublicationTrace.empty_trace' depends on axioms: [sorryAx]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_PublicationTrace.lean:46:68: error: Tactic `decide` failed for proposition
+  (execute false 0 [] [0, 1]).1 = (execute false 0 [] [1, 0]).1 ∧
+    (execute false 0 [] [0, 1]).2 ≠ (execute false 0 [] [1, 0]).2
+because its `Decidable` instance
+  instDecidableAnd
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableAnd` and `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match (execute false 0 [] [0, 1]).1 with
+  | [] =>
+    match (execute false 0 [] [1, 0]).1 with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: as =>
+    match (execute false 0 [] [1, 0]).1 with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match as.hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+'PV_L2D_PublicationTrace.query_set_insufficient' depends on axioms: [sorryAx]
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/PV_L2D_PublicationTrace.lean:50:24: error: Ambiguous term
+  insert
+Possible interpretations:
+  PV_L2D_PublicationIndices.insert x xs : List ℕ
+  
+  Insert.insert x xs : List ℕ
+'PV_L2D_PublicationTrace.source_insert_erases' depends on axioms: [propext, sorryAx]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

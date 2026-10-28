@@ -1,0 +1,17 @@
+def Aeneas.Std.toStr : (s : String) → autoParam (s.toByteArray.size ≤ U32.max) toStr._auto_1 → Str :=
+fun s h => ⟨List.map (fun x => { toFin := ⟨x.toNat, ⋯⟩ }#uscalar) s.toByteArray.toList, ⋯⟩
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+'R1Z.PV_RDEA_ActualDigitTable.one_byte' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDEA_ActualDigitTable.entry_length' depends on axioms: [propext, Classical.choice, Quot.sound]

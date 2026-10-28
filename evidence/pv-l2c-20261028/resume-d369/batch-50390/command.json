@@ -1,0 +1,21 @@
+[
+  "systemd-run",
+  "--user",
+  "--scope",
+  "--quiet",
+  "--unit=l2c-batch-50390",
+  "-p",
+  "MemoryHigh=6G",
+  "-p",
+  "MemoryMax=8G",
+  "-p",
+  "MemorySwapMax=0",
+  "-p",
+  "TasksMax=64",
+  "python3",
+  "-u",
+  "-c",
+  "import json,pathlib,subprocess,hashlib,re,sys,time\nH=pathlib.Path(sys.argv[1]);start=sys.argv[2];P=H/'lean';env=P/'J.json';roots=[pathlib.Path(x) for x in json.load(open(env))['LEAN_PATH'].split(':')]\nfor x in json.load(open(H/('batch-'+start+'.json'))):\n a=x['attempt'];m=x['module'].replace('.','/');s=P/'sources'/(m+'.lean');o=P/'objects'/(m+'.olean');s.parent.mkdir(parents=True,exist_ok=True);o.parent.mkdir(parents=True,exist_ok=True)\n if o.is_symlink():raise RuntimeError('Refuse to overwrite reused cache object '+str(o))\n s.write_text(x['source']);assert hashlib.sha256(s.read_bytes()).hexdigest()==x['source_sha256']\n deps={}\n for name in [n for line in re.findall(r'^\\s*(?:(?:public|private)\\s+)?import[ \\t]+([^\\n]+)',x['source'],re.M) for n in line.split()]:\n  p=next((r/(name.replace('.','/')+'.olean') for r in roots if (r/(name.replace('.','/')+'.olean')).exists() or (r/(name.replace('.','/')+'.olean')).is_symlink()),None)\n  if p is None or not p.is_file():raise RuntimeError('Missing actual import '+name)\n  deps[name]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())\n (H/'evidence'/('deps-'+str(a)+'.json')).write_text(json.dumps(deps,sort_keys=True))\n t=time.monotonic()\n with (H/'evidence'/('out-'+str(a)+'.log')).open('w') as f:\n  p=subprocess.run(['/usr/bin/time','-v','-o',str(H/'evidence'/('time-'+str(a)+'.log')),'timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(env),str(P/'objects'),str(P/'sources'),str(o),str(s),'7000'],stdout=f,stderr=subprocess.STDOUT)\n  f.write('\\nexit='+str(p.returncode)+'\\n')\n (H/'evidence'/('done-'+str(a)+'.json')).write_text(json.dumps(dict(exit=p.returncode,wall_seconds=time.monotonic()-t)))\n print(a,m,p.returncode,flush=True)\n if p.returncode:break\n",
+  "/home/dombarker/project-offloads/codex-pv-l2c-20261028",
+  "50390"
+]

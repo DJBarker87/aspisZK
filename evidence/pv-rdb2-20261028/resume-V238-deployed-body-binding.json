@@ -1,0 +1,93 @@
+{
+  "row": "V238",
+  "checks": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn from_mut(",
+      "body": "{\n        \n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "exact_tokens": true,
+      "law": "ConstructorEffects.from_mut_complete"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const unsafe fn new_unchecked(",
+      "body": "{\n        \n        unsafe {\n            assert_unsafe_precondition!(\n                check_language_ub,\n                \"NonNull::new_unchecked requires that the pointer is non-null\",\n                (ptr: *mut () = ptr as *mut ()) => !ptr.is_null()\n            );\n            NonNull { pointer: ptr as _ }\n        }\n    }",
+      "exact_tokens": true,
+      "law": "ConstructorEffects.new_unchecked_complete; nonzero supplied by valid reference/slice representation"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn without_provenance(",
+      "body": "{\n        let pointer = crate::ptr::without_provenance(addr.get());\n        \n        unsafe { NonNull { pointer } }\n    }",
+      "exact_tokens": true,
+      "law": "ConstructorEffects.without_provenance_complete; no permission to read or new allocation inferred"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "item": "pub const fn slice_from_raw_parts(",
+      "body": "{\n        \n        unsafe { Self::new_unchecked(super::slice_from_raw_parts_mut(data.as_ptr(), len)) }\n    }",
+      "exact_tokens": true,
+      "law": "ConstructorEffects.slice_complete/slice_nonzero/slice_provenance"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "item": "pub const fn without_provenance<T>",
+      "body": "{\n    without_provenance_mut(addr)\n}",
+      "exact_tokens": true,
+      "law": "explicit no-provenance constructor"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "item": "pub const fn without_provenance_mut<T>",
+      "body": "{\n    \n    \n    \n    \n    \n    unsafe { mem::transmute(addr) }\n}",
+      "exact_tokens": true,
+      "law": "sysroot integer-to-pointer intrinsic representation; ConstructorEffects.without_provenance_complete; never dereferenced"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "item": "pub const fn slice_from_raw_parts_mut<T>",
+      "body": "{\n    from_raw_parts_mut(data, len)\n}",
+      "exact_tokens": true,
+      "law": "ConstructorEffects.slice_complete: data/provenance unchanged, length becomes metadata"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "item": "pub const fn copy_from_slice(",
+      "body": "{\n        \n        unsafe { copy_from_slice_impl(self, src) }\n    }",
+      "exact_tokens": true,
+      "law": "CopyEffects.copy_complete/copy_rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "item": "copy_from_slice_impl",
+      "body": "{\n    \n    \n    #[cfg_attr(not(panic = \"immediate-abort\"), inline(never), cold)]\n    #[cfg_attr(panic = \"immediate-abort\", inline)]\n    #[track_caller]\n    const fn len_mismatch_fail(dst_len: usize, src_len: usize) -> ! {\n        const_panic!(\n            \"copy_from_slice: source slice length does not match destination slice length\",\n            \"copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})\",\n            src_len: usize,\n            dst_len: usize,\n        )\n    }\n\n    if dest.len() != src.len() {\n        len_mismatch_fail(dest.len(), src.len());\n    }\n\n    \n    \n    \n    unsafe {\n        ptr::copy_nonoverlapping(src.as_ptr(), dest.as_mut_ptr(), dest.len());\n    }\n}",
+      "runtime_main_body_tokens_equal": true,
+      "length_error": "const_panic -> Aeneas panic error; no copy on mismatch",
+      "law": "CopyEffects.copy_complete/copy_rejected/source_preserved/copy_frame; CtCopy.copy_complete/returned_length/complete_frame"
+    }
+  ],
+  "proofs": {
+    "constructors": "R1Z.PV_RDB2_ConstructorEffects.*",
+    "default32": "CopyEffects.initialized32 and PV_DL_CtCarrier.initial_byte; native GenericArray generation/default dependency body unchanged",
+    "copy": "CtCopy.copy_complete/returned_length/complete_frame",
+    "result": "PV_DL_CtCarrier.complete; PV_DL_CtSelected.selected_native in the owned import-narrowed cohort"
+  },
+  "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+  "toolchain": "rustc1.94.1",
+  "resolved_features_reference": "native-ct/receipt.json",
+  "original_wrapper_binding": "wrapper-structural/results.json, already PASS on deployed dependencies; inputs unchanged",
+  "side_and_size": "Both original truncation sides; full32 and native output shape<=32; no guard weakened",
+  "effect_boundary": "original variable-finalizer and TRUNC_SIDE complete Results remain explicit parameters; all returned core/buffer/output preserved; source/output borrowing is disjoint",
+  "excluded_envelope": "AtomicPtr, CStr and formatting bodies occur outside the admitted wrapper/default/copy boundary or inside explicit callback parameters; not associated as reached copy bodies",
+  "machine_boundary": "Rust memory/intrinsic and compiler correspondence retained at the original structural-route boundary; no new T field; V232 unchanged",
+  "restored": false
+}

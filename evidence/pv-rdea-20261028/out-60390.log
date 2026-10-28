@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:12:24: warning: Possibly looping simp theorem: `table.eq_1`
+
+Note: Possibly caused by: `Array.make`, `toStr`, `UScalarTy.U8_numBits_eq`, `Nat.reducePow`, `Fin.mk_uInt8ToNat`, `BitVec.ofFin_uInt8ToFin`, `ByteArray.toList`, `ByteArray.toList.loop`, `String.size_toByteArray`, `zero_add`, and `Nat.reduceAdd`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:12:41: warning: Possibly looping simp theorem: `toStr.eq_1`
+
+Note: Possibly caused by: `UScalarTy.U8_numBits_eq`, `Nat.reducePow`, `Fin.mk_uInt8ToNat`, `BitVec.ofFin_uInt8ToFin`, `ByteArray.toList`, `ByteArray.toList.loop`, `String.size_toByteArray`, `zero_add`, and `Nat.reduceAdd`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:12:47: warning: Possibly looping simp theorem: `ByteArray.toList.eq_1`
+
+Note: Possibly caused by: `ByteArray.toList.loop`, `zero_add`, and `Nat.reduceAdd`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:12:64: warning: Possibly looping simp theorem: `ByteArray.toList.loop.eq_1`
+
+Note: Possibly caused by: `ByteArray.toList.loop`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdea-20261028/actual-sources/R1Z/PV_RDEA_ActualDigitTable.lean:12:18: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+def Aeneas.Std.toStr : (s : String) → autoParam (s.toByteArray.size ≤ U32.max) toStr._auto_1 → Str :=
+fun s h => ⟨List.map (fun x => { toFin := ⟨x.toNat, ⋯⟩ }#uscalar) s.toByteArray.toList, ⋯⟩
+def Aeneas.Std.Array.make.{u} : {α : Type u} →
+  (n : Usize) → (init : List α) → autoParam (init.length = ↑n) Array.make._auto_1 → Std.Array α n :=
+fun {α} n init hl => ⟨init, hl⟩
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Slice α → Usize → Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some x => ok x
+'R1Z.PV_RDEA_ActualDigitTable.entry_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

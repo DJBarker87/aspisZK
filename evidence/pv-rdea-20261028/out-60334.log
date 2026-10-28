@@ -1,0 +1,91 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDEA_NameFill.lean:54:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RDEA_AppendExecution.append step shape b1 lo w1
+in the target expression
+  (match
+      (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+          { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+            deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+            successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+            memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+            frame := w.frame }).1 with
+    | Except.error e =>
+      (Except.error e,
+        (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+            { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+              deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+              successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+              memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+              frame := w.frame }).2)
+    | Except.ok v =>
+      fill step shape rest v
+        (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+            { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+              deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+              successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+              memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+              frame := w.frame }).2) =
+    (Except.ok out, after)
+
+case cons.refine_1
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+head : Fin 256
+rest : List (Fin 256)
+ih :
+  ∀ (b : Buffer U8) (w : World S F),
+    b.values.length + 2 * rest.length + 5 ≤ b.capacity →
+      ∃ out after,
+        fill step shape rest b w = (Except.ok out, after) ∧
+          out.capacity = b.capacity ∧
+            out.values = b.values ++ bytes rest ∧
+              out.address = b.address ∧
+                after.allocator = w.allocator ∧ after.history = w.history ∧ after.frame = w.frame
+b : Buffer U8
+w : World S F
+fits : b.values.length + 2 * (rest.length + 1) + 5 ≤ b.capacity
+hi : List U8 := [digitByte (high head)]
+lo : List U8 := [digitByte (low head)]
+hf : b.values.length + hi.length ≤ b.capacity
+b1 : Buffer U8 := appended b hi hf
+w1 : World S F := afterCopy b hi w
+hl : b1.values.length + lo.length ≤ b1.capacity
+b2 : Buffer U8 := appended b1 lo hl
+w2 : World S F := afterCopy b1 lo w1
+remaining : b2.values.length + 2 * rest.length + 5 ≤ b2.capacity
+out : Buffer U8
+after : World S F
+run : fill step shape rest b2 w2 = (Except.ok out, after)
+hcap : out.capacity = b2.capacity
+hval : out.values = b2.values ++ bytes rest
+haddr : out.address = b2.address
+halloc : after.allocator = w2.allocator
+hhist : after.history = w2.history
+hframe : after.frame = w2.frame
+⊢ (match
+      (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+          { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+            deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+            successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+            memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+            frame := w.frame }).1 with
+    | Except.error e =>
+      (Except.error e,
+        (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+            { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+              deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+              successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+              memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+              frame := w.frame }).2)
+    | Except.ok v =>
+      fill step shape rest v
+        (PV_RDEA_AppendExecution.append step shape (appended b hi hf) [digitByte (low head)]
+            { allocator := w.allocator, allocCalls := w.allocCalls, reallocCalls := w.reallocCalls,
+              deallocCalls := w.deallocCalls, successfulAlloc := w.successfulAlloc,
+              successfulRealloc := w.successfulRealloc, drops := w.drops, history := w.history,
+              memory := PV_RDB1_Append.writeTail b.address b.values.length hi w.memory, live := w.live,
+              frame := w.frame }).2) =
+    (Except.ok out, after)
+'R1Z.PV_RDEA_NameFill.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh

@@ -1,0 +1,42 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/drop-u32-03/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/drop-u32-03/time.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/run-drop-u32.sh"
+  ],
+  "exit": 0,
+  "wall": "0:00.12",
+  "peak_rss_kib": "122100",
+  "swap": "0",
+  "source_revision": "0fe0c0ff66c1af6a84d8a9637eb12c3f8756a30d",
+  "expected_phase": "optimized Rust compile then paired allocation trace validation",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "source_files": {
+    "drop-u32.rs": "c669eaa7c5cd7153e795ed79ed7ea52f4b7996ebfe26e1440b21e1886be24ae7",
+    "run-drop-u32.sh": "875dc231452db40c2f2bee04467e01c67b0ad4274bdb300e0d6b1068b88d4aa1"
+  }
+}

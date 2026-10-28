@@ -1,0 +1,51 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/v186-structural/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rdb1-20261028/v186-structural/time.log",
+    "python3",
+    "-c",
+    "\"\"\"Complete deployed Default/reference call binding, not an old-body identity test.\"\"\"\nfrom pathlib import Path\nimport re,json,hashlib\nD=Path('/home/dombarker/project-offloads/codex-pv-rdb1-20261028')\nF=Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028')\nS=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library')\ndef clean(s):return re.sub(r'/\\*.*?\\*/|//[^\\n]*','',s,flags=re.S)\ndef tokens(s):return re.findall(r'::|=>|[A-Za-z_]\\w*|\\d+|[^\\s]',clean(s))\ndef body(s,needle):\n s=clean(s);a=s.index('{',s.index(needle));d=0\n for i in range(a,len(s)):\n  d+=(s[i]=='{')-(s[i]=='}')\n  if not d:return s[a:i+1]\n raise ValueError(needle)\nvec=(S/'alloc/src/vec/mod.rs').read_text();raw=(S/'alloc/src/raw_vec/mod.rs').read_text()\nchecks=[]\ndef check(path,source,anchor,want):\n actual=body(source,anchor);assert tokens(actual)==tokens(want),(anchor,actual)\n checks.append(dict(path=path,anchor=anchor,complete_body=actual,sha256=hashlib.sha256(source.encode()).hexdigest(),tokens_equal=True))\ncheck('alloc/src/vec/mod.rs',vec,'Default for Vec<T>','{fn default() -> Vec<T> {Vec::new()}}')\nbundle=json.loads((F/'structural-inputs.json').read_text())\n# The owned reference used by the original extraction is tracked in this branch.\nref=(D/'op35-reference.rs').read_text()\ncheck('tools/pv-cblib-20261027/kani-lib.rs',ref,'fn default_reference<T>()','{Vec::new()}')\n# Both calls resolve to the same deployed core/alloc/std, not two modeled copies.\ncheck('alloc/src/vec/mod.rs',vec,'pub const fn new()','{Vec {buf: RawVec::new(),len: 0}}')\ncheck('alloc/src/raw_vec/mod.rs',raw,'pub(crate) const fn new()','{Self::new_in(Global)}')\ncheck('alloc/src/raw_vec/mod.rs',raw,'pub(crate) const fn new_in(alloc: A)','{const {assert!(T::LAYOUT.size() % T::LAYOUT.align() == 0)}; Self {inner: RawVecInner::new_in(alloc, Alignment::of::<T>()),_marker: PhantomData}}')\ncheck('alloc/src/raw_vec/mod.rs',raw,'const fn new_in(alloc: A, align: Alignment)','{let ptr = Unique::from_non_null(NonNull::without_provenance(align.as_nonzero()));Self {ptr,cap: ZERO_CAP,alloc}}')\nreport=dict(row='V186',evidence_class='structural (K-1 substitute)',checks=checks,shared_callee='The same monomorphization Vec::<T>::new in the same 1.94.1 sysroot and deployed process; no conditional compilation at either call',changed_body='RawVecInner::new_in uses Alignment::as_nonzero rather than as_nonzero_usize. Both callers execute the SAME deployed body; no equality of historical/deployed constructor semantics is required for the row law.',complete_Result_laws=['R1Z.PV_RDB1_V186.complete','R1Z.PV_RDB1_V186.selected_result'],before='default = ok(Vec.new), proven on the prior owned reference; native association suspended for sysroot drift',after='same equation; deployed default and reference are identical calls for every T and every constructor behavior',boundary='Existing op35 library value/Result boundary. No new destructor, allocator, compiler, binary, timing or endpoint theorem.',features=json.loads((F/'units-client-bin/features.json').read_text()),profile='release opt3 debug_assertions=false overflow_checks=false panic=unwind',toolchain='1.94.1',kani=False)\n(D/'v186-structural.json').write_text(json.dumps(report,indent=2));print('V186 deployed default/reference are the same complete call')"
+  ],
+  "exit": 0,
+  "wall": "0:00.03",
+  "peak_rss_kib": "20608",
+  "swap": "0",
+  "source_revision": "e4208bb8b594431dba7f0fa186d71cab946e8371",
+  "expected_phase": "complete shared deployed callee binding",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "deployed_configuration": {
+    "path": "../resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73",
+    "toolchain": "1.94.1",
+    "client": "devnet_spend",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind"
+  },
+  "command_sha256": "0f0d8e4ea70e3353956b4cce9a3996065093a7be1f2389b44a6ef5d9eb7a9f7d"
+}

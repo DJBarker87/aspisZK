@@ -1,0 +1,82 @@
+'PV_L2C_OwnedBalance.rows_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:31:4: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:38:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  R1Z.ProverCommitFoldSteps.foldSteps
+    (qm31ReadStep (vector bound1024 fun i => source (table i)).deref d (PV_L2C_VecRead.active active)) rows
+    (source zero)
+in the target expression
+  (if active ⟨↑d, hd'⟩ = true then
+      ok
+        (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.TraceShape,
+          vector bound1024 fun i => source (table i))
+    else do
+      let sum ←
+        R1Z.ProverCommitFoldSteps.foldSteps
+            (qm31ReadStep (vector bound1024 fun i => source (table i)).deref d (PV_L2C_VecRead.active active))
+            (rowSequence 1024 0#usize) (source zero)
+      let value ← aspis_core.field.QM31.sub (source zero) sum
+      let (_, back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31)
+            (vector bound1024 fun i => source (table i)) d
+      ok (core.result.Result.Ok (), back value)) =
+    ok (core.result.Result.Ok (), vector bound1024 fun i => source (output table active d i))
+
+table : Fin 1024 → Q
+active : Fin 1024 → Bool
+d : Usize
+hd : ↑d < 1024
+ha : active ⟨↑d, hd⟩ = false
+hlen : (vector bound1024 fun i => source (table i)).len = 1024#usize
+hd' : ↑d < ↑1024#usize
+⊢ (if active ⟨↑d, hd'⟩ = true then
+      ok
+        (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.TraceShape,
+          vector bound1024 fun i => source (table i))
+    else do
+      let sum ←
+        R1Z.ProverCommitFoldSteps.foldSteps
+            (qm31ReadStep (vector bound1024 fun i => source (table i)).deref d (PV_L2C_VecRead.active active))
+            (rowSequence 1024 0#usize) (source zero)
+      let value ← aspis_core.field.QM31.sub (source zero) sum
+      let (_, back) ←
+        alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31)
+            (vector bound1024 fun i => source (table i)) d
+      ok (core.result.Result.Ok (), back value)) =
+    ok (core.result.Result.Ok (), vector bound1024 fun i => source (output table active d i))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:37:13: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵a̵,̵bind_tc_ok, ̲Bool.false_eq_true, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:37:27: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲a̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:37:46: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲a̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_OwnedBalance.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

@@ -1,0 +1,14 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ByteInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `core.num.U32.from_le_bytes`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ByteInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `core.num.U32.to_le_bytes`
+def BitVec.fromLEBytes : (l : List Byte) → BitVec (8 * l.length) :=
+fun l => List.brecOn l BitVec.fromLEBytes._f
+@[irreducible] def BitVec.toLEBytes : {w : ℕ} → BitVec w → List Byte :=
+fun {w} b => BitVec.toLEBytes._unary ⟨w, b⟩
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_ByteInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Array.map`
+def Aeneas.Std.Slice.index_usize.{u} : {α : Type u} → Aeneas.Std.Slice α → Aeneas.Std.Usize → Aeneas.Std.Result α :=
+fun {α} v i =>
+  match v[i]? with
+  | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+  | some x => Aeneas.Std.Result.ok x
+
+exit=1

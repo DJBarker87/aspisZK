@@ -1,0 +1,42 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/zeroize-04/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/zeroize-04/time.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-fxmem-20261028/run-zeroize.sh"
+  ],
+  "exit": 0,
+  "wall": "0:00.20",
+  "peak_rss_kib": "110920",
+  "swap": "0",
+  "source_revision": "59e450a5404a2717b5f8df282851ef4595556380",
+  "expected_phase": "optimized zeroize library/driver compile then finite native validation",
+  "print_axioms": "N/A native/extraction; Lean results separately audited",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "source_files": {
+    "zeroize-native.rs": "c75c5ef51245c57a9e3a884619120c9bc9cd9ae88fc4843bde4a204ce372cc71",
+    "run-zeroize.sh": "899c36f3ad71720b8f4055919eb6b3f445556d7f72052571ac9732c6663951f0"
+  }
+}
