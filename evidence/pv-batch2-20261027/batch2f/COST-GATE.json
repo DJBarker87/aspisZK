@@ -1,0 +1,147 @@
+{
+  "passed": true,
+  "scope": "Finite inclusive microbenchmark with retained non-inlined Box boundary and caller Vec allocation; indicative estimate, not a latency bound or quiet-window adoption timing gate. Nested raw work overlaps inclusive materialize costs.",
+  "source_revision": "763e429f184b932ca5c52633b7fa2a98a3b36b6f",
+  "costs": [
+    {
+      "name": "249_original",
+      "iterations": 100000,
+      "seconds": 0.009319484,
+      "microseconds_per_call": 0.09319483999999999
+    },
+    {
+      "name": "249_copy",
+      "iterations": 100000,
+      "seconds": 0.010251821,
+      "microseconds_per_call": 0.10251821
+    },
+    {
+      "name": "250_original",
+      "iterations": 100000,
+      "seconds": 0.003404536,
+      "microseconds_per_call": 0.034045360000000004
+    },
+    {
+      "name": "250_copy",
+      "iterations": 100000,
+      "seconds": 0.005489825,
+      "microseconds_per_call": 0.054898249999999996
+    },
+    {
+      "name": "252_original",
+      "iterations": 10000,
+      "seconds": 0.016257839,
+      "microseconds_per_call": 1.6257839
+    },
+    {
+      "name": "252_copy",
+      "iterations": 10000,
+      "seconds": 0.018849796,
+      "microseconds_per_call": 1.8849795999999999
+    },
+    {
+      "name": "253_original",
+      "iterations": 100000,
+      "seconds": 0.008626045,
+      "microseconds_per_call": 0.08626045
+    },
+    {
+      "name": "253_copy",
+      "iterations": 100000,
+      "seconds": 0.007677817,
+      "microseconds_per_call": 0.07677817
+    },
+    {
+      "name": "251_original",
+      "iterations": 100,
+      "seconds": 0.068724162,
+      "microseconds_per_call": 687.2416200000001
+    },
+    {
+      "name": "251_copy_with_allocation",
+      "iterations": 100,
+      "seconds": 0.066172262,
+      "microseconds_per_call": 661.72262
+    }
+  ],
+  "projection": [
+    {
+      "fixture": "transfer",
+      "parts": [
+        {
+          "op": 249,
+          "copy_calls": 1,
+          "delta_us_per_call": 0.009323370000000011,
+          "projected_delta_us": 0.009323370000000011
+        },
+        {
+          "op": 250,
+          "copy_calls": 3,
+          "delta_us_per_call": 0.020852889999999992,
+          "projected_delta_us": 0.06255866999999998
+        },
+        {
+          "op": 251,
+          "copy_calls": 1,
+          "delta_us_per_call": -25.51900000000012,
+          "projected_delta_us": -25.51900000000012
+        },
+        {
+          "op": 252,
+          "copy_calls": 1,
+          "delta_us_per_call": 0.2591956999999998,
+          "projected_delta_us": 0.2591956999999998
+        },
+        {
+          "op": 253,
+          "copy_calls": 8192,
+          "delta_us_per_call": -0.009482279999999996,
+          "projected_delta_us": -77.67883775999996
+        }
+      ],
+      "projected_delta_us": -102.86676002000009,
+      "threshold_seconds": 0.2876,
+      "passes": true
+    },
+    {
+      "fixture": "withdrawal",
+      "parts": [
+        {
+          "op": 249,
+          "copy_calls": 1,
+          "delta_us_per_call": 0.009323370000000011,
+          "projected_delta_us": 0.009323370000000011
+        },
+        {
+          "op": 250,
+          "copy_calls": 3,
+          "delta_us_per_call": 0.020852889999999992,
+          "projected_delta_us": 0.06255866999999998
+        },
+        {
+          "op": 251,
+          "copy_calls": 1,
+          "delta_us_per_call": -25.51900000000012,
+          "projected_delta_us": -25.51900000000012
+        },
+        {
+          "op": 252,
+          "copy_calls": 1,
+          "delta_us_per_call": 0.2591956999999998,
+          "projected_delta_us": 0.2591956999999998
+        },
+        {
+          "op": 253,
+          "copy_calls": 8192,
+          "delta_us_per_call": -0.009482279999999996,
+          "projected_delta_us": -77.67883775999996
+        }
+      ],
+      "projected_delta_us": -102.86676002000009,
+      "threshold_seconds": 0.2876,
+      "passes": true
+    }
+  ],
+  "receipt": "candidate/batch2f-cost-run-001/receipt/receipt.json",
+  "call_counts": "Reuse unchanged callback counts; Box factory adds no source-op invocation"
+}
