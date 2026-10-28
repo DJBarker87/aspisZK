@@ -14022,3 +14022,22 @@ copying). No large concrete recurrence was reduced. Open: establishing SemanticD
 actual caller, query and node openings and publish_compact, the native ROMView decoders and helper
 associations, and the final proof-byte equation. runjoin42 (IDs 60200-60299) continues in that order.
 Rows removed outright: 0. Privacy target not yet established.
+
+## D396 (Stream B) 2026-10-28 19:16 UTC: owner decisions of the evening (fifth amendment; standing delegation to the soundness lead) and their effect on Stream B
+
+Stream A relayed, and the lead checked in SECURITY-CONTRACT-20261021.md ("Owner-approved amendment,
+2026-10-28 (fifth)", "Owner delegation, 2026-10-28 evening (standing)"; commits ed2f962c0a, 1d77529081):
+composition trust option A, under which "native contract semantic transport (result projection)" is
+an explicit clarification of the existing P6 (Kani) and D188 (Aeneas) tool trust whose uses are
+reported as reclassification, never as premise removal; release and trust-reduction routes in
+parallel; a newer Kani evaluated only in an isolated sandbox, with the pinned 0.67.0 / CBMC 6.8.0
+and the shared PATH unchanged; and a standing delegation to the soundness lead that excludes
+anything that would compromise 100-bit soundness, privacy or the two-transaction design.
+
+Effect on Stream B: (a) any Stream B closure that rests on Kani or Aeneas agreeing on Rust semantics
+is reported under the same rule, as reclassification within the existing tool trust, never as removal;
+the next recount applies it. (b) The delegation is to Stream A and excludes privacy, so every pending
+Stream B decision still goes to the owner: the zero-change honest-user domain, timing evidence on a
+throttled host, the compiler-cohort question for V242, the on-chain log observer gap, the release recipe
+features and constant-time decoding, N7 custody, SHA-NI, DOITM and client scope. Rows removed
+outright: 0. Privacy target not yet established.
