@@ -71,117 +71,117 @@ def reference (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val
 
 def program (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Array U32 8#usize) : P (core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) := do
   let s15 ← invoke "core.slice.index.Slice.index" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 432#usize, «end» := 464#usize })
   let r39 ← invoke "pool_v1.pair_terminal.exact" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       pool_v1.pair_terminal.exact 32#usize s15)
   let cf26 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTry.branch r39)
   match cf26 with
   | core.ops.control_flow.ControlFlow.Continue val26 =>
     let r40 ← R1Z.PV_RJDec_Parser03.program val26
     let r41 ← invoke "core.result.Result.map_err" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_13.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r40 ())
     let cf27 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.Insts.CoreOpsTry.branch r41)
     match cf27 with
     | core.ops.control_flow.ControlFlow.Continue val27 =>
       let s16 ← invoke "core.slice.index.Slice.index" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 464#usize, «end» := 496#usize })
       let r42 ← invoke "pool_v1.pair_terminal.exact" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           pool_v1.pair_terminal.exact 32#usize s16)
       let cf28 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.result.Result.Insts.CoreOpsTry.branch r42)
       match cf28 with
       | core.ops.control_flow.ControlFlow.Continue val28 =>
         let r43 ← R1Z.PV_RJDec_Parser03.program val28
         let r44 ← invoke "core.result.Result.map_err" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r43 ())
         let cf29 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.Insts.CoreOpsTry.branch r44)
         match cf29 with
         | core.ops.control_flow.ControlFlow.Continue val29 =>
           let s17 ← invoke "core.slice.index.Slice.index" (fun ops =>
-              letI : ExternalFuns := ops
+              letI : ProverRwFull.ExternalFuns := ops
               core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 496#usize, «end» := 528#usize })
           let r45 ← invoke "pool_v1.pair_terminal.exact" (fun ops =>
-              letI : ExternalFuns := ops
+              letI : ProverRwFull.ExternalFuns := ops
               pool_v1.pair_terminal.exact 32#usize s17)
           let cf30 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-              letI : ExternalFuns := ops
+              letI : ProverRwFull.ExternalFuns := ops
               core.result.Result.Insts.CoreOpsTry.branch r45)
           match cf30 with
           | core.ops.control_flow.ControlFlow.Continue val30 =>
             let r46 ← R1Z.PV_RJDec_Parser03.program val30
             let r47 ← invoke "core.result.Result.map_err" (fun ops =>
-                letI : ExternalFuns := ops
+                letI : ProverRwFull.ExternalFuns := ops
                 core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_15.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r46 ())
             let cf31 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-                letI : ExternalFuns := ops
+                letI : ProverRwFull.ExternalFuns := ops
                 core.result.Result.Insts.CoreOpsTry.branch r47)
             match cf31 with
             | core.ops.control_flow.ControlFlow.Continue val31 =>
               let s18 ← invoke "core.slice.index.Slice.index" (fun ops =>
-                  letI : ExternalFuns := ops
+                  letI : ProverRwFull.ExternalFuns := ops
                   core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 528#usize, «end» := 560#usize })
               let r48 ← invoke "pool_v1.pair_terminal.exact" (fun ops =>
-                  letI : ExternalFuns := ops
+                  letI : ProverRwFull.ExternalFuns := ops
                   pool_v1.pair_terminal.exact 32#usize s18)
               let cf32 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-                  letI : ExternalFuns := ops
+                  letI : ProverRwFull.ExternalFuns := ops
                   core.result.Result.Insts.CoreOpsTry.branch r48)
               match cf32 with
               | core.ops.control_flow.ControlFlow.Continue val32 =>
                 let r49 ← R1Z.PV_RJDec_Parser03.program val32
                 let r50 ← invoke "core.result.Result.map_err" (fun ops =>
-                    letI : ExternalFuns := ops
+                    letI : ProverRwFull.ExternalFuns := ops
                     core.result.Result.map_err pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1.closure_16.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairVerifierTransportErrorV1 r49 ())
                 let cf33 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-                    letI : ExternalFuns := ops
+                    letI : ProverRwFull.ExternalFuns := ops
                     core.result.Result.Insts.CoreOpsTry.branch r50)
                 match cf33 with
                 | core.ops.control_flow.ControlFlow.Continue val33 =>
                   R1Z.PV_RJDec_AfterChunk33.program bytes val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 val27 val29 val31 val33
                 | core.ops.control_flow.ControlFlow.Break residual =>
                   invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-                    letI : ExternalFuns := ops
+                    letI : ProverRwFull.ExternalFuns := ops
                     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
               | core.ops.control_flow.ControlFlow.Break residual =>
                 invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-                  letI : ExternalFuns := ops
+                  letI : ProverRwFull.ExternalFuns := ops
                   core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
             | core.ops.control_flow.ControlFlow.Break residual =>
               invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-                letI : ExternalFuns := ops
+                letI : ProverRwFull.ExternalFuns := ops
                 core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
           | core.ops.control_flow.ControlFlow.Break residual =>
             invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-              letI : ExternalFuns := ops
+              letI : ProverRwFull.ExternalFuns := ops
               core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
         | core.ops.control_flow.ControlFlow.Break residual =>
           invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
       | core.ops.control_flow.ControlFlow.Break residual =>
         invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
     | core.ops.control_flow.ControlFlow.Break residual =>
       invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
   | core.ops.control_flow.ControlFlow.Break residual =>
     invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 (core.convert.FromSame pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) residual)
 
 theorem source (ops : ProverRwFull.ExternalFuns) (bytes : Slice U8) (val1 val3 val5 val7 val9 val11 val13 val15 val17 val19 val21 val23 val25 : Array U32 8#usize) :

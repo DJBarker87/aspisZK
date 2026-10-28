@@ -14,93 +14,93 @@ variable [ProverRwFull.ExternalTypes]
 
 def program (bytes : Slice U8) (val val1 val2 val3 val4 val5 val6 val7 val8 val9 val10 val11 val12 : Array U32 8#usize) : P (core.result.Result PoolV1PairLiveSnapshotV1 PoolV1PairLiveSnapshotErrorV1) := do
   let s17 ← invoke "core.slice.index.Slice.index" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 544#usize, «end» := 576#usize })
   let r39 ← invoke "core.array.TryFromSharedArraySlice.try_from" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.array.TryFromSharedArraySlice.try_from 32#usize s17)
   let a14 ← invoke "atomic_statement.unwrap_fixed_slice" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r39)
   let r40 ← R1Z.PV_RJDec_Parser03.program a14
   let r41 ← invoke "core.result.Result.map_err" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.map_err pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_13.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1 r40 ())
   let cf13 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTry.branch r41)
   match cf13 with
   | core.ops.control_flow.ControlFlow.Continue val13 =>
     let s18 ← invoke "core.slice.index.Slice.index" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 576#usize, «end» := 608#usize })
     let r42 ← invoke "core.array.TryFromSharedArraySlice.try_from" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.array.TryFromSharedArraySlice.try_from 32#usize s18)
     let a15 ← invoke "atomic_statement.unwrap_fixed_slice" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r42)
     let r43 ← R1Z.PV_RJDec_Parser03.program a15
     let r44 ← invoke "core.result.Result.map_err" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.map_err pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_14.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1 r43 ())
     let cf14 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.Insts.CoreOpsTry.branch r44)
     match cf14 with
     | core.ops.control_flow.ControlFlow.Continue val14 =>
       let s19 ← invoke "core.slice.index.Slice.index" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 608#usize, «end» := 640#usize })
       let r45 ← invoke "core.array.TryFromSharedArraySlice.try_from" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.array.TryFromSharedArraySlice.try_from 32#usize s19)
       let a16 ← invoke "atomic_statement.unwrap_fixed_slice" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r45)
       let r46 ← R1Z.PV_RJDec_Parser03.program a16
       let r47 ← invoke "core.result.Result.map_err" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.result.Result.map_err pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_15.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1 r46 ())
       let cf15 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.result.Result.Insts.CoreOpsTry.branch r47)
       match cf15 with
       | core.ops.control_flow.ControlFlow.Continue val15 =>
         let s20 ← invoke "core.slice.index.Slice.index" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice Std.U8) bytes { start := 640#usize, «end» := 672#usize })
         let r48 ← invoke "core.array.TryFromSharedArraySlice.try_from" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.array.TryFromSharedArraySlice.try_from 32#usize s20)
         let a17 ← invoke "atomic_statement.unwrap_fixed_slice" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             atomic_statement.unwrap_fixed_slice (Shared0T.Insts.CoreMarkerCopy (Array Std.U8 32#usize)) r48)
         let r49 ← R1Z.PV_RJDec_Parser03.program a17
         let r50 ← invoke "core.result.Result.map_err" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.map_err pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1.closure_16.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PairLiveSnapshotErrorV1 r49 ())
         let cf16 ← invoke "core.result.Result.Insts.CoreOpsTry.branch" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.Insts.CoreOpsTry.branch r50)
         match cf16 with
         | core.ops.control_flow.ControlFlow.Continue val16 =>
           R1Z.PV_RJDec_SnapshotChunk16.program bytes val val1 val2 val3 val4 val5 val6 val7 val8 val9 val10 val11 val12 val13 val14 val15 val16
         | core.ops.control_flow.ControlFlow.Break residual =>
           invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-            letI : ExternalFuns := ops
+            letI : ProverRwFull.ExternalFuns := ops
             core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) residual)
       | core.ops.control_flow.ControlFlow.Break residual =>
         invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-          letI : ExternalFuns := ops
+          letI : ProverRwFull.ExternalFuns := ops
           core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) residual)
     | core.ops.control_flow.ControlFlow.Break residual =>
       invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-        letI : ExternalFuns := ops
+        letI : ProverRwFull.ExternalFuns := ops
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) residual)
   | core.ops.control_flow.ControlFlow.Break residual =>
     invoke "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual" (fun ops =>
-      letI : ExternalFuns := ops
+      letI : ProverRwFull.ExternalFuns := ops
       core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 (core.convert.FromSame pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1) residual)
 
 theorem source (ops : ProverRwFull.ExternalFuns) (bytes : Slice U8) (val val1 val2 val3 val4 val5 val6 val7 val8 val9 val10 val11 val12 : Array U32 8#usize) :

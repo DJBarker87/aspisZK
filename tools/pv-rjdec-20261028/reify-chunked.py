@@ -24,7 +24,7 @@ def make(mod,src,fun,header,result,body,args,extra_imports=(),top=None,reference
  if reference:
   text+='def reference '+header+' : Result '+result+' := do\n'+body+'\n\n'
   fun=mod+'.reference'
- text+='def program '+header+' : P '+result+' := do\n'+emit(node,calls=calls)+'\n\n'
+ text+='def program '+header+' : P '+result+' := do\n'+emit(node,calls=calls).replace('letI : ExternalFuns := ops','letI : ProverRwFull.ExternalFuns := ops')+'\n\n'
  targetfun=fun
  text+='theorem '+('source_chunk' if top else 'source')+' (ops : ProverRwFull.ExternalFuns) '+header+' :\n  erase ops (program '+' '.join(args)+') = '+fun+' '+' '.join(args)+' := by\n  unfold program '+fun+'\n'+proof(node)+'\n\n'
  if top:
