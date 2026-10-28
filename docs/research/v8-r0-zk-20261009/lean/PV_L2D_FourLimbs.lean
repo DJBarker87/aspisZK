@@ -67,7 +67,7 @@ theorem consumed_bound (next : S → Draw S W) (cap k : Nat) (s : S) :
   | succ k ih =>
     have h:=PV_L2D_ScalarPort.consumed_bound next cap 0 s
     have t:=ih (sample next cap 0 s).after
-    cases hv : (sample next cap 0 s).value <;> simp [collect,hv] <;> omega
+    cases hv : (sample next cap 0 s).value <;> simp [collect,hv,Nat.mul_succ] <;> omega
 #print axioms consumed_bound
 
 theorem counts_bound (next : S → Draw S W) (cap k : Nat) (s : S) :
@@ -76,7 +76,7 @@ theorem counts_bound (next : S → Draw S W) (cap k : Nat) (s : S) :
   | zero => simp [collect]
   | succ k ih =>
     have t:=ih (sample next cap 0 s).after
-    cases hv : (sample next cap 0 s).value <;> simp [collect,hv] <;> omega
+    cases hv : (sample next cap 0 s).value <;> simp [collect,hv,Nat.mul_succ] <;> omega
 #print axioms counts_bound
 
 theorem success_length (next : S → Draw S W) (cap k : Nat) (s : S) (vs : List Nat)
