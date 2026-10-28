@@ -1,0 +1,39 @@
+{
+  "attempt": "NDB_K042",
+  "kind": "kani",
+  "module": "r1_pool_adapter::NDB_native::NDB_lane_header",
+  "sources": [
+    "NDB_src/programs/r1-cost-probe/src/lib.rs",
+    "NDB_src/programs/r1-cost-probe/src/NDB_reference.rs",
+    "NDB_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NDB_src/programs/r1-cost-probe/src/NDB_native.rs",
+    "NDB_gate.py",
+    "NDB_frozen_graph.sha256",
+    "NDB_src/Cargo.lock",
+    "NDB_KMX_copy_stubs.patch"
+  ],
+  "command": [
+    "python3",
+    "NDB_gate.py",
+    "NDB_K042",
+    "r1_pool_adapter::NDB_native::NDB_lane_header"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_tmp",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-cx-native-decnat-20261028/NDB_target"
+  },
+  "timeout": 600,
+  "source_revision": "346d4e1ab44f749874b5aa3704274632b2dcee4e",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387"
+  },
+  "expected_time": "Optimized compilation, then solver gate r1_pool_adapter::NDB_native::NDB_lane_header"
+}

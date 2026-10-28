@@ -1,0 +1,57 @@
+{"attempt": "NDB_L027", "exit_status": 1, "wall_seconds": 1.690705511951819, "peak_rss_kib": "2642868", "swaps": "0", "print_axioms": ["'NDB_DigestReject.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NDB_DigestReject.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDB_generated/NDB_DigestReject.lean:14:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NDB_generated/NDB_DigestReject.lean:17:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NDB_generated/NDB_DigestReject.lean:58:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  out.2
+in the target expression
+  (let (out1, pending_return) := out
+    match pending_return with
+    | none => ok (core.result.Result.Ok out1)
+    | some r => ok r) =
+    ok (core.result.Result
+...
+↑s + 4 * ↑i → NCV_Reference.word32 b addr = ok (word ↑i)
+canonical : ∀ j < bad, ↑(word j) < 2147483647
+failure : ¬↑(word bad) < 2147483647
+steps :
+  ∀ (a : Std.Array U32 8#usize) (i : Usize),
+    ↑i < bad → ∃ next out, ↑next = ↑i + 1 ∧ NCV_Reference.digest_loop.body b s a i = ok (ControlFlow.cont (out, next))
+reject :
+  ∀ (a : Std.Array U32 8#usize) (i : Usize),
+    ↑i = bad →
+      ∃ out,
+        NCV_Reference.digest_loop.body b s a i = ok (ControlFlow.done out) ∧ out.2 = some (core.result.Result.Err ())
+out : Std.Array U32 8#usize × Option (core.result.Result (Std.Array U32 8#usize) Unit)
+call :
+  loop
+      (fun x =>
+        match x with
+        | (a, i) => NCV_Reference.digest_loop.body b s a i)
+      (Array.repeat 8#usize 0#u32, 0#usize) =
+    ok out
+post : out.2 = some (core.result.Result.Err ())
+loopcall : NCV_Reference.digest_loop b s (Array.repeat 8#usize 0#u32) 0#usize = ok out
+⊢ (let (out1, pending_return) := out
+    match pending_return with
+    | none => ok (core.result.Result.Ok out1)
+    | some r => ok r) =
+    ok (core.result.Result.Err ())
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NDB_DigestReject.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDB_DigestReject.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6c4f8a79ab47405385e1ebc640031176.scope; invocation ID: c2bf79f782704c1db629eeb1db3e4475

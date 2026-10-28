@@ -37,3 +37,44 @@ exact-KMX fidelity pair. K013 positive passes, but K014 negative stalled
 
 The top decoders remain OPEN. A copy/pointer frame theorem and a child body
 comparison do not establish full-domain native wrapper/allocator association.
+
+## Stage 3: native allocation/result and branch components
+
+Native budget used:60/60, including two own-input compile failures. There are
+22 matched LOCAL component pairs; this is not22 decoder closures. Twelve
+invocations failed memcmp unwinding (both members of six pairs); no credit.
+K013 positive lacks a usable inverse after K014 stalled; excluded.
+Exact target/status/resource/source/feature/lock evidence: NDB_ATTEMPTS.jsonl,
+NDB_RESULTS.json and per-attempt directories.
+
+K049–056 repair master/checkpoint Box and map-error checks by arbitrary
+scalar-field projection (238 master observations;82 checkpoint observations),
+without increasing unwind or timeout. NDB_RecordExt proves array/record
+extensionality; connection of numeric Rust observer dispatch to those typed
+observations is a written source audit, not a new extraction theorem.
+K027–030 already passed the lane aggregate Box/map-error pairs.
+K057/058 repair remaining-sequence iterator observation via arbitrary suffix
+coordinate; K059/060 split the frontier check to the actual iterator
+selection/write/frame on arbitrary full pre-state, omitting the separately
+checked guard. The split changes the property/body, not just its name.
+
+Additional kernel results: complete sequence valid/zero decision scans and
+digest equality (including rejection), master validation Boolean composition,
+frontier digest/occupancy rejection plus first-failure induction, and digest
+canonicality rejection. Final audit follows.
+
+## Decoder disposition
+
+| Decoder | Status | Exact remaining native bridge obligations |
+|---|---|---|
+|op48 decode_master_box|OPEN|Full-domain wrapper rejection; original header/identity/policy/validation call-site association on the same input; compose selected iterator step/window/induction and all master chronology branches; transport projected Box/map-error result with original allocation/context frame.|
+|op49 decode_checkpoint_box|OPEN|Full-domain wrapper rejection; original header/key/digest/iterator call-site association including capacity rejection and its exact prefix; assemble same-input scalar/read observations; original Box/map-error allocation/context frame.|
+|op50 decode_lane_from_pool_release|OPEN|Full-domain wrapper rejection; compose actual canonical-digest child with exact tree/frontier windows, selected iterator frame, occupancy and final-root guards on the same input; associate original Box/error/allocator continuation. K013/K014 cannot supply combined-step credit.|
+
+For every decoder the inherited Lean side is already literal:
+NCV_Install.op48/op49/op50 maps the E008 extracted reference through its
+lossless NCV_Carrier conversion, maps inner Unit rejection to InvalidAccountData,
+and preserves outer Aeneas fail/div. NDB's primary helper laws refer to E008.
+No whole native==f_ref theorem, conditional equality axiom, P6 instance, or
+headline/security closure has been added. Runtime/heap/ABI/source-to-ELF
+boundaries are retained. Option A would be a trust RECLASSIFICATION, not removal.
