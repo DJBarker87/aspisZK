@@ -169,3 +169,14 @@ kani133-kmx-08 with all six exact copy replacements, native per-loop bounds,
 default1026 for replacement loops and the original assertions/auxiliary domain.
 No business-function replacement. No PASS yet;8 actual Kani runs completed,
 a ninth in progress.17 charged Lean attempts. All six rows remain OPEN.
+
+kani133-kmx-08 times out900.998s,exit124,swap0,cgroup peak6763036672bytes.
+The15660KiB timeout-parent RSS is not descendant aggregate. No PASS/no credit.
+CBMC remained the active heavy process near the end, without an observed
+Kissat child. Nine Kani runs completed. No unchanged rerun or larger cap.
+A changed CBMC representation (no array field sensitivity) will first run the
+exact negative growth control under that representation, then the original
+op133 property only if the intended assertion is again the sole failure.
+This tests the identified array expansion bottleneck; source, assertions,
+auxiliary domain and native bounds stay fixed. Two runs would leave one of
+12 Kani slots. Lean work continues regardless of Kani exhaustion.
