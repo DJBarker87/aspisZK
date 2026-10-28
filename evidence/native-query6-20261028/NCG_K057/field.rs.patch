@@ -1,0 +1,16 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -236,6 +236,7 @@
+     }
+ 
+     /// Parse from 4 LE bytes; rejects non-canonical encodings (>= P).
++    #[cfg_attr(kani, kani::ensures(|r:&Option<M31>|match r{Some(v)=>v.0==u32::from_le_bytes(bytes)&&v.0<P,None=>u32::from_le_bytes(bytes)>=P}))]
+     pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {
+         let v = u32::from_le_bytes(bytes);
+         if v >= P {
+@@ -3266,3 +3267,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="NCG_field_arbitrary.rs"] mod NCG_field_arbitrary;

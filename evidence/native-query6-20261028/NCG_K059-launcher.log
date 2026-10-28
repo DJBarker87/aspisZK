@@ -1,0 +1,46 @@
+{"attempt": "NCG_K059", "exit_status": 1, "wall_seconds": 14.252833650039975, "peak_rss_kib": "499960", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-query6-20261028/NCG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+assert_eq!(NBF_VALUE_CALLS,0);}}
+     |                                                   ^^^^^^^^^^^^^^^ shared reference to mutable static
+     |
+     = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+     = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBF_init_body_prestate` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1126:4
+     |
+1126 | fn NBF_init_body_prestate() {
+     |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbf_init_body_prestate`
+
+warning: variable `oldIndex` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1128:62
+     |
+1128 |  let mut index:usize=kani::any();kani::assume(index<=64);let oldIndex=index;
+     |                                                              ^^^^^^^^ help: convert the identifier to snake case: `old_index`
+
+    Finished `dev` profile [optimized] target(s) in 13.74s
+Checking harness verifier::candidate::NCG_native::NCG_actual_decoder_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 74 failed
+Failed Checks: |r:&Option<M31>|!match
+r{Some(v)=>v.0==u32::from_le_bytes(bytes)&&v.0<P,None=>u32::from_le_bytes(bytes)>=P}
+ File: "/home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_src/crates/aspis-core/src/field.rs", line 239, in aspis_core::field::M31::from_le_bytes::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.06748704s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NCG_native::NCG_actual_decoder_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rc1bdca7e679f4f7fa4fa0ebec828b439.scope; invocation ID: 47c4f1b20078427e8d9dfc6c4d2d5930

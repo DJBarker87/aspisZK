@@ -1,0 +1,44 @@
+{"attempt": "NCG_K046", "exit_status": 1, "wall_seconds": 20.850106550962664, "peak_rss_kib": "408516", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+                  ^^^^^^^^ help: convert the identifier to snake case: `old_index`
+
+error: Target function in stub_verified, `M31::from_le_bytes`, has no contract.
+   --> crates/aspis-r1-cost-probe/src/NCG_native.rs:753:1
+    |
+753 | #[kani::stub_verified(aspis_core::field::M31::from_le_bytes)]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: Try adding a contract to this function or use the unsound `stub` attribute instead.
+   --> /home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_src/crates/aspis-core/src/field.rs:239:5
+    |
+239 |     pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: this error originates in the attribute macro `kani::stub_verified` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: Target function in stub_verified, `M31::from_le_bytes`, has no contract.
+   --> crates/aspis-r1-cost-probe/src/NCG_native.rs:767:1
+    |
+767 | #[kani::stub_verified(aspis_core::field::M31::from_le_bytes)]
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: Try adding a contract to this function or use the unsound `stub` attribute instead.
+   --> /home/dombarker/project-offloads/codex-cx-native-query2-20261027/NBF_src/crates/aspis-core/src/field.rs:239:5
+    |
+239 |     pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: this error originates in the attribute macro `kani::stub_verified` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 2 previous errors; 1999 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r7f4a240bcccd434e87624c20657e31d7.scope; invocation ID: 28adfd7fc12f4061a7afb5a865333f47

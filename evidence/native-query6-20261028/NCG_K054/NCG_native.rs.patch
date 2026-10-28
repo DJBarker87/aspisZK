@@ -1,0 +1,775 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCG_native.rs
+@@ -0,0 +1,772 @@
++// Literal frozen four_dots_one stages, split at one source iteration/window.
++extern crate alloc;
++include!("KMX_stubs.rs");
++use super::*;
++const NCG_P:u64=2147483647;const NCG_D:u64=4611686009837453316;
++fn NCG_e()->E {let w:[u32;8]=kani::any();for x in w{kani::assume(x<2147483647);}E::from_limbs(w).unwrap()}
++fn NCG_g()->[E;29] {[NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e(),NCG_e()]}
++static mut NCG_PHASE:usize=0;
++static mut NCG_CALLS:usize=0;
++static mut NCG_OLD:[u64;8]=[0;8];static mut NCG_COEFF:[u32;8]=[0;8];static mut NCG_SCALAR:[u32;8]=[0;8];static mut NCG_OUT:[u64;8]=[0;8];
++fn NCG_add_expression(old:u64,x:u32,y:u32)->u64{old+u64::from(x)*u64::from(y)}
++fn NCG_add_spec(old:u64,x:u32,y:u32)->u64{
++ assert!(u64::from(x)<NCG_P&&u64::from(y)<NCG_P);
++ unsafe {assert!(NCG_PHASE<4);assert!(old<(1u64<<34)+(NCG_PHASE as u64)*NCG_D);}
++ let out:u64=kani::any(); // opaque whole add-product result: no value constraint
++ unsafe {let i=NCG_CALLS;assert!(i<8);NCG_OLD[i]=old;NCG_COEFF[i]=x;NCG_SCALAR[i]=y;NCG_OUT[i]=out;NCG_CALLS+=1;}out
++}
++fn NCG_base_iteration(q:&[u8;608],g:&[E;29],slot:usize,term:usize,sums:&mut[u64;8]) {
++ let scalar=M31::from_le_bytes(q[slot*120+term*4..slot*120+term*4+4].try_into().unwrap()).unwrap();
++ let coefficient=g[term].to_limbs();
++ sums[0]=NCG_add_expression(sums[0],coefficient[0],scalar.0);
++ sums[1]=NCG_add_expression(sums[1],coefficient[1],scalar.0);
++ sums[2]=NCG_add_expression(sums[2],coefficient[2],scalar.0);
++ sums[3]=NCG_add_expression(sums[3],coefficient[3],scalar.0);
++ sums[4]=NCG_add_expression(sums[4],coefficient[4],scalar.0);
++ sums[5]=NCG_add_expression(sums[5],coefficient[5],scalar.0);
++ sums[6]=NCG_add_expression(sums[6],coefficient[6],scalar.0);
++ sums[7]=NCG_add_expression(sums[7],coefficient[7],scalar.0);
++}
++fn NCG_base_case(negative:bool){
++ let q:[u8;608]=kani::any();let g=NCG_g();let slot:usize=kani::any();let term:usize=kani::any();let phase:usize=kani::any();let k:usize=kani::any();
++ kani::assume(slot<4&&term<26&&phase<4&&k<8);
++ let offset=slot*120+term*4;let scalar=u32::from_le_bytes([q[offset],q[offset+1],q[offset+2],q[offset+3]]);kani::assume(scalar<2147483647);
++ let mut sums:[u64;8]=kani::any();for x in sums{kani::assume(x<(1u64<<34)+(phase as u64)*NCG_D);}let old=sums[k];let coefficient=g[term].to_limbs()[k];
++ unsafe{NCG_PHASE=phase;}
++ NCG_base_iteration(&q,&g,slot,term,&mut sums);
++ unsafe{assert_eq!(NCG_CALLS,8);assert_eq!(NCG_OLD[k],old);assert_eq!(NCG_COEFF[k],coefficient);assert_eq!(NCG_SCALAR[k],scalar);
++ if negative{assert_ne!(sums[k],NCG_OUT[k]);}else{assert_eq!(sums[k],NCG_OUT[k]);}}
++ kani::cover!(slot==3&&term==25&&k==7);kani::cover!(phase==0);kani::cover!(phase==3);
++}
++fn NCG_fold_iteration(limbs:&mut[u64;8],sums:&[u64;8]) {
++ limbs[0]+=(sums[0]&0x7fff_ffff)+(sums[0]>>31);
++ limbs[1]+=(sums[1]&0x7fff_ffff)+(sums[1]>>31);
++ limbs[2]+=(sums[2]&0x7fff_ffff)+(sums[2]>>31);
++ limbs[3]+=(sums[3]&0x7fff_ffff)+(sums[3]>>31);
++ limbs[4]+=(sums[4]&0x7fff_ffff)+(sums[4]>>31);
++ limbs[5]+=(sums[5]&0x7fff_ffff)+(sums[5]>>31);
++ limbs[6]+=(sums[6]&0x7fff_ffff)+(sums[6]>>31);
++ limbs[7]+=(sums[7]&0x7fff_ffff)+(sums[7]>>31);
++}
++fn NCG_fold_case(negative:bool){
++ let mut limbs:[u64;8]=kani::any();let sums:[u64;8]=kani::any();
++ for x in limbs {kani::assume(x<6*(1u64<<34));}
++ let k:usize=kani::any();kani::assume(k<8);let old=limbs[k];let input=sums[k];
++ NCG_fold_iteration(&mut limbs,&sums);
++ let expected=old+(input%(1u64<<31))+(input/(1u64<<31));
++ if negative{assert_ne!(limbs[k],expected);}else{assert_eq!(limbs[k],expected);}
++ assert!(limbs[k]<7*(1u64<<34));kani::cover!(k==0);kani::cover!(k==7);
++}
++static mut NCG_REDUCE_CALLS:usize=0;static mut NCG_REDUCE_IN:[u64;8]=[0;8];static mut NCG_REDUCE_OUT:[u32;8]=[0;8];
++fn NCG_reduce_spec(x:u64)->M31{let out:u32=kani::any();kani::assume(u64::from(out)==x%NCG_P);unsafe{let i=NCG_REDUCE_CALLS;assert!(i<8);NCG_REDUCE_IN[i]=x;NCG_REDUCE_OUT[i]=out;NCG_REDUCE_CALLS+=1;}M31(out)}
++fn NCG_canonical_expression(limbs:[u64;8])->E {E::from_limbs([
++M31::reduce_u64(limbs[0]).0,M31::reduce_u64(limbs[1]).0,M31::reduce_u64(limbs[2]).0,M31::reduce_u64(limbs[3]).0,M31::reduce_u64(limbs[4]).0,M31::reduce_u64(limbs[5]).0,M31::reduce_u64(limbs[6]).0,M31::reduce_u64(limbs[7]).0]).unwrap()}
++fn NCG_canonical_case(negative:bool){
++ let limbs:[u64;8]=kani::any();let k:usize=kani::any();kani::assume(k<8);
++ let out=NCG_canonical_expression(limbs);
++ unsafe{assert_eq!(NCG_REDUCE_CALLS,8);assert_eq!(NCG_REDUCE_IN[k],limbs[k]);
++ if negative{assert_ne!(out.to_limbs()[k],NCG_REDUCE_OUT[k]);}else{assert_eq!(out.to_limbs()[k],NCG_REDUCE_OUT[k]);}}
++ assert!(out.to_limbs()[k]<2147483647);kani::cover!(k==0);kani::cover!(k==7);
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_base_gate(){NCG_base_case(false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_base_gate_negative(){NCG_base_case(true);}
++
++// Post-read split: NBZ paired decoder/coefficient gates supply these scalar inputs.
++fn NCG_postread_case(eight:bool,negative:bool){
++ let mut sums:[u64;8]=kani::any();let old=sums;
++ let c:[u32;8]=kani::any();let scalar:u32=kani::any();let phase:usize=kani::any();
++ let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<8&&phase<4);
++ kani::assume(scalar<2147483647);for x in c{kani::assume(x<2147483647);}
++ for x in sums{kani::assume(x<(1u64<<34)+(phase as u64)*NCG_D);}
++ unsafe{NCG_PHASE=phase;}
++ if eight {
++sums[0]=NCG_add_expression(sums[0],c[0],scalar);
++sums[1]=NCG_add_expression(sums[1],c[1],scalar);
++sums[2]=NCG_add_expression(sums[2],c[2],scalar);
++sums[3]=NCG_add_expression(sums[3],c[3],scalar);
++sums[4]=NCG_add_expression(sums[4],c[4],scalar);
++sums[5]=NCG_add_expression(sums[5],c[5],scalar);
++sums[6]=NCG_add_expression(sums[6],c[6],scalar);
++sums[7]=NCG_add_expression(sums[7],c[7],scalar);
++
++ } else {sums[k]=NCG_add_expression(sums[k],c[k],scalar);}
++ unsafe{
++ let n=if eight{8}else{1};assert_eq!(NCG_CALLS,n);
++ let index=if eight{k}else{0};
++ assert_eq!(NCG_OLD[index],old[k]);assert_eq!(NCG_COEFF[index],c[k]);assert_eq!(NCG_SCALAR[index],scalar);
++ let expected=if eight||j==k {NCG_OUT[if eight{j}else{0}]}else{old[j]};
++ if negative{assert_ne!(sums[j],expected);}else{assert_eq!(sums[j],expected);}
++ }
++ kani::cover!(k==7&&j==0&&phase==3);kani::cover!(j==k);
++}
++static mut NCG_WCALLS:usize=0;
++static mut NCG_WX:[[u32;8];4]=[[0;8];4];static mut NCG_WY:[[u32;8];4]=[[0;8];4];static mut NCG_WO:[[u32;8];4]=[[0;8];4];
++fn NCG_wide_opaque(x:E,y:E)->E{
++ let a=x.to_limbs();let b=y.to_limbs();for t in a{assert!(t<2147483647);}for t in b{assert!(t<2147483647);}
++ let z=NCG_e(); // canonical carrier only; no product relation
++ unsafe {let i=NCG_WCALLS;assert!(i<4);NCG_WX[i]=a;NCG_WY[i]=b;NCG_WO[i]=z.to_limbs();NCG_WCALLS+=1;}z
++}
++fn NCG_horner(alpha:E,h:E,p:E)->E{h.add(alpha.mul(p))}
++fn NCG_horner_log_case(three:bool,negative:bool){
++ let a=NCG_e();let h=[NCG_e(),NCG_e(),NCG_e(),NCG_e()];let k:usize=kani::any();kani::assume(k<8);
++ let mut out=NCG_horner(a,h[2],h[3]);
++ if three{out=NCG_horner(a,h[1],out);out=NCG_horner(a,h[0],out);}
++ unsafe{
++ assert_eq!(NCG_WCALLS,if three{3}else{1});assert_eq!(NCG_WX[0][k],a.to_limbs()[k]);assert_eq!(NCG_WY[0][k],h[3].to_limbs()[k]);
++ let z0=E::from_limbs(NCG_WO[0]).unwrap();let t0=h[2].add(z0);
++ let expected=if three{
++  assert_eq!(NCG_WX[1][k],a.to_limbs()[k]);assert_eq!(NCG_WY[1][k],t0.to_limbs()[k]);
++  let t1=h[1].add(E::from_limbs(NCG_WO[1]).unwrap());assert_eq!(NCG_WX[2][k],a.to_limbs()[k]);assert_eq!(NCG_WY[2][k],t1.to_limbs()[k]);
++  h[0].add(E::from_limbs(NCG_WO[2]).unwrap())
++ }else{t0};
++ if negative{assert_ne!(out.to_limbs()[k],expected.to_limbs()[k]);}else{assert_eq!(out.to_limbs()[k],expected.to_limbs()[k]);}
++ }
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_single(){NCG_postread_case(false,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_single_negative(){NCG_postread_case(false,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_eight(){NCG_postread_case(true,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(NCG_add_expression,NCG_add_spec)]
++fn NCG_eight_negative(){NCG_postread_case(true,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++fn NCG_horner_one(){NCG_horner_log_case(false,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++fn NCG_horner_one_negative(){NCG_horner_log_case(false,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++fn NCG_horner_three(){NCG_horner_log_case(true,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++fn NCG_horner_three_negative(){NCG_horner_log_case(true,true);}
++
++#[kani::ensures(|r:&Result<u32,Error>| matches!(r,Ok(v) if *v==x))]
++fn NCG_result_identity(x:u32)->Result<u32,Error>{Ok(x)}
++#[kani::ensures(|r:&Result<u32,Error>| !matches!(r,Ok(v) if *v==x))]
++fn NCG_result_inverted(x:u32)->Result<u32,Error>{Ok(x)}
++#[kani::ensures(|_r:&Result<u32,Error>| true)]
++fn NCG_result_weak(x:u32)->Result<u32,Error>{Ok(x)}
++#[kani::modifies(a)]
++#[kani::ensures(|_r:&Result<u32,Error>| true)]
++fn NCG_result_modifies(a:&mut u32,b:&mut u32)->Result<u32,Error>{*a=1;*b=2;Ok(0)}
++#[kani::proof_for_contract(NCG_result_identity)]
++fn NCG_result_contract(){let x:u32=kani::any();let _=NCG_result_identity(x);}
++#[kani::proof_for_contract(NCG_result_inverted)]
++fn NCG_result_wrong(){let x:u32=kani::any();let _=NCG_result_inverted(x);}
++#[kani::proof_for_contract(NCG_result_weak)]
++fn NCG_result_weak_contract(){let x:u32=kani::any();let _=NCG_result_weak(x);}
++#[kani::proof]
++fn NCG_result_real(){let x:u32=kani::any();assert_eq!(NCG_result_weak(x),Ok(x));}
++#[kani::proof]
++#[kani::stub_verified(NCG_result_weak)]
++fn NCG_result_unimplied(){let x:u32=kani::any();assert_eq!(NCG_result_weak(x),Ok(x));}
++#[kani::proof_for_contract(NCG_result_modifies)]
++fn NCG_result_frame_wrong(){let mut a:u32=kani::any();let mut b:u32=kani::any();let _=NCG_result_modifies(&mut a,&mut b);}
++#[kani::proof]
++#[kani::stub_verified(NCG_result_identity)]
++fn NCG_result_install(){let x:u32=kani::any();assert_eq!(NCG_result_identity(x),Ok(x));}
++#[kani::proof]
++#[kani::stub_verified(NCG_result_identity)]
++fn NCG_result_install_negative(){let x:u32=kani::any();assert_ne!(NCG_result_identity(x),Ok(x));}
++
++static mut NCG_MC:usize=0;static mut NCG_MX:[u32;8]=[0;8];static mut NCG_MY:[u32;8]=[0;8];static mut NCG_MO:[u32;8]=[0;8];
++static mut NCG_SC:usize=0;static mut NCG_SX:[[u32;4];16]=[[0;4];16];static mut NCG_SY:[u32;16]=[0;16];static mut NCG_SO:[[u32;4];16]=[[0;4];16];
++fn NCG_m31_opaque(x:M31,y:M31)->M31{assert!(x.0<2147483647&&y.0<2147483647);let z:u32=kani::any();kani::assume(z<2147483647);unsafe{let i=NCG_MC;assert!(i<8);NCG_MX[i]=x.0;NCG_MY[i]=y.0;NCG_MO[i]=z;NCG_MC+=1;}M31(z)}
++fn NCG_qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn NCG_q(x:[u32;4])->K{use aspis_core::field::CM31;K{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn NCG_scalar_opaque(x:K,y:M31)->K{let words=NCG_qwords(x);for w in words{assert!(w<2147483647);}assert!(y.0<2147483647);let z:[u32;4]=kani::any();for w in z{kani::assume(w<2147483647);}unsafe{let i=NCG_SC;assert!(i<16);NCG_SX[i]=words;NCG_SY[i]=y.0;NCG_SO[i]=z;NCG_SC+=1;}NCG_q(z)}
++fn NCG_scalar_return(i:usize)->E{unsafe{E::new(NCG_q(NCG_SO[2*i]),NCG_q(NCG_SO[2*i+1]))}}
++fn NCG_check_scale(i:usize,x:E,y:u32,k:usize){unsafe{let half=k/4;let word=k%4;assert_eq!(NCG_SX[2*i+half][word],x.to_limbs()[k]);assert_eq!(NCG_SY[2*i],y);assert_eq!(NCG_SY[2*i+1],y);}}
++fn NCG_fold_log_case(line:bool,negative:bool){
++ let alpha=NCG_e();let values=[NCG_e(),NCG_e(),NCG_e(),NCG_e()];let mut inv:[u32;5]=kani::any();for w in inv{kani::assume(w<2147483647);}let inverse=inv.map(M31);
++ let k:usize=kani::any();kani::assume(k<8);
++ let out=if line{line_fold_with_inverses(alpha,values,&inverse)}else{circle_fold_with_inverses(alpha,values,&inverse)};
++ let [a,b,c,d]=values;let quarter=536870912u32;let half=1073741824u32;
++ unsafe{
++ assert_eq!(NCG_WCALLS,3);
++ let h0=NCG_scalar_return(0);NCG_check_scale(0,a.add(b).add(c).add(d),quarter,k);
++ let (h1,h2,h3)=if line{
++  assert_eq!(NCG_SC,12);assert_eq!(NCG_MC,4);
++  assert_eq!(NCG_MX[0],quarter);assert_eq!(NCG_MY[0],inv[4]);
++  assert_eq!(NCG_MX[1],half);assert_eq!(NCG_MY[1],inv[2]);
++  assert_eq!(NCG_MX[2],half);assert_eq!(NCG_MY[2],inv[3]);
++  assert_eq!(NCG_MX[3],half);assert_eq!(NCG_MY[3],inv[4]);
++  NCG_check_scale(1,a.add(b).sub(c).sub(d),NCG_MO[0],k);
++  NCG_check_scale(2,a.sub(b),NCG_MO[1],k);NCG_check_scale(3,d.sub(c),NCG_MO[2],k);
++  let c0=NCG_scalar_return(2);let c1=NCG_scalar_return(3);
++  NCG_check_scale(4,c0.add(c1),half,k);NCG_check_scale(5,c0.sub(c1),NCG_MO[3],k);
++  (NCG_scalar_return(4),NCG_scalar_return(1),NCG_scalar_return(5))
++ }else{
++  assert_eq!(NCG_SC,8);assert_eq!(NCG_MC,4);
++  assert_eq!(NCG_MX[0],quarter);assert_eq!(NCG_MY[0],inv[1]);
++  assert_eq!(NCG_MX[1],quarter);assert_eq!(NCG_MY[1],inv[0]);
++  assert_eq!(NCG_MX[2],quarter);assert_eq!(NCG_MY[2],inv[0]);
++  assert_eq!(NCG_MX[3],NCG_MO[2]);assert_eq!(NCG_MY[3],inv[1]);
++  NCG_check_scale(1,a.sub(b).sub(c).add(d),NCG_MO[0],k);
++  NCG_check_scale(2,a.add(b).sub(c).sub(d),NCG_MO[1],k);
++  NCG_check_scale(3,a.sub(b).add(c).sub(d),NCG_MO[3],k);
++  (NCG_scalar_return(1),NCG_scalar_return(2),NCG_scalar_return(3))
++ };
++ assert_eq!(NCG_WX[0][k],alpha.to_limbs()[k]);assert_eq!(NCG_WY[0][k],h3.to_limbs()[k]);
++ let t0=h2.add(E::from_limbs(NCG_WO[0]).unwrap());assert_eq!(NCG_WX[1][k],alpha.to_limbs()[k]);assert_eq!(NCG_WY[1][k],t0.to_limbs()[k]);
++ let t1=h1.add(E::from_limbs(NCG_WO[1]).unwrap());assert_eq!(NCG_WX[2][k],alpha.to_limbs()[k]);assert_eq!(NCG_WY[2][k],t1.to_limbs()[k]);
++ let expected=h0.add(E::from_limbs(NCG_WO[2]).unwrap());
++ if negative{assert_ne!(out.to_limbs()[k],expected.to_limbs()[k]);}else{assert_eq!(out.to_limbs()[k],expected.to_limbs()[k]);}
++ }
++}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NCG_scalar_opaque)]
++#[kani::stub(aspis_core::field::M31::mul,NCG_m31_opaque)]
++#[kani::unwind(129)]
++fn NCG_circle(){NCG_fold_log_case(false,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NCG_scalar_opaque)]
++#[kani::stub(aspis_core::field::M31::mul,NCG_m31_opaque)]
++#[kani::unwind(129)]
++fn NCG_circle_negative(){NCG_fold_log_case(false,true);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NCG_scalar_opaque)]
++#[kani::stub(aspis_core::field::M31::mul,NCG_m31_opaque)]
++#[kani::unwind(129)]
++fn NCG_line(){NCG_fold_log_case(true,false);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::stub(aspis_core::field::WideExact::mul,NCG_wide_opaque)]
++#[kani::stub(aspis_core::field::QM31::mul_m31,NCG_scalar_opaque)]
++#[kani::stub(aspis_core::field::M31::mul,NCG_m31_opaque)]
++#[kani::unwind(129)]
++fn NCG_line_negative(){NCG_fold_log_case(true,true);}
++
++#[kani::ensures(|r:&Option<M31>| matches!(r,Some(v) if v.0==x))]
++fn NCG_option_identity(x:u32)->Option<M31>{Some(M31(x))}
++#[kani::ensures(|r:&Option<M31>| !matches!(r,Some(v) if v.0==x))]
++fn NCG_option_inverted(x:u32)->Option<M31>{Some(M31(x))}
++#[kani::ensures(|_r:&Option<M31>|true)]
++fn NCG_option_weak(x:u32)->Option<M31>{Some(M31(x))}
++#[kani::modifies(a)]
++#[kani::ensures(|_r:&Option<M31>|true)]
++fn NCG_option_modifies(a:&mut u32,b:&mut u32)->Option<M31>{*a=1;*b=2;Some(M31(0))}
++#[kani::requires(!x.is_empty())]
++#[kani::ensures(|r:&&[u32]| r.len()==x.len() && r.as_ptr()==x.as_ptr())]
++fn NCG_slice_identity(x:&[u32])->&[u32]{x}
++#[kani::requires(!x.is_empty())]
++#[kani::ensures(|r:&&[u32]| r.len()!=x.len())]
++fn NCG_slice_inverted(x:&[u32])->&[u32]{x}
++#[kani::requires(!x.is_empty())]
++#[kani::ensures(|_r:&&[u32]|true)]
++fn NCG_slice_weak(x:&[u32])->&[u32]{x}
++#[kani::modifies(a)]
++#[kani::ensures(|_r:&&[u32]|true)]
++fn NCG_slice_modifies<'a>(a:&mut u32,b:&mut u32,x:&'a[u32])->&'a[u32]{*a=1;*b=2;x}
++#[kani::ensures(|r:&Result<Vec<[u64;4]>,Error>| matches!(r,Ok(v) if v.is_empty()))]
++fn NCG_vec_identity()->Result<Vec<[u64;4]>,Error>{Ok(Vec::new())}
++#[kani::ensures(|r:&Result<Vec<[u64;4]>,Error>| !matches!(r,Ok(v) if v.is_empty()))]
++fn NCG_vec_inverted()->Result<Vec<[u64;4]>,Error>{Ok(Vec::new())}
++#[kani::ensures(|_r:&Result<Vec<[u64;4]>,Error>|true)]
++fn NCG_vec_weak()->Result<Vec<[u64;4]>,Error>{Ok(Vec::new())}
++#[kani::modifies(a)]
++#[kani::ensures(|_r:&Result<Vec<[u64;4]>,Error>|true)]
++fn NCG_vec_modifies(a:&mut u32,b:&mut u32)->Result<Vec<[u64;4]>,Error>{*a=1;*b=2;Ok(Vec::new())}
++#[kani::proof_for_contract(NCG_option_identity)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_option_contract(){let x:u32=kani::any();let _=NCG_option_identity(x);}
++#[kani::proof_for_contract(NCG_option_inverted)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_option_wrong(){let x:u32=kani::any();let _=NCG_option_inverted(x);}
++#[kani::proof_for_contract(NCG_option_weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_option_weak_contract(){let x:u32=kani::any();let _=NCG_option_weak(x);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_option_real(){let x:u32=kani::any();assert_eq!(NCG_option_weak(x),Some(M31(x)));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_option_weak)]
++fn NCG_option_unimplied(){let x:u32=kani::any();assert_eq!(NCG_option_weak(x),Some(M31(x)));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_option_identity)]
++fn NCG_option_install(){let x:u32=kani::any();assert_eq!(NCG_option_identity(x),Some(M31(x)));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_option_identity)]
++fn NCG_option_install_negative(){let x:u32=kani::any();assert_ne!(NCG_option_identity(x),Some(M31(x)));}
++#[kani::proof_for_contract(NCG_option_modifies)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_option_frame_wrong(){let mut a:u32=kani::any();let mut b:u32=kani::any();let _=NCG_option_modifies(&mut a,&mut b);}
++#[kani::proof_for_contract(NCG_slice_identity)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_slice_contract(){let x:[u32;5]=kani::any();let _=NCG_slice_identity(&x);}
++#[kani::proof_for_contract(NCG_slice_inverted)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_slice_wrong(){let x:[u32;5]=kani::any();let _=NCG_slice_inverted(&x);}
++#[kani::proof_for_contract(NCG_slice_weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_slice_weak_contract(){let x:[u32;5]=kani::any();let _=NCG_slice_weak(&x);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_slice_real(){let x:[u32;5]=kani::any();assert_eq!(NCG_slice_weak(&x),&x[..]);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_slice_weak)]
++fn NCG_slice_unimplied(){let x:[u32;5]=kani::any();assert_eq!(NCG_slice_weak(&x),&x[..]);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_slice_identity)]
++fn NCG_slice_install(){let x:[u32;5]=kani::any();assert_eq!(NCG_slice_identity(&x),&x[..]);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_slice_identity)]
++fn NCG_slice_install_negative(){let x:[u32;5]=kani::any();assert_ne!(NCG_slice_identity(&x),&x[..]);}
++#[kani::proof_for_contract(NCG_slice_modifies)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_slice_frame_wrong(){let mut a:u32=kani::any();let mut b:u32=kani::any();let x:[u32;5]=kani::any();let _=NCG_slice_modifies(&mut a,&mut b,&x);}
++#[kani::proof_for_contract(NCG_vec_identity)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_vec_contract(){let _=NCG_vec_identity();}
++#[kani::proof_for_contract(NCG_vec_inverted)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_vec_wrong(){let _=NCG_vec_inverted();}
++#[kani::proof_for_contract(NCG_vec_weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_vec_weak_contract(){let _=NCG_vec_weak();}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_vec_real(){assert_eq!(NCG_vec_weak(),Ok(Vec::new()));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_vec_weak)]
++fn NCG_vec_unimplied(){assert_eq!(NCG_vec_weak(),Ok(Vec::new()));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_vec_identity)]
++fn NCG_vec_install(){assert_eq!(NCG_vec_identity(),Ok(Vec::new()));}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(NCG_vec_identity)]
++fn NCG_vec_install_negative(){assert_ne!(NCG_vec_identity(),Ok(Vec::new()));}
++#[kani::proof_for_contract(NCG_vec_modifies)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_vec_frame_wrong(){let mut a:u32=kani::any();let mut b:u32=kani::any();let _=NCG_vec_modifies(&mut a,&mut b);}
++
++#[kani::requires(index<4)]
++#[kani::ensures(|r:&u64|*r==row[index])]
++fn NCG_row_get(row:&[u64;4],index:usize)->u64{residue_limb_at(row,index)}
++#[kani::requires(index<4)]
++#[kani::ensures(|r:&u64|*r!=row[index])]
++fn NCG_row_get_wrong(row:&[u64;4],index:usize)->u64{residue_limb_at(row,index)}
++#[kani::requires(index<4)]
++#[kani::ensures(|r:&u32|*r==limbs[index])]
++fn NCG_power_get(limbs:&[u32;4],index:usize)->u32{power_limb_at(limbs,index)}
++#[kani::requires(index<4)]
++#[kani::ensures(|r:&u32|*r!=limbs[index])]
++fn NCG_power_get_wrong(limbs:&[u32;4],index:usize)->u32{power_limb_at(limbs,index)}
++#[kani::ensures(|r:&Option<M31>|match r{Some(v)=>v.0==u32::from_le_bytes(bytes)&&v.0<2147483647,None=>u32::from_le_bytes(bytes)>=2147483647})]
++fn NCG_decoder(bytes:[u8;4])->Option<M31>{M31::from_le_bytes(bytes)}
++#[kani::ensures(|r:&Option<M31>|!match r{Some(v)=>v.0==u32::from_le_bytes(bytes)&&v.0<2147483647,None=>u32::from_le_bytes(bytes)>=2147483647})]
++fn NCG_decoder_wrong(bytes:[u8;4])->Option<M31>{M31::from_le_bytes(bytes)}
++#[kani::proof_for_contract(NCG_row_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_row_get_callee(){let row:[u64;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let _=NCG_row_get(&row,i);}
++#[kani::proof_for_contract(NCG_row_get_wrong)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_row_get_callee_negative(){let row:[u64;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let _=NCG_row_get_wrong(&row,i);}
++#[kani::proof_for_contract(NCG_power_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_power_get_callee(){let row:[u32;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let _=NCG_power_get(&row,i);}
++#[kani::proof_for_contract(NCG_power_get_wrong)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_power_get_callee_negative(){let row:[u32;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let _=NCG_power_get_wrong(&row,i);}
++#[kani::proof_for_contract(NCG_decoder)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_decoder_callee(){let bytes:[u8;4]=kani::any();let _=NCG_decoder(bytes);}
++#[kani::proof_for_contract(NCG_decoder_wrong)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_decoder_callee_negative(){let bytes:[u8;4]=kani::any();let _=NCG_decoder_wrong(bytes);}
++#[kani::proof]
++#[kani::stub_verified(NCG_row_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_row_get_caller(){let row:[u64;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);assert_eq!(NCG_row_get(&row,i),row[i]);}
++#[kani::proof]
++#[kani::stub_verified(NCG_row_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_row_get_caller_negative(){let row:[u64;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);assert_ne!(NCG_row_get(&row,i),row[i]);}
++#[kani::proof]
++#[kani::stub_verified(NCG_power_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_power_get_caller(){let row:[u32;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);assert_eq!(NCG_power_get(&row,i),row[i]);}
++#[kani::proof]
++#[kani::stub_verified(NCG_power_get)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_power_get_caller_negative(){let row:[u32;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);assert_ne!(NCG_power_get(&row,i),row[i]);}
++#[kani::proof]
++#[kani::stub_verified(NCG_decoder)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_decoder_caller(){let bytes:[u8;4]=kani::any();assert_eq!(NCG_decoder(bytes),if u32::from_le_bytes(bytes)<2147483647{Some(M31(u32::from_le_bytes(bytes)))}else{None});}
++#[kani::proof]
++#[kani::stub_verified(NCG_decoder)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_decoder_caller_negative(){let bytes:[u8;4]=kani::any();assert_ne!(NCG_decoder(bytes),if u32::from_le_bytes(bytes)<2147483647{Some(M31(u32::from_le_bytes(bytes)))}else{None});}
++
++// Exhaustive native Error generator, no success bias or hidden postcondition.
++impl kani::Arbitrary for Error{fn any()->Self{match kani::any::<u8>()%8 {0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation}}}
++#[kani::proof_for_contract(aspis_core::field::M31::from_le_bytes)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++fn NCG_actual_decoder_contract(){let b:[u8;4]=kani::any();let _=M31::from_le_bytes(b);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(aspis_core::field::M31::from_le_bytes)]
++fn NCG_actual_base_decoder(){let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);let offset=slot*120+term*4;
++ let scalar=M31::from_le_bytes(q[slot*120+term*4..slot*120+term*4+4].try_into().unwrap());
++ let native=u32::from_le_bytes([q[offset],q[offset+1],q[offset+2],q[offset+3]]);
++ let expected=if native<2147483647{Some(M31(native))}else{None};
++assert_eq!(scalar,expected);kani::cover!(slot==3&&term==25);kani::cover!(native>=2147483647);}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,KMX_clone_from_slice)]
++#[kani::stub(<[u8]>::to_vec,KMX_to_vec)]
++#[kani::stub(Vec::<u8>::extend_from_slice,KMX_extend_from_slice)]
++#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
++#[kani::unwind(129)]
++#[kani::stub_verified(aspis_core::field::M31::from_le_bytes)]
++fn NCG_actual_base_decoder_negative(){let q:[u8;608]=kani::any();let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4&&term<26);let offset=slot*120+term*4;
++ let scalar=M31::from_le_bytes(q[slot*120+term*4..slot*120+term*4+4].try_into().unwrap());
++ let native=u32::from_le_bytes([q[offset],q[offset+1],q[offset+2],q[offset+3]]);
++ let expected=if native<2147483647{Some(M31(native))}else{None};
++assert_ne!(scalar,expected);kani::cover!(slot==3&&term==25);kani::cover!(native>=2147483647);}

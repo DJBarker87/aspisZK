@@ -1,0 +1,42 @@
+{"attempt": "NCG_L006", "exit_status": 0, "wall_seconds": 2.0144951789989136, "peak_rss_kib": "4446484", "swaps": "0", "print_axioms": ["'NCG_CallLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCG_CallLog.base_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCG_HornerLog.three' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCG_TailLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCG_ReduceLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+'NCG_CallLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_CallLog.base_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_HornerLog.three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_TailLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_ReduceLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NCG_CallLog.base_substitution : ∀ (log : Fin 8 → NCG_CallLog.Call) (terms : ℕ)
+  (before after : Fin 8 → Aeneas.Std.U64) (coeff : Fin 8 → Aeneas.Std.U32) (scalar : Aeneas.Std.U32),
+  (∀ (k : Fin 8), (log k).old = before k) →
+    (∀ (k : Fin 8), (log k).coefficient =
+...
+=> value) right✝² run value same)
+            left✝² run value same)
+        left✝¹ run value same)
+    left✝ run value same
+theorem NCG_ReduceLog.substitute : ∀ (input : Aeneas.Std.U64) (reply : Aeneas.Std.U32),
+  FIo_Native.fast_pairing.canonical.reduce input = Aeneas.Std.Result.ok reply →
+    ↑reply = ↑input % 2147483647 ∧ ↑reply < 2147483647 :=
+fun input reply association =>
+  let ⟨out, h✝⟩ := AspisR1.LPf_ReductionWord.native_reduce input
+  let ⟨run, right✝⟩ := h✝
+  let ⟨value, canonical⟩ := right✝
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm run) association);
+  same ▸ ⟨value, canonical⟩
+NBO_WriterEntry.same_writer (base : VTop_Stages.Ops) (reserved : Bool) (ops : AspisR1.Port3_NativeQueryBody.Ops)
+  (producers : NBO_ProducerDomains.NBA_NBC base ops) (bounds : NBO_Entry.NBC_Bounds base)
+  (lower : NBO_QueryDomains.Lower ops) (bindings : NBO_FieldSemantics.NBC_Bindings ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (reached :
+    AspisR1.VTop_Provenance.WriterPrefix (NBO_TopInstall.install base reserved ops) D hash semantic proof split none p
+      a) :
+  ∃ g initial pending geometry after,
+    NBO_Entry.Prelude base reserved D hash semantic proof split p g initial pending geometry ∧
+      NBO_Composite.source ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after)) ∧
+        NBO_Composite.reference ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after))
+
+Running as unit: run-r7ba452c18f604572844df568b9bb2d7e.scope; invocation ID: 18c60e6926cd4206b8f96f77015c02be

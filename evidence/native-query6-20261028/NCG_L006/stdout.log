@@ -1,0 +1,315 @@
+'NCG_CallLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_CallLog.base_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_HornerLog.three' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_TailLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCG_ReduceLog.substitute' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NCG_CallLog.base_substitution : ∀ (log : Fin 8 → NCG_CallLog.Call) (terms : ℕ)
+  (before after : Fin 8 → Aeneas.Std.U64) (coeff : Fin 8 → Aeneas.Std.U32) (scalar : Aeneas.Std.U32),
+  (∀ (k : Fin 8), (log k).old = before k) →
+    (∀ (k : Fin 8), (log k).coefficient = coeff k) →
+      (∀ (k : Fin 8), (log k).scalar = scalar) →
+        (∀ (k : Fin 8), after k = (log k).reply) →
+          (∀ (k : Fin 8), ↑(coeff k) < 2 ^ 31 - 1) →
+            ↑scalar < 2 ^ 31 - 1 →
+              (∀ (k : Fin 8), NBB_Phase.Bound terms ↑(before k)) →
+                (∀ (k : Fin 8),
+                    S7OwnedP6Scalar.residue_scalar_owned (log k).old (log k).coefficient (log k).scalar false =
+                      Aeneas.Std.Result.ok (log k).reply) →
+                  ∀ (k : Fin 8), ↑(after k) = ↑(before k) + ↑(coeff k) * ↑scalar :=
+fun log terms before after coeff scalar old_input coefficient_input scalar_input stores hc hs ho association k =>
+  have h :=
+    NCG_CallLog.substitute (log k) terms (Eq.symm (coefficient_input k) ▸ hc k) (Eq.symm (scalar_input k) ▸ hs)
+      (Eq.symm (old_input k) ▸ ho k) (association k);
+  Eq.mpr (id (congrArg (fun _a => ↑_a = ↑(before k) + ↑(coeff k) * ↑scalar) (stores k)))
+    (Eq.mp (congrArg (fun _a => ↑(log k).reply = ↑(before k) + ↑(coeff k) * ↑_a) (scalar_input k))
+      (Eq.mp (congrArg (fun _a => ↑(log k).reply = ↑(before k) + ↑_a * ↑(log k).scalar) (coefficient_input k))
+        (Eq.mp (congrArg (fun _a => ↑(log k).reply = ↑_a + ↑(log k).coefficient * ↑(log k).scalar) (old_input k)) h)))
+theorem NCG_HornerLog.three : ∀ (alpha h0 h1 h2 h3 z0 z1 z2 t0 t1 out : AspisR1Stage2.Stage2E),
+  NBZ_Wide.product alpha h3 = Aeneas.Std.Result.ok z0 →
+    NBO_FieldSemantics.add h2 z0 = Aeneas.Std.Result.ok t0 →
+      NBZ_Wide.product alpha t0 = Aeneas.Std.Result.ok z1 →
+        NBO_FieldSemantics.add h1 z1 = Aeneas.Std.Result.ok t1 →
+          NBZ_Wide.product alpha t1 = Aeneas.Std.Result.ok z2 →
+            NBO_FieldSemantics.add h0 z2 = Aeneas.Std.Result.ok out →
+              NBW_Horner.eval NBZ_Wide.product alpha [h0, h1, h2] h3 = Aeneas.Std.Result.ok out :=
+fun alpha h0 h1 h2 h3 z0 z1 z2 t0 t1 out p0 a0 p1 a1 p2 a2 =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Eq.trans
+              (congrFun'
+                (congrArg bind
+                  (Eq.trans
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg bind
+                          (Eq.trans
+                            (Aeneas.Std.bind_tc_ok h3 fun y => do
+                              let product ← NBZ_Wide.product alpha y
+                              NBO_FieldSemantics.add h2 product)
+                            (Eq.trans
+                              (Eq.trans (congrFun' (congrArg bind p0) fun product => NBO_FieldSemantics.add h2 product)
+                                (Aeneas.Std.bind_tc_ok z0 (NBO_FieldSemantics.add h2)))
+                              a0)))
+                        fun prior => do
+                        let product ← NBZ_Wide.product alpha prior
+                        NBO_FieldSemantics.add h1 product)
+                      (Aeneas.Std.bind_tc_ok t0 fun y => do
+                        let product ← NBZ_Wide.product alpha y
+                        NBO_FieldSemantics.add h1 product))
+                    (Eq.trans
+                      (Eq.trans (congrFun' (congrArg bind p1) fun product => NBO_FieldSemantics.add h1 product)
+                        (Aeneas.Std.bind_tc_ok z1 (NBO_FieldSemantics.add h1)))
+                      a1)))
+                fun prior => do
+                let product ← NBZ_Wide.product alpha prior
+                NBO_FieldSemantics.add h0 product)
+              (Aeneas.Std.bind_tc_ok t1 fun y => do
+                let product ← NBZ_Wide.product alpha y
+                NBO_FieldSemantics.add h0 product))
+            (Eq.trans
+              (Eq.trans (congrFun' (congrArg bind p2) fun product => NBO_FieldSemantics.add h0 product)
+                (Aeneas.Std.bind_tc_ok z2 (NBO_FieldSemantics.add h0)))
+              a2)))
+        (Aeneas.Std.Result.ok out))
+      (eq_self (Aeneas.Std.Result.ok out)))
+theorem NCG_TailLog.substitute : ∀ (x y : AspisR1.LPi_RawValues.Q),
+  AspisR1.LPi_RawValues.Canon x →
+    AspisR1.LPi_RawValues.Canon y →
+      ∀ (a b c d : Aeneas.Std.U64),
+        FIo_Native.fast_pairing.canonical.Q.raw x y =
+            Aeneas.Std.Result.ok (Aeneas.Std.Array.make 4#usize [a, b, c, d] ⋯) →
+          (↑a, ↑b, ↑c, ↑d) = AspisR1.LPi_RawValues.spec x y :=
+fun x y hx hy a b c d association =>
+  let ⟨r0, h✝⟩ := AspisR1.LPi_RawValues.source x y hx hy
+  let ⟨r1, h✝¹⟩ := h✝
+  let ⟨r2, h✝²⟩ := h✝¹
+  let ⟨r3, h✝³⟩ := h✝²
+  let ⟨run, value⟩ := h✝³
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm association) run);
+  have words := congrArg (fun z => ↑z) same;
+  let ⟨left✝, right✝⟩ :=
+    Eq.mp
+      (Eq.trans (List.cons.injEq a [b, c, d] r0 [r1, r2, r3])
+        (congrArg (And (a = r0))
+          (Eq.trans (List.cons.injEq b [c, d] r1 [r2, r3])
+            (congrArg (And (b = r1))
+              (Eq.trans (List.cons.injEq c [d] r2 [r3])
+                (congrArg (And (c = r2))
+                  (Eq.trans (List.cons.injEq d [] r3 [])
+                    (Eq.trans (congrArg (And (d = r3)) (eq_self [])) (and_true (d = r3))))))))))
+      words
+  Eq.ndrec (motive := fun r0 =>
+    FIo_Native.fast_pairing.canonical.Q.raw x y =
+        Aeneas.Std.Result.ok
+          (Aeneas.Std.Array.make 4#usize [r0, r1, r2, r3]
+            (of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Eq
+                    (congrFun'
+                      (congrArg HAdd.hAdd
+                        (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                      1))
+                  (Aeneas.Std.UScalar.ofNatCore_val_eq
+                    (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                      (of_decide_eq_true (id (Eq.refl true))))))
+                (eq_self 4)))) →
+      (↑r0, ↑r1, ↑r2, ↑r3) = AspisR1.LPi_RawValues.spec x y →
+        Aeneas.Std.Array.make 4#usize [a, b, c, d]
+              (of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        1))
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                        (of_decide_eq_true (id (Eq.refl true))))))
+                  (eq_self 4))) =
+            Aeneas.Std.Array.make 4#usize [r0, r1, r2, r3]
+              (of_eq_true
+                (Eq.trans
+                  (congr
+                    (congrArg Eq
+                      (congrFun'
+                        (congrArg HAdd.hAdd
+                          (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                        1))
+                    (Aeneas.Std.UScalar.ofNatCore_val_eq
+                      (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                        (of_decide_eq_true (id (Eq.refl true))))))
+                  (eq_self 4))) →
+          (↑a, ↑b, ↑c, ↑d) = AspisR1.LPi_RawValues.spec x y)
+    (fun run value same =>
+      let ⟨left✝¹, right✝¹⟩ := right✝
+      Eq.ndrec (motive := fun r1 =>
+        FIo_Native.fast_pairing.canonical.Q.raw x y =
+            Aeneas.Std.Result.ok
+              (Aeneas.Std.Array.make 4#usize [a, r1, r2, r3]
+                (of_eq_true
+                  (Eq.trans
+                    (congr
+                      (congrArg Eq
+                        (congrFun'
+                          (congrArg HAdd.hAdd
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          1))
+                      (Aeneas.Std.UScalar.ofNatCore_val_eq
+                        (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                          (of_decide_eq_true (id (Eq.refl true))))))
+                    (eq_self 4)))) →
+          (↑a, ↑r1, ↑r2, ↑r3) = AspisR1.LPi_RawValues.spec x y →
+            Aeneas.Std.Array.make 4#usize [a, b, c, d]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                            1))
+                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                            (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 4))) =
+                Aeneas.Std.Array.make 4#usize [a, r1, r2, r3]
+                  (of_eq_true
+                    (Eq.trans
+                      (congr
+                        (congrArg Eq
+                          (congrFun'
+                            (congrArg HAdd.hAdd
+                              (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                            1))
+                        (Aeneas.Std.UScalar.ofNatCore_val_eq
+                          (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                            (of_decide_eq_true (id (Eq.refl true))))))
+                      (eq_self 4))) →
+              (↑a, ↑b, ↑c, ↑d) = AspisR1.LPi_RawValues.spec x y)
+        (fun run value same =>
+          let ⟨left✝², right✝²⟩ := right✝¹
+          Eq.ndrec (motive := fun r2 =>
+            FIo_Native.fast_pairing.canonical.Q.raw x y =
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.Array.make 4#usize [a, b, r2, r3]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun'
+                              (congrArg HAdd.hAdd
+                                (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                              1))
+                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                              (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 4)))) →
+              (↑a, ↑b, ↑r2, ↑r3) = AspisR1.LPi_RawValues.spec x y →
+                Aeneas.Std.Array.make 4#usize [a, b, c, d]
+                      (of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                1))
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          (eq_self 4))) =
+                    Aeneas.Std.Array.make 4#usize [a, b, r2, r3]
+                      (of_eq_true
+                        (Eq.trans
+                          (congr
+                            (congrArg Eq
+                              (congrFun'
+                                (congrArg HAdd.hAdd
+                                  (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                1))
+                            (Aeneas.Std.UScalar.ofNatCore_val_eq
+                              (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                (of_decide_eq_true (id (Eq.refl true))))))
+                          (eq_self 4))) →
+                  (↑a, ↑b, ↑c, ↑d) = AspisR1.LPi_RawValues.spec x y)
+            (fun run value same =>
+              Eq.ndrec (motive := fun r3 =>
+                FIo_Native.fast_pairing.canonical.Q.raw x y =
+                    Aeneas.Std.Result.ok
+                      (Aeneas.Std.Array.make 4#usize [a, b, c, r3]
+                        (of_eq_true
+                          (Eq.trans
+                            (congr
+                              (congrArg Eq
+                                (congrFun'
+                                  (congrArg HAdd.hAdd
+                                    (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                                  1))
+                              (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                  (of_decide_eq_true (id (Eq.refl true))))))
+                            (eq_self 4)))) →
+                  (↑a, ↑b, ↑c, ↑r3) = AspisR1.LPi_RawValues.spec x y →
+                    Aeneas.Std.Array.make 4#usize [a, b, c, d]
+                          (of_eq_true
+                            (Eq.trans
+                              (congr
+                                (congrArg Eq
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                        1))
+                                    1))
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              (eq_self 4))) =
+                        Aeneas.Std.Array.make 4#usize [a, b, c, r3]
+                          (of_eq_true
+                            (Eq.trans
+                              (congr
+                                (congrArg Eq
+                                  (congrFun'
+                                    (congrArg HAdd.hAdd
+                                      (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1))
+                                        1))
+                                    1))
+                                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 4
+                                    (of_decide_eq_true (id (Eq.refl true))))))
+                              (eq_self 4))) →
+                      (↑a, ↑b, ↑c, ↑d) = AspisR1.LPi_RawValues.spec x y)
+                (fun run value same => value) right✝² run value same)
+            left✝² run value same)
+        left✝¹ run value same)
+    left✝ run value same
+theorem NCG_ReduceLog.substitute : ∀ (input : Aeneas.Std.U64) (reply : Aeneas.Std.U32),
+  FIo_Native.fast_pairing.canonical.reduce input = Aeneas.Std.Result.ok reply →
+    ↑reply = ↑input % 2147483647 ∧ ↑reply < 2147483647 :=
+fun input reply association =>
+  let ⟨out, h✝⟩ := AspisR1.LPf_ReductionWord.native_reduce input
+  let ⟨run, right✝⟩ := h✝
+  let ⟨value, canonical⟩ := right✝
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm run) association);
+  same ▸ ⟨value, canonical⟩
+NBO_WriterEntry.same_writer (base : VTop_Stages.Ops) (reserved : Bool) (ops : AspisR1.Port3_NativeQueryBody.Ops)
+  (producers : NBO_ProducerDomains.NBA_NBC base ops) (bounds : NBO_Entry.NBC_Bounds base)
+  (lower : NBO_QueryDomains.Lower ops) (bindings : NBO_FieldSemantics.NBC_Bindings ops) {Hash : Type}
+  (D : VTop_Stages.aspis_core.digest.Digest32 Hash) (hash : Hash)
+  (semantic : VTop_Stages.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (proof : Aeneas.Std.Slice Aeneas.Std.U8) (split : Aeneas.Std.Usize) (p : AspisR1Stage2.verifier.Prepared)
+  (a : AspisR1Stage2.verifier.Accumulator)
+  (reached :
+    AspisR1.VTop_Provenance.WriterPrefix (NBO_TopInstall.install base reserved ops) D hash semantic proof split none p
+      a) :
+  ∃ g initial pending geometry after,
+    NBO_Entry.Prelude base reserved D hash semantic proof split p g initial pending geometry ∧
+      NBO_Composite.source ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after)) ∧
+        NBO_Composite.reference ops proof p initial g geometry pending =
+          Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (a, after))

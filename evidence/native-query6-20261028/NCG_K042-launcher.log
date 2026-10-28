@@ -1,0 +1,40 @@
+{"attempt": "NCG_K042", "exit_status": 1, "wall_seconds": 16.256595432991162, "peak_rss_kib": "505968", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+}}
+     |                                                   ^^^^^^^^^^^^^^^ shared reference to mutable static
+     |
+     = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+     = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBF_init_body_prestate` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1126:4
+     |
+1126 | fn NBF_init_body_prestate() {
+     |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbf_init_body_prestate`
+
+warning: variable `oldIndex` should have a snake case name
+    --> crates/aspis-r1-cost-probe/src/NBF_harness.rs:1128:62
+     |
+1128 |  let mut index:usize=kani::any();kani::assume(index<=64);let oldIndex=index;
+     |                                                              ^^^^^^^^ help: convert the identifier to snake case: `old_index`
+
+error: `core::result::Result<alloc::vec::Vec<[u64; 4]>, verifier::Error>` doesn't implement `kani::Arbitrary`.
+ --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+  |
+  = help: All objects in the modifies clause must implement the Arbitrary. The return type must also implement the Arbitrary trait if you are checking recursion or using verified stub.
+  = note: this error originates in the macro `kani_core::kani_intrinsics` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 1978 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r1bd7a3c5fd0e41ba9b3bbce3259a65f0.scope; invocation ID: 3c86cbbcb59c4bc4bf65fb58bd100c07
