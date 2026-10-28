@@ -1,0 +1,67 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50465/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50465/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Ownership.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Ownership.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.21",
+  "peak_rss_kib": "481984",
+  "swap": "0",
+  "source_revision": "3b1e3c1f9ffd4e4543adf14f0b97f4d8d231ce67",
+  "expected_phase": "compilation of R1Z/PV_W_Ownership",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Ownership.lean:55:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (dropSlot glue slot (take slot s).snd ?m.30).snd\nin the target expression\n  (dropSlot glue slot (dropSlot glue slot s w).fst (dropSlot glue slot s w).snd).snd = glue t w\n\nS : Type\nglue : Token \u2192 S \u2192 S\nslot : Nat\ns : Slots\nw : S\nt : Token\nh : s slot = some t\none : (dropSlot glue slot s w).snd = glue t w\n\u22a2 (dropSlot glue slot (dropSlot glue slot s w).fst (dropSlot glue slot s w).snd).snd = glue t w\n'R1Z.PV_W_Ownership.take_source' does not depend on any axioms\n'R1Z.PV_W_Ownership.take_empty' depends on axioms: [propext]\n'R1Z.PV_W_Ownership.take_other' depends on axioms: [propext]\n'R1Z.PV_W_Ownership.take_twice' depends on axioms: [propext]\n'R1Z.PV_W_Ownership.take_unique' depends on axioms: [propext]\n'R1Z.PV_W_Ownership.drop_slot_empty' depends on axioms: [propext]\n'R1Z.PV_W_Ownership.drop_slot_once' depends on axioms: [propext, sorryAx]\n'R1Z.PV_W_Ownership.drop_slot_unique' depends on axioms: [propext]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 50465,
+  "module": "R1Z/PV_W_Ownership",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Ownership.lean",
+  "source_blob": "728e09a634d1354e52ecb38c799acf8a6d0370ba",
+  "source_sha256": "9eccc4bd7167c38041faaaa68d093ecce35fd1cebb384d4795c88cca89ee2390",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_Enriched"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "e25a1d05a3570d07b910f55feb72c47c2bb43ba8830f704ddcbadd2ab78b0715",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_Enriched": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Enriched.olean",
+      "sha256": "b72a8c8f8f2ee64bed120225fb12ea75167956d32fe44c748bd7be7480b6216a",
+      "source_sha256": "3ac2efea789b759fa8c81fe5edcb51af79c414a3409251153aac898aaee5b076"
+    }
+  },
+  "transitive_cache_selection_sha256": null,
+  "external_selection_sha256": "adc40f5f1f598394e06c7c5d9d4c7cbf2821475560642fb465009285313187f3"
+}

@@ -39,3 +39,8 @@ The retry was 57.47 seconds early; D372-COOLDOWN-DEVIATION.json records this
 and the wrapper correction. 50452 upload refusal at 13:47:45 UTC consumes
 neither a compiler attempt nor its ID; its full 180-second cooldown is
 now enforced by the wrapper over both upload and barrier refusal records.
+
+Final D372 refusal accounting is d372-refusals.json: six uncharged refusals,
+IDs 50434/50452/50453/50468/50478/50482, all reused for their eventual compiler
+starts. The first retry's deviation is explicitly recorded; the remaining
+five retry admissions were 181.8–182.5 seconds after their refusals.

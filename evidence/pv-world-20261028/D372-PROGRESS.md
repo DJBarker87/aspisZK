@@ -13,8 +13,9 @@ path conversions, error payloads and native implicit Drop/scope exits. No
 remaining helper is assumed natively pure. D372-OWNERSHIP-FINDINGS.md identifies
 concrete field-take and scope-exit obligations in the reached publication path.
 
-The existing trust-field carrier/producer has not been replaced. Its source
-closure requires 270 private rebuilds beyond the 560 h6-qualified selections;
+The existing trust-field carrier/producer has not been replaced. A selection from the replay cache
+qualified 560 project objects and left 270 needing another h6-qualified cache
+or a private rebuild;
 this is an import-planning result, not a theorem or a reason to switch cohorts.
 The complete filesystem and D159 payload association and real deployment
 remain P work. Full selection details stay on the host with a local hash and

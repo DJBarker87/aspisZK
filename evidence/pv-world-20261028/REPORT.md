@@ -1,129 +1,172 @@
-# World interpretation result — D364 resume
+# World interpretation — D372 resume
 
-**Target not established. No row closed; no endpoint premise removed.**
-Stopped on budget exhaustion: 100/100 Lean compiler starts total, including
-96 resumed attempts; zero Kani. Final focused audit and replay passed. W-CARRIER-1 is a finding about a design that
-forgets destructor-accessible state, not a ledger/endpoint counterexample and
-not a stop. The earlier report's stop disposition is superseded.
+**Target not yet established. The requested whole-prover → existing trust
+Observation theorem is not established. No new ledger row closed; no endpoint
+premise or deployment condition removed.**
 
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-world`, unchanged branch
-`codex/pv-world-20261028`; resume start `937b8f561de14683239b9f5f7abe74c7eafd013c`.
-Original prover base `10b8afe7647d478f70693d8fc12e07be871c91e0`.
-Host directory `/home/dombarker/project-offloads/codex-pv-world-20261028/`.
-Used IDs: 36000–36096 and 36197–36199, all within the assigned block.
-Original uses were 36000–36002 and 36197; final audits used 36198–36199. `REFUSALS.md` records uncharged admission cooldowns.
+`codex/pv-world-20261028`; resume base
+`95740e686418809a3ceade00cf558cd5a42cc180`. Fresh budget exhausted:
+**100/100 Lean compiler starts, 0 Kani**, IDs **50400–50499** only, including
+reserved audits 50497–50499. The previous stage's 100 attempts remain historical
+evidence; this resume adds 100. No checked counterexample to a ROWS7 row or the
+endpoint was found. The retained carrier/fixed-dictionary and new ownership
+findings are not stop-rule counterexamples.
 
-## Established focused results
+## Checked progress and its exact scope
 
-`PV_W_Enriched` retains process statics/atomics, live heap allocations and
-ownership, allocator state, thread-local cells, volatile writes, ordering and
-fences, unwind state and runtime-specific Extra. Its flag/counter witness
-represents both retained normal/panic outcomes, counts one destructor entry,
-and records an internal event. `drop_valid` and `project_threaded` establish
-full-world continuity and OS projection through proven-silent steps. This is
-not a proved representation of the shipped machine or all reached destructors.
+`PV_W_R_Entry.erase_program` proves complete-Result erasure back to the frozen
+`prover.prove_masked_attempt`, with the hash callback explicitly erased from
+its lifted subprogram. `PV_W_R_MaskedWithAttempt.erase_program` covers the
+50-call nested body, including its early rejections. The recursive translation
+splices reservation/build, mask material/application, zero-factor, fixed-column,
+audit, salt, opening and publishing helpers. Hash and nonce-store callbacks
+are subprograms; they are not evaluated once into a fixed Result. The generator's
+`--check` passes for all **26** final lifted bodies, preserving source expressions,
+branches, sequencing and typed filesystem/reserve arguments.
 
-`PV_W_Syntax` proves the typed state/error/trace interpreter agrees with an
-independently defined operational execution judgment, including early-error
-and divergence prefixes. `PV_W_SourceSyntax` supplies complete-Result erasure
-and named bind/branch laws. These are model/source laws, not native purity.
+`PV_W_ReachedThreading.entry_source`, `entry_threaded`, `entry_operational` and
+`project_run` compose that concrete syntax over the enriched state/error/trace
+calculus. The interpreter's `Laws` still requires local base-helper and
+reserve/Drop/zeroize step validity. These are explicit **P obligations**, not
+proved native purity, an installed native dictionary or new T facts. Projection
+removes an internal event only under a proved OS frame law. Complete source
+Result erasure is not native trace adequacy.
 
-`PV_W_Reservation` reifies the exact frozen directory-sync, fallible-reserve
-and public store-reserve bodies. All three complete-Result erasure theorems
-compile. The checked generator retains all 34 source call sites, arguments,
-continuations and error branches. The finite source-tree proof generator
-replaced unsuccessful congruence searches; caps were never raised.
-`PV_W_ReservationThreading` composes those concrete source terms with ordered
-operational world threading and enriched-state projection.
+`PV_W_Loops` proves finite operational loop executions have an exact fuelled
+state/error/trace interpretation and retain continuity, including terminal
+errors and nonreturning prefixes. Its source theorem uses the pinned symbolic
+`Aeneas.Std.loop.eq_def`. `PV_W_PrivateSaltsLoop` connects the actual reified salt
+body to the frozen loop and proves finite source/world execution laws. This
+is not a theorem of native loop termination or complete infinite traces.
+The audit/inactive/opening loop bodies are independently checked. Uncompiled
+fold drafts remain in Git at `d216687bb4`; they were removed from the final
+accepted module set rather than presented as proved.
 
-`PV_W_TypedEffects` and `PV_W_TypedReservation` retain typed open/sync/options/
-error-kind/write arguments, with dictionary families for emitted generic
-path conversions. Their erasure remains exactly the frozen Result.
-`PV_W_TypedThreading` proves caller composition from local model-step laws;
-those laws remain explicit obligations. Helpers are not asserted natively pure.
-`PV_W_ErrorSyntax` proves error embedding preserves complete state/trace
-results, allowing interpreter tape faults to remain distinct from native IO
-error values. Focused receipts include their axiom reports.
+The exact merged fxmem sources were pinned from candidate merge `46a2203505`;
+17 modules were privately recompiled. The unused aggregate `PV_FXM_Closure`
+source is retained by historical citation, not loaded here. `PV_W_MemoryLift`
+transports the packages' source/reference laws into the calculus at the actual
+scoped types: op4 at `Vec<u32>`, world/header-indexed op32, and byte zeroize at
+the emitted dictionaries. Reserve commit receives the **post-buffer/header**;
+capacity/pointer are not reconstructed from element lists.
+`PV_W_MemoryCombined.current_selector` uses the same combined current-world
+fxmem selector for all four projections. This is source/package transport,
+not realization of the raw primitives or a deployed ABI theorem.
 
-## Still required
+`PV_W_ZeroizingBridge` distinguishes explicit op130 wrapper zeroization from
+subsequent consuming Drop, including two actions' write/fence counts in the
+package world. It does not prove L3 register/spill/extra-copy erasure or the
+complete candidate dictionary installation. `PV_W_Ownership.drop_slot_once`
+proves slot consumption prevents repeated glue in the ownership model; native
+local-variable, move/take and scope/unwind association remains unproved.
 
-The requested **entire extracted prover → existing trust Observation** theorem
-is not established. The exact `prove_masked_attempt` entry reification
-(16 call sites) and complete-Result erasure passed, as did entry threading
-conditional on local model-step laws. `PV_W_OsFile`, `PV_W_OsEntropy`,
-`PV_W_OsSchedule` and `PV_W_OsCombined` interpret the actual existing OsWorld
-tapes and prove reservation projection to its ordered tagged-call sequence.
-They preserve native error payloads separately from tape faults and retain
-process/filesystem updates. `PV_W_RepeatFile` checks an advancing repeated-call
-model; it is not a native O_EXCL proof. These results do not establish
-primitive native adequacy or bind a complete trust-field Observation. The main nested proof routine,
-reservation_path and other helpers still need recursive interpretations;
-primitive native adequacy, actual reached Drop/implicit close and ownership,
-allocator/zeroize fidelity, and the complete filesystem/D159 observation
-producer and deployment binding remain P obligations. No partial threading
-lemma is counted as that complete theorem or a native dictionary installation.
+## Missing native/Observation connection and rows
 
-The original FXM native witness is retained at its committed pins. No new
-reached-destructor purity theorem is borrowed from unfinished/unavailable
-fxmem2 work. The original fixed-callback/forgotten-state findings remain
-findings; they do not stop this resume.
+[D372-OWNERSHIP-FINDINGS.md](D372-OWNERSHIP-FINDINGS.md) identifies actual reached
+`backend.c1.take()` / `c2.take()` bindings before publication scope exit. Returned
+Option/Vec values alone do not encode their ownership updates or implicit Drop.
+The generic Digest32/Commitments backend and its captured fields also need a
+lifted interpretation; `hash : H` is not automatically the plain hash callback.
+Remaining opaque helper/loop-driver leaves are explicitly listed in the
+reification evidence and are not assumed natively pure.
 
-## OS findings and row accounting
+The existing `TrustEndpoint.trustData` producer is unchanged: it copies event
+fields from supplied `extractedEvents` and uses the supplied complete observer
+function `extracted` as payload. This run does **not** bind those functions to
+one complete interpreted prover execution, its filesystem State and its full
+D159 payload. No Unit payload, reduced observer or new producer is substituted.
+The replay-cache preflight qualified 560 project objects and left 270 without
+qualified objects from that cache; another h6-qualified selection or private
+build is required. No alternate source cohort was substituted.
 
-W-OS-1: O_EXCL exclusive creation/namespace behavior remains an owner finding.
-W-OS-2: file sync and parent-directory-entry crash durability are distinct
-owner obligations; nonce non-reuse across recovery depends on the required
-persistence/recovery laws. Neither is assumed, and neither is a new T field.
-OS-FINDINGS.md gives the dependencies. Native IO failure witness independence
-under the adopted public-failure option is still unproved here.
+New closures among V171/V172/V175/V176/V267/V268/V271: **none**.
 
-V170 effectful cases and V171/V172/V175/V176/V267/V268/V271/V221/V222 remain
-OPEN at their ROWS7 scope (`row-scope.json`). Endpoint statement, carriers,
-observer (including L1/L2/L3), simulator, failure event and T are unchanged.
-T remains exactly entropy_law, entropy_kernel, observation. Premises
-removed/added/weakened: **0/0/0**. No source refinement gap is hidden in T.
+| Rows | Remaining obligations beyond conditional threading |
+| --- | --- |
+| V171, V175 | Native path/flag/open/error and owned-descriptor association; complete caller/Observation installation |
+| V172 | Native sync result/effect law and the distinct persistence/recovery findings below |
+| V176, V268 | Complete native Error representation, payload/errno/kind decoding and required dynamic association/frame laws |
+| V267 | Native partial-write/progress, Interrupted/WriteZero, retained error effects and owner/cursor/content transport |
+| V271 | Native live ownership, aliasing/generation and exactly-once close/Drop across all reached exits |
 
-## Validation boundary
+Pre-existing scoped fxmem credit is reused, not recounted as new generic
+V170/V183/V221/V222 closure. The privacy endpoint, bounds, adversary, simulator
+(including simE), observer (including L1/L2/L3), failure event, carriers and
+client/deployment conditions are unchanged. Premises removed/added/weakened:
+**0/0/0**. T remains exactly **entropy_law, entropy_kernel, observation**; no
+missing P fact was placed in T. E1/E2, failure-event witness independence,
+whole RunJoin/native association and deployment identity remain obligations.
 
-Lean runs use one capped scope at a time: MemoryHigh=6G, MemoryMax=8G,
-MemorySwapMax=0, TasksMax=64, -M7000. Exact commands, source revision/blob/SHA,
-dependency fingerprints, exit, wall, RSS, swap and axiom output are retained.
-Only successful standard-axiom results receive credit; failed sorryAx output
-is rejected. No Kani, Rust/SBF rebuild, key/account operation, merge or push.
-No changes under crates/ or programs/, frozen extraction, shared source tree,
-or soundness/deployment files. No XR imports or proof shortcuts.
+## OS owner findings retained explicitly
 
-All 5,673 h4 external objects were hash-verified before the first resumed
-compile. Split-object companion selection and the public-import scan repair
-are documented. CACHE-SCAN-CORRECTION.md supersedes the initial incomplete
-OS cache preflight; the failed consumer passed after full revalidation.
-No unchanged full regression or full frozen manifest replay was run: no
-row-closing native/deployment instance has been obtained.
+[OS-FINDINGS.md](OS-FINDINGS.md) remains authoritative here. **W-OS-1** is the
+O_EXCL atomic exclusive-create/namespace obligation needed for no duplicate
+successful reservation in one running namespace. **W-OS-2** distinguishes
+file-data persistence from parent-directory-entry persistence and recovery;
+nonce non-reuse across a crash needs the required laws for both. A source sync
+call, successful reply or projected sync tag proves neither persistence law.
+Neither finding is assumed, folded into observation or added as a T field.
 
-History: `git log --oneline 10b8afe7647d478f70693d8fc12e07be871c91e0..HEAD`.
-Final source/receipt accounting is `resume-validation.json`: 100 compiler
-starts (76 accepted and 24 failed), no unverified focused sources, and no row closures. Final targets:
+## Validation and compact evidence
 
-| ID | Target | Exit | Wall | Peak RSS (KiB) | Swap |
+[d372-validation.json](d372-validation.json) accounts for all 100 fresh starts:
+**81 accepted compilations, 19 rejected attempts**, zero Kani. Every current
+new world proof source has a matching successful compile and its required
+axiom queries; no unverified current world source remains. Rejected elaborations
+and their sorryAx output receive no credit. The final targets are:
+
+| ID | Exact module target | Exit | Wall | Peak RSS (KiB) | Swap |
 | --- | --- | --- | --- | --- | --- |
-| 36198 | R1Z/PV_W_ResumeAudit | 0 | 1.50 s | 3856952 | 0 |
-| 36199 | R1Z/PV_W_ResumeReplay | 0 | 1.53 s | 3859612 | 0 |
+| 50497 | R1Z/PV_FXM_AuditAxioms | 0 | 1.22 s | 2,633,904 | 0 |
+| 50498 | R1Z/PV_W_D372Audit | 0 | 1.44 s | 2,642,724 | 0 |
+| 50499 | R1Z/PV_W_D372Replay | 0 | 1.29 s | 2,647,100 | 0 |
 
-The audit contains 93 explicit axiom queries; the replay adds six. Every
-accepted query uses only a subset of propext, Classical.choice and Quot.sound.
-Exact source revisions and source hashes are recorded per attempt in
-`36198-source.json`, `36199-source.json` and their receipt directories,
-with the final module hashes in `resume-source-freeze.json`. This is a
-focused dependency/import replay, not a full deployment-manifest release.
+All three use source revision `590c01c15c0ac3863ce763c73b16a699e3f8073b`.
+Their source paths/blobs/SHA-256, dependency fingerprints, complete commands,
+exit/wall/RSS/swap and full `#print axioms` output are in the numbered source
+records and `lean-50497`–`lean-50499` receipts. The audits issue **79 + 89 + 7**
+queries; accepted results use only subsets of `propext`, `Classical.choice`,
+`Quot.sound`. This is a focused source/dependency replay, **not** a frozen
+manifest/deployment release. No unchanged full regression was repeated.
 
-`resume-cleanup.json` and `resume-private-object-manifest.json` retain the
-compiled-artifact inventory/hashes. Cleanup removed 22,148 private entries;
-zero reused targets were removed. Sources, receipts and witnesses remain;
-no keys were touched.
+Every compile used one admitted scope, MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64 and Lean -M7000. Maximum observed peak RSS was
+3,286,960 KiB; all swaps were zero. All 5,673 h4 external objects were freshly
+hash-verified before the first compile. No external object was rebuilt or
+shared source overwritten. The fxmem native/structural K-1 substitute evidence
+is reused at its stated scopes; no new native differential, Rust/SBF build,
+Kani gate or release-pin check is claimed.
 
-Next concrete deliverable: recursively interpret `prove_masked_with_attempt`
-and reached helpers, prove native primitive/Drop/ownership adequacy for their
-actual types, then connect the resulting full filesystem and D159 payload
-sequence to the existing Observation producer without adding any T premise.
-The source/model results here provide composition lemmas for that work, not
-a substitute for it.
+Six reservation refusals were uncharged and retried with the same unlaunched
+IDs. One retry (50434) occurred 57.47 seconds before the full cooldown;
+[D372-COOLDOWN-DEVIATION.json](D372-COOLDOWN-DEVIATION.json) records the error.
+The wrapper was corrected; the other five retries waited over 180 seconds,
+as recorded in [d372-refusals.json](d372-refusals.json). Admission and memory
+caps held throughout. Refusals were not the stopping reason.
+
+Upload/admission inventories are represented by compact decisions and byte
+hashes instead of repeated full manifests. [d372-cleanup.json](d372-cleanup.json)
+retains private output-object hashes and the full host inventory's hash/path;
+the **9,671,900-byte** inventory is not committed. Cleanup removed 22,637 private
+object entries, zero reused targets and zero keys. Sources, receipts and
+witnesses remain. [d372-source-freeze.json](d372-source-freeze.json) pins the
+final checked sources and their output-object hashes. No crates/programs,
+endpoint/soundness files, keys/accounts, branch, worktree or release artifact
+was changed; no merge or push occurred.
+
+History: `git log --oneline 95740e6864..HEAD`; [d372-commits.txt](d372-commits.txt)
+records the implementation history through the source/audit freeze. The
+previous report and receipt accounting remain in Git at `95740e6864`.
+
+Stopped on the fresh **100-attempt budget exhaustion**. Next concrete work:
+lift the generic Digest32/Commitments backend and captured fields, install the
+remaining loop drivers and native ownership/move/Drop semantics, discharge the
+actual filesystem/Error/descriptor leaf laws, and construct the existing
+filesystem plus complete D159 Observation producer from that same execution.
+The current conditional threading and source equations support this work;
+they do not replace those P obligations.
+
+Documentation correction: [D372-DOC-ERRATUM.md](D372-DOC-ERRATUM.md) corrects the
+inherited transformer-name analogy; the audited Run/bind definitions and their
+failure-prefix laws are unchanged.
