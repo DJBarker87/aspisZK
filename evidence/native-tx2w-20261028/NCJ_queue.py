@@ -9,4 +9,4 @@ for n,h in rows:
  p=E/f'NCJ_K{n:03}/receipt.json'
  if r.returncode or not p.exists():raise SystemExit('runner stop '+r.stderr)
  log=(p.parent/'stdout.log').read_text()
- if 'could not compile' in log or 'TIMEOUT' in log or 'VERIFICATION:- TIMEOUT' in log or 'Timed out' in log or 'Failed to execute cargo' in log:raise SystemExit('adaptive queue stop; isolate failed shape')
+ if 'could not compile' in log or 'timeout' in log.lower() or 'timed out' in log.lower() or 'Failed to execute cargo' in log:raise SystemExit('adaptive queue stop; isolate failed shape')
