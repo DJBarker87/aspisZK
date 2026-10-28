@@ -1,0 +1,79 @@
+use super::*;
+use alloc::vec::Vec;
+// Scratch-only replacements. T: Copy excludes Clone side effects.
+#[inline(never)]
+pub unsafe fn NBR_copy_nonoverlapping<T: Copy>(src: *const T,dst: *mut T,count:usize){
+    let mut i=0;while i<count {let value=unsafe{src.add(i).read()};unsafe{dst.add(i).write(value)};i+=1;}
+}
+#[inline(never)]
+pub fn NBR_copy_from_slice<T: Copy>(dst:&mut [T],src:&[T]){
+    assert_eq!(dst.len(),src.len());let mut i=0;while i<src.len(){dst[i]=src[i];i+=1;}
+}
+#[inline(never)]
+pub fn NBR_clone_from_slice<T: Copy>(dst:&mut [T],src:&[T]){NBR_copy_from_slice(dst,src)}
+#[inline(never)]
+pub fn NBR_extend_from_slice<T: Copy,A:alloc::alloc::Allocator>(dst:&mut Vec<T,A>,src:&[T]){
+    dst.reserve(src.len());let mut i=0;while i<src.len(){dst.push(src[i]);i+=1;}
+}
+#[inline(never)]
+pub fn NBR_to_vec<T: Copy>(src:&[T])->Vec<T>{
+    let mut dst=Vec::with_capacity(src.len());NBR_extend_from_slice(&mut dst,src);dst
+}
+// Match the successful-reallocation byte law, preserving the old allocation on failure.
+// MaybeUninit permits copying spare-capacity bytes without reading them as values.
+pub unsafe fn NBR_realloc(ptr:*mut u8,layout:alloc::alloc::Layout,new_size:usize)->*mut u8{
+ let new_layout=alloc::alloc::Layout::from_size_align(new_size,layout.align()).unwrap();
+ let out=unsafe{alloc::alloc::alloc(new_layout)};
+ if !out.is_null(){
+  let mut i=0;while i<core::cmp::min(layout.size(),new_size){
+   let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(i).read()};
+   unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(i).write(value)};i+=1;
+  }
+  unsafe{alloc::alloc::dealloc(ptr,layout)};
+ }
+ out
+}
+
+fn NBR_value(roots:[[u8;32];2],gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],semantic_alpha:[K;10],z:[SecureCirclePoint;2],claim:E,state:[u8;32])->Prepared{
+ Prepared{variant:Variant::S2,roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state}
+}
+fn NBR_error_cut(returned:Result<E,Error>)->Result<Box<Prepared>,Error>{
+ let _claim=returned?;
+ kani::assume(false);unreachable!()
+}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof] #[kani::unwind(35)]
+fn NBR_claim_errors(){
+ let tag:u8=kani::any();kani::assume(tag<8);let error=match tag{0=>Error::Parse,1=>Error::Semantic,2=>Error::Transcript,3=>Error::Relation,4=>Error::Merkle,5=>Error::Query,6=>Error::Checkpoint,_=>Error::Allocation};
+ match NBR_error_cut(Err(error)){Err(e)=>assert_eq!(e,error),Ok(_)=>assert!(false,"returned claim error was swallowed")};
+ kani::cover!(true,"all eight claim errors return before Prepared allocation");
+}
+fn NBR_box_fixture(scalars:bool){
+ let roots:[[u8;32];2]=kani::any();let gamma:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};let kappa:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};let alpha:[E;2]=unsafe{core::mem::transmute::<[u8;64],[E;2]>(kani::any())};let rho:K=unsafe{core::mem::transmute::<[u8;16],K>(kani::any())};let queries:[u32;22]=kani::any();let semantic_alpha:[K;10]=unsafe{core::mem::transmute::<[u8;160],[K;10]>(kani::any())};let z:[SecureCirclePoint;2]=unsafe{core::mem::transmute::<[u8;64],[SecureCirclePoint;2]>(kani::any())};let claim:E=unsafe{core::mem::transmute::<[u8;32],E>(kani::any())};let state:[u8;32]=kani::any();
+ let i:usize=kani::any();let b:usize=kani::any();let j:usize=kani::any();let a:usize=kani::any();kani::assume(i<32&&b<2&&j<22&&a<10);
+ let p=Box::new(NBR_value(roots,gamma,kappa,alpha,rho,queries,semantic_alpha,z,claim,state));
+ if scalars{assert_eq!(p.variant,Variant::S2);assert_eq!(p.gamma,gamma);assert_eq!(p.kappa,kappa);assert_eq!(p.rho,rho);assert_eq!(p.claim,claim);assert_eq!(p.state[i],state[i]);}
+ else{assert_eq!(p.roots[b][i],roots[b][i]);assert_eq!(p.alpha[b],alpha[b]);assert_eq!(p.queries[j],queries[j]);assert_eq!(p.semantic_alpha[a],semantic_alpha[a]);assert_eq!(p.z[b],z[b]);}
+ kani::cover!(true,"source constructor and typed Box retain every selected field");
+}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof] #[kani::unwind(35)]
+fn NBR_box_scalars(){NBR_box_fixture(true)}
+#[kani::stub(<[u8]>::copy_from_slice,NBR_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,NBR_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,NBR_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,NBR_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,NBR_to_vec)]
+#[kani::stub(alloc::alloc::realloc,NBR_realloc)]
+#[kani::proof] #[kani::unwind(35)]
+fn NBR_box_arrays(){NBR_box_fixture(false)}
