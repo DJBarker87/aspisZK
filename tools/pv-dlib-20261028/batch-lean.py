@@ -8,12 +8,14 @@ import subprocess,json,hashlib,re,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-dlib-20261028'
 D='/home/dombarker/project-offloads/codex-pv-dlib-20261028';H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
-check_ready();modules=sys.argv[1:];assert modules
+check_ready();audit_mode=sys.argv[1:2]==['--audit'];modules=sys.argv[2:] if audit_mode else sys.argv[1:];assert modules
 head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();t=json.loads((E/'TALLY.json').read_text());start=max(t['used_ids'])+1
-assert start+len(modules)<=43497 and len(t['lean_charged'])+len(modules)<=100
+assert ((43497<=start and start+len(modules)<=43500) if audit_mode else start+len(modules)<=43497)
+assert len(t['lean_charged'])+len(modules)<=100
 records=[]
 for i,m in enumerate(modules):
- assert m.startswith('R1Z/PV_DL_') and not any(x in m for x in ['Audit','Replay'])
+ assert m.startswith('R1Z/PV_DL_')
+ assert (m in ['R1Z/PV_DL_ResumeAudit','R1Z/PV_DL_ResumeReplay']) if audit_mode else not any(x in m for x in ['Audit','Replay'])
  p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');s=p.read_bytes();rel=str(p.relative_to(R));assert subprocess.check_output(['git','show','HEAD:'+rel])==s
  n=start+i;meta=dict(attempt=n,module=m,source_path=rel,source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],text=True).strip(),source_sha256=hashlib.sha256(s).hexdigest(),revision=head,source_revision=head,environment_generation='private pinned external overlay with same-authority IR companions',external_manifest_sha256=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest(),external_ir_manifest_sha256=hashlib.sha256((E/'external-ir-companions.json').read_bytes()).hexdigest())
  
