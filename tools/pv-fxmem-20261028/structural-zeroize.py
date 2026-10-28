@@ -7,7 +7,7 @@ r=subprocess.run(['ssh','dombarker@100.108.41.90','cat '+p],text=True,capture_ou
 s=r.stdout
 # Same complete-body parser/tokenizer as the already reviewed drop gate.
 src=(R/'tools/pv-fxmem-20261028/structural-drop.py').read_text();a=src.index('def clean(');b=src.index('expected=');exec(src[a:b])
-expected=[('impl<Z> Zeroize for Z','{fn zeroize(&mut self) {volatile_write(self, Z::default());atomic_fence();}}'),
+expected=[('impl<Z> Drop for Zeroizing<Z>','{fn drop(&mut self) {self.0.zeroize()}}'),('impl<Z> Zeroize for Z','{fn zeroize(&mut self) {volatile_write(self, Z::default());atomic_fence();}}'),
  ('impl<Z, const N: usize> Zeroize for [Z; N]','{fn zeroize(&mut self) {self.iter_mut().zeroize();}}'),
  ("impl<Z> Zeroize for IterMut<'_, Z>",'{fn zeroize(&mut self) {for elem in self {elem.zeroize();}}}'),
  ('fn atomic_fence()','{atomic::compiler_fence(atomic::Ordering::SeqCst);}'),
@@ -22,5 +22,6 @@ j=dict(evidence_class='structural (K-1 substitute)',path=p,sha256=hashlib.sha256
  excludes='No hardware memory fence is asserted. A compiler fence controls compiler ordering. No inspection of emitted deployed machine instructions, registers, spill slots, extra copies, pages after free, persistence, concurrent reads, DMA, or side-channel observations. L3 binary audit remains separate and open.',
  semantics='PV_FXM_ZeroWorld.byte/native/indexed; exact byte overwrite, write/fence counts, outside-target memory preservation, arbitrary frame and allocator/drop counters preserved, caller composition.',
  value='PV_FXM_ZeroSelected.elements/array/scalar; complete Result projected through the exact primitive byte dictionaries. Generic trait effects are not inferred from the name DefaultIsZeroes.',
+ drop_caller='Zeroizing<[u8;N]>::drop delegates once to array zeroize; subsequent field glue for the byte array has no user destructor or allocator effect. PV_FXM_ZeroDrop composes this consumed callback with caller state.',
  d188='No Aeneas zeroize iterator emission is credited. Owned index reference keeps each element result; structural gate binds the complete native iterator body. Existing extraction stand-ins are not imported.')
 (E/'STRUCTURAL-ZEROIZE-GATE.json').write_text(json.dumps(j,indent=2)+'\n');print('PASS complete array/iterator/blanket/volatile/fence bodies')
