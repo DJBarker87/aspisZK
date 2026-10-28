@@ -1,0 +1,34 @@
+{"attempt": "NBY_K098", "exit_status": 1, "wall_seconds": 8.861241023987532, "peak_rss_kib": "349540", "swaps": "0", "print_axioms": "N/A: kani"}
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true}
+{"command": ["/home/dombarker/.cargo/bin/cargo-kani", "kani", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_src/crates/aspis-r1-cost-probe/Cargo.toml", "--target-dir", "/home/dombarker/project-offloads/codex-cx-native-tx1f-20261028/NBY_target", "--lib", "-j", "1", "-Z", "unstable-options", "-Z", "stubbing", "--harness-timeout", "90s", "--exact", "--harness", "verifier::candidate:
+...
+_slot_last_sentinel_wrong.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NBY_reduced_control.rs:7:110 in function verifier::candidate::NBY_reduced_control::NBY_slot_last_sentinel_wrong
+
+Check 28: verifier::candidate::NBY_reduced_control::NBY_slot_last_sentinel_wrong.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NBY_reduced_control.rs:7:110 in function verifier::candidate::NBY_reduced_control::NBY_slot_last_sentinel_wrong
+
+Check 29: compact::slot_offset.array_bounds.1
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: crates/aspis-r1-cost-probe/src/compact.rs:60:20 in function compact::slot_offset
+
+
+SUMMARY:
+ ** 1 of 29 failed
+Failed Checks: assertion failed: !(byte == proof[57606] && nodes.len() == 32 * SLOT_NODES[5])
+ File: "crates/aspis-r1-cost-probe/src/NBY_reduced_control.rs", line 7, in verifier::candidate::NBY_reduced_control::NBY_slot_last_sentinel_wrong
+
+VERIFICATION:- FAILED
+Verification Time: 1.8716987s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBY_reduced_control::NBY_slot_last_sentinel_wrong
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+{"lock_before": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "new_packages": [], "edge_errors": [], "metadata_sha256": "86b3ab14b83340f35302d6351dd27205134c98228e1d7c08baad8357b5e7b7ff", "resolved_packages": 441, "frozen_packages": 444, "allowed": true, "lock_after": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef", "unchanged": true, "kani_exit": 1}
+
+Running as unit: run-r58f7e33d14f743dcad4496e0cf7661e1.scope; invocation ID: a485ccf9a71041c2834580f76280f75d

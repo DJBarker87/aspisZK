@@ -1,0 +1,60 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBY_reduced_control.rs
+@@ -0,0 +1,7 @@
++use super::*;
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u32]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NBY_slot_last_sentinel_wrong(){let mut proof=[0u8;57607];proof[57606]=1;let nodes=slot(&proof,5);let byte=nodes[nodes.len()-1];assert!(!(byte==proof[57606]&&nodes.len()==32*SLOT_NODES[5]));}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,47 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[path="NBV_keys.rs"]
++mod NBV_keys;
++
++#[cfg(kani)]
++#[path="NBV_replay_keys.rs"]
++mod NBV_replay_keys;
++
++#[cfg(kani)]
++#[path="NBV_leaf_rows.rs"]
++mod NBV_leaf_rows;
++
++#[cfg(kani)]
++#[path="NBV_posthash.rs"]
++mod NBV_posthash;
++
++#[cfg(kani)]
++#[path="NBV_parent.rs"]
++mod NBV_parent;
++
++#[cfg(kani)]
++#[path="NBY_opening.rs"]
++mod NBY_opening;
++
++#[cfg(kani)]
++#[path="NBY_keys.rs"]
++mod NBY_keys;
++
++#[cfg(kani)]
++#[path="NBY_leaf.rs"]
++mod NBY_leaf;
++
++#[cfg(kani)]
++#[path="NBY_padding.rs"]
++mod NBY_padding;
++
++#[cfg(kani)]
++#[path="NBY_boundary.rs"]
++mod NBY_boundary;
++
++#[cfg(kani)]
++#[path="NBY_reduced_control.rs"]
++mod NBY_reduced_control;

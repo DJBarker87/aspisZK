@@ -66,3 +66,45 @@ no scratch writes and no digest-log extension. K027/028 give a small borrowed
 supplied-window indexed-load/frame law with a failing control, not the entire
 variable-length physical-node read association. No short rejection is being
 used to justify a successful row.
+
+K065–K072: four native positive/control pairs PASS / expected FAIL.
+The first two call actual verify_in_place with arbitrary full scratch and either
+invalid n or a failing first strict-order pair; both preserve scratch and make
+no hash call. The latter two check final Result/complete scratch frame and
+outer n=w/reset/iterator control. Successful eighteen-level consumption is
+still OPEN; the local instrumentation counter is not a global log law.
+
+K073/074 and K075/076 validate actual first/last opening boundary bytes on a
+full arbitrary57607-byte allocation, with failing controls. Fixed edge results
+are not quantified all-byte opening refinement. Slot edge checks reuse the
+already proved offset recurrence (NBE_SlotLoop/NBV_K022); no new loop proof is
+inferred from a finite caller replay. Final control status is in the ledger.
+
+K077/078 first-slot byte PASS / expected FAIL. K079 last-slot byte PASS, but
+its matched K080 control did not finish: outer exit124 at240.136443899s,
+no verification summary. K080 reaches SAT then stalls before a terminal
+counterexample report; it has NO expected-failure credit, and K079 therefore
+has NO native credit. Its original CBMC90s/outer240s limits were not raised.
+Time-v reports101240KiB RSS, but child attribution is incomplete after the
+outer kill; actual cgroup memory.peak is6661271552bytes. No memory-max kill.
+Read-only recovery proves the scope is gone and frozen lock unchanged, in
+NBY_K080-post-timeout-lock.json. The gate epilogue did not run, so its original
+pre-run graph is retained rather than rewritten as a completed postcheck.
+No unchanged repeat of this trace-producing shape is launched.
+
+K098 is the changed, reduced last-slot control: one fixed sentinel byte on the
+full carrier, same slot helper/predicate, exact KMX patch and configuration.
+It FAILS exactly the intended assertion in8.861241024s,RSS349540KiB,swap0.
+This restores K079's fixed-edge local credit; it does not rewrite K080's
+excluded timeout or turn four edge checks into an all-byte opening theorem.
+
+K081–K088: four mitigation-window gates PASS, all matching controls FAIL.
+They check an index-plus-one-byte cut; byte-only inside effect; byte-only
+complete outside/index frame; and pointer geometry on full arbitrary16-row
+scratch. They execute the exact KMX implementation, not a new copy stub.
+The byte-only frames do not repeat the index store. K089/090 checks actual
+parent-read before overlapping index-write on the same arbitrary index array;
+K091/092 checks binary XOR sibling detection equals equal-parent grouping
+under the caller's strict adjacent order, and exact advancing index bounds.
+All have failing controls. These are local source/mitigation cuts, not a full
+successful row/caller or global oracle-history refinement.

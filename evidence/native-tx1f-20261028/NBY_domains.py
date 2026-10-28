@@ -6,4 +6,10 @@ g.pair('empty_level_transition','''let idx:[u32;16]=kani::any();let values:[[u8;
 # A missing negative control for the imported, unchanged NBV_K039 arity gate.
 g.text+=g.attrs+'''fn NBY_binary_arity_wrong(){assert!(!(Arity::Two.bits()==1&&Arity::Two.width()==2&&Arity::Two.levels()==18));}\n'''
 g.cases.append(('NBY_binary_arity_wrong',True))
-if __name__=='__main__':g.publish('NBY_domains','multiproof.rs',89)
+if __name__=='__main__':
+ import subprocess,sys
+ # Isolate the timed-out negative trace to one sentinel byte, same configuration.
+ assert subprocess.run([sys.executable,str(g.E/'NBY_reduced_control.py')]).returncode==0
+ if len(list(g.E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))<80:
+  assert subprocess.run([sys.executable,str(g.E/'NBY_host.py'),'NBY_K098']).returncode==0
+ g.publish('NBY_domains','multiproof.rs',89)

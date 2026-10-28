@@ -16,7 +16,10 @@ for p in sorted(E.glob('NBY_[KL][0-9][0-9][0-9]/receipt.json')):
   status='standard-axioms-pass'
  else:
   assert j['env']['CARGO_NET_OFFLINE']=='true' and j['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3',a
-  graph=json.loads((E/(a+'-graph.json')).read_text());assert graph['allowed'] and graph['unchanged'] and not graph['new_packages'] and not graph['edge_errors'],a
+  graph=json.loads((E/(a+'-graph.json')).read_text());assert graph['allowed'] and not graph['new_packages'] and not graph['edge_errors'],a
+  if not graph.get('unchanged'):
+   recovery=json.loads((E/(a+'-post-timeout-lock.json')).read_text());assert recovery['unchanged'] and not recovery['scope_processes'],a
+   graph={**graph,'unchanged':True,'lock_after':recovery['lock_after']}
   assert graph['lock_before']==graph['lock_after']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef',a
   assert j['source_hashes']['NBY_KMX_copy_stubs.patch']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',a
   timed='cbmc timed out' in out.lower() or 'harness timed out' in out.lower() or j['exit_status'] in [124,137]
@@ -24,10 +27,10 @@ for p in sorted(E.glob('NBY_[KL][0-9][0-9][0-9]/receipt.json')):
   if timed:status='timeout'
   elif j['exit_status']==0:
    assert not cfg.get('expected_negative'),a
-   nexta=f'NBY_K{int(a[-3:])+1:03}'
+   nexta='NBY_K098' if a=='NBY_K079' else f'NBY_K{int(a[-3:])+1:03}'
    cp=E/nexta/'stdout.log'
-   paired=cp.is_file() and 'VERIFICATION:- FAILED' in cp.read_text() and 'cbmc timed out' not in cp.read_text().lower()
-   status='diagnostic-loop-pass' if a in ['NBY_K009','NBY_K011'] else 'paired-pass' if paired else 'pass-control-open'
+   paired=cp.is_file() and 'VERIFICATION:- FAILED' in cp.read_text() and 'cbmc timed out' not in cp.read_text().lower() and json.loads((cp.parent/'receipt.json').read_text())['exit_status'] not in [124,137]
+   status='diagnostic-loop-pass' if a in ['NBY_K009','NBY_K011'] else 'paired-pass-reduced-control' if a=='NBY_K079' and paired else 'paired-pass' if paired else 'pass-control-open'
   else:
    fs=re.findall(r'- Status: FAILURE\s+\t - Description: "([^"]*)"',out)
    if cfg.get('expected_negative') and len(fs)==1 and fs[0].startswith('assertion failed: !'):
@@ -37,5 +40,5 @@ for p in sorted(E.glob('NBY_[KL][0-9][0-9][0-9]/receipt.json')):
  counts[status]+=1;rows.append({'attempt':a,'kind':kind,'status':status,'exit':j['exit_status'],'wall_seconds':j['wall_seconds'],'peak_rss_kib':int(j['peak_rss_kib']),'swaps':int(j['swaps'])})
 ks=[x for x in rows if x['kind']=='kani'];ls=[x for x in rows if x['kind']=='lean'];assert len(ks)<=80 and len(ls)<=60
 ledger=[json.loads(l)['attempt'] for l in (E/'NBY_ATTEMPTS.jsonl').read_text().splitlines()];assert len(ledger)==len(set(ledger))==len(rows)
-out={'counts':dict(counts),'kani_used':len(ks),'kani_budget':80,'lean_used':len(ls),'lean_budget':60,'total_wall_seconds':sum(x['wall_seconds'] for x in rows),'maximum_peak_rss_kib':max(x['peak_rss_kib'] for x in rows),'swaps':sum(x['swaps'] for x in rows),'findings_or_input_errors':failures,'attempts':rows}
+out={'counts':dict(counts),'kani_used':len(ks),'kani_budget':80,'lean_used':len(ls),'lean_budget':60,'total_wall_seconds':sum(x['wall_seconds'] for x in rows),'maximum_recorded_peak_rss_kib':max(x['peak_rss_kib'] for x in rows),'maximum_cgroup_memory_peak_bytes':max(int(json.loads((E/x['attempt']/'receipt.json').read_text())['cgroup_memory_peak_bytes']) for x in rows),'swaps':sum(x['swaps'] for x in rows),'findings_or_input_errors':failures,'attempts':rows}
 (E/'NBY_VALIDATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:v for k,v in out.items() if k!='attempts'}));assert not failures,failures

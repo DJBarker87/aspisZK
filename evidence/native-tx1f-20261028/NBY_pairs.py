@@ -3,7 +3,7 @@ from pathlib import Path
 import sys,json,subprocess
 E=Path(__file__).resolve().parent;sys.path.insert(0,str(E));import NBY_host as h
 for number in range(int(sys.argv[1]),int(sys.argv[2])+1,2):
- if 80-len(list(E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))==1:raise SystemExit('One slot retained for imported arity negative control; no unpaired positive')
+ if 80-len(list(E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))==1:raise SystemExit('One slot retained for a reduced negative control; no unpaired positive')
  for n in [number,number+1]:
   if len(list(E.glob('NBY_K[0-9][0-9][0-9]/receipt.json')))>=80:raise SystemExit('Kani budget exhausted; continue Lean-only work')
   a=f'NBY_K{n:03}';p=E/a/'receipt.json'

@@ -28,3 +28,17 @@ admission. They are retained as diagnostic positive/control results, not P6
 closure under the single-iteration ruling. NBI_CountScan/NBI_Admission and
 NBJ_CountRows/CountLevels are imported; NBY_CountExecution proves the reached
 bound on that existing execution, without replacing the missing native instance.
+
+## D-4: index assignment is once per row, not once per copied byte
+
+The native byte-window drafts are split before launch: byte-only windows
+frame the entire index array. A separate parent-read/index-write gate handles
+the once-per-row index store. Recomputing parent and writing idx[w] on every
+byte would be wrong when w=i, repeatedly halving the source cell. No such
+composition is claimed. NBY_RowCopy only composes the value-byte plane; its
+source reply is fixed for that copy. The joint index/one-byte gate is a local
+cut, not a32-iteration implementation of the original row.
+
+## D-5: negative trace size
+
+K080 solves SAT but fails to produce a terminal counterexample before the outer240s deadline. It is not a successful control. Its replacement isolates a single last-byte sentinel on a fixed full carrier, with the SAME slot helper/predicate, exact KMX patch, frozen graph and verifier flags. This changes the failing witness representation rather than rerunning the huge arbitrary-array trace or raising a limit. K079 stays uncredited unless that new control actually fails.
