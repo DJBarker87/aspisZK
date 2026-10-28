@@ -45,7 +45,7 @@ security claim follows from this local fixture result.
 
 ## Certificate method and checker
 
-453 equations: tree0 Fin157, tree1 Fin157, tree2 Fin139;996 compression blocks.
+453 equations: tree0 Fin 157, tree1 Fin 157, tree2 Fin 139; 996 compression blocks.
 JHx_generate.py independently checks each retained block's input/start/result,
 all 64 SHA rounds, chaining, padding, source head/chunk definitions, input and
 expected aliases, and all 453 complete digests with hashlib. `--check` validates
@@ -59,26 +59,31 @@ records the broad-unfolding scan. JHx_FINAL_SOURCES.json pins delivered sources.
 ## Validation and resources
 
 {len(current)} canonical modules have passing exact-source receipts. Budget usage:
-{v['normal_attempts']}/60 normal attempts;{v['agg16_attempts']}/2 approved16GiB attempts.
+{v['normal_attempts']}/60 normal attempts; {v['agg16_attempts']}/2 approved 16 GiB attempts.
 Every attempt (including failures) is in JHx_ATTEMPTS.jsonl and its numbered
 receipt directory: target/argv, source revision and hash, direct object and tool
 pins, exit, wall, peakRSS, swap, cgroup limits and full axioms output. Admission
-requires exit0 AND allowed:true. One scope at a time. All swap counts0.
+requires exit 0 AND allowed:true. One scope at a time. All swap counts 0.
 
-Instance: {inst['attempt']}, exit0, wall{inst['wall_seconds']:.6f}s,
-peakRSS{inst['peak_rss_kib']}KiB, swap0, source revision{inst['source_revision']}.
-Joint: {joint['attempt']}, exit0, wall{joint['wall_seconds']:.6f}s,
-peakRSS{joint['peak_rss_kib']}KiB, swap0, source revision{joint['source_revision']}.
+Instance: {inst['attempt']}, exit 0, wall {inst['wall_seconds']:.6f}s,
+peak RSS {inst['peak_rss_kib']} KiB, swap 0, source revision {inst['source_revision']}.
+Joint: {joint['attempt']}, exit 0, wall {joint['wall_seconds']:.6f}s,
+peak RSS {joint['peak_rss_kib']} KiB, swap 0, source revision {joint['source_revision']}.
 Their complete standard-axiom audits are in JHx_VALIDATION.json and stdout logs.
-Total Lean wall{sum(r['wall_seconds'] for r in rows):.6f}s;
-maximum attemptRSS{max(int(r['peak_rss_kib']) for r in rows)}KiB.
+Total Lean wall {sum(r['wall_seconds'] for r in rows):.6f}s;
+maximum attempt RSS {max(int(r['peak_rss_kib']) for r in rows)}KiB.
 
-001 failed memory after encountering padding/length/member proof errors;003
+001 failed memory after encountering padding/length/member proof errors; 003
 isolated the remaining padding recursion error. Rejected sorryAx diagnostics
-receive no credit. Both were replaced by changed proof shapes; no unchanged
-failed chunk was rerun. JHx_MEMORY_SPLIT001.md records the failures, focused
-replacement and measured16→28→56-block scale. No arithmetic cap increase.
-The successful probe is retained in004's source snapshot, outside the canonical
+receive no credit. Both were replaced by changed proof shapes; neither rejected
+proof shape was rerun unchanged. JHx_MEMORY_SPLIT001.md records the failures, focused
+replacement and measured 16→28→56-block scale. No arithmetic cap increase.
+044 failed at joint IMPORT before the post-import marker (exit 134, wall
+5.289048s, RSS 7917988 KiB, swap 0). The user-approved exception authorized
+045 on the same assembly in the 16 GiB scope after all three runner hashes
+matched. It passed. JHx_AGGREGATION.md documents this specific exception;
+only one of the two permitted 16 GiB attempts was used.
+The successful probe is retained in 004's source snapshot, outside the canonical
 module list. No unchanged full regression or package build was run. Final
 assembly and exact-source/axiom audits consume all checked chunks. Inherited
 compiled dependencies were reused, not claimed as a fresh frozen release replay.
@@ -88,9 +93,9 @@ compiled dependencies were reused, not claimed as a fresh frozen release replay.
 Own retained cache: /home/dombarker/project-offloads/codex-cx-sha453-cache-20261028.
 Seeded by copying .olean companions from the read-only tx2fix and fixture caches.
 JHx_SEED_COLLISIONS.json confirms no differing overlapping seed objects. Original
-cache directories were never changed. Normal caps6G/8G,swap0,TasksMax64,-M7000.
+cache directories were never changed. Normal caps 6G/8G, swap 0, TasksMax 64, -M7000.
 The approved agg16 runner hashes were verified against JHw_RUNNER_HASHES.json;
-any actual agg16 use is separately receipted with14G/16G,-M15000. Source and
+any actual agg16 use is separately receipted with 14G/16G, -M15000. Source and
 receipts only are committed; no binaries, objects or oversized logs. Work is
 confined to new JHx modules and evidence/joint-sha453-20261028. Existing proved
 modules, Rust, protocol, wallet keys and frozen artifacts are unchanged.
