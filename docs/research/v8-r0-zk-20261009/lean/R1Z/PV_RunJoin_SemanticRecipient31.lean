@@ -18,7 +18,10 @@ theorem recipient (i : Input) (success : run i = ok (.Ok i.compiled))
     (statement (K := K) i).recipient = some (AspisR1.SpendRelation.recipientCommitment
       (statement (K := K) i) (witness (K := K) i)) := by
   cases hreq : i.request with
-  | withdrawal p => cases hv
+  | withdrawal p =>
+    simp only [statement,publicInput,hreq,PV_Src_Public.canonicalPublic,
+      BuilderPublicProjection.withdrawalPublic,mapPub] at hv
+    cases hv
   | transfer p recipient =>
     obtain ⟨r,hr,hrec⟩ := PV_RunJoin_CompilerReads31.recipient i.witness
       (outputValue i.request) (PV_Src_NativeInput.recipient i.request) i.change (forestPublic i.request)
