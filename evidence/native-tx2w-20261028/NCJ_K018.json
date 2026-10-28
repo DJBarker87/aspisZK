@@ -1,0 +1,57 @@
+{
+  "source_revision": "3c67d21ad0da1811b711bbf7dbadce9778df17f5",
+  "source_tree_dirty": true,
+  "sources": [
+    "NCJ_src/Cargo.lock",
+    "NCJ_src/Cargo.toml",
+    "NCJ_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NCJ_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NCJ_src/crates/aspis-r1-cost-probe/src/NCJ_weights.rs",
+    "NCJ_src/crates/aspis-r1-cost-probe/src/weights.rs",
+    "NCJ_src/KMX_stubs.rs",
+    "NCJ_src/crates/aspis-r1-cost-probe/src/lib.rs"
+  ],
+  "env": {
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2w-20261028/NCJ_tmp",
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1"
+  },
+  "attempt": "NCJ_K018",
+  "kind": "kani",
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2w-20261028/NCJ_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2w-20261028/NCJ_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "-Z",
+    "function-contracts",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "weights::NCJ_weights::NCJ_scalar_negative",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 600,
+  "expected_time": "Optimized compilation then NCJ_scalar_negative native single-call gate",
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_check": "NCJ_K018-graph-check.json"
+  },
+  "reservation_retries": 0
+}
