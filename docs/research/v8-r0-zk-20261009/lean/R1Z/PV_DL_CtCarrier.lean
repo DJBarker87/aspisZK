@@ -12,7 +12,8 @@ def initial (N : Type) : Full N := ⟨PV_DL_StorageBuild.build 5 (fun _ => 0#u8)
 
 theorem initial_byte (N : Type) (i : Fin 32) :
     (flatten 5 (initial N).data)[i.val]?=some 0#u8 := by
-  simp only [initial,PV_DL_StorageBuild.flatten_build,List.getElem?_ofFn,dif_pos i.isLt]
+  simp only [initial,PV_DL_StorageBuild.flatten_build,List.getElem?_ofFn]
+  exact if_pos (show i.val<2^5 from i.isLt)
 
 def adapted {T A N : Type} (finish : T → Buffer A → Full N → Result (T × Buffer A × Full N))
     (state : T) (buffer : Buffer A) (_ : List U8) : Result (T × Buffer A × List U8) := do
@@ -53,6 +54,13 @@ theorem complete {T A N OutN : Type}
   simp only [Aeneas.Std.uncurry,bind_tc_ok]
   have hl : (flatten 5 full.data).length=32 := PV_CBL_GenericArrayPower.length 5 full.data
   rw [hl]
+  cases side with
+  | fail e => rfl
+  | div => rfl
+  | ok direction =>
+    by_cases hs : PV_DL_ArrayShape.size s≤32
+    · simp only [bind_tc_ok,if_pos hs,Aeneas.Std.uncurry]
+    · simp only [bind_tc_ok,if_neg hs,bind_tc_fail]
 
 theorem decoded {OutN : Type} (s : PV_DL_ArrayShape.Shape) (bytes : List U8)
     (h : bytes.length=PV_DL_ArrayShape.size s) :

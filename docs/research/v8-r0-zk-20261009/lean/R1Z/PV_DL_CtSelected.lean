@@ -43,8 +43,9 @@ def finisher (base : ExternalTypes) {T N0 A0 Nout Aout K N1 A1 O0 : Type}
 @[reducible] def selected (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (s : PV_DL_ArrayShape.Shape) : @ExternalFuns (Types base) :=
   letI : ExternalTypes := Types base
-  {ops with op219 := fun vc al le nz less nz1 =>
-    dispatch (finisher base vc) vc.TRUNC_SIDE s (ops.op219 vc al le nz less nz1)}
+  {ops with
+    op219 := fun vc al le nz less nz1 =>
+      dispatch (finisher base vc) vc.TRUNC_SIDE s (ops.op219 vc al le nz less nz1)}
 
 theorem selected_native (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (s : PV_DL_ArrayShape.Shape) {T OutN O N0 A0 Nout K N1 A1 O0 O1 O2 : Type}
