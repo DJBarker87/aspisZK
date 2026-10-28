@@ -8,7 +8,7 @@ freeze=json.loads(show('research','docs/research/100bit-spend-path-20261013/evid
 ext={r['module'] for r in json.loads((C/'external-object-manifest.json').read_text())}
 h5=json.loads((C/'H5-SOURCE-PINS.json').read_text());h5.update(json.loads((E.parent/'batch2e/H5-SOURCE-PINS.json').read_text()));own={}
 for a in json.loads((C/'AUDIT-PREFLIGHT.json').read_text())['accepted']:own[a['module']]=str(L/(a['module']+'.lean'))
-for p in list((L/'R1Z').glob('PV_B2_D_*.lean'))+list((L/'R1Z').glob('PV_B2_E_*.lean')):own['R1Z/'+p.stem]=str(p)
+for p in list((L/'R1Z').glob('PV_B2_D_*.lean'))+list((L/'R1Z').glob('PV_B2_E_*.lean'))+list((L/'R1Z').glob('PV_B2_F_*.lean')):own['R1Z/'+p.stem]=str(p)
 for m,r in h5.items():own[m]=r['path']
 seen=set();rows=[];missing=[];order=[]
 def visit(m):
