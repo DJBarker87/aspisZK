@@ -13636,3 +13636,13 @@ and its reached helpers recursively, reuses pv-fxmem's scoped drop, allocator an
 connects the file-system and D159 payload sequence to the Observation producer without a new trust
 field, and closes the file rows that rest only on that; it is told to keep evidence compact. Rows
 removed outright: 0. Privacy target not yet established.
+
+## D373 (Stream B) 2026-10-28 14:33 UTC: V229 closed on the candidate; b3p6c continues the remaining five batch-3 rows
+
+b3p6b (100 Lean attempts; no Kani; audits 36497-36499 with standard axioms; no counterexample) closes
+V229 (op133 copy_active_rows) at its selected callback, source and value obligation by a structural
+(K-1 substitute) link, and adds value and composition lemmas for V243 (op226 public_bytes) with 2,884
+native comparisons (finite validation); V243's whole-row binding and V228, V241, V245, V244 remain
+open. Merged into the prover candidate (1e826627aa, pushed); the branch was fast-forwarded to the
+candidate and continues as b3p6c (IDs 50500-50599; no Kani): V243, then V228, V241, V245, V244. V229
+enters the ledger at the next recount. Rows removed outright: 0. Privacy target not yet established.
