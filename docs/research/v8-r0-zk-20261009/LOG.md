@@ -13510,3 +13510,16 @@ timeout gives no credit, so V178 and V182 keep only their structural (K-1 substi
 V195 and V233 now have both a structural link and a confirmed stubbed Kani link. Final focused audit
 44710 passes with standard axioms. Merged into the prover candidate (71b2f97c53, pushed); worktree
 and branch removed. Rows removed outright: 0. Privacy target not yet established.
+
+## D366 (Stream B) 2026-10-28 11:02 UTC: pv-b3p6 result: no row closed; b3p6b continues by the structural route without Kani
+
+pv-b3p6 used its whole budget (100 Lean attempts, 12 Kani runs; IDs 42500-42599; no crates/ or
+programs/ change). Final combined audit 42598 and focused closure 42599 pass with standard axioms.
+No row closed. V229 (op133): reference laws, installation and non-vacuity checked; native equality
+unconfirmed. V243 (op226): substantial reference laws and carrier installation checked; its
+structural candidate earned no native credit. V228 (op132), V241 (op224), V245 (op228): owned
+reference and native binding still needed. V244 (op227): the field-arithmetic structural route is
+still needed. b3p6b (fresh 100 attempts; no Kani; IDs 36400-36499) supplies every native link by the
+structural route (ruling (k') for copy-dependent control bodies, (k) for op227's field arithmetic),
+closest rows first: V229, V243, V228, V241, V245, V244. Rows removed outright: 0. Privacy target not
+yet established.
