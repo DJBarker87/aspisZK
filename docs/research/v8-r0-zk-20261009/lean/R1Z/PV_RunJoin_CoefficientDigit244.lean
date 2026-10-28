@@ -31,8 +31,7 @@ theorem body (j out : Usize) :
   have tau : Array.index_usize transport.TAU 2#usize = .ok 2#usize := by rfl
   unfold transport.Variant.row_loop.body
   rw [hn]
-  dsimp only
-  simp only [bind_tc_ok,lo]
+  simp only [bind_tc_ok,Aeneas.Std.uncurry,lo]
   rw [PV_RunJoin_CheckedShift44.right j 4#usize (by decide)]
   simp only [bind_tc_ok,lift,tau,hi]
   rw [PV_RunJoin_CheckedShift44.left _ 4#usize (by decide)]
