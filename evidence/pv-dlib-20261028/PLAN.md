@@ -177,3 +177,10 @@ IDs43400–43499 only; audit43497–43499. Initial tally retained separately.
 Read new ruling(k'): structural (K-1 substitute) permitted with full source
 check, complete-Result reference law and finite same-input differential.
 First compile is corrected EncoderMutation; no new native source changes.
+
+Resume preflight: all5673 authoritative and selected external objects matched.
+43400 ENOENT admission refusal; full180s observed before43401.
+43401 mutation witness passed;43402 second barrier refused03:27:33Z,
+43403 next admission03:30:37Z passed, zip conjunction candidate failed.
+43404 changed candidate upload refused03:30:52Z; next admission >=03:33:52Z.
+All failed source snapshots and refusals retained; no unchanged compile retry.

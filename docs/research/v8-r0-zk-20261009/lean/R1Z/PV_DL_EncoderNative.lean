@@ -58,6 +58,16 @@ theorem source_reference {E : Type} (inst : aspis_core.r0.scalar.CodeField E)
   rw [fold inst q basis 512 0#usize _ _ (by decide)]
   rfl
 
+/-- Selected op79 consumes the same complete Result as the native structural
+interpretation, for arbitrary original field callbacks. -/
+theorem selected_native [types : ExternalTypes] (ops : ExternalFuns) {E : Type}
+    (inst : aspis_core.r0.scalar.CodeField E) (q : Array E 1024#usize)
+    (p : aspis_core.r0.domain.Point E) :
+    @aspis_core.r0.encoder.eval_message types (PV_DL_EncoderSelected.selected ops) E inst q p=
+      value inst q p := by
+  rw [PV_DL_EncoderSelected.consumed,source_reference]
+
+#print axioms selected_native
 #print axioms run
 #print axioms suffix
 #print axioms fold
