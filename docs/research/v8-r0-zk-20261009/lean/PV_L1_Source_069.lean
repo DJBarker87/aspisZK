@@ -284,6 +284,11 @@ theorem complete_result
     | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
   all_goals
     cases value
-    rfl
+    repeat' first
+      | with_reducible rfl
+      | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+        intro value called
+      | split <;> simp only [PV_L1_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_030.complete_result,PV_L1_Source_031.complete_result,PV_L1_Source_037.complete_result,PV_L1_Source_068.complete_result]
+    all_goals rfl
 #print axioms complete_result
 end PV_L1_Source_069
