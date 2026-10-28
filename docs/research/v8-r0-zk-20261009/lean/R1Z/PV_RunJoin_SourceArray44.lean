@@ -9,7 +9,7 @@ theorem map (n : Usize) (p : Nat → Raw) :
     ProverRwP6ArrayMap.map current (sourceArray n p) = PV_RunJoin_BatchRowValue44.array n p := by
   apply Subtype.ext
   simp only [ProverRwP6ArrayMap.map,sourceArray,PV_RunJoin_BatchRowValue44.array,
-    ProverCommitArray49.array,List.map_ofFn]
+    ProverCommitArray49.array,List.map_ofFn,Function.comp_def]
 
 theorem payload (p : Nat → Raw) (start n : Nat) :
     PV_RunJoin_BatchLoopValue44.payload p start n =
