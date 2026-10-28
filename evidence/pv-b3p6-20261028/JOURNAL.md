@@ -189,3 +189,18 @@ and timeout remain retained. New extraction and finite validation are pending;
 no old model is silently re-associated to v3. No shipped source changes.
 The running op133 gate uses its frozen earlier host source; v3 will be uploaded
 only after that scope completes.
+
+Generic proof continuation:42530 RustResult passes all9 reports without axioms.
+42532 retains the opaque-small-scalar flattening proof failure;42533 accepts
+explicit64/23 literal equalities and the symbolic1472-byte flatten/take laws.
+42537 accepts U16 coverage and vector extensionality;42538 accepts all6
+indexing/arithmetic bounds. All accepted reports use only permitted axioms.
+42540 retains repeated-array helper name-resolution errors; explicit Result
+constructors and Aeneas.Std.Array.set repair the source, pending retry.
+42529/31/34/35/36/39/41 are zero-charge admission refusals.
+23 charged Lean attempts;11 Kani runs completed, all target native gates
+unconfirmed. The second mitigated op133 timeout is900.638s,exit124,
+cgroup peak6696042496bytes,swap0;15480KiB is timeout-parent RSS, not aggregate.
+Native op133 association remains OPEN. The final Kani slot is reserved for
+both serializer variants after v3 extraction/finite preflights are green.
+No changes under crates/ or programs/ relative to5fa2cc6781; no keys touched.
