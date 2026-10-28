@@ -23,7 +23,7 @@ theorem success_iff [ExternalLinear] [Records]
   simp only [bind_wp,ite_wp,option_wp,flow_wp,ok_wp,isRustOk_ok,isRustOk_err,residual_wp,Prod.exists]
   repeat' first
     | (apply exists_congr; intro value)
-    | (apply and_congr_right; intro prefix)
+    | (apply and_congr_right; intro hprefix)
     | (split <;> simp only [bind_wp,ite_wp,option_wp,flow_wp,ok_wp,
         isRustOk_ok,isRustOk_err,residual_wp,Prod.exists])
     | rfl

@@ -46,7 +46,7 @@ theorem error_iff [ExternalLinear] [Records]
   simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,Result.ok.injEq,Prod.exists]
   repeat' first
     | (apply exists_congr; intro value)
-    | (apply and_congr_right; intro prefix)
+    | (apply and_congr_right; intro hprefix)
     | (split <;> simp only [bind_wp,ite_wp,ok_wp,ok_ne_err,residual_eq_wp,
         Result.ok.injEq,Prod.exists])
     | rfl
