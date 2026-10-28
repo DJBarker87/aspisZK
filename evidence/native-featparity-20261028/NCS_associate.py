@@ -56,5 +56,16 @@ for r in rows:
   if a['sha256']!=z['sha256']:differences.append(k)
   if a['unknown']or z['unknown']:unknown.append(k)
  out.append(dict(**r,roots=rr,reached_inventory_bodies=sorted(seen),differing_library_bodies=differences,cfg_unknown_bodies=unknown,unresolved_edges={k:unresolved[k]for k in sorted(seen)if unresolved[k]}))
+# Tables and machine ledgers sometimes spell the same member with/without its file stem.
+# Merge only identical resolved roots within a packet; distinct restored harness properties stay separate.
+merged={}
+for r in out:
+ key=(r['packet'],tuple(r['roots'])) if r['packet'] not in ('KMX','KMZ','P6') else (r['id'],)
+ if key not in merged:
+  r['id']=r['id'].replace('`','');r['member']=r['member'].replace('`','');r['alias_credit_ids']=[];merged[key]=r
+ else:
+  q=merged[key];q['alias_credit_ids'].append(r['id']);q['sources']+=r['sources'];q['detail']+=r['detail']
+  if 'CONDITIONAL'in r['credited_status']:q['credited_status']='CLOSED-CONDITIONAL'
+out=sorted(merged.values(),key=lambda r:r['id'])
 (E/'NCS_ASSOCIATIONS.json').write_text(json.dumps(dict(rows=out,method='Conservative union of TX1/TX2 inventory edges, exact frozen body SHA association. Edges stop at documented opaque/external boundaries; unresolved edges retained, not dynamically certified harness closure.'),indent=2)+'\n')
 print('rows',len(out),'unmapped',[(r['packet'],r['member'])for r in out if not r['roots']]);print('differences',[(r['id'],r['differing_library_bodies'])for r in out if r['differing_library_bodies']]);print('cfg unknown',sum(bool(r['cfg_unknown_bodies'])for r in out))

@@ -10,9 +10,9 @@ blobs={};locations=collections.defaultdict(list)
 for d in pathlib.Path('evidence').iterdir():
  if not d.is_dir()or not d.name.startswith(('native-','leaf-','kani-')):continue
  for p in d.rglob('*'):
-  if not p.is_file()or p.suffix not in ('.rs','.patch')or p.stat().st_size>2000000:continue
+  if not p.is_file()or p.suffix not in ('.rs','.patch','.txt')or p.stat().st_size>2000000:continue
   b=p.read_bytes()
-  if p.suffix=='.rs':candidates=[b]
+  if p.suffix in ('.rs','.txt'):candidates=[b]
   else:
    candidates=[]
    for block in re.split(rb'(?=^--- )',b,flags=re.M):
@@ -66,9 +66,42 @@ for d in pathlib.Path('evidence').iterdir():
    states[newpath]=result;patch_stats['applied']+=1;h=sha(result)
    if h in wanted:blobs[h]=result;locations[h].append(str(p)+':checked-patch-reconstruction')
 print('patch reconstruction',dict(patch_stats))
+# Follow explicit receipt patch chains from the frozen source, rather than guessing chronological alternatives.
+patch_index={sha(p.read_bytes()):p for d in pathlib.Path('evidence').iterdir()if d.is_dir()and d.name.startswith(('native-','leaf-','kani-'))for p in d.glob('*.patch')}
+chain_stats=collections.Counter()
+for receipt in rs:
+ original=json.loads(pathlib.Path(receipt['path']).read_text());chain=original.get('deps_fingerprint',{}).get('cfg_patch_chain',[])
+ if not chain:continue
+ states={};valid=True
+ for item in chain:
+  p=patch_index.get(item['sha256'])
+  if p is None:valid=False;break
+  for block in re.split(rb'(?=^--- )',p.read_bytes(),flags=re.M):
+   lines=block.splitlines(keepends=True)
+   if len(lines)<3 or not lines[0].startswith(b'--- ')or not lines[1].startswith(b'+++ '):continue
+   oldpath=lines[0][4:].strip().decode();newpath=lines[1][4:].strip().decode()
+   if newpath.startswith('b/'):newpath=newpath[2:]
+   if not newpath.endswith('.rs'):continue
+   if oldpath=='/dev/null':base=b''
+   else:
+    if newpath not in baselines:
+     q=subprocess.run(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+newpath],capture_output=True);baselines[newpath]=q.stdout if q.returncode==0 else None
+    base=states.get(newpath,baselines[newpath])
+   if base is None:valid=False;break
+   result=apply(base)
+   if result is None:valid=False;break
+   states[newpath]=result
+  if not valid:break
+ if valid:
+  chain_stats['exact_chain_applied']+=1
+  for path,content in states.items():
+   h=sha(content)
+   if h in wanted:blobs[h]=content;locations[h].append(receipt['path']+':receipt-patch-chain')
+ else:chain_stats['chain_context_missing']+=1
+print('receipt patch chains',dict(chain_stats))
 # Current host snapshots count only when their whole-file hash equals a historical receipt.
-host=E/'NCS_I004-stdout.log'
-if host.exists():
+for host in [E/'NCS_I004-stdout.log',E/'NCS_I006-stdout.log']:
+ if not host.exists():continue
  for line in host.read_text().splitlines():
   r=json.loads(line)
   if r.get('exists') and r['sha256'] in wanted:
