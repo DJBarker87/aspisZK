@@ -4,6 +4,7 @@ import PV_B3P_BytesV3Emission226
 namespace PV_B3P_Install226V3
 open Aeneas Aeneas.Std Result ProverRwFull
 set_option autoImplicit false
+noncomputable section
 abbrev Types := PV_B3P_PublicCarrier226V3.Types
 abbrev E := PV_B3P_226V3.aspis_core.state_only_prefix.r0.Error
 abbrev Packet := (PV_B3P_ByteOutput226.Chunks × Usize)
