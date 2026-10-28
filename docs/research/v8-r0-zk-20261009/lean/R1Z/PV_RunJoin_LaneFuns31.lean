@@ -20,16 +20,16 @@ noncomputable section
 namespace PV_RunJoin_Lane31
 variable [R1Z.BuilderForestAdmissionPort.ExternalLinear]
 
-/-- [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1::PairLeaf]:
+/-- [aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1::PairLeaf]:
     Source: '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin27-native-source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 138:4-138:12
-    Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1::PairLeaf] -/
+    Name pattern: [aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1::PairLeaf] -/
 @[rust_fun
-  "aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1::PairLeaf"]
-def aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor
-  (pvplev : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1) :
-  Result aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  "aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1::PairLeaf"]
+def aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1.PairLeafCtor
+  (pvplev : aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1) :
+  Result aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
   := do
-  ok (aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeaf
+  ok (aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1.PairLeaf
     pvplev)
 
 /-- [pv_runjoin31_lane_reference::step]:
@@ -50,16 +50,16 @@ def step
 def lane_root
   (input : aspis_statement.pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1) :
   Result (core.result.Result (Array aspis_core.field.M31 8#usize)
-    aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1)
+    aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1)
   := do
   let r ←
     aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.leaf_digest
       input.pair_leaf
   let r1 ←
     core.result.Result.map_err (BuiltinFnOnce
-      aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
-      aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1) r
-      (aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeafCtor)
+      aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
+      aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1) r
+      (aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1.PairLeafCtor)
   let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
@@ -147,6 +147,6 @@ def lane_root
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       (Array aspis_core.field.M31 8#usize) (core.convert.FromSame
-      aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1) residual
+      aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1) residual
 
 end PV_RunJoin_Lane31

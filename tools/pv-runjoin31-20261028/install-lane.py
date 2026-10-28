@@ -12,6 +12,7 @@ end PV_RunJoin_Lane31
 ''')
 for kind in ['Types','Funs']:
  s=(G/(kind+'.lean')).read_text().replace('import Pv31-lane-reference-names-04.TypesExternal','import R1Z.PV_RunJoin_LaneTypesExternal31').replace('import Pv31-lane-reference-names-04.Types','import R1Z.PV_RunJoin_LaneTypes31').replace('import Pv31-lane-reference-names-04.FunsExternal','import R1Z.PV_RunJoin_LaneExternal31')
+ for name in ['PoolV1PairTraceErrorV1','PoolV1PairLeafErrorV1']:s=s.replace(name,'PV31_'+name)
  if kind=='Funs':s=s.replace('namespace PV_RunJoin_Lane31','namespace PV_RunJoin_Lane31\nvariable [R1Z.BuilderForestAdmissionPort.ExternalLinear]')
  (L/('PV_RunJoin_Lane'+kind+'31.lean')).write_text(s)
 leaf='aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1'
@@ -43,8 +44,11 @@ s+=f'''def {leaf}.leaf_digest (x : {leaf}) :
   ok (match r with | .Ok d => .Ok d | .Err e => .Err (leafErrorFromForest e))
 end PV_RunJoin_Lane31
 '''
+for name in ['PoolV1PairTraceErrorV1','PoolV1PairLeafErrorV1']:
+ # Only lane-local names are nominally prefixed; the concrete forest child stays unchanged.
+ s=s.replace('aspis_statement.pool_v1.'+('pair_trace.' if 'Trace' in name else 'pair_tree_profile.')+name, 'aspis_statement.pool_v1.'+('pair_trace.' if 'Trace' in name else 'pair_tree_profile.')+'PV31_'+name)
 (L/'PV_RunJoin_LaneExternal31.lean').write_text(s)
 rows=[]
 for kind in ['Types','Funs']:
- p=L/('PV_RunJoin_Lane'+kind+'31.lean');rows.append(dict(path=str(p.relative_to(R)),raw_sha256=hashlib.sha256((G/(kind+'.lean')).read_bytes()).hexdigest(),installed_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),changes='import paths; explicit ExternalLinear dictionary in Funs only'))
+ p=L/('PV_RunJoin_Lane'+kind+'31.lean');rows.append(dict(path=str(p.relative_to(R)),raw_sha256=hashlib.sha256((G/(kind+'.lean')).read_bytes()).hexdigest(),installed_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),changes='import paths; uniquely prefixed error enum names; explicit ExternalLinear dictionary in Funs only'))
 (E/'lane-emission-install.json').write_text(json.dumps(rows,indent=2)+'\n')

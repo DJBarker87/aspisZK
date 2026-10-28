@@ -61,79 +61,79 @@ structure aspis_statement.pool_v1.pair_trace.PoolV1PairInputNoteWitnessV1 where
   membership :
     aspis_statement.pool_v1.payment_relation.PoolV1MembershipWitnessV1
 
-/-- [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1]
+/-- [aspis_statement::pool_v1::pair_tree_profile::PV31_PoolV1PairLeafErrorV1]
     Source: '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin27-native-source/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs', lines 78:0-78:30
-    Name pattern: [aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1]
+    Name pattern: [aspis_statement::pool_v1::pair_tree_profile::PV31_PoolV1PairLeafErrorV1]
     Visibility: public -/
 @[discriminant isize, rust_type
-  "aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafErrorV1"]
-inductive aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 where
+  "aspis_statement::pool_v1::pair_tree_profile::PV31_PoolV1PairLeafErrorV1"]
+inductive aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1 where
 | NonCanonicalCommitment :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | NonCanonicalOccupancy :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | NonCanonicalInverse :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | OccupancyNotBoolean :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | SentinelInverseMismatch :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | EmptyInverseNonZero :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | EmptyCommitmentNonZero :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | OccupiedSentinelZero :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 | SelectedSlotEmpty :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1
 
-/-- [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1]
+/-- [aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1]
     Source: '/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin27-native-source/crates/aspis-statement/src/pool_v1/pair_trace.rs', lines 136:0-136:31
-    Name pattern: [aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1]
+    Name pattern: [aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1]
     Visibility: public -/
 @[discriminant isize, rust_type
-  "aspis_statement::pool_v1::pair_trace::PoolV1PairTraceErrorV1"]
-inductive aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1 where
+  "aspis_statement::pool_v1::pair_trace::PV31_PoolV1PairTraceErrorV1"]
+inductive aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1 where
 | Statement :
   aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
     →
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | PairLeaf :
-  aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafErrorV1 →
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_tree_profile.PV31_PoolV1PairLeafErrorV1 →
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | Tree :
   aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError →
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| Shape : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| WrongVariant : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| RuntimeBinding : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| Shape : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| WrongVariant : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| RuntimeBinding : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | NullifierAlreadySpent :
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| WitnessDigest : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| ValueOutOfRange : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| Conservation : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| HashSchedule : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| WitnessDigest : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| ValueOutOfRange : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| Conservation : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| HashSchedule : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | SelectedCommitmentMismatch :
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| AnchorMismatch : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| NullifierMismatch : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| AnchorMismatch : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| NullifierMismatch : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | RecipientCommitmentMismatch :
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | ChangeCommitmentMismatch :
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | SnapshotBindingMismatch :
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | BlockMismatch :
   Std.U8 →
   Std.U8 →
   Std.U8 →
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 | AuxiliaryMismatch :
   Std.U16 →
   Std.U8 →
-  aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| MetadataMismatch : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| CopyLayout : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
-| CopyImbalance : aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1
+  aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| MetadataMismatch : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| CopyLayout : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
+| CopyImbalance : aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1
 
 end PV_RunJoin_Lane31

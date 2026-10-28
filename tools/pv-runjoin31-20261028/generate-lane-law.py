@@ -18,7 +18,7 @@ def reverse (input : Pair) (level : Nat) : Bool :=
 
 def model (input : Pair) := recipe
   (PV_RunJoin_Lane31.aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLeafWitnessV1.leaf_digest input.pair_leaf)
-  PV_RunJoin_Lane31.aspis_statement.pool_v1.pair_trace.PoolV1PairTraceErrorV1.PairLeaf
+  PV_RunJoin_Lane31.aspis_statement.pool_v1.pair_trace.PV31_PoolV1PairTraceErrorV1.PairLeaf
   PV_RunJoin_Lane31.aspis_statement.pool_v1.format.pool_v1_tree_parent
   (sibling input) (reverse input) (List.range 20)
 
