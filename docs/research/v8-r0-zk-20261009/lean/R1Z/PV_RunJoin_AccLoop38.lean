@@ -50,7 +50,7 @@ theorem complete (ops : ExternalFuns) (n : Nat) (k : Usize)
       · simp only [Function.update_of_ne eq]
         have tests : (k.val+1≤j ∧ j<k.val+1+n) = (k.val≤j ∧ j<k.val+(n+1)) :=
           propext (by omega)
-        rw [tests]
+        simp only [tests]
 
 #print axioms complete
 end R1Z.PV_RunJoin_AccLoop38
