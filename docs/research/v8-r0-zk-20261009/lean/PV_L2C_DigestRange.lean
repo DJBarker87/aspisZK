@@ -15,6 +15,13 @@ theorem scalar_success (bytes : Array U8 4#usize) (v : U32)
   PV_L2C_DecodeRange.scalar_success bytes v ((scalar_eq bytes).symm.trans h)
 #print axioms scalar_success
 
+theorem ok_or_return {T E : Type} (o : Option T) (e : E) (v : T)
+    (h : core.option.Option.ok_or o e = ok (.Ok v)) : o = some v := by
+  cases o with
+  | none => cases h
+  | some a => cases h; rfl
+#print axioms ok_or_return
+
 /-- Each returned limb of the actual eight-limb digest decoder is canonical.
 This is success reflection, with no re-encoding premise. -/
 theorem digest_success (bytes : Array U8 32#usize) (d : Array U32 8#usize)
@@ -22,6 +29,7 @@ theorem digest_success (bytes : Array U8 32#usize) (d : Array U32 8#usize)
     ∀ x ∈ d.val, x.val < 2147483647 := by
   unfold atomic_statement.decode_digest_canonical at h
   repeat' first
+    | (have ho := ok_or_return _ _ _ hvalue; clear hvalue; cases ho)
     | (have hr := R1Z.PV_RunJoin_DecoderReturn29.branch_continue _ _ hvalue
        clear hvalue
        cases hr)
@@ -30,7 +38,11 @@ theorem digest_success (bytes : Array U8 32#usize) (d : Array U32 8#usize)
     | (have _test : core.ops.control_flow.ControlFlow _ _ := value; cases value)
     | exact False.elim (R1Z.PV_Src_ResultControl.error_ne_ok _ _ h)
     | exact False.elim (R1Z.PV_Src_ResultControl.same_residual_ne_ok _ _ h)
-    | (cases h; simp_all only [Array.make, List.mem_cons, List.mem_singleton,
-        forall_eq_or_imp, scalar_success])
+  all_goals
+    cases h
+    intro x hx
+    simp only [Array.make, List.mem_cons, List.not_mem_nil, or_false] at hx
+    rcases hx with hx | hx | hx | hx | hx | hx | hx | hx
+    all_goals subst x; exact scalar_success _ _ (by assumption)
 #print axioms digest_success
 end PV_L2C_DigestRange
