@@ -35,5 +35,5 @@ cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generi
 r=subprocess.run([sys.executable,str(R/'tools/pv-relink-20261028/scope.py'),str(n),'Lean',*cmd])
 p=E/str(n)/'receipt.json';t=json.loads(ledger.read_text());t[-1]['charged']=p.exists();t[-1]['exit']=r.returncode
 if p.exists():
- j=json.loads(p.read_text());j.update(x);j['dependency_source_resolution']='../source-resolution.json';j['preflight']='../preflight.json';p.write_text(json.dumps(j,indent=2)+'\n')
+ j=json.loads(p.read_text());j['receipt_collected_at_revision']=j['source_revision'];j['source_revision']=x['revision'];j.update(x);j['dependency_source_resolution']='../source-resolution.json';j['preflight']='../preflight.json';p.write_text(json.dumps(j,indent=2)+'\n')
 ledger.write_text(json.dumps(t,indent=2)+'\n');sys.exit(r.returncode)
