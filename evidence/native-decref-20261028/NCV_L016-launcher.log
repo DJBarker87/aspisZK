@@ -1,0 +1,77 @@
+{"attempt": "NCV_L016", "exit_status": 1, "wall_seconds": 1.1224464119877666, "peak_rss_kib": "2634032", "swaps": "0", "print_axioms": ["'NCV_EqualValue.same_iff' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NCV_EqualValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCV_generated/NCV_EqualValue.lean:24:54: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+b v : Slice U8
+cap : (↑b).length ≤ 768
+length : (↑b).length = (↑v).length
+⊢ (b.len != v.len) = false
+NCV_generated/NCV_EqualValue.lean:26:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  b.len != v.len
+in the target expression
+  (have i := b.len;
+    have i1 := v.len;
+    if (i != i1) = true then ok false
+    else do
+      let pending_return ← NCV_Reference.equal_loop b v 0#usize
+      match pending_return with
+        | none => ok true
+        | some b1 => ok b1) =
+    ok (decide (↑b = ↑
+...
+f semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    b
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑b
+NCV_generated/NCV_EqualValue.lean:34:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  b.len != v.len
+in the target expression
+  (have i := b.len;
+    have i1 := v.len;
+    if (i != i1) = true then ok false
+    else do
+      let pending_return ← NCV_Reference.equal_loop b v 0#usize
+      match pending_return with
+        | none => ok true
+        | some b1 => ok b1) =
+    ok (decide (↑b = ↑v))
+
+case neg
+b v : Slice U8
+cap : (↑b).length ≤ 768
+length : ¬(↑b).length = (↑v).length
+h : (b.len != v.len) = true
+no : ↑b ≠ ↑v
+⊢ (have i := b.len;
+    have i1 := v.len;
+    if (i != i1) = true then ok false
+    else do
+      let pending_return ← NCV_Reference.equal_loop b v 0#usize
+      match pending_return with
+        | none => ok true
+        | some b1 => ok b1) =
+    ok (decide (↑b = ↑v))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    b
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑b
+'NCV_EqualValue.same_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCV_EqualValue.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rdaab90fbf3cf49b7bbcd86f27f16a11d.scope; invocation ID: 4dc62fa6dd1c4cdf9555ea48e515641d

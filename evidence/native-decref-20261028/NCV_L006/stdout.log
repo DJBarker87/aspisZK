@@ -1,0 +1,335 @@
+NCV_generated/NCV_Reject.lean:7:54: error: unsolved goals
+b : Slice U8
+bad : (↑b).length ≠ 384
+h : b.len ≠ 384#usize
+⊢ (if b.len ≠ 384#usize then ok (core.result.Result.Err ())
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) b { «end» := 4#usize }
+      let s1 ← lift (Array.make 4#usize [65#u8, 83#u8, 77#u8, 56#u8] NCV_Reference.decode_master_ref._proof_3).to_slice
+      let b1 ← NCV_Reference.equal s s1
+      if b1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ 2#u8 then ok (core.result.Result.Err ())
+            else do
+              let i2 ← b.index_usize 5#usize
+              if i2 ≠ 8#u8 then ok (core.result.Result.Err ())
+                else do
+                  let i3 ← b.index_usize 6#usize
+                  if i3 ≠ 1#u8 then ok (core.result.Result.Err ())
+                    else do
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                            { start := 50#usize, «end» := 64#usize }
+                      let b2 ← NCV_Reference.zero s2
+                      if b2 = true then do
+                          let s3 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                { start := 312#usize, «end» := 320#usize }
+                          let b3 ← NCV_Reference.zero s3
+                          if b3 = true then do
+                              let s4 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                    { start := 8#usize, «end» := 40#usize }
+                              let s5 ← lift NCV_Reference.BINDING.to_slice
+                              let b4 ← NCV_Reference.equal s4 s5
+                              if b4 = true then do
+                                  let i4 ← b.index_usize 49#usize
+                                  match i4 with
+                                    | 0#8#uscalar => do
+                                      let s6 ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                            { start := 64#usize, «end» := 208#usize }
+                                      let r ← NCV_Reference.identity s6
+                                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                      match cf with
+                                        | core.ops.control_flow.ControlFlow.Continue val => do
+                                          let s7 ←
+                                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                b { start := 208#usize, «end» := 312#usize }
+                                          let r1 ← NCV_Reference.policy s7
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let seq ← NCV_Reference.sequences b 320#usize
+                                              let i5 ← b.index_usize 7#usize
+                                              let i6 ← b.index_usize 48#usize
+                                              let i7 ← NCV_Reference.word64 b 40#usize
+                                              let b5 ←
+                                                NCV_Reference.valid_master
+                                                    { bump := i5, identity := val, verifier_policy := val1,
+                                                      initialized_lane_mask := i6, has_checkpoint := false,
+                                                      next_checkpoint_sequence := i7,
+                                                      last_checkpoint_lane_sequences := seq }
+                                              if b5 = true then
+                                                  ok
+                                                    (core.result.Result.Ok
+                                                      { bump := i5, identity := val, verifier_policy := val1,
+                                                        initialized_lane_mask := i6, has_checkpoint := false,
+                                                        next_checkpoint_sequence := i7,
+                                                        last_checkpoint_lane_sequences := seq })
+                                                else ok (core.result.Result.Err ())
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                NCV_Reference.Master (core.convert.FromSame Unit) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            NCV_Reference.Master (core.convert.FromSame Unit) residual
+                                    | 1#8#uscalar => do
+                                      let s6 ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                            { start := 64#usize, «end» := 208#usize }
+                                      let r ← NCV_Reference.identity s6
+                                      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                      match cf with
+                                        | core.ops.control_flow.ControlFlow.Continue val => do
+                                          let s7 ←
+                                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+                                                b { start := 208#usize, «end» := 312#usize }
+                                          let r1 ← NCV_Reference.policy s7
+                                          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                                          match cf1 with
+                                            | core.ops.control_flow.ControlFlow.Continue val1 => do
+                                              let seq ← NCV_Reference.sequences b 320#usize
+                                              let i5 ← b.index_usize 7#usize
+                                              let i6 ← b.index_usize 48#usize
+                                              let i7 ← NCV_Reference.word64 b 40#usize
+                                              let b5 ←
+                                                NCV_Reference.valid_master
+                                                    { bump := i5, identity := val, verifier_policy := val1,
+                                                      initialized_lane_mask := i6, has_checkpoint := true,
+                                                      next_checkpoint_sequence := i7,
+                                                      last_checkpoint_lane_sequences := seq }
+                                              if b5 = true then
+                                                  ok
+                                                    (core.result.Result.Ok
+                                                      { bump := i5, identity := val, verifier_policy := val1,
+                                                        initialized_lane_mask := i6, has_checkpoint := true,
+                                                        next_checkpoint_sequence := i7,
+                                                        last_checkpoint_lane_sequences := seq })
+                                                else ok (core.result.Result.Err ())
+                                            | core.ops.control_flow.ControlFlow.Break residual =>
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                NCV_Reference.Master (core.convert.FromSame Unit) residual
+                                        | core.ops.control_flow.ControlFlow.Break residual =>
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            NCV_Reference.Master (core.convert.FromSame Unit) residual
+                                    | x => ok (core.result.Result.Err ())
+                                else ok (core.result.Result.Err ())
+                            else ok (core.result.Result.Err ())
+                        else ok (core.result.Result.Err ())
+        else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Err ())
+NCV_generated/NCV_Reject.lean:9:58: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_master_ref, bne_iff_ne, h̵,̵ ̵ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_Reject.lean:9:61: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_master_ref, bne_iff_ne, h,̵ ̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_Reject.lean:12:58: error: unsolved goals
+b : Slice U8
+bad : (↑b).length ≠ 192
+h : b.len ≠ 192#usize
+⊢ (if b.len ≠ 192#usize then ok (core.result.Result.Err ())
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) b { «end» := 4#usize }
+      let s1 ←
+        lift (Array.make 4#usize [65#u8, 83#u8, 67#u8, 56#u8] NCV_Reference.decode_checkpoint_ref._proof_3).to_slice
+      let b1 ← NCV_Reference.equal s s1
+      if b1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ 2#u8 then ok (core.result.Result.Err ())
+            else do
+              let i2 ← b.index_usize 5#usize
+              if i2 ≠ 8#u8 then ok (core.result.Result.Err ())
+                else do
+                  let i3 ← b.index_usize 6#usize
+                  if i3 ≠ 1#u8 then ok (core.result.Result.Err ())
+                    else do
+                      let s2 ←
+                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) b
+                            { start := 176#usize }
+                      let b2 ← NCV_Reference.zero s2
+                      if b2 = true then do
+                          let master ← NCV_Reference.bytes32 b 8#usize
+                          let deployment_domain ← NCV_Reference.bytes32 b 40#usize
+                          let s3 ← lift master.to_slice
+                          let b3 ← NCV_Reference.zero s3
+                          if b3 = true then ok (core.result.Result.Err ())
+                            else do
+                              let s4 ← lift deployment_domain.to_slice
+                              let b4 ← NCV_Reference.zero s4
+                              if b4 = true then ok (core.result.Result.Err ())
+                                else do
+                                  let r ← NCV_Reference.digest b 80#usize
+                                  let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                  match cf with
+                                    | core.ops.control_flow.ControlFlow.Continue val => do
+                                      let seq ← NCV_Reference.sequences b 112#usize
+                                      let b5 ← NCV_Reference.valid_sequences seq
+                                      if b5 = true then do
+                                          let i4 ← b.index_usize 7#usize
+                                          let i5 ← NCV_Reference.word64 b 72#usize
+                                          ok
+                                              (core.result.Result.Ok
+                                                { bump := i4, master := master, deployment_domain := deployment_domain,
+                                                  checkpoint_sequence := i5, global_root := val,
+                                                  lane_sequences := seq })
+                                        else ok (core.result.Result.Err ())
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        NCV_Reference.Checkpoint (core.convert.FromSame Unit) residual
+                        else ok (core.result.Result.Err ())
+        else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Err ())
+NCV_generated/NCV_Reject.lean:14:62: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_checkpoint_ref, bne_iff_ne, h̵,̵ ̵ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_Reject.lean:14:65: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_checkpoint_ref, bne_iff_ne, h,̵ ̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_Reject.lean:17:52: error: unsolved goals
+b : Slice U8
+bad : (↑b).length ≠ 768
+h : b.len ≠ 768#usize
+⊢ (if b.len ≠ 768#usize then ok (core.result.Result.Err ())
+    else do
+      let s ← core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8) b { «end» := 4#usize }
+      let s1 ← lift (Array.make 4#usize [65#u8, 83#u8, 76#u8, 56#u8] NCV_Reference.decode_lane_ref._proof_3).to_slice
+      let b1 ← NCV_Reference.equal s s1
+      if b1 = true then do
+          let i1 ← b.index_usize 4#usize
+          if i1 ≠ 2#u8 then ok (core.result.Result.Err ())
+            else do
+              let i2 ← b.index_usize 5#usize
+              if i2 ≥ 8#u8 then ok (core.result.Result.Err ())
+                else do
+                  let i3 ← b.index_usize 6#usize
+                  if i3 ≠ 8#u8 then ok (core.result.Result.Err ())
+                    else do
+                      let i4 ← b.index_usize 7#usize
+                      if i4 ≠ 20#u8 then ok (core.result.Result.Err ())
+                        else do
+                          let s2 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                { start := 8#usize, «end» := 40#usize }
+                          let s3 ← lift NCV_Reference.BINDING.to_slice
+                          let b2 ← NCV_Reference.equal s2 s3
+                          if b2 = true then do
+                              let s4 ←
+                                core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b
+                                    { start := 73#usize, «end» := 80#usize }
+                              let b3 ← NCV_Reference.zero s4
+                              if b3 = true then do
+                                  let master ← NCV_Reference.bytes32 b 40#usize
+                                  let s5 ← lift master.to_slice
+                                  let b4 ← NCV_Reference.zero s5
+                                  if b4 = true then ok (core.result.Result.Err ())
+                                    else do
+                                      let tree ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                                            b { start := 80#usize }
+                                      let s6 ←
+                                        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeToUsizeSlice U8)
+                                            tree { «end» := 4#usize }
+                                      let s7 ←
+                                        lift
+                                            (Array.make 4#usize [65#u8, 83#u8, 80#u8, 84#u8]
+                                                NCV_Reference.decode_lane_ref._proof_5).to_slice
+                                      let b5 ← NCV_Reference.equal s6 s7
+                                      if b5 = true then do
+                                          let i5 ← tree.index_usize 4#usize
+                                          if i5 ≠ 1#u8 then ok (core.result.Result.Err ())
+                                            else do
+                                              let i6 ← tree.index_usize 5#usize
+                                              if i6 ≠ 20#u8 then ok (core.result.Result.Err ())
+                                                else do
+                                                  let i7 ← tree.index_usize 6#usize
+                                                  if i7 ≠ 3#u8 then ok (core.result.Result.Err ())
+                                                    else do
+                                                      let i8 ← tree.index_usize 7#usize
+                                                      if i8 ≠ 1#u8 then ok (core.result.Result.Err ())
+                                                        else do
+                                                          let next_leaf_index ← NCV_Reference.word64 tree 8#usize
+                                                          if next_leaf_index > 1048576#u64 then
+                                                              ok (core.result.Result.Err ())
+                                                            else do
+                                                              let r ← NCV_Reference.digest tree 16#usize
+                                                              let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+                                                              match cf with
+                                                                | core.ops.control_flow.ControlFlow.Continue val => do
+                                                                  let r1 ←
+                                                                    NCV_Reference.decode_frontier tree next_leaf_index
+                                                                  let cf1 ←
+                                                                    core.result.Result.Insts.CoreOpsTry.branch r1
+                                                                  match cf1 with
+                                                                    | core.ops.control_flow.ControlFlow.Continue val1 =>
+                                                                      if next_leaf_index = 0#u64 then do
+                                                                        let a ← NCV_Reference.EMPTY.index_usize 20#usize
+                                                                        let b6 ← NCV_Reference.eq_digest val a
+                                                                        if b6 = true then do
+                                                                            let i9 ← b.index_usize 72#usize
+                                                                            ok
+                                                                                (core.result.Result.Ok
+                                                                                  { bump := i9, master := master,
+                                                                                    lane_id := i2,
+                                                                                    next_leaf_index := next_leaf_index,
+                                                                                    root := val, frontier := val1 })
+                                                                          else ok (core.result.Result.Err ())
+                                                                      else do
+                                                                        let i9 ← b.index_usize 72#usize
+                                                                        ok
+                                                                            (core.result.Result.Ok
+                                                                              { bump := i9, master := master,
+                                                                                lane_id := i2,
+                                                                                next_leaf_index := next_leaf_index,
+                                                                                root := val, frontier := val1 })
+                                                                    |
+                                                                    core.ops.control_flow.ControlFlow.Break residual =>
+                                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                        NCV_Reference.Lane (core.convert.FromSame Unit)
+                                                                        residual
+                                                                | core.ops.control_flow.ControlFlow.Break residual =>
+                                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                    NCV_Reference.Lane (core.convert.FromSame Unit)
+                                                                    residual
+                                        else ok (core.result.Result.Err ())
+                                else ok (core.result.Result.Err ())
+                            else ok (core.result.Result.Err ())
+        else ok (core.result.Result.Err ())) =
+    ok (core.result.Result.Err ())
+NCV_generated/NCV_Reject.lean:19:56: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_lane_ref, bne_iff_ne, h̵,̵ ̵ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_Reject.lean:19:59: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_Reference.decode_lane_ref, bne_iff_ne, h,̵ ̵i̵t̵e̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCV_Reject.master' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_Reject.checkpoint' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_Reject.lane' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_Reject.op48' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_Reject.op49' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_Reject.op50' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

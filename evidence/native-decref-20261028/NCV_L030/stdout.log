@@ -1,0 +1,94 @@
+NCV_generated/NCV_CastHelpers.lean:26:27: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+NCV_generated/NCV_CastHelpers.lean:35:36: error: unsolved goals
+b : Slice U8
+s : Usize
+a : Std.Array U8 32#usize
+fit : ↑s + 32 ≤ (↑b).length
+field : List.take 32 (List.drop ↑s ↑b) = ↑a
+stop : Usize
+call : s + 32#usize = ok stop
+value : ↑stop = ↑s + ↑32#usize
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := s, «end» := stop } =
+    ok (JHg_FieldRead.segment b ↑s ↑32#usize)
+cast :
+  core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 (JHg_FieldRead.segment b (↑s) 32) =
+    ok (core.result.Result.Ok a)
+⊢ (do
+      let r ←
+        core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 (JHg_FieldRead.segment b ↑s ↑32#usize)
+      match r with
+        | core.result.Result.Ok a => ok a
+        | core.result.Result.Err a => ok (Array.repeat 32#usize 0#u8)) =
+    ok a
+NCV_generated/NCV_CastHelpers.lean:38:43: warning: This simp argument is unused:
+  cast
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_CastRef.bytes32, ̲call, ̲read,c̵a̵s̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_CastHelpers.lean:42:64: error: unsolved goals
+b : Slice U8
+s : Usize
+a : Std.Array U8 8#usize
+fit : ↑s + 8 ≤ (↑b).length
+field : List.take 8 (List.drop ↑s ↑b) = ↑a
+stop : Usize
+call : s + 8#usize = ok stop
+value : ↑stop = ↑s + ↑8#usize
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := s, «end» := stop } =
+    ok (JHg_FieldRead.segment b ↑s ↑8#usize)
+cast :
+  core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 (JHg_FieldRead.segment b (↑s) 8) =
+    ok (core.result.Result.Ok a)
+⊢ (do
+      let r ← core.array.TryFromArrayCopySlice.try_from 8#usize core.marker.CopyU8 (JHg_FieldRead.segment b ↑s ↑8#usize)
+      match r with
+        | core.result.Result.Ok a => ok (core.num.U64.from_le_bytes a)
+        | core.result.Result.Err a => ok 0#u64) =
+    ok (core.num.U64.from_le_bytes a)
+NCV_generated/NCV_CastHelpers.lean:45:42: warning: This simp argument is unused:
+  cast
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_CastRef.word64, ̲call, ̲read,c̵a̵s̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCV_generated/NCV_CastHelpers.lean:49:64: error: unsolved goals
+b : Slice U8
+s : Usize
+a : Std.Array U8 4#usize
+fit : ↑s + 4 ≤ (↑b).length
+field : List.take 4 (List.drop ↑s ↑b) = ↑a
+stop : Usize
+call : s + 4#usize = ok stop
+value : ↑stop = ↑s + ↑4#usize
+read :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) b { start := s, «end» := stop } =
+    ok (JHg_FieldRead.segment b ↑s ↑4#usize)
+cast :
+  core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 (JHg_FieldRead.segment b (↑s) 4) =
+    ok (core.result.Result.Ok a)
+⊢ (do
+      let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 (JHg_FieldRead.segment b ↑s ↑4#usize)
+      match r with
+        | core.result.Result.Ok a => ok (core.num.U32.from_le_bytes a)
+        | core.result.Result.Err a => ok 0#u32) =
+    ok (core.num.U32.from_le_bytes a)
+NCV_generated/NCV_CastHelpers.lean:52:42: warning: This simp argument is unused:
+  cast
+
+Hint: Omit it from the simp argument list.
+  simp only [NCV_CastRef.word32, ̲call, ̲read,c̵a̵s̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NCV_CastHelpers.equal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCV_CastHelpers.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCV_CastHelpers.range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NCV_CastHelpers.bytes32' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_CastHelpers.word64' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NCV_CastHelpers.word32' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

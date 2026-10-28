@@ -1,0 +1,42 @@
+from pathlib import Path
+from NCV_instrument import harness_text
+E=Path(__file__).resolve().parent
+stubs='''#[kani::stub(<[u8]>::copy_from_slice,crate::NCV_KMX::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NCV_KMX::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::NCV_KMX::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::NCV_KMX::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::NCV_KMX::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::NCV_KMX::KMX_realloc)]
+'''
+functions={
+'word32':'''let b:[u8;4]=kani::any();let actual=u32::from_le_bytes(b);let expected=R::word32(&b,0);assert!((actual==expected)!=NCV_INVERSE);''',
+'word64':'''let b:[u8;8]=kani::any();let actual=u64::from_le_bytes(b);let expected=R::word64(&b,0);assert!((actual==expected)!=NCV_INVERSE);''',
+'sequence_frame':'''let b:[u8;8]=kani::any();let mut seq:[u64;8]=kani::any();let old=seq;let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<8);let sequence=&mut seq[k];*sequence=u64::from_le_bytes(b);let expected=if j==k{R::word64(&b,0)}else{old[j]};assert!((seq[j]==expected)!=NCV_INVERSE);''',
+'sequence_capacity':'''let b:[u8;8]=kani::any();let mut seq:[u64;8]=kani::any();let old=seq;let k:usize=kani::any();let j:usize=kani::any();kani::assume(k<8&&j<8);let sequence=&mut seq[k];*sequence=u64::from_le_bytes(b);let reject=*sequence>POOL_V1_PAIR_CAPACITY;let value=R::word64(&b,0);let expected=if j==k{value}else{old[j]};assert!((seq[j]==expected&&reject==(value>1048576))!=NCV_INVERSE);''',
+'frontier_guard':'''let raw:[u32;8]=kani::any();let node=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])];let level:usize=kani::any();let next:u64=kani::any();kani::assume(level<20&&next<=1048576);let actual=(next>>level)&1==0&&node!=crate::r1_pool_adapter::v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[level];let expected=(next>>level)&1==0&&!R::eq_digest(&raw,&R::EMPTY[level]);assert!((actual==expected)!=NCV_INVERSE);''',
+'empty_guard':'''let raw:[u32;8]=kani::any();let root=[M31(raw[0]),M31(raw[1]),M31(raw[2]),M31(raw[3]),M31(raw[4]),M31(raw[5]),M31(raw[6]),M31(raw[7])];let next:u64=kani::any();kani::assume(next<=1048576);let actual=next==0&&root!=crate::r1_pool_adapter::v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[POOL_V1_PAIR_TREE_DEPTH];let expected=next==0&&!R::eq_digest(&raw,&R::EMPTY[20]);assert!((actual==expected)!=NCV_INVERSE);''',
+'policy_flags':'''let flags:u8=kani::any();let actual=flags & !aspis_statement::pool_v1::POOL_V1_VERIFIER_POLICY_FLAGS_MASK!=0;let expected=flags&!3!=0;assert!((actual==expected)!=NCV_INVERSE);''',
+'master_chronology':'''let has:bool=kani::any();let next:u64=kani::any();let nonzero:bool=kani::any();let actual=(!has&&(next!=0||nonzero))||(has&&next==0);let expected=if has{next==0}else{next!=0||nonzero};assert!((actual==expected)!=NCV_INVERSE);'''
+}
+functions.update({
+'key_zero': 'let b:[u8;32]=kani::any();let actual=b==[0u8;32];let expected=R::zero(&b);assert!((actual==expected)!=NCV_INVERSE);',
+'magic_equal': 'let a:[u8;4]=kani::any();let b:[u8;4]=kani::any();let actual=a==b;let expected=R::equal(&a,&b);assert!((actual==expected)!=NCV_INVERSE);',
+'asset_canonical':'let b:[u8;4]=kani::any();let raw=u32::from_le_bytes(b);let actual=raw>=aspis_core::field::P;let expected=R::word32(&b,0)>=2147483647;assert!((actual==expected)!=NCV_INVERSE);',
+'lane_id':'let lane:u8=kani::any();let actual=usize::from(lane)>=POOL_V1_PAIR_FOREST_LANE_COUNT;let expected=lane>=8;assert!((actual==expected)!=NCV_INVERSE);',
+'binding_entry':'let k:usize=kani::any();kani::assume(k<32);let actual=POOL_V1_PAIR_FOREST_ACCOUNT_FORMAT_BINDING[k];let expected=R::BINDING[k];assert!((actual==expected)!=NCV_INVERSE);',
+'empty_entry':'let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<21&&j<8);let actual=crate::r1_pool_adapter::v7_pair_empty_roots::V7_PAIR_EMPTY_ROOTS[i][j].0;let expected=R::EMPTY[i][j];assert!((actual==expected)!=NCV_INVERSE);',
+'policy_body':'let a:[u8;32]=kani::any();let b:[u8;32]=kani::any();let c:[u8;32]=kani::any();let f:u8=kani::any();let p=aspis_statement::pool_v1::VerifierPolicyV1{flags:f,registry_program:a,registry_authority:b,policy_binding:c};let q=R::Policy{flags:f,registry_program:a,registry_authority:b,policy_binding:c};let actual=aspis_statement::pool_v1::validate_verifier_policy_v1(&p).is_ok();let expected=R::valid_policy(&q);assert!((actual==expected)!=NCV_INVERSE);',
+'identity_body':'let b:[u8;144]=kani::any();let actual=aspis_statement::pool_v1::decode_pool_identity_v1(&b).map(|a|R::Identity{pool:a.pool,asset_mint:a.asset_mint,token_program:a.token_program,asset_id:a.asset_id.0,deployment_domain:a.deployment_domain}).map_err(|_|());let expected=R::identity(&b);assert!((actual==expected)!=NCV_INVERSE);'
+})
+s='''#![allow(non_snake_case,dead_code)]
+// One source-body fragment per gate. Iterator/caller association remains separate.
+use super::*;
+pub const NCV_INVERSE:bool=false;
+'''
+for name,body in functions.items():s+='#[kani::proof]\n'+stubs+'#[kani::unwind(34)]\nfn NCV_'+name+'_step(){'+body+'}\n'
+(E/'NCV_fragments.rs').write_text(s)
+p=E/'NCV_native.rs';s=harness_text('NCV_native.rs')
+if 'mod NCV_fragments;' not in s:s+='\n#[path="NCV_fragments.rs"] mod NCV_fragments;\n'
+p.with_suffix('.tmp').write_text(s);p.with_suffix('.tmp').replace(p)
+p=E/'NCV_instrument.py';s=p.read_text().replace("d['programs/r1-cost-probe/src/NCV_native.rs']=(E/'NCV_native.rs').read_text()", "d['programs/r1-cost-probe/src/NCV_native.rs']=(E/'NCV_native.rs').read_text()\n d['programs/r1-cost-probe/src/NCV_fragments.rs']=(E/'NCV_fragments.rs').read_text().replace('pub const NCV_INVERSE:bool=false;','pub const NCV_INVERSE:bool='+('true' if os.environ.get('NCV_NEGATIVE') else 'false')+';')")
+p.write_text(s)
