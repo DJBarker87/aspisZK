@@ -33,7 +33,7 @@ theorem overflow_world {T S F : Type} (step : Request → S → Option Nat × S)
 theorem copied_prefix (r : Request) (memory : Nat → Option Nat) (p i : Nat)
     (grow : r.oldCapacity≤r.newCapacity) (h : i<r.oldCapacity*r.shape.width) :
     memoryAfter r p memory (p+i)=memory (r.address+i) := by
-  have hi : i<r.newCapacity*r.shape.width :=
+  have hi : i < r.newCapacity * r.shape.width :=
     lt_of_lt_of_le h (Nat.mul_le_mul_right r.shape.width grow)
   have hp : p≤p+i := Nat.le_add_right _ _
   have hn : p+i<p+r.newCapacity*r.shape.width := Nat.add_lt_add_left hi p
@@ -46,7 +46,7 @@ theorem outside_memory (r : Request) (memory : Nat → Option Nat) (p a : Nat)
   simp only [memoryAfter,hn,ite_false]
 
 theorem new_spare_uninitialized (r : Request) (memory : Nat → Option Nat) (p i : Nat)
-    (h : r.oldCapacity*r.shape.width≤i) (hi : i<r.newCapacity*r.shape.width) :
+    (h : r.oldCapacity * r.shape.width ≤ i) (hi : i < r.newCapacity * r.shape.width) :
     memoryAfter r p memory (p+i)=none := by
   have hp : p≤p+i := Nat.le_add_right _ _
   have hn : p+i<p+r.newCapacity*r.shape.width := Nat.add_lt_add_left hi p
