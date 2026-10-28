@@ -27,9 +27,14 @@ theorem phase (ops : ExternalFuns) (xs : Nat → Raw) (i : Usize) (n : Nat) (bou
     @PV_RunJoin_RoundScaleThread44.phase _ (ProverRwP6BodyCandidate.selected ops) n (array 7#usize xs) i =
       .ok (array 7#usize (PV_RunJoin_IntervalMap44.map product xs i.val n)) := by
   induction n generalizing xs i with
-  | zero => rw [PV_RunJoin_RoundScaleThread44.phase,PV_RunJoin_IntervalMap44.zero]
+  | zero =>
+    change Result.ok (array 7#usize xs) = _
+    rw [PV_RunJoin_IntervalMap44.zero]
   | succ n ih =>
-    rw [PV_RunJoin_RoundScaleThread44.phase,step ops xs i (by omega)]
+    change (do
+      let next ← @PV_RunJoin_RoundScaleThread44.step _ (ProverRwP6BodyCandidate.selected ops) (array 7#usize xs) i
+      @PV_RunJoin_RoundScaleThread44.phase _ (ProverRwP6BodyCandidate.selected ops) n next (Usize.wrapping_add i 1#usize)) = _
+    rw [step ops xs i (by omega)]
     simp only [bind_tc_ok]
     have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
     rw [ih _ _ (by rw [inc];omega),inc,PV_RunJoin_IntervalMap44.step]
