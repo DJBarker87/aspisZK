@@ -10,7 +10,7 @@ for name,b,res in [('already_exists','true','.Ok false'),('other_error','false',
     (error : std.io.error.Error) (kind : core.io.error.ErrorKind)
     (opened : std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path = .ok (.Err error))
     (classified : std.io.error.Error.kind error = .ok kind)
-    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok '''+b+'))'
+    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok '''+b+')'
  text+='theorem '+name+args+extra+f''' :
     {base}.reserve_fallible store statement nonce = .ok ({res},{{store with last_error := none}}) := by
 '''+proof+'''  change (std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path >>= _) = _

@@ -15,7 +15,7 @@ theorem already_exists (store : Store) (statement nonce : Array U8 32#usize)
     (error : std.io.error.Error) (kind : core.io.error.ErrorKind)
     (opened : std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path = .ok (.Err error))
     (classified : std.io.error.Error.kind error = .ok kind)
-    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok true)) :
+    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok true) :
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible store statement nonce = .ok (.Ok false,{store with last_error := none}) := by
   unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
   change (aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path {store with last_error := none} nonce >>= _) = _
@@ -46,7 +46,7 @@ theorem other_error (store : Store) (statement nonce : Array U8 32#usize)
     (error : std.io.error.Error) (kind : core.io.error.ErrorKind)
     (opened : std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath (moded.2 moded.1) path = .ok (.Err error))
     (classified : std.io.error.Error.kind error = .ok kind)
-    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok false)) :
+    (compared : core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq kind core.io.error.ErrorKind.AlreadyExists = .ok false) :
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible store statement nonce = .ok (.Err error,{store with last_error := none}) := by
   unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
   change (aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path {store with last_error := none} nonce >>= _) = _
