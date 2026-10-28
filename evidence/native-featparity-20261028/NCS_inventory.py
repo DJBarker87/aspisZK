@@ -43,6 +43,11 @@ add('NBQ','powers','CLOSED-CONDITIONAL','evidence/native-tx2h-20261028/NBQ_U07_B
 for packet,source in [('NBQ','evidence/native-tx2h-20261028/NBQ_U00_BRIDGE.md'),('NBS','evidence/native-tx2i-20261028/NBS_U00_BRIDGE.md')]:
  add(packet,'error','CLOSED-CONDITIONAL',source,'Returning log/frame domain only; formatting/SDK/runtime retained')
 add('NCA','inactive serializer statement5','CLOSED-CONDITIONAL','evidence/native-prepare4-20261028/NCA_prepare_BRIDGE.md:19','One actual zip body and Prepared::new serializer argument; lower native bridges retained; complete prepare OPEN')
+# Restored native harness families in merged mitigation/reverification bridges are narrow credits, not whole-member closures.
+for r in json.load(open('evidence/kani-mitig-20261028/KMX_RERUN_STATUS.json')):
+ if r['status']=='PASS':add('KMX',r['id'],'CLOSED narrow replay','evidence/kani-mitig-20261028/KMX_RERUN_STATUS.json',json.dumps(r))
+for r in json.load(open('evidence/kani-reverify2-20261028/KMZ_ROW_CREDITS.json'))['rows']:
+ if r['status']=='CONFIRMED':add('KMZ',r['original'],'CLOSED narrow restored property','evidence/kani-reverify2-20261028/KMZ_ROW_CREDITS.json',json.dumps(r))
 # Merge abbreviated and fully qualified member names within each packet where exact unique suffix matches.
 for k in list(rows):
  if k not in rows:continue
