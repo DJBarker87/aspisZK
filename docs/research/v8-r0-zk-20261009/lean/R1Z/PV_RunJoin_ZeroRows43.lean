@@ -44,7 +44,7 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
     rcases triple with ⟨r,t,o⟩
     cases r with
     | Err e =>
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
       trivial
     | Ok q =>
       obtain ⟨header,hlen,hbytes,olen⟩ := hp
@@ -52,7 +52,7 @@ theorem loop (ops : ExternalFuns) {H : Type} (hash : aspis_core.digest.Digest32 
         refine ⟨header,hlen,?_⟩
         change o.val=out.val++header++[] at hbytes
         simpa only [List.append_nil] using hbytes
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
       apply PV_RunJoin_ResultPost41.bind
       intro zc1
       have next := ih (Usize.wrapping_add i 1#usize) t o zc1
