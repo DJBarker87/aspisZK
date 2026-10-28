@@ -1,0 +1,42 @@
+{
+  "target": "native expander next/m31/qm31 finite controls",
+  "source_revision": "8e45fcd46cd6320e45cd73669561dc7d38131571",
+  "source_sha256": "fb2bedeed822f7f3aba3957b5a18b7f8dfb7f1560c449cbbfb5986cbc2154e44",
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=pv-l2d-expander-native",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-l2d-20261028/evidence/time-expander-native.log",
+    "timeout",
+    "300",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-l2d-20261028/expander-cargo-run.py"
+  ],
+  "admission": {
+    "schema": "ProverRwNativeEntropy-reservation-v1",
+    "utc": "2026-10-28T16:25:21.434914+00:00",
+    "requested_bytes": 8589934592,
+    "safe_limit_bytes": 59055800320,
+    "scanner_sha256": "f5379c1cf7673afeb1c452bae5c36a00a6c8562bbc3336667bd428858eff8647",
+    "print_axioms": "N/A: read-only resource gate",
+    "allowed": true,
+    "bounded_reserved_bytes": 34225520640,
+    "projected_reserved_bytes": 42815455232
+  },
+  "expected_time": "optimized zeroize/harness compilation, then named scalar/refill/limb-propagation finite controls; no chained field arithmetic",
+  "print_axioms": "N/A: native finite validation",
+  "features": "standalone field declarations/constructor and source-identical expander; deployed feature/ELF credit not claimed"
+}

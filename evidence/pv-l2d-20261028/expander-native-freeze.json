@@ -1,0 +1,84 @@
+{
+  "source_revision": "8e45fcd46cd6320e45cd73669561dc7d38131571",
+  "bodies": [
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub struct CM31 {",
+      "sha256": "70788522ae518a81cf038cef9116d5bebc9dc6a097406a62c79f3635b8998d10"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub struct QM31 {",
+      "sha256": "7602e05ad6f14b7feb141cb99aceceb0d24174c409e0ccca4ae3e1911dc247dd"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "start": "pub fn new(a: M31, b: M31)",
+      "sha256": "67b40a34e4de780871a1d5216430959a57e4ce4b83ec6f541c5c5a3bd763c22e"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "start": "pub enum StateOnlyMaskBuildError {",
+      "sha256": "164b97c3abcde39558b597d18079e9dbe40df0bee27dda20e4c3c09a0a01bf7a"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "struct Profile21SourceExpander {",
+      "sha256": "60fb12270c7728e80e1ed033fcd593998fc77933a127ad2217e31cbd83c5d340"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "impl Profile21SourceExpander {",
+      "sha256": "4aebf4e556179f26b86d59a6a86e5539e201a830dedfe4266ca2b4f53a2a2460"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "impl Drop for Profile21SourceExpander {",
+      "sha256": "f4d848fbe6d3067a5273f060f429f3155a186890f46f0ade81bdd828a5ccbfb3"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "start": "fn profile21_source_expander_block(",
+      "sha256": "bb8d119cf88625597b23cd520393c40b91256ae382dfe7783a4710453413cc5a"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) struct State {",
+      "sha256": "e15014c952d294abfb5677ba7a061ae79512d9ff7de48322ca972cc0e31a2588"
+    },
+    {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "start": "pub fn host_hashv(",
+      "sha256": "f9f7cc6b026d72a12ddae62e0c2e8c46315cd04ee667e58eff57d6cf6fcee209"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn next(",
+      "sha256": "b5ebc19de6282ae556ce2c55da84b64636a72c74652f45b8ae57cc698518a4eb"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn limb_caller(",
+      "sha256": "0e29651ab2c9dbf9f35aee2135208aa6b509a9d42d9b91c588dbe77853ca7347"
+    },
+    {
+      "path": "crates/aspis-prover/src/prover_commit_reference.rs",
+      "start": "pub(crate) fn qm31_caller(",
+      "sha256": "41ee9e5ecb0f03bfd262c79701aec6953789b5f82269a678a7381d1aa9d0d800"
+    }
+  ],
+  "harness_sha256": "331d37ba00883dfc8ad36955bce0e957ddfc5091e0c870ff2e6d1b8d88cc4430",
+  "zeroize_version": "1.8.1",
+  "evidence_class": "finite validation preparation; no deployed hash or whole-row trace credit",
+  "differences": [
+    "nominal enclosing aspis_core module; exact scalar/tower field declarations and CM31 constructor",
+    "public P constant has same 0x7fffffff value",
+    "extra Debug/Eq derives for comparisons; no source function body changed",
+    "test uses synthetic HashFn families plus 64 source-identical host_hashv cases under sha2 0.10.9; no ELF credit",
+    "reference next uses explicit four-byte array, source next uses slice try_into",
+    "reference scalar uses range loop; source scalar uses counted while",
+    "reference QM31 construction is delayed; source construction is nested; these observations need the separate trace model"
+  ],
+  "fidelity": "next/refill use direct owned-state writes, no iterator backward continuation; reference emissions not claimed by this script",
+  "source_modifications_under_crates": false
+}
