@@ -47,13 +47,13 @@ theorem source_reference (buffer : List U8) (pos : Nat) (input : List U8) :
     simp only [List.drop_drop,Nat.add_comm]
 
 theorem write_length (buffer bytes : List U8) (pos : Nat)
-    (hb : buffer.length=64) (h : pos+bytes.length≤64) :
+    (hb : buffer.length=64) (h : pos+bytes.length ≤ 64) :
     (write buffer pos bytes).length=64 := by
   simp only [write,List.length_append,List.length_take,List.length_drop,hb]
   omega
 
 theorem first_length (buffer input : List U8) (pos : Nat)
-    (hb : buffer.length=64) (hp : pos<64) (hn : 64-pos≤input.length) :
+    (hb : buffer.length=64) (hp : pos<64) (hn : 64-pos ≤ input.length) :
     (first buffer pos input).length=64 := by
   unfold first
   split

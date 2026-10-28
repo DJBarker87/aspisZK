@@ -40,7 +40,7 @@ theorem byte (input : List U8) (i j : Nat) (hj : j<64) :
     ((input.drop (64*i)).take 64)[j]?=input[64*i+j]? := by
   simp only [List.getElem?_take,List.getElem?_drop,if_pos hj,Nat.add_comm]
 
-theorem lengths (n : Nat) (input : List U8) (bound : 64*n≤input.length)
+theorem lengths (n : Nat) (input : List U8) (bound : 64*n ≤ input.length)
     (block : List U8) (h : block∈views n input) : block.length=64 := by
   induction n generalizing input with
   | zero => simp only [views,List.not_mem_nil] at h

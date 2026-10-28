@@ -34,14 +34,14 @@ theorem decoded_blocks (N : Type) (bytes : List U8) :
 
 def compress {T N : Type} (update : T → Blocks N → Result T)
     (state : T) (bytes : List U8) : Result T :=
-  if h : (blockList N bytes).length≤Usize.max then update state ⟨blockList N bytes,h⟩ else fail .panic
+  if h : (blockList N bytes).length ≤ Usize.max then update state ⟨blockList N bytes,h⟩ else fail .panic
 
 theorem block_count (N : Type) (bytes : List U8) :
     (blockList N bytes).length=bytes.length/64 := by
   simp only [blockList,List.length_map,PV_DL_UpdateViews.count]
 
 theorem compression_call {T N : Type} (update : T → Blocks N → Result T)
-    (state : T) (bytes : List U8) (bound : bytes.length≤Usize.max) :
+    (state : T) (bytes : List U8) (bound : bytes.length ≤ Usize.max) :
     compress update state bytes=update state
       ⟨blockList N bytes,by rw [block_count];exact le_trans (Nat.div_le_self _ _) bound⟩ := by
   unfold compress
