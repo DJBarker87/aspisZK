@@ -21,7 +21,7 @@ theorem number_add (p : Nat → Nat → Bool) (c r m n : Nat) :
   | zero => simp [number]
   | succ m ih =>
     rw [Nat.succ_add,number,number,ih]
-    congr 1 <;> omega
+    simp only [Nat.add_assoc,Nat.add_comm,Nat.add_left_comm]
 
 theorem blocks (p : Nat → Nat → Bool) (c start n k : Nat)
     (h : ∀ b, b < n → number p c (start+16*b) 16 = k) :
@@ -30,13 +30,22 @@ theorem blocks (p : Nat → Nat → Bool) (c start n k : Nat)
   | zero => simp [number]
   | succ n ih =>
     rw [Nat.mul_succ,number_add,ih (fun b hb => h b (by omega)),h n (by omega)]
-    omega
+    simp only [Nat.succ_mul]
+
+theorem pick_padding (r c : Nat) (hr : r < 912) :
+    pick r c = decide (13 ≤ r%16) := by
+  apply Bool.eq_iff_iff.mpr
+  simp only [pick,decide_eq_true_eq]
+  exact PV_B3P_MaskModel132.padding r c hr
 
 theorem padding_block (c b : Nat) (hb : b < 57) : number pick c (16*b) 16 = 3 := by
-  simp (disch := omega) [number,pick,PV_B3P_MaskModel132.free,Nat.add_mod,Nat.mul_mod]
+  simp only [number]
+  simp (disch := omega) only [pick_padding,decide_eq_true_eq]
+  simp (disch := omega) [Nat.add_mod,Nat.mul_mod]
 
 #print axioms length_rows
 #print axioms number_add
 #print axioms blocks
+#print axioms pick_padding
 #print axioms padding_block
 end PV_B3P_MaskCount132
