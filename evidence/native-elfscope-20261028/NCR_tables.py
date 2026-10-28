@@ -17,4 +17,5 @@ for lane,xs in sorted(collections.defaultdict(list, {lane:[x for x in s if x['pa
  profile='release' if '--release' in c else ('standalone profile unspecified' if c and c[0].endswith('kani-driver') else 'dev; opt='+str(env.get('CARGO_PROFILE_DEV_OPT_LEVEL','unspecified')))
  flags=env.get('RUSTFLAGS','unrecorded')
  text.append('| `'+lane+'` / `'+x['path'].split('/')[-2]+'` | `'+root+'`; '+features+' | '+profile+'; `'+flags+'` |')
+text += ['', 'Additional feature variant: `native-u04d-20261028/NCF_K063` uses program features `pool-adapter,private-leaf-salts,no-entrypoint`; entrypoint expansion is excluded. Full receipt is included in the sample JSON.']
 p.write_text(base+'\n'.join(text)+'\n')

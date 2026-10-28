@@ -9,6 +9,8 @@
 5. **Verification replacements:** `cfg(kani)` modules, `kani::stub`/contracts, arbitrary digest replies, arithmetic replacements and KMX copying windows are proof abstractions with separate value/domain/caller obligations. Their implementations are not linked into the release ELF. Function-pointer-dependent PASS results remain quarantined under local rule14.
 6. **Receipt-scope correction:** not every result in the named directories is a cargo-kani compilation of the entire frozen workspace. Later Kani reverify receipts, e.g. KNE_K001, invoke `kani-driver` on standalone `KNE_windows.rs`, checking the frozen Cargo graph separately. These are window lemmas with source-association obligations. Preserving a lock hash in their receipt does not make the standalone file a compiled release crate.
 
+7. **Entrypoint suppressed in a native SDK lane:** `native-u04d-20261028/NCF_K063` selects `pool-adapter,private-leaf-salts,no-entrypoint`. The last feature cfg-excludes the `solana_program::entrypoint!` expansion (`programs/r1-cost-probe/src/lib.rs:20`); it is absent from both deployed verifier builds. This local SDK helper gate therefore does not cover the deployed entry ABI/panic expansion. Core adapter helper bodies may still agree. This additional variant is retained explicitly in the sample JSON.
+
 ## Exact release configuration
 
 Source baseline `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; lock SHA256 `5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef`. [Low2 build manifest](../lowering2-20261026/Low2_build_manifest.json) contains actual rustc arguments; [NCR_RELEASE_CFG.json](NCR_RELEASE_CFG.json) extracts their cfg/codegen/target switches. The sbf-identity recapture plan is **proposed**, so it is not treated as a successful build receipt; Low2 supplies the realized builds.
@@ -99,7 +101,7 @@ The exact-body scan checks all345 TX1 and242 TX2 inventory spans against frozen 
 
 ## Representative receipt lanes
 
-119 sampled receipts across 61 lanes. These include failures/negative controls; sampling is configuration evidence, not proof credit. Full commands/environments/source pins/statuses are retained in [NCR_RECEIPT_SAMPLE.json](NCR_RECEIPT_SAMPLE.json); wrapper source in [NCR_WRAPPERS.json](NCR_WRAPPERS.json).
+120 sampled receipts across 61 lanes. These include failures/negative controls; sampling is configuration evidence, not proof credit. Full commands/environments/source pins/statuses are retained in [NCR_RECEIPT_SAMPLE.json](NCR_RECEIPT_SAMPLE.json); wrapper source in [NCR_WRAPPERS.json](NCR_WRAPPERS.json).
 
 | Lane / first sampled receipt | Effective command class / features | Profile/flags |
 |---|---|---|
@@ -164,3 +166,5 @@ The exact-body scan checks all345 TX1 and242 TX2 inventory spans against frozen 
 | `native-tx2w-20261028` / `NCJ_K001` | `/home/dombarker/project-offloads/codex-cx-native-tx2w-20261028/NCJ_src/crates/aspis-r1-cost-probe/Cargo.toml`; no explicit features | dev; opt=3; `-C link-arg=-Wl,--threads=1` |
 | `native-u04c-20261028` / `NCC_K001` | `/home/dombarker/project-offloads/codex-cx-native-tx2j-20261028/NBU_src/crates/aspis-statement/Cargo.toml`; no explicit features | dev; opt=3; `unrecorded` |
 | `native-u04d-20261028` / `NCF_K001` | `/home/dombarker/project-offloads/codex-cx-native-tx2j-20261028/NBU_src/crates/aspis-statement/Cargo.toml`; no explicit features | dev; opt=3; `unrecorded` |
+
+Additional feature variant: `native-u04d-20261028/NCF_K063` uses program features `pool-adapter,private-leaf-salts,no-entrypoint`; entrypoint expansion is excluded. Full receipt is included in the sample JSON.

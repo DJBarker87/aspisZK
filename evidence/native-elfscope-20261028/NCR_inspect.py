@@ -16,6 +16,8 @@ for lane in lanes:
   if not isinstance(cmd,list) or not (j.get('kind')=='kani' or any(str(x)=='kani' or str(x).endswith('/cargo-kani') for x in cmd)):continue
   samples.append(dict(path=p,receipt=j));found+=1
   if found>=2:break
+p='evidence/native-u04d-20261028/NCF_K063/receipt.json'
+if not any(x['path']==p for x in samples):samples.append(dict(path=p,receipt=json.loads(git('show','HEAD:'+p))))
 (O/'NCR_RECEIPT_SAMPLE.json').write_text(json.dumps(samples,indent=2)+'\n')
 inv=json.load(open('evidence/native-inv1-20261027/NBI1_INVENTORY.json'))
 cache={};hits=[];pins=[]
