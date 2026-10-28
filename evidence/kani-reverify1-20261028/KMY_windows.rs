@@ -72,6 +72,7 @@ pub const OFF_OPENINGS: usize = OFF_FINAL + FINAL_LEN * 32;
 pub const OPENING: usize = 480 + 128 + 32 + 32 + 128 + 32;
 pub const OFF_NODES: usize = OFF_OPENINGS + QUERIES * OPENING;
 pub const MAX_NODES: usize = 2 * (146 + 172) + (128 + 150);
+pub const FIXED: usize = OFF_NODES;
 pub const MAX_PROOF: usize = FIXED + 32 * MAX_NODES;
 pub const PROOF_BYTES: usize = MAX_PROOF;
 }
@@ -479,3 +480,8 @@ fn KMY_capacity16(){
  let expected=[16usize,32,64,64,128,128,128,128,256,256,256,256,256,256];
  for i in 0..14{KMX_stubs::KMX_extend_from_slice(&mut out,&source);assert_eq!(out.len(),16*(i+1));assert_eq!(out.capacity(),expected[i]);}
 }
+
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+fn KMY_capacity_schedules(){KMY_capacity32();KMY_capacity16();}
