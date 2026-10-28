@@ -1,0 +1,11 @@
+from pathlib import Path
+s=Path('docs/research/v8-r0-zk-20261009/lean/R1Z/ProverCommitFoldCell48.lean').read_text()
+s=s.replace('import R1Z.ProverCommitMix48','import R1Z.PV_RunJoin_WideArithmetic44\nimport R1Z.ProverCommitFoldCell48')
+s=s.replace('namespace R1Z.ProverCommitFoldCell48','namespace R1Z.PV_RunJoin_FoldCell44').replace('end R1Z.ProverCommitFoldCell48','end R1Z.PV_RunJoin_FoldCell44')
+a=s.index('/-!');b=s.index('set_option',a);s=s[:a]+s[b:]
+s=s.replace('attribute [local irreducible] sourceArray source value','variable [ProverRwFull.ExternalTypes]\nopen PV_RunJoin_WideArithmetic44\nattribute [local irreducible] sourceArray source value\n\ndef array (size : Usize) (q : Nat → Raw) :=\n  ProverCommitArray49.array size (fun i => current (source (q i)))')
+s=s.replace('theorem cell (q','theorem cell (ops : ProverRwFull.ExternalFuns) (q')
+s=s.replace('∃ z : Raw, fold_cell (sourceArray 4#usize q) (source a)=ok (source z) ∧','∃ z : Raw, @ProverRwFull.prover.fold_cell _ (ProverRwP6BodyCandidate.selected ops)\n      (array 4#usize q) (current (source a)) false=ok (current (source z)) ∧')
+s=s.replace('rw [fold_cell,index _ _ 0#usize (by decide),index _ _ 1#usize (by decide),\n      index _ _ 2#usize (by decide),index _ _ 3#usize (by decide)]','rw [ProverRwFull.prover.fold_cell]\n    simp only [Bool.false_eq_true,↓reduceIte]\n    rw [ProverCommitArray49.index _ _ 0#usize (by decide),\n      ProverCommitArray49.index _ _ 1#usize (by decide),\n      ProverCommitArray49.index _ _ 2#usize (by decide),\n      ProverCommitArray49.index _ _ 3#usize (by decide)]')
+s=s.replace('bind_tc_ok,hm3,hs2,hm2,hs1,hm1,hz]','bind_tc_ok,PV_RunJoin_WideArithmetic44.mul ops _ _ _ hm3,\n      PV_RunJoin_WideArithmetic44.add ops _ _ _ hs2,\n      PV_RunJoin_WideArithmetic44.mul ops _ _ _ hm2,\n      PV_RunJoin_WideArithmetic44.add ops _ _ _ hs1,\n      PV_RunJoin_WideArithmetic44.mul ops _ _ _ hm1,\n      PV_RunJoin_WideArithmetic44.add ops _ _ _ hz]')
+Path('docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_FoldCell44.lean').write_text(s)
