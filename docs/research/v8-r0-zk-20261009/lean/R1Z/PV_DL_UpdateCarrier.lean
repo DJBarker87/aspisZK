@@ -96,8 +96,9 @@ theorem complete {T N : Type} (update : T → Blocks N → Result T)
 theorem encoding_valid {T : Type} (state : T) (buffer : List U8) (pos : Nat)
     (hb : buffer.length=64) (hp : pos<64) :
     encode (state,buffer,pos)=ok ⟨state,⟨PV_DL_StorageBuild.build 6 (fun i => buffer[i]!),
-      U8.ofNatCore pos (by omega),()⟩⟩ := by
+      U8.ofNatCore pos (by simp only [UScalarTy.U8_numBits_eq];omega),()⟩⟩ := by
   unfold encode
+  dsimp only
   rw [dif_pos (by omega)]
 
 theorem decoded {T : Type} (state : T) (buffer : List U8) (pos : Nat)
@@ -110,8 +111,6 @@ theorem decoded {T : Type} (state : T) (buffer : List U8) (pos : Nat)
 #print axioms decoded_blocks
 #print axioms compress
 #print axioms block_count
-#print axioms block_decoding
-#print axioms decoded_blocks
 #print axioms compression_call
 #print axioms native_batch_bound
 #print axioms encode
