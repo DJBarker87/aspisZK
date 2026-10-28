@@ -18,7 +18,9 @@ theorem complete (w : W) (hs : w.variant=.S2) (j : Usize) :
   rw [PV_RunJoin_WeightResult46.shared_bind]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro idx _
-  rw [PV_RunJoin_WeightMap46.index]
+  dsimp only
+  have hi := PV_RunJoin_WeightMap46.index (amap (amap toQ)) w.factors idx
+  rw [hi]
   symm
   apply map_bind (amap (amap toQ)) toQ
   intro rows
