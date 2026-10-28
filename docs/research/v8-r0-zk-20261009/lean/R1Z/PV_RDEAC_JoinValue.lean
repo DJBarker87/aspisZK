@@ -47,11 +47,11 @@ theorem relative (base path : Slice U8) (positive : 0<path.val.length)
     · simp only [slash,bne_self_eq_false,ne_eq,not_true_eq_false,decide_false,if_false,
         bind_tc_ok,joined,needsSeparator,bp,decide_true,Bool.true_and,Bool.false_eq_true]
       rw [extend _ path (by change base.val.length+path.val.length≤_;omega)]
-      rfl
+      simp only [List.append_nil]
     · simp only [slash,ne_eq,not_false_eq_true,decide_true,if_true,joined,
         needsSeparator,bp,Bool.true_and]
       rw [push _ 47#u8 (by change base.val.length+1≤_;omega)]
-      simp only [bind_tc_ok]
+      simp only [if_pos slash,bind_tc_ok]
       rw [extend _ path (by simp only [List.length_append,List.length_cons,List.length_nil];omega)]
   · have bnot : ¬Slice.len base>0#usize := by
       change ¬0<(Slice.len base).val

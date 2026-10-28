@@ -25,24 +25,31 @@ theorem projection {S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F) :
     erase (append step shape b tail w)=PV_RDEA_AppendExecution.append step shape b tail w := by
   unfold append PV_RDEA_AppendExecution.append
+  dsimp only
   split <;> rename_i h
-  · simp only [erase,h]
-  · rfl
+  all_goals split <;> rename_i h2
+  all_goals try {rw [h] at h2; cases h2}
+  all_goals simp only [erase,h]
+  all_goals cases (Except.error.inj (h.symm.trans h2)); rfl
 
 theorem failed_header {S F : Type} (step : Request → S → Option Nat × S)
     (shape : Shape) (b : Buffer U8) (tail : List U8) (w : World S F)
     (err : PV_RDB1_V183_ReserveWorld.Error) (h : (append step shape b tail w).returned=.error err) :
     (append step shape b tail w).buffer=b := by
   unfold append at h ⊢
+  dsimp only at h ⊢
   split at h <;> rename_i hr
-  · simp only [hr]
+  · try simp only [hr]
     unfold reserve finishAt at hr ⊢
-    split <;> try rfl
-    split <;> try rfl
-    split <;> try rfl
+    split <;> rename_i h0
+    · rfl
+    split <;> rename_i h1
+    · rfl
+    split <;> rename_i h2
+    · rfl
     dsimp only at hr ⊢
     cases hs : step ⟨b.address,b.capacity,growthCapacity b.values.length b.capacity tail.length,shape⟩ w.allocator with
-    | mk p s => cases p <;> simp [hs] at hr ⊢
+    | mk p s => cases p <;> simp [hs,h0,h1,h2] at hr ⊢
   · cases h
 
 #print axioms projection

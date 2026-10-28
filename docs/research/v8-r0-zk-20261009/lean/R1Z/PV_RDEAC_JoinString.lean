@@ -1,0 +1,51 @@
+import R1Z.PV_RDEAC_JoinValue
+import R1Z.PV_RDEAC_NameValue
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_RDEAC_JoinString
+open PV_CBL_StringBytesAdapter PV_RDEAC_JoinValue
+
+def joinedText (base path : String) : String :=
+  base++(if needsSeparator (encodeList base) then "/" else "")++path
+
+theorem slash_bytes : encodeList "/"=[47#u8] := by decide
+
+theorem joined_bytes (base path : String) :
+    encodeList (joinedText base path)=joined (encodeList base) (encodeList path) := by
+  unfold joinedText joined
+  rw [PV_RDEAC_AppendSimulation.encode_append,PV_RDEAC_AppendSimulation.encode_append]
+  split
+  · rw [slash_bytes]
+  · rfl
+
+theorem reference (base path : String) (positive : 0<(encodeList path).length)
+    (first : (encodeList path)[0]'positive ≠47#u8)
+    (bound : (encodeList base).length+1+(encodeList path).length≤Usize.max) :
+    PV_CBL_JoinAdapter.reference base path=ok (joinedText base path) := by
+  have bb : (encodeList base).length≤Usize.max := by omega
+  have pb : (encodeList path).length≤Usize.max := by omega
+  unfold PV_CBL_JoinAdapter.reference
+  simp only [encode,dif_pos bb,dif_pos pb,bind_tc_ok]
+  rw [relative _ _ positive first (by exact bound)]
+  simp only [bind_tc_ok]
+  apply PV_CBL_StringByteObservation.decode_of_bytes
+  change joined (encodeList base) (encodeList path)=encodeList (joinedText base path)
+  exact (joined_bytes base path).symm
+
+theorem basename_positive (digest : List U8) :
+    0<(encodeList (PV_RDEAC_NameText.basenameText digest)).length := by
+  rw [PV_RDEAC_NameText.name_length]
+  omega
+
+theorem basename_relative (digest : List U8) :
+    (encodeList (PV_RDEAC_NameText.basenameText digest))[0]'(basename_positive digest)≠47#u8 := by
+  intro eq
+  have no := PV_RDEA_NameBytes.no_slash (digest.map PV_RDEAC_NibbleModel.byte)
+  rw [←PV_RDEAC_NameText.name_bytes] at no
+  exact no (eq ▸ List.getElem_mem _)
+
+#print axioms slash_bytes
+#print axioms joined_bytes
+#print axioms reference
+#print axioms basename_positive
+#print axioms basename_relative
+end R1Z.PV_RDEAC_JoinString

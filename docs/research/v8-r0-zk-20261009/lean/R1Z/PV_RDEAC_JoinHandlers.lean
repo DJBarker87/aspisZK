@@ -1,0 +1,82 @@
+import R1Z.PV_RDEAC_FullJoin
+open Aeneas Aeneas.Std
+namespace R1Z.PV_RDEAC_JoinHandlers
+open PV_RDB1_V183_ReserveWorld PV_RDEAC_OwnedCleanup
+
+def finalWorld {S F : Type} (free : Nat → Nat → Nat → S → S)
+    (owned : Buffer U8) (e : Execution U8 S F) : World S F :=
+  match e.returned with
+  | .error (.allocError _) => e.world
+  | .error .capacityOverflow => release free owned (release free e.buffer e.world)
+  | .ok () => release free owned e.world
+
+def consume {S F R : Type} (free : Nat → Nat → Nat → S → S)
+    (owned : Buffer U8) (e : Execution U8 S F)
+    (oom : core.alloc.layout.Layout → World S F → R)
+    (panic : World S F → R) (next : List U8 → World S F → R) : R :=
+  match e.returned with
+  | .error (.allocError layout) => oom layout (finalWorld free owned e)
+  | .error .capacityOverflow => panic (finalWorld free owned e)
+  | .ok () => next e.buffer.values (finalWorld free owned e)
+
+theorem frame_history {S F : Type} (free : Nat → Nat → Nat → S → S)
+    (owned : Buffer U8) (e : Execution U8 S F) :
+    (finalWorld free owned e).frame=e.world.frame ∧
+    (finalWorld free owned e).history=e.world.history := by
+  unfold finalWorld
+  split
+  · exact ⟨rfl,rfl⟩
+  · exact ⟨(effects free owned _).1.trans (effects free e.buffer e.world).1,
+      (effects free owned _).2.2.trans (effects free e.buffer e.world).2.2⟩
+  · exact ⟨(effects free owned _).1,(effects free owned _).2.2⟩
+
+theorem erase_world {S F : Type} (e : Execution U8 S F) :
+    (PV_RDEAC_FullAppend.erase e).2=e.world := by
+  cases e with
+  | mk returned b w => cases returned <;> rfl
+
+theorem success_value {S F : Type} (step : Request → S → Option Nat × S)
+    (shape : Shape) (address : Nat) (absolute needSep : Bool) (base path : List U8)
+    (w : World S F)
+    (h : (PV_RDEAC_FullJoin.join step shape address absolute needSep base path w).returned=.ok ()) :
+    (PV_RDEAC_FullJoin.join step shape address absolute needSep base path w).buffer.values=
+      PV_RDEA_PushValues.value base path absolute needSep := by
+  let e := PV_RDEAC_FullJoin.join step shape address absolute needSep base path w
+  change e.returned=.ok () at h
+  have he : (PV_RDEAC_FullAppend.erase e).1=.ok e.buffer := by
+    simp only [PV_RDEAC_FullAppend.erase,h]
+  rw [PV_RDEAC_FullJoin.projection] at he
+  exact PV_RDEA_JoinValues.success_value step shape address absolute needSep base path w e.buffer he
+
+theorem consumed {S F R : Type} (step : Request → S → Option Nat × S)
+    (free : Nat → Nat → Nat → S → S) (owned : Buffer U8)
+    (shape : Shape) (width : shape.width=1) (address : Nat) (absolute needSep : Bool)
+    (base path : List U8) (w : World S F)
+    (oom : core.alloc.layout.Layout → World S F → R)
+    (panic : World S F → R) (next : List U8 → World S F → R) :
+    let e := PV_RDEAC_FullJoin.join step shape address absolute needSep base path w
+    consume free owned e oom panic next=
+      (match e.returned with
+       | .error (.allocError layout) => oom layout e.world
+       | .error .capacityOverflow => panic (release free owned (release free e.buffer e.world))
+       | .ok () => next (PV_RDEA_PushValues.value base path absolute needSep) (release free owned e.world)) ∧
+    PV_RDEA_PrefixWords.Prefix (PV_RDEA_CapacityEndpoint.sizes (finalWorld free owned e).history)
+      (PV_RDEA_CapacityEndpoint.sizes w.history++PV_RDEA_PathSchedule.joinWord base.length path.length absolute needSep) := by
+  dsimp only
+  refine ⟨?_,?_⟩
+  · unfold consume
+    split <;> rename_i h
+    · simp only [finalWorld,h]
+    · simp only [finalWorld,h]
+    · simp only [finalWorld,h]
+      rw [success_value step shape address absolute needSep base path w h]
+  · rw [(frame_history free owned _).2]
+    have hist := PV_RDEA_JoinRequests.join_requests_prefix step shape width address absolute needSep base path w
+    rw [←PV_RDEAC_FullJoin.projection] at hist
+    simpa only [erase_world] using hist
+
+#print axioms frame_history
+#print axioms erase_world
+#print axioms success_value
+#print axioms consumed
+end R1Z.PV_RDEAC_JoinHandlers
