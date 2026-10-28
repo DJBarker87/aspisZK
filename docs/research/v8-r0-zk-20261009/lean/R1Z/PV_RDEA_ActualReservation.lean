@@ -4,7 +4,10 @@ open Aeneas Aeneas.Std Result ProverRwFull
 namespace R1Z.PV_RDEA_ActualReservation
 variable [ExternalTypes] [ExternalFuns]
 
-def finiteByte (b : U8) : Fin 256 := ⟨b.val,by simpa only [UScalar.size,UScalarTy.numBits] using b.hSize⟩
+def finiteByte (b : U8) : Fin 256 := ⟨b.val,by
+  have h := b.hSize
+  norm_num [UScalar.size,UScalarTy.numBits] at h
+  exact h⟩
 def digestList (digest : Array U8 32#usize) : List (Fin 256) := digest.val.map finiteByte
 
 theorem array_length (digest : Array U8 32#usize) : digest.val.length=32 := by
