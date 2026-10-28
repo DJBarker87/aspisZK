@@ -3,6 +3,19 @@ from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys,time
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd-20261028';D='/home/dombarker/project-offloads/codex-pv-rdcd-20261028';H='dombarker@100.108.41.90';G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 name,phase,*cmd=sys.argv[1:];assert re.fullmatch(r'[A-Za-z0-9_-]+',name) and cmd
+# A refusal imposes a job-wide180s cooldown, even if later host admission would allow.
+from datetime import datetime,timezone
+refusals=[]
+for history in list(E.glob('*/admission-history.jsonl'))+list(E.glob('*/barrier-history.jsonl')):
+ for line in history.read_text().splitlines():
+  entry=json.loads(line);admission=entry.get('admission',{})
+  if admission.get('allowed') is False and admission.get('utc'):
+   refusals.append(datetime.fromisoformat(admission['utc']).timestamp())
+if refusals:
+ remaining=180-(datetime.now(timezone.utc).timestamp()-max(refusals))
+ if remaining>0:
+  print(f'LOCAL COOLDOWN: wait at least{remaining:.1f}s; no host launch',flush=True)
+  sys.exit(78)
 out=E/name;out.mkdir(exist_ok=True);assert not (out/'receipt.json').exists()
 def ssh(c):
  for k in range(11):
