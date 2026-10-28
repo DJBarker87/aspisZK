@@ -119,3 +119,52 @@ full errors are retained, all recovery sorryAx outputs uncredited. NCT_L008
 checks the final same-call composition: exit0, wall2.472852s,
 peakRSS5384916KiB, swaps0, revision8a098e8591 plus exact source hash in receipt.
 All ten NCT roots use only propext/Classical.choice/Quot.sound.
+
+## Final status and exact remaining obligations
+
+**Target not yet established unconditionally, even at the installed model level.**
+Step4 fallback is delivered. Naming `established` does not make its three field
+gates proved. The new result removes the length/next/weight-canonicality parts
+of the caller obligation and composes the exact same-call leaf with all other
+input-field gates visible. The remaining concrete model deliverable is a
+same-cut preparation/query arithmetic theorem deriving S2, all query bounds
+and the nine NonWeightCanonical field groups, on currentInstalled c's actual
+abstract primitives or their proved concrete instance. We have not asserted
+that these facts follow merely from an op16 success or a parse result.
+
+There is a SECOND reachability gap: NCL's interface is accepted-run cuts, not
+an execution-prefix semantics proving every writer call, including a writer
+that fails/diverges (or any execution that later rejects), is in that class.
+This packet does not equate accepted-call and all-reached-call quantifiers.
+A model prefix invariant is the next deliverable if the caller needs that
+larger class. Because writerCode is the final operation, some success cases
+may be equivalent, but no failure/prefix transport theorem is inferred here.
+
+There is a THIRD, separate native gap: identifying this model driver's calls
+with the frozen native driver's calls is the cross-tool semantic transport
+awaiting the OWNER decision in COMPOSITION-TRUST-DECISION-20261028.md, or the
+driver's own native bridge. Neither the result's name `native_result`, nor
+standard axioms, nor the existing bounded append receipts closes that gap.
+Existing oracle/library/allocator/runtime/ABI/source-to-ELF/artifact and
+extraction boundaries remain. No new security claim, headline premise removal,
+trust decision, or 100-bit closure is claimed. No Kani was run in this lane.
+
+## Final validation and reproducibility
+
+One final cached manifest `lean/NCT_Final.lean` passed in NCT_L009: exit0,
+wall2.098974s, peakRSS5346948KiB, swaps0, source revisiona5706e331c plus exact
+source SHA256 in receipt. It prints the after-statements and all ten NCT roots'
+axioms; only propext/Classical.choice/Quot.sound occur. This is a coherent cached
+module audit, NOT the complete frozen release manifest or fresh extraction.
+The unchanged module was not recompiled; the new final import target was.
+
+Budget: 9/30 Lean attempts, five successful and four rejected drafts.
+Each scope was serial, 6G high/8G max, swap0, Tasks64, Lean-M7000, 180s timeout.
+Every admission returned allowed:true AND process exit0; no contention or
+transport retry, ambiguous submission, memory kill or timeout occurred.
+Existing S2W backends were reused byte-identically; only task inputs/transport
+were prepared. NCT_POSTFLIGHT.json confirms all860 seed files unchanged and
+both backend hashes match their inherited files. Own persistent cache retained;
+no seed cache, proved module, Rust source, wallet, key or authority was changed.
+No push. NCT_ATTEMPTS.jsonl holds all target/command/revision/hash/resource/axiom
+records; NCT_VALIDATION.json checks current sources against successful receipts.
