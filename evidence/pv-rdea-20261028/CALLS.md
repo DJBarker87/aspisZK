@@ -1,76 +1,39 @@
-# Deployed callers and argument provenance
+# Deployed call-site reconciliation
 
-Revision: candidate `3e77ed7b62` plus proof/evidence-only commits. Deployed client:
-`tools/r1-cost-probe`, binary `devnet_spend`, features
-`r1p-check,aspis-r1-cost-probe/ct-host-prover`, rustc 1.94.1, release opt3,
-debug assertions/overflow checks off. The inherited complete 487-unit resolved
-feature graph is `../pv-rdb1-20261028/resolved-features.json`, SHA256
-`613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73`.
-No extraction, Rust build, Kani run or ELF change is performed here.
+The previous one-op30/one-op26 model inventory was not exhaustive. The current
+machine/MIR/stdlib-inline evidence is linked from REPORT.md. Exact every-site
+argument excerpts and hashes are in `site-reconciliation.json`; each of its 54
+MIR source sites and 15 stdlib inline contexts is individually recorded.
 
-## Exact existing row-model call sites
+| Site family | Argument source | Reachability/evidence | Proven request boundary |
+|---|---|---|---|
+| Durable reservation String constructor | literal 69, state_only_entropy.rs:961 | MIR candidate2, linked reserve_fallible allocation; SHA prelude/tail factor proved in actual FullFuns | `(0,69,1)` on success and allocator failure; physical fill adds no requests |
+| Durable reservation join | store.directory; two hex digits for each of 32 SHA digest bytes, then `.burn` | MIR candidate2, machine call15ed45→GOT220e78→Path::_join | basename69 and relative branch; clone/append public schedule at physical byte boundary |
+| Client recovery join | public caller-supplied outdir; literal `note-recovery.json` | MIR17, machine8252c | derived length18, relative branch |
+| Client ledger join | outdir; literal `mask-nonce-ledger` | MIR17, machine827d8 | derived length17, relative branch |
+| Client proof join | outdir; literal `proof.bin` | MIR17, machine82bca | derived length9, relative branch |
+| Client statement join | outdir; literal `statement.bin` | MIR17, machine82c29 | derived length13, relative branch |
+| fmt::format_inner constructor | `args.estimated_capacity()`: as_str length or decoded template literal lengths/placeholder metadata; rendered argument values not read by estimate | exact alloc bitcode inline location fmt.rs647; direct IR and ELF callers include devnet hex, plan::prove and anyhow formatting | decoded hex template capacity0; general physical constructor error law; native parser/provenance bridge incomplete |
+| String::from_utf8_lossy constructor | input slice length; called only after invalid UTF-8 guard | exact alloc inline string.rs633; linked OS-error Debug/Display and addr2line::line::render_file xrefs | general constructor request law only; complete public invocation/length provenance not proved |
+| Backtrace build-id constructor | `23+6+2*build_id.len()+1`; ELF metadata, debug directory guards | std inline elf.rs438; linked Mapping::new_debug and Cache::with_global callers | symbolic size formula; public metadata/guard classification still residual |
+| Backtrace debuglink pushes | canonicalized object parent, filename from `.gnu_debuglink`, `.debug`, `/usr/lib/debug`, parent without leading slash | inline chains to locate_debuglink elf.rs470/471/478/479/480/488; exact contexts in JSON | physical push schedule depends on existing public header; source/header provenance residual |
+| Backtrace debugaltlink push | canonicalized object parent plus ELF `.gnu_debugaltlink` filename, relative branch | inline chain to locate_debugaltlink elf.rs521 | physical push law; public-environment/header provenance residual |
+| Backtrace split-DWARF pushes | optional `load.comp_dir`, then `load.path` from DWARF | inline chains elf.rs543/546 | physical push law; public-environment/header provenance residual |
+| anyhow::ensure::render | msg length +2+formatted lhs length+4+formatted rhs length+1 | MIR0; absent resolved linked-function set | runtime candidate not certified unreachable; no source-public proof claimed |
+| aspis_prover::pow::hex | bytes.len()*2 | MIR1; absent resolved linked-function set | runtime candidate not certified unreachable |
+| itertools0.14 and0.15 generic join | separator length * iterator lower size_hint after first element | MIR19/20; generic implementation may be instantiated/inlined | not certified unreachable; caller/instantiation closure residual |
+| num_cpus cgroup translate push | procfs mount point and relative cgroup path | MIR21; crate runtime unit but function not in resolved linked set | not certified unreachable |
+| num_cpus raw_param join | self.base and quota/cgroup parameter string | MIR22; crate runtime unit but function not in resolved linked set | not certified unreachable |
 
-The script checks that ProverRwFullFuns contains precisely one call each to
-String.with_capacity and Path.join. These are V181/op30 and V178/op26. This
-is a complete inventory of these two calls in that source model, not a
-claim of a complete transitive call graph of the deployed executable.
+MIR candidates3–16,18,23–36 are mechanically outside the runtime unit closure:
+autocfg, cc, derivative, find_msvc_tools, proc_macro2, proc_macro_crate, syn,
+toml and winnow sites. They cannot be invoked by spend entry points as runtime
+Rust calls. Their exact dynamic arguments, literals, source spans and hashes are
+still recorded individually in the JSON, rather than discarded. This is a
+Cargo build/proc-macro boundary exclusion, not a linked-symbol heuristic.
 
-`plan::prove` -> `RealR1_client::prove_for_proof_accounts` ->
-`prover::prove_masked_retrying_with` -> `retry_attempt` ->
-`prove_masked_attempt` -> `reserve_and_build_pool_v1_pair_forest_mask_material_v1`
--> `StateOnlyMaskNonceStore::reserve` -> `reserve_fallible` -> `reservation_path`.
-
-* V181, state_only_entropy.rs:961: exact capacity is the literal 69, independent
-  of all input, witness, seeds, statement digest and nonce. The emission at
-  ProverRwFullFuns.lean:14408 passes `69#usize`. The new natural-number bound
-  is connected by a script-checked literal correspondence, not an elaborated
-  theorem about the entire emitted reservation_path (its SHA cone is large).
-* V178, state_only_entropy.rs:962: base is `self.directory`; argument is
-  `reservation_name(SHA256(ATTEMPT_RESERVATION_DOMAIN || mask_nonce), empty,0)`.
-  The recursion emits 32 pairs of hex digits then five bytes `.burn`.
-  mask_nonce comes from the proof-account public key passed to
-  `generate_for_mask_nonce`, not either private seed. The directory is created
-  from `q["proof_dir"]` joined with `mask-nonce-ledger` at plan.rs:115.
-  No private-seed content is an input to this path expression. This provenance
-  does not prove allocation addresses, failure events or cache traces public.
-
-## Additional direct application joins on the client route
-
-All are in tools/r1-cost-probe/src/bin/devnet_spend/plan.rs, with base
-`Path::new(q["proof_dir"].as_str().unwrap())`:
-
-| Line | Argument | Source |
-|---|---|---|
-| 113 | `note-recovery.json` | literal; evaluated after recovery JSON construction |
-| 115 | `mask-nonce-ledger` | literal; passed to durable store open |
-| 119 | `proof.bin` | literal; evaluated after proof generation |
-| 119 | `statement.bin` | literal; evaluated after proof generation |
-
-These calls are not represented by op26's single reservation_path call in
-ProverRwFull. Their initial allocator state can depend on preceding work.
-The incoming request's proof_dir is not constrained by a Lean public-input
-classification theorem in the inspected row model. Calling it public here
-records its request provenance, not an added premise in a privacy theorem.
-
-No direct String::with_capacity is present in devnet_spend, plan,
-RealR1_client or the selected cost-probe prover. aspis-prover/pow.rs:26 has
-`bytes.len()*2`, with its own callers passing 32-byte transcript state;
-that module's PoW entry is not called by the inspected cost-probe prover
-(which uses its own transcript). Other binaries/examples/tests are not the
-selected devnet_spend root. Third-party/std indirect allocation call sites
-(e.g. formatting/collect) are NOT certified exhaustively by this inventory.
-That missing deployed binary reachability certificate is explicitly retained.
-
-## Endpoint statement mismatch
-
-ProverRwFullExternalFuns.op30 has type `Usize -> Result String`.
-PV_CBL_AppendBundle.op30_source yields unconditional `ok empty`; its selected
-callback has no allocator world input/output. op26 similarly returns PathBuf
-without a world. PV_CBL_CallbackPublication.op26_source selects the old
-JoinAdapter.reference, which builds a fresh byte vector; it does not select
-the clone-first reference. The new proofs do not edit either dictionary.
-
-The adapters added here transport complete results to an arbitrary consumer
-that actually accepts them. They do not establish that the deployed endpoint
-is such a consumer. A generic `congrArg` transport cannot supply that missing
-instance, an allocator-state relation, or L1/L2/L3 noninterference.
+A complete indirect-dispatch and inlining-coverage certificate is **not yet
+established**. The conservative inventory retains those unknowns. Public outdir,
+ELF metadata, OS locale/error buffers and filesystem-derived paths have not been
+silently added to T as new assumptions; the needed native source classification
+and actual endpoint simulation are explicit remaining deliverables.
