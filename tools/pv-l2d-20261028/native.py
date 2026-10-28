@@ -11,7 +11,7 @@ q=ssh(f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reser
 (E/f'admission-{label}.log').write_text(q.stdout+q.stderr);a=json.loads(q.stdout.strip().splitlines()[-1])
 if q.returncode!=0 or not a['allowed']:print('REFUSED',a);sys.exit(78)
 q=subprocess.run(['scp','-q',str(s),host+':'+H+'/'+label+'.rs']);assert q.returncode==0
-cmd=['systemd-run','--user','--scope','--quiet','--unit=pv-l2d-'+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+'/time-'+label+'.log','sh','-c',f'/home/dombarker/.cargo/bin/rustc -O --edition=2021 -C codegen-units=1 -C link-arg=-Wl,--threads=4 {H}/{label}.rs -o {H}/{label} && {H}/{label}']
+cmd=['systemd-run','--user','--scope','--quiet','--unit=pv-l2d-'+label,'-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+'/time-'+label+'.log','sh','-c',f'/home/dombarker/.cargo/bin/rustup run 1.94.1 rustc -O --edition=2021 -C codegen-units=1 -C link-arg=-Wl,--threads=4 {H}/{label}.rs -o {H}/{label} && {H}/{label}']
 v=dict(target=label,command=cmd,source_revision=rev,source_sha256=hashlib.sha256(s.read_bytes()).hexdigest(),admission=a,expected_time='optimized standalone compilation, then finite public index/byte control-flow validation; no chained field arithmetic',print_axioms='N/A: Rust finite validation',features='standalone exact-body comparator; no crate feature or deployed-ELF credit')
 (E/f'launch-{label}.json').write_text(json.dumps(v,indent=2)+'\n')
 q=ssh(shlex.join(cmd)+f' > {H}/out-{label}.log 2>&1');v['scope_exit']=q.returncode
