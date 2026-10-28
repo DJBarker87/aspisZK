@@ -2,6 +2,7 @@ import R1Z.PV_CB_Op107Exact
 import R1Z.PV_RDCD_OptionBinding
 import R1Z.PV_RDCD_ShiftLiterals
 import R1Z.PV_RDCD_Wrapping194
+import R1Z.PV_RDCD_Cast194
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RDCD_Op107Audit
@@ -16,6 +17,7 @@ theorem retained_importer (ops : ExternalFuns) (x : aspis_core.field.QM31) :
         (R1Z.PV_CB_Op107Transport.encode x)
       ok (value.map R1Z.PV_CB_Op107Transport.decode)) :=
   R1Z.PV_CB_Op107Exact.op107_source ops x
+#print axioms PV_RDCD_Cast194.binding
 #print axioms retained_importer
 #print axioms PV_RDCD_OptionBinding.branch
 #print axioms PV_RDCD_OptionBinding.residual
