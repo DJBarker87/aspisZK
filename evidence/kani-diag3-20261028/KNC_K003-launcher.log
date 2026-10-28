@@ -1,0 +1,42 @@
+{"attempt": "KNC_K003", "exit_status": 0, "wall_seconds": 9.128470959025435, "peak_rss_kib": "490408", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::KNC_native::NBZ_return_carriers
+
+Check 56: verifier::candidate::KNC_native::NBZ_return_carriers.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::KNC_native::NBZ_return_carriers
+
+Check 57: verifier::candidate::KNC_native::NBZ_return_carriers.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::KNC_native::NBZ_return_carriers
+
+Check 58: verifier::candidate::KNC_native::NBZ_return_carriers.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::KNC_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 0 of 58 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.7519544s
+
+WARNING: Kani could not produce a concrete playback for `verifier::candidate::KNC_native::NBZ_return_carriers` because there were no failing panic checks or satisfiable cover statements.
+INFO: The concrete playback feature never generated unit tests because there were no failing harnesses.
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r011c07a2ceb64d9d83f5e98c97a90a92.scope; invocation ID: 2796f79ed6784c4cbf0955f180e1f39d
