@@ -197,6 +197,24 @@
       "function": "crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb",
       "status": "OPEN",
       "obstacle": "Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations."
+    },
+    {
+      "function": "crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs",
+      "status": "CLOSED",
+      "scope": "local bounded value bridge; caller bounds remain OPEN",
+      "domain": "each of four u64 limbs is less than 2^62",
+      "reference": "NDE_E002 source snapshot: extension_raw_ref",
+      "extraction": "NDE_E002",
+      "lean": "NDE_RawBridge.extension_raw",
+      "lean_attempt": 8,
+      "positive": 10,
+      "negative": 11,
+      "copy_fidelity": [
+        8,
+        9
+      ],
+      "stubs": "exact KMX copy_nonoverlapping; no arithmetic stubs or field multiplication",
+      "callee_domain": "Actual frozen M31::reduce_u62 and CM31::new execute in K010; all four debug-assert bounds are contract preconditions. No independent core-field bridge is claimed."
     }
   ]
 }

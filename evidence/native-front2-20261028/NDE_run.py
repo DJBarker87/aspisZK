@@ -75,7 +75,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDE_EXTRACTION_PINS.json','NDE_extracted/NDE_Reference/Types.lean','NDE_extracted/NDE_Reference/Funs.lean']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDE_EXTRACTION_PINS.json','NDE_extracted/NDE_Reference/Types.lean','NDE_extracted/NDE_Reference/Funs.lean','NDE_extracted2/NDE_Reference2/Types.lean','NDE_extracted2/NDE_Reference2/Funs.lean','NDE_extracted3/NDE_Reference3/Types.lean','NDE_extracted3/NDE_Reference3/Funs.lean']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr

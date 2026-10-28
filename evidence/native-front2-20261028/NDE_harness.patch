@@ -28,7 +28,7 @@
 +fn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NDE_reference.rs
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,19 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -38,6 +38,15 @@
 +}
 +pub fn extension_limbs_ref(value: Q) -> [u32;4] {
 +    [value.c0.a, value.c0.b, value.c1.a, value.c1.b]
++}
++pub fn reduce_ref(x:u64)->u32 {
++    let x=(x & 0x7fff_ffff)+(x >> 31u32);
++    let x=(x & 0x7fff_ffff)+(x >> 31u32);
++    let x=x as u32;
++    if x>=0x7fff_ffff {x-0x7fff_ffff} else {x}
++}
++pub fn extension_raw_ref(limbs:[u64;4])->Q {
++    Q{c0:C{a:reduce_ref(limbs[0]),b:reduce_ref(limbs[1])},c1:C{a:reduce_ref(limbs[2]),b:reduce_ref(limbs[3])}}
 +}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs
@@ -69,7 +78,7 @@
 +fn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}
 --- a/crates/aspis-statement/src/state_only_poseidon.rs
 +++ b/crates/aspis-statement/src/state_only_poseidon.rs
-@@ -127,6 +127,7 @@
+@@ -127,11 +127,14 @@
  }
  
  #[inline(always)]
@@ -77,7 +86,14 @@
  fn extension_limbs(value: QM31) -> [u32; 4] {
      [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
  }
-@@ -1239,3 +1240,7 @@
+ 
+ #[inline(always)]
++#[cfg_attr(kani, kani::requires(limbs[0] < (1u64<<62) && limbs[1] < (1u64<<62) && limbs[2] < (1u64<<62) && limbs[3] < (1u64<<62)))]
++#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::to_native(NDE_native::reference::extension_raw_ref(limbs))) != cfg!(NDE_invert)))]
+ fn extension_from_raw_limbs(limbs: [u64; 4]) -> QM31 {
+     QM31 {
+         c0: CM31::new(M31::reduce_u62(limbs[0]), M31::reduce_u62(limbs[1])),
+@@ -1239,3 +1242,7 @@
          );
      }
  }
@@ -87,7 +103,7 @@
 +mod NDE_native;
 --- /dev/null
 +++ b/crates/aspis-statement/src/NDE_poseidon.rs
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,10 @@
 +use super::*;
 +#[path="NDE_reference.rs"] pub(super) mod reference;
 +pub(super) fn to_ref(v:QM31)->reference::Q { reference::Q { c0:reference::C{a:v.c0.a.0,b:v.c0.b.0},c1:reference::C{a:v.c1.a.0,b:v.c1.b.0} } }
@@ -95,9 +111,12 @@
 +#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
 +#[kani::proof_for_contract(super::extension_limbs)]
 +fn NDE_contract(){let v:[u32;4]=kani::any();let _=super::extension_limbs(to_native(reference::Q{c0:reference::C{a:v[0],b:v[1]},c1:reference::C{a:v[2],b:v[3]}}));}
++#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]
++#[kani::proof_for_contract(super::extension_from_raw_limbs)]
++fn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }
 --- /dev/null
 +++ b/crates/aspis-statement/src/NDE_reference.rs
-@@ -0,0 +1,10 @@
+@@ -0,0 +1,19 @@
 +#[derive(Clone, Copy, PartialEq, Eq)]
 +pub struct C { pub a: u32, pub b: u32 }
 +#[derive(Clone, Copy, PartialEq, Eq)]
@@ -107,6 +126,15 @@
 +}
 +pub fn extension_limbs_ref(value: Q) -> [u32;4] {
 +    [value.c0.a, value.c0.b, value.c1.a, value.c1.b]
++}
++pub fn reduce_ref(x:u64)->u32 {
++    let x=(x & 0x7fff_ffff)+(x >> 31u32);
++    let x=(x & 0x7fff_ffff)+(x >> 31u32);
++    let x=x as u32;
++    if x>=0x7fff_ffff {x-0x7fff_ffff} else {x}
++}
++pub fn extension_raw_ref(limbs:[u64;4])->Q {
++    Q{c0:C{a:reduce_ref(limbs[0]),b:reduce_ref(limbs[1])},c1:C{a:reduce_ref(limbs[2]),b:reduce_ref(limbs[3])}}
 +}
 --- a/crates/aspis-statement/src/lib.rs
 +++ b/crates/aspis-statement/src/lib.rs

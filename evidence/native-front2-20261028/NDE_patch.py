@@ -10,6 +10,17 @@ def files():
   prop='NDE_native::to_native(NDE_native::reference::lift_ref(value.0))' if fun=='lift_m31' else 'NDE_native::reference::extension_limbs_ref(NDE_native::to_ref(value))'
   attr='#[cfg_attr(kani, kani::ensures(|r| (*r == '+prop+') != cfg!(NDE_invert))) ]\n'
   s=s.replace('fn '+fun+'(',attr+'fn '+fun+'(',1)
+  if prefix=='poseidon':
+   pre='#[cfg_attr(kani, kani::requires(limbs[0] < (1u64<<62) && limbs[1] < (1u64<<62) && limbs[2] < (1u64<<62) && limbs[3] < (1u64<<62)))]\n'
+   post='#[cfg_attr(kani, kani::ensures(|r| (*r == NDE_native::to_native(NDE_native::reference::extension_raw_ref(limbs))) != cfg!(NDE_invert)))]\n'
+   s=s.replace('fn extension_from_raw_limbs(',pre+post+'fn extension_from_raw_limbs(',1)
+  if prefix=='semantic':
+   for fn,pre,prop in [
+    ('initial_variant_selectors','NDE_native::canonical(high27)&&NDE_native::canonical(high28)&&NDE_native::canonical(high29)','NDE_native::native_initial(variant,high27,high28,high29)'),
+    ('scalar_lanes','NDE_native::canonical(output_scalar)&&NDE_native::canonical(private_transfer_term)&&NDE_native::canonical(withdrawal_term)','NDE_native::native_scalar(variant,withdrawal_amount_present,input_asset,output_scalar,private_transfer_term,withdrawal_term)'),
+    ('copy_variant','true','if NDE_native::reference::copy_variant_ref(variant==CompiledVariant::Withdrawal){PoolV1PairForestCompiledVariantV1::Withdrawal}else{PoolV1PairForestCompiledVariantV1::PrivateTransfer}')]:
+    attrs='#[cfg_attr(kani,kani::requires('+pre+'))]\n#[cfg_attr(kani,kani::ensures(|r|(*r==('+prop+')) != cfg!(NDE_invert)))]\n'
+    s=s.replace('fn '+fn+'(',attrs+'fn '+fn+'(',1)
   module='NDE_'+prefix
   s+='\n#[cfg(kani)]\n#[path="'+module+'.rs"]\nmod NDE_native;\n'
   out[n]=s
@@ -23,6 +34,9 @@ pub(super) fn to_native(v:reference::Q)->QM31 {QM31 {c0:CM31{a:M31(v.c0.a),b:M31
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::lift_m31)]\nfn NDE_contract(){let v:u32=kani::any();let _=super::lift_m31(M31(v));}\n'
   else:
    harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_limbs)]\nfn NDE_contract(){let v:[u32;4]=kani::any();let _=super::extension_limbs(to_native(reference::Q{c0:reference::C{a:v[0],b:v[1]},c1:reference::C{a:v[2],b:v[3]}}));}\n'
+  if prefix=='poseidon':
+   harness+='#[kani::stub(core::ptr::copy_nonoverlapping, crate::NDE_kmx::KMX_copy_nonoverlapping)]\n#[kani::proof_for_contract(super::extension_from_raw_limbs)]\nfn NDE_raw_contract(){let v:[u64;4]=kani::any();kani::assume(v[0]<(1u64<<62)&&v[1]<(1u64<<62)&&v[2]<(1u64<<62)&&v[3]<(1u64<<62));let _=super::extension_from_raw_limbs(v); }\n'
+  if prefix=='semantic':harness+=(E/'NDE_semantic_extra.rs').read_text()
   out['crates/aspis-statement/src/'+dirname+module+'.rs']=harness
   out['crates/aspis-statement/src/'+dirname+'NDE_reference.rs']=(E/'NDE_reference.rs').read_text()
  # Root allocator feature required by exact KMX code.

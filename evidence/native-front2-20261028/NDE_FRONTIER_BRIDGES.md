@@ -36,8 +36,12 @@ All CLOSED labels below are local on the stated domain. The composed S2 and 100-
 | `crates/aspis-statement/src/state_only_poseidon.rs::external_local_packed_raw` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 | `crates/aspis-statement/src/state_only_poseidon.rs::interpolate_three_constant_limb` | OPEN | Not attempted yet in this stage; pending independent native/reference and cohort-equality obligations. |
 
+| `crates/aspis-statement/src/state_only_poseidon.rs::extension_from_raw_limbs` | CLOSED locally | each limb < 2^62; NDE_RawBridge.extension_raw; E002, L008, K010/K011; caller bound association OPEN |
+
 K002/K004/K006 pass; their exact inverted-contract controls K003/K005/K007 fail one intended ensures check each. Exact KMX pointer positive K008 passes and wrong-copy K009 fails one intended check. K001 is superseded by K002 (stricter copy/feature receipts), never counted twice. E001 extracted safe record references; L001/L002 compiled generated modules; L003 proves exact cohort equalities with standard axioms only. Constructor transport is bijective field placement, not byte-havoc. No stub_verified composition is used in this batch; no per-shape substitution credit is claimed.
 
 Deployed statement features: r0/pool-v1-kernel and all twelve optimized features, matching the isolated deployed verifier root. The statement-only Kani helper target omits no-entrypoint and has no program-entry credit. Core features exactly r0. Every graph-check from K002 includes isolated_deployed_features for every crate; workspace metadata is labelled over-unified and used only for frozen-graph identity. Scratch Cargo.lock is unchanged before/after every run, offline; exact KMX patch SHA256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67.
 
 No repository crates/programs/ or existing Lean file changed. ELF rebuild trigger did not fire. Release pins remain inherited, not reproduced.
+
+Raw-limb stage: K010 passes, K011 fails its one inverted ensures check. L006/L007 are excluded elaboration failures; L008 passes with standard axioms only. The reference uses the exact folded reduction already in the cohort; this is an extracted-reference equality for a statement helper, not a duplicate native core-field result.
