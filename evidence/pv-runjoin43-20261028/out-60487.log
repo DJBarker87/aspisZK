@@ -1,0 +1,51 @@
+START 60487 R1Z.PV_RunJoin_FibreFillThread43
+DONE 60487 R1Z.PV_RunJoin_FibreFillThread43 exit 1 wall 1.88 RSS 4404334592
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FibreFillThread43.lean:49:86: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+c : host_commitment.Commitment
+u : aspis_core.r0.domain.FibreIndex
+values : Matrix
+j : Usize
+more : j ≠ c.lanes.len
+⊢ (do
+      let lane ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Usize) c.lanes j
+      let w ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) c.words j
+      let row ← host_commitment.opening_lane_values w u
+      let we ← row.index_usize 0#usize
+      let (a, index_mut_back) ← Array.index_mut_usize values 0#usize
+      let a1 ← a.update lane we
+      let we1 ← row.index_usize 1#usize
+      let (a2, index_mut_back1) ← (index_mut_back a1).index_mut_usize 1#usize
+      let a3 ← a2.update lane we1
+      let we2 ← row.index_usize 2#usize
+      let (a4, index_mut_back2) ← (index_mut_back1 a3).index_mut_usize 2#usize
+      let a5 ← a4.update lane we2
+      let we3 ← row.index_usize 3#usize
+      let (a6, index_mut_back3) ← (index_mut_back2 a5).index_mut_usize 3#usize
+      let a7 ← a6.update lane we3
+      host_commitment.fill_opening_values c u (index_mut_back3 a7) (j.wrapping_add 1#usize)) =
+    do
+    let x ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Usize) c.lanes j
+    let x_1 ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) c.words j
+    let x_2 ← host_commitment.opening_lane_values x_1 u
+    let x_3 ← x_2.index_usize 0#usize
+    let x_4 ← Array.index_mut_usize values 0#usize
+    let next ←
+      let (a, index_mut_back) := x_4
+        do
+        let a1 ← a.update x x_3
+        let we1 ← x_2.index_usize 1#usize
+        let (a2, index_mut_back1) ← (index_mut_back a1).index_mut_usize 1#usize
+        let a3 ← a2.update x we1
+        let we2 ← x_2.index_usize 2#usize
+        let (a4, index_mut_back2) ← (index_mut_back1 a3).index_mut_usize 2#usize
+        let a5 ← a4.update x we2
+        let we3 ← x_2.index_usize 3#usize
+        let (a6, index_mut_back3) ← (index_mut_back2 a5).index_mut_usize 3#usize
+        let a7 ← a6.update x we3
+        ok (index_mut_back3 a7)
+    host_commitment.fill_opening_values c u next (j.wrapping_add 1#usize)
+'R1Z.PV_RunJoin_FibreFillThread43.one_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FibreFillThread43.thread' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

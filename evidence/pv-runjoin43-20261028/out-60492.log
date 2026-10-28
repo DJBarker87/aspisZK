@@ -1,0 +1,47 @@
+START 60492 R1Z.PV_RunJoin_OpeningLane43
+DONE 60492 R1Z.PV_RunJoin_OpeningLane43 exit 1 wall 2.52 RSS 4405825536
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OpeningLane43.lean:34:2: error: Tactic `apply` failed: could not unify the conclusion of `congrArg (Std.bind ?m.40)`
+  Std.bind ?m.40 ?m.36 = Std.bind ?m.40 ?m.37
+with the goal
+  (do
+      let we ← PV_RunJoin_OpeningWord43.read ops word at1
+      let we1 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize)
+      let we2 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize)
+      let we3 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize)
+      ok (Array.make 4#usize [we, we1, we2, we3] ⋯)) =
+    match aspis_core.r0.domain.FibreIndex.get i with
+    | ok v => do
+      let we ← PV_RunJoin_OpeningWord43.read ops word (Usize.wrapping_mul 4#usize v)
+      let we1 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 1#usize)
+      let we2 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 2#usize)
+      let we3 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 3#usize)
+      ok (Array.make 4#usize [we, we1, we2, we3] ⋯)
+    | fail v => fail v
+    | div => div
+
+Note: The full type of `congrArg (Std.bind ?m.40)` is
+  ?m.36 = ?m.37 → Std.bind ?m.40 ?m.36 = Std.bind ?m.40 ?m.37
+
+inst✝ : ExternalTypes
+ops : ExternalFuns
+word : host_commitment.Word
+u : aspis_core.r0.domain.FibreIndex
+i : Usize
+at1 : Usize := Usize.wrapping_mul 4#usize i
+⊢ (do
+      let we ← PV_RunJoin_OpeningWord43.read ops word at1
+      let we1 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize)
+      let we2 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize)
+      let we3 ← word.value ((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize)
+      ok (Array.make 4#usize [we, we1, we2, we3] ⋯)) =
+    match aspis_core.r0.domain.FibreIndex.get i with
+    | ok v => do
+      let we ← PV_RunJoin_OpeningWord43.read ops word (Usize.wrapping_mul 4#usize v)
+      let we1 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 1#usize)
+      let we2 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 2#usize)
+      let we3 ← PV_RunJoin_OpeningWord43.read ops word ((Usize.wrapping_mul 4#usize v).wrapping_add 3#usize)
+      ok (Array.make 4#usize [we, we1, we2, we3] ⋯)
+    | fail v => fail v
+    | div => div
+'R1Z.PV_RunJoin_OpeningLane43.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

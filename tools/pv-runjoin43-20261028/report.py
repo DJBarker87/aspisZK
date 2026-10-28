@@ -10,7 +10,7 @@ text=f'''# Runjoin43 — actual caller domain and opening source construction
 
 Worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
 `codex/pv-runjoin-20261026`. Entry `cbec9b692502c78e2d4914724f3c51c2408838e3`,
-resume LOG D401. Final source/evidence preparation revision `{head}`.
+resume LOG D401. Source revision at final read-only validation `{head}`.
 Assigned IDs **60400–60499**, audit IDs **60497–60499**.
 
 **Target not yet established. Whole ledger rows removed: 0.**
@@ -91,7 +91,7 @@ not used in any credited endpoint result. **Op227 is not the sole refinement gap
 
 ## Validation and process
 
-The initial read-only preflight checked 2633 project source/object pairs, 5519 import
+The archived initial read-only preflight (`initial-fresh-preflight.json.xz`) checked 2633 project source/object pairs, 5519 import
 fingerprints, 5673 external objects and 5438 IR companions. The final preflight checks
 **{len(f['projects'])} project pairs**, **{len(f['dependencies'])} import fingerprints**,
 **{len(f['external'])} external objects** and **{len(f['ir'])} IR companions**, all matching.
@@ -125,7 +125,9 @@ All accepted printed axiom sets are subsets of propext, Classical.choice, Quot.s
 Every original module output/time pair is hash-verified in
 `original-module-logs.json.xz`. `receipt-*.json` and `modules-*.json` record targets,
 commands, exact source revisions/blobs/hashes, import fingerprints, exit statuses,
-wall time, RSS, swap and printed axioms. Overall peak RSS is **{t['peak_rss_bytes']} bytes**;
+wall time, RSS, swap and printed axioms. An empty axiom output on an unchanged generated
+prerequisite means that source had no print; its consuming/root audits print the closure
+axiom sets. Overall peak RSS is **{t['peak_rss_bytes']} bytes**;
 all swaps are zero. `toolchain-and-final-scopes.json` records Lean 4.32.0, pinned
 commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35, and no own running scopes.
 These are focused source/model audits, not a final frozen-manifest release replay.

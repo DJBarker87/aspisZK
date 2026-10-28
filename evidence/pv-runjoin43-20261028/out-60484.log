@@ -1,0 +1,34 @@
+START 60484 R1Z.PV_RunJoin_EncodedImage43
+DONE 60484 R1Z.PV_RunJoin_EncodedImage43 exit 1 wall 7.68 RSS 4430811136
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedImage43.lean:14:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_EncodedImage43.entry`:
+  [ExternalTypes]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncodedImage43.lean:38:4: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  (List.ofFn fun i => List.ofFn (ProverCommitValueRange47.bytes (value (p (start + 1 + ↑i))))) =
+    List.ofFn fun i => List.ofFn (ProverCommitValueRange47.bytes (value (p (start + ↑i.succ))))
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.42} {β : α → Sort ?u.41} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case succ.e_a
+inst✝ : ExternalTypes
+count : Usize
+p : ℕ → Raw
+hc : ∀ i < ↑count, canonical (p i)
+n : ℕ
+ih :
+  ∀ (start : ℕ),
+    start + n ≤ ↑count → List.map byte (PV_RunJoin_EncodedLoop41.payload (values count p) start n) = image n start p
+start : ℕ
+bound : start + (n + 1) ≤ ↑count
+⊢ (List.ofFn fun i => List.ofFn (ProverCommitValueRange47.bytes (value (p (start + 1 + ↑i))))) =
+    List.ofFn fun i => List.ofFn (ProverCommitValueRange47.bytes (value (p (start + ↑i.succ))))
+'R1Z.PV_RunJoin_EncodedImage43.entry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedImage43.payload' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_EncodedImage43.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
