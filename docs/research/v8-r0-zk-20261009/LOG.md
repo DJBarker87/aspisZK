@@ -13319,3 +13319,35 @@ V256-V260), records the five K-1 rows as suspended and re-linked structurally, V
 V152-V154 as unsatisfiable over the raw family and discharged at the honest family with the open
 coverage question, settles the D348 question on on-chain logs and error text, and updates the owner
 packet. Rows removed outright: 0. Privacy target not yet established.
+
+## D358 (Stream B) 2026-10-28 08:32 UTC: adoption gate stage A passes on the merged candidate; the first timing window was contaminated through a Stream B barrier that ignored the quiet window; barrier fixed; gate7 takes a second window
+
+pv-gate6 (resumed after a capacity interruption, reusing receipts) passed stage A on candidate
+82566acdfb: three ELF pins match; the pinned 1.94.1 client builds (sha256 0d9dbd91…); the fixed-coin
+fixtures match on the deterministic criterion; and the 1,000-pair differential against the shipped
+prover c57a344726 (seeds 6000-6999) passes 1,000 of 1,000, canonical records and ledger bytes
+included. Stage B (timing) is incomplete. The window ran 07:34:17-07:41:30 UTC (marker removed
+07:41:30.534, never extended) and stopped at pair 8 when pv-b3p6's scope lean-42574 appeared. Seven
+pairs were retained (transfer median 13.97 s, ratio 0.997; withdrawal 14.07 s, ratio 1.014), all
+throttled.
+
+Cause, found by the lead: Stream B's native-entropy reservation scanner
+(tools/prover-rw-20261023/native-entropy/reservation.py, schema ProverRwNativeEntropy-reservation-v1,
+sha a5943cb4…; barrier.py delegates to it) never read QUIET_WINDOW.json. Stream A's exit-78 change of
+2026-10-27 covered the launchers it knew about, not this Stream B tool. An admission scan of the host
+shows six pv-b3p6 Lean scopes admitted inside the window (42569 at 07:36:16; 42570-42573 at 07:38:16-
+07:38:42; 42574 at 07:41:27) and no Stream A scope. The seven retained pairs are therefore INVALID as
+timing evidence, not merely throttled. Fix: admission() now refuses while the marker exists with now <
+until unless QUIET_WINDOW_OWNER=1, and refuses on an unreadable marker; committed on the prover
+candidate (508dfb9230, pushed) and installed at the shared host copy
+codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/reservation.py (sha now
+662a4278…, equal to the commit; old file kept as .pre-D358); a local unit test and one live admission
+behave correctly. Stream A confirms its Kani lanes are admitted through the same shared copy and are
+covered with no change on its side.
+
+pv-gate7 (stage B only; same branch) takes one more window: binaries re-hashed, the scanner sha
+checked before the marker, marker first with until = start + 1500 and a deletion trap, and any pair
+with a running cx-* or pv-* scope marked invalid; the gate is judged only on valid, unthrottled pairs
+and reported as undecided if there are too few. Stream A also reports a possible second Kani anomaly
+under diagnosis (NBZ_K042 fails obs.is_none() on a literal None; job KNB_), with no credit change on
+either side until it reports. Rows removed outright: 0. Privacy target not yet established.
