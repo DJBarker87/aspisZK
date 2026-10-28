@@ -1,75 +1,98 @@
-# World interpretation result
+# World interpretation result — D364 resume
 
-**Target not yet established. No row closed, no endpoint premise removed.**
+**Target not yet established. No row closed; no endpoint premise removed.**
+This resume is in progress. W-CARRIER-1 is a finding about a design that
+forgets destructor-accessible state, not a ledger/endpoint counterexample and
+not a stop. The earlier report's stop disposition is superseded.
 
-Worktree stayed exactly `/Users/dominic/ZK/.worktrees/pv-world`. The assigned
-branch `codex/pv-world-20261028` already existed at entry, at prover candidate
-`10b8afe7647d478f70693d8fc12e07be871c91e0`; no branch move was necessary.
-Host directory: `/home/dombarker/project-offloads/codex-pv-world-20261028/`.
+Exact worktree `/Users/dominic/ZK/.worktrees/pv-world`, unchanged branch
+`codex/pv-world-20261028`; resume start `937b8f561de14683239b9f5f7abe74c7eafd013c`.
+Original prover base `10b8afe7647d478f70693d8fc12e07be871c91e0`.
+Host directory `/home/dombarker/project-offloads/codex-pv-world-20261028/`.
+Budget at resume entry: 96 Lean attempts, zero Kani. All IDs stay in
+36000–36199, excluding original uses 36000–36002 and 36197; 36198–36199 are
+reserved final audits. `REFUSALS.md` records uncharged admission cooldowns.
 
-## Proved and not proved
+## Established focused results
 
-`PV_W_Threading` proves a parametric state/error/trace calculus with success,
-error and divergence prefixes, pure callback lifting/frame, associativity,
-ordered pre-world trace append and named `valid_emit`/`valid_bind` composition.
-The generic type parameters permit an existing-World instantiation, but this
-job does **not** supply the actual extracted-prover correspondence, a concrete
-allocator world, a complete dictionary interpretation or an Observation producer.
-In particular `valid_bind` must not be recounted as the requested caller theorem.
+`PV_W_Enriched` retains process statics/atomics, live heap allocations and
+ownership, allocator state, thread-local cells, volatile writes, ordering and
+fences, unwind state and runtime-specific Extra. Its flag/counter witness
+represents both retained normal/panic outcomes, counts one destructor entry,
+and records an internal event. `drop_valid` and `project_threaded` establish
+full-world continuity and OS projection through proven-silent steps. This is
+not a proved representation of the shipped machine or all reached destructors.
 
-`PV_W_CarrierObstruction` proves no state interpreter can reproduce distinct
-native outcomes whose world projections coincide. Its external-flag witness
-reuses the checked FXM native normal/panic evidence, with exact git/blob/SHA
-pins in reused-evidence.json. W-CARRIER-1 is a checked counterexample to a
-**projection forgetting destructor-accessible state**, not to all possible
-world-indexed interpretations or the actual reached destructor types. Its five
-theorems have empty axiom sets. A retained-flag model proves nonvacuity.
+`PV_W_Syntax` proves the typed state/error/trace interpreter agrees with an
+independently defined operational execution judgment, including early-error
+and divergence prefixes. `PV_W_SourceSyntax` supplies complete-Result erasure
+and named bind/branch laws. These are model/source laws, not native purity.
 
-Stopped under the checked-counterexample condition on that generic adequacy
-claim. A proposed repair remains viable: enrich ordinary P interpreter state
-with memory/allocator/ownership data and prove its projection to the unchanged
-Observation, or prove an adequate restriction for all actual reached types.
-It must also interpret source control flow before Result evaluation erases
-the call sequence. This job has not established that repair.
+`PV_W_Reservation` reifies the exact frozen directory-sync, fallible-reserve
+and public store-reserve bodies. All three complete-Result erasure theorems
+compile. The checked generator retains all 34 source call sites, arguments,
+continuations and error branches. The finite source-tree proof generator
+replaced unsuccessful congruence searches; caps were never raised.
+`PV_W_ReservationThreading` composes those concrete source terms with ordered
+operational world threading and enriched-state projection.
 
-DESIGN.md audits where threading enters today and states the sidecar design;
-OS-FINDINGS.md records W-OS-1 (exclusive create) and W-OS-2 (file plus directory
-crash persistence), their consequences, and their absence from existing T.
-Neither is assumed. ROWS.md gives the exact remaining closure route for
-V171/V172/V175/V176/V267/V268/V271/V221/V222 and effectful V170.
+`PV_W_TypedEffects` and `PV_W_TypedReservation` retain typed open/sync/options/
+error-kind/write arguments, with dictionary families for emitted generic
+path conversions. Their erasure remains exactly the frozen Result.
+`PV_W_TypedThreading` proves caller composition from local model-step laws;
+those laws remain explicit obligations. Helpers are not asserted natively pure.
+`PV_W_ErrorSyntax` proves error embedding preserves complete state/trace
+results, allowing interpreter tape faults to remain distinct from native IO
+error values. Focused receipts include their axiom reports.
 
-## Before/after and validation
+## Still required
 
-Before and after: the same world-free ExternalFuns signatures and deployed
-headline; T is exactly entropy_law, entropy_kernel, observation; all listed
-rows OPEN. Premises removed/added/weakened: 0/0/0. No changes under crates/ or
-programs/, no shared source writes, XR imports, native-decide shortcuts, key
-operations, merges or pushes. No frozen extraction changes.
+The requested **entire extracted prover → existing trust Observation** theorem
+is not established. Prover entry staging, existing-OsWorld step models and
+projection composition are being checked. The main nested proof routine,
+reservation_path and other helpers still need recursive interpretations;
+primitive native adequacy, actual reached Drop/implicit close and ownership,
+allocator/zeroize fidelity, and the complete filesystem/D159 observation
+producer and deployment binding remain P obligations. No partial threading
+lemma is counted as that complete theorem or a native dictionary installation.
 
-4/100 Lean attempts, 0 Kani. One host refusal consumed no attempt; retry
-followed a cooldown exceeding 180 seconds. 36000 failed on a trace-length
-elaboration (its generated sorryAx report is rejected); changed source 36001
-passed. 36002 passed the obstruction. Reserved 36197 passed the combined
-17-query axioms audit: only propext and Quot.sound, or no axioms. 36198–36199
-are unused. All 5,673 h4 external objects were hash-verified before compilation.
-No sibling project objects were loaded. Focused receipts include exact target,
-revision/blob/source SHA, caps, exit, wall, RSS, swap and axiom output.
-No full frozen release manifest was run: no row-closing instance was obtained.
+The original FXM native witness is retained at its committed pins. No new
+reached-destructor purity theorem is borrowed from unfinished/unavailable
+fxmem2 work. The original fixed-callback/forgotten-state findings remain
+findings; they do not stop this resume.
 
-Initial proof-driver calls before the ID preflight completed failed locally
-without admission or a compiler. The broad filename scan initially matched
-hexadecimal ledger/Rust fingerprints; the corrected alphanumeric-boundary
-check excludes them and finds no attempt-ID collision. Both are bookkeeping
-corrections, not Lean attempts. An exploratory incomplete closure lookup was
-not used as source authority or as a cache-reuse certificate. Private compiled
-scratch is inventoried by SHA/size before cleanup; sources/receipts are retained.
+## OS findings and row accounting
 
-Next concrete deliverable: a sufficient P memory/allocator state and proved
-Observation projection, then a syntax-directed reservation sidecar with named
-open/three-writes/file-sync/directory-sync/early-error/implicit-Drop lemmas.
-The complete native-world and source bindings remain proof obligations.
+W-OS-1: O_EXCL exclusive creation/namespace behavior remains an owner finding.
+W-OS-2: file sync and parent-directory-entry crash durability are distinct
+owner obligations; nonce non-reuse across recovery depends on the required
+persistence/recovery laws. Neither is assumed, and neither is a new T field.
+OS-FINDINGS.md gives the dependencies. Native IO failure witness independence
+under the adopted public-failure option is still unproved here.
 
-History: `git log --oneline 10b8afe7647d478f70693d8fc12e07be871c91e0..HEAD`;
-substantive commits b2ef7df670, 98ecf596e4, 866a763184, ad2404c2b6, 273d5b9752,
-followed by this evidence/receipt commit. No implementation claim is attached
-to the number of commits or theorems.
+V170 effectful cases and V171/V172/V175/V176/V267/V268/V271/V221/V222 remain
+OPEN at their ROWS7 scope (`row-scope.json`). Endpoint statement, carriers,
+observer (including L1/L2/L3), simulator, failure event and T are unchanged.
+T remains exactly entropy_law, entropy_kernel, observation. Premises
+removed/added/weakened: **0/0/0**. No source refinement gap is hidden in T.
+
+## Validation boundary
+
+Lean runs use one capped scope at a time: MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64, -M7000. Exact commands, source revision/blob/SHA,
+dependency fingerprints, exit, wall, RSS, swap and axiom output are retained.
+Only successful standard-axiom results receive credit; failed sorryAx output
+is rejected. No Kani, Rust/SBF rebuild, key/account operation, merge or push.
+No changes under crates/ or programs/, frozen extraction, shared source tree,
+or soundness/deployment files. No XR imports or proof shortcuts.
+
+All 5,673 h4 external objects were hash-verified before the first resumed
+compile. Split-object companion selection and the public-import scan repair
+are documented. CACHE-SCAN-CORRECTION.md supersedes the initial incomplete
+OS cache preflight; the failed consumer passed after full revalidation.
+No unchanged full regression or full frozen manifest replay was run: no
+row-closing native/deployment instance has been obtained.
+
+History: `git log --oneline 10b8afe7647d478f70693d8fc12e07be871c91e0..HEAD`.
+The final budget/audit/cleanup accounting will be recorded when this resume
+stops under the task rules.
