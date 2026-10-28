@@ -1,0 +1,106 @@
+{
+  "row": "V198",
+  "evidence_class": "structural (K-1 substitute)",
+  "checks": [
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {",
+      "anchor": "pub fn to_le_bytes(",
+      "complete_body": "{\n        self.0.to_le_bytes()\n    }",
+      "tokens_equal": true,
+      "law": "arbitrary raw u32 bits; no canonicality check"
+    },
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {",
+      "anchor": "pub fn write_le_bytes(",
+      "complete_body": "{\n        out[0..4].copy_from_slice(&self.a.to_le_bytes());\n        out[4..8].copy_from_slice(&self.b.to_le_bytes());\n    }",
+      "tokens_equal": true,
+      "law": "V198Bridge.pair_result and inner_bounds"
+    },
+    {
+      "file": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {",
+      "anchor": "pub fn write_le_bytes(",
+      "complete_body": "{\n        self.c0.write_le_bytes(&mut out[0..8]);\n        self.c1.write_le_bytes(&mut out[8..16]);\n    }",
+      "tokens_equal": true,
+      "law": "V198Bridge.source_complete; ordered outer bounds and partial mutation retained"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "anchor": "pub const fn copy_from_slice(",
+      "complete_body": "{\n        \n        unsafe { copy_from_slice_impl(self, src) }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { copy_from_slice_impl(self, src) }\n    }",
+      "tokens_equal": true,
+      "law": "U8 Copy wrapper; same snapshot primitive"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "anchor": "const unsafe fn copy_from_slice_impl<",
+      "complete_body": "{\n    \n    \n    #[cfg_attr(not(panic = \"immediate-abort\"), inline(never), cold)]\n    #[cfg_attr(panic = \"immediate-abort\", inline)]\n    #[track_caller]\n    const fn len_mismatch_fail(dst_len: usize, src_len: usize) -> ! {\n        const_panic!(\n            \"copy_from_slice: source slice length does not match destination slice length\",\n            \"copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})\",\n            src_len: usize,\n            dst_len: usize,\n        )\n    }\n\n    if dest.len() != src.len() {\n        len_mismatch_fail(dest.len(), src.len());\n    }\n\n    \n    \n    \n    unsafe {\n        ptr::copy_nonoverlapping(src.as_ptr(), dest.as_mut_ptr(), dest.len());\n    }\n}",
+      "selected_release_body": "{\n    \n    \n    #[cfg_attr(not(panic = \"immediate-abort\"), inline(never), cold)]\n    #[cfg_attr(panic = \"immediate-abort\", inline)]\n    #[track_caller]\n    const fn len_mismatch_fail(dst_len: usize, src_len: usize) -> ! {\n        const_panic!(\n            \"copy_from_slice: source slice length does not match destination slice length\",\n            \"copy_from_slice: source slice length ({src_len}) does not match destination slice length ({dst_len})\",\n            src_len: usize,\n            dst_len: usize,\n        )\n    }\n\n    if dest.len() != src.len() {\n        len_mismatch_fail(dest.len(), src.len());\n    }\n\n    \n    \n    \n    unsafe {\n        ptr::copy_nonoverlapping(src.as_ptr(), dest.as_mut_ptr(), dest.len());\n    }\n}",
+      "tokens_equal": true,
+      "law": "source/destination lengths exactly4 => mismatch panic unreachable; Copy.overwrite_frame and overwrite_length"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "complete_body": "{\n        \n        if let Some(new_len) = usize::checked_sub(self.end, self.start)\n            && self.end <= slice.len()\n        {\n            \n            unsafe { &mut *get_offset_len_mut_noubcheck(slice, self.start, new_len) }\n        } else {\n            slice_index_fail(self.start, self.end, slice.len())\n        }\n    }",
+      "tokens_equal": true,
+      "law": "V198.short_first/short_second/full/status; increasing fixed bounds0..8,8..16"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn from_ref(",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: r as *const T } }\n    }",
+      "tokens_equal": true,
+      "law": "PointerConstruct.from_ref_complete; provenance/address preserved"
+    },
+    {
+      "file": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "anchor": "pub const fn cast<U>",
+      "complete_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "selected_release_body": "{\n        \n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "tokens_equal": true,
+      "law": "Pointer.cast_complete"
+    },
+    {
+      "emission": "PV_CB_Op72Funs.lean",
+      "sha256": "fe53b90875ce980cb47e6c49f2be55d6aac9f32fcaec50c3e6addbdbe102268f",
+      "restoration": "all four mutable subrange continuations retained; wrapper forwards complete Result; no XR model"
+    }
+  ],
+  "laws": [
+    "PV_RDB1_V198Bridge.source_complete",
+    "PV_RDB1_V198Bridge.inner_bounds",
+    "PV_RDB1_V198.short_first",
+    "PV_RDB1_V198.short_second",
+    "PV_RDB1_V198.full",
+    "PV_RDB1_V198.length_preserved",
+    "PV_RDB1_PointerConstruct.from_ref_complete"
+  ],
+  "before": "Original op72 selected callback equals the emitted qm_write Result. Native association suspended; it does not expose memory on Result.fail.",
+  "after": "Same emitted Result law, plus explicit native buffer state on success/failure. len<8: panic/no writes; 8<=len<16: panic/first8 overwritten; len>=16: all16 overwritten/suffix retained. No allocator or destructor call.",
+  "native_validation": [
+    "project-bytes/receipt.json (4101 full-byte pairs, reused)",
+    "v198-errors-native/receipt.json (125 status/buffer pairs,40 partial panics,new)"
+  ],
+  "D188": "All four emitted restoration continuations are used. Native observations cover a changed output and error partial writes; no discarded backward function is credited.",
+  "features": {
+    "path": "resolved-features.json",
+    "sha256": "613c405ef941cc940fd003ece28b23d910d327e02e19a9f7945bf2b939858f73"
+  },
+  "toolchain": "1.94.1",
+  "profile": "release opt3; debug_assertions=false; overflow_checks=false; panic=unwind",
+  "retained_boundary": "Original library intrinsic/valid mutable slice relation; raw byte copy semantics, compiler/binary and full side-channel obligations retained. Error buffer state is additional evidence, never erased by projecting Result.",
+  "new_trust_items": [],
+  "kani_credit": false
+}

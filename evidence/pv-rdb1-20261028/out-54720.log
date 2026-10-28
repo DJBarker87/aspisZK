@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_V198Bridge.lean:18:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  copies out 0 [↑(core.num.U32.to_le_bytes a), ↑(core.num.U32.to_le_bytes b)] =
+    ↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++
+      List.drop ((↑(core.num.U32.to_le_bytes a)).length + (↑(core.num.U32.to_le_bytes b)).length) out
+but is expected to have type
+  pairCopies a b out = ↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++ List.drop 8 out
+/home/dombarker/project-offloads/aspis-joint-20261019/sources/R1Z/PV_RDB1_V198Bridge.lean:26:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  copies (↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++ List.drop 8 out)
+      ((↑(core.num.U32.to_le_bytes a)).length + (↑(core.num.U32.to_le_bytes b)).length)
+      [↑(core.num.U32.to_le_bytes c), ↑(core.num.U32.to_le_bytes d)] =
+    ↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++
+        (↑(core.num.U32.to_le_bytes c) ++ ↑(core.num.U32.to_le_bytes d)) ++
+      List.drop (8 + ((↑(core.num.U32.to_le_bytes c)).length + (↑(core.num.U32.to_le_bytes d)).length)) out
+but is expected to have type
+  copies (↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++ List.drop 8 out) 8
+      [↑(core.num.U32.to_le_bytes c), ↑(core.num.U32.to_le_bytes d)] =
+    ↑(core.num.U32.to_le_bytes a) ++ ↑(core.num.U32.to_le_bytes b) ++
+        (↑(core.num.U32.to_le_bytes c) ++ ↑(core.num.U32.to_le_bytes d)) ++
+      List.drop 16 out
+'R1Z.PV_RDB1_V198Bridge.chunk_length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_V198Bridge.pair_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_V198Bridge.two_pairs_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_V198Bridge.source_complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB1_V198Bridge.inner_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+exit=1
+window=0 slot=global env=J launcher=run-joint.sh
