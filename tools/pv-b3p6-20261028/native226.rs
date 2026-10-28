@@ -132,5 +132,15 @@ fn emission_fixture226() {
             Source::Withdrawal(p,t) => Public::Withdrawal(&p,&t).public_bytes(),
         }.unwrap();
         println!("{}=({}, {:?})",if withdrawal {"WITHDRAWAL"} else {"TRANSFER"},bytes.len(),bytes);
+        let bad=match source {
+            Source::Transfer(mut p,t) => {p.asset_id=M31(u32::MAX); Source::Transfer(p,t)},
+            Source::Withdrawal(mut p,t) => {p.amount=u32::MAX; Source::Withdrawal(p,t)},
+        };
+        let error=match bad {
+            Source::Transfer(p,t) => Public::Transfer(&p,&t).public_bytes(),
+            Source::Withdrawal(p,t) => Public::Withdrawal(&p,&t).public_bytes(),
+        };
+        assert_eq!(error,Err(aspis_core::state_only_prefix::r0::Error::Public));
+        println!("{}=ERR",if withdrawal {"BAD_WITHDRAWAL"} else {"BAD_TRANSFER"});
     }
 }
