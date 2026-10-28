@@ -12,7 +12,11 @@ theorem aligned_limit (bytes limit align k m : Nat) (positive : 0<align)
   constructor
   · intro h
     have hm : k*align<m*align := by omega
-    have hk : k<m := (mul_lt_mul_right positive).mp hm
+    have hk : k<m := by
+      by_contra hn
+      have hmk : m≤k := by omega
+      have hp : m*align≤k*align := Nat.mul_le_mul_right align hmk
+      omega
     have hkm : (k+1)*align≤m*align := Nat.mul_le_mul_right align hk
     rw [Nat.add_mul,Nat.one_mul] at hkm
     omega

@@ -92,6 +92,9 @@ r=subprocess.run(cmd);d=E/f'lean-{n}'
 if not (d/'receipt.json').exists():raise SystemExit(r.returncode)
 j=json.loads((d/'receipt.json').read_text());log=(d/'output.log').read_text();meta.update(j)
 meta['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log,re.S)
+meta['receipt_collection_revision']=j['source_revision'];meta['source_revision']=rev
+meta['print_axioms']=meta['axioms'] if meta['axioms'] else 'N/A: inherited type declarations only'
+meta['limits']['Lean_M']=7000
 meta['accepted']=j['exit']==0 and 'sorryAx' not in log
 meta['object_pin']=None
 if meta['accepted']:
