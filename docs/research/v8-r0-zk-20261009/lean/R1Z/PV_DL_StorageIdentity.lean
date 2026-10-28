@@ -10,6 +10,14 @@ theorem zero_array {T : Type} (a b : Array T 0#usize) : a=b := by
   have hb : b.val=[] := List.length_eq_zero.mp b.property
   rw [ha,hb]
 
+theorem left_half {T : Type} (k : Nat) (a b : Storage T k) :
+    (flatten k a++flatten k b).take (2^k)=flatten k a := by
+  simpa only [length] using (List.take_left (l₁ := flatten k a) (l₂ := flatten k b))
+
+theorem right_half {T : Type} (k : Nat) (a b : Storage T k) :
+    (flatten k a++flatten k b).drop (2^k)=flatten k b := by
+  simpa only [length] using (List.drop_left (l₁ := flatten k a) (l₂ := flatten k b))
+
 theorem injective {T : Type} (k : Nat) (a b : Storage T k)
     (h : flatten k a=flatten k b) : a=b := by
   induction k with
@@ -30,10 +38,10 @@ theorem injective {T : Type} (k : Nat) (a b : Storage T k)
       flatten k b.parent1++flatten k b.parent2 at h
     have left : flatten k a.parent1=flatten k b.parent1 := by
       have ht := congrArg (List.take (2^k)) h
-      simpa only [List.take_append,length,List.take_length,Nat.sub_self,List.take_zero,List.append_nil] using ht
+      simpa only [left_half] using ht
     have right : flatten k a.parent2=flatten k b.parent2 := by
       have ht := congrArg (List.drop (2^k)) h
-      simpa only [List.drop_append,length,List.drop_length,Nat.sub_self,List.drop_zero,List.nil_append] using ht
+      simpa only [right_half] using ht
     have h1 := ih a.parent1 b.parent1 left
     have h2 := ih a.parent2 b.parent2 right
     rcases a with ⟨a1,a2,am⟩
@@ -46,6 +54,8 @@ theorem rebuild {T : Type} [Inhabited T] (k : Nat) (a : Storage T k) :
   exact PV_DL_StorageBuild.reconstruct k _ (length k a)
 
 #print axioms zero_array
+#print axioms left_half
+#print axioms right_half
 #print axioms injective
 #print axioms rebuild
 end R1Z.PV_DL_StorageIdentity
