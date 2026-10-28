@@ -27,17 +27,11 @@ theorem base_step (ops : ExternalFuns) (p : Nat → W)
   simp only [show i<26#usize from bound,↓reduceIte]
   rw [ProverCommitArray49.index 29#usize p i (by change i.val<29;omega)]
   simp only [bind_tc_ok]
-  change (do
-    let next ← (do
-      let bytes ← @aspis_core.field.wide_exact.WideExact.to_le_bytes _
-        (ProverRwP6BodyCandidate.selected ops) (p i.val)
-      let s ← core.array.Array.index (core.ops.index.IndexSlice
-        (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes { «end» :=4#usize }
-      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s)
-    Result.ok (ControlFlow.cont (next,Usize.wrapping_add i 1#usize) :
-      ControlFlow ((alloc.vec.Vec U8) × Usize) (alloc.vec.Vec U8)))= _
-  rw [hn]
-  rfl
+  have hc := congrArg (fun r : Result (alloc.vec.Vec U8) =>
+    r >>= fun value => Result.ok
+      (ControlFlow.cont (value,Usize.wrapping_add i 1#usize) :
+        ControlFlow ((alloc.vec.Vec U8) × Usize) (alloc.vec.Vec U8))) hn
+  simpa only [bind_assoc_eq,bind_tc_ok,lift] using hc
 #print axioms base_stop
 #print axioms base_step
 
@@ -60,17 +54,11 @@ theorem secure_step (ops : ExternalFuns) (p : Nat → W)
   simp only [show i<28#usize from bound,↓reduceIte]
   rw [ProverCommitArray49.index 29#usize p i (by change i.val<29;omega)]
   simp only [bind_tc_ok]
-  change (do
-    let next ← (do
-      let bytes ← @aspis_core.field.wide_exact.WideExact.to_le_bytes _
-        (ProverRwP6BodyCandidate.selected ops) (p i.val)
-      let s ← core.array.Array.index (core.ops.index.IndexSlice
-        (core.slice.index.SliceIndexRangeToUsizeSlice U8)) bytes { «end» :=16#usize }
-      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out s)
-    Result.ok (ControlFlow.cont (next,Usize.wrapping_add i 1#usize) :
-      ControlFlow ((alloc.vec.Vec U8) × Usize) (alloc.vec.Vec U8)))= _
-  rw [hn]
-  rfl
+  have hc := congrArg (fun r : Result (alloc.vec.Vec U8) =>
+    r >>= fun value => Result.ok
+      (ControlFlow.cont (value,Usize.wrapping_add i 1#usize) :
+        ControlFlow ((alloc.vec.Vec U8) × Usize) (alloc.vec.Vec U8))) hn
+  simpa only [bind_assoc_eq,bind_tc_ok,lift] using hc
 #print axioms secure_stop
 #print axioms secure_step
 end R1Z.PV_RunJoin_OpeningStep41
