@@ -28,7 +28,10 @@ theorem change (i : Input) (success : run i = ok (.Ok i.compiled))
   have hw := PV_RunJoin_UniversalRecords22.words i checked r hrecords
   have hp := PV_RunJoin_UniversalRecords22.publicCorr (K := K) i success frontier r hrecords
   have hpub : (statement (K := K) i).change = digK (forestPublic i.request).change_commitment := by
-    cases hreq : i.request <;> rfl
+    cases hreq : i.request <;> funext j <;>
+      simp only [statement,publicInput,hreq,PV_Src_Public.canonicalPublic,
+        BuilderPublicProjection.transferPublic,BuilderPublicProjection.withdrawalPublic,
+        mapPub,digK,liftU,map_natCast]
   have hc := PV_RunJoin_ChangeLift30.change_eq r (statement (K := K) i) hw hp _ hchange hpub
   rw [PV_RunJoin_UniversalRecords22.returned i r hrecords] at hc
   exact hc
