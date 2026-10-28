@@ -27,35 +27,27 @@ theorem path_block (c b : Nat) (hb : b < 6) :
   simp only [number]
   simp (disch := omega) only [pick_path,decide_eq_true_eq]
   simp [PV_B3P_MaskShape132.localUsed,Nat.add_mod,Nat.mul_mod]
-  by_cases h : c ≤ 8 <;> simp_all (disch := omega)
+  by_cases h : c ≤ 8
+  · have hn : ¬8 < c := by omega
+    simp [h,hn]
+  · have hn : 8 < c := by omega
+    simp [h,hn]
+
+theorem value_formula (c : Nat) :
+    number pick c 1008 16 = 10*(if 10 < c then 1 else 0) +
+      (if 3 ≤ c then 1 else 0) + (if 1 < c then 1 else 0) +
+      (if 10 ≤ c then 1 else 0) + 3 := by
+  simp only [number]
+  simp (disch := omega) only [pick_value,decide_eq_true_eq]
+  simp only [PV_B3P_MaskModel132.valueUsed]
+  norm_num only
+  omega
 
 theorem value_block (c : Nat) :
     number pick c 1008 16 =
       if c < 2 then 3 else if c < 3 then 4 else if c < 10 then 5 else if c ≤ 10 then 6 else 16 := by
-  by_cases h0 : c < 2
-  · simp only [if_pos h0]
-    simp only [number]
-    simp (disch := omega) only [pick_value,decide_eq_true_eq]
-    simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
-  · by_cases h1 : c < 3
-    · simp only [if_neg h0,if_pos h1]
-      simp only [number]
-      simp (disch := omega) only [pick_value,decide_eq_true_eq]
-      simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
-    · by_cases h2 : c < 10
-      · simp only [if_neg h0,if_neg h1,if_pos h2]
-        simp only [number]
-        simp (disch := omega) only [pick_value,decide_eq_true_eq]
-        simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
-      · by_cases h3 : c ≤ 10
-        · simp only [if_neg h0,if_neg h1,if_neg h2,if_pos h3]
-          simp only [number]
-          simp (disch := omega) only [pick_value,decide_eq_true_eq]
-          simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
-        · simp only [if_neg h0,if_neg h1,if_neg h2,if_neg h3]
-          simp only [number]
-          simp (disch := omega) only [pick_value,decide_eq_true_eq]
-          simp (disch := omega) [PV_B3P_MaskModel132.valueUsed]
+  rw [value_formula]
+  split_ifs <;> omega
 
 theorem per_column (c : Nat) :
     (rows pick c 0 1024).length =
@@ -78,6 +70,7 @@ theorem full_count : (columns pick 0 16).length = 3803 := by
 #print axioms pick_path
 #print axioms pick_value
 #print axioms path_block
+#print axioms value_formula
 #print axioms value_block
 #print axioms per_column
 #print axioms full_count
