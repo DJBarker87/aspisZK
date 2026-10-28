@@ -23,10 +23,7 @@ theorem consumer {P W R : Type} (asRef : P → Result (List U8))
       let path ← asRef arg
       let (b,w') ← clone base w
       PV_RDB1_V178.repairedPush append absolute needSep b path w') := by
-  unfold adapter
-  congr 1
-  cases h : asRef arg <;> simp only [bind_tc_ok,bind_tc_fail]
-  simp only [PV_RDB1_V178.join_repaired]
+  simp only [adapter,PV_RDB1_V178.join_repaired]
 
 /-- A value-only successful consumer cannot represent clone failure, including
 on absolute paths; no allocation-success hypothesis is introduced. -/
