@@ -1,0 +1,20 @@
+import NDO_JHi_AfterstateBody
+set_option autoImplicit false
+namespace AspisR1.JHi_AfterstateConstants
+theorem c0 : AspisR1AdapterReconstruct.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION=AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION AspisR1TerminalDecoder.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION
+  rfl
+#print axioms c0
+theorem c1 : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC=AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC
+  rfl
+#print axioms c1
+theorem c2 : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION=AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION AspisR1TerminalDecoder.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION
+  rfl
+#print axioms c2
+theorem c3 : AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION=AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION AspisR1TerminalDecoder.pool_v1.pair_tree_profile.POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION
+  rfl
+#print axioms c3
+end AspisR1.JHi_AfterstateConstants

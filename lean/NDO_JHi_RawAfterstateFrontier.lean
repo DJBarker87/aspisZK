@@ -1,0 +1,36 @@
+import NDO_JHi_ProfileDigestAssociation
+set_option autoImplicit false
+namespace AspisR1.JHi_RawAfterstateFrontier
+open Aeneas Aeneas.Std Result WP
+open AspisR1AdapterReconstruct
+
+@[local step] theorem digest (q : Array U32 8#usize) (canon : JFu_DigestCanonical.Canonical q) :
+    aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical q ⦃ b => b=true ⦄ := by
+  rw [JHi_ProfileDigestAssociation.canonical q canon,WP.spec_ok]
+
+theorem source (a : Array (Array U32 8#usize) 20#usize)
+    (canon : ∀ i : Fin 20,JFu_DigestCanonical.Canonical
+      (a.val[i.val]'(by simpa only [a.property,show (20#usize).val=20 from rfl] using i.isLt))) :
+    aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate_loop a 0#usize=ok (.Ok ()) := by
+  have spec : aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate_loop a 0#usize
+      ⦃ out => out=.Ok () ⦄ := by
+    unfold aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate_loop
+    refine loop.spec_decr_nat
+      (fun i : Usize => 20-i.val) (fun i : Usize => i.val≤20)
+      (fun out => out=.Ok ())
+      (fun i => aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate_loop.body a i)
+      0#usize ?_ ?_
+    · intro i hi
+      unfold aspis_statement.pool_v1.pair_terminal.validate_verified_afterstate_loop.body
+      step*
+      all_goals first
+        | scalar_tac
+        | (simp_all;exact canon ⟨i.val,by scalar_tac⟩)
+    · scalar_tac
+  obtain ⟨out,call,same⟩:=WP.spec_imp_exists spec
+  rw [same] at call
+  exact call
+
+#print axioms digest
+#print axioms source
+end AspisR1.JHi_RawAfterstateFrontier

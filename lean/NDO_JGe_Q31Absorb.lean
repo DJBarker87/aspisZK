@@ -1,0 +1,655 @@
+import NDO_JGe_Q31AbsorbBlocks00
+import NDO_JGe_Q31AbsorbBlocks04
+import NDO_JGe_Q31AbsorbBlocks08
+import NDO_JGe_Q31AbsorbBlocks12
+import NDO_JGe_Q31AbsorbBlocks16
+import NDO_JGe_Q31AbsorbBlocks20
+import NDO_JGe_Q31AbsorbBlocks24
+import NDO_JGe_Q31AbsorbBlocks28
+import NDO_JFp_SeedHash
+set_option autoImplicit false
+namespace AspisR1.JGe_Q31Absorb
+open JFp_SHA256
+namespace B32
+def input : List Nat := [233,12,170,48,217,44,199,192,198,96,231,176,100,6,217,4,182,122,215,146,102,35,118,237,182,35,159,49,31,48,242,144,115,44,147,108,158,65,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65,48]
+def start : Reg := ⟨2296476702,2807470755,1749051690,152158108,3901832253,866343058,3699851054,642777260⟩
+def w00 : List Nat := [3909921328,3643590592,3328239536,1678170372,3061503890,1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688]
+def s00 : Reg := start
+theorem parsed : words input=w00 := by rfl
+#print axioms parsed
+def w01 : List Nat := [3643590592,3328239536,1678170372,3061503890,1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908]
+def s01 : Reg := ⟨3997963778,2296476702,2807470755,1749051690,3355508037,3901832253,866343058,3699851054⟩
+theorem word00 : advance w00=w01 := by rfl
+theorem round00 : round s00 1116352408 (w00.getD 0 0)=s01 := by rfl
+#print axioms word00
+#print axioms round00
+def w02 : List Nat := [3328239536,1678170372,3061503890,1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385]
+def s02 : Reg := ⟨3432430463,3997963778,2296476702,2807470755,1253478990,3355508037,3901832253,866343058⟩
+theorem word01 : advance w01=w02 := by rfl
+theorem round01 : round s01 1899447441 (w01.getD 0 0)=s02 := by rfl
+#print axioms word01
+#print axioms round01
+def w03 : List Nat := [1678170372,3061503890,1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016]
+def s03 : Reg := ⟨40636346,3432430463,3997963778,2296476702,1791508199,1253478990,3355508037,3901832253⟩
+theorem word02 : advance w02=w03 := by rfl
+theorem round02 : round s02 3049323471 (w02.getD 0 0)=s03 := by rfl
+#print axioms word02
+#print axioms round02
+def w04 : List Nat := [3061503890,1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771]
+def s04 : Reg := ⟨1105847862,40636346,3432430463,3997963778,2936619667,1791508199,1253478990,3355508037⟩
+theorem word03 : advance w03=w04 := by rfl
+theorem round03 : round s03 3921009573 (w03.getD 0 0)=s04 := by rfl
+#print axioms word03
+#print axioms round03
+def w05 : List Nat := [1713600237,3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364]
+def s05 : Reg := ⟨37164793,1105847862,40636346,3432430463,2839924216,2936619667,1791508199,1253478990⟩
+theorem word04 : advance w04=w05 := by rfl
+theorem round04 : round s04 961987163 (w04.getD 0 0)=s05 := by rfl
+#print axioms word04
+#print axioms round04
+def w06 : List Nat := [3055787825,523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683]
+def s06 : Reg := ⟨590776421,37164793,1105847862,40636346,3259108636,2839924216,2936619667,1791508199⟩
+theorem word05 : advance w05=w06 := by rfl
+theorem round05 : round s05 1508970993 (w05.getD 0 0)=s06 := by rfl
+#print axioms word05
+#print axioms round05
+def w07 : List Nat := [523301520,1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851]
+def s07 : Reg := ⟨654914561,590776421,37164793,1105847862,1417186853,3259108636,2839924216,2936619667⟩
+theorem word06 : advance w06=w07 := by rfl
+theorem round06 : round s06 2453635748 (w06.getD 0 0)=s07 := by rfl
+#print axioms word06
+#print axioms round06
+def w08 : List Nat := [1932301164,2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076]
+def s08 : Reg := ⟨3232425869,654914561,590776421,37164793,306333581,1417186853,3259108636,2839924216⟩
+theorem word07 : advance w07=w08 := by rfl
+theorem round07 : round s07 2870763221 (w07.getD 0 0)=s08 := by rfl
+#print axioms word07
+#print axioms round07
+def w09 : List Nat := [2655092736,0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880]
+def s09 : Reg := ⟨3028799915,3232425869,654914561,590776421,2881075433,306333581,1417186853,3259108636⟩
+theorem word08 : advance w08=w09 := by rfl
+theorem round08 : round s08 3624381080 (w08.getD 0 0)=s09 := by rfl
+#print axioms word08
+#print axioms round08
+def w10 : List Nat := [0,0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067]
+def s10 : Reg := ⟨1414907834,3028799915,3232425869,654914561,1405443088,2881075433,306333581,1417186853⟩
+theorem word09 : advance w09=w10 := by rfl
+theorem round09 : round s09 310598401 (w09.getD 0 0)=s10 := by rfl
+#print axioms word09
+#print axioms round09
+def w11 : List Nat := [0,0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535]
+def s11 : Reg := ⟨1920571166,1414907834,3028799915,3232425869,3307325795,1405443088,2881075433,306333581⟩
+theorem word10 : advance w10=w11 := by rfl
+theorem round10 : round s10 607225278 (w10.getD 0 0)=s11 := by rfl
+#print axioms word10
+#print axioms round10
+def w12 : List Nat := [0,0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361]
+def s12 : Reg := ⟨1022900306,1920571166,1414907834,3028799915,3340482659,3307325795,1405443088,2881075433⟩
+theorem word11 : advance w11=w12 := by rfl
+theorem round11 : round s11 1426881987 (w11.getD 0 0)=s12 := by rfl
+#print axioms word11
+#print axioms round11
+def w13 : List Nat := [0,0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192]
+def s13 : Reg := ⟨616486789,1022900306,1920571166,1414907834,3078516976,3340482659,3307325795,1405443088⟩
+theorem word12 : advance w12=w13 := by rfl
+theorem round12 : round s12 1925078388 (w12.getD 0 0)=s13 := by rfl
+#print axioms word12
+#print axioms round12
+def w14 : List Nat := [0,16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513]
+def s14 : Reg := ⟨1124356450,616486789,1022900306,1920571166,1409875329,3078516976,3340482659,3307325795⟩
+theorem word13 : advance w13=w14 := by rfl
+theorem round13 : round s13 2162078206 (w13.getD 0 0)=s14 := by rfl
+#print axioms word13
+#print axioms round13
+def w15 : List Nat := [16688,850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822]
+def s15 : Reg := ⟨3631249895,1124356450,616486789,1022900306,462895693,1409875329,3078516976,3340482659⟩
+theorem word14 : advance w14=w15 := by rfl
+theorem round14 : round s14 2614888103 (w14.getD 0 0)=s15 := by rfl
+#print axioms word14
+#print axioms round14
+def w16 : List Nat := [850796908,1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029]
+def s16 : Reg := ⟨745144509,3631249895,1124356450,616486789,812164237,462895693,1409875329,3078516976⟩
+theorem word15 : advance w15=w16 := by rfl
+theorem round15 : round s15 3248222580 (w15.getD 0 0)=s16 := by rfl
+#print axioms word15
+#print axioms round15
+def w17 : List Nat := [1117238385,1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755]
+def s17 : Reg := ⟨3814180861,745144509,3631249895,1124356450,3636803021,812164237,462895693,1409875329⟩
+theorem word16 : advance w16=w17 := by rfl
+theorem round16 : round s16 3835390401 (w16.getD 0 0)=s17 := by rfl
+#print axioms word16
+#print axioms round16
+def w18 : List Nat := [1291971016,385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824]
+def s18 : Reg := ⟨2257285483,3814180861,745144509,3631249895,3371721732,3636803021,812164237,462895693⟩
+theorem word17 : advance w17=w18 := by rfl
+theorem round17 : round s17 4022224774 (w17.getD 0 0)=s18 := by rfl
+#print axioms word17
+#print axioms round17
+def w19 : List Nat := [385091771,2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975]
+def s19 : Reg := ⟨1311435640,2257285483,3814180861,745144509,957668679,3371721732,3636803021,812164237⟩
+theorem word18 : advance w18=w19 := by rfl
+theorem round18 : round s18 264347078 (w18.getD 0 0)=s19 := by rfl
+#print axioms word18
+#print axioms round18
+def w20 : List Nat := [2348595364,2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842]
+def s20 : Reg := ⟨479827004,1311435640,2257285483,3814180861,2668791503,957668679,3371721732,3636803021⟩
+theorem word19 : advance w19=w20 := by rfl
+theorem round19 : round s19 604807628 (w19.getD 0 0)=s20 := by rfl
+#print axioms word19
+#print axioms round19
+def w21 : List Nat := [2111251683,2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567]
+def s21 : Reg := ⟨714289620,479827004,1311435640,2257285483,1053333160,2668791503,957668679,3371721732⟩
+theorem word20 : advance w20=w21 := by rfl
+theorem round20 : round s20 770255983 (w20.getD 0 0)=s21 := by rfl
+#print axioms word20
+#print axioms round20
+def w22 : List Nat := [2701427851,3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975]
+def s22 : Reg := ⟨2574190201,714289620,479827004,1311435640,1218182690,1053333160,2668791503,957668679⟩
+theorem word21 : advance w21=w22 := by rfl
+theorem round21 : round s21 1249150122 (w21.getD 0 0)=s22 := by rfl
+#print axioms word21
+#print axioms round21
+def w23 : List Nat := [3140653076,4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917]
+def s23 : Reg := ⟨3641774397,2574190201,714289620,479827004,621935542,1218182690,1053333160,2668791503⟩
+theorem word22 : advance w22=w23 := by rfl
+theorem round22 : round s22 1555081692 (w22.getD 0 0)=s23 := by rfl
+#print axioms word22
+#print axioms round22
+def w24 : List Nat := [4222992880,90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991]
+def s24 : Reg := ⟨1741121994,3641774397,2574190201,714289620,794783974,621935542,1218182690,1053333160⟩
+theorem word23 : advance w23=w24 := by rfl
+theorem round23 : round s23 1996064986 (w23.getD 0 0)=s24 := by rfl
+#print axioms word23
+#print axioms round23
+def w25 : List Nat := [90796067,1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564]
+def s25 : Reg := ⟨123493657,1741121994,3641774397,2574190201,2393030558,794783974,621935542,1218182690⟩
+theorem word24 : advance w24=w25 := by rfl
+theorem round24 : round s24 2554220882 (w24.getD 0 0)=s25 := by rfl
+#print axioms word24
+#print axioms round24
+def w26 : List Nat := [1877776535,571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551]
+def s26 : Reg := ⟨499112472,123493657,1741121994,3641774397,2540584383,2393030558,794783974,621935542⟩
+theorem word25 : advance w25=w26 := by rfl
+theorem round25 : round s25 2821834349 (w25.getD 0 0)=s26 := by rfl
+#print axioms word25
+#print axioms round25
+def w27 : List Nat := [571568361,1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969]
+def s27 : Reg := ⟨579705107,499112472,123493657,1741121994,3405239850,2540584383,2393030558,794783974⟩
+theorem word26 : advance w26=w27 := by rfl
+theorem round26 : round s26 2952996808 (w26.getD 0 0)=s27 := by rfl
+#print axioms word26
+#print axioms round26
+def w28 : List Nat := [1561970192,929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575]
+def s28 : Reg := ⟨3938864086,579705107,499112472,123493657,345087461,3405239850,2540584383,2393030558⟩
+theorem word27 : advance w27=w28 := by rfl
+theorem round27 : round s27 3210313671 (w27.getD 0 0)=s28 := by rfl
+#print axioms word27
+#print axioms round27
+def w29 : List Nat := [929412513,123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003]
+def s29 : Reg := ⟨3197364007,3938864086,579705107,499112472,2654390722,345087461,3405239850,2540584383⟩
+theorem word28 : advance w28=w29 := by rfl
+theorem round28 : round s28 3336571891 (w28.getD 0 0)=s29 := by rfl
+#print axioms word28
+#print axioms round28
+def w30 : List Nat := [123468822,3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673]
+def s30 : Reg := ⟨1714061315,3197364007,3938864086,579705107,1079835480,2654390722,345087461,3405239850⟩
+theorem word29 : advance w29=w30 := by rfl
+theorem round29 : round s29 3584528711 (w29.getD 0 0)=s30 := by rfl
+#print axioms word29
+#print axioms round29
+def w31 : List Nat := [3196587029,3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562]
+def s31 : Reg := ⟨1950168987,1714061315,3197364007,3938864086,884371675,1079835480,2654390722,345087461⟩
+theorem word30 : advance w30=w31 := by rfl
+theorem round30 : round s30 113926993 (w30.getD 0 0)=s31 := by rfl
+#print axioms word30
+#print axioms round30
+def w32 : List Nat := [3245551755,2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225]
+def s32 : Reg := ⟨2838108210,1950168987,1714061315,3197364007,2292857638,884371675,1079835480,2654390722⟩
+theorem word31 : advance w31=w32 := by rfl
+theorem round31 : round s31 338241895 (w31.getD 0 0)=s32 := by rfl
+#print axioms word31
+#print axioms round31
+def w33 : List Nat := [2641642824,3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311]
+def s33 : Reg := ⟨2620340774,2838108210,1950168987,1714061315,853150530,2292857638,884371675,1079835480⟩
+theorem word32 : advance w32=w33 := by rfl
+theorem round32 : round s32 666307205 (w32.getD 0 0)=s33 := by rfl
+#print axioms word32
+#print axioms round32
+def w34 : List Nat := [3830827975,2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433]
+def s34 : Reg := ⟨2771017626,2620340774,2838108210,1950168987,2219700203,853150530,2292857638,884371675⟩
+theorem word33 : advance w33=w34 := by rfl
+theorem round33 : round s33 773529912 (w33.getD 0 0)=s34 := by rfl
+#print axioms word33
+#print axioms round33
+def w35 : List Nat := [2490964842,545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820]
+def s35 : Reg := ⟨2395275254,2771017626,2620340774,2838108210,1492535615,2219700203,853150530,2292857638⟩
+theorem word34 : advance w34=w35 := by rfl
+theorem round34 : round s34 1294757372 (w34.getD 0 0)=s35 := by rfl
+#print axioms word34
+#print axioms round34
+def w36 : List Nat := [545136567,1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675]
+def s36 : Reg := ⟨276634342,2395275254,2771017626,2620340774,3716030337,1492535615,2219700203,853150530⟩
+theorem word35 : advance w35=w36 := by rfl
+theorem round35 : round s35 1396182291 (w35.getD 0 0)=s36 := by rfl
+#print axioms word35
+#print axioms round35
+def w37 : List Nat := [1450219975,3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416]
+def s37 : Reg := ⟨2228018193,276634342,2395275254,2771017626,4115355953,3716030337,1492535615,2219700203⟩
+theorem word36 : advance w36=w37 := by rfl
+theorem round36 : round s36 1695183700 (w36.getD 0 0)=s37 := by rfl
+#print axioms word36
+#print axioms round36
+def w38 : List Nat := [3318158917,1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467]
+def s38 : Reg := ⟨2869559512,2228018193,276634342,2395275254,412625419,4115355953,3716030337,1492535615⟩
+theorem word37 : advance w37=w38 := by rfl
+theorem round37 : round s37 1986661051 (w37.getD 0 0)=s38 := by rfl
+#print axioms word37
+#print axioms round37
+def w39 : List Nat := [1802668991,498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708]
+def s39 : Reg := ⟨458461166,2869559512,2228018193,276634342,633846858,412625419,4115355953,3716030337⟩
+theorem word38 : advance w38=w39 := by rfl
+theorem round38 : round s38 2177026350 (w38.getD 0 0)=s39 := by rfl
+#print axioms word38
+#print axioms round38
+def w40 : List Nat := [498364564,58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428]
+def s40 : Reg := ⟨819909110,458461166,2869559512,2228018193,4269137658,633846858,412625419,4115355953⟩
+theorem word39 : advance w39=w40 := by rfl
+theorem round39 : round s39 2456956037 (w39.getD 0 0)=s40 := by rfl
+#print axioms word39
+#print axioms round39
+def w41 : List Nat := [58282551,1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311]
+def s41 : Reg := ⟨2633187254,819909110,458461166,2869559512,1839443841,4269137658,633846858,412625419⟩
+theorem word40 : advance w40=w41 := by rfl
+theorem round40 : round s40 2730485921 (w40.getD 0 0)=s41 := by rfl
+#print axioms word40
+#print axioms round40
+def w42 : List Nat := [1157748969,545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648]
+def s42 : Reg := ⟨69799377,2633187254,819909110,458461166,4293426348,1839443841,4269137658,633846858⟩
+theorem word41 : advance w41=w42 := by rfl
+theorem round41 : round s41 2820302411 (w41.getD 0 0)=s42 := by rfl
+#print axioms word41
+#print axioms round41
+def w43 : List Nat := [545942575,3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270]
+def s43 : Reg := ⟨232332825,69799377,2633187254,819909110,2289854949,4293426348,1839443841,4269137658⟩
+theorem word42 : advance w42=w43 := by rfl
+theorem round42 : round s42 3259730800 (w42.getD 0 0)=s43 := by rfl
+#print axioms word42
+#print axioms round42
+def w44 : List Nat := [3035454003,1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405]
+def s44 : Reg := ⟨1304167784,232332825,69799377,2633187254,2581293652,2289854949,4293426348,1839443841⟩
+theorem word43 : advance w43=w44 := by rfl
+theorem round43 : round s43 3345764771 (w43.getD 0 0)=s44 := by rfl
+#print axioms word43
+#print axioms round43
+def w45 : List Nat := [1286040673,3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873]
+def s45 : Reg := ⟨2916075046,1304167784,232332825,69799377,1959865079,2581293652,2289854949,4293426348⟩
+theorem word44 : advance w44=w45 := by rfl
+theorem round44 : round s44 3516065817 (w44.getD 0 0)=s45 := by rfl
+#print axioms word44
+#print axioms round44
+def w46 : List Nat := [3102383562,4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764]
+def s46 : Reg := ⟨1527384865,2916075046,1304167784,232332825,2885160330,1959865079,2581293652,2289854949⟩
+theorem word45 : advance w45=w46 := by rfl
+theorem round45 : round s45 3600352804 (w45.getD 0 0)=s46 := by rfl
+#print axioms word45
+#print axioms round45
+def w47 : List Nat := [4219114225,1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186]
+def s47 : Reg := ⟨1136126336,1527384865,2916075046,1304167784,3692961925,2885160330,1959865079,2581293652⟩
+theorem word46 : advance w46=w47 := by rfl
+theorem round46 : round s46 4094571909 (w46.getD 0 0)=s47 := by rfl
+#print axioms word46
+#print axioms round46
+def w48 : List Nat := [1982135311,3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916]
+def s48 : Reg := ⟨642716736,1136126336,1527384865,2916075046,2771478455,3692961925,2885160330,1959865079⟩
+theorem word47 : advance w47=w48 := by rfl
+theorem round47 : round s47 275423344 (w47.getD 0 0)=s48 := by rfl
+#print axioms word47
+#print axioms round47
+def w49 : List Nat := [3745654433,1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400]
+def s49 : Reg := ⟨521783802,642716736,1136126336,1527384865,4061564719,2771478455,3692961925,2885160330⟩
+theorem word48 : advance w48=w49 := by rfl
+theorem round48 : round s48 430227734 (w48.getD 0 0)=s49 := by rfl
+#print axioms word48
+#print axioms round48
+def w50 : List Nat := [1744406820,2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517]
+def s50 : Reg := ⟨1565295482,521783802,642716736,1136126336,33907215,4061564719,2771478455,3692961925⟩
+theorem word49 : advance w49=w50 := by rfl
+theorem round49 : round s49 506948616 (w49.getD 0 0)=s50 := by rfl
+#print axioms word49
+#print axioms round49
+def w51 : List Nat := [2394714675,82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249]
+def s51 : Reg := ⟨1875320994,1565295482,521783802,642716736,3584386265,33907215,4061564719,2771478455⟩
+theorem word50 : advance w50=w51 := by rfl
+theorem round50 : round s50 659060556 (w50.getD 0 0)=s51 := by rfl
+#print axioms word50
+#print axioms round50
+def w52 : List Nat := [82310416,494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817]
+def s52 : Reg := ⟨2604831051,1875320994,1565295482,521783802,3756254179,3584386265,33907215,4061564719⟩
+theorem word51 : advance w51=w52 := by rfl
+theorem round51 : round s51 883997877 (w51.getD 0 0)=s52 := by rfl
+#print axioms word51
+#print axioms round51
+def w53 : List Nat := [494497467,2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811]
+def s53 : Reg := ⟨3469034864,2604831051,1875320994,1565295482,667893205,3756254179,3584386265,33907215⟩
+theorem word52 : advance w52=w53 := by rfl
+theorem round52 : round s52 958139571 (w52.getD 0 0)=s53 := by rfl
+#print axioms word52
+#print axioms round52
+def w54 : List Nat := [2529448708,3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145]
+def s54 : Reg := ⟨751432207,3469034864,2604831051,1875320994,2905378778,667893205,3756254179,3584386265⟩
+theorem word53 : advance w53=w54 := by rfl
+theorem round53 : round s53 1322822218 (w53.getD 0 0)=s54 := by rfl
+#print axioms word53
+#print axioms round53
+def w55 : List Nat := [3016629428,3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857]
+def s55 : Reg := ⟨1388438239,751432207,3469034864,2604831051,3074689975,2905378778,667893205,3756254179⟩
+theorem word54 : advance w54=w55 := by rfl
+theorem round54 : round s54 1537002063 (w54.getD 0 0)=s55 := by rfl
+#print axioms word54
+#print axioms round54
+def w56 : List Nat := [3684833311,3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330]
+def s56 : Reg := ⟨3223407138,1388438239,751432207,3469034864,1189111067,3074689975,2905378778,667893205⟩
+theorem word55 : advance w55=w56 := by rfl
+theorem round55 : round s55 1747873779 (w55.getD 0 0)=s56 := by rfl
+#print axioms word55
+#print axioms round55
+def w57 : List Nat := [3848503648,3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819]
+def s57 : Reg := ⟨2324164481,3223407138,1388438239,751432207,3025435232,1189111067,3074689975,2905378778⟩
+theorem word56 : advance w56=w57 := by rfl
+theorem round56 : round s56 1955562222 (w56.getD 0 0)=s57 := by rfl
+#print axioms word56
+#print axioms round56
+def w58 : List Nat := [3830766270,4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788]
+def s58 : Reg := ⟨3137754612,2324164481,3223407138,1388438239,607826827,3025435232,1189111067,3074689975⟩
+theorem word57 : advance w57=w58 := by rfl
+theorem round57 : round s57 2024104815 (w57.getD 0 0)=s58 := by rfl
+#print axioms word57
+#print axioms round57
+def w59 : List Nat := [4254086405,3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133]
+def s59 : Reg := ⟨3927600102,3137754612,2324164481,3223407138,446783362,607826827,3025435232,1189111067⟩
+theorem word58 : advance w58=w59 := by rfl
+theorem round58 : round s58 2227730452 (w58.getD 0 0)=s59 := by rfl
+#print axioms word58
+#print axioms round58
+def w60 : List Nat := [3635311873,614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133,3909285872]
+def s60 : Reg := ⟨1414963656,3927600102,3137754612,2324164481,3729992324,446783362,607826827,3025435232⟩
+theorem word59 : advance w59=w60 := by rfl
+theorem round59 : round s59 2361852424 (w59.getD 0 0)=s60 := by rfl
+#print axioms word59
+#print axioms round59
+def w61 : List Nat := [614927764,3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133,3909285872,2266240368]
+def s61 : Reg := ⟨4266253568,1414963656,3927600102,3137754612,1290485511,3729992324,446783362,607826827⟩
+theorem word60 : advance w60=w61 := by rfl
+theorem round60 : round s60 2428436474 (w60.getD 0 0)=s61 := by rfl
+#print axioms word60
+#print axioms round60
+def w62 : List Nat := [3103101186,1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133,3909285872,2266240368,2787067976]
+def s62 : Reg := ⟨3271015298,4266253568,1414963656,3927600102,2395054271,1290485511,3729992324,446783362⟩
+theorem word61 : advance w61=w62 := by rfl
+theorem round61 : round s61 2756734187 (w61.getD 0 0)=s62 := by rfl
+#print axioms word61
+#print axioms round61
+def w63 : List Nat := [1840870916,2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133,3909285872,2266240368,2787067976,696071571]
+def s63 : Reg := ⟨18607049,3271015298,4266253568,1414963656,1654172633,2395054271,1290485511,3729992324⟩
+theorem word62 : advance w62=w63 := by rfl
+theorem round62 : round s62 3204031479 (w62.getD 0 0)=s63 := by rfl
+#print axioms word62
+#print axioms round62
+def w64 : List Nat := [2820041400,2146087517,3354466249,1421279817,16138811,1193006145,3859552857,2405615330,657040819,1087435788,947549133,3909285872,2266240368,2787067976,696071571,3773081436]
+def s64 : Reg := ⟨2824043725,18607049,3271015298,4266253568,3366735084,1654172633,2395054271,1290485511⟩
+theorem word63 : advance w63=w64 := by rfl
+theorem round63 : round s63 3329325298 (w63.getD 0 0)=s64 := by rfl
+#print axioms word63
+#print axioms round63
+def result : Reg := ⟨825553131,2826077804,725099692,123444380,2973600041,2520515691,1799938029,1933262771⟩
+theorem checked : compress start (words input)=result := by
+  rw [parsed]
+  unfold compress loop
+  change add start (constants.foldl transition (w00,s00)).2=result
+  unfold constants
+  rw [List.foldl_cons,transition,word00,round00]
+  rw [List.foldl_cons,transition,word01,round01]
+  rw [List.foldl_cons,transition,word02,round02]
+  rw [List.foldl_cons,transition,word03,round03]
+  rw [List.foldl_cons,transition,word04,round04]
+  rw [List.foldl_cons,transition,word05,round05]
+  rw [List.foldl_cons,transition,word06,round06]
+  rw [List.foldl_cons,transition,word07,round07]
+  rw [List.foldl_cons,transition,word08,round08]
+  rw [List.foldl_cons,transition,word09,round09]
+  rw [List.foldl_cons,transition,word10,round10]
+  rw [List.foldl_cons,transition,word11,round11]
+  rw [List.foldl_cons,transition,word12,round12]
+  rw [List.foldl_cons,transition,word13,round13]
+  rw [List.foldl_cons,transition,word14,round14]
+  rw [List.foldl_cons,transition,word15,round15]
+  rw [List.foldl_cons,transition,word16,round16]
+  rw [List.foldl_cons,transition,word17,round17]
+  rw [List.foldl_cons,transition,word18,round18]
+  rw [List.foldl_cons,transition,word19,round19]
+  rw [List.foldl_cons,transition,word20,round20]
+  rw [List.foldl_cons,transition,word21,round21]
+  rw [List.foldl_cons,transition,word22,round22]
+  rw [List.foldl_cons,transition,word23,round23]
+  rw [List.foldl_cons,transition,word24,round24]
+  rw [List.foldl_cons,transition,word25,round25]
+  rw [List.foldl_cons,transition,word26,round26]
+  rw [List.foldl_cons,transition,word27,round27]
+  rw [List.foldl_cons,transition,word28,round28]
+  rw [List.foldl_cons,transition,word29,round29]
+  rw [List.foldl_cons,transition,word30,round30]
+  rw [List.foldl_cons,transition,word31,round31]
+  rw [List.foldl_cons,transition,word32,round32]
+  rw [List.foldl_cons,transition,word33,round33]
+  rw [List.foldl_cons,transition,word34,round34]
+  rw [List.foldl_cons,transition,word35,round35]
+  rw [List.foldl_cons,transition,word36,round36]
+  rw [List.foldl_cons,transition,word37,round37]
+  rw [List.foldl_cons,transition,word38,round38]
+  rw [List.foldl_cons,transition,word39,round39]
+  rw [List.foldl_cons,transition,word40,round40]
+  rw [List.foldl_cons,transition,word41,round41]
+  rw [List.foldl_cons,transition,word42,round42]
+  rw [List.foldl_cons,transition,word43,round43]
+  rw [List.foldl_cons,transition,word44,round44]
+  rw [List.foldl_cons,transition,word45,round45]
+  rw [List.foldl_cons,transition,word46,round46]
+  rw [List.foldl_cons,transition,word47,round47]
+  rw [List.foldl_cons,transition,word48,round48]
+  rw [List.foldl_cons,transition,word49,round49]
+  rw [List.foldl_cons,transition,word50,round50]
+  rw [List.foldl_cons,transition,word51,round51]
+  rw [List.foldl_cons,transition,word52,round52]
+  rw [List.foldl_cons,transition,word53,round53]
+  rw [List.foldl_cons,transition,word54,round54]
+  rw [List.foldl_cons,transition,word55,round55]
+  rw [List.foldl_cons,transition,word56,round56]
+  rw [List.foldl_cons,transition,word57,round57]
+  rw [List.foldl_cons,transition,word58,round58]
+  rw [List.foldl_cons,transition,word59,round59]
+  rw [List.foldl_cons,transition,word60,round60]
+  rw [List.foldl_cons,transition,word61,round61]
+  rw [List.foldl_cons,transition,word62,round62]
+  rw [List.foldl_cons,transition,word63,round63]
+  rw [List.foldl_nil]
+  rfl
+#print axioms checked
+end B32
+end AspisR1.JGe_Q31Absorb
+namespace AspisR1.JGe_Q31Absorb
+open JFp_SHA256 JFp_SeedHash
+theorem lenB00 : B00.input.length=64 := by rfl
+#print axioms lenB00
+theorem lenB01 : B01.input.length=64 := by rfl
+#print axioms lenB01
+theorem lenB02 : B02.input.length=64 := by rfl
+#print axioms lenB02
+theorem lenB03 : B03.input.length=64 := by rfl
+#print axioms lenB03
+theorem lenB04 : B04.input.length=64 := by rfl
+#print axioms lenB04
+theorem lenB05 : B05.input.length=64 := by rfl
+#print axioms lenB05
+theorem lenB06 : B06.input.length=64 := by rfl
+#print axioms lenB06
+theorem lenB07 : B07.input.length=64 := by rfl
+#print axioms lenB07
+theorem lenB08 : B08.input.length=64 := by rfl
+#print axioms lenB08
+theorem lenB09 : B09.input.length=64 := by rfl
+#print axioms lenB09
+theorem lenB10 : B10.input.length=64 := by rfl
+#print axioms lenB10
+theorem lenB11 : B11.input.length=64 := by rfl
+#print axioms lenB11
+theorem lenB12 : B12.input.length=64 := by rfl
+#print axioms lenB12
+theorem lenB13 : B13.input.length=64 := by rfl
+#print axioms lenB13
+theorem lenB14 : B14.input.length=64 := by rfl
+#print axioms lenB14
+theorem lenB15 : B15.input.length=64 := by rfl
+#print axioms lenB15
+theorem lenB16 : B16.input.length=64 := by rfl
+#print axioms lenB16
+theorem lenB17 : B17.input.length=64 := by rfl
+#print axioms lenB17
+theorem lenB18 : B18.input.length=64 := by rfl
+#print axioms lenB18
+theorem lenB19 : B19.input.length=64 := by rfl
+#print axioms lenB19
+theorem lenB20 : B20.input.length=64 := by rfl
+#print axioms lenB20
+theorem lenB21 : B21.input.length=64 := by rfl
+#print axioms lenB21
+theorem lenB22 : B22.input.length=64 := by rfl
+#print axioms lenB22
+theorem lenB23 : B23.input.length=64 := by rfl
+#print axioms lenB23
+theorem lenB24 : B24.input.length=64 := by rfl
+#print axioms lenB24
+theorem lenB25 : B25.input.length=64 := by rfl
+#print axioms lenB25
+theorem lenB26 : B26.input.length=64 := by rfl
+#print axioms lenB26
+theorem lenB27 : B27.input.length=64 := by rfl
+#print axioms lenB27
+theorem lenB28 : B28.input.length=64 := by rfl
+#print axioms lenB28
+theorem lenB29 : B29.input.length=64 := by rfl
+#print axioms lenB29
+theorem lenB30 : B30.input.length=64 := by rfl
+#print axioms lenB30
+theorem lenB31 : B31.input.length=64 := by rfl
+#print axioms lenB31
+theorem lenB32 : B32.input.length=64 := by rfl
+#print axioms lenB32
+def head : List (List Nat) := [B00.input,B01.input,B02.input,B03.input,B04.input,B05.input,B06.input,B07.input,B08.input,B09.input,B10.input,B11.input,B12.input,B13.input,B14.input,B15.input,B16.input,B17.input,B18.input,B19.input,B20.input,B21.input,B22.input,B23.input,B24.input,B25.input,B26.input,B27.input,B28.input,B29.input,B30.input,B31.input]
+def tail : List Nat := [233,12,170,48,217,44,199,192,198,96,231,176,100,6,217,4,182,122,215,146,102,35,118,237,182,35,159,49,31,48,242,144,115,44,147,108,158,65]
+def message : List Nat := head.flatten ++ tail
+def chunks : List (List Nat) := head ++ [B32.input]
+theorem tailLength : tail.length=38 := by rfl
+#print axioms tailLength
+theorem headLength : head.flatten.length=2048 := by
+  simp only [head,List.length_flatten,List.map_cons,List.map_nil,List.sum_cons,List.sum_nil,lenB00,lenB01,lenB02,lenB03,lenB04,lenB05,lenB06,lenB07,lenB08,lenB09,lenB10,lenB11,lenB12,lenB13,lenB14,lenB15,lenB16,lenB17,lenB18,lenB19,lenB20,lenB21,lenB22,lenB23,lenB24,lenB25,lenB26,lenB27,lenB28,lenB29,lenB30,lenB31]
+  omega
+#print axioms headLength
+theorem messageLength : message.length=2086 := by
+  simp only [message,List.length_append,headLength,tailLength]
+#print axioms messageLength
+theorem tailPad : tail ++ [128] ++ List.replicate 17 0 ++ [0,0,0,0,0,0,65,48]=[B32.input].flatten := by rfl
+#print axioms tailPad
+theorem padded : pad message=chunks.flatten := by
+  rw [pad,messageLength]
+  change (head.flatten ++ tail) ++ [128] ++ List.replicate 17 0 ++ [0,0,0,0,0,0,65,48]=_
+  simp only [List.append_assoc,chunks,List.flatten_append]
+  exact congrArg (fun t => head.flatten ++ t) (by simpa only [List.append_assoc] using tailPad)
+#print axioms padded
+theorem lengths : ∀ c∈chunks,c.length=64 := by
+  intro c hc
+  simp only [chunks,head,List.mem_append,List.mem_cons,List.not_mem_nil,or_false,or_assoc] at hc
+  rcases hc with h0 | h1 | h2 | h3 | h4 | h5 | h6 | h7 | h8 | h9 | h10 | h11 | h12 | h13 | h14 | h15 | h16 | h17 | h18 | h19 | h20 | h21 | h22 | h23 | h24 | h25 | h26 | h27 | h28 | h29 | h30 | h31 | h32
+  · subst c;exact lenB00
+  · subst c;exact lenB01
+  · subst c;exact lenB02
+  · subst c;exact lenB03
+  · subst c;exact lenB04
+  · subst c;exact lenB05
+  · subst c;exact lenB06
+  · subst c;exact lenB07
+  · subst c;exact lenB08
+  · subst c;exact lenB09
+  · subst c;exact lenB10
+  · subst c;exact lenB11
+  · subst c;exact lenB12
+  · subst c;exact lenB13
+  · subst c;exact lenB14
+  · subst c;exact lenB15
+  · subst c;exact lenB16
+  · subst c;exact lenB17
+  · subst c;exact lenB18
+  · subst c;exact lenB19
+  · subst c;exact lenB20
+  · subst c;exact lenB21
+  · subst c;exact lenB22
+  · subst c;exact lenB23
+  · subst c;exact lenB24
+  · subst c;exact lenB25
+  · subst c;exact lenB26
+  · subst c;exact lenB27
+  · subst c;exact lenB28
+  · subst c;exact lenB29
+  · subst c;exact lenB30
+  · subst c;exact lenB31
+  · subst c;exact lenB32
+#print axioms lengths
+theorem paddedLength : (pad message).length=2112 := by
+  rw [padded]
+  simp only [chunks,head,List.flatten_append,List.flatten_cons,List.flatten_nil,List.length_append,List.length_nil,lenB00,lenB01,lenB02,lenB03,lenB04,lenB05,lenB06,lenB07,lenB08,lenB09,lenB10,lenB11,lenB12,lenB13,lenB14,lenB15,lenB16,lenB17,lenB18,lenB19,lenB20,lenB21,lenB22,lenB23,lenB24,lenB25,lenB26,lenB27,lenB28,lenB29,lenB30,lenB31,lenB32]
+#print axioms paddedLength
+theorem blockList : blocks ((pad message).length/64) (pad message)=chunks := by
+  rw [paddedLength,padded]
+  exact blocks_chunks chunks lengths
+#print axioms blockList
+def result : Reg := B32.result
+theorem checked : JFp_SHA256.hash message=result := by
+  unfold JFp_SHA256.hash
+  dsimp only
+  rw [blockList]
+  simp only [chunks,head,List.foldl_append,List.foldl_cons,List.foldl_nil]
+  rw [show initial=B00.start from rfl,B00.checked]
+  rw [show B00.result=B01.start from rfl,B01.checked]
+  rw [show B01.result=B02.start from rfl,B02.checked]
+  rw [show B02.result=B03.start from rfl,B03.checked]
+  rw [show B03.result=B04.start from rfl,B04.checked]
+  rw [show B04.result=B05.start from rfl,B05.checked]
+  rw [show B05.result=B06.start from rfl,B06.checked]
+  rw [show B06.result=B07.start from rfl,B07.checked]
+  rw [show B07.result=B08.start from rfl,B08.checked]
+  rw [show B08.result=B09.start from rfl,B09.checked]
+  rw [show B09.result=B10.start from rfl,B10.checked]
+  rw [show B10.result=B11.start from rfl,B11.checked]
+  rw [show B11.result=B12.start from rfl,B12.checked]
+  rw [show B12.result=B13.start from rfl,B13.checked]
+  rw [show B13.result=B14.start from rfl,B14.checked]
+  rw [show B14.result=B15.start from rfl,B15.checked]
+  rw [show B15.result=B16.start from rfl,B16.checked]
+  rw [show B16.result=B17.start from rfl,B17.checked]
+  rw [show B17.result=B18.start from rfl,B18.checked]
+  rw [show B18.result=B19.start from rfl,B19.checked]
+  rw [show B19.result=B20.start from rfl,B20.checked]
+  rw [show B20.result=B21.start from rfl,B21.checked]
+  rw [show B21.result=B22.start from rfl,B22.checked]
+  rw [show B22.result=B23.start from rfl,B23.checked]
+  rw [show B23.result=B24.start from rfl,B24.checked]
+  rw [show B24.result=B25.start from rfl,B25.checked]
+  rw [show B25.result=B26.start from rfl,B26.checked]
+  rw [show B26.result=B27.start from rfl,B27.checked]
+  rw [show B27.result=B28.start from rfl,B28.checked]
+  rw [show B28.result=B29.start from rfl,B29.checked]
+  rw [show B29.result=B30.start from rfl,B30.checked]
+  rw [show B30.result=B31.start from rfl,B31.checked]
+  rw [show B31.result=B32.start from rfl,B32.checked]
+  rfl
+#print axioms checked
+end AspisR1.JGe_Q31Absorb
