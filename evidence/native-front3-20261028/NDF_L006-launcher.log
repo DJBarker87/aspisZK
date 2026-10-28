@@ -1,0 +1,29 @@
+{"attempt": "NDF_L006", "exit_status": 0, "wall_seconds": 1.1114875859348103, "peak_rss_kib": "2625440", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+Aeneas.Std.UScalar.mul_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x * ↑y ≤ UScalar.max ty) :
+  x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+Aeneas.Std.Usize.mul_spec {
+...
+def Aeneas.Std.UScalar.mul : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x * ↑y)
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+Aeneas.Std.UScalar.mul_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x * ↑y ≤ UScalar.max ty) :
+  x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.UScalar.add_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x + ↑y ≤ UScalar.max ty) :
+  x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+Aeneas.Std.Usize.mul_spec {x y : Usize} (hmax : ↑x * ↑y ≤ Usize.max) : x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+Aeneas.Std.Usize.add_spec {x y : Usize} (hmax : ↑x + ↑y ≤ Usize.max) : x + y ⦃ z => ↑z = ↑x + ↑y ⦄
+def Aeneas.Std.UScalar.ofNatCore : {ty : UScalarTy} → (x : ℕ) → x < 2 ^ ty.numBits → UScalar ty :=
+fun {ty} x h => { toFin := ⟨x, h⟩ }#uscalar
+
+Running as unit: run-r22832d93c05640379bc8d4fa549823ce.scope; invocation ID: 02c8c29489d848b282588dab2ac03b68

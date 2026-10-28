@@ -1,0 +1,9 @@
+def Aeneas.Std.UScalar.shiftLeft : {ty : UScalarTy} → UScalar ty → ℕ → Result (UScalar ty) :=
+fun {ty} x s => if s < ty.numBits then ok (x.bv.shiftLeft s#uscalar) else fail Error.integerOverflow
+NDF_generated/NDF_ParserWordInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `UScalar.shl`
+NDF_generated/NDF_ParserWordInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Usize.shl_spec`
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+System.Platform.numBits_eq : System.Platform.numBits = 32 ∨ System.Platform.numBits = 64
+System.Platform.numBits_pos : 0 < System.Platform.numBits
+NDF_generated/NDF_ParserWordInspect.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `System.Platform.numBits_eq_32_or_64`

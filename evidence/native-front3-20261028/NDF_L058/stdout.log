@@ -1,0 +1,276 @@
+NDF_generated/NDF_ValidatorStep.lean:33:18: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+        if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+          else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (done r1)
+is not definitionally equal to the right-hand side
+  do
+    let status ←
+      do
+        let bad ← fail e
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+
+case ok.some.fail
+row : U8
+iter : Iter
+chunk : Slice U8
+chunks : List (Slice U8)
+count : Usize
+head : iter.iter.chunks = chunk :: chunks
+advance : iter.count + 1#usize = ok count
+w : wide_exact.WideExact
+decodeCall : wide_exact.WideExact.from_le_bytes chunk = ok (some w)
+e : Error
+compareCall : core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO = fail e
+⊢ (do
+      let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+            else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (done r1)) =
+    do
+    let status ←
+      do
+        let bad ← fail e
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+NDF_generated/NDF_ValidatorStep.lean:34:15: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+        if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+          else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (done r1)
+is not definitionally equal to the right-hand side
+  do
+    let status ←
+      do
+        let bad ← div
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+
+case ok.some.div
+row : U8
+iter : Iter
+chunk : Slice U8
+chunks : List (Slice U8)
+count : Usize
+head : iter.iter.chunks = chunk :: chunks
+advance : iter.count + 1#usize = ok count
+w : wide_exact.WideExact
+decodeCall : wide_exact.WideExact.from_le_bytes chunk = ok (some w)
+compareCall : core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO = div
+⊢ (do
+      let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+            else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (done r1)) =
+    do
+    let status ←
+      do
+        let bad ← div
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+NDF_generated/NDF_ValidatorStep.lean:35:28: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+        if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+          else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (done r1)
+is not definitionally equal to the right-hand side
+  do
+    let status ←
+      do
+        let bad ← ok false
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+
+case ok.some.ok.false
+row : U8
+iter : Iter
+chunk : Slice U8
+chunks : List (Slice U8)
+count : Usize
+head : iter.iter.chunks = chunk :: chunks
+advance : iter.count + 1#usize = ok count
+w : wide_exact.WideExact
+decodeCall : wide_exact.WideExact.from_le_bytes chunk = ok (some w)
+compareCall : core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO = ok false
+⊢ (do
+      let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+            else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (done r1)) =
+    do
+    let status ←
+      do
+        let bad ← ok false
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+NDF_generated/NDF_ValidatorStep.lean:35:28: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+        if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+          else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame r1_wire.Error) residual
+        ok (done r1)
+is not definitionally equal to the right-hand side
+  do
+    let status ←
+      do
+        let bad ← ok true
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+
+case ok.some.ok.true
+row : U8
+iter : Iter
+chunk : Slice U8
+chunks : List (Slice U8)
+count : Usize
+head : iter.iter.chunks = chunk :: chunks
+advance : iter.count + 1#usize = ok count
+w : wide_exact.WideExact
+decodeCall : wide_exact.WideExact.from_le_bytes chunk = ok (some w)
+compareCall : core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 w.c1 QM31.ZERO = ok true
+⊢ (do
+      let r ← AspisR1RecordParser.core.option.Option.ok_or (some w) (r1_wire.Error.NonCanonical row iter.count)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default QM31.Insts.CoreCmpPartialEqQM31 val.c1 QM31.ZERO
+          if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+            else ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (done r1)) =
+    do
+    let status ←
+      do
+        let bad ← ok true
+        if bad = true then ok (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count))
+          else ok (core.result.Result.Ok ())
+    match status with
+      | core.result.Result.Ok a =>
+        ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+      | core.result.Result.Err error => ok (done (core.result.Result.Err error))
+NDF_generated/NDF_ValidatorStep.lean:29:17: warning: This simp argument is unused:
+  core.option.Option.ok_or
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵o̵k̵_̵o̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵w̵i̵d̵e̵_̵e̵x̵a̵c̵t̵.̵W̵i̵d̵e̵E̵x̵a̵c̵t̵.̵i̵m̵p̵l̵.̵c̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲w̲i̲d̲e̲_̲e̲x̲a̲c̲t̲.̲W̲i̲d̲e̲E̲x̲a̲c̲t̲.̲i̲m̲p̲l̲.̲c̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_ValidatorStep.split_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDF_ValidatorStep.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,56 @@
+{"attempt": "NDF_L045", "exit_status": 1, "wall_seconds": 1.4406056569423527, "peak_rss_kib": "2630020", "swaps": "0", "print_axioms": ["'NDF_ParserWord.word_packed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDF_ParserWord.bits' depends on axioms: [propext, Quot.sound]", "'NDF_ParserWord.little_endian' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDF_generated/NDF_ParserWord.lean:16:73: error: unsolved goals
+a b c d : U8
+h8 : 8 < UScalarTy.Usize.numBits
+h16 : 16 < UScalarTy.Usize.numBits
+h24 : 24 < UScalarTy.Usize.numBits
+⊢ (do
+      let b1 ←
+        if 8 < System.Platform.numBits then ok (BitVec.setWidth System.Platform.numBits b.bv <<< 8#uscalar)
+          else fail Error.integerOverflow
+      let c1 ←
+        if 16 < System.Platform.numBits then ok (BitVec.setWidth System.Platform.numBits c.bv <<< 16#uscalar)
+          else fail Error.integerOverflow
+      let d1 ←
+        if 24 < System.Platform.numBits then ok (BitVec.setWidth System.Platform.numBits d.bv <<< 24#uscalar)
+          else fail Error.integerOverflow
+      ok (UScala
+...
+w
+      let c1 ←
+        if 16 < System.Platform.numBits then ok (BitVec.setWidth System.Platform.numBits c.bv <<< 16#uscalar)
+          else fail Error.integerOverflow
+      let d1 ←
+        if 24 < System.Platform.numBits then ok (BitVec.setWidth System.Platform.numBits d.bv <<< 24#uscalar)
+          else fail Error.integerOverflow
+      ok (UScalar.cast UScalarTy.Usize a ||| b1 ||| c1 ||| d1)) =
+    ok
+      ((BitVec.setWidth System.Platform.numBits a.bv ||| BitVec.setWidth System.Platform.numBits b.bv <<< 8 |||
+            BitVec.setWidth System.Platform.numBits c.bv <<< 16 |||
+          BitVec.setWidth System.Platform.numBits d.bv <<< 24)#uscalar)
+NDF_generated/NDF_ParserWord.lean:25:52: warning: This simp argument is unused:
+  h8
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8̵,̵h̵16, ̲h24, ̲packed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDF_generated/NDF_ParserWord.lean:25:55: warning: This simp argument is unused:
+  h16
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h1̵6̵,̵h̵24, ̲packed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDF_generated/NDF_ParserWord.lean:25:59: warning: This simp argument is unused:
+  h24
+
+Hint: Omit it from the simp argument list.
+  simp [UScalar.shiftLeft_IScalar, ̲UScalar.shiftLeft, ̲h8, ̲h16,h̵2̵4̵,̵ ̲packed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_ParserWord.word_packed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDF_ParserWord.bits' depends on axioms: [propext, Quot.sound]
+'NDF_ParserWord.little_endian' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7107d29c86054f6fb06c9cf6fc254bfb.scope; invocation ID: 8c1684a7ea9345339a0e9287a4447678

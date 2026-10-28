@@ -1,0 +1,80 @@
+NDF_generated/NDF_ValidatorReference.lean:36:60: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+row : U8
+payload : Slice U8
+cap : (↑payload).length ≤ 3712
+final : Usize
+sameBad : NCO_OuterRun.bad payload = NDF_ValidatorWindows.bad payload
+zero : ↑0#usize = 0
+i : ℕ
+found : NCO_Search.search (NDF_ValidatorWindows.bad payload) ((↑payload).length / 32) 0 = some i
+position : ↑final = i
+call : NCO_ParserRef.validate_ref_loop0 payload 0#usize = ok (final, none)
+⊢ ↑final ≤ UScalar.cMax UScalarTy.Usize
+NDF_generated/NDF_ValidatorReference.lean:33:11: error: unsolved goals
+case some
+row : U8
+payload : Slice U8
+cap : (↑payload).length ≤ 3712
+final : Usize
+sameBad : NCO_OuterRun.bad payload = NDF_ValidatorWindows.bad payload
+zero : ↑0#usize = 0
+i : ℕ
+found : NCO_Search.search (NDF_ValidatorWindows.bad payload) ((↑payload).length / 32) 0 = some i
+position : ↑final = i
+call : NCO_ParserRef.validate_ref_loop0 payload 0#usize = ok (final, none)
+small : i ≤ UScalar.cMax UScalarTy.Usize
+equal : final = UScalar.ofNat i small
+⊢ (do
+      let status ←
+        let (i, pending_return) := (UScalar.ofNat i small, none)
+          match pending_return with
+          | none => ok (core.result.Result.Err (NCO_ParserRef.RefError.NonCanonical row i))
+          | some r => ok r
+      ok
+          (match
+            match status with
+            | core.result.Result.Ok a => core.result.Result.Ok a
+            | core.result.Result.Err e =>
+              core.result.Result.Err
+                (match e with
+                | NCO_ParserRef.RefError.InvalidRow => AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow
+                | NCO_ParserRef.RefError.Length row => AspisR1PrefixAggregateParser.r1_wire.Error.Length row
+                | NCO_ParserRef.RefError.Tag row => AspisR1PrefixAggregateParser.r1_wire.Error.Tag row
+                | NCO_ParserRef.RefError.NonCanonical row value =>
+                  AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value) with
+          | core.result.Result.Ok value => core.result.Result.Ok value
+          | core.result.Result.Err error =>
+            core.result.Result.Err
+              (match error with
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Allocation => AspisR1RecordParser.r1_wire.Error.Allocation
+              | AspisR1PrefixAggregateParser.r1_wire.Error.RowOrder expected actual =>
+                AspisR1RecordParser.r1_wire.Error.RowOrder expected actual
+              | AspisR1PrefixAggregateParser.r1_wire.Error.InvalidRow => AspisR1RecordParser.r1_wire.Error.InvalidRow
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Tag row => AspisR1RecordParser.r1_wire.Error.Tag row
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Length row => AspisR1RecordParser.r1_wire.Error.Length row
+              | AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row index =>
+                AspisR1RecordParser.r1_wire.Error.NonCanonical row index
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Boundary index =>
+                AspisR1RecordParser.r1_wire.Error.Boundary index
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Terminal => AspisR1RecordParser.r1_wire.Error.Terminal
+              | AspisR1PrefixAggregateParser.r1_wire.Error.EqualCirclePoints =>
+                AspisR1RecordParser.r1_wire.Error.EqualCirclePoints
+              | AspisR1PrefixAggregateParser.r1_wire.Error.TrailingBytes =>
+                AspisR1RecordParser.r1_wire.Error.TrailingBytes
+              | AspisR1PrefixAggregateParser.r1_wire.Error.Public => AspisR1RecordParser.r1_wire.Error.Public))) =
+    ok (core.result.Result.Err (AspisR1RecordParser.r1_wire.Error.NonCanonical row (UScalar.ofNat i small)))
+NDF_generated/NDF_ValidatorReference.lean:40:58: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵D̵F̵_̵V̵a̵l̵i̵d̵a̵t̵o̵r̵W̵i̵n̵d̵o̵w̵s̵.̵o̵u̵t̵c̵o̵m̵e̵,̵d̵i̵f̵_̵p̵o̵s̵ ̵s̵m̵a̵l̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵C̵O̵_̵F̵r̵a̵m̵i̵n̵g̵.̵r̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵N̵C̵O̵_̵F̵r̵a̵m̵i̵n̵g̵.̵e̵r̵r̵o̵r̵,̵s̵t̵a̵t̵u̵s̵T̵o̵R̵e̵c̵o̵r̵d̵,̵e̵r̵r̵o̵r̵T̵o̵R̵e̵c̵o̵r̵d̵,̵e̵q̵u̵a̵l̵]̵[̲N̲D̲F̲_̲V̲a̲l̲i̲d̲a̲t̲o̲r̲W̲i̲n̲d̲o̲w̲s̲.̲o̲u̲t̲c̲o̲m̲e̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲ ̲s̲m̲a̲l̲l̲,̲ ̲N̲C̲O̲_̲F̲r̲a̲m̲i̲n̲g̲.̲r̲e̲s̲u̲l̲t̲,̲ ̲N̲C̲O̲_̲F̲r̲a̲m̲i̲n̲g̲.̲e̲r̲r̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲t̲a̲t̲u̲s̲T̲o̲R̲e̲c̲o̲r̲d̲,̲ ̲e̲r̲r̲o̲r̲T̲o̲R̲e̲c̲o̲r̲d̲,̲ ̲e̲q̲u̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_ValidatorReference.outcome' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

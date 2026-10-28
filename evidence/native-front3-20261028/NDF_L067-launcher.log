@@ -1,0 +1,51 @@
+{"attempt": "NDF_L067", "exit_status": 1, "wall_seconds": 1.2478024850133806, "peak_rss_kib": "2654584", "swaps": "0", "print_axioms": ["'NDF_ValidatorWindows.scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDF_generated/NDF_ValidatorWindows.lean:11:34: error: Application type mismatch: The argument
+  List.drop (32 * i) ↑bytes
+has type
+  List U8
+but is expected to have type
+  ℕ
+in the application
+  List.length_take_le (List.drop (32 * i) ↑bytes)
+NDF_generated/NDF_ValidatorWindows.lean:11:58: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (List ?m.17) 32
+numerals are polymorphic in Lean, but the numeral `32` cannot be used in a context where the expected type is
+  List ?m.17
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NDF_generated/NDF_Va
+...
+of type class
+  OfNat (List ?m.17) 32
+numerals are polymorphic in Lean, but the numeral `32` cannot be used in a context where the expected type is
+  List ?m.17
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NDF_generated/NDF_ValidatorWindows.lean:10:35: error: unsolved goals
+bytes : Slice U8
+i : ℕ
+⊢ (List.take 32 (List.drop (32 * i) ↑bytes)).length ≤ Usize.max
+NDF_generated/NDF_ValidatorWindows.lean:41:6: error: Type mismatch: After simplification, term
+  rest
+ has type
+  @Eq (Result (core.result.Result Unit r1_wire.Error))
+    (NDF_ValidatorRun.scan row next (List.map (window bytes) (List.range' (↑start + 1) (stop - (↑start + 1)))))
+    (outcome row (NCO_Search.search (bad bytes) stop (↑start + 1)))
+but is expected to have type
+  @Eq (Result (core.result.Result Unit r1_wire.Error))
+    (NDF_ValidatorRun.scan row next (List.map (window bytes) (List.range' (↑start + 1) (stop - (↑start + 1)))))
+    (outcome row (if false = true then some ↑start else NCO_Search.search (bad bytes) stop (↑start + 1)))
+NDF_generated/NDF_ValidatorWindows.lean:47:6: error: No goals to be solved
+NDF_generated/NDF_ValidatorWindows.lean:52:0: warning: unused `termination_by`, function is not recursive
+NDF_generated/NDF_ValidatorWindows.lean:39:49: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵i̵d̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵a̵d̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲v̲a̲l̲i̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲a̲d̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_ValidatorWindows.scan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a664b9dd8c44542b890ecf6f11251ec.scope; invocation ID: 8d1362ebcba744048d61d89b92012f21

@@ -1,0 +1,103 @@
+NDF_generated/NDF_ValidatorRun.lean:22:8: error: unsolved goals
+case nil
+row : U8
+iter : Iter
+equal : iter.iter.chunks = []
+widths : ∀ chunk ∈ [], (↑chunk).length = 32
+⊢ (do
+      let r ←
+        let (o, iter1) := (none, { iter := iter.iter, count := iter.count })
+          match o with
+          | none => ok (done (core.result.Result.Ok ()))
+          | some p =>
+            let (value, bytes) := p
+            do
+            let o1 ← field.wide_exact.WideExact.from_le_bytes bytes
+            let r ← AspisR1RecordParser.core.option.Option.ok_or o1 (r1_wire.Error.NonCanonical row value)
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let q ← field.wide_exact.WideExact.impl.c1 val
+                let b ← core.cmp.PartialEq.ne.trait_default field.QM31.Insts.CoreCmpPartialEqQM31 q field.QM31.ZERO
+                if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row value)))
+                  else ok (cont iter1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame r1_wire.Error) residual
+                ok (done r1)
+      match r with
+        | cont next => r1_wire.validate_record_fields_loop next row
+        | done result => ok result) =
+    ok (core.result.Result.Ok ())
+NDF_generated/NDF_ValidatorRun.lean:49:16: error: Tactic `introN` failed: There are no additional binders or `let` bindings in the goal to introduce
+
+case pos.equal
+row : U8
+chunk : Slice U8
+chunks : List (Slice U8)
+ih :
+  ∀ (iter : Iter),
+    iter.iter.chunks = chunks →
+      (∀ chunk ∈ chunks, (↑chunk).length = 32) →
+        r1_wire.validate_record_fields_loop iter row = scan row iter.count chunks
+iter : Iter
+equal : iter.iter.chunks = chunk :: chunks
+widths : ∀ chunk_1 ∈ chunk :: chunks, (↑chunk_1).length = 32
+count : UScalar UScalarTy.Usize
+increment : iter.count + 1#usize = ok count
+width : (↑chunk).length = 32
+arr : Std.Array U8 32#usize := ⋯
+same : arr.to_slice = chunk
+step :
+  r1_wire.validate_record_fields_loop.body row iter =
+    if LPl_Kit_Bytes.validChunk 8 true ↑arr = true then
+      ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+    else ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+valid : LPl_Kit_Bytes.validChunk 8 true ↑chunk = true
+validArr : LPl_Kit_Bytes.validChunk 8 true ↑arr = true
+⊢ { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count }.iter.chunks = chunks
+NDF_generated/NDF_ValidatorRun.lean:51:10: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case pos.widths
+row : U8
+chunk : Slice U8
+chunks : List (Slice U8)
+ih :
+  ∀ (iter : Iter),
+    iter.iter.chunks = chunks →
+      (∀ chunk ∈ chunks, (↑chunk).length = 32) →
+        r1_wire.validate_record_fields_loop iter row = scan row iter.count chunks
+iter : Iter
+equal : iter.iter.chunks = chunk :: chunks
+widths : ∀ chunk_1 ∈ chunk :: chunks, (↑chunk_1).length = 32
+count : UScalar UScalarTy.Usize
+increment : iter.count + 1#usize = ok count
+width : (↑chunk).length = 32
+arr : Std.Array U8 32#usize := ⋯
+same : arr.to_slice = chunk
+step :
+  r1_wire.validate_record_fields_loop.body row iter =
+    if LPl_Kit_Bytes.validChunk 8 true ↑arr = true then
+      ok (cont { iter := { chunks := chunks, remainder := iter.iter.remainder }, count := count })
+    else ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row iter.count)))
+valid : LPl_Kit_Bytes.validChunk 8 true ↑chunk = true
+validArr : LPl_Kit_Bytes.validChunk 8 true ↑arr = true
+⊢ ∀ chunk ∈ chunks, (↑chunk).length = 32
+NDF_generated/NDF_ValidatorRun.lean:39:65: warning: This simp argument is unused:
+  equal
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵e̵q̵u̵a̵l̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDF_generated/NDF_ValidatorRun.lean:44:17: warning: This simp argument is unused:
+  equal
+
+Hint: Omit it from the simp argument list.
+  simp only [̵e̵q̵u̵a̵l̵,̵s̵c̵a̵n̵,̵i̵n̵c̵r̵e̵m̵e̵n̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲s̲c̲a̲n̲,̲ ̲i̲n̲c̲r̲e̲m̲e̲n̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDF_ValidatorRun.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

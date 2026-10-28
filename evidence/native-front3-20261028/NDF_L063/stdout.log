@@ -1,0 +1,54 @@
+NDF_generated/NDF_PrefixValidation.lean:26:40: error: unsolved goals
+case ok.fail
+α β : Type
+f : α → β
+injective : Function.Injective f
+v✝ : α
+e✝ : Error
+same : ok (f v✝) = fail e✝
+⊢ ok v✝ = fail e✝
+
+case ok.div
+α β : Type
+f : α → β
+injective : Function.Injective f
+v✝ : α
+same : ok (f v✝) = div
+⊢ ok v✝ = div
+
+case fail.ok
+α β : Type
+f : α → β
+injective : Function.Injective f
+e✝ : Error
+v✝ : α
+same : fail e✝ = ok (f v✝)
+⊢ fail e✝ = ok v✝
+
+case fail.div
+α β : Type
+f : α → β
+injective : Function.Injective f
+e✝ : Error
+same : fail e✝ = div
+⊢ fail e✝ = div
+
+case div.ok
+α β : Type
+f : α → β
+injective : Function.Injective f
+v✝ : α
+same : div = ok (f v✝)
+⊢ div = ok v✝
+
+case div.fail
+α β : Type
+f : α → β
+injective : Function.Injective f
+e✝ : Error
+same : div = fail e✝
+⊢ div = fail e✝
+'NDF_PrefixValidation.error_injective' depends on axioms: [propext]
+'NDF_PrefixValidation.status_injective' depends on axioms: [propext]
+'NDF_PrefixValidation.map_injective' depends on axioms: [propext, sorryAx]
+'NDF_PrefixValidation.loop' depends on axioms: [propext, Classical.choice, Quot.sound]

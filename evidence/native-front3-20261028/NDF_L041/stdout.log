@@ -1,0 +1,57 @@
+def r1_wire.validate_record_fields : U8 → Slice U8 → Result (core.result.Result Unit LPl_Kit_Release.r1_wire.Error) :=
+fun row bytes =>
+  match
+    List.find? (fun i => !LPl_Kit_Bytes.validChunk 8 true (List.take 32 (List.drop (32 * i) ↑bytes)))
+      (List.range ((↑bytes).length / 32)) with
+  | none => ok (core.result.Result.Ok ())
+  | some i =>
+    if h : i ≤ UScalar.cMax UScalarTy.Usize then
+      ok (core.result.Result.Err (LPl_Kit_Release.r1_wire.Error.NonCanonical row (UScalar.ofNat i h)))
+    else fail Error.panic
+def LPl_Kit_Bytes.validChunk : ℕ → Bool → List U8 → Bool :=
+fun width highZero bs =>
+  (List.range width).all fun j =>
+    have n := LPl_Kit_Bytes.le32 (List.take 4 (List.drop (4 * j) bs));
+    decide (n < 2147483647) && (!highZero || decide (j < 4 ∨ n = 0))
+NDF_generated/NDF_ValidatorInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `LPl_Kit_Bytes.valid`
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields : U8 →
+  Slice U8 → Result (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error) :=
+fun row payload => do
+  let ce ← core.slice.Slice.chunks_exact payload 32#usize
+  let iter ←
+    core.iter.traits.iterator.Iterator.enumerate.trait_default (core.iter.traits.iterator.IteratorChunksExact U8) ce
+  AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop iter row
+def AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body : U8 →
+  core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8) →
+    Result
+      (ControlFlow (core.iter.adapters.enumerate.Enumerate (core.slice.iter.ChunksExact U8))
+        (core.result.Result Unit AspisR1PrefixAggregateParser.r1_wire.Error)) :=
+fun row iter => do
+  let (o, iter1) ←
+    core.iter.adapters.enumerate.IteratorEnumerate.next (core.iter.traits.iterator.IteratorChunksExact U8) iter
+  match o with
+    | none => ok (ControlFlow.done (core.result.Result.Ok ()))
+    | some p =>
+      let (value, bytes) := p
+      do
+      let o1 ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.from_le_bytes bytes
+      let r ←
+        AspisR1PrefixAggregateParser.core.option.Option.ok_or o1
+            (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← AspisR1PrefixAggregateParser.field.wide_exact.WideExact.impl.c1 val
+          let b ←
+            core.cmp.PartialEq.ne.trait_default AspisR1PrefixAggregateParser.field.QM31.Insts.CoreCmpPartialEqQM31 q
+                AspisR1PrefixAggregateParser.field.QM31.ZERO
+          if b = true then
+              ok
+                (ControlFlow.done
+                  (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.NonCanonical row value)))
+            else ok (ControlFlow.cont iter1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+          ok (ControlFlow.done r1)

@@ -1,0 +1,24 @@
+NDF_generated/NDF_RawBridge.lean:12:54: error: unsolved goals
+N : Usize
+r : verifier.Reader
+fit : ↑r.at + ↑N ≤ (↑r.bytes).length
+value : Std.Array U8 N
+finish : Usize
+call : NDF_ReaderRef.raw_ref N r.bytes r.at = ok (value, finish)
+contents : ↑value = List.take (↑N) (List.drop ↑r.at ↑r.bytes)
+endVal : ↑finish = ↑r.at + ↑N
+bytes : Std.Array U8 N
+out : verifier.Reader
+source :
+  verifier.Reader.rawWithUnwrap N (OraclePortCkptAbi2Unwrap.unwrapWithPanic fun x => fail Error.panic) r =
+    ok (bytes, out)
+sourceContents : ↑bytes = List.take (↑N) (List.drop ↑r.at ↑r.bytes)
+cursor : ↑out.at = ↑r.at + ↑N
+backing : out.bytes = r.bytes
+sameBytes : value = bytes
+sameAt : out.at = finish
+sameOut : out = { bytes := r.bytes, «at» := finish }
+⊢ (let (out, finish) := (bytes, finish)
+    ok (out, { bytes := r.bytes, «at» := finish })) =
+    ok (bytes, { bytes := r.bytes, «at» := finish })
+'NDF_RawBridge.cohort' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

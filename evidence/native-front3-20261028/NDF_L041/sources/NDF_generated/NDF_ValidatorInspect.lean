@@ -1,0 +1,8 @@
+import NCO_ValidateModel
+import AspisR1PrefixAggregateParser.Funs
+open Aeneas Aeneas.Std Result
+#print _root_.r1_wire.validate_record_fields
+#print LPl_Kit_Bytes.validChunk
+#print LPl_Kit_Bytes.valid
+#print AspisR1PrefixAggregateParser.r1_wire.validate_record_fields
+#print AspisR1PrefixAggregateParser.r1_wire.validate_record_fields_loop.body
