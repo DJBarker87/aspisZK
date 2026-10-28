@@ -1,0 +1,199 @@
+NBL_generated/NBL_EffectControl.lean:84:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let we ← liftM OriginalPreparedNative.zero
+    let __x ← B.queries D t3 30#u8 v.final_message
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let i1 ← liftM (30#u8 + 1#u8)
+        let s1 ← liftM (lift (Std.Array.empty U8).to_slice)
+        let __x ← B.rho D __x.2 i1 s1
+        let g1 ← B.powers 29#usize gamma
+        let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+        let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 =>
+            pure
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, we] ⋯, rho := __x.1, queries := val,
+                    semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := __x.2.state },
+                g1)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (r2, g1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual)
+        pure (r1, old)
+is not definitionally equal to the right-hand side
+  do
+    let __x ← B.queries D t3 30#u8 v.final_message
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue queries => do
+        let row ← liftM (30#u8 + 1#u8)
+        let payload ← liftM (lift (Std.Array.empty U8).to_slice)
+        let __x ← B.rho D __x.2 row payload
+        let g ← B.powers 29#usize gamma
+        let r ← B.claim D sem v.y1 v.inactive g kappa
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue claim =>
+            pure
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := __x.1,
+                    queries := queries, semantic_alpha := sem.alpha, z := sem.z, claim := claim, state := __x.2.state },
+                g)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (r, g)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r ←
+          liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual)
+        pure (r, old)
+
+case isFalse
+B : PreparedSourceEffects.Effects Code
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+old : Scratch
+state : Std.Array U8 32#usize
+start : transcript.Transcript H
+gamma : aspis_core.field.WideExact
+t1 : transcript.Transcript H
+bytes : Std.Array U8 32#usize
+payload : Slice U8
+kappa : aspis_core.field.WideExact
+t2 : transcript.Transcript H
+alpha0 : aspis_core.field.WideExact
+t3 : transcript.Transcript H
+folds : Usize
+h✝ : ¬folds = 2#usize
+⊢ (do
+      let we ← liftM OriginalPreparedNative.zero
+      let __x ← B.queries D t3 30#u8 v.final_message
+      let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let i1 ← liftM (30#u8 + 1#u8)
+          let s1 ← liftM (lift (Std.Array.empty U8).to_slice)
+          let __x ← B.rho D __x.2 i1 s1
+          let g1 ← B.powers 29#usize gamma
+          let r1 ← B.claim D sem v.y1 v.inactive g1 kappa
+          let cf1 ← liftM (core.result.Result.Insts.CoreOpsTry.branch r1)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 =>
+              pure
+                (core.result.Result.Ok
+                    { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                      alpha := Array.make 2#usize [alpha0, we] ⋯, rho := __x.1, queries := val,
+                      semantic_alpha := sem.alpha, z := sem.z, claim := val1, state := __x.2.state },
+                  g1)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                liftM
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      verifier.Prepared (core.convert.FromSame verifier.Error) residual)
+              pure (r2, g1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            liftM
+                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                  (core.convert.FromSame verifier.Error) residual)
+          pure (r1, old)) =
+    do
+    let __x ← B.queries D t3 30#u8 v.final_message
+    let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue queries => do
+        let row ← liftM (30#u8 + 1#u8)
+        let payload ← liftM (lift (Std.Array.empty U8).to_slice)
+        let __x ← B.rho D __x.2 row payload
+        let g ← B.powers 29#usize gamma
+        let r ← B.claim D sem v.y1 v.inactive g kappa
+        let cf ← liftM (core.result.Result.Insts.CoreOpsTry.branch r)
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue claim =>
+            pure
+              (core.result.Result.Ok
+                  { variant := v.variant, roots := sem.roots, gamma := gamma, kappa := kappa,
+                    alpha := Array.make 2#usize [alpha0, aspis_core.field.WideExact.ZERO] ⋯, rho := __x.1,
+                    queries := queries, semantic_alpha := sem.alpha, z := sem.z, claim := claim, state := __x.2.state },
+                g)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r ←
+              liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                    (core.convert.FromSame verifier.Error) residual)
+            pure (r, g)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r ←
+          liftM
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual verifier.Prepared
+                (core.convert.FromSame verifier.Error) residual)
+        pure (r, old)
+NBL_generated/NBL_EffectControl.lean:74:13: warning: This simp argument is unused:
+  NBL_CodeMonad.associative
+
+Hint: Omit it from the simp argument list.
+  simp only [N̵B̵L̵_̵C̵o̵d̵e̵M̵o̵n̵a̵d̵.̵a̵s̵s̵o̵c̵i̵a̵t̵i̵v̵e̵,̵Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:74:39: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_CodeMonad.associative,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:78:13: warning: This simp argument is unused:
+  NBL_CodeMonad.associative
+
+Hint: Omit it from the simp argument list.
+  simp only [N̵B̵L̵_̵C̵o̵d̵e̵M̵o̵n̵a̵d̵.̵a̵s̵s̵o̵c̵i̵a̵t̵i̵v̵e̵,̵Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:78:39: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_CodeMonad.associative,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:80:13: warning: This simp argument is unused:
+  NBL_CodeMonad.associative
+
+Hint: Omit it from the simp argument list.
+  simp only [N̵B̵L̵_̵C̵o̵d̵e̵M̵o̵n̵a̵d̵.̵a̵s̵s̵o̵c̵i̵a̵t̵i̵v̵e̵,̵Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:80:39: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [NBL_CodeMonad.associative,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_EffectControl.lean:82:93: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵B̵L̵_̵C̵o̵d̵e̵M̵o̵n̵a̵d̵.̵a̵s̵s̵o̵c̵i̵a̵t̵i̵v̵e̵,̵N̵B̵L̵_̵C̵o̵d̵e̵M̵o̵n̵a̵d̵.̵p̵u̵r̵e̵_̵b̵i̵n̵d̵,̵c̵o̵n̵t̵i̵n̵u̵a̵t̵i̵o̵n̵,̵o̵u̵t̵p̵u̵t̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲N̲B̲L̲_̲C̲o̲d̲e̲M̲o̲n̲a̲d̲.̲a̲s̲s̲o̲c̲i̲a̲t̲i̲v̲e̲,̲ ̲N̲B̲L̲_̲C̲o̲d̲e̲M̲o̲n̲a̲d̲.̲p̲u̲r̲e̲_̲b̲i̲n̲d̲,̲ ̲c̲o̲n̲t̲i̲n̲u̲a̲t̲i̲o̲n̲,̲ ̲o̲u̲t̲p̲u̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NBL_EffectControl.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,54 @@
+{"attempt": "NBL_L048", "exit_status": 1, "wall_seconds": 1.8037957810447551, "peak_rss_kib": "4719488", "swaps": "0", "print_axioms": ["'AspisR1.NBL_HashReplay.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NBL_HashReplay.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NBL_HashReplay.seed' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NBL_generated/NBL_HashReplay.lean:28:59: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+before : transcript.Transcript H
+row : U8
+payload : Slice U8
+b : NBL_BlockTrace.Block D before row payload
+first :
+  run (PreparedHashEffects.absorb effects D before row payload) =
+    ([Event.digest D before.hash (NBA_Transcript.absorbParts before.state b.tag payload) (ok b.absorbed)],
+      ok { state := b.absorbed, hash := before.hash })
+second :
+  D.digest before.hash
+      (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice =
+    ok b.value
+third :
+  D.digest before.hash
+      (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize
+...
+orbed, hash := before.hash })
+second :
+  D.digest before.hash
+      (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice =
+    ok b.value
+third :
+  D.digest before.hash
+      (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize [2#u8] ⋯).to_slice] ⋯).to_slice =
+    ok b.final
+⊢ ([Event.digest D before.hash (NBA_Transcript.absorbParts before.state b.tag payload) (ok b.absorbed)] ++
+        ([Event.digest D before.hash
+              (Array.make 2#usize
+                  [Array.to_slice b.absorbed, (Array.make 1#usize [1#u8] PreparedHashEffects.block._proof_2).to_slice]
+                  ⋯).to_slice
+              (ok b.value)] ++
+          [Event.digest D before.hash
+              (Array.make 2#usize
+                  [Array.to_slice b.absorbed, (Array.make 1#usize [2#u8] PreparedHashEffects.block._proof_5).to_slice]
+                  ⋯).to_slice
+              (ok b.final)]),
+      ok (b.value, { state := b.final, hash := before.hash })) =
+    ([Event.digest D before.hash (NBA_Transcript.absorbParts before.state b.tag payload) (ok b.absorbed),
+        Event.digest D before.hash
+          (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice
+          (ok b.value),
+        Event.digest D before.hash
+          (Array.make 2#usize [Array.to_slice b.absorbed, (Array.make 1#usize [2#u8] ⋯).to_slice] ⋯).to_slice
+          (ok b.final)],
+      ok (b.value, { state := b.final, hash := before.hash }))
+'AspisR1.NBL_HashReplay.absorb' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBL_HashReplay.block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_HashReplay.seed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rffc201e568ed494fb272c19458a7ed55.scope; invocation ID: 0e5537d770014166be6ca762846c05a6
