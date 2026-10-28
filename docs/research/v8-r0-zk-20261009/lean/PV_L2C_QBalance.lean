@@ -24,7 +24,6 @@ theorem rebalance_component (before after : List Q) (i : Fin 4) :
         (after.map (fun q => q i)) := by
   simp only [rebalanceQ,List.map_append,List.map_cons,subQ,zero,fold_component,
     PV_L2C_NativeBalance.rebalance]
-  rw [List.map_append]
 #print axioms rebalance_component
 
 theorem rebalance_audit (before after : List Q)
