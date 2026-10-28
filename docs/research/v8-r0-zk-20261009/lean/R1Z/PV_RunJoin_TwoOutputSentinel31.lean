@@ -25,7 +25,7 @@ theorem source (first second : Array U32 8#usize)
       pv_peel h with zero hz
       cases zero <;> simp only [Bool.false_eq_true,↓reduceIte] at h
       · refine ⟨hc,?_⟩
-        rw [PV_RunJoin_ForestEquality30.dictionary,PV_RunJoin_RuntimePrimitives30.word_eq] at hz
+        unfold aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq at hz
         simpa only [aspis_core.field.M31.ZERO,Result.ok.injEq,decide_eq_false_iff_not] using hz
       · cases h
 #print axioms source
