@@ -17,3 +17,7 @@ fn finite_native133() {
  let actual=aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1().unwrap();
  assert_eq!(actual.as_slice(), reference133::active_rows().as_slice());
 }
+
+pub mod reference226;
+#[cfg(any(kani, test))]
+mod native226;
