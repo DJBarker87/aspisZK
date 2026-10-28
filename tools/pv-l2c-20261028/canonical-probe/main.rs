@@ -15,6 +15,7 @@ impl aspis_r1_cost_probe::host_semantic::Commitments for GuardBoundary {
 }
 fn main() {
  let mut public_before=None;
+ let mut transition_before=None;
  let key=digest(10);let salt=digest(100);let asset=M31(77);
  let input=PoolV1PairForestInputNoteWitnessV1 {
   pair:PoolV1PairInputNoteWitnessV1 {nullifier_key:key,salt,value:1000,
@@ -37,6 +38,7 @@ fn main() {
   let witness=PoolV1PairForestPrivateTransferWitnessV1 {input,recipient,change};
   let context=PoolV1PaymentRelationContextV1 {runtime_binding:PoolV1PaymentRuntimeBindingV1 {pool:public.pool,deployment_domain:public.deployment_domain,anchor_sequence:public.anchor_sequence,anchor_root:public.anchor_root,asset_id:public.asset_id},spent_nullifiers:&[]};
   let compiled=compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&public,&witness,context,decoded).expect("canonical snapshot decode then full compiler success");
+  if let Some(previous)=transition_before {assert_eq!(compiled.public_statement,previous,"same complete public transition");}else{transition_before=Some(compiled.public_statement);}
   let bad_cells:Vec<_>=compiled.semantic_c1.c1.iter().enumerate().flat_map(|(c,col)|col.iter().enumerate().filter_map(move |(r,x)|if x.0>=P {Some((c,r,x.0))}else{None})).collect();
   println!("case_noncanonical={bad}; snapshot_roundtrip=true; full_compile=Ok; N3_bad_cells={bad_cells:?}");
   let masks=pool_v1_pair_forest_copy_active_row_masks_v1().unwrap();

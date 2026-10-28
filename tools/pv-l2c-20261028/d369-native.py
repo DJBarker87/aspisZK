@@ -2,7 +2,12 @@
 from pathlib import Path
 import json,subprocess,shlex,hashlib,datetime,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l2c-20261028/resume-d369';H='/home/dombarker/project-offloads/codex-pv-l2c-20261028';host='dombarker@100.108.41.90';B=H+'/native-source'
-name=sys.argv[1];assert not (E/(name+'-invocation.json')).exists()
+name=sys.argv[1]
+refusal=E/(name+'-refusal.json')
+if refusal.exists():
+ remaining=180-(datetime.datetime.now(datetime.timezone.utc)-datetime.datetime.fromisoformat(json.loads(refusal.read_text())['utc'])).total_seconds()
+ if remaining>0:print('Cooldown remaining',remaining);sys.exit(77)
+assert not (E/(name+'-invocation.json')).exists()
 def ssh(s):return subprocess.run(['ssh',host,s],text=True,capture_output=True)
 files=sorted(str(p.relative_to(R)) for crate in ['aspis-core','aspis-statement','aspis-prover','aspis-r1-cost-probe'] for p in (R/'crates'/crate/'src').rglob('*.rs'))
 files+=sorted(str(p.relative_to(R)) for n in ['writers','blockwriters','poseidon'] for p in (R/'docs/research/v8-r0-zk-20261009/refine'/n).rglob('*.rs'))
