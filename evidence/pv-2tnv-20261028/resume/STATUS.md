@@ -29,9 +29,18 @@ The 696-project-module source/object closure and all 5673 external objects were
 checked against their pinned authority before the relevant imports. Thirteen
 historical runjoin source paths are absent on the host; their exact recorded
 source hashes were checked through the pinned passing receipt snapshots.
-No Stream A object directory is in this job's search path. The original native
+No joint SHA453/fixture Stream A cache was used. The inherited env-J path
+retains historical frozen union prefixes; selected baseline objects were
+checked against the external authority and runjoin cohort. The original native
 byte modules were rebuilt privately from their pinned committed source.
 
 These are helper results only. The exact runtime-conditional joint implication,
 its same-wrapper execution association and a deployed runtime dictionary are
 still absent. FixturePdaRuntime remains NOT discharged. No AGG16 request exists.
+
+Final: all 60 normal attempts are terminal, 57 pass and three rejected. The
+final 60997 composed source_pair/audit passed with standard axioms, RSS
+4480248 KiB and zero swap. The exact headline fibre and eleven source-data
+associations are proved. The required joint/runtime implication is not delivered.
+See ../REPORT.md for precise remaining obligations and per-suspect disposition.
+No AGG16 request was staged or launched.

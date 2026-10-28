@@ -4,6 +4,7 @@ import subprocess,json,hashlib,shlex,re,sys,time
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-2tnv-20261028/resume';H='/home/dombarker/project-offloads/codex-pv-2tnv-20261028';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);m=sys.argv[2];s=R/sys.argv[3];assert 60900<=a<=60999
 assert not (E/f'receipt-{a}.json').exists()
+assert len(list(E.glob('receipt-*.json')))<60, 'normal Lean budget exhausted'
 def ssh(c):return subprocess.run(['ssh',host,c],capture_output=True,text=True)
 # Refusals return immediately; caller observes cooldown and retries same ID.
 c=f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {H}/reservation-{a}.json > {H}/reservation-{a}.log 2>&1\nrc=$?\ncat {H}/reservation-{a}.log\nexit $rc'

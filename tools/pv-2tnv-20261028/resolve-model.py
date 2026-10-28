@@ -13,7 +13,7 @@ ejr=json.loads(read('HEAD','evidence/envj-rebuild-20261026/EJR_final-inventory.j
 auth={}
 for r in ejr['selected']:
  if r.get('resolution'):auth.setdefault(r['module'].replace('/','.'),r)
-roots=['R1Z.PV_RunJoin_CanonicalFixtures','R1Z.PV_RunJoin_RootModelTable','R1Z.PV_RunJoin_PathValues16','R1Z.PV_RunJoin_OutputValues16','R1Z.PV_RunJoin_FixtureNullifier','R1Z.PV_RunJoin_OutputCell3917']
+roots=['R1Z.PV_RunJoin_CanonicalFixtures','R1Z.PV_RunJoin_RootModelTable','R1Z.PV_RunJoin_PathValues16','R1Z.PV_RunJoin_OutputValues16','R1Z.PV_RunJoin_FixtureNullifier','R1Z.PV_RunJoin_OutputCell3917','R1Z.PrivacyR1HeadlineDeployedReal']
 seen={};gaps=[]
 def visit(m):
  if m in seen or m in external:return
@@ -22,7 +22,7 @@ def visit(m):
   gaps.append((m,'not in pinned runjoin24 resolution'));return
  seen[m]=v.copy();sha=v['sha256']
  if m in auth:
-  if auth[m]['sha256']!=sha:gaps.append((m,'EJR mismatch'))
+  if not any(r.get('resolution') and r['module'].replace('/','.')==m and r['sha256']==sha for r in ejr['selected']):gaps.append((m,'EJR mismatch'))
  else:
   p=v.get('path');b=read('HEAD',p)
   if hashlib.sha256(b).hexdigest()!=sha:gaps.append((m,'HEAD mismatch'))
