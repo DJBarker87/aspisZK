@@ -1,5 +1,294 @@
 {
-  "status": "proposed",
-  "inherited_delta": "evidence/native-front1-20261028/NDD_LEDGER_DELTA.json",
-  "new_claims": []
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "headline": "AspisR1.RPx_Deployed.deployed",
+  "claim_scope": "Candidate LOCAL Result/value bridges only; all enclosing caller domains and physical interpretations remain OPEN.",
+  "trust_change": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
+  "budget_used": {
+    "kani": 0,
+    "lean": 4,
+    "extract": 0
+  },
+  "members": [
+    {
+      "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
+      "dependent_rows": 40,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "value < 2^62",
+      "lean_theorem": "NDD_Reduce.reduce_cohort",
+      "lean_attempt": "NDD_L007",
+      "kani_attempt": "NDD_K007",
+      "negative_control": "NDD_K008",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
+      "dependent_rows": 34,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "four canonical u32 limbs",
+      "lean_theorem": "NDD_Prepared.prepared",
+      "lean_attempt": "NDD_L015",
+      "kani_attempt": "NDD_K018",
+      "negative_control": "NDD_K019",
+      "extraction": "NDD_E003"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "dependent_rows": 31,
+      "status": "OPEN",
+      "partial_evidence": "K076/K077; NDD_SelectorModel.field_cut",
+      "obstacle": "Only the selected-window/unchanged-Some decoder cut is checked. Instantiate the CLOSED real decoder value/success/carrier law on these SAME bytes, prove canonical caller bytes and offsets, and replace the abstract decoder cut with an admissible native callee bridge. Needs Kani; the conditional Lean selector cut is complete.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::from_m31",
+      "dependent_rows": 29,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all u32 inputs",
+      "lean_theorem": "NDD_Simple.cm31_from",
+      "lean_attempt": "NDD_L009",
+      "kani_attempt": "NDD_K009",
+      "negative_control": "NDD_K010",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
+      "dependent_rows": 29,
+      "status": "OPEN",
+      "partial_evidence": "K060/K061, K062/K063, K068\u2013K075; NDD_CopyFrame and NDD_PackModel",
+      "obstacle": "K037/K038 full checks and K067 isolated-limb/verified-reducer shape timed out; K066 was codegen-only. Copy window, four exact raw arithmetic spans and reducer contract are separate checks. Native SAME-execution association from the actual padded buffer to all four spans/returns remains OPEN. The cohort arithmetic cut/reference equality is proved; no whole-buffer retry or cap increase is justified. Needs new split native association, not more arithmetic normalization.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::square",
+      "dependent_rows": 28,
+      "status": "OPEN",
+      "partial_evidence": "Inherited ExtractedMaskCM31Square.squareOperand_success/current_square_words",
+      "obstacle": "The actual real-coordinate path contains an inline u64 product before reduce_u64. It cannot be verified by multiplying in Kani or by replacing only M31::mul. Need a native raw-factor/product opaque log and association to the already checked symbolic square/product law, with canonical inputs established. Needs Kani; existing mathematical product/word laws are reusable.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
+      "dependent_rows": 28,
+      "status": "OPEN",
+      "partial_evidence": "Pinned source/member inventory",
+      "obstacle": "Depends on open CM31 square through QM31::square, plus actual mixed cross-product/coordinate call log and a resolved cohort consumer (no named counterpart in the inventory). Need native call-domain/step association using Lean-discharged multiplication laws. No whole-product Kani run is allowed.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
+      "dependent_rows": 26,
+      "status": "OPEN",
+      "partial_evidence": "K027/K028; NDD_LeafRefs.arity_bits",
+      "obstacle": "Native contract and extracted value specification pass, but the inventory has no named cohort helper. Associate this scalar to the enclosing adopted multiproof arity/shift consumer, including binary versus eight-way domain; needs a native caller/cut association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums",
+      "dependent_rows": 23,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all nine u64 channel sums",
+      "lean_theorem": "NDD_Channels.channels",
+      "lean_attempt": "NDD_L019",
+      "kani_attempt": "NDD_K024",
+      "negative_control": "NDD_K025",
+      "extraction": "NDD_E004"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::neg",
+      "dependent_rows": 22,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "two words < P",
+      "lean_theorem": "NDD_Composite.cm31_neg",
+      "lean_attempt": "NDD_L011",
+      "kani_attempt": "NDD_K013",
+      "negative_control": "NDD_K015",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::QM31::neg",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "K022/K023; extracted qm31_neg_ref",
+      "obstacle": "Canonical native contract/control pass. No resolved named cohort counterpart; associate the actual four coordinates to its enclosing model use, rather than creating a stand-in. Needs a native/model caller packet.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::index_at",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "K029/K030; NDD_LeafRefs.index",
+      "obstacle": "Native/extracted array indexing is checked for index<16, with total reference Result law. No named adopted helper; prove each actual caller index/domain and match the cohort inlined access. Needs native caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "K078/K079; NDD_WellformedModel",
+      "obstacle": "One windows predicate/membership step is checked; allM_total proves library induction. Still need actual windows iterator/pre-state association, length/nonempty gates, early rejection and enclosing cohort counterpart. Full-buffer Kani is forbidden. Needs native iteration/caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels",
+      "dependent_rows": 21,
+      "status": "OPEN",
+      "partial_evidence": "Frozen raw-product span and member inventory",
+      "obstacle": "Native nested iteration contains raw u64 products and += on arbitrary sums. Need one arbitrary-pre-state channel iteration with the <=four-products invariant, operand/carry log and a paired emitted natural product law. Multiplication must remain Lean-only. Needs Kani source-step association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::occupied_binary_parent",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "K056/K057",
+      "obstacle": "Exact tag/left/right slices and arbitrary reply unchanged are checked with a static recorder. No named cohort helper; bind this boundary to the SAME adopted parent/digest operation and prove index+1<16 at every caller. RuntimeSha256Value remains trust. Needs native caller/cohort association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::root_matches",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "K033/K034; NDD_LeafRefs.root",
+      "obstacle": "Native first-root comparison and extracted Result specification pass. No named cohort helper; bind this comparison to the SAME adopted root/value arrays and caller domain. Needs native caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::sibling_binary_parent",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "K058/K059",
+      "obstacle": "Both left/right exact slice order and unchanged reply are checked for a 32-byte sibling and index<16. Associate the actual node range and enclosing cohort digest boundary; no named helper is inventoried. Runtime digest value remains trust. Needs native caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::value_at",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "K031/K032; NDD_LeafRefs.value",
+      "obstacle": "Native fixed-array result/control and extracted Result indexing law pass for index<16. No named cohort helper; instantiate the enclosing model access on the SAME array/index. Needs native caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::QM31::is_zero",
+      "dependent_rows": 16,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all four u32 words",
+      "lean_theorem": "NDD_Composite.qm31_zero",
+      "lean_attempt": "NDD_L011",
+      "kani_attempt": "NDD_K016",
+      "negative_control": "NDD_K017",
+      "extraction": "NDD_E003"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_m31_dot",
+      "dependent_rows": 16,
+      "status": "OPEN",
+      "partial_evidence": "Frozen source: <=4 fast branch and blocked outer loop",
+      "obstacle": "Both branches contain raw limb u64 products; long branch also has four-product blocks and reduced outer sums. Need one native iteration, product/carry-domain log and Lean induction for each branch, then native/model association. No whole-buffer Kani or direct field multiplication is allowed. Needs Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::M31::neg",
+      "dependent_rows": 14,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "x < 2147483647",
+      "lean_theorem": "NDD_Simple.m31_neg",
+      "lean_attempt": "NDD_L009",
+      "kani_attempt": "NDD_K011",
+      "negative_control": "NDD_K012",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg",
+      "dependent_rows": 14,
+      "status": "OPEN",
+      "partial_evidence": "K064/K065; extracted wide_neg_ref",
+      "obstacle": "Canonical eight-limb native contract/control pass. No named cohort counterpart is resolved; bind the two QM31 negations and actual eight-coordinate carrier to the adopted consumer. Needs native/model caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
+      "dependent_rows": 14,
+      "status": "OPEN",
+      "partial_evidence": "Frozen source and FIo_Native.weights.Weights.scalar_factor",
+      "obstacle": "Need one arbitrary-pre-state fold iteration (s<4), exact PERM selection, canonical E/K accumulators and translated multiplication return log, then final QUARTER scaling association. Existing multiplication value laws may be reused; none is replaced by an unpaired stub here. Needs Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
+      "dependent_rows": 12,
+      "status": "OPEN",
+      "partial_evidence": "Frozen reverse read/four-write nested loop",
+      "obstacle": "Need native iteration on arbitrary invariant output state, k<5, folds<=5, n/index/length bounds, reverse-order read-before-overwrite and four multiplication logs; then Lean induction. No complete output buffer may be unwound. Needs Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
+      "dependent_rows": 11,
+      "status": "OPEN",
+      "partial_evidence": "FIo_Native.weights.high_dot / frozen four-push loop",
+      "obstacle": "Need one actual EbyKDot::push iteration on arbitrary state, canonical operands, Result/error path and SAME raw accumulator carrier, followed by finish association. Raw-dot emitted law and field laws exist; whole four-push execution is not a substitute for the required iteration cut. Needs Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts",
+      "dependent_rows": 10,
+      "status": "OPEN",
+      "partial_evidence": "NDD_BoxModel.parts",
+      "obstacle": "The model constructor returns a record and erases Box allocation/ownership. Need native arbitrary-field window transport plus allocation/ownership/frame/cleanup interpretation; scalar/fixed-array contract permission does not automatically admit a Box return. The exact model constructor fact is proved. Needs native/allocator evidence.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::double",
+      "dependent_rows": 10,
+      "status": "OPEN",
+      "partial_evidence": "NDD_DoubleModel.observed; NDD_ReferenceLinear",
+      "obstacle": "Correct QM31 model performs one product, frozen source performs two SAME-input products. Native opaque multiplication observations, deterministic value association and canonical domains remain missing. M31-named overloads are not this function. Checked-to-wrapping recombination and conditional reference/model theorem are proved. Needs Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",
+      "dependent_rows": 10,
+      "status": "CLOSED-local",
+      "partial_evidence": "K039/K040; NDD_GuardModel.cut",
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "No local value obligation; enclosing call edges, deployed physical/carrier interpretation remain OPEN",
+      "domain": "all Weights records and all usize folds; SAME w.variant and row w[0][2],w[2][2],w[0][3],w[2][3], arbitrary noncanonical words permitted",
+      "lean_theorem": "NDL_GuardAssociation.cohort / first_comparison / second_comparison",
+      "lean_attempt": "NDL_L004",
+      "kani_attempt": "NDD_K039",
+      "negative_control": "NDD_K040",
+      "extraction": "NDD_E005"
+    }
+  ],
+  "inherited_budget": "NDD budgets excluded from this continuation",
+  "inherited_closed": 7
 }

@@ -1,6 +1,6 @@
 # NDL frontier bridges — inherited baseline
 
-Frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; headline `AspisR1.RPx_Deployed.deployed`. **Target not yet established.** Seven local bridges, 21 OPEN representatives. No enclosing call edge is closed.
+Frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; headline `AspisR1.RPx_Deployed.deployed`. **Target not yet established.** Eight local bridges (seven inherited), 20 OPEN representatives. No enclosing call edge is closed.
 
 CLOSED-local retains the exact packet domain and P6/D188 physical/tool interpretation. Incoming callers must establish the domain on the SAME inputs. No cryptographic premise, runtime trust item, metric, privacy condition or transaction design was removed or weakened.
 
@@ -33,7 +33,7 @@ CLOSED-local retains the exact packet domain and P6/D188 physical/tool interpret
 | `crates/aspis-r1-cost-probe/src/weights.rs::high_dot` | 11 | OPEN | FIo_Native.weights.high_dot / frozen four-push loop; Need one actual EbyKDot::push iteration on arbitrary state, canonical operands, Result/error path and SAME raw accumulator carrier, followed by finish association. Raw-dot emitted law and field laws exist; whole four-push execution is not a substitute for the required iteration cut. Needs Kani. |
 | `crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts` | 10 | OPEN | NDD_BoxModel.parts; The model constructor returns a record and erases Box allocation/ownership. Need native arbitrary-field window transport plus allocation/ownership/frame/cleanup interpretation; scalar/fixed-array contract permission does not automatically admit a Box return. The exact model constructor fact is proved. Needs native/allocator evidence. |
 | `crates/aspis-r1-cost-probe/src/weights.rs::double` | 10 | OPEN | NDD_DoubleModel.observed; NDD_ReferenceLinear; Correct QM31 model performs one product, frozen source performs two SAME-input products. Native opaque multiplication observations, deterministic value association and canonical domains remain missing. M31-named overloads are not this function. Checked-to-wrapping recombination and conditional reference/model theorem are proved. Needs Kani. |
-| `crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard` | 10 | OPEN | K039/K040; NDD_GuardModel.cut; Native complete-record checks pass. The reference takes Boolean comparison cuts; prove SAME row/variant and derived-array equality carrier association to those exact cohort comparisons (or use a fuller raw-word reference and recheck natively). Conditional model cut is proved; do not treat its comparison hypotheses as discharged. Needs native/model equality association. |
+| `crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard` | 10 | CLOSED-local | Arbitrary complete records and folds; NDL_GuardAssociation.cohort/first_comparison/second_comparison (L004) derives every SAME-record comparison from emitted definitions. Reuses NDD_K039/K040 and E005; enclosing callers/physical interpretation remain OPEN. |
 
 Support callee contract: M31::reduce_u64, K062/K063, natural two-fold reference; NDD_ChannelPrimitives.reduce. It was used as a verified stub only in excluded packing attempts.
 
