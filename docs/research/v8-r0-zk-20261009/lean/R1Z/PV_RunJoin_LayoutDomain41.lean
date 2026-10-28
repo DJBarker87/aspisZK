@@ -38,8 +38,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 12903#usize 928#usize 13831#usize rfl]
         have hr : U8.wrapping_add 26#u8 1#u8=27#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d25 : ∃ records, Domain ops logical 27#u8 9181#usize 25#u8 records := by
     obtain ⟨records,ht⟩ := d26
@@ -52,8 +52,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 9186#usize 3712#usize 12898#usize rfl]
         have hr : U8.wrapping_add 25#u8 1#u8=26#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d24 : ∃ records, Domain ops logical 27#u8 8280#usize 24#u8 records := by
     obtain ⟨records,ht⟩ := d25
@@ -66,8 +66,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 8285#usize 896#usize 9181#usize rfl]
         have hr : U8.wrapping_add 24#u8 1#u8=25#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d23 : ∃ records, Domain ops logical 27#u8 7379#usize 23#u8 records := by
     obtain ⟨records,ht⟩ := d24
@@ -80,8 +80,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 7384#usize 896#usize 8280#usize rfl]
         have hr : U8.wrapping_add 23#u8 1#u8=24#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d22 : ∃ records, Domain ops logical 27#u8 6478#usize 22#u8 records := by
     obtain ⟨records,ht⟩ := d23
@@ -94,8 +94,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 6483#usize 896#usize 7379#usize rfl]
         have hr : U8.wrapping_add 22#u8 1#u8=23#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d21 : ∃ records, Domain ops logical 27#u8 5577#usize 21#u8 records := by
     obtain ⟨records,ht⟩ := d22
@@ -108,8 +108,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 5582#usize 896#usize 6478#usize rfl]
         have hr : U8.wrapping_add 21#u8 1#u8=22#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d20 : ∃ records, Domain ops logical 27#u8 4676#usize 20#u8 records := by
     obtain ⟨records,ht⟩ := d21
@@ -122,8 +122,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 4681#usize 896#usize 5577#usize rfl]
         have hr : U8.wrapping_add 20#u8 1#u8=21#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d19 : ∃ records, Domain ops logical 27#u8 3775#usize 19#u8 records := by
     obtain ⟨records,ht⟩ := d20
@@ -136,8 +136,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 3780#usize 896#usize 4676#usize rfl]
         have hr : U8.wrapping_add 19#u8 1#u8=20#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d18 : ∃ records, Domain ops logical 27#u8 2874#usize 18#u8 records := by
     obtain ⟨records,ht⟩ := d19
@@ -150,8 +150,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 2879#usize 896#usize 3775#usize rfl]
         have hr : U8.wrapping_add 18#u8 1#u8=19#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d17 : ∃ records, Domain ops logical 27#u8 1973#usize 17#u8 records := by
     obtain ⟨records,ht⟩ := d18
@@ -164,8 +164,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 1978#usize 896#usize 2874#usize rfl]
         have hr : U8.wrapping_add 17#u8 1#u8=18#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d16 : ∃ records, Domain ops logical 27#u8 1072#usize 16#u8 records := by
     obtain ⟨records,ht⟩ := d17
@@ -178,8 +178,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 1077#usize 896#usize 1973#usize rfl]
         have hr : U8.wrapping_add 16#u8 1#u8=17#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d15 : ∃ records, Domain ops logical 27#u8 171#usize 15#u8 records := by
     obtain ⟨records,ht⟩ := d16
@@ -192,8 +192,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 176#usize 896#usize 1072#usize rfl]
         have hr : U8.wrapping_add 15#u8 1#u8=16#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d14 : ∃ records, Domain ops logical 27#u8 134#usize 14#u8 records := by
     obtain ⟨records,ht⟩ := d15
@@ -206,8 +206,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 139#usize 32#usize 171#usize rfl]
         have hr : U8.wrapping_add 14#u8 1#u8=15#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d13 : ∃ records, Domain ops logical 27#u8 129#usize 13#u8 records := by
     obtain ⟨records,ht⟩ := d14
@@ -220,8 +220,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 134#usize 0#usize 134#usize rfl]
         have hr : U8.wrapping_add 13#u8 1#u8=14#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d12 : ∃ records, Domain ops logical 27#u8 124#usize 12#u8 records := by
     obtain ⟨records,ht⟩ := d13
@@ -234,8 +234,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 129#usize 0#usize 129#usize rfl]
         have hr : U8.wrapping_add 12#u8 1#u8=13#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d11 : ∃ records, Domain ops logical 27#u8 119#usize 11#u8 records := by
     obtain ⟨records,ht⟩ := d12
@@ -248,8 +248,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 124#usize 0#usize 124#usize rfl]
         have hr : U8.wrapping_add 11#u8 1#u8=12#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d10 : ∃ records, Domain ops logical 27#u8 114#usize 10#u8 records := by
     obtain ⟨records,ht⟩ := d11
@@ -262,8 +262,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 119#usize 0#usize 119#usize rfl]
         have hr : U8.wrapping_add 10#u8 1#u8=11#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d9 : ∃ records, Domain ops logical 27#u8 109#usize 9#u8 records := by
     obtain ⟨records,ht⟩ := d10
@@ -276,8 +276,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 114#usize 0#usize 114#usize rfl]
         have hr : U8.wrapping_add 9#u8 1#u8=10#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d8 : ∃ records, Domain ops logical 27#u8 104#usize 8#u8 records := by
     obtain ⟨records,ht⟩ := d9
@@ -290,8 +290,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 109#usize 0#usize 109#usize rfl]
         have hr : U8.wrapping_add 8#u8 1#u8=9#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d7 : ∃ records, Domain ops logical 27#u8 99#usize 7#u8 records := by
     obtain ⟨records,ht⟩ := d8
@@ -304,8 +304,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 104#usize 0#usize 104#usize rfl]
         have hr : U8.wrapping_add 7#u8 1#u8=8#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d6 : ∃ records, Domain ops logical 27#u8 94#usize 6#u8 records := by
     obtain ⟨records,ht⟩ := d7
@@ -318,8 +318,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 99#usize 0#usize 99#usize rfl]
         have hr : U8.wrapping_add 6#u8 1#u8=7#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d5 : ∃ records, Domain ops logical 27#u8 89#usize 5#u8 records := by
     obtain ⟨records,ht⟩ := d6
@@ -332,8 +332,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 94#usize 0#usize 94#usize rfl]
         have hr : U8.wrapping_add 5#u8 1#u8=6#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d4 : ∃ records, Domain ops logical 27#u8 84#usize 4#u8 records := by
     obtain ⟨records,ht⟩ := d5
@@ -346,8 +346,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 89#usize 0#usize 89#usize rfl]
         have hr : U8.wrapping_add 4#u8 1#u8=5#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d3 : ∃ records, Domain ops logical 27#u8 79#usize 3#u8 records := by
     obtain ⟨records,ht⟩ := d4
@@ -360,8 +360,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 84#usize 0#usize 84#usize rfl]
         have hr : U8.wrapping_add 3#u8 1#u8=4#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d2 : ∃ records, Domain ops logical 27#u8 42#usize 2#u8 records := by
     obtain ⟨records,ht⟩ := d3
@@ -374,8 +374,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 47#usize 32#usize 79#usize rfl]
         have hr : U8.wrapping_add 2#u8 1#u8=3#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d1 : ∃ records, Domain ops logical 27#u8 37#usize 1#u8 records := by
     obtain ⟨records,ht⟩ := d2
@@ -388,8 +388,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 42#usize 0#usize 42#usize rfl]
         have hr : U8.wrapping_add 1#u8 1#u8=2#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   have d0 : ∃ records, Domain ops logical 27#u8 32#usize 0#u8 records := by
     obtain ⟨records,ht⟩ := d1
@@ -402,8 +402,8 @@ theorem domain (ops : ExternalFuns) (logical : Slice U8)
             PV_RunJoin_LayoutArithmetic41.add 37#usize 0#usize 37#usize rfl]
         have hr : U8.wrapping_add 0#u8 1#u8=1#u8 := by
           apply UScalar.eq_of_val_eq
-          rw [U8.wrapping_add_val_eq]
-          rfl
+          rw [U8.wrapping_add_val_eq,UScalar.size_def]
+          decide
         simpa only [ha,hr] using ht)⟩
   exact d0
 #print axioms domain
