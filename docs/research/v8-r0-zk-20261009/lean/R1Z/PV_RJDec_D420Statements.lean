@@ -13,7 +13,6 @@ import R1Z.PV_RJDec_Factor
 import R1Z.PV_RJDec_ResultCases
 import R1Z.PV_RunJoin_InstalledCausalHeadline
 import R1Z.PV_RunJoin_JoinedCausalHeadline
-import R1Z.PV_RunJoin_CausalHeadline
 #print R1Z.PV_RJDec_RuntimeFields.execute_independent
 #print R1Z.PV_RJDec_RuntimeFields.oracle_underdetermined
 #print R1Z.PV_RJDec_TotalExtension.cases_iff
@@ -41,7 +40,6 @@ import R1Z.PV_RunJoin_CausalHeadline
 #print AspisR1.PV_2TNV_HeadlineFibre.fibre
 #print R1Z.PV_RunJoin_InstalledCausalHeadline.privacy_headline_deployed_candidate
 #print R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
-#print R1Z.PV_RunJoin_CausalHeadline.privacy_headline_deployed_candidate
 #print R1Z.PV_RunJoin_Deployed.Runtime
 #print R1Z.PV_RunJoin_SourceConstructor.runtime
 #print R1Z.PV_RunJoin_LedgerConstructor.runtime
@@ -78,4 +76,3 @@ import R1Z.PV_RunJoin_CausalHeadline
 #print axioms AspisR1.PV_2TNV_HeadlineFibre.fibre
 #print axioms R1Z.PV_RunJoin_InstalledCausalHeadline.privacy_headline_deployed_candidate
 #print axioms R1Z.PV_RunJoin_JoinedCausalHeadline.privacy_headline_deployed_candidate
-#print axioms R1Z.PV_RunJoin_CausalHeadline.privacy_headline_deployed_candidate

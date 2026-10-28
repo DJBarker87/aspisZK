@@ -32,6 +32,7 @@ for name,mod,space,fn,const,err in [('TerminalGuard','ParserR20','pair_forest_te
   simp only [DECODE,first,bind_tc_ok,wrong,Bool.true_eq,↓reduceIte]
 #print axioms wrong_length
 '''.replace('CALL',call).replace('MOD',mod).replace('ERR',q+err).replace('DECODE',decode)
+ if mod=='ParserR15': s=s.replace('PV_RJDec_ParserR15.source]','PV_RJDec_ParserR15.source_chunk]').replace(decode,'PV_RJDec_ParserR15.reference')
  s+='end R1Z.PV_RJDec_'+name+'\n';emit(D/('PV_RJDec_'+name+'.lean'),s)
 s='import R1Z.PV_RJDec_ParserR17\nimport R1Z.PV_RJDec_ParserR10\n'+base.replace('NAME','PaymentPrefix')
 for name,mod,fn in [('transfer','ParserR17','decode_pool_v1_private_transfer_public_v1'),('withdrawal','ParserR10','decode_pool_v1_withdrawal_public_v1')]:
