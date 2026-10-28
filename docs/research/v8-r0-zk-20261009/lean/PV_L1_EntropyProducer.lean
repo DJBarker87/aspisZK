@@ -45,6 +45,5 @@ theorem source_replay (nonce : Array U8 32#usize) (p after : Tape) (status : Sta
   change ok ((drawEvents p (after.used.val-p.used.val),status),after) = _
   rw [count]
   simp only [drawEvents,replayEvents,history,List.flatMap_map]
-  rfl
 #print axioms source_replay
 end PV_L1_EntropyProducer
