@@ -1,0 +1,45 @@
+{
+  "revision": "786826d2a50ff1f087255f7e2f9606e1733c03a5",
+  "complete_emission_occurrences": [
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullExternalFuns.lean",
+      "line": 817,
+      "text": "abbrev core.mem.drop [types : ExternalTypes] [ext : ExternalFuns] := @ExternalFuns.op4 types ext",
+      "sha256": "ba71e3be7eab2c4c59fe09d6f859ab323e74ca207b66fdf44b770382bfb8faf1"
+    },
+    {
+      "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+      "line": 16098,
+      "text": "core.mem.drop level",
+      "sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f"
+    }
+  ],
+  "call_count": 1,
+  "types": [
+    "alloc.vec.Vec Std.U32 = Rust Vec<u32, Global>"
+  ],
+  "source_call": {
+    "path": "crates/aspis-r1-cost-probe/src/host_tree.rs",
+    "line": 29,
+    "sha256": "aef29f8add711c38b9b3a6dd07aa65efd08846a16d23a2c35be179eef5062a61"
+  },
+  "dictionary_op4_assignments": [
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_FormatterDictionaryMap.lean",
+      "line": 30,
+      "text": "op4 := ops.op4",
+      "sha256": "766b02d19e99302fafb2fb4d83d7cd7d47fc05e2babadd04119901dbdaa52274"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PDict_IOCarriers.lean",
+      "line": 15,
+      "text": "op4 := PDict_PathTypes.std.path.PathBuf",
+      "sha256": "2838ad0de1587893a7c2880bd42b0bd204908f076511342b3aa231874d41f35b"
+    }
+  ],
+  "dictionary_conclusion": "PDict_FinalDictionary.selected aliases PDict_Options.selected; its inherited op4 is unchanged. FormatterDictionaryMap explicitly forwards ops.op4; IOCarriers.op4 is ExternalTypes.PathBuf, not ExternalFuns.op4.",
+  "scope": "Explicit op4 invocations only. Implicit Rust drops of other locals are not op4 call sites and are not discharged by this finite row.",
+  "before": "Generic T, arbitrary worlds, fixed callback equals complete native drop Result: refuted and retained.",
+  "after": "Exactly Vec<u32,Global> at host_tree::multiproof_levels; value callback returns ok (); native world consumes vector and frees nonzero-capacity allocation, with zero element destructor calls. Other T and every other ExternalFuns field retained.",
+  "status": "Census checked; source gate, world law and installed callback evidence recorded separately."
+}

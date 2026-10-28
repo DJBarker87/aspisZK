@@ -8,7 +8,10 @@ assert 35500 <= n < 35597
 m=sys.argv[2] if len(sys.argv)>2 else 'R1Z/PV_FXM_DropCounterexample'
 assert m.startswith('R1Z/PV_FXM_')
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
-assert re.findall(r'^import (\S+)',p.read_text(),re.M)==['Init']
+imports=re.findall(r'^import (\S+)',p.read_text(),re.M)
+carrier = imports != ['Init']
+if carrier:
+ pre=json.loads((E/'CARRIER-PREFLIGHT.json').read_text());assert pre['ok']
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads';D=B+'/codex-pv-fxmem-20261028'
 G=B+'/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 def prelaunch(args):
@@ -19,9 +22,11 @@ def prelaunch(args):
   if retry<10:time.sleep(60)
  return r
 
-sha=hashlib.sha256(p.read_bytes()).hexdigest();dep=next(x for x in pre['external'] if x['module']=='Init')
+sha=hashlib.sha256(p.read_bytes()).hexdigest();dep=pre if carrier else next(x for x in pre['external'] if x['module']=='Init')
+if carrier:
+ dep={'carrier':pre,'owned':json.loads((E/'35503-submission.json').read_text())}
 fp=hashlib.sha256(json.dumps(dep,sort_keys=True).encode()).hexdigest()
-meta=dict(id=n,module=m,source_sha256=sha,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],cwd=R,text=True).strip(),dependencies={'Init':dep},deps_fingerprint=fp)
+meta=dict(id=n,module=m,source_sha256=sha,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],cwd=R,text=True).strip(),dependencies=dep,deps_fingerprint=fp)
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n')
 (E/f'{n}-source.lean.txt').write_bytes(p.read_bytes())
 # Admission before uploading any source; both exit status and allowed:true.
