@@ -1,35 +1,28 @@
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NCH_candidate.rs
-@@ -0,0 +1,32 @@
+@@ -0,0 +1,25 @@
 +use super::*;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
-+// Restricted FIRST append only; no arbitrary live-prefix result is claimed.
-+#[kani::requires(v.len()==0 && v.capacity()==256 && v.as_ptr()==base)]
-+#[kani::modifies(v,v.as_mut_ptr())]
-+#[kani::ensures(|_| v.len()==1 && v[0]==value && v.capacity()==256 && v.as_ptr()==base)]
-+fn NCH_pushfirst(v:&mut Vec<u8>,value:u8,base:*const u8){v.push(value);}
-+#[kani::proof_for_contract(NCH_pushfirst)]#[kani::unwind(3)]
-+fn NCH_first_contract(){let mut v=Vec::<u8>::with_capacity(256);let base=v.as_ptr();NCH_pushfirst(&mut v,kani::any(),base);}
-+#[kani::requires(v.len()==0 && v.capacity()==256 && v.as_ptr()==base)]
-+#[kani::modifies(v,v.as_mut_ptr())]#[kani::ensures(|_| v.len()!=1)]
-+fn NCH_firstinvert(v:&mut Vec<u8>,value:u8,base:*const u8){v.push(value);}
-+#[kani::proof_for_contract(NCH_firstinvert)]#[kani::unwind(3)]
-+fn NCH_first_inverted(){let mut v=Vec::<u8>::with_capacity(256);let base=v.as_ptr();NCH_firstinvert(&mut v,kani::any(),base);}
-+#[kani::requires(v.len()==0 && v.capacity()==256)]
-+#[kani::modifies(v,v.as_mut_ptr())]#[kani::ensures(|_| v.len()==1)]
-+fn NCH_firstweak(v:&mut Vec<u8>,value:u8){v.push(value);}
-+#[kani::proof_for_contract(NCH_firstweak)]#[kani::unwind(3)]
-+fn NCH_first_weak_contract(){let mut v=Vec::<u8>::with_capacity(256);NCH_firstweak(&mut v,kani::any());}
-+#[kani::proof]#[kani::unwind(3)]#[kani::stub_verified(NCH_firstweak)]
-+fn NCH_first_unimplied(){let mut v=Vec::<u8>::with_capacity(256);NCH_firstweak(&mut v,kani::any());let cap=v.capacity();core::mem::forget(v);assert_eq!(cap,256,"weak contract has no capacity postcondition");}
-+#[kani::proof]#[kani::unwind(3)]
-+fn NCH_first_real(){let mut v=Vec::<u8>::with_capacity(256);NCH_firstweak(&mut v,kani::any());let cap=v.capacity();core::mem::forget(v);assert_eq!(cap,256);}
-+#[kani::requires(v.len()==0 && v.capacity()==256 && v.as_ptr()==base)]
-+#[kani::modifies(v)]#[kani::ensures(|_| v.len()==1)]
-+fn NCH_firstbadframe(v:&mut Vec<u8>,value:u8,base:*const u8){v.push(value);}
-+#[kani::proof_for_contract(NCH_firstbadframe)]#[kani::unwind(3)]
-+fn NCH_first_modifies(){let mut v=Vec::<u8>::with_capacity(256);let base=v.as_ptr();NCH_firstbadframe(&mut v,kani::any(),base);}
-+#[kani::proof]#[kani::unwind(3)]#[kani::stub_verified(NCH_pushfirst)]
-+fn NCH_first_caller(){let source:[u8;32]=kani::any();let mut v=Vec::<u8>::with_capacity(256);let base=v.as_ptr();v.reserve(32);NCH_pushfirst(&mut v,source[0],base);assert_eq!(v[0],source[0]);assert_eq!(v.len(),1);assert_eq!(v.capacity(),256);assert_eq!(v.as_ptr(),base);}
-+#[kani::proof]#[kani::unwind(3)]#[kani::stub_verified(NCH_pushfirst)]
-+fn NCH_first_caller_wrong(){let mut v=Vec::<u8>::with_capacity(256);let base=v.as_ptr();v.reserve(32);NCH_pushfirst(&mut v,1,base);assert_eq!(v[0],0);}
++fn NCH_geometry(row:u8)->(usize,usize){let r=row as usize;let s=if r<=2{32+5*r}else if r<=14{64+5*r}else if r<=25{155+453*(r-15)}else{6546};let d=if r<=2{32+5*r}else if r<=14{64+5*r}else if r<=25{171+901*(r-15)}else{12898};(s,d)}
++#[kani::proof]#[kani::unwind(2)]
++fn NCH_row_borrow_domain(){
++ let input:[u8;7015]=kani::any();let mut logical:[u8;14759]=kani::any();let base=logical.as_mut_ptr();let row:u8=kani::any();kani::assume(row<27);let(src,dst)=NCH_geometry(row);let size=crate::r1_wire::row_shape(row).unwrap().1;
++ let(semantic,y1)=logical.split_at_mut(13831);assert_eq!(semantic.as_ptr(),base);assert_eq!(y1.as_ptr(),unsafe{base.add(13831)});assert_eq!(y1.len(),928);
++ {let source=&input[src..src+5];let target=&mut semantic[dst..dst+5];assert_eq!(source.len(),5);assert_eq!(target.len(),5);assert_eq!(source.as_ptr(),unsafe{input.as_ptr().add(src)});assert_eq!(target.as_ptr(),unsafe{base.add(dst)});}
++ let start_src=src+5;let start_dst=dst+5;let width=if row>=14{size/2}else{size};let source=&input[start_src..start_src+width];let target=&mut semantic[start_dst..start_dst+size];assert_eq!(source.len(),width);assert_eq!(target.len(),size);assert_eq!(target.as_ptr(),unsafe{base.add(start_dst)});assert!(start_dst+size<=13831);assert!(start_src+width<=7015);
++ if row>=14{assert!(width<=1856);assert_eq!(width%16,0);assert_eq!(target.len(),2*source.len());}else{assert_eq!(source.len(),target.len());}
++}
++#[kani::proof]#[kani::unwind(2)]
++fn NCH_row_borrow_wrong(){let mut logical:[u8;14759]=kani::any();let base=logical.as_mut_ptr();let(_,y1)=logical.split_at_mut(13831);assert_eq!(y1.as_ptr(),unsafe{base.add(13832)},"wrong same-allocation y1 offset");}
++static mut NCH_CELL_SRC:*const u8=core::ptr::null();static mut NCH_CELL_DST:*mut u8=core::ptr::null_mut();
++fn NCH_cell_argument(source:&[u8],target:&mut[u8])->Result<(),CodecError>{unsafe{assert_eq!(source.as_ptr(),NCH_CELL_SRC);assert_eq!(target.as_mut_ptr(),NCH_CELL_DST);}assert_eq!(source.len(),16);assert_eq!(target.len(),32);Ok(())}
++#[kani::proof]#[kani::unwind(2)]#[kani::stub(crate::compact::expand_values,NCH_cell_argument)]
++fn NCH_cell_borrow_domain(){let input:[u8;7015]=kani::any();let mut logical:[u8;14759]=kani::any();let base=logical.as_mut_ptr();let row:u8=kani::any();kani::assume(14<=row&&row<27);let(src,dst)=NCH_geometry(row);let size=crate::r1_wire::row_shape(row).unwrap().1;let i:usize=kani::any();kani::assume(i<size/32);let s=src+5+16*i;let d=dst+5+32*i;
++ assert!(s+16<=src+5+size/2&&s+16<=7015);assert!(d+32<=dst+5+size&&d+32<=13831);
++ let(semantic,y1)=logical.split_at_mut(13831);assert_eq!(y1.as_ptr(),unsafe{base.add(13831)});unsafe{NCH_CELL_SRC=input.as_ptr().add(s);NCH_CELL_DST=base.add(d);}
++ // ONE value-window call, at arbitrary native row and value index.
++ assert!(compact::expand_values(&input[s..s+16],&mut semantic[d..d+32]).is_ok());
++}
++#[kani::proof]#[kani::unwind(2)]#[kani::stub(crate::compact::expand_values,NCH_cell_argument)]
++fn NCH_cell_borrow_wrong(){let input:[u8;7015]=kani::any();let mut logical:[u8;14759]=kani::any();unsafe{NCH_CELL_SRC=input.as_ptr().add(140);NCH_CELL_DST=logical.as_mut_ptr().add(139);}
++ let _=compact::expand_values(&input[139..155],&mut logical[139..171]);}

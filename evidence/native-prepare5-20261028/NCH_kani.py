@@ -54,6 +54,10 @@ if not pinbase.exists():pinbase.write_bytes(pinbytes)
 assert pinbase.read_bytes()==pinbytes
 (E/(a+'-source-pin.json')).write_text(json.dumps(dict(schema='NCH-source-pin-reference-v1',pinset=pinbase.name,sha256=pinhash,bytes=len(pinbytes),original_sha256=pinhash),indent=2)+'\n')
 cfg=dict(attempt=a,kind='kani',module=module,sources=[src,'NCH_src/crates/aspis-r1-cost-probe/src/lib.rs','NCH_src/crates/aspis-r1-cost-probe/src/verifier.rs','NCH_src/crates/aspis-core/src/r0_transcript.rs','NCH_src/crates/aspis-r1-cost-probe/src/sampler.rs','NCH_src/Cargo.toml','NCH_src/Cargo.lock','NCH_src/KMX_stubs.rs','NCH_src/crates/aspis-r1-cost-probe/src/r1_wire.rs'],command=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NCH_src/crates/'+package+'/Cargo.toml','--target-dir',B+'/NCH_target','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',module,'--output-format','terse'],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1','TMPDIR':B+'/NCH_tmp'},deps_fingerprint={'scope':'frozen native source selected by NCH_SOURCE.json; graph audit before every run; arbitrary callee return overapproximations'},expected_time='optimized Kani compilation then native call routing; no arithmetic elimination',reservation_retries=retry)
+if os.environ.get('NCH_KANI_PATTERN')=='1':
+ cfg['command'].remove('--exact')
+ cfg['harness_selection']='prefix substring, four targets serially at -j1; one cargo-kani invocation'
+ cfg['expected_harnesses']=['NCH_row_borrow_domain','NCH_row_borrow_wrong','NCH_cell_borrow_domain','NCH_cell_borrow_wrong']
 if os.environ.get('NCH_KANI_TRACE')=='1':
  cfg['command'][cfg['command'].index('terse')]='regular'
  cfg['command']+=['--cbmc-args','--trace']

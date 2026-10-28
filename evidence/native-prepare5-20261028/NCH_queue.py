@@ -7,6 +7,8 @@ for item in sys.argv[1:]:
  if r.returncode:raise SystemExit(r.returncode)
  receipt=json.loads((E/("NCH_K"+a)/"receipt.json").read_text())
  log=(E/("NCH_K"+a)/"stdout.log").read_text()
+ if "internal compiler error" in log.lower() or "could not compile" in log.lower():
+  raise SystemExit("STOP queue at compiler failure; repair own harness or move to an independent shape")
  if "timed out" in log.lower() or receipt["exit_status"] in [124,137]:
   raise SystemExit("STOP queue at timeout/kill; isolate and split before next launch")
 
