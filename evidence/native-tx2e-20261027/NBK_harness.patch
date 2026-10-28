@@ -1,6 +1,6 @@
 --- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
-@@ -640,3 +640,7 @@
+@@ -640,3 +640,11 @@
          );
      }
  }
@@ -8,6 +8,10 @@
 +#[cfg(kani)]
 +#[path="NBK_codecs.rs"]
 +mod NBK_codecs;
++
++#[cfg(kani)]
++#[path="NBK_more.rs"]
++mod NBK_more;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NBK_codecs.rs
 @@ -0,0 +1,285 @@
@@ -295,4 +299,298 @@
 + let j:usize=kani::any();kani::assume(j<800);
 + NBK_store::<800,768>(&mut out,bytes);
 + assert_eq!(out[j],if j>=768 && j<800 {bytes[j-768]} else {old[j]});
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NBK_more.rs
+@@ -0,0 +1,291 @@
++use crate::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1;
++fn NBK_statement_prefix(master:[u8;32],checkpoint:[u8;32],selected:[u8;32],lane:u8)->Option<PoolV1PairForestTerminalFormatErrorV1>{
++    if master == [0u8; 32]
++        || checkpoint == [0u8; 32]
++        || selected == [0u8; 32]
++    {
++        return Some(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
++    }
++    if usize::from(lane) >= 8 {
++        return Some(PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane);
++    }
++None}
++#[kani::proof]
++fn NBK_statement_prefix_gate(){
++ let m= kani::any();let c=kani::any();let s=kani::any();let l:u8=kani::any();
++ let expected=if m==[0;32]||c==[0;32]||s==[0;32]{Some(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)}else if l>=8{Some(PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane)}else{None};
++ assert_eq!(NBK_statement_prefix(m,c,s,l),expected);
++}
++#[kani::proof]
++fn NBK_asf8_domains_gate(){
++ let mut output:[u8;1880]=kani::any();
++ let base=output.as_mut_ptr();
++ let late=&mut output[144..1664];
++ assert_eq!(late.len(),1520);assert_eq!(late.as_mut_ptr(),base.wrapping_add(144));
++ let payment=&mut output[1664..];
++ assert_eq!(payment.len(),216);assert_eq!(payment.as_mut_ptr(),base.wrapping_add(1664));
++ // Live deployment domain is inside late[32..832], offset 80, hence public[256..288].
++ let domain=&mut output[144+32+80..144+32+112];
++ assert_eq!(domain.len(),32);assert_eq!(domain.as_mut_ptr(),base.wrapping_add(256));
++}
++fn NBK_master_sequence0(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[0];
++   let start=320+8*0;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence0_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence0(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[320] as u64)<<0) | ((bytes[321] as u64)<<8) | ((bytes[322] as u64)<<16) | ((bytes[323] as u64)<<24) | ((bytes[324] as u64)<<32) | ((bytes[325] as u64)<<40) | ((bytes[326] as u64)<<48) | ((bytes[327] as u64)<<56);
++ assert_eq!(rows[j],if j==0{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence1(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[1];
++   let start=320+8*1;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence1_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence1(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[328] as u64)<<0) | ((bytes[329] as u64)<<8) | ((bytes[330] as u64)<<16) | ((bytes[331] as u64)<<24) | ((bytes[332] as u64)<<32) | ((bytes[333] as u64)<<40) | ((bytes[334] as u64)<<48) | ((bytes[335] as u64)<<56);
++ assert_eq!(rows[j],if j==1{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence2(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[2];
++   let start=320+8*2;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence2_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence2(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[336] as u64)<<0) | ((bytes[337] as u64)<<8) | ((bytes[338] as u64)<<16) | ((bytes[339] as u64)<<24) | ((bytes[340] as u64)<<32) | ((bytes[341] as u64)<<40) | ((bytes[342] as u64)<<48) | ((bytes[343] as u64)<<56);
++ assert_eq!(rows[j],if j==2{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence3(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[3];
++   let start=320+8*3;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence3_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence3(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[344] as u64)<<0) | ((bytes[345] as u64)<<8) | ((bytes[346] as u64)<<16) | ((bytes[347] as u64)<<24) | ((bytes[348] as u64)<<32) | ((bytes[349] as u64)<<40) | ((bytes[350] as u64)<<48) | ((bytes[351] as u64)<<56);
++ assert_eq!(rows[j],if j==3{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence4(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[4];
++   let start=320+8*4;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence4_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence4(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[352] as u64)<<0) | ((bytes[353] as u64)<<8) | ((bytes[354] as u64)<<16) | ((bytes[355] as u64)<<24) | ((bytes[356] as u64)<<32) | ((bytes[357] as u64)<<40) | ((bytes[358] as u64)<<48) | ((bytes[359] as u64)<<56);
++ assert_eq!(rows[j],if j==4{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence5(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[5];
++   let start=320+8*5;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence5_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence5(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[360] as u64)<<0) | ((bytes[361] as u64)<<8) | ((bytes[362] as u64)<<16) | ((bytes[363] as u64)<<24) | ((bytes[364] as u64)<<32) | ((bytes[365] as u64)<<40) | ((bytes[366] as u64)<<48) | ((bytes[367] as u64)<<56);
++ assert_eq!(rows[j],if j==5{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence6(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[6];
++   let start=320+8*6;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence6_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence6(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[368] as u64)<<0) | ((bytes[369] as u64)<<8) | ((bytes[370] as u64)<<16) | ((bytes[371] as u64)<<24) | ((bytes[372] as u64)<<32) | ((bytes[373] as u64)<<40) | ((bytes[374] as u64)<<48) | ((bytes[375] as u64)<<56);
++ assert_eq!(rows[j],if j==6{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_master_sequence7(bytes:&[u8;384],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[7];
++   let start=320+8*7;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   false
++}
++#[kani::proof]
++fn NBK_master_sequence7_gate(){
++ let bytes:[u8;384]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_master_sequence7(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[376] as u64)<<0) | ((bytes[377] as u64)<<8) | ((bytes[378] as u64)<<16) | ((bytes[379] as u64)<<24) | ((bytes[380] as u64)<<32) | ((bytes[381] as u64)<<40) | ((bytes[382] as u64)<<48) | ((bytes[383] as u64)<<56);
++ assert_eq!(rows[j],if j==7{word}else{old[j]});
++ assert_eq!(failed,false);
++}
++fn NBK_checkpoint_sequence0(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[0];
++   let start=112+8*0;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence0_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence0(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[112] as u64)<<0) | ((bytes[113] as u64)<<8) | ((bytes[114] as u64)<<16) | ((bytes[115] as u64)<<24) | ((bytes[116] as u64)<<32) | ((bytes[117] as u64)<<40) | ((bytes[118] as u64)<<48) | ((bytes[119] as u64)<<56);
++ assert_eq!(rows[j],if j==0{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence1(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[1];
++   let start=112+8*1;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence1_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence1(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[120] as u64)<<0) | ((bytes[121] as u64)<<8) | ((bytes[122] as u64)<<16) | ((bytes[123] as u64)<<24) | ((bytes[124] as u64)<<32) | ((bytes[125] as u64)<<40) | ((bytes[126] as u64)<<48) | ((bytes[127] as u64)<<56);
++ assert_eq!(rows[j],if j==1{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence2(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[2];
++   let start=112+8*2;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence2_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence2(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[128] as u64)<<0) | ((bytes[129] as u64)<<8) | ((bytes[130] as u64)<<16) | ((bytes[131] as u64)<<24) | ((bytes[132] as u64)<<32) | ((bytes[133] as u64)<<40) | ((bytes[134] as u64)<<48) | ((bytes[135] as u64)<<56);
++ assert_eq!(rows[j],if j==2{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence3(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[3];
++   let start=112+8*3;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence3_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence3(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[136] as u64)<<0) | ((bytes[137] as u64)<<8) | ((bytes[138] as u64)<<16) | ((bytes[139] as u64)<<24) | ((bytes[140] as u64)<<32) | ((bytes[141] as u64)<<40) | ((bytes[142] as u64)<<48) | ((bytes[143] as u64)<<56);
++ assert_eq!(rows[j],if j==3{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence4(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[4];
++   let start=112+8*4;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence4_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence4(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[144] as u64)<<0) | ((bytes[145] as u64)<<8) | ((bytes[146] as u64)<<16) | ((bytes[147] as u64)<<24) | ((bytes[148] as u64)<<32) | ((bytes[149] as u64)<<40) | ((bytes[150] as u64)<<48) | ((bytes[151] as u64)<<56);
++ assert_eq!(rows[j],if j==4{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence5(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[5];
++   let start=112+8*5;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence5_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence5(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[152] as u64)<<0) | ((bytes[153] as u64)<<8) | ((bytes[154] as u64)<<16) | ((bytes[155] as u64)<<24) | ((bytes[156] as u64)<<32) | ((bytes[157] as u64)<<40) | ((bytes[158] as u64)<<48) | ((bytes[159] as u64)<<56);
++ assert_eq!(rows[j],if j==5{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence6(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[6];
++   let start=112+8*6;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence6_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence6(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[160] as u64)<<0) | ((bytes[161] as u64)<<8) | ((bytes[162] as u64)<<16) | ((bytes[163] as u64)<<24) | ((bytes[164] as u64)<<32) | ((bytes[165] as u64)<<40) | ((bytes[166] as u64)<<48) | ((bytes[167] as u64)<<56);
++ assert_eq!(rows[j],if j==6{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++fn NBK_checkpoint_sequence7(bytes:&[u8;192],rows:&mut[u64;8])->bool{
++   let sequence=&mut rows[7];
++   let start=112+8*7;
++   *sequence=u64::from_le_bytes(bytes[start..start+8].try_into().unwrap());
++   *sequence>1048576
++}
++#[kani::proof]
++fn NBK_checkpoint_sequence7_gate(){
++ let bytes:[u8;192]=kani::any();let mut rows:[u64;8]=kani::any();let old=rows;
++ let failed=NBK_checkpoint_sequence7(&bytes,&mut rows);let j:usize=kani::any();kani::assume(j<8);
++ let word=((bytes[168] as u64)<<0) | ((bytes[169] as u64)<<8) | ((bytes[170] as u64)<<16) | ((bytes[171] as u64)<<24) | ((bytes[172] as u64)<<32) | ((bytes[173] as u64)<<40) | ((bytes[174] as u64)<<48) | ((bytes[175] as u64)<<56);
++ assert_eq!(rows[j],if j==7{word}else{old[j]});
++ assert_eq!(failed,word>1048576);
++}
++use super::*;
++use crate::pool_v1::pair_tree_profile::*;
++fn NBK_after_prefix(index:u64,root:[u8;32])->[u8;688]{
++    let mut output = [0u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES];
++    output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);
++    output[4] = POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION;
++    output[5] = crate::pool_v1::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[7] = 1;
++    output[8..16].copy_from_slice(&index.to_le_bytes());
++    output[16..48].copy_from_slice(&root);
++output}
++#[kani::proof]
++fn NBK_after_prefix_gate(){
++ let index:u64=kani::any();let root:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<688);
++ let out=NBK_after_prefix(index,root);
++ let expected=if j<4{b"ASJA"[j]}else if j<8{1}else if j<16{index.to_le_bytes()[j-8]}else if j<48{root[j-16]}else{0};
++ assert_eq!(out[j],expected);
++}
++fn NBK_live_prefix(output:&mut[u8;800],pool:[u8;32],domain:[u8;32],sequence:u64,index:u64,root:[u8;32]){
++    output.fill(0);
++    output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);
++    output[8] = POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;
++    output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);
++    output[48..80].copy_from_slice(&pool);
++    output[80..112].copy_from_slice(&domain);
++    output[112..120].copy_from_slice(&sequence.to_le_bytes());
++    output[120..128].copy_from_slice(&index.to_le_bytes());
++    output[128..160].copy_from_slice(&root);
++}
++#[kani::proof]
++fn NBK_live_prefix_gate(){
++ let mut output:[u8;800]=kani::any();let pool:[u8;32]=kani::any();let domain:[u8;32]=kani::any();let sequence:u64=kani::any();let index:u64=kani::any();let root:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<800);
++ NBK_live_prefix(&mut output,pool,domain,sequence,index,root);
++ let expected=if j<8{POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC[j]}else if j==8{1}else if j<16{0}else if j<48{POOL_V1_PAIR_TREE_FORMAT_BINDING[j-16]}else if j<80{pool[j-48]}else if j<112{domain[j-80]}else if j<120{sequence.to_le_bytes()[j-112]}else if j<128{index.to_le_bytes()[j-120]}else if j<160{root[j-128]}else{0};
++ assert_eq!(output[j],expected);
 +}

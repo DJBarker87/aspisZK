@@ -1,0 +1,46 @@
+{
+  "exit": 0,
+  "log": "{\"allowed\": true, \"bounded_reserved_bytes\": 17179869184, \"requested_bytes\": 8589934592}\n",
+  "reservation": {
+    "requested_bytes": 8589934592,
+    "allowed": true,
+    "utc": 1793151799.6387763,
+    "populated_scopes": [
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r643a16d505694032b942ed445244cb71.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/capped.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt combined-differential-001 -- python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/capped.py /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt combined-differential-001 -- python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/combined-differential-001/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "python3 /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus.py",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6955-baseline 6955 1 0",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/candidate/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6955-candidate 6955 1 0",
+          "/home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/baseline/bin/prover_rw_differential /home/dombarker/project-offloads/codex-pv-integ4-20261027/combined/corpus-6000/6956-baseline 6956 1 0"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 1581129728
+      },
+      {
+        "scope": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfd98b9eb09454f2c9da44c9e1990608f.scope",
+        "memory_max": 8589934592,
+        "processes": [
+          "/usr/bin/python3 /home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/admission-barrier.json python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/capped.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt optimized Rust test compilation followed by finite frozen-row/copy comparison; no elimination -- python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/capped.py /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt optimized Rust test compilation followed by finite frozen-row/copy comparison; no elimination -- python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "/usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-batch2-20261027/candidate/batch2f-box-native-001/receipt/time.log python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "python3 /home/dombarker/project-offloads/codex-pv-batch2-20261027/rowcheck-batch2c.py --box-boundary 001",
+          "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo test --release --offline --locked -j 4 -p aspis-r1-cost-probe --features optimized-terminal,r1p-check,ct-host-prover --lib -- pv_b2_box_boundary --test-threads=1 --nocapture",
+          "/home/dombarker/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc --crate-name aspis_r1_cost_probe --edition=2021 crates/aspis-r1-cost-probe/src/lib.rs --error-format=json --json=diagnostic-rendered-ansi,artifacts,future-incompat --emit=dep-info,link -C opt-level=3 -C embed-bitcode=no --test --cfg feature=\"ct-host-prover\" --cfg feature=\"default\" --cfg feature=\"optimized-terminal\" --cfg feature=\"private-leaf-salts\" --cfg feature=\"prover\" --cfg feature=\"r1p-check\" --check-cfg cfg(docsrs,test) --check-cfg cfg(feature, values(\"audit-eight-way\", \"ct-host-prover\", \"default\", \"detail-phases\", \"optimized-terminal\", \"private-leaf-salts\", \"program-build\", \"prover\", \"public-work-trace\", \"r0-op-count\", \"r1p-check\")) -C metadata=ba084a758f49a357 -C extra-filename=-b9d25d88f73a907f --out-dir /home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps -C strip=debuginfo -L dependency=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps --extern aspis_core=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libaspis_core-ed597fefb435d008.rlib --extern aspis_prover=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libaspis_prover-23524b85ada4895a.rlib --extern aspis_statement=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libaspis_statement-9b7a70cb7abe5e4b.rlib --extern aspis_z4b_probe=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libaspis_z4b_probe-35b2e00b8f9a2e00.rlib --extern getrandom=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libgetrandom-48cb88df4a19f518.rlib --extern serde_json=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libserde_json-a6a05520dbf7394d.rlib --extern sha2=/home/dombarker/project-offloads/codex-pv-rebase-20261026/native-target/release/deps/libsha2-7eaacef3968c9643.rlib -C link-arg=-Wl,--threads=4"
+        ],
+        "memory_high": "6442450944",
+        "memory_swap_max": "0",
+        "memory_current": 325554176
+      }
+    ],
+    "bounded_reserved_bytes": 17179869184,
+    "all_populated_scopes_bounded": true,
+    "safe_limit_bytes": 59055800320,
+    "print_axioms": "N/A: read-only resource preflight"
+  }
+}

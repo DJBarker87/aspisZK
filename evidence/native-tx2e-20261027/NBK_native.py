@@ -69,7 +69,7 @@ elif sys.argv[1]=='run':
  a,harness=sys.argv[2:];assert len(list(E.glob('NBK_K*/receipt.json')))<60
  assert not harness.endswith(('::NBK_store688_gate','::NBK_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
- sources=['NBK_src/Cargo.lock','NBK_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBK_src/crates/aspis-statement/src/pool_v1/NBK_codecs.rs']
+ sources=['NBK_src/Cargo.lock','NBK_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBK_src/crates/aspis-statement/src/pool_v1/NBK_codecs.rs','NBK_src/crates/aspis-statement/src/pool_v1/NBK_more.rs']
  g=a.replace('_K','_G');rc=launch(g,'metadata',['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/NBK_src/Cargo.toml','--locked','--offline','--format-version','1'],sources,120);assert rc['exit_status']==0
  # Cargo diagnostics are not JSON; parse the complete JSON output line only.
  lines=(E/g/'stdout.log').read_text().splitlines();m=next(json.loads(s) for s in lines if s.startswith('{') and '"packages"' in s)
