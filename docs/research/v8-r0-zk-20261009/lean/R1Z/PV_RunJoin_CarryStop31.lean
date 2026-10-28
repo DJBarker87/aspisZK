@@ -44,15 +44,17 @@ theorem stop [ExternalLinear] (index : U64) (roots : Roots)
           rw [hb] at hbval
           simp only [UScalar.ofNatCore_val_eq] at hbval
           omega
-        rw [nextStop,hnext]
+        rw [nextStop,hnext,← hn]
         rw [show 20-level.val = (20-(level.val+1))+1 by omega,
           R0P.digestTrailingOnes,if_neg hbit]
         rw [Nat.shiftRight_add]
         omega
       · rw [if_neg hb] at h
-        obtain ⟨rfl,rfl,rfl⟩ := Prod.mk.inj (Result.ok.inj h)
+        have heq := congrArg (fun x : Frontier × Digest × Usize => x.2.2) (Result.ok.inj h)
+        change level = finish at heq
+        rw [← heq,← hn]
         have hbit : ((index.val >>> level.val) &&& 1) = 0 := by
-          have hsmall := Nat.and_le_right (index.val >>> level.val) 1
+          have hsmall : ((index.val >>> level.val) &&& 1) ≤ 1 := Nat.and_le_right
           have hne : ((index.val >>> level.val) &&& 1) ≠ 1 := by
             intro he
             apply hb
@@ -62,7 +64,9 @@ theorem stop [ExternalLinear] (index : U64) (roots : Roots)
         rw [show 20-level.val = (20-(level.val+1))+1 by omega,
           R0P.digestTrailingOnes,if_pos hbit,Nat.add_zero]
     · rw [if_neg active] at h
-      obtain ⟨rfl,rfl,rfl⟩ := Prod.mk.inj (Result.ok.inj h)
+      have heq := congrArg (fun x : Frontier × Digest × Usize => x.2.2) (Result.ok.inj h)
+      change level = finish at heq
+      rw [← heq,← hn]
       have he : level.val=20 := by change ¬level.val<20 at active; omega
       rw [he]
       rfl
