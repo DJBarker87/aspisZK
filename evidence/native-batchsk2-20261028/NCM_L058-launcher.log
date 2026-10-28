@@ -1,0 +1,61 @@
+{"attempt": "NCM_L058", "exit_status": 1, "wall_seconds": 1.7688964320113882, "peak_rss_kib": "4409732", "swaps": "0", "print_axioms": ["'AspisR1.NCM_OuterDirect.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_OuterDirect.lean:45:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  after0 ((child 0 s).2.1, (child 0 s).2.2)
+in the target expression
+  (have dispatched := (0, s);
+    have out0 := child dispatched.1 dispatched.2;
+    match after0 out0.2 with
+    | NCE_OuterCuts.Next.stop stopped => (out0.1, some 0, stopped)
+    | NCE_OuterCuts.Next.call kind1 next1 =>
+      have out1 := child kind1 next1;
+      match after1 out1.2 with
+      | NCE_OuterCuts.Next.stop stopped => (out0.1 ++ out1.1, some 1, stopped)
+      | NCE_OuterCuts.Next.call kind2 next2 =>
+        have out2 := child kind2 next2;
+        (out0.1 ++ out1.1 ++ out2.1, finish out2.2)) =
+    let
+...
+ NCE_OuterCuts.Next.call kind1 next1 =>
+      have out1 := child kind1 next1;
+      match after1 out1.2 with
+      | NCE_OuterCuts.Next.stop stopped => (out0.1 ++ out1.1, some 1, stopped)
+      | NCE_OuterCuts.Next.call kind2 next2 =>
+        have out2 := child kind2 next2;
+        (out0.1 ++ out1.1 ++ out2.1, finish out2.2)) =
+    let out0 := child 0 s;
+    if out0.2.1 = true then
+      let out1 := child 1 out0.2.2;
+      if out1.2.1 = true then
+        let out2 := child 2 out1.2.2;
+        (out0.1 ++ out1.1 ++ out2.1, if out2.2.1 = true then none else some 2, out2.2.2)
+      else (out0.1 ++ out1.1, some 1, out1.2.2)
+    else (out0.1, some 0, out0.2.2)
+
+start : NCE_OuterCuts.Start
+after0 after1 : NCE_OuterCuts.Continue
+finish : NCE_OuterCuts.Finish
+cut : NCE_OuterCuts.NCE_Native_ThreeTrees start after0 after1 finish
+child : Child
+s : Carrier
+⊢ (have dispatched := (0, s);
+    have out0 := child dispatched.1 dispatched.2;
+    match after0 out0.2 with
+    | NCE_OuterCuts.Next.stop stopped => (out0.1, some 0, stopped)
+    | NCE_OuterCuts.Next.call kind1 next1 =>
+      have out1 := child kind1 next1;
+      match after1 out1.2 with
+      | NCE_OuterCuts.Next.stop stopped => (out0.1 ++ out1.1, some 1, stopped)
+      | NCE_OuterCuts.Next.call kind2 next2 =>
+        have out2 := child kind2 next2;
+        (out0.1 ++ out1.1 ++ out2.1, finish out2.2)) =
+    let out0 := child 0 s;
+    if out0.2.1 = true then
+      let out1 := child 1 out0.2.2;
+      if out1.2.1 = true then
+        let out2 := child 2 out1.2.2;
+        (out0.1 ++ out1.1 ++ out2.1, if out2.2.1 = true then none else some 2, out2.2.2)
+      else (out0.1 ++ out1.1, some 1, out1.2.2)
+    else (out0.1, some 0, out0.2.2)
+'AspisR1.NCM_OuterDirect.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r4babc4d1c17d484d863104e63f0f2551.scope; invocation ID: a41ac7a3099441dab52b968bd2343208

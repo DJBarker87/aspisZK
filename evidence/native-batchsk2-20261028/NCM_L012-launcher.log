@@ -1,0 +1,45 @@
+{"attempt": "NCM_L012", "exit_status": 1, "wall_seconds": 1.945816696039401, "peak_rss_kib": "4415104", "swaps": "0", "print_axioms": ["'AspisR1.NCM_Levels.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_Levels.lean:44:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (annotate ?update ?caller ?program)
+in the target expression
+  ((eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 ++
+        (eval H
+            (match ok out with
+            | fail error =>
+              Program.done
+                (fail error,
+                  { prepared := s.prepared, proof := s.proof,
+                    scratch := NCM_RowsObservation.levelScratch s.scratch (ok out),
+                    log := s.log ++ (eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 })
+            | div =>
+              Progra
+...
+ ++ (eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 })
+          | div =>
+            Program.done
+              (div,
+                { prepared := s.prepared, proof := s.proof,
+                  scratch := NCM_RowsObservation.levelScratch s.scratch (ok out),
+                  log := s.log ++ (eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 })
+          | ok (reference.Level.Stop stopped) =>
+            Program.done
+              (ok (reference.Level.Stop stopped),
+                { prepared := s.prepared, proof := s.proof,
+                  scratch := NCM_RowsObservation.levelScratch s.scratch (ok out),
+                  log := s.log ++ (eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 })
+          | ok (reference.Level.Done a) =>
+            levels native exit height
+              { prepared := s.prepared, proof := s.proof,
+                scratch := NCM_RowsObservation.levelScratch s.scratch (ok out),
+                log := s.log ++ (eval H (transport (MultiproofConePhysicalLevels.level s.scratch physical))).1 }
+              physical)).2) =
+    ((eval H (transport (MultiproofConePhysicalLevels.levels (height + 1) s.scratch physical))).1,
+      (eval H (transport (MultiproofConePhysicalLevels.levels (height + 1) s.scratch physical))).2,
+      { prepared := s.prepared, proof := s.proof,
+        scratch :=
+          NCM_RowsObservation.levelScratch s.scratch
+            (eval H (transport (MultiproofConePhysicalLevels.levels (height + 1) s.scratch physical))).2,
+        log := s.log ++ (eval H (transport (MultiproofConePhysicalLevels.levels (height + 1) s.scratch physical))).1 })
+'AspisR1.NCM_Levels.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2dc798bd7de94761aeb58d1f78243130.scope; invocation ID: 7a54bfbd9a5e4ce2b63ba62eca8e17dc

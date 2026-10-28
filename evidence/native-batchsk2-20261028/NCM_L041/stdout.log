@@ -1,0 +1,53 @@
+NCM_sources/NCM_OuterObservation.lean:53:43: error: unsolved goals
+H : Bytes → State
+child : NCE_OuterCuts.Child
+start : NCE_OuterCuts.Start
+after0 after1 : NCE_OuterCuts.Continue
+finish : NCE_OuterCuts.Finish
+cut : NCE_OuterCuts.NCE_Native_ThreeTrees start after0 after1 finish
+s : Carrier
+⊢ (if (eval H (child 0 s)).2.1 = true then
+      if (eval H (child 1 (eval H (child 0 s)).2.2)).2.1 = true then
+        ((eval H (child 0 s)).1 ++
+            ((eval H (child 1 (eval H (child 0 s)).2.2)).1 ++
+              (eval H (child 2 (eval H (child 1 (eval H (child 0 s)).2.2)).2.2)).1),
+          if (eval H (child 2 (eval H (child 1 (eval H (child 0 s)).2.2)).2.2)).2.1 = true then none else some 2,
+          (eval H (child 2 (eval H (child 1 (eval H (child 0 s)).2.2)).2.2)).2.2)
+      else
+        ((eval H (child 0 s)).1 ++ (eval H (child 1 (eval H (child 0 s)).2.2)).1, some 1,
+          (eval H (child 1 (eval H (child 0 s)).2.2)).2.2)
+    else ((eval H (child 0 s)).1, some 0, (eval H (child 0 s)).2.2)) =
+    ((eval H (child 0 s)).1 ++
+        (eval H
+            (if (eval H (child 0 s)).2.1 = true then
+              AspisV8R19.OracleProgramOps.bind (child 1 (eval H (child 0 s)).2.2) fun out =>
+                if out.1 = true then
+                  AspisV8R19.OracleProgramOps.bind (child 2 out.2) fun out =>
+                    if out.1 = true then Program.done (none, out.2) else Program.done (some 2, out.2)
+                else Program.done (some 1, out.2)
+            else Program.done (some 0, (eval H (child 0 s)).2.2))).1,
+      (eval H
+          (if (eval H (child 0 s)).2.1 = true then
+            AspisV8R19.OracleProgramOps.bind (child 1 (eval H (child 0 s)).2.2) fun out =>
+              if out.1 = true then
+                AspisV8R19.OracleProgramOps.bind (child 2 out.2) fun out =>
+                  if out.1 = true then Program.done (none, out.2) else Program.done (some 2, out.2)
+              else Program.done (some 1, out.2)
+          else Program.done (some 0, (eval H (child 0 s)).2.2))).2)
+NCM_sources/NCM_OuterObservation.lean:55:32: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [sequence, ̲eval_bind,e̵v̵a̵l̵,̵ ̲List.append_nil, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_OuterObservation.lean:55:37: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵e̵q̵u̵e̵n̵c̵e̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲s̲e̲q̲u̲e̲n̲c̲e̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲e̲v̲a̲l̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_OuterObservation.lifted_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCM_OuterObservation.sequence_observation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCM_OuterObservation.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

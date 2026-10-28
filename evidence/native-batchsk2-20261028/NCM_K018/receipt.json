@@ -1,0 +1,71 @@
+{
+  "attempt": "NCM_K018",
+  "kind": "kani",
+  "sources": [
+    "NCM_src/Cargo.lock",
+    "NCM_gate.py",
+    "NCM_KMX_copy_stubs.patch",
+    "NCM_native.patch",
+    "NCM_src/KMX_stubs.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/multiproof.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_spy.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_candidate.rs",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_multiproof.rs",
+    "NCM_src/crates/aspis-core/src/state_only_private_merkle.rs"
+  ],
+  "command": [
+    "python3",
+    "NCM_gate.py",
+    "NCM_K018",
+    "multiproof::NCM_multiproof::NCM_left_reply_wrong",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "timeout": 240,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-batchsk2-20261028/NCM_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph_receipt": "NCM_K018-graph.json"
+  },
+  "expected_time": "optimized cold compilation for first run, then one named native helper byte window SAT step; no SHA or field multiplication",
+  "reservation_retries": 0,
+  "source_revision": "9506188fa83a33c5261720f7f037a7d2d293d4ab",
+  "source_tree_dirty": true,
+  "exit_status": 1,
+  "wall_seconds": 4.757032800000161,
+  "peak_rss_kib": "345156",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r7fe72d24c32c48dcbfa52a89fbe41379.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "332886016",
+  "source_hashes": {
+    "NCM_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NCM_gate.py": "ebe0702d059ba71161415b12f19238ffe32327bd5f8fe4ee1eca0a6c3476d0d5",
+    "NCM_KMX_copy_stubs.patch": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+    "NCM_native.patch": "5706a7040b72dcb607ec0bbb1f848a0bb76178c1308f3d34677cca0b0baa7fc3",
+    "NCM_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NCM_src/crates/aspis-r1-cost-probe/src/lib.rs": "59ed2946d2e7d45ebc9ab8bd0f7943d487d54431b70a9bc389cb1a9b8a0114dc",
+    "NCM_src/crates/aspis-r1-cost-probe/src/candidate.rs": "8a27e1ea8b5b7fe0119d787f2b35ac74d12654c5912339fc1c311f5025b15ab2",
+    "NCM_src/crates/aspis-r1-cost-probe/src/multiproof.rs": "9ba22e44e110bbb5c7333a4f3a76869138897e8d790d8c71e93c3c3c5eecf126",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_spy.rs": "635671b7fc87d1cbdfb6175a5d0e5c26e118409d1ac65b0ca14209637e128e82",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_candidate.rs": "e2012ff58f79f91346eb45364a4639d158a59b5403a4787b7647a4023b7b5e12",
+    "NCM_src/crates/aspis-r1-cost-probe/src/NCM_multiproof.rs": "7ea2551f421bd27c452cefe3ad6b404cc859c0a923253cb50ca004e52409efee",
+    "NCM_src/crates/aspis-core/src/state_only_private_merkle.rs": "6f9f030ea3add192358330f8012c81884a1f599e7dcd6b95ca837a5584ecd451"
+  },
+  "print_axioms": "N/A: kani"
+}

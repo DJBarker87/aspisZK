@@ -1,0 +1,296 @@
+NCM_sources/NCM_Tree.lean:85:10: error: Function expected at
+  List.drop_left
+but this term has type
+  List.drop (List.length ?m.206) (?m.206 ++ ?m.207) = ?m.207
+
+Note: Expected a function because this term is being applied to the argument
+  _
+NCM_sources/NCM_Tree.lean:89:19: error: Application type mismatch: The argument
+  prepared
+has type
+  after.prepared = (reset s).prepared
+but is expected to have type
+  (match
+            NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+              { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+                log := s.log } with
+          | ok (out, after) =>
+            match out with
+            | none => (List.drop (List.length s.log) after.log, false, after)
+            | some val =>
+              (List.drop (List.length s.log) after.log ++
+                  (eval H
+                      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                        nodes after)).1,
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).2)
+          | x => ([], false, s)).2.2.prepared =
+    s.prepared
+in the application
+  And.intro prepared
+NCM_sources/NCM_Tree.lean:89:28: error: Application type mismatch: The argument
+  proof
+has type
+  after.proof = (reset s).proof
+but is expected to have type
+  (match
+            NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+              { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+                log := s.log } with
+          | ok (out, after) =>
+            match out with
+            | none => (List.drop (List.length s.log) after.log, false, after)
+            | some val =>
+              (List.drop (List.length s.log) after.log ++
+                  (eval H
+                      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                        nodes after)).1,
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).2)
+          | x => ([], false, s)).2.2.proof =
+    s.proof
+in the application
+  And.intro proof
+NCM_sources/NCM_Tree.lean:89:34: error: Application type mismatch: The argument
+  reads
+has type
+  after.log = (reset s).log ++ log
+but is expected to have type
+  (match
+            NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+              { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+                log := s.log } with
+          | ok (out, after) =>
+            match out with
+            | none => (List.drop (List.length s.log) after.log, false, after)
+            | some val =>
+              (List.drop (List.length s.log) after.log ++
+                  (eval H
+                      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                        nodes after)).1,
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).2)
+          | x => ([], false, s)).2.2.log =
+    s.log ++
+      (match
+          NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+            { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+              log := s.log } with
+        | ok (out, after) =>
+          match out with
+          | none => (List.drop (List.length s.log) after.log, false, after)
+          | some val =>
+            (List.drop (List.length s.log) after.log ++
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).1,
+              (eval H
+                  (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root nodes
+                    after)).2)
+        | x => ([], false, s)).1
+in the application
+  And.intro reads
+NCM_sources/NCM_Tree.lean:89:60: error: Dependent elimination failed: Failed to solve equation
+  true =
+    (match
+          NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+            { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+              log := s.log } with
+        | ok (out, after) =>
+          match out with
+          | none => (List.drop (List.length s.log) after.log, false, after)
+          | some val =>
+            (List.drop (List.length s.log) after.log ++
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).1,
+              (eval H
+                  (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root nodes
+                    after)).2)
+        | x => ([], false, s)).2.1
+NCM_sources/NCM_Tree.lean:89:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.239 = ?m.239
+but is expected to have type
+  (match
+          NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+            { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+              log := s.log } with
+        | ok (out, after) =>
+          match out with
+          | none => (List.drop (List.length s.log) after.log, false, after)
+          | some val =>
+            (List.drop (List.length s.log) after.log ++
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).1,
+              (eval H
+                  (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root nodes
+                    after)).2)
+        | x => ([], false, s)).2.1 =
+    (eval H
+          (match
+            (eval H
+                (MultiproofConeLeafFold.leaves parsed (Port4B_KeyInstall.queries s.prepared.queries) (↑kind)
+                  (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries s.prepared.queries) batch ↑kind)
+                  (MultiproofConeSlotState.reset s.scratch))).2 with
+          | ok (some after) => MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes after
+          | x => Program.done (false, s.scratch))).2.1
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:99:20: error: Application type mismatch: The argument
+  prepared
+has type
+  after.prepared = (reset s).prepared
+but is expected to have type
+  (match
+            NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+              { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+                log := s.log } with
+          | ok (out, after) =>
+            match out with
+            | none => (List.drop (List.length s.log) after.log, false, after)
+            | some val =>
+              (List.drop (List.length s.log) after.log ++
+                  (eval H
+                      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                        nodes after)).1,
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).2)
+          | x => ([], false, s)).2.2.prepared =
+    s.prepared
+in the application
+  And.intro prepared
+NCM_sources/NCM_Tree.lean:99:29: error: Application type mismatch: The argument
+  proof
+has type
+  after.proof = (reset s).proof
+but is expected to have type
+  (match
+            NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+              { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+                log := s.log } with
+          | ok (out, after) =>
+            match out with
+            | none => (List.drop (List.length s.log) after.log, false, after)
+            | some val =>
+              (List.drop (List.length s.log) after.log ++
+                  (eval H
+                      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                        nodes after)).1,
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).2)
+          | x => ([], false, s)).2.2.proof =
+    s.proof
+in the application
+  And.intro proof
+NCM_sources/NCM_Tree.lean:99:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.320 = ?m.320
+but is expected to have type
+  (match
+          NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+            { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch,
+              log := s.log } with
+        | ok (out, after) =>
+          match out with
+          | none => (List.drop (List.length s.log) after.log, false, after)
+          | some val =>
+            (List.drop (List.length s.log) after.log ++
+                (eval H
+                    (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root
+                      nodes after)).1,
+              (eval H
+                  (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind)) root nodes
+                    after)).2)
+        | x => ([], false, s)).2.1 =
+    (eval H
+          (match
+            (eval H
+                (MultiproofConeLeafFold.leaves parsed (Port4B_KeyInstall.queries s.prepared.queries) (↑kind)
+                  (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries s.prepared.queries) batch ↑kind)
+                  (MultiproofConeSlotState.reset s.scratch))).2 with
+          | ok (some after) => MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes after
+          | x => Program.done (false, s.scratch))).2.1
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:88:30: warning: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲na̵t̵i̵v̵e,̵n̵e̵wReads, ̲MultiproofConeSlotState.slotState, ̲reset, ̲eval_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲model, ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:88:37: warning: This simp argument is unused:
+  newReads
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲native,n̵e̵w̵R̵e̵a̵d̵s̵,̵ ̲MultiproofConeSlotState.slotState, ̲reset, ̲eval_bind, ̲model,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲eval, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:88:96: warning: This simp argument is unused:
+  model
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲native, ̲newReads, ̲MultiproofConeSlotState.slotState, ̲reset,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲eval_bind,m̵o̵d̵ ̲el̵,̵e̵val, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:88:102: warning: This simp argument is unused:
+  eval
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲native, ̲newReads, ̲MultiproofConeSlotState.slotState, ̲reset,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲eval_bind, ̲model,e̵v̵a̵l̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:88:107: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵g̵r̵e̵e̵s̵,̵e̵x̵e̵c̵u̵t̵e̵,̵n̵a̵t̵i̵v̵e̵,̵n̵e̵w̵R̵e̵a̵d̵s̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵l̵o̵t̵S̵t̵a̵t̵e̵.̵s̵l̵o̵t̵S̵t̵a̵t̵e̵,̵r̵e̵s̵e̵t̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵m̵o̵d̵e̵l̵,̵e̵v̵a̵l̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲A̲g̲r̲e̲e̲s̲,̲ ̲e̲x̲e̲c̲u̲t̲e̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲n̲e̲w̲R̲e̲a̲d̲s̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲S̲l̲o̲t̲S̲t̲a̲t̲e̲.̲s̲l̲o̲t̲S̲t̲a̲t̲e̲,̲ ̲r̲e̲s̲e̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲m̲o̲d̲e̲l̲,̲ ̲e̲v̲a̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:98:30: warning: This simp argument is unused:
+  native
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲na̵t̵i̵v̵e,̵n̵e̵wReads, ̲MultiproofConeSlotState.slotState, ̲reset, ̲eval_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲model, ̲observed]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:98:37: warning: This simp argument is unused:
+  newReads
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵g̵r̵e̵e̵s̵,̵e̵x̵e̵c̵u̵t̵e̵,̵n̵a̵t̵i̵v̵e̵,̵n̵e̵w̵R̵e̵a̵d̵s̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵l̵o̵t̵S̵t̵a̵t̵e̵.̵s̵l̵o̵t̵S̵t̵a̵t̵e̵,̵r̵e̵s̵e̵t̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵m̵o̵d̵e̵l̵,̵o̵b̵s̵e̵r̵v̵e̵d̵]̵[̲A̲g̲r̲e̲e̲s̲,̲ ̲e̲x̲e̲c̲u̲t̲e̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲S̲l̲o̲t̲S̲t̲a̲t̲e̲.̲s̲l̲o̲t̲S̲t̲a̲t̲e̲,̲ ̲r̲e̲s̲e̲t̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲m̲o̲d̲e̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:98:96: warning: This simp argument is unused:
+  model
+
+Hint: Omit it from the simp argument list.
+  simp only [Agrees, ̲execute, ̲native, ̲newReads, ̲MultiproofConeSlotState.slotState, ̲reset,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲eval_bind,m̵ ̲od̵e̵l̵,̵o̵bserved]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Tree.lean:98:102: warning: This simp argument is unused:
+  observed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵g̵r̵e̵e̵s̵,̵e̵x̵e̵c̵u̵t̵e̵,̵n̵a̵t̵i̵v̵e̵,̵n̵e̵w̵R̵e̵a̵d̵s̵,̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵l̵o̵t̵S̵t̵a̵t̵e̵.̵s̵l̵o̵t̵S̵t̵a̵t̵e̵,̵r̵e̵s̵e̵t̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵,̵m̵o̵d̵e̵l̵,̵o̵b̵s̵e̵r̵v̵e̵d̵]̵[̲A̲g̲r̲e̲e̲s̲,̲ ̲e̲x̲e̲c̲u̲t̲e̲,̲ ̲n̲a̲t̲i̲v̲e̲,̲ ̲n̲e̲w̲R̲e̲a̲d̲s̲,̲ ̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲S̲l̲o̲t̲S̲t̲a̲t̲e̲.̲s̲l̲o̲t̲S̲t̲a̲t̲e̲,̲ ̲r̲e̲s̲e̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲,̲ ̲m̲o̲d̲e̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_Tree.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

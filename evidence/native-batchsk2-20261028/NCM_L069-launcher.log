@@ -1,0 +1,54 @@
+{"attempt": "NCM_L069", "exit_status": 0, "wall_seconds": 2.049122159020044, "peak_rss_kib": "4441412", "swaps": "0", "print_axioms": ["'AspisR1.NCM_Assembly.bridge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+def AspisR1.NCM_Assembly.Claim : {X : Type} →
+  AspisR1Stage2.aspis_core.digest.Digest32 X →
+    X → (Bytes → State) → Ops → ℕ → NCE_VerifierCuts.Digest → Carrier → OraclePortCompactDraft.Parsed → Prop :=
+fun {X} D hash H ops batch folded s parsed =>
+  have source := NCM_BatchCore.execute D hash H ops batch folded s;
+  have target :=
+    NCE_FirstFailure.observe H (NCM_BatchCore.slot parsed s) [(batch, 0), (batch, 1), (batch, 2)]
+      Port4B_BatchJoin.initial;
+  source.1 = target.1 ∧
+    source.2.1 = Option.map Prod.snd target.2.1 ∧
+      source.2.2.prepared = s.prepared ∧
+        source.2.2.proof = s.proof ∧
+          source.2.2.log = s.log ++ source.1 ∧ (source.2.1 = none → source.2.2.scr
+...
+iction fun a =>
+            bridge._proof_2 batch kind
+              (Eq.mp
+                (Eq.trans bridge._simp_1
+                  (congrArg (Or (kind = 0))
+                    (Eq.trans bridge._simp_1
+                      (congrArg (Or (kind = 1))
+                        (Eq.trans bridge._simp_1
+                          (Eq.trans (congrArg (Or (kind = 2)) bridge._simp_2) (or_false (kind = 2))))))))
+                member)
+              a;
+        NCM_BatchCore.child_agrees D hash H oracle ops base keysZero keysWrite keysSort valueSort get opening leafCut
+          countZero countCopy countScan countStore countHeight paddingCut row rowStore verifier admission outer batch bb
+          s current parsed folded inputs good kind kb)
+      (NCM_BatchCore.initial s) ⟨rfl, rfl⟩;
+  let ⟨reads, right✝⟩ :=
+    Eq.mp
+      (congrArg
+        (fun _a =>
+          have source := _a;
+          have target :=
+            NCE_FirstFailure.observe H (NCM_BatchCore.slot parsed s) (List.map (fun k => (batch, k)) [0, 1, 2])
+              (NCM_BatchCore.initial s).scratch;
+          source.1 = target.1 ∧
+            source.2.1 = Option.map Prod.snd target.2.1 ∧
+              Good s source.2.2 ∧
+                source.2.2.log = (NCM_BatchCore.initial s).log ++ source.1 ∧
+                  (source.2.1 = none → source.2.2.scratch = target.2.2))
+        (Eq.symm
+          (NCM_OuterRefinement.control ops.start ops.after0 ops.after1 ops.finish outer
+            (NCM_BatchCore.child D hash H ops batch folded) (NCM_BatchCore.initial s))))
+      related
+  let ⟨first, right✝¹⟩ := right✝
+  let ⟨good, right✝²⟩ := right✝¹
+  let ⟨log, final⟩ := right✝²
+  ⟨reads, ⟨first, ⟨good.left, ⟨good.right, ⟨log, final⟩⟩⟩⟩⟩
+'AspisR1.NCM_Assembly.bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-ra3f2ffded99a411897111260cf9aff3f.scope; invocation ID: b30dacac8ca346179f9b89672711bedd

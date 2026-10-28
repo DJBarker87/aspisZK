@@ -1,0 +1,112 @@
+NCM_sources/NCM_PaddingScan.lean:22:12: error: unsolved goals
+case cons.false
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+remainder chunk : Slice U8
+rest : List (Slice U8)
+ih :
+  (∀ c ∈ rest, (↑c).length = 8) →
+    ∃ after, NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+sizes : ∀ c ∈ chunk :: rest, (↑c).length = 8
+size : (↑chunk).length = 8
+after : core.slice.iter.ChunksExact U8
+tail : NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+zero : ((↑chunk).all fun b => b == 0#u8) = false
+⊢ (do
+      let (stop, _) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+            (Port3_BatchStd.install base) D () chunk
+      if stop = true then ok (true, { chunks := rest, remainder := remainder })
+        else NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest) =
+    ok (true, { chunks := rest, remainder := remainder })
+NCM_sources/NCM_PaddingScan.lean:26:11: error: unsolved goals
+case cons.true
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+remainder chunk : Slice U8
+rest : List (Slice U8)
+ih :
+  (∀ c ∈ rest, (↑c).length = 8) →
+    ∃ after, NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+sizes : ∀ c ∈ chunk :: rest, (↑c).length = 8
+size : (↑chunk).length = 8
+after : core.slice.iter.ChunksExact U8
+tail : NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+zero : ((↑chunk).all fun b => b == 0#u8) = true
+⊢ (do
+      let (stop, _) ←
+        Port3_NativeBatchBody.verifier.candidate.batch_tree.closure.Insts.CoreOpsFunctionFnMutTupleSharedSliceU8Bool.call_mut
+            (Port3_BatchStd.install base) D () chunk
+      if stop = true then ok (true, { chunks := rest, remainder := remainder })
+        else ok (!rest.all fun c => (↑c).all fun b => b == 0#u8, after)) =
+    ok (!rest.all fun c => (↑c).all fun b => b == 0#u8, after)
+NCM_sources/NCM_PaddingScan.lean:24:34: warning: This simp argument is unused:
+  NCM_PaddingPredicate.observation base D chunk size
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵B̵I̵_̵P̵a̵d̵d̵i̵n̵g̵.̵s̵c̵a̵n̵,̵N̵C̵M̵_̵P̵a̵d̵d̵i̵n̵g̵P̵r̵e̵d̵i̵c̵a̵t̵e̵.̵o̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵ ̵b̵a̵s̵e̵ ̵D̵ ̵c̵h̵u̵n̵k̵ ̵s̵i̵z̵e̵,̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f̵_̵t̵r̵u̵e̵,̵a̵l̵l̵Z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵l̵l̵_̵c̵o̵n̵s̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵a̵n̵d̵]̵[̲N̲B̲I̲_̲P̲a̲d̲d̲i̲n̲g̲.̲s̲c̲a̲n̲,̲ ̲z̲e̲r̲o̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲a̲l̲l̲Z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲_̲c̲o̲n̲s̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:25:23: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_false,b̵ ̲in̵d̵_̵t̵c̵_̵o̵k̵,̵i̵f_true, ̲allZero, ̲List.all_cons, ̲Bool.false_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:25:34: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_false, ̲bind_tc_ok,i̵f̵_̵t̵r̵u̵e̵,̵ ̲allZero, ̲List.all_cons, ̲Bool.false_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:28:34: warning: This simp argument is unused:
+  NCM_PaddingPredicate.observation base D chunk size
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵B̵I̵_̵P̵a̵d̵d̵i̵n̵g̵.̵s̵c̵a̵n̵,̵N̵C̵M̵_̵P̵a̵d̵d̵i̵n̵g̵P̵r̵e̵d̵i̵c̵a̵t̵e̵.̵o̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵ ̵b̵a̵s̵e̵ ̵D̵ ̵c̵h̵u̵n̵k̵ ̵s̵i̵z̵e̵,̵z̵e̵r̵o̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵t̵a̵i̵l̵,̵a̵l̵l̵Z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵a̵l̵l̵_̵c̵o̵n̵s̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲N̲B̲I̲_̲P̲a̲d̲d̲i̲n̲g̲.̲s̲c̲a̲n̲,̲ ̲z̲e̲r̲o̲,̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲a̲i̲l̲,̲ ̲a̲l̲l̲Z̲e̲r̲o̲,̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲_̲c̲o̲n̲s̲,̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:8: warning: This simp argument is unused:
+  Bool.not_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵bind_tc_ok, ̲Bool.false_eq_true, ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Bool.false_eq_true, ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:33: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true, ̲bind_tc_ok,B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵ ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:52: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true, ̲bind_tc_ok, ̲Bool.false_eq_true,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_PaddingScan.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCM_PaddingScan.native_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

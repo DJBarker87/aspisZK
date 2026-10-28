@@ -1,0 +1,222 @@
+NCM_sources/NCM_LeafLoop.lean:60:38: error: `simp` made no progress
+NCM_sources/NCM_LeafLoop.lean:78:6: error: unsolved goals
+case cons.none.refine_1
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+ops : Ops
+getCut : NCE_KeyReadCuts.NCE_Native_KeysRead ops.get
+readerCut : NCE_Native_Opening ops.reader
+leafCut : NCE_Native_Leaf ops.request ops.post
+kind : Usize
+batch n : ℕ
+kb : ↑kind < 3
+small : n ≤ 16
+q : Fin 22 → Fin 262144
+parsed : OraclePortCompactDraft.Parsed
+keys : Std.Array U64 16#usize
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (cursor : Usize) (s : Carrier),
+    (∀ p ∈ rest, p ∈ OraclePortSelectedDraft.batchPositions batch) →
+      Stream keys cursor q batch (↑kind) rest →
+        ↑cursor + rest.length = n →
+          ↑s.scratch.n + rest.length ≤ 16 →
+            (↑s.proof).length = 57607 →
+              parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof →
+                ∃ log out after,
+                  eval H (MultiproofConeLeafFold.leaves parsed q (↑kind) rest s.scratch) = (log, ok out) ∧
+                    run D hash ops kind batch n rest.length keys cursor s = ok (out, after) ∧
+                      after.prepared = s.prepared ∧
+                        after.proof = s.proof ∧
+                          after.log = s.log ++ log ∧ ∀ (t : reference.Scratch), out = some t → after.scratch = t
+cursor : Usize
+s : Carrier
+members : ∀ p ∈ selected :: rest, p ∈ OraclePortSelectedDraft.batchPositions batch
+stream : Stream keys cursor q batch (↑kind) (selected :: rest)
+span : ↑cursor + (selected :: rest).length = n
+room : ↑s.scratch.n + (selected :: rest).length ≤ 16
+size : (↑s.proof).length = 57607
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof
+active : ↑cursor < n
+cb : ↑cursor < 16
+available : ↑s.scratch.n < 16
+key : (↑keys)[↑cursor]! = MultiproofConeSortOrder.packed q batch (↑kind) selected
+observed :
+  NCM_LeafSelected.step D hash ops.get ops.reader ops.request ops.post kind batch s keys cursor =
+    have input := OraclePortSelectedDraft.leaf parsed (↑kind) selected;
+    have afterRead :=
+      { prepared := s.prepared, proof := s.proof, scratch := s.scratch, log := s.log ++ [(input, H input)] };
+    have out :=
+      project s.scratch (cursor.wrapping_add 1#usize)
+        (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H input)) available);
+    ok (out, returnedCarrier afterRead out, keys)
+input : Bytes := OraclePortSelectedDraft.leaf parsed (↑kind) selected
+digest : Std.Array U8 32#usize := encodeState (H input)
+nextPos : Usize := cursor.wrapping_add 1#usize
+nextVal : ↑nextPos = ↑cursor + 1
+physical :
+  reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest =
+    ok (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest available)
+next : MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest available = none
+afterRead : Carrier :=
+  { prepared := s.prepared, proof := s.proof, scratch := s.scratch, log := s.log ++ [(input, H input)] }
+⊢ ((OraclePortSelectedDraft.leaf parsed (↑kind) selected, H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)) ::
+        (eval H
+            (match
+              reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+                (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) with
+            | fail e => Program.done (fail e)
+            | div => Program.done div
+            | ok none => Program.done (ok none)
+            | ok (some t) => MultiproofConeLeafFold.leaves parsed q (↑kind) rest t)).1,
+      (eval H
+          (match
+            reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+              (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) with
+          | fail e => Program.done (fail e)
+          | div => Program.done div
+          | ok none => Program.done (ok none)
+          | ok (some t) => MultiproofConeLeafFold.leaves parsed q (↑kind) rest t)).2) =
+    ([(input, H input)], ok none)
+NCM_sources/NCM_LeafLoop.lean:79:8: error: `simp` made no progress
+NCM_sources/NCM_LeafLoop.lean:95:6: error: unsolved goals
+case cons.some.refine_1
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+ops : Ops
+getCut : NCE_KeyReadCuts.NCE_Native_KeysRead ops.get
+readerCut : NCE_Native_Opening ops.reader
+leafCut : NCE_Native_Leaf ops.request ops.post
+kind : Usize
+batch n : ℕ
+kb : ↑kind < 3
+small : n ≤ 16
+q : Fin 22 → Fin 262144
+parsed : OraclePortCompactDraft.Parsed
+keys : Std.Array U64 16#usize
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (cursor : Usize) (s : Carrier),
+    (∀ p ∈ rest, p ∈ OraclePortSelectedDraft.batchPositions batch) →
+      Stream keys cursor q batch (↑kind) rest →
+        ↑cursor + rest.length = n →
+          ↑s.scratch.n + rest.length ≤ 16 →
+            (↑s.proof).length = 57607 →
+              parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof →
+                ∃ log out after,
+                  eval H (MultiproofConeLeafFold.leaves parsed q (↑kind) rest s.scratch) = (log, ok out) ∧
+                    run D hash ops kind batch n rest.length keys cursor s = ok (out, after) ∧
+                      after.prepared = s.prepared ∧
+                        after.proof = s.proof ∧
+                          after.log = s.log ++ log ∧ ∀ (t : reference.Scratch), out = some t → after.scratch = t
+cursor : Usize
+s : Carrier
+members : ∀ p ∈ selected :: rest, p ∈ OraclePortSelectedDraft.batchPositions batch
+stream : Stream keys cursor q batch (↑kind) (selected :: rest)
+span : ↑cursor + (selected :: rest).length = n
+room : ↑s.scratch.n + (selected :: rest).length ≤ 16
+size : (↑s.proof).length = 57607
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof
+active : ↑cursor < n
+cb : ↑cursor < 16
+available : ↑s.scratch.n < 16
+key : (↑keys)[↑cursor]! = MultiproofConeSortOrder.packed q batch (↑kind) selected
+observed :
+  NCM_LeafSelected.step D hash ops.get ops.reader ops.request ops.post kind batch s keys cursor =
+    have input := OraclePortSelectedDraft.leaf parsed (↑kind) selected;
+    have afterRead :=
+      { prepared := s.prepared, proof := s.proof, scratch := s.scratch, log := s.log ++ [(input, H input)] };
+    have out :=
+      project s.scratch (cursor.wrapping_add 1#usize)
+        (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H input)) available);
+    ok (out, returnedCarrier afterRead out, keys)
+input : Bytes := OraclePortSelectedDraft.leaf parsed (↑kind) selected
+digest : Std.Array U8 32#usize := encodeState (H input)
+nextPos : Usize := cursor.wrapping_add 1#usize
+nextVal : ↑nextPos = ↑cursor + 1
+physical :
+  reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest =
+    ok (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest available)
+nextScratch : reference.Scratch
+next :
+  MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected) digest available =
+    some nextScratch
+nextCursor : nextScratch.at = s.scratch.at
+nextSize : ↑nextScratch.n ≤ ↑s.scratch.n + 1
+nextCaller : Carrier :=
+  { prepared := s.prepared, proof := s.proof, scratch := nextScratch, log := s.log ++ [(input, H input)] }
+tailStream : Stream keys nextPos q batch (↑kind) rest
+log : List (Bytes × State)
+out : Option reference.Scratch
+after : Carrier
+model : eval H (MultiproofConeLeafFold.leaves parsed q (↑kind) rest nextCaller.scratch) = (log, ok out)
+native : run D hash ops kind batch n rest.length keys nextPos nextCaller = ok (out, after)
+prepared : after.prepared = nextCaller.prepared
+proof : after.proof = nextCaller.proof
+reads : after.log = nextCaller.log ++ log
+final : ∀ (t : reference.Scratch), out = some t → after.scratch = t
+⊢ ((OraclePortSelectedDraft.leaf parsed (↑kind) selected, H (OraclePortSelectedDraft.leaf parsed (↑kind) selected)) ::
+        (eval H
+            (match
+              reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+                (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) with
+            | fail e => Program.done (fail e)
+            | div => Program.done div
+            | ok none => Program.done (ok none)
+            | ok (some t) => MultiproofConeLeafFold.leaves parsed q (↑kind) rest t)).1,
+      (eval H
+          (match
+            reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+              (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) with
+          | fail e => Program.done (fail e)
+          | div => Program.done div
+          | ok none => Program.done (ok none)
+          | ok (some t) => MultiproofConeLeafFold.leaves parsed q (↑kind) rest t)).2) =
+    ((input, H input) :: log, ok out)
+NCM_sources/NCM_LeafLoop.lean:97:8: error: `simp` made no progress
+NCM_sources/NCM_LeafLoop.lean:78:54: warning: This simp argument is unused:
+  physical
+
+Hint: Omit it from the simp argument list.
+  simp only [̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵L̵e̵a̵f̵F̵o̵l̵d̵.̵l̵e̵a̵v̵e̵s̵,̵e̵v̵a̵l̵,̵p̵h̵y̵s̵i̵c̵a̵l̵,̵n̵e̵x̵t̵]̵[̲M̲u̲l̲t̲i̲p̲r̲o̲o̲f̲C̲o̲n̲e̲L̲e̲a̲f̲F̲o̲l̲d̲.̲l̲e̲a̲v̲e̲s̲,̲ ̲e̲v̲a̲l̲,̲ ̲n̲e̲x̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:78:63: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval, ̲physical,̵n̵e̵x̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:95:54: warning: This simp argument is unused:
+  physical
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval,p̵h̵y̵s̵i̵c̵a̵l̵,̵ ̲next, ̲model]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:95:63: warning: This simp argument is unused:
+  next
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval, ̲physical,n̵e̵x̵t̵,̵ ̲model]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:95:68: warning: This simp argument is unused:
+  model
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval, ̲physical, ̲next,̵m̵o̵d̵e̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_LeafLoop.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

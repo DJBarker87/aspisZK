@@ -1,0 +1,45 @@
+{"attempt": "NCM_L030", "exit_status": 1, "wall_seconds": 1.791164591908455, "peak_rss_kib": "4416696", "swaps": "0", "print_axioms": ["'AspisR1.NCM_LeafSelected.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_LeafSelected.lean:58:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let out ←
+      NCM_Leaf.step D hash request post kind view s (MultiproofConeLeafFold.key q (↑kind) selected)
+          (cursor.wrapping_add 1#usize)
+    ok (out.1, out.2, keys)
+is not definitionally equal to the right-hand side
+  ok
+    (project s.scratch (cursor.wrapping_add 1#usize)
+        (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) room),
+      returnedCarrier
+        { prepared := s.prepared, proof := s.proof, scratch := s.scratch,
+          log :=
+            s.l
+...
+ s̵i̵m̵p̵ ̵o̵n̵l̵y̵ ̵[̵N̵C̵M̵_̵L̵e̵a̵f̵.̵o̵b̵s̵e̵r̵v̵a̵t̵i̵o̵n̵ ̵D̵ ̵h̵a̵s̵h̵ ̵H̵ ̵l̵a̵w̵ ̵r̵e̵q̵u̵e̵s̵t̵ ̵p̵o̵s̵t̵ ̵l̵e̵a̵f̵C̵u̵t̵ ̵k̵i̵n̵d̵ ̵v̵i̵e̵w̵ ̵s̵
+  ̵ ̵ ̵ ̵ ̵(̵P̵o̵r̵t̵4̵B̵_̵N̵a̵t̵i̵v̵e̵L̵e̵a̵f̵.̵d̵e̵c̵o̵d̵e̵d̵I̵n̵d̵e̵x̵ ̵(̵M̵u̵l̵t̵i̵p̵r̵o̵o̵f̵C̵o̵n̵e̵S̵o̵r̵t̵O̵r̵d̵e̵r̵.̵p̵a̵c̵k̵e̵d̵ ̵q̵ ̵b̵a̵t̵c̵h̵ ̵k̵i̵n̵d̵.̵v̵a̵l̵ ̵s̵e̵l̵e̵c̵t̵e̵d̵)̵)̵
+  ̵ ̵ ̵ ̵ ̵(̵U̵s̵i̵z̵e̵.̵w̵r̵a̵p̵p̵i̵n̵g̵_̵a̵d̵d̵ ̵c̵u̵r̵s̵o̵r̵ ̵1̵#̵u̵s̵i̵z̵e̵)̵ ̵k̵b̵ ̵l̵e̵n̵ ̵r̵o̵o̵m̵,̵a̵d̵d̵r̵e̵s̵s̵,̵i̵n̵d̵e̵x̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵s̲i̲m̲p̲ ̲o̲n̲l̲y̲ ̲[̲a̲d̲d̲r̲e̲s̲s̲,̲ ̲i̲n̲d̲e̲x̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafSelected.lean:57:52: warning: This simp argument is unused:
+  address
+
+Hint: Omit it from the simp argument list.
+  simp only [NCM_Leaf.observation D hash H law request post leafCut kind view s
+       ̲ ̲ ̲ ̲(Port4B_NativeLeaf.decodedIndex (MultiproofConeSortOrder.packed q batch kind.val selected))
+       ̲ ̲ ̲ ̲(Usize.wrapping_add cursor 1#usize) kb len room,a̵d̵d̵r̵e̵s̵s̵,̵
+  ̲ ̲ ̲ ̲ ̲index, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafSelected.lean:57:66: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NCM_Leaf.observation D hash H law request post leafCut kind view s
+       ̲ ̲ ̲ ̲(Port4B_NativeLeaf.decodedIndex (MultiproofConeSortOrder.packed q batch kind.val selected))
+       ̲ ̲ ̲ ̲(Usize.wrapping_add cursor 1#usize) kb len room,
+  ̲ ̲ ̲ ̲ ̲address, ̲index,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_LeafSelected.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r5039825ad629470eb1c3c933c7effab2.scope; invocation ID: 52d62662825243b1afc4a44007223da0

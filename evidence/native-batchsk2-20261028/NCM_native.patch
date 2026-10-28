@@ -1,0 +1,372 @@
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCM_spy.rs
+@@ -0,0 +1,16 @@
++use aspis_core::Digest32;
++#[derive(Clone,Copy)]
++pub struct NCM_Spy<'a> {pub expected:[&'a[u8];3],pub reply:[u8;32],pub mode:u8,pub offset:usize,pub negative:bool}
++impl Digest32 for NCM_Spy<'_> {
++ fn digest(&self,p:&[&[u8]])->[u8;32] {
++  assert_eq!(p.len(),3,"NCM three parts");
++  let geometry=p[0].len()==self.expected[0].len() && p[1].len()==self.expected[1].len() && p[2].len()==self.expected[2].len() && p[0]==self.expected[0];
++  if self.mode==0 {assert!(geometry != self.negative,"NCM geometry/tag");} else {assert!(geometry,"NCM geometry/tag");}
++  if self.mode==1 {assert!((p[1][self.offset]==self.expected[1][self.offset]) != self.negative,"NCM left/value byte");}
++  if self.mode==2 {assert!((p[2][self.offset]==self.expected[2][self.offset]) != self.negative,"NCM right/salt byte");}
++  self.reply
++ }
++}
++pub fn NCM_reply(out:[u8;32],expected:[u8;32],mode:u8,offset:usize,negative:bool) {
++ if mode==3 {assert!((out[offset]==expected[offset]) != negative,"NCM reply byte");}
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCM_candidate.rs
+@@ -0,0 +1,158 @@
++use super::*;
++use crate::NCM_spy::{NCM_Spy,NCM_reply};
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_key_read_native() {let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let expected:u64=kani::any();kani::assume(keys[i]==expected);let out=batch_key_at(&keys,i);assert!((out==expected) != false,"NCM selected key");}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_key_read_wrong() {let keys:[u64;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let expected:u64=kani::any();kani::assume(keys[i]==expected);let out=batch_key_at(&keys,i);assert!((out==expected) != true,"NCM selected key");}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_geometry_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:0,offset:pos,negative:false};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_geometry_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:0,offset:pos,negative:true};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_first_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<480);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:1,offset:pos,negative:false};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_first_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<480);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:1,offset:pos,negative:true};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_second_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:2,offset:pos,negative:false};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_second_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:2,offset:pos,negative:true};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_reply_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:3,offset:pos,negative:false};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf0_reply_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C1_TAG],&q[0..480],&q[608..640]],reply,mode:3,offset:pos,negative:true};let out=batch_leaf(h,0,&q);NCM_reply(out,reply,3,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_geometry_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:0,offset:pos,negative:false};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_geometry_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:0,offset:pos,negative:true};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_first_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<128);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:1,offset:pos,negative:false};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_first_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<128);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:1,offset:pos,negative:true};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_second_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:2,offset:pos,negative:false};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_second_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:2,offset:pos,negative:true};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_reply_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:3,offset:pos,negative:false};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf1_reply_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,merkle::C2_TAG],&q[480..608],&q[640..672]],reply,mode:3,offset:pos,negative:true};let out=batch_leaf(h,1,&q);NCM_reply(out,reply,3,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_geometry_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:0,offset:pos,negative:false};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_geometry_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:0,offset:pos,negative:true};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_first_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<128);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:1,offset:pos,negative:false};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_first_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<128);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:1,offset:pos,negative:true};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_second_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:2,offset:pos,negative:false};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_second_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:2,offset:pos,negative:true};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_reply_native(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:3,offset:pos,negative:false};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_leaf2_reply_wrong(){let q:[u8;832]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let h=NCM_Spy{expected:[&[0x10,0x72],&q[672..800],&q[800..832]],reply,mode:3,offset:pos,negative:true};let out=batch_leaf(h,2,&q);NCM_reply(out,reply,3,pos,true);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NCM_multiproof.rs
+@@ -0,0 +1,146 @@
++use super::*;
++use crate::NCM_spy::{NCM_Spy,NCM_reply};
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_geometry_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:0,offset:pos,negative:false};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_geometry_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:0,offset:pos,negative:true};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_first_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:1,offset:pos,negative:false};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_first_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:1,offset:pos,negative:true};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_second_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:2,offset:pos,negative:false};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_second_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:2,offset:pos,negative:true};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_reply_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:3,offset:pos,negative:false};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_occupied_reply_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<15);let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&values[i+1]],reply,mode:3,offset:pos,negative:true};let out=occupied_binary_parent(h,&values,i);NCM_reply(out,reply,3,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_geometry_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:0,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_geometry_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:0,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_first_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:1,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_first_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:1,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_second_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:2,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_second_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:2,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_reply_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:3,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_left_reply_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&values[i],&sibling],reply,mode:3,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,true);NCM_reply(out,reply,3,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_geometry_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:0,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,0,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_geometry_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<1);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:0,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,0,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_first_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:1,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,1,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_first_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:1,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,1,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_second_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:2,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,2,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_second_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:2,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,2,pos,true);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_reply_native(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:3,offset:pos,negative:false};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,3,pos,false);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++fn NCM_right_reply_wrong(){let values:[[u8;32];16]=kani::any();let reply:[u8;32]=kani::any();let pos:usize=kani::any();kani::assume(pos<32);let i:usize=kani::any();kani::assume(i<16);let sibling:[u8;32]=kani::any();let h=NCM_Spy{expected:[&[BINARY_NODE_TAG],&sibling,&values[i]],reply,mode:3,offset:pos,negative:true};let out=sibling_binary_parent(h,&values,i,&sibling,false);NCM_reply(out,reply,3,pos,true);}
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,11 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++#[allow(non_snake_case)]
++pub mod KMX_stubs;
++#[cfg(kani)]
++#[allow(non_snake_case)]
++pub mod NCM_spy;
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,8 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++#[allow(non_snake_case)]
++#[path="NCM_candidate.rs"]
++mod NCM_candidate;
+--- a/crates/aspis-r1-cost-probe/src/multiproof.rs
++++ b/crates/aspis-r1-cost-probe/src/multiproof.rs
+@@ -354,3 +354,8 @@
+         assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
+     }
+ }
++
++#[cfg(kani)]
++#[allow(non_snake_case)]
++#[path="NCM_multiproof.rs"]
++mod NCM_multiproof;

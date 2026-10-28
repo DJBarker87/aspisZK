@@ -1,0 +1,128 @@
+NCM_sources/NCM_Tree.lean:90:11: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.238 = ?m.238
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:90:15: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.242 = ?m.242
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:100:12: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.313 = ?m.313
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:100:16: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.317 = ?m.317
+but is expected to have type
+  True
+in the application
+  And.intro rfl
+NCM_sources/NCM_Tree.lean:104:6: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case some.refine_2
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+oracle : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+keys : NCM_KeysLeaves.Keys
+keysZero : NCE_KeyProducerCuts.NCE_Native_KeysZero keys.create
+keysWrite : NCE_KeyCuts.NCE_Native_KeysWrite keys.write
+keysSort : NCE_SortCarrierCuts.NCE_Native_KeysSortCarrier keys.sort
+leaf : NCM_LeafLoop.Ops
+get : NCE_KeyReadCuts.NCE_Native_KeysRead leaf.get
+opening : NCE_Native_Opening leaf.reader
+leafCut : NCE_LeafCuts.NCE_Native_Leaf leaf.request leaf.post
+count : NCM_CountCarrier.Ops
+countZero : NCE_CountInitCuts.NCE_Native_CountZero count.create
+countCopy : NCE_CountInitCuts.NCE_Native_CountCopy count.copy
+countScan : NCE_CountCuts.NCE_Native_CountScan count.scan
+countStore : NCE_CountRowCuts.NCE_Native_CountCommit count.store
+countHeight : NCE_CountLevelCuts.NCE_Native_CountHeight count.height
+base : Port3_NativeBatchBody.Ops
+padding : NCE_PaddingCuts.Body Carrier
+paddingCut : NCE_PaddingCuts.NCE_Native_Padding (NCM_PaddingPredicate.predicate base D) padding
+verifier : NCM_Tail.Verifier
+row : NCE_CarrierEffects.NCE_Native_Row H verifier.node
+control : NCE_VerifierCuts.NCE_Native_Verifier verifier.entry verifier.exit verifier.finish
+admission : NCE_AdmissionCuts.NCE_Native_Admission verifier.pair verifier.range
+batch : ℕ
+kind : Usize
+bb : batch < 2
+kb : ↑kind < 3
+s : Carrier
+queries : ∀ j < 22, ↑(↑s.prepared.queries)[j]! < 262144
+size : (↑s.proof).length = 57607
+parsed : OraclePortCompactDraft.Parsed
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof
+root : NCE_VerifierCuts.Digest
+rootValue : root = encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)
+nodes : Slice U8
+nodeSize : (↑nodes).length = 32 * OraclePortSelectedDraft.capacity (3 * batch + ↑kind)
+cap : OraclePortSelectedDraft.capacity (3 * batch + ↑kind) ≤ 172
+countWidth : ↑(width batch) = (OraclePortSelectedDraft.batchPositions batch).length
+log : List (Bytes × State)
+after : Carrier
+prepared : after.prepared = s.prepared
+proof : after.proof = s.proof
+reads : after.log = s.log ++ log
+newReads : List.drop (List.length s.log) after.log = log
+next : reference.Scratch
+model :
+  eval H
+      (MultiproofConeLeafFold.leaves parsed (Port4B_KeyInstall.queries s.prepared.queries) (↑kind)
+        (OraclePortFrozenOrder.sortedPositions (Port4B_KeyInstall.queries s.prepared.queries) batch ↑kind)
+        (MultiproofConeSlotState.reset s.scratch)) =
+    (log, ok (some next))
+native :
+  NCM_KeysLeaves.run D hash keys leaf kind batch (width batch)
+      { prepared := s.prepared, proof := s.proof, scratch := MultiproofConeSlotState.reset s.scratch, log := s.log } =
+    ok (some next, after)
+final : ∀ (t : reference.Scratch), some next = some t → after.scratch = t
+scratch : after.scratch = next
+tail :
+  eval H
+      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    eval H
+      (NCM_Tail.model (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after)
+tailModel :
+  eval H
+      (NCM_Tail.model (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    have out := eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes after.scratch);
+    (out.1, out.2.1,
+      { prepared := after.prepared, proof := after.proof, scratch := out.2.2, log := after.log ++ out.1 })
+observed :
+  eval H
+      (NCM_Tail.run count padding verifier (OraclePortSelectedDraft.capacity (3 * batch + ↑kind))
+        (encodeState (OraclePortBatchDraft.committedRoot parsed ↑kind)) nodes after) =
+    have out := eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes next);
+    (out.1, out.2.1,
+      { prepared := after.prepared, proof := after.proof, scratch := out.2.2, log := after.log ++ out.1 })
+accepted : (eval H (MultiproofConeVerifyState.tailState parsed batch (↑kind) nodes next)).2.1 = true
+⊢ True
+NCM_sources/NCM_Tree.lean:102:17: warning: This simp argument is unused:
+  reset
+
+Hint: Omit it from the simp argument list.
+  simp only [r̵e̵s̵e̵t̵,̵List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_Tree.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

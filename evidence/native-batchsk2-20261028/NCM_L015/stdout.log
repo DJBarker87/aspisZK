@@ -1,0 +1,79 @@
+NCM_sources/NCM_Verifier.lean:67:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval H (NCM_Levels.levels node exit 18 s physical)
+in the target expression
+  eval H
+      (if decide (True ∧ True) = true then
+        AspisV8R19.OracleProgramOps.bind (NCM_Levels.levels node exit 18 s physical) fun out =>
+          Program.done (returned finish root physical out)
+      else Program.done (false, s)) =
+    eval H
+      (if True ∧ True then
+        AspisV8R19.OracleProgramOps.bind
+          (annotate NCM_RowsObservation.levelScratch s
+            (transport (MultiproofConePhysicalLevels.levels 18 s.scratch physical)))
+          fun out => Program.done (MultiproofConePhysicalVerify.finish root physical out.1, out.2)
+      else Program.done (false, s))
+
+case pos
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (rawOracle H input)
+node : Node
+row : NCE_Native_Row H node
+entry : NCE_VerifierCuts.Entry
+exit : NCE_VerifierCuts.Exit
+finish : NCE_VerifierCuts.Finish
+control : NCE_VerifierCuts.NCE_Native_Verifier entry exit finish
+pair range : NCE_AdmissionCuts.Predicate
+predicates : NCE_AdmissionCuts.NCE_Native_Admission pair range
+root : NCE_VerifierCuts.Digest
+physical : Slice U8
+s : Carrier
+size : (↑physical).length ≤ 5504
+zero : ↑s.scratch.at = 0
+admitted :
+  NCE_VerifierAdmission.admitted entry pair range s (↑physical).length =
+    (decide
+        (OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s.scratch 0 ↑s.scratch.n)) ∧
+          (↑physical).length % 32 = 0),
+      s)
+guard :
+  OraclePortFrozenOrder.wellFormed (List.map Prod.fst (live s.scratch 0 ↑s.scratch.n)) ∧ (↑physical).length % 32 = 0
+length : (List.map Prod.fst (live s.scratch 0 ↑s.scratch.n)).length = ↑s.scratch.n
+domain : Domain physical s.scratch
+⊢ eval H
+      (if decide (True ∧ True) = true then
+        AspisV8R19.OracleProgramOps.bind (NCM_Levels.levels node exit 18 s physical) fun out =>
+          Program.done (returned finish root physical out)
+      else Program.done (false, s)) =
+    eval H
+      (if True ∧ True then
+        AspisV8R19.OracleProgramOps.bind
+          (annotate NCM_RowsObservation.levelScratch s
+            (transport (MultiproofConePhysicalLevels.levels 18 s.scratch physical)))
+          fun out => Program.done (MultiproofConePhysicalVerify.finish root physical out.1, out.2)
+      else Program.done (false, s))
+NCM_sources/NCM_Verifier.lean:55:21: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Verifier.lean:55:33: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲e̲v̲a̲l̲_̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_Verifier.lean:55:41: warning: This simp argument is unused:
+  eval_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵e̵v̵a̵l̵_̵b̵i̵n̵d̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_Verifier.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

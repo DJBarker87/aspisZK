@@ -1,0 +1,34 @@
+{"attempt": "NCM_L070", "exit_status": 0, "wall_seconds": 2.198934103944339, "peak_rss_kib": "4435136", "swaps": "0", "print_axioms": ["'AspisR1.NCM_Batch.bridge' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem AspisR1.NCM_Batch.bridge : ∀ {X : Type} (D : AspisR1Stage2.aspis_core.digest.Digest32 X) (hash : X)
+  (H : Bytes → State),
+  (∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)) →
+    ∀ (ops : Ops) (base : Port3_NativeBatchBody.Ops),
+      NCE_KeyProducerCuts.NCE_Native_KeysZero ops.keys.create →
+        NCE_KeyCuts.NCE_Native_KeysWrite ops.keys.write →
+          NCE_SortCarrierCuts.NCE_Native_KeysSortCarrier ops.keys.sort →
+            NCE_SortCuts.NCE_Native_KeysSort ops.valueSort →
+              NCE_KeyReadCuts.NCE_Native_KeysRead ops.leaf.get →
+                NCE_Native_Opening ops.leaf.reader →
+                  NCE_LeafCu
+...
+               NCE_CountRowCuts.NCE_Native_CountCommit ops.count.store →
+                            NCE_CountLevelCuts.NCE_Native_CountHeight ops.count.height →
+                              NCE_PaddingCuts.NCE_Native_Padding (NCM_PaddingPredicate.predicate base D) ops.padding →
+                                NCE_CarrierEffects.NCE_Native_Row H ops.verifier.node →
+                                  NCE_RowStoreCuts.NCE_Native_RowStore ops.rowStore →
+                                    NCE_VerifierCuts.NCE_Native_Verifier ops.verifier.entry ops.verifier.exit
+                                        ops.verifier.finish →
+                                      NCE_AdmissionCuts.NCE_Native_Admission ops.verifier.pair ops.verifier.range →
+                                        NCE_OuterCuts.NCE_Native_ThreeTrees ops.start ops.after0 ops.after1 ops.finish →
+                                          ∀ (s : Carrier) (parsed : OraclePortCompactDraft.Parsed)
+                                            (folded : NCE_VerifierCuts.Digest),
+                                            Inputs s parsed folded →
+                                              NCM_Assembly.Claim D hash H ops 0 folded s parsed :=
+fun {X} D hash H oracle ops base keysZero keysWrite keysSort valueSort get opening leafCut countZero countCopy countScan
+    countStore countHeight paddingCut row rowStore verifier admission outer s parsed folded inputs =>
+  NCM_Assembly.bridge D hash H oracle ops base keysZero keysWrite keysSort valueSort get opening leafCut countZero
+    countCopy countScan countStore countHeight paddingCut row rowStore verifier admission outer 0
+    (of_decide_eq_true (id (Eq.refl true))) s parsed folded inputs
+'AspisR1.NCM_Batch.bridge' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r50af3afb09744585b498aef60a605c6b.scope; invocation ID: f2d97db1c38449cfaf1be0d011db8fd6

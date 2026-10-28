@@ -1,0 +1,52 @@
+{"attempt": "NCM_L045", "exit_status": 1, "wall_seconds": 1.690296720014885, "peak_rss_kib": "4411196", "swaps": "0", "print_axioms": ["'AspisR1.NCM_PaddingScan.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCM_PaddingScan.native_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_PaddingScan.lean:22:12: error: unsolved goals
+case cons.false
+base : Port3_NativeBatchBody.Ops
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+remainder chunk : Slice U8
+rest : List (Slice U8)
+ih :
+  (∀ c ∈ rest, (↑c).length = 8) →
+    ∃ after, NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+sizes : ∀ c ∈ chunk :: rest, (↑c).length = 8
+size : (↑chunk).length = 8
+after : core.slice.iter.ChunksExact U8
+tail : NBI_Padding.scan (NCM_PaddingPredicate.predicate base D) remainder rest = ok (!allZero rest, after)
+zero : ((↑chunk).all fun b => b == 0#u8) = false
+⊢ (do
+      let (stop, _) ←
+        Port3_NativeBatchBody.verifi
+...
+ ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵,̵bind_tc_ok, ̲Bool.false_eq_true, ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:22: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Bool.false_eq_true, ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:33: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true, ̲bind_tc_ok,B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵ ̲if_false, ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_PaddingScan.lean:29:52: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NBI_Padding.scan, ̲NCM_PaddingPredicate.observation base D chunk size, ̲zero,
+          Bool.not_true, ̲bind_tc_ok, ̲Bool.false_eq_true,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲tail, ̲allZero, ̲List.all_cons, ̲Bool.true_and]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_PaddingScan.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCM_PaddingScan.native_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc5be6ad65f13430db872f472385f1b64.scope; invocation ID: 4656d61cc5544a228984e6513637d738

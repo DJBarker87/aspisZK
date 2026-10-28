@@ -1,0 +1,27 @@
+NCM_sources/NCM_BatchTypes.lean:48:95: error: unsolved goals
+case «1»
+s current : Carrier
+parsed : OraclePortCompactDraft.Parsed
+folded : NCE_VerifierCuts.Digest
+inputs : Inputs s parsed folded
+good : Good s current
+kind : ℕ
+bound : 1 < 3
+⊢ (if 1 = 0 then encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+    else encodeState (OraclePortBatchDraft.committedRoot parsed 1)) =
+    encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+
+case «2»
+s current : Carrier
+parsed : OraclePortCompactDraft.Parsed
+folded : NCE_VerifierCuts.Digest
+inputs : Inputs s parsed folded
+good : Good s current
+kind : ℕ
+bound : 2 < 3
+⊢ (if 2 = 0 then encodeState (OraclePortBatchDraft.committedRoot parsed 0)
+    else
+      if 2 = 1 then encodeState (OraclePortBatchDraft.committedRoot parsed 1)
+      else encodeState (OraclePortBatchDraft.committedRoot parsed 2)) =
+    encodeState (OraclePortBatchDraft.committedRoot parsed 2)
+'AspisR1.NCM_BatchTypes.root_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

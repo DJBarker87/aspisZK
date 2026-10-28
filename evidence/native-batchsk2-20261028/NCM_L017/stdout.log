@@ -1,0 +1,23 @@
+NCM_sources/NCM_Leaf.lean:36:2: error: Type mismatch
+  post_association request post cut s index ?m.43 pos room
+has type
+  post s index ?m.43 pos =
+    have out := project s.scratch pos (MultiproofConeLeafContent.next s.scratch index ?m.43 room);
+    ok (out, returnedCarrier s out)
+but is expected to have type
+  post
+      { prepared := s.prepared, proof := s.proof, scratch := s.scratch,
+        log := s.log ++ [(flatten (Port4B_LeafCode.input kind view), H (flatten (Port4B_LeafCode.input kind view)))] }
+      index (encodeState (H (flatten (Port4B_LeafCode.input kind view)))) pos =
+    ok
+      (project s.scratch pos
+          (MultiproofConeLeafContent.next s.scratch index (encodeState (H (flatten (Port4B_LeafCode.input kind view))))
+            room),
+        returnedCarrier
+          { prepared := s.prepared, proof := s.proof, scratch := s.scratch,
+            log :=
+              s.log ++ [(flatten (Port4B_LeafCode.input kind view), H (flatten (Port4B_LeafCode.input kind view)))] }
+          (project s.scratch pos
+            (MultiproofConeLeafContent.next s.scratch index
+              (encodeState (H (flatten (Port4B_LeafCode.input kind view)))) room)))
+'AspisR1.NCM_Leaf.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
