@@ -63,6 +63,7 @@ theorem complete_result (p : Public) (claims : Claims) (point : Point) (c : Chal
       | ok equality =>
         simp only [bind_tc_ok,PV_B3P_FieldExt227.qmul_result,
           PV_B3P_FieldExt227.qadd_result,PV_B3P_FieldExt227.qsub_result,combination]
+        all_goals rfl
 
 #print axioms selected_result
 #print axioms complete_result
