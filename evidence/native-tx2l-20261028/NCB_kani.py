@@ -5,6 +5,7 @@ from NCB_expected import expected
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-native-tx2l-20261028';S=B+'/NCB_src'
 a,crate,harness=sys.argv[1:4]
+if (E/'NCB_HOLD').exists():raise SystemExit('Own queue hold before admission; no launch')
 extra=Path(sys.argv[4]) if len(sys.argv)>4 else None
 assert len(list(E.glob('NCB_K*/receipt.json')))<70
 assert len(list(E.glob('NCB_L*/receipt.json')))<80
@@ -122,6 +123,6 @@ r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 out=json.loads(r.stdout);(E/(a+'-lock-after.log')).write_text(out['lock_after']+'\n');assert out['lock_after']==locksha,'STOP lock drift'
 for n,t in out['files'].items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 assert a+'/receipt.json' in out['files'],'STOP missing submitted receipt'
-rc=json.loads(out['files'][a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print(out['files'][a+'/stdout.log'][-6000:])
+rc=json.loads(out['files'][a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print('\n'.join(out['files'][a+'/stdout.log'].splitlines()[-26:]))
 
 with (E/'NCB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')

@@ -1,0 +1,5 @@
+# NCB U08 — OPEN
+
+Import NBS_GeometryDomains/Install and NBQ prefix/backward proofs unchanged. No nonempty-range closure follows from the inherited getter, rejected/empty gates or mathematical induction alone. Remaining work is the SAME native producer/read/push/multiply/iterator association, nonempty geometry row/outer-loop composition, resize/reverse/group ownership/cleanup and propagation of each callee domain.
+
+K014 is the intended failing r1 copy control. K015/K016's combined110-cell prefix prestate experiments time out and have no credit. K017–K020 split them into selected SAME native flat read, source index increment, termination test and field-call operand/reply routing; all pass. M31::mul is a natural-spec stub paired to LPf_BaseMultiply.source, not native field multiplication. The inherited mitigated NBS_K033 push/frame window is reused unchanged. NCB_PrefixNativeStep.source/stopped prove how exactly these local read/append/product/index observations associate to the actual cohort body on one arbitrary prestate. Whole native trace/ownership is still OPEN.

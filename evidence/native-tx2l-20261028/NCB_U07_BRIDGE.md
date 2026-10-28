@@ -1,0 +1,9 @@
+# NCB U07 — OPEN
+
+Import all NBS/NBQ model inductions and qualified native windows unchanged. No K030 timeout credit. Work targets source tail continuations, iterator/read/state association and caller byte domains. Scalar-domain work derives the existing forward theorem's domain from the SAME accepted cohort call, using FJl_SlotReads and decoder canonicality; it does not replace native accepted-run association.
+
+The requested adapter audit is unresolved because the named coherent workspace lacks the adapter module. NCB claims no adopted-cohort identity for that adapter; see NCB_ADAPTER_AUDIT.json. Independent dot helper results do not use that adapter as an invented replacement.
+
+NCB_ScalarDomains.accepted and NCB_TailDomains.accepted now derive scalar and all three tail decoder domains from the SAME successful cohort slot call; NCB_TailOffsets identifies the exact three source reads. NCB_CoefficientDomains.returned identifies the SAME powers result with NBS's canonical constructor. These remove no native caller premise.
+
+K021–K023 pass the exact frozen scalar/coefficient read prefix on arbitrary608-byte q, arbitrary typed29-entry g (all bit-valid representations, overapproximating canonical coefficients), arbitrary active Range start/end≤26 and slot<4. Selected scalar bytes are assumed canonical on THAT q; actual accepted native scan must establish this. They check native cursor update, decoded scalar/canonicality and selected SAME coefficient. K024 covers terminal Range, K025–K027 actual StepBy first/next/last observable states. No full loop is unwound. NCB_DotNativeStep.source associates the eight-cell native observations with the SAME actual model range/read/coefficient/prestate; it does not assume a whole dot result. Complete native same-execution iteration trace and tail continuation remain OPEN.
