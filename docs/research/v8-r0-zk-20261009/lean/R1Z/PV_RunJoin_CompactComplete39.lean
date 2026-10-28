@@ -19,6 +19,7 @@ theorem encode (logical : Slice U8) (out : alloc.vec.Vec U8) (n : Nat)
     apply UScalar.eq_of_val_eq
     change r.val=0
     have hz : (Slice.len logical).val=32*n := length
+    change r.val=(Slice.len logical).val%32 at hv
     rw [hz] at hv
     omega
   rw [rz] at hr
@@ -26,6 +27,7 @@ theorem encode (logical : Slice U8) (out : alloc.vec.Vec U8) (n : Nat)
     (by change 0+32*n=logical.length;omega) rfl room zero
   refine ⟨next,?_,hval⟩
   unfold host_compact.compact_values
+  dsimp only
   rw [hr]
   simp only [bind_tc_ok,show ¬(0#usize != 0#usize) from (by decide),↓reduceIte,hn]
   rfl
