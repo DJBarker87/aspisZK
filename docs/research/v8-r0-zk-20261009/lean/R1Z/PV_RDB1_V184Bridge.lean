@@ -24,7 +24,9 @@ theorem complete {T P F : Type} (p : NonNull T P)
   obtain ⟨o, hn, hr, h⟩ := PV_RDB1_V184.complete b w memory frame width
   refine ⟨o, ?_, hr, h⟩
   unfold deployed
-  rw [cast_complete, bind_tc_ok, hn]
+  rw [cast_complete]
+  dsimp only [bind_tc_ok]
+  rw [hn]
   rfl
 
 #print axioms complete
