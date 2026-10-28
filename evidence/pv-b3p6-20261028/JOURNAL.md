@@ -267,3 +267,8 @@ was rewritten. Failed drafts remain without proof credit.
 
 Next row V243: remaining region/layout values, chunk flatten/take value law,
 native Vec composition and complete structural binding, then its carrier law.
+
+
+## Resume completion
+
+100/100 fresh Lean attempts; zero Kani. Reserved audits36497/36498/36499 all PASS. V229 selected structural closure retained; V243 partial helpers and2884 finite native cases retained without whole-row credit. Five rows and all endpoint/native/side-channel premises remain open. Source and private-object coherence verified; own rebuildable host caches removed after final scope. See FINAL.md and receipt-index-resume.json.

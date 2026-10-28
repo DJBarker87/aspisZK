@@ -1,0 +1,20 @@
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} → alloc.vec.Vec α → α → Result (alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Result.fail Error.maximumSizeExceeded
+theorem Aeneas.Std.alloc.vec.Vec.push_spec.{u} : ∀ {α : Type u} (v : alloc.vec.Vec α) (x : α),
+  (↑v).length < Usize.max → v.push x ⦃ v1 => ↑v1 = ↑v ++ [x] ⦄ :=
+fun {α} v x h => id (alloc.vec.Vec.push_spec._proof_1_3 v x h)
+def Aeneas.Std.alloc.vec.Vec.extend_from_slice : {T : Type} →
+  core.clone.Clone T → alloc.vec.Vec T → Slice T → Result (alloc.vec.Vec T) :=
+fun {T} cloneInst v s =>
+  if h : v.length + s.length ≤ Usize.max then
+    match h' : Slice.clone cloneInst.clone s with
+    | Result.ok s' => Result.ok ⟨↑v ++ ↑s', ⋯⟩
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div
+  else Result.fail Error.panic
+'Aeneas.Std.alloc.vec.Vec.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Aeneas.Std.alloc.vec.Vec.push_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Aeneas.Std.alloc.vec.Vec.extend_from_slice' depends on axioms: [propext, Quot.sound]

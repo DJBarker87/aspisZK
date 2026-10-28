@@ -1,0 +1,20 @@
+structure Aeneas.Std.core.clone.Clone (Self : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.clone.Clone.clone : Self → Result Self
+  Aeneas.Std.core.clone.Clone.clone_from : Self → Self → Result Self :=
+    fun x => self.clone
+constructor:
+  Aeneas.Std.core.clone.Clone.mk {Self : Type} (clone : Self → Result Self) (clone_from : Self → Self → Result Self) :
+    core.clone.Clone Self
+def Aeneas.Std.Slice.clone : {T : Type} → (T → Result T) → Slice T → Result (Slice T) :=
+fun {T} clone s => do
+  let s' ← List.clone clone ↑s
+  Result.ok ⟨↑s', ⋯⟩
+@[reducible] def Aeneas.Std.alloc.vec.Vec.length.{u} : {α : Type u} → alloc.vec.Vec α → ℕ :=
+fun {α} v => (↑v).length
+@[reducible] def Aeneas.Std.Slice.length.{u} : {α : Type u} → Slice α → ℕ :=
+fun {α} v => (↑v).length
+Aeneas.Std.core.clone.impls.CloneU8.clone
+Aeneas.Std.core.clone.impls.CloneU8.clone_from
+Aeneas.Std.core.clone.CloneU8
