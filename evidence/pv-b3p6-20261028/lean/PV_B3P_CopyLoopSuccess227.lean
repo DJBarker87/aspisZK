@@ -35,6 +35,7 @@ theorem copy_loop_total (selectors : reference_copy_terminal.Selectors) (append_
       have hsize := Usize.cMax_bound_concrete.1
       rw [UScalar.size_def]
       scalar_tac)
+    simp only [link] at hweight hproducer hconsumer
     refine ⟨.cont (v2,w2,v3,w3,j),?_,?_,?_⟩
     · simp only [reference_copy_terminal.evaluate_with_selectors_loop.body,hw,hb,↓reduceIte,
         hlink,hweight,hproducer,hconsumer,lift,bind_tc_ok,j]

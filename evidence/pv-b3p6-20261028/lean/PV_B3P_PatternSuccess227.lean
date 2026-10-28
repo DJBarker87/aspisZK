@@ -112,6 +112,7 @@ theorem pattern_outer_total (openings powers : Array aspis_core.field.QM31 16#us
       have hsize := Usize.cMax_bound_concrete.1
       rw [UScalar.size_def]
       scalar_tac)
+    simp only [pattern] at hvalue
     refine ⟨.cont (limb1,values1,j),?_,?_,?_⟩
     · simp only [reference_copy_terminal.pattern_values_literal_loop1.body,hw,hb,↓reduceIte,
         hpat,hvalue,hvalues1,lift,bind_tc_ok,j]
