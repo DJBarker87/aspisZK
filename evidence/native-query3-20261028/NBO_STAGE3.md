@@ -1,0 +1,9 @@
+# Stage 3 — capacity partition, actual finish step and tail domains
+
+K004-K011 pass except K003 (the predecessor combined capacity/store timeout). K005-K008 cover arbitrary successful allocation capacity for each actual Vec element type and its TX1 length, retaining the SAME slice pointer/length and original Vec capacity. K010 checks ONE borrowed-row update with arbitrary 64-row contents, selected observation and terms, including flush/no-flush. K011 checks ONE actual Enumerate/value/store, including exhaustion and all four reducer calls. Unwind4096 covers all copied byte extents; no old insufficient-unwind receipt is promoted. See NBO_STUBS.md for exact semantic pairings and exclusions.
+
+NBO_TailDomain.initial derives rhs canonicality from the SAME actual constructor. NBO_TailDomain.accumulate derives rhs/power output canonicality from the SAME basis/row/tail execution, canonical inputs and exact named lower field-domain laws. L006 passed with standard axioms. NBO_QueryDomains.closure/front derive actual decoder-array and inverse return domains under exact named lower decoder/from_fn/geometry/line laws. L008 passed; failed L007 subst-name diagnostics remain excluded.
+
+These results close local allocation-view and one-step finish coverage, and strengthen the formal same-caller domain chain. Native full query semantics, actual lower callback dictionaries and their upstream producer-domain installation remain OPEN. No cryptographic premise, model, game or deployed headline changes.
+
+All metrics, commands, hashes and accepted axiom lines are in receipts. No timeout/cap increase; K003 solver cleanup finds no residual solver files. One scope at a time after the documented initial overlap. Budget at end of stage: Lean8/100,Kani11/40. No shipped change, ELF rebuild, push, merge or wallet/key operation.
