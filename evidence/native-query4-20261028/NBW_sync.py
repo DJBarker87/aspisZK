@@ -1,5 +1,6 @@
 from NBW_host import *
-import sys,hashlib
+import sys,hashlib,fcntl
+_serial=(E/'NBW_SERIAL.lock').open('a');fcntl.flock(_serial,fcntl.LOCK_EX)
 admit(sys.argv[1])
 s=(E/'NBW_native.rs.txt').read_text()
 code=f'''from pathlib import Path

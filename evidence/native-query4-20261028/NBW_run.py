@@ -30,3 +30,14 @@ after=ssh('sha256sum '+B+'/NBW_src/Cargo.lock');assert after.returncode==0
 check['lock_after_sha256']=after.stdout.split()[0];check['lock_unchanged']=check['lock_after_sha256']==expected
 (E/(attempt+'-graph-check.json')).write_text(json.dumps(check,indent=2)+'\n')
 assert check['lock_unchanged'],'STOP Cargo.lock drift'
+if r['exit_status']!=0:
+ cleanup=py(f'''from pathlib import Path
+import json,hashlib
+root=Path({(B+'/NBW_tmp')!r});removed=[]
+for p in root.rglob('*'):
+ if p.is_file() and ((p.name.startswith('external-sat') and p.suffix=='.cnf') or p.name.startswith('smt2_dec_problem')):
+  removed.append(dict(path=str(p),bytes=p.stat().st_size,sha256=hashlib.sha256(p.read_bytes()).hexdigest()));p.unlink()
+print(json.dumps(dict(attempt={attempt!r},removed=removed)))
+''')
+ assert cleanup.returncode==0,cleanup.stderr
+ (E/(attempt+'-solver-cleanup.json')).write_text(cleanup.stdout)
