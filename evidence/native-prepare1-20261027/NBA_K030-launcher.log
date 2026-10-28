@@ -1,0 +1,52 @@
+{"attempt": "NBA_K030", "exit_status": 0, "wall_seconds": 24.36434490204556, "peak_rss_kib": "656932", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-prepare1-20261027/NBA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+dition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBA_scalar_routes` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:268:4
+    |
+268 | fn NBA_scalar_routes(){
+    |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nba_scalar_routes`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-r1-cost-probe/src/NBA_verifier.rs:272:13
+    |
+272 |  assert_eq!(NBA_REVENT,2);assert_eq!(t.state[i],NBA_RAFTER[i]);kani::cover!(mode==0,"gamma routing");kani::cover!(mode==1,"ordinary...
+    |             ^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.18s
+Checking harness verifier::NBA_verifier::NBA_scalar_routes...
+
+VERIFICATION RESULT:
+ ** 0 of 482 failed
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 15.63249s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-rbb988042deb4473caf9e1706610ad93c.scope; invocation ID: 13e73c4e47f1457aac095ba6dc0ffb2c

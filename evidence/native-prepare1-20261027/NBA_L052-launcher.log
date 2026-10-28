@@ -1,0 +1,53 @@
+{"attempt": "NBA_L052", "exit_status": 1, "wall_seconds": 5.868855486041866, "peak_rss_kib": "5246736", "swaps": "0", "print_axioms": ["'AspisR1.NBA_ClaimInputs.from_claim' depends on axioms: [propext]", "'AspisR1.NBA_ClaimInputs.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBA_generated/NBA_ClaimInputs.lean:48:22: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fromClaimE (LPq_Powers.claim ?x)
+in the target expression
+  ok
+      (match core.result.Result.Ok (LPq_Powers.claim out) with
+      | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+      | core.result.Result.Err e => core.result.Result.Err (fromClaimError e)) =
+    ok (core.result.Result.Ok (NBA_ClaimCallee.wide out))
+
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+hs : LPq_ReadPorts.SemCanonical (toClaimSem sem)
+compact before y1 : Slice U8
+len : (↑compact).length = 464
+size : (↑before).length = 928
+checked : LPt_External.compact.check_value
+...
+PE
+gc : PreparedModel.scalar NBA_Installed.actual.sampling D start 27#u8 y1 true = ok (gamma, t1)
+kc : PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 inactiveBytes false = ok (kappa, t2)
+hi : canonE (NBA_Carriers.back inactive)
+hg : canonE (NBA_Carriers.back gamma)
+hk : canonE (NBA_Carriers.back kappa)
+g : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 29#usize
+native : FIo_Native.weights.powers 29#usize (NBA_Carriers.back gamma) = ok g
+powers : NBA_Installed.actual.powers 29#usize gamma = ok (mapArray NBA_ClaimCallee.wide g)
+canonical : ∀ z ∈ ↑g, canonE z
+hy : LPq_SelectedDomain.ByteDomain y1
+out : NE
+tr :
+  LPq_PreparedTrace.Trace (toClaimSem sem) y1 (XRo_Join_Carriers.arr LPq_Powers.claim g) (NBA_Carriers.back inactive)
+    (NBA_Carriers.back kappa) out
+co : canonE out
+eqn :
+  LPq_PreparedClaim.program (toClaimSem sem) y1 (XRo_Join_Carriers.arr LPq_Powers.claim g) (NBA_Carriers.back inactive)
+      (NBA_Carriers.back kappa) =
+    fun x => ok (core.result.Result.Ok (LPq_Powers.claim out))
+call :
+  AspisR1CurrentPreparedClaim.verifier.prepared_claim LPm_PointLoop.ops (toClaimDigest D) (toClaimSem sem) y1
+      (LPq_Powers.claim (NBA_Carriers.back inactive)) (XRo_Join_Carriers.arr LPq_Powers.claim g)
+      (LPq_Powers.claim (NBA_Carriers.back kappa)) =
+    ok (core.result.Result.Ok (LPq_Powers.claim out))
+⊢ ok
+      (match core.result.Result.Ok (LPq_Powers.claim out) with
+      | core.result.Result.Ok x => core.result.Result.Ok (fromClaimE x)
+      | core.result.Result.Err e => core.result.Result.Err (fromClaimError e)) =
+    ok (core.result.Result.Ok (NBA_ClaimCallee.wide out))
+'AspisR1.NBA_ClaimInputs.from_claim' depends on axioms: [propext]
+'AspisR1.NBA_ClaimInputs.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rba5156d22e5342028b5d2a9c39b5a60e.scope; invocation ID: 0bb7099b8ff74839bc79dff9eac5a1e4

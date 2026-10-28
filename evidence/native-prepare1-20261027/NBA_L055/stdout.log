@@ -1,0 +1,34 @@
+NBA_generated/NBA_AddCarry.lean:35:34: error: Invalid `←` modifier: Cannot be applied to a rule that rewrites to `True`
+
+Note: This simp theorem will rewrite `out < P` to `True`, which should not be applied in the reverse direction
+NBA_generated/NBA_AddCarry.lean:33:62: error: unsolved goals
+case cons
+xs✝ ys✝ : List ℕ
+carry✝ final✝ digit carry out next final : ℕ
+xs ys : List ℕ
+hd : digit < P
+hc : carry ≤ 257
+frame : Frame digit carry out next
+tail : Trace xs next ys final
+ih : addDigits P next xs = (ys, final)
+value : out = (digit + carry) % P ∧ next = (digit + carry) / P ∧ out < P ∧ next ≤ 1
+⊢ (out :: (addDigits P ((digit + carry) / P) xs).1, (addDigits P ((digit + carry) / P) xs).2) = (out :: ys, final)
+NBA_generated/NBA_AddCarry.lean:35:43: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [addDigits, ̲← ̲value.1, ̲← ̲value.2,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBA_generated/NBA_AddCarry.lean:49:71: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.87 = ?m.87
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+'AspisR1.NBA_AddCarry.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NBA_AddCarry.source' depends on axioms: [sorryAx]
+'AspisR1.NBA_AddCarry.unique' depends on axioms: [sorryAx]
+'AspisR1.NBA_AddCarry.construct' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

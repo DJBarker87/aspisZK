@@ -8,7 +8,7 @@
 +#[cfg(kani)] mod NBA_verifier { include!("NBA_verifier.rs"); }
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBA_verifier.rs
-@@ -0,0 +1,252 @@
+@@ -0,0 +1,274 @@
 +use super::*;
 +// Exact frozen continuing suffix; only Self is renamed to its concrete owner.
 +fn NBA_tail<H:Digest32>(sem:&crate::r1_semantic::Verified<H>,v:&View<'_>,g:&mut[E;29],gamma:E,kappa:E,alpha:[E;2],rho:K,queries:[u32;22],t:Transcript<H>)->Result<Box<Prepared>,Error>{
@@ -261,6 +261,28 @@
 +}}}
 +#[kani::proof] #[kani::unwind(3)]
 +fn NBA_transcript_seed(){let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<32&&j<29);unsafe{SI=i;SJ=j;SS=kani::any();SR=kani::any();SN=0;let t=Transcript::new(NBA_SeedDigest,SS,Variant::S2);assert_eq!(SN,1);assert_eq!(t.state[i],SR[i]);kani::cover!(true,"S2 seed framing and arbitrary reply");}}
++
++static mut NBA_RROW:u8=0;static mut NBA_RPTR:*const u8=core::ptr::null();static mut NBA_RLEN:usize=0;
++static mut NBA_RI:usize=0;static mut NBA_RMODE:u8=0;static mut NBA_REVENT:usize=0;
++static mut NBA_RB:[u8;32]=[0;32];static mut NBA_RBEFORE:[u8;32]=[0;32];static mut NBA_RAFTER:[u8;32]=[0;32];static mut NBA_RE:E=E::ZERO;static mut NBA_RK:K=K::ZERO;
++fn NBA_route_block<H:Digest32>(t:&mut Transcript<H>,row:u8,payload:&[u8])->[u8;32]{unsafe{
++ assert_eq!(NBA_REVENT,0);NBA_REVENT=1;assert_eq!(row,NBA_RROW);assert_eq!(payload.as_ptr(),NBA_RPTR);assert_eq!(payload.len(),NBA_RLEN);assert_eq!(t.state[NBA_RI],NBA_RBEFORE[NBA_RI]);t.state=NBA_RAFTER;NBA_RB
++}}
++fn NBA_route_gamma(block:&[u8;32])->E{unsafe{assert_eq!(NBA_REVENT,1);NBA_REVENT=2;assert_eq!(NBA_RMODE,0);assert_eq!(block[NBA_RI],NBA_RB[NBA_RI]);NBA_RE}}
++fn NBA_route_ordinary(block:&[u8;32])->E{unsafe{assert_eq!(NBA_REVENT,1);NBA_REVENT=2;assert_eq!(NBA_RMODE,1);assert_eq!(block[NBA_RI],NBA_RB[NBA_RI]);NBA_RE}}
++fn NBA_route_qm(block:&[u8;32])->K{unsafe{assert_eq!(NBA_REVENT,1);NBA_REVENT=2;assert_eq!(NBA_RMODE,2);assert_eq!(block[NBA_RI],NBA_RB[NBA_RI]);NBA_RK}}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(crate::transcript::Transcript::block,NBA_route_block)]
++#[kani::stub(crate::sampler::gamma_sample,NBA_route_gamma)]
++#[kani::stub(crate::sampler::ordinary_sample,NBA_route_ordinary)]
++#[kani::stub(crate::sampler::qm31_sample,NBA_route_qm)]
++fn NBA_scalar_routes(){
++ let payload:[u8;2048]=kani::any();let n:usize=kani::any();let row:u8=kani::any();let i:usize=kani::any();let mode:u8=kani::any();kani::assume(n<=2048&&row>=27&&row<=32&&i<32&&mode<3);let bytes=&payload[..n];
++ unsafe{let mut t=Transcript::new(NBA_Digest,kani::any(),Variant::S2);NBA_RROW=row;NBA_RPTR=bytes.as_ptr();NBA_RLEN=n;NBA_RI=i;NBA_RMODE=mode;NBA_REVENT=0;NBA_RBEFORE=kani::any();NBA_RAFTER=kani::any();NBA_RB=kani::any();NBA_RE=any_e();NBA_RK=any_k();t.state=NBA_RBEFORE;
++ if mode<2{let x=t.scalar(row,bytes,mode==0);let j:usize=kani::any();kani::assume(j<8);assert_eq!(x.to_limbs()[j],NBA_RE.to_limbs()[j]);}else{let x=t.scalar_k(row,bytes);let j:usize=kani::any();kani::assume(j<4);assert_eq!([x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0][j],[NBA_RK.c0.a.0,NBA_RK.c0.b.0,NBA_RK.c1.a.0,NBA_RK.c1.b.0][j]);}
++ assert_eq!(NBA_REVENT,2);assert_eq!(t.state[i],NBA_RAFTER[i]);kani::cover!(mode==0,"gamma routing");kani::cover!(mode==1,"ordinary routing");kani::cover!(mode==2,"rho routing");
++ }
++}
 --- a/crates/aspis-core/src/r0_transcript.rs
 +++ b/crates/aspis-core/src/r0_transcript.rs
 @@ -319,3 +319,5 @@
@@ -317,7 +339,7 @@
 +#[cfg(kani)] mod NBA_sampler { include!("NBA_sampler.rs"); }
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBA_sampler.rs
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,72 @@
 +use super::*;
 +// Exactly ONE iteration of add_small_base_p on an arbitrary native pre-state.
 +fn NBA_add_digit(digit:&mut u32,addend:&mut u32){
@@ -334,4 +356,59 @@
 +#[kani::proof] #[kani::unwind(3)]
 +fn NBA_decode8(){
 + let d:[u32;8]=unsafe{core::mem::transmute::<[u8;32],[u32;8]>(kani::any())};kani::assume(d[0]<P&&d[1]<P&&d[2]<P&&d[3]<P&&d[4]<P&&d[5]<P&&d[6]<P&&d[7]<P);let value=decode8(d);let j:usize=kani::any();kani::assume(j<8);assert_eq!(value.to_limbs()[j],d[j]);kani::cover!(true,"canonical digit packing");
++}
++
++static mut NBA_LPTR:*const u8=core::ptr::null();
++static mut NBA_LD:[u32;8]=[0;8];static mut NBA_LQ:u32=0;static mut NBA_LS:usize=0;
++fn NBA_can(d:&[u32;8])->bool{d[0]<P&&d[1]<P&&d[2]<P&&d[3]<P&&d[4]<P&&d[5]<P&&d[6]<P&&d[7]<P}
++fn NBA_low_route(block:&[u8;32])->([u32;8],u32){unsafe{
++ assert_eq!(NBA_LS,0);assert_eq!(block.as_ptr(),NBA_LPTR);NBA_LS=1;
++ NBA_LD=core::mem::transmute::<[u8;32],[u32;8]>(kani::any());NBA_LQ=kani::any();kani::assume(NBA_can(&NBA_LD)&&NBA_LQ<=256);(NBA_LD,NBA_LQ)
++}}
++fn NBA_add_route(d:&mut[u32;8],a:u32)->bool{unsafe{
++ let j:usize=kani::any();kani::assume(j<8);assert_eq!(d[j],NBA_LD[j]);assert!(NBA_can(d));assert!(a<=257);
++ if NBA_LS==2{assert_eq!(a,1);kani::cover!(true,"wrapped gamma reaches second carry pass");kani::assume(false);}
++ assert_eq!(NBA_LS,1);assert_eq!(a,NBA_LQ+1);NBA_LS=2;
++ NBA_LD=core::mem::transmute::<[u8;32],[u32;8]>(kani::any());kani::assume(NBA_can(&NBA_LD));*d=NBA_LD;kani::any()
++}}
++fn NBA_decode_route(d:[u32;8])->WideExact{unsafe{
++ let j:usize=kani::any();kani::assume(j<8);assert_eq!(d[j],NBA_LD[j]);assert!(NBA_can(&d));kani::cover!(true,"same canonical digits reach decoder");kani::assume(false);WideExact::ZERO
++}}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(crate::sampler::low_base_p_digits,NBA_low_route)]
++#[kani::stub(crate::sampler::add_small_base_p,NBA_add_route)]
++#[kani::stub(crate::sampler::decode8,NBA_decode_route)]
++fn NBA_sampler_routes(){let block:[u8;32]=kani::any();unsafe{NBA_LS=0;NBA_LPTR=block.as_ptr();if kani::any(){let _=gamma_sample(&block);}else{let _=ordinary_sample(&block);}}}
++
++static mut NBA_QD:[u32;4]=[0;4];
++fn NBA_qdigits(_block:&[u8;32])->[u32;4]{unsafe{NBA_QD=core::mem::transmute::<[u8;16],[u32;4]>(kani::any());kani::assume(NBA_QD[0]<P&&NBA_QD[1]<P&&NBA_QD[2]<P&&NBA_QD[3]<P);NBA_QD}}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(crate::sampler::qm31_digits,NBA_qdigits)]
++fn NBA_qm31_pack(){let q=qm31_sample(&kani::any());let j:usize=kani::any();kani::assume(j<4);let out=[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0];unsafe{assert_eq!(out[j],NBA_QD[j]);}kani::cover!(true,"four canonical digits packed into rho");}
++
++// ONE frozen qm31_div_pass iteration, including the descending index update.
++fn NBA_qdiv_iteration(rank:&mut[u32;8],remainder:&mut u64,j:&mut usize){
++ *j-=1;
++ let dividend=(*remainder<<32)|u64::from(rank[*j]);
++ rank[*j]=(dividend/u64::from(P)) as u32;
++ *remainder=dividend%u64::from(P);
++}
++#[kani::proof] #[kani::unwind(3)]
++fn NBA_qdiv_step(){
++ let mut rank:[u32;8]=unsafe{core::mem::transmute::<[u8;32],[u32;8]>(kani::any())};let old=rank;let rem:u64=kani::any();let initial:usize=kani::any();let i:usize=kani::any();kani::assume(rem<u64::from(P)&&initial>0&&initial<=8&&i<8);let mut r=rem;let mut j=initial;NBA_qdiv_iteration(&mut rank,&mut r,&mut j);assert_eq!(j,initial-1);assert!(r<u64::from(P));let q=u64::from(rank[j]);let weighted=(q<<31)-q;assert_eq!(weighted+r,(rem<<32)|u64::from(old[j]));assert_eq!(rank[i],if i==j{rank[j]}else{old[i]});kani::cover!(true,"arbitrary descending rho division step");
++}
++static mut NBA_PASS_IN:[u32;8]=[0;8];static mut NBA_PASS_OUT:[u32;8]=[0;8];static mut NBA_PASS_REM:u32=0;static mut NBA_PASS_N:usize=0;
++fn NBA_pass_route(rank:[u32;8])->([u32;8],u32){unsafe{
++ let j:usize=kani::any();kani::assume(j<8);assert_eq!(rank[j],NBA_PASS_IN[j]);NBA_PASS_N+=1;NBA_PASS_OUT=core::mem::transmute::<[u8;32],[u32;8]>(kani::any());NBA_PASS_REM=kani::any();kani::assume(NBA_PASS_REM<P);(NBA_PASS_OUT,NBA_PASS_REM)
++}}
++fn NBA_qdigits_iteration(rank:&mut[u32;8],digits:&mut[u32;4],i:&mut usize){
++ let (quotient,digit)=qm31_div_pass(*rank);
++ *rank=quotient;
++ digits[*i]=digit;
++ *i+=1;
++}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(crate::sampler::qm31_div_pass,NBA_pass_route)]
++fn NBA_qdigits_step(){
++ let mut rank:[u32;8]=unsafe{core::mem::transmute::<[u8;32],[u32;8]>(kani::any())};let mut digits:[u32;4]=unsafe{core::mem::transmute::<[u8;16],[u32;4]>(kani::any())};let old=digits;let at:usize=kani::any();let j:usize=kani::any();let k:usize=kani::any();kani::assume(at<4&&j<8&&k<4);let mut i=at;unsafe{NBA_PASS_IN=rank;NBA_PASS_N=0;NBA_qdigits_iteration(&mut rank,&mut digits,&mut i);assert_eq!(NBA_PASS_N,1);assert_eq!(i,at+1);assert_eq!(rank[j],NBA_PASS_OUT[j]);assert_eq!(digits[k],if k==at{NBA_PASS_REM}else{old[k]});assert!(digits[at]<P);kani::cover!(true,"one rho digit callback and writeback");}
 +}
