@@ -1,0 +1,72 @@
+NBL_generated/NBL_OpeningTrace.lean:25:69: error: Type mismatch
+  ok bytes1
+has type
+  Result (?m.50 → alloc.vec.Vec U8)
+but is expected to have type
+  Result (alloc.vec.Vec U8)
+NBL_generated/NBL_OpeningTrace.lean:25:36: error: stuck at solving universe constraint
+  ?u.38 + 1 =?= max 1 ?u.31
+while trying to unify
+  ?m.50 → alloc.vec.Vec U8 : Sort (max 1 ?u.31)
+with
+  ?m.50 → alloc.vec.Vec U8 : Sort (max 1 ?u.31)
+NBL_generated/NBL_OpeningTrace.lean:24:2: error: stuck at solving universe constraint
+  ?u.38 + 1 =?= max 1 ?u.31
+while trying to unify
+  ?m.50 → alloc.vec.Vec U8 : Sort (max 1 ?u.31)
+with
+  ?m.50 → alloc.vec.Vec U8 : Sort (max 1 ?u.31)
+NBL_generated/NBL_OpeningTrace.lean:31:9: error(lean.unknownIdentifier): Unknown identifier `Trace`
+
+Note: It is not possible to treat `Trace` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NBL_generated/NBL_OpeningTrace.lean:37:9: error(lean.unknownIdentifier): Unknown identifier `Trace`
+
+Note: It is not possible to treat `Trace` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NBL_generated/NBL_OpeningTrace.lean:43:9: error(lean.unknownIdentifier): Unknown identifier `Trace`
+
+Note: It is not possible to treat `Trace` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+NBL_generated/NBL_OpeningTrace.lean:49:73: error: failed to synthesize
+  Decidable (32#usize + 224#usize = ok 256#usize)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+NBL_generated/NBL_OpeningTrace.lean:43:88: error: unsolved goals
+H : Type
+D : aspis_core.Digest32 H
+sem : r1_semantic.Verified H
+v : verifier.View
+hash : H
+t : sorry
+seed : transcript.Transcript.new D hash sem.transcript.state v.variant = ok { state := sorry, hash := hash }
+folds : v.variant.folds = ok 2#usize
+capacity : 32#usize + 224#usize = ok 256#usize
+root : core.option.Option.unwrap v.folded_root = ok sorry
+⊢ (do
+      let (gamma, t1) ←
+        PreparedModel.scalar NBA_Installed.actual.sampling D { state := sorry, hash := hash } 27#u8 v.y1 true
+      let bytes ← NBA_Installed.actual.sampling.toBytes v.inactive
+      let (kappa, t2) ← PreparedModel.scalar NBA_Installed.actual.sampling D t1 28#u8 bytes.to_slice false
+      let (alpha0, t3) ← PreparedModel.scalar NBA_Installed.actual.sampling D t2 29#u8 v.round0 false
+      let b1 ←
+        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 256#usize) sorry.to_slice
+      let b2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 b1 v.round1
+      let (alpha1, t4) ← PreparedModel.scalar NBA_Installed.actual.sampling D t3 30#u8 b2.deref false
+      ok
+          { gamma := gamma, kappa := kappa, alpha := Array.make 2#usize [alpha0, alpha1] ⋯, transcript := t4,
+            row := 31#u8 }) =
+    ok sorry
+NBL_generated/NBL_OpeningTrace.lean:56:37: warning: This simp argument is unused:
+  Trace.output
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵1̵_̵w̵i̵r̵e̵.̵S̵e̵m̵a̵n̵t̵i̵c̵T̵r̵a̵n̵s̵c̵r̵i̵p̵t̵.̵i̵m̵p̵l̵.̵s̵t̵a̵t̵e̵,̵s̵e̵e̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲r̲1̲_̲w̲i̲r̲e̲.̲S̲e̲m̲a̲n̲t̲i̲c̲T̲r̲a̲n̲s̲c̲r̲i̲p̲t̲.̲i̲m̲p̲l̲.̲s̲t̲a̲t̲e̲,̲ ̲s̲e̲e̲d̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      scalar_result D _ _ _ _ t̵.̵g̵a̵m̵m̵a̵,̵t̵.̵s̵e̵r̵i̵a̵l̵i̵z̵e̵,̵l̵i̵f̵t̵,̵t̲.̲g̲a̲m̲m̲a̲,̲ ̲t̲.̲s̲e̲r̲i̲a̲l̲i̲z̲e̲,̲ ̲l̲i̲f̲t̲,̲ scalar_result D _ _ _ _ t̵.̵k̵a̵p̵p̵a̵,̵s̵c̵a̵l̵a̵r̵_̵r̵e̵s̵u̵l̵t̵ ̵D̵ ̵_̵ ̵_̵ ̵_̵ ̵_̵t̲.̲k̲a̲p̲p̲a̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲c̲a̲l̲a̲r̲_̲r̲e̲s̲u̲l̲t̲ ̲D̲ ̲_̲ ̲_̲ ̲_̲ ̲_̲ t.alpha0, f̵o̵l̵d̵s̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵c̵a̵p̵a̵c̵i̵t̵y̵,̵r̵o̵o̵t̵,̵t̵.̵a̵p̵p̵e̵n̵d̵R̵o̵o̵t̵,̵t̵.̵a̵p̵p̵e̵n̵d̵R̵o̵u̵n̵d̵,̵f̲o̲l̲d̲s̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲c̲a̲p̲a̲c̲i̲t̲y̲,̲ ̲r̲o̲o̲t̲,̲ ̲t̲.̲a̲p̲p̲e̲n̲d̲R̲o̲o̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲t̲.̲a̲p̲p̲e̲n̲d̲R̲o̲u̲n̲d̲,̲ scalar_result D _ _ _ _ t̵.̵a̵l̵p̵h̵a̵1̵,̵T̵r̵a̵c̵e̵.̵o̵u̵t̵p̵u̵t̵]̵t̲.̲a̲l̲p̲h̲a̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NBL_generated/NBL_OpeningTrace.lean:56:37: warning: declaration uses `sorry`
+NBL_generated/NBL_OpeningTrace.lean:62:9: error(lean.unknownIdentifier): Unknown identifier `Trace`
+
+Note: It is not possible to treat `Trace` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+'AspisR1.NBL_OpeningTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NBL_OpeningTrace.log_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

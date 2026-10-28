@@ -5,6 +5,13 @@ from pathlib import Path
 import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-prepare2-20261027';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X='/home/dombarker/project-offloads/codex-cx-assoc-a2-cache-20261027/XRw_objects'
 a,local,module=sys.argv[1:];local=Path(local);src='NBL_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-leaf-cache-20261027/'+module.replace('.','/')+'.olean'
+import os
+active=E/'NBL_ACTIVE.json'
+try:
+ fd=os.open(active,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
+except FileExistsError:
+ raise SystemExit('STOP own attempt active; recover its terminal receipt before launching: '+active.read_text())
+with os.fdopen(fd,'w') as f:json.dump(dict(attempt=a),f)
 if (E/'NBL_BUDGET_STOP.json').exists():raise SystemExit('allocation exhausted: no prover launches')
 if (E/'NBL_PAUSE').exists():raise SystemExit('paused before admission')
 assert len(list(E.glob('NBL_L*/receipt.json')))<100
@@ -69,3 +76,6 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 if a+'/receipt.json' not in out:raise SystemExit('STOP no prover receipt; inspect setup/launcher, do not resubmit blindly')
 rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-16000:])
+
+assert json.loads(active.read_text())["attempt"]==a
+active.unlink()
