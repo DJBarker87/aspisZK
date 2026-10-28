@@ -41,7 +41,7 @@ theorem cells (p : reference226.OwnedPublic)
   rw [hival,List.getElem?_eq_getElem hi] at hval
   simp only [Option.getD_some] at hval
   rw [PV_B3P_ChunkFlatten226.flatten_cell chunks i hi1472,
-    List.getElem?_eq_getElem (by rw [(chunks.val[i/64]'(by rw [chunks.property]; simpa using hq)).property]; omega),
+    List.getElem?_eq_getElem (by rw [(chunks.val[i/64]'(by rw [chunks.property]; simpa using hq)).property]; change i%64 < 64; omega),
     List.getElem?_eq_getElem hi]
   exact congrArg some hval
 
