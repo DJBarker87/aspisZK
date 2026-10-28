@@ -10,7 +10,7 @@ def transport(cmd,**kw):
  for k in range(11):
   r=subprocess.run(cmd,**kw)
   if r.returncode!=255:return r
-  with (E/'transport-retries.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,retry=k,command=cmd,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
+  with (E/'transport-retries.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,retry=k,command=cmd,exit=r.returncode,stdout=r.stdout,stderr=r.stderr,utc=datetime.datetime.now(datetime.timezone.utc).isoformat()))+'\n')
   if k==10:raise RuntimeError('10 transport retries exhausted')
   print('transport unavailable; 60s retry cooldown',flush=True);time.sleep(60)
 def ssh(cmd):return transport(['ssh',host,cmd],text=True,capture_output=True)
@@ -60,7 +60,7 @@ stream=[];done_count=0
 for line in proc.stdout:
  stream.append(line)
  if line.startswith('DONE'):done_count+=1
- if line.startswith(('CHUNK','RECEIPT')) or (line.startswith('DONE') and done_count%10==0):print(line.rstrip(),flush=True)
+ if line.startswith(('DONE','CHUNK','RECEIPT')):print(line.rstrip(),flush=True)
 rc=proc.wait()
 class Result:pass
 r=Result();r.returncode=rc

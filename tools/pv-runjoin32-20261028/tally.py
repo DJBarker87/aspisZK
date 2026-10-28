@@ -17,7 +17,11 @@ assert not bad_axioms,bad_axioms
 assert len(receipts)<=100
 assert all(51300<=r['attempt']<=51499 for r in receipts)
 assert all(r['swaps']==0 for r in receipts)
-result=dict(charged=len(receipts),remaining=100-len(receipts),accepted_attempts=sum(r['accepted'] for r in receipts),rejected_attempts=sum(not r['accepted'] for r in receipts),accepted_modules=len(accepted),failed_modules=fail,kani=0,axiom_reports=sum(len(v['axioms']) for v in accepted.values()),nonstandard_axioms=bad_axioms,peak_rss_bytes=max([r['peak_rss_bytes'] or 0 for r in receipts]+[0]),nonzero_swaps=[],used_ids=[r['attempt'] for r in receipts])
+pending=[]
+for p in E.glob('transport-[0-9]*.json'):
+ a=int(p.stem.split('-')[1]);v=json.loads(p.read_text())
+ if a not in {r['attempt'] for r in receipts} and v.get('exit')==0:pending.append(a)
+result=dict(charged=len(receipts)+len(pending),remaining=100-len(receipts)-len(pending),completed_receipts=len(receipts),confirmed_completed_pending_collection=sorted(pending),accepted_attempts=sum(r['accepted'] for r in receipts),rejected_attempts=sum(not r['accepted'] for r in receipts),accepted_modules=len(accepted),failed_modules=fail,kani=0,axiom_reports=sum(len(v['axioms']) for v in accepted.values()),nonstandard_axioms=bad_axioms,peak_rss_bytes=max([r['peak_rss_bytes'] or 0 for r in receipts]+[0]),nonzero_swaps=[],used_ids=[r['attempt'] for r in receipts])
 (E/'tally.json').write_text(json.dumps(result,indent=2)+'\n')
 (E/'receipt-index.tsv').write_text('attempt\tmodules\texit\thost_wall_s\tpeak_rss_bytes\tswap\taccepted\n'+''.join(f"{r['attempt']}\t{r['completed_modules']}\t{r['exit']}\t{r['host_wall_seconds']}\t{r['peak_rss_bytes']}\t{r['swaps']}\t{r['accepted']}\n" for r in receipts))
 (E/'accepted-object-index.json').write_text(json.dumps({m:{k:v[k] for k in ['attempt','source_sha256','object_sha256','deps_fingerprint']} for m,v in accepted.items()},indent=2)+'\n')

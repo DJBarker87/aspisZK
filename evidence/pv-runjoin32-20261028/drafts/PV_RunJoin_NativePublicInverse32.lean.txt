@@ -43,9 +43,9 @@ theorem target_withdrawal_roundtrip (p : TargetWithdrawal) :
 def unPublic (base : ProverRwFull.ExternalTypes) (p : TargetPublic base) : PV_Src_Public.Input := by
   letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
   exact match p with
-    | .Transfer public transition => .transfer (unTransfer public)
+    | .Transfer pub transition => .transfer (unTransfer pub)
         (PV_RunJoin_NominalCompiledData.unTransition base transition)
-    | .Withdrawal public transition => .withdrawal (unWithdrawal public)
+    | .Withdrawal pub transition => .withdrawal (unWithdrawal pub)
         (PV_RunJoin_NominalCompiledData.unTransition base transition)
 
 theorem from_public_roundtrip (base : ProverRwFull.ExternalTypes) (p : PV_Src_Public.Input) :
@@ -58,6 +58,22 @@ theorem from_input_roundtrip (base : ProverRwFull.ExternalTypes) (i : PV_Src_Nat
     unPublic base (fromInput base i) = PV_Src_NativeInput.publicInput i := by
   rw [selected_public,from_public_roundtrip]
 #print axioms from_input_roundtrip
+
+theorem target_transition_roundtrip (base : ProverRwFull.ExternalTypes)
+    (t : PV_RunJoin_NominalCompiledData.TargetTransition base) :
+    PV_RunJoin_NominalCompiledData.transition base
+      (PV_RunJoin_NominalCompiledData.unTransition base t) = t := by
+  letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
+  cases t
+  rfl
+#print axioms target_transition_roundtrip
+
+theorem to_public_roundtrip (base : ProverRwFull.ExternalTypes) (p : TargetPublic base) :
+    fromPublicInput base (unPublic base p) = p := by
+  letI : ProverRwFull.ExternalTypes := PDict_CodecDictionary.native base
+  cases p <;> simp only [unPublic,fromPublicInput,target_transfer_roundtrip,
+    target_withdrawal_roundtrip,target_transition_roundtrip]
+#print axioms to_public_roundtrip
 
 /-- A complete source public input survives nominal translation. In particular,
 pool/deployment, anchor sequence, withdrawal destination and transition fields
