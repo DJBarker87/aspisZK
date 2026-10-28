@@ -27,7 +27,7 @@ theorem complete {S : Type} (f : S → Nat → Result S) (fuel start stop : Nat)
   | succ fuel ih =>
     have active : start < stop := by omega
     rw [source,loop.eq_def]
-    simp only [body,next_active _ active,ordered]
+    simp only [body,next_active (⟨start,stop⟩ : Cursor) active,ordered]
     cases hf : f acc start with
     | ok out =>
       simp only [hf,bind_tc_ok]
