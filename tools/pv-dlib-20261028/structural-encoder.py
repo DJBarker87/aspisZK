@@ -46,7 +46,7 @@ differences=[
       proofs=['PV_DL_EncoderPairs.coordinate','PV_DL_EncoderZip.coordinate','PV_DL_EncoderNative.fold'],
       bounds='512 complete pairs, 512 basis entries; no remainder'),
  dict(native='while/for mutable basis',reference='owned recursive basis_round/basis_fill/basis_cell',
-      proofs=['PV_DL_EncoderFill.source','PV_DL_EncoderBasis.source','PV_DL_EncoderMutation.restoration'],
+      proofs=['PV_DL_EncoderFill.source','PV_DL_EncoderBasis.source','PV_DL_EncoderMutation.restoration','PV_DL_EncoderBounds.cells','PV_DL_EncoderBounds.target_val','PV_DL_EncoderBounds.writes'],
       bounds='width*2^fuel=512 and j+fuel=width; width+j<512'),
  dict(native='width.min(N-width)',reference='width for N=512',
       proofs=['PV_DL_EncoderBasis.half_rank','PV_DL_EncoderBasis.native_min']),
