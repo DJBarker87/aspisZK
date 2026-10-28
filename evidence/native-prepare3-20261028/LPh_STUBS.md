@@ -23,6 +23,8 @@ NBR_COPY_IMPORT.json pins merged research b173d5111cab35fe169da8c9942872071d0421
 
 ## Final producing-call and source-position cuts
 
+K030 failed Rust type-checking with E0382 (worker-owned moved transcript). All K030 rows below describe intended, **UNVALIDATED** cuts; none has native closure credit. No rerun after the budget stop.
+
 | Cut | Scope / pairing | What the gate establishes |
 |---|---|---|
 | NBR_alloc / NBR_sem / NBR_y1 / NBR_view (K027/K028) | NativeFilled14759 and NativeSemanticLoop remain OPEN; model pairings NBR_ProducerBuffers.source, NBR_BufferJoin.source, NBR_ValuesPort.returned, NBR_SemanticReturn.returned | Exact source proof/ranges, one fresh allocation and order. Alloc returns arbitrary initialized bytes, producer success carries NO byte law; view cut terminates, fabricates no View. No complete native value closure credit. |

@@ -18,7 +18,7 @@ K002 establishes arbitrary semantic row shape/offset domains. K003 establishes t
 
 K027/K028 target the ACTUAL prepare function up to producing-call/wide-view argument cuts. Their allocation stub supplies arbitrary initialized bytes (overapproximation); semantic/y1 child stubs return success without any byte law. Consequently passing gates establish SAME allocation pointer/ranges and order only, not allocation refinement, producer values, frames or wide_view results. The exact joined byte carrier is proved at model level, not silently supplied by these overapproximations.
 
-The final opening and ordinary-row fissions are bounded local checks; source cuts invent no returned serializer bytes, expansion values or complete local trace. They retain the missing source association below. LPh_STUBS.md records exact cut domains and pairings.
+K029 passed both ordinary payload covers. K030 did NOT type-check: the worker harness moved `t` in mode1 and reused it in a separate mode2 `if` (E0382). It has NO proof credit, and no rerun was launched after the30-command stop. Its intended opening cuts are retained only as an unvalidated candidate patch. The ordinary-row fission is a bounded local check; source cuts invent no returned serializer bytes, expansion values or complete local trace. They retain the missing source association below. LPh_STUBS.md records exact cut domains and pairings.
 
 ## CLOSED-CONDITIONAL callee obligations
 
