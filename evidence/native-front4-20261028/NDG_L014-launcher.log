@@ -1,0 +1,38 @@
+{"attempt": "NDG_L014", "exit_status": 0, "wall_seconds": 1.1905006499728188, "peak_rss_kib": "2628252", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Result α :=
+fun {α} x => ok x
+Aeneas.Std.Usize.wrapping_add (x y : Usize) : Usize
+Aeneas.Std.Usize.wrapping_add (x y : Usize) : Usize
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop.body : Slice U8 →
+  Usize → Result (ControlFlow Usize (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError))) :=
+fun bytes index =>
+  have i := bytes.len;
+  if index < i then do
+    let i1 ← bytes.index_usize index
+    if (i1 != 0#u8) = true then
+        ok
+          (ControlFlow.done
+            (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+      else do
+        let index1 ← lift (i
+...
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Result α :=
+fun {α} x => ok x
+Aeneas.Std.Usize.wrapping_add (x y : Usize) : Usize
+Aeneas.Std.Usize.wrapping_add (x y : Usize) : Usize
+def AdapterRw.r1_pool_adapter.owned.require_zero_loop.body : Slice U8 →
+  Usize → Result (ControlFlow Usize (Option (core.result.Result Unit AdapterRw.solana_program_error.ProgramError))) :=
+fun bytes index =>
+  have i := bytes.len;
+  if index < i then do
+    let i1 ← bytes.index_usize index
+    if (i1 != 0#u8) = true then
+        ok
+          (ControlFlow.done
+            (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.AccountAlreadyInitialized)))
+      else do
+        let index1 ← lift (index.wrapping_add 1#usize)
+        ok (ControlFlow.cont index1)
+  else ok (ControlFlow.done none)
+
+Running as unit: run-rabbd1c51f5594224888e5c9a475f309c.scope; invocation ID: b5e2ecfbdbeb403a8ddf0f6221708b21

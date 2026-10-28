@@ -1,0 +1,99 @@
+use super::*;
+fn arbitrary_account()->OwnedAccount {
+ OwnedAccount {key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(kani::any()),bytes:Err(ProgramError::InvalidAccountData)}
+}
+#[kani::proof_for_contract(OwnedAccount::owner)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn owner_contract(){let a=arbitrary_account();let _=a.owner();}
+#[kani::proof_for_contract(OwnedAccount::key)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn key_contract(){let a=arbitrary_account();let _=a.key();}
+
+fn successful_account()->OwnedAccount {
+ let mut a=arbitrary_account();
+ a.bytes=Ok(vec![kani::any::<u8>()]);
+ a.length=if kani::any(){Ok(kani::any())}else{Err(ProgramError::Custom(kani::any()))};a
+}
+#[kani::proof_for_contract(OwnedAccount::owner)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn owner_success_contract(){let a=successful_account();let _=a.owner();}
+#[kani::proof_for_contract(OwnedAccount::key)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn key_success_contract(){let a=successful_account();let _=a.key();}
+#[kani::proof_for_contract(OwnedAccount::data_len)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn length_contract(){let a=successful_account();let _=a.data_len();}
+#[kani::proof_for_contract(OwnedAccount::data)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn data_success_contract(){let a=successful_account();let _=a.data();}
+#[kani::proof_for_contract(OwnedAccount::data)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn data_error_contract(){let mut a=arbitrary_account();a.bytes=Err(ProgramError::Custom(kani::any()));let _=a.data();}
+
+#[kani::proof_for_contract(OwnedAccount::data_len)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn length_ok_contract(){let a=arbitrary_account();let _=a.data_len();}
+#[kani::proof_for_contract(OwnedAccount::data_len)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn length_error_contract(){let mut a=arbitrary_account();a.length=Err(ProgramError::Custom(kani::any()));let _=a.data_len();}
+
+#[kani::proof]
+#[kani::unwind(3)]
+fn zero_window(){let b:[u8;4]=kani::any();let i:usize=kani::any();kani::assume(i<4);let r=require_zero(&b[i..i+1]);assert_eq!(r.is_ok()==(b[i]==0),!cfg!(NDG_negative));}
+#[kani::proof]
+#[kani::unwind(2)]
+fn zero_empty(){assert_eq!(require_zero(&[]).is_ok(),!cfg!(NDG_negative));}
+#[kani::proof]
+#[kani::unwind(2)]
+fn zero_reject(){let b:[u8;32]=kani::any();kani::assume(b[0]!=0);assert_eq!(matches!(require_zero(&b),Err(ProgramError::AccountAlreadyInitialized)),!cfg!(NDG_negative));}
+
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_one(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports=0u64;let b:u8=kani::any();let mut data=[b];
+ let signer=kani::any();let writable=kani::any();let executable=kani::any();
+ let a=AccountInfo::new(&key,signer,writable,&mut lamports,&mut data,&owner,executable,0);
+ let r=snapshot(&a,1,2);
+ let good=r.key==key && r.owner==owner && r.is_signer==signer && r.is_writable==writable && r.executable==executable && r.length==Ok(1) && r.bytes.as_ref().unwrap().as_slice()==[b];
+ assert_eq!(good,!cfg!(NDG_negative));
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_wrong_length(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut lamports=0;let mut data=[kani::any::<u8>()];
+ let a=AccountInfo::new(&key,false,false,&mut lamports,&mut data,&owner,false,0);let r=snapshot(&a,2,3);
+ assert_eq!(r.length==Ok(1) && matches!(r.bytes,Err(ProgramError::InvalidAccountData)),!cfg!(NDG_negative));
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_borrow_error(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut lamports=0;let mut data=[kani::any::<u8>()];
+ let a=AccountInfo::new(&key,false,false,&mut lamports,&mut data,&owner,false,0);let guard=a.data.borrow_mut();let r=snapshot(&a,1,2);
+ assert_eq!(matches!(r.length,Err(ProgramError::AccountBorrowFailed)) && matches!(r.bytes,Err(ProgramError::AccountBorrowFailed)),!cfg!(NDG_negative));drop(guard);
+}
+
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn length_custom_observation(){let mut a=arbitrary_account();let x:u32=kani::any();a.length=Err(ProgramError::Custom(x));let good=match a.data_len(){Err(ProgramError::Custom(y))=>x==y,_=>false};assert_eq!(good,!cfg!(NDG_negative));}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn data_custom_observation(){let mut a=arbitrary_account();let x:u32=kani::any();a.bytes=Err(ProgramError::Custom(x));let good=match a.data(){Err(ProgramError::Custom(y))=>x==y,_=>false};assert_eq!(good,!cfg!(NDG_negative));}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDG_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn data_empty_observation(){let mut a=arbitrary_account();a.bytes=Ok(Vec::new());let good=match a.data(){Ok(v)=>v.is_empty(),_=>false};assert_eq!(good,!cfg!(NDG_negative));}
