@@ -158,10 +158,8 @@ def reserve
   (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   (statement_digest mask_nonce : Array Aeneas.Std.U8 32#usize) :
   P (Bool × aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) := do
-  let (r, self1) ← invoke "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible" (fun ops =>
-    letI : ExternalFuns := ops
-    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-    self statement_digest mask_nonce)
+  let (r, self1) ← reserveFallible
+    self statement_digest mask_nonce
   match r with
   | core.result.Result.Ok reserved =>
     pure (reserved, self1)
@@ -175,12 +173,7 @@ theorem erase_syncDirectory (ops : ExternalFuns) (directory : std.path.Path) :
     erase ops (syncDirectory directory) =
       @aspis_prover.state_only_entropy.sync_directory _ ops directory := by
   unfold syncDirectory aspis_prover.state_only_entropy.sync_directory
-  repeat' first
-  | rfl
-  | (progress simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite])
-  | (apply congrArg (Aeneas.Std.bind _))
-  | funext x
-  | split
+  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 theorem erase_reserveFallible (ops : ExternalFuns)
     (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
@@ -189,12 +182,7 @@ theorem erase_reserveFallible (ops : ExternalFuns)
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
         _ ops self statement nonce := by
   unfold reserveFallible aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible
-  repeat' first
-  | rfl
-  | (progress simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_syncDirectory])
-  | (apply congrArg (Aeneas.Std.bind _))
-  | funext x
-  | split
+  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_syncDirectory]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 theorem erase_reserve (ops : ExternalFuns)
     (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
@@ -203,12 +191,7 @@ theorem erase_reserve (ops : ExternalFuns)
       @aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
         _ ops self statement nonce := by
   unfold reserve aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
-  repeat' first
-  | rfl
-  | (progress simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_reserveFallible])
-  | (apply congrArg (Aeneas.Std.bind _))
-  | funext x
-  | split
+  repeat' (simp only [erase_bind,erase_invoke,erase_pure,erase_coreResult,erase_controlFlow,erase_ite,erase_reserveFallible]; first | rfl | apply congrArg (Aeneas.Std.bind _) | funext x | split)
 
 #print axioms erase_syncDirectory
 #print axioms erase_reserveFallible
