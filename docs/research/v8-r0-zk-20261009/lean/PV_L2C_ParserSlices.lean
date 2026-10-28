@@ -13,8 +13,11 @@ theorem copy_array {n : Usize} (a : Array U8 n) :
 #print axioms copy_array
 
 def pair (a b : Array U8 4#usize) : Slice U8 :=
-  ⟨a.val++b.val,by have ha := a.property; have hb := b.property
-                 simp only [List.length_append]; scalar_tac⟩
+  ⟨a.val++b.val,by
+    have ha := a.property
+    have hb := b.property
+    simp only [List.length_append]
+    scalar_tac⟩
 
 theorem left (a b : Array U8 4#usize) :
     core.slice.index.SliceIndexRangeUsizeSlice.index {start:=0#usize,«end»:=4#usize} (pair a b)=
@@ -30,5 +33,8 @@ theorem right (a b : Array U8 4#usize) :
   have ha : a.val.length=4 := a.property
   have hb : b.val.length=4 := b.property
   simp [core.slice.index.SliceIndexRangeUsizeSlice.index,pair,slice,List.slice,ha,hb]
+  apply Subtype.ext
+  change b.val.take 4=b.val
+  rw [← hb,List.take_length]
 #print axioms right
 end PV_L2C_ParserSlices
