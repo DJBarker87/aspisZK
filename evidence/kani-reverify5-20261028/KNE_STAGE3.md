@@ -1,0 +1,5 @@
+# Program-level schedule refinement
+
+KNE_Writer.appendAll is the source-shaped sequential append machine. appendAll_eq is proved once by list induction. bodyList_eq and returnList_eq tie its payloads to the adopted LPm materialize/returned definitions. sourceProgram computes the115 body appends, queries the checksum oracle on that SAME body, and appends the32-byte reply. It does not recompute the body as another physical write sequence. cohort_program_eq proves equality of reified oracle programs for all replies. emission_count proves116 individual writes using the derived widths.
+
+L019 passes all eight new top axioms audits, with only the permitted standard axioms. L015-L018 are retained rejected local proofs; bodyList/returnList and the corresponding LPm slice definitions are now locally opaque while proving projection equalities. This replaces unwanted concrete list expansion; no recursion or resource limit was raised. The body/checksum representation and property were not weakened.
