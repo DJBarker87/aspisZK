@@ -1,6 +1,6 @@
 # Coherent endpoint/lane/native-snapshot dependency rebuild
 
-All1985 dependency modules rebuilt in a fresh private objects directory. The
+All 1,985 dependency modules rebuilt in a fresh private objects directory. The
 endpoint audit was excluded from the dependency chunks and checked once after
 preflight. h4/SCOPE external objects are read-only; no old project cache fallback
 exists in LEAN_PATH. Old runjoin24-lean retained unchanged for provenance.
@@ -21,7 +21,7 @@ Audits (scope wall; maximum child RSS bytes; swaps):
 -51497 endpoint:exit0;2.29s;4338163712;0.
 -51498 explicitly imports LaneDenotation31:exit0;2.55s;5031555072;0.
 -51499 NativeSnapshot31 preflight:exit0;1.97s;4524470272;0.
-All printed axiom sets are subsets of propext,Classical.choice,Quot.sound.
+All printed axiom sets are subsets of propext, Classical.choice, Quot.sound.
 These audits ran once each on the fresh closure. NativeSnapshot31 and the lane
 reference theorem have coherent source/object provenance on this closure.
 Their native link retains the structural (K-1 substitute) evidence class; finite

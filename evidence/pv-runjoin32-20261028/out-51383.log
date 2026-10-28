@@ -1,0 +1,73 @@
+START 51383 R1Z.PV_RunJoin_AttemptProjection32
+DONE 51383 R1Z.PV_RunJoin_AttemptProjection32 exit 1 wall 1.75 RSS 4380516352
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AttemptProjection32.lean:33:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  bodyB secret (project next)
+in the target expression
+  (do
+      let value ←
+        let (status, next) := (core.result.Result.Ok secret, next)
+          match status with
+          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+          | core.result.Result.Ok secret => do
+            let (result, final) ← bodyA secret next
+            match result with
+              | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+              | core.result.Result.Err ProverRwFull.verifier.Error.Rejected =>
+                ok (ProverCommitRetry34.Step.retry, final)
+              | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)
+      ok (value.1, project value.2)) =
+    let (status, next) := (core.result.Result.Ok secret, project next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← bodyB secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)
+
+case ok.Ok
+inst✝² : ProverRwFull.ExternalTypes
+inst✝¹ : ProverRwRngCaller.NativeTypes
+inst✝ : ProverRwRngCaller.ErasureFns
+N L C N' L' C' : Type
+project : State N L C → State N' L' C'
+left : ProverRwEffectCallback.Account (State N L C)
+right : ProverRwEffectCallback.Account (State N' L' C')
+bodyA : Body (State N L C)
+bodyB : Body (State N' L' C')
+entropy_step :
+  ∀ (index : ℕ) (s : State N L C),
+    mapR (fun out => (out.1, project out.2)) (entropy left index s) = entropy right index (project s)
+body_step :
+  ∀ (secret : ProverRwRetryModel.Secret) (s : State N L C),
+    mapR (fun out => (out.1, project out.2)) (bodyA secret s) = bodyB secret (project s)
+index : ℕ
+s next : State N L C
+secret : ProverRwRetryModel.Secret
+he : entropy left index s = ok (core.result.Result.Ok secret, next)
+⊢ (do
+      let value ←
+        let (status, next) := (core.result.Result.Ok secret, next)
+          match status with
+          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+          | core.result.Result.Ok secret => do
+            let (result, final) ← bodyA secret next
+            match result with
+              | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+              | core.result.Result.Err ProverRwFull.verifier.Error.Rejected =>
+                ok (ProverCommitRetry34.Step.retry, final)
+              | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)
+      ok (value.1, project value.2)) =
+    let (status, next) := (core.result.Result.Ok secret, project next)
+    match status with
+    | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), next)
+    | core.result.Result.Ok secret => do
+      let (result, final) ← bodyB secret next
+      match result with
+        | core.result.Result.Ok proof => ok (ProverCommitRetry34.Step.done proof, final)
+        | core.result.Result.Err ProverRwFull.verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, final)
+        | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), final)
+'R1Z.PV_RunJoin_AttemptProjection32.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_AttemptProjection32.client' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

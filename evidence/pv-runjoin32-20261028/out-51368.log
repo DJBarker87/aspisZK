@@ -1,0 +1,51 @@
+START 51368 R1Z.PV_RunJoin_AppendDeterminism32
+DONE 51368 R1Z.PV_RunJoin_AppendDeterminism32 exit 1 wall 2.82 RSS 5113786368
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AppendDeterminism32.lean:33:9: warning: 'have _test : _ × _ := value' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AppendDeterminism32.lean:33:38: warning: 'rcases value with ⟨value, rest⟩' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AppendDeterminism32.lean:33:38: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'R1Z.PV_RunJoin_AppendDeterminism32.returned' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_AppendDeterminism32.lean:51:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (na, ra).1
+in the target expression
+  { next_pair_index := na.next_leaf_index, next_root := na.root, next_frontier := na.frontier } =
+    { next_pair_index := nb.next_leaf_index, next_root := nb.root, next_frontier := nb.frontier }
+
+case refl.refl
+inst✝ : ExternalLinear
+a b : pair_forest_copy_builder.CopyRecords
+snapshot : pair_tree_profile.PoolV1PairLiveSnapshotV1
+leaf : Digest
+outA outB : pair_terminal.PoolV1PairVerifiedAfterstateV1
+ha : pair_forest_trace.late_append a snapshot leaf = ok (core.result.Result.Ok outA)
+hb : pair_forest_trace.late_append b snapshot leaf = ok (core.result.Result.Ok outB)
+ea : Roots
+ta na : incremental_merkle.IncrementalMerkleTreeV1
+ra : incremental_merkle.AppendOneV1
+hea : pair_trace.pair_empty_roots = ok ea
+hca :
+  incremental_merkle.IncrementalMerkleTreeV1.from_parts_with_empty_roots snapshot.next_pair_index snapshot.current_root
+      snapshot.frontier ea =
+    ok (core.result.Result.Ok ta)
+haa : ta.append_one_with_empty_roots leaf ea = ok (core.result.Result.Ok (na, ra))
+hoa : outA = { next_pair_index := na.next_leaf_index, next_root := na.root, next_frontier := na.frontier }
+nb : incremental_merkle.IncrementalMerkleTreeV1
+rb : incremental_merkle.AppendOneV1
+hob : outB = { next_pair_index := nb.next_leaf_index, next_root := nb.root, next_frontier := nb.frontier }
+heb : pair_trace.pair_empty_roots = ok ea
+hcb :
+  incremental_merkle.IncrementalMerkleTreeV1.from_parts_with_empty_roots snapshot.next_pair_index snapshot.current_root
+      snapshot.frontier ea =
+    ok (core.result.Result.Ok ta)
+hab : ta.append_one_with_empty_roots leaf ea = ok (core.result.Result.Ok (nb, rb))
+nexts : (na, ra) = (nb, rb)
+hn : (na, ra).1 = (nb, rb).1
+⊢ { next_pair_index := na.next_leaf_index, next_root := na.root, next_frontier := na.frontier } =
+    { next_pair_index := nb.next_leaf_index, next_root := nb.root, next_frontier := nb.frontier }
+'R1Z.PV_RunJoin_AppendDeterminism32.unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
