@@ -1,93 +1,116 @@
-# LOG D373 resume handoff — 2026-10-28
+# LOG D377 resume handoff — 2026-10-28
 
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`; branch
 `codex/pv-b3p6-20261028`; resume base `1e826627aa39fe02569bf840efb894eaa287efcf`.
-Final Lean proof revision `9cb77f87aa4896a19e2475cd4b17cc39c7aa9e9c`.
-Stage history: [COMMIT-LOG-resume2.txt](COMMIT-LOG-resume2.txt).
-Prior handoff retained in [FINAL-D366.md](FINAL-D366.md).
+Final Lean proof revision `49557de942ec32710ff035d5d396f30b77056472`.
+Stage history: [COMMIT-LOG-resume3.txt](COMMIT-LOG-resume3.txt).
+Prior handoff: [FINAL-D373.md](FINAL-D373.md).
 
-**V243 newly closed; V229 remains closed. Four selected rows remain open.
-Target not yet established.**
+**V228 newly closed; V229 and V243 retain their accepted closed status.
+V241, V245 and V244 remain open. Target not yet established.**
 
-Stop: the fresh100 Lean budget is exhausted, IDs50500–50599 exactly:
-86 successful compiles,14 failed drafts, zero Kani. No checked counterexample
-to a ROWS7 statement or endpoint was found. Failed drafts/sorryAx placeholders
-receive zero proof credit. Historical12 Kani runs remain spent/uncredited;
-no copy-dependent or function-pointer Kani PASS is newly credited.
+Stop: all 100 Lean attempts consumed, IDs51900–51999 exactly, 65 successful
+compiles and35 failed drafts; zero Kani. Capacity relaunch inherited89 charged
+attempts, not a fresh budget; the final11 contained10 successful compiles and
+one failed draft. Refusals at51948 and51985 were uncharged and retried at the
+same IDs after cooldown. Failed drafts and their sorryAx placeholders earn
+zero proof credit. No checked counterexample to ROWS7 or the endpoint was found.
+Historical12 Kani runs remain spent/uncredited; no copy-dependent or
+function-pointer Kani PASS is newly credited.
 
 |Row/op|Status and exact scope|Next deliverable|
 |---|---|---|
-|V243/226|CLOSED selected callback/source/value requirement, **structural (K-1 substitute)**. `Closure226.complete_result`, `value`, `nonvacuity`; full1427/1455-byte layout, native Vec/error composition, original carrier and261 other-field frames.|Separate-budget KMX re-verification when required. Full native composition remains substantive.|
-|V229/133|CLOSED, inherited accepted structural packet; combined carrier equation replayed. No repeated full V229 regression.|No new row work.|
-|V228/132|OPEN. Owned fixed-array reference accepted by pinned extractor; local emitted predicate, write-retention, skip/stop, cast, geometry and loop-measure laws checked.|Prove whole nested-loop ordered-value/count invariant, global write-capacity bound and remaining predicate/source-helper equivalences; carrier installation and whole native binding.|
-|V241/224|OPEN; not advanced this resume.|Owned helper reference and full structural/reference law.|
-|V245/228|OPEN; not advanced this resume.|Owned registry reference and full structural/reference law.|
-|V244/227|OPEN; not advanced this resume.|Owned field-arithmetic reference and plain structural binding; no chained-field Kani.|
+|V228/132|CLOSED selected callback/source/value requirement, **structural (K-1 substitute)**. Whole nested-loop ordered-value/count law, exact3803-cell capacity, source predicates, native binding, original carrier installation and261 other-field frames.|Separate-budget KMX re-verification when required; whole native composition remains substantive.|
+|V229/133|CLOSED, inherited accepted structural packet.|No repeated full regression.|
+|V243/226|CLOSED, inherited accepted structural packet.|No repeated full regression.|
+|V241/224|OPEN. Both extracted component loops have complete Result laws and checked mutable-restoration fidelity. No whole native root or installed callback closure.|Convert prefix/suffix field and row types explicitly, connect original trace and registry, prove whole structural/reference law and install op224 with nonvacuity.|
+|V245/228|OPEN; not advanced.|Owned registry reference and full structural/reference law.|
+|V244/227|OPEN; not advanced.|Owned field-arithmetic reference and plain structural binding; no chained-field Kani.|
 
-## V243 binding
+## V228 closure
 
-[structural226-resume2.json](structural226-resume2.json) records the complete
-source argument, exact accepted proof-source receipts and ten categories of
-differences with their named Lean laws. The checker verifies unedited native
-bodies, the import/metadata-only emission port, the Lean native plan, every
-symbolic source-field/lane/flag/index in both layouts, sequential chunk staging,
-canonical-check grouping,20-row frontier order and17/45 padding cells.
-Field words remain arbitrary symbolic labels. `WholeBuffer226.value` discharges
-the old `cells` premise; `NativePlan226.complete_result` composes actual pinned
-Aeneas Vec push/clone/extend operations, rejection paths and size bounds.
+[V228 closure](V228-CLOSURE-resume3.md) and
+[structural packet](structural132-resume3.json) record21 exact native body/helper
+pins, deployed feature parity, every representation/control difference and its
+named Lean transport law. `MaskScan132.inner`, `MaskOuter132.outer`,
+`MaskCapacity132.full_count` and `MaskOrdered132.complete_result` prove the
+whole loop, without normalizing a1024-row recurrence. `MaskSource132.native_free`
+and `MaskFreeLaw132.free_eq` connect source helper predicates. `Install132.reference`,
+`value_law`, `count_law` and `nonvacuity` install the reference in the original
+carrier. This is a structural source argument, not compiler correctness or a
+Lean theorem of native machine execution.
 
-This is a structural source argument under(k′), not a Lean theorem of native
-machine execution, compiler correctness or a Kani result. The unchanged2884
-same-input native original/copy/reference comparisons are reused as **finite
-validation**, with all source pins checked. See [V243 closure](V243-CLOSURE-resume2.md).
+Exact-feature native validation compares statement, copy, deployed host array
+and reference on the same unit input and all3803 ordered cells. It is **finite
+validation**. Receipt `receipts-resume3/native132-resume3-exact/receipt/receipt.json`:
+exit0,26.752s,peak508860KiB,swap0,source0ed3bce74f,axioms N/A.
 
-## V228 evidence
+## V241 partial result and remaining boundary
 
-The first Vec candidate hit the retained structured-Drop guard. The fixed-array
-replacement passed optimized native comparison of all3803 ordered output cells
-and pinned Charon/Aeneas extraction, without a bypass. Its emitted Array.update
-state is retained through both loops. `MaskStep132.write_retained` proves the
-local write path, but neither this nor the finite validation proves the full
-loop/count/value law. Raw emission, failed extraction and all receipts remain.
+The owned references remain outside shipped crates. Initial whole helper
+extractions failed retained structured-Drop/translation guards; accepted
+factorings avoid those shapes without editing the pinned extractor.
+`HelperComplete224.complete_result` proves the emitted arithmetic suffix equals
+an ordered1024-element Result traversal, including error/failure/divergence.
+`PrefixComplete224.complete_result` proves the emitted136-link prefix equals
+ordered stateful actions, preserving producer-before-consumer calls and rejection.
+`HelperSide224.producer_zero` exposes restored value/weight arrays and final
+outer write. `HelperLength224` proves successful ordered traversals retain length.
+`HelperRegistryGuard224.bounded` derives row bounds from the accepted forest
+schedule, conditional on an explicit endpoint agreement check.
 
-Array native receipt: `receipts-resume2/native132-resume2-array/receipt/receipt.json`:
-exit0,0.162s,peak147288KiB,scope67977216bytes,swap0;
-Rust revision `79dc9aa0bb2a352bf5ea62fe13fcc820305e2b6b`; axioms N/A.
+Prefix and suffix emissions use distinct generated field/row types. Their
+conversion and relation to the original whole native helper are NOT proved.
+A proposed uncompiled direct composition was removed before any compile because
+it ignored that type boundary. No local component theorem is promoted to V241
+closure. `HelperView224` specializes variant type op19 to the withdrawal Bool,
+preserves missing vector entries as None and proves other type frames; this is
+not an installed op224 callback.
+
+[fidelity224-resume3.json](fidelity224-resume3.json) records native/emission
+comparisons with changing writes: four prefix side cases and a full1024-element
+suffix output with one active endpoint at1023. Both agree. These are finite
+validation, not universal native equality. Feature graphs and native receipt
+pins are retained; no deployed-feature credit is inferred for an unbound root.
 
 ## Final verification
 
-All Lean runs used env J,-M7000,900s, one own6G-high/8G-max/swap0/Tasks64 scope.
-All accepted axioms are subsets of propext, Classical.choice, Quot.sound.
+Every Lean run: env J,-M7000,900s, one own6G-high/8G-max/swap0/Tasks64 scope.
+All accepted axioms are subsets of propext,Classical.choice,Quot.sound.
 
 |ID/target|Exit|Wall(s)|Peak RSS(KiB)|Scope peak(bytes)|Swap|
 |---|---:|---:|---:|---:|---:|
-|50597 / PV_B3P_Resume2Axioms|0|1.025|2640484|290594816|0|
-|50598 / PV_B3P_Resume2CombinedAudit|0|31.585|2676884|323084288|0|
-|50599 / PV_B3P_Resume2FocusedClosure|0|1.058|2647468|292237312|0|
+|51997 / PV_B3P_Resume3Axioms|0|1.223|2641540|294903808|0|
+|51998 / PV_B3P_Resume3CombinedAudit|0|6.598|2663056|320311296|0|
+|51999 / PV_B3P_Resume3FocusedClosure|0|1.015|2645340|292605952|0|
 
-Each uses the final Lean proof revision above. The combined audit preserves260
-other fields after selecting133 and226. The focused closure is this packet,
-not the privacy endpoint. [Receipt index](receipt-index-resume2.json) retains
-exact targets, SHA/blob/dependency fingerprints, errors, timings, resource
-measurements and full axioms logs. [Closure hash audit](closure-hash-audit-resume2.json)
-checks86 project modules with zero dependency mismatches. All5673 external
-objects were freshly SHA-verified before the first compile
-(`receipts-resume2/external-verification.json`). Five early inherited
-revision-label mismatches have explicit corrections in
-`resume2-revision-corrections.json`; original receipts remain unchanged.
+All three use the final proof revision above. The combined audit installs132
+in any original carrier and preserves all261 others, including133/226; those
+inherited packets are reused, not recompiled. The focused closure is the new
+V228 packet plus V241 component laws, not the privacy endpoint or a full
+rebuild of the inherited V229/V243 closure.
+
+[Receipt index](receipt-index-resume3.json) records all100 targets, statuses,
+resource measurements, exact source/blob/dependency fingerprints and axioms.
+[Closure hash audit](closure-hash-audit-resume3.json) checks60 current project
+modules with zero dependency mismatches. All5673 external objects were SHA-checked
+before the first compile (`receipts-resume3/external-verification.json`).
+No revision-label corrections were needed. Original receipts and failed drafts
+are retained. [ROWS7 snapshot](ROWS7-selected.json) records the selected ledger
+statements without changing their scope; its research revision/hash is retained.
 
 ## Premises and cleanup
 
-Before this resume: V229 selected requirement closed; five open. After: V229
-and V243 selected requirements closed; four open. No hypothesis was added,
-weakened or moved into T. No full endpoint premise was removed by this packet:
-V165/V167, E1/E2, real RunJoin, client proof-account route and L1/L2/L3 remain
-substantive. T remains exactly entropy_law, entropy_kernel, observation.
-Simulator and observer are unchanged.
+Before D377: V229/V243 closed; four selected requirements open. After D377:
+V228 additionally closed; three remain open. No hypothesis was weakened, added
+or moved into T. No full endpoint premise was removed: V165/V167,E1/E2,real
+RunJoin,the client proof-account route and L1/L2/L3 remain substantive.
+T remains exactly entropy_law,entropy_kernel,observation. Simulator and observer
+are unchanged. No crates/,programs/,shared sources,other-job workspaces or keys
+were changed; no push.
 
-No crates/, programs/, shared sources, other-job workspaces or keys were changed.
-After all own scopes ended, own target/, charon-target/ and lean-objects/ caches
-were removed:169226112bytes. Hashes are retained in `resume2-object-manifest.json`
-and `resume2-native-artifacts.json`; sources and receipts remain on the host.
-No push. Resume V228 at the whole-loop invariant, then V241,V245,V244, using a new
-budget and fresh IDs.
+After all own scopes ended, own target/,charon-target/,lean-objects/ caches were
+removed:328416064 bytes. Sources, receipts and hashes remain; see
+[cleanup](resume3-cleanup.json) and [artifact manifest](resume3-object-manifest.json).
+Resume V241 with a fresh budget/IDs, then V245,V244; do not rerun unchanged
+successful proofs solely because their disposable compiled caches were removed.

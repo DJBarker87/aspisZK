@@ -1,0 +1,90 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_HelperRow224.lean:20:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let r ← ?x
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => ?k a
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual ?m.19
+          (core.convert.FromSame ?m.20) residual
+in the target expression
+  (do
+      let r_1 ←
+        reference224.endpoint aspis_core.field.QM31.ZERO (zero r.producer_values) (zero r.producer_weights) chi false
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r_1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← reference224.endpoint val (one r.producer_values) (one r.producer_weights) chi false
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← reference224.endpoint val1 (zero r.consumer_values) (zero r.consumer_weights) chi true
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 =>
+                  reference224.endpoint val2 (one r.consumer_values) (one r.consumer_weights) chi true
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.QM31 (core.convert.FromSame reference224.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+                (core.convert.FromSame reference224.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+            (core.convert.FromSame reference224.Error) residual) =
+    bindR
+      (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations false chi
+        PV_B3P_HelperEndpoint224.operations.zero (zero r.producer_values) (zero r.producer_weights))
+      fun v0 =>
+      bindR
+        (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations false chi v0 (one r.producer_values)
+          (one r.producer_weights))
+        fun v1 =>
+        bindR
+          (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations true chi v1 (zero r.consumer_values)
+            (zero r.consumer_weights))
+          fun v2 =>
+          PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations true chi v2 (one r.consumer_values)
+            (one r.consumer_weights)
+
+r : aspis_statement.logup.CopyLogUpRow
+chi : aspis_core.field.QM31
+⊢ (do
+      let r_1 ←
+        reference224.endpoint aspis_core.field.QM31.ZERO (zero r.producer_values) (zero r.producer_weights) chi false
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r_1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let r1 ← reference224.endpoint val (one r.producer_values) (one r.producer_weights) chi false
+          let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let r2 ← reference224.endpoint val1 (zero r.consumer_values) (zero r.consumer_weights) chi true
+              let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r2
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 =>
+                  reference224.endpoint val2 (one r.consumer_values) (one r.consumer_weights) chi true
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    aspis_core.field.QM31 (core.convert.FromSame reference224.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+                (core.convert.FromSame reference224.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+            (core.convert.FromSame reference224.Error) residual) =
+    bindR
+      (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations false chi
+        PV_B3P_HelperEndpoint224.operations.zero (zero r.producer_values) (zero r.producer_weights))
+      fun v0 =>
+      bindR
+        (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations false chi v0 (one r.producer_values)
+          (one r.producer_weights))
+        fun v1 =>
+        bindR
+          (PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations true chi v1 (zero r.consumer_values)
+            (zero r.consumer_weights))
+          fun v2 =>
+          PV_B3P_HelperEffects224.endpoint PV_B3P_HelperEndpoint224.operations true chi v2 (one r.consumer_values)
+            (one r.consumer_weights)
+'PV_B3P_HelperRow224.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
