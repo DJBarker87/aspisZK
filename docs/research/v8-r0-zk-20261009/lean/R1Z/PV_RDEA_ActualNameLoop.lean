@@ -36,9 +36,9 @@ def finite (digest : Array U8 32#usize) : Nat → String → Usize → Result St
 
 theorem step (digest : Array U8 32#usize) (acc : String) (i : Usize)
     (go : i≠32#usize) :
-    aspis_prover.state_only_entropy.reservation_name digest acc i = do
+    aspis_prover.state_only_entropy.reservation_name digest acc i = (do
       let next ← round digest acc i
-      aspis_prover.state_only_entropy.reservation_name digest next (Usize.wrapping_add i 1#usize) := by
+      aspis_prover.state_only_entropy.reservation_name digest next (Usize.wrapping_add i 1#usize)) := by
   rw [aspis_prover.state_only_entropy.reservation_name.eq_def]
   simp only [go,if_false,round,lift,bind_tc_ok,bind_assoc]
 
