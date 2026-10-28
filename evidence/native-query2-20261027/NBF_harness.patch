@@ -8,7 +8,7 @@
 +#[cfg(kani)] #[path="NBF_harness.rs"] mod NBF_harness;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NBF_harness.rs
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,48 @@
 +use super::*;
 +use aspis_core::field::CM31;
 +static mut NBF_PTR: *mut [u64;4] = core::ptr::null_mut();
@@ -35,4 +35,25 @@
 + assert_eq!(weights.raw.as_ptr(),ptr);assert_eq!(weights.raw.len(),64);assert_eq!(weights.raw.capacity(),cap);assert_eq!(weights.terms,terms);
 + unsafe {assert_eq!(NBF_PTR,ptr.add(index) as *mut [u64;4]);assert_eq!(NBF_POWER,p);assert_eq!(NBF_BASIS,basis);assert_eq!(NBF_FLUSH,terms&3==3);assert_eq!(NBF_CALLS,1);}
 + kani::cover!(index==0);kani::cover!(index==63);kani::cover!(terms&3==3);
++}
++
++static mut NBF_REPLY:[u64;4]=[0;4];
++// One selected row write; every returned row is considered. No field multiply.
++fn NBF_write(row:&mut[u64;4],_power:K,_basis:M31,_flush:bool) {
++ let reply:[u64;4]=kani::any();unsafe {NBF_REPLY=reply;} *row=reply;
++}
++#[kani::proof]
++#[kani::stub(super::update_residue_row,NBF_write)]
++fn NBF_single_row_write() {
++ let backing:Box<[[u64;4];64]>=Box::new(kani::any());
++ let slice:Box<[[u64;4]]>=backing;let raw=Vec::from(slice);
++ let i:usize=kani::any();kani::assume(i<64);
++ let j:usize=kani::any();kani::assume(j<64);
++ let k:usize=kani::any();kani::assume(k<4);
++ let before=raw[j][k];let ptr=raw.as_ptr();let capacity=raw.capacity();let terms:usize=kani::any();
++ let mut weights=BatchedWeights{raw,terms};
++ weights.push(i,K::ZERO,M31::ZERO);
++ assert_eq!(weights.raw.len(),64);assert_eq!(weights.raw.capacity(),capacity);assert_eq!(weights.raw.as_ptr(),ptr);assert_eq!(weights.terms,terms);
++ unsafe {assert_eq!(weights.raw[j][k],if i==j {NBF_REPLY[k]} else {before});}
++ kani::cover!(i!=j);kani::cover!(i==j);kani::cover!(i==63);kani::cover!(i==0);
 +}
