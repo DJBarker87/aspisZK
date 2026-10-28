@@ -18,6 +18,7 @@ theorem indexed (logical : Slice U8) (start n : Nat) :
     apply congrArg List.ofFn
     funext i
     congr 2
+    simp only [Fin.val_succ]
     omega
 
 theorem length (logical : Slice U8) (start n : Nat)
