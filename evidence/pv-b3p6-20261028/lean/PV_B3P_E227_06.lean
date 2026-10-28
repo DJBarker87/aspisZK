@@ -18,35 +18,49 @@ namespace PV_B3P_227
 
 /-- [pv_b3p6_reference227::reference_copy_terminal::constants::COPY_PATTERNS]
     Source: 'host_copy_terminal_constants.rs', lines 10:0-25:2 -/
-@[irreducible]
-def reference_copy_terminal.constants.COPY_PATTERNS
-  : Array reference_copy_terminal.CompiledPoolV1PairForestPattern 14#usize :=
-  let a := Array.repeat 16#usize 1#u8
-  let a1 := Array.repeat 16#usize 0#u32
-  let a2 := Array.repeat 16#usize 0#u32
-  let a3 := Array.repeat 16#usize 0#u32
-  let a4 := Array.repeat 16#usize 0#u32
-  let a5 := Array.repeat 16#usize 0#u32
-  let a6 := Array.repeat 16#usize 0#u32
-  let a7 := Array.repeat 16#usize 0#u8
-  let a8 := Array.repeat 16#usize 0#u32
-  let a9 := Array.repeat 16#usize 0#u32
-  let a10 := Array.repeat 16#usize 0#u32
-  let a11 := Array.repeat 16#usize 0#u32
-  let a12 := Array.repeat 16#usize 0#u32
-  let a13 := Array.repeat 16#usize 0#u32
-  let a14 := Array.repeat 16#usize 0#u32
-  Array.make 14#usize [
-    {
-      kinds := a,
+private def reference_copy_terminal.constants.pattern_let_a : Array U8 16#usize := Array.repeat 16#usize 1#u8
+
+private def reference_copy_terminal.constants.pattern_let_a1 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a2 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a3 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a4 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a5 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a6 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a7 : Array U8 16#usize := Array.repeat 16#usize 0#u8
+
+private def reference_copy_terminal.constants.pattern_let_a8 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a9 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a10 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a11 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a12 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a13 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_let_a14 : Array U32 16#usize := Array.repeat 16#usize 0#u32
+
+private def reference_copy_terminal.constants.pattern_0 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
+      kinds := reference_copy_terminal.constants.pattern_let_a,
       columns :=
         (Array.make 16#usize [
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 10#u8,
           11#u8, 12#u8, 13#u8, 14#u8, 15#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a1
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a1
+    }
+
+private def reference_copy_terminal.constants.pattern_1 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
@@ -57,9 +71,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a2
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a2
+    }
+
+private def reference_copy_terminal.constants.pattern_2 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -70,9 +86,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a3
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a3
+    }
+
+private def reference_copy_terminal.constants.pattern_3 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -83,9 +101,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           0#u8, 1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a4
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a4
+    }
+
+private def reference_copy_terminal.constants.pattern_4 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -96,9 +116,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           0#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a5
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a5
+    }
+
+private def reference_copy_terminal.constants.pattern_5 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -109,18 +131,22 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           6#u8, 7#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a6
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a6
+    }
+
+private def reference_copy_terminal.constants.pattern_6 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      columns := a7,
-      offsets := a8
-    },
-    {
+      columns := reference_copy_terminal.constants.pattern_let_a7,
+      offsets := reference_copy_terminal.constants.pattern_let_a8
+    }
+
+private def reference_copy_terminal.constants.pattern_7 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -131,9 +157,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           10#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a9
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a9
+    }
+
+private def reference_copy_terminal.constants.pattern_8 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -144,9 +172,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a10
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a10
+    }
+
+private def reference_copy_terminal.constants.pattern_9 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
@@ -157,9 +187,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           2#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a11
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a11
+    }
+
+private def reference_copy_terminal.constants.pattern_10 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
@@ -175,8 +207,10 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 1051521018#u32,
           0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32, 0#u32
           ] (by simp only [List.length_cons, List.length_nil]; rfl))
-    },
-    {
+    }
+
+private def reference_copy_terminal.constants.pattern_11 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
@@ -187,9 +221,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 9#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a12
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a12
+    }
+
+private def reference_copy_terminal.constants.pattern_12 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
@@ -200,9 +236,11 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           1#u8, 2#u8, 3#u8, 4#u8, 5#u8, 6#u8, 7#u8, 8#u8, 0#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a13
-    },
-    {
+      offsets := reference_copy_terminal.constants.pattern_let_a13
+    }
+
+private def reference_copy_terminal.constants.pattern_13 : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+{
       kinds :=
         (Array.make 16#usize [
           1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 1#u8, 0#u8, 0#u8, 0#u8,
@@ -213,9 +251,25 @@ def reference_copy_terminal.constants.COPY_PATTERNS
           8#u8, 9#u8, 10#u8, 11#u8, 12#u8, 13#u8, 14#u8, 15#u8, 0#u8, 0#u8,
           0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8
           ] (by simp only [List.length_cons, List.length_nil]; rfl)),
-      offsets := a14
+      offsets := reference_copy_terminal.constants.pattern_let_a14
     }
-    ] (by simp only [List.length_cons, List.length_nil]; rfl)
+
+@[irreducible]
+def reference_copy_terminal.constants.COPY_PATTERNS : Array reference_copy_terminal.CompiledPoolV1PairForestPattern 14#usize :=
+  Array.make 14#usize [reference_copy_terminal.constants.pattern_0,
+reference_copy_terminal.constants.pattern_1,
+reference_copy_terminal.constants.pattern_2,
+reference_copy_terminal.constants.pattern_3,
+reference_copy_terminal.constants.pattern_4,
+reference_copy_terminal.constants.pattern_5,
+reference_copy_terminal.constants.pattern_6,
+reference_copy_terminal.constants.pattern_7,
+reference_copy_terminal.constants.pattern_8,
+reference_copy_terminal.constants.pattern_9,
+reference_copy_terminal.constants.pattern_10,
+reference_copy_terminal.constants.pattern_11,
+reference_copy_terminal.constants.pattern_12,
+reference_copy_terminal.constants.pattern_13] (by simp only [List.length_cons, List.length_nil]; rfl)
 
 
 end PV_B3P_227
