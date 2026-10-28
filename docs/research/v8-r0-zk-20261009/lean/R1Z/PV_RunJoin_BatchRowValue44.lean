@@ -29,7 +29,7 @@ theorem step (ops : ExternalFuns) (c : Nat → Nat → Raw) (p : Nat → Raw)
   unfold PV_RunJoin_BatchRowThread44.step table array
   rw [ProverCommitArray49.index 29#usize (fun i => current (source (p i))) lane hl]
   simp only [bind_tc_ok]
-  rw [PV_RunJoin_Vector44.read 29#usize (fun l => ProverCommitArray49.array 1024#usize (fun i => current (source (c l i)))) lane hl]
+  rw [PV_RunJoin_Vector44.read (A := Array W 1024#usize) 29#usize (fun (l : Nat) => ProverCommitArray49.array 1024#usize (fun i => current (source (c l i)))) lane hl]
   simp only [bind_tc_ok]
   rw [ProverCommitArray49.index 1024#usize (fun i => current (source (c lane.val i))) row hr]
   simp only [bind_tc_ok,PV_RunJoin_WideArithmetic44.mul ops _ _ _ hprod,
