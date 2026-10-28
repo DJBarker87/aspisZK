@@ -13076,3 +13076,14 @@ checks), proving per site that the guard outcome is constant on every honest inp
 prover's randomness, using runjoin's HonestInput predicate, toward rows V352, V354, V357, V360. An
 honest input on which a guard takes the other branch would be a real L2 leak and a stop. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D345 (Stream B) 2026-10-28 02:12 UTC: runjoin30 result; runjoin31 launched
+
+runjoin30 used its 64 attempts (40 passed, 24 failures retained; final audit with standard axioms; no
+shipped-code change). It proves the snapshot codec's success and error domains, the provenance of
+decoded data, the snapshot guards and canonicality of the input pair along the canonical route. The
+full outer preparation domain and "every successful canonical-route preparation is an HonestInput"
+remain open, so the owner coverage sentence is not yet written; V038/V045 were not started. Branch
+pushed (e79a804202). runjoin31 (fresh 100 attempts; IDs 42900-42999) composes the codec results with
+runjoin29's inner-compiler characterisation to finish those three steps. Rows removed outright: 0.
+Privacy target not yet established.
