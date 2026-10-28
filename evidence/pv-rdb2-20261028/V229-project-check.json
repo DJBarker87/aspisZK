@@ -1,0 +1,100 @@
+{
+  "candidate": "5fa2cc6781d436cf346e630850f8aaac2f64ef93",
+  "revision": "86e544301d40b2d55347ab66d21c3b0f8c0d0c90",
+  "evidence_class": "structural (K-1 substitute)",
+  "exact_body_copies": [
+    {
+      "module": "tree",
+      "function": "link",
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "tokens_sha256": "1244412fc988d8dee065167ae961891996dd72d633e077a88193c7794c8e6663"
+    },
+    {
+      "module": "tree",
+      "function": "endpoint_counts",
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "tokens_sha256": "722fe7b75549916c5a976ce741356b3e55ea7f909e4b281332224b8d08c081a1"
+    },
+    {
+      "module": "tree",
+      "function": "build_pool_v1_pair_copy_row_schedule_v1",
+      "path": "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs",
+      "tokens_sha256": "930eab03ac0452d23f754d88dcf2490050d322d86d6a25df32ce261c2ed0848c"
+    },
+    {
+      "module": "forest",
+      "function": "link",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "tokens_sha256": "1244412fc988d8dee065167ae961891996dd72d633e077a88193c7794c8e6663"
+    },
+    {
+      "module": "forest",
+      "function": "endpoint_counts",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "tokens_sha256": "722fe7b75549916c5a976ce741356b3e55ea7f909e4b281332224b8d08c081a1"
+    },
+    {
+      "module": "forest",
+      "function": "build_pool_v1_pair_forest_copy_row_schedule_v1",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "tokens_sha256": "907a94ec02af0424b4d058623827c0e81eb332686622ebe856264a352e54eb6f"
+    },
+    {
+      "module": "forest",
+      "function": "pool_v1_pair_forest_copy_active_rows_v1",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs",
+      "tokens_sha256": "0768ba76778cc13760aa9e804c5acbf5a6b18ef0581311bdcd79925f268f0485"
+    }
+  ],
+  "source_files": {
+    "crates/aspis-statement/src/pool_v1/pair_tree_hiding.rs": "3dfe485fc2e9a643a15e0bc7ef0d9fed20b1fa43984bb1d0997d38a380a90ab6",
+    "crates/aspis-statement/src/pool_v1/pair_forest_hiding.rs": "61bcd59a22c9c02fe3f9ba69cda43bfa8fe02ea14f15da9b761e976fe48798bf",
+    "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs": "660f00d91fb08e809b8f00a7e3917d546cf2097e6ea4b59b951e0dc8cc03e7af"
+  },
+  "owned_copy_sha256": "bd61953d7b03889b9be55efb690edb3bfefde0215ab240510aea22e0683146c5",
+  "copy_to_literal_differences": [
+    {
+      "change": "specialize no-argument legacy and forest schedule loops and guards",
+      "law": "PV_B3P_ScheduleResult133.legacy_success / forest_success"
+    },
+    {
+      "change": "erase unused kind data after private-path filtering",
+      "law": "PV_B3P_Schedule133.kind_erasure"
+    },
+    {
+      "change": "sort/dedup the fixed endpoint sequence to literal ordered rows",
+      "law": "PV_B3P_Closure133.sorted_value; PV_B3P_SortedResult133.complete_result"
+    },
+    {
+      "change": "owned array to native Vec carrier",
+      "law": "PV_B3P_Output133.toVec_val"
+    }
+  ],
+  "finite_validation": "finite_native133_structural; native Rust, same unit input",
+  "native_link_credit": false,
+  "note": "Candidate until all named Lean specialization laws and native receipt are checked. Exact native body copies themselves have no syntax differences.",
+  "row": "V229",
+  "op": 133,
+  "model_schedule_pairs": 136,
+  "model_expected_rows": 214,
+  "control_order": "legacy Shape then endpoints; filter private kinds; translate endpoints; forest level pushes; forest Shape then endpoints; endpoint flat-map; ascending sort; adjacent dedup; Ok",
+  "preserved_error_paths": "Both constructor Shape/EndpointCapacity guards succeed, by checked complete-Result laws. All helper Options succeed on their exact call domains; casts and increments are in bounds.",
+  "scalar_state_refinement": "PV_B3P_StructuralLemmas133.counts_refinement / u16_cast_harmless / u8_increment_harmless",
+  "helper_refinement": "PV_B3P_StructuralLemmas133.legacy_option / forest_aux_option / forest_block_option / previous_block_option / local_table / helper_bounds",
+  "sort_value_refinement": "PV_B3P_Closure133.sorted_value: every ascending sorted permutation of the exact endpoint sequence gives the same 214 rows after adjacent dedup",
+  "reference_refinement": "PV_B3P_ReferenceValue133.reference_complete",
+  "carrier_law": "PV_B3P_Closure133.row_law; PV_B3P_Install133.source/reference, 261 unchanged callback frames",
+  "trusted_items_added": [],
+  "universal_native_machine_equality_claimed": false,
+  "standard_library_value_reading": [
+    "Vec collection preserves flat-map order",
+    "sort_unstable returns an ascending permutation under natural u16 order",
+    "dedup compresses adjacent equal values"
+  ],
+  "standard_library_reading_scope": "Structural source argument uses the same standard calls in its exact owned copies. Algorithm-independent sorting/dedup transport is the Lean law above; no Kani PASS or compiler correctness proof is claimed.",
+  "row_closed": false,
+  "recovered_from": "/Users/dominic/ZK/.worktrees/pv-rdb2/evidence/pv-b3p6-20261028/structural133.json",
+  "original_checker_sha256": "3caef3d4c4f47a8441e5353f933b4d36b96eeb82d70620b1f48848b005d352ae",
+  "recovery_change": "omit only final display indexing missing row_closed when --finalize is absent",
+  "scope": "project body/certificate checks only; deployed std body laws and full row closure remain suspended"
+}
