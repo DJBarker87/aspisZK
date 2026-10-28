@@ -1,0 +1,46 @@
+NCM_sources/NCM_RowsObservation.lean:48:25: error: unsolved goals
+case neg.Next
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (rawOracle H input)
+physical : Slice U8
+size : (↑physical).length ≤ 5504
+fuel : ℕ
+ih :
+  ∀ (s : Carrier) (i w : Usize),
+    RowDomain physical s.scratch i w →
+      eval H (NCM_Rows.rows NCM_RowProgress.model NCM_Rows.modelExit fuel s physical i w) =
+        eval H (annotate levelScratch s (transport (MultiproofConePhysicalLevels.rows fuel s.scratch physical i w)))
+s : Carrier
+i w : Usize
+domain : RowDomain physical s.scratch i w
+halt : ¬i ≥ s.scratch.n
+active : ↑i < ↑s.scratch.n
+log : List (Bytes × State)
+after : reference.Scratch
+ni nw : Usize
+observed :
+  eval H (NCM_RowProgress.model s physical i w) =
+    (log, ok (reference.Row.Next after ni nw),
+      { prepared := s.prepared, proof := s.proof, scratch := rowScratch s.scratch (ok (reference.Row.Next after ni nw)),
+        log := s.log ++ log })
+post : Progress physical s.scratch i w (reference.Row.Next after ni nw)
+raw :
+  eval H (transport (MultiproofConePhysicalProgram.node s.scratch physical i w)) =
+    (log, ok (reference.Row.Next after ni nw))
+⊢ (log ++ (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).1,
+      (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).2,
+      { prepared := s.prepared, proof := s.proof,
+        scratch :=
+          levelScratch after (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).2,
+        log :=
+          s.log ++ (log ++ (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).1) }) =
+    (log ++ (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).1,
+      (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).2,
+      { prepared := s.prepared, proof := s.proof,
+        scratch :=
+          levelScratch s.scratch (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).2,
+        log := s.log ++ (log ++ (eval H (transport (MultiproofConePhysicalLevels.rows fuel after physical ni nw))).1) })
+'AspisR1.NCM_RowsObservation.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

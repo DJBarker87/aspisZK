@@ -1,0 +1,159 @@
+NCM_sources/NCM_LeafLoop.lean:81:6: error: unsolved goals
+case cons.none.refine_2
+X : Type
+D : AspisR1Stage2.aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (MultiproofConePhysicalTransport.rawOracle H input)
+ops : Ops
+getCut : NCE_KeyReadCuts.NCE_Native_KeysRead ops.get
+readerCut : NCE_Native_Opening ops.reader
+leafCut : NCE_Native_Leaf ops.request ops.post
+kind : Usize
+batch n : ℕ
+kb : ↑kind < 3
+small : n ≤ 16
+q : Fin 22 → Fin 262144
+parsed : OraclePortCompactDraft.Parsed
+keys : Std.Array U64 16#usize
+selected : ℕ
+rest : List ℕ
+ih :
+  ∀ (cursor : Usize) (s : Carrier),
+    (∀ p ∈ rest, p ∈ OraclePortSelectedDraft.batchPositions batch) →
+      Stream keys cursor q batch (↑kind) rest →
+        ↑cursor + rest.length = n →
+          ↑s.scratch.n + rest.length ≤ 16 →
+            (↑s.proof).length = 57607 →
+              parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof →
+                ∃ log out after,
+                  eval H (MultiproofConeLeafFold.leaves parsed q (↑kind) rest s.scratch) = (log, ok out) ∧
+                    run D hash ops kind batch n rest.length keys cursor s = ok (out, after) ∧
+                      after.prepared = s.prepared ∧
+                        after.proof = s.proof ∧
+                          after.log = s.log ++ log ∧ ∀ (t : reference.Scratch), out = some t → after.scratch = t
+cursor : Usize
+s : Carrier
+members : ∀ p ∈ selected :: rest, p ∈ OraclePortSelectedDraft.batchPositions batch
+stream : Stream keys cursor q batch (↑kind) (selected :: rest)
+span : ↑cursor + (selected :: rest).length = n
+room : ↑s.scratch.n + (selected :: rest).length ≤ 16
+size : (↑s.proof).length = 57607
+wire : parsed.wire = MultiproofConeCanonical.bytesOf ↑s.proof
+active : ↑cursor < n
+cb : ↑cursor < 16
+available : ↑s.scratch.n < 16
+key : (↑keys)[↑cursor]! = MultiproofConeSortOrder.packed q batch (↑kind) selected
+observed :
+  NCM_LeafSelected.step D hash ops.get ops.reader ops.request ops.post kind batch s keys cursor =
+    have input := OraclePortSelectedDraft.leaf parsed (↑kind) selected;
+    have afterRead :=
+      { prepared := s.prepared, proof := s.proof, scratch := s.scratch, log := s.log ++ [(input, H input)] };
+    have out :=
+      project s.scratch (cursor.wrapping_add 1#usize)
+        (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+          (encodeState (H input)) available);
+    ok (out, returnedCarrier afterRead out, keys)
+input : Bytes := OraclePortSelectedDraft.leaf parsed (↑kind) selected
+digest : Std.Array U8 32#usize := encodeState (H input)
+nextPos : Usize := cursor.wrapping_add 1#usize
+nextVal : ↑nextPos = ↑cursor + 1
+physical :
+  reference.leaf_step s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) =
+    ok
+      (MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+        (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) available)
+next :
+  MultiproofConeLeafContent.next s.scratch (MultiproofConeLeafFold.key q (↑kind) selected)
+      (encodeState (H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))) available =
+    none
+afterRead : Carrier :=
+  { prepared := s.prepared, proof := s.proof, scratch := s.scratch, log := s.log ++ [(input, H input)] }
+⊢ ok
+      (none,
+        returnedCarrier
+          { prepared := s.prepared, proof := s.proof, scratch := s.scratch,
+            log :=
+              s.log ++
+                [(OraclePortSelectedDraft.leaf parsed (↑kind) selected,
+                    H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))] }
+          (done (s.scratch.idx, s.scratch.val, some (core.result.Result.Err AspisR1Stage2.verifier.Error.Merkle)))) =
+    ok (none, afterRead)
+NCM_sources/NCM_LeafLoop.lean:101:8: error: Type mismatch
+  native
+has type
+  run D hash ops kind batch n rest.length keys nextPos nextCaller = ok (out, after)
+but is expected to have type
+  run D hash ops kind batch n rest.length keys (cursor.wrapping_add 1#usize)
+      (returnedCarrier
+        { prepared := s.prepared, proof := s.proof, scratch := s.scratch,
+          log :=
+            s.log ++
+              [(OraclePortSelectedDraft.leaf parsed (↑kind) selected,
+                  H (OraclePortSelectedDraft.leaf parsed (↑kind) selected))] }
+        (cont (nextScratch.idx, nextScratch.val, nextScratch.n, cursor.wrapping_add 1#usize))) =
+    ok (out, after)
+NCM_sources/NCM_LeafLoop.lean:80:74: warning: This simp argument is unused:
+  digest
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval, ̲physical, ̲next, ̲input,̵d̵i̵g̵e̵s̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:81:69: warning: This simp argument is unused:
+  input
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_cons, ̲run, ̲active, ̲if_true, ̲observed, ̲next,i̵n̵p̵u̵t̵,̵ ̲digest, ̲project,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲NCM_LeafFrame.rejected]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:81:75: warning: This simp argument is unused:
+  digest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵r̵u̵n̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵n̵e̵x̵t̵,̵i̵n̵p̵u̵t̵,̵d̵i̵g̵e̵s̵t̵,̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵C̵M̵_̵L̵e̵a̵f̵F̵r̵a̵m̵e̵.̵r̵e̵j̵e̵c̵t̵e̵d̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲n̲e̲x̲t̲,̲ ̲i̲n̲p̲u̲t̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲C̲M̲_̲L̲e̲a̲f̲F̲r̲a̲m̲e̲.̲r̲e̲j̲e̲c̲t̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:81:101: warning: This simp argument is unused:
+  NCM_LeafFrame.rejected
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵r̵u̵n̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵n̵e̵x̵t̵,̵i̵n̵p̵u̵t̵,̵d̵i̵g̵e̵s̵t̵,̵p̵r̵o̵j̵e̵c̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵N̵C̵M̵_̵L̵e̵a̵f̵F̵r̵a̵m̵e̵.̵r̵e̵j̵e̵c̵t̵e̵d̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲n̲e̲x̲t̲,̲ ̲i̲n̲p̲u̲t̲,̲ ̲d̲i̲g̲e̲s̲t̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:98:80: warning: This simp argument is unused:
+  digest
+
+Hint: Omit it from the simp argument list.
+  simp only [MultiproofConeLeafFold.leaves, ̲eval, ̲physical, ̲next, ̲model, ̲input,d̵i̵g̵e̵s̵t̵,̵ ̲nextCaller]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:100:69: warning: This simp argument is unused:
+  input
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵r̵u̵n̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵n̵e̵x̵t̵,̵i̵n̵p̵u̵t̵,̵d̵i̵g̵e̵s̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵r̵r̵i̵e̵r̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲n̲e̲x̲t̲,̲ ̲d̲i̲g̲e̲s̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲r̲r̲i̲e̲r̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:100:75: warning: This simp argument is unused:
+  digest
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵r̵u̵n̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵n̵e̵x̵t̵,̵i̵n̵p̵u̵t̵,̵d̵i̵g̵e̵s̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵r̵r̵i̵e̵r̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲n̲e̲x̲t̲,̲ ̲i̲n̲p̲u̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲a̲r̲r̲i̲e̲r̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCM_sources/NCM_LeafLoop.lean:100:93: warning: This simp argument is unused:
+  carrier
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵r̵u̵n̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵o̵b̵s̵e̵r̵v̵e̵d̵,̵n̵e̵x̵t̵,̵i̵n̵p̵u̵t̵,̵d̵i̵g̵e̵s̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵c̵a̵r̵r̵i̵e̵r̵,̵p̵r̵o̵j̵e̵c̵t̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲r̲u̲n̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲o̲b̲s̲e̲r̲v̲e̲d̲,̲ ̲n̲e̲x̲t̲,̲ ̲i̲n̲p̲u̲t̲,̲ ̲d̲i̲g̲e̲s̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲p̲r̲o̲j̲e̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCM_LeafLoop.observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,36 @@
+NCM_sources/NCM_RowProgress.lean:32:63: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).2
+in the target expression
+  (have out := eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w));
+    (out.1, out.2,
+      { prepared := caller.prepared, proof := caller.proof, scratch := rowScratch caller.scratch out.2,
+        log := caller.log ++ out.1 })) =
+    ((eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).1, ok out,
+      { prepared := caller.prepared, proof := caller.proof, scratch := rowScratch caller.scratch (ok out),
+        log := caller.log ++ (eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).1 })
+
+X : Type
+D : aspis_core.digest.Digest32 X
+hash : X
+H : Bytes → State
+law : ∀ (input : Slice (Slice U8)), D.digest hash input = ok (rawOracle H input)
+native : Node
+cut : NCE_Native_Row H native
+caller : Carrier
+physical : Slice U8
+i w : Usize
+size : (↑physical).length ≤ 5504
+domain : RowDomain physical caller.scratch i w
+active : ↑i < ↑caller.scratch.n
+out : reference.Row
+returned : reference.binary_step D hash caller.scratch physical i w = ok out
+post : Progress physical caller.scratch i w out
+result : (eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).2 = ok out
+⊢ (have out := eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w));
+    (out.1, out.2,
+      { prepared := caller.prepared, proof := caller.proof, scratch := rowScratch caller.scratch out.2,
+        log := caller.log ++ out.1 })) =
+    ((eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).1, ok out,
+      { prepared := caller.prepared, proof := caller.proof, scratch := rowScratch caller.scratch (ok out),
+        log := caller.log ++ (eval H (transport (MultiproofConePhysicalProgram.node caller.scratch physical i w))).1 })
+'AspisR1.NCM_RowProgress.progress' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

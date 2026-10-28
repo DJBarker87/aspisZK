@@ -1,0 +1,53 @@
+{"attempt": "NCM_L005", "exit_status": 1, "wall_seconds": 1.9202276959549636, "peak_rss_kib": "4407672", "swaps": "0", "print_axioms": ["'AspisR1.NCM_TransportBind.transport_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NCM_TransportBind.transport_checked' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NCM_sources/NCM_TransportBind.lean:18:15: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.34 ?m.35 ?m.36 →
+    (?m.36 → Program ?m.34 ?m.35 ?m.37) → Program ?m.34 ?m.35 ?m.37
+  
+  Std.bind : Result ?m.34 → (?m.34 → Result ?m.35) → Result ?m.35
+NCM_sources/NCM_TransportBind.lean:20:4: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  transport (AspisV8R19.OracleProgramOps.bind (Program.ask input continuation) next) =
+    AspisV8R19.OracleProgramOps.bind
+      (Program.ask (AspisV8R19.SqueezeOracleBridge.flatten input) fun answer =>
+        transport (continuation (AspisV8R19.SqueezeOracleB
+...
+NCM_sources/NCM_TransportBind.lean:18:15: error: Ambiguous term
+  bind
+Possible interpretations:
+  AspisV8R19.OracleProgramOps.bind : Program ?m.34 ?m.35 ?m.36 →
+    (?m.36 → Program ?m.34 ?m.35 ?m.37) → Program ?m.34 ?m.35 ?m.37
+  
+  Std.bind : Result ?m.34 → (?m.34 → Result ?m.35) → Result ?m.35
+NCM_sources/NCM_TransportBind.lean:20:4: error: Tactic `apply` failed: could not unify the conclusion of `@funext`
+  ?f = ?g
+with the goal
+  transport (AspisV8R19.OracleProgramOps.bind (Program.ask input continuation) next) =
+    AspisV8R19.OracleProgramOps.bind
+      (Program.ask (AspisV8R19.SqueezeOracleBridge.flatten input) fun answer =>
+        transport (continuation (AspisV8R19.SqueezeOracleBridge.encodeState answer)))
+      fun a => transport (next a)
+
+Note: The full type of `@funext` is
+  ∀ {α : Sort ?u.28} {β : α → Sort ?u.27} {f g : (x : α) → β x}, (∀ (x : α), f x = g x) → f = g
+
+case ask
+A B : Type
+next : A → Program Address Digest B
+input : Address
+continuation : Digest → Program Address Digest A
+ih :
+  ∀ (a : Digest),
+    transport (AspisV8R19.OracleProgramOps.bind (continuation a) next) =
+      AspisV8R19.OracleProgramOps.bind (transport (continuation a)) fun a => transport (next a)
+⊢ transport (AspisV8R19.OracleProgramOps.bind (Program.ask input continuation) next) =
+    AspisV8R19.OracleProgramOps.bind
+      (Program.ask (AspisV8R19.SqueezeOracleBridge.flatten input) fun answer =>
+        transport (continuation (AspisV8R19.SqueezeOracleBridge.encodeState answer)))
+      fun a => transport (next a)
+'AspisR1.NCM_TransportBind.transport_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NCM_TransportBind.transport_checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rbdadd8969cf94c9f80e188ebadbaaa39.scope; invocation ID: 217162471dfb4668993f3143168a6b86
