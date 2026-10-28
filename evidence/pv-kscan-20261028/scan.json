@@ -15,7 +15,7 @@
   "baseline": "0c282f7952",
   "ruling": "pv-common.txt LEAD RULING(r),2026-10-28 02:25 UTC",
   "method": "KDX reached-call graph plus admitted-domain/property review; source/name candidates alone never certify reachability or exemption",
-  "coverage": "Complete selected Stream-B evidence-directory historical PASS log census at the eight pinned heads; reached-call adjudication remains INCOMPLETE for entries explicitly UNRESOLVED/GROWTH_ONLY_UNRESOLVED. No no-copy conclusion is drawn for them.",
+  "coverage": "Complete selected Stream-B evidence-directory historical PASS log census at the eight pinned heads; reached-call adjudication remains INCOMPLETE for entries explicitly UNRESOLVED/GROWTH_ONLY_UNRESOLVED. No no-copy conclusion is drawn for them. Capacity-recovery delta adds one unadjudicated dlib padding PASS; see resume-review.json.",
   "target": "not yet established",
   "budget": {
     "kani": 10,
@@ -26,13 +26,13 @@
     "notes": "K01 CLI rejection charged; K02-K10 optimized codegen only, not SAT verification. Separate capped read-only graph recovery for K02 and surviving historical artifacts R01. No false-pass reproduction or stub."
   },
   "counts": {
-    "UNRESOLVED": 161,
+    "UNRESOLVED": 162,
     "NO_REACHED_COPY": 59,
     "EXEMPT": 19,
     "EXPOSED": 22,
     "PROPERTY_INDEPENDENT": 2
   },
-  "pass_count": 263,
+  "pass_count": 264,
   "passes": [
     {
       "harness": "BEf_tail_proofs::BEf_tail_tx1",
@@ -15213,6 +15213,88 @@
         "identity_scope": "Retained source package relocated for diagnostic codegen; qualified harness/call chain. No SAT replay, no restoration of native credit."
       },
       "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved."
+    },
+    {
+      "harness": "padding_coordinate_gate::padding_events_coordinate",
+      "pass_output": "evidence/pv-dlib-20261028/kani-padding-05/output.log",
+      "pass_output_blob": "5ebeb64f49e8c9492c551ddd6e6b9a5a7fb17bbf",
+      "refs": [
+        "codex/pv-dlib-20261028"
+      ],
+      "receipt": "evidence/pv-dlib-20261028/kani-padding-05/receipt.json",
+      "receipt_blob": "f43d7703ad4aa5fd2d02bb00325a000e8bad1420",
+      "command": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "python3",
+        "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+        "/home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-padding-05/admission-barrier.json",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-padding-05/time.log",
+        "timeout",
+        "900",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "CARGO_PROFILE_DEV_OVERFLOW_CHECKS=false",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-dlib-20261028/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-dlib-20261028/native-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "padding_coordinate_gate::padding_events_coordinate",
+        "--solver",
+        "kissat",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ],
+      "source_revision": "d0fb4b26f363a1ecf18275de40afb72d7a843adc",
+      "tool_pins": {
+        "kani": "0.67.0",
+        "cbmc": "6.8.0",
+        "pin_scope": "Historical version/config pins, not a fresh equality check of historical tool binaries. Diagnostic binary SHA256 values are in diagnostics/tool-pins.json.",
+        "output_version_lines": [
+          "Kani Rust Verifier 0.67.0 (cargo plugin)"
+        ]
+      },
+      "ledger_rows": [
+        "V234",
+        "V235"
+      ],
+      "ledger_relation": "Supporting padding/finalize proposal only; recount6 V234/V235 remain OPEN. No claimed original-row closure.",
+      "copy_builtin_reached": null,
+      "property_depends_on_copy": null,
+      "exemption": null,
+      "status": "UNRESOLVED",
+      "reason": "New PASS after prior handoff. Owner PLAN explicitly suspends this copy-dependent gate under ruling(r). Source callback copies 64 bytes into events and asserts event coordinates; no corresponding goto/trace recovered by this scan. No exemption or credit; ten-run diagnostic budget already exhausted.",
+      "diagnostic": null,
+      "evidence_use": "Historical PASS census; may be superseded or partial. Exact row scope is preserved."
     }
   ],
   "exposed": [
@@ -15400,7 +15482,8 @@
     257,
     258,
     259,
-    260
+    260,
+    263
   ],
   "suspended_rows": [
     "V178",
@@ -18974,7 +19057,9 @@
       "baseline_evidence": [
         "definition-audit6.json#V234"
       ],
-      "supporting_passes": [],
+      "supporting_passes": [
+        263
+      ],
       "reverify_when_validated_stub_available": false
     },
     {
@@ -18987,7 +19072,9 @@
       "baseline_evidence": [
         "definition-audit6.json#V235"
       ],
-      "supporting_passes": [],
+      "supporting_passes": [
+        263
+      ],
       "reverify_when_validated_stub_available": false
     },
     {
@@ -21593,5 +21680,16 @@
     "pv-route2/pv-batch1/pv-batch2/pv-batch3": "No successful Kani PASS output in the pinned evidence directories; extraction/structural/native fixture gates retain their own status. Historical batch-effects and batch-effects3 PASS records are included separately.",
     "pv-b3p6": "At pinned head only op133 setup failures/running gate, no PASS recorded.",
     "pv-reach/pv-l2c": "No new PASS log found outside inherited corpus at pinned heads."
-  }
+  },
+  "recovery_heads": {
+    "research": "c86d4fd6afdff6b65ecd020d14a5f8c7bae427b0",
+    "codex/cx-prover-rw-20261023": "e461dca06a993d32f4ebca368003e46add1ea884",
+    "codex/pv-dlib-20261028": "23a1a9dc408bb6105441591b927115b68f0d3a98",
+    "codex/pv-b3p6-20261028": "8fabe31935d3300f5e7f104fad5f06f699dd5d49",
+    "codex/pv-batch2-20261027": "eacfaf0e21feb689220bb13c08b8fdb52870ece3",
+    "codex/pv-runjoin-20261026": "f25511118ceadd592286f02baa742a31c2c2f57d",
+    "codex/pv-reach-20261027": "ee0f9fb93c6700935f9cc43067940c70eee4e928",
+    "codex/pv-l2c-20261028": "b66c13cdd144d0f663688a3a5ba8561e4b1e3fd1"
+  },
+  "recovery_review": "resume-review.json"
 }
