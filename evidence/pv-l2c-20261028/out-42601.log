@@ -1,0 +1,33 @@
+'PV_L2C_PaddingProducer.sampled_active' depends on axioms: [propext]
+'PV_L2C_PaddingProducer.balanced_active' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PaddingProducer.lean:43:4: error: Tactic `apply` failed: could not unify the conclusion of `Finset.sum_subset (Finset.erase_subset d Finset.univ)`
+  ∑ x ∈ Finset.univ.erase d, ?m.68 x = ∑ x, ?m.68 x
+with the goal
+  (∑ x ∈ Finset.univ.erase d,
+      if active x = true then 0
+      else if x = d then -∑ i, if (!active i && decide (i ≠ d)) = true then v i else 0 else v x) =
+    ∑ i, if (!active i && decide (i ≠ d)) = true then v i else 0
+
+Note: The full type of `Finset.sum_subset (Finset.erase_subset d Finset.univ)` is
+  (∀ x ∈ Finset.univ, x ∉ Finset.univ.erase d → ?m.68 x = 0) → ∑ x ∈ Finset.univ.erase d, ?m.68 x = ∑ x, ?m.68 x
+
+case e_a
+A : Type
+inst✝ : AddCommGroup A
+n : ℕ
+active : Fin n → Bool
+d : Fin n
+v : Fin n → A
+hd : active d = false
+⊢ (∑ x ∈ Finset.univ.erase d,
+      if active x = true then 0
+      else if x = d then -∑ i, if (!active i && decide (i ≠ d)) = true then v i else 0 else v x) =
+    ∑ i, if (!active i && decide (i ≠ d)) = true then v i else 0
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_PaddingProducer.lean:40:59: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [hd, Bool.false_eq_true, if_false, balanced,̵ ̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_PaddingProducer.balanced_sum' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

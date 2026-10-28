@@ -1,0 +1,78 @@
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:24:6: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (have c := w &&& BitVec.ofNat 32 p;
+    if BitVec.toNat c < p then some (c, ws) else scan n ws) =
+    some (v, rest)
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ.cons
+v : word
+rest : List word
+n : ℕ
+ih : ∀ (xs : List word), scan n xs = some (v, rest) → canonical v
+w : word
+ws : List word
+h :
+  (have c := w &&& BitVec.ofNat 32 p;
+    if BitVec.toNat c < p then some (c, ws) else scan n ws) =
+    some (v, rest)
+⊢ canonical v
+'PV_L2C_SampleCanonical.scalar_canonical' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2C_SampleCanonical.tuple_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:68:39: error: Invalid projection: Projections extract constructor fields for one-constructor inductive types. The expression
+  h
+has type
+  (do
+      let __x ← some (a, xs1)
+      let __x_1 ← scan fuel __x.2
+      let __x_2 ← scan fuel __x_1.2
+      let __x_3 ← scan fuel __x_2.2
+      some (tuple __x.1 __x_1.1 __x_2.1 __x_3.1, __x_3.2)) =
+    some (q, rest)
+which has no fields.
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:24: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1̵,̵h̵2, ̲h3, ̲Option.bind_some, ̲Option.some.injEq, ̲Prod.mk.injEq] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:27: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1, ̲h2̵,̵h̵3, ̲Option.bind_some, ̲Option.some.injEq, ̲Prod.mk.injEq] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:30: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [h0, ̲h1, ̲h2,h̵3̵,̵ ̲Option.bind_some, ̲Option.some.injEq, ̲Prod.mk.injEq] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:33: warning: This simp argument is unused:
+  Option.bind_some
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵,̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲,̲ ̲P̲r̲o̲d̲.̲m̲k̲.̲i̲n̲j̲E̲q̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:50: warning: This simp argument is unused:
+  Option.some.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵,̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲P̲r̲o̲d̲.̲m̲k̲.̲i̲n̲j̲E̲q̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_SampleCanonical.lean:67:68: warning: This simp argument is unused:
+  Prod.mk.injEq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵s̵o̵m̵e̵,̵O̵p̵t̵i̵o̵n̵.̵s̵o̵m̵e̵.̵i̵n̵j̵E̵q̵,̵P̵r̵o̵d̵.̵m̵k̵.̵i̵n̵j̵E̵q̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲b̲i̲n̲d̲_̲s̲o̲m̲e̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲s̲o̲m̲e̲.̲i̲n̲j̲E̲q̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L2C_SampleCanonical.secure_canonical' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1

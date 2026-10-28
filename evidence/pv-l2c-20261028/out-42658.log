@@ -1,0 +1,12 @@
+'PV_L2C_VecRead.bound1024' depends on axioms: [propext, Quot.sound]
+'PV_L2C_VecRead.read' depends on axioms: [propext]
+'PV_L2C_VecRead.read_active' depends on axioms: [propext]
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex Usize (Slice T) T :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedUsize, get := core.slice.index.Usize.get,
+    get_mut := core.slice.index.Usize.get_mut, get_unchecked := core.slice.index.Usize.get_unchecked,
+    get_unchecked_mut := core.slice.index.Usize.get_unchecked_mut, index := core.slice.index.Usize.index,
+    index_mut := core.slice.index.Usize.index_mut }
+
+exit=0

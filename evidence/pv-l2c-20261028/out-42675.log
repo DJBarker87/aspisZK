@@ -1,0 +1,41 @@
+'PV_L2C_OwnedBalance.rows_bounded' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:31:4: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:35:18: error: Application type mismatch: The argument
+  active
+has type
+  Fin 1024 → Bool
+but is expected to have type
+  Fin ↑?m.85 → Bool
+in the application
+  read_active active
+/home/dombarker/project-offloads/codex-pv-l2c-20261028/lean/sources/PV_L2C_OwnedBalance.lean:28:82: error: unsolved goals
+table : Fin 1024 → Q
+active : Fin 1024 → Bool
+d : Usize
+hd : ↑d < 1024
+ha : active ⟨↑d, hd⟩ = false
+hlen : (vector bound1024 fun i => source (table i)).len = 1024#usize
+hd' : ↑d < ↑1024#usize
+⊢ (do
+      let b ← (PV_L2C_VecRead.active active).index_usize d
+      if b = true then
+          ok
+            (core.result.Result.Err state_only_hiding.StateOnlyMaskBuildError.TraceShape,
+              vector bound1024 fun i => source (table i))
+        else do
+          let sum ←
+            R1Z.ProverCommitFoldSteps.foldSteps
+                (qm31ReadStep (vector bound1024 fun i => source (table i)).deref d (PV_L2C_VecRead.active active))
+                (rowSequence 1024 0#usize) aspis_core.field.QM31.ZERO
+          let value ← aspis_core.field.QM31.ZERO.sub sum
+          let (_, back) ←
+            alloc.vec.Vec.index_mut (core.slice.index.SliceIndexUsizeSlice aspis_core.field.QM31)
+                (vector bound1024 fun i => source (table i)) d
+          ok (core.result.Result.Ok (), back value)) =
+    ok (core.result.Result.Ok (), vector bound1024 fun i => source (output table active d i))
+'PV_L2C_OwnedBalance.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+exit=1
