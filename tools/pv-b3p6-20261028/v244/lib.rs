@@ -10,3 +10,5 @@ pub mod reference_terminal;
 pub fn reference227(public: reference_terminal::r0::Public<'_>, claims: &[[aspis_core::field::QM31;29];3], alpha: &[aspis_core::field::QM31;10], c: &aspis_core::state_only_prefix::r0::Challenges) -> Result<aspis_core::field::QM31,aspis_core::state_only_prefix::r0::Error> {
     public.terminal_qm31(claims,alpha,c)
 }
+
+pub mod std194227;

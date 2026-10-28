@@ -6,6 +6,36 @@
 
 // Closure-free array construction, evaluated in increasing source index order.
 macro_rules! qm31_array {
+    (4, $index:ident, $body:expr) => {{
+        let mut output=[QM31::ZERO;4];
+        { let $index=0usize; output[0]=$body; }
+        { let $index=1usize; output[1]=$body; }
+        { let $index=2usize; output[2]=$body; }
+        { let $index=3usize; output[3]=$body; }
+        output
+    }};
+
+    (16, $index:ident, $body:expr) => {{
+        let mut output=[QM31::ZERO;16];
+        { let $index=0usize; output[0]=$body; }
+        { let $index=1usize; output[1]=$body; }
+        { let $index=2usize; output[2]=$body; }
+        { let $index=3usize; output[3]=$body; }
+        { let $index=4usize; output[4]=$body; }
+        { let $index=5usize; output[5]=$body; }
+        { let $index=6usize; output[6]=$body; }
+        { let $index=7usize; output[7]=$body; }
+        { let $index=8usize; output[8]=$body; }
+        { let $index=9usize; output[9]=$body; }
+        { let $index=10usize; output[10]=$body; }
+        { let $index=11usize; output[11]=$body; }
+        { let $index=12usize; output[12]=$body; }
+        { let $index=13usize; output[13]=$body; }
+        { let $index=14usize; output[14]=$body; }
+        { let $index=15usize; output[15]=$body; }
+        output
+    }};
+
     ($n:expr, $index:ident, $body:expr) => {{
         let mut output = [QM31::ZERO; $n];
         let mut $index = 0usize;
@@ -142,7 +172,7 @@ fn add_preweighted<const N: usize>(
 ) {
     let first = start / 4;
     let last = (start + N - 1) / 4;
-    for group in first..=last {
+    let mut group_index = first; while group_index <= last { let group=group_index; group_index+=1;
         let lanes: [QM31; 4] = qm31_array!(4, slot, {
             let source = 4 * group + slot;
             if source >= start && source < start + N {
@@ -172,7 +202,7 @@ fn add_preweighted_shared_selector<const N: usize>(
 ) {
     let first = start / 4;
     let last = (start + N - 1) / 4;
-    for group in first..=last {
+    let mut group_index = first; while group_index <= last { let group=group_index; group_index+=1;
         let lanes: [QM31; 4] = qm31_array!(4, slot, {
             let source = 4 * group + slot;
             if source >= start && source < start + N {
@@ -233,16 +263,16 @@ fn validate_transition(
     }
     let index = source.next_pair_index;
     let carry = bounded_append_carry(index);
-    for level in 0..20 {
+    let mut level_index = 0usize; while level_index < 20 { let level=level_index; level_index+=1;
         if level == carry && carry < 20 {
             continue;
         }
         let expected = if level < carry || ((index >> level) & 1) == 0 {
             empty_root(level)
         } else {
-            source.frontier[level]
+            digest227(source.frontier,level)
         };
-        if after.next_frontier[level] != expected {
+        if digest227(after.next_frontier,level) != expected {
             return Err(PoolV1PairForestSemanticTerminalErrorV1::InvalidAppendTransition);
         }
     }
@@ -251,7 +281,7 @@ fn validate_transition(
 
 fn poseidon_selectors(selectors: &Selectors) -> StateOnlyPoseidonSelectors {
     StateOnlyPoseidonSelectors {
-        block: sum_high(selectors, &[0..57]),
+        block: sum_interval227(selectors.high,QM31::ZERO,0,57),
         local: selectors.low,
     }
 }
@@ -281,10 +311,10 @@ fn initial_variant_selectors(
 
 fn semantic_initial_and_absorption(
     public: SemanticPublic,
-    openings: &StateOnlyPoseidonOpenings,
-    selectors: &Selectors,
+    openings: StateOnlyPoseidonOpenings,
+    selectors: Selectors,
 ) -> ([QM31; 16], [QM31; 16]) {
-    let nodes = sum_high(selectors, &[4..25, 33..57]);
+    let nodes = sum_interval227(selectors.high,sum_interval227(selectors.high,QM31::ZERO,4,25),33,57);
     let first_common = selectors.high[0]
         .add(selectors.high[1])
         .add(selectors.high[25])
@@ -302,11 +332,7 @@ fn semantic_initial_and_absorption(
     let full_or_rate =
         PreparedQm31Multiplier::new(full_initial_selector.add(rate_initial_selector));
     let mut initial = qm31_array!(16, lane, {
-        if lane < RATE {
-            full_or_rate.mul(openings.z[lane])
-        } else {
-            full.mul(openings.z[lane])
-        }
+        initial_lane227(lane,full_or_rate,full,read227(openings.z,lane))
     });
     let note_first = selectors.high[1]
         .add(selectors.high[30])
@@ -403,20 +429,70 @@ fn absorption_lanes_factored(
 #[inline(always)]
 #[cfg(any(test, not(feature = "optimized-terminal")))]
 fn add_digest_binding(
-    output: &mut [QM31; DIGEST_ELEMS],
+    mut output: [QM31; DIGEST_ELEMS],
     selector: QM31,
-    opened: &[QM31; POSEIDON2_WIDTH],
+    opened: [QM31; POSEIDON2_WIDTH],
     start: usize,
-    expected: &Digest,
+    expected: Digest,
     right_tweak: bool,
-) {
-    for lane in 0..DIGEST_ELEMS {
-        let mut target = expected[lane];
-        if right_tweak && lane + 1 == DIGEST_ELEMS {
+) -> [QM31;DIGEST_ELEMS] {
+    let mut lane_index = 0usize;  
+        let mut target = expected[0usize];
+        if right_tweak && 0usize + 1 == DIGEST_ELEMS {
             target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
         }
-        output[lane] = output[lane].add(selector.mul(opened[start + lane].sub(lift_m31(target))));
-    }
+        output[0usize] = output[0usize].add(selector.mul(opened[start + 0usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[1usize];
+        if right_tweak && 1usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[1usize] = output[1usize].add(selector.mul(opened[start + 1usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[2usize];
+        if right_tweak && 2usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[2usize] = output[2usize].add(selector.mul(opened[start + 2usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[3usize];
+        if right_tweak && 3usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[3usize] = output[3usize].add(selector.mul(opened[start + 3usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[4usize];
+        if right_tweak && 4usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[4usize] = output[4usize].add(selector.mul(opened[start + 4usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[5usize];
+        if right_tweak && 5usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[5usize] = output[5usize].add(selector.mul(opened[start + 5usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[6usize];
+        if right_tweak && 6usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[6usize] = output[6usize].add(selector.mul(opened[start + 6usize].sub(lift_m31(target))));
+    
+ 
+        let mut target = expected[7usize];
+        if right_tweak && 7usize + 1 == DIGEST_ELEMS {
+            target = target.add(MERKLE_NODE_COMPRESSION_V3_TWEAK);
+        }
+        output[7usize] = output[7usize].add(selector.mul(opened[start + 7usize].sub(lift_m31(target))));
+    
+    output
 }
 
 #[inline(never)]
@@ -426,7 +502,7 @@ fn add_schedule_lanes(
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
-    let (initial, absorption) = semantic_initial_and_absorption(public, openings, selectors);
+    let (initial, absorption) = semantic_initial_and_absorption(public, *openings, *selectors);
     add_preweighted(packed, 0, &initial);
     add_preweighted(packed, 16, &absorption);
 }
@@ -437,7 +513,7 @@ fn add_path_lanes(
     openings: &StateOnlyPoseidonOpenings,
     selectors: &Selectors,
 ) {
-    let path_selector = sum_high(selectors, &[57..63]).mul(
+    let path_selector = sum_interval227(selectors.high,QM31::ZERO,57,63).mul(
         selectors.low[1]
             .add(selectors.low[5])
             .add(selectors.low[9])
@@ -455,15 +531,78 @@ fn path_lanes_literal(path_selector: QM31, openings: &StateOnlyPoseidonOpenings)
     let bit = openings.z[0];
     let mut path = [QM31::ZERO; 17];
     path[0] = path_selector.mul(bit.mul(bit.sub(QM31::ONE)));
-    for lane in 0..DIGEST_ELEMS {
-        let current = openings.z[1 + lane];
-        path[1 + lane] = path_selector
+    let mut lane_index = 0usize;  
+        let current = openings.z[1 + 0usize];
+        path[1 + 0usize] = path_selector
             .mul(QM31::ONE.sub(bit))
-            .mul(openings.succ_z[lane].sub(current));
-        path[1 + DIGEST_ELEMS + lane] = path_selector
+            .mul(openings.succ_z[0usize].sub(current));
+        path[1 + DIGEST_ELEMS + 0usize] = path_selector
             .mul(bit)
-            .mul(openings.succ_z[RATE + lane].sub(current));
-    }
+            .mul(openings.succ_z[RATE + 0usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 1usize];
+        path[1 + 1usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[1usize].sub(current));
+        path[1 + DIGEST_ELEMS + 1usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 1usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 2usize];
+        path[1 + 2usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[2usize].sub(current));
+        path[1 + DIGEST_ELEMS + 2usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 2usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 3usize];
+        path[1 + 3usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[3usize].sub(current));
+        path[1 + DIGEST_ELEMS + 3usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 3usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 4usize];
+        path[1 + 4usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[4usize].sub(current));
+        path[1 + DIGEST_ELEMS + 4usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 4usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 5usize];
+        path[1 + 5usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[5usize].sub(current));
+        path[1 + DIGEST_ELEMS + 5usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 5usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 6usize];
+        path[1 + 6usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[6usize].sub(current));
+        path[1 + DIGEST_ELEMS + 6usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 6usize].sub(current));
+    
+ 
+        let current = openings.z[1 + 7usize];
+        path[1 + 7usize] = path_selector
+            .mul(QM31::ONE.sub(bit))
+            .mul(openings.succ_z[7usize].sub(current));
+        path[1 + DIGEST_ELEMS + 7usize] = path_selector
+            .mul(bit)
+            .mul(openings.succ_z[RATE + 7usize].sub(current));
+    
     path
 }
 
@@ -519,24 +658,168 @@ fn add_value_lanes(
         .add(value_selectors[2]);
     let mut range = [QM31::ZERO; 33];
     let mut index = 0usize;
-    while index < 10 {
-        range[index] = openings.z[index].square().sub(openings.z[index]);
-        index += 1;
-    }
+    
+        range[0usize] = read227(openings.z,0usize).square().sub(read227(openings.z,0usize));
+        
+    
+
+        range[1usize] = read227(openings.z,1usize).square().sub(read227(openings.z,1usize));
+        
+    
+
+        range[2usize] = read227(openings.z,2usize).square().sub(read227(openings.z,2usize));
+        
+    
+
+        range[3usize] = read227(openings.z,3usize).square().sub(read227(openings.z,3usize));
+        
+    
+
+        range[4usize] = read227(openings.z,4usize).square().sub(read227(openings.z,4usize));
+        
+    
+
+        range[5usize] = read227(openings.z,5usize).square().sub(read227(openings.z,5usize));
+        
+    
+
+        range[6usize] = read227(openings.z,6usize).square().sub(read227(openings.z,6usize));
+        
+    
+
+        range[7usize] = read227(openings.z,7usize).square().sub(read227(openings.z,7usize));
+        
+    
+
+        range[8usize] = read227(openings.z,8usize).square().sub(read227(openings.z,8usize));
+        
+    
+
+        range[9usize] = read227(openings.z,9usize).square().sub(read227(openings.z,9usize));
+        
+    
     index = 0;
-    while index < 10 {
-        range[10 + index] = openings.succ_z[index]
+    
+        range[10 + 0usize] = read227(openings.succ_z,0usize)
             .square()
-            .sub(openings.succ_z[index]);
-        index += 1;
-    }
+            .sub(read227(openings.succ_z,0usize));
+        
+    
+
+        range[10 + 1usize] = read227(openings.succ_z,1usize)
+            .square()
+            .sub(read227(openings.succ_z,1usize));
+        
+    
+
+        range[10 + 2usize] = read227(openings.succ_z,2usize)
+            .square()
+            .sub(read227(openings.succ_z,2usize));
+        
+    
+
+        range[10 + 3usize] = read227(openings.succ_z,3usize)
+            .square()
+            .sub(read227(openings.succ_z,3usize));
+        
+    
+
+        range[10 + 4usize] = read227(openings.succ_z,4usize)
+            .square()
+            .sub(read227(openings.succ_z,4usize));
+        
+    
+
+        range[10 + 5usize] = read227(openings.succ_z,5usize)
+            .square()
+            .sub(read227(openings.succ_z,5usize));
+        
+    
+
+        range[10 + 6usize] = read227(openings.succ_z,6usize)
+            .square()
+            .sub(read227(openings.succ_z,6usize));
+        
+    
+
+        range[10 + 7usize] = read227(openings.succ_z,7usize)
+            .square()
+            .sub(read227(openings.succ_z,7usize));
+        
+    
+
+        range[10 + 8usize] = read227(openings.succ_z,8usize)
+            .square()
+            .sub(read227(openings.succ_z,8usize));
+        
+    
+
+        range[10 + 9usize] = read227(openings.succ_z,9usize)
+            .square()
+            .sub(read227(openings.succ_z,9usize));
+        
+    
     index = 0;
-    while index < 10 {
-        range[20 + index] = openings.xor12_z[index]
+    
+        range[20 + 0usize] = read227(openings.xor12_z,0usize)
             .square()
-            .sub(openings.xor12_z[index]);
-        index += 1;
-    }
+            .sub(read227(openings.xor12_z,0usize));
+        
+    
+
+        range[20 + 1usize] = read227(openings.xor12_z,1usize)
+            .square()
+            .sub(read227(openings.xor12_z,1usize));
+        
+    
+
+        range[20 + 2usize] = read227(openings.xor12_z,2usize)
+            .square()
+            .sub(read227(openings.xor12_z,2usize));
+        
+    
+
+        range[20 + 3usize] = read227(openings.xor12_z,3usize)
+            .square()
+            .sub(read227(openings.xor12_z,3usize));
+        
+    
+
+        range[20 + 4usize] = read227(openings.xor12_z,4usize)
+            .square()
+            .sub(read227(openings.xor12_z,4usize));
+        
+    
+
+        range[20 + 5usize] = read227(openings.xor12_z,5usize)
+            .square()
+            .sub(read227(openings.xor12_z,5usize));
+        
+    
+
+        range[20 + 6usize] = read227(openings.xor12_z,6usize)
+            .square()
+            .sub(read227(openings.xor12_z,6usize));
+        
+    
+
+        range[20 + 7usize] = read227(openings.xor12_z,7usize)
+            .square()
+            .sub(read227(openings.xor12_z,7usize));
+        
+    
+
+        range[20 + 8usize] = read227(openings.xor12_z,8usize)
+            .square()
+            .sub(read227(openings.xor12_z,8usize));
+        
+    
+
+        range[20 + 9usize] = read227(openings.xor12_z,9usize)
+            .square()
+            .sub(read227(openings.xor12_z,9usize));
+        
+    
     let reconstructed = reconstruct_10(&openings.z)
         .add(reconstruct_10(&openings.succ_z).mul_m31(M31(1 << 10)))
         .add(reconstruct_10(&openings.xor12_z).mul_m31(M31(1 << 20)));
@@ -546,10 +829,138 @@ fn add_value_lanes(
     #[cfg(not(feature = "optimized-terminal"))]
     {
         let mut residual_index = 0usize;
-        while residual_index < 33 {
-            range[residual_index] = range_selector.mul(range[residual_index]);
-            residual_index += 1;
-        }
+        
+            range[0usize] = range_selector.mul(read227(range,0usize));
+            
+        
+
+            range[1usize] = range_selector.mul(read227(range,1usize));
+            
+        
+
+            range[2usize] = range_selector.mul(read227(range,2usize));
+            
+        
+
+            range[3usize] = range_selector.mul(read227(range,3usize));
+            
+        
+
+            range[4usize] = range_selector.mul(read227(range,4usize));
+            
+        
+
+            range[5usize] = range_selector.mul(read227(range,5usize));
+            
+        
+
+            range[6usize] = range_selector.mul(read227(range,6usize));
+            
+        
+
+            range[7usize] = range_selector.mul(read227(range,7usize));
+            
+        
+
+            range[8usize] = range_selector.mul(read227(range,8usize));
+            
+        
+
+            range[9usize] = range_selector.mul(read227(range,9usize));
+            
+        
+
+            range[10usize] = range_selector.mul(read227(range,10usize));
+            
+        
+
+            range[11usize] = range_selector.mul(read227(range,11usize));
+            
+        
+
+            range[12usize] = range_selector.mul(read227(range,12usize));
+            
+        
+
+            range[13usize] = range_selector.mul(read227(range,13usize));
+            
+        
+
+            range[14usize] = range_selector.mul(read227(range,14usize));
+            
+        
+
+            range[15usize] = range_selector.mul(read227(range,15usize));
+            
+        
+
+            range[16usize] = range_selector.mul(read227(range,16usize));
+            
+        
+
+            range[17usize] = range_selector.mul(read227(range,17usize));
+            
+        
+
+            range[18usize] = range_selector.mul(read227(range,18usize));
+            
+        
+
+            range[19usize] = range_selector.mul(read227(range,19usize));
+            
+        
+
+            range[20usize] = range_selector.mul(read227(range,20usize));
+            
+        
+
+            range[21usize] = range_selector.mul(read227(range,21usize));
+            
+        
+
+            range[22usize] = range_selector.mul(read227(range,22usize));
+            
+        
+
+            range[23usize] = range_selector.mul(read227(range,23usize));
+            
+        
+
+            range[24usize] = range_selector.mul(read227(range,24usize));
+            
+        
+
+            range[25usize] = range_selector.mul(read227(range,25usize));
+            
+        
+
+            range[26usize] = range_selector.mul(read227(range,26usize));
+            
+        
+
+            range[27usize] = range_selector.mul(read227(range,27usize));
+            
+        
+
+            range[28usize] = range_selector.mul(read227(range,28usize));
+            
+        
+
+            range[29usize] = range_selector.mul(read227(range,29usize));
+            
+        
+
+            range[30usize] = range_selector.mul(read227(range,30usize));
+            
+        
+
+            range[31usize] = range_selector.mul(read227(range,31usize));
+            
+        
+
+            range[32usize] = range_selector.mul(read227(range,32usize));
+            
+        
         add_preweighted(packed, 49, &range);
     }
     #[cfg(feature = "optimized-terminal")]
@@ -613,9 +1024,30 @@ fn occupancy_lanes_literal(
     occupancy[0] = both.mul(occupied.mul(occupied.sub(QM31::ONE)));
     occupancy[1] = both.mul(opened[9].mul(inverse).sub(occupied));
     occupancy[2] = both.mul(one_minus.mul(inverse));
-    for lane in 0..DIGEST_ELEMS {
-        occupancy[3 + lane] = both.mul(one_minus.mul(opened[2 + lane]));
-    }
+    let mut lane_index = 0usize;  
+        occupancy[3 + 0usize] = both.mul(one_minus.mul(opened[2 + 0usize]));
+    
+ 
+        occupancy[3 + 1usize] = both.mul(one_minus.mul(opened[2 + 1usize]));
+    
+ 
+        occupancy[3 + 2usize] = both.mul(one_minus.mul(opened[2 + 2usize]));
+    
+ 
+        occupancy[3 + 3usize] = both.mul(one_minus.mul(opened[2 + 3usize]));
+    
+ 
+        occupancy[3 + 4usize] = both.mul(one_minus.mul(opened[2 + 4usize]));
+    
+ 
+        occupancy[3 + 5usize] = both.mul(one_minus.mul(opened[2 + 5usize]));
+    
+ 
+        occupancy[3 + 6usize] = both.mul(one_minus.mul(opened[2 + 6usize]));
+    
+ 
+        occupancy[3 + 7usize] = both.mul(one_minus.mul(opened[2 + 7usize]));
+    
     occupancy[11] = input_occupancy
         .mul(opened[10].mul(one_minus))
         .add(output_occupancy.mul(occupied.sub(lift_m31(expected_output))));
@@ -640,9 +1072,30 @@ fn occupancy_lanes_factored(
     occupancy[0] = occupied_selector.mul(occupied.sub(QM31::ONE));
     occupancy[1] = both.mul(opened[9].mul(inverse).sub(occupied));
     occupancy[2] = empty.mul(inverse);
-    for lane in 0..DIGEST_ELEMS {
-        occupancy[3 + lane] = empty.mul(opened[2 + lane]);
-    }
+    let mut lane_index = 0usize;  
+        occupancy[3 + 0usize] = empty.mul(opened[2 + 0usize]);
+    
+ 
+        occupancy[3 + 1usize] = empty.mul(opened[2 + 1usize]);
+    
+ 
+        occupancy[3 + 2usize] = empty.mul(opened[2 + 2usize]);
+    
+ 
+        occupancy[3 + 3usize] = empty.mul(opened[2 + 3usize]);
+    
+ 
+        occupancy[3 + 4usize] = empty.mul(opened[2 + 4usize]);
+    
+ 
+        occupancy[3 + 5usize] = empty.mul(opened[2 + 5usize]);
+    
+ 
+        occupancy[3 + 6usize] = empty.mul(opened[2 + 6usize]);
+    
+ 
+        occupancy[3 + 7usize] = empty.mul(opened[2 + 7usize]);
+    
     occupancy[11] = input_occupancy
         .mul(opened[10].mul(one_minus))
         .add(output_occupancy.mul(occupied.sub(lift_m31(expected_output))));
@@ -653,85 +1106,503 @@ fn occupancy_lanes_factored(
 #[cfg(any(test, not(feature = "optimized-terminal")))]
 fn public_digest_lanes(
     public: SemanticPublic,
-    openings: &StateOnlyPoseidonOpenings,
-    selectors: &Selectors,
+    openings: StateOnlyPoseidonOpenings,
+    selectors: Selectors,
 ) -> [QM31; DIGEST_ELEMS] {
     let mut digests = [QM31::ZERO; DIGEST_ELEMS];
-    add_digest_binding(
-        &mut digests,
+    digests = add_digest_binding(
+        digests,
         selectors.row(56 * 16 + 11),
-        &openings.z,
+        openings.z,
         0,
-        &public.anchor,
+        public.anchor,
         false,
     );
-    add_digest_binding(
-        &mut digests,
+    digests = add_digest_binding(
+        digests,
         selectors.row(26 * 16 + 11),
-        &openings.z,
+        openings.z,
         0,
-        &public.nullifier,
+        public.nullifier,
         false,
     );
     if let Some(recipient) = public.recipient {
-        add_digest_binding(
-            &mut digests,
+        digests = add_digest_binding(
+            digests,
             selectors.row(29 * 16 + 11),
-            &openings.z,
+            openings.z,
             0,
-            &recipient,
+            recipient,
             false,
         );
     }
-    add_digest_binding(
-        &mut digests,
+    digests = add_digest_binding(
+        digests,
         selectors.row(32 * 16 + 11),
-        &openings.z,
+        openings.z,
         0,
-        &public.change,
+        public.change,
         false,
     );
 
     let source = public.transition.live_snapshot;
     let after = public.transition.candidate_afterstate;
-    for level in 0..20 {
-        let block = 34 + level;
-        if ((source.next_pair_index >> level) & 1) == 0 {
-            add_digest_binding(
-                &mut digests,
+    let mut level_index = 0usize;  
+        let block = 34 + 0usize;
+        if ((source.next_pair_index >> 0usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
                 selectors.row(block * 16),
-                &openings.z,
+                openings.z,
                 RATE,
-                &empty_root(level),
+                empty_root(0usize),
                 true,
             );
         } else {
-            add_digest_binding(
-                &mut digests,
+            digests = add_digest_binding(
+                digests,
                 selectors.row(block * 16 + 12),
-                &openings.z,
+                openings.z,
                 0,
-                &source.frontier[level],
+                digest227(source.frontier,0usize),
                 false,
             );
         }
-    }
-    add_digest_binding(
-        &mut digests,
+    
+ 
+        let block = 34 + 1usize;
+        if ((source.next_pair_index >> 1usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(1usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,1usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 2usize;
+        if ((source.next_pair_index >> 2usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(2usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,2usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 3usize;
+        if ((source.next_pair_index >> 3usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(3usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,3usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 4usize;
+        if ((source.next_pair_index >> 4usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(4usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,4usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 5usize;
+        if ((source.next_pair_index >> 5usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(5usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,5usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 6usize;
+        if ((source.next_pair_index >> 6usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(6usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,6usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 7usize;
+        if ((source.next_pair_index >> 7usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(7usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,7usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 8usize;
+        if ((source.next_pair_index >> 8usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(8usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,8usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 9usize;
+        if ((source.next_pair_index >> 9usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(9usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,9usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 10usize;
+        if ((source.next_pair_index >> 10usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(10usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,10usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 11usize;
+        if ((source.next_pair_index >> 11usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(11usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,11usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 12usize;
+        if ((source.next_pair_index >> 12usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(12usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,12usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 13usize;
+        if ((source.next_pair_index >> 13usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(13usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,13usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 14usize;
+        if ((source.next_pair_index >> 14usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(14usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,14usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 15usize;
+        if ((source.next_pair_index >> 15usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(15usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,15usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 16usize;
+        if ((source.next_pair_index >> 16usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(16usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,16usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 17usize;
+        if ((source.next_pair_index >> 17usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(17usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,17usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 18usize;
+        if ((source.next_pair_index >> 18usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(18usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,18usize),
+                false,
+            );
+        }
+    
+ 
+        let block = 34 + 19usize;
+        if ((source.next_pair_index >> 19usize) & 1) == 0 {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16),
+                openings.z,
+                RATE,
+                empty_root(19usize),
+                true,
+            );
+        } else {
+            digests = add_digest_binding(
+                digests,
+                selectors.row(block * 16 + 12),
+                openings.z,
+                0,
+                digest227(source.frontier,19usize),
+                false,
+            );
+        }
+    
+    digests = add_digest_binding(
+        digests,
         selectors.row(53 * 16 + 11),
-        &openings.z,
+        openings.z,
         0,
-        &after.next_root,
+        after.next_root,
         false,
     );
     let carry = bounded_append_carry(source.next_pair_index);
     if carry < 20 {
-        add_digest_binding(
-            &mut digests,
+        digests = add_digest_binding(
+            digests,
             selectors.row((33 + carry) * 16 + 11),
-            &openings.z,
+            openings.z,
             0,
-            &after.next_frontier[carry],
+            after.next_frontier[carry],
             false,
         );
     }
@@ -819,7 +1690,7 @@ fn public_digest_packed_row_major(
 
     let source = public.transition.live_snapshot;
     let after = public.transition.candidate_afterstate;
-    for level in 0..20 {
+    let mut level_index = 0usize; while level_index < 20 { let level=level_index; level_index+=1;
         let block = 34 + level;
         if ((source.next_pair_index >> level) & 1) == 0 {
             add_digest_binding_packed(
@@ -836,7 +1707,7 @@ fn public_digest_packed_row_major(
                 selectors.row(block * 16 + 12),
                 &openings.z,
                 0,
-                &source.frontier[level],
+                &digest227(source.frontier,level),
                 false,
             );
         }
@@ -1199,7 +2070,7 @@ fn semantic_packed(
     add_preweighted(
         &mut packed,
         84,
-        &public_digest_lanes(public, openings, selectors),
+        &public_digest_lanes(public, *openings, *selectors),
     );
     #[cfg(feature = "optimized-terminal")]
     {
@@ -1243,13 +2114,17 @@ fn copy_variant(variant: CompiledVariant) -> PoolV1PairForestCompiledVariantV1 {
     }
 }
 
-fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {
-    let mut product = equality_factor(left[0], right[0]);
-    let mut index = 1usize;
-    while index < left.len() {
-        product = product.mul(equality_factor(left[index], right[index]));
-        index += 1;
-    }
+fn equality_value(left: &[QM31;10], right: &[QM31;10]) -> QM31 {
+    let mut product=equality_factor(left[0],right[0]);
+    product=product.mul(equality_factor(left[1],right[1]));
+    product=product.mul(equality_factor(left[2],right[2]));
+    product=product.mul(equality_factor(left[3],right[3]));
+    product=product.mul(equality_factor(left[4],right[4]));
+    product=product.mul(equality_factor(left[5],right[5]));
+    product=product.mul(equality_factor(left[6],right[6]));
+    product=product.mul(equality_factor(left[7],right[7]));
+    product=product.mul(equality_factor(left[8],right[8]));
+    product=product.mul(equality_factor(left[9],right[9]));
     product
 }
 
@@ -1672,3 +2547,16 @@ pub fn reference227(public: SemanticPublic, claims: [[QM31;29];3], alpha: [QM31;
 }
 
 fn read227<const N:usize>(values:[QM31;N], index:usize)->QM31 { values[index] }
+
+fn digest227(values:[Digest;20],index:usize)->Digest { values[index] }
+
+fn sum_interval227(high:[QM31;64], initial:QM31, start:usize, end:usize)->QM31 {
+    let mut sum=initial;
+    let mut i=start;
+    while i<end { sum=sum.add(read227(high,i)); i+=1; }
+    sum
+}
+
+fn initial_lane227(lane:usize,full_or_rate:PreparedQm31Multiplier,full:PreparedQm31Multiplier,value:QM31)->QM31 {
+    if lane<RATE { full_or_rate.mul(value) } else { full.mul(value) }
+}
