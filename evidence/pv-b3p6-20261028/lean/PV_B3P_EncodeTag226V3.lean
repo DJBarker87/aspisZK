@@ -11,7 +11,7 @@ theorem tag (p : reference226.OwnedPublic) (chunks : PV_B3P_ByteOutput226.Chunks
   unfold reference226.encode_owned at h
   cases hp : p.withdrawal with
   | false =>
-    have hu : { p with withdrawal := false } = p := by cases p; simp_all
+    have hu : { p with withdrawal := false } = p := by cases p; cases hp; rfl
     simp only [hp,Bool.false_eq_true,↓reduceIte,bind_tc_ok,hu] at h
     generalize hr0 : reference226.chunk p 0#usize = r0 at h
     cases r0 with
@@ -223,7 +223,7 @@ theorem tag (p : reference226.OwnedPublic) (chunks : PV_B3P_ByteOutput226.Chunks
                                                                                                 cases h
                                                                                                 rfl
   | true =>
-    have hu : { p with withdrawal := true } = p := by cases p; simp_all
+    have hu : { p with withdrawal := true } = p := by cases p; cases hp; rfl
     simp only [hp,Bool.false_eq_true,↓reduceIte,bind_tc_ok,hu] at h
     generalize hr0 : reference226.chunk p 0#usize = r0 at h
     cases r0 with
