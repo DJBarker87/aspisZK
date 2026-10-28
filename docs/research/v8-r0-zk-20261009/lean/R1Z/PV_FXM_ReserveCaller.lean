@@ -16,8 +16,8 @@ def postMetadata {T S F : Type} (step : Request → S → Option Nat × S)
   ⟨e.buffer.address,e.buffer.capacity,by
     have h := values_preserved step wordMax byteMax shape
       (PV_FXM_ReserveSelected.buffer v m) n.val w
-    rw [← h]
-    exact e.buffer.fits⟩
+    calc v.val.length = e.buffer.values.length := (congrArg List.length h).symm
+         _ ≤ e.buffer.capacity := e.buffer.fits⟩
 
 theorem execution {T S F A : Type} (ops : ExternalFuns) (Allocator : Type)
     (step : Request → S → Option Nat × S) (wordMax byteMax : Nat)
