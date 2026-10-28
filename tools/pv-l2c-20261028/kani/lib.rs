@@ -46,3 +46,19 @@ fn packed_masks_match_schedule() {
     }
     assert_eq!(masks[row >> 4] & (1u16 << (row & 15)) != 0, expected);
 }
+
+// Actual shipped native codec; only byte conversions, slices and guards.
+#[cfg(kani)]
+#[kani::proof]
+#[kani::unwind(5)]
+fn native_qm31_parser_roundtrip() {
+    use aspis_core::field::{CM31, M31, QM31, P};
+    let limbs: [u32; 4] = kani::any();
+    let mut i = 0;
+    while i < 4 { kani::assume(limbs[i] < P); i += 1; }
+    let q = QM31 { c0: CM31::new(M31(limbs[0]), M31(limbs[1])),
+                   c1: CM31::new(M31(limbs[2]), M31(limbs[3])) };
+    let mut bytes = [0u8; 16];
+    q.write_le_bytes(&mut bytes);
+    assert!(QM31::from_le_bytes(&bytes) == Some(q));
+}
