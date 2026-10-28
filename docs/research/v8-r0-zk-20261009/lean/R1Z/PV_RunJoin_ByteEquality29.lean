@@ -31,7 +31,14 @@ theorem list_result (xs ys : List U8) (hl : xs.length=ys.length) :
 
 theorem array_result {n : Usize} (a b : Array U8 n) :
     core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 a b = ok (decide (a=b)) := by
-  rw [core.array.equality.PartialEqArray.eq,if_pos rfl]
+  rw [core.array.equality.PartialEqArray.eq]
+  have ha : a.length=n := by
+    apply UScalar.eq_of_val_eq
+    simp [Array.length,a.property]
+  have hb : b.length=n := by
+    apply UScalar.eq_of_val_eq
+    simp [Array.length,b.property]
+  rw [if_pos (ha.trans hb.symm)]
   change List.allM compare (a.val.zip b.val) = _
   rw [list_result a.val b.val (by rw [a.property,b.property])]
   have he : a.val=b.val ↔ a=b := ⟨Subtype.ext,fun h => congrArg (fun x => x.val) h⟩
