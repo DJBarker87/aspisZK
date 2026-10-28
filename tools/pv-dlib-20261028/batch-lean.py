@@ -16,7 +16,9 @@ for i,m in enumerate(modules):
  assert m.startswith('R1Z/PV_DL_') and not any(x in m for x in ['Audit','Replay'])
  p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');s=p.read_bytes();rel=str(p.relative_to(R));assert subprocess.check_output(['git','show','HEAD:'+rel])==s
  n=start+i;meta=dict(attempt=n,module=m,source_path=rel,source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],text=True).strip(),source_sha256=hashlib.sha256(s).hexdigest(),revision=head,source_revision=head,environment_generation='private pinned external overlay with same-authority IR companions',external_manifest_sha256=hashlib.sha256((E/'external-object-manifest.json').read_bytes()).hexdigest(),external_ir_manifest_sha256=hashlib.sha256((E/'external-ir-companions.json').read_bytes()).hexdigest())
- (E/f'{n}-source.lean.txt').write_bytes(s);records.append(dict(meta=meta,path=str(p),imports=re.findall(r'^import (\S+)',s.decode(),re.M)))
+ 
+ if i==0:(E/f'{n}-source.lean.txt').write_bytes(s)
+ records.append(dict(meta=meta,path=str(p),imports=re.findall(r'^import (\S+)',s.decode(),re.M)))
 t['used_ids'].append(start);(E/'TALLY.json').write_text(json.dumps(t,indent=2)+'\n')
 name='lean-batch-'+str(start)
 r=subprocess.run(['ssh',H,f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/upload-admission.json > {D}/{name}/upload-reservation.log 2>&1'],capture_output=True,text=True)
@@ -71,6 +73,7 @@ for n,files in collected.items():
  d=E/('lean-'+n);d.mkdir(exist_ok=True)
  for file,content in files.items():(d/file).write_text(content)
  (E/(n+'-submission.json')).write_text(files['submission.json'])
+ j=json.loads(files['submission.json']);source=subprocess.check_output(['git','show',j['revision']+':'+j['source_path']]);assert hashlib.sha256(source).hexdigest()==j['source_sha256'];(E/(n+'-source.lean.txt')).write_bytes(source)
  if int(n) not in t['used_ids']:t['used_ids'].append(int(n))
  if int(n) not in t['lean_charged']:t['lean_charged'].append(int(n))
  print(n,json.loads(files['receipt.json'])['module'],json.loads(files['receipt.json'])['exit'],flush=True)

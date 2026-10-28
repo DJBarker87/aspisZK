@@ -1,0 +1,37 @@
+/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderNative.lean:36:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) a c
+in the target expression
+  (let (p0, p1) := (a, c)
+    PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) p0 p1) =
+    let (p0, p1) := (a, c)
+    run inst (List.drop (↑j + 1) (PV_DL_EncoderZip.entries q b)) p0 p1
+
+case succ
+E : Type
+inst✝ : Inhabited E
+inst : aspis_core.r0.scalar.CodeField E
+q : Std.Array E 1024#usize
+b : Std.Array E 512#usize
+fuel : ℕ
+ih :
+  ∀ (j : Usize) (p0 p1 : E),
+    ↑j + fuel = 512 →
+      PV_DL_EncoderFold.finite inst q b fuel j p0 p1 = run inst (List.drop (↑j) (PV_DL_EncoderZip.entries q b)) p0 p1
+j : Usize
+p0 p1 : E
+rank : ↑j + (fuel + 1) = 512
+hj : ↑j < 512
+a c : E
+hp : PV_DL_EncoderZip.applyEntry inst (((↑q)[2 * ↑j]!, (↑q)[2 * ↑j + 1]!), (↑b)[↑j]!) p0 p1 = ok (a, c)
+⊢ (let (p0, p1) := (a, c)
+    PV_DL_EncoderFold.finite inst q b fuel (PV_DL_EncoderRange.advance j) p0 p1) =
+    let (p0, p1) := (a, c)
+    run inst (List.drop (↑j + 1) (PV_DL_EncoderZip.entries q b)) p0 p1
+'R1Z.PV_DL_EncoderNative.selected_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.run' does not depend on any axioms
+'R1Z.PV_DL_EncoderNative.suffix' depends on axioms: [propext]
+'R1Z.PV_DL_EncoderNative.fold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_DL_EncoderNative.source_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-43410/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-43410/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-objects/R1Z/PV_DL_EncoderNative.olean", "/home/dombarker/project-offloads/codex-pv-dlib-20261028/lean-sources/R1Z/PV_DL_EncoderNative.lean", "7000"], "exit": 1, "wall": "0:01.23", "peak_rss_kib": "2623476", "swap": "0", "source_revision": "0c55b5c71dfa72559e45d071b496da6d235a88f0", "expected_phase": "focused Lean compilation; source/import fingerprints in submission receipt", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
