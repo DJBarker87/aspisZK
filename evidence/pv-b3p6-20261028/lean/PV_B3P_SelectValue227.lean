@@ -45,10 +45,10 @@ theorem nonvacuity (claims : Claims) :
     ∃ out, reference_terminal.select227 claims = .ok out ∧ out.val = expected claims := by
   have h := complete_value claims
   cases he : reference_terminal.select227 claims with
-  | fail e => simp only [he,observe] at h
-  | div => simp only [he,observe] at h
+  | fail e => simp only [he,observe] at h; cases h
+  | div => simp only [he,observe] at h; cases h
   | ok out =>
-    refine ⟨out,he,?_⟩
+    refine ⟨out,rfl,?_⟩
     simpa only [he,observe,Result.ok.injEq] using h
 
 #print axioms expected_length
