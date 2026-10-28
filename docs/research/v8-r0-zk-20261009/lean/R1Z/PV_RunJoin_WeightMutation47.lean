@@ -12,7 +12,7 @@ theorem read_zero (out : Out) (j : Usize) (hj : j.val<1024)
     (hz : ZeroSuffix out j.val) :
     Array.index_usize out j=ok PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO := by
   change (match out.val[j.val]? with
-    | none => .fail .arrayOutOfBounds | some v => .ok v)=_
+    | none => Result.fail .arrayOutOfBounds | some v => Result.ok v)=_
   rw [hz j.val (by omega) hj]
 #print axioms read_zero
 
