@@ -20,9 +20,11 @@ theorem source (value operand : aspis_core.field.QM31) (weight : aspis_core.fiel
       endpoint operations consumer chi value operand weight := by
   simp only [reference224.endpoint,aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,bind_tc_ok,
     endpoint,operations]
-  by_cases h : weight = aspis_core.field.M31.ZERO <;>
-    simp only [h,ne_self,not_true_eq_false,not_false_eq_true,decide_true,decide_false,↓reduceIte]
-  cases consumer <;> rfl
+  by_cases h : weight = aspis_core.field.M31.ZERO
+  · subst weight
+    simp
+  · simp only [h,not_false_eq_true,decide_true,decide_false,↓reduceIte]
+    cases consumer <;> rfl
 
 #print axioms source
 end PV_B3P_HelperEndpoint224
