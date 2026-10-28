@@ -13203,3 +13203,28 @@ extraction plus Lean or on the structural route. Evidence merged into research
 re-verified when Stream A's validated copy stub (KMX_) is announced, or re-linked by the structural
 route of ruling (k'). Recount 7 records the suspensions. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D352 (Stream B) 2026-10-28 03:43 UTC: suspended rows re-linked by the structural route; a lead launch error corrected; Stream A's validated copy stubs adopted (ruling (r'))
+
+pv-relink (IDs 43700-43799; 100 Lean attempts; no Kani; no source change) re-links the five rows
+suspended in D351 (V178, V179, V182, V195, V233) by the structural route of ruling (k'), recorded as
+"structural (K-1 substitute)", keeping their source laws and leaving the suspended Kani PASSes in the
+evidence, never cited.
+
+Lead error, corrected: the lead first created the pv-relink worktree, merged research into it so the
+worker could read the scan evidence, and launched the worker without checking the merge, which had
+stopped on a conflict in design/PRIVACY-LEDGER-20261026.md. The lead stopped the worker within
+seconds (it had written nothing), aborted the merge, confirmed a clean worktree at the candidate head
+82566acdfb, and relaunched with a prompt that reads the evidence from research with git show instead
+of merging. Rule for the lead: check a worktree's state after every merge and before every launch.
+
+Stream A delivered job KMX_ (merged on research: evidence/kani-mitig-20261028/KMX_FINDING.md and
+KMX_copy_stubs.patch). Of 55 copy configurations, 34 disagree with native execution, 17 agree on
+fixtures and 4 time out; the divergence persists on Kani 0.68.0 / CBMC 6.11.0, so upgrading is not a
+fix. Six element-wise copy replacements are validated by paired Kani controls (expected value passes,
+negative control fails), 1,466,538 native differential checks and Lean value laws. Stream A's replay of
+its exposed harnesses with the stubs gave 18 PASS, 16 TIMEOUT, 0 FAIL. Ruling (r'): a copy-dependent
+Kani PASS may be re-credited only when re-run with exactly that patch (sha256 recorded) and a failing
+negative control; a timeout gives no credit; large buffers are split by window. Stream B's five
+suspended rows can therefore be restored either by the structural re-link now running or by a
+stubbed Kani re-run. Rows removed outright: 0. Privacy target not yet established.
