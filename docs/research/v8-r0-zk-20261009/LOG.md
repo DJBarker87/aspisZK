@@ -13128,3 +13128,26 @@ V179, V182 and V195 likewise lose credit until re-verified. kscan2 completes the
 and goto-program inspection only (no verification runs; same pins and harness sources; up to 120
 capped scopes) and produces the final suspension list. Re-verification of suspended links waits for
 Stream A's validated copy stub. Rows removed outright: 0. Privacy target not yet established.
+
+## D348 (Stream B) 2026-10-28 03:02 UTC: on-chain program logs and error text are inside the privacy observer; coverage question recorded for recount 7
+
+Stream A noted (C3-BIN 03:00 UTC) that its soundness bridges treat error paths only by their control
+effect (the error is returned, no account write, no acceptance); formatted error text and log
+contents, such as the U00 error formatter and its allocating log composition on the TX2 path, are out
+of soundness scope and not covered by its bridges.
+
+For privacy they are in scope: program logs and error strings written on-chain are published bytes,
+which the D159 observer sees. They are produced by the verifier program from the transaction's
+public bytes, so the expected argument is that they are simulatable from the simulated transaction,
+provided the formatter and the log composition are deterministic functions of those inputs (no
+allocator addresses, timing or uninitialised data in the text). The lead found no ledger row for
+this: V268 and V269 concern the prover-side std.io.Error and core.fmt.Formatter interpretations,
+V270 the forbidden Formatter axiom route, none of them the verifier's on-chain log bytes.
+
+Recorded for recount 7, without assuming the answer: determine whether the endpoint's observer model
+(PrivacyR1HeadlineDeployedReal and its observer_program) includes the on-chain program logs and
+error text of the deployed verifier on every reached path. If it does, add the explicit P obligation
+"logs and error text are a deterministic function of the public transaction bytes" with an owner. If
+it does not, record it as a coverage gap between the model and D159: an observer-model matter that
+cannot be closed by proof inside the current statement and goes to the owner. Rows removed outright:
+0. Privacy target not yet established.
