@@ -18,7 +18,7 @@ theorem next_admitted (s : State) (x : Nat) (h : Admitted s)
   · simpa [Admitted,next,hx] using And.intro hn (And.intro hb (by omega))
   · simp only [Admitted,next,hx,ite_false,List.length_append,List.length_singleton]
     refine ⟨?_,?_,by omega,by omega,by omega⟩
-    · simpa using hn.append (by simp) (by simpa [List.disjoint_singleton_right] using hx)
+    · simpa using hn.append (by simp) (by simpa using hx)
     · intro y hy
       simp only [List.mem_append,List.mem_singleton] at hy
       rcases hy with hy|rfl
