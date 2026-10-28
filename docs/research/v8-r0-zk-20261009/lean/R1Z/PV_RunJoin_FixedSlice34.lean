@@ -18,8 +18,8 @@ in the emitted caller. No successful ZERO leaf is assumed. -/
 theorem complete (ops : ExternalFuns) (values : Slice Q) (length : values.val.length=1024) :
     @prover.fixed_k_column _ ops values =
       (do let _ ← @aspis_core.field.QM31.ZERO _ ops; .ok (array values length)) := by
-  rw [← as_slice values length]
-  exact @PV_RunJoin_FixedColumn34.complete _ ops _
+  simpa only [as_slice] using
+    @PV_RunJoin_FixedColumn34.complete _ ops (array values length)
 
 /-- On the source dictionary with the existing exact ZERO entry installed,
 the emitted helper returns the entire original 1024-cell input. Native
