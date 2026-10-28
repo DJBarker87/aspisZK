@@ -1,0 +1,34 @@
+Time expected in focused optimized core compilation to expose native generic MIR; no arithmetic/proof gate.
+ition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: function `verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes` is never used
+   --> crates/aspis-core/src/circle_merkle.rs:419:15
+    |
+419 | pub(crate) fn verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes<
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 20.07s
+
+{"command": ["/home/dombarker/.cargo/bin/cargo", "rustc", "--release", "--locked", "--offline", "-j", "2", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-lowering2-20261026/src/Cargo.toml", "-p", "aspis-core", "--features", "r0", "--", "--emit=mir,llvm-ir"], "exit": 0, "wall": 20.093417774070986, "outputs": {"aspis_core-1da1ea494ba41990.ll": {"bytes": 23507580, "sha256": "76861c061437385bd1200aa7a4417110d00714e3e528b827462d726f4c926b33", "encoding_domain_encode_lines": [[137889, "; invoke aspis_core::r0::prover::EncodingDomain::encode"], [137890, "  invoke fastcc void @_ZN10aspis_core2r06prover14EncodingDomain6encode17h96d8af68ce653412E(ptr noalias noundef align 8 captures(none) dereferenceable(24) %_52, ptr noalias noundef readonly align 8 captures(address, read_provenance) dereferenceable(48) %domain, ptr noalias noundef readonly align 4 captures(address, read_provenance) dereferenceable(16384) %_54)"], [137948, "; invoke aspis_core::r0::prover::EncodingDomain::encode"], [137949, "  invoke fastcc void @_ZN10aspis_core2r06prover14EncodingDomain6encode17hcceea295e92f2a6fE(ptr noalias noundef align 8 captures(none) dereferenceable(24) %_46, ptr noalias noundef readonly align 8 captures(address, read_provenance) dereferenceable(48) %domain, ptr noalias noundef readonly align 4 captures(address, read_provenance) dereferenceable(4096) %_48)"], [139407, "; aspis_core::r0::prover::EncodingDomain::encode"], [139409, "define internal fastcc void @_ZN10aspis_core2r06prover14EncodingDomain6encode17h96d8af68ce653412E(ptr dead_on_unwind noalias noundef nonnull writable writeonly align 8 captures(none) dereferenceable(24) %_0, ptr noalias noundef nonnull readonly align 8 captures(address, read_provenance) dereferenceable(48) %self, ptr noalias noundef nonnull readonly align 4 captures(none) dereferenceable(16384) %message) unnamed_addr #21 personality ptr @rust_eh_personality {"], [140151, "; aspis_core::r0::prover::EncodingDomain::encode"], [140153, "define internal fastcc void @_ZN10aspis_core2r06prover14EncodingDomain6encode17hcceea295e92f2a6fE(ptr dead_on_unwind noalias noundef nonnull writable writeonly align 8 captures(none) dereferenceable(24) %_0, ptr noalias noundef nonnull readonly align 8 captures(address, read_provenance) dereferenceable(48) %self, ptr noalias noundef nonnull readonly align 4 captures(none) dereferenceable(4096) %message) unnamed_addr #21 personality ptr @rust_eh_personality {"], [274207, "!8651 = distinct !{!8651, !8652, !\"_ZN10aspis_core2r06prover14EncodingDomain6encode28_$u7b$$u7b$closure$u7d$$u7d$17h57bfd498fb591d3eE: %_0\"}"], [274208, "!8652 = distinct !{!8652, !\"_ZN10aspis_core2r06prover14EncodingDomain6encode28_$u7b$$u7b$closure$u7d$$u7d$17h57bfd498fb591d3eE\"}"]]}, "aspis_core-1da1ea494ba41990.mir": {"bytes": 31087431, "sha256": "92eda13d778fdc510c6fab0bc8697d56465393e58e88efb0c4fb63e9a2546979", "encoding_domain_encode_lines": [[179135, "fn prover::<impl at crates/aspis-core/src/r0/prover.rs:25:1: 25:20>::encode(_1: &EncodingDomain, _2: &[T; 1024]) -> Result<Vec<T>, r0::Error> {"], [179432, "                scope 39 (inlined EncodingDomain::encode::<T>::{closure#0}) {"], [182008, "        _46 = EncodingDomain::encode::<M31>(copy _2, move _47) -> [return: bb15, unwind: bb60];"], [182047, "        _52 = EncodingDomain::encode::<QM31>(copy _2, move _53) -> [return: bb17, unwind: bb60];"]]}}}
