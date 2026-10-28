@@ -27,10 +27,14 @@ theorem source_insert (x : Nat) (xs : List Nat) : sourceInsert x xs = insert x x
   | nil => simp [sourceInsert,seek,insert]
   | cons y ys ih =>
     by_cases h : y<x
-    · simpa [sourceInsert,seek,insert,h,Nat.add_comm] using congrArg (List.cons y) ih
+    · simp only [sourceInsert,seek,h,ite_true]
+      rw [Nat.add_comm 1 (seek x ys),List.getElem?_cons_succ,List.insertIdx_succ_cons]
+      rw [insert,if_pos h,← ih]
+      unfold sourceInsert
+      split_ifs <;> rfl
     · by_cases he : y=x
       · simp [sourceInsert,seek,insert,h,he]
-      · simp [sourceInsert,seek,insert,h,he,eq_comm]
+      · simp [sourceInsert,seek,insert,h,he,Ne.symm he]
 #print axioms source_insert
 
 theorem insert_length (x : Nat) (xs : List Nat) : (insert x xs).length≤xs.length+1 := by
