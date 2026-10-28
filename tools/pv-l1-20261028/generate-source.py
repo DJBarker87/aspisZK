@@ -95,5 +95,5 @@ for k,n in enumerate(selected):
   assert hashlib.sha256(path.read_bytes()).hexdigest()==accepted[mod]['source_sha256'],('accepted source changed',mod)
  else:path.write_text(code)
  rows.append(dict(module=mod,source_function=n,path=str(path.relative_to(R)),source_body_sha256=hashlib.sha256(raw.encode()).hexdigest(),source_module_sha256=hashlib.sha256(s.encode()).hexdigest(),dependencies=sorted(set(deps)),native_edges=sorted(set(re.findall(r'\b(?:prover|host_semantic|host_transcript|host_sumcheck)\.[\w.]+',body))),discarded_restoration_candidates=re.findall(r'^.*(?:let\s+\([^\n]*,\s*_\)|next_back.*_).*$' ,raw,re.M),evidence_class='emission/model complete-Result law only; native fidelity and loop payload frontier open'))
- known[n]=mod
+ known[n]='PV_L1_QueryProducer' if n=='host_transcript.Transcript.queries' else mod
 (E/'source-frontier.json').write_text(json.dumps(rows,indent=2)+'\n');print('Generated',len(rows),'source phase modules')
