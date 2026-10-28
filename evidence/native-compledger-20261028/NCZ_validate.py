@@ -144,6 +144,13 @@ def collect():
     patch = 'evidence/kani-mitig-20261028/KMX_copy_stubs.patch'
     patch_hash = sha(s.read(patch))
     restoration = {r['audit_row']: r for r in kng['rows']}
+    assert {r['audit_id'] for r in ncs if r['classification'] == 'UNDETERMINED'} == set(restoration)
+    for r in ncs:
+        if r['classification'] == 'SAME BODIES':
+            assert not r['differing_functions'] and not r['cfg_unknown_bodies'], r['id']
+            assert all(h['original'] == h['deployed'] for h in r['reached_hashes']), r['id']
+    for r in restoration.values():
+        assert set(r['required_historical_attempts']) <= {p['historical_attempt'] for p in r['new_pairs']}, r['audit_row']
     receipt_index = collections.defaultdict(list)
     for p in s.tree:
         if p.endswith('/receipt.json'):
@@ -166,8 +173,8 @@ def collect():
             s.read(p)
         hashes = {s.used[p]['sha256'] for p in paths}
         if len(hashes) > 1:
-            # Keep all, do not silently choose a different historical receipt.
-            return paths
+            # Contradictory attempt identities cannot be silently selected.
+            raise ValueError('conflicting receipt hashes for ' + attempt)
         return [sorted(paths, key=lambda p: (p.count('/'), p))[0]]
 
     # Check every replacement pair independently, not the summary's PASS label.
@@ -344,7 +351,10 @@ def collect():
                 for suffix in ['-graph-check.json', '-graph.json', '-lock-check.json', '-source-check.json']:
                     gp = directory + attempt + suffix
                     if gp in s.tree:
-                        s.read(gp)
+                        g = s.obj(gp)
+                        if spec['admit'] and kind in ['positive', 'negative'] and suffix == '-graph-check.json':
+                            project = next(x for x in g['selected_closure'] if x['name'] == 'aspis-r1-cost-probe')
+                            assert {'default', 'private-leaf-salts', 'optimized-terminal', 'program-build'} <= set(project['features']), (attempt, 'deployed feature selection')
                         evidence.append(gp)
         for p in evidence:
             s.read(p)
@@ -530,6 +540,9 @@ def collect():
                 receipt_paths.update(support_receipts[directory])
         rows_out.append({'row': f'{tx}:{i+1:03d}', 'inventory_id': f['id'],
                          'inventory_row': f.get('row'), 'transaction': tx,
+                         'inventory_evidence': {'path': dict(INV)[tx], 'sha256': s.used[dict(INV)[tx]]['sha256']},
+                         'frozen_body_byte_range': f.get('body_byte_range', [f.get('body_start_byte'), f.get('body_end_byte')]),
+                         'source_file_sha256': sha(source_cache[f['file']]),
                          'function': name, 'frozen_body_sha256': f['body_sha256'],
                          'frozen_body_verified': True, 'source_file': f['file'],
                          'source_line': f['line'],
@@ -539,6 +552,7 @@ def collect():
                          'selected_claims': [c['claim_id'] for c in selected],
                          'claim_ids': [c['claim_id'] for c in cs],
                          'medium': sorted({c['medium'] for c in cs}),
+                         'feature_parity_summary': ('Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained' if selected else 'UNDETERMINED for a whole-body native bridge; see per-claim feature evidence and OPEN/quarantine status'),
                          'feature_parity': [{'claim': c['claim_id'], 'status': c['feature_parity']} for c in cs],
                          'caller_domain_obligations': obligations,
                          'incoming_domain_obligation_owners': sorted(reverse[name]),
@@ -598,6 +612,8 @@ def validate_invariants(d):
     claims = {c['claim_id']: c for c in d['claims']}
     for r in d['rows']:
         assert r['frozen_body_verified']
+        assert r['feature_parity_summary']
+        assert r['inventory_evidence']['sha256'] == d['evidence_manifest'][r['inventory_evidence']['path']]['sha256']
         for p, digest in r.get('receipt_sha256', {}).items():
             assert digest == d['evidence_manifest'][p]['sha256'], ('receipt hash mismatch', p)
         for p in r['evidence'] + r['receipts']:
