@@ -193,3 +193,7 @@ every refusal, blocks all used Lean/native/staging admission paths before
 any host call, and consumes no ID for its own pre-admission hold. Shared
 launchers/barriers/caps unchanged. Guard initialization waits a fresh180s
 from local receipt; later refusals append cooldown-history.jsonl.
+
+The local batch source/HEAD guard caught an in-flight edit during preparation
+for proposed43471. It stopped before ID assignment, admission, upload or compiler.
+The committed source is used for the next submission; no attempt was charged.
