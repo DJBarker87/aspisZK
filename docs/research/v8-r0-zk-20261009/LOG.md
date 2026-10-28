@@ -13190,3 +13190,16 @@ against c57a344726, and then, only if those pass, the quiet-window timing gate (
 with until = start + 1500 s and a deletion trap, drain at most 10 minutes, paired alternating runs with
 throttle counters, gate median under 15 s and ratio at most 1.10 per fixture). Stream A was told in
 advance. Rows removed outright: 0. Privacy target not yet established.
+
+## D351 (Stream B) 2026-10-28 03:38 UTC: Kani K-1 exposure audit complete: five rows suspended
+
+kscan2 (60 of 120 codegen and goto-inspection scopes; no verification runs; no Lean; no source change)
+resolved the reached-call inventory of all 264 Kani PASS observations that Stream B cites: zero
+unresolved, 57 copy-exposed. Final suspension list under ruling (r): V178, V179, V182, V195 and V233,
+whose native links depend on a reached copy builtin with no independent route. V184 stands on its
+structural proof; every other Stream B row either reaches no copy builtin, is exempt, or rests on
+extraction plus Lean or on the structural route. Evidence merged into research
+(evidence/pv-kscan-20261028/SCAN.md, ROWS.md); worktree and branch removed. These five rows are
+re-verified when Stream A's validated copy stub (KMX_) is announced, or re-linked by the structural
+route of ruling (k'). Recount 7 records the suspensions. Rows removed outright: 0. Privacy target not
+yet established.
