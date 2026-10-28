@@ -25,3 +25,10 @@ commit explicitly; it does not reconstruct capacity from the Vec's list.
 
 This is a precise source/interpretation finding, not a counterexample to a
 ROWS7 row or the privacy endpoint, and not a stop. No T field is added.
+
+The generic host commitment backend is another explicit frontier. Its `hash`
+parameter has type H under a Digest32 dictionary; it is not automatically the
+plain leaf hash callback. `PV_W_R_HostBuild` preserves H. The main recursive
+translation retains this backend call as an opaque helper until Digest32 and
+Commitments and their captured backend fields receive a lifted interpretation.
+No fixed-snapshot backend is declared natively adequate.
