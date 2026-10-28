@@ -13276,3 +13276,29 @@ it as consuming the ID: the worker waits the full cooldown and retries the same 
 the launcher rejects the reuse. l2c2 (72 attempts; IDs 44800-44899) re-runs the audit and replay with
 the corrected parser, then links each guard site to the honest-input carrier and proves constancy on
 every honest input. Rows removed outright: 0. Privacy target not yet established.
+
+## D356 (Stream B) 2026-10-28 07:02 UTC: research push unblocked after Stream A's large-file rewrite; disk-full and capacity interruptions; three jobs resumed
+
+Research pushes had been rejected by GitHub's pre-receive hook (GH001) because Stream A's unpushed
+commits carried native-transport evidence files of 121-148 MB (evidence/native-query3-20261028/
+NBO_NATIVE_TRANSPORT.jsonl, evidence/native-query4-20261028/NBW_NATIVE_TRANSPORT.jsonl, and the 90 MB
+evidence/native-tx2i-20261028/NBS_K_TRANSPORT.jsonl); local research was 64 commits ahead, one of them
+Stream B's (D355). The lead told Stream A and held all Stream B commits to research. Stream A rewrote
+only the unpushed range, replacing the three files in every commit by .jsonl.xz plus .jsonl.sha256
+(the originals decompress byte-identically), keeping the old tip as research-backup-pre-rewrite-
+20261028, which must not be merged anywhere. The lead checked that the LOG is byte-identical across
+the rewrite, that only those nine paths differ between the old and new tips, and that no blob over
+50 MB remains, then pushed: origin/research = 3eccd4312f, nothing unpushed. No Stream B branch contains
+the three files. Lead rule recorded in memory: after every research push, verify that
+origin/research..research is empty.
+
+During the rewrite preparation the Mac's disk filled (Stream A's scratch checkout), which also blocked
+the lead's tools for a while. l2c2 crashed on the full disk (ENOSPC); runjoin32 and pv-gate6 ended on
+Codex "model at capacity" errors. pv-gate6's host-side differential driver kept running (853 of 1,000
+pairs passed, no disagreement, at the last report); the lead checked that the driver performs only the
+differential and its audit, so no quiet window can start unattended, and that the quiet-window script
+writes the marker with until = start + 1500 and deletes it by trap. All three jobs are resumed with
+recovery prompts: reconstruct state from their own commits and host receipts, collect launched but
+uncollected results read-only, never rerun a completed compile or measurement, wait for running
+host drivers, and charge only launched attempts. Rows removed outright: 0. Privacy target not yet
+established.
