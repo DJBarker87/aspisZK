@@ -4,5 +4,5 @@ import R1Z.PV_RunJoin_AbstractEndpoint
 set_option autoImplicit false
 #print R1Z.PV_RunJoin_OracleBridge38.selected_callback
 #print R1Z.PV_RunJoin_AbstractEndpoint.PV_RunJoin_Premises
-#print R1Z.PV_RunJoin_TrustItems
+#print R1Z.PV_RunJoin_TrustBoundary.PV_RunJoin_TrustItems
 #print axioms R1Z.PV_RunJoin_OracleBridge38.selected_callback
