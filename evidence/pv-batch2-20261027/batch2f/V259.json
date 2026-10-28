@@ -1,0 +1,117 @@
+{
+  "row": "V259",
+  "operation": 252,
+  "status": "CLOSED_SELECTED_BOX_CONTEXT_SOURCE_CALLBACK",
+  "closing_theorems": [
+    "PV_B2_F_ConstructorEffect.complete_result",
+    "PV_B2_F_ConstructorNative.source",
+    "PV_B2_F_252Closure.four_rows"
+  ],
+  "statements": [
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorEffect.lean",
+      "statement": "theorem complete_result (boxRequest : Result Unit) (v : NV) (alpha : Array NQ 10#usize)\n    (z : Array NP 2#usize) : copied boxRequest v alpha z = original boxRequest v alpha z"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorEffect.lean",
+      "statement": "theorem value_law (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 w : Weight,\n      PV_B2_C_WeightsNative.host_weights.Weights.new (fromVariant v)\n        (amap fromQ alpha) (amap fromPoint z) = ok (.Ok w) \u2227\n      copied (ok ()) v alpha z = ok (.Ok (toWeight w))"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorEffect.lean",
+      "statement": "theorem failure (e : Error) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    copied (fail e) v alpha z = fail e"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorEffect.lean",
+      "statement": "theorem divergence (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    copied div v alpha z = div"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorEffect.lean",
+      "statement": "theorem rust_error (boxRequest : Result Unit) (e : PV_B2_C_Carrier.verifier.Error) :\n    finish boxRequest (.Err e) = ok (.Err (toError e))"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem source (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (boxRequest : Result Unit) (ops : @ProverRwFull.ExternalFuns (types base))\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base request boxRequest ops) v alpha z =\n      PV_B2_F_ConstructorEffect.original boxRequest v alpha z"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem value_law (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 w : Weight,\n      PV_B2_C_WeightsNative.host_weights.Weights.new (fromVariant v)\n        (amap fromQ alpha) (amap fromPoint z) = ok (.Ok w) \u2227\n      @ProverRwFull.ExternalFuns.op252 (types base) (selected base request (ok ()) ops) v alpha z =\n        ok (.Ok (toWeight w))"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem nonvacuity (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 w, @ProverRwFull.ExternalFuns.op252 (types base) (selected base request (ok ()) ops) v alpha z =\n      ok (.Ok w)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem failure (base : ProverRwFull.ExternalTypes) (request : Result Outcome) (e : Error)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base request (fail e) ops) v alpha z = fail e"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem divergence (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (ops : @ProverRwFull.ExternalFuns (types base))\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base request div ops) v alpha z = div"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem dictionaries (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (boxRequest : Result Unit) (ops : @ProverRwFull.ExternalFuns (types base)) :\n    selected base request boxRequest ops = originalDictionary base request boxRequest ops"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorNative.lean",
+      "statement": "theorem observations {O : Sort _} (base : ProverRwFull.ExternalTypes)\n    (observe : @ProverRwFull.ExternalFuns (types base) \u2192 O) (request : Result Outcome)\n    (boxRequest : Result Unit) (ops : @ProverRwFull.ExternalFuns (types base)) :\n    observe (selected base request boxRequest ops) = observe (originalDictionary base request boxRequest ops)"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem amap_roundtrip {\u03b1 \u03b2 : Type} {n : Usize} (f : \u03b1 \u2192 \u03b2) (g : \u03b2 \u2192 \u03b1)\n    (h : \u2200 x,g (f x)=x) (a : Array \u03b1 n) : amap g (amap f a)=a"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem q_roundtrip (q : K) : from251Q (to251Q q)=q"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem variant_roundtrip (v : Variant) : from251Variant (to251Variant v)=v"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem q_array_roundtrip {n : Usize} (a : Array K n) :\n    amap from251Q (amap to251Q a)=a"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem q_matrix_roundtrip {n m : Usize} (a : Array (Array K n) m) :\n    amap (amap from251Q) (amap (amap to251Q) a)=a"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem q_tensor_roundtrip {n m k : Usize} (a : Array (Array (Array K n) m) k) :\n    amap (amap (amap from251Q)) (amap (amap (amap to251Q)) a)=a"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem weight_roundtrip (w : Weight) : fromWeight (toWeight w)=w"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem alpha_roundtrip (alpha : Array NQ 10#usize) : amap toQ (amap fromQ alpha)=alpha"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_ConstructorCarrierLaws.lean",
+      "statement": "theorem points_roundtrip (z : Array NP 2#usize) : amap toPoint (amap fromPoint z)=z"
+    },
+    {
+      "source": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_B2_F_252Closure.lean",
+      "statement": "theorem four_rows (base : ProverRwFull.ExternalTypes) (request : Result Outcome)\n    (boxRequest : Result Unit) (ops : @ProverRwFull.ExternalFuns (types base))\n    (b : PV_B2_E_OrdinaryOriginal.Bytes) (w : W) (kappa : E)\n    (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op249 (types base) (selected base request boxRequest ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_GammaOriginal.originalGamma b) \u2227\n    @ProverRwFull.ExternalFuns.op250 (types base) (selected base request boxRequest ops) b =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative\n        (PV_B2_E_OrdinaryOriginal.original b) \u2227\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base request boxRequest ops) w kappa =\n      PV_B2_E_OrdinaryOriginal.mapResult PV_B2_F_MaterializeNative.mapRust\n        (PV_B2_F_MaterializeRequest.original request w (PV_B2_F_MaterializeNative.fromNative kappa)) \u2227\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base request boxRequest ops) v alpha z =\n      PV_B2_F_ConstructorEffect.original boxRequest v alpha z"
+    }
+  ],
+  "ambient_context": "Every base ExternalTypes with op25 instantiated to exact weights carrier, every prior allocation request and every Box request Result, arbitrary native variant/10QM31 alpha/2point inputs and prior dictionary. No canonicality, circle-membership, constructor-success, allocator-success or source-equality premise.",
+  "nonvacuity": "For every native input the pure constructor returns RustOk; with ok() Box request, the selected callback returns its exact complete mapped weight. Box failure/divergence propagate; no unconditional native allocation-success claim.",
+  "binding": "CONSTRUCTOR-STRUCTURAL-BINDING.json",
+  "native_link_evidence_class": "Reviewed frozen-source fixed-row/caller-Box structural association, universal Lean complete Result equality for every Box request context, exact native carrier/dictionary composition, compiled layout assertion and finite native allocation/drop/value witnesses; not fresh extraction of original Box/Drop closure",
+  "scope": "Selected candidate source/callback row. Actual native execution/RunJoin installation, OS-failure witness independence and L1/L2/L3 remain P obligations.",
+  "receipt": {
+    "attempt": 40842,
+    "module": "R1Z/PV_B2_F_252Closure",
+    "source_revision": "03b37df2aa2a0871fb574a320eae0c437f0b33b8",
+    "source_sha256": "850f6439836b8b67df1e5ad204359b1c80a4c788b2f69a093aed2f5f96d5d858",
+    "exit_status": 0,
+    "wall_seconds": 6.281,
+    "peak_rss_kib": 3847636,
+    "swaps": 0,
+    "accepted_axioms": true
+  },
+  "print_axioms": "40842-stdout.log"
+}
