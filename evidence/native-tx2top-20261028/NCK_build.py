@@ -4,7 +4,9 @@ Batches transfer/recovery to avoid repeated flaky connections. No backend edits.
 from pathlib import Path
 import subprocess,sys,json,time,shlex,hashlib
 E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028';C='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025';X=C+'/objects'
+from NCK_serial import ActiveRun
 a,local,module=sys.argv[1:];local=Path(local);src='NCK_generated/'+module.replace('.','/')+'.lean';obj='/home/dombarker/project-offloads/codex-cx-tx2top-cache-20261028/'+module.replace('.','/')+'.olean'
+active=ActiveRun(E,a,'lean')
 if (E/'NCK_PAUSE').exists():raise SystemExit('paused before admission')
 assert int(a.rsplit('L',1)[1])<=80
 assert len(list(E.glob('NCK_L*/receipt.json')))<80
@@ -36,7 +38,7 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('admission refused; wait180s',flush=True);time.sleep(180);continue
  raise SystemExit('STOP admission error')
 else:raise SystemExit('STOP admission exhausted')
-cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCK_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2top-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'NBS prefix; persistent leaf cache and coherent SInt2; resolved Aeneas pins in NCK_LIBRARY_START.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
+cfg=dict(attempt=a,kind='lean',module=module,sources=[src],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NCK_generated','-o',obj,src],timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'LEAN_PATH':'/home/dombarker/project-offloads/codex-cx-tx2top-cache-20261028:'+X+':'+C+':'+C+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'},deps_fingerprint={'scope':'private copied leaf/mid cache plus coherent SInt2; resolved Aeneas pins in NCK_LIBRARY_PIN.json'},expected_time='single module symbolic elaboration',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 q=E/a/'sources'/src;q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(local.read_bytes())
 payload=dict(cfg=cfg,source=local.read_text(),src=src,obj=obj,launchers=json.loads((E/'NCK_LAUNCHER_INPUTS.json').read_text()))
@@ -59,6 +61,7 @@ else:p.write_text(json.dumps(pins,indent=2)+'\\n')
 '''
 # Submission is never retried, including transport failures; recover read-only.
 cmd='cd '+shlex.quote(B)+' && python3 -c '+shlex.quote(setup)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_lean_host.py '+shlex.quote(a+'.json')
+active.submitted()
 r=ssh(cmd,submitted=True);(E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 recover=f'''from pathlib import Path
 import json
@@ -72,3 +75,5 @@ if a+'/receipt.json' not in out:raise SystemExit('STOP no prover receipt; inspec
 rc=json.loads(out[a+'/receipt.json']);print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-16000:])
 
 with (E/"NCK_ATTEMPTS.jsonl").open("a") as f:f.write(json.dumps(rc)+"\n")
+
+active.terminal()

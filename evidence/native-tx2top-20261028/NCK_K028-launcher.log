@@ -1,0 +1,54 @@
+{"attempt": "NCK_K028", "exit_status": 0, "wall_seconds": 23.04737380403094, "peak_rss_kib": "1203224", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+x-native-tx2top-20261028/NCK_src/programs/r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_src/programs/r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - TerminatorKind::InlineAsm (2)
+             - caller_location (1)
+             - foreign function (12)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+warning: Kani currently does not support concurrency. The following constructs will be treated as sequential operations:
+             - atomic_cxchg (15)
+             - atomic_load (6)
+             - atomic_xchg (5)
+             - atomic_xadd (5)
+             - atomic_cxchgweak (15)
+             - atomic_store (3)
+             - atomic_xsub (5)
+         
+
+    Finished `dev` profile [optimized] target(s) in 2.73s
+Checking harness r1_pool_adapter::owned::NCK_owned::stage2_empty...
+
+VERIFICATION RESULT:
+ ** 0 of 13393 failed (1342 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 6.5139422s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r3c1864e2da2245ed802d3bb2bd256d5d.scope; invocation ID: f97cafc0cab043a4b6f4f0b823afe4f7

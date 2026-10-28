@@ -1,0 +1,50 @@
+{"attempt": "NCK_L024", "exit_status": 1, "wall_seconds": 3.5990203720284626, "peak_rss_kib": "2677012", "swaps": "0", "print_axioms": ["'AspisR1.NCK_Stage2Shape.fixed_range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCK_generated/NCK_Stage2Shape.lean:42:4: warning: aesop: failed to prove the goal after exhaustive search.
+NCK_generated/NCK_Stage2Shape.lean:42:4: warning: aesop: failed to prove the goal after exhaustive search.
+NCK_generated/NCK_Stage2Shape.lean:29:32: error: unsolved goals
+ops : AdapterRw.Ops
+program : AdapterRw.solana_pubkey.Pubkey
+accounts : Slice Account
+data : Slice U8
+scanner : NCK_ScanDependency.ScannerLength ops
+a : U64
+x : Result (Option (Slice U8))
+a_1 : Option (Slice U8)
+x_1 : Result (Slice U8)
+a_2 : Slice U8
+x_2 : Result Bool
+x_3 : Result (core.result.Result AdapterRw.r1_pool_adapter.ValidatedAsqa AdapterRw.solana_program_error.ProgramError)
+a_4 : AdapterRw.r1_pool_adapter.Val
+...
+ (core.cmp.PartialEqShared (AdapterRw.Slice.Insts.CoreCmpPartialEqSlice core.cmp.PartialEqU8)))
+      a_1 (some a_2) =
+    ok false
+heq_3 :
+  AdapterRw.r1_pool_adapter.owned.validate_asq8 ops program accounts data (core.result.Result.Err a) =
+    ok (core.result.Result.Ok a_4)
+heq_4 : accounts.index_usize 0#usize = ok a_5
+heq_5 : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a_5 = ok (core.result.Result.Ok a_6)
+heq_6 : accounts.index_usize 6#usize = ok a_7
+heq_7 : AdapterRw.r1_pool_adapter.owned.OwnedAccount.data ops a_7 = ok (core.result.Result.Ok a_8)
+h_2 : (↑a_6).length = ↑a_9
+heq_8 : ops.op22 a_4.statement = ok (core.result.Result.Ok a_10)
+heq_9 :
+  AdapterRw.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES ops = ok a_11
+h_3 : ↑a_11 = 1880
+heq_10 : core.slice.index.SliceIndexRangeUsizeSlice.index { start := 688#usize, «end» := a_9 } a_6 = ok a_12
+heq_11 :
+  ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) a_10.to_slice a_12 a_8 () none =
+    ok (core.result.Result.Ok a_13)
+accepted : ops.54 a_4.statement = ok (core.result.Result.Ok ())
+heq_12 :
+  AdapterRw.core.option.Option.ok_or (some 58295#usize) AdapterRw.solana_program_error.ProgramError.InvalidAccountData =
+    ok (core.result.Result.Ok a_9)
+fwd : core.slice.index.SliceIndexRangeUsizeSlice.index { start := 688#usize, «end» := a_6.len } a_6 = ok a_12
+⊢ ∃ x x_13,
+    core.slice.index.SliceIndexRangeUsizeSlice.index { start := 688#usize, «end» := 58295#usize } a_6 = ok x_13 ∧
+      ops.op11 (AdapterRw.SolanaDigest.Insts.Aspis_coreDigestDigest32 ops) x.to_slice x_13 a_8 () none =
+          ok (core.result.Result.Ok ()) ∧
+        ↑a_9 = 58295
+'AspisR1.NCK_Stage2Shape.fixed_range' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd4a23bbaae88461883a250c791c861b1.scope; invocation ID: b5510c2692764950a4049bd9a683a8c3

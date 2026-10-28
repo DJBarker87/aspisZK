@@ -1,0 +1,209 @@
+NCK_generated/NCK_ResumeDomain.lean:31:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let (p, a) := (p, a)
+    if (a.next != 10#usize) = true then
+      ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+    else do
+      let g ← ops.op17 29#usize p.gamma
+      ops.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+      let i1 ← ops.op23
+      let i2 ← ops.op22
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i1, «end» := i2 }
+      let o ← ops.op2 s
+      let r1 ← ops.op0 o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let i3 ← ops.op15
+          let i4 ← ops.op14
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+          let folded_root ← ops.unwrap32 r2
+          let r3 ← ops.op5 D proof p folded_root 1#usize hash
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a_1 => do
+              ops.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 10#usize)
+              let r4 ← ops.op11 p.queries a.next 22#usize
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let r5 ← ops.op10 a.weights.deref
+                  let cf4 ←
+                    match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let r6 ← ops.op6 proof p a g obs val2 val3 22#usize
+                      let cf5 ←
+                        match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                          let (a1, pending) := val4
+                          do
+                          let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                          let s4 ← ops.op9 pending s3
+                          let s5 ← lift (Std.Array.empty U8).to_slice
+                          let s6 ← lift (Std.Array.empty U8).to_slice
+                          let s7 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i2, «end» := i3 }
+                          let i5 ← ops.op21
+                          let s8 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i4, «end» := i5 }
+                          let i6 ← ops.op20
+                          let s9 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i5, «end» := i6 }
+                          let s10 ← lift (Std.Array.empty U8).to_slice
+                          ops.op19
+                              { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                inactive := val1, round0 := s7, folded_root := none, round1 := s8, final_message := s9,
+                                query_bytes := s10 }
+                              p { weights := deref_mut_back s4, rhs := a1.rhs, power := a1.power, next := a1.next } obs
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+of `accepted`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+pub proof cp : Slice U8
+obs : Option (verifier.Phase → Result Unit)
+p : verifier.Prepared
+a : verifier.Accumulator
+split : ops.op16 = ok 10#usize
+resumed : ops.op18 D cp proof pub AspisR1Stage2.transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a))
+accepted :
+  (let (p, a) := (p, a)
+    if (a.next != 10#usize) = true then
+      ok (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+    else do
+      let g ← ops.op17 29#usize p.gamma
+      ops.op13 obs AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead
+      let i1 ← ops.op23
+      let i2 ← ops.op22
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof { start := i1, «end» := i2 }
+      let o ← ops.op2 s
+      let r1 ← ops.op0 o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+      let cf1 ←
+        match r1 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let i3 ← ops.op15
+          let i4 ← ops.op14
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                { start := i3, «end» := i4 }
+          let r2 ← core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1
+          let folded_root ← ops.unwrap32 r2
+          let r3 ← ops.op5 D proof p folded_root 1#usize hash
+          let cf2 ←
+            match r3 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a_1 => do
+              ops.op13 obs (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 10#usize)
+              let r4 ← ops.op11 p.queries a.next 22#usize
+              let cf3 ←
+                match r4 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf3 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let r5 ← ops.op10 a.weights.deref
+                  let cf4 ←
+                    match r5 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf4 with
+                    | core.ops.control_flow.ControlFlow.Continue val3 => do
+                      let r6 ← ops.op6 proof p a g obs val2 val3 22#usize
+                      let cf5 ←
+                        match r6 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                      match cf5 with
+                        | core.ops.control_flow.ControlFlow.Continue val4 =>
+                          let (a1, pending) := val4
+                          do
+                          let (s3, deref_mut_back) ← lift a1.weights.deref_mut
+                          let s4 ← ops.op9 pending s3
+                          let s5 ← lift (Std.Array.empty U8).to_slice
+                          let s6 ← lift (Std.Array.empty U8).to_slice
+                          let s7 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i2, «end» := i3 }
+                          let i5 ← ops.op21
+                          let s8 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i4, «end» := i5 }
+                          let i6 ← ops.op20
+                          let s9 ←
+                            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+                                { start := i5, «end» := i6 }
+                          let s10 ← lift (Std.Array.empty U8).to_slice
+                          ops.op19
+                              { variant := AspisR1Stage2.transport.Variant.S2, semantic := s5, y1 := s6,
+                                inactive := val1, round0 := s7, folded_root := none, round1 := s8, final_message := s9,
+                                query_bytes := s10 }
+                              p { weights := deref_mut_back s4, rhs := a1.rhs, power := a1.power, next := a1.next } obs
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Ok ())
+⊢ a.next = 10#usize
+'AspisR1.NCK_ResumeDomain.authenticated_of_cuts' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NCK_ResumeDomain.next_ten' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

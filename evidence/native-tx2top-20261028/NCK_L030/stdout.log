@@ -1,0 +1,340 @@
+NCK_generated/NCK_CommonCuts.lean:42:80: error: unsolved goals
+ops : Ops
+H : Type
+D : aspis_core.digest.Digest32 H
+hash : H
+pub proof cp : Slice U8
+p : verifier.Prepared
+a : verifier.Accumulator
+g : Std.Array aspis_core.field.wide_exact.WideExact 29#usize
+inactive : aspis_core.field.wide_exact.WideExact
+optionInactive : Option aspis_core.field.wide_exact.WideExact
+inactiveStart round0 folded round1 : Usize
+inactiveBytes foldedBytes : Slice U8
+root : Std.Array U8 32#usize
+converted : core.result.Result (Std.Array U8 32#usize) core.array.TryFromSliceError
+geometry : verifier.QueryGeometry
+pending : verifier.BatchedWeights
+returned : verifier.Accumulator × verifier.BatchedWeights
+resumeCut : ops.op18 D cp proof pub AspisR1Stage2.transport.Variant.S2 hash = ok (core.result.Result.Ok (p, a))
+splitCut : ops.op16 = ok 10#usize
+nextTen : a.next = 10#usize
+powersCut : ops.op17 29#usize p.gamma = ok g
+markRead : ops.op13 none AdapterRw.aspis_r1_cost_probe.verifier.Phase.CheckpointRead = ok ()
+inactiveOffset : ops.op23 = ok inactiveStart
+round0Offset : ops.op22 = ok round0
+inactiveRange :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := inactiveStart, «end» := round0 } =
+    ok inactiveBytes
+decodeInactive : ops.op2 inactiveBytes = ok optionInactive
+checkInactive :
+  ops.op0 optionInactive AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse = ok (core.result.Result.Ok inactive)
+foldedOffset : ops.op15 = ok folded
+round1Offset : ops.op14 = ok round1
+foldedRange :
+  core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) proof
+      { start := folded, «end» := round1 } =
+    ok foldedBytes
+convertRoot : core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 foldedBytes = ok converted
+unwrapRoot : ops.unwrap32 converted = ok root
+batchCut : ops.op5 D proof p root 1#usize hash = ok (core.result.Result.Ok ())
+markBatch : ops.op13 none (AdapterRw.aspis_r1_cost_probe.verifier.Phase.Merkle 10#usize) = ok ()
+geometryCut : ops.op11 p.queries a.next 22#usize = ok (core.result.Result.Ok geometry)
+pendingCut : ops.op10 a.weights.deref = ok (core.result.Result.Ok pending)
+queryCut : ops.op6 proof p a g none geometry pending 22#usize = ok (core.result.Result.Ok returned)
+tailCut :
+  VTop_SecondFlow.tail (VTop_Flow.sourceEffects ops) proof p none inactive round0 folded round1 returned =
+    ok (core.result.Result.Ok ())
+⊢ (do
+      let cf ← liftM (ok (core.ops.control_flow.ControlFlow.Continue (p, a)))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if (val.2.next != 10#usize) = true then
+            pure (core.result.Result.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Checkpoint)
+          else do
+            let g ← ops.op17 29#usize val.1.gamma
+            let s ← liftM (ok inactiveBytes)
+            let o ← ops.op2 s
+            let r1 ← ops.op0 o AdapterRw.aspis_r1_cost_probe.verifier.Error.Parse
+            let cf1 ←
+              liftM
+                  (match r1 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let s1 ← liftM (ok foldedBytes)
+                let r2 ← liftM (core.array.TryFromArrayCopySlice.try_from 32#usize core.marker.CopyU8 s1)
+                let folded_root ← ops.unwrap32 r2
+                let r3 ← ops.op5 D proof val.1 folded_root 1#usize hash
+                let cf2 ←
+                  liftM
+                      (match r3 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue __r => do
+                    let r4 ← ops.op11 val.1.queries val.2.next 22#usize
+                    let cf3 ←
+                      liftM
+                          (match r4 with
+                          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                          | core.result.Result.Err e =>
+                            ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                    match cf3 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let r5 ← ops.op10 val.2.weights.deref
+                        let cf4 ←
+                          liftM
+                              (match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                        match cf4 with
+                          | core.ops.control_flow.ControlFlow.Continue val3 => do
+                            let r6 ← ops.op6 proof val.1 val.2 g none val2 val3 22#usize
+                            let cf5 ←
+                              liftM
+                                  (match r6 with
+                                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                                  | core.result.Result.Err e =>
+                                    ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e)))
+                            match cf5 with
+                              | core.ops.control_flow.ControlFlow.Continue val4 =>
+                                VTop_SecondFlow.tail
+                                  { op0 := fun {T E} => ops.op0, op1 := ops.op1, op2 := ops.op2, op3 := ops.op3,
+                                    op4 := ops.op4, op5 := fun {H} => ops.op5, op6 := ops.op6,
+                                    op7 := fun {H} => ops.op7, op8 := fun {H} => ops.op8, op9 := ops.op9,
+                                    op10 := ops.op10, op11 := ops.op11, op12 := ops.op12, op13 := ops.op13,
+                                    op14 := ok round1, op15 := ok folded, op16 := ok 10#usize, op17 := ops.op17,
+                                    op18 := fun {H} => ops.op18, op19 := ops.op19, op20 := ops.op20, op21 := ops.op21,
+                                    op22 := ok round0, op23 := ok inactiveStart, unwrap32 := ops.unwrap32 }
+                                  proof val.1 none val1 round0 folded round1 val4
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                liftM
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    Unit (core.convert.FromSame verifier.Error) residual)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            liftM
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame verifier.Error) residual)
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        liftM
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                            (core.convert.FromSame verifier.Error) residual)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    liftM
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame verifier.Error) residual)
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                liftM
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame verifier.Error) residual)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          liftM
+            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame verifier.Error) residual)) =
+    ok (core.result.Result.Ok ())
+NCK_generated/NCK_CommonCuts.lean:46:4: warning: This simp argument is unused:
+  nextTen
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵n̵e̵x̵t̵T̵e̵n̵,̵ ̵bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:46:13: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵ ̵Bool.false_eq_true,
+  ̲  ̲ ̲ ̲↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset, inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive,
+  ̲  ̲ ̲ ̲checkInactive, foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot, batchCut,
+  ̲  ̲ ̲ ̲markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:46:32: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲ B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵  ̲ ̲↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset, inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive,
+  ̲  ̲ ̲ ̲checkInactive, foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot, batchCut,
+  ̲  ̲ ̲ ̲markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:46:52: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset, inactiveRange,
+      decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot,
+  ̲  ̲ ̲ ̲batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:47:4: warning: This simp argument is unused:
+  powersCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵p̵o̵w̵e̵r̵s̵C̵u̵t̵,̵ ̵markRead, inactiveOffset, round0Offset, inactiveRange,
+      decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot,
+  ̲  ̲ ̲ ̲batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:48:4: warning: This simp argument is unused:
+  decodeInactive
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵d̵e̵co̵d̵e̵I̵n̵a̵c̵t̵i̵v̵e̵,̵ ̵c̵heckInactive, foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot,
+  ̲  ̲ ̲ ̲batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:48:20: warning: This simp argument is unused:
+  checkInactive
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, c̵h̵e̵c̵k̵I̵n̵a̵c̵t̵i̵v̵e̵,̵ ̵foldedOffset, round1Offset, foldedRange,
+  ̵  ̵ ̵ ̵convertRoot, unwrapRoot,
+  ̲  ̲ ̲ ̲batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:4: warning: This simp argument is unused:
+  convertRoot
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      c̵o̵n̵v̵e̵r̵t̵R̵o̵o̵t̵,̵ ̵unwrapRoot, batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:17: warning: This simp argument is unused:
+  unwrapRoot
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, u̵n̵w̵r̵a̵p̵R̵o̵o̵t̵,̵ ̵batchCut, markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:29: warning: This simp argument is unused:
+  batchCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, b̵a̵t̵c̵h̵C̵u̵t̵,̵ ̵markBatch, geometryCut, pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:50: warning: This simp argument is unused:
+  geometryCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, batchCut, markBatch, g̵e̵o̵m̵e̵t̵r̵y̵C̵u̵t̵,̵ ̵pendingCut, queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:63: warning: This simp argument is unused:
+  pendingCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, batchCut, markBatch, geometryCut, p̵e̵n̵d̵i̵n̵g̵C̵u̵t̵,̵ ̵queryCut, tailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:75: warning: This simp argument is unused:
+  queryCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, batchCut, markBatch, geometryCut, pendingCut, q̵u̵e̵r̵y̵C̵u̵t,̵ ̵t̵ailCut]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NCK_generated/NCK_CommonCuts.lean:49:85: warning: This simp argument is unused:
+  tailCut
+
+Hint: Omit it from the simp argument list.
+  simp only [VTop_SecondFlow.common, VTop_Flow.sourceEffects, resumeCut,
+      core.result.Result.Insts.CoreOpsTry.branch, bind_tc_ok, splitCut,
+  ̵  ̵ ̵ ̵nextTen, bne_self_eq_false,
+  ̲  ̲ ̲ ̲Bool.false_eq_true, ↓reduceIte,
+  ̵  ̵ ̵ ̵powersCut, markRead, inactiveOffset, round0Offset,
+  ̲  ̲ ̲ ̲inactiveRange,
+  ̵  ̵ ̵ ̵decodeInactive, checkInactive, foldedOffset, round1Offset, foldedRange,
+      convertRoot, unwrapRoot, batchCut, markBatch, geometryCut, pendingCut, queryCut,̵ ̵t̵a̵i̵l̵C̵u̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCK_CommonCuts.compose' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

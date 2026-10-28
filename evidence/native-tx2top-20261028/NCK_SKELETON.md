@@ -46,3 +46,23 @@ This does not hold independent top members behind those gaps. Stage 2 continues
 with metadata/getters/dispatch and small native cuts. Exact per-unit hypotheses
 and caller proofs, U16 reconstruction to byte-identical1880, U15 resume next10
 through query22 and relation, and the concrete same-SDK instance remain OPEN.
+
+## Checked domain and same-input additions
+
+- `NCK_SecondBinding.original_inputs`: inverts the SAME accepted model wrapper,
+  derives its unchanged heap and identifies the tx2 child's proof suffix with
+  original account0 bytes.drop688, length57607, and its checkpoint with original
+  account6 bytes, length1768. The scanner's precisely named `ScannerLength`
+  law remains a hypothesis. It does not produce acceptance or a cross-TX law.
+- `NCK_Admission`: derives seven accounts and successful deferred Clock slot
+  from the respective model acceptance equations; no Clock success assumed.
+- `NCK_Stage2Shape.fixed_range`: scanner length law transfers to the actual
+  top-body selection[688,58295), not an independently chosen suffix.
+- `NCK_CommonCuts.compose`: forward value composition through actual resume,
+  next10 guard, powers29, batch1, geometry, pending and query22, retaining the
+  unreplaced tail on the same returned accumulator/pending. Its premises are
+  explicit LOCAL MODEL CUTS, not the missing `NCK_Lower_Uxx` native bridges.
+
+Thus an exact same-input accepted-run interface now exists for lower-lane
+integration. The requested forward native-to-cohort theorem, the exact
+NCK_Lower_U00–U14 hypotheses and joint accepted2 instance remain OPEN.

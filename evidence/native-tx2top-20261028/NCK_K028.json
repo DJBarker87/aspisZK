@@ -1,0 +1,77 @@
+{
+  "attempt": "NCK_K028",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "c97aea8a35f5d071e2ed80c349913f32b5c00e0a",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NCK_src/Cargo.toml",
+    "NCK_src/Cargo.lock",
+    "NCK_src/KMX_CopyMeaning.lean",
+    "NCK_src/KMX_native.rs",
+    "NCK_src/KMX_stubs.rs",
+    "NCK_src/programs/r1-cost-probe/src/lib.rs",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::owned::NCK_owned::stage2_empty",
+    "--output-format",
+    "terse",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "d5777588f4da15534535ff534e27212465637e5ac2b11c40751cbb556d3e7010",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "fbeefb68ed12eb3bdf1bbb1b6c773efa14cf77939070b5015efa118352052895",
+    "extra_patch_sha256": null,
+    "scratch_source_manifest_sha256": "365ed041b7ac9e7eed16e8b4e5d6b58ca20dff007012d574caca950be3b76cd4",
+    "cfg_patch_chain": [
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2top/evidence/kani-mitig-20261028/KMX_copy_stubs.patch",
+        "sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2top/evidence/native-tx2top-20261028/NCK_native.patch",
+        "sha256": "dfd00d31ab81f78e4607ce0ac899db2a7b57fb02bca88ab8fbbb0cd92f5ec61b"
+      }
+    ]
+  },
+  "expected_time": "optimized dependency compilation then native release leaf r1_pool_adapter::owned::NCK_owned::stage2_empty"
+}
