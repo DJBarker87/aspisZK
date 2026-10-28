@@ -1,0 +1,434 @@
+{
+  "revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "files": {
+    "programs/r1-cost-probe/src/r1_pool_adapter.rs": {
+      "sha256": "09ce3b480cf772c843315b9bcdabd9bf266f4065e5a524ae2a4d5560ea4feaf3",
+      "bytes": 37612
+    },
+    "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": {
+      "sha256": "246d96b479ef552b485a51a2a3d4c4dbe1ff4ef9c0527b6f9a872f296b60576b",
+      "bytes": 20485
+    },
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs": {
+      "sha256": "594f8b53e6c8d7cd6265542e7730c5371f3233d778de06d220bedab7529d97d9",
+      "bytes": 32965
+    },
+    "crates/aspis-statement/src/pool_v1/format.rs": {
+      "sha256": "209bf45ab1fbf03fa6a5b524e6b2079068537368b02837e320d708ca5128f88d",
+      "bytes": 12953
+    },
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs": {
+      "sha256": "1992026c00dbced3a0c475b6e2be0a72fae1a7e859dd041e741707384e727ba3",
+      "bytes": 31632
+    },
+    "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs": {
+      "sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+      "bytes": 67431
+    }
+  },
+  "sdk_model_sha256": "c6aa4d351e409cc56ee59b64c573590fddca8831f7abba0634ac35ef80bcf497",
+  "slots": {
+    "15": {
+      "native_function": "validate_verifier_policy_v1",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 543,
+          "context": "ier_policy.policy_binding != AUDIT_POLICY_BINDING\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    validate_verifier_policy_v1(&master.verifier_policy)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let registry_program = Pubkey::new_from_array(registry_program_id());\n    require_readonly_account(registr"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 101,
+          "context": "ier_policy.policy_binding != AUDIT_POLICY_BINDING\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    validate_verifier_policy_v1(&master.verifier_policy)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let registry_program = Pubkey::new_from_array(registry_program_id());\n    require_readonly_account(registr"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1376,
+          "context": "ops.op15\n                master.verifier_policy\n            let r1 \u2190\n              core.result.Result.map_err\n                r1_pool_adapter.owned.authenticate_invariant_release_registry.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1FormatErrorProgramError\n                r ()\n            let cf \u2190 "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "23": {
+      "native_function": "decode_pool_v1_pair_forest_terminal_request_v1",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 894,
+          "context": "_PAIR_FOREST_TERMINAL_REQUEST_BYTES {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let request = decode_pool_v1_pair_forest_terminal_request_v1(instruction_data)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    if request.verifier_profile != PROFILE_BINDING\n        || request.verifier_release != RELE"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 347,
+          "context": "_PAIR_FOREST_TERMINAL_REQUEST_BYTES {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    let request = decode_pool_v1_pair_forest_terminal_request_v1(instruction_data)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    if request.verifier_profile != PROFILE_BINDING\n        || request.verifier_release != RELE"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 2688,
+          "context": "ops.op23\n        instruction_data\n    let r1 \u2190\n      core.result.Result.map_err\n        r1_pool_adapter.owned.validate_asq8.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestTerminalFormatErrorV1ProgramError\n        r ()\n    let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r1\n    match cf w"
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "25": {
+      "native_function": "is_paused",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 577,
+          "context": ".programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(&entry_"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 637,
+          "context": "egistry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_d"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 135,
+          "context": ".programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(entry_a"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 195,
+          "context": "egistry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(entry_account.data()?)\n    "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1915,
+          "context": "ops.op25\n                                      val1\n                                  if b9\n                                  then\n                                    ok (core.result.Result.Err\n                                      solana_program_error.ProgramError.InvalidAccountData)\n              "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "26": {
+      "native_function": "is_immutable",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 576,
+          "context": "ader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = de"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 636,
+          "context": "icy.registry_authority\n        || registry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_e"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 134,
+          "context": "ader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = de"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 194,
+          "context": "icy.registry_authority\n        || registry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_e"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1910,
+          "context": "ops.op26\n                                    val1\n                                if b8\n                                then\n                                  let b9 \u2190\n                                    ops.op25\n                                      val1\n                                  if b9\n    "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "27": {
+      "native_function": "is_paused",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 577,
+          "context": ".programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(&entry_"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 637,
+          "context": "egistry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_d"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 135,
+          "context": ".programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(entry_a"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 195,
+          "context": "egistry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(entry_account.data()?)\n    "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1536,
+          "context": "ops.op27\n                                              val1\n                                          if b12\n                                          then\n                                            ok (core.result.Result.Err\n                                              solana_program_error.Progra"
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "28": {
+      "native_function": "is_immutable",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 576,
+          "context": "ader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = de"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 636,
+          "context": "icy.registry_authority\n        || registry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_e"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 134,
+          "context": "ader.to_bytes()\n            || registry.programdata_address != registry_programdata.to_bytes()\n            || !registry.is_immutable()\n            || registry.is_paused()\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = de"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 194,
+          "context": "icy.registry_authority\n        || registry.policy_binding != master.verifier_policy.policy_binding\n        || !registry.is_immutable()\n        || registry.is_paused()\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_e"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1531,
+          "context": "ops.op28\n                                            val1\n                                        if b11\n                                        then\n                                          let b12 \u2190\n                                            ops.op27\n                                             "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "29": {
+      "native_function": "is_active_at",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 612,
+          "context": "s != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)\n"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 664,
+          "context": "binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}\n\n#[inline(never)]\nfn authenticate_asq8_accounts(\n    verifier_program: &Pubkey,\n    accounts: &[AccountInfo<'_>],\n"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 170,
+          "context": "s != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(registry_account.data()?)\n        .map"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 222,
+          "context": "binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}\n\n#[inline(never)]\nfn authenticate_asq8_accounts(\n    verifier_program: &Pubkey,\n    accounts: &[OwnedAccount],\n   "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1762,
+          "context": "ops.op29\n                                                                            val5\n                                                                            current_slot\n                                                                          if b22\n                                        "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "30": {
+      "native_function": "is_active_at",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 612,
+          "context": "s != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)\n"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 664,
+          "context": "binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}\n\n#[inline(never)]\nfn authenticate_asq8_accounts(\n    verifier_program: &Pubkey,\n    accounts: &[AccountInfo<'_>],\n"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 170,
+          "context": "s != verifier_programdata.to_bytes()\n            || entry.expected_upgrade_authority != [0u8; 32]\n            || !entry.is_active_at(current_slot)\n        {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(registry_account.data()?)\n        .map"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 222,
+          "context": "binding != RELEASE_BINDING\n        || entry.statement_version != POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n        || !entry.is_active_at(current_slot)\n    {\n        return Err(ProgramError::InvalidAccountData);\n    }\n    Ok(())\n}\n\n#[inline(never)]\nfn authenticate_asq8_accounts(\n    verifier_program: &Pubkey,\n    accounts: &[OwnedAccount],\n   "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 2068,
+          "context": "ops.op30\n                                                              val4 current_slot\n                                                          if b16\n                                                          then\n                                                            ok\n                    "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "31": {
+      "native_function": "decode_verifier_registry_v1",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 619,
+          "context": " {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(&registry_account.try_borrow_data()?)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let expected_registry = Pubkey::create_program_address(\n        &[\n            VERIFIER_REGIS"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 177,
+          "context": " {\n            return Err(ProgramError::InvalidAccountData);\n        }\n        return Ok(());\n    }\n\n    let registry = decode_verifier_registry_v1(registry_account.data()?)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let expected_registry = Pubkey::create_program_address(\n        &[\n            VERIFIER_REGISTRY_SEED,\n  "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1837,
+          "context": "ops.op31\n                        val\n                    let r5 \u2190\n                      core.result.Result.map_err\n                        r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_7.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError\n           "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "32": {
+      "native_function": "decode_verifier_registry_entry_v1",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 642,
+          "context": "ogramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(&entry_account.try_borrow_data()?)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let expected_entry = Pubkey::create_program_address(\n        &[\n            VERIFIER_ENTRY"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 200,
+          "context": "ogramError::InvalidAccountData);\n    }\n    require_readonly_account(entry_account, &registry_program)?;\n    let entry = decode_verifier_registry_entry_v1(entry_account.data()?)\n        .map_err(|_| ProgramError::InvalidAccountData)?;\n    let expected_entry = Pubkey::create_program_address(\n        &[\n            VERIFIER_ENTRY_SEED,\n     "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1943,
+          "context": "ops.op32\n                                            val3\n                                        let r11 \u2190\n                                          core.result.Result.map_err\n                                            r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_9.Insts.C"
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "33": {
+      "native_function": "decode_verifier_registry_v2",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 551,
+          "context": "EPLOYMENT != 0;\n    if immutable_deployment {\n        let loader = bpf_loader_upgradeable::id();\n        let registry = decode_verifier_registry_v2(&registry_account.try_borrow_data()?)\n            .map_err(|_| ProgramError::InvalidAccountData)?;\n        let expected_registry = Pubkey::create_program_address(\n            &[\n              "
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 109,
+          "context": "EPLOYMENT != 0;\n    if immutable_deployment {\n        let loader = bpf_loader_upgradeable::id();\n        let registry = decode_verifier_registry_v2(registry_account.data()?)\n            .map_err(|_| ProgramError::InvalidAccountData)?;\n        let expected_registry = Pubkey::create_program_address(\n            &[\n                VERIFIER_R"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1404,
+          "context": "ops.op33\n                        val\n                    let r5 \u2190\n                      core.result.Result.map_err\n                        r1_pool_adapter.owned.authenticate_invariant_release_registry.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1VerifierRegistryFormatErrorProgramError\n           "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "34": {
+      "native_function": "decode_verifier_registry_entry_v2",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 582,
+          "context": "InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(&entry_account.try_borrow_data()?)\n            .map_err(|_| ProgramError::InvalidAccountData)?;\n        let expected_entry = Pubkey::create_program_address(\n            &[\n              "
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 140,
+          "context": "InvalidAccountData);\n        }\n        require_readonly_account(entry_account, &registry_program)?;\n        let entry = decode_verifier_registry_entry_v2(entry_account.data()?)\n            .map_err(|_| ProgramError::InvalidAccountData)?;\n        let expected_entry = Pubkey::create_program_address(\n            &[\n                VERIFIER_E"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 1564,
+          "context": "ops.op34\n                                                    val4\n                                                let r13 \u2190\n                                                  core.result.Result.map_err\n                                                    r1_pool_adapter.owned.authenticate_invariant_re"
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "48": {
+      "native_function": "decode_master_box",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 429,
+          "context": "ramError::InvalidAccountData);\n    }\n    target_data[ASPU_AUTHORITY.clone()].fill(0);\n    Ok(())\n}\n\n#[inline(never)]\nfn decode_master_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestMasterV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_master_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n "
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 703,
+          "context": " lane_account,\n        registry_account,\n        entry_account,\n        verifier_checkpoint,\n    ])?;\n\n    let master = decode_master_box(&master_account.try_borrow_data()?)?;\n    if master.identity.pool != master_account.key.to_bytes()\n        || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK\n        || Pubkey::create"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 261,
+          "context": " lane_account,\n        registry_account,\n        entry_account,\n        verifier_checkpoint,\n    ])?;\n\n    let master = decode_master_box(master_account.data()?)?;\n    if master.identity.pool != master_account.key().to_bytes()\n        || master.initialized_lane_mask != POOL_V1_PAIR_FOREST_ALL_LANES_MASK\n        || Pubkey::create_program_a"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 2258,
+          "context": "ops.op48 val\n                  let cf7 \u2190 core.result.Result.Insts.CoreOpsTry.branch r7\n                  match cf7 with\n                  | core.ops.control_flow.ControlFlow.Continue val1 =>\n                    let p \u2190\n                      r1_pool_adapter.owned.OwnedAccount.impl.key\n               "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "49": {
+      "native_function": "decode_checkpoint_box",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 437,
+          "context": "pair_forest_master_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAccountData)?,\n    ))\n}\n\n#[inline(never)]\nfn decode_checkpoint_box(bytes: &[u8]) -> Result<Box<PoolV1PairForestCheckpointV1>, ProgramError> {\n    Ok(Box::new(\n        decode_pool_v1_pair_forest_checkpoint_v1(bytes)\n            .map_err(|_| ProgramError::InvalidAcco"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 728,
+          "context": ",\n        &master,\n        registry_account,\n        entry_account,\n        current_slot,\n    )?;\n\n    let checkpoint = decode_checkpoint_box(&checkpoint_account.try_borrow_data()?)?;\n    if checkpoint.master != master_account.key.to_bytes()\n        || checkpoint.deployment_domain != master.identity.deployment_domain\n        || Pubkey::cr"
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 286,
+          "context": ",\n        &master,\n        registry_account,\n        entry_account,\n        current_slot,\n    )?;\n\n    let checkpoint = decode_checkpoint_box(checkpoint_account.data()?)?;\n    if checkpoint.master != master_account.key().to_bytes()\n        || checkpoint.deployment_domain != master.identity.deployment_domain\n        || Pubkey::create_progr"
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 2333,
+          "context": "ops.op49 val3\n                                let cf11 \u2190\n                                  core.result.Result.Insts.CoreOpsTry.branch\n                                    r12\n                                match cf11 with\n                                | core.ops.control_flow.ControlFlow.Continue\n "
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    },
+    "53": {
+      "native_function": "emit_result",
+      "native_occurrences": [
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter.rs",
+          "line": 923,
+          "context": ")?;\n    Ok(ValidatedAsqa {\n        statement,\n        proof_length: scanned.proof_length,\n    })\n}\n\n#[inline(never)]\nfn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult {\n    let result = PoolV1PairForestTerminalResultV1 {\n        transition_kind: statement.transition_kind(),\n        master_account: statement."
+        },
+        {
+          "path": "programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+          "line": 444,
+          "context": "ta,\n        super::super::SolanaDigest,\n        super::super::observer(),\n    )\n    .map_err(super::super::error)?;\n    emit_result(&validated.statement)\n}\n\npub(super) fn stage1(program_id: &Pubkey, accounts: &[AccountInfo<'_>], data: &[u8]) -> ProgramResult {\n    if !(data == &[3, 10] || data == &[3, 11]) || accounts.len() != 3 {\n       "
+        }
+      ],
+      "sdk_occurrences": [
+        {
+          "line": 3425,
+          "context": "ops.op53 val.statement\n                    | core.ops.control_flow.ControlFlow.Break residual =>\n                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n                        Unit (core.convert.FromSame\n                        solana_program_error.P"
+        }
+      ],
+      "status": "source association inspection; not a kernel extraction component"
+    }
+  },
+  "op53_effect": "fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult {\n    let result = PoolV1PairForestTerminalResultV1 {\n        transition_kind: statement.transition_kind(),\n        master_account: statement.common().master_account,\n        selected_lane_account: statement.common().selected_lane_account,\n        output_lane: statement.common().output_lane,\n        nullifier: *statement.nullifier(),\n        verified_afterstate: statement.common().lane_transition.candidate_afterstate,\n    };\n    validate_pool_v1_pair_forest_terminal_result_against_statement_v1(statement, &result)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    let encoded = encode_pool_v1_pair_forest_terminal_result_v1(&result)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    if encoded.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES\n        || encoded[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC\n    {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    program::set_return_data(&encoded);\n    Ok(())\n}",
+  "claim": "read-only source inspection, no native completeness credit"
+}

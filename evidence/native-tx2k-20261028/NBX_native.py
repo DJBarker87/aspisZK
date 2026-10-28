@@ -42,10 +42,10 @@ b=Path({B!r}); print(json.dumps({{n:(b/n).read_text() for n in {[a+'/receipt.jso
  return receipt
 def launch(a,kind,command,sources,timeout=180):
  admit(a)
- preflight=py('from pathlib import Path; b=Path('+repr(B)+'); missing=[f for f in '+repr(sources)+' if not (b/f).is_file()]; assert not missing,missing')
+ preflight=py('from pathlib import Path; b=Path('+repr(B)+'); (b/"NBX_tmp").mkdir(exist_ok=True); missing=[f for f in '+repr(sources)+' if not (b/f).is_file()]; assert not missing,missing')
  assert preflight.returncode==0,preflight.stdout+preflight.stderr
  target=command[command.index('--harness')+1] if '--harness' in command else 'cargo metadata'
- cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':B+'/NBU_target','TMPDIR':B+'/NBU_tmp'},deps_fingerprint={'frozen_source':REV},expected_time='Optimized compilation, then '+target+' solver gate; no field multiplication or protocol whole-buffer loop')
+ cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,timeout=timeout,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,env={'PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_NET_OFFLINE':'true','CARGO_BUILD_JOBS':'1','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','CARGO_TARGET_DIR':B+'/NBX_target','TMPDIR':B+'/NBX_tmp'},deps_fingerprint={'frozen_source':REV},expected_time='Optimized compilation, then '+target+' solver gate; no field multiplication or protocol whole-buffer loop')
  (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
  r=py(f'from pathlib import Path; p=Path({(B+"/"+a+".json")!r}); p.write_text({json.dumps(cfg,indent=2)!r})');assert r.returncode==0
  r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+shlex.quote(a+'.json'),submitted=True)
@@ -57,7 +57,7 @@ if sys.argv[1]=='setup':
  paths=['Cargo.toml','Cargo.lock','crates','programs','audit/poseidon-pair-probe/program','xtask','tools/r1-builder-reference','docs/research/v8-r0-zk-20261009/refine/diffharness/tests/glue_gen.rs','docs/research/v8-r0-zk-20261009/c3/check','docs/research/v8-r0-zk-20261009/c3/build','docs/research/v8-r0-zk-20261009/z4']+['docs/research/v8-r0-zk-20261009/refine/'+n for n in ['writers','blockwriters','poseidon']]
  # One source scratch, no copied compiled corpus. Do not retry after data submission.
  r=ssh('test ! -e '+B+'/NBU_src');assert r.returncode==0,'scratch already exists; inspect rather than overwrite'
- r=ssh('mkdir -p '+B+'/NBU_src '+B+'/NBU_tmp');assert r.returncode==0
+ r=ssh('mkdir -p '+B+'/NBU_src '+B+'/NBX_tmp');assert r.returncode==0
  a=subprocess.Popen(['git','archive',REV,*paths],stdout=subprocess.PIPE)
  r=subprocess.run(['ssh',H,'tar -xf - -C '+B+'/NBU_src'],stdin=a.stdout,capture_output=True,text=True);a.stdout.close();assert a.wait()==0 and r.returncode==0,r.stderr
  (E/'NBX_SETUP_TRANSFER.json').write_text(json.dumps(dict(revision=REV,paths=paths,exit=r.returncode,stderr=r.stderr),indent=2)+'\n')
