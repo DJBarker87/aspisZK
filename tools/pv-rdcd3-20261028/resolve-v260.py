@@ -13,7 +13,11 @@ def go(m):
  for dep in deps:
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
-go('R1Z.PV_B2_C_RawWeights253Funs')
+go('R1Z.PV_RDCD3_V260Owned')
+go('R1Z.PV_RDCD3_V260RowRange')
+go('R1Z.PV_RDCD3_Range194')
+go('R1Z.PV_RDCD3_V260Bounds')
+go('R1Z.PV_RDCD3_Index194')
 checks={}
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json','docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json']:
  raw=git('show','HEAD:'+ref);j=json.loads(raw);hits=[]
