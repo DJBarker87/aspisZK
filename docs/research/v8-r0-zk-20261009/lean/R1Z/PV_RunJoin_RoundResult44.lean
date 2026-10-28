@@ -34,6 +34,7 @@ theorem complete (ops : ExternalFuns) (count : Usize) (small : count.val / 4 ≤
   · intro k hk
     exact ProverCommitWideScalar48.product_canonical _ _
   · intro k hk
-    rw [PV_RunJoin_RoundScaleValue44.product,ProverCommitWideScalar48.product_value,hdxs k hk]
+    change value (ProverCommitWideScalar48.product (xs k) 536870912#u32) = _
+    rw [ProverCommitWideScalar48.product_value,hdxs k hk]
 #print axioms complete
 end R1Z.PV_RunJoin_RoundResult44
