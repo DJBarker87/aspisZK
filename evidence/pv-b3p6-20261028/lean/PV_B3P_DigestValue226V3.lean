@@ -5,6 +5,7 @@ namespace PV_B3P_DigestValue226V3
 open Aeneas Aeneas.Std PV_B3P_226V3 PV_B3P_ByteLayout226V3
 set_option autoImplicit false
 
+set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (a : Array U32 8#usize) (i : Usize) (hi : i.val < 32) :
     PV_B3P_DigestTotal226V3.digestAt a i =
       if (a.val[i.val / 4]?.getD 0#u32) < 2147483647#u32 then
@@ -37,7 +38,7 @@ theorem complete_result (a : Array U32 8#usize) (i : Usize) (hi : i.val < 32) :
   rw [hr]
   simp only [bind_tc_ok]
   rw [PV_B3P_NativeFieldByte226V3.complete_result _ r hrb]
-  rw [← PV_B3P_EndianVerified226V3.word_bytes]
+  simp only [← PV_B3P_EndianVerified226V3.word_bytes]
   by_cases hc : (a.val[q.val]'hlen) < 2147483647#u32
   · simp only [hc,↓reduceIte]
     rw [hcell]
