@@ -14286,3 +14286,25 @@ runjoin47 launched (IDs 61900-61999; 100 Lean, 0 Kani). It follows WEIGHT-NEXT.m
 - kernelState produced by weights53.new, never assumed;
 - composition into ProverCommitOpeningModel53.exact_result and the publication bytes.
 Step (4) waits for step (3). Privacy target not yet established.
+
+## D422 (Stream B) 2026-10-28 23:46 UTC: recount 8 merged (OPEN 77 -> 81); correction to D403, V213 is not restored; pv-fix launched
+
+Recount 8 (pv-recount8; 0 of 30 Lean used; statement checks and receipts only) re-derived all 407 rows at immutable pins. It was merged into research as 9dbbd0ecb7 by the plumbing route and pushed. Totals moved from recount 7 to recount 8 as follows:
+- OPEN 77 to 81;
+- CLOSED-ON-CANDIDATE 53 to 49;
+- REDUCED 176, CLOSED-ON-RESEARCH 87 and EVIDENCED 14, all unchanged.
+Open buckets: a 2, b 71, c 6, d 2. Of the 23 restoration claims since recount 7, 22 are independently accepted. Every step resting on Kani, Aeneas or Charon is tagged as reclassification. No endpoint premise was removed, added or weakened.
+
+The rise in OPEN is the D386 suspension of 41 closures, net of the restorations. The recount also records the following:
+- the D415 correction (JHx_Joint is historical-forest evidence only);
+- pv-2tnv's partial V047 result;
+- the release-checklist item that the deployed verifier must equal the pinned release ELF (D416);
+- the D348 gap, extended with the client-side formatting, error-string and backtrace channel (D414, D418): neither witness independence nor witness-dependent leakage is established.
+The owner packet was refreshed. Its open owner choices are the zero-change domain, timing on a throttled host, the V242 compiler cohort, the diagnostic observer, release features and constant-time decoding, custody (N7), SHA-NI, DOITM and client scope.
+
+Correction to D403: the lead reported V213 as restored. Recount 8 rejects that under ruling (t). V213's binding compile, attempt 41466, was launched in breach of the admission and cooldown rule, as pv-rdcd's own RESUME-SEQUENCING.md records. The later audits only imported its object and did not recompile it, and standard axioms do not repair admission. The D403 review missed this. V213 stays OPEN, and the D403 count of eight restored rows from pv-rdcd is seven.
+
+pv-fix launched (sparse worktree from candidate 1a3cd3de26; IDs 62000-62099; 15 Lean; no new proofs). It has two items:
+- recompile V213's binding modules unchanged, at their pinned blobs, under compliant admission, and re-audit V213 against the fresh objects only;
+- make a one-line name qualification in pv-rdeac's failed final replay 61199 wrapper and compile it once.
+Privacy target not yet established.
