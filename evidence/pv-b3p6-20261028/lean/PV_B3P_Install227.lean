@@ -3,6 +3,7 @@ import PV_B3P_P227_14
 namespace PV_B3P_Install227
 open Aeneas Aeneas.Std ProverRwFull
 set_option autoImplicit false
+noncomputable section
 abbrev Types := PV_B3P_Carrier227.Types
 abbrev SourceQ := PV_B3P_227.aspis_core.field.QM31
 abbrev SourceError := PV_B3P_227.aspis_core.state_only_prefix.r0.Error
