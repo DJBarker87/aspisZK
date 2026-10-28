@@ -16,10 +16,11 @@ def spec8 (p : reference226.OwnedPublic) (base : Usize) :
               bindR (reference226.byte_at p (Usize.wrapping_add base 6#usize)) (fun v6 =>
                 bindR (reference226.byte_at p (Usize.wrapping_add base 7#usize)) (fun v7 =>
                   .ok (.Ok (Array.make 8#usize [v0, v1, v2, v3, v4, v5, v6, v7] (by rfl)))))))))))
+set_option backward.isDefEq.respectTransparency false in
 theorem complete_result (p : reference226.OwnedPublic) (base : Usize) :
     reference226.chunk8 p base = spec8 p base := by
   unfold reference226.chunk8 spec8
-  simp only [try_bind_eq]
+  simp only [lift,bind_tc_ok,try_bind_eq]
 
 #print axioms complete_result
 end PV_B3P_ChunkV3Law226
