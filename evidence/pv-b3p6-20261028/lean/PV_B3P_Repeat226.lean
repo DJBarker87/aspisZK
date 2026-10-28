@@ -23,8 +23,11 @@ theorem repeat_set {α : Type} (n : Usize) (x : α) (i : Usize)
   have hi : i.val < (Array.repeat n x).val.length := by simpa [Array.length_eq] using h
   have hx : (Array.repeat n x).val[i.val]'hi = x := by
     simp only [Array.repeat_val, List.getElem_replicate]
-  rw [← hx]
-  exact Array.set_getElem_eq _ _ hi
+  calc
+    (Array.repeat n x).set i x =
+        (Array.repeat n x).set i ((Array.repeat n x).val[i.val]'hi) :=
+      congrArg (fun value => (Array.repeat n x).set i value) hx.symm
+    _ = Array.repeat n x := Array.set_getElem_eq _ _ hi
 
 theorem repeat_update {α : Type} (n : Usize) (x : α) (i : Usize)
     (h : i.val < n.val) : Array.update (Array.repeat n x) i x = .ok (Array.repeat n x) := by
