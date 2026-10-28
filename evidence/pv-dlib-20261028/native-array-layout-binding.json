@@ -1,0 +1,28 @@
+{
+  "source": {
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+    "sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247"
+  },
+  "declarations": {
+    "GenericArrayImplEven": "#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplEven<T, U> {\n    parent1: U,\n    parent2: U,\n    _marker: PhantomData<T>,\n}",
+    "GenericArrayImplOdd": "#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplEven<T, U> {\n    parent1: U,\n    parent2: U,\n    _marker: PhantomData<T>,\n}\n\nimpl<T: Clone, U: Clone> Clone for GenericArrayImplEven<T, U> {\n    fn clone(&self) -> GenericArrayImplEven<T, U> {\n        GenericArrayImplEven {\n            parent1: self.parent1.clone(),\n            parent2: self.parent2.clone(),\n            _marker: PhantomData,\n        }\n    }\n}\n\nimpl<T: Copy, U: Copy> Copy for GenericArrayImplEven<T, U> {}\n\n/// Internal type used to generate a struct of appropriate size\n#[allow(dead_code)]\n#[repr(C)]\n#[doc(hidden)]\npub struct GenericArrayImplOdd<T, U> {\n    parent1: U,\n    parent2: U,\n    data: T,\n}",
+    "GenericArray": "#[repr(transparent)]\npub struct GenericArray<T, U: ArrayLength<T>> {\n    data: U::ArrayType,\n}"
+  },
+  "whole_field_bodies_and_repr_checked": true,
+  "archive_checksum_checked": true,
+  "reference": "PV_CBL_LibraryShapes.Even/Odd/GenericArray, PV_CBL_GenericArrayPower.Storage and PV_DL_ArrayShape.Carrier",
+  "differences": [
+    {
+      "native": "PhantomData marker and native zero-length array",
+      "reference": "Unit marker and length-zero Array subtype",
+      "proof": "StorageIdentity.zero_array/injective/rebuild; unique Unit fields; ArrayShape.length/reconstruct"
+    },
+    {
+      "native": "repr(C) contiguous u8 field hierarchy under repr(transparent) outer array",
+      "reference": "left subtree then right subtree then odd byte",
+      "proof": "GenericArrayPower.length, StorageBuild.flatten_build/reconstruct, ArrayShape.flatten_build/reconstruct; UpdateViews.native_bulk/byte/native_block_lengths"
+    }
+  ],
+  "scope": "Original u8 layouts, powers32/64 and native odd/even28. Native/compiler representation rules remain in E1/E2; no new trust field or backend equality introduced.",
+  "finite_validation": "wrappers-native-combined-resume4/receipt.json; full native buffers and output arrays checked finitely"
+}
