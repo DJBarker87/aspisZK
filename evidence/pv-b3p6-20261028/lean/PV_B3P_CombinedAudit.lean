@@ -4,6 +4,7 @@ import PV_B3P_NativeFieldByte226V3
 import PV_B3P_DigestRegionValue226V3
 import PV_B3P_AssetValue226V3
 import PV_B3P_GuardedWords226V3
+import PV_B3P_MetadataAudit226V3
 namespace PV_B3P_CombinedAudit
 open Aeneas Aeneas.Std ProverRwFull
 set_option autoImplicit false
@@ -39,6 +40,9 @@ theorem source226 (base : ExternalTypes) (ops : @ExternalFuns (Types base))
 #print axioms PV_B3P_GuardedWords226V3.complete_byte_fields
 #print axioms PV_B3P_PublicCarrier226V3.roundtrip
 #print axioms PV_B3P_PublicCarrier226V3.reverse_roundtrip
+#print axioms PV_B3P_MetadataAudit226V3.transfer_metadata
+#print axioms PV_B3P_MetadataAudit226V3.withdrawal_metadata
+#print axioms PV_B3P_MetadataAudit226V3.transition_metadata
 
 theorem preserved_op0 (base : ExternalTypes) (ops : @ExternalFuns (Types base)) :
     @ExternalFuns.op0 (Types base) (selected base ops) =
