@@ -42,7 +42,8 @@ theorem complete_result
   aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
   (lambda : aspis_core.field.QM31) (chi : aspis_core.field.QM31) :
   erase (produce compiled lambda chi) = host_semantic.no_pole compiled lambda chi := by
-  unfold produce host_semantic.no_pole
+  unfold produce
+  conv_rhs => unfold host_semantic.no_pole
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

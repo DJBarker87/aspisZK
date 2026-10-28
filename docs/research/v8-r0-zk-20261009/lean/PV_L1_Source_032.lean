@@ -24,7 +24,8 @@ def produce
 theorem complete_result
   (e : aspis_prover.state_only_hiding.StateOnlyMaskBuildError) :
   erase (produce e) = prover.mask_error e := by
-  unfold produce prover.mask_error
+  unfold produce
+  conv_rhs => unfold prover.mask_error
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

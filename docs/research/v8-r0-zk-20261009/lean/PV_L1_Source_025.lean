@@ -26,7 +26,8 @@ theorem complete_result
   (variant : transport.Variant)
   (messages : Slice (Array aspis_core.field.wide_exact.WideExact 1024#usize)) :
   erase (produce variant messages) = prover.opening_coefficients variant messages := by
-  unfold produce prover.opening_coefficients
+  unfold produce
+  conv_rhs => unfold prover.opening_coefficients
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

@@ -25,7 +25,8 @@ theorem complete_result
   (variant : transport.Variant) (a : aspis_core.field.QM31)
   (b : aspis_core.field.QM31) :
   erase (produce columns variant a b) = host_semantic.extra_claims columns variant a b := by
-  unfold produce host_semantic.extra_claims
+  unfold produce
+  conv_rhs => unfold host_semantic.extra_claims
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

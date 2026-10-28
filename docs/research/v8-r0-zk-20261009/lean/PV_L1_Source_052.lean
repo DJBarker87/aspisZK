@@ -43,7 +43,8 @@ theorem complete_result
   (g : Array aspis_core.field.QM31 1024#usize)
   (d : Array aspis_core.field.QM31 1024#usize) :
   erase (produce c1 h1 g d) = host_semantic.lift_columns c1 h1 g d := by
-  unfold produce host_semantic.lift_columns
+  unfold produce
+  conv_rhs => unfold host_semantic.lift_columns
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

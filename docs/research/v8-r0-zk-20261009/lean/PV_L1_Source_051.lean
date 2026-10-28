@@ -20,7 +20,8 @@ def produce
 theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize) :
   erase (produce columns) = host_semantic.initial_mask_sum columns := by
-  unfold produce host_semantic.initial_mask_sum
+  unfold produce
+  conv_rhs => unfold host_semantic.initial_mask_sum
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

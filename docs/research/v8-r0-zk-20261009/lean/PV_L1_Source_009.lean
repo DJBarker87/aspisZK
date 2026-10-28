@@ -25,7 +25,8 @@ theorem complete_result
   (word : Slice aspis_core.field.wide_exact.WideExact)
   (salts : host_commitment.PrivateSalts) :
   erase (produce hash word salts) = prover.folded_leaves hash word salts := by
-  unfold produce prover.folded_leaves
+  unfold produce
+  conv_rhs => unfold prover.folded_leaves
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

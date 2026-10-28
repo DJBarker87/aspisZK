@@ -26,7 +26,8 @@ theorem complete_result
   1024#usize))
   (z1 : aspis_core.r0.domain.Point aspis_core.field.wide_exact.WideExact) :
   erase (produce coefficients z1) = prover.opening_claim_bytes coefficients z1 := by
-  unfold produce prover.opening_claim_bytes
+  unfold produce
+  conv_rhs => unfold prover.opening_claim_bytes
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

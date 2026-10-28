@@ -22,7 +22,8 @@ def produce
 theorem complete_result
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) :
   erase (produce c1) = host_semantic.check_base_columns c1 := by
-  unfold produce host_semantic.check_base_columns
+  unfold produce
+  conv_rhs => unfold host_semantic.check_base_columns
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

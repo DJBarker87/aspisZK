@@ -80,7 +80,7 @@ for k,n in enumerate(selected):
  code+='\n/-- Source-parametric phase entry and complete Result. Remaining loop and\nopaque/native event edges are recorded in source-frontier.json. -/\n'
  code+='def produce'+params+result_sig+'\n  := do\n  let _ ← observe '+marker+' 0 (ok ())\n'+body+'\n\n'
  code+='theorem complete_result'+params.rstrip().removesuffix(':').rstrip()+' :\n  erase (produce '+applications+') = '+n+' '+applications+' := by\n'
- code+='  unfold produce '+n+'\n'
+ code+='  unfold produce\n  conv_rhs => unfold '+n+'\n'
  lemmas=['Aeneas.Std.bind_tc_ok','erase_bind','erase_observe','erase_lift','erase_coe','erase_pure']+[d+'.complete_result' for d in sorted(set(deps))]
  simp='simp only ['+','.join(lemmas)+']'
  code+='  '+simp+'\n  repeat\' first\n    | with_reducible rfl\n    | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n      intro value called\n    | split <;> '+simp+'\n'

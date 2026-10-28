@@ -28,7 +28,8 @@ theorem complete_result
   (dc : Array aspis_core.field.QM31 1024#usize) (offset : Std.Usize)
   (j : Std.Usize) (sum : aspis_core.field.QM31) :
   erase (produce dc offset j sum) = host_semantic.d_tail_sum dc offset j sum := by
-  unfold produce host_semantic.d_tail_sum
+  unfold produce
+  conv_rhs => unfold host_semantic.d_tail_sum
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

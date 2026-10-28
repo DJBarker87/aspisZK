@@ -34,7 +34,8 @@ theorem complete_result
   (hash : H) (semantic_state : Array Std.U8 32#usize)
   (variant : transport.Variant) :
   erase (produce (H := H) aspis_coredigestDigest32Inst hash semantic_state variant) = host_transcript.Transcript.new (H := H) aspis_coredigestDigest32Inst hash semantic_state variant := by
-  unfold produce host_transcript.Transcript.new
+  unfold produce
+  conv_rhs => unfold host_transcript.Transcript.new
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

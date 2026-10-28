@@ -20,7 +20,8 @@ def produce
 theorem complete_result
   (values : Slice aspis_core.field.QM31) (masks : Array Std.U16 64#usize) :
   erase (produce values masks) = prover.inactive_sum_k values masks := by
-  unfold produce prover.inactive_sum_k
+  unfold produce
+  conv_rhs => unfold prover.inactive_sum_k
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

@@ -45,7 +45,8 @@ theorem complete_result
   (row : Std.U8) (payload : Slice Std.U8)
   (transcript : host_wire.SemanticTranscript H) (bytes : alloc.vec.Vec Std.U8) :
   erase (produce (H := H) aspis_coredigestDigest32Inst row payload transcript bytes) = host_semantic.semantic_row (H := H) aspis_coredigestDigest32Inst row payload transcript bytes := by
-  unfold produce host_semantic.semantic_row
+  unfold produce
+  conv_rhs => unfold host_semantic.semantic_row
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

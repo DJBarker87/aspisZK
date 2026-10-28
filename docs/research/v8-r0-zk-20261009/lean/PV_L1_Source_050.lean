@@ -31,7 +31,8 @@ theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
   (row : Std.Usize) :
   erase (produce columns row) = host_semantic.initial_mask_value columns row := by
-  unfold produce host_semantic.initial_mask_value
+  unfold produce
+  conv_rhs => unfold host_semantic.initial_mask_value
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

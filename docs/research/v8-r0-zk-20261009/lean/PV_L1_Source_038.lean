@@ -21,7 +21,8 @@ def produce
 theorem complete_result
   (values : Slice aspis_core.field.QM31) :
   erase (produce values) = prover.fixed_k_column values := by
-  unfold produce prover.fixed_k_column
+  unfold produce
+  conv_rhs => unfold prover.fixed_k_column
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

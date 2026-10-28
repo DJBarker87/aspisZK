@@ -20,7 +20,8 @@ def produce
 theorem complete_result
   (q : Slice aspis_core.field.wide_exact.WideExact) (w : weights.Weights) :
   erase (produce q w) = prover.opening_inactive q w := by
-  unfold produce prover.opening_inactive
+  unfold produce
+  conv_rhs => unfold prover.opening_inactive
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

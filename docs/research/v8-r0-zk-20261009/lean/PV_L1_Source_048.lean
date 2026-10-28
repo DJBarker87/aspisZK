@@ -22,7 +22,8 @@ theorem complete_result
   (coefficients : Array aspis_core.field.QM31 1024#usize)
   (a : aspis_core.field.QM31) (b : aspis_core.field.QM31) :
   erase (produce coefficients a b) = host_semantic.extra coefficients a b := by
-  unfold produce host_semantic.extra
+  unfold produce
+  conv_rhs => unfold host_semantic.extra
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

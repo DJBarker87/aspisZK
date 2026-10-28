@@ -31,7 +31,8 @@ theorem complete_result
   (transcript : host_wire.SemanticTranscript H) (output : alloc.vec.Vec Std.U8)
   (initial_claim : aspis_core.field.QM31) (oracle : T1) :
   erase (produce (H := H) (T1 := T1) aspis_coredigestDigest32Inst OracleInst transcript output initial_claim oracle) = host_sumcheck.prove_sumcheck (H := H) (T1 := T1) aspis_coredigestDigest32Inst OracleInst transcript output initial_claim oracle := by
-  unfold produce host_sumcheck.prove_sumcheck
+  unfold produce
+  conv_rhs => unfold host_sumcheck.prove_sumcheck
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_042.complete_result]
   repeat' first
     | with_reducible rfl

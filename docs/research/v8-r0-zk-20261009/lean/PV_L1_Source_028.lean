@@ -41,7 +41,8 @@ theorem complete_result
   (tag : Std.U8) (index : Std.U32)
   (salts : alloc.vec.Vec (Array Std.U8 32#usize)) :
   erase (produce reserved context hash tag index salts) = prover.derive_private_salt_step reserved context hash tag index salts := by
-  unfold produce prover.derive_private_salt_step
+  unfold produce
+  conv_rhs => unfold prover.derive_private_salt_step
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

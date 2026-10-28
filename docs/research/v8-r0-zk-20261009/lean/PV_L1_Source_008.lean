@@ -32,7 +32,8 @@ theorem complete_result
   (challenges : aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)
   (c1_root : Array Std.U8 32#usize) :
   erase (produce variant challenges c1_root) = prover.public_check variant challenges c1_root := by
-  unfold produce prover.public_check
+  unfold produce
+  conv_rhs => unfold prover.public_check
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

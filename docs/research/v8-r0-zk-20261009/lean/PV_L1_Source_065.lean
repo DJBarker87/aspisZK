@@ -27,7 +27,8 @@ theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
   (point : Array aspis_core.field.QM31 10#usize) :
   erase (produce columns point) = host_semantic.claims_at_point columns point := by
-  unfold produce host_semantic.claims_at_point
+  unfold produce
+  conv_rhs => unfold host_semantic.claims_at_point
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

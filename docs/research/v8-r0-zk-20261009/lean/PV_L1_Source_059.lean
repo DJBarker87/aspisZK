@@ -27,7 +27,8 @@ def produce
 theorem complete_result
   (column : Slice aspis_core.field.M31) (row : Std.Usize) :
   erase (produce column row) = host_semantic.check_base_column_loop.body column row := by
-  unfold produce host_semantic.check_base_column_loop.body
+  unfold produce
+  conv_rhs => unfold host_semantic.check_base_column_loop.body
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

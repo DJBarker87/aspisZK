@@ -68,7 +68,8 @@ theorem complete_result
   (h1_padding : Array aspis_core.field.QM31 1024#usize) (commitments : T1)
   (hash : H) (variant : transport.Variant) :
   erase (produce (H := H) (T1 := T1) aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant) = host_semantic.build_with_material (H := H) (T1 := T1) aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant := by
-  unfold produce host_semantic.build_with_material
+  unfold produce
+  conv_rhs => unfold host_semantic.build_with_material
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_067.complete_result]
   repeat' first
     | with_reducible rfl

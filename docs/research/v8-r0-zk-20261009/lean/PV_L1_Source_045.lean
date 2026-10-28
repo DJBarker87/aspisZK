@@ -22,7 +22,8 @@ theorem complete_result
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
   (variant : transport.Variant) (z : aspis_core.circle.SecureCirclePoint) :
   erase (produce columns variant z) = host_semantic.endpoint_bytes columns variant z := by
-  unfold produce host_semantic.endpoint_bytes
+  unfold produce
+  conv_rhs => unfold host_semantic.endpoint_bytes
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

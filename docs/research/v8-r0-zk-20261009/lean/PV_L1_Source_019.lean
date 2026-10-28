@@ -33,7 +33,8 @@ theorem complete_result
   (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8)
   (nonzero : Bool) :
   erase (produce (H := H) aspis_coredigestDigest32Inst self row payload nonzero) = host_transcript.Transcript.scalar (H := H) aspis_coredigestDigest32Inst self row payload nonzero := by
-  unfold produce host_transcript.Transcript.scalar
+  unfold produce
+  conv_rhs => unfold host_transcript.Transcript.scalar
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_017.complete_result]
   repeat' first
     | with_reducible rfl

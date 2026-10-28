@@ -27,7 +27,8 @@ def produce
 theorem complete_result
   (q : Array Std.U32 22#usize) (i : Std.Usize) :
   erase (produce q i) = host_transcript.trace_queries_loop.body q i := by
-  unfold produce host_transcript.trace_queries_loop.body
+  unfold produce
+  conv_rhs => unfold host_transcript.trace_queries_loop.body
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl

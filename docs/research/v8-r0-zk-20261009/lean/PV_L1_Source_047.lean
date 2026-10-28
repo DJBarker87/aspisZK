@@ -29,7 +29,8 @@ theorem complete_result
   (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
   (extras : Array aspis_core.field.QM31 29#usize) :
   erase (produce claims extras) = host_semantic.claim_bytes claims extras := by
-  unfold produce host_semantic.claim_bytes
+  unfold produce
+  conv_rhs => unfold host_semantic.claim_bytes
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_046.complete_result]
   repeat' first
     | with_reducible rfl

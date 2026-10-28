@@ -24,7 +24,8 @@ theorem complete_result
   (blocks : Array (Array Std.U8 32#usize) 8#usize)
   (advances : Array (Array Std.U8 32#usize) 8#usize) :
   erase (produce blocks advances) = host_transcript.queries_from_pairs blocks advances := by
-  unfold produce host_transcript.queries_from_pairs
+  unfold produce
+  conv_rhs => unfold host_transcript.queries_from_pairs
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1_Source_012.complete_result]
   repeat' first
     | with_reducible rfl

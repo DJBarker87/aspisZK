@@ -24,7 +24,8 @@ theorem complete_result
   (noised : Slice (alloc.vec.Vec aspis_core.field.M31))
   (mask_only : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize) :
   erase (produce noised mask_only) = host_semantic.clone_semantic_columns noised mask_only := by
-  unfold produce host_semantic.clone_semantic_columns
+  unfold produce
+  conv_rhs => unfold host_semantic.clone_semantic_columns
   simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure]
   repeat' first
     | with_reducible rfl
