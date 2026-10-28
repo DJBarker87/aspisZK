@@ -13549,3 +13549,27 @@ correspondence get no credit yet. runjoin33 (IDs 51300-51499) rebuilds the endpo
 into a fresh object directory as a chunked dependency build, reruns the endpoint, lane and snapshot
 audits once each, then works on V045 and V038. Rows removed outright: 0. Privacy target not yet
 established.
+
+## D368 (Stream B) 2026-10-28 11:29 UTC: memory-effect packages at their actual scopes (V170, V183, V221, V222); merged into the candidate
+
+fxmem2 (31 of 98 attempts; no Kani; no crates/ or programs/ change; combined installation, a 79-query
+axioms audit and a focused closure replay pass with standard axioms) completes four source-law
+packages as structural (K-1 substitute), native checks labelled finite validation:
+- V170 / op4 drop: a census of the extracted prover finds exactly one call,
+  host_tree::multiproof_levels (host_tree.rs:29; emission ProverRwFullFuns:16098), at T = Vec<u32>;
+  op4 is installed at that one type with a complete consumed-buffer deallocation world law and caller
+  composition. The generic finding (no world-free callback equals native drop for every T) is
+  retained; the generic assertion is not restored.
+- V183 / op32 try_reserve_exact: a world-indexed family over the allocator world (not one fixed
+  callback), with the complete Ok/Err results and error layout, length, capacity, pointer and
+  allocator effects, and the post-reserve header passed to the caller.
+- V221 / op122 and V222 / op123 zeroize: at the emitted byte dictionaries, a symbolic overwrite with
+  the exact volatile-write and compiler-fence history, frame and caller laws, including the consuming
+  Zeroizing drop. Scope, stated by the worker: ordered volatile writes and compiler fences under Rust's
+  primitive semantics, not a hardware fence and not a binary-level erasure audit (registers, spills,
+  extra copies), which stays with L3.
+PV_FXM_AuditInstall.other_fields proves that restoring the four fields recovers the original record.
+These are narrower than the generic readings of their rows (one type, a world-indexed family, the
+actual dictionaries); the next recount decides whether each row's recorded text is met. Merged into
+the prover candidate (46a2203505, pushed); worktree and branch removed. Rows removed outright: 0.
+Privacy target not yet established.
