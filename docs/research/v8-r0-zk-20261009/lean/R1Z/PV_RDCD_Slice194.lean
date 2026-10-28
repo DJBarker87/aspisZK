@@ -38,7 +38,7 @@ theorem loop_suffix {A B : Type} (xs : List A) (ys : List B) (p : core.cmp.Parti
     have he : i=xs.length := by omega
     subst i
     rw [loop.eq_def]
-    simp [body, lengths]
+    simp [body, lengths] <;> rfl
   | succ n ih =>
     intro i hn hi
     have hx : i < xs.length := by omega
@@ -50,7 +50,7 @@ theorem loop_suffix {A B : Type} (xs : List A) (ys : List B) (p : core.cmp.Parti
     simp only [body, hx, if_true, List.getElem?_eq_getElem hx,
       List.getElem?_eq_getElem hy, List.zip_cons_cons, List.allM]
     cases hne : p.ne xs[i] ys[i] with
-    | ok different => cases different <;> simp [compare,hne,next]
+    | ok different => cases different <;> simp [compare,hne,next] <;> rfl
     | fail e => simp [compare,hne]
     | div => simp [compare,hne]
 
