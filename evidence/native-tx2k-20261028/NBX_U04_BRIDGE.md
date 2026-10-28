@@ -47,3 +47,68 @@ K003–022 establish ten positive/failing-control pairs; K001/K002 were own
 compilation-input failures and are excluded. Exact sources, commands, frozen
 graph, lock pre/post hashes, dependency/tool pins and cgroups are in per-attempt
 receipts and NBX_ATTEMPTS.jsonl. No native whole extraction is claimed.
+
+## Stage 3: decoder and loop components
+
+K023/024,025/026,027/028,029/030 cover op31/32/33/34 respectively on
+arbitrary full wire images of 128/192/256/320 bytes. Two invocations receive
+the SAME slice; the complete Result is compared (success record or exact error),
+and an arbitrary input byte is framed. Controls invert the same conjunction.
+There is no canonical/valid header precondition. These gates establish local
+exact-width determinism and input frame; they do not supply a native result
+model, arbitrary-slice admission, external heap frame or complete extraction.
+
+NBX_FrameComposition.scan_value proves reserved scanning by list induction.
+rows_value and rows_ext prove source-ordered reads use the same original reader.
+NBX_RowFrames is the corresponding intended in-place value/frame induction,
+to be checked after the native batch, one capped scope at a time.
+Native master/checkpoint cuts execute exactly one row update with an arbitrary
+pre-state, lane and observation coordinate. No full sequence-loop replay,
+whole-buffer decoder loop, field multiplication or SHA is attempted.
+
+L003 (NBX_FrameComposition) exit0,5.709678515s,peakRSS5,419,532KiB,swap0;
+all four printed roots use only standard axioms or none. The return-data law
+is an obstruction lemma; it does not assert a successful ASR8 encoder.
+
+## Per-slot extraction ledger (no body-fidelity substitution)
+
+No row below is marked whole-instance CLOSED. In particular, SDK selection is
+not silently promoted to the headline's AeneasExtraction premise.
+
+| Slot | Native function / passed arguments | Current component; remaining obligation |
+|---|---|---|
+| op15 | validate_verifier_policy_v1(master.verifier_policy) | selected unchanged PoolS2 source; full typed native frame/determinism pair. OPEN actual caller extraction/carrier composition. |
+| op23 | decode_pool_v1_pair_forest_terminal_request_v1(instruction suffix) | arbitrary exact-width wrong-magic rejection and original payment-window frame. OPEN success branches, lower child argument/frame and native caller composition. |
+| op25 | VerifierRegistryV1::is_paused(registry) | native arbitrary-record value/frame + Lean selected/continuation. OPEN actual enclosing native caller extraction component. |
+| op26 | VerifierRegistryV1::is_immutable(registry) | same full-domain component as op25; OPEN actual enclosing native caller extraction component. |
+| op27 | VerifierRegistryV2::is_paused(registry) | same full-domain component; OPEN actual enclosing native caller extraction component. |
+| op28 | VerifierRegistryV2::is_immutable(registry) | same full-domain component; OPEN actual enclosing native caller extraction component. |
+| op29 | VerifierRegistryEntryV2::is_active_at(entry,current_slot) | arbitrary entry/slot, exact Bool and frame; Lean selected/continuation. OPEN actual enclosing native caller extraction component. |
+| op30 | VerifierRegistryEntryV1::is_active_at(entry,current_slot) | same full-domain component; OPEN actual enclosing native caller extraction component. |
+| op31 | decode_verifier_registry_v1(registry_account.data()?) | exact-width whole-Result determinism/input frame. OPEN arbitrary-slice/native wrapper/caller extraction component. |
+| op32 | decode_verifier_registry_entry_v1(entry_account.data()?) | same exact-width component; OPEN arbitrary-slice/native wrapper/caller extraction component. |
+| op33 | decode_verifier_registry_v2(registry_account.data()?) | same exact-width component; OPEN arbitrary-slice/native wrapper/caller extraction component. |
+| op34 | decode_verifier_registry_entry_v2(entry_account.data()?) | same exact-width component; OPEN arbitrary-slice/native wrapper/caller extraction component. |
+| op48 | decode_master_box(original master bytes) | identity/policy frames, one native sequence-store iteration and Lean frame induction. OPEN native Box/allocator/error frame, complete original-reader composition and caller association. |
+| op49 | decode_checkpoint_box(original checkpoint bytes) | one native bounded-sequence iteration and Lean frame induction. OPEN canonical digest/Box/allocator/error frame, complete original-reader composition and caller association. |
+
+Each remaining row needs native caller/argument/heap evidence (Kani/P6), not a
+new abstract law restricting missing. The imported NBN callback-unconstrained
+lemmas do not provide that evidence. op53's effect obstruction is separately
+recorded in NBX_OP53_FINDING.md. No headline/security/runtime assumption changes.
+
+Stage3 completed: all23 NBX positive/control pairs K003–048 behave as
+expected; K049 additionally verifies empty-slice WrongLength from all seven
+actual decoder entry points (a copy-free boundary check, not arbitrary-length
+closure). No solver timeout, memory kill, unwinding failure or cap increase.
+K031/032 policy validator, K033–036 identity/policy decoders, K037/038 ASQ8
+wrong-magic frame, K039/040 master store, K041/042 checkpoint store,
+K043/044 reserved scan step, K045/046 request window, K047/048 master identity
+window. The window observations select arbitrary offsets in the SAME input.
+
+NBX_L004 compiled NBX_RowFrames: exit0,5.513528492s,peakRSS5,382,416KiB,
+swap0. value_frame/read_ext prove all in-interval writes and every outside
+row from an arbitrary initial state, by induction; no concrete array replay.
+nonempty_return_write proves the precise return-data effect obstruction.
+All printed axioms are standard. The aggregate installed-selection candidate
+is still pending missing unchanged imports and receives no proof credit yet.
