@@ -11,3 +11,9 @@ Stages: (1) pins, interface controls and references; (2) leaf contracts;
 Each stage is committed. Budget: 70 Kani, 60 Lean, serial capped scopes.
 No changes to shipped source or existing Lean modules are authorized here.
 Headline and all approved trust boundaries remain unchanged; S2 OPEN.
+
+Stage 1: interface probes K001–K014 show Result<u8,u8> fidelity controls
+behave as required. Bare &[u8] and Result<&[u8],u8> contract body checks pass,
+but stub_verified code generation rejects &[u8]: no kani::Arbitrary impl.
+K011/K014 are compiler failures, not intended assertion failures and not
+fidelity passes. No workaround or carrier replacement is silently admitted.
