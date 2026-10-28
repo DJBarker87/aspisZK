@@ -1,0 +1,38 @@
+NCK_generated/NCK_DistinctOuter.lean:33:4: error: unsolved goals
+ops : AdapterRw.Ops
+a : Accounts
+start : Usize
+ordered : ↑start ≤ 7
+comparison : Comparison ops
+i : Usize
+bound : ↑i ≤ 7
+running : ↑i < 7
+index1 : Usize
+_ : [> let index1 ← lift (i.wrapping_add 1#usize) <]
+equivalent :
+  (∀ (i j : Fin 7), ↑start ≤ ↑i → j < i → ¬(↑a)[↑j].key = (↑a)[↑i].key) ↔
+    ∀ (i_1 j : Fin 7), ↑i ≤ ↑i_1 → j < i_1 → ¬(↑a)[↑j].key = (↑a)[↑i_1].key
+h✝ : ∀ (j : Fin 7), ↑j < ↑i → ¬(↑a)[↑j].key = (↑a)[↑i].key
+index1_post : index1 = i.wrapping_add 1#usize
+⊢ (↑i + 1) % Usize.size ≤ 7 ∧
+    ((∀ (i_1 j : Fin 7), ↑i ≤ ↑i_1 → j < i_1 → ¬(↑a)[↑j].key = (↑a)[↑i_1].key) ↔
+        ∀ (i_1 j : Fin 7), (↑i + 1) % Usize.size ≤ ↑i_1 → j < i_1 → ¬(↑a)[↑j].key = (↑a)[↑i_1].key) ∧
+      7 - (↑i + 1) % Usize.size < 7 - ↑i
+
+ops : AdapterRw.Ops
+a : Accounts
+start : Usize
+ordered : ↑start ≤ 7
+comparison : Comparison ops
+i : Usize
+bound : ↑i ≤ 7
+running : ↑i < 7
+val✝ : core.result.Result Unit AdapterRw.solana_program_error.ProgramError
+equivalent :
+  (∀ (i j : Fin 7), ↑start ≤ ↑i → j < i → ¬(↑a)[↑j].key = (↑a)[↑i].key) ↔
+    ∀ (i_1 j : Fin 7), ↑i ≤ ↑i_1 → j < i_1 → ¬(↑a)[↑j].key = (↑a)[↑i_1].key
+h✝ :
+  (∃ x, ↑x < ↑i ∧ (↑a)[↑x].key = (↑a)[↑i].key) ∧
+    core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument = val✝
+⊢ ∃ x, ↑i ≤ ↑x ∧ ∃ x_1 < x, (↑a)[↑x_1].key = (↑a)[↑x].key
+'AspisR1.NCK_DistinctOuter.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

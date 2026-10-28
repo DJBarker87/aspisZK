@@ -66,3 +66,18 @@ through query22 and relation, and the concrete same-SDK instance remain OPEN.
 Thus an exact same-input accepted-run interface now exists for lower-lane
 integration. The requested forward native-to-cohort theorem, the exact
 NCK_Lower_U00–U14 hypotheses and joint accepted2 instance remain OPEN.
+
+## Additional U16 model obligations discharged after Kani exhaustion
+
+`NCK_DistinctInner.source` and `NCK_DistinctOuter.source` prove the exact two
+emitted loops by decreasing-natural induction, including first duplicate
+rejection and no-wrap progress on the seven-account domain. `NCK_Distinct.source`
+exports the full Result; `accepted` derives pairwise key inequality. The only
+retained comparison premise is the explicit primitive law `Comparison ops`.
+No native loop-step association is claimed: it still needs Kani.
+
+`NCK_Owners.readonly/checkpoint` derive exact owner equality as well as the
+privilege and checkpoint-length domains, from actual accepted model guards.
+Comparison and checkpoint-size primitive laws remain explicit. Authentication
+caller cut/domain modules are being prepared; no credit is assigned before a
+passing receipt. The host transport currently prevents their submission.

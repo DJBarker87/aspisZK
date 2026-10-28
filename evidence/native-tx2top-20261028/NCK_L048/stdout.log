@@ -1,0 +1,50 @@
+NCK_generated/NCK_DistinctInner.lean:30:92: error: unsolved goals
+case h1
+ops : AdapterRw.Ops
+a : Accounts
+index start : Usize
+within : ↑index < 7
+ordered : ↑start ≤ ↑index
+comparison : ∀ (x y : AdapterRw.solana_pubkey.Pubkey), ops.op36 x y = ok (decide (x = y))
+j : Usize
+bound : ↑j ≤ ↑index
+h✝¹ : j < index
+oa : OwnedAccount
+_✝ : [> let oa ← Array.index_usize a j <]
+oa1 : OwnedAccount
+_ : [> let oa1 ← Array.index_usize a index <]
+equivalent :
+  (∀ (j : Fin 7), ↑start ≤ ↑j → ↑j < ↑index → ¬(↑a)[↑j].key = (↑a)[↑index].key) ↔
+    ∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key
+oa_post : oa = (↑a)[↑j]
+oa1_post : oa1 = (↑a)[↑index]
+h✝ : (↑a)[↑j].key = (↑a)[↑index].key
+⊢ ∃ x, ↑j ≤ ↑x ∧ ↑x < ↑index ∧ (↑a)[↑x].key = (↑a)[↑index].key
+
+ops : AdapterRw.Ops
+a : Accounts
+index start : Usize
+within : ↑index < 7
+ordered : ↑start ≤ ↑index
+comparison : ∀ (x y : AdapterRw.solana_pubkey.Pubkey), ops.op36 x y = ok (decide (x = y))
+j : Usize
+bound : ↑j ≤ ↑index
+h✝¹ : j < index
+oa : OwnedAccount
+_✝¹ : [> let oa ← Array.index_usize a j <]
+oa1 : OwnedAccount
+_✝ : [> let oa1 ← Array.index_usize a index <]
+previous1 : Usize
+_ : [> let previous1 ← lift (j.wrapping_add 1#usize) <]
+equivalent :
+  (∀ (j : Fin 7), ↑start ≤ ↑j → ↑j < ↑index → ¬(↑a)[↑j].key = (↑a)[↑index].key) ↔
+    ∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key
+oa_post : oa = (↑a)[↑j]
+oa1_post : oa1 = (↑a)[↑index]
+h✝ : ¬(↑a)[↑j].key = (↑a)[↑index].key
+previous1_post : previous1 = j.wrapping_add 1#usize
+⊢ (↑j + 1) % Usize.size ≤ ↑index ∧
+    ((∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key) ↔
+        ∀ (j_1 : Fin 7), (↑j + 1) % Usize.size ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key) ∧
+      ↑index - (↑j + 1) % Usize.size < ↑index - ↑j
+'AspisR1.NCK_DistinctInner.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,3 +1,4 @@
+import NCK_Snapshots
 import NCK_Getters
 import S2W_D189Wrappers
 set_option autoImplicit false

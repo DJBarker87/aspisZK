@@ -1,0 +1,72 @@
+{"attempt": "NCK_L047", "exit_status": 1, "wall_seconds": 3.1285635250387713, "peak_rss_kib": "4412960", "swaps": "0", "print_axioms": ["'AspisR1.NCK_DistinctInner.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NCK_generated/NCK_DistinctInner.lean:29:92: error: unsolved goals
+ops : AdapterRw.Ops
+a : Accounts
+index start : Usize
+within : ↑index < 7
+ordered : ↑start ≤ ↑index
+comparison : Comparison ops
+j : Usize
+bound : ↑j ≤ ↑index
+h✝ : j < index
+oa : OwnedAccount
+_✝ : [> let oa ← Array.index_usize a j <]
+oa1 : OwnedAccount
+_ : [> let oa1 ← Array.index_usize a index <]
+equivalent :
+  (∀ (j : Fin 7), ↑start ≤ ↑j → ↑j < ↑index → ¬(↑a)[↑j].key = (↑a)[↑index].key) ↔
+    ∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key
+oa_post : oa = (↑a)[↑j]
+oa1_post : oa1 = (↑a)[↑index]
+⊢ (do
+      let b ← ops.op36 (↑a)[↑j].key (↑a)[↑index].key
+      if b = true then
+          ok (done (so
+...
+NCK_generated/NCK_DistinctInner.lean:29:92: error: unsolved goals
+ops : AdapterRw.Ops
+a : Accounts
+index start : Usize
+within : ↑index < 7
+ordered : ↑start ≤ ↑index
+comparison : Comparison ops
+j : Usize
+bound : ↑j ≤ ↑index
+h✝ : j < index
+oa : OwnedAccount
+_✝ : [> let oa ← Array.index_usize a j <]
+oa1 : OwnedAccount
+_ : [> let oa1 ← Array.index_usize a index <]
+equivalent :
+  (∀ (j : Fin 7), ↑start ≤ ↑j → ↑j < ↑index → ¬(↑a)[↑j].key = (↑a)[↑index].key) ↔
+    ∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key
+oa_post : oa = (↑a)[↑j]
+oa1_post : oa1 = (↑a)[↑index]
+⊢ (do
+      let b ← ops.op36 (↑a)[↑j].key (↑a)[↑index].key
+      if b = true then
+          ok (done (some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)))
+        else do
+          let previous1 ← lift (j.wrapping_add 1#usize)
+          ok (cont previous1)) ⦃
+    r =>
+    match r with
+    | done y =>
+      y =
+        if ∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key then none
+        else some (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidArgument)
+    | cont x' =>
+      ↑x' ≤ ↑index ∧
+        ((∀ (j_1 : Fin 7), ↑j ≤ ↑j_1 → ↑j_1 < ↑index → ¬(↑a)[↑j_1].key = (↑a)[↑index].key) ↔
+            ∀ (j : Fin 7), ↑x' ≤ ↑j → ↑j < ↑index → ¬(↑a)[↑j].key = (↑a)[↑index].key) ∧
+          ↑index - ↑x' < ↑index - ↑j ⦄
+NCK_generated/NCK_DistinctInner.lean:41:38: warning: This simp argument is unused:
+  comparison
+
+Hint: Omit it from the simp argument list.
+  simp only [OwnedAccount.impl.key,̵ ̵c̵o̵m̵p̵a̵r̵i̵s̵o̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NCK_DistinctInner.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r074bd4cbfa614b098c9f92557a4a4f00.scope; invocation ID: e45f1225d3604264830aa0a6c4e27f8f

@@ -1,3 +1,4 @@
+import NCK_Stage2Shape
 import AdapterRwCuts
 set_option autoImplicit false
 noncomputable section

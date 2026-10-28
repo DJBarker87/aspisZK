@@ -1,0 +1,179 @@
+{
+  "attempt": "NCK_K046",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "8d1f04d5b12be5903c0fa3d7fe236b4b011ccf64",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NCK_src/Cargo.toml",
+    "NCK_src/Cargo.lock",
+    "NCK_src/KMX_CopyMeaning.lean",
+    "NCK_src/KMX_native.rs",
+    "NCK_src/KMX_stubs.rs",
+    "NCK_src/crates/aspis-r1-cost-probe/src/candidate.rs",
+    "NCK_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NCK_src/programs/r1-cost-probe/src/lib.rs",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "verifier::candidate::NCK_shape::bad_magic",
+    "--output-format",
+    "terse",
+    "--features",
+    "optimized-terminal,program-build,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2top-20261028/NCK_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "d5777588f4da15534535ff534e27212465637e5ac2b11c40751cbb556d3e7010",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+      "exact_frozen_selected_graph": true,
+      "package_count": 441,
+      "edge_count": 1491,
+      "disabled_packages": [
+        [
+          "aspis-r1-cert-build",
+          "0.0.0",
+          null
+        ],
+        [
+          "aspis-r1-cert-check",
+          "0.0.0",
+          null
+        ],
+        [
+          "aspis-z4b-probe",
+          "0.1.0",
+          null
+        ]
+      ],
+      "disabled_optional_edges": [
+        [
+          [
+            "aspis-r1-cost-probe",
+            "0.1.0",
+            null
+          ],
+          [
+            "aspis-prover",
+            "0.1.0",
+            null
+          ]
+        ],
+        [
+          [
+            "aspis-r1-cost-probe",
+            "0.1.0",
+            null
+          ],
+          [
+            "getrandom",
+            "0.3.4",
+            "registry+https://github.com/rust-lang/crates.io-index"
+          ]
+        ],
+        [
+          [
+            "aspis-r1-cost-probe",
+            "0.1.0",
+            null
+          ],
+          [
+            "serde_json",
+            "1.0.150",
+            "registry+https://github.com/rust-lang/crates.io-index"
+          ]
+        ],
+        [
+          [
+            "aspis-r1-cost-probe",
+            "0.1.0",
+            null
+          ],
+          [
+            "sha2",
+            "0.10.9",
+            "registry+https://github.com/rust-lang/crates.io-index"
+          ]
+        ]
+      ],
+      "canonical_graph_sha256": "cbf1ff0ea0a9648bea799668883410c76a3c275d482f55777b6b403663ea6939"
+    },
+    "harness_patch_sha256": "111cb46cc02f8dc14fd5db79c416370693050729e59bccb8e82904ff5ce28f5d",
+    "extra_patch_sha256": null,
+    "scratch_source_manifest_sha256": "fb2d731d5e2f3224c02d6b6f073ab083c556336ccbd66c8820026532112c62f3",
+    "cfg_patch_chain": [
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2top/evidence/kani-mitig-20261028/KMX_copy_stubs.patch",
+        "sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2top/evidence/native-tx2top-20261028/NCK_native.patch",
+        "sha256": "dfd00d31ab81f78e4607ce0ac899db2a7b57fb02bca88ab8fbbb0cd92f5ec61b"
+      },
+      {
+        "path": "/Users/dominic/ZK/.worktrees/cx-native-tx2top/evidence/native-tx2top-20261028/NCK_split.patch",
+        "sha256": "111cb46cc02f8dc14fd5db79c416370693050729e59bccb8e82904ff5ce28f5d"
+      }
+    ]
+  },
+  "expected_time": "optimized dependency compilation then native release leaf verifier::candidate::NCK_shape::bad_magic",
+  "exit_status": 0,
+  "wall_seconds": 2.113707660930231,
+  "peak_rss_kib": "318820",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rfc5cb58d0ca14ab18a6dac5e504fbf47.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "272396288",
+  "source_hashes": {
+    "NCK_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NCK_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NCK_src/KMX_CopyMeaning.lean": "2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b",
+    "NCK_src/KMX_native.rs": "cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880",
+    "NCK_src/KMX_stubs.rs": "ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138",
+    "NCK_src/crates/aspis-r1-cost-probe/src/candidate.rs": "c780ee994a099967e9e5c1b6eebf4824fdbd61813bc1d4cce890469058802645",
+    "NCK_src/crates/aspis-r1-cost-probe/src/lib.rs": "0536996ebcb0d90ea99b3b54685f83c35019a032c0222c9b95502152659c97dd",
+    "NCK_src/programs/r1-cost-probe/src/lib.rs": "e10d870e6934a982a143cba00591f8b9c1001e89912e9939a1c1b027c9be0436",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs": "519bbc8aa7a2be24d7c5ec5068d879382a87884dd06b01f6c8856aa0b957c380",
+    "NCK_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": "0bb83cb0636795694abc48799037d4931f86809422166a5a9880c8586434a7d8"
+  },
+  "print_axioms": "N/A: kani"
+}

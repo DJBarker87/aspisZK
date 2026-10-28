@@ -17,3 +17,12 @@ NCK_kani.py's own transport log now stores large stdout losslessly in .xz,
 with uncompressed sha256/length instead of duplicating cargo-metadata JSON
 inside every transport line. Parsing and graph validation still use the full
 original stdout. This changes storage only. Shared launchers are unchanged.
+
+NCK_L057 had two SSH255 losses before either its source or configuration was
+uploaded. A later read-only recovery connection also returned255; the active
+run guard correctly refused further launch. Recovery follows60s retries,
+never resubmitting an unresolved prover. NCK_build.py now uploads its own
+inputs through stdin in a distinct pre-launch transport step, then submits the
+unchanged capped S2W launcher separately. This removes large quoted command
+arguments and distinguishes upload retry from actual submission. All source,
+backend, library, admission and receipt checks remain intact or stricter.
