@@ -47,9 +47,9 @@ if kind=='preflight':
  sys.exit(0)
 assert kind=='native'
 x=json.loads((H/'features227-resume4.json').read_text());assert x['profile']['cfg_test']is False
-label='native227-resume4';i=0
+label='native227-resume4-errors';i=0
 while (H/label).exists():
  assert not (H/label/'receipt/receipt.json').exists(),'charged gate cannot be rerun unchanged'
- i+=1;label='native227-resume4-r'+str(i)
+ i+=1;label='native227-resume4-errors-r'+str(i)
 cmd=['timeout','300','taskset','--cpu-list','0-3','cargo','+1.94.1','run','--release','--locked','--offline','--manifest-path',str(p/'Cargo.toml'),'--bin','finite227','--jobs','4']
 sys.exit(run(label,cmd,'time expected in optimized Rust compilation, then one named finite differential across host/owned/statement terminal Results; no dense arithmetic release gate or proof generation; cfg(test) disabled',{'RUSTFLAGS':'-C link-arg=-Wl,--threads=4'}))

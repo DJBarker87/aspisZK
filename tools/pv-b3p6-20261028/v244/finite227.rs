@@ -13,7 +13,7 @@ fn main(){
    let ch=Challenges{lambda:q(seed*7),chi:q(seed*11),theta:q(seed*13),zc:core::array::from_fn(|i|q(seed*19+i as u32)),mu:q(seed*23),eta:q(seed*29)};
    for rejected in [false,true]{
     let mut transition=*match f.public(){Public::Transfer(_,t)|Public::Withdrawal(_,t)=>t};
-    if rejected{transition.candidate_afterstate.next_root[0]=M31(P);}
+    if rejected{transition.candidate_afterstate.next_pair_index=transition.live_snapshot.next_pair_index;}
     let pub_=match f.public(){Public::Transfer(p,_)=>Public::Transfer(p,&transition),Public::Withdrawal(p,_)=>Public::Withdrawal(p,&transition)};
     let reference=match pub_{Public::Transfer(p,t)=>pv_b3p6_reference227::host_terminal::r0::Public::Transfer(p,t),Public::Withdrawal(p,t)=>pv_b3p6_reference227::host_terminal::r0::Public::Withdrawal(p,t)};
     let host=aspis_r1_cost_probe::host_public::terminal_qm31(pub_,&claims,&alpha,&ch);
@@ -29,5 +29,6 @@ fn main(){
    }
   }
  }
+ assert_eq!(ok,32);assert_eq!(err,32);
  println!("finite validation: {checks} same-input complete native Results across deployed host, owned byte-identical host and statement; ok={ok}, public_error={err}; D-column perturbations checked; no universal equality or row closure claimed");
 }
