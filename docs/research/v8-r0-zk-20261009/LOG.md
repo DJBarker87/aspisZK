@@ -14183,3 +14183,18 @@ The remaining V047 piece is native decoder identification, which is runjoin's st
 runjoin45 (head 841d1616f4, pushed) used all 100 Lean attempts, of which 86 were accepted and 14 rejected (runjoin44 had 38 rejected), with no Kani. Following the D411 direction, it completed opening_coefficients with named op255 projection lemmas, one isolated cell proof and inductive assembly of all 29 columns in order. No limit was raised, and its admission audit found no void launches under ruling (t). All three reserved audits passed with standard axioms only. Lead review: no change under crates, programs or tools/r1-cost-probe; no forbidden constructs and no limit options in the new sources; no file over 5 MB. Before the weight and opening-constructor association, 22 pinned weight prerequisites remain. Rows removed: 0.
 
 runjoin46 launched (IDs 61400-61499; 100 Lean, 0 Kani). Its order of work: the 22 weight prerequisites from PV_B2_F_MutationModel; the installed stored-weight association; composition with both opening constructors into ProverCommitOpeningModel53.exact_result; then the query and node appends and publish_compact's proof-byte equation. Step (3) belongs to the parallel pv-rjdec. Step (4) waits until the lead has merged pv-rjdec into the runjoin branch. Privacy target not yet established.
+
+## D414 (Stream B) 2026-10-28 22:35 UTC: b3p6g results (V244 still open); b3p6h launched, with a formatting-glue observer check
+
+b3p6g (branch codex/pv-b3p6-20261028, head 1b86d5a589, pushed) used all 100 Lean attempts (81 passing targets, 19 rejected), no native scopes and no Kani. Audits 60897-60899 passed; all 97 audited theorems use standard axioms only. It proved symbolic validator nonvacuity and PV_B3P_Success227.preparation_success, covering validation, selection, the C1 rows, masks and selectors. These are supporting stages, not successful execution of the full reference or of the installed callback. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs outside unimported Aeneas templates; no change to Rust sources.
+
+V244 remains OPEN on four residuals:
+- full composition_parts success, then nonvacuity of the reference and the callback;
+- the exhaustive structural binding;
+- the remaining D188 checks and the accumulator-matrix comparison;
+- the slice-caller laws and pre-inline std coverage.
+Runjoin's op227 hypothesis is not discharged. Rust interpretations are labelled reclassification within Charon and Aeneas tool trust. Under the pending D381/D386 compiler-cohort boundary the worker named ctpop and core::fmt vtable glue (vtable, vtable_drop_shim, and the write_str, write_char and write_fmt vtable methods). T is unchanged.
+
+The core::fmt glue in the op227 standard-library cone is privacy-relevant whatever the compiler-cohort decision. If formatting output can occur on an honest-run path, or if its content or occurrence depends on witness data, it is an observable under D159 and bears on the open log and error observer gap (D348). The likely source is panic-message construction on bounds-check or unwrap failures, but that is not yet shown.
+
+b3p6h launched (IDs 61500-61599; 100 Lean, 60 native, 0 Kani). It works on V244 residuals (a) to (d) in order, plus a new early item (e): trace each formatting entry to its exact caller and branch, and classify it as panic-only or as an honest-path observable, reporting the latter as a finding. Rows removed: 0. Privacy target not yet established.
