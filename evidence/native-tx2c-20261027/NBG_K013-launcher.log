@@ -1,0 +1,66 @@
+{"attempt": "NBG_K013", "exit_status": 0, "wall_seconds": 22.339803334034514, "peak_rss_kib": "751496", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+^^^^
+...
+51 |         pub fn half_pow(self,n:u8)->Option<Self>{
+   |                ^^^^^^^^
+...
+57 |         #[inline(always)] pub fn mul_m31(self,rhs:u32)->Option<Self>{
+   |                                  ^^^^^^^
+...
+64 |         #[inline(always)] pub fn mul(self,rhs:Self)->Self {
+   |                                  ^^^
+
+warning: associated items `dot`, `neg`, and `square` are never used
+   --> crates/aspis-r1-cost-probe/src/fast_pairing.rs:95:16
+    |
+ 80 |     impl Q {
+    |     ------ associated items in this implementation
+...
+ 95 |         pub fn dot<const N:usize>(left:[Self;N],right:[Self;N])->Self {
+    |                ^^^
+...
+104 |         #[inline(always)] pub fn neg(self)->Self {Self::ZERO.sub(self)}
+    |                                  ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NBG_runtime` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/transport.rs:27:5
+   |
+27 | mod NBG_runtime;
+   |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_runtime`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NBG_transport` should have a snake case name
+ --> crates/aspis-r1-cost-probe/src/transport/NBG_runtime.rs:2:4
+  |
+2 | fn NBG_transport() {
+  |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_transport`
+
+    Finished `dev` profile [optimized] target(s) in 21.78s
+Checking harness transport::NBG_runtime::NBG_transport...
+
+VERIFICATION RESULT:
+ ** 0 of 22 failed
+
+ ** 3 of 3 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.093515925s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r5946903bc2f948b6887c0fa21e16f05a.scope; invocation ID: 3aec23e7c1c841589848f9fdd6f4f8cc

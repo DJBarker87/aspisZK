@@ -1,0 +1,31 @@
+--- a/programs/r1-cost-probe/src/NBG_runtime.rs
++++ b/programs/r1-cost-probe/src/NBG_runtime.rs
+@@ -27,3 +27,28 @@
+     unsafe {assert!(CALLS==1);}
+     kani::cover!(n==0 && m==32);
+ }
++
++static mut NBG_EXPECTED_LOG:&str="";
++static mut NBG_LOG_INDEX:usize=0;
++static mut NBG_LOG_CALLS:usize=0;
++fn NBG_log(message:&str){unsafe{
++ assert!(message.len()==NBG_EXPECTED_LOG.len());
++ assert!(message.as_bytes()[NBG_LOG_INDEX]==NBG_EXPECTED_LOG.as_bytes()[NBG_LOG_INDEX]);
++ NBG_LOG_CALLS+=1;
++}}
++#[kani::proof]
++#[kani::stub(solana_program::log::sol_log,NBG_log)]
++fn NBG_error_log(){
++ use aspis_r1_cost_probe::verifier::Error;
++ let tag:u8=kani::any();kani::assume(tag<8);
++ let (e,s)=match tag{
++ 0=>(Error::Parse,"r1:error:Parse"),1=>(Error::Semantic,"r1:error:Semantic"),
++ 2=>(Error::Transcript,"r1:error:Transcript"),3=>(Error::Relation,"r1:error:Relation"),
++ 4=>(Error::Merkle,"r1:error:Merkle"),5=>(Error::Query,"r1:error:Query"),
++ 6=>(Error::Checkpoint,"r1:error:Checkpoint"),_=>(Error::Allocation,"r1:error:Allocation")};
++ let i:usize=kani::any();kani::assume(i<s.len());
++ unsafe{NBG_EXPECTED_LOG=s;NBG_LOG_INDEX=i;NBG_LOG_CALLS=0;}
++ assert!(super::error(e)==solana_program::program_error::ProgramError::InvalidInstructionData);
++ unsafe{assert!(NBG_LOG_CALLS==1);}
++ kani::cover!(tag==7);
++}

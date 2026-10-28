@@ -1,0 +1,48 @@
+{"attempt": "NBG_K032", "exit_status": 1, "wall_seconds": 96.55507836199831, "peak_rss_kib": "4582584", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qu
+...
+the static is mutated or if a mutable reference is created for it while the shared reference lives
+   = note: `#[warn(static_mut_refs)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+
+warning: creating a shared reference to mutable static
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:36:45
+   |
+36 |  assert!(message.as_bytes()[NBG_LOG_INDEX]==NBG_EXPECTED_LOG.as_bytes()[NBG_LOG_INDEX]);
+   |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^ shared reference to mutable static
+   |
+   = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+   = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: function `NBG_error_log` should have a snake case name
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:41:4
+   |
+41 | fn NBG_error_log(){
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_error_log`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 5.08s
+Checking harness NBG_runtime::NBG_error_log...
+
+CBMC failed
+VERIFICATION:- FAILED
+CBMC timed out. You may want to rerun your proof with a larger timeout or use stubbing to reduce the size of the code the verifier reasons about.
+
+Manual Harness Summary:
+Verification failed for - NBG_runtime::NBG_error_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r21b3126c771042719258a5256d0628d7.scope; invocation ID: f45bdf6c80a040559e9619fa76235f8c

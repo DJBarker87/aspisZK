@@ -1,0 +1,29 @@
+{"attempt": "NBG_L086", "exit_status": 0, "wall_seconds": 2.0215409189695492, "peak_rss_kib": "2627340", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Slice U → Aeneas.Std.Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Aeneas.Std.Result.ok false
+
+...
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Slice U → Aeneas.Std.Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Aeneas.Std.Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Aeneas.Std.Result.ok false
+
+Running as unit: run-r12d5b4bb51944e28ab9917d9e1dd9b2d.scope; invocation ID: 63aab3f8a182477682f852b4eff8bbf3

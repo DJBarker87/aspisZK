@@ -1,0 +1,55 @@
+{"attempt": "NBG_K004", "exit_status": 1, "wall_seconds": 0.7852284169639461, "peak_rss_kib": "185232", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0597]: `a` does not live long enough
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:21:28
+   |
+17 |     let a: [u8;32] = kani::any();
+   |         - binding `a` declared here
+...
+21 |     let parts: [&[u8];2]=[&a[..n],&b[..m]];
+   |                            ^ borrowed value does not live long enough
+22 |     let reply: [u8;32]=kani::any();
+23 |     unsafe { EXPECT_PARTS=parts.as_ptr(); EXPECT_LEN=2; REPLY=reply; CALLS=0; }
+   |              --------------------------- assignment requires that `a` is borrowed for `'static`
+...
+29 | }
+   | - `a` dropped here while still borrowed
+
+error[E0597]: `b` does not live long enough
+  --> programs/r1-cost-probe/src/NBG_runtime.rs:21:36
+   |
+18 |     let b: [u8;32] = kani::any();
+   |         - binding `b` declared here
+...
+21 |     let parts: [&[u8];2]=[&a[..n],&b[..m]];
+   |                                    ^ borrowed value does not live long enough
+22 |     let reply: [u8;32]=kani::any();
+23 |     unsafe { EXPECT_PARTS=parts.as_ptr(); EXPECT_LEN=2; REPLY=reply; CALLS=0; }
+   |              --------------------------- assignment requires that `b` is borrowed for `'static`
+...
+29 | }
+   | - `b` dropped here while still borrowed
+
+For more information about this error, try `rustc --explain E0597`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 2 previous errors; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-ra10ca7e554d54217aa435f224316cef8.scope; invocation ID: c3b8da34650248e6b11a13adfdd44aef

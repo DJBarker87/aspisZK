@@ -1,0 +1,23 @@
+--- a/crates/aspis-r1-cost-probe/src/transport.rs
++++ b/crates/aspis-r1-cost-probe/src/transport.rs
+@@ -22,3 +22,6 @@
+         out
+     }
+ }
++
++#[cfg(kani)]
++mod NBG_runtime;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/transport/NBG_runtime.rs
+@@ -0,0 +1,11 @@
++#[kani::proof]
++fn NBG_transport() {
++ use super::Variant;
++ let n:u8=kani::any();kani::assume(n<3);
++ let v=match n {0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
++ assert!(v.tag()==n+1);
++ assert!(v.folds()==if n==0{1}else{2});
++ assert!(v.final_len()==if n==0{256}else{64});
++ assert!(crate::verifier::checkpoint_size(v)==if n==0{4840}else{1768});
++ kani::cover!(n==0);kani::cover!(n==1);kani::cover!(n==2);
++}

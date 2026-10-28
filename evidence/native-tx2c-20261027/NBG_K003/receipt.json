@@ -1,0 +1,81 @@
+{
+  "attempt": "NBG_K003",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "f21ade1bf29d2b0fd6192eab0300f34099ac08e1",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBG_src/Cargo.toml",
+    "NBG_src/Cargo.lock",
+    "NBG_src/programs/r1-cost-probe/src/lib.rs",
+    "NBG_src/programs/r1-cost-probe/src/NBG_runtime.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NBG_runtime::NBG_digest_reply",
+    "--output-format",
+    "terse",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "5c5831f1e36b847a693938c285c05ab3a97a249e04ce083cd75ffa5f6a99b2df",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "ee16a2659cd257103a6b7645f55e3bcdde6d939a13db1b8a39aa3e03f003b1ca",
+    "extra_patch_sha256": null
+  },
+  "expected_time": "optimized dependency compilation then native release leaf NBG_runtime::NBG_digest_reply",
+  "exit_status": 1,
+  "wall_seconds": 129.74734863702906,
+  "peak_rss_kib": "533148",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2f688ef49bbe4f6d8448d4ef04da153a.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "942100480",
+  "source_hashes": {
+    "NBG_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBG_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBG_src/programs/r1-cost-probe/src/lib.rs": "7e20af38557e047a49c0b7b87c03eb4e3fa569e16d872a18ea9fd77e614bd4a1",
+    "NBG_src/programs/r1-cost-probe/src/NBG_runtime.rs": "21cebfd6b5c5da187869c9f69b324de585fdfc24d6e60d82801d4adc92b4fabc"
+  },
+  "print_axioms": "N/A: kani"
+}

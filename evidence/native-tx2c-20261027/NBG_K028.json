@@ -1,0 +1,59 @@
+{
+  "attempt": "NBG_K028",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "c2bf6cb9f04908857d11bd19822dd7df76734ee1",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBG_src/Cargo.toml",
+    "NBG_src/Cargo.lock",
+    "NBG_src/crates/aspis-core/src/field/NBG_runtime.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::NBG_runtime::NBG_square_iteration",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "5c5831f1e36b847a693938c285c05ab3a97a249e04ce083cd75ffa5f6a99b2df",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "32294cf6b59abd5a5c0fcbd5d9288be37d4c322f502dab599af8d585225686ce",
+    "extra_patch_sha256": null
+  },
+  "expected_time": "optimized dependency compilation then native release leaf field::NBG_runtime::NBG_square_iteration"
+}

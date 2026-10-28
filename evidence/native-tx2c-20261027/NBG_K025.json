@@ -1,0 +1,62 @@
+{
+  "attempt": "NBG_K025",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "1f4a3b40063d13bbe0c46115327371f386c968d7",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBG_src/Cargo.toml",
+    "NBG_src/Cargo.lock",
+    "NBG_src/crates/aspis-statement/src/pool_v1/payment_relation.rs",
+    "NBG_src/crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs",
+    "NBG_src/crates/aspis-statement/src/atomic_statement.rs",
+    "NBG_src/crates/aspis-statement/src/atomic_statement/NBG_runtime.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::payment_relation::NBG_runtime::NBG_withdrawal_validation",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2c-20261027/NBG_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "5c5831f1e36b847a693938c285c05ab3a97a249e04ce083cd75ffa5f6a99b2df",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "b47346d7a8b8d4b79d4bac73dcb2fffef1aa32cbe9012776fa21b2bdd4cd2105",
+    "extra_patch_sha256": null
+  },
+  "expected_time": "optimized dependency compilation then native release leaf pool_v1::payment_relation::NBG_runtime::NBG_withdrawal_validation"
+}

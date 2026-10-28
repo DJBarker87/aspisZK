@@ -1,0 +1,115 @@
+{"attempt": "NBG_K024", "exit_status": 0, "wall_seconds": 12.054282351979055, "peak_rss_kib": "505672", "swaps": "0"}
+ement/NBG_runtime.rs:5:4
+  |
+5 | fn NBG_digest_decode(){
+  |    ^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_digest_decode`
+
+warning: function `NBG_encode_digest_step` should have a snake case name
+  --> crates/aspis-statement/src/atomic_statement/NBG_runtime.rs:13:4
+   |
+13 | fn NBG_encode_digest_step(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_encode_digest_step`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/tree.rs:116:28
+    |
+116 |                 assert_eq!(CALLS,1);
+    |                            ^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+    = note: `#[warn(static_mut_refs)]` (part of `#[warn(rust_2024_compatibility)]`) on by default
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/tree.rs:193:28
+    |
+193 |                 assert_eq!(ROOT_CALLS,1);
+    |                            ^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/tree.rs:194:28
+    |
+194 |                 assert_eq!(ROOT_TREE.next_leaf_index,tree.next_leaf_index);
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: module `NBG_runtime` should have a snake case name
+    --> crates/aspis-statement/src/pool_v1/payment_relation.rs:1163:5
+     |
+1163 | mod NBG_runtime;
+     |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_runtime`
+
+warning: function `NBG_digest_canonical` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:15:4
+   |
+15 | fn NBG_digest_canonical(){let d=digest();assert!(super::digest_is_canonical(&d)==canon(&d));kani::cover!(d[0].0==P);}
+   |    ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_digest_canonical`
+
+warning: function `NBG_common_validation` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:17:4
+   |
+17 | fn NBG_common_validation(){let c=common();assert!(super::validate_common(c)==common_spec(c));kani::cover!(c.pool==[0;32]);}
+   |    ^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_common_validation`
+
+warning: function `NBG_transfer_validation` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:19:4
+   |
+19 | fn NBG_transfer_validation(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_transfer_validation`
+
+warning: function `NBG_withdrawal_validation` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:24:4
+   |
+24 | fn NBG_withdrawal_validation(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_withdrawal_validation`
+
+warning: function `NBG_projections` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:31:4
+   |
+31 | fn NBG_projections(){
+   |    ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_projections`
+
+warning: function `NBG_header` should have a snake case name
+  --> crates/aspis-statement/src/pool_v1/payment_relation/NBG_runtime.rs:39:4
+   |
+39 | fn NBG_header(){
+   |    ^^^^^^^^^^ help: convert the identifier to snake case: `nbg_header`
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:131:20
+    |
+131 |         assert_eq!(ACTUAL_CALL, 4);
+    |                    ^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+warning: creating a shared reference to mutable static
+   --> crates/aspis-statement/src/../../../tools/r1-builder-reference/poseidon.rs:132:20
+    |
+132 |         assert_eq!(REFERENCE_CALL, 4);
+    |                    ^^^^^^^^^^^^^^ shared reference to mutable static
+    |
+    = note: for more information, see <https://doc.rust-lang.org/edition-guide/rust-2024/static-mut-references.html>
+    = note: shared references to mutable statics are dangerous; it's undefined behavior if the static is mutated or if a mutable reference is created for it while the shared reference lives
+
+    Finished `dev` profile [optimized] target(s) in 9.74s
+Checking harness pool_v1::payment_relation::NBG_runtime::NBG_transfer_validation...
+
+VERIFICATION RESULT:
+ ** 0 of 237 failed
+
+ ** 1 of 1 cover properties satisfied
+
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 1.1340811s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
