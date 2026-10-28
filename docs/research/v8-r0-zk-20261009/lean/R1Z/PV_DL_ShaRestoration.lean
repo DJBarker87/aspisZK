@@ -8,13 +8,9 @@ set_option autoImplicit false
 
 theorem position (pos : U8) : (UScalar.cast .Usize pos).val=pos.val := by
   rw [UScalar.cast_val_eq]
-  change pos.val%UScalar.size .Usize=pos.val
-  apply Nat.mod_eq_of_lt
-  have hp := pos.hSize
-  change pos.val<256 at hp
-  have big := (256#usize).hSize
-  change 256<UScalar.size .Usize at big
-  omega
+  refine Nat.mod_eq_of_lt (lt_of_lt_of_le pos.hBounds ?_)
+  simp only [UScalarTy.U8_numBits_eq,UScalarTy.Usize_numBits_eq]
+  exact Nat.pow_le_pow_right (by omega) (by cases System.Platform.numBits_eq <;> simp_all)
 
 def suffix (core : PV_DL_ShaFinal.Core) (buffer : Buffer (Storage U8 6)) : List U8 :=
   (PV_DL_LengthEncoding.suffix
