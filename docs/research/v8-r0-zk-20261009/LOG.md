@@ -13523,3 +13523,29 @@ still needed. b3p6b (fresh 100 attempts; no Kani; IDs 36400-36499) supplies ever
 structural route (ruling (k') for copy-dependent control bodies, (k) for op227's field arithmetic),
 closest rows first: V229, V243, V228, V241, V245, V244. Rows removed outright: 0. Privacy target not
 yet established.
+
+## D367 (Stream B) 2026-10-28 11:23 UTC: successful canonical preparation yields an honest input, unconditionally; exact coverage proved; runjoin33 rebuilds a coherent cache
+
+runjoin32 (recovered; 100 attempts: 63 accepted, 37 rejected; no Kani; final scoped audit with
+standard axioms; original logs recovered without rerunning completed jobs) proves:
+- PV_RunJoin_CanonicalHonest31.transfer/withdrawal (44649): for every bytes/public/witness/context
+  tuple and every returned snapshot and compiled payload, successful canonical preparation implies
+  a native lane-root result and HonestInput of the associated input (Admission, the complete inner
+  compiler return with both Result layers, Checked, canonical frontier words), with input
+  membership, pair validity, nullifier, output commitment and amount, append root and carry, and
+  the change sentinel derived rather than assumed.
+- PV_RunJoin_CanonicalCoverage31.transfer_iff/withdrawal_iff (44650): the prepared-and-honest
+  domain equals the codec path followed by the outer readiness predicates; positive change is
+  necessary for both spend kinds.
+- PV_RunJoin_SnapshotAgreement31.whole (44674): complete native snapshot equality when pool and
+  deployment bytes agree, with strict non-fullness derived from a successful append.
+So the honest-family V152-V154 theorem covers exactly the spends the shipped client prepares; the
+owner packet's zero-change item now carries this as the exact coverage under option (A).
+
+Retained boundary: the job's private object cache is stale against the current branch sources
+(2,038 endpoint-audit and 1,491 lane-audit mismatches, recorded with both hashes); no object was
+substituted, the endpoint audit stopped at that boundary, and native-lane and NativeSnapshot31
+correspondence get no credit yet. runjoin33 (IDs 51300-51499) rebuilds the endpoint and lane closures
+into a fresh object directory as a chunked dependency build, reruns the endpoint, lane and snapshot
+audits once each, then works on V045 and V038. Rows removed outright: 0. Privacy target not yet
+established.

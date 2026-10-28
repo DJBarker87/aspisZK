@@ -217,3 +217,14 @@ not change the pre-registered criterion itself; this is the owner's call.
 
 **Unblocks.** The prover candidate's adoption gates (stage A already passes: three ELF pins, pinned
 client, fixtures, 1,000/1,000 differential).
+
+**Update (LOG D367, 2026-10-28): the coverage under option (A) is now proved exactly.** On the
+canonical preparation route (snapshot codec, then the frozen outer wrapper, then the inner compiler),
+the universal V152-V154 honest-family theorem covers exactly the admitted pairs that route prepares;
+every successful preparation yields an honest input with no remaining admission hypothesis, and
+positive change is necessary for both transfers and withdrawals
+(PV_RunJoin_CanonicalHonest31.transfer/withdrawal; PV_RunJoin_CanonicalCoverage31.transfer_iff/
+withdrawal_iff; codex/pv-runjoin-20261026, evidence/pv-runjoin31-20261028/OWNER-COVERAGE.md). Under
+option (A) the privacy claim's honest-user domain is therefore exactly "spends the shipped client
+prepares", with zero-change spends of either kind outside it. The decision itself is still the
+owner's.
