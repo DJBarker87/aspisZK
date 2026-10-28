@@ -19,6 +19,19 @@ p=S/(module.replace('.','/')+'.lean');assert p.exists(),p
 outfile=O/(module.replace('.','/')+'.olean')
 outfile.parent.mkdir(parents=True,exist_ok=True)
 state=H/'TALLY.json';t=json.loads(state.read_text())
+# Reconcile historical pre-m' refusals only after checking that no compiler
+# receipt exists. Their retained admission directories remain immutable.
+recovered=[]
+charged_ids={r['attempt'] for r in t.get('receipts',[])}
+for refused in t.get('refusals',[]):
+ old=refused['attempt']
+ if old in t['used_ids'] and old not in charged_ids:
+  assert 42500<=old<42597
+  assert not any((d/'receipt/receipt.json').exists() for d in H.glob(f'lean-{old}*'))
+  t['used_ids'].remove(old);recovered.append(old)
+if recovered:
+ (H/'m-prime-id-recovery.json').write_text(json.dumps(dict(ruling='m prime 2026-10-28 06:40 UTC',recovered_ids=sorted(set(recovered)),compiler_receipts_absent=True),indent=2)+'\n')
+t['next_unused_id']=next((i for i in range(42500,42597) if i not in t['used_ids']),42597)
 assert t['lean_attempts']<100,t
 is_audit=len(sys.argv)>2 and sys.argv[2]=='audit'
 a=(42597+len(t.get('audit_ids_used',[]))) if is_audit else t['next_unused_id']
@@ -56,7 +69,7 @@ fp=hashlib.sha256(json.dumps(context,sort_keys=True).encode()).hexdigest();key=s
 assert key not in t.get('sent_inputs',[]),'unchanged source/dependencies refused'
 t['used_ids'].append(a)
 if is_audit:t.setdefault('audit_ids_used',[]).append(a)
-else:t['next_unused_id']=a+1
+else:t['next_unused_id']=next((i for i in range(42500,42597) if i not in t['used_ids']),42597)
 state.write_text(json.dumps(t,indent=2)+'\n')
 label=f'lean-{a}'
 retry=0
