@@ -51,7 +51,7 @@ theorem fill {F E : Type} (eval : Nat → Result (core.result.Result F E))
         funext tail
         rw [prefix_set out r value hr,List.drop_set_of_lt (by omega)]
         simp only [List.append_assoc,List.singleton_append]
-        congr 2 <;> omega
+        simp only [Nat.add_assoc,Nat.add_comm,Nat.add_left_comm]
 
 theorem whole {F E : Type} (eval : Nat → Result (core.result.Result F E)) (out : List F) :
     run eval 0 out.length out = ordered eval 0 out.length := by
