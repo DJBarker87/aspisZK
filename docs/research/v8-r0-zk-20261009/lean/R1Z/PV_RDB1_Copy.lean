@@ -7,12 +7,12 @@ The fresh scalar source array does not alias the mutable destination. -/
 def overwrite {T : Type} (out : List T) (offset : Nat) (data : List T) : List T :=
   out.take offset ++ data ++ out.drop (offset+data.length)
 
-theorem overwrite_frame {T : Type} (prefix suffix data : List T) :
-    overwrite (prefix++suffix) prefix.length data =
-      prefix++data++suffix.drop data.length := by
+theorem overwrite_frame {T : Type} (before suffix data : List T) :
+    overwrite (before++suffix) before.length data =
+      before++data++suffix.drop data.length := by
   unfold overwrite
   rw [List.take_left,List.drop_append]
-  have hz : prefix.drop (prefix.length+data.length)=[] :=
+  have hz : before.drop (before.length+data.length)=[] :=
     List.drop_eq_nil_iff.mpr (by omega)
   rw [hz,Nat.add_sub_cancel_left,List.nil_append]
 
@@ -20,10 +20,10 @@ def copies {T : Type} (out : List T) (offset : Nat) : List (List T) → List T
   | [] => out
   | chunk::rest => copies (overwrite out offset chunk) (offset+chunk.length) rest
 
-theorem copies_result {T : Type} (chunks : List (List T)) (prefix suffix : List T) :
-    copies (prefix++suffix) prefix.length chunks =
-      prefix++chunks.flatten++suffix.drop chunks.flatten.length := by
-  induction chunks generalizing prefix suffix with
+theorem copies_result {T : Type} (chunks : List (List T)) (before suffix : List T) :
+    copies (before++suffix) before.length chunks =
+      before++chunks.flatten++suffix.drop chunks.flatten.length := by
+  induction chunks generalizing before suffix with
   | nil => simp only [copies,List.flatten_nil,List.length_nil,List.drop_zero,List.append_nil]
   | cons c cs ih =>
     simp only [copies,overwrite_frame]
