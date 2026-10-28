@@ -21,11 +21,15 @@ for version in ['nightly-2026-06-01','1.94.1']:
   p=root/file;s=p.read_text();r['files'][file]=dict(path=str(p),sha256=sha(p.read_bytes()))
   for key,marker,after in items:
    b=span(s,marker,after);r['bodies'][key]=dict(text=b,token_sha256=sha('\0'.join(tok(b)).encode()))
+ num=root/'num/mod.rs';ns=num.read_text();r['files']['num/mod.rs']=dict(path=str(num),sha256=sha(num.read_bytes()));r['bodies']['usize_macro']=dict(text=span(ns,'uint_impl!','impl usize {'),qualification='target x86_64; compiler-cohort primitive usize width64 retained')
  s=(root/'iter/range.rs').read_text();assert re.search(r'step_integer_impls!\s*\{[\s\S]*?usize',s)
  if version=='1.94.1':
+  for op in ['add','sub']:
+   expected='''pub const unsafe fn unchecked_OP(self, rhs: Self) -> Self { assert_unsafe_precondition!( check_language_ub, concat!(stringify!($SelfT), "::unchecked_OP cannot overflow"), (lhs: $SelfT = self, rhs: $SelfT = rhs,) => !lhs.overflowing_OP(rhs).1, ); unsafe { intrinsics::unchecked_OP(self, rhs) } }'''.replace('OP',op)
+   assert tok(r['bodies']['unchecked_'+op]['text'])==tok(expected)
   assert tok(r['bodies']['trusted_back']['text'])==tok('''fn spec_next_back(&mut self) -> Option<T> { if self.start < self.end { self.end = unsafe { Step::backward_unchecked(self.end, 1) }; Some(self.end) } else { None } }''')
   assert tok(r['bodies']['unsigned_back']['text'])==tok('''unsafe fn backward_unchecked(start: Self, n: usize) -> Self { unsafe { start.unchecked_sub(n as Self) } }''')
  records.append(r)
-comparison={k:records[0]['bodies'][k]['token_sha256']==records[1]['bodies'][k]['token_sha256'] for k in records[0]['bodies']}
-result=dict(row='V218',cohorts=records,identical=comparison,concrete_dispatch='Range<usize> is TrustedStep integer specialization; Rev.next calls next_back; usize cast is identity; next_back writes end before returning it',laws=['PV_RDCD_Range194.backward_bound','PV_RDCD_Range194.next_back','PV_RDCD_Range194.reverse_dispatch','PV_RDCD_Range194.reverse_new'],primitive_boundary='Rust scalar unchecked subtraction with proved nonoverflow precondition; primitive comparisons, stack array copy/value layout and compiler cohort; no L1/L2/L3 or RunJoin discharge',qualification='Supplemental concrete source/model binding, original route remains pinned extraction; source hash comparison alone never proves native binary refinement')
+comparison={k:records[0]['bodies'][k]['token_sha256']==records[1]['bodies'][k]['token_sha256'] for k in records[0]['bodies'] if 'token_sha256' in records[0]['bodies'][k]}
+result=dict(row='V218',cohorts=records,identical=comparison,concrete_dispatch='Range<usize> is TrustedStep integer specialization; Rev.next calls next_back; usize cast is identity; next_back writes end before returning it',laws=['PV_RDCD_Range194.backward_bound','PV_RDCD_Range194.next_back','PV_RDCD_Range194.reverse_dispatch','PV_RDCD_Range194.reverse_new','PV_RDCD_RangeForward.forward_bound','PV_RDCD_RangeForward.next'],primitive_boundary='Rust scalar unchecked subtraction with proved nonoverflow precondition; primitive comparisons, stack array copy/value layout and compiler cohort; no L1/L2/L3 or RunJoin discharge',qualification='Supplemental concrete source/model binding, original route remains pinned extraction; source hash comparison alone never proves native binary refinement')
 (O/'source-binding.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(comparison,indent=2))
