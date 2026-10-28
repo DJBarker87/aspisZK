@@ -11,6 +11,7 @@ assert not (E/attempt/'receipt.json').exists()
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 env={'TMPDIR':B+'/NBZ_tmp','PATH':'/home/dombarker/.cargo/bin:/usr/bin:/bin','CARGO_BUILD_JOBS':'1','CARGO_NET_OFFLINE':'true','CARGO_PROFILE_DEV_OPT_LEVEL':'3','CARGO_PROFILE_DEV_DEBUG':'0','CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS':'true','RUSTFLAGS':'-C link-arg=-Wl,--threads=1'}
 base=dict(source_revision=rev,source_tree_dirty=True,sources=['NBZ_src/Cargo.lock','NBZ_src/Cargo.toml','NBZ_src/crates/aspis-r1-cost-probe/src/verifier.rs','NBZ_src/crates/aspis-r1-cost-probe/src/candidate.rs','NBZ_src/crates/aspis-r1-cost-probe/src/NBZ_native.rs','NBZ_src/crates/aspis-r1-cost-probe/src/KMX_stubs.rs','NBZ_src/crates/aspis-r1-cost-probe/src/lib.rs'],env=env)
+base['sources'] += json.loads(os.getenv('NBZ_EXTRA_SOURCES','[]'))
 r=py(f'from pathlib import Path;Path({(B+"/NBZ_tmp")!r}).mkdir(exist_ok=True)');assert r.returncode==0
 before=ssh('sha256sum '+B+'/NBZ_src/Cargo.lock');assert before.returncode==0
 expected='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
