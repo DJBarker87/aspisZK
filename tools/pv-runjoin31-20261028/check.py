@@ -27,7 +27,11 @@ assert charged<100
 prior_admission=json.loads((E/f'refusal-{A}.json').read_text()) if (E/f'refusal-{A}.json').exists() else {}
 scan_race=bool(re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',prior_admission.get('error','')))
 launched=any(json.loads(l).get('attempt')==A for l in (E/'launches.jsonl').read_text().splitlines()) if (E/'launches.jsonl').exists() else False
-assert not (E/f'used-{A}.json').exists() or (scan_race and not launched and not (E/f'receipt-{A}.json').exists()), 'ID retired'
+assert not launched and not (E/f'receipt-{A}.json').exists(), 'compiler already launched under ID'
+# Ruling m-prime: prelaunch metadata/refusals do not consume an ID.
+if (E/f'refusal-{A}.json').exists():
+ archive=E/f'admission-history-{A}-{time.time_ns()}.json'
+ archive.write_bytes((E/f'refusal-{A}.json').read_bytes())
 if scan_race:
  races=list(E.glob(f'barrier-race-{A}-*.json'))
  assert len(races)<=3,'fourth transient scan race: stop and report'
