@@ -16,7 +16,7 @@ theorem encode (logical : Slice U8) (out : alloc.vec.Vec U8) (n : Nat)
   obtain ⟨next,hn,hval⟩ := PV_RunJoin_CompactComplete39.encode logical out n length room zero
   refine ⟨next,hn,?_,?_⟩
   · rw [hval,PV_RunJoin_CompactPayload39.indexed]
-    rfl
+    simp only [Nat.zero_add]
   · change next.val.length=out.val.length+16*n
     rw [hval,List.length_append,PV_RunJoin_CompactPayload39.length logical 0 n (by omega)]
 
