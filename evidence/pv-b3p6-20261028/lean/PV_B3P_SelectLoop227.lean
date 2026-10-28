@@ -41,7 +41,7 @@ theorem complete_result (claims : Claims) :
       .ok (plan claims 84 0 (List.replicate 84 aspis_core.field.QM31.ZERO)) := by
   unfold reference_terminal.select227
   have h := complete_loop claims 84 (Array.repeat 84#usize aspis_core.field.QM31.ZERO) 0#usize (by rfl)
-  simpa only [Array.repeat_val,show (0#usize).val = 0 from rfl] using h
+  simpa only [Array.repeat_val,show (0#usize).val = 0 from rfl,show (84#usize).val = 84 from rfl] using h
 
 #print axioms complete_loop
 #print axioms complete_result
