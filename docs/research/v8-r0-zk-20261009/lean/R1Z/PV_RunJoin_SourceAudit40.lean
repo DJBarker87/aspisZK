@@ -1,0 +1,16 @@
+import R1Z.PV_RunJoin_PolyPublish40
+import R1Z.PV_RunJoin_SemanticComplete40
+import R1Z.PV_RunJoin_CompactLengthReject40
+import R1Z.PV_RunJoin_CompactRejectComplete40
+import R1Z.ProverCommitOpeningBytes49
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_PolyPublish40.encode
+#print R1Z.PV_RunJoin_SemanticDomain40.Domain
+#print R1Z.PV_RunJoin_SemanticComplete40.encode
+#print R1Z.PV_RunJoin_CompactLengthReject40.reject
+#print R1Z.PV_RunJoin_CompactRejectComplete40.reject
+#print axioms R1Z.PV_RunJoin_PolyPublish40.encode
+#print axioms R1Z.PV_RunJoin_SemanticComplete40.encode
+#print axioms R1Z.PV_RunJoin_CompactLengthReject40.reject
+#print axioms R1Z.PV_RunJoin_CompactRejectComplete40.reject
+#print axioms R1Z.ProverCommitOpeningBytes49.exact_images
