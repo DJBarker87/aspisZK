@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_RuntimeMemorySource38
+import R1Z.PV_RJDec_Run
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RJDec_MemoryDrop
@@ -13,7 +14,7 @@ theorem complete (ops : ExternalFuns)
           ((PV_RunJoin_RuntimeMemorySource38.selected ops m w).op4 v),
         m.dropCommit w (PV_FXM_DropWorld.reference m.free (m.dropBuffer w v) (m.dropView w)).2,
         [(w,none)]⟩ := by
-  apply Run.ext
+  apply PV_RJDec_Run.ext
   · exact PV_RunJoin_RuntimeMemorySource38.drop ops base m v w
   · exact PV_W_MemoryLift.drop_world m.dropView m.dropCommit m.free (m.dropBuffer w v) w
   · rfl

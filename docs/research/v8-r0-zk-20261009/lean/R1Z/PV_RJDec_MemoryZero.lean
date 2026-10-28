@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_RuntimeMemorySource38
+import R1Z.PV_RJDec_Run
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RJDec_MemoryZero
@@ -13,7 +14,7 @@ theorem complete (ops : ExternalFuns)
           ((PV_RunJoin_RuntimeMemorySource38.selected ops m w).op122 PV_FXM_ZeroSelected.byteZero v),
         m.zeroCommit w (PV_FXM_ZeroWorld.indexed (m.arrayAddress w v) 0 N.val (m.zeroView w)),
         [(w,none)]⟩ := by
-  apply Run.ext
+  apply PV_RJDec_Run.ext
   · exact PV_RunJoin_RuntimeMemorySource38.array ops base m N v w
   · exact PV_W_MemoryLift.zero_world m.zeroView m.zeroCommit (m.arrayAddress w v) N w
   · rfl

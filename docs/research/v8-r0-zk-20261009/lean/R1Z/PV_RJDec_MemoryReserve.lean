@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_RuntimeMemorySource38
+import R1Z.PV_RJDec_Run
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RJDec_MemoryReserve
@@ -18,7 +19,7 @@ theorem complete (ops : ExternalFuns)
       ⟨PV_W_SourceSyntax.resultOutcome
           ((PV_RunJoin_RuntimeMemorySource38.selected ops m w).op32 Allocator v n),
         m.reserveCommit w e.buffer e.world,[(w,none)]⟩ := by
-  apply Run.ext
+  apply PV_RJDec_Run.ext
   · exact PV_RunJoin_RuntimeMemorySource38.reserve ops base m Allocator v n w
   · exact PV_RunJoin_RuntimeMemory38.reserve base m Allocator v n w
   · rfl
