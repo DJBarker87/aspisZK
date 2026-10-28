@@ -1,0 +1,3 @@
+# Fixed-store unwind audit
+
+Native gate time is expected in optimized compilation, then fixed-position byte/frame SAT. Not dense arithmetic. Each gate is one native row-store cut, arbitrary input bytes/prestate and arbitrary observed byte. The explicit unwind801 covers the largest800-byte old-array copy and all32-byte slice copies. Unwinding assertions remain enabled. This changes the bound of the previously passing NBK fixed-position shape for the specifically identified KDX copy-fidelity question; it never reruns NBH dynamic-store timeouts. Dynamic store drafts were generated locally but never submitted. No field stub or protocol whole-buffer loop. Native crate sources remain frozen outside the scratch cfg-only module.

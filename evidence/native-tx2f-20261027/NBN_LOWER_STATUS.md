@@ -1,0 +1,3 @@
+# Lower-unit update inspected read-only
+
+Immutable merge d8d3b2f6f7 (lead addendum97a4d66504) is now available in the local object database; no merge/cherry-pick or live worker tree access. Its NBG_HANDOFF.md closes U01 and eight U02 helpers. The required whole digest/payment codecs remain OPEN: encode/decode_digest_canonical, encode/decode_common, transfer and withdrawal encoders/decoders. Thus this continuation still cannot cite a CLOSED lower DigestEncode/Decode or PaymentEncode/Decode. NBG's validators do not establish their enclosing byte codecs. No fresh TX1 prepared_claim premise is introduced; LPt already closed it and TX2 does not call it again.

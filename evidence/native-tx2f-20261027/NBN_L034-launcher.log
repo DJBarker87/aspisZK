@@ -1,0 +1,48 @@
+{"attempt": "NBN_L034", "exit_status": 1, "wall_seconds": 3.2277945069945417, "peak_rss_kib": "5400484", "swaps": "0", "print_axioms": ["'NBN_StatementDomains.payment_reached' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBN_StatementDomains.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NBN_StatementDomains.lane_late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NBN_StatementDomains.late_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBN_generated/NBN_StatementDomains.lean:37:63: error: unsolved goals
+case h_2
+s : Statement
+accepted : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (core.result.Result.Ok ())
+w✝ : Std.Array U8 216#usize
+left✝ : payment s = ok (core.result.Result.Ok w✝)
+pool deployment : Std.Array U8 32#usize
+sequence : U64
+anchor nullifier : Std.Array U32 8#usize
+asset : U32
+hp : parts s = (pool, deployment, sequence, anchor, nullifier, asset)
+h✝⁵ : ¬(NBD_TerminalProjection.parts s).1 ≠ (common s).master_account
+h✝⁴ : ¬(NBD_TerminalProjection.parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain
+h✝³ : ¬(common s).lane_transition.live_snapshot.pool ≠ (common s).master_account
+
+...
+sult.Result.Ok ())
+w✝ : Std.Array U8 216#usize
+left✝ : payment s = ok (core.result.Result.Ok w✝)
+pool deployment : Std.Array U8 32#usize
+sequence : U64
+anchor nullifier : Std.Array U32 8#usize
+asset : U32
+hp : parts s = (pool, deployment, sequence, anchor, nullifier, asset)
+h✝⁵ : ¬(NBD_TerminalProjection.parts s).1 ≠ (common s).master_account
+h✝⁴ : ¬(NBD_TerminalProjection.parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain
+h✝³ : ¬(common s).lane_transition.live_snapshot.pool ≠ (common s).master_account
+h✝² : ¬sequence ≠ (common s).checkpoint_sequence
+h✝¹ : ¬(NBD_TerminalProjection.parts s).2.2.2.1 ≠ (common s).historical_global_anchor
+x✝¹ : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+lane✝ : U8
+heq✝¹ : NBN_OutputLane.result nullifier = core.result.Result.Ok lane✝
+h✝ : ¬lane✝ ≠ (common s).output_lane
+x✝ : core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1
+a✝ : Unit
+heq✝ : lateStatus (common s).lane_transition = core.result.Result.Ok a✝
+h : core.result.Result.Ok () = core.result.Result.Ok ()
+⊢ pool = (common s).master_account ∧
+    deployment = (common s).lane_transition.live_snapshot.deployment_domain ∧
+      (common s).lane_transition.live_snapshot.pool = (common s).master_account ∧
+        sequence = (common s).checkpoint_sequence ∧ anchor = (common s).historical_global_anchor
+'NBN_StatementDomains.payment_reached' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBN_StatementDomains.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_StatementDomains.lane_late' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NBN_StatementDomains.late_children' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2439b98a379944c58526f048460d3360.scope; invocation ID: f3d02f92ca314e35a1b784d70ce8b0dd

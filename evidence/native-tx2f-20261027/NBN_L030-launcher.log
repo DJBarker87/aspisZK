@@ -1,0 +1,42 @@
+{"attempt": "NBN_L030", "exit_status": 1, "wall_seconds": 7.314876228978392, "peak_rss_kib": "5353080", "swaps": "0", "print_axioms": ["'NBN_StatementResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBN_generated/NBN_StatementResult.lean:84:21: error: unsolved goals
+case neg.PrivateTransfer.Ok
+a✝¹ : PoolV1PairForestTerminalCommonV1
+a✝ : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+hm : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).master_account = zero
+hc : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).checkpoint_account = zero
+hs : ¬(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).selected_lane_account = zero
+lane : ¬8 ≤ ↑(common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a✝¹ a✝)).output_lane
+cast :
+  core.convert.num.FromUsizeU8.from (common (PoolV1PairForestTerminalStatementV1.PrivateTransfer a
+...
+1.DeploymentBindingMismatch
+        else
+          if a✝¹.lane_transition.live_snapshot.pool ≠ a✝¹.master_account then
+            core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+          else
+            if a✝.anchor_sequence ≠ a✝¹.checkpoint_sequence then
+              core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+            else
+              if a✝.anchor_root ≠ a✝¹.historical_global_anchor then
+                core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+              else
+                match NBN_OutputLane.result a✝.nullifier with
+                | core.result.Result.Err e => core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.Account e)
+                | core.result.Result.Ok lane =>
+                  if lane ≠ a✝¹.output_lane then
+                    core.result.Result.Err PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+                  else
+                    match
+                      if
+                          a✝¹.lane_transition.live_snapshot.next_pair_index.checked_add 1#u64 ≠
+                            some a✝¹.lane_transition.candidate_afterstate.next_pair_index then
+                        core.result.Result.Err
+                          pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch
+                      else NBN_LateTail.status a✝¹.lane_transition with
+                    | core.result.Result.Err e =>
+                      core.result.Result.Err (PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)
+                    | core.result.Result.Ok a => core.result.Result.Ok ())
+'NBN_StatementResult.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r2da0da51f3d046d6ad18caf7ca4dd6b5.scope; invocation ID: f4654215a7e14f1998ec5c7830a3b090
