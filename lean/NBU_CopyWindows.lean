@@ -26,24 +26,24 @@ def rows {α : Type} (src : Nat → Nat → α) (dst : Nat → α)
 
 /-- Induction lifts one native arbitrary-prestate row to all rows and frame. -/
 theorem rows_spec {α : Type} (src : Nat → Nat → α) (dst : Nat → α)
-    (base width count j : Nat) (positive : 0 < width) :
-    rows src dst base width count j =
-      if base ≤ j ∧ j < base+width*count
-      then src ((j-base)/width) ((j-base)%width) else dst j := by
+    (base count j : Nat) :
+    rows src dst base 32 count j =
+      if base ≤ j ∧ j < base+32*count
+      then src ((j-base)/32) ((j-base)%32) else dst j := by
   induction count with
   | zero => simp [rows]; omega
   | succ n ih =>
     rw [rows, window_spec]
-    by_cases last : base+width*n ≤ j ∧ j < base+width*n+width
+    by_cases last : base+32*n ≤ j ∧ j < base+32*n+32
     · rw [if_pos last]
-      have whole : base ≤ j ∧ j < base+width*(n+1) := by omega
+      have whole : base ≤ j ∧ j < base+32*(n+1) := by omega
       rw [if_pos whole]
-      have eqdiv : (j-base)/width = n := by omega
-      have eqmod : (j-base)%width = j-(base+width*n) := by omega
+      have eqdiv : (j-base)/32 = n := by omega
+      have eqmod : (j-base)%32 = j-(base+32*n) := by omega
       rw [eqdiv, eqmod]
     · rw [if_neg last, ih]
-      have equivalent : (base ≤ j ∧ j < base+width*n) ↔
-          (base ≤ j ∧ j < base+width*(n+1)) := by omega
+      have equivalent : (base ≤ j ∧ j < base+32*n) ↔
+          (base ≤ j ∧ j < base+32*(n+1)) := by omega
       simp only [equivalent]
 
 #print axioms window_spec

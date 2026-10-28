@@ -9,3 +9,5 @@ failed (1/24), as required. Both use exact mandated patch SHA256
 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67.
 Graph/lock checks are per-run. First pair re-establishes only the local copy32
 cut, not a whole codec. Lean offset/frame composition is pending compilation.
+
+Actual inherited branch is codex/cx-native-tx2j-20261028 (not the date-27 name in the relaunch text); no branch switch or cross-worktree operation was made.

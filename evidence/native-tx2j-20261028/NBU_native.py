@@ -73,6 +73,13 @@ elif sys.argv[1]=='run':
  assert not harness.endswith(('::NBU_store688_gate','::NBU_store800_gate')),'retired timed-out shape; use isolated range/copy boundaries'
  frozen=subprocess.check_output(['git','show',REV+':Cargo.lock']);lockhash=hashlib.sha256(frozen).hexdigest()
  sources=['NBU_src/KMX_stubs.rs','NBU_src/crates/aspis-statement/src/KMX_stubs.rs','NBU_KMX_copy_stubs.patch','NBU_src/Cargo.lock','NBU_src/crates/aspis-statement/src/lib.rs','NBU_src/crates/aspis-statement/src/pool_v1/pair_terminal.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_codecs.rs','NBU_src/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_more.rs','NBU_src/crates/aspis-statement/src/pool_v1/NBU_decode.rs']
+ verify=py(f'''from pathlib import Path
+import hashlib,json
+b=Path({B!r});s=b/'NBU_src';p=b/'NBU_KMX_copy_stubs.patch'
+assert hashlib.sha256(p.read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+assert (s/'KMX_stubs.rs').read_bytes()==(s/'crates/aspis-statement/src/KMX_stubs.rs').read_bytes()
+print('exact KMX patch and stub inclusion verified')
+''');assert verify.returncode==0,verify.stdout+verify.stderr
  g=a.replace('_K','_G');rc=launch(g,'metadata',['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',B+'/NBU_src/Cargo.toml','--locked','--offline','--format-version','1'],sources,120);assert rc['exit_status']==0
  # Cargo diagnostics are not JSON; parse the complete JSON output line only.
  lines=(E/g/'stdout.log').read_text().splitlines();m=next(json.loads(s) for s in lines if s.startswith('{') and '"packages"' in s)

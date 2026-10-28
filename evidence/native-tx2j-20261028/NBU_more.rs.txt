@@ -681,3 +681,43 @@ fn NBU_result_control_negative(){
  let expected=if zero {Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)}else{match l {Err(e)=>Err(PoolV1PairForestTerminalFormatErrorV1::Account(e)),Ok(lane)=>if r.output_lane!=lane {Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch)}else{a.map(|_|()).map_err(PoolV1PairForestTerminalFormatErrorV1::Afterstate)}}};
  assert_eq!(actual,expected);assert_eq!(stage.get(),if zero{0}else if l.is_err()||l.ok()!=Some(r.output_lane){1}else{2});
 }
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_asf8_header(){let mut output:[u8;8]=kani::any();let kind:u8=kani::any();let lane:u8=kani::any();output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);output[4]=POOL_V1_PAIR_FOREST_TERMINAL_VERSION;output[5]=kind;output[6]=POOL_V1_DIGEST_ENCODING_VERSION;output[7]=lane;let j:usize=kani::any();kani::assume(j<8);assert_eq!(output[j],if j<4{b"ASF8"[j]}else if j==4||j==6{1}else if j==5{kind}else{lane});}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_asf8_header_negative(){let mut output:[u8;8]=kani::any();let kind:u8=kani::any();let lane:u8=kani::any();output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);output[4]=POOL_V1_PAIR_FOREST_TERMINAL_VERSION;output[5]=kind;output[6]=POOL_V1_DIGEST_ENCODING_VERSION;output[7]=lane;let j:usize=kani::any();kani::assume(j<8);assert_ne!(output[j],if j<4{b"ASF8"[j]}else if j==4||j==6{1}else if j==5{kind}else{lane});}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_asf8_ranges(){let mut out:[u8;1880]=kani::any();let ptr=out.as_mut_ptr();let field:usize=kani::any();kani::assume(field<7);let (start,len)=match field{0=>(MASTER_OFFSET,32),1=>(CHECKPOINT_ACCOUNT_OFFSET,32),2=>(SELECTED_LANE_ACCOUNT_OFFSET,32),3=>(CHECKPOINT_SEQUENCE_OFFSET,8),4=>(HISTORICAL_ANCHOR_OFFSET,32),5=>(LATE_STATEMENT_OFFSET,POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES),_=>(PAYMENT_STATEMENT_OFFSET,POOL_V1_PAYMENT_STATEMENT_BYTES)};let expected_start=[8,40,72,104,112,144,1664][field];let expected_len=[32,32,32,8,32,1520,216][field];let view=&mut out[start..start+len];assert_eq!(view.len(),expected_len);assert_eq!(view.as_mut_ptr(),ptr.wrapping_add(expected_start));}
+
+#[kani::proof]
+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+#[kani::unwind(34)]
+fn NBU_asf8_ranges_negative(){let mut out:[u8;1880]=kani::any();let ptr=out.as_mut_ptr();let field:usize=kani::any();kani::assume(field<7);let (start,len)=match field{0=>(MASTER_OFFSET,32),1=>(CHECKPOINT_ACCOUNT_OFFSET,32),2=>(SELECTED_LANE_ACCOUNT_OFFSET,32),3=>(CHECKPOINT_SEQUENCE_OFFSET,8),4=>(HISTORICAL_ANCHOR_OFFSET,32),5=>(LATE_STATEMENT_OFFSET,POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES),_=>(PAYMENT_STATEMENT_OFFSET,POOL_V1_PAYMENT_STATEMENT_BYTES)};let expected_start=[8,40,72,104,112,144,1664][field];let expected_len=[32,32,32,8,32,1520,216][field];let view=&mut out[start..start+len];assert_ne!(view.len(),expected_len);assert_eq!(view.as_mut_ptr(),ptr.wrapping_add(expected_start));}
