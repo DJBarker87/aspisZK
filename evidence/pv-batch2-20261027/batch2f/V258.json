@@ -65,5 +65,23 @@
     "swaps": 0,
     "accepted_axioms": true
   },
-  "print_axioms": "40837-stdout.log"
+  "print_axioms": "40837-stdout.log",
+  "resource_family_generalization": {
+    "theorem": "PV_B2_F_ResourceFamilies.selected_heap",
+    "attempt": 40844,
+    "full_statements": [
+      "theorem heap_source (heap : HeapRequest) (w : W) (kappa : Native) :\n    heapCallback heap w kappa = heapOriginal heap w kappa",
+      "theorem box_source (box : BoxRequest) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    boxCallback box v alpha z = boxOriginal box v alpha z",
+      "theorem selected_heap (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    @ProverRwFull.ExternalFuns.op251 (types base) (selected base heap box ops) w kappa =\n      heapOriginal heap w kappa",
+      "theorem selected_box (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    @ProverRwFull.ExternalFuns.op252 (types base) (selected base heap box ops) v alpha z =\n      boxOriginal box v alpha z",
+      "theorem dictionaries (base : ProverRwFull.ExternalTypes) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    selected base heap box ops = originalDictionary base heap box ops",
+      "theorem observations {O : Sort _} (base : ProverRwFull.ExternalTypes)\n    (observe : @ProverRwFull.ExternalFuns (types base) \u2192 O) (heap : HeapRequest) (box : BoxRequest)\n    (ops : @ProverRwFull.ExternalFuns (types base)) :\n    observe (selected base heap box ops) = observe (originalDictionary base heap box ops)",
+      "theorem heap_nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (w : W) (kappa : Native) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op251 (types base)\n      (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) w kappa = ok (.Ok out)",
+      "theorem box_nonvacuity (base : ProverRwFull.ExternalTypes)\n    (ops : @ProverRwFull.ExternalFuns (types base)) (v : NV) (alpha : Array NQ 10#usize) (z : Array NP 2#usize) :\n    \u2203 out, @ProverRwFull.ExternalFuns.op252 (types base)\n      (selected base (fun _ _ => ok .supplied) (fun _ _ _ => ok ()) ops) v alpha z = ok (.Ok out)"
+    ],
+    "HeapRequest": "W \u2192 Native \u2192 Result Outcome",
+    "BoxRequest": "NV \u2192 Array NQ 10 \u2192 Array NP 2 \u2192 Result Unit",
+    "quantifiers": "Every resolver, including input/witness-dependent outcomes; no independence premise. Actual native failure-event witness independence remains a separate P obligation.",
+    "final_composition": "PV_B2_F_FiveRows.five_rows / nonvacuity;40847"
+  }
 }
