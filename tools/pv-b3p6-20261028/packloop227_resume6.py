@@ -3,6 +3,7 @@ import sys
 p=Path('evidence/pv-b3p6-20261028/lean/PV_B3P_PackLoopSuccess227.lean')
 s='''import PV_B3P_ExpandSuccess227
 import PV_B3P_RefFieldSuccess227
+import PV_B3P_E227_19
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
@@ -14,7 +15,6 @@ theorem slice_read {α : Type} (xs : Slice α) (i : Usize)
   exact ⟨q,hq⟩
 
 #print axioms slice_read
-#print massert
 '''
 for prefix,short in [('host_terminal_field','host'),('reference_field','ref')]:
  src=prefix+'.qm31_pack_base4_loop'

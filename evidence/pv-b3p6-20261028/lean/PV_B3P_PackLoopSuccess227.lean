@@ -1,5 +1,6 @@
 import PV_B3P_ExpandSuccess227
 import PV_B3P_RefFieldSuccess227
+import PV_B3P_E227_19
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
@@ -11,7 +12,6 @@ theorem slice_read {α : Type} (xs : Slice α) (i : Usize)
   exact ⟨q,hq⟩
 
 #print axioms slice_read
-#print massert
 
 theorem host_pack_loop_total (values : Slice aspis_core.field.QM31)
     (padded : Array aspis_core.field.QM31 4#usize) (index : Usize)

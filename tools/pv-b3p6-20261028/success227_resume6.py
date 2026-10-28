@@ -9,6 +9,8 @@ D=Path('evidence/pv-b3p6-20261028');L=D/'lean';mapping={
  'aspis_core.field.CM31.add':'cadd','aspis_core.field.CM31.sub':'csub','aspis_core.field.CM31.mul':'cmul','aspis_core.field.CM31.mul_m31':'cmul_m31','aspis_core.field.CM31.square':'csquare','aspis_core.field.CM31.new':'cnew',
  'aspis_core.field.M31.add':'add','aspis_core.field.M31.sub':'sub','aspis_core.field.M31.mul':'mul','aspis_core.field.M31.reduce_u64':'reduce64','aspis_core.field.M31.reduce_u62':'reduce62','aspis_core.field.M31.double':'double',
  'Array.index_usize':'index','Array.update':'update','Array.index_mut_usize':'borrow','lift':'ok','ok':'ok'}
+mapping['host_terminal_field.qm31_pack_base4_loop']='host_pack_loop_total'
+mapping['reference_field.qm31_pack_base4_loop']='ref_pack_loop_total'
 records=[]
 def extract(mod):
  text=(L/(mod+'.lean')).read_text();blocks=re.split(r'(?=^def )',text,flags=re.M)[1:];out=[]
@@ -39,14 +41,20 @@ def emit(mod,source_mod,names,imports):
    ns=binder[1:-1].split(':',1)[0].split();args += ['('+n+':='+n+')' if binder[0]=='{' else n for n in ns]
   theorem='total_'+name.replace('.','_')
   mapping[name]=theorem
+  ispack=name in ['host_terminal_field.qm31_pack_base4','reference_field.qm31_pack_base4']
+  if ispack:
+   binders.append('(hlen : (Slice.len values).val ≤ 4)')
+   body=body.replace('  massert (i <= 4#usize)\n','')
   assert not re.search(r'\b(if|match|loop|massert)\b',body),(name,'non-straightline')
   body='  '+body.lstrip()
   lets=list(re.finditer(r'^  let (.*?)\s*(←|:=)\s*',body,re.M))
   proof=['  '+('delta' if name=='reference_poseidon.global_sums227' else 'unfold')+' '+name]
+  if ispack:proof += ['  have hb : Slice.len values ≤ 4#usize := by scalar_tac','  simp only [massert,hb,↓reduceIte,bind_tc_ok]']
   def rule(expr):
    call=expr.split()[0];assert call in mapping,(name,call,expr)
    target=mapping[call]
    if target in ['index','update','borrow']:return 'apply '+target+' <;> scalar_tac'
+   if target in ['host_pack_loop_total','ref_pack_loop_total']:return 'apply '+target+' <;> scalar_tac'
    if target=='ok':return 'exact ok _'
    return 'apply '+target
   for j,m in enumerate(lets):
@@ -82,5 +90,7 @@ emit('PV_B3P_AccumulateSuccess227','PV_B3P_P227_00',['reference_field.accumulate
 emit('PV_B3P_DotSuccess227','PV_B3P_P227_01',['reference_field.qm31_sum_products3_prepared','reference_field.qm31_m31_dot'],['PV_B3P_P227_01','PV_B3P_RefFieldSuccess227','PV_B3P_AccumulateSuccess227'])
 emit('PV_B3P_PoseidonBaseSuccess227','PV_B3P_P227_02',[
  'reference_poseidon.pow5','reference_poseidon.extension_limbs','reference_poseidon.extension_from_raw_limbs','reference_poseidon.add_global227','reference_poseidon.global_sums227'],['PV_B3P_P227_02'])
+emit('PV_B3P_HostPackSuccess227','PV_B3P_E227_10',['host_terminal_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
+emit('PV_B3P_RefPackSuccess227','PV_B3P_E227_19',['reference_field.qm31_pack_base4'],['PV_B3P_PackLoopSuccess227'])
 if '--check'not in sys.argv:(D/'resume6/success-generator.json').write_text(json.dumps(records,indent=2)+'\n')
 print(json.dumps(dict(theorems=len(records),check='--check'in sys.argv)))
