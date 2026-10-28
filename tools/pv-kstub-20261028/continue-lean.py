@@ -12,15 +12,20 @@ import json,hashlib,re,os
 D=Path('/home/dombarker/project-offloads/codex-pv-kstub-20261028')
 pins=json.loads(PAYLOAD)
 used=[]
+scanned=[]
 for base in Path('/home/dombarker/project-offloads').glob('codex-pv-*'):
- for x in pins:
-  for relative in [str(x['id']), 'receipts/'+str(x['id']), 'evidence/'+str(x['id'])]:
-   p=base/relative
-   if p.exists():used.append(str(p))
-sent=Path('/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/sent.txt')
-if sent.exists():
- for line in sent.read_text().splitlines():
-  if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',line) for p in pins):used.append(line)
+ scanned.append(str(base))
+ for root,dirs,files in os.walk(base):
+  depth=len(Path(root).relative_to(base).parts)
+  dirs[:]=[d for d in dirs if d not in ['target','node_modules','.git','sources','lean-sources','native','src','lean-objects','objects'] and depth<3]
+  for name in dirs+files:
+   if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',name) for p in pins):used.append(str(Path(root)/name))
+for base in ['aspis-fs-generic-20261006','r1-privacy-build-integration-20261019']:
+ for relative in ['sent.txt','evidence/sent.txt']:
+  sent=Path('/home/dombarker/project-offloads')/base/relative
+  if sent.exists():
+   for line in sent.read_text().splitlines():
+    if any(re.search(r'(?<!\\d)'+str(p['id'])+r'(?!\\d)',line) for p in pins):used.append(str(sent)+':'+line)
 assert not used,used
 checks=[]
 for x in json.loads((D/'external-object-manifest.json').read_text()):
@@ -29,7 +34,7 @@ for x in json.loads((D/'external-object-manifest.json').read_text()):
 for p in pins:
  assert hashlib.sha256(p['source'].encode()).hexdigest()==p['sha256'];(D/(p['module']+'.lean')).write_text(p['source'])
 env=json.loads((D/'env-J.json').read_text());env['LEAN_PATH']=str(D/'lean-objects')+':'+env['LEAN_PATH'];(D/'env-J-continuation.json').write_text(json.dumps(env,indent=2))
-record=dict(ids=[p['id'] for p in pins],other_receipt_conflicts=used,external_objects=checks,private_dependency_sources=[p['module'] for p in pins]+['PV_KStub_CopyMeaning','PV_KStub_WindowFrame'])
+record=dict(receipt_directories_scanned=scanned,ids=[p['id'] for p in pins],other_receipt_conflicts=used,external_objects=checks,private_dependency_sources=[p['module'] for p in pins]+['PV_KStub_CopyMeaning','PV_KStub_WindowFrame'])
 (D/'lean-continuation-preflight.json').write_text(json.dumps(record,indent=2));print(json.dumps(record))
 '''.replace('PAYLOAD',repr(json.dumps(pins)))
 for k in range(11):

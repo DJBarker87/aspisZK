@@ -9,9 +9,13 @@ paths=subprocess.check_output(['git','diff','--name-only','6d4350e42c','HEAD'],c
 check(hashlib.sha256((E/'KMX_copy_stubs.patch').read_bytes()).hexdigest()=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67','exact patch')
 check(all(x.get('original_body_equal',True) for x in json.loads((E/'original-body-bindings.json').read_text())),'historical bodies')
 check(all(x['ok'] for x in json.loads((E/'lean-external-preflight.json').read_text())),'external objects')
-for n in ['44700','44701']:
+lean_receipts=sorted(E.glob('447[0-9][0-9]/receipt.json'))
+check(len(lean_receipts)<=10,'Lean budget')
+for n in [p.parent.name for p in lean_receipts]:
  r=json.loads((E/n/'receipt.json').read_text());check(r['exit']==0,'Lean '+n);check(r['swap']=='0','Lean swap '+n)
- log=(E/n/'output.log').read_text();check('sorryAx' not in log and 'axioms:' in log or 'does not depend on any axioms' in log,'axioms '+n)
+ log=(E/n/'output.log').read_text();check('sorryAx' not in log and ('axioms:' in log or 'does not depend on any axioms' in log),'axioms '+n)
+ for names in re.findall(r'depends on axioms: \[([^\]]*)\]',log):
+  check(set(x.strip() for x in names.replace('\n',' ').split(',') if x.strip()) <= {'propext','Classical.choice','Quot.sound'},'standard axioms '+n)
 receipts=list(E.glob('K[0-9][0-9]/receipt.json'));check(len(receipts)<=30,'Kani budget')
 for f in receipts:
  name=f.parent.name;r=json.loads(f.read_text());target=r['target'];limits=r['limits'];check(limits==dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64),'caps '+name)
@@ -26,5 +30,5 @@ for row in json.loads((E/'table.json').read_text())['rows']:
    check(bool(failures) and all('assertion failed:' in f and '!=' in f for f in failures),'intended negative assertion '+h['harness'])
    check(bool(re.search(r'\*\*\s*1 of \d+ failed',log)),'only intended failure '+h['harness'])
  check(row['status']!='pending','unfinished '+row['row'])
-result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=2,paths=paths)
+result=dict(ok=not errors,errors=errors,kani_runs=len(receipts),lean_attempts=len(lean_receipts),paths=paths)
 (E/'validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));sys.exit(bool(errors))
