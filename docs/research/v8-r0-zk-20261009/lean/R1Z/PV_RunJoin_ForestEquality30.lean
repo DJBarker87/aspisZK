@@ -4,6 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_ForestEquality30
 open Aeneas Aeneas.Std Result
+local instance (p : Prop) : Decidable p := Classical.propDecidable p
 
 theorem dictionary : BuilderForestAdmissionPort.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 =
     AspisBuilderAdmissionSource.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 := rfl
