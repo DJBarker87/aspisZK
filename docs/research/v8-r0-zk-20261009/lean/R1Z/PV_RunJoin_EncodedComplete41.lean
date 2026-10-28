@@ -15,7 +15,8 @@ theorem encode (ops : ExternalFuns) (values : Slice W)
       next.length=32*values.length := by
   obtain ⟨next,hn,hv⟩ := PV_RunJoin_EncodedLoop41.complete ops values values.length
     0#usize (alloc.vec.Vec.with_capacity U8 (Usize.wrapping_mul 32#usize (Slice.len values)))
-    (by rfl) room
+    (by change 0+values.length=values.length;omega)
+    (by change 0+32*values.length≤Usize.max;omega)
   refine ⟨next,hn,?_,?_⟩
   · simpa only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val=0 from rfl] using hv
   · change next.val.length=_
