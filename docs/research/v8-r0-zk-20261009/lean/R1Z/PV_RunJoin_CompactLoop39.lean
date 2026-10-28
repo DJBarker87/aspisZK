@@ -24,9 +24,9 @@ theorem complete (logical : Slice U8) (n : Nat) (at1 : Usize) (out : alloc.vec.V
     rw [ProverRw19LoopBind.loop_bind]
     simp only [PV_RunJoin_CompactStep39.stop logical out at1 (by omega),bind_tc_ok]
   | succ n ih =>
-    have cap := logical.property
+    have cap : logical.length≤Usize.max := logical.property
     have hb : at1.val+32≤logical.length := by omega
-    have plus := PV_RunJoin_CompactStep39.offset at1 32#usize (by change at1.val+32≤Usize.max;omega)
+    have plus : (Usize.wrapping_add at1 32#usize).val=at1.val+32 := PV_RunJoin_CompactStep39.offset at1 32#usize (by change at1.val+32≤Usize.max;omega)
     obtain ⟨mid,hm,hv⟩ := PV_RunJoin_CompactStep39.step logical out at1 hb (by omega)
       (zero at1 aligned hb)
     have hlen : mid.length=out.length+16 := by

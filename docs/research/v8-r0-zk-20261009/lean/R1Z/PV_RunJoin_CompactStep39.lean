@@ -27,8 +27,8 @@ theorem step (logical : Slice U8) (out : alloc.vec.Vec U8) (at1 : Usize)
     ∃ next, host_compact.compact_values_loop0.body logical out at1=
         .ok (.cont (next,Usize.wrapping_add at1 32#usize)) ∧
       next.val=out.val ++ (logical.val.drop at1.val).take 16 := by
-  have cap := logical.property
-  have plus16 := offset at1 16#usize (by change at1.val+16≤Usize.max;omega)
+  have cap : logical.length≤Usize.max := logical.property
+  have plus16 : (Usize.wrapping_add at1 16#usize).val=at1.val+16 := offset at1 16#usize (by change at1.val+16≤Usize.max;omega)
   have hh := PV_RunJoin_CompactHigh39.complete logical at1 16 16#usize rfl (by decide) zero
   obtain ⟨s,next,hs,hn,hval⟩ := PV_RunJoin_ByteRange39.append logical out at1
     (Usize.wrapping_add at1 16#usize) (by rw [plus16];omega)
