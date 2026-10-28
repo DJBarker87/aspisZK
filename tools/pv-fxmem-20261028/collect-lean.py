@@ -23,7 +23,7 @@ def field(label):
  a=re.search(label+r':\s*(.+)',tim);return a[1] if a else None
 j=json.loads((E/f'{n}-submission.json').read_text())
 a=re.findall(r'^exit=(\d+)',log,re.M);assert a
-j.update(target=json.loads((E/f'{n}-command.json').read_text()),exit=int(a[-1]),wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log,re.S),limits=dict(Lean_M=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128),errors=re.findall(r'.*error:.*',log))
+j.update(target=json.loads((E/f'{n}-command.json').read_text()),exit=int(a[-1]),wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),axioms=re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log,re.S),limits=dict(Lean_M=7000,MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=128 if n<=35501 else 64),errors=re.findall(r'.*error:.*',log))
 j['accepted']=j['exit']==0 and 'sorryAx' not in log and len(j['axioms'])==len(re.findall(r'^#print axioms ',(E/f'{n}-source.lean.txt').read_text(),re.M))
 (E/f'{n}.json').write_text(json.dumps(j,indent=2)+'\n')
 print(json.dumps({k:j[k] for k in ['id','exit','wall','peak_rss_kib','swap','accepted']}))

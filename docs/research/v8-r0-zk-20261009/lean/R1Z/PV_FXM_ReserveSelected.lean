@@ -75,8 +75,7 @@ theorem execution {T S F A : Type} (ops : ExternalFuns) (Allocator : Type)
       caller (returned encode (reference step wordMax byteMax (shape T)
         (buffer v (metadata v)) n.val w).returned) v
         (reference step wordMax byteMax (shape T) (buffer v (metadata v)) n.val w).world := by
-  rw [complete,source_reference]
-  rfl
+  simp only [complete,bind_tc_ok,source_reference]
 
 #print axioms other_fields
 #print axioms error_payload
