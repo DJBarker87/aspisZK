@@ -9,8 +9,9 @@ set_option autoImplicit false
 
 def bufferKind (base : ExternalTypes) (ops : @ExternalFuns (Types base))
     (T K : Type) (kind : @block_buffer.BufferKind (Types base) K) :
-    @digest.core_api.BufferKindUser (Types base) T K (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) :=
-  ⟨⟨PV_AL_SplitNativeShape.nativeTrait base ops 6⟩,kind⟩
+    @digest.core_api.BufferKindUser (Types base) T K (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6) := by
+  letI : ExternalTypes := Types base
+  exact ⟨⟨PV_AL_SplitNativeShape.nativeTrait base ops 6⟩,kind⟩
 
 /-- The native size constructor discharges the size guard; the core Default
 operation stays a parameter with its complete Result behavior. -/

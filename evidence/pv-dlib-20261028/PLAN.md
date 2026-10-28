@@ -82,3 +82,8 @@ credited from the failed attempt. 42224 is the next fresh focused ID.
 BufferKindUser captured `base` rather than `Types base`. Make that instance
 argument explicit in the callback and native constructor statements. This is
 a typed-carrier correction, not a source-law premise or a weakened success guard.
+
+42225 was a resource refusal at 01:11:07.873518Z; next eligible admission
+01:14:07.873518Z. 42226 launched after that time and caught an implicit
+projection instance in the draft size guard. Replace dot projection on
+BufferKindUser with an explicitly carrier-indexed projection helper.
