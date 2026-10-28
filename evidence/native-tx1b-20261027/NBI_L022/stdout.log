@@ -1,0 +1,24 @@
+NBI_sources/NBI_CountPort.lean:25:23: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (if _a then i + 2 else i + 1) = if pairAt key n i then i + 2 else i + 1
+Error: Application type mismatch: The argument
+  instDecidableAnd
+has type
+  Decidable (i + 1 < n ∧ key (i + 1) / 2 = key i / 2)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite ℕ _a instDecidableAnd
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+key : ℕ → ℕ
+n i : ℕ
+active : i < n
+ordered : Strict key i n
+pair : i + 1 < n ∧ key (i + 1) / 2 = key i / 2 ↔ pairAt key n i
+result :
+  NBI_CountScan.scan key (key i / 2) n (n - i) i = if i + 1 < n ∧ key (i + 1) / 2 = key i / 2 then i + 2 else i + 1
+⊢ (if i + 1 < n ∧ key (i + 1) / 2 = key i / 2 then i + 2 else i + 1) = if pairAt key n i then i + 2 else i + 1
+'AspisR1.NBI_CountPort.scan_row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

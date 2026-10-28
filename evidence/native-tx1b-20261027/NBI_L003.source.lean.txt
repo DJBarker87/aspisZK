@@ -1,0 +1,48 @@
+import NBI_Frame
+import MultiproofConeNodeWindow
+import MultiproofConePhysicalTransport
+
+set_option autoImplicit false
+namespace AspisR1.NBI_Window
+open Aeneas Aeneas.Std Result MultiproofConeRef
+open MultiproofConePhysicalProgram MultiproofConePhysicalTransport
+open AspisV8R19.MemoizedProgramLaw AspisV8R19.OracleProgramOps
+
+/-- Compose the physical supplied-sibling read with the single native write
+frame. The address, reply, complete scratch and rejected short-window domain
+are kept separate from the runtime digest-value trust item. -/
+theorem supplied_observation (H : AspisV8R19.DuplexFrames.Bytes →
+      AspisV8R19.SourceDuplexStep.State)
+    (physical : Slice U8) (s : reference.Scratch) (value : Digest)
+    (ni : Usize) (index : U32) (w : Usize) (wb : w.val < 16)
+    (enough : s.«at».val + 32 ≤ physical.val.length) (left : Bool) :
+    ∃ cursor chunk view parent nw,
+      s.«at» + 32#usize = ok cursor ∧ cursor.val = s.«at».val + 32 ∧
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        physical {start := s.«at», «end» := cursor} = ok view ∧
+      reference.read32 view = ok chunk ∧
+      chunk.val = (physical.val.drop s.«at».val).take 32 ∧
+      parent.val = index.val / 2 ∧ nw.val = w.val + 1 ∧
+      let l := if left then value else chunk
+      let r := if left then chunk else value
+      eval H (transport (writer s l r ni cursor index w)) =
+        ([(AspisV8R19.SqueezeOracleBridge.flatten
+             (MultiproofConePhysicalDigest.parts l r),
+           H (AspisV8R19.SqueezeOracleBridge.flatten
+             (MultiproofConePhysicalDigest.parts l r)))],
+         ok (.Next {s with idx := s.idx.set w parent,
+           val := s.val.set w (AspisV8R19.SqueezeOracleBridge.encodeState
+             (H (AspisV8R19.SqueezeOracleBridge.flatten
+               (MultiproofConePhysicalDigest.parts l r)))),«at» := cursor} ni nw)) := by
+  obtain ⟨cursor,chunk,view,add,cv,range,read,bytes⟩ :=
+    MultiproofConeNodeWindow.physical_read physical s.«at» enough
+  let l := if left then value else chunk
+  let r := if left then chunk else value
+  let digest := AspisV8R19.SqueezeOracleBridge.encodeState
+    (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))
+  obtain ⟨parent,nw,pv,nwv,finish⟩ := NBI_Frame.finish_exact s digest ni cursor index w wb
+  refine ⟨cursor,chunk,view,parent,nw,add,cv,range,read,bytes,pv,nwv,?_⟩
+  rw [writer_observation,finish]
+
+#print axioms supplied_observation
+end AspisR1.NBI_Window

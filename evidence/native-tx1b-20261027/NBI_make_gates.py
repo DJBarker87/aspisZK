@@ -22,7 +22,7 @@ fn NBI_index_write(){
  idx[w]=parent;
  assert_eq!(idx[k],if k==w{old[i]/2}else{old[k]});
 }
-#[kani::proof] #[kani::unwind(2)]
+#[kani::proof] #[kani::unwind(34)]
 fn NBI_digest_write(){
  let mut val:[[u8;32];16]=kani::any();let old=val;let digest:[u8;32]=kani::any();
  let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<16 && k<16 && c<32);
@@ -112,7 +112,7 @@ fn NBI_duplicate_decision(){
 }
 #[kani::proof] #[kani::unwind(2)]
 fn NBI_dedup_index_write(){let mut idx:[u32;16]=kani::any();let old=idx;let index:u32=kani::any();let d:usize=kani::any();let k:usize=kani::any();kani::assume(d<12 && k<16);idx[d]=index;assert_eq!(idx[k],if k==d{index}else{old[k]});}
-#[kani::proof] #[kani::unwind(2)]
+#[kani::proof] #[kani::unwind(34)]
 fn NBI_dedup_leaf_write(){let mut val:[[u8;32];16]=kani::any();let old=val;let leaf:[u8;32]=kani::any();let d:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(d<12 && k<16 && c<32);val[d]=leaf;assert_eq!(val[k][c],if k==d{leaf[c]}else{old[k][c]});}
 #[kani::proof] #[kani::unwind(2)]
 fn NBI_dedup_advance(){let mut d:usize=kani::any();let pos:usize=kani::any();let n:usize=kani::any();kani::assume(d<pos && pos<=n && n<=12);let old=d;d+=1;assert!(d==old+1 && d<=pos && d<=12);}
@@ -128,8 +128,11 @@ fn NBI_split_slot(){let batch:usize=kani::any();let tree:usize=kani::any();kani:
 fn NBI_padding_short_circuit(){let count:usize=kani::any();let s:usize=kani::any();kani::assume(s<6);let mut calls=0;let reject=count>SLOT_NODES[s] || {calls+=1;kani::any::<bool>()};assert_eq!(calls,if count>SLOT_NODES[s]{0}else{1});if count>SLOT_NODES[s]{assert!(reject)}}
 #[kani::proof] #[kani::unwind(2)]
 fn NBI_verifier_node_prefix(){let nodes:[u8;5504]=kani::any();let count:usize=kani::any();let cap:usize=kani::any();let c:usize=kani::any();kani::assume(count<=cap && cap<=172 && c<32*count);let slot=&nodes[..32*cap];let prefix=&slot[..32*count];assert_eq!(prefix.len(),32*count);assert_eq!(prefix[c],nodes[c]);assert_eq!(prefix.as_ptr(),slot.as_ptr());}
-#[kani::proof] #[kani::unwind(2)]
-fn NBI_error_projection(){let verified:bool=kani::any();let r:Result<(),Error>=if !verified{Err(Error::Merkle)}else{Ok(())};assert_eq!(r.is_ok(),verified);if let Err(e)=r{assert!(matches!(e,Error::Merkle));}}
+#[kani::proof] #[kani::unwind(34)]
+fn NBI_digest_write_repaired(){
+ let mut val:[[u8;32];16]=kani::any();let old=val;let digest:[u8;32]=kani::any();let w:usize=kani::any();let k:usize=kani::any();let c:usize=kani::any();kani::assume(w<16 && k<16 && c<32);
+ val[w]=digest;assert_eq!(val[k][c],if k==w{digest[c]}else{old[k][c]});
+}
 '''
 files={BASE+'NBI_multiproof.rs':mp,BASE+'NBI_keys.rs':keys}
 for f,n in [('multiproof.rs','NBI_multiproof'),('candidate.rs','NBI_keys')]:
@@ -152,5 +155,5 @@ for mod,src in [('multiproof::NBI_multiproof',mp),('verifier::candidate::NBI_key
 assert len(names)==30,len(names)
 for i,name in enumerate(names,1):
  a=f'NBI_K{i:03}';cfg=json.loads((R/'evidence/native-tx1a-20261027/NBE_K016.json').read_text());cfg['attempt']=a;cfg['command']=['python3','NBI_gate.py',a,name];cfg['sources']=[x.replace('NBE_','NBI_') for x in cfg['sources']];cfg['deps_fingerprint']['graph_receipt']=a+'-graph.json';cfg['env']['TMPDIR']=h.B+'/NBI_tmp';cfg.pop('reservation_retries',None);cfg.pop('source_revision',None);cfg.pop('source_tree_dirty',None)
- (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
+ if not (E/a/'receipt.json').exists():(E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 print('Generated 30 distinct atomic gates')

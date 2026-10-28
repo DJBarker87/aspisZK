@@ -1,0 +1,55 @@
+{"attempt": "NBI_L006", "exit_status": 1, "wall_seconds": 3.2352497940300964, "peak_rss_kib": "4400644", "swaps": "0", "print_axioms": ["'AspisR1.NBI_Window.supplied_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBI_sources/NBI_Window.lean:44:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  eval ?H (transport (writer ?s ?left ?right ?ni ?cursor ?index ?w))
+in the target expression
+  let l := if left = true then value else chunk;
+  let r := if left = true then chunk else value;
+  eval H (transport (writer s l r ni cursor index w)) =
+    ([(AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r),
+          H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))],
+      ok
+        (reference.Row.Next
+          { idx := s.idx.set w parent,
+            val :=
+              s.val.set w
+                (AspisV8R19.SqueezeOra
+...
+rue then chunk else value
+digest : Std.Array U8 32#usize :=
+  AspisV8R19.SqueezeOracleBridge.encodeState
+    (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))
+parent : U32
+nw : Usize
+pv : ↑parent = ↑index / 2
+nwv : ↑nw = ↑w + 1
+finish :
+  MultiproofConePhysicalProgram.finish s digest ni cursor index w =
+    ok (reference.Row.Next { idx := s.idx.set w parent, val := s.val.set w digest, n := s.n, «at» := cursor } ni nw)
+⊢ let l := if left = true then value else chunk;
+  let r := if left = true then chunk else value;
+  eval H (transport (writer s l r ni cursor index w)) =
+    ([(AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r),
+          H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))],
+      ok
+        (reference.Row.Next
+          { idx := s.idx.set w parent,
+            val :=
+              s.val.set w
+                (AspisV8R19.SqueezeOracleBridge.encodeState
+                  (H (AspisV8R19.SqueezeOracleBridge.flatten (MultiproofConePhysicalDigest.parts l r)))),
+            n := s.n, «at» := cursor }
+          ni nw))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (16 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NBI_Window.supplied_observation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0327a91a7f5d4e9c891751e39f157511.scope; invocation ID: e8b73c56409548fc80f7475dbba427c3

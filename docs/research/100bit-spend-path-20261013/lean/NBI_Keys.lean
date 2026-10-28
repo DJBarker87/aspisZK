@@ -1,0 +1,93 @@
+import NBE_KeyLoop
+import Port4B_KeyInstall
+import Port4B_Opening
+
+set_option autoImplicit false
+namespace AspisR1.NBI_Keys
+open Aeneas Aeneas.Std Result
+open OraclePortSelectedDraft MultiproofConeSortOrder
+
+/-- No modulo weakening: every selected canonical raw word is identical to
+its installed finite query. This domain must be derived by the producer. -/
+theorem canonical_query (raw : Array U32 22#usize) (j : Nat) (jb : j < 22)
+    (canonical : raw.val[j]!.val < 262144) :
+    (Port4B_KeyInstall.queries raw ⟨j,jb⟩).val = raw.val[j]!.val := by
+  have len : raw.val.length = 22 := raw.property
+  have h : j < raw.val.length := by omega
+  simp only [Port4B_KeyInstall.queries,List.getElem?_map,List.getElem?_eq_getElem h,
+    Option.map_some,Option.getD_some]
+  simpa only [List.getElem!_eq_getElem?_getD,List.getElem?_eq_getElem h,Option.getD_some]
+    using Nat.mod_eq_of_lt canonical
+
+/-- The natural word checked by NBE_key is exactly the installed packed U64
+word for both transaction splits, before any sorting is considered. -/
+theorem packed_word (raw : Array U32 22#usize) (batch kind j : Nat)
+    (jb : j < (if batch = 0 then 10 else 12))
+    (canonical : raw.val[(if batch = 0 then 0 else 10)+j]!.val < 262144) :
+    (packed (Port4B_KeyInstall.queries raw) batch kind
+      ((if batch = 0 then 0 else 10)+j)).val =
+      256 * (if kind = 2 then raw.val[(if batch = 0 then 0 else 10)+j]!.val / 4
+        else raw.val[(if batch = 0 then 0 else 10)+j]!.val) + j := by
+  have pos : (if batch = 0 then 0 else 10)+j < 22 := by by_cases h : batch = 0 <;> simp_all <;> omega
+  have query := canonical_query raw ((if batch = 0 then 0 else 10)+j) pos canonical
+  simp only [packed,index,Nat.mod_eq_of_lt pos,query]
+  simp [Nat.mod_eq_of_lt pos]
+
+/-- List form of the native zero-initialized suffix. -/
+theorem padded_get {α : Type} [Inhabited α] (front : List α) (zero : α)
+    (bound : front.length ≤ 16) (k : Nat) (kb : k < 16) :
+    (front ++ List.replicate (16-front.length) zero)[k]! =
+      if k < front.length then front[k]! else zero := by
+  by_cases active : k < front.length
+  · simp only [if_pos active,List.getElem!_eq_getElem?_getD,
+      List.getElem?_append_left active]
+  · rw [if_neg active,List.getElem!_eq_getElem?_getD,
+      List.getElem?_append_right (by omega)]
+    simp only [List.getElem?_replicate,if_pos (by omega : k-front.length < 16-front.length),Option.getD_some]
+
+/-- Exact forward producer, including every untouched zero suffix coordinate.
+The word is the native step's packed word, not an assumed final array. -/
+theorem key_array_values (raw : Array U32 22#usize) (batch kind k : Nat) (kb : k < 16) :
+    NBE_KeyLoop.fill
+      (fun j => packed (Port4B_KeyInstall.queries raw) batch kind
+        ((if batch = 0 then 0 else 10)+j))
+      (if batch = 0 then 10 else 12) 0 (fun _ => 0#u64) k =
+      (Port4B_KeyInstall.keyArray raw batch kind).val[k]! := by
+  rw [NBE_KeyLoop.fill_values]
+  change _ = ((Port4B_KeyInstall.prefixKeys raw batch kind) ++
+    List.replicate (16-(Port4B_KeyInstall.prefixKeys raw batch kind).length) 0#u64)[k]!
+  rw [padded_get _ _ (Port4B_KeyInstall.prefix_bound raw batch kind) k kb]
+  by_cases zero : batch = 0
+  · subst batch
+    by_cases active : k < 10 <;>
+      simp [Port4B_KeyInstall.prefixKeys,batchPositions,List.getElem!_eq_getElem?_getD,active]
+  · by_cases active : k < 12 <;>
+      simp [Port4B_KeyInstall.prefixKeys,batchPositions,zero,List.getElem!_eq_getElem?_getD,Nat.add_comm,active]
+
+/-- Array constructed by the forward native single-write recurrence. -/
+def producer (raw : Array U32 22#usize) (batch kind : Nat) : Array U64 16#usize :=
+  ⟨List.ofFn (fun k : Fin 16 => NBE_KeyLoop.fill
+    (fun j => packed (Port4B_KeyInstall.queries raw) batch kind
+      ((if batch = 0 then 0 else 10)+j))
+    (if batch = 0 then 10 else 12) 0 (fun _ => 0#u64) k.val),by simp⟩
+
+/-- Forward step induction yields the complete installed array, with no final
+array equation or final-coordinate observations supplied as premises. -/
+theorem producer_eq (raw : Array U32 22#usize) (batch kind : Nat) :
+    producer raw batch kind = Port4B_KeyInstall.keyArray raw batch kind := by
+  apply Subtype.ext
+  apply List.ext_getElem
+  · exact (producer raw batch kind).property.trans
+      (Port4B_KeyInstall.keyArray raw batch kind).property.symm
+  · intro k ha hb
+    have kb : k < 16 := by simpa only [producer,List.length_ofFn] using ha
+    have cells := key_array_values raw batch kind k kb
+    simpa only [producer,List.getElem_ofFn,List.getElem!_eq_getElem?_getD,
+      List.getElem?_eq_getElem hb,Option.getD_some] using cells
+
+#print axioms canonical_query
+#print axioms packed_word
+#print axioms padded_get
+#print axioms key_array_values
+#print axioms producer_eq
+end AspisR1.NBI_Keys
