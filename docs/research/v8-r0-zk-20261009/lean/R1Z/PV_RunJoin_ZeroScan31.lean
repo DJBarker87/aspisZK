@@ -14,7 +14,7 @@ theorem word_zero (m : U32)
     (h : core.cmp.PartialEq.ne.trait_default aspis_core.field.M31.Insts.CoreCmpPartialEqM31 m
       aspis_core.field.M31.ZERO = ok false) : m = 0#u32 := by
   rw [PV_RunJoin_ForestEquality30.dictionary,PV_RunJoin_RuntimePrimitives30.word_ne] at h
-  simpa only [AspisBuilderAdmissionSource.aspis_core.field.M31.ZERO,
+  simpa only [aspis_core.field.M31.ZERO,
     Result.ok.injEq,decide_eq_false_iff_not,not_not] using h
 #print axioms word_zero
 
@@ -31,7 +31,7 @@ theorem scalar (c x : U32) (state : U32)
   obtain ⟨z,hz,_,hv⟩ := PV_Src_PortField.multiply (K := K) c x
   have hez : z=m := Result.ok.inj (hz.symm.trans hm)
   rw [hez,he] at hv
-  exact ⟨rfl,hv.symm.trans (by rfl)⟩
+  exact ⟨rfl,hv.symm.trans (by simp only [liftU,UScalar.ofNatCore_val_eq,Nat.cast_zero])⟩
 #print axioms scalar
 
 theorem list (xs : List U32) (c : U32) (n : Nat)
@@ -73,7 +73,7 @@ theorem array (d : Array U32 8#usize) (c : U32)
   intro j
   have hlt : j.val < d.val.length := by rw [d.property]; simpa using j.isLt
   change liftU c * liftU d.val[j.val]! = 0
-  rw [List.getElem!_eq_getElem hlt]
+  rw [getElem!_pos d.val j.val hlt]
   exact hall _ (List.getElem_mem hlt)
 #print axioms array
 end R1Z.PV_RunJoin_ZeroScan31
