@@ -1,0 +1,46 @@
+import JHn_TX1
+import JHm_JointSkeleton
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHn_Joint
+open Aeneas Aeneas.Std Result
+/-- The retained exact TX1 goal, now available for proof. -/
+def Accepted1SavedStatement : Prop := JHm_JointSkeleton.Accepted1SavedStatement
+/-- Same corrected world, SDK, TX2 input and slot, and exact TX2 accepted2.
+The three byte-digest equations are no longer hypotheses. -/
+def JointStatement : Prop :=
+  ∀ [trees : JHe_SHARealization]
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops)
+    (data2 : Slice U8) (slot : S2W_ExtractionBoundary.Slot)
+    (accepted2 : S2W_D189Wrappers.second (JHe_Natives.second base stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier data2 slot ()=
+        ok (.Ok (JHg_World.e2.heap,()))),
+    ∃ saved : alloc.vec.Vec U8,
+      S2W_D189Wrappers.first (JHe_Natives.first base stage)
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHk_WorldFirst.post saved,())) ∧
+      saved.val=JFx_NativeBytes.checkpoint.val ∧ saved.val.length=1768 ∧
+      S2W_D189Wrappers.second (JHe_Natives.second base stage)
+        CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier data2 slot ()=
+          ok (.Ok (JHg_World.e2.heap,()))
+
+theorem accepted : Accepted1SavedStatement := by
+  intro trees base stage
+  exact JHn_TX1.accepted1_saved base stage
+#print axioms accepted
+
+theorem source : JointStatement := by
+  intro trees base stage data2 slot accepted2
+  obtain ⟨saved,first,identity,length⟩ := JHn_TX1.corrected base stage
+  exact ⟨saved,first,identity,length,accepted2⟩
+#print axioms source
+
+/-- This also inhabits the predecessor's exact two-class skeleton. -/
+theorem retained : JHm_JointSkeleton.JointStatement := by
+  intro trees bytes base stage data2 slot accepted2
+  exact source base stage data2 slot accepted2
+#print axioms retained
+#print JointStatement
+end AspisR1.JHn_Joint
+end

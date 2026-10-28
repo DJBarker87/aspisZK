@@ -27,3 +27,24 @@ JHe_SHARealization if it fits. No retry of026 or033 unchanged is authorized.
 
 All jobs retain -M7000, MemoryHigh6G, MemoryMax8G, MemorySwapMax0, TasksMax64.
 The module-system route and a larger cap remain unavailable.
+
+The second replacement PASSES: 084–089 separate JHn_ByteSHA (exactly three
+concrete equations, without a tree class), derive actual body/saved/returned
+identities under it, prove that class unconditionally from the separately
+checked equations, then compile JHn_ExactReturned.source with NO SHA premise.
+Attempt089: exit0,5.386547416s,6762880KiB,swap0,standard root axioms.
+
+Attempt090 (`JHn_TX1`) combines the unconditional byte implication with the
+restored conditional candidate and SDK wrapper. It fails during import at
+interpreter: exit134,7.239616313s,7272464KiB,swap0,no axioms output. There is
+NO checked JHn_TX1.accepted1_saved. The failed source is a draft.
+
+Replacement091: JHn_TX1Frontier retains acceptance and the same returned
+candidate/child witness under only JHe_SHARealization. Its assembly lemmas
+explicitly take ByteIdentity, whose exact formula is separately proved by
+JHn_ExactReturned.source. This is an assembly INTERFACE, not a claim that the
+remaining premise was discharged. It passes at7146216KiB. Attempt092 corrects
+the witness's prose to say length1768 rather than claiming byte identity and
+rechecks that new source. Final checked application of the two environments
+is left to the owner's separately approved aggregation step. No cap increase,
+module-system workaround, unchanged failed rerun or assumption added to SHA.
