@@ -24,4 +24,11 @@ j=dict(evidence_class='structural (K-1 substitute)',path=p,sha256=hashlib.sha256
  value='PV_FXM_ZeroSelected.elements/array/scalar; complete Result projected through the exact primitive byte dictionaries. Generic trait effects are not inferred from the name DefaultIsZeroes.',
  drop_caller='Zeroizing<[u8;N]>::drop delegates once to array zeroize; subsequent field glue for the byte array has no user destructor or allocator effect. PV_FXM_ZeroDrop composes this consumed callback with caller state.',
  d188='No Aeneas zeroize iterator emission is credited. Owned index reference keeps each element result; structural gate binds the complete native iterator body. Existing extraction stand-ins are not imported.')
+core=(E/'CORE-DEFAULT-SOURCE.rs.txt').read_text()
+macro=body(core,'macro_rules! default_impl')
+want='{($t:ty, $v:expr, $doc:tt) => {#[stable(feature = "rust1", since = "1.0.0")] #[rustc_const_unstable(feature = "const_default", issue = "143894")] const impl Default for $t {#[inline(always)] #[doc = $doc] fn default() -> $t {$v}}};}'
+assert tokens(macro)==tokens(want),macro
+invocation=body(core,'default_impl! { u8,')
+assert tokens(invocation)==tokens('{u8,0,"Returns the default value of `0`"}'),invocation
+j['primitive_default']=dict(source=json.loads((E/'CORE-DEFAULT-SOURCE.json').read_text()),macro=macro,u8_invocation=invocation,complete_tokens_match=True,conclusion='u8 Default returns literal 0 with no world read/write or error path')
 (E/'STRUCTURAL-ZEROIZE-GATE.json').write_text(json.dumps(j,indent=2)+'\n');print('PASS complete array/iterator/blanket/volatile/fence bodies')

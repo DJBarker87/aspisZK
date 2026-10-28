@@ -17,3 +17,12 @@ Result Unit with no world argument. Test whether a valid destructor can change
 its Result from the same input according to an external flag. Such a checked
 counterexample to a universal full-Result projection would trigger the user's
 stop condition; do not replace it silently by a Drop-free restriction.
+
+## D362 resume outcome
+
+The generic finding above is retained. The authorized finite-type V170 repair
+and explicit world-indexed reserve/zeroize source packages were completed,
+then combined installation 35597, axioms audit 35598 and focused closure 35599
+passed. See REPORT.md, AUDIT.md, RESUME-ROW-STATEMENTS.json and TALLY.json for
+current scopes, native finite validation, retained P obligations and budget.
+No deployment/privacy target claim or generic row flag is changed.

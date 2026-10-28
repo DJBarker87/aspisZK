@@ -45,5 +45,15 @@
   "semantics": "PV_FXM_ZeroWorld.byte/native/indexed; exact byte overwrite, write/fence counts, outside-target memory preservation, arbitrary frame and allocator/drop counters preserved, caller composition.",
   "value": "PV_FXM_ZeroSelected.elements/array/scalar; complete Result projected through the exact primitive byte dictionaries. Generic trait effects are not inferred from the name DefaultIsZeroes.",
   "drop_caller": "Zeroizing<[u8;N]>::drop delegates once to array zeroize; subsequent field glue for the byte array has no user destructor or allocator effect. PV_FXM_ZeroDrop composes this consumed callback with caller state.",
-  "d188": "No Aeneas zeroize iterator emission is credited. Owned index reference keeps each element result; structural gate binds the complete native iterator body. Existing extraction stand-ins are not imported."
+  "d188": "No Aeneas zeroize iterator emission is credited. Owned index reference keeps each element result; structural gate binds the complete native iterator body. Existing extraction stand-ins are not imported.",
+  "primitive_default": {
+    "source": {
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/default.rs",
+      "sha256": "6280e537b8ef5d1934b44a77cb1115420d01d8adcd19f4f1bc72a0e968c9b90d"
+    },
+    "macro": "{\n    ($t:ty, $v:expr, $doc:tt) => {\n        #[stable(feature = \"rust1\", since = \"1.0.0\")]\n        #[rustc_const_unstable(feature = \"const_default\", issue = \"143894\")]\n        const impl Default for $t {\n            #[inline(always)]\n            #[doc = $doc]\n            fn default() -> $t {\n                $v\n            }\n        }\n    };\n}",
+    "u8_invocation": "{ u8, 0, \"Returns the default value of `0`\" }",
+    "complete_tokens_match": true,
+    "conclusion": "u8 Default returns literal 0 with no world read/write or error path"
+  }
 }

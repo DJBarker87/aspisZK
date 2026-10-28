@@ -63,3 +63,9 @@ reference. It is not an unbounded libc implementation, compiler or deployed
 binary proof. Primitive realization in the deployed artifact, failure-event
 witness independence, real RunJoin and L1/L2/L3 obligations remain P, never T.
 No observer/simulator weakening or new trust field is introduced.
+
+Focused accepted targets: ReserveWorld 35515, ReserveFacts 35520,
+ReserveLayout 35522, ReserveSelected 35524, ReservePrimitive 35525,
+ReserveCaller 35526, Physical 35527. Full header/state composition is the
+ReserveCaller theorem; the earlier value/world-only projection is not used
+to claim capacity has been passed to the caller.

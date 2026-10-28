@@ -1,3 +1,5 @@
+> Historical finding retained from 7e46a8b2c9. The D362 resume does not retract this generic obstruction or call it a privacy counterexample. Current finite-type/world-indexed source packages and their boundaries are recorded in REPORT.md and AUDIT.md.
+
 # V170: generic fixed-callback projection obstruction
 
 Target not yet established. No recount row or endpoint premise is discharged.

@@ -61,3 +61,8 @@ the owned array. The source gate now also checks the complete Zeroizing Drop
 body. zeroize-drop-06 passes 1,024 paired actual destructor cases using live
 MaybeUninit storage; no destroyed owning value is read and no double drop occurs.
 This remains finite validation, with the same L3 boundary.
+
+The final source gate also token-checks the pinned core::default macro and
+u8 invocation: Default for u8 returns literal zero, with no native world
+read/write or error path. ZEROIZE-INSTANTIATIONS.json exhausts the emitted
+blanket instances and literal array lengths.

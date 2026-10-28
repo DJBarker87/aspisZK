@@ -1,77 +1,96 @@
-# Memory callback finding
+# Memory callback source packages — D362 resume
 
-**Target not yet established. No row closed and no deployed endpoint premise
-removed.** Branch `codex/pv-fxmem-20261028`, base `10b8afe764`, worktree unchanged.
+**Target not yet established. No deployed endpoint premise removed.**
 
-Stopped at the checked V170 obstruction detailed in [FINDING.md](FINDING.md).
-A fixed original `op4 : {T : Type} → T → Result Unit` cannot reproduce normal
-return and panic for the same input in two different accessible worlds. The
-native witness uses an inhabited zero-sized type with a destructor that reads
-an external flag. This refutes the explicitly stated **fixed, world-independent,
-generic complete-Result projection**, not Rust drop or every possible world-indexed
-formulation of the row. It does not allege this destructor occurs in a shipped
-caller. No Drop-free restriction has been substituted for the generic statement.
+Worktree `/Users/dominic/ZK/.worktrees/pv-fxmem`, branch
+`codex/pv-fxmem-20261028`, candidate base `10b8afe764`, resumed from `7e46a8b2c9`.
+All four requested source-law packages are complete at the explicitly documented
+scopes below. They are **structural (K-1 substitute)** packages, with native
+checks labelled finite validation. Lead recount/acceptance remains pending;
+no generic or deployed ledger row is silently marked discharged.
 
-The next deliverable is an explicit effect-aware/world-indexed callback
-interpretation and its consumed execution composition, or proofs about exactly
-the consumed types/destructors that justify a narrower installation. Neither is
-silently assumed here. The logical proof explicitly constructs a state-indexed
-interpreter as a non-vacuous repair example; it is not a native refinement.
+| Row | Exact completed package | Detail |
+|---|---|---|
+| V170 / op4 | Census: one call, `host_tree::multiproof_levels`, Rust `host_tree.rs:29`, emission `ProverRwFullFuns:16098`, T=`Vec<u32,Global>`. Finite-type installation, complete consumed-buffer/deallocation world law and caller composition. Other types and fields retained. | [V170](V170-RESUME.md), [census](DROP-INSTANTIATIONS.json), [gate](STRUCTURAL-DROP-GATE.json) |
+| V183 / op32 | Current-world/metadata indexed original-carrier installation; complete inner Ok/Err and source error layout; values/length/capacity/pointer and allocator effects; rejection paths; caller receives the post-buffer header and world. | [V183](V183-RESUME.md), [gate](STRUCTURAL-RESERVE-GATE.json) |
+| V221 / op122 | Generic element Result sequencing retains all writes in the value projection. At the actual emitted byte dictionaries: symbolic array overwrite, exact volatile-write/fence history, frame and caller laws, including consuming Zeroizing Drop. | [V221/V222](V221-V222-RESUME.md), [instances](ZEROIZE-INSTANTIATIONS.json), [gate](STRUCTURAL-ZEROIZE-GATE.json) |
+| V222 / op123 | Default Result projection plus pinned literal-zero u8 Default binding; volatile overwrite, compiler fence, exact state effects and caller composition for the actual primitive dictionary. | [V221/V222](V221-V222-RESUME.md), [gate](STRUCTURAL-ZEROIZE-GATE.json) |
 
-| Row | Result |
-|---|---|
-| V170 / op4 drop | OPEN; checked counterexample to the fixed generic projection |
-| V183 / op32 try_reserve_exact | OPEN; no allocator/error/capacity installation supplied |
-| V221 / op122 Array Zeroize | OPEN; no volatile-write/restoration/fence installation supplied |
-| V222 / op123 blanket zeroize | OPEN; no default/volatile-write/fence installation supplied |
+## Before and after
 
-Proved: the five theorems in
-`docs/research/v8-r0-zk-20261009/lean/R1Z/PV_FXM_DropCounterexample.lean`.
-They are Init-only logical facts; they do not assert that an owned source model
-is an extracted native destructor. The generic contradiction applies to every
-result representation with two distinct outcomes, including a complete Result
-classification which distinguishes normal return from panic/nonreturn.
+The accepted [generic finding](FINDING.md) is retained: a fixed world-free
+callback cannot equal arbitrary native Drop across worlds. It is not a privacy
+counterexample. V170 now has the explicitly narrower finite consumed-type law
+requested by D362; the original generic assertion is not restored.
 
-Measured: **32 paired finite-validation cases** on pinned nightly-2026-06-01,
-optimized with `-O`, using real `core::mem::drop` and an owned wrapper. All pass;
-both flag values enter Drop exactly once. Unwind policy is explicit. No Kani,
-compiler non-elision, allocator trace or deployed-path equivalence is claimed.
-`PREFLIGHT.json` records the complete pinned stdlib drop source shape/hash and
-all 601 Init object hashes checked against the h4 external manifest before any
-Lean compile. The scanned ID range had no existing receipt/submission hits.
+V183 is an explicitly world-indexed family, not one fixed dictionary for all
+allocator worlds. V221/V222 distinguish generic value callback laws from the
+physical byte law at the actual emitted primitive dictionaries. Arbitrary
+custom trait effects are not inferred pure from a trait name. The exact
+quantifiers, carrier identities and changed scope are in
+[RESUME-ROW-STATEMENTS.json](RESUME-ROW-STATEMENTS.json).
 
-| Run | Target | Exit | Wall | Peak RSS KiB | Swap | Source revision | Axioms |
-|---|---|---:|---:|---:|---:|---|---|
-| native01 | driver, rustc absent from PATH | 127 | 0.00s | 1760 | 0 | 7b5b43fcd7 | N/A; compiler never started |
-| native02 | optimized compile + 32 finite pairs | 0 | 0.11s | 112640 | 0 | 7b5b43fcd7 + recorded changed driver hash | N/A native |
-| 35500 | PV_FXM_DropCounterexample | 1 | 0.18s | 474920 | 0 | cf19921d80 | rejected; one elaboration error/sorryAx, no credit |
-| 35501 | changed PV_FXM_DropCounterexample | 0 | 0.19s | 482492 | 0 | e82e62c591 | all five queries: no axioms |
+All installations use the original carriers. `PV_FXM_AuditInstall.other_fields`
+proves that restoring op4/op32/op122/op123 recovers the entire original record.
+Physical allocator bytes and all accessible external state are carried inside
+`Physical.Runtime`; logical allocation snapshots are explicitly distinguished
+from physical freed storage. Post-reserve capacity is passed to the caller,
+not reconstructed from the unchanged extracted value list.
 
-Exact targets, full source revisions/hashes/blob IDs, raw logs, admissions,
-dependency fingerprint and axioms are in the numbered/native receipts. All
-scopes used MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0. Native scopes used
-TasksMax=64; the standing shared Lean launcher used its accepted TasksMax=128
-and Lean -M7000. There was at most one capped scope per job. SSH failures were
-recovered read-only or retried before submission; no unchanged submitted
-compiler was rerun because of missing receipts. Attempt 35501's precompiler
-transport failure consumed no ID. The source changed between 35500 and 35501.
+## Verification actually run
 
-Budget: **2/100 Lean, 0/0 Kani**, 98 Lean attempts unspent at the checked-finding
-stop. Audit IDs 35597–35599 unused. No complete-row combined audit or closure
-replay was run, because no complete row was obtained. The finding itself has a
-focused compile and five successful axioms queries.
+[AuditInstall 35597](35597.json) passes. [AuditAxioms 35598](35598.json) passes all
+79 retained/source-package queries, using only subsets of `propext`,
+`Classical.choice`, `Quot.sound`. The one focused final
+[Closure.callbacks replay 35599](35599.json) passes and queries its own axioms.
+These are source/helper and packaging results, not a new composed privacy theorem.
 
-Before/after: all four recount-6 P obligations remain OPEN, without changed
-quantifiers, guards, failure events or conclusions. No fourth T field, source
-law assumption, observer weakening, simulator weakening, carrier change or
-endpoint edit was added. Zeroize volatile-write/compiler-fence laws and the L3
-binary obligation remain separate and unproved by this job. All deployment,
-E1/E2, real RunJoin and side-channel obligations are retained.
+Optimized pinned nightly-2026-06-01 native checks pass:
 
-No crates/ or programs/ changes, ELF rebuild, fresh pin verification, local Lean
-compile, push or merge. No keys were created or cleaned. This finding needs lead
-review before any change to row scope or carrier interpretation.
+- `drop-u32-03`: 260 paired drop/reference cases, exact deallocation pointer/layout and counters.
+- `zeroize-04`: 1,280 paired arrays and 1,280 scalar byte cases, zeros and adjacent frames checked.
+- `reserve-05`: 2,160 paired cases, including injected allocation failure, overflow and ZST; complete error kind/layout, data/header and explicit call counts checked. Concrete test types include an owned Word-shaped enum; no unbounded compiler ABI theorem is inferred.
+- `zeroize-drop-06`: 1,024 paired actual Zeroizing destructor cases in live MaybeUninit storage.
 
-Cleanup: `cleanup.json` records SHA-256/size and removal of only this job's native
-test executable. Sources and receipts remain. No private Lean cache was created;
-the new module used the standing shared launcher. No shared cache was deleted.
+The retained generic finding's 32 native pairs are reused, not rerun. No Kani.
+No finite validation is promoted to an unbounded memory-model or compiler proof.
+
+[RECEIPTS.md](RECEIPTS.md) records every exact target, exit, wall time, peak RSS,
+swap and revision; numbered JSON/logs include source blobs/hashes, dependency
+fingerprints and full axioms. [Commit history](COMMITS-resume.txt) records the resume stages.
+All new compiler/native scopes use 6G/8G/swap 0;
+Lean uses -M7000. Peak Lean RSS was 2,658,476 KiB, all swap counts zero. The current
+observed shared launcher and private/native scopes use TasksMax=64; legacy
+35500/35501 retain their standing 128 setting. External h4 pins and the complete
+project source/import resolutions are retained in the carrier preflights and
+[FINAL-SOURCE-MANIFEST.json](FINAL-SOURCE-MANIFEST.json).
+
+Budget: **31/98 resume Lean attempts**, **33/100 total**, **67 remaining**, **0 Kani**.
+Rejected elaborations and two own private-environment failures remain rejected.
+Refusals were uncharged. One admission retry was about 38 seconds early; admission
+and caps still held. [COOLDOWN-DEVIATION.json](COOLDOWN-DEVIATION.json) records it,
+and the wrapper now checks both admission stages' cooldown deadlines.
+
+## Retained obligations and stop
+
+The four scoped source packages, combined audit and focused replay are finished.
+No privacy endpoint, observer, simulator, failure event, bound or T field was
+changed. T remains exactly entropy_law, entropy_kernel, observation. No premise
+was folded into T. No generic ledger flag or endpoint premise was removed.
+
+The source laws share explicit returning raw native primitives with their owned
+references. Realization of those primitives in the deployed artifact, arbitrary
+OS nonreturn, the real whole-prover/RunJoin world interpreter, failure-event
+witness independence, deployment E1/E2 and L1/L2/L3 remain P obligations.
+The volatile source gate establishes ordered volatile writes and compiler fences
+under their Rust primitive interpretation; it is not a hardware fence or an
+L3 instruction/register/spill/extra-copy erasure audit. See [AUDIT.md](AUDIT.md).
+
+Next concrete deliverable: lead recount at these exact scopes, then compose the
+current-world/header-carrying source laws into the real RunJoin/deployed execution
+and complete the separate L3 binary audit. No claim that privacy is established.
+
+No crates/programs change, ELF rebuild, fresh release-pin verification, local
+Lean compile, push, merge, key creation or key cleanup. Source/evidence remain;
+disposable native binaries and this job's private object scratch are removed
+only after their hashes and closure evidence are recorded.
