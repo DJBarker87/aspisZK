@@ -5,7 +5,7 @@ set_option autoImplicit false
 noncomputable section
 namespace PV_L1_CanonicalSource
 open Aeneas Aeneas.Std Result ProverRwFull
-open R1Z R1Z.PV_RunJoin_Outer30
+open R1Z PV_RunJoin_Outer30
 local instance : BuilderForestAdmissionPort.ExternalLinear := PV_RunJoin_ShippedExternal.E_shipped
 local instance : BuilderForestAdmissionPort.Records := PV_RunJoin_UniversalRecords22.shipped
 local instance : LaneRoot := PV_RunJoin_LaneABI31.native
