@@ -129,3 +129,12 @@ optimized compilation 0.37 s and no verification/counterexample result. Both
 update candidates are retained; no third same-bound Kani update run is planned.
 V236 is still OPEN at native correspondence. Continue with independent padding
 and Lean proofs; do not treat a failed candidate as a false-row counterexample.
+
+Candidate correction found by re-reading CBL/native padding: the initial
+padding_reference/finalize_reference drafts return the local second block as
+retained buffer at pos>=56. Native digest_pad retains its first buffer and
+uses a separate local second block. This is a failed candidate, not a false
+ROWS6 statement. The active padding-05 gate checks compression events/count/
+cursor only; it does not credit retained-buffer equality. Corrected owned
+reference is padding-retained-reference.rs, aligned with
+PV_CBL_PadContentSource.source and PV_CBL_PaddingModel.retained.
