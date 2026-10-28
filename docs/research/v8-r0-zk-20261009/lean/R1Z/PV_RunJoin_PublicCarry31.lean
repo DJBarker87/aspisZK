@@ -20,7 +20,7 @@ theorem carry (pub : R0P.Public K) (leafMeaning : R0P.Digest K)
     digK next.frontier.val[R0P.digestCarry pub.nextPairIndex]! =
       AspisR1.AppendPath.pathPrefix pub leafMeaning (R0P.digestCarry pub.nextPairIndex) := by
   unfold incremental_merkle.IncrementalMerkleTreeV1.append_one_with_empty_roots at h
-  obtain ⟨constructed,hctor,h⟩ := bind_ok_inv h
+  pv_peel h with constructed hctor
   cases constructed with
   | Err error =>
     change (ok (.Err error) : Result (core.result.Result _ _)) = ok (.Ok (next,receipt)) at h
@@ -28,7 +28,7 @@ theorem carry (pub : R0P.Public K) (leafMeaning : R0P.Digest K)
   | Ok owned =>
     have frame := construct tree.next_leaf_index tree.root tree.frontier roots owned hctor
     simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
-    obtain ⟨appended,ha,h⟩ := bind_ok_inv h
+    pv_peel h with appended ha
     cases appended with
     | Err error =>
       change (ok (.Err error) : Result (core.result.Result _ _)) = ok (.Ok (next,receipt)) at h
