@@ -1,0 +1,58 @@
+{
+  "row": "V236",
+  "evidence_class": "structural (K-1 substitute)",
+  "rulings": [
+    "r",
+    "k'"
+  ],
+  "sources": {
+    "digest-0.10.7/src/core_api/wrapper.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
+      "sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a"
+    },
+    "block-buffer-0.10.4/src/lib.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d"
+    },
+    "block-buffer-0.10.4/src/sealed.rs": {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/sealed.rs",
+      "sha256": "9327ee3e567ae779b83c2b7f4f3ff56fcb2117163e023e7b0e37759e7e8d1f5c"
+    }
+  },
+  "native_bodies": {
+    "wrapper": "{\n        let Self { core, buffer } = self;\n        buffer.digest_blocks(input, |blocks| core.update_blocks(blocks));\n    }",
+    "buffer": "{\n        let pos = self.get_pos();\n        \n        \n        let rem = self.size() - pos;\n        let n = input.len();\n        \n        \n        \n        \n        \n        \n        \n        if Kind::invariant(n, rem) {\n            \n            self.buffer[pos..][..n].copy_from_slice(input);\n            self.set_pos_unchecked(pos + n);\n            return;\n        }\n        if pos != 0 {\n            let (left, right) = input.split_at(rem);\n            input = right;\n            self.buffer[pos..].copy_from_slice(left);\n            compress(slice::from_ref(&self.buffer));\n        }\n\n        let (blocks, leftover) = Kind::split_blocks(input);\n        if !blocks.is_empty() {\n            compress(blocks);\n        }\n\n        let n = leftover.len();\n        self.buffer[..n].copy_from_slice(leftover);\n        self.set_pos_unchecked(n);\n    }",
+    "invariant": "{\n        pos < block_size\n    }",
+    "split": "{\n        let nb = data.len() / N::USIZE;\n        let blocks_len = nb * N::USIZE;\n        let tail_len = data.len() - blocks_len;\n        \n        \n        unsafe {\n            let blocks_ptr = data.as_ptr() as *const Block<N>;\n            let tail_ptr = data.as_ptr().add(blocks_len);\n            (\n                slice::from_raw_parts(blocks_ptr, nb),\n                slice::from_raw_parts(tail_ptr, tail_len),\n            )\n        }\n    }"
+  },
+  "owned_reference": {
+    "path": "tools/pv-dlib-20261028/default-reference.rs",
+    "sha256": "696b3c6c720d5c367102dd0c3e3795e291e9818a0e9d1660eb27c77aa78b8a0d",
+    "body": "{\n    let n=input.len();let rem=64-pos;\n    if n<rem {\n        let mut i=0;while i<n {buffer[pos+i]=input[i];i+=1;}\n        return (state,buffer,pos+n);\n    }\n    let mut start=0;\n    if pos!=0 {\n        let mut i=0;while i<rem {buffer[pos+i]=input[i];i+=1;}\n        state=C::compress(state,&buffer);\n        start=rem;\n    }\n    let full=(n-start)/64;\n    let end=start+full*64;\n    if full!=0 {state=C::compress(state,&input[start..end]);}\n    let left=n-end;\n    let mut j=0;while j<left {buffer[j]=input[end+j];j+=1;}\n    (state,buffer,left)\n}",
+    "whole_body_token_checked": true
+  },
+  "differences": [
+    {
+      "native": "borrowed core/buffer, slice copy",
+      "reference": "owned state/buffer and element cursor copy",
+      "proof": "UpdateCopy.copy/cells_value/bounds; UpdatePlan.shape; all retained bytes preserved"
+    },
+    {
+      "native": "first input split_at(rem), then Eager split_blocks of remaining bytes",
+      "reference": "start/end index arithmetic and one whole bulk callback",
+      "proof": "UpdatePlan.source_reference, BatchPlan.reassemble/remainder, UpdateViews.native_bulk/coordinate/byte/native_block_lengths; same V233 take/drop quotient specification, no suspended copy-dependent Kani credit"
+    },
+    {
+      "native": "compress receives borrowed sequence of native64-byte blocks",
+      "reference": "compress receives the same contiguous bytes, exact call boundaries",
+      "proof": "UpdateViews.count/joined/native_bulk; UpdatePlan.complete for arbitrary batched Result callback; no singleton-fold premise introduced"
+    }
+  ],
+  "guard": "Original SHA-cohort Eager64 safe private pos<64, native byte-slice size bound; no guard changed. All checked subtraction/range paths discharged symbolically.",
+  "complete_result": "PV_DL_UpdatePlan.complete",
+  "finite_validation": "../wrappers-native-combined-resume4/receipt.json",
+  "finite_scope": "99328 paired same-input native/reference cases; exact batch boundaries and bytes, counter including wrap, all retained64buffer bytes and cursor; finite validation only",
+  "compression": "arbitrary Result-valued batched callback, no backend/V232 equality assumed",
+  "v232_untouched": true,
+  "kani": false
+}
