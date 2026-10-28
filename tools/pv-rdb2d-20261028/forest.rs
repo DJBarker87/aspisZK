@@ -1,8 +1,8 @@
 use std::alloc::{GlobalAlloc,Layout,System};
 use std::sync::atomic::{AtomicBool,AtomicUsize,Ordering::SeqCst};
 use aspis_statement::pool_v1::{pair_forest_hiding as forest,pair_tree_hiding::PoolV1PairCopyRowLinkV1 as Link};
-mod owned133 { include!("owned133.rs"); }
-mod reference133 { include!("reference133.rs"); }
+mod owned133;
+mod reference133;
 struct A;
 static ON:AtomicBool=AtomicBool::new(false);
 static COUNT:AtomicUsize=AtomicUsize::new(0);
