@@ -1,0 +1,79 @@
+{
+  "attempt": "NBP_K016",
+  "kind": "kani",
+  "timeout": 180,
+  "source_revision": "bc418abf9e7de3474752c6bbbe96ad06899f543c",
+  "source_tree_dirty": true,
+  "reservation_retries": 0,
+  "sources": [
+    "NBP_src/Cargo.toml",
+    "NBP_src/Cargo.lock",
+    "NBP_src/programs/r1-cost-probe/src/NBP_error.rs"
+  ],
+  "command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NBP_error::NBP_debug_Allocation",
+    "--output-format",
+    "terse",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-tx2g-20261028/NBP_tmp"
+  },
+  "deps_fingerprint": {
+    "frozen_source": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "graph": {
+      "resolved_packages": 441,
+      "new_package_tuples": [],
+      "edge_errors": [],
+      "graph_matches_frozen": true,
+      "graph_sha256": "805dbcd7b94dc1578e2c9b1d2b0af5d244790516cc42ef40827aac6f60442e42",
+      "lock_sha256": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+    },
+    "harness_patch_sha256": "fdd1b3059b6925b3f1479226c0a3e31977407d6a3dfc3e4372f1369c642c9a60",
+    "extra_patch_sha256": null
+  },
+  "expected_time": "optimized dependency compilation then native release leaf NBP_error::NBP_debug_Allocation",
+  "exit_status": 0,
+  "wall_seconds": 2.241758628981188,
+  "peak_rss_kib": "333436",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r29101803ea7040db93980856a2d8dc42.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "263184384",
+  "source_hashes": {
+    "NBP_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NBP_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NBP_src/programs/r1-cost-probe/src/NBP_error.rs": "55fa9d9379a6b577f04b303725107560f2c2ee380e311af691145e7e2025427f"
+  },
+  "print_axioms": "N/A: kani"
+}

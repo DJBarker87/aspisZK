@@ -1,0 +1,115 @@
+{"attempt": "NBP_L033", "exit_status": 1, "wall_seconds": 2.10157448699465, "peak_rss_kib": "3859848", "swaps": "0", "print_axioms": ["'NBP_CommonDecode.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBP_generated/NBP_CommonDecode.lean:32:65: error: unsolved goals
+b : Std.Array U8 216#usize
+⊢ (do
+      let r ←
+        if h : (List.slice 144 148 ↑b).length = 4 then ok (core.result.Result.Ok ⟨List.slice 144 148 ↑b, ⋯⟩)
+          else ok (core.result.Result.Err ())
+      let a ←
+        match r with
+          | core.result.Result.Ok value1 => ok value1
+          | core.result.Result.Err a => fail Error.panic
+      if 2147483647 ≤ ↑(core.num.U32.from_le_bytes a) then
+          ok (core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId)
+        else do
+          let r1 ←
+            if h : (List.slice 8 40 ↑b).length = 32 then ok (core.result.Result.Ok ⟨List.slice 8 40 ↑b, ⋯⟩)
+              else ok (core.result.Result.Err ())
+          let a1 ←
+            match r1 with
+              | core.result.Result.Ok value1 => ok value1
+              | core.result.Result.Err a => fail Error.panic
+          let r2 ←
+            if h : (List.slice 40 72 ↑b).length = 32 then ok (core.result.Result.Ok ⟨List.slice 40 72 ↑b, ⋯⟩)
+              else ok (core.result.Result.Err ())
+          let a2 ←
+            match r2 with
+              | core.result.Result.Ok value1 => ok value1
+              | core.result.Result.Err a => fail Error.panic
+          let r3 ←
+            if h : (List.slice 72 80 ↑b).length = 8 then ok (core.result.Result.Ok ⟨List.slice 72 80 ↑b, ⋯⟩)
+              else ok (core.result.Result.Err ())
+          let a3 ←
+            match r3 with
+              | core.result.Result.Ok value1 => ok value1
+              | core.result.Result.Err a => fail Error.panic
+          let r4 ←
+            if h : Usize.ofNatCore (List.slice 80 112 ↑b).length ⋯ = 32#usize then
+                ok (core.result.Result.Ok ⟨List.slice 80 112 ↑b, ⋯⟩)
+              else ok (core.result.Result.Err ())
+          let a4 ←
+            match r4 with
+              | core.result.Result.Ok value1 => ok value1
+              | core.result.Result.Err a => fail Error.panic
+          let r6 ←
+            core.result.Result.map_err
+                pool_v1.payment_relation.decode_common.closure.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+                (NBP_DigestDecode.decoded a4) ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r6
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let r7 ←
+                if h : Usize.ofNatCore (List.slice 112 144 ↑b).length ⋯ = 32#usize then
+                    ok (core.result.Result.Ok ⟨List.slice 112 144 ↑b, ⋯⟩)
+                  else ok (core.result.Result.Err ())
+              let a5 ←
+                match r7 with
+                  | core.result.Result.Ok value1 => ok value1
+                  | core.result.Result.Err a => fail Error.panic
+              let r9 ←
+                core.result.Result.map_err
+                    pool_v1.payment_relation.decode_common.closure_1.Insts.CoreOpsFunctionFnOnceTupleAtomicStatementErrorPoolV1PaymentStatementFormatError
+                    (NBP_DigestDecode.decoded a5) ()
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r9
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let cf2 ←
+                    core.result.Result.Insts.CoreOpsTry.branch
+                        (NBG_PaymentChecks.common
+                          { pool := a1, deployment_domain := a2, anchor_sequence := core.num.U64.from_le_bytes a3,
+                            anchor_root := val, nullifier := val1, asset_id := core.num.U32.from_le_bytes a })
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue a_1 =>
+                      ok
+                        (core.result.Result.Ok
+                          { pool := a1, deployment_domain := a2, anchor_sequence := core.num.U64.from_le_bytes a3,
+                            anchor_root := val, nullifier := val1, asset_id := core.num.U32.from_le_bytes a })
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        pool_v1.payment_relation.CommonPublicV1
+                        (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    pool_v1.payment_relation.CommonPublicV1
+                    (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                pool_v1.payment_relation.CommonPublicV1
+                (core.convert.FromSame pool_v1.payment_relation.PoolV1PaymentStatementFormatError) residual) =
+    ok
+      (if 2147483647 ≤ ↑(core.num.U32.from_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩) then
+        core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalAssetId
+      else
+        match NBP_DigestDecode.decoded ⟨List.take 32 (List.drop 80 ↑b), ⋯⟩ with
+        | core.result.Result.Err a =>
+          core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest
+        | core.result.Result.Ok anchor =>
+          match NBP_DigestDecode.decoded ⟨List.take 32 (List.drop 112 ↑b), ⋯⟩ with
+          | core.result.Result.Err a =>
+            core.result.Result.Err pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest
+          | core.result.Result.Ok nullifier =>
+            match
+              NBG_PaymentChecks.common
+                { pool := ⟨List.take 32 (List.drop 8 ↑b), ⋯⟩, deployment_domain := ⟨List.take 32 (List.drop 40 ↑b), ⋯⟩,
+                  anchor_sequence := core.num.U64.from_le_bytes ⟨List.take 8 (List.drop 72 ↑b), ⋯⟩,
+                  anchor_root := anchor, nullifier := nullifier,
+                  asset_id := core.num.U32.from_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩ } with
+            | core.result.Result.Err e => core.result.Result.Err e
+            | core.result.Result.Ok PUnit.unit =>
+              core.result.Result.Ok
+                { pool := ⟨List.take 32 (List.drop 8 ↑b), ⋯⟩, deployment_domain := ⟨List.take 32 (List.drop 40 ↑b), ⋯⟩,
+                  anchor_sequence := core.num.U64.from_le_bytes ⟨List.take 8 (List.drop 72 ↑b), ⋯⟩,
+                  anchor_root := anchor, nullifier := nullifier,
+                  asset_id := core.num.U32.from_le_bytes ⟨List.take 4 (List.drop 144 ↑b), ⋯⟩ })
+'NBP_CommonDecode.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

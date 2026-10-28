@@ -1,0 +1,93 @@
+{"attempt": "NBP_L044", "exit_status": 1, "wall_seconds": 1.8451470200088806, "peak_rss_kib": "3896692", "swaps": "0", "print_axioms": ["'NBP_CommonBytes.action_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBP_generated/NBP_CommonBytes.lean:72:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.slice.Slice.copy_from_slice core.marker.CopyU8 (NBP_ArrayIndex.slice output 0#usize 4#usize) magic.to_slice
+in the target expression
+  (let (s, index_mut_back) := (NBP_ArrayIndex.slice output 0#usize 4#usize, fun s => output.setSlice! 0 ↑s)
+    do
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+    let output2 ← (index_mut_back s2).update 4#usize 1#u8
+    let output3 ← output2.update 5#usize (NBG_Header.tag kind)
+    let output4 ← output3.update 6#usize 1#u8
+    let (s3, index_mut_back1) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output4
+          { start := 8#usize, «end» := 40#usize }
+    let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 c.pool.to_slice
+    let (s6, index_mut_back2) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize }
+    let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 c.deployment_domain.to_slice
+    let (s9, index_mut_back3) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back2 s8) { start := 72#usize, «end» := 80#usize }
+    let s11 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+    let (s12, index_mut_back4) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back3 s11) { start := 80#usize, «end» := 112#usize }
+    let s14 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+    let (s15, index_mut_back5) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize }
+    let s17 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+    let (s18, index_mut_back6) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back5 s17) { start := 144#usize, «end» := 148#usize }
+    let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (index_mut_back6 s20)) =
+    ok (encoded output magic kind c)
+
+output : Std.Array U8 216#usize
+magic : Std.Array U8 4#usize
+kind : K
+c : C
+⊢ (let (s, index_mut_back) := (NBP_ArrayIndex.slice output 0#usize 4#usize, fun s => output.setSlice! 0 ↑s)
+    do
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+    let output2 ← (index_mut_back s2).update 4#usize 1#u8
+    let output3 ← output2.update 5#usize (NBG_Header.tag kind)
+    let output4 ← output3.update 6#usize 1#u8
+    let (s3, index_mut_back1) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8)) output4
+          { start := 8#usize, «end» := 40#usize }
+    let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 c.pool.to_slice
+    let (s6, index_mut_back2) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back1 s5) { start := 40#usize, «end» := 72#usize }
+    let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 c.deployment_domain.to_slice
+    let (s9, index_mut_back3) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back2 s8) { start := 72#usize, «end» := 80#usize }
+    let s11 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s9 (core.num.U64.to_le_bytes c.anchor_sequence).to_slice
+    let (s12, index_mut_back4) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back3 s11) { start := 80#usize, «end» := 112#usize }
+    let s14 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s12 (AspisR1.S2K.DigestBytes.bytes c.anchor_root).to_slice
+    let (s15, index_mut_back5) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back4 s14) { start := 112#usize, «end» := 144#usize }
+    let s17 ←
+      core.slice.Slice.copy_from_slice core.marker.CopyU8 s15 (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+    let (s18, index_mut_back6) ←
+      core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+          (index_mut_back5 s17) { start := 144#usize, «end» := 148#usize }
+    let s20 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s18 (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (index_mut_back6 s20)) =
+    ok (encoded output magic kind c)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (216 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NBP_CommonBytes.action_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

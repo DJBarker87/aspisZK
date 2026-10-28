@@ -1,0 +1,57 @@
+{"attempt": "NBP_L037", "exit_status": 1, "wall_seconds": 1.8999954930040985, "peak_rss_kib": "3903344", "swaps": "0", "print_axioms": ["'NBP_CommonBytes.action_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NBP_generated/NBP_CommonBytes.lean:76:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (s, index_mut_back) ←
+      do
+        let __x ←
+          if ↑4#usize ≤ output.to_slice.length then
+              ok (⟨List.slice 0 ↑4#usize ↑output.to_slice, ⋯⟩, fun s' => ⟨(↑output.to_slice).setSlice! 0 ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o => output.from_slice (__x.2 o))
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s magic.to_slice
+    let output2 ← (index_mut_back s2).update 4#usize 1#u8
+    let output3 ← output2.update 5#usize (NBG_Header.tag kind)
+    let output4 ← output3.update 6#usize 1#u8
+    let (s3, index_mut_back1) ←
+      do
+   
+...
+oot).to_slice
+        ok (back copied)
+    let x ←
+      do
+        let __x ←
+          if 112#usize ≤ 144#usize ∧ ↑144#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑112#usize ↑144#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑112#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let o ←
+      let (s, back) := x
+        do
+        let copied ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s (AspisR1.S2K.DigestBytes.bytes c.nullifier).to_slice
+        ok (back copied)
+    let (s, back) ←
+      do
+        let __x ←
+          if 144#usize ≤ 148#usize ∧ ↑148#usize ≤ o.to_slice.length then
+              ok
+                (⟨List.slice ↑144#usize ↑148#usize ↑o.to_slice, ⋯⟩, fun s' =>
+                  ⟨(↑o.to_slice).setSlice! ↑144#usize ↑s', ⋯⟩)
+            else fail Error.panic
+        ok (__x.1, fun o_1 => o.from_slice (__x.2 o_1))
+    let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s (core.num.U32.to_le_bytes c.asset_id).to_slice
+    ok (back copied)
+NBP_generated/NBP_CommonBytes.lean:71:50: warning: This simp argument is unused:
+  NBP_BindPair.pair
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵c̵t̵i̵o̵n̵,̵N̵B̵P̵_̵S̵t̵o̵r̵e̵.̵s̵t̵o̵r̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵N̵B̵P̵_̵B̵i̵n̵d̵P̵a̵i̵r̵.̵p̵a̵i̵r̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲a̲c̲t̲i̲o̲n̲,̲ ̲N̲B̲P̲_̲S̲t̲o̲r̲e̲.̲s̲t̲o̲r̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NBP_CommonBytes.action_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NBP_CommonBytes.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-re342954f82cf4db19763518f0b657ac8.scope; invocation ID: de05bf69cac24ccbb277c3b59abde79c
