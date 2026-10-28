@@ -14,13 +14,13 @@ theorem copy_acc (chunks : List (List U8)) (acc : List U8) :
 theorem chunks_flat (chunks : List (List U8)) : copies [] chunks=chunks.flatten := by
   rw [copy_acc]; rfl
 /-- Overwrite disjoint chunks of a preallocated buffer, retaining its suffix. -/
-def copyBuffer (prefix suffix : List U8) : List (List U8) → List U8
-  | [] => prefix++suffix
-  | chunk::rest => copyBuffer (prefix++chunk) (suffix.drop chunk.length) rest
-theorem copyBuffer_result (chunks : List (List U8)) (prefix suffix : List U8) :
-    copyBuffer prefix suffix chunks=
-      prefix++chunks.flatten++suffix.drop chunks.flatten.length := by
-  induction chunks generalizing prefix suffix with
+def copyBuffer (written suffix : List U8) : List (List U8) → List U8
+  | [] => written++suffix
+  | chunk::rest => copyBuffer (written++chunk) (suffix.drop chunk.length) rest
+theorem copyBuffer_result (chunks : List (List U8)) (written suffix : List U8) :
+    copyBuffer written suffix chunks=
+      written++chunks.flatten++suffix.drop chunks.flatten.length := by
+  induction chunks generalizing written suffix with
   | nil => simp [copyBuffer]
   | cons c cs ih =>
     simp only [copyBuffer,ih,List.flatten_cons,List.length_append,List.drop_drop]
