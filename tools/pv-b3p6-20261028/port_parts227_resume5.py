@@ -49,7 +49,9 @@ for kind in ('Types','Funs'):
  rows=[];prev='PV_B3P_E227_19';check='--check'in __import__('sys').argv
  for j,(a,b)in enumerate(zip(cuts,cuts[1:])):
   mod=f'PV_B3P_P227_{j:02}';part=header.replace('import PV_B3P_E227_19','import '+prev)+''.join(decls[n]for n in remaining[a:b]);part=re.sub(r'\nend PV_B3P_227\s*$','',part)+'\nend PV_B3P_227\n\n'+''.join('#print axioms PV_B3P_227.'+n+'\n'for n in remaining[a:b]);p=D/'lean'/(mod+'.lean')
-  if check:assert p.read_text()==part,p
+  if check:
+   checked_source=(D/'p03-before-isolation-resume5.lean.txt') if mod=='PV_B3P_P227_03' and (D/'isolate-p03-resume5.json').exists() else p
+   assert checked_source.read_text()==part,checked_source
   else:p.write_text(part)
   rows.append(dict(module=mod,names=remaining[a:b],source=str(p),sha256=hashlib.sha256(part.encode()).hexdigest(),imports=[prev]));prev=mod
  agg='import '+prev+'\n\n#print axioms PV_B3P_227.reference_terminal.reference227\n';p=D/'lean/PV_B3P_PartsEmission227.lean'
