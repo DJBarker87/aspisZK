@@ -44,6 +44,7 @@ theorem frame (ops : ExternalFuns) (row tag : U8) (size : Usize) (payload : Slic
     exact length
   have ho : core.option.Option.ok_or (some (tag,size)) r1_wire.Error.InvalidRow=
       .ok (.Ok (tag,size)) := rfl
+  dsimp only [out,word] at h1 hh
   simp only [host_wire.record,shape,ho,core.result.Result.Insts.CoreOpsTry.branch,
     bind_tc_ok,Aeneas.Std.uncurry,lenword,bne_self_eq_false,Bool.false_eq_true,↓reduceIte,lift,h1,hh,hf]
   apply PV_RunJoin_ResultPost41.bind
