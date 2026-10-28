@@ -3,6 +3,8 @@ import R1Z.PV_RunJoin_NativeSelectedInputs
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_NativeSnapshot31
 open Aeneas Aeneas.Std Result
+local instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes
+local instance : ProverRwRngCaller.ErasureFns := ⟨fun _ value => .ok value,fun _ value => .ok value⟩
 
 def live (base : ProverRwFull.ExternalTypes) (p : PV_RunJoin_NominalPublicData.TargetPublic base) :
     PV_RunJoin_NominalLeafData.TargetSnapshot := by
