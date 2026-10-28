@@ -14098,3 +14098,16 @@ Nine rows remain SUSPENDED: V197, V201, V217, V220, V233, V236, V237, V260 and V
 runjoin43 (branch codex/pv-runjoin-20261026, head 440982374b, pushed; report evidence/pv-runjoin43-20261028/REPORT.md) used all 100 Lean attempts (69 accepted, 31 rejected, 0 Kani). It completed step (1): SemanticDomain40.Domain for the actual successful build_with_helper_mode output, discharging all 27 caller-domain obligations. It also compiled the 39 staged opening-model modules and added folded-encoding and fibre-construction source laws. All three reserved audits passed with standard axioms only. Lead review: no change under crates, programs or tools/r1-cost-probe since 82566acdfb; no forbidden constructs; largest committed file 7.3 MB. Still open in step (2): the PreparedOpening association, complete query and node construction, and the publication bytes. Steps (3) and (4) are not started. Rows removed: 0.
 
 runjoin44 launched in the same worktree from 440982374b (IDs 60700-60799; 100 Lean, 0 Kani). It covers step (2) (PreparedOpening association with ProverCommitOpeningModel53.exact_result; append_query_openings and append_node_slots bytes; publish_compact's complete ordered proof bytes), then steps (3) and (4) as before. Privacy target not yet established.
+
+## D405 (Stream B) 2026-10-28 21:36 UTC: b3p6f results (V244 still open); b3p6g launched on V244 only
+
+b3p6f (branch codex/pv-b3p6-20261028, head 897c2b28a6, pushed) used all 100 Lean attempts and no Kani. Under ruling (x') it ran pinned nightly extraction, native64 validation on 1.94.1, 36 native and emission comparisons, and the final audits 42097-42099. Supporting results: the emitted complete Result plan, the concrete op227 installation with 261 framed other fields, whole-emission D-column independence and the combined installed-Result bridge, all with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs outside unimported Aeneas template files; largest committed file 5.3 MB; no change under crates, programs or tools/r1-cost-probe.
+
+V244 remains OPEN (RESIDUALS-resume5.md). Four residuals remain:
+(a) formal successful nonvacuity for the full reference and the installed callback;
+(b) the universal shipped-to-owned structural binding over every transformed body, beyond finite native validation;
+(c) D188 evidence for the remaining mutating copy and terminal helpers;
+(d) the slice bound and index laws at the actual array caller, plus complete pre-inline source-cone coverage.
+Compiler glue and intrinsics stay at the owner's pending D381/D386 compiler-cohort boundary. V241 and V245 were not reached. Runjoin's op227 hypothesis is therefore not discharged.
+
+b3p6g launched in the same worktree (IDs 60800-60899; 100 Lean, 100 native, 0 Kani). It works on V244 only, residuals (a) to (d) in order. Nonvacuity must be proved symbolically, never by whole-body kernel reduction. Steps resting on extraction are labelled as reclassification. Rows removed: 0. Privacy target not yet established.
