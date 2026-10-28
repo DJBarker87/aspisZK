@@ -6,7 +6,7 @@ namespace R1Z.PV_RE_ClientMaterial10
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
 variable [ExternalTypes]
-open PV_RE_AfterPrefix1002
+open PV_RE_AfterPrefix1002 (Z Pre Material)
 theorem entered {C : Type} (ops : ExternalFuns)
     (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
     (store : Store) (state state1 : C) (secret : Secrets)
@@ -26,7 +26,7 @@ theorem entered {C : Type} (ops : ExternalFuns)
   intro store1 h0 private_entropy h1
   apply PV_RE_BindTransportB10.compose _ _ _
     (PV_RE_ClientAfter1002.entered ops entropy pub compiled hash store state state1 secret
-      entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1)
+      entropy_prefix bytes digest binding serialization first_hash second_hash store1 h0 private_entropy h1)
   exact PV_RE_MaterialCellsC10.entered ops aspis_prover.state_only_entropy.PreReservedNonce.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore hash binding digest secret.mask_nonce private_entropy
     {statement_digest := digest,mask_nonce := secret.mask_nonce,consumed := false}
 #print axioms entered

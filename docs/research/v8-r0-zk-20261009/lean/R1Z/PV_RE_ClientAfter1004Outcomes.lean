@@ -5,7 +5,7 @@ namespace R1Z.PV_RE_ClientAfter1004Outcomes
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
 variable [ExternalTypes]
-open PV_RE_AfterPrefix1004
+open PV_RE_AfterPrefix1004 (Z Pre Material)
 theorem failure {C : Type} (ops : ExternalFuns)
     (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
     (store : Store) (state state1 : C) (secret : Secrets)
@@ -24,7 +24,7 @@ theorem failure {C : Type} (ops : ExternalFuns)
     @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = .fail e := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
   intro store1 h0 private_entropy h1 material h2 encoded h3 e stopped
-  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1004.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3
+  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1004.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest binding serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3
   rw [stopped] at hn
   exact hn
 #print axioms failure
@@ -46,7 +46,7 @@ theorem divergence {C : Type} (ops : ExternalFuns)
     @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = .div := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
   intro store1 h0 private_entropy h1 material h2 encoded h3 stopped
-  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1004.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3
+  obtain ⟨next,hn⟩ := PV_RE_ClientAfter1004.entered ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest binding serialization first_hash second_hash store1 h0 private_entropy h1 material h2 encoded h3
   rw [stopped] at hn
   exact hn
 #print axioms divergence

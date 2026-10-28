@@ -6,7 +6,7 @@ namespace R1Z.PV_RE_ClientIOMaterial10
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RE_RetryStep PV_RE_PublicPrefix6 PV_RE_AttemptHashPrefix6 PV_RE_AttemptBindingHash7
 variable [ExternalTypes]
-open PV_RE_AfterPrefix1002
+open PV_RE_AfterPrefix1002 (Z Pre Material)
 theorem entered {C : Type} (ops : ExternalFuns)
     (entropy : RawEntropy C) (pub : Public) (compiled : Compiled) (hash : Hash)
     (store : Store) (state state1 : C) (secret : Secrets)
@@ -35,7 +35,7 @@ theorem entered {C : Type} (ops : ExternalFuns)
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
   intro path h0 options h1 written h2 created h3 moded h4 file h5 file1 h6 file2 h7 file3 h8 h9 directory h10 h11 private_entropy entropy_read
   exact PV_RE_ClientMaterial10.entered ops entropy pub compiled hash store state state1 secret
-    entropy_prefix bytes digest serialization first_hash second_hash
+    entropy_prefix bytes digest binding serialization first_hash second_hash
     {store with last_error := none}
     (PV_RE_StoreSuccess10.reserved store digest secret.mask_nonce path h0 options h1 written h2 created h3 moded h4 file h5 file1 h6 file2 h7 file3 h8 h9 directory h10 h11)
     private_entropy entropy_read

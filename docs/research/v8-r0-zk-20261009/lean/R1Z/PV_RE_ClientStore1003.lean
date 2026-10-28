@@ -23,7 +23,7 @@ theorem entered {C : Type} (ops : ExternalFuns)
     ∃ next, @RealR1_client.prove_for_proof_accounts _ (ProverRwOuterMapErr.selected ops) C entropy pub compiled hash store state = (std.fs.OpenOptions.create_new written.1 true >>= next) := by
   letI : ExternalFuns := ProverRwOuterMapErr.selected ops
   intro path h0 options h1 written h2
-  obtain ⟨next,hn⟩ := PV_RE_ReserveGuards9.client_to_store ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest serialization first_hash second_hash
+  obtain ⟨next,hn⟩ := PV_RE_ReserveGuards9.client_to_store ops entropy pub compiled hash store state state1 secret entropy_prefix bytes digest binding serialization first_hash second_hash
   unfold aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve at hn
   rw [PV_RE_ClientEntry.bind_assoc] at hn
   obtain ⟨tail,ht⟩ := PV_RE_StorePrefix1003.entered store digest secret.mask_nonce path h0 options h1 written h2
