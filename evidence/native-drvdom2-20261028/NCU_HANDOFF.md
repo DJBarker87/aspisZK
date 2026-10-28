@@ -53,3 +53,47 @@ The remaining head mismatch was generated matcher transparency, resolved by
 an explicit kernel-checked `with_unfolding_all exact h` on symbolic terms.
 No limit was raised. Tail L022: exit0,2.903512s,RSS5383788KiB,swap0.
 Head L031: exit0,3.165962s,RSS5383284KiB,swap0. All four roots standard axioms.
+
+# Stage 3: all-prefix domain and conditional leaf
+
+NCU_DriverDomain.prefix_of_reached derives split10 and Prefix from the SAME
+beforeWriter execution under the two unchanged offset equations. Prefix is
+NCL's complete cut inventory EXCEPT checkpoint success. It contains shape,
+scan, zero, preparation, root bounds/copy, initial, batch, geometry, pending,
+query and flush calls. It imposes no writer-return or final acceptance premise.
+Thus every reached writer is in this pre-writer accepted-prefix class, but
+failed/diverging writers are not in NCL.Cuts (which additionally asks success).
+accepted_when_writer_returns proves the missing acceptance implication exactly
+when the actual op16 returns, without postulating a second accepted execution.
+
+control composes existing constructor, loop_raw, flush contents/canonicality
+results on this Prefix and derives 64 weights, next10 and all flushed weight
+canonicality. It does not require writer success. domain transports these to
+the leaf's raw writer fields. This extends NCT's accepted-call conclusions to
+all release model writer prefixes, including those whose writer fails/diverges.
+
+After: NCU_DriverDomain.leaf has a Prefix of currentInstalled c/currentDigest c
+and the three SAME pointwise field gates (S2, 22 query bounds, nine nonweight
+canonical groups). It has NO WriterDomain, DriverEstablishedDomain, writer
+success or accepted-run premise. Under the unchanged leaf's same-body local
+append correctness, chronological three digest calls and oracle interpretation,
+it proves output length1768, exact returned bytes, chronological writer read
+log and the encoding of the SAME pm/am. Unlike NCT's accepted leaf it does not
+claim equality to an accepted saved Vec: that carrier does not exist for a
+failed writer. No change to proof/public/hash/Prepared/Accumulator carriers.
+
+**Target not yet established unconditionally at model level.** S2, all query
+bounds and gamma/kappa/alpha/rho/semanticAlpha/coordinates/claim/rhs/power are
+still explicit obligations, not discharged by a new structure. No arithmetic
+primitive law was fabricated. The next deliverable remains an actual-instance
+same-prefix preparation/query arithmetic theorem. The stage1 statement audit
+identifies why the listed model lane results cannot simply instantiate free
+Configuration.boundaries and query operations. No impossibility theorem or
+counterexample to full model closure was proved; this is an exact remaining
+obligation, not a claim that further Lean work cannot close it.
+
+L032-L034 are rejected record-construction drafts; L038 is a rejected notation
+capture draft. L035-L037 pass the successive prefix/control/domain targets.
+L039 is the complete conditional leaf: exit0,2.948817s,RSS5410044KiB,swap0,
+standard axioms for all five module roots. Predecessor generic lemmas were
+imported; new proofs invert/factor the driver and compose their results.
