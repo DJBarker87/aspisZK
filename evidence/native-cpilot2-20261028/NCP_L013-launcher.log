@@ -1,0 +1,25 @@
+{"attempt": "NCP_L013", "exit_status": 0, "wall_seconds": 1.6001036668894812, "peak_rss_kib": "2641912", "swaps": "0", "print_axioms": ["'NBP_Store.update' depends on axioms: [propext, Quot.sound]", "'NBP_Store.exact' depends on axioms: [propext, Quot.sound]", "'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]"]}
+'NBP_Store.update' depends on axioms: [propext, Quot.sound]
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }
+
+...
+'NBP_Store.update' depends on axioms: [propext, Quot.sound]
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }
+
+Running as unit: run-r5d70c2fddca1432994edf4d602573024.scope; invocation ID: b6e7b89c9599402e8c0e5a4199f15e69
