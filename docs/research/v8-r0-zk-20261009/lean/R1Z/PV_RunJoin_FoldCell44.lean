@@ -27,8 +27,19 @@ theorem cell (ops : ProverRwFull.ExternalFuns) (q : Nat → Raw) (hq : ∀ j, j<
   obtain ⟨m1,hm1,hcm1,hdm1⟩ := mul_exact a s1 ha hcs1
   obtain ⟨z,hz,hcz,hdz⟩ := add_exact (q 0) m1 (hq 0 (by decide)) hcm1
   refine ⟨z,?_,hcz,?_⟩
-  · rw [ProverRwFull.prover.fold_cell]
-    simp only [Bool.false_eq_true,↓reduceIte]
+  · unfold ProverRwFull.prover.fold_cell
+    change (do
+      let v0 ← Array.index_usize (array 4#usize q) 0#usize
+      let v1 ← Array.index_usize (array 4#usize q) 1#usize
+      let v2 ← Array.index_usize (array 4#usize q) 2#usize
+      let v3 ← Array.index_usize (array 4#usize q) 3#usize
+      let m3 ← @ProverRwFull.aspis_core.field.wide_exact.WideExact.mul _ (ProverRwP6BodyCandidate.selected ops) (current (source a)) v3
+      let s2 ← @ProverRwFull.aspis_core.field.wide_exact.WideExact.add _ (ProverRwP6BodyCandidate.selected ops) v2 m3
+      let m2 ← @ProverRwFull.aspis_core.field.wide_exact.WideExact.mul _ (ProverRwP6BodyCandidate.selected ops) (current (source a)) s2
+      let s1 ← @ProverRwFull.aspis_core.field.wide_exact.WideExact.add _ (ProverRwP6BodyCandidate.selected ops) v1 m2
+      let m1 ← @ProverRwFull.aspis_core.field.wide_exact.WideExact.mul _ (ProverRwP6BodyCandidate.selected ops) (current (source a)) s1
+      @ProverRwFull.aspis_core.field.wide_exact.WideExact.add _ (ProverRwP6BodyCandidate.selected ops) v0 m1)=_
+    simp only [array]
     rw [ProverCommitArray49.index _ _ 0#usize (by decide),
       ProverCommitArray49.index _ _ 1#usize (by decide),
       ProverCommitArray49.index _ _ 2#usize (by decide),
