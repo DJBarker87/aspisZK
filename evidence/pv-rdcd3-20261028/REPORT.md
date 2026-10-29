@@ -114,3 +114,5 @@ failure/divergence. Whole V265 is still suspended until its full cone passes.
 60648–60651 rebuild retained circle types, functions, control and native source theorem in the own pinned cache. All pass; receipts retain exact timing/RSS/source/axioms. No changed source or alternate compiler/library cohort was substituted.
 
 60652 failed only in the final inverse-chain equality on residual usize literal projections2/4/8. Generic square_loop and square_count elaborate; the failed module is wholly uncredited. Changed proof adds explicit scalar literal-value facts. Receipt:exit1,wall1.18s,peak2,629,796KiB,swap0.
+
+60653 passes the exact inverse chain/static dispatch (exit0,wall1.30s,peak2,645,564KiB,swap0; standard axioms).60654 fails only the Option ok_or helper equality because reversed constructor-match order is not definitionally equal on an abstract Option; closing complete/carrier statements otherwise elaborate. Changed proof cases the Option explicitly; whole failed module remains uncredited.

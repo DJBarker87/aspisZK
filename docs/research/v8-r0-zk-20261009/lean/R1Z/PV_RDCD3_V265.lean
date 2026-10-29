@@ -16,7 +16,8 @@ abbrev Row := aspis_core.r0_transcript.CircleRow
 
 /-- Existing owned control is exactly the deployed Option ok_or match. -/
 theorem okOr_binding {T E : Type} (o : Option T) (e : E) :
-    PV_AL_CircleControl.okOr o e = PV_RDCD3_Result194.okOr o e := rfl
+    PV_AL_CircleControl.okOr o e = PV_RDCD3_Result194.okOr o e := by
+  cases o <;> rfl
 
 theorem unwrap_binding {T E : Type} (r : core.result.Result T E) (fallback : E → Result T) :
     PV_AL_CircleControl.unwrapOrElse r fallback =
