@@ -22,6 +22,7 @@ theorem complete (out nodes : alloc.vec.Vec U8) (cap : Usize)
     simp only [PV_RunJoin_NodeTail41.finish,massert,hnot,if_false,bind_tc_fail,
       resultBytes,ProverCommitPublish43.appendSlot,Bind.bind,Except.bind,bytes,List.length_map,
       show nodes.val.length>cap.val from (by omega),if_true,exceptBytes]
+    rfl
 
 #print axioms complete
 end R1Z.PV_RunJoin_NodeTailModel60
