@@ -29,10 +29,12 @@ theorem fields_iterator_binding14 (append : AppendWord13) (out : List U8) (value
   | nil => rw [loop.eq_1]; rfl
   | cons value rest ih =>
     rw [loop.eq_1]
-    simp only [fields_body14,field_next14,fields_model13]
-    split
-    · rfl
-    · cases h : append out value with
+    dsimp only [fields_body14,field_next14,fields_model13]
+    by_cases bad : value ≥ 2147483647#u32
+    · simp only [bad,if_true]
+      rfl
+    · simp only [bad,if_false]
+      cases h : append out value with
       | fail e => rfl
       | div => rfl
       | ok next => simpa only [bind_tc_ok] using ih next
