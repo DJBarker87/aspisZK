@@ -14733,3 +14733,15 @@ pv-diag6 used all 100 Lean attempts (96 passed, 4 failures corrected), 6 capped 
 Lead assessment after six rounds: most of those sinks are driven by operating-system outcomes. They include write, flush and delivery failures, nonce-store and file I/O errors, print failures, environment-dependent logger and backtrace configuration, and strerror and UTF-8-lossy content. The owner already decided how such outcomes enter the privacy argument. Under option B (D215, privacy ledger decision 2) the environment-failure signal is a public input to both the real and the ideal experiment, the observer stays complete and the error bound is unchanged, subject to one P row: the failure event is witness-independent. The diagnostic line had not applied this. Doing so turns per-sink native laws into one shared P row.
 
 pv-diag7 (branch codex/pv-diag7-20261029; IDs 65700-65799; 100 Lean, 40 native, 0 Kani) applies option B uniformly. Each sink's OS-outcome inputs become components of the public signal, never new trust and never fixed or empty outcomes. Occurrence, order and content are proved to be functions of that signal plus public data, and each sink is related by name to the option-B P row. Any dependence on witness-derived operands or payloads stays UNRESOLVED or becomes a finding. One named conditional law is then stated for pv-rj4idb's DIAG_* inputs, with exact coverage. Rows removed: 0. Privacy target not yet established.
+
+## D459 (Stream B) 2026-10-29 04:24 UTC: pv-l1c results (four L1 inputs partial); pv-l1d launched
+
+pv-l1c stopped after 13 of 100 Lean attempts, with no native scopes or Kani. The combined conditional model statement, the axioms audit and the focused replay passed, and its twenty new model theorems use standard axioms only. Peak RSS was 2.50 GB, with zero swap. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate and pushed.
+
+All four L1 inputs of pv-rj4idb's decoder are PARTIAL, with the model-level composition proved and the native instance open:
+- L1_COUNT_TRACE: prefix composition proved; the original-experiment native count, account, upload and operation coupling remains.
+- L1_TIME_TRACE: lossless timing and original-bad-event extension criteria proved; the native clock and serialization law and the owner's D359 timing-evidence decision remain.
+- L1_ORACLE_PREFIX: ordered-prefix and duplicate preservation proved; the complete native query and answer association remains.
+- L1_RETAINED_SIDECHANNELS: trace composition proved; the native world, ownership and cross-channel association remain.
+
+pv-l1d (branch codex/pv-l1d-20261029; IDs 65800-65899; 100 Lean, 30 native, 0 Kani) uses the full budget and finishes one input before starting the next. Counts come first, concrete through the D163 count law, V394, the retry models and pv-diag2's Rejected exclusion, with the retry loop bound under own-1. Then the oracle prefix and the time law, with D359 named and not assumed, then the retained side channels through the pv-own interface. Rows removed: 0. Privacy target not yet established.
