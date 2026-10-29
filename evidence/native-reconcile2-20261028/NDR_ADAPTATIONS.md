@@ -437,3 +437,31 @@ NDO_JGi_ClaimArrays successfully with the explicit noneToFirst transport.
 NDO_JHm_SemanticOperands remains ahead in dependency order at index 2209.
 All printed axioms in completed chunks B001–B015 were independently checked
 to be standard only. This checkpoint is not a combined-root replay result.
+
+## Exact non-None limits
+
+`NDO_JGi_FinishFields.source` quantifies over callbacks on the retained
+FirstCaller carrier and assumes a successful `FinishModel.finish` call on that
+carrier. It does not establish a producer execution premise. Applying it to a
+non-None emitted `verifier.Phase` callback would first require a theorem
+transporting that producer execution to `FinishModel.finish ...
+(RPz7_PhaseIso.observerToFirst obs)`, including the observer-dependent failures,
+state and observable query history required by the consuming experiment.
+`observerRoundtrip` alone does not supply that premise.
+
+`NDO_JGi_ClaimArrays.source` assumes `FinishModel.finish ... none`; its new proof
+application maps exactly that None. `NDO_JHm_SemanticOperands.source` obtains its
+None finish premise from `JHl_SemanticFields.source` and maps exactly that None.
+Neither statement quantifies over an arbitrary observer. A non-None extension
+would need to generalize and prove the corresponding execution premises upstream,
+including that semantic-installation-to-finish connection in the second caller.
+No such extension is claimed.
+
+`RPx_FIr_FinishComparison` explicitly consumes a finish premise with
+`observerToFirst obs`. Its selected replay source already states that premise;
+this lane does not construct it from an arbitrary producer run or transfer an
+adaptive experiment through it. The other retained-carrier replay theorems in
+the 23-entry inventory stay on that carrier. Direct producer calls in
+`NDO_JHk_QueryPowerStep`, `NDO_JGy_QueryFrontier`, and
+`NDO_JHc_WriterContinuation` remain producer calls; their successful checking
+would not add a cross-carrier adaptive execution theorem.
