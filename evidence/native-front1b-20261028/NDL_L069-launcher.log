@@ -1,0 +1,38 @@
+{"attempt": "NDL_L069", "exit_status": 1, "wall_seconds": 1.1068305510561913, "peak_rss_kib": "2617156", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} x s src => if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.index.IndexMut (Aeneas.Std.Slice T) I Output →
+      Aeneas.Std.Array T N → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => Aeneas.Std.Result.ok (s, fu
+...
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} x s src => if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def Aeneas.Std.core.array.Array.index_mut : {T I Output : Type} →
+  {N : Aeneas.Std.Usize} →
+    Aeneas.Std.core.ops.index.IndexMut (Aeneas.Std.Slice T) I Output →
+      Aeneas.Std.Array T N → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.Array T N)) :=
+fun {T I Output} {N} inst a i => do
+  let __x ← inst.index_mut a.to_slice i
+  match __x with
+    | (s, back) => Aeneas.Std.Result.ok (s, fun o => a.from_slice (back o))
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T) :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+NDL_generated/NDL_PrefixInspect.lean:5:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.copy_from_slice`
+
+Running as unit: run-rc5d9b6304bbd4b29a13536fcabe218d7.scope; invocation ID: 273aa21f825a4595894b9e33d83da28f

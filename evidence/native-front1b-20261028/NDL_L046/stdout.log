@@ -1,0 +1,97 @@
+NDL_generated/NDL_ScalarFold.lean:5:17: error: failed to set `[local reducible]` for `FIo_Native.weights.Weights.scalar_factor.closure`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+NDL_generated/NDL_ScalarFold.lean:32:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCJ_ScalarFoldStep.body it (powers, factors) a
+in the target expression
+  body (it, (powers, factors), a).1 (it, (powers, factors), a).2.1 (it, (powers, factors), a).2.2 ⦃ r =>
+    match r with
+    | done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑(it, (powers, factors), a).1.start ⦄
+
+case pos
+p : Std.Array NE 4#usize
+f : Std.Array NQ 4#usize
+hp : ∀ x ∈ ↑p, canonE x
+iter : Iter
+finish : ↑iter.end = 4
+cap : ↑iter.start ≤ 4
+v : NE
+hv : canonE v
+inv : Iter × C × NE → Prop := fun s => ↑s.1.end = 4 ∧ ↑s.1.start ≤ 4 ∧ (∀ x ∈ ↑s.2.1.1, canonE x) ∧ canonE s.2.2
+it : Iter
+a : NE
+powers : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+factors : Std.Array FIo_Native.aspis_core.field.QM31 4#usize
+cp : ∀ x ∈ ↑(it, (powers, factors), a).2.1.1, canonE x
+last : ↑it.end = 4
+bound : ↑it.start ≤ 4
+ca : canonE a
+more : ↑it.start < ↑it.end
+rest : core.ops.range.Range (UScalar UScalarTy.Usize)
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+step : NCJ_ScalarFoldStep.body it (powers, factors) a = ok (cont (rest, (powers, factors), out))
+inc : ↑rest.start = ↑it.start + 1
+last' : ↑rest.end = 4
+co : canonE out
+⊢ body (it, (powers, factors), a).1 (it, (powers, factors), a).2.1 (it, (powers, factors), a).2.2 ⦃ r =>
+    match r with
+    | done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑(it, (powers, factors), a).1.start ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (powers, factors)
+  has type
+    Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize ×
+      Std.Array FIo_Native.aspis_core.field.QM31 4#usize
+  but is expected to have type
+    C
+  in the application
+    Prod.mk (powers, factors)
+NDL_generated/NDL_ScalarFold.lean:37:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NCJ_ScalarFoldStep.body it (powers, factors) a
+in the target expression
+  body (it, (powers, factors), a).1 (it, (powers, factors), a).2.1 (it, (powers, factors), a).2.2 ⦃ r =>
+    match r with
+    | done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑(it, (powers, factors), a).1.start ⦄
+
+case neg
+p : Std.Array NE 4#usize
+f : Std.Array NQ 4#usize
+hp : ∀ x ∈ ↑p, canonE x
+iter : Iter
+finish : ↑iter.end = 4
+cap : ↑iter.start ≤ 4
+v : NE
+hv : canonE v
+inv : Iter × C × NE → Prop := fun s => ↑s.1.end = 4 ∧ ↑s.1.start ≤ 4 ∧ (∀ x ∈ ↑s.2.1.1, canonE x) ∧ canonE s.2.2
+it : Iter
+a : NE
+powers : Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize
+factors : Std.Array FIo_Native.aspis_core.field.QM31 4#usize
+cp : ∀ x ∈ ↑(it, (powers, factors), a).2.1.1, canonE x
+last : ↑it.end = 4
+bound : ↑it.start ≤ 4
+ca : canonE a
+more : ¬↑it.start < ↑it.end
+step : NCJ_ScalarFoldStep.body it (powers, factors) a = ok (done a)
+⊢ body (it, (powers, factors), a).1 (it, (powers, factors), a).2.1 (it, (powers, factors), a).2.2 ⦃ r =>
+    match r with
+    | done y => canonE y
+    | cont x' => inv x' ∧ 4 - ↑x'.1.start < 4 - ↑(it, (powers, factors), a).1.start ⦄
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (powers, factors)
+  has type
+    Std.Array FIo_Native.aspis_core.field.wide_exact.WideExact 4#usize ×
+      Std.Array FIo_Native.aspis_core.field.QM31 4#usize
+  but is expected to have type
+    C
+  in the application
+    Prod.mk (powers, factors)
+'NDL_ScalarFold.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

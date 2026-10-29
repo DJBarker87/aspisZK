@@ -1,0 +1,53 @@
+{"attempt": "NDL_K043", "exit_status": 1, "wall_seconds": 22.00131299602799, "peak_rss_kib": "1262272", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NDL_pack_log`
+   --> crates/aspis-core/src/field.rs:157:29
+    |
+157 |     #[cfg_attr(all(kani,not(NDL_pack_log)), kani::requires(true))]
+    |                             ^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", c
+...
+;assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 2.19s
+Checking harness field::NDL_core::pack_reduce_log...
+
+VERIFICATION RESULT:
+ ** 1 of 529 failed (8 unreachable)
+Failed Checks: assertion failed: NDL_PACK_CALLS != 4
+ File: "crates/aspis-core/src/field/NDL_core.rs", line 26, in field::NDL_core::pack_reduce_log
+
+VERIFICATION:- FAILED
+Verification Time: 17.341688s
+
+Manual Harness Summary:
+Verification failed for - field::NDL_core::pack_reduce_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb842ac8595f54ca2b4ba2d79d6471089.scope; invocation ID: dfcf9029179c4704bde10656ed835dc7

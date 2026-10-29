@@ -1,0 +1,72 @@
+{
+  "attempt": "NDL_K031",
+  "kind": "kani",
+  "module": "weights::NDL_weights::tensor_iteration_window",
+  "sources": [
+    "NDL_gate.py",
+    "NDL_SOURCE_PINS.json",
+    "NDL_src/Cargo.lock",
+    "NDL_src/crates/aspis-core/src/field.rs",
+    "NDL_src/crates/aspis-core/src/field/NDD_field.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/multiproof.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/weights.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/NDL_weights.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/NDL_reference.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/NDL_pairing.rs",
+    "NDL_src/crates/aspis-r1-cost-probe/src/NDL_dot.rs",
+    "NDL_src/crates/aspis-core/src/field/NDL_core.rs"
+  ],
+  "command": [
+    "python3",
+    "NDL_gate.py",
+    "NDL_K031.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_target",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "weights::NDL_weights::tensor_iteration_window",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDL_tensor_sparse --cfg NDL_tensor_any --cfg NDL_bad_tensor_write",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_objects:/home/dombarker/project-offloads/codex-cx-front1-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "90f46918494f85118e420a7e0a7d5b3e511bdcc3",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDL_SOURCE.json",
+    "library_pinset": "NDL_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

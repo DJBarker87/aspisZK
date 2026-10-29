@@ -1,0 +1,326 @@
+{
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "headline": "AspisR1.RPx_Deployed.deployed",
+  "claim_scope": "Candidate LOCAL Result/value bridges only; all enclosing caller domains and physical interpretations remain OPEN.",
+  "trust_change": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
+  "budget_used": {
+    "kani": 80,
+    "lean": 80,
+    "extract": 20
+  },
+  "members": [
+    {
+      "function": "crates/aspis-core/src/field.rs::M31::reduce_u62",
+      "dependent_rows": 40,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "value < 2^62",
+      "lean_theorem": "NDD_Reduce.reduce_cohort",
+      "lean_attempt": "NDD_L007",
+      "kani_attempt": "NDD_K007",
+      "negative_control": "NDD_K008",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::PreparedQm31Multiplier::new",
+      "dependent_rows": 34,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "four canonical u32 limbs",
+      "lean_theorem": "NDD_Prepared.prepared",
+      "lean_attempt": "NDD_L015",
+      "kani_attempt": "NDD_K018",
+      "negative_control": "NDD_K019",
+      "extraction": "NDD_E003"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::field",
+      "dependent_rows": 31,
+      "status": "CLOSED-local",
+      "partial_evidence": "K076/K077; NDD_SelectorModel.field_cut",
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Caller canonicality, exact selected inputs, rejected paths outside successful canonical domain, physical interpretation and call edges remain OPEN.",
+      "domain": "source-valid canonical selected32 window; native source envelope len<=2048, i<64, 32*(i+1)<=len; all eight words<P. Enclosing callers still prove byte canonicality on SAME inputs.",
+      "lean_theorem": "NDL_FieldCompose.cohort and selection; NDL_FieldDecode.window",
+      "lean_attempt": "NDL_L024",
+      "kani_attempt": "NDL_K007",
+      "negative_control": "NDL_K008",
+      "extraction": "NDL_E002",
+      "supporting_native": [
+        "NDL_K003",
+        "NDL_K004",
+        "NDL_K005"
+      ]
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::from_m31",
+      "dependent_rows": 29,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all u32 inputs",
+      "lean_theorem": "NDD_Simple.cm31_from",
+      "lean_attempt": "NDD_L009",
+      "kani_attempt": "NDD_K009",
+      "negative_control": "NDD_K010",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
+      "dependent_rows": 29,
+      "status": "OPEN",
+      "partial_evidence": "K060/K061, K062/K063, K068\u2013K075; NDD_CopyFrame and NDD_PackModel; NDL_K040 native SAME-execution four reducer argument/reply/count log PASS; K041\u2013043 targeted FAIL; NDL_PrefixValues.cohort L079 covers every length<=4",
+      "obstacle": "Actual native reducer log K040 and all controls K041\u2013043 pass. L079 closes all model padding shapes and full reference equality. Still missing the compiled final transport from the native four raw-span/reply log into that SAME full reference output, or the requested actual-function proof_for_contract against it. Broader opaque reducer probes alone are not promoted to that contract. No unchanged numerical retry is justified.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Final raw-span/reducer-log-to-pack_ref composition remains; 80/80 Lean attempts used, so this cannot be attempted further within this job. Kani may also be needed for the exact requested actual-function contract interface."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::square",
+      "dependent_rows": 28,
+      "status": "OPEN",
+      "partial_evidence": "NDL_K079 PASS / K080 factor-bound control FAIL; E011 factor reference extracted; inherited FJm raw trace/value laws",
+      "obstacle": "The two raw factor additions/subtraction and bound<2P are checked without a product. The actual inline u64 multiplication cannot be replaced by a named field stub. Need a permitted native raw-product observation boundary associated to the named emitted natural product law, plus exact square output/reducer association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E011 needs its cohort factor equality; existing symbolic square/product laws are reusable. Native product/consumer association is still required."
+    },
+    {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::square",
+      "dependent_rows": 28,
+      "status": "OPEN",
+      "partial_evidence": "Pinned source/member inventory",
+      "obstacle": "Depends on open CM31 square through QM31::square, plus actual mixed cross-product/coordinate call log and a resolved cohort consumer (no named counterpart in the inventory). Need native call-domain/step association using Lean-discharged multiplication laws. No whole-product Kani run is allowed.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::Arity::bits",
+      "dependent_rows": 26,
+      "status": "OPEN",
+      "partial_evidence": "NDD K027/028 / NDD_LeafRefs.arity_bits; NDL K074/075 binary index-shift window; E015 extracted parent-index reference",
+      "obstacle": "The real binary parent window invokes Arity::Two.bits and index_at on the same inputs; need its compiled cohort step/caller equality and adopted domain connection. Eight-way uses are outside the binary model; do not silently map them.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E015 and actual source-loop association remain; the scalar bit value itself is imported, not re-proved."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_from_karatsuba_channel_sums",
+      "dependent_rows": 23,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all nine u64 channel sums",
+      "lean_theorem": "NDD_Channels.channels",
+      "lean_attempt": "NDD_L019",
+      "kani_attempt": "NDD_K024",
+      "negative_control": "NDD_K025",
+      "extraction": "NDD_E004"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::CM31::neg",
+      "dependent_rows": 22,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "two words < P",
+      "lean_theorem": "NDD_Composite.cm31_neg",
+      "lean_attempt": "NDD_L011",
+      "kani_attempt": "NDD_K013",
+      "negative_control": "NDD_K015",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::QM31::neg",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "K022/K023; extracted qm31_neg_ref",
+      "obstacle": "Canonical native contract/control pass. No resolved named cohort counterpart; associate the actual four coordinates to its enclosing model use, rather than creating a stand-in. Needs a native/model caller packet.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::index_at",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "NDL_MultiproofAccess.index_at/active_index L028; occupied_step L031; K074/075 same native index/shift window; K076/077 occupied bounds; E015/E016 refs",
+      "obstacle": "Exact same-array model accesses and caller bounds are now proved locally. Need the final native scratch/loop/caller physical-carrier association consuming that model access; do not confuse an inlined model read with complete native verification.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E015/E016 step equality and source consumer transport remain; native scratch/caller association needs Kani."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::well_formed",
+      "dependent_rows": 22,
+      "status": "OPEN",
+      "partial_evidence": "NDD predicate iteration K078/079 and allM induction; NDL K072/073 invalid empty/17-length gate; E018 length reference",
+      "obstacle": "Empty/oversized rejection is checked without any accepted buffer loop. Still need actual windows/iter cursor and arbitrary-prestate predicate association, all accepted-length gates/early rejection, then the SAME cohort consumer. Never whole-buffer Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E018 gate equality plus native iterator-to-model allM induction remain; needs native iterator/caller cut."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_accumulate_product_channels",
+      "dependent_rows": 21,
+      "status": "OPEN",
+      "partial_evidence": "NDL_ChannelBounds.cell L039; channel_add_ref E009 extracted",
+      "obstacle": "Raw u64 products inside nested iteration still have no permitted native opaque product boundary. Need one arbitrary-prestate channel iteration, SAME factors/sum, count<=four invariant and natural raw-product law. No multiplication in Kani.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E009 add-step equality and native/model iteration/induction must be composed after its native boundary is supplied."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::occupied_binary_parent",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "NDL K062 pointer/tag/length/reply/count PASS; K063\u2013066 controls FAIL; L028 occupied index domain; L031 actual model consumer; E012/E013 digest payload refs",
+      "obstacle": "Exact native views/call-count/reply boundary is now checked on SAME array/index with i+1<n<=16. Need compiled binding to the adopted digest callback/write_parent and physical input arrays. Digest VALUE remains RuntimeSha256Value trust.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E012/E013 callback payload/consumer equality remains; native physical-node/current-scratch association still needs Kani."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::root_matches",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "NDL_MultiproofAccess.root_matches L028 and source_guard L029; E017 terminal guard reference",
+      "obstacle": "Model terminal guard retains SAME first value, n=1, first index=0 and exact node cursor. Need the native terminal guard/caller carrier packet and its compiled equality; root equality alone is not verification success.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E017 requires emitted terminal guard association; native caller/physical node consumption still required."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::sibling_binary_parent",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "NDL K067 PASS; K068\u2013071 pointer/tag/reply/count controls FAIL; E012/E014 digest payload refs",
+      "obstacle": "Both order branches pass exact native views/length/tag/call-count/reply probes. Need the SAME physical 32-byte sibling range/cursor and adopted callback/writer association, including source slice bounds. RuntimeSha256Value remains trust.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E012/E014 callback/cohort equality and source cursor/node range association remain; requires native caller evidence."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/multiproof.rs::value_at",
+      "dependent_rows": 20,
+      "status": "OPEN",
+      "partial_evidence": "NDD K031/032 fixed-array contract/reference; frozen source call-site inspection",
+      "obstacle": "Actual value_at use is in the eight-way arm, while the adopted multiproof model is binary. A binary inlined read is not this helper. Resolve the inventory/arity domain and a real reached adopted consumer before any local closure; native/caller evidence required.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "No new stand-in is introduced. Existing extracted indexing law is reusable after resolving the real consumer."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::QM31::is_zero",
+      "dependent_rows": 16,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "all four u32 words",
+      "lean_theorem": "NDD_Composite.qm31_zero",
+      "lean_attempt": "NDD_L011",
+      "kani_attempt": "NDD_K016",
+      "negative_control": "NDD_K017",
+      "extraction": "NDD_E003"
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::qm31_m31_dot",
+      "dependent_rows": 16,
+      "status": "OPEN",
+      "partial_evidence": "NDL_ChannelBounds.outer L039; block_reduce_ref E010 extracted",
+      "obstacle": "Short and long branches still contain inline raw products; need native factor/reply/carry step association and four-product block/outer-sum induction. Neither a full-buffer retry nor multiplication in Kani is permitted.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E010 reduced-block reference/cohort equality and chronological sum induction remain; arithmetic bounds alone are not native refinement."
+    },
+    {
+      "function": "crates/aspis-core/src/field.rs::M31::neg",
+      "dependent_rows": 14,
+      "status": "CLOSED-local",
+      "obstacle": null,
+      "domain": "x < 2147483647",
+      "lean_theorem": "NDD_Simple.m31_neg",
+      "lean_attempt": "NDD_L009",
+      "kani_attempt": "NDD_K011",
+      "negative_control": "NDD_K012",
+      "extraction": "NDD_E002"
+    },
+    {
+      "function": "crates/aspis-core/src/field/wide_exact.rs::WideExact::neg",
+      "dependent_rows": 14,
+      "status": "OPEN",
+      "partial_evidence": "K064/K065; extracted wide_neg_ref",
+      "obstacle": "Canonical eight-limb native contract/control pass. No named cohort counterpart is resolved; bind the two QM31 negations and actual eight-coordinate carrier to the adopted consumer. Needs native/model caller association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::scalar_factor",
+      "dependent_rows": 14,
+      "status": "OPEN",
+      "partial_evidence": "K011\u2013019 selected multiply/add/PERM/final QUARTER logs and failing controls; L032 value laws; L056 actual fold canonical totality; K053/054 range step; L077 exact constant/forward association; E007 scalar add-step reference",
+      "obstacle": "The selected-cell fission cut, iterator/closure carrier and final scale have separate native packets. Need a single compiled SAME-execution association connecting these packets to the actual scalar_factor fold, and its exact returned eight coordinates. Totality/canonicality alone is insufficient.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E007 needs reference/cohort step equality and value-preserving fold induction; 80/80 Lean exhausted. Native closure/caller association still needs Kani."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::tensor",
+      "dependent_rows": 12,
+      "status": "OPEN",
+      "partial_evidence": "K030/031 sparse write; K057/058 sparse frame; K059 saved-read/K060 coefficient/K061 four-call controls FAIL; K055/056 reverse step; NCJ frame laws; E006 four-write and E020 stage refs",
+      "obstacle": "K026/028/029 full-state shapes timed out. Sparse-window input zeros every unobserved cell: stronger than the actual caller invariant (FINDING). Need a native full-state noninterference/frame lift over KMX laws, not merely another sparse pass; then stage/descending-loop association.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E006/E020 cohort association and full nested-loop composition remain. Existing NCJ_TensorFrame induction is reusable; native arbitrary-state lift needs Kani."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
+      "dependent_rows": 11,
+      "status": "OPEN",
+      "partial_evidence": "K020\u2013025 selected push/error/raw-state and selector packets; K047\u2013049 new-state; K050\u2013052 stop/finish; K053/054 forward range; L045 step domains; L051 raw carrier injectivity; L066 actual loop totality; E008 state/Result ref",
+      "obstacle": "Native cuts check exact local arguments, state words/count, errors and reply, but their complete SAME-loop value transport into the actual emitted high_dot is still absent. Need to bind native iterator/state carrier and full returned value, including every early error, to the adopted loop.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E008 needs exact emitted step/Result equality and value-preserving native/model induction. L066 supplies total/canonical success, not full value transport; Kani caller association still required."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts",
+      "dependent_rows": 10,
+      "status": "OPEN",
+      "partial_evidence": "NDD_BoxModel.parts; NDL K078 full field-window TIMEOUT; E019 record-erasure reference",
+      "obstacle": "The model erases Box allocation/ownership. K078 timed out and was not retried; there is no positive native field-transport credit. Need a split field/ownership/frame probe and explicit successful allocation/cleanup interpretation. Scalar/fixed-array contract permission does not admit Box automatically.",
+      "requires_further_kani": true,
+      "remaining_lean_only_obligation": "E019 can supply record-erasure equality only; allocator/ownership/native transport remains indispensable."
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::double",
+      "dependent_rows": 10,
+      "status": "CLOSED-local",
+      "partial_evidence": "NDL_REFERENCE_REUSE.json pins byte-identical inherited safe reference and its extracted definition.",
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Enclosing caller canonicality, call edges and release composition remain OPEN. Native opaque-contract transport reclassifies P6/D188 trust.",
+      "domain": "four canonical input words; opaque SAME-input product reply instantiated by NDL_DoubleLaw.product with exact canonical natural mulQ law",
+      "lean_theorem": "NDL_DoubleLaw.cohort; NDD_DoubleModel.observed",
+      "lean_attempt": "NDL_L068",
+      "kani_attempt": "NDL_K044",
+      "negative_control": "NDL_K045",
+      "supporting_native": [
+        "NDL_K046"
+      ],
+      "extraction": "NDD_E008"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",
+      "dependent_rows": 10,
+      "status": "CLOSED-local",
+      "partial_evidence": "Supersedes incomplete comparison-Boolean packet with actual raw-word contract/ref/cohort equality.",
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Enclosing call edges, physical representation and release composition remain OPEN.",
+      "domain": "all raw u32 words in complete Weights record, all variants and folds; no canonicality precondition",
+      "lean_theorem": "NDL_GuardRawModel.cohort",
+      "lean_attempt": "NDL_L058",
+      "kani_attempt": "NDL_K032",
+      "negative_control": "NDL_K033",
+      "extraction": "NDL_E004"
+    }
+  ],
+  "inherited_budget": "NDD budgets excluded from this continuation",
+  "inherited_closed": 7,
+  "budget_limit": {
+    "kani": 80,
+    "lean": 80,
+    "extract": 20
+  },
+  "new_local_closures": [
+    "weights::field",
+    "weights::shared_two_point_guard",
+    "weights::double"
+  ],
+  "composed_closures": 0,
+  "retained_target": "100-bit PER-ATTEMPT; target not yet established"
+}

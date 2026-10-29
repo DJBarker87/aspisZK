@@ -1,0 +1,87 @@
+--- /dev/null
++++ b/NDL_weights.rs
+@@ -0,0 +1,84 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="NDL_reference.rs"] mod reference;
++static mut NDL_BASE:*const u8=core::ptr::null();
++static mut NDL_INDEX:usize=0;
++static mut NDL_SEEN:bool=false;
++static mut NDL_REPLY:[u32;8]=[0;8];
++pub(super) fn field_post(r:E)->bool {unsafe{r.to_limbs()==NDL_REPLY}}
++fn decoder_log(bytes:&[u8])->Option<E>{unsafe{
++ let (lo,hi)=reference::range_ref(NDL_INDEX);
++ let right=bytes.as_ptr()==NDL_BASE.add(lo) && bytes.len()==hi-lo;
++ if cfg!(NDL_bad_range){assert!(!right);}else{assert!(right);}
++
++ E::from_limbs(NDL_REPLY)
++}}
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decoder_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_log_contract(){
++ let bytes:[u8;2048]=kani::any();let len:usize=kani::any();let i:usize=kani::any();
++ kani::assume(len<=2048 && i<64 && (i+1)*32<=len);
++ let reply:[u32;8]=kani::any();kani::assume(reply.iter().all(|x|*x<2147483647));
++ unsafe{NDL_BASE=bytes.as_ptr();NDL_INDEX=i;NDL_SEEN=false;NDL_REPLY=reply;}
++ let r=field(&bytes[..len],i);
++ if cfg!(NDL_bad_reply){assert_ne!(r.to_limbs(),reply);}else{assert_eq!(r.to_limbs(),reply);}
++}
++pub(super) fn field_domain(bytes:&[u8],i:usize)->bool{i<64 && (i+1)*32<=bytes.len() && reference::field_ref(bytes,i).iter().all(|x|*x<2147483647)}
++pub(super) fn field_exact_post(r:E,bytes:&[u8],i:usize)->bool{
++ let eq=r.to_limbs()==reference::field_ref(bytes,i);if cfg!(NDL_bad_exact){!eq}else{eq}
++}
++fn decoder_exact(bytes:&[u8])->Option<E>{E::from_limbs(reference::decode_ref(bytes))}
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decoder_exact)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_exact_contract(){let bytes:[u8;2048]=kani::any();let len:usize=kani::any();let i:usize=kani::any();
++ kani::assume(len<=2048 && i<64 && (i+1)*32<=len);
++ let input=&bytes[..len];kani::assume(field_domain(input,i));
++ unsafe{NDL_REPLY=reference::field_ref(input,i);}
++ field(input,i);
++}
++// Split replacement for K006: one selected window, no large-buffer value proof.
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_window_contract(){let bytes:[u8;32]=kani::any();
++ kani::assume(field_domain(&bytes,0));unsafe{NDL_REPLY=reference::field_ref(&bytes,0);}
++ field(&bytes,0);
++}
++fn qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn fromq(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn canonical8(x:[u32;8])->bool{x.iter().all(|v|*v<2147483647)}
++fn anye()->E{let x:[u32;8]=kani::any();kani::assume(canonical8(x));E::from_limbs(x).unwrap()}
++static mut NDL_SF_POWER:[u32;8]=[0;8];
++static mut NDL_SF_FACTOR:[u32;4]=[0;4];
++static mut NDL_SF_PRODUCT:[u32;8]=[0;8];
++fn scalar_mul_log(x:E,y:K)->E{unsafe{
++ let right=x.to_limbs()==NDL_SF_POWER && qwords(y)==NDL_SF_FACTOR;
++ if cfg!(NDL_bad_sf_operands){assert!(!right);}else{assert!(right);}
++ assert!(canonical8(x.to_limbs()));E::from_limbs(NDL_SF_PRODUCT).unwrap()
++}}
++fn scalar_cell_post(r:E,v:E)->bool{let right=if cfg!(NDL_scalar_log){unsafe{r.to_limbs()==NDL_SF_SUM}}else{unsafe{r.to_limbs()==reference::add8_ref(v.to_limbs(),NDL_SF_PRODUCT)}};if cfg!(NDL_bad_sf_result){!right}else{right}}
++// Verbatim frozen scalar_factor fold closure, fissioned at one arbitrary pre-state.
++#[kani::requires(s<4 && canonical8(v.to_limbs()) && p.iter().all(|x|canonical8(x.to_limbs())) && canonical8(unsafe{NDL_SF_PRODUCT}))]
++#[kani::ensures(|r|scalar_cell_post(*r,v))]
++fn scalar_cell(v:E,s:usize,f:&[K;4],p:&[E;4])->E{v.add(p[PERM[s]].mul_qm31(f[s]))}
++#[kani::proof_for_contract(scalar_cell)] #[kani::unwind(40)]
++#[kani::stub(E::mul_qm31,scalar_mul_log)]
++#[kani::stub(E::add,scalar_add_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scalar_cell_contract(){let p=[anye(),anye(),anye(),anye()];let f=[fromq(kani::any()),fromq(kani::any()),fromq(kani::any()),fromq(kani::any())];let s:usize=kani::any();kani::assume(s<4);let v=anye();let result=anye();let sum=anye();
++ unsafe{NDL_SF_POWER=p[PERM[s]].to_limbs();NDL_SF_FACTOR=qwords(f[s]);NDL_SF_PRODUCT=result.to_limbs();NDL_SF_ACC=v.to_limbs();NDL_SF_SUM=sum.to_limbs();}
++ scalar_cell(v,s,&f,&p);
++}
++
++// K009 replacement: split both reached callees into SAME-input opaque logs.
++static mut NDL_SF_ACC:[u32;8]=[0;8];
++static mut NDL_SF_SUM:[u32;8]=[0;8];
++fn scalar_add_log(x:E,y:E)->E{unsafe{
++ let right=x.to_limbs()==NDL_SF_ACC && y.to_limbs()==NDL_SF_PRODUCT;
++ if cfg!(NDL_bad_sf_add){assert!(!right);}else{assert!(right);}
++ E::from_limbs(NDL_SF_SUM).unwrap()
++}}

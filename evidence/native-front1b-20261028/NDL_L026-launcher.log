@@ -1,0 +1,43 @@
+{"attempt": "NDL_L026", "exit_status": 0, "wall_seconds": 1.8480182500788942, "peak_rss_kib": "4307592", "swaps": "0", "print_axioms": []}
+structure MultiproofConeRef.reference.Scratch : Type
+number of parameters: 0
+fields:
+  MultiproofConeRef.reference.Scratch.idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize
+  MultiproofConeRef.reference.Scratch.val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize
+  MultiproofConeRef.reference.Scratch.n : Aeneas.Std.Usize
+  MultiproofConeRef.reference.Scratch.at : Aeneas.Std.Usize
+constructor:
+  MultiproofConeRef.reference.Scratch.mk (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+    (val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize) (n «at» : Aeneas.Std.Usize) :
+    MultiproofConeRef.reference.Scratch
+def AspisR1.MultiproofConeP6Callbacks.nodeWith
+...
+un chunk =>
+                  AspisR1.MultiproofConePhysicalProgram.checked (MultiproofConeRef.reference.read32 chunk)
+                    fun valueSibling =>
+                    if index &&& 1#u32 = 0#u32 then
+                      AspisR1.MultiproofConeP6Callbacks.parent sibling s value valueSibling ni cursor index w
+                    else AspisR1.MultiproofConeP6Callbacks.parent sibling s valueSibling value ni cursor index w;
+        if ni < s.n then
+          AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+            if nextIndex = index ^^^ 1#u32 then
+              AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                  AspisR1.MultiproofConeP6Callbacks.parent occupied s value right next s.at index w
+            else supplied
+        else supplied
+def AspisR1.MultiproofConeNodeDomain.RowDomain : Aeneas.Std.Slice Aeneas.Std.U8 →
+  MultiproofConeRef.reference.Scratch → Aeneas.Std.Usize → Aeneas.Std.Usize → Prop :=
+fun physical s i w => 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+def Aeneas.Std.UScalar.shiftRight : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x s =>
+  if s < ty.numBits then Aeneas.Std.Result.ok (x.bv.ushiftRight s#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.div : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y =>
+  if (y.bv != 0) = true then Aeneas.Std.Result.ok (x.bv.udiv y.bv#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.divisionByZero
+
+Running as unit: run-r78f8f42c4ae74a7daf0df10ba8140f74.scope; invocation ID: 143d0d1e30634065a5841e79f2aeb92c

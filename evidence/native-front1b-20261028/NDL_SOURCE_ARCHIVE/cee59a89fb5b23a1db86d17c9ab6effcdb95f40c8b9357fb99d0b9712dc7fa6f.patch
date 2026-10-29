@@ -1,0 +1,69 @@
+--- /dev/null
++++ b/NDD_field.rs
+@@ -0,0 +1,66 @@
++use super::*;
++impl kani::Arbitrary for M31{fn any()->Self{M31(kani::any())}}
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="NDD_reference.rs"] pub(super) mod reference;
++pub(super) fn verdict(v:bool)->bool {if cfg!(NDD_negative){!v}else{v}}
++pub(super) fn pack_pred(x:[u32;4],y:[u32;4])->bool{let equal=if cfg!(NDD_pack0){x[0]==y[0]}else if cfg!(NDD_pack1){x[1]==y[1]}else if cfg!(NDD_pack2){x[2]==y[2]}else if cfg!(NDD_pack3){x[3]==y[3]}else{x==y};verdict_pack(equal)}
++pub(super) fn verdict_reduce64(v:bool)->bool{if cfg!(NDD_negative_reduce64){!v}else{v}}
++pub(super) fn verdict_pack(v:bool)->bool{if cfg!(NDD_negative_pack){!v}else{v}}
++pub(super) fn padded(x:&[QM31],k:usize)->[u32;4]{if k<x.len(){limbs(x[k])}else{[0;4]}}
++pub(super) fn verdict_channels(v:bool)->bool{if cfg!(NDD_negative_channels){!v}else{v}}
++pub(super) fn verdict_cneg(v:bool)->bool{if cfg!(NDD_negative_cneg){!v}else{v}}
++pub(super) fn verdict_qneg(v:bool)->bool{if cfg!(NDD_negative_qneg){!v}else{v}}
++pub(super) fn limbs(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++pub(super) fn qm(x:[u32;4])->QM31{QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
++pub(super) fn canonical(x:QM31)->bool{let x=limbs(x);x[0]<P && x[1]<P && x[2]<P && x[3]<P}
++pub(super) fn prepared_limbs(x:PreparedQm31Multiplier)->[[u32;3];3]{let a=x.components;[[a[0][0].0,a[0][1].0,a[0][2].0],[a[1][0].0,a[1][1].0,a[1][2].0],[a[2][0].0,a[2][1].0,a[2][2].0]]}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(qm31_from_karatsuba_channel_sums)] fn channels_contract(){qm31_from_karatsuba_channel_sums(kani::any());}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[cfg_attr(NDL_pack_log,kani::proof)] #[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(qm31_pack_base4))]
++#[cfg_attr(not(NDL_pack_log),kani::stub_verified(M31::reduce_u64))]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)] #[kani::unwind(7)]
++fn pack_contract(){let x:[QM31;4]=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];let n:usize=kani::any();kani::assume(n<=4);qm31_pack_base4(&x[..n]);}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[cfg_attr(NDL_pack_log,kani::proof)] #[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(M31::reduce_u64))] fn reduce64_contract(){M31::reduce_u64(kani::any());}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(M31::reduce_u62)] fn reduce_contract(){M31::reduce_u62(kani::any());}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(PreparedQm31Multiplier::new)] fn prepared_contract(){PreparedQm31Multiplier::new(qm(kani::any()));}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(CM31::from_m31)] fn from_contract(){CM31::from_m31(M31(kani::any()));}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(M31::neg)] fn mneg_contract(){M31(kani::any()).neg();}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(CM31::neg)] fn cneg_contract(){CM31{a:M31(kani::any()),b:M31(kani::any())}.neg();}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(QM31::neg)] fn qneg_contract(){qm(kani::any()).neg();}
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] #[kani::proof_for_contract(QM31::is_zero)] fn zero_contract(){qm(kani::any()).is_zero();}
++
++#[kani::proof] #[kani::unwind(3)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] fn pack_copy_window(){let src:[QM31;4]=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];let mut dst:[QM31;4]=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];let before=dst;let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<4&&j<4);unsafe{core::ptr::copy_nonoverlapping(src.as_ptr().add(i),dst.as_mut_ptr().add(i),1)};if cfg!(NDD_negative_copy){assert_ne!(dst[i],src[i]);}else{assert_eq!(dst[i],src[i]);if i!=j{assert_eq!(dst[j],before[j]);}}}
++pub(super) fn wide_limbs(x:WideExact)->[u32;8]{let a=limbs(x.c0());let b=limbs(x.c1());[a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3]]}
++pub(super) fn wide_canonical(x:WideExact)->bool{canonical(x.c0())&&canonical(x.c1())}
++pub(super) fn verdict_wide(v:bool)->bool{if cfg!(NDD_negative_wide){!v}else{v}}
++#[kani::proof_for_contract(WideExact::neg)] #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)] fn wide_contract(){let a=qm(kani::any());let b=qm(kani::any());kani::assume(canonical(a)&&canonical(b));WideExact::new(a,b).neg();}
++// Exact frozen arithmetic spans, checked separately after the copy cut.
++fn pack_raw_native0(v0:QM31,v1:QM31,v2:QM31,v3:QM31)->u64{let p=u64::from(P);let limb=|value:M31|u64::from(value.0);
++    let c0_a = limb(v0.c0.a)
++        + (p - limb(v1.c0.b))
++        + 2 * limb(v2.c1.a)
++        + (p - limb(v2.c1.b))
++        + (p - limb(v3.c1.a))
++        + (2 * p - 2 * limb(v3.c1.b));
++c0_a
++}
++#[kani::proof] fn pack_raw0(){let x=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];kani::assume(canonical(x[0])&&canonical(x[1])&&canonical(x[2])&&canonical(x[3]));let native=pack_raw_native0(x[0],x[1],x[2],x[3]);let spec=reference::raw_pack_ref([limbs(x[0]),limbs(x[1]),limbs(x[2]),limbs(x[3])],0);if cfg!(NDD_negative_raw){assert_ne!(native,spec);}else{assert_eq!(native,spec);}}
++fn pack_raw_native1(v0:QM31,v1:QM31,v2:QM31,v3:QM31)->u64{let p=u64::from(P);let limb=|value:M31|u64::from(value.0);
++    let c0_b = limb(v0.c0.b)
++        + limb(v1.c0.a)
++        + limb(v2.c1.a)
++        + 2 * limb(v2.c1.b)
++        + 2 * limb(v3.c1.a)
++        + (p - limb(v3.c1.b));
++c0_b
++}
++#[kani::proof] fn pack_raw1(){let x=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];kani::assume(canonical(x[0])&&canonical(x[1])&&canonical(x[2])&&canonical(x[3]));let native=pack_raw_native1(x[0],x[1],x[2],x[3]);let spec=reference::raw_pack_ref([limbs(x[0]),limbs(x[1]),limbs(x[2]),limbs(x[3])],1);if cfg!(NDD_negative_raw){assert_ne!(native,spec);}else{assert_eq!(native,spec);}}
++fn pack_raw_native2(v0:QM31,v1:QM31,v2:QM31,v3:QM31)->u64{let p=u64::from(P);let limb=|value:M31|u64::from(value.0);
++    let c1_a = limb(v0.c1.a) + (p - limb(v1.c1.b)) + limb(v2.c0.a) + (p - limb(v3.c0.b));
++c1_a
++}
++#[kani::proof] fn pack_raw2(){let x=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];kani::assume(canonical(x[0])&&canonical(x[1])&&canonical(x[2])&&canonical(x[3]));let native=pack_raw_native2(x[0],x[1],x[2],x[3]);let spec=reference::raw_pack_ref([limbs(x[0]),limbs(x[1]),limbs(x[2]),limbs(x[3])],2);if cfg!(NDD_negative_raw){assert_ne!(native,spec);}else{assert_eq!(native,spec);}}
++fn pack_raw_native3(v0:QM31,v1:QM31,v2:QM31,v3:QM31)->u64{let p=u64::from(P);let limb=|value:M31|u64::from(value.0);
++    let c1_b = limb(v0.c1.b) + limb(v1.c1.a) + limb(v2.c0.b) + limb(v3.c0.a);
++c1_b
++}
++#[kani::proof] fn pack_raw3(){let x=[qm(kani::any()),qm(kani::any()),qm(kani::any()),qm(kani::any())];kani::assume(canonical(x[0])&&canonical(x[1])&&canonical(x[2])&&canonical(x[3]));let native=pack_raw_native3(x[0],x[1],x[2],x[3]);let spec=reference::raw_pack_ref([limbs(x[0]),limbs(x[1]),limbs(x[2]),limbs(x[3])],3);if cfg!(NDD_negative_raw){assert_ne!(native,spec);}else{assert_eq!(native,spec);}}

@@ -1,0 +1,39 @@
+--- /dev/null
++++ b/NDL_multiproof.rs
+@@ -0,0 +1,36 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++static mut NDL_CALLS:usize=0;
++#[derive(Clone,Copy)]
++struct PointerRecorder{a:*const u8,b:*const u8,reply:[u8;32]}
++impl Digest32 for PointerRecorder{fn digest(&self,p:&[&[u8]])->[u8;32]{
++ let same=p.len()==3&&p[0].len()==1&&p[1].len()==32&&p[2].len()==32;
++ assert!(same);
++ let tag=p[0][0]==BINARY_NODE_TAG;if cfg!(NDL_bad_node_tag){assert!(!tag);}else{assert!(tag);}
++ let same=p[1].as_ptr()==self.a&&p[2].as_ptr()==self.b;
++ if cfg!(NDL_bad_node_pointer){assert!(!same);}else{assert!(same);}
++ unsafe{NDL_CALLS+=1;}self.reply
++}}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn occupied_pointer(){let values:[[u8;32];16]=kani::any();let n:usize=kani::any();let i:usize=kani::any();let k:usize=kani::any();kani::assume(n<=16&&i<n&&i+1<n&&k<32);let reply:[u8;32]=kani::any();
++ let h=PointerRecorder{a:values[i].as_ptr(),b:values[i+1].as_ptr(),reply};unsafe{NDL_CALLS=0;}
++ let r=occupied_binary_parent(h,&values,i);
++ if cfg!(NDL_bad_node_reply){assert_ne!(r[k],reply[k]);}else{assert_eq!(r[k],reply[k]);}
++ unsafe{if cfg!(NDL_bad_node_count){assert_ne!(NDL_CALLS,1);}else{assert_eq!(NDL_CALLS,1);}}
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn sibling_pointer(){let values:[[u8;32];16]=kani::any();let i:usize=kani::any();let k:usize=kani::any();kani::assume(i<16&&k<32);let sibling:[u8;32]=kani::any();let left:bool=kani::any();let reply:[u8;32]=kani::any();
++ let h=PointerRecorder{a:if left{values[i].as_ptr()}else{sibling.as_ptr()},b:if left{sibling.as_ptr()}else{values[i].as_ptr()},reply};unsafe{NDL_CALLS=0;}
++ let r=sibling_binary_parent(h,&values,i,&sibling,left);
++ if cfg!(NDL_bad_node_reply){assert_ne!(r[k],reply[k]);}else{assert_eq!(r[k],reply[k]);}
++ unsafe{if cfg!(NDL_bad_node_count){assert_ne!(NDL_CALLS,1);}else{assert_eq!(NDL_CALLS,1);}}
++}
++#[kani::proof] #[kani::unwind(2)]
++fn invalid_length_gate(){let empty:bool=kani::any();let values:[u32;17]=kani::any();let v=if empty{&values[..0]}else{&values[..17]};let r=well_formed(v);if cfg!(NDL_bad_length_gate){assert!(r);}else{assert!(!r);}}
++fn parent_iteration(idx:&[u32;16],i:usize)->u32{index_at(idx,i)>>Arity::Two.bits()}
++#[kani::proof] #[kani::unwind(3)]
++fn binary_parent_index(){let idx:[u32;16]=kani::any();let i:usize=kani::any();kani::assume(i<16);let r=parent_iteration(&idx,i);let same=r==idx[i]/2;if cfg!(NDL_bad_parent_index){assert!(!same);}else{assert!(same);}}
++#[kani::proof] #[kani::unwind(3)]
++fn occupied_index_domain(){let n:usize=kani::any();let i:usize=kani::any();kani::assume(n<=16&&i<n&&i+1<n);let same=i<16&&i+1<16;if cfg!(NDL_bad_index_domain){assert!(!same);}else{assert!(same);}}

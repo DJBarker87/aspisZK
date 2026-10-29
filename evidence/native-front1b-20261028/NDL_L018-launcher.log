@@ -1,0 +1,57 @@
+{"attempt": "NDL_L018", "exit_status": 1, "wall_seconds": 1.287742312066257, "peak_rss_kib": "2607940", "swaps": "0", "print_axioms": []}
+theorem Aeneas.Std.UScalar.size_def : ∀ (ty : UScalarTy), UScalar.size ty = 2 ^ ty.numBits :=
+fun ty =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a.1 ty = 2 ^ ty.numBits)
+          (have this := Subtype.ext (Eq.symm wrapped✝.property);
+          this)))
+      (Eq.refl (⟨definition✝, rfl⟩.1 ty)))
+theorem Aeneas.Std.Usize.size_def : Usize.size = 2 ^ Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a => _a.1 = 2 ^ Usize.numBits)
+        (have this := Subtype.ext (Eq.symm wrapped✝.property);
+        this)))
+    (Eq.refl ⟨definition✝, rfl⟩.1))
+theorem Aeneas.Std.Usize.numBits_def : Usize.numBits = UScalarTy.Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a =>
+...
+theorem Aeneas.Std.UScalar.size_def : ∀ (ty : UScalarTy), UScalar.size ty = 2 ^ ty.numBits :=
+fun ty =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a.1 ty = 2 ^ ty.numBits)
+          (have this := Subtype.ext (Eq.symm wrapped✝.property);
+          this)))
+      (Eq.refl (⟨definition✝, rfl⟩.1 ty)))
+theorem Aeneas.Std.Usize.size_def : Usize.size = 2 ^ Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a => _a.1 = 2 ^ Usize.numBits)
+        (have this := Subtype.ext (Eq.symm wrapped✝.property);
+        this)))
+    (Eq.refl ⟨definition✝, rfl⟩.1))
+theorem Aeneas.Std.Usize.numBits_def : Usize.numBits = UScalarTy.Usize.numBits :=
+id
+  (Eq.mpr
+    (id
+      (congrArg (fun _a => _a.1 = UScalarTy.Usize.numBits)
+        (have this := Subtype.ext (Eq.symm wrapped✝.property);
+        this)))
+    (Eq.refl ⟨definition✝, rfl⟩.1))
+def Aeneas.Std.UScalar.add : {ty : UScalarTy} → UScalar ty → UScalar ty → Result (UScalar ty) :=
+fun {ty} x y => UScalar.tryMk ty (↑x + ↑y)
+NDL_generated/NDL_InspectSizes.lean:7:7: error(lean.unknownIdentifier): Unknown constant `UScalar.instHAdd`
+theorem Aeneas.Std.Usize.wrapping_add_val_eq : ∀ (x y : Usize),
+  ↑(x.wrapping_add y) = (↑x + ↑y) % UScalar.size UScalarTy.Usize :=
+fun x y => UScalar.wrapping_add_val_eq x y
+
+Running as unit: run-r4ac653c4499449d282c37045943a2306.scope; invocation ID: f75eadd1dbc444c983bb50f84ce8d952

@@ -1,0 +1,60 @@
+NDL_generated/NDL_FieldAssociation.lean:12:18: error: Application type mismatch: The argument
+  bound
+has type
+  ↑x + ↑y < 2 ^ Usize.numBits
+but is expected to have type
+  ↑x + ↑y < 2 ^ UScalarTy.Usize.numBits
+in the application
+  AspisR1.ExtractedMaskReducerOps.tryMk_success (↑x + ↑y) bound
+NDL_generated/NDL_FieldAssociation.lean:14:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑x + ↑y) % 2 ^ Usize.numBits
+in the target expression
+  ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.Usize
+
+x y : Usize
+bound : ↑x + ↑y < 2 ^ Usize.numBits
+z : UScalar UScalarTy.Usize
+hz : UScalar.tryMk UScalarTy.Usize (↑x + ↑y) = ok z
+hv : ↑z = ↑x + ↑y
+⊢ ↑x + ↑y = (↑x + ↑y) % UScalar.size UScalarTy.Usize
+NDL_generated/NDL_FieldAssociation.lean:16:2: error: Type mismatch: After simplification, term
+  hz
+ has type
+  @Eq (Result (UScalar UScalarTy.Usize)) (UScalar.tryMk UScalarTy.Usize (↑x + ↑y)) (ok (x.wrapping_add y))
+but is expected to have type
+  @Eq (Result (UScalar UScalarTy.Usize)) (x + y) (ok (x.wrapping_add y))
+NDL_generated/NDL_FieldAssociation.lean:21:18: error: Application type mismatch: The argument
+  bound
+has type
+  ↑x * ↑y < 2 ^ Usize.numBits
+but is expected to have type
+  ↑x * ↑y < 2 ^ UScalarTy.Usize.numBits
+in the application
+  AspisR1.ExtractedMaskReducerOps.tryMk_success (↑x * ↑y) bound
+NDL_generated/NDL_FieldAssociation.lean:23:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑x * ↑y % 2 ^ Usize.numBits
+in the target expression
+  ↑x * ↑y = ↑x * ↑y % UScalar.size UScalarTy.Usize
+
+x y : Usize
+bound : ↑x * ↑y < 2 ^ Usize.numBits
+z : UScalar UScalarTy.Usize
+hz : UScalar.tryMk UScalarTy.Usize (↑x * ↑y) = ok z
+hv : ↑z = ↑x * ↑y
+⊢ ↑x * ↑y = ↑x * ↑y % UScalar.size UScalarTy.Usize
+NDL_generated/NDL_FieldAssociation.lean:25:2: error: Type mismatch: After simplification, term
+  hz
+ has type
+  @Eq (Result (UScalar UScalarTy.Usize)) (UScalar.tryMk UScalarTy.Usize (↑x * ↑y)) (ok (x.wrapping_mul y))
+but is expected to have type
+  @Eq (Result (UScalar UScalarTy.Usize)) (x * y) (ok (x.wrapping_mul y))
+NDL_generated/NDL_FieldAssociation.lean:33:48: error: Type mismatch: After simplification, term
+  fits
+ has type
+  32 * (↑i + 1) < Usize.size
+but is expected to have type
+  32 * (↑i + 1) < 2 ^ Usize.numBits
+'NDL_FieldAssociation.checked_add' depends on axioms: [propext, sorryAx]
+'NDL_FieldAssociation.checked_mul' depends on axioms: [propext, sorryAx]
+'NDL_FieldAssociation.offsets' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDL_FieldAssociation.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
