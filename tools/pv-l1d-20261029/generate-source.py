@@ -89,6 +89,11 @@ for k,n in enumerate(selected):
  if n=='host_semantic.zc_rows':
   proof_start=code.index(' := by\n',code.index('theorem complete_result'))
   code=code[:proof_start]+" := by\n  unfold produce\n  conv_rhs => unfold host_semantic.zc_rows\n  simp only [erase_bind,erase_observe,erase_lift,Aeneas.Std.bind_tc_ok]\n  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n  intro zero hz\n  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr\n  rintro ⟨tr1,bs1,zc1,pending⟩ hr\n  cases pending <;> rfl\n"
+ template=Path(__file__).with_name('templates')/(mod+'.proof.txt')
+ if template.exists():
+  proof_start=code.index(' := by\n',code.index('theorem complete_result'))+len(' := by\n')
+  code=code[:proof_start]+template.read_text()
+  if mod=='PV_L1D_Source_027':code='import PV_L1D_EraseControl\n'+code
  code+='#print axioms complete_result\nend '+mod+'\n'
  path=D/(mod+'.lean')
  if mod in accepted:
