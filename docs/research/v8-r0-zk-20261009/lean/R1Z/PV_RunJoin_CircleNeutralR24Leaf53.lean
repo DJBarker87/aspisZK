@@ -15,7 +15,7 @@ theorem prime_val : prime.val = 2147483647 := by rw [prime,up_val];rfl
 theorem square_val : square.val = 4611686014132420609 := by
   unfold square
   rw [PV_RunJoin_CircleNeutralWord53.mul64]
-  · rw [prime_val];rfl
+  · rw [prime_val]
   · rw [prime_val];decide
 
 theorem pp : PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul.PP = ok square := by

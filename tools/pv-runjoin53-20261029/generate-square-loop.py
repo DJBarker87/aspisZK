@@ -10,16 +10,14 @@ theorem {name} (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
   induction n generalizing r a with
   | zero =>
     have hn := next_none r (by omega)
-    unfold {raw}.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.{name}]
     simp only [{raw}.field.square_n_loop.body,hn,bind_tc_ok,{finite}]
     rfl
   | succ n ih =>
     obtain ⟨after,hn,hs,he⟩ := next_some r (by omega)
     have hafter : after.end.val=after.start.val+n := by rw [he];omega
-    unfold {raw}.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
-    simp only [{raw}.field.square_n_loop.body,hn,bind_tc_ok]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.{name}]
+    rw [PV_RunJoin_CircleNeutralSquareCell53.{name} r after a hn]
     simp only [bind_assoc_eq,bind_tc_ok]
     change (do let v ← {raw}.field.M31.mul a a
                {raw}.field.square_n_loop after v) = {finite} (n+1) a
@@ -28,7 +26,7 @@ theorem {name} (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
     funext v
     exact ih after v hafter
 '''
-w.write('PV_RunJoin_CircleNeutralSquareLoop53',['R1Z.PV_RunJoin_CircleNeutralRange53','R1Z.PV_RunJoin_CircleNeutralFinite53','R1Z.ProverRw19LoopBind'],body,['owned','model'])
+w.write('PV_RunJoin_CircleNeutralSquareLoop53',['R1Z.PV_RunJoin_CircleNeutralRange53','R1Z.PV_RunJoin_CircleNeutralFinite53','R1Z.ProverRw19LoopBind','R1Z.PV_RunJoin_CircleNeutralSquareCell53','R1Z.PV_RunJoin_CircleNeutralSquareEquation53'],body,['owned','model'])
 w.write('PV_RunJoin_CircleNeutralSquareN53',['R1Z.PV_RunJoin_CircleNeutralSquareLoop53'],'''open PV_RunJoin_CircleNeutralShape53
 
 theorem complete (a : U32) (ha : Canon a) (count : Usize) :
