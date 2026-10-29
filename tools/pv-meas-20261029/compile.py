@@ -62,8 +62,11 @@ tim=(E/f'time-{a}.log').read_text();out=(E/f'out-{a}.log').read_text()
 for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kbytes=r'Maximum resident set size \(kbytes\): (\d+)',swaps=r'Swaps: (\d+)',wall=r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)').items():
  m=re.search(pat,tim);intent[key]=m[1] if m else None
 intent['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
+allowed_axioms={'propext','Classical.choice','Quot.sound'}
+actual_axioms={a.strip() for block in re.findall(r'depends on axioms:\s*\[([^]]*)\]',out) for a in block.split(',') if a.strip()}
+intent['nonstandard_axioms']=sorted(actual_axioms-allowed_axioms)
 intent['deps_fingerprint']=hashlib.sha256((E/('prepare-'+module+'.json')).read_bytes()).hexdigest()
-intent['admission']=admission;intent['accepted']=intent['exit']=='0' and 'error:' not in out and 'sorryAx' not in out
+intent['admission']=admission;intent['accepted']=intent['exit']=='0' and 'error:' not in out and 'sorryAx' not in out and not intent['nonstandard_axioms']
 if intent['accepted']:
  q=ssh('sha256sum '+H+'/objects/'+module+'.olean');assert q.returncode==0,q.stderr
  intent['object_sha256']=q.stdout.split()[0]

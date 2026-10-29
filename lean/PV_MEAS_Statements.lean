@@ -15,3 +15,5 @@ set_option autoImplicit false
 #print PV_MEAS_Legacy.links_of_legacy
 #print PV_MEAS_Legacy.finite_uniform_corollary
 #print PV_MEAS_Satisfiability.simultaneously_satisfiable
+
+#print axioms PV_MEAS_Deployed.privacy_headline_deployed_events_meas
