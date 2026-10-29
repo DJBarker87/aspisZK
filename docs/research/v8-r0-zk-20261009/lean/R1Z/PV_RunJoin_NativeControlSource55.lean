@@ -22,8 +22,7 @@ theorem complete
       aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
       public1 compiled variant hash context binding attempt nonce_store := by
   unfold prover.prove_masked_with_attempt PV_RunJoin_NativeControl55.run
-  repeat' (simp only [PV_RunJoin_NativeControl55.source,Aeneas.Std.uncurry,lift,bind_tc_ok]
-    first
+  repeat' (simp only [PV_RunJoin_NativeControl55.source,Aeneas.Std.uncurry,lift,bind_tc_ok]; first
     | apply PV_RunJoin_ResultBindEq55.complete; intro value
     | split
     | rfl)
