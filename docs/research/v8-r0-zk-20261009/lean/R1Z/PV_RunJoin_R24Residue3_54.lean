@@ -36,7 +36,7 @@ theorem complete (left right : Q) (hl : QC left) (hr : QC right)
   have hn : PV_RunJoin_R24Equation3_54.accumulator left right u v<18446744073709551616 := by
     unfold PV_RunJoin_R24Equation3_54.accumulator
     omega
-  obtain ⟨y,hy,hc,hv⟩ := PV_RunJoin_R24Reduce54.complete _ hn
-  exact ⟨y,(PV_RunJoin_R24Equation3_54.complete left right hl hr u v hu hv).trans hy,hc,hv⟩
+  obtain ⟨y,hy,hc,hres⟩ := PV_RunJoin_R24Reduce54.complete _ hn
+  exact ⟨y,(PV_RunJoin_R24Equation3_54.complete left right hl hr u v hu hv).trans hy,hc,hres⟩
 #print axioms complete
 end R1Z.PV_RunJoin_R24Residue3_54
