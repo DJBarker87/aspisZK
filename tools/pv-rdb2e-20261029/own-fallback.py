@@ -7,7 +7,8 @@ const=[m for m in x['order']if re.search(r'FallbackConstant',m)]
 lanes=[m for m in x['order']if re.search(r'Fallback(?:Lane|SmallSigma)',m)]
 canonical=[m for m in x['order']if m.split('.')[-1]in ['PV_CBL_FallbackBoolean','PV_CBL_FallbackAddAlgebra','PV_CBL_FallbackCanonicalT1','PV_CBL_FallbackCanonicalT2','PV_CBL_FallbackCanonicalStep']]
 # Groups are emitted at their last component so every dependency stays earlier.
-combined=[('FallbackConstants',const),('FallbackLanes',lanes),('FallbackCanonical',canonical)]
+recurrence=[m for m in x['order'] if m in ['R1Z.PV_CBL_FallbackCanonicalRecurrence','R1Z.PV_CBL_FallbackScheduleCanonical']]
+combined=[('FallbackConstants',const),('FallbackLanes',lanes),('FallbackCanonical',canonical),('FallbackRecurrence',recurrence)]
 last={vs[-1]:(name,vs)for name,vs in combined};grouped={m for _,vs in combined for m in vs}
 for m in x['order']:
  if m in shared:continue
