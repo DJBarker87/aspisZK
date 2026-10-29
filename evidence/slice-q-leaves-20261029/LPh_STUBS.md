@@ -6,7 +6,7 @@
 
 The native method here is the approved opaque-call-log form for a function whose output is a field product. The stub overapproximates all canonical replies and records SAME operands/reply/count; it does not assert a fabricated multiplication result. Kani proves the caller for every such reply. The paired Lean theorem chooses the actual emitted canonical natural product (LPi_FieldValues.mulC) and thus instantiates that universal log. This is P6/D188 semantic transport reclassification, not removal. No field multiplication is proved in Kani. The CM31 callee is previously CLOSED under NBG/LPi, not a new arithmetic claim.
 
-NEA_line::m_mul is prepared but NOT yet validated or credited. Its paired emitted base-product theorem remains a requirement before any line closure.
+NEA_line::m_mul is paired and credited only in the line packet below.
 
 No custom copy stub exists. The official KMX patch hash is bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67; same deployed verifier configuration pointer-copy positive K012 PASS / negative K013 FAIL. Native point K014 and inverted post K015 use its exact ptr-copy replacement.
 
@@ -20,3 +20,13 @@ No custom copy stub exists. The official KMX patch hash is bcdf749b78eb614378950
 | NEA_line::m_sub_one for M31::sub | NEA_LinePrimitive.sub_one_value (L060), NEA_LineTail.sub_one | Input canonical and rhs=1; the native caller asserts/establishes both, rather than assuming a convenient rhs |
 
 Point/product cuts overapproximate all canonical replies. L059 constructs the actual point and exact emitted square and composes their native argument/return observations with the exact extracted tail. The other two scalar stubs assume their actual natural spec, with named emitted-definition proofs. No field multiplication in Kani; no new trust item or body-equality premise. K029 source contains all cuts and the cfg(kani) scalar-log entry reset; K030 inverts the returned-reference equality and FAILS. Same NEA_line_opaque/deployed/KMX configuration K031 positive PASS / K032 negative FAIL.
+
+## Fold packets under validation (not yet native credit)
+
+| Opaque native operation | Named emitted return/value law | Domain |
+|---|---|---|
+| NEA_fold::em / E::mul | NEA_CurrentProducts.wide (L067), AspisR1.LPi_TowerValues.wide_mul (audited L066) | Both eight-limb values canonical; native stub asserts each operand. |
+| NEA_fold::sm / E::mul_m31 | NEA_CurrentProducts.scale (L067), NEA_ScaleProduct.wide (L066) | Canonical eight-limb value and canonical scalar; native stub asserts both. |
+| NEA_fold::bm / M31::mul | NEA_CurrentProducts.base (L067), current_mul_mod | Canonical scalar operands; native stub asserts both. |
+
+The memo log returns an arbitrary canonical value on the first occurrence of each operand pair and the same value thereafter. The read-only reference replay asserts that every reference product has the same recorded native operands. This overapproximates deterministic emitted products. Its Lean instantiation uses the exact natural product laws above; a missing replay entry is an assertion failure, never an assumption. Unused inverse-array cells are unrestricted; used cells alone are canonical. No inverse/nonzero relation is required by either fold.

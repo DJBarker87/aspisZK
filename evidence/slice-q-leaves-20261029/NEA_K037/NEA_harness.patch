@@ -1,0 +1,357 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -913,6 +913,8 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani,kani::requires(NEA_field::canonical(self)))]
++    #[cfg_attr(kani,kani::ensures(|r| NEA_field::neg_post(self,*r)))]
+     pub fn neg(self) -> QM31 {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KNeg);
+@@ -3266,3 +3268,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="field/NEA_field.rs"] mod NEA_field;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NEA_field.rs
+@@ -0,0 +1,12 @@
++use super::*;
++pub fn canonical(x:QM31)->bool {x.c0.a.0<P && x.c0.b.0<P && x.c1.a.0<P && x.c1.b.0<P}
++fn words(x:QM31)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn neg(x:u32)->u32 {if x==0 {0}else{P-x}}
++pub fn neg_post(x:QM31,r:QM31)->bool {
++ let a=words(x);let want=[neg(a[0]),neg(a[1]),neg(a[2]),neg(a[3])];
++ if cfg!(NEA_wrong_neg) {words(r)!=want} else {words(r)==want}
++}
++#[kani::proof_for_contract(QM31::neg)]
++fn qm_neg() {let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};kani::assume(canonical(x));let _=x.neg();}
++
++impl kani::Arbitrary for M31 {fn any()->Self{M31(kani::any())}}
+--- a/crates/aspis-core/src/r0/domain.rs
++++ b/crates/aspis-core/src/r0/domain.rs
+@@ -8,6 +8,7 @@
+         #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+         pub struct $name(usize);
+         impl $name {
++            #[cfg_attr(kani,kani::ensures(|r| match r {Ok(v)=>index < $bound && v.0==index,Err(e)=>index >= $bound && *e==Error::IndexOutOfRange}))]
+             pub fn new(index: usize) -> Result<Self, Error> {
+                 if index < $bound {
+                     Ok(Self(index))
+@@ -97,3 +98,10 @@
+ pub fn line_node<E: CodeField>(u: FibreIndex) -> E {
+     basis::double(exact_circle_x::<E>(u))
+ }
++
++#[cfg(kani)] mod NEA_domain { use super::*;
++#[kani::proof_for_contract(FibreIndex::new)] fn constructor(){let i:usize=kani::any();let _=FibreIndex::new(i);}
++#[kani::proof] fn reject_control(){let i:usize=kani::any();let x=FibreIndex::new(i);assert!(x.is_ok());}
++}
++
++#[cfg(kani)] impl<E:kani::Arbitrary> kani::Arbitrary for Point<E> {fn any()->Self{Self{x:kani::any(),y:kani::any()}}}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -135,11 +135,13 @@
+     let mut prefixes=Vec::with_capacity(flat.len());
+     let mut product=M31::ONE;
+     let mut index=0;
++    #[cfg(all(kani,NEA_prefix))] { (prefixes,product,index)=NEA_prefix::seed(flat); }
+     while index<flat.len() {
+         let value=flat[index];
+         prefixes.push(product);
+         product=product.mul(value);
+         index+=1;
++        #[cfg(all(kani,NEA_prefix))] {NEA_prefix::observe(flat,&prefixes,product,index);break;}
+     }
+     (prefixes,product)
+ }
+@@ -179,7 +181,11 @@
+     fn for_query(&self,index:usize)->&[M31;5] {&self.inverses[index-self.start]}
+ }
+ #[inline(always)]
++#[cfg_attr(all(kani,NEA_fold),kani::requires(NEA_fold::domain(alpha,a,inverse,false)))]
++#[cfg_attr(all(kani,NEA_fold),kani::modifies(&raw mut NEA_fold::EM,&raw mut NEA_fold::SM,&raw mut NEA_fold::BM))]
++#[cfg_attr(all(kani,NEA_fold),kani::ensures(|r| NEA_fold::circle_post(*r,alpha,a,inverse)))]
+ fn circle_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
++    #[cfg(all(kani,NEA_fold))] unsafe {NEA_fold::reset();}
+     let [ix,iy,_,_,_]=*inverse;let [a,b,c,d]=a;
+     let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);
+     let h1=a.sub(b).sub(c).add(d).mul_m31(QUARTER.mul(iy));
+@@ -188,7 +194,11 @@
+     h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))
+ }
+ #[inline(always)]
++#[cfg_attr(all(kani,NEA_fold),kani::requires(NEA_fold::domain(alpha,a,inverse,true)))]
++#[cfg_attr(all(kani,NEA_fold),kani::modifies(&raw mut NEA_fold::EM,&raw mut NEA_fold::SM,&raw mut NEA_fold::BM))]
++#[cfg_attr(all(kani,NEA_fold),kani::ensures(|r| NEA_fold::line_post(*r,alpha,a,inverse)))]
+ fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
++    #[cfg(all(kani,NEA_fold))] unsafe {NEA_fold::reset();}
+     let [_,_,ix,iy,iz]=*inverse;let half=M31(1073741824);let [a,b,c,d]=a;
+     let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);
+     let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(iz));
+@@ -526,3 +536,9 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NEA_verifier.rs"] mod NEA_verifier;
++
++#[cfg(kani)] #[path="NEA_fold.rs"] mod NEA_fold;
++
++#[cfg(all(kani,NEA_prefix))] #[path="NEA_prefix.rs"] mod NEA_prefix;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_verifier.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof] fn index_alignment() {let u:usize=kani::any();kani::assume(u<262144);let a=domain::FibreIndex::new(u/4*4).unwrap();let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(a.get()==u/4*4 && b.get()==u/4*4+3);}
++#[kani::proof] fn index_alignment_wrong() {let u:usize=kani::any();kani::assume(u<262144);let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(b.get()==u/4*4);}
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
+ //! M31 PCS substrate (Stage 0).
+ //!
+@@ -97,3 +98,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] pub(crate) mod NEA_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] pub(crate) mod NEA_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -279,6 +279,10 @@
+ 
+ /// Return exactly the core R0 fibre point for this checked index.
+ #[inline]
++#[cfg_attr(all(kani,not(NEA_line_opaque)),kani::requires(u.get()<262144))]
++#[cfg_attr(all(kani,not(NEA_line_opaque)),kani::modifies(&raw mut NEA_point::LOG))]
++#[cfg_attr(all(kani,not(NEA_point_tail),not(NEA_line_opaque)),kani::ensures(|r| NEA_point::point_post(u,*r)))]
++#[cfg_attr(all(kani,NEA_point_tail,not(NEA_line_opaque)),kani::ensures(|r| NEA_point::tail_post(u,*r)))]
+ pub fn fibre_point(u: FibreIndex) -> Point<M31> {
+     let index = u.get();
+     let left = table_value(TABLE_A[index & 511]);
+@@ -292,8 +296,16 @@
+ 
+ /// Return the R0 line node `2*x^2 - 1` for this checked fibre index.
+ #[inline]
++#[cfg_attr(kani,kani::requires(u.get()<262144))]
++#[cfg_attr(kani,kani::modifies(&raw mut NEA_point::LOG,&raw mut NEA_line::LOG))]
++#[cfg_attr(kani,kani::ensures(|r| NEA_line::line_post(u,*r)))]
+ pub fn line_node(u: FibreIndex) -> M31 {
++    #[cfg(all(kani,NEA_line_opaque))] unsafe {NEA_line::LOG.count=0;}
+     let x = fibre_point(u).x;
+     let square = x.mul(x);
+     square.double().sub(M31::ONE)
+ }
++
++#[cfg(kani)] #[path="NEA_point.rs"] mod NEA_point;
++
++#[cfg(kani)] #[path="NEA_line.rs"] mod NEA_line;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_point.rs
+@@ -0,0 +1,29 @@
++use super::*;
++#[path="NEA_point_reference.rs"] mod NEA_point_reference;
++#[derive(Clone,Copy,kani::Arbitrary)]
++pub(super) struct PointLog {pub count:usize,pub left:[u32;2],pub right:[u32;2],pub reply:[u32;2]}
++pub(super) static mut LOG:PointLog=PointLog{count:0,left:[0;2],right:[0;2],reply:[0;2]};
++fn words(x:CM31)->[u32;2] {[x.a.0,x.b.0]}
++fn canonical(x:CM31)->bool {x.a.0<2147483647 && x.b.0<2147483647}
++// Opaque product log: UNIVERSAL over canonical replies, not an asserted product.
++// Lean selects the one exact canonical natural-number product after this check.
++pub(super) fn cm_mul(x:CM31,y:CM31)->CM31 {
++ assert!(canonical(x) && canonical(y));
++ let z=CM31{a:M31(kani::any()),b:M31(kani::any())};kani::assume(canonical(z));
++ unsafe {LOG.count+=1;LOG.left=words(x);LOG.right=words(y);LOG.reply=words(z);}
++ z
++}
++pub fn point_post(u:FibreIndex,r:Point<M31>)->bool {unsafe {
++ let i=u.get();let a=TABLE_A[i&511];let b=TABLE_B[i>>9];
++ let association=LOG.count==1 && LOG.left==[a.0,a.1] && LOG.right==[b.0,b.1];
++ let reference=NEA_point_reference::point_ref(i,&TABLE_A,&TABLE_B,LOG.reply);
++ let returned=r.x.0==reference[4] && r.y.0==reference[5] && LOG.left==[reference[0],reference[1]] && LOG.right==[reference[2],reference[3]];
++ association && LOG.reply[0]<2147483647 && LOG.reply[1]<2147483647 && if cfg!(NEA_wrong_point){!returned}else{returned}
++}}
++#[cfg_attr(not(NEA_line_opaque),kani::proof_for_contract(fibre_point))]
++#[cfg_attr(NEA_line_opaque,kani::proof)]
++#[kani::stub(CM31::mul,cm_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn point() {unsafe{LOG.count=0;} let i:usize=kani::any();kani::assume(i<262144);let u=FibreIndex::new(i).unwrap();let _=fibre_point(u);}
++
++pub fn tail_post(_u:FibreIndex,r:Point<M31>)->bool {unsafe {let valid=LOG.count==1 && LOG.reply[0]<2147483647 && LOG.reply[1]<2147483647 && r.x.0==LOG.reply[0] && r.y.0==LOG.reply[1];if cfg!(NEA_wrong_point){!valid}else{valid}}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_point_reference.rs
+@@ -0,0 +1 @@
++pub fn point_ref(index:usize,a:&[(u32,u32);512],b:&[(u32,u32);512],product:[u32;2])->[u32;6] {let left=a[index&511];let right=b[index>>9];[left.0,left.1,right.0,right.1,product[0],product[1]]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_line.rs
+@@ -0,0 +1,30 @@
++use super::*;
++#[derive(Clone,Copy,kani::Arbitrary)]
++pub(super) struct ScalarLog {pub count:usize,pub x:u32,pub y:u32,pub reply:u32}
++pub(super) static mut LOG:ScalarLog=ScalarLog{count:0,x:0,y:0,reply:0};
++fn m_mul(x:M31,y:M31)->M31 {assert!(x.0<2147483647 && y.0<2147483647);let z:u32=kani::any();kani::assume(z<2147483647);unsafe{LOG.count+=1;LOG.x=x.0;LOG.y=y.0;LOG.reply=z;}M31(z)}
++fn reference(square:u32)->u32 {let t=square+square;let d=if t>=2147483647 {t-2147483647}else{t};if d>=1 {d-1}else{2147483647-1}}
++pub fn line_post(u:FibreIndex,r:M31)->bool {unsafe {
++ let p=Point{x:M31(NEA_point::LOG.reply[0]),y:M31(NEA_point::LOG.reply[1])};
++ let point_ok=if cfg!(NEA_line_opaque){NEA_point::LOG.count==1 && NEA_point::LOG.left[0] as usize==u.get() && NEA_point::LOG.reply[0]<2147483647 && NEA_point::LOG.reply[1]<2147483647}else if cfg!(NEA_point_tail){NEA_point::tail_post(u,p)}else{NEA_point::point_post(u,p)};
++ let association=point_ok && LOG.count==1 && LOG.x==p.x.0 && LOG.y==p.x.0;
++ association && if cfg!(NEA_wrong_line){r.0!=reference(LOG.reply)}else{r.0==reference(LOG.reply)}
++}}
++#[kani::proof_for_contract(line_node)]
++#[cfg_attr(not(NEA_line_opaque),kani::stub_verified(fibre_point))]
++#[cfg_attr(NEA_line_opaque,kani::stub(fibre_point,point_cut))]
++#[cfg_attr(NEA_line_opaque,kani::stub(M31::double,m_double))]
++#[cfg_attr(NEA_line_opaque,kani::stub(M31::sub,m_sub_one))]
++#[kani::stub(CM31::mul,NEA_point::cm_mul)]
++#[kani::stub(M31::mul,m_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn line(){unsafe{LOG=kani::any();NEA_point::LOG=kani::any();}let i:usize=kani::any();kani::assume(i<262144);let u=FibreIndex::new(i).unwrap();let _=line_node(u);}
++
++fn point_cut(u:FibreIndex)->Point<M31> {
++ assert!(u.get()<262144);
++ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647 && b<2147483647);
++ unsafe{NEA_point::LOG=NEA_point::PointLog{count:1,left:[u.get() as u32,0],right:[0;2],reply:[a,b]};}
++ Point{x:M31(a),y:M31(b)}
++}
++fn m_double(x:M31)->M31 {assert!(x.0<2147483647);let t=x.0+x.0;let spec=if t>=2147483647{t-2147483647}else{t};let out:u32=kani::any();kani::assume(out==spec);M31(out)}
++fn m_sub_one(x:M31,y:M31)->M31 {assert!(x.0<2147483647 && y.0==1);let spec=if x.0>=1{x.0-1}else{2147483646};let out:u32=kani::any();kani::assume(out==spec);M31(out)}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_fold.rs
+@@ -0,0 +1,66 @@
++use super::*;
++#[path="NEA_fold_reference.rs"] mod NEA_fold_reference;
++use NEA_fold_reference::{NEA_Ops,circle_ref,line_ref};
++const P:u32=2147483647;
++fn canon(x:E)->bool {let w=x.to_limbs();w[0]<P&&w[1]<P&&w[2]<P&&w[3]<P&&w[4]<P&&w[5]<P&&w[6]<P&&w[7]<P}
++fn any_e()->E {let w:[u32;8]=kani::any();kani::assume(w[0]<P&&w[1]<P&&w[2]<P&&w[3]<P&&w[4]<P&&w[5]<P&&w[6]<P&&w[7]<P);E::from_limbs(w).unwrap()}
++pub fn domain(alpha:E,a:[E;4],i:&[M31;5],line:bool)->bool {canon(alpha)&&canon(a[0])&&canon(a[1])&&canon(a[2])&&canon(a[3])&&if line{i[2].0<P&&i[3].0<P&&i[4].0<P}else{i[0].0<P&&i[1].0<P}}
++#[derive(Clone,Copy)] pub(super) struct EMEntry {x:E,y:E,out:E}
++pub(super) struct EMMemo {count:usize,slots:[EMEntry;8]}
++pub(super) static mut EM:EMMemo=EMMemo{count:0,slots:[EMEntry{x:E::ZERO,y:E::ZERO,out:E::ZERO};8]};
++#[derive(Clone,Copy)] pub(super) struct BMEntry {x:M31,y:M31,out:M31}
++pub(super) struct BMMemo {count:usize,slots:[BMEntry;8]}
++pub(super) static mut BM:BMMemo=BMMemo{count:0,slots:[BMEntry{x:M31::ZERO,y:M31::ZERO,out:M31::ZERO};8]};
++#[derive(Clone,Copy)] pub(super) struct SMEntry {x:E,y:M31,out:E}
++pub(super) struct SMMemo {count:usize,slots:[SMEntry;16]}
++pub(super) static mut SM:SMMemo=SMMemo{count:0,slots:[SMEntry{x:E::ZERO,y:M31::ZERO,out:E::ZERO};16]};
++fn em(x:E,y:E)->E {assert!(canon(x)&&canon(y));unsafe{assert!(EM.count<8);let out=any_e();let k=EM.count;EM.slots[k]=EMEntry{x,y,out};EM.count+=1;out}}
++fn sm(x:E,y:M31)->E {assert!(canon(x)&&y.0<P);unsafe{assert!(SM.count<16);let out=any_e();let k=SM.count;SM.slots[k]=SMEntry{x,y,out};SM.count+=1;out}}
++fn bm(x:M31,y:M31)->M31 {assert!(x.0<P&&y.0<P);unsafe {
++if BM.count>0 && BM.slots[0].x==x && BM.slots[0].y==y {return BM.slots[0].out;}
++if BM.count>1 && BM.slots[1].x==x && BM.slots[1].y==y {return BM.slots[1].out;}
++if BM.count>2 && BM.slots[2].x==x && BM.slots[2].y==y {return BM.slots[2].out;}
++if BM.count>3 && BM.slots[3].x==x && BM.slots[3].y==y {return BM.slots[3].out;}
++if BM.count>4 && BM.slots[4].x==x && BM.slots[4].y==y {return BM.slots[4].out;}
++if BM.count>5 && BM.slots[5].x==x && BM.slots[5].y==y {return BM.slots[5].out;}
++if BM.count>6 && BM.slots[6].x==x && BM.slots[6].y==y {return BM.slots[6].out;}
++if BM.count>7 && BM.slots[7].x==x && BM.slots[7].y==y {return BM.slots[7].out;}
++let w:u32=kani::any();kani::assume(w<P);let out=M31(w);
++assert!(BM.count<8);let k=BM.count;BM.slots[k]=BMEntry{x,y,out};BM.count+=1;out
++}}
++fn bm_replay(x:M31,y:M31)->M31 {assert!(x.0<P&&y.0<P);unsafe {
++if BM.count>0 && BM.slots[0].x==x && BM.slots[0].y==y {return BM.slots[0].out;}
++if BM.count>1 && BM.slots[1].x==x && BM.slots[1].y==y {return BM.slots[1].out;}
++if BM.count>2 && BM.slots[2].x==x && BM.slots[2].y==y {return BM.slots[2].out;}
++if BM.count>3 && BM.slots[3].x==x && BM.slots[3].y==y {return BM.slots[3].out;}
++if BM.count>4 && BM.slots[4].x==x && BM.slots[4].y==y {return BM.slots[4].out;}
++if BM.count>5 && BM.slots[5].x==x && BM.slots[5].y==y {return BM.slots[5].out;}
++if BM.count>6 && BM.slots[6].x==x && BM.slots[6].y==y {return BM.slots[6].out;}
++if BM.count>7 && BM.slots[7].x==x && BM.slots[7].y==y {return BM.slots[7].out;}
++panic!("reference operand has no matching native call");
++}}
++pub(super) unsafe fn reset(){EM.count=0;SM.count=0;BM.count=0;}
++struct Replay{ie:usize,is:usize,ib:usize}
++impl NEA_Ops<E,M31> for Replay {
++ fn add(&mut self,x:E,y:E)->E {assert!(canon(x)&&canon(y));x.add(y)}
++ fn sub(&mut self,x:E,y:E)->E {assert!(canon(x)&&canon(y));x.sub(y)}
++fn mul(&mut self,x:E,y:E)->E {unsafe{let k=self.ie;assert!(k<EM.count);let e=EM.slots[k];assert!(e.x==x&&e.y==y);self.ie+=1;e.out}}
++fn scale(&mut self,x:E,y:M31)->E {unsafe{let k=self.is;assert!(k<SM.count);let e=SM.slots[k];assert!(e.x==x&&e.y==y);self.is+=1;e.out}}
++fn base_mul(&mut self,x:M31,y:M31)->M31 {bm_replay(x,y)}
++}
++pub fn circle_post(r:E,alpha:E,a:[E;4],inverse:&[M31;5])->bool {let expected=circle_ref::<E,M31,Replay>(&mut Replay{ie:0,is:0,ib:0},alpha,a,*inverse,QUARTER);if cfg!(NEA_wrong_fold){r!=expected}else{r==expected}}
++pub fn line_post(r:E,alpha:E,a:[E;4],inverse:&[M31;5])->bool {let expected=line_ref::<E,M31,Replay>(&mut Replay{ie:0,is:0,ib:0},alpha,a,*inverse,QUARTER,M31(1073741824));if cfg!(NEA_wrong_fold){r!=expected}else{r==expected}}
++#[cfg_attr(NEA_fold,kani::proof_for_contract(circle_fold_with_inverses))]
++#[cfg_attr(not(NEA_fold),kani::proof)]
++#[kani::stub(E::mul,em)]
++#[kani::stub(E::mul_m31,sm)]
++#[kani::stub(M31::mul,bm)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn circle() {let alpha=any_e();let a=[any_e(),any_e(),any_e(),any_e()];let inverse=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];kani::assume(domain(alpha,a,&inverse,false));let _=circle_fold_with_inverses(alpha,a,&inverse);}
++#[cfg_attr(NEA_fold,kani::proof_for_contract(line_fold_with_inverses))]
++#[cfg_attr(not(NEA_fold),kani::proof)]
++#[kani::stub(E::mul,em)]
++#[kani::stub(E::mul_m31,sm)]
++#[kani::stub(M31::mul,bm)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn line() {let alpha=any_e();let a=[any_e(),any_e(),any_e(),any_e()];let inverse=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];kani::assume(domain(alpha,a,&inverse,true));let _=line_fold_with_inverses(alpha,a,&inverse);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_fold_reference.rs
+@@ -0,0 +1,25 @@
++pub trait NEA_Ops<E,M> {
++ fn add(&mut self,x:E,y:E)->E; fn sub(&mut self,x:E,y:E)->E;
++ fn mul(&mut self,x:E,y:E)->E; fn scale(&mut self,x:E,y:M)->E; fn base_mul(&mut self,x:M,y:M)->M;
++}
++pub fn circle_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M)->E {
++ let [ix,iy,_,_,_]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let amb=ops.sub(a,b);let ambmc=ops.sub(amb,c);let ambmcpd=ops.add(ambmc,d);
++ let m=ops.base_mul(quarter,iy);let h1=ops.scale(ambmcpd,m);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m1=ops.base_mul(quarter,ix);let h2=ops.scale(abmcmd,m1);
++ let ambpc=ops.add(amb,c);let ambpcmd=ops.sub(ambpc,d);let m2=ops.base_mul(m1,iy);let h3=ops.scale(ambpcmd,m2);
++ let we10=ops.mul(alpha,h3);let we11=ops.add(h2,we10);let we12=ops.mul(alpha,we11);
++ let we13=ops.add(h1,we12);let we14=ops.mul(alpha,we13);ops.add(h0,we14)
++}
++pub fn line_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M,half:M)->E {
++ let [_,_,ix,iy,iz]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m=ops.base_mul(quarter,iz);let h2=ops.scale(abmcmd,m);
++ let amb=ops.sub(a,b);let m1=ops.base_mul(half,ix);let c0=ops.scale(amb,m1);
++ let dmc=ops.sub(d,c);let m2=ops.base_mul(half,iy);let c1=ops.scale(dmc,m2);
++ let c0pc1=ops.add(c0,c1);let h1=ops.scale(c0pc1,half);
++ let c0mc1=ops.sub(c0,c1);let m3=ops.base_mul(half,iz);let h3=ops.scale(c0mc1,m3);
++ let we9=ops.mul(alpha,h3);let we10=ops.add(h2,we9);let we11=ops.mul(alpha,we10);
++ let we12=ops.add(h1,we11);let we13=ops.mul(alpha,we12);ops.add(h0,we13)
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_prefix.rs
+@@ -0,0 +1,23 @@
++use super::*;
++const P:u32=2147483647;
++static mut INDEX:usize=0;static mut PRODUCT:M31=M31::ZERO;static mut FRAME:usize=0;static mut VALUE:M31=M31::ZERO;
++static mut COUNT:usize=0;static mut X:M31=M31::ZERO;static mut Y:M31=M31::ZERO;static mut OUT:M31=M31::ZERO;
++pub(super) fn seed(flat:&[M31])->(Vec<M31>,M31,usize){
++ let index:usize=kani::any();kani::assume(index<flat.len());
++ let words:[M31;110]=kani::any();let prefixes=words[..index].to_vec();
++ let product=M31(kani::any());let frame:usize=kani::any();kani::assume(index==0||frame<index);
++ unsafe{INDEX=index;PRODUCT=product;FRAME=frame;if index>0{VALUE=prefixes[frame];}COUNT=0;}
++ (prefixes,product,index)
++}
++fn mul(x:M31,y:M31)->M31 {let r:u32=kani::any();kani::assume(r<P);unsafe{COUNT+=1;X=x;Y=y;OUT=M31(r);}M31(r)}
++pub(super) fn observe(flat:&[M31],prefixes:&[M31],product:M31,index:usize){unsafe{
++ assert!(COUNT==1&&X==PRODUCT&&Y==flat[INDEX]&&product==OUT);
++ assert!(index==INDEX+1&&prefixes.len()==index&&prefixes[INDEX]==PRODUCT);
++ if INDEX>0 {assert!(prefixes[FRAME]==VALUE);}
++ if cfg!(NEA_wrong_prefix){assert!(prefixes.len()==INDEX);}
++}}
++#[kani::proof]
++#[kani::unwind(120)]
++#[kani::stub(M31::mul,mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn step(){let flat:[M31;110]=kani::any();let n:usize=kani::any();kani::assume(n>0&&n<=110);let _=batch_prefix_products(&flat[..n]);}

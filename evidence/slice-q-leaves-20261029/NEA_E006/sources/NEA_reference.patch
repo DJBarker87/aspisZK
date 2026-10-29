@@ -1,0 +1,29 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,26 @@
++#![no_std]
++pub trait NEA_Ops<E,M> {
++ fn add(&mut self,x:E,y:E)->E; fn sub(&mut self,x:E,y:E)->E;
++ fn mul(&mut self,x:E,y:E)->E; fn scale(&mut self,x:E,y:M)->E; fn base_mul(&mut self,x:M,y:M)->M;
++}
++pub fn circle_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M)->E {
++ let [ix,iy,_,_,_]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let amb=ops.sub(a,b);let ambmc=ops.sub(amb,c);let ambmcpd=ops.add(ambmc,d);
++ let m=ops.base_mul(quarter,iy);let h1=ops.scale(ambmcpd,m);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m1=ops.base_mul(quarter,ix);let h2=ops.scale(abmcmd,m1);
++ let ambpc=ops.add(amb,c);let ambpcmd=ops.sub(ambpc,d);let m2=ops.base_mul(m1,iy);let h3=ops.scale(ambpcmd,m2);
++ let we10=ops.mul(alpha,h3);let we11=ops.add(h2,we10);let we12=ops.mul(alpha,we11);
++ let we13=ops.add(h1,we12);let we14=ops.mul(alpha,we13);ops.add(h0,we14)
++}
++pub fn line_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M,half:M)->E {
++ let [_,_,ix,iy,iz]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m=ops.base_mul(quarter,iz);let h2=ops.scale(abmcmd,m);
++ let amb=ops.sub(a,b);let m1=ops.base_mul(half,ix);let c0=ops.scale(amb,m1);
++ let dmc=ops.sub(d,c);let m2=ops.base_mul(half,iy);let c1=ops.scale(dmc,m2);
++ let c0pc1=ops.add(c0,c1);let h1=ops.scale(c0pc1,half);
++ let c0mc1=ops.sub(c0,c1);let m3=ops.base_mul(half,iz);let h3=ops.scale(c0mc1,m3);
++ let we9=ops.mul(alpha,h3);let we10=ops.add(h2,we9);let we11=ops.mul(alpha,we10);
++ let we12=ops.add(h1,we11);let we13=ops.mul(alpha,we12);ops.add(h0,we13)
++}

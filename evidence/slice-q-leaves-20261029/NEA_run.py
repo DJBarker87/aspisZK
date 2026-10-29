@@ -60,6 +60,7 @@ elif kind=='kani':
         native[native.index('--manifest-path')+1]=B+'/NEA_src/crates/aspis-core/Cargo.toml'
         native[native.index('--features')+1]='r0'
     if os.environ.get('NEA_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NEA_RUST_CFG']
+    if os.environ.get('NEA_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEA_gate.py',a+'.json']
 elif kind=='inspect':
     files['NEA_goto_inspect.py']=(E/'NEA_goto_inspect.py').read_text()

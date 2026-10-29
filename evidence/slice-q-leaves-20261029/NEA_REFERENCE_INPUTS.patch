@@ -9,6 +9,11 @@
 +pub fn residue_flush_ref(x:u64)->u64 {(x&2147483647)+(x>>31)}
 +pub fn line_double_sub_ref(square:u32)->u32 {let t=square+square;let d=if t>=2147483647 {t-2147483647}else{t};if d>=1 {d-1}else{2147483647-1}}
 --- /dev/null
++++ b/NEA_point_param_reference.rs
+@@ -0,0 +1,2 @@
++#![no_std]
++pub fn point_ref(index:usize,a:&[(u32,u32);512],b:&[(u32,u32);512],product:[u32;2])->[u32;6] {let left=a[index&511];let right=b[index>>9];[left.0,left.1,right.0,right.1,product[0],product[1]]}
+--- /dev/null
 +++ b/NEA_point_reference.rs
 @@ -0,0 +1,263 @@
 +#![no_std]
@@ -275,15 +280,10 @@
 +];
 +pub fn point_ref(index:usize,product:[u32;2])->[u32;6] {let left=TABLE_A[index&511];let right=TABLE_B[index>>9];[left.0,left.1,right.0,right.1,product[0],product[1]]}
 --- /dev/null
-+++ b/NEA_point_param_reference.rs
-@@ -0,0 +1,2 @@
-+#![no_std]
-+pub fn point_ref(index:usize,a:&[(u32,u32);512],b:&[(u32,u32);512],product:[u32;2])->[u32;6] {let left=a[index&511];let right=b[index>>9];[left.0,left.1,right.0,right.1,product[0],product[1]]}
---- /dev/null
 +++ b/NEA_fold_reference.rs
 @@ -0,0 +1,26 @@
 +#![no_std]
-+pub trait NEA_Ops<E:Copy,M:Copy> {
++pub trait NEA_Ops<E,M> {
 + fn add(x:E,y:E)->E; fn sub(x:E,y:E)->E;
 + fn mul(x:E,y:E)->E; fn scale(x:E,y:M)->E; fn base_mul(x:M,y:M)->M;
 +}
@@ -307,4 +307,41 @@
 + let c0mc1=O::sub(c0,c1);let m3=O::base_mul(half,iz);let h3=O::scale(c0mc1,m3);
 + let we9=O::mul(alpha,h3);let we10=O::add(h2,we9);let we11=O::mul(alpha,we10);
 + let we12=O::add(h1,we11);let we13=O::mul(alpha,we12);O::add(h0,we13)
++}
+--- /dev/null
++++ b/NEA_fold_state_reference.rs
+@@ -0,0 +1,26 @@
++#![no_std]
++pub trait NEA_Ops<E,M> {
++ fn add(&mut self,x:E,y:E)->E; fn sub(&mut self,x:E,y:E)->E;
++ fn mul(&mut self,x:E,y:E)->E; fn scale(&mut self,x:E,y:M)->E; fn base_mul(&mut self,x:M,y:M)->M;
++}
++pub fn circle_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M)->E {
++ let [ix,iy,_,_,_]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let amb=ops.sub(a,b);let ambmc=ops.sub(amb,c);let ambmcpd=ops.add(ambmc,d);
++ let m=ops.base_mul(quarter,iy);let h1=ops.scale(ambmcpd,m);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m1=ops.base_mul(quarter,ix);let h2=ops.scale(abmcmd,m1);
++ let ambpc=ops.add(amb,c);let ambpcmd=ops.sub(ambpc,d);let m2=ops.base_mul(m1,iy);let h3=ops.scale(ambpcmd,m2);
++ let we10=ops.mul(alpha,h3);let we11=ops.add(h2,we10);let we12=ops.mul(alpha,we11);
++ let we13=ops.add(h1,we12);let we14=ops.mul(alpha,we13);ops.add(h0,we14)
++}
++pub fn line_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(ops:&mut O,alpha:E,values:[E;4],inverse:[M;5],quarter:M,half:M)->E {
++ let [_,_,ix,iy,iz]=inverse;let [a,b,c,d]=values;
++ let ab=ops.add(a,b);let abc=ops.add(ab,c);let abcd=ops.add(abc,d);let h0=ops.scale(abcd,quarter);
++ let abmc=ops.sub(ab,c);let abmcmd=ops.sub(abmc,d);let m=ops.base_mul(quarter,iz);let h2=ops.scale(abmcmd,m);
++ let amb=ops.sub(a,b);let m1=ops.base_mul(half,ix);let c0=ops.scale(amb,m1);
++ let dmc=ops.sub(d,c);let m2=ops.base_mul(half,iy);let c1=ops.scale(dmc,m2);
++ let c0pc1=ops.add(c0,c1);let h1=ops.scale(c0pc1,half);
++ let c0mc1=ops.sub(c0,c1);let m3=ops.base_mul(half,iz);let h3=ops.scale(c0mc1,m3);
++ let we9=ops.mul(alpha,h3);let we10=ops.add(h2,we9);let we11=ops.mul(alpha,we10);
++ let we12=ops.add(h1,we11);let we13=ops.mul(alpha,we12);ops.add(h0,we13)
++}
+--- /dev/null
++++ b/NEA_prefix_reference.rs
+@@ -0,0 +1,5 @@
++#![no_std]
++// A one-iteration native call-log reference. Multiplication is Lean-discharged.
++pub fn prefix_step_ref(product:u32,value:u32,reply:u32,index:usize)->(u32,usize,u32,u32) {
++ (reply,index+1,product,value)
 +}

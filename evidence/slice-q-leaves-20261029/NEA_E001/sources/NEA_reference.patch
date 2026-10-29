@@ -1,0 +1,10 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,7 @@
++#![no_std]
++pub fn neg_ref(x:u32)->u32 {if x==0 {0} else {2147483647-x}}
++pub fn qm_neg_ref(x:[u32;4])->[u32;4] {[neg_ref(x[0]),neg_ref(x[1]),neg_ref(x[2]),neg_ref(x[3])]}
++pub fn fibre_new_ref(x:usize)->Result<usize,u8> {if x<262144 {Ok(x)} else {Err(1)}}
++pub fn aligned_ref(x:usize)->[usize;2] {[x/4*4,x/4*4+3]}
++pub fn residue_flush_ref(x:u64)->u64 {(x&2147483647)+(x>>31)}
++pub fn line_double_sub_ref(square:u32)->u32 {let t=square+square;let d=if t>=2147483647 {t-2147483647}else{t};if d>=1 {d-1}else{2147483647-1}}
