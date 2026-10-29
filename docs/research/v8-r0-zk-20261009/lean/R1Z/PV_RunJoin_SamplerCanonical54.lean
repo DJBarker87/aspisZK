@@ -9,7 +9,7 @@ theorem complete (block : Array U8 32#usize) :
   obtain ⟨digits,hd,hc⟩ := PV_RunJoin_SamplerDigits54.complete block
   let read (i : Fin 4) := digits.val[i.val]'(by rw [digits.property];exact i.isLt)
   have index (i : Fin 4) : Array.index_usize digits (Usize.ofNatCore i.val (by scalar_tac))=ok (read i) :=
-    ProverCommitArrayIndex25.array_index_usize_ok _ _ i.isLt
+    ProverCommitArrayIndex25.array_index_usize_ok digits (Usize.ofNatCore i.val (by scalar_tac)) (by change i.val<4;exact i.isLt)
   refine ⟨((read 0,read 1),(read 2,read 3)),?_,⟨⟨hc 0 (by decide),hc 1 (by decide)⟩,⟨hc 2 (by decide),hc 3 (by decide)⟩⟩⟩
   unfold shipped_sampler.qm31_sample
   rw [hd,bind_tc_ok]
