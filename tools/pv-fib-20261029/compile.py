@@ -45,4 +45,4 @@ for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kbytes=r'Maximum residen
 intent['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
 intent['admission']=admission;intent['accepted']=intent['exit']=='0' and 'error:' not in out and 'sorryAx' not in out
 (E/f'receipt-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
-print(out);print(json.dumps(intent,indent=2));sys.exit(0 if intent['accepted'] else 1)
+print(out);print(json.dumps({k:v for k,v in intent.items() if k not in ['admission','command']},indent=2));sys.exit(0 if intent['accepted'] else 1)

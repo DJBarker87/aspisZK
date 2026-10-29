@@ -36,41 +36,41 @@ theorem offCharged_exact {M : Type} (old : Fin 8 → M → Prop)
 /-- I ranges over COMMON samples of every actual invocation (including
 witness and adversary). good i is OffCharged old queries (cp.toM s).
 No acceptance, success, fixed witness, or fixed native prefix restriction.
-Public equality includes the statement and ALL public invocation data.
+Public equality includes the statement and ALL pubData invocation data.
 Signal is only the owner-option-B failure signal, never elapsed time or a
 secret-dependent prefix. Its native witness independence is a separate link. -/
 def Fibres {I P S R V : Type} (good : I → Prop)
-    (public : I → P) (signal : I → S) (returned : I → R)
+    (pubData : I → P) (signal : I → S) (returned : I → R)
     (observe : I → V) : Prop :=
-  ∀ l r, good l → good r → public l = public r → signal l = signal r →
+  ∀ l r, good l → good r → pubData l = pubData r → signal l = signal r →
     returned l = returned r → observe l = observe r
 
 /-- This form retains all successful states, same-error failure prefixes,
 and every finite divergent prefix. It is stronger than decision equality. -/
 def SourceFibres {I P S W A : Type} (good : I → Prop)
-    (public : I → P) (signal : I → S)
+    (pubData : I → P) (signal : I → S)
     (run : I → R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A)
     (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes) : Prop :=
-  Fibres good public signal
+  Fibres good pubData signal
     (fun i => R1Z.PV_RunJoin_WorldDecode33.returned (run i))
     (fun i => PV_RJ4IDB.actualObservation render (run i))
 
 theorem decoder_implies_fibres {I P S R V : Type} (good : I → Prop)
-    (public : I → P) (signal : I → S) (returned : I → R) (observe : I → V)
+    (pubData : I → P) (signal : I → S) (returned : I → R) (observe : I → V)
     (decode : P → S → R → V)
-    (link : ∀ i, good i → decode (public i) (signal i) (returned i) = observe i) :
-    Fibres good public signal returned observe := by
+    (link : ∀ i, good i → decode (pubData i) (signal i) (returned i) = observe i) :
+    Fibres good pubData signal returned observe := by
   intro l r hl hr hp hs hout
   rw [← link l hl, ← link r hr, hp, hs, hout]
 
 /-- A single unequal retained component refutes the COMPLETE fibre. -/
 theorem component_obstruction {I P S R V C : Type} (good : I → Prop)
-    (public : I → P) (signal : I → S) (returned : I → R) (observe : I → V)
+    (pubData : I → P) (signal : I → S) (returned : I → R) (observe : I → V)
     (component : V → C) (l r : I)
-    (hl : good l) (hr : good r) (hp : public l = public r)
+    (hl : good l) (hr : good r) (hp : pubData l = pubData r)
     (hs : signal l = signal r) (hout : returned l = returned r)
     (different : component (observe l) ≠ component (observe r)) :
-    ¬ Fibres good public signal returned observe := by
+    ¬ Fibres good pubData signal returned observe := by
   intro hf
   exact different (congrArg component (hf l r hl hr hp hs hout))
 
@@ -78,9 +78,9 @@ theorem component_obstruction {I P S R V C : Type} (good : I → Prop)
 its post-computation clock read. The source audit, not this generic theorem,
 justifies which values depend on that read. No non-bad native run is invented. -/
 theorem post_clock_obstruction {I P S R T : Type} (good : I → Prop)
-    (public : I → P) (signal : I → S) (returned : I → R)
+    (pubData : I → P) (signal : I → S) (returned : I → R)
     (s : I) (hs : good s) (t u : T) (different : t ≠ u) :
-    ¬ Fibres (fun x : I × T => good x.1) (fun x => public x.1)
+    ¬ Fibres (fun x : I × T => good x.1) (fun x => pubData x.1)
       (fun x => signal x.1) (fun x => returned x.1) (fun x => x.2) := by
   intro hf
   exact different (hf (s,t) (s,u) hs hs rfl rfl rfl)
