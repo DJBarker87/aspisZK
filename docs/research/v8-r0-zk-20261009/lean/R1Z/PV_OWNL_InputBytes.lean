@@ -13,14 +13,14 @@ theorem read_write (x : Nat) (hx : x < 4294967296) : read4 (le4 x) = x := by
  have h1 := Nat.mod_add_div (x/256) 256
  have h2 := Nat.mod_add_div (x/65536) 256
  have h3 := Nat.mod_add_div (x/16777216) 256
- have hd1 : x/256/256 = x/65536 := by rw [Nat.div_div]; rfl
- have hd2 : x/65536/256 = x/16777216 := by rw [Nat.div_div]; rfl
+ have hd1 : x/256/256 = x/65536 := by rw [Nat.div_div_eq_div_mul]; rfl
+ have hd2 : x/65536/256 = x/16777216 := by rw [Nat.div_div_eq_div_mul]; rfl
  have hd3 : x/16777216/256 = 0 := by
-  rw [Nat.div_div]; exact Nat.div_eq_of_lt hx
+  rw [Nat.div_div_eq_div_mul]; exact Nat.div_eq_of_lt hx
  rw [hd1] at h1
  rw [hd2] at h2
  rw [hd3] at h3
- unfold read4 le4
+ simp only [read4,le4,Prod.fst,Prod.snd]
  omega
 
 def checked (q : Q) : Bool :=
