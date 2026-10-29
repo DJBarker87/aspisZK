@@ -10,7 +10,7 @@ theorem complete (a b : C) (ha : CC a) (hb : CC b) :
   obtain ⟨y1,h1,hc1,hv1⟩ := PV_RunJoin_NeutralAddValue54.complete a.2 b.2 ha.2 hb.2
   refine ⟨(y0,y1),?_,⟨hc0,hc1⟩,?_⟩
   · unfold PV_RunJoin_CircleRawTower52.field.CM31.add
-    rw [h0,bind_tc_ok,h1,bind_tc_ok]
+    simp only [h0,h1,bind_tc_ok]
   · exact Prod.ext hv0 hv1
 #print axioms complete
 end R1Z.PV_RunJoin_NeutralCAddValue54

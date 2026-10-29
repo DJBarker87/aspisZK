@@ -17,7 +17,15 @@ theorem complete (a b : C) (ha : CC a) (hb : CC b) :
   obtain ⟨y1,h5,hc5,hv5⟩ := PV_RunJoin_NeutralSubValue54.complete t m1 hc4 hc1
   refine ⟨(y0,y1),?_,⟨hc3,hc5⟩,?_⟩
   · unfold PV_RunJoin_CircleRawTower52.field.CM31.mul
-    simp only [h0,h1,lift,bind_tc_ok,h2,h3,h4,h5]
+    simp only [h0,h1,lift,bind_tc_ok,PV_RunJoin_CircleNeutralWide53.from32,
+      PV_RunJoin_CircleNeutralWrappers53.add64]
+    change (do
+      let z ← PV_RunJoin_CircleRawScalar52.field.M31.reduce_u64 (PV_RunJoin_NeutralCMulWord54.word a b)
+      let r ← PV_RunJoin_CircleRawScalar52.field.M31.sub m0 m1
+      let t ← PV_RunJoin_CircleRawScalar52.field.M31.sub z m0
+      let q ← PV_RunJoin_CircleRawScalar52.field.M31.sub t m1
+      ok (r,q))=ok (y0,y1)
+    simp only [h2,h3,h4,h5,bind_tc_ok]
   · apply Prod.ext
     · exact hv3.trans (congrArg₂ (· - ·) hv0 hv1)
     · change scalar y1=scalar a.1*scalar b.2+scalar a.2*scalar b.1
