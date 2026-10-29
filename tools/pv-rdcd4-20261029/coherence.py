@@ -34,5 +34,7 @@ for module,pin in modules.items():
 library=json.load(open(D/'library-sources.json'))
 for record in library:
  assert sha(record['path'])==record['sha256'],('deployed Rust library source changed',record['path'])
-out=dict(source_revision=meta['revision'],modules=records,at_launch_snapshots=snapshots,external_count=len(external),external_manifest_sha256=sha(str(D/'external-object-manifest.json')),environment=env,scope='Final independent coherent source/object/import measurement, with comparison to each actual launch snapshot. No retroactive launch measurement is claimed.',deployed_library_files=len(library),compiler_boundary='V370/D381/D386 and existing Aeneas/Rust semantic trust retained; no endpoint premise removal')
+for pin in meta.get('additional_native_source_pins',[]):
+ assert sha(pin['path'])==pin['sha256'],('additional deployed source changed',pin['path'])
+out=dict(additional_native_source_pins=meta.get('additional_native_source_pins',[]),source_revision=meta['revision'],modules=records,at_launch_snapshots=snapshots,external_count=len(external),external_manifest_sha256=sha(str(D/'external-object-manifest.json')),environment=env,scope='Final independent coherent source/object/import measurement, with comparison to each actual launch snapshot. No retroactive launch measurement is claimed.',deployed_library_files=len(library),compiler_boundary='V370/D381/D386 and existing Aeneas/Rust semantic trust retained; no endpoint premise removal')
 (D/'final-coherence-result.json').write_text(json.dumps(out,indent=2)+'\n');print(len(records),'successful private modules and all',len(external),'external hashes coherent with every launch snapshot')
