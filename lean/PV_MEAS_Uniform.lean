@@ -14,7 +14,7 @@ def uniformMeasure : Measure M :=
 
 instance uniform_probability : IsProbabilityMeasure (uniformMeasure M) := by
   constructor
-  simp [uniformMeasure, Measure.smul_apply, Measure.sum_apply,
+  simp [uniformMeasure, Measure.smul_apply, Measure.finsetSum_apply,
     Fintype.card_ne_zero, ENNReal.natCast_ne_top]
 
 def uniform : ProbabilityMeasure M := ⟨uniformMeasure M, inferInstance⟩
@@ -51,7 +51,7 @@ theorem uniform_fst (C R : Type*) [Fintype C] [Nonempty C] [Fintype R] [Nonempty
   intro s hs
   rw [Measure.map_apply measurable_fst hs]
   simp only [uniform, uniformMeasure, Measure.smul_apply, smul_eq_mul,
-    Measure.sum_apply _ (measurable_fst hs), Measure.sum_apply _ hs,
+    Measure.finsetSum_apply,
     Measure.dirac_apply, Set.indicator_apply, Pi.one_apply, Set.mem_preimage,
     Fintype.sum_prod_type, Fintype.card_prod, Nat.cast_mul,
     Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← Finset.mul_sum]
