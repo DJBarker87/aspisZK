@@ -9,7 +9,7 @@ def neutral(d):
  d=re.sub(r'\{ a, b \}', '{ fst := a, snd := b }',d)
  d=re.sub(r'\{ c0 := c, c1 \}', '{ fst := c, snd := c1 }',d)
  for a,b in [('a','fst'),('b','snd'),('c0','fst'),('c1','snd'),('x','fst'),('y','snd')]:
-  d=re.sub(r'\.'+a+r'\b','.'+b,d);d=re.sub(r'\b'+a+r'\s*:=',b+' :=',d)
+  d=re.sub(r'\.'+a+r'\b','.'+b,d);d=re.sub(r'([,{]\s*)'+a+r'\s*:=',lambda m:m[1]+b+' :=',d)
  return d
 body='''abbrev field.M31 := U32
 abbrev field.CM31 := U32 × U32

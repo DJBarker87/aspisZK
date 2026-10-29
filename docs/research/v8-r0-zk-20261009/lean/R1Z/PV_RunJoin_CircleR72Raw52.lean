@@ -307,8 +307,8 @@ def field.CM31.new (a : field.M31) (b : field.M31) : Result field.CM31 := do
 
 def field.r24_canonical_mul
   (left : field.QM31) (right : field.QM31) : Result (Option field.QM31) := do
-  let fst := left.fst.fst
-  let snd := left.fst.snd
+  let a := left.fst.fst
+  let b := left.fst.snd
   let c := left.snd.fst
   let d := left.snd.snd
   let e := right.fst.fst
