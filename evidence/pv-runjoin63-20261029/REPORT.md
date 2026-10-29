@@ -17,3 +17,89 @@ No other job directory was written.
 
 The worktree ledger predates Recount 8. The CONFIRM table was read from research
 with git show, without changing the ledger or merging another branch.
+
+## Checked stage status
+
+MODEL: ModelAtoms63.coefficients/sample prove the explicit zero-coefficient,
+unit-circle data is well-formed. They do not construct an existential dictionary
+and world with Produced and all nine links. MODEL witness remains NOT ESTABLISHED,
+no decomposition credit, no contradiction claimed from an unfinished proof.
+
+Packets63.mask_source/reference/value/count/nonvacuity bind V228 at opsNative.
+AllocatorWorld63.complete/execution/sequential and Packets63.reserve retain the
+world-indexed V183 complete Result, including inner allocation failure.
+NativeResidual63 explicitly selects the inventoried Vec<u32> destructor V170.
+NativeBinding63.native proves the new composition equals the previous native
+composition with these three residual selections. Existing other selected value
+callbacks are retained, not promoted beyond their qualified source packets.
+
+The capture/Produced family is now parameterized by allocator runtime and world.
+The checked sequential continuation selects request two at request one's
+post-world. The unchanged Result-only NativeControl.run does not itself expose
+this evolving world; full effect-world threading through capture remains a
+native-interpreter composition obligation, not an assumed qualification.
+ReserveAdequacy63.growth identifies the exact guard/outcome boundary under
+rdea-1; it does not assume that every allocation succeeds or prove public
+failure independence. V370 and D381/D386 remain.
+
+ResidualSuccess63.Op227Success and .Op257Success are literal arbitrary-input
+existentials, with no full row law hidden inside. ResidualObstruction63.insufficient
+is checked: a dictionary preserving every installed field, including V228/V183,
+satisfies both existentials and has no capture. Its worker succeeds at hint 0
+and diverges at the actual commitment caller's hint 200. This is a residual
+dictionary diagnostic, not a shipped implementation counterexample. Thus the
+requested generic implication from these two statements to Nonempty P is NOT
+proved and is false for arbitrary remaining ops. Binding the native world worker
+interpreter and its reached-input semantics is still necessary; it is not added
+to T or silently included in either minimal success statement.
+
+## Recount 8 qualifications, verbatim
+
+These are copied from the pinned research ledger in qualified-packets.json.
+They are retained boundaries, not newly introduced hypotheses. Some rows lie
+inside supplied hash functions or still-uninstalled callback cones, rather than
+the 98 syntactically reachable prefix fields. Their full native/world composition
+is not claimed merely because an older selected value callback is present.
+
+| Row | Full statement / hypothesis / nonvacuity and native boundary | Verdict |
+|---|---|---|
+| V233/op209 | SplitSelected.native_callback/.consumed; arbitrary Slice U8 at constructed 64-byte storage/trait; SplitObservation.complete includes zero-size error. P6 no-stub native gate lengths 0–129,389 checks, plus 1026 prefixes. Not a native interpretation of every generic ArrayLength. | CONFIRM CLOSED-ON-CANDIDATE |
+| V265/op259 | CircleNative.source_reference; CircleSelected.native_source/.consumed, every block/both rows, full Result. Script-checked structural source under(k),8712 finite native comparisons; no raw low-digit defect dependency. | CONFIRM CLOSED-ON-CANDIDATE |
+| V184/op33 | MoveWorld/MoveSelected/MoveClosure.complete/.allocation_delta/.nonvacuous; arbitrary non-Copy payload, explicit Buffer.fits/world/memory/frame. Pinned stdlib structural interpretation, Kani lengths 0–4,99 native and33 Drop-ZST cases; no universal raw-pointer/compiler/allocator refinement. | CONFIRM CLOSED-ON-CANDIDATE |
+| V261/op254 | B1_254.source; Close254.selected_callback, all N/raw limbs, nonfailure all N, witness N=1; extracted copy plus structural original, restored indexed writes,6144 finite native pairs. | CONFIRM CLOSED-ON-CANDIDATE |
+| V247/op230 | B1_230.source; Close230.selected_callback on original callback carrier; symbolic 1024-element Some witness, all lengths/raw limbs, structural original link,320 finite native pairs. | CONFIRM CLOSED-ON-CANDIDATE |
+| V264/op258 | B1_258.source; Close258.selected_callback, arbitrary rows/masks/raw limbs, truth/false/bounds errors, nonempty and1025-row failure witnesses; structural original link,896 values/128 errors checked. | CONFIRM CLOSED-ON-CANDIDATE |
+| V230/op134 | PV_B3_Close134.source; exact original callback carrier/concrete error type,64 masks,261 callback frames; all136 endpoint pairs and sort/dedup OR transport checked. Nonvacuity length64. | CONFIRM selected candidate closure; structural source |
+| V239/op222 | PV_B3_Install222.source; arbitrary raw column/10-point array, full Result/Option, ordered scan/storage/fold, lossless carriers. Empty-column formal witness and nonempty constant-seven native/emission witness kept distinct. | CONFIRM selected candidate closure; structural source |
+| V217/op117 | PV_B3_Install117.source; arbitrary raw16/10 coefficients,value,10 points, full Result, no canonicality/source-law premise; symbolic successful zero witness, exact prepared/traversal order. | CONFIRM selected candidate closure; structural source |
+| V220/op121 | PV_B3_Install121.source; arbitrary raw28 coefficients/challenge, exact grouped evaluator/full Result, successful symbolic zero witness; no naive Horner substitution. | CONFIRM selected candidate closure; structural source |
+| V256/op249; V257/op250 | GammaOriginal/OrdinaryOriginal.copy_equal_original plus F_AuditClosure.closed_rows; every byte slice, complete Result, original carrier and arbitrary-byte sampler success. | CONFIRM two selected candidate closures; structural source |
+| V258/op251 | MaterializeRequest.complete_result; ResourceFamilies.heap_source; F_AuditClosure.closed_rows. Every weights/kappa and input-dependent HeapRequest, denied/fail/div retained. Supplied-success witness. | CONFIRM selected candidate closure; structural source |
+| V259/op252 | ConstructorEffect.complete_result; ResourceFamilies.box_source; F_AuditClosure.closed_rows. Every variant/raw alpha/points and input-dependent BoxRequest. Shared constructed-weight witness; caller Box repair/layout evidence retained. | CONFIRM selected candidate closure; structural source |
+| V260/op253 | RawNative.copy_equal_original/source plus F_AuditClosure.closed_rows. Every kind/index including invalid D; no success-only narrowing. Retained old error counterexample, exact table/guard repair and successful constructor/raw witness. | CONFIRM selected candidate closure; structural source |
+| V178,V179,V182,V195,V233 | Closing Lean laws unchanged; complete-body structural bindings, named Lean transports, unchanged domain residuals, fresh same-input native comparisons. | CONFIRM prior closures as structural (K-1 substitute); historical copy-dependent Kani links SUSPENDED |
+| V164 | R1Z.PV_Op223_V164.refinement; All raw tag/values/lambda, complete ordered arithmetic Result; primitive operations remain explicit. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V170 | R1Z.PV_FXM_DropSelected.execution; Only inventoried Vec<u32>/Global destructor, arbitrary returning free primitive and world. Generic all-T drop is refuted, not restored; fixed selected callback returns unit and other types retain old op4. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V182 | R1Z.PV_CBL_AppendBundle.op31_source; Every representable append buffer/tail, snapshot copy, first error before copy, updated header/private allocator world; no assumed allocation success. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V183 | R1Z.PV_FXM_ReserveSelected.complete; Every type/layout/additional count under valid runtime shape; world-indexed callback family with explicit metadata/error encoding, allocation failure and post-header. This is not a fixed world-free native callback. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V184 | R1Z.PV_AL_MoveClosure.complete; Generic non-Copy/ZST move, buffer ownership, unchanged allocation/frame; old copying-reference counterexample retained. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V186 | R1Z.PV_CBL_AppendBundle.op35_source; Generic same Vec::new constructor; empty length without falsely setting ZST capacity zero. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V187 | R1Z.PV_DL_ArrayNative.selected_native; Generic owned Vec-to-array, mismatch retains input and finalization effects; no payload-copy assumption. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V195 | R1Z.PV_CB3_Op51Arbitrary.op51_source; All raw limbs, all eight chunks exactly once, complete copy frame; ManuallyDrop restoration checked. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V198 | R1Z.PV_CB_Op72Exact.op72_source; Arbitrary output length, ordered range errors and retained first eight bytes on later error. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V219 | R1Z.PV_CB3_Op120Source.op120_source; All raw28 coefficients, explicit ordered complete-Result arithmetic and independent four-limb updates. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V238 | R1Z.PV_DL_CtSelected.selected_native; Generic Ct wrapper/default/copy; explicit finalizer/TRUNC_SIDE remain parameters, full32 and output-shape<=32. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V240 | R1Z.PV_RDB2_Compress.complete; All raw words and slice lengths; literal five emitted arithmetic operations, deployed prover_shared index-loop caller; extraction transport remains tool trust. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V247 | R1Z.PV_RDB2_SumDeployed.installed; All slices; wrong length has no read, valid1024 cells with full storage and optimized fold/pointer law. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V169 | R1Z.PV_RDCD_TakeBinding.vector_m31; Four concrete Default dictionaries (M31/QM31 Vec and array10/16), no-allocation metadata/frame; not arbitrary native Default/Drop. | CONFIRM qualified restoration; extraction with deployed source-law transport; reclassification |
+| V212 | R1Z.PV_CB_Op107Exact.op107_source; All raw QM31, complete Result/Option; exact original three literal typing adapters with proved U64 corrections; raw unadapted failure retained. | CONFIRM qualified restoration; extraction with deployed source-law transport; reclassification |
+| V216 | R1Z.PV_RDCD_ContextInstall.op114_complete; Complete bytewise32 comparison/carrier equality, separately bound source identity; not automatic credit for all compiler-lowering differences. | CONFIRM qualified restoration; extraction with deployed source-law transport; reclassification |
+| V218 | R1Z.PV_RDCD_Op118Audit.source; Complete three arrays and ordered iterator state/writeback, original two adapters and TrustedStep/Rev bounds; no dropped restoration. | CONFIRM qualified restoration; extraction with deployed source-law transport; reclassification |
+| V221 | R1Z.PV_RDCD_Audit.v221; Emitted byte-array dictionary, source association at recorded lengths32/64, ordered volatile writes followed by address-bearing assembly barrier. Native binary erasure not proved. | CONFIRM qualified restoration; structural dependency source/world; reclassification |
+| V222 | R1Z.PV_RDCD_Audit.v222; Emitted scalar/consuming Drop byte dictionaries, complete zeroize1.9.0 source/world trace. Old compilerFence trace superseded; not a hardware fence. | CONFIRM qualified restoration; structural dependency source/world; reclassification |
+| V246 | R1Z.PV_RDCD_StatementBridge.source; Every raw/noncanonical statement, full equality Result, exact indexed short-circuit source; initial extraction with two external axioms rejected. | CONFIRM qualified restoration; extraction with deployed source-law transport; reclassification |
+| V258 | R1Z.PV_RDB2C_FinalReplay.v258; Every weights/kappa and input-dependent resource outcome; public32768-byte alignment4 request once, null error before initialization,1024 restored cells. Failure/post-state explicit under rdea-1. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V259 | R1Z.PV_RDB2C_FinalReplay.v259; Every native variant/raw alpha/point; public2116-byte alignment4 Box request, null handler before initialization,2112 payload bytes plus variant, padding not claimed initialized. BoxAdequacy derived from retained primitive adequacy, not a new trust field. | CONFIRM qualified restoration; structural (K-1 substitute); reclassification |
+| V228 | Install132.reference/value_law/count_law/nonvacuity; all3803 ordered cells, exact capacity/source predicates, original carrier and261 frames. | CONFIRM selected structural source/value packet |
+| V243 | Closure226.complete_result/value/nonvacuity; all raw public inputs, both variants,1427/1455-byte ordered layout, complete Result and carriers. | CONFIRM selected structural source/value packet |
+| V234,V235 | dlib2 DigestFinal/FixedFinal.selected_native; complete Result/carrier, explicit finalizer/compression parameters. fscan STANDS at that boundary. | CONFIRM selected structural K-1 substitutes; SHA-NI unchanged |
