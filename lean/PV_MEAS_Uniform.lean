@@ -29,6 +29,17 @@ theorem integral_uniform (f : M → ℝ) :
   · intro m _
     exact integrable_dirac (by simp)
 
+/-- Fubini for finite uniform laws, by sums rather than carrier reduction. -/
+theorem integral_uniform_product {C R : Type*} [Fintype C] [Nonempty C]
+    [Fintype R] [Nonempty R] [MeasurableSpace C] [MeasurableSingletonClass C]
+    [MeasurableSpace R] [MeasurableSingletonClass R] (f : C × R → ℝ) :
+    (∫ p, f p ∂(uniform (C × R) : Measure (C × R))) =
+      ∫ c, (∫ r, f (c,r) ∂(uniform R : Measure R)) ∂(uniform C : Measure C) := by
+  simp only [integral_uniform, Fintype.card_prod, Nat.cast_mul, Fintype.sum_prod_type]
+  rw [← Finset.sum_div]
+  ring
+
+#print axioms integral_uniform_product
 #print axioms uniform_probability
 #print axioms integral_uniform
 end PV_MEAS_Uniform
