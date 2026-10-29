@@ -1,0 +1,50 @@
+'PV_DIAG7.native_write_ok' depends on axioms: [propext]
+'PV_DIAG7.native_write_error' depends on axioms: [propext]
+'PV_DIAG7.os_interrupted_guard' does not depend on any axioms
+'PV_DIAG7.interrupted_drop_no_custom_payload' does not depend on any axioms
+'PV_DIAG7.optionB_write_step_public' does not depend on any axioms
+'PV_DIAG7.optionB_write_prefix_public' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Write.lean:62:60: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → Execution x_0 x_1 → (x_1 → Op x_0 x_2) → Execution x_0 x_2
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Write.lean:62:73: error: Ambiguous term
+  pure
+Possible interpretations:
+  PV_DIAG3.pure : ?m.16 → Op ?m.15 ?m.16
+  
+  Pure.pure : ?m.17 → ?m.15 ?m.17
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Write.lean:61:55: error: unsolved goals
+signal : Signal
+fd : Nat
+bs : Bytes
+s : State
+bad : Bytes → Nat → Op State (Except WriteError Unit)
+suffix : Bytes → Op State (Except WriteError Unit)
+e : OsError
+hne : List.isEmpty bs = false
+hw : signal.write fd s.cursor = IoReply.error e
+hi : e.interrupted = true
+⊢ (PV_DIAG3.bind
+      { events := [Event.requested fd bs], state := store s e, exit := Exit.value (Except.error (WriteError.os e)) }
+      fun r =>
+      match r with
+      | Except.ok 0 => PV_DIAG3.pure (Except.error WriteError.zero)
+      | Except.ok n.succ => if n + 1 ≤ List.length bs then suffix (List.drop (n + 1) bs) else bad bs (n + 1)
+      | Except.error e =>
+        sequence
+          (PV_DIAG3.pure
+            (match e with
+            | WriteError.os e => e.interrupted
+            | WriteError.zero => false))
+          fun interrupted =>
+          if interrupted = true then sequence (PV_DIAG3.pure ()) fun x => suffix bs
+          else PV_DIAG3.pure (Except.error e)) =
+    { events := Event.requested fd bs :: (suffix bs (store s e)).events, state := (suffix bs (store s e)).state,
+      exit := (suffix bs (store s e)).exit }
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Write.lean:62:48: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp [writeAllStep, ̲hne, ̲writeOps, ̲nativeWrite, ̲hw,h̵i̵,̵ ̲sequence, ̲bind, ̲prepend, ̲pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG7.optionB_interrupted_retry' depends on axioms: [propext, sorryAx, Quot.sound]

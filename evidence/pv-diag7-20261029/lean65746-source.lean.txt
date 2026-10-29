@@ -1,0 +1,148 @@
+import PV_DIAG7_Signal
+/-! Public-input transducers for environmental portions of diagnostics.
+They do not assert that a native application's requested bytes or invocation
+history are public. They retain failures, partial delivery, errno and slots. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+def advance (s : State) : State := {s with cursor := s.cursor+1}
+def store (s : State) (e : OsError) : State := {advance s with lastError := e}
+def write (signal : Signal) (fd : Nat) (bytes : Bytes) : Op State Reply := fun s =>
+ match signal.write fd s.cursor with
+ | .ok n => ⟨[.requested fd bytes,.delivered fd (bytes.take n)],advance s,.value (.write (.ok n))⟩
+ | .error e => ⟨[.requested fd bytes],store s e,.value (.write (.error e))⟩
+def status (outcome : Nat → Option OsError) : Op State Reply := fun s =>
+ match outcome s.cursor with
+ | none => ⟨[],advance s,.value (.status none)⟩
+ | some e => ⟨[],store s e,.value (.status (some e))⟩
+def effect (signal : Signal) : Request → Op State Reply
+ | .write fd bytes => write signal fd bytes
+ | .flush fd => status (signal.flush fd)
+ | .file op _path => status (signal.file op)
+ | .lastError => fun s => let e := signal.errno s.cursor
+                        ⟨[],store s e,.value (.error e)⟩
+ | .strerror code => fun s => ⟨[],advance s,.value (.bytes (signal.strerror code))⟩
+ | .environment name => fun s => ⟨[],advance s,.value (.optionalBytes (signal.environment name))⟩
+ | .logger level => fun s => ⟨[],advance s,.value (.logger (signal.loggerEnabled level) signal.loggerRoute)⟩
+ | .backtrace => fun s => ⟨[],advance s,.value (.enabled signal.backtraceEnabled)⟩
+ | .capture => fun s => ⟨[],advance s,.value (.enabled signal.captureSelected)⟩
+theorem advance_cursor (s : State) : (advance s).cursor = s.cursor+1 := rfl
+#print axioms advance_cursor
+theorem store_cursor (s : State) (e : OsError) : (store s e).cursor = s.cursor+1 := rfl
+#print axioms store_cursor
+theorem store_last_error (s : State) (e : OsError) : (store s e).lastError = e := rfl
+#print axioms store_last_error
+theorem advance_keeps_error (s : State) : (advance s).lastError = s.lastError := rfl
+#print axioms advance_keeps_error
+theorem write_success (signal : Signal) (fd n : Nat) (bytes : Bytes) (s : State)
+ (h : signal.write fd s.cursor = .ok n) :
+ write signal fd bytes s =
+ ⟨[.requested fd bytes,.delivered fd (bytes.take n)],advance s,.value (.write (.ok n))⟩ := by
+ simp only [write,h]
+#print axioms write_success
+theorem write_failure (signal : Signal) (fd : Nat) (bytes : Bytes) (s : State) (e : OsError)
+ (h : signal.write fd s.cursor = .error e) :
+ write signal fd bytes s = ⟨[.requested fd bytes],store s e,.value (.write (.error e))⟩ := by
+ simp only [write,h]
+#print axioms write_failure
+theorem write_events_public (a b : Signal) (fd : Nat) (bs cs : Bytes) (s t : State)
+ (he : a = b) (hb : bs = cs) (hs : s = t) :
+ (write a fd bs s).events = (write b fd cs t).events := by cases he; cases hb; cases hs; rfl
+#print axioms write_events_public
+theorem write_terminal_public (a b : Signal) (fd : Nat) (bs cs : Bytes) (s t : State)
+ (he : a = b) (hb : bs = cs) (hs : s = t) :
+ (write a fd bs s).exit = (write b fd cs t).exit := by cases he; cases hb; cases hs; rfl
+#print axioms write_terminal_public
+theorem partial_delivery_keeps_requested (signal : Signal) (fd n : Nat) (bs : Bytes)
+ (s : State) (h : signal.write fd s.cursor = .ok n) :
+ (write signal fd bs s).events = [.requested fd bs,.delivered fd (bs.take n)] := by
+ rw [write_success signal fd n bs s h]
+#print axioms partial_delivery_keeps_requested
+theorem failed_write_keeps_request (signal : Signal) (fd : Nat) (bs : Bytes)
+ (s : State) (e : OsError) (h : signal.write fd s.cursor = .error e) :
+ (write signal fd bs s).events = [.requested fd bs] := by rw [write_failure signal fd bs s e h]
+#print axioms failed_write_keeps_request
+theorem write_errno_history (signal : Signal) (fd : Nat) (bs : Bytes)
+ (s : State) (e : OsError) (h : signal.write fd s.cursor = .error e) :
+ (write signal fd bs s).state.lastError = e := by rw [write_failure signal fd bs s e h]; rfl
+#print axioms write_errno_history
+theorem status_success (o : Nat → Option OsError) (s : State) (h : o s.cursor = none) :
+ status o s = ⟨[],advance s,.value (.status none)⟩ := by simp only [status,h]
+#print axioms status_success
+theorem status_failure (o : Nat → Option OsError) (s : State) (e : OsError)
+ (h : o s.cursor = some e) :
+ status o s = ⟨[],store s e,.value (.status (some e))⟩ := by simp only [status,h]
+#print axioms status_failure
+theorem status_preserves_failure (o : Nat → Option OsError) (s : State) (e : OsError)
+ (h : o s.cursor = some e) :
+ (status o s).exit = .value (.status (some e)) := by rw [status_failure o s e h]
+#print axioms status_preserves_failure
+theorem flush_failure (signal : Signal) (fd : Nat) (s : State) (e : OsError)
+ (h : signal.flush fd s.cursor = some e) :
+ effect signal (.flush fd) s = ⟨[],store s e,.value (.status (some e))⟩ := status_failure _ _ _ h
+#print axioms flush_failure
+theorem file_failure (signal : Signal) (op : Nat) (path : Bytes) (s : State) (e : OsError)
+ (h : signal.file op s.cursor = some e) :
+ effect signal (.file op path) s = ⟨[],store s e,.value (.status (some e))⟩ := status_failure _ _ _ h
+#print axioms file_failure
+theorem errno_reply (signal : Signal) (s : State) :
+ effect signal .lastError s = ⟨[],store s (signal.errno s.cursor),.value (.error (signal.errno s.cursor))⟩ := rfl
+#print axioms errno_reply
+theorem strerror_reply (signal : Signal) (code : Int) (s : State) :
+ effect signal (.strerror code) s = ⟨[],advance s,.value (.bytes (signal.strerror code))⟩ := rfl
+#print axioms strerror_reply
+theorem environment_reply (signal : Signal) (name : Bytes) (s : State) :
+ effect signal (.environment name) s = ⟨[],advance s,.value (.optionalBytes (signal.environment name))⟩ := rfl
+#print axioms environment_reply
+theorem logger_reply (signal : Signal) (level : Nat) (s : State) :
+ effect signal (.logger level) s = ⟨[],advance s,.value (.logger (signal.loggerEnabled level) signal.loggerRoute)⟩ := rfl
+#print axioms logger_reply
+theorem backtrace_configuration_reply (signal : Signal) (s : State) :
+ effect signal .backtrace s = ⟨[],advance s,.value (.enabled signal.backtraceEnabled)⟩ := rfl
+#print axioms backtrace_configuration_reply
+theorem capture_configuration_reply (signal : Signal) (s : State) :
+ effect signal .capture s = ⟨[],advance s,.value (.enabled signal.captureSelected)⟩ := rfl
+#print axioms capture_configuration_reply
+theorem effect_public (a b : Signal) (q r : Request) (s t : State)
+ (he : a = b) (hq : q = r) (hs : s = t) : effect a q s = effect b r t := by
+ cases he; cases hq; cases hs; rfl
+#print axioms effect_public
+theorem effect_has_value (signal : Signal) (q : Request) (s : State) :
+ ∃ r, (effect signal q s).exit = .value r := by
+ cases q <;> simp only [effect]
+ · unfold write; split <;> exact ⟨_,rfl⟩
+ · unfold status; split <;> exact ⟨_,rfl⟩
+ · unfold status; split <;> exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+ · exact ⟨_,rfl⟩
+#print axioms effect_has_value
+theorem effect_advances_cursor (signal : Signal) (q : Request) (s : State) :
+ (effect signal q s).state.cursor = s.cursor+1 := by
+ cases q <;> simp only [effect]
+ · unfold write; split <;> rfl
+ · unfold status; split <;> rfl
+ · unfold status; split <;> rfl
+ · rfl
+ · rfl
+ · rfl
+ · rfl
+ · rfl
+ · rfl
+#print axioms effect_advances_cursor
+/-- Lossy conversion is a public pure operation; native UTF-8 representation
+association is separate. No error bytes are selected to be empty or fixed. -/
+def lossyError (lossy : Bytes → Bytes) (signal : Signal) (code : Int) : Bytes :=
+ lossy (signal.strerror code)
+theorem lossy_public (lossy : Bytes → Bytes) (a b : Signal) (code other : Int)
+ (he : a = b) (hc : code = other) : lossyError lossy a code = lossyError lossy b other := by
+ cases he; cases hc; rfl
+#print axioms lossy_public
+theorem lossy_length_public (lossy : Bytes → Bytes) (a b : Signal) (code : Int)
+ (he : a = b) : (lossyError lossy a code).length = (lossyError lossy b code).length :=
+ congrArg List.length (lossy_public lossy a b code code he rfl)
+#print axioms lossy_length_public
+end PV_DIAG7

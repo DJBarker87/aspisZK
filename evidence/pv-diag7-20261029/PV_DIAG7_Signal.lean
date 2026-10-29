@@ -17,6 +17,7 @@ structure Signal where
  write : Nat → Nat → IoReply
  flush : Nat → Nat → Option OsError
  file : Nat → Nat → Option OsError
+ reserved : Nat → Nat → Bool
  errno : Nat → OsError
  strerror : Int → Bytes
  environment : Bytes → Option Bytes
@@ -44,6 +45,7 @@ inductive Request where
 inductive Reply where
  | write (result : IoReply)
  | status (error : Option OsError)
+ | reserved (accepted : Bool)
  | error (value : OsError)
  | bytes (value : Bytes)
  | optionalBytes (value : Option Bytes)
@@ -56,13 +58,11 @@ independence and not a claim about arbitrary witness-dependent signal laws. -/
 def V400_OptionB_P {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) : Prop :=
  ∀ w u, pub w = pub u → coins w = coins u → signal w = signal u
--- NEXT
 theorem V400_shared_signal {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) :
  signal w = signal u := h w u hp hc
 #print axioms V400_shared_signal
--- NEXT
 theorem public_signal_satisfies_P {W P C : Type} (pub : W → P) (coins : W → C)
  (publicSignal : P → C → Signal) :
  V400_OptionB_P pub coins (fun w => publicSignal (pub w) (coins w)) := by
@@ -70,55 +70,47 @@ theorem public_signal_satisfies_P {W P C : Type} (pub : W → P) (coins : W → 
  change publicSignal (pub w) (coins w) = publicSignal (pub u) (coins u)
  rw [hp,hc]
 #print axioms public_signal_satisfies_P
--- NEXT
 theorem V400_component {W P C X : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (component : Signal → X) (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) :
  component (signal w) = component (signal u) := congrArg component (h w u hp hc)
 #print axioms V400_component
--- NEXT
 theorem V400_write {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (fd n : Nat) :
  (signal w).write fd n = (signal u).write fd n :=
  V400_component pub coins signal h (fun e => e.write fd n) w u hp hc
 #print axioms V400_write
--- NEXT
 theorem V400_flush {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (fd n : Nat) :
  (signal w).flush fd n = (signal u).flush fd n :=
  V400_component pub coins signal h (fun e => e.flush fd n) w u hp hc
 #print axioms V400_flush
--- NEXT
 theorem V400_file {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (op n : Nat) :
  (signal w).file op n = (signal u).file op n :=
  V400_component pub coins signal h (fun e => e.file op n) w u hp hc
 #print axioms V400_file
--- NEXT
 theorem V400_errno {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (n : Nat) :
  (signal w).errno n = (signal u).errno n :=
  V400_component pub coins signal h (fun e => e.errno n) w u hp hc
 #print axioms V400_errno
--- NEXT
 theorem V400_strerror {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (code : Int) :
  (signal w).strerror code = (signal u).strerror code :=
  V400_component pub coins signal h (fun e => e.strerror code) w u hp hc
 #print axioms V400_strerror
--- NEXT
 theorem V400_environment {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (name : Bytes) :
  (signal w).environment name = (signal u).environment name :=
  V400_component pub coins signal h (fun e => e.environment name) w u hp hc
 #print axioms V400_environment
--- NEXT
 theorem V400_logger {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) (level : Nat) :
@@ -126,21 +118,18 @@ theorem V400_logger {W P C : Type} (pub : W → P) (coins : W → C)
  ((signal u).loggerEnabled level,(signal u).loggerRoute) :=
  V400_component pub coins signal h (fun e => (e.loggerEnabled level,e.loggerRoute)) w u hp hc
 #print axioms V400_logger
--- NEXT
 theorem V400_backtrace {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) :
  (signal w).backtraceEnabled = (signal u).backtraceEnabled :=
  V400_component pub coins signal h Signal.backtraceEnabled w u hp hc
 #print axioms V400_backtrace
--- NEXT
 theorem V400_capture {W P C : Type} (pub : W → P) (coins : W → C)
  (signal : W → Signal) (h : V400_OptionB_P pub coins signal)
  (w u : W) (hp : pub w = pub u) (hc : coins w = coins u) :
  (signal w).captureSelected = (signal u).captureSelected :=
  V400_component pub coins signal h Signal.captureSelected w u hp hc
 #print axioms V400_capture
--- NEXT
 /-- Merely matching a failure bit does not match errno/content. Model
 obstruction only; this is not a shipped-client counterexample. -/
 theorem equal_failure_bit_not_equal_content :
@@ -149,12 +138,10 @@ theorem equal_failure_bit_not_equal_content :
  have k : (1 : Int) = 2 := congrArg (fun r => match r with | .ok _ => 0 | .error e => e.code) h
  contradiction
 #print axioms equal_failure_bit_not_equal_content
--- NEXT
 def isFailure : IoReply → Bool | .ok _ => false | .error _ => true
 theorem failure_bit_agrees_for_distinct_errors :
  isFailure (.error ⟨1,false⟩) = isFailure (.error ⟨2,false⟩) := rfl
 #print axioms failure_bit_agrees_for_distinct_errors
--- NEXT
 theorem shared_input_real_ideal {P C V : Type}
  (channel : P → C → Signal → V) (p : P) (c : C) (signal : Signal) :
  channel p c signal = channel p c signal := Eq.refl _

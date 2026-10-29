@@ -1,0 +1,104 @@
+import PV_DIAG7_Write
+/-! Decoder-facing laws. Instantiating a public Program from the deployed
+client is an explicit remaining source obligation. The theorem does not
+hide that obligation in V400, T, the signal, or a weakened observer. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+variable {W P C O : Type}
+/-- One function retains all ordered diagnostic events, exposed state,
+terminal, existing public L1 count and the actual selected call history. -/
+def DIAG_inputs (count : Nat) (x : Execution State Reply) (history : List Request) :=
+ (count,x.events,x.state,x.exit,history)
+/-- reserve_fallible resets its diagnostic slot; reserve stores only a
+failure kind. This is the complete wrapper result, not filesystem contents. -/
+def reserveResult (signal : Signal) (operation cursor : Nat) : Bool × Option OsError :=
+ match signal.file operation cursor with
+ | none => (signal.reserved operation cursor,none)
+ | some e => (false,some e)
+theorem nonce_failure_retained (signal : Signal) (op n : Nat) (e : OsError)
+ (h : signal.file op n = some e) : reserveResult signal op n = (false,some e) := by
+ simp only [reserveResult,h]
+#print axioms nonce_failure_retained
+theorem nonce_success_resets_error (signal : Signal) (op n : Nat)
+ (h : signal.file op n = none) : reserveResult signal op n = (signal.reserved op n,none) := by
+ simp only [reserveResult,h]
+#print axioms nonce_success_resets_error
+theorem nonce_last_error_kind {K : Type} (kind : OsError → K) (signal : Signal)
+ (op n : Nat) (e : OsError) (h : signal.file op n = some e) :
+ ((reserveResult signal op n).2).map kind = some (kind e) := by
+ rw [nonce_failure_retained signal op n e h]; rfl
+#print axioms nonce_last_error_kind
+theorem nonce_wrapper_public (a b : Signal) (op n : Nat) (h : a = b) :
+ reserveResult a op n = reserveResult b op n := by cases h; rfl
+#print axioms nonce_wrapper_public
+/-- Named conditional law for pv-rj4idb's DIAG_* inputs. At every finite
+prefix coordinate, occurrence, order, content, retained last_error and exit
+are a function of the public program/data and option-B signal. The supplied
+programs must denote real prefixes, not a fuel-based truncation. -/
+theorem DIAG_public_given_optionB
+ (pub : W → P) (coins : W → C) (environment : W → Signal)
+ (V400 : V400_OptionB_P pub coins environment)
+ (program : P → C → Nat → Program) (initial : P → C → State)
+ (existingL1Count : P → C → Nat) (w u : W)
+ (hp : pub w = pub u) (hc : coins w = coins u) :
+ (fun n => DIAG_inputs (existingL1Count (pub w) (coins w))
+   (run (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w)))
+   (calls (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w)))) =
+ (fun n => DIAG_inputs (existingL1Count (pub u) (coins u))
+   (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u)))
+   (calls (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u)))) := by
+ have he := V400 w u hp hc
+ rw [he,hp,hc]
+#print axioms DIAG_public_given_optionB
+theorem DIAG_complete_decoder
+ (decode : Execution State Reply → O) (a b : Signal) (p : Program) (s : State)
+ (h : a = b) : decode (run a p s) = decode (run b p s) := by cases h; rfl
+#print axioms DIAG_complete_decoder
+theorem DIAG_retained_state
+ (expose : State → List (Bytes × Bytes)) (a b : Signal) (p : Program) (s : State)
+ (h : a = b) : expose (run a p s).state = expose (run b p s).state := by cases h; rfl
+#print axioms DIAG_retained_state
+/-- This does not assume equality only after projection. The source binding
+must identify complete events, state and terminal before decoder application. -/
+theorem DIAG_native_handoff
+ (native : W → Nat → Execution State Reply) (pub : W → P) (coins : W → C)
+ (environment : W → Signal) (V400 : V400_OptionB_P pub coins environment)
+ (program : P → C → Nat → Program) (initial : P → C → State)
+ (sourceBinding : ∀ w n, native w n = run (environment w)
+   (program (pub w) (coins w) n) (initial (pub w) (coins w)))
+ (decode : Execution State Reply → O) (w u : W)
+ (hp : pub w = pub u) (hc : coins w = coins u) :
+ (fun n => decode (native w n)) = (fun n => decode (native u n)) := by
+ funext n
+ rw [sourceBinding w n,sourceBinding u n,V400 w u hp hc,hp,hc]
+#print axioms DIAG_native_handoff
+theorem DIAG_signal_not_fixed
+ (a b : Signal) (fd : Nat) (s : State) (bs : Bytes) (n : Nat) (e : OsError)
+ (ha : a.write fd s.cursor = .ok n) (hb : b.write fd s.cursor = .error e) :
+ (write a fd bs s).exit ≠ (write b fd bs s).exit := by
+ rw [write_success a fd n bs s ha,write_failure b fd bs s e hb]
+ intro h; cases h
+#print axioms DIAG_signal_not_fixed
+/-- Formatting witness operands is deliberately outside the public law.
+The complete observer retains distinct returned strings even with one signal. -/
+theorem DIAG_witness_operand_obstruction (signal : Signal) (s : State) (a b : Bytes)
+ (different : a ≠ b) (r : Reply) :
+ (run signal (.returned a (.done r)) s).events ≠
+ (run signal (.returned b (.done r)) s).events := by
+ intro h
+ have hab : a = b := by cases h; rfl
+ exact different hab
+#print axioms DIAG_witness_operand_obstruction
+def printFailureMessage (label : Bytes) (render : OsError → Bytes) (error : OsError) : Bytes :=
+ label ++ render error
+theorem print_to_message_public (label : Bytes) (render : OsError → Bytes)
+ (e f : OsError) (h : e = f) :
+ printFailureMessage label render e = printFailureMessage label render f := by cases h; rfl
+#print axioms print_to_message_public
+theorem print_to_message_length_public (label : Bytes) (render : OsError → Bytes)
+ (e f : OsError) (h : e = f) :
+ (printFailureMessage label render e).length = (printFailureMessage label render f).length :=
+ congrArg List.length (print_to_message_public label render e f h)
+#print axioms print_to_message_length_public
+end PV_DIAG7

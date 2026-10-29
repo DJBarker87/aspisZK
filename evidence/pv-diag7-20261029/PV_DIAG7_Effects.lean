@@ -15,10 +15,16 @@ def status (outcome : Nat → Option OsError) : Op State Reply := fun s =>
  match outcome s.cursor with
  | none => ⟨[],advance s,.value (.status none)⟩
  | some e => ⟨[],store s e,.value (.status (some e))⟩
+/-- Full reservation success bit is retained, including AlreadyExists=false.
+Generic read contents are not represented by this diagnostic status model. -/
+def fileStatus (signal : Signal) (op : Nat) : Op State Reply := fun s =>
+ match signal.file op s.cursor with
+ | none => ⟨[],advance s,.value (.reserved (signal.reserved op s.cursor))⟩
+ | some e => ⟨[],store s e,.value (.status (some e))⟩
 def effect (signal : Signal) : Request → Op State Reply
  | .write fd bytes => write signal fd bytes
  | .flush fd => status (signal.flush fd)
- | .file op _path => status (signal.file op)
+ | .file op _path => fileStatus signal op
  | .lastError => fun s => let e := signal.errno s.cursor
                         ⟨[],store s e,.value (.error e)⟩
  | .strerror code => fun s => ⟨[],advance s,.value (.bytes (signal.strerror code))⟩
@@ -26,117 +32,93 @@ def effect (signal : Signal) : Request → Op State Reply
  | .logger level => fun s => ⟨[],advance s,.value (.logger (signal.loggerEnabled level) signal.loggerRoute)⟩
  | .backtrace => fun s => ⟨[],advance s,.value (.enabled signal.backtraceEnabled)⟩
  | .capture => fun s => ⟨[],advance s,.value (.enabled signal.captureSelected)⟩
--- NEXT
 theorem advance_cursor (s : State) : (advance s).cursor = s.cursor+1 := rfl
 #print axioms advance_cursor
--- NEXT
 theorem store_cursor (s : State) (e : OsError) : (store s e).cursor = s.cursor+1 := rfl
 #print axioms store_cursor
--- NEXT
 theorem store_last_error (s : State) (e : OsError) : (store s e).lastError = e := rfl
 #print axioms store_last_error
--- NEXT
 theorem advance_keeps_error (s : State) : (advance s).lastError = s.lastError := rfl
 #print axioms advance_keeps_error
--- NEXT
 theorem write_success (signal : Signal) (fd n : Nat) (bytes : Bytes) (s : State)
  (h : signal.write fd s.cursor = .ok n) :
  write signal fd bytes s =
  ⟨[.requested fd bytes,.delivered fd (bytes.take n)],advance s,.value (.write (.ok n))⟩ := by
  simp only [write,h]
 #print axioms write_success
--- NEXT
 theorem write_failure (signal : Signal) (fd : Nat) (bytes : Bytes) (s : State) (e : OsError)
  (h : signal.write fd s.cursor = .error e) :
  write signal fd bytes s = ⟨[.requested fd bytes],store s e,.value (.write (.error e))⟩ := by
  simp only [write,h]
 #print axioms write_failure
--- NEXT
 theorem write_events_public (a b : Signal) (fd : Nat) (bs cs : Bytes) (s t : State)
  (he : a = b) (hb : bs = cs) (hs : s = t) :
  (write a fd bs s).events = (write b fd cs t).events := by cases he; cases hb; cases hs; rfl
 #print axioms write_events_public
--- NEXT
 theorem write_terminal_public (a b : Signal) (fd : Nat) (bs cs : Bytes) (s t : State)
  (he : a = b) (hb : bs = cs) (hs : s = t) :
  (write a fd bs s).exit = (write b fd cs t).exit := by cases he; cases hb; cases hs; rfl
 #print axioms write_terminal_public
--- NEXT
 theorem partial_delivery_keeps_requested (signal : Signal) (fd n : Nat) (bs : Bytes)
  (s : State) (h : signal.write fd s.cursor = .ok n) :
  (write signal fd bs s).events = [.requested fd bs,.delivered fd (bs.take n)] := by
  rw [write_success signal fd n bs s h]
 #print axioms partial_delivery_keeps_requested
--- NEXT
 theorem failed_write_keeps_request (signal : Signal) (fd : Nat) (bs : Bytes)
  (s : State) (e : OsError) (h : signal.write fd s.cursor = .error e) :
  (write signal fd bs s).events = [.requested fd bs] := by rw [write_failure signal fd bs s e h]
 #print axioms failed_write_keeps_request
--- NEXT
 theorem write_errno_history (signal : Signal) (fd : Nat) (bs : Bytes)
  (s : State) (e : OsError) (h : signal.write fd s.cursor = .error e) :
  (write signal fd bs s).state.lastError = e := by rw [write_failure signal fd bs s e h]; rfl
 #print axioms write_errno_history
--- NEXT
 theorem status_success (o : Nat → Option OsError) (s : State) (h : o s.cursor = none) :
  status o s = ⟨[],advance s,.value (.status none)⟩ := by simp only [status,h]
 #print axioms status_success
--- NEXT
 theorem status_failure (o : Nat → Option OsError) (s : State) (e : OsError)
  (h : o s.cursor = some e) :
  status o s = ⟨[],store s e,.value (.status (some e))⟩ := by simp only [status,h]
 #print axioms status_failure
--- NEXT
 theorem status_preserves_failure (o : Nat → Option OsError) (s : State) (e : OsError)
  (h : o s.cursor = some e) :
  (status o s).exit = .value (.status (some e)) := by rw [status_failure o s e h]
 #print axioms status_preserves_failure
--- NEXT
 theorem flush_failure (signal : Signal) (fd : Nat) (s : State) (e : OsError)
  (h : signal.flush fd s.cursor = some e) :
  effect signal (.flush fd) s = ⟨[],store s e,.value (.status (some e))⟩ := status_failure _ _ _ h
 #print axioms flush_failure
--- NEXT
 theorem file_failure (signal : Signal) (op : Nat) (path : Bytes) (s : State) (e : OsError)
  (h : signal.file op s.cursor = some e) :
- effect signal (.file op path) s = ⟨[],store s e,.value (.status (some e))⟩ := status_failure _ _ _ h
+ effect signal (.file op path) s = ⟨[],store s e,.value (.status (some e))⟩ := by simp only [effect,fileStatus,h]
 #print axioms file_failure
--- NEXT
 theorem errno_reply (signal : Signal) (s : State) :
  effect signal .lastError s = ⟨[],store s (signal.errno s.cursor),.value (.error (signal.errno s.cursor))⟩ := rfl
 #print axioms errno_reply
--- NEXT
 theorem strerror_reply (signal : Signal) (code : Int) (s : State) :
  effect signal (.strerror code) s = ⟨[],advance s,.value (.bytes (signal.strerror code))⟩ := rfl
 #print axioms strerror_reply
--- NEXT
 theorem environment_reply (signal : Signal) (name : Bytes) (s : State) :
  effect signal (.environment name) s = ⟨[],advance s,.value (.optionalBytes (signal.environment name))⟩ := rfl
 #print axioms environment_reply
--- NEXT
 theorem logger_reply (signal : Signal) (level : Nat) (s : State) :
  effect signal (.logger level) s = ⟨[],advance s,.value (.logger (signal.loggerEnabled level) signal.loggerRoute)⟩ := rfl
 #print axioms logger_reply
--- NEXT
 theorem backtrace_configuration_reply (signal : Signal) (s : State) :
  effect signal .backtrace s = ⟨[],advance s,.value (.enabled signal.backtraceEnabled)⟩ := rfl
 #print axioms backtrace_configuration_reply
--- NEXT
 theorem capture_configuration_reply (signal : Signal) (s : State) :
  effect signal .capture s = ⟨[],advance s,.value (.enabled signal.captureSelected)⟩ := rfl
 #print axioms capture_configuration_reply
--- NEXT
 theorem effect_public (a b : Signal) (q r : Request) (s t : State)
  (he : a = b) (hq : q = r) (hs : s = t) : effect a q s = effect b r t := by
  cases he; cases hq; cases hs; rfl
 #print axioms effect_public
--- NEXT
 theorem effect_has_value (signal : Signal) (q : Request) (s : State) :
  ∃ r, (effect signal q s).exit = .value r := by
  cases q <;> simp only [effect]
  · unfold write; split <;> exact ⟨_,rfl⟩
  · unfold status; split <;> exact ⟨_,rfl⟩
- · unfold status; split <;> exact ⟨_,rfl⟩
+ · unfold fileStatus; split <;> exact ⟨_,rfl⟩
  · exact ⟨_,rfl⟩
  · exact ⟨_,rfl⟩
  · exact ⟨_,rfl⟩
@@ -144,13 +126,12 @@ theorem effect_has_value (signal : Signal) (q : Request) (s : State) :
  · exact ⟨_,rfl⟩
  · exact ⟨_,rfl⟩
 #print axioms effect_has_value
--- NEXT
 theorem effect_advances_cursor (signal : Signal) (q : Request) (s : State) :
  (effect signal q s).state.cursor = s.cursor+1 := by
  cases q <;> simp only [effect]
  · unfold write; split <;> rfl
  · unfold status; split <;> rfl
- · unfold status; split <;> rfl
+ · unfold fileStatus; split <;> rfl
  · rfl
  · rfl
  · rfl
@@ -158,7 +139,6 @@ theorem effect_advances_cursor (signal : Signal) (q : Request) (s : State) :
  · rfl
  · rfl
 #print axioms effect_advances_cursor
--- NEXT
 /-- Lossy conversion is a public pure operation; native UTF-8 representation
 association is separate. No error bytes are selected to be empty or fixed. -/
 def lossyError (lossy : Bytes → Bytes) (signal : Signal) (code : Int) : Bytes :=
@@ -167,26 +147,21 @@ theorem lossy_public (lossy : Bytes → Bytes) (a b : Signal) (code other : Int)
  (he : a = b) (hc : code = other) : lossyError lossy a code = lossyError lossy b other := by
  cases he; cases hc; rfl
 #print axioms lossy_public
--- NEXT
 theorem lossy_length_public (lossy : Bytes → Bytes) (a b : Signal) (code : Int)
  (he : a = b) : (lossyError lossy a code).length = (lossyError lossy b code).length :=
  congrArg List.length (lossy_public lossy a b code code he rfl)
 #print axioms lossy_length_public
--- NEXT
 def returnedError (render : OsError → Bytes) (e : OsError) : Event := .returned (render e)
 theorem returned_error_public (render : OsError → Bytes) (e f : OsError) (h : e = f) :
  returnedError render e = returnedError render f := congrArg (returnedError render) h
 #print axioms returned_error_public
--- NEXT
 theorem interrupted_class_public (a b : IoReply) (h : a = b) :
  (match a with | .ok _ => false | .error e => e.interrupted) =
- (match b with | .ok _ => false | .error e => e.interrupted) := by cases h; rfl
+ (match b with | .ok _ => false | .error e => e.interrupted) := by cases h; cases a <;> rfl
 #print axioms interrupted_class_public
--- NEXT
 theorem fd1_public (a b : Signal) (bs : Bytes) (s : State) (h : a = b) :
  write a 1 bs s = write b 1 bs s := by cases h; rfl
 #print axioms fd1_public
--- NEXT
 theorem fd2_public (a b : Signal) (bs : Bytes) (s : State) (h : a = b) :
  write a 2 bs s = write b 2 bs s := by cases h; rfl
 #print axioms fd2_public
