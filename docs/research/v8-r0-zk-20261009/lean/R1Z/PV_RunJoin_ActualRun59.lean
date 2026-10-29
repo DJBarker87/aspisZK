@@ -45,7 +45,7 @@ theorem layout (p : Phase) :
     (runs p).plan.offOpenings=10055 ∧ (runs p).plan.offNodes=28359 ∧
     (runs p).plan.proofBytes=57607 := by
   simp only [runs,PV_RunJoin_NativeCallback55.runOf,plans,List.length_ofFn]
-  exact ⟨rfl,rfl,rfl⟩
+  exact ⟨rfl,rfl,rfl,rfl,rfl⟩
 
 #print axioms data
 #print axioms statement
