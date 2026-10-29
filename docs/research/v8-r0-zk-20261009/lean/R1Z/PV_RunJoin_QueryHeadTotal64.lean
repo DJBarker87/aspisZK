@@ -26,7 +26,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     rw [PV_B2_D_SmallScalar.cast_val]
     exact Nat.lt_of_le_of_lt (Nat.mod_le _ _) (range q (List.getElem_mem hi))
   have read : Array.index_usize queries (PV_RunJoin_QueryCell63.index i)=ok q :=
-    ProverCommitArrayIndex25.array_index_usize_ok queries _ i.isLt
+    ProverCommitArrayIndex25.array_index_usize_ok queries (PV_RunJoin_QueryCell63.index i) (by change i.val<22;exact i.isLt)
   have new : aspis_core.r0.domain.FibreIndex.new u=ok (.Ok u) := by
     change (selected base heap box ops).op75 u=_
     rw [PV_RunJoin_QueryIndexInstalled56.installed]
@@ -38,6 +38,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       Array.repeat 2#usize (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8)))⟩
   obtain ⟨first,hfirst⟩ := PV_RunJoin_QueryFillTotal64.complete base heap box ops cc1 domain1 u bound opening
   obtain ⟨second,hsecond⟩ := PV_RunJoin_QueryFillTotal64.complete base heap box ops cc2 domain2 u bound first
+  dsimp only [u,opening] at new hfirst hsecond
   refine ⟨(u,second),?_,bound⟩
   simp only [PV_RunJoin_QueryScript63.head,read,bind_tc_ok,new,unwrapSlice,hzero,hfirst,hsecond]
 
