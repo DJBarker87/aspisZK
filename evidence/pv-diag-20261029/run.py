@@ -16,6 +16,7 @@ if a.returncode or not ad.exists() or json.loads(ad.read_text()).get('allowed') 
     print('REFUSED', label, a.returncode, flush=True)
     sys.exit(78)
 cmd = ['systemd-run', '--user', '--scope', '--quiet', '-p', 'MemoryHigh=6G', '-p', 'MemoryMax=8G', '-p', 'MemorySwapMax=0', '-p', 'TasksMax=64', '/usr/bin/time', '-v', '-o', str(D / f'{label}-time.log'), 'timeout', '900', 'python3', str(D / 'audit.py'), *args]
+(D/f'{label}-audit.py').write_bytes((D/'audit.py').read_bytes())
 start = time.time()
 with (D / f'{label}-output.log').open('w') as f:
     p = subprocess.run(cmd, stdout=f, stderr=subprocess.STDOUT)
