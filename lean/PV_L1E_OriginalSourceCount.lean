@@ -33,11 +33,19 @@ theorem same_original_success {C Key : Type} (entropy : Entropy C) (pub : Pub)
         PV_L1D_UploadCounts.uploads p.proof.1.length, (1 : Nat)) =
       (p.attempts,p.attempts-1,(p.proof.1.length+3762)/3763,1) := by
   constructor
-  · exact PV_L1E_SourceEntries.successful_callbacks entropy pub compiled variant hash 8 0 s after p success
+  · simpa only [Nat.zero_add] using
+      PV_L1E_SourceEntries.successful_callbacks entropy pub compiled variant hash 8 0 s after p success
   · rw [PV_L1E_OwnerJoin.run_of_link _ owner link] at success
     have pair : ((run owner 8 0 s).1.result,(run owner 8 0 s).2) = (.done p,after) := by
       injection success
     have original := congrArg Prod.fst pair
-    exact PV_L1D_UploadCounts.same_original_result owner s p keys original
+    obtain ⟨k,hk,selected⟩ := PV_L1D_SelectedCount.original_success owner s p keys original
+    refine ⟨k,hk,selected,?_⟩
+    have counts := PV_L1D_RejectionCount.original_count_pair owner s p original
+    have entered := congrArg Prod.fst counts
+    have rejected := congrArg Prod.snd counts
+    change (run owner 8 0 s).1.attempts.length = p.attempts at entered
+    change ((run owner 8 0 s).1.attempts.filter PV_L1D_RejectionCount.retrying).length = p.attempts-1 at rejected
+    rw [entered,rejected,PV_L1D_UploadCounts.ceil_formula]
 #print axioms same_original_success
 end PV_L1E_OriginalSourceCount
