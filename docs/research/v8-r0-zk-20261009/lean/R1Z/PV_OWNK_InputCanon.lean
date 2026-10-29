@@ -5,12 +5,14 @@ namespace R1Z.PV_OWNK_InputCanon
 open Aeneas Aeneas.Std
 open PV_OWNI_RawOps PV_OWNJ_Points
 abbrev Canon := PV_OWNK_TowerCanon.Canon
+attribute [local irreducible] PV_B2_FieldValue.aspis_core.field.QM31.add
+ PV_B2_FieldValue.aspis_core.field.QM31.mul PV_B2_FieldValue.aspis_core.field.QM31.sub
 
 theorem successorRev_canon (point : List Q) (carry : Q)
  (hp : ∀ q ∈ point, Canon q) (hc : Canon carry) :
  ∀ q ∈ successorRev point carry, Canon q := by
  induction point generalizing carry with
- | nil => simp only [successorRev,List.not_mem_nil,IsEmpty.forall_iff]
+ | nil => intro q hq; simp only [successorRev] at hq; cases hq
  | cons x xs ih =>
   intro q hq
   have hx := hp x (by simp)
@@ -44,9 +46,12 @@ theorem statement_points_canon (point : List Q) (hp : ∀ q ∈ point, Canon q) 
  · intro q hq
    obtain ⟨⟨x,i⟩,hx,rfl⟩ := List.mem_map.mp hq
    have hc := hp x (zipIdx_fst_mem point 0 (x,i) hx)
-   split
-   · exact PV_OWNK_TowerCanon.qm_sub _ _ PV_OWNK_TowerCanon.one_canon hc
-   · exact hc
+   change Canon (if i=6 ∨ i=7 then valueSub one x else x)
+   by_cases h : i=6 ∨ i=7
+   · rw [if_pos h]
+     exact PV_OWNK_TowerCanon.qm_sub _ _ PV_OWNK_TowerCanon.one_canon hc
+   · rw [if_neg h]
+     exact hc
 
 def lift (x : U32) : Q := ⟨⟨x,0#u32⟩,⟨0#u32,0#u32⟩⟩
 
