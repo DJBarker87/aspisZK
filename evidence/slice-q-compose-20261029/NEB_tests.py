@@ -18,12 +18,12 @@ def affected_open(change):
  mutated=copy.deepcopy(edges);edge=next(e for e in mutated['edges'] if e['edge']==TARGET);change(edge)
  out,delta=v.extend(base,mutated)
  assert all(r['composed_status']=='OPEN' for r in out['rows'] if r['row'] in WRAPPERS)
- assert not(WRAPPERS & set(delta['composed_rows_closed'])) and delta['edge_closed']==26
+ assert not(WRAPPERS & set(delta['composed_rows_closed'])) and delta['edge_closed']==102
  assert all(x==['OPEN'] for x in delta['roots'].values())
 test('unchanged original NDT invariants',lambda:v.ndt.validate_invariants(base))
 out,delta=v.extend(base,edges)
-assert delta['closed_count']==24 and delta['edge_closed']==27
-results.append(dict(test='registered reducer and additive certificates close 24 occurrence rows bottom-up',result='PASS'))
+assert delta['closed_count']==60 and delta['edge_closed']==103
+results.append(dict(test='registered reducer and additive certificates close 60 occurrence rows bottom-up',result='PASS'))
 test('missing certificate keeps both actual callers OPEN',lambda:affected_open(lambda e:e.update(certificate=None)))
 test('wrong edge identity keeps actual callers OPEN',lambda:affected_open(lambda e:e['certificate'].update(edge=TARGET+' wrong')))
 test('wrong frozen revision keeps actual callers OPEN',lambda:affected_open(lambda e:e['certificate'].update(frozen_revision='0'*40)))
@@ -68,5 +68,61 @@ bad=copy.deepcopy(edges);bad['inventory_edges'].append(copy.deepcopy(bad['invent
 test('duplicate extra original inventory edge rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
 bad=copy.deepcopy(edges);bad['inventory_edges'][0]['selected_target']=True
 test('self-cycle cannot be relabelled as an active proved call',lambda:reject(lambda:v.extend(base,bad)))
+CANON='crates/aspis-core/src/field/wide_exact.rs::canonical_qm31'
+EMBED='crates/aspis-core/src/field/wide_exact.rs::WideExact::from_qm31'
+EMBED_ROWS={r['row'] for r in base['rows'] if r['function']==EMBED}
+def embedding_open(change):
+ m=copy.deepcopy(edges);change(m);o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['row'] in EMBED_ROWS)
+test('missing canonical-embedding edge keeps both callers OPEN',lambda:embedding_open(lambda m:next(e for e in m['edges'] if e['caller']==EMBED).update(certificate=None)))
+test('missing inner canonical helper physical discharge keeps embedding OPEN',lambda:embedding_open(lambda m:next(e for e in m['edges'] if e['caller']==EMBED)['certificate']['inner_hypotheses_discharged'].pop()))
+test('missing lower canonical occurrence blocks both embedding rows',lambda:embedding_open(lambda m:m.update(row_certificates=[r for r in m['row_certificates'] if r['row']!='TX1:060'])))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==CANON);r['external_obligations'].pop(next(k for k,c in r['external_obligations'].items() if c['kind']=='BUNDLED_PURE_REMAINDER_CLOSURE'))
+test('omitted bundled closure occurrence rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==CANON);next(c for c in r['external_obligations'].values() if c['kind']=='BUNDLED_PURE_REMAINDER_CLOSURE')['line']+=1
+test('wrong bundled closure occurrence line rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function'].endswith('::WideExact::to_limbs'));r['lean_evidence'][0]['theorems'].remove('NEB_RepresentationRefs.e_injective')
+test('missing complete eight-field carrier injection rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+MUL='crates/aspis-core/src/field.rs::M31::mul'
+MUL_ROWS={r['row'] for r in base['rows'] if r['function']==MUL}
+def mul_open(change):
+ m=copy.deepcopy(edges);change(m);o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['row'] in MUL_ROWS)
+test('missing actual product-to-reducer edge blocks raw multiplication',lambda:mul_open(lambda m:next(e for e in m['edges'] if e['caller']==MUL).update(certificate=None)))
+test('wrong audited result theorem cannot replace exact native call association',lambda:mul_open(lambda m:next(e for e in m['edges'] if e['caller']==MUL)['certificate']['parts']['native_callsite_association'].update(theorems=['NEB_MulReducerCall.value'])))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if any(c['kind']=='LOSSLESS_U32_TO_U64' for c in r['external_obligations'].values()));next(c for c in r['external_obligations'].values() if c['kind']=='LOSSLESS_U32_TO_U64')['line']+=1
+test('wrong scalar conversion occurrence rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==MUL);r['lean_evidence'].pop()
+test('omitted checked-versus-wrapping product witness rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+TABLE='crates/aspis-r1-cost-probe/src/fast_domain.rs::table_value'
+TABLE_ROWS={r['row'] for r in base['rows'] if r['function']==TABLE}
+def table_open(change):
+ m=copy.deepcopy(edges);change(m);o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['row'] in TABLE_ROWS)
+test('missing constructor interpretation certificate blocks table values',lambda:table_open(lambda m:next(e for e in m['edges'] if e['caller']==TABLE).update(certificate=None)))
+test('constructor context cannot retain inner interpretation as a hidden premise',lambda:table_open(lambda m:next(e for e in m['edges'] if e['caller']==TABLE)['certificate'].update(residual_hypotheses=['constructor interpretation'])))
+def altered_scope():
+ original=v.obj
+ def override(path):
+  d=original(path)
+  if path==E/'NEB_SCOPE.json':d=copy.deepcopy(d);d['slice']['roots']=[]
+  return d
+ v.obj=override
+ try:reject(lambda:v.extend(base,edges))
+ finally:v.obj=original
+test('root membership must match authoritative slice manifest',altered_scope)
+POINT='crates/aspis-r1-cost-probe/src/fast_domain.rs::fibre_point'
+POINT_ROWS={r['row'] for r in base['rows'] if r['function']==POINT}
+def point_open(change):
+ m=copy.deepcopy(edges);change(m);o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['row'] in POINT_ROWS)
+test('missing actual native point product use certificate blocks closure',lambda:point_open(lambda m:next(e for e in m['edges'] if e['caller']==POINT and e['callee'].endswith('::CM31::mul')).update(certificate=None)))
+test('missing conservative point product alternative certificate blocks closure',lambda:point_open(lambda m:next(e for e in m['edges'] if e['caller']==POINT and not e['selected_target']).update(certificate=None)))
+bad=copy.deepcopy(edges);next(e for e in bad['edges'] if e['callee']==POINT)['required_named_hypotheses']=[]
+test('new packet qualifiers cannot be omitted at a caller',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);next(e for e in bad['edges'] if e['caller']==POINT and not e['selected_target'])['selected_target']=True
+test('wrong native point receiver resolution rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==POINT);r['lean_evidence']=[p for p in r['lean_evidence'] if not any(n=='NEB_GeometryFieldPorts.physical' for n in p['theorems'])]
+test('missing actual R17 dictionary instance rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
 assert base==v.obj(v.N/'NDT_LEDGER.json');results.append(dict(test='authoritative ledger unchanged',result='PASS'))
 print(json.dumps(dict(results=results,tests=len(results),composed_closed=delta['closed_count'],slice_roots_closed=0,synthetic_evidence_credit=0),indent=1))

@@ -75,11 +75,23 @@ def certificate_errors(edge,cert,baseline):
 def extend(baseline,edges):
  # Preserve every original NDT structural/refresh/quarantine/feature check.
  ndt.validate_invariants(baseline)
- scope=obj(E/'NEB_SCOPE.json')['slice']
+ from NEB_leaf_updates import apply as apply_leaves,resolutions
+ baseline,leaf_refresh=apply_leaves(baseline)
+ manifest=obj(E/'NEB_SCOPE.json')
+ slice_bytes=subprocess.check_output(['git','show','HEAD:docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json'],cwd=R)
+ require(sha(slice_bytes)==manifest['slice_sha256'],'changed authoritative slice manifest')
+ scope=manifest['slice']
+ require(scope==json.loads(slice_bytes)['slices']['Q'],'altered slice membership/roots/edges')
+ require(manifest['budget']=={'kani':40,'lean':150},'changed job budget')
+ require(manifest['caps']=={'MemoryHigh':'6G','MemoryMax':'8G','MemorySwapMax':0,'TasksMax':64},'changed scope caps')
  require({e['edge'] for e in edges['edges']}==set(scope['internal_edges']),'missing/extra slice edge')
  require(len(edges['edges'])==len(scope['internal_edges']),'duplicate edge')
  require(all(e['caller']+' -> '+e['callee']==e['edge'] for e in edges['edges']),'edge identity')
  for e in edges['edges']:
+  resolved=resolutions(e)
+  require(e['selected_target']==resolved['selected_target'] and e['classification']==resolved['classification'],'wrong refreshed leaf target resolution')
+  named=sorted(set(h['name'] for r in baseline['rows'] if r['function']==e['callee'] for h in r['named_hypotheses']))
+  require(e['required_named_hypotheses']==named,'stale/missing selected callee qualifications')
   callers=[r for r in baseline['rows'] if r['function']==e['caller']]
   require(callers and all(r['frozen_body_sha256']==e['source_body_sha256'] for r in callers),'edge source body mismatch')
   require(all(any(o['id']==e['obligation_id'] and o.get('callee')==e['callee'] for o in r['caller_domain_obligations']) for r in callers),'edge obligation mismatch')
@@ -89,6 +101,9 @@ def extend(baseline,edges):
  # were omitted only from the slice's self-edge-free enumeration.
  from NEB_additive_certificates import expected as additive_expected
  _,_,approved_inventory=additive_expected(baseline)
+ from NEB_field_certificates import expected as field_expected
+ _,_,field_inventory=field_expected(baseline)
+ approved_inventory+=field_inventory
  inventory_edges=edges.get('inventory_edges',[])
  require(len({e['obligation_id'] for e in inventory_edges})==len(inventory_edges),'duplicate inventory edge')
  approved_index={e['obligation_id']:e for e in approved_inventory}
@@ -147,6 +162,19 @@ def extend(baseline,edges):
       require(ext['native_review']==rc['native_review'],'inactive cfg lacks same native feature review')
       require(any(any('feature = \"'+f+'\"' in c for f in ['r0-op-count','r0-r91-audit','r0-e4-reference']) for c in ext['cfg']),'cfg inactivity not established')
       o.update(status='CLOSED',discharged_by=rc['id']+':inactive-release-cfg')
+     elif ext['kind']=='BUNDLED_PURE_REMAINDER_CLOSURE':
+      require(row['function']=='crates/aspis-core/src/field/wide_exact.rs::canonical_qm31','remainder closure belongs to wrong parent')
+      require(o['call'].get('expression',o['call'].get('syntax'))==ext['syntax']=='reduce','wrong bundled closure')
+      require(o['call']['resolution'] in ['inline closure (body inventoried in parent)','local closure body bundled with caller'],'closure is not bundled in original frozen body')
+      require(ext['line']==o['call']['line'] and ext['caller_body_sha256']==row['frozen_body_sha256'],'wrong closure occurrence/body')
+      require(ext['native_review']==rc['native_review'],'bundled closure lacks same native parent proof')
+      o.update(status='CLOSED',discharged_by=rc['id']+':bundled-pure-remainder')
+     elif ext['kind']=='LOSSLESS_U32_TO_U64':
+      require(row['function']=='crates/aspis-core/src/field.rs::CM31::mul','conversion is not actual complex-product field call')
+      require(o['call'].get('expression',o['call'].get('syntax'))==ext['syntax']=='u64::from','wrong scalar conversion')
+      require(ext['line']==o['call']['line'] and ext['caller_body_sha256']==row['frozen_body_sha256'],'wrong source conversion occurrence')
+      require(ext['native_review']==rc['native_review'],'scalar conversion has no same-body field review')
+      o.update(status='CLOSED',discharged_by=rc['id']+':lossless-u32-u64')
      else:require(False,'unregistered external obligation kind')
  # Admit rows bottom-up along actual obligations. Resolved-away alternatives
  # remain CLOSED obligations but are not active call dependencies. No real SCC
@@ -186,7 +214,7 @@ def extend(baseline,edges):
    require(all(o['status']=='CLOSED' and o['discharged_by'] for o in row['caller_domain_obligations']),'open row call domain')
    require(not row['open_transitive_dependencies'],'open/quarantined transitive dependency')
    require(row['selected_claims'],'missing bridge')
- return out,dict(schema='NEB-ledger-delta-v1',composed_rows_closed=changes,closed_count=len(changes),slice='Q',roots={f:sorted(set(r['composed_status'] for r in out['rows'] if r['function']==f)) for f in scope['roots']},edge_closed=sum(not certificate_errors(e,e.get('certificate'),baseline) and e.get('certificate')==approved_edges.get(e['edge']) for e in edges['edges']),edge_total=len(edges['edges']),baseline_unchanged=True)
+ return out,dict(schema='NEB-ledger-delta-v1',composed_rows_closed=changes,closed_count=len(changes),slice='Q',roots={f:sorted(set(r['composed_status'] for r in out['rows'] if r['function']==f)) for f in scope['roots']},edge_closed=sum(not certificate_errors(e,e.get('certificate'),baseline) and e.get('certificate')==approved_edges.get(e['edge']) for e in edges['edges']),edge_total=len(edges['edges']),baseline_unchanged=True,local_packet_refresh=leaf_refresh)
 
 def replay_baseline():
  # NDT deliberately rejects previously unknown merged reports. Reconstruct its

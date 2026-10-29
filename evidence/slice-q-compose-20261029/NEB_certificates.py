@@ -48,14 +48,29 @@ def expected(baseline):
   rows[row['row']]=dict(id='NEB-reducer-root:'+row['row'],row=row['row'],function=row['function'],frozen_body_sha256=row['frozen_body_sha256'],selected_claims=row['selected_claims'],named_hypotheses_discharged=names,inventory_domains_discharged=[o['unit'] for o in row['inventory_domain_obligations']],parts=['result','state','ordered_effects','native_association'],lean_evidence=[proof],remaining_inner_hypotheses=[],top_hypotheses=[row['function']+'.PacketDomain',row['function']+'.PhysicalInterpretation','NativeContractSemanticTransport'],review=rev,native_review=cert['native_review'],external_obligations=external)
  from NEB_additive_certificates import expected as additive
  extra_edges,extra_rows,_=additive(baseline)
- return {edge:cert,**extra_edges},{**rows,**extra_rows}
+ from NEB_representation_certificates import expected as representation
+ representation_edges,representation_rows=representation(baseline)
+ from NEB_field_certificates import expected as field_expected
+ field_edges,field_rows,_=field_expected(baseline)
+ from NEB_scalar_certificates import expected as scalar_expected
+ scalar_edges,scalar_rows=scalar_expected(baseline)
+ from NEB_leaf_certificates import expected as leaf_expected
+ leaf_edges,leaf_rows=leaf_expected(baseline)
+ return {edge:cert,**extra_edges,**representation_edges,**field_edges,**scalar_edges,**leaf_edges},{**rows,**extra_rows,**representation_rows,**field_rows,**scalar_rows,**leaf_rows}
 if __name__=='__main__':
- base=obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json');edges=obj(E/'NEB_EDGES.json');expected_edges,rows=expected(base)
+ from NEB_leaf_updates import apply,resolutions
+ base,_=apply(obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json'));edges=obj(E/'NEB_EDGES.json')
+ edges['edges']=[resolutions(e) for e in edges['edges']]
+ for e in edges['edges']:
+  e['required_named_hypotheses']=sorted(set(h['name'] for r in base['rows'] if r['function']==e['callee'] for h in r['named_hypotheses']))
+ expected_edges,rows=expected(base)
  for edge in edges['edges']:
   if edge['edge'] in expected_edges:edge.update(certificate=expected_edges[edge['edge']],status='CLOSED',obstacle=None)
  from NEB_additive_certificates import expected as additive
  _,_,extra=additive(base)
- edges['inventory_edges']=extra
+ from NEB_field_certificates import expected as field_expected
+ _,_,field_extra=field_expected(base)
+ edges['inventory_edges']=extra+field_extra
  edges['row_certificates']=list(rows.values())
  (E/'NEB_EDGES.json').write_text(json.dumps(edges,indent=1)+'\n')
  print(json.dumps(dict(edge_certificates=len(expected_edges),root_certificates=len(rows))))
