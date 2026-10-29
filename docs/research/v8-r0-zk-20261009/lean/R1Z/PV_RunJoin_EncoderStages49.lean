@@ -35,7 +35,8 @@ theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S →
         PV_RunJoin_EncoderFactor49.complete inst f hone hm ha hs]
       change (do let x ← mapResult f (PV_RunJoin_EncoderFactor49.next factor)
                  PV_DL_EncoderBasis.finite inst n (amap f out1) (PV_DL_EncoderBasis.advance width) x)=_
-      simpa only [PV_RunJoin_EncoderFactor49.next,Aeneas.Std.bind_assoc_eq] using
+      simpa only [PV_RunJoin_EncoderFactor49.next,Aeneas.Std.bind_assoc_eq,
+        mapResult,PV_B2_E_OrdinaryOriginal.mapResult,PV_DL_EncoderBasis.advance] using
         (PV_RunJoin_WeightMap46.map_bind f (amap f) (PV_RunJoin_EncoderFactor49.next factor)
           (fun x => ProverCommitBasisCounter47.stagesN n out1 (PV_DL_EncoderBasis.advance width) x)
           (fun x => PV_DL_EncoderBasis.finite inst n (amap f out1) (PV_DL_EncoderBasis.advance width) x)
