@@ -26,8 +26,7 @@ theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S →
       PV_RunJoin_WeightMap46.map_bind (pairMap f) (pairMap f)
         (ProverCommitNativePair48.step q basis j (p0,p1))
         (fun p => ProverCommitNativePair48.range q basis n (PV_DL_EncoderRange.advance j) p)
-        (fun p => match p with | (a,b) => PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n
-          (PV_DL_EncoderRange.advance j) a b)
+        (fun p => match p with | (a,b) => PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) a b)
         (fun p => by rcases p with ⟨a,b⟩; exact (ih _ hr a b).symm)
 #print axioms complete
 end R1Z.PV_RunJoin_EncoderPairs49
