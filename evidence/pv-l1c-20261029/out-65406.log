@@ -1,0 +1,14 @@
+START 65406 PV_L1C_TimingLaw
+DONE 65406 PV_L1C_TimingLaw exit 1 wall 1.05 RSS 2490175488
+/home/dombarker/project-offloads/codex-pv-l1c-20261029/sources/PV_L1C_TimingLaw.lean:37:3: error: Type mismatch: After simplification, term
+  h fun k => if k = v then 1 else 0
+ has type
+  (mean fun s => @ite ℚ (timingKey (real s) = v) (instDecidableEqProd (timingKey (real s)) v) 1 0) =
+    mean fun t => if timingKey (sim t) = v then 1 else 0
+but is expected to have type
+  (mean fun r => @ite ℚ (timingKey (real r) = v) (Classical.propDecidable ((fun s => timingKey (real s)) r = v)) 1 0) =
+    mean fun r => if timingKey (sim r) = v then 1 else 0
+'PV_L1C.law_map' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1C.timing_law_iff_tests' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_L1C.full_law_iff_timing_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+
