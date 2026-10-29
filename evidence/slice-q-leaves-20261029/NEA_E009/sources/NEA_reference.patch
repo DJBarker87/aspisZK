@@ -1,0 +1,10 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,7 @@
++extern crate alloc;
++use alloc::vec::Vec;
++pub fn row_ref(mut row:[u64;4],power:[u32;4],basis:u32,flush:bool)->[u64;4]{for j in 0..4{let old=row[j];let limb=power[j];row[j]=old+u64::from(limb)*u64::from(basis);}if flush{for limb in &mut row{*limb=(*limb&2147483647)+(*limb>>31);}}row}
++pub struct Weights {pub raw:Vec<[u64;4]>,pub terms:usize}
++pub fn push_ref(mut w:Weights,index:usize,power:[u32;4],basis:u32)->Weights{let flush=w.terms&3==3;w.raw[index]=row_ref(w.raw[index],power,basis,flush);w}
++pub fn row_add_limb_ref(mut row:[u64;4],power:[u32;4],basis:u32,j:usize)->[u64;4]{let old=row[j];row[j]=old+u64::from(power[j])*u64::from(basis);row}
++pub fn row_fold_limb_ref(mut row:[u64;4],j:usize)->[u64;4]{let old=row[j];row[j]=(old&2147483647)+(old>>31);row}

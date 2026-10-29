@@ -1,0 +1,72 @@
+NEA_generated/NEA_FoldStateCircle.lean:9:75: error: unsolved goals
+alpha : W
+values : Std.Array W 4#usize
+inverse : Std.Array U32 5#usize
+⊢ (do
+      let ix ← inverse.index_usize 0#usize
+      let iy ← inverse.index_usize 1#usize
+      let a ← values.index_usize 0#usize
+      let b ← values.index_usize 1#usize
+      let c ← values.index_usize 2#usize
+      let d ← values.index_usize 3#usize
+      let (ab, ops1) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add a b)
+      let (abc, ops2) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add ab c)
+      let (abcd, ops3) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add abc d)
+      let (h0, ops4) ← NEA_StateLaws.lift (NEA_FoldModel.ops.scale abcd SAQ_LineSource.quarter)
+      let (amb, ops5) ← NEA_StateLaws.lift (NEA_FoldModel.ops.sub a b)
+      let (ambmc, ops6) ← NEA_StateLaws.lift (NEA_FoldModel.ops.sub amb c)
+      let (ambmcpd, ops7) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add ambmc d)
+      let (m, ops8) ← NEA_StateLaws.lift (NEA_FoldModel.ops.base_mul SAQ_LineSource.quarter iy)
+      let (h1, ops9) ← NEA_StateLaws.lift (NEA_FoldModel.ops.scale ambmcpd m)
+      let (abmc, ops10) ← NEA_StateLaws.lift (NEA_FoldModel.ops.sub ab c)
+      let (abmcmd, ops11) ← NEA_StateLaws.lift (NEA_FoldModel.ops.sub abmc d)
+      let (m1, ops12) ← NEA_StateLaws.lift (NEA_FoldModel.ops.base_mul SAQ_LineSource.quarter ix)
+      let (h2, ops13) ← NEA_StateLaws.lift (NEA_FoldModel.ops.scale abmcmd m1)
+      let (ambpc, ops14) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add amb c)
+      let (ambpcmd, ops15) ← NEA_StateLaws.lift (NEA_FoldModel.ops.sub ambpc d)
+      let (m2, ops16) ← NEA_StateLaws.lift (NEA_FoldModel.ops.base_mul m1 iy)
+      let (h3, ops17) ← NEA_StateLaws.lift (NEA_FoldModel.ops.scale ambpcmd m2)
+      let (we10, ops18) ← NEA_StateLaws.lift (NEA_FoldModel.ops.mul alpha h3)
+      let (we11, ops19) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add h2 we10)
+      let (we12, ops20) ← NEA_StateLaws.lift (NEA_FoldModel.ops.mul alpha we11)
+      let (we13, ops21) ← NEA_StateLaws.lift (NEA_FoldModel.ops.add h1 we12)
+      let (we14, ops22) ← NEA_StateLaws.lift (NEA_FoldModel.ops.mul alpha we13)
+      NEA_StateLaws.lift (NEA_FoldModel.ops.add h0 we14)) =
+    do
+    let x ← inverse.index_usize 0#usize
+    let x_1 ← inverse.index_usize 1#usize
+    let x_2 ← values.index_usize 0#usize
+    let x_3 ← values.index_usize 1#usize
+    let x_4 ← values.index_usize 2#usize
+    let x_5 ← values.index_usize 3#usize
+    let x_6 ← NEA_FoldModel.ops.add x_2 x_3
+    let x_7 ← NEA_FoldModel.ops.add x_6 x_4
+    let x_8 ← NEA_FoldModel.ops.add x_7 x_5
+    let x_9 ← NEA_FoldModel.ops.scale x_8 SAQ_LineSource.quarter
+    let x_10 ← NEA_FoldModel.ops.sub x_2 x_3
+    let x_11 ← NEA_FoldModel.ops.sub x_10 x_4
+    let x_12 ← NEA_FoldModel.ops.add x_11 x_5
+    let x_13 ← NEA_FoldModel.ops.base_mul SAQ_LineSource.quarter x_1
+    let x_14 ← NEA_FoldModel.ops.scale x_12 x_13
+    let x_15 ← NEA_FoldModel.ops.sub x_6 x_4
+    let x_16 ← NEA_FoldModel.ops.sub x_15 x_5
+    let x ← NEA_FoldModel.ops.base_mul SAQ_LineSource.quarter x
+    let x_17 ← NEA_FoldModel.ops.scale x_16 x
+    let x_18 ← NEA_FoldModel.ops.add x_10 x_4
+    let x_19 ← NEA_FoldModel.ops.sub x_18 x_5
+    let x ← NEA_FoldModel.ops.base_mul x x_1
+    let x ← NEA_FoldModel.ops.scale x_19 x
+    let x ← NEA_FoldModel.ops.mul alpha x
+    let x ← NEA_FoldModel.ops.add x_17 x
+    let x ← NEA_FoldModel.ops.mul alpha x
+    let x ← NEA_FoldModel.ops.add x_14 x
+    let x ← NEA_FoldModel.ops.mul alpha x
+    NEA_StateLaws.lift (NEA_FoldModel.ops.add x_9 x)
+NEA_generated/NEA_FoldStateCircle.lean:11:82: warning: This simp argument is unused:
+  step
+
+Hint: Omit it from the simp argument list.
+  simp only [NEA_FoldStateRef.circle_ref, ̲NEA_FoldRef.circle_ref, ̲NEA_StateLaws.ops,s̵t̵e̵p̵,̵ ̲lift_bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEA_FoldStateCircle.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

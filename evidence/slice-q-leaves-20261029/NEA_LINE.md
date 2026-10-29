@@ -1,0 +1,9 @@
+# Line node local bridge
+
+CLOSED-CONDITIONAL NEA::line_node on exactly u<262144. L059 constructs the actual emitted point, its canonical coordinates, exact emitted square, exact extracted reference tail and the actual R17FibrePointLineNodeActual.line_node result, canonical out. Only the named lower CM31 interpretation remains. No successful enclosing call or output equality is a premise.
+
+K029 actual frozen line body proof_for_contract PASS, K030 inverted reference equality FAIL; K031/K032 official KMX controls PASS/FAIL under identical flags. Deployed library features, frozen offline graph and unchanged lock are checked per invocation. The credited caller is the direct opaque lower-callee method: CLOSED point bridge + Lean-discharged M31 product/double/sub-one cuts. It uses no stub_verified. Same point argument, point.x square operands, and returned extracted-tail value are checked natively. Every stub/domain/actual emitted value law is indexed in LPh_STUBS.md.
+
+K016/K019/K022/K028 all timed out at the unchanged90s solver cap; no credit and no rerun unchanged. K023 was a capped read-only GOTO inspection. The successful replacement isolates the field-linear operations as well, whose exact value laws are now supplied by L060 instead of SAT arithmetic. It also uses fresh typed ghost records; line's scalar counter resets at cfg(kani) entry and the proof starts from arbitrary old ghost records. No native caller input precondition was added. The frozen function body is unchanged after cfg erasure; lower table/value correspondence remains P6/D188 reclassification.
+
+L059 exit0,wall3.684148748s,RSS4515164KiB,swap0; L060 exit0,wall3.480848799s,RSS3834592KiB,swap0. K029 exit0,wall13.027694085s,RSS459084KiB,swap0. All accepted top theorems print only propext/Classical.choice/Quot.sound. Full source hashes, revisions, dependencies, commands and caps in receipts. No shipped-file change, ELF rebuild, root-composition credit or headline conclusion.

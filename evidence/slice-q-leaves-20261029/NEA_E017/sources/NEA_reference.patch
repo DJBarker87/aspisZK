@@ -1,0 +1,9 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,6 @@
++extern crate alloc;
++use alloc::vec::Vec;
++pub trait Ops<E,K>{fn m_mul(a:u32,b:u32)->u32;fn m_double(a:u32)->u32;fn m_sub(a:u32,b:u32)->u32;fn push(w:Vec<[u64;4]>,index:usize,power:K,basis:u32,flush:bool)->Vec<[u64;4]>;fn e_add(a:E,b:E)->E;fn e_mul_k(a:E,b:K)->E;fn k_mul(a:K,b:K)->K;}
++pub struct State<E,K>{pub weights:Vec<K>,pub rhs:E,pub power:K,pub next:usize}
++pub struct Pending{pub raw:Vec<[u64;4]>,pub terms:usize}
++pub fn accumulate_ref<E:Copy,K:Copy,O:Ops<E,K>>(mut a:State<E,K>,mut w:Pending,rho:K,mut node:u32,value:E)->(State<E,K>,Pending){let width=a.weights.len();let mut basis=[0u32;256];basis[0]=1;let mut n=1;while n<width{for j in 0..n{basis[n+j]=O::m_mul(basis[j],node);}node=O::m_sub(O::m_double(O::m_mul(node,node)),1);n*=2;}for j in 0..width{w.raw=O::push(w.raw,j,a.power,basis[j],w.terms&3==3);}w.terms+=1;a.rhs=O::e_add(a.rhs,O::e_mul_k(value,a.power));a.power=O::k_mul(a.power,rho);a.next+=1;(a,w)}

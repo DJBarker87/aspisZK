@@ -1,0 +1,31 @@
+NEA_generated/NEA_LineTail.lean:23:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≤ -1
+where
+ a := ↑(↑d + AspisR1.ExtractedCurrentM31AddSub.P - ↑1#u32) % ↑AspisR1.ExtractedCurrentM31AddSub.P
+ b := ↑AspisR1.ExtractedCurrentM31AddSub.P
+NEA_generated/NEA_LineTail.lean:24:4: error: Type mismatch: After simplification, term
+  raw
+ has type
+  @Eq (Result (UScalar UScalarTy.U32)) (UScalar.sub d 1#u32) (ok out)
+but is expected to have type
+  @Eq (Result (UScalar UScalarTy.U32)) (d - 1#u32) (ok out)
+NEA_generated/NEA_LineTail.lean:33:4: error: Type mismatch: After simplification, term
+  raw
+ has type
+  @Eq (Result (UScalar UScalarTy.U32)) (2147483647#u32.sub 1#u32) (ok out)
+but is expected to have type
+  @Eq (Result (UScalar UScalarTy.U32)) (2147483647#u32 - 1#u32) (ok out)
+NEA_generated/NEA_LineTail.lean:42:2: error: 'change' tactic failed, pattern
+  (do
+      let d ← AspisR1Qm31ArithmeticProbe.field.M31.double s
+      if d ≥ 1#u32 then d - 1#u32 else 2147483647#u32 - 1#u32) =
+    ?m.52
+is not definitionally equal to target
+  NEA_Reference.line_double_sub_ref s = do
+    let d ← AspisR1Qm31ArithmeticProbe.field.M31.double s
+    d.sub 1#u32
+'NEA_LineTail.sub_one' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEA_LineTail.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

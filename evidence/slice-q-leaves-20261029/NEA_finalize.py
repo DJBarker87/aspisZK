@@ -1,0 +1,50 @@
+from pathlib import Path
+import json,subprocess,hashlib,collections
+E=Path(__file__).resolve().parent;R=E.parent.parent
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+git=lambda *a:subprocess.check_output(['git',*a],cwd=R,text=True).strip()
+q=json.loads(subprocess.check_output(['git','show','HEAD:docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json'],cwd=R,text=True))['slices']['Q']['open_functions']
+closed={x['function']:x for x in json.loads((E/'NEA_CLOSED.json').read_text())}
+reasons={
+'CM31::inv':('K-2 quarantine','Calls inv_with(M31::inv), a function-pointer-dependent path. E013 emits an unvalidated reference; native callback representability and exact adopted-carrier association remain. Conservative Q carrier edges require NEB type-resolution certificates.'),
+'CM31::inv_with':('K-2 quarantine','Actual inverse: fn(M31)->M31 argument is quarantined. E014 emits a function-parameter reference but supplies no native pointer-behavior credit or Lean correspondence.'),
+'QM31::inv':('K-2 / open callee','Delegates to OPEN try_inv, whose CM inverse path is function-pointer dependent. E016 emits only the try_inv/expect wrapper; caller nonzero/canonical domain and cohort association are not proved here.'),
+'QM31::neg':('Missing cohort association','K001 PASS/K002 failing value control and E001 array reference are fragments. L001 finds no standalone adopted emitted neg definition. Exact enclosing typed use/carrier association is still missing; do not promote an array formula.'),
+'QM31::try_inv':('Slice boundary + K-2','Actual c0.square/c1.square resolve to CM31::square, outside slice Q. Its CM31 inverse reaches a function pointer. E015 exposes these operations explicitly but is unvalidated. No out-of-slice square proof was attempted.'),
+'query_loop':('K-2 / open query callee','Carries Observer=Option<fn> to query_values/mark, so rule14 forbids native credit. Also depends on OPEN query_values and its ordered rejection/effect/loop association. No literal-None or renamed workaround.'),
+'query_values':('K-2 / open value callees','Calls mark(obs,Phase::Query(i)); pointer quarantine applies. four_dots, both folds, geometry and accumulation remain OPEN, including same-input Vec/state/effect/rejection bindings.'),
+'mark':('K-2 quarantine','Body is if let Some(f)=obs {f(p)}. Native callback/effect representability cannot be credited under standing rule14. Existing model universality is not a native instance.'),
+'four_dots':('Open callee / reference-only','Depends on OPEN four_dots_one at slots 0,1,2,3 on the SAME first608 bytes and g. E012 emits a wrapper candidate, uncompiled and unproved; source-to-model same-call/result association is not supplied by the name.'),
+'four_dots_one':('Raw arithmetic + loop/frame','Inline u64 field products cannot be proved in Kani or replaced by an invented copy/product stub. Need actual one-term/native read/write association, paired raw-product law, grouping/induction/frame and exact tail. E011/E020 fail in Aeneas; logs retain spans.'),
+'BatchedWeights::push':('Open raw-row callee','Depends on OPEN update_residue_row and same raw[index]/power/basis/flush (terms&3==3) association. No terms increment occurs in push. E010 fails while extracting its row dependency; source/model mutation and frame remain.'),
+'QueryGeometry::for_range':('Prefix + loop/allocator assembly','CLOSED index/point/line leaves are available, but prefix, gather/append, backward inversion, nonzero and regrouping/capacity/source-loop bindings remain. E008 emits external array-iterator/is_empty axioms: rejected, text-only, no standard-axiom model credit.'),
+'egress_unused':('unused','unused'),
+'batch_prefix_products':('Timed native frame + unjoined induction','K037 and K038 time out on different one-iteration prestate constructions. Need a true arbitrary-offset KMX window/frame composition and actual native cut history feeding existing NCB_PrefixNativeStep/CutTrace. E007/E019 emit uncompiled references, not a native whole-loop trace.'),
+'circle_fold_with_inverses':('Timed native result composition','E005/L064 exactly match FIp_CircleSource.circle and its ABI wrapper; L066/L067 pair products. K034/K036/K056/K057 time out, all excluded. K052–K055 linear and K063–K080 log controls do not prove the full result. E018 supplies split candidates; new cut composition/Lean work remains.'),
+'line_fold_with_inverses':('Timed native result composition','E005/L064 exactly match SAQ_LineSource.line; accepted product laws apply. K039/K058 time out. Need small native prelude/Horner cuts and checked composition. State-erasure drafts L070/L072–L077 and WideLinear L078–L080 are not passing modules.'),
+'accumulate_batched_with_node':('Open row/push + iteration/frame','Correction: no Observer argument; deployed prover is absent, so trace::value is a no-op. No K-2 claim for this helper. Need CLOSED raw-row/push, arbitrary basis/weight iterations, state/weights frame, scalar/extension domain propagation and induction. E017 fails in Aeneas.'),
+'update_residue_row':('Inline raw product + frame','Need paired unreduced u64 product semantics, old-residue/overflow and flush bounds and one-limb frame/induction for the two loops. Never run this multiplication in Kani. E009/E020 fail in Aeneas; no fabricated primitive stub was introduced.')}
+fnrows=[]
+for f in q:
+ suffix=f.split('.rs::',1)[1]
+ if f in closed:
+  c=closed[f];row=dict(function=f,local_status='CLOSED-CONDITIONAL',composed_status='OPEN',claim_id=c['claim_id'],domain_statement=c['domain_statement'],remaining='NEB must establish every real caller domain, same inputs/effects/carrier and the retained physical interpretation before composed promotion.')
+ else:
+  kind,why=reasons[suffix];row=dict(function=f,local_status='OPEN',composed_status='OPEN',obstacle_class=kind,remaining=why)
+ fnrows.append(row)
+(E/'NEA_SLICE_BRIDGES.md').write_text('# Slice Q leaf bridge matrix\n\nThree local conditional packets; no composed row is closed. No unvalidated reference, timeout, failed Lean module or quarantined pointer path is accepted.\n\n| Function | Local status | Packet / exact obstacle |\n|---|---|---|\n'+''.join('| `'+x['function']+'` | '+x['local_status']+' | '+(x.get('claim_id','')+'; '+x.get('domain_statement','')+'; ' if x['local_status']=='CLOSED-CONDITIONAL' else '')+x['remaining']+' |\n' for x in fnrows))
+rows=[json.loads(x) for x in (E/'NEA_ATTEMPTS.jsonl').read_text().splitlines()];budget={'K_slots_used':80,'kani_runs':79,'bounded_goto_inspection_slots':1,'Lean_runs_used':80,'extraction_runs_used':20,'authorized_limits':{'K':80,'L':80,'E':20}}
+validation=json.loads((E/'NEA_VALIDATION.json').read_text())
+delta=dict(schema='NEA proposed local slice-Q additions, no canonical closure mutation',frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387',headline='AspisR1.RPx_Deployed.deployed',baseline='evidence/native-ledger3-20261029/NDT_LEDGER.json',baseline_sha256=sha(E/'NEA_NDT_LEDGER.json'),ledger_copy='NEA_NDT_LEDGER.json',local_claims=list(closed.values()),functions=fnrows,canonical_row_mutations=[],composed_row_promotions=[],trust='Owner amendment fifth: P6/D188 native contract semantic transport reclassification, never removal; exact PacketDomain and physical interpretation remain named.',budget=budget,validation={'own_integrity_and_ndt_invariants':validation,'full_NDT_command':'python3 evidence/native-ledger3-20261029/NDT_validate.py --ledger evidence/slice-q-leaves-20261029/NEA_NDT_LEDGER.json','full_NDT_exit':1,'full_NDT_reason':validation['full_ndt_reason'],'adoption':'UNADOPTED: lead must explicitly refresh the merged report snapshot; do not hand-edit canonical rows or weaken NDT.'})
+(E/'NEA_LEDGER_DELTA.json').write_text(json.dumps(delta,indent=2)+'\n')
+(E/'NEA_STOP_AUDIT.json').write_text(json.dumps(dict(reason='All authorized run slots exhausted; no new run or unchanged timeout replay is authorized.',budget=budget,functions=fnrows,proof_only_candidates='NEA_REFERENCE_RESULTS.json; no new Lean budget for these outputs',quarantined_native_support='No new NEA Kani pass depends on an Option<fn>/function-pointer program value; inverse and observer functions are OPEN rather than credited.'),indent=2)+'\n')
+metrics=[]
+for x in rows:
+ metrics.append({k:x.get(k) for k in ['attempt','kind','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','print_axioms','cgroup','limits']})
+(E/'NEA_RESULTS.json').write_text(json.dumps(metrics,indent=2)+'\n')
+frozen_changes=git('diff','--name-only','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387','HEAD','--','crates','programs')
+ours=git('diff','--name-only','c2adb7682a^','--','crates','programs')
+audit=dict(audit_revision=git('rev-parse','HEAD'),audit_tree_dirty=True,task_base=git('rev-parse','c2adb7682a^'),frozen_revision=delta['frozen_revision'],shipped_changes_by_task=ours.splitlines() if ours else [],shipped_changes_since_frozen=frozen_changes.splitlines() if frozen_changes else [],ELF_rebuild_triggered=False,inherited_not_reproduced_ELFs={'default':'f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4','devnet':'63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299','Pool':'121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548'},protocol_pins={'cohort':'frozen3 and coherent SInt2 closure','base_modulus':2147483647,'fibre_count':262144,'queries':22,'split':10,'dots_prefix_bytes':608,'statement_L154':'owner-approved statement parameter','D188':'owner-approved narrowed P6/D188 interpretation','RuntimePersistence':'approved CPR_DataPersistence.TwoTransactionLaw; untouched','soundness_metric':'100-bit PER-ATTEMPT target unchanged; no proof-of-work/grinding credit','privacy_and_two_transactions':'untouched'},no_release_claim=True,no_wallet_or_key_operations=True,no_push=True)
+assert not audit['shipped_changes_by_task']
+(E/'NEA_FROZEN_SOURCE_AUDIT.json').write_text(json.dumps(audit,indent=2)+'\n')
+print(json.dumps({'local_conditional':len(closed),'open':len(q)-len(closed),'composed_closed':0,'budgets':budget,'frozen_source_changed_paths':audit['shipped_changes_since_frozen']}))

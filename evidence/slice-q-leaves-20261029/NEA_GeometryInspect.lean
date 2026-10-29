@@ -1,0 +1,9 @@
+import NDH_Geometry
+import AspisR1BatchedWeightsExtraction.Funs
+open Aeneas Aeneas.Std Result
+#print AspisR1QueryGeometryActual.domain.FibreIndex
+#print AspisR1QueryGeometryActual.fast_domain.fibre_point
+#print AspisR1QueryGeometryActual.fast_domain.line_node
+#print AspisR1QueryGeometryActual.CM31Ops
+#print AspisR1QueryGeometryActual.M31Ops
+#check AspisR1BatchedWeightsExtraction.verifier.BatchedWeights.push

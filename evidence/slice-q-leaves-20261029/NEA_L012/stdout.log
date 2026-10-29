@@ -1,0 +1,52 @@
+NEA_generated/NEA_PointBridge.lean:28:2: error: unsolved goals
+case left
+ops : CM31Ops
+u iA iB : Usize
+a b : U32 × U32
+z : field.CM31
+mask : lift (u &&& 511#usize) = ok iA
+shift : u >>> 9#i32 = ok iB
+readA : fast_domain.TABLE_A.index_usize iA = ok a
+readB : fast_domain.TABLE_B.index_usize iB = ok b
+constructor : ∀ (x y : field.M31), ops.new x y = ok { a := x, b := y }
+product : ops.mul { a := a.1, b := a.2 } { a := b.1, b := b.2 } = ok z
+⊢ (let (i2, i3) := a
+    let (i4, i5) := b
+    ok ⟨[i2, i3, i4, i5, z.a, z.b], ⋯⟩) =
+    ok ⟨[a.1, a.2, b.1, b.2, z.a, z.b], ⋯⟩
+NEA_generated/NEA_PointBridge.lean:30:2: error: unsolved goals
+case right
+ops : CM31Ops
+u iA iB : Usize
+a b : U32 × U32
+z : field.CM31
+mask : lift (u &&& 511#usize) = ok iA
+shift : u >>> 9#i32 = ok iB
+readA : fast_domain.TABLE_A.index_usize iA = ok a
+readB : fast_domain.TABLE_B.index_usize iB = ok b
+constructor : ∀ (x y : field.M31), ops.new x y = ok { a := x, b := y }
+product : ops.mul { a := a.1, b := a.2 } { a := b.1, b := b.2 } = ok z
+⊢ (do
+      let left ←
+        let (i, i1) := a
+          ok { a := i, b := i1 }
+      let right ←
+        let (i, i1) := b
+          ok { a := i, b := i1 }
+      let point ← ops.mul left right
+      ok { x := point.a, y := point.b }) =
+    ok { x := z.a, y := z.b }
+NEA_generated/NEA_PointBridge.lean:31:54: warning: This simp argument is unused:
+  product
+
+Hint: Omit it from the simp argument list.
+  simp only [fast_domain.fibre_point, ̲domain.FibreIndex.get, ̲mask, ̲shift,
+  ̵  ̵ ̵ ̵ ̵ ̵readA, ̲readB,
+  ̲ ̲ ̲ ̲ ̲fast_domain.table_value, ̲constructor,p̵r̵o̵d̵u̵c̵t̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEA_generated/NEA_PointBridge.lean:43:37: error(lean.invalidField): Invalid field `FibreIndex`: The environment does not contain `Nat.le.FibreIndex`, so it is not possible to project the field `FibreIndex` from an expression
+  domain
+of type `(↑u).succ.le 262144`
+'NEA_PointBridge.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEA_PointBridge.reads' depends on axioms: [propext, Classical.choice, Quot.sound]

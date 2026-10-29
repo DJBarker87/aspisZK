@@ -1,0 +1,7 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,4 @@
++pub trait Ops<E,T>{fn limbs(x:E)->[u32;8];fn from_limbs(x:[u32;8])->Option<E>;fn reduce(x:u64)->u32;fn parse_k(b:&[u8])->Option<[u32;4]>;fn tail_new()->T;fn tail_push(t:T,x:E,k:[u32;4])->Result<T,u8>;fn tail_finish(t:T)->E;fn add(x:E,y:E)->E;}
++fn read_m(b:&[u8])->u32{let x=u32::from_le_bytes([b[0],b[1],b[2],b[3]]);assert!(x<2147483647);x}
++pub fn dot_term_ref<E:Copy,T,O:Ops<E,T>>(q:&[u8;608],g:&[E;29],slot:usize,term:usize,mut sums:[u64;8])->[u64;8]{let at=slot*120+term*4;let scalar=read_m(&q[at..at+4]);let c=O::limbs(g[term]);for j in 0..8{sums[j]+=u64::from(c[j])*u64::from(scalar);}sums}
++pub fn dots_one_ref<E:Copy,T,O:Ops<E,T>>(q:&[u8;608],g:&[E;29],slot:usize)->E{let mut limbs=[0u64;8];let mut start=0;while start<26{let mut sums=[0u64;8];let stop=core::cmp::min(start+4,26);for term in start..stop{sums=dot_term_ref::<E,T,O>(q,g,slot,term,sums);}for j in 0..8{limbs[j]+=(sums[j]&2147483647)+(sums[j]>>31);}start+=4;}let v=O::from_limbs([O::reduce(limbs[0]),O::reduce(limbs[1]),O::reduce(limbs[2]),O::reduce(limbs[3]),O::reduce(limbs[4]),O::reduce(limbs[5]),O::reduce(limbs[6]),O::reduce(limbs[7])]).unwrap();let mut tail=O::tail_new();let k=O::parse_k(&q[slot*120+104..slot*120+120]).unwrap();tail=O::tail_push(tail,g[28],k).ok().unwrap();let at=480+slot*32;let k=O::parse_k(&q[at..at+16]).unwrap();tail=O::tail_push(tail,g[26],k).ok().unwrap();let k=O::parse_k(&q[at+16..at+32]).unwrap();tail=O::tail_push(tail,g[27],k).ok().unwrap();O::add(v,O::tail_finish(tail))}

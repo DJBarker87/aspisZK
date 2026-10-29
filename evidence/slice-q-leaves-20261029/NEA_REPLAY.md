@@ -1,0 +1,9 @@
+# Reproduction and evidence boundaries
+
+Native harnesses are committed only as baseline-relative NEA_native.patch and each K attempt's NEA_harness.patch. Research crates/ and programs/ are unchanged. The frozen source is 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. NEA_restore.py reconstructs local scratch payload JSON and reference text inputs from these patches. NEA_run.py also reconstructs a missing payload, or accepts NEA_REPLAY_PATCH pointing to one exact attempt patch. The development maker scripts are not a replacement for an attempt's immutable patch.
+
+No replay is authorized merely by this recipe. Existing attempt identifiers cannot be reused, expired budgets cannot be exceeded, and an unchanged timed-out shape cannot be rerun. A later worker needs its own authorized budget, prefix, workspace, admission and capped scope. Every Kani run must retain frozen graph validation, offline mode, official KMX patch, deployed features, source hashes and post-run lock hash. Pure-core index controls use r0 and reach no verifier code; the index macro has no feature-dependent body or bound.
+
+NEA_recover_sources.py reads immutable per-attempt source snapshots from the own host workspace. Rust reference snapshots are stored as patches; Lean snapshots retain exact failed and successful versions separately. Only exit-0 Lean receipts with standard axiom output are accepted. A theorem appearing before another module error is not accepted as a passing module.
+
+The authoritative NDT validator is unchanged. Its full run against NEA_NDT_LEDGER.json rejects this branch because new committed reports change the merged report corpus relative to its frozen BASE. That is an evidence-snapshot adoption requirement, not permission to edit canonical closure rows or weaken the validator. The delta therefore carries proposed local claims and zero composed promotions; final adoption needs the lead's explicit refreshed snapshot.

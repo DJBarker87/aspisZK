@@ -1,0 +1,3 @@
+# Own reference/input repairs
+
+E004 successfully extracts generic circle/line references, but its generated trait declaration repeats the field name coremarkerCopyInst for the E and M Copy bounds. L061 rejects that declaration; no theorem or native credit. E005 removes redundant Copy bounds from the TRAIT declaration while retaining both Copy bounds on the actual reference functions, which already require them. Function bodies, names, inputs and computation are unchanged. This repairs our reference interface without editing Aeneas, Charon, a launcher, or an existing proved module. New extraction and Lean compilation are required; the old generated source/hash and failure remain evidence.

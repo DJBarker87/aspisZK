@@ -1,0 +1,57 @@
+{"attempt": "NEA_K002", "exit_status": 1, "wall_seconds": 8.124388008960523, "peak_rss_kib": "495428", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-leaves-20261029/NEA_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `NEA_field` should have a snake case name
+    --> crates/aspis-core/src/field.rs:3272:47
+     |
+3272 | #[cfg(kani)] #[path="field/NEA_field.rs"] mod NEA_field;
+     |                                               ^^^^^^^^^ help: convert the identifier to snake case: `nea_field`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NEA_domain` should have a snake case name
+   --> crates/aspis-core/src/r0/domain.rs:102:18
+    |
+102 | #[cfg(kani)] mod NEA_domain { use super::*;
+    |                  ^^^^^^^^^^ help: convert the identifier to snake case: `nea_domain`
+
+    Finished `dev` profile [optimized] target(s) in 4.36s
+Checking harness field::NEA_field::qm_neg...
+
+VERIFICATION RESULT:
+ ** 1 of 77 failed
+Failed Checks: |r| NEA_field::neg_post(self,*r)
+ File: "crates/aspis-core/src/field.rs", line 917, in field::QM31::neg::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.25327805s
+
+Manual Harness Summary:
+Verification failed for - field::NEA_field::qm_neg
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf06487f513f84b9d92e6fdcc4d8ef84e.scope; invocation ID: d7db98fc4a934833919f22c37cef2566
