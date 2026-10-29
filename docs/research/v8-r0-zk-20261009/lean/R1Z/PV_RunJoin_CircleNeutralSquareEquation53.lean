@@ -11,7 +11,7 @@ theorem owned (r : core.ops.range.Range Usize) (a : U32) :
       | .done out => ok out) := by
   unfold PV_RunJoin_CircleRawScalar52.field.square_n_loop
   rw [ProverRw19LoopBind.loop_bind]
-  rfl
+  simp only [Aeneas.Std.uncurry,Prod.mk.eta]
 
 theorem model (r : core.ops.range.Range Usize) (a : U32) :
     PV_RunJoin_CircleR72Raw52.field.square_n_loop r a = (do
@@ -21,7 +21,7 @@ theorem model (r : core.ops.range.Range Usize) (a : U32) :
       | .done out => ok out) := by
   unfold PV_RunJoin_CircleR72Raw52.field.square_n_loop
   rw [ProverRw19LoopBind.loop_bind]
-  rfl
+  simp only [Aeneas.Std.uncurry,Prod.mk.eta]
 
 #print axioms owned
 #print axioms model
