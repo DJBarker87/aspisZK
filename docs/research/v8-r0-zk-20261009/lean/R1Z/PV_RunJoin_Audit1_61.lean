@@ -1,0 +1,9 @@
+import R1Z.PV_RunJoin_NonVacuity61
+import R1Z.PV_RunJoin_CaptureBoundary61
+#print axioms R1Z.PV_RunJoin_NonVacuity61.SuccessfulCapture
+#print axioms R1Z.PV_RunJoin_NonVacuity61.successfulCapture_iff
+#print axioms R1Z.PV_RunJoin_NonVacuity61.empty_links
+#print axioms R1Z.PV_RunJoin_CaptureBoundary61.rejecting
+#print axioms R1Z.PV_RunJoin_CaptureBoundary61.no_produced
+#print axioms R1Z.PV_RunJoin_CaptureBoundary61.no_successfulCapture
+#print axioms R1Z.PV_RunJoin_CaptureBoundary61.selected_mapErr

@@ -1,0 +1,9 @@
+import R1Z.PV_RunJoin_ActualFrontRoom61
+import R1Z.PV_RunJoin_CircleObstruction61
+#print axioms R1Z.PV_RunJoin_ActualFrontRoom61.FrontRoom
+#print axioms R1Z.PV_RunJoin_ActualFrontRoom61.producer_iff
+#print axioms R1Z.PV_RunJoin_ActualFrontRoom61.specialize
+#print axioms R1Z.PV_RunJoin_CircleObstruction61.rejecting
+#print axioms R1Z.PV_RunJoin_CircleObstruction61.no_capture
+#print axioms R1Z.PV_RunJoin_CircleObstruction61.not_uniform_capture
+#print axioms R1Z.PV_RunJoin_CircleObstruction61.degenerate_links
