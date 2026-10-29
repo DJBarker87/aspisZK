@@ -15009,3 +15009,15 @@ pv-rows10 (sparse worktree from the current candidate; IDs 68300-68399; 100 Lean
 - V263, host_work.map;
 - V404 and V405, per-fixture reachability.
 The level-2 rows V352, V366, V368 and V369 go to pv-l2e's next round, and the file-I/O rows (V171, V172, V175, V176, V267-V269, V271) to the diagnostic line once D474 is decided. Privacy target not yet established.
+
+## D484 (Stream B) 2026-10-29 07:09 UTC: pv-l3a results (V373 binary audit: no leak found, 7 kernels unresolved); pv-l3b launched with a debug-provenance identity check
+
+pv-l3a used one capped analysis scope, with no Lean or Kani. Seven scanner controls, a source-parity check and an evidence-integrity check passed. Lead review: nothing outside the worker's evidence and tools; no large files; no change under crates or programs. It was merged into the candidate and pushed.
+
+On the deployed client binary (SHA-256 fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348) it audited 17 relevant kernel symbol bodies. Ten are provisionally CLEAN under its documented heuristic taint assumptions, which are finite evidence and not a proof, and seven are UNRESOLVED. It recorded 117 resolved kernel call sites and 17 resolved inversion calls, with exact zero branches at 0x19b812 and 0x19e6f5. No protocol-level leak was found. The deployed binary carries no DWARF, which prevents exhaustive identification of inlined copies and source-line mapping. V373 and V380-inversion remain OPEN. V371 (CPU latency) and DOITM remain owner and trust items.
+
+pv-l3b (IDs 68400-68499; 40 Lean, 40 native, 0 Kani) takes three steps:
+- rebuild the client with the identical configuration, changing only the debug-info level, and check that the .text bytes and symbol addresses equal the deployed binary's; only if they are identical does the DWARF describe the shipped code exactly;
+- resolve the seven kernels and every inlined copy with that provenance;
+- connect the 17 inversion calls and both zero branches to their source callers and to the existing nonzero or charged-bad-event proofs, reporting any missing one as an obligation and any reachable witness-dependent zero as a finding.
+Rows removed: 0. Privacy target not yet established.
