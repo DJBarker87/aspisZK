@@ -17,9 +17,11 @@ def table (columns : Slice Column) (length : columns.length=29) : Columns :=
 theorem native (columns : Slice Column) (length : columns.length=29) :
     Array.to_slice (amap (amap fromW) (table columns length))=columns := by
   apply Subtype.ext
-  simp only [table,amap,Array.to_slice,List.map_map,Function.comp_def,
-    PV_RunJoin_ClaimEvaluationActual50.array_roundtrip]
-  exact List.map_id _
+  change (columns.val.map (amap toW)).map (amap fromW)=columns.val
+  rw [List.map_map]
+  have inverse : ((amap fromW) ∘ (amap toW) : Column → Column)=id :=
+    funext PV_RunJoin_ClaimEvaluationActual50.array_roundtrip
+  rw [inverse,List.map_id]
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (columns : Slice Column) (length : columns.length=29) (g : W) :
