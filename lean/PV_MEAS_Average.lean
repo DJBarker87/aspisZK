@@ -8,6 +8,7 @@ ProbabilityMeasure, without importing its topological API. -/
 set_option autoImplicit false
 noncomputable section
 open MeasureTheory
+open scoped ENNReal
 namespace PV_MEAS_Law
 abbrev ProbabilityMeasure (E : Type*) [MeasurableSpace E] :=
   { μ : Measure E // IsProbabilityMeasure μ }
@@ -17,7 +18,7 @@ instance probability {E : Type*} [MeasurableSpace E] (μ : ProbabilityMeasure E)
     (μ : ProbabilityMeasure E) : Nonempty E := nonempty_of_isProbabilityMeasure (μ : Measure E)
 def expectation {E : Type*} [MeasurableSpace E] (μ : Measure E) (p : E → ℝ) : ℝ :=
   (∫⁻ e, ENNReal.ofReal (p e) ∂μ).toReal
-notation3 "∫ₚ " (...) ", " r:60 " ∂" μ:70 => expectation μ (fun ... => r)
+notation3 "∫ₚ " (...) ", " r:60:(scoped f => f) " ∂" μ:70 => expectation μ r
 #print axioms ProbabilityMeasure.nonempty
 end PV_MEAS_Law
 
