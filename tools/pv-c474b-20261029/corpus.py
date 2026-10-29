@@ -10,19 +10,23 @@ import asyncio,json,hashlib,sys,time,os
 H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle/corpus-6000'
 B={'baseline':Path('/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/bin/prover_rw_differential'), 'candidate':H/'native-target/client/pv-c474-differential'}
 # Verify each baseline file against the previous committed evidence before reuse.
+assert hashlib.sha256((H/'corpus-ledger-audit.json').read_bytes()).hexdigest()=='aad32be02435e2ce45d0f9dcbbfc986fcf1e52d29e575fbe421a95b6fa6de118'
 manifest=json.loads((H/'corpus-ledger-audit.json').read_text());assert manifest['passed'] and manifest['physical_ledger_pairs']==1000
 for row in manifest['rows']:
  coin=row['coin'];p=H/'corpus-6000'/f'{coin}-baseline'/str(coin);pins=row['sides']['baseline']
  for name,key in [('public.bin','public_sha256'),('result.json','result_sha256'),('proof.bin','proof_sha256')]:
   assert (hashlib.sha256((p/name).read_bytes()).hexdigest() if (p/name).exists() else None)==pins[key],(coin,name)
  # Oracle streams are also covered by prior comparison hashes, not inferred.
- comparison=json.loads((H/'corpus-6000'/f'comparison-{coin}.json').read_text())
+ comparison_file=H/'corpus-6000'/f'comparison-{coin}.json'
+ assert hashlib.sha256(comparison_file.read_bytes()).hexdigest()==row['comparison_sha256']
+ comparison=json.loads(comparison_file.read_text())
  for name,entry in comparison['comparisons'][0]['files'].items():
   assert hashlib.sha256((p/name).read_bytes()).hexdigest()==entry['baseline_sha256']
 (O.parent/'baseline-corpus-reuse.json').write_text(json.dumps(dict(verified_cases=1000,manifest_sha256=hashlib.sha256((H/'corpus-ledger-audit.json').read_bytes()).hexdigest(),reason='Unchanged shipped baseline controls reused read-only; only combined candidate re-executed. Public/proof/result/ledger/oracle bytes compared by the unchanged full-file comparator.'),indent=2)+'\n')
 assert not O.exists(), 'Never duplicate an existing corpus'
 O.mkdir()
 pin=json.loads(Path('/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/build-differential/binary-pins.json').read_text())['prover_rw_differential']
+assert pin['sha256']=='3c31fe5786de3197c66c4fae5a3897599a2c2e94b449780903fd18cb672a96c1'
 assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()==pin['sha256'] and B['baseline'].stat().st_size==pin['bytes']
 slots=asyncio.Semaphore(3)
 sems={k:slots for k in ['baseline','candidate']}

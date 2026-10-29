@@ -22,3 +22,15 @@ The actual deployed client graph has no insecure fixture feature. Audit harnesse
 N73501 successfully built the final client, then failed at the audit manifest's inherited `default-run` pointing to an absent target. N73502 corrects only that audit manifest and builds the harnesses; the successful client build is not repeated. N73503 failed before any default ELF was produced because native build-script LLVM linkers exceeded TasksMax=64. N73504 replaces it with four-core CPU affinity, unchanged memory/task caps and identical release input. No cap increase or unchanged failed retry occurs.
 
 The 1,000-pair gate reuses and verifies the shipped control's retained 6000–6999 outputs read-only against their prior hashes. Only the combined candidate regenerates those cases; the unchanged full-file comparator checks proofs, public bytes, result records, physical nonce ledgers and four complete ordered oracle streams. This avoids repeating an unchanged baseline regression. Results pending.
+
+## Extraction spans for pv-cx
+
+`changed-spans.json` pins each final file hash and exact line spans against both the pre-D474 source (`a9a9781f8a`) and this continuation's requested base (`19c9611220`). In final source coordinates:
+
+| File | Full bundle changed spans versus a9a9781f8a | Additional changes versus 19c9611220 |
+|---|---|---|
+| `devnet_spend.rs` | 2–6, 14, 17–25, 27–39, 42–44, 49–53 | 14, 27–39, 49–53 |
+| `devnet_spend/plan.rs` | 3; deletion at the line-20 boundary; 29, 40, 108, 112, 114, 118, 123 | none |
+| `devnet_spend/Client64_accounts.rs` | 2, 20 | none |
+
+`PATCH.diff` contains the entire production bundle versus a9a9781f8a, including the accepted first half. `PATCH.incremental-from-19c9611220.diff` contains only this continuation. Both reverse-apply checks pass against the final tree. `N7-port.diff` records the exact key-loader block differences from the prepared patch; its Python hunk and fixed-copy decoder are unchanged. All other source additions in this evidence directory are gate tools, not production inputs.

@@ -1,0 +1,28 @@
+{
+  "sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+  "bytes": 2281512,
+  "path": "/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/devnet_spend",
+  "recipe": "#!/bin/sh\n# Reviewed Linux client recipe; root-workspace SBF builds never invoke this.\nset -eu\ncd \"$(dirname \"$0\")\"\nunset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP\nexport RUSTFLAGS='--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4'\nexec cargo +1.94.1 build --profile client --locked --offline -j 4 \\\n  --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend\n",
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "unit_graph_command": [
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--profile",
+    "client",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--bin",
+    "devnet_spend",
+    "-Z",
+    "unstable-options",
+    "--unit-graph"
+  ],
+  "bootstrap_scope": "graph-only; no bootstrap on production compilation",
+  "insecure_spend_fixture": false,
+  "ct_host_prover": true
+}
