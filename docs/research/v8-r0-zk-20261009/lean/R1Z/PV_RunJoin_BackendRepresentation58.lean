@@ -31,7 +31,8 @@ theorem of_vec (v : alloc.vec.Vec Column) (h : v.length=29) : matrix (cells v h)
     simp only [matrix,List.getElem_ofFn]
     apply Subtype.ext
     apply List.ext_getElem
-    · simp only [ProverCommitArray49.array,List.length_ofFn,Array.length]
+    · simp only [ProverCommitArray49.array,List.length_ofFn]
+      exact (v.val[l]'hl').property.symm
     · intro j hj hj'
       have bl : l<29 := by simpa only [matrix,List.length_ofFn] using hl
       have bj : j<1024 := by simpa only [ProverCommitArray49.array,List.length_ofFn] using hj
