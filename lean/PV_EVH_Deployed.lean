@@ -64,8 +64,9 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
 open PV_RJ4IDB PV_EVH_Interface PV_EVH_Core
 open Aeneas Aeneas.Std ProverRwFull
 variable [ExternalTypes]
-variable {Public Signal Env A R S : Type} [Fintype R] [Nonempty R]
+variable {Public Signal Env A R S N : Type} [Fintype R] [Nonempty R]
   [Fintype S] [Nonempty S] [Fintype Env] [Nonempty Env]
+  [Fintype N] [Nonempty N]
 
 /-- adopted by owner decision D502/D478. Data for the exact deployed invocation.
 No proof fields, Result decoder, success restriction or extra trust field.
@@ -74,6 +75,7 @@ the public invocation includes the stopping policy, never the witness or elapsed
 structure Runtime where
   completion : Completion Public Signal Env (ROMView K CommitHandle Aux R1Bat) A
   publicInput : Public
+  acquisition : N → Env × R
   native : Env → Observer Signal A → (h).Instance → R → NativeTrace A
   signal : Env → Observer Signal A → (h).Instance → R → Signal
   toNative : Env → Observer Signal A → (h).Instance → S → R
@@ -105,7 +107,7 @@ structure Runtime where
   point : Env × Observer Signal A × (h).Instance × R → Array aspis_core.field.QM31 10#usize
 
 variable (rt : Runtime (Public := Public) (Signal := Signal) (Env := Env)
-  (A := A) (R := R) (S := S) template outputs x)
+  (A := A) (R := R) (S := S) (N := N) template outputs x)
 
 def acquired (i : Env × Observer Signal A × (h).Instance × R) : NativeTrace A :=
   rt.native i.1 i.2.1 i.2.2.1 i.2.2.2
@@ -152,14 +154,13 @@ def SignalAgreement : Prop := ∀ e adv w,
 quantified over all equal-public witnesses; the earlier event prefix is retained. -/
 def V400 : Prop := ∀ adv,
   PV_EVH_Residual.Link_PublicSignal (h).public x.1
-    (fun w (p : Env × R) => rt.signal p.1 adv w p.2)
+    (fun w n => rt.signal (rt.acquisition n).1 adv w (rt.acquisition n).2)
     (fun p : Env × R => rt.completion.signal rt.publicInput p.1)
 
-/-- adopted by owner decision D502/D478. The experiment samples its named
-public product directly. This identity does not assert a native scheduler law;
-D163 and native acquisition must bind the actual experiment to that product. -/
+/-- adopted by owner decision D502/D478. Exact JOINT native environment/coin
+acquisition law. Neither an identity nor separate timing/signal marginals. -/
 def PublicEnvironment : Prop :=
-  PV_EVH_Residual.Link_PublicEnvironment (fun p : Env × R => p)
+  PV_EVH_Residual.Link_PublicEnvironment rt.acquisition
 
 def CausalPrefix : Prop := PV_EVH_Residual.Link_CausalPrefix
   (fun e v oracleLog => rt.completion.complete rt.publicInput
@@ -211,7 +212,8 @@ def toCoreLinks (links : Links template outputs x rt) (e : Env)
 /-- adopted by owner decision D502/D478. The deployed real experiment receives
 the complete lossless native observation; the adversary carrier is explicitly
 Observer Signal A, with arbitrary adaptive programs and Boolean decisions. -/
-def deployedReal := PV_EVH_Average.realExperiment rt.native rt.signal
+def deployedReal (adv : Observer Signal A) (w : (h).Instance) (n : N) :=
+  PV_EVH_Average.realExperiment rt.native rt.signal adv w (rt.acquisition n)
 
 def deployedIdeal := PV_EVH_Average.idealExperiment template outputs x rt.completion rt.publicInput
 
@@ -223,6 +225,13 @@ theorem privacy_headline_deployed_events (links : Links template outputs x rt)
     |mean (fun r => bit (adv.decide (deployedReal template outputs x rt adv w r))) -
       mean (fun r => bit (adv.decide (deployedIdeal template outputs x rt adv r)))| ≤
       PV_EVH_Core.bound template outputs x := by
+  have transfer := R0Z.LawTransport.mean_eq_of_equalLaws rt.acquisition
+    (fun p : Env × R => p)
+    (fun p => bit (adv.decide (PV_EVH_Average.realExperiment rt.native rt.signal adv w p)))
+    links.environment
+  change |mean (fun n => bit (adv.decide
+    (PV_EVH_Average.realExperiment rt.native rt.signal adv w (rt.acquisition n)))) - _| ≤ _
+  rw [transfer]
   exact PV_EVH_Average.privacy_headline_events_joint template outputs x
     rt.completion rt.publicInput rt.native rt.signal
     (fun e adv w _ => toCoreLinks template outputs x rt links e adv w) adv w hw
