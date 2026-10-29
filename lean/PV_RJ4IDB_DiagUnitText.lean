@@ -8,13 +8,13 @@ namespace PV_RJ4IDB
 open Aeneas Aeneas.Std
 /-- The native unit-variant spelling is a proved available component. Actual
 variant occurrence, PCs, formatting, delivery and earlier prefixes remain. -/
-theorem unit_variant_content (e : R1Z.ProverRwFull.verifier.Error) (pcs : List Nat) :
+theorem unit_variant_content (e : ProverRwFull.verifier.Error) (pcs : List Nat) :
  PV_DIAG2.reportError (PV_DIAG2.exportError (R1Z.ProverRwRetryModel.error e)) pcs "" false =
  ⟨[.returned (PV_DIAG2.exportError (R1Z.ProverRwRetryModel.error e)),
  .stderr ("Error: " ++ PV_DIAG2.nativeUnitDebug e ++ "\n")],.value 1⟩ :=
  PV_DIAG2.native_report_disabled e pcs
 
-theorem unit_content_retained (e : R1Z.ProverRwFull.verifier.Error) (pcs : List Nat)
+theorem unit_content_retained (e : ProverRwFull.verifier.Error) (pcs : List Nat)
  (before : List PV_DIAG2.Effect) :
  diagnostics2 (diag2Events (before ++
  (PV_DIAG2.reportError (PV_DIAG2.exportError (R1Z.ProverRwRetryModel.error e)) pcs "" false).effects)) =
