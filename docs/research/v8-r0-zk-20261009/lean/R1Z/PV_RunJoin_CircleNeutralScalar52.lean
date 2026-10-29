@@ -1,4 +1,6 @@
 import R1Z.PV_RunJoin_CircleNeutralBase52
+import R1Z.PV_B2_C_MachineArithmetic
+import R1Z.PV_B2_C_U32Arithmetic
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace R1Z.PV_RunJoin_CircleNeutralScalar52
@@ -23,29 +25,23 @@ theorem subtract_shape (x : U32) :
 
 theorem checked_add (a b : U32) (h : a.val+b.val < 2^32) :
     UScalar.add a b = ok (U32.wrapping_add a b) := by
-  have ht : UScalar.tryMk .U32 (a.val+b.val) = ok (UScalar.ofNatCore (a.val+b.val) h) := by
-    simp only [UScalar.tryMk,UScalar.tryMkOpt,UScalar.check_bounds,h,if_pos,Result.ofOption]
-  change UScalar.tryMk .U32 (a.val+b.val) = _
-  rw [ht]
-  congr 1
-  apply UScalar.eq_of_val_eq
-  change a.val+b.val = (U32.wrapping_add a b).val
-  rw [U32.wrapping_add_val_eq,UScalar.size]
-  exact (Nat.mod_eq_of_lt h).symm
+  exact PV_B2_C_U32Arithmetic.add_exact a b (by change a.val+b.val ≤ 4294967295; omega)
 
 theorem checked_sub (a b : U32) (h : b.val ≤ a.val) :
     UScalar.sub a b = ok (U32.wrapping_sub a b) := by
-  unfold UScalar.sub
-  simp only [Nat.not_lt.mpr h,if_false]
-  congr 1
-  apply UScalar.eq_of_val_eq
-  change (a.val-b.val)%4294967296 = (U32.wrapping_sub a b).val
-  rw [U32.wrapping_sub_val_eq,UScalar.size]
-  have ha := a.hBounds
-  have hb := b.hBounds
-  change a.val < 4294967296 at ha
-  change b.val < 4294967296 at hb
-  omega
+  obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U32.sub_spec (x := a) (y := b) h)
+  have he : z = U32.wrapping_sub a b := by
+    apply UScalar.eq_of_val_eq
+    rw [U32.wrapping_sub_val_eq]
+    have ha := a.hBounds
+    have hb := b.hBounds
+    change a.val < 4294967296 at ha
+    change b.val < 4294967296 at hb
+    change z.val = (a.val + (4294967296-b.val)) % 4294967296
+    rw [show a.val + (4294967296-b.val) = (a.val-b.val)+4294967296 from by omega,
+      Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
+    exact hv.1
+  simpa only [he] using hz
 
 #print axioms wrapping_sub_zero
 #print axioms subtract_shape
