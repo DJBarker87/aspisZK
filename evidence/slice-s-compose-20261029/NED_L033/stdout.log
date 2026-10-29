@@ -1,0 +1,561 @@
+NED_generated/NED_ValidatorTrace.lean:59:14: error: Tactic `rfl` failed: The left-hand side
+  (have d := (parts s).2.2.2.2.1;
+    match NBN_FirstByteDependency.lane enc d with
+    | fail e => (fail e, [Call.lane d])
+    | div => (div, [Call.lane d])
+    | ok (core.result.Result.Err e) =>
+      (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e)),
+        [Call.lane d])
+    | ok (core.result.Result.Ok l) =>
+      if l ≠ (common s).output_lane then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane d])
+      else
+        have arg := (common s).lane_transition;
+        have out := NBN_LateResult.zero;
+        have r := do
+          let (status, _) ← NBN_LateSummary.run enc arg out
+          match status with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ());
+        (r, [Call.lane d, Call.late arg out])).1
+is not definitionally equal to the right-hand side
+  do
+    let lane ← fail e
+    match lane with
+      | core.result.Result.Err e =>
+        ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+      | core.result.Result.Ok l =>
+        if l ≠ (common s).output_lane then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else do
+          let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match r with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case fail
+s : Statement
+e : Std.Error
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = fail e
+⊢ (have d := (parts s).2.2.2.2.1;
+      match NBN_FirstByteDependency.lane enc d with
+      | fail e => (fail e, [Call.lane d])
+      | div => (div, [Call.lane d])
+      | ok (core.result.Result.Err e) =>
+        (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e)),
+          [Call.lane d])
+      | ok (core.result.Result.Ok l) =>
+        if l ≠ (common s).output_lane then
+          (ok
+              (core.result.Result.Err
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+            [Call.lane d])
+        else
+          have arg := (common s).lane_transition;
+          have out := NBN_LateResult.zero;
+          have r := do
+            let (status, _) ← NBN_LateSummary.run enc arg out
+            match status with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+              | core.result.Result.Ok a => ok (core.result.Result.Ok ());
+          (r, [Call.lane d, Call.late arg out])).1 =
+    do
+    let lane ← fail e
+    match lane with
+      | core.result.Result.Err e =>
+        ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+      | core.result.Result.Ok l =>
+        if l ≠ (common s).output_lane then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else do
+          let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match r with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:60:11: error: Tactic `rfl` failed: The left-hand side
+  (have d := (parts s).2.2.2.2.1;
+    match NBN_FirstByteDependency.lane enc d with
+    | fail e => (fail e, [Call.lane d])
+    | div => (div, [Call.lane d])
+    | ok (core.result.Result.Err e) =>
+      (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e)),
+        [Call.lane d])
+    | ok (core.result.Result.Ok l) =>
+      if l ≠ (common s).output_lane then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane d])
+      else
+        have arg := (common s).lane_transition;
+        have out := NBN_LateResult.zero;
+        have r := do
+          let (status, _) ← NBN_LateSummary.run enc arg out
+          match status with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ());
+        (r, [Call.lane d, Call.late arg out])).1
+is not definitionally equal to the right-hand side
+  do
+    let lane ← div
+    match lane with
+      | core.result.Result.Err e =>
+        ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+      | core.result.Result.Ok l =>
+        if l ≠ (common s).output_lane then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else do
+          let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match r with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case div
+s : Statement
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = div
+⊢ (have d := (parts s).2.2.2.2.1;
+      match NBN_FirstByteDependency.lane enc d with
+      | fail e => (fail e, [Call.lane d])
+      | div => (div, [Call.lane d])
+      | ok (core.result.Result.Err e) =>
+        (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e)),
+          [Call.lane d])
+      | ok (core.result.Result.Ok l) =>
+        if l ≠ (common s).output_lane then
+          (ok
+              (core.result.Result.Err
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+            [Call.lane d])
+        else
+          have arg := (common s).lane_transition;
+          have out := NBN_LateResult.zero;
+          have r := do
+            let (status, _) ← NBN_LateSummary.run enc arg out
+            match status with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+              | core.result.Result.Ok a => ok (core.result.Result.Ok ());
+          (r, [Call.lane d, Call.late arg out])).1 =
+    do
+    let lane ← div
+    match lane with
+      | core.result.Result.Err e =>
+        ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+      | core.result.Result.Ok l =>
+        if l ≠ (common s).output_lane then
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else do
+          let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match r with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (fail e✝, [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  if a✝ ≠ (common s).output_lane then
+    ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+  else do
+    let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case h_1
+s : Statement
+a✝ : U8
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+e✝ : Std.Error
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = fail e✝
+⊢ (fail e✝, [Call.lane (parts s).2.2.2.2.1]).1 =
+    if a✝ ≠ (common s).output_lane then
+      ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (div, [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  if a✝ ≠ (common s).output_lane then
+    ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+  else do
+    let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case h_2
+s : Statement
+a✝ : U8
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = div
+⊢ (div, [Call.lane (parts s).2.2.2.2.1]).1 =
+    if a✝ ≠ (common s).output_lane then
+      ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+      [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  if a✝ ≠ (common s).output_lane then
+    ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+  else do
+    let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case h_3
+s : Statement
+a✝ : U8
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+e✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err e✝)
+⊢ (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+        [Call.lane (parts s).2.2.2.2.1]).1 =
+    if a✝ ≠ (common s).output_lane then
+      ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (if l✝ ≠ (common s).output_lane then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [Call.lane (parts s).2.2.2.2.1])
+    else
+      (do
+        let (status, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+        [Call.lane (parts s).2.2.2.2.1, Call.late (common s).lane_transition NBN_LateResult.zero])).1
+is not definitionally equal to the right-hand side
+  if a✝ ≠ (common s).output_lane then
+    ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+  else do
+    let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case h_4
+s : Statement
+a✝ : U8
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+l✝ : U8
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok l✝)
+⊢ (if l✝ ≠ (common s).output_lane then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane (parts s).2.2.2.2.1])
+      else
+        (do
+          let (status, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match status with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+          [Call.lane (parts s).2.2.2.2.1, Call.late (common s).lane_transition NBN_LateResult.zero])).1 =
+    if a✝ ≠ (common s).output_lane then
+      ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (fail e✝, [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+
+case h_1
+s : Statement
+a✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+e✝ : Std.Error
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = fail e✝
+⊢ (fail e✝, [Call.lane (parts s).2.2.2.2.1]).1 =
+    ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (div, [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+
+case h_2
+s : Statement
+a✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = div
+⊢ (div, [Call.lane (parts s).2.2.2.2.1]).1 =
+    ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+      [Call.lane (parts s).2.2.2.2.1]).1
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+
+case h_3
+s : Statement
+a✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+e✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err e✝)
+⊢ (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+        [Call.lane (parts s).2.2.2.2.1]).1 =
+    ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+NED_generated/NED_ValidatorTrace.lean:61:75: error: Tactic `rfl` failed: The left-hand side
+  (if l✝ ≠ (common s).output_lane then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [Call.lane (parts s).2.2.2.2.1])
+    else
+      (do
+        let (status, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+        [Call.lane (parts s).2.2.2.2.1, Call.late (common s).lane_transition NBN_LateResult.zero])).1
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+
+case h_4
+s : Statement
+a✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Err a✝)
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+l✝ : U8
+heq✝ : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 = ok (core.result.Result.Ok l✝)
+⊢ (if l✝ ≠ (common s).output_lane then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane (parts s).2.2.2.2.1])
+      else
+        (do
+          let (status, _) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+          match status with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+          [Call.lane (parts s).2.2.2.2.1, Call.late (common s).lane_transition NBN_LateResult.zero])).1 =
+    ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account a✝))
+NED_generated/NED_ValidatorTrace.lean:78:22: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fail` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `OptionT.fail`
+  [apply] `fail`
+  [apply] `AspisR1.R22TotalCheckedComposition.Code.fail`
+  [apply] `Lean.Parser.Tactic.fail`
+  [apply] `Std.Internal.Parsec.fail`
+  [apply] `Lean.Parser.Tactic.Grind.fail`
+  [apply] `Std.Http.Protocol.H1.Reader.fail`
+NED_generated/NED_ValidatorTrace.lean:79:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.div` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `AnalyticAt.div`
+  [apply] `AnalyticOn.div`
+  [apply] `AnalyticOnNhd.div`
+  [apply] `AnalyticWithinAt.div`
+  [apply] `Con.div`
+  [apply] `ContDiff.div`
+  [apply] `ContDiffAt.div`
+  [apply] `ContDiffOn.div`
+  [apply] `ContDiffWithinAt.div`
+  [apply] `Continuous.div`
+  [apply] `ContinuousAt.div`
+  [apply] `ContinuousOn.div`
+  [apply] `ContinuousWithinAt.div`
+  [apply] `Div.div`
+  [apply] `DivisibleBy.div`
+  [apply] `Equiv.div`
+  [apply] `Fin.div`
+  [apply] `Finset.div`
+  [apply] `Float.div`
+  [apply] `Float32.div`
+  [apply] `HasCompactSupport.div`
+  [apply] `HasProd.div`
+  [apply] `ISize.div`
+  [apply] `Int16.div`
+  [apply] `Int32.div`
+  [apply] `Int64.div`
+  [apply] `Int8.div`
+  [apply] `IsGLB.div`
+  [apply] `IsLUB.div`
+  [apply] `IsSelfAdjoint.div`
+  [apply] `IsSquare.div`
+  [apply] `IsUnit.div`
+  [apply] `LipschitzOnWith.div`
+  [apply] `LipschitzWith.div`
+  [apply] `LocallyLipschitz.div`
+  [apply] `LocallyLipschitzOn.div`
+  [apply] `Multipliable.div`
+  [apply] `Multiplicative.div`
+  [apply] `Nat.div`
+  [apply] `Nonneg.div`
+  [apply] `Ordinal.div`
+  [apply] `PNat.div`
+  [apply] `Polynomial.div`
+  [apply] `Rat.div`
+  [apply] `RatFunc.div`
+  [apply] `Set.div`
+  [apply] `Subgroup.div`
+  [apply] `SubgroupClass.div`
+  [apply] `TendstoLocallyUniformly.div`
+  [apply] `TendstoLocallyUniformlyOn.div`
+  [apply] `TendstoUniformly.div`
+  [apply] `TendstoUniformlyOn.div`
+  [apply] `TendstoUniformlyOnFilter.div`
+  [apply] `UInt16.div`
+  [apply] `UInt32.div`
+  [apply] `UInt64.div`
+  [apply] `UInt8.div`
+  [apply] `ULift.div`
+  [apply] `USize.div`
+  [apply] `UniformCauchySeqOn.div`
+  [apply] `UniformContinuous.div`
+  [apply] `WithZero.div`
+  [apply] `padicValNat.div`
+  [apply] `padicValRat.div`
+  [apply] `Asymptotics.IsEquivalent.div`
+  [apply] `Asymptotics.IsTheta.div`
+  [apply] `Bornology.IsBounded.div`
+  [apply] `CompPoly.CPolynomial.div`
+  [apply] `ENNReal.Tendsto.div`
+  [apply] `Filter.EventuallyEq.div`
+  [apply] `Filter.HasBasis.div`
+  [apply] `Filter.NeBot.div`
+  [apply] `Filter.Tendsto.div`
+  [apply] `Finset.Nonempty.div`
+  [apply] `Function.Antiperiodic.div`
+  [apply] `Function.HasFiniteMulSupport.div`
+  [apply] `Function.Periodic.div`
+  [apply] `Int.Nonneg.div`
+  [apply] `Set.Finite.div`
+  [apply] `Set.MapsTo.div`
+  [apply] `Set.Nonempty.div`
+  [apply] `IScalar.div`
+  [apply] `div`
+  [apply] `UScalar.div`
+  [apply] `CategoryTheory.Functor.Faithful.div`
+  [apply] `CompPoly.CPolynomial.Raw.div`
+  [apply] `Int.Linear.Poly.div`
+  [apply] `Lean.Omega.Constraint.div`
+  [apply] `Lean.Grind.CommRing.Mon.div`
+  [apply] `Lean.Grind.CommRing.Stepwise.div`
+  [apply] `Lean.Grind.Linarith.Poly.div`
+  [apply] `Mathlib.Tactic.FieldSimp.Sign.div`
+  [apply] `Mathlib.Tactic.FieldSimp.qNF.div`
+  [apply] `Std.Time.Internal.UnitVal.div`
+  [apply] `Lean.Meta.Grind.Arith.CommRing.EqCnstrProof.div`
+  [apply] `Lean.Meta.Grind.Arith.Cutsat.EqCnstrProof.div`
+NED_generated/NED_ValidatorTrace.lean:80:31: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+NED_generated/NED_ValidatorTrace.lean:119:18: error: Type mismatch
+  reached
+has type
+  d = (parts s).2.2.2.2.1 ∨ False ∨ Call.lane d ∈ []
+but is expected to have type
+  d = (parts s).2.2.2.2.1
+NED_generated/NED_ValidatorTrace.lean:118:43: warning: This simp argument is unused:
+  List.mem_singleton
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵C̵a̵l̵l̵.̵l̵a̵n̵e̵.̵i̵n̵j̵E̵q̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵,̵o̵r̵_̵f̵a̵l̵s̵e̵]̵[̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲,̲ ̲C̲a̲l̲l̲.̲l̲a̲n̲e̲.̲i̲n̲j̲E̲q̲,̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲,̲ ̲o̲r̲_̲f̲a̲l̲s̲e̲]̲ at reached
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_ValidatorTrace.lean:118:91: warning: This simp argument is unused:
+  or_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵m̵e̵m̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵m̵e̵m̵_̵s̵i̵n̵g̵l̵e̵t̵o̵n̵,̵C̵a̵l̵l̵.̵l̵a̵n̵e̵.̵i̵n̵j̵E̵q̵,̵r̵e̵d̵u̵c̵e̵C̵t̵o̵r̵E̵q̵,̵o̵r̵_̵f̵a̵l̵s̵e̵]̵[̲L̲i̲s̲t̲.̲m̲e̲m̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲e̲m̲_̲s̲i̲n̲g̲l̲e̲t̲o̲n̲,̲ ̲C̲a̲l̲l̲.̲l̲a̲n̲e̲.̲i̲n̲j̲E̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲r̲e̲d̲u̲c̲e̲C̲t̲o̲r̲E̲q̲]̲ at reached
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_ValidatorTrace.tail_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_ValidatorTrace.bindings_erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_ValidatorTrace.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_ValidatorTrace.lane_same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

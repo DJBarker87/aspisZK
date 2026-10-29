@@ -1,0 +1,268 @@
+NED_generated/NED_RawValidatorControl.lean:9:65: error: Missing cases:
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind))
+(further cases omitted, increase `set_option match.maxCounterExamples 5` to see more)
+NED_generated/NED_RawValidatorControl.lean:9:65: error: Missing cases:
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding))
+(core.ops.control_flow.ControlFlow.Break (core.result.Result.Err aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind))
+(further cases omitted, increase `set_option match.maxCounterExamples 5` to see more)
+NED_generated/NED_RawValidatorControl.lean:48:13: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r3 ←
+      core.result.Result.map_err
+          aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+          (core.result.Result.Err e) ()
+    let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        if (val != (NED_ReconstructCarriers.toRawCommon (common s)).output_lane) = true then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+        else
+          have late_bytes := Array.repeat 1520#usize 0#u8;
+          do
+          let (s, _) ← lift late_bytes.to_slice_mut
+          let (r4, _) ←
+            aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition s
+          let r5 ←
+            core.result.Result.map_err
+                aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                r4 ()
+          let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+          match cf2 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+is not definitionally equal to the right-hand side
+  match core.result.Result.Err e with
+  | core.result.Result.Err e =>
+    ok
+      (core.result.Result.Err
+        (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+  | core.result.Result.Ok l =>
+    if l ≠ (common s).output_lane then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r, _) ←
+        aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+            (NED_LateCarriers.toRawLate (common s).lane_transition) NBN_LateResult.zero
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+case Err
+s : Statement
+e : aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+⊢ (do
+      let r3 ←
+        core.result.Result.map_err
+            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+            (core.result.Result.Err e) ()
+      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if (val != (NED_ReconstructCarriers.toRawCommon (common s)).output_lane) = true then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+          else
+            have late_bytes := Array.repeat 1520#usize 0#u8;
+            do
+            let (s, _) ← lift late_bytes.to_slice_mut
+            let (r4, _) ←
+              aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                  (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition s
+            let r5 ←
+              core.result.Result.map_err
+                  aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                  r4 ()
+            let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())) =
+    match core.result.Result.Err e with
+    | core.result.Result.Err e =>
+      ok
+        (core.result.Result.Err
+          (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e))
+    | core.result.Result.Ok l =>
+      if l ≠ (common s).output_lane then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+      else do
+        let (r, _) ←
+          aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+              (NED_LateCarriers.toRawLate (common s).lane_transition) NBN_LateResult.zero
+        match r with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_RawValidatorControl.lean:54:6: error: Tactic `apply` failed: could not unify the conclusion of `@NBN_LateFactor.bind_ext`
+  (do
+      let x ← ?r
+      ?f x) =
+    do
+    let x ← ?r
+    ?g x
+with the goal
+  (if ((common s).output_lane != (NED_ReconstructCarriers.toRawCommon (common s)).output_lane) = true then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r4, _) ←
+        aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+            (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition (Array.repeat 1520#usize 0#u8).to_slice
+      let r5 ←
+        match r4 with
+          | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+          | core.result.Result.Err e => do
+            let t ←
+              aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                  () e
+            ok (core.result.Result.Err t)
+      let cf2 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())) =
+    do
+    let (r, _) ←
+      aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+          (NED_LateCarriers.toRawLate (common s).lane_transition) NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err
+            (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+
+Note: The full type of `@NBN_LateFactor.bind_ext` is
+  ∀ {α β : Type} (r : Result α) (f g : α → Result β),
+    (∀ (x : α), f x = g x) →
+      (do
+          let x ← r
+          f x) =
+        do
+        let x ← r
+        g x
+
+case pos
+s : Statement
+val : U8
+same : val = (common s).output_lane
+⊢ (if ((common s).output_lane != (NED_ReconstructCarriers.toRawCommon (common s)).output_lane) = true then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (r4, _) ←
+        aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+            (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition (Array.repeat 1520#usize 0#u8).to_slice
+      let r5 ←
+        match r4 with
+          | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+          | core.result.Result.Err e => do
+            let t ←
+              aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                  () e
+            ok (core.result.Result.Err t)
+      let cf2 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())) =
+    do
+    let (r, _) ←
+      aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+          (NED_LateCarriers.toRawLate (common s).lane_transition) NBN_LateResult.zero
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err
+            (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+      | core.result.Result.Ok a => ok (core.result.Result.Ok ())
+NED_generated/NED_RawValidatorControl.lean:59:6: error: Tactic `rfl` failed: The left-hand side
+  if ¬val = (NED_ReconstructCarriers.toRawCommon (common s)).output_lane then
+    ok
+      (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+  else do
+    let (s, _) ← lift (Array.repeat 1520#usize 0#u8).to_slice_mut
+    let (r4, _) ←
+      aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+          (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition s
+    let r5 ←
+      match r4 with
+        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+        | core.result.Result.Err e => do
+          let t ←
+            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                () e
+          ok (core.result.Result.Err t)
+    let cf2 ←
+      match r5 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+is not definitionally equal to the right-hand side
+  ok
+    (core.result.Result.Err
+      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+
+case neg
+s : Statement
+val : U8
+same : ¬val = (common s).output_lane
+⊢ (if ¬val = (NED_ReconstructCarriers.toRawCommon (common s)).output_lane then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else do
+      let (s, _) ← lift (Array.repeat 1520#usize 0#u8).to_slice_mut
+      let (r4, _) ←
+        aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+            (NED_ReconstructCarriers.toRawCommon (common s)).lane_transition s
+      let r5 ←
+        match r4 with
+          | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+          | core.result.Result.Err e => do
+            let t ←
+              aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                  () e
+            ok (core.result.Result.Err t)
+      let cf2 ←
+        match r5 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())) =
+    ok
+      (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+NED_generated/NED_RawValidatorControl.lean:52:22: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵a̵m̵e̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵A̵r̵r̵a̵y̵.̵t̵o̵_̵s̵l̵i̵c̵e̵_̵m̵u̵t̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵[̲s̲a̲m̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲A̲r̲r̲a̲y̲.̲t̲o̲_̲s̲l̲i̲c̲e̲_̲m̲u̲t̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_RawValidatorControl.tail_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

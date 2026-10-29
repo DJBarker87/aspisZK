@@ -1,0 +1,66 @@
+NED_generated/NED_TransferEncodingCohort.lean:39:79: error: unexpected token '('; expected ')', ',' or ':'
+NED_generated/NED_TransferEncodingCohort.lean:25:6: error(lean.unknownIdentifier): Unknown identifier `aspis_statement.pool_v1.payment_relation.POOL_V1_PAYMENT_STATEMENT_BYTES`
+NED_generated/NED_TransferEncodingCohort.lean:26:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_statement.pool_v1.payment_relation.encode_common ?out ?magic (NED_CommonEncodeCohort.toRawKind ?kind)
+    (toRawCommon ?c)
+in the target expression
+  (do
+      let output1 ←
+        aspis_statement.pool_v1.payment_relation.encode_common (Array.repeat 216#usize 0#u8)
+            aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+            aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer
+            (toRawCommon (NBG_PaymentValidators.tc p))
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            output1
+            { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
+              «end» := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+      let a ← aspis_statement.atomic_statement.encode_digest_canonical (toRawTransfer p).recipient_commitment
+      let s1 ← lift ⟨↑a, ⋯⟩
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      let (s3, index_mut_back1) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+            (index_mut_back s2) { start := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+      let a1 ← aspis_statement.atomic_statement.encode_digest_canonical (toRawTransfer p).change_commitment
+      let s4 ← lift ⟨↑a1, ⋯⟩
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+      ok (core.result.Result.Ok (index_mut_back1 s5))) =
+    ok (core.result.Result.Ok (NBP_PaymentModel.transfer_bytes p))
+
+case Ok.unit
+p : T
+h : NBG_PaymentValidators.transfer p = core.result.Result.Ok PUnit.unit
+⊢ (do
+      let output1 ←
+        aspis_statement.pool_v1.payment_relation.encode_common (Array.repeat 216#usize 0#u8)
+            aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+            aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer
+            (toRawCommon (NBG_PaymentValidators.tc p))
+      let (s, index_mut_back) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            output1
+            { start := aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
+              «end» := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+      let a ← aspis_statement.atomic_statement.encode_digest_canonical (toRawTransfer p).recipient_commitment
+      let s1 ← lift ⟨↑a, ⋯⟩
+      let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+      let (s3, index_mut_back1) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8))
+            (index_mut_back s2) { start := aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET }
+      let a1 ← aspis_statement.atomic_statement.encode_digest_canonical (toRawTransfer p).change_commitment
+      let s4 ← lift ⟨↑a1, ⋯⟩
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+      ok (core.result.Result.Ok (index_mut_back1 s5))) =
+    ok (core.result.Result.Ok (NBP_PaymentModel.transfer_bytes p))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (216 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NED_TransferEncodingCohort.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

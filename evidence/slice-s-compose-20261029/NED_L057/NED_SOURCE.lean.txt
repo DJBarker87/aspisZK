@@ -1,0 +1,27 @@
+import NED_ScannerCohorts
+set_option autoImplicit false
+noncomputable section
+namespace NED_OutputLaneCohort
+open Aeneas Aeneas.Std Result
+attribute [local instance] Classical.propDecidable
+abbrev TE := AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+abbrev RE := AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+
+def mapAccount {T : Type} : core.result.Result T TE → core.result.Result T RE
+  | .Ok v => .Ok v
+  | .Err e => .Err (NED_ErrorCarriers.toRawPoolV1PairForestAccountErrorV1 e)
+
+theorem result (d : Array U32 8#usize) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 d =
+    ok (mapAccount (NBN_OutputLane.result d)) := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1
+  rw [NED_ScannerCohorts.account_result]
+  simp only [bind_tc_ok]
+  by_cases good : NBD_DigestInduction.Canonical d
+  · simp only [good,decide_true,if_true,NED_DigestCohorts.first_byte,
+      NBN_OutputLane.first_source,bind_tc_ok,lift,NBN_OutputLane.result,mapAccount]
+    rfl
+  · simp [good,NBN_OutputLane.result,mapAccount,NED_ErrorCarriers.toRawPoolV1PairForestAccountErrorV1]
+
+#print axioms result
+end NED_OutputLaneCohort

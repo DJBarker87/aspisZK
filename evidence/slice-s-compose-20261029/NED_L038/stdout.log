@@ -1,0 +1,245 @@
+NED_generated/NED_EncoderTrace.lean:61:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:62:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:64:52: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok, ̲Aeneas.Std.uncurry]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:71:25: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:72:22: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:73:28: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:82:11: error: unsolved goals
+case fail
+s : Statement
+e : Std.Error
+h :
+  NBN_ValidatorSummary.run atomic_statement.encode_digest_canonical (fun p => ok (NBP_PaymentModel.transfer_encoded p))
+      (fun p => ok (NBP_PaymentModel.withdrawal_encoded p)) s =
+    fail e
+⊢ fail e = do
+    let valid ← NBN_ValidatorSummary.run enc transfer withdrawal s
+    match valid with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a => do
+        let anchor ← enc (common s).historical_global_anchor
+        let (status, late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => do
+            let pay ← NBN_ValidatorSummary.paymentWith transfer withdrawal s
+            match pay with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+              | core.result.Result.Ok a =>
+                ok (core.result.Result.Ok (NBN_StatementEncoderSummary.prefixBytes s anchor ++ ↑late ++ ↑a))
+NED_generated/NED_EncoderTrace.lean:83:8: error: unsolved goals
+case div
+s : Statement
+h :
+  NBN_ValidatorSummary.run atomic_statement.encode_digest_canonical (fun p => ok (NBP_PaymentModel.transfer_encoded p))
+      (fun p => ok (NBP_PaymentModel.withdrawal_encoded p)) s =
+    div
+⊢ div = do
+    let valid ← NBN_ValidatorSummary.run enc transfer withdrawal s
+    match valid with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a => do
+        let anchor ← enc (common s).historical_global_anchor
+        let (status, late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => do
+            let pay ← NBN_ValidatorSummary.paymentWith transfer withdrawal s
+            match pay with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+              | core.result.Result.Ok a =>
+                ok (core.result.Result.Ok (NBN_StatementEncoderSummary.prefixBytes s anchor ++ ↑late ++ ↑a))
+NED_generated/NED_EncoderTrace.lean:85:12: error: unsolved goals
+case ok.Err
+s : Statement
+e : NBN_ValidatorSummary.E
+h :
+  NBN_ValidatorSummary.run atomic_statement.encode_digest_canonical (fun p => ok (NBP_PaymentModel.transfer_encoded p))
+      (fun p => ok (NBP_PaymentModel.withdrawal_encoded p)) s =
+    ok (core.result.Result.Err e)
+⊢ ok (core.result.Result.Err e) = do
+    let valid ← NBN_ValidatorSummary.run enc transfer withdrawal s
+    match valid with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a => do
+        let anchor ← enc (common s).historical_global_anchor
+        let (status, late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => do
+            let pay ← NBN_ValidatorSummary.paymentWith transfer withdrawal s
+            match pay with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+              | core.result.Result.Ok a =>
+                ok (core.result.Result.Ok (NBN_StatementEncoderSummary.prefixBytes s anchor ++ ↑late ++ ↑a))
+NED_generated/NED_EncoderTrace.lean:90:6: error: Tactic `rfl` failed: The left-hand side
+  do
+    let anchor ← enc (common s).historical_global_anchor
+    lateRef s anchor
+is not definitionally equal to the right-hand side
+  do
+    let valid ← NBN_ValidatorSummary.run enc transfer withdrawal s
+    match valid with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a => do
+        let anchor ← enc (common s).historical_global_anchor
+        let (status, late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => do
+            let pay ← NBN_ValidatorSummary.paymentWith transfer withdrawal s
+            match pay with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+              | core.result.Result.Ok a =>
+                ok (core.result.Result.Ok (NBN_StatementEncoderSummary.prefixBytes s anchor ++ ↑late ++ ↑a))
+
+case ok.Ok
+s : Statement
+u : Unit
+h :
+  NBN_ValidatorSummary.run atomic_statement.encode_digest_canonical (fun p => ok (NBP_PaymentModel.transfer_encoded p))
+      (fun p => ok (NBP_PaymentModel.withdrawal_encoded p)) s =
+    ok (core.result.Result.Ok u)
+⊢ (do
+      let anchor ← enc (common s).historical_global_anchor
+      lateRef s anchor) =
+    do
+    let valid ← NBN_ValidatorSummary.run enc transfer withdrawal s
+    match valid with
+      | core.result.Result.Err e => ok (core.result.Result.Err e)
+      | core.result.Result.Ok a => do
+        let anchor ← enc (common s).historical_global_anchor
+        let (status, late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => do
+            let pay ← NBN_ValidatorSummary.paymentWith transfer withdrawal s
+            match pay with
+              | core.result.Result.Err e =>
+                ok
+                  (core.result.Result.Err
+                    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+              | core.result.Result.Ok a =>
+                ok (core.result.Result.Ok (NBN_StatementEncoderSummary.prefixBytes s anchor ++ ↑late ++ ↑a))
+NED_generated/NED_EncoderTrace.lean:82:87: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_fail]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:82:89: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [h,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:83:84: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:83:86: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [h,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:85:88: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:85:90: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [h,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:88:17: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_EncoderTrace.lean:88:19: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [h,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_EncoderTrace.late_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_EncoderTrace.anchor_erases' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_EncoderTrace.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

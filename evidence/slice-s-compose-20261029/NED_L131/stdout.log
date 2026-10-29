@@ -1,0 +1,1229 @@
+NED_generated/NED_RawValidatorCohort.lean:31:2: error: unsolved goals
+case pos
+s : Terminal
+cast :
+  core.convert.num.FromUsizeU8.from (NBN_StatementResult.common s).output_lane =
+    Usize.ofNatCore ↑(NBN_StatementResult.common s).output_lane ⋯
+zero :
+  (NBN_StatementResult.common s).master_account = NBN_StatementResult.zero ∨
+    (NBN_StatementResult.common s).checkpoint_account = NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common s).selected_lane_account = NBN_StatementResult.zero
+⊢ ¬(NBN_StatementResult.common s).master_account = Array.repeat 32#usize 0#u8 →
+    ¬(NBN_StatementResult.common s).checkpoint_account = Array.repeat 32#usize 0#u8 →
+      ¬(NBN_StatementResult.common s).selected_lane_account = Array.repeat 32#usize 0#u8 →
+        (if 8 ≤ ↑(NBN_StatementResult.common s).output_lane then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+          else
+            match toRaw s with
+            |
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer a
+                public1 =>
+              do
+              let r ← aspis_statement.pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 public1
+              let r1 ←
+                core.result.Result.map_err
+                    aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+                    r ()
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  let (pool, deployment, anchor_sequence, anchor, nullifier, _) := NBN_StatementResult.parts s
+                  if pool = (NBN_StatementResult.common s).master_account then
+                    if deployment = (NBN_StatementResult.common s).lane_transition.live_snapshot.deployment_domain then
+                      if
+                          (NBN_StatementResult.common s).lane_transition.live_snapshot.pool =
+                            (NBN_StatementResult.common s).master_account then
+                        if ↑anchor_sequence = ↑(NBN_StatementResult.common s).checkpoint_sequence then
+                          if anchor = (NBN_StatementResult.common s).historical_global_anchor then do
+                            let r3 ←
+                              core.result.Result.map_err
+                                  aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                  (NED_OutputLaneCohort.mapAccount (NBN_OutputLane.result nullifier)) ()
+                            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val =>
+                                if ↑val = ↑(NBN_StatementResult.common s).output_lane then
+                                  let (s, _) := (Array.repeat 1520#usize 0#u8).to_slice_mut
+                                  do
+                                  let (r4, _) ←
+                                    NED_LiveEncodingCohort.mapStateOuter toRawPoolV1PairLatePublicStatementErrorV1
+                                        (AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                          (NBN_StatementResult.common s).lane_transition s)
+                                  let r5 ←
+                                    core.result.Result.map_err
+                                        aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                        r4 ()
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit
+                                        (core.convert.FromSame
+                                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                        residual
+                                else
+                                  ok
+                                    (core.result.Result.Err
+                                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame
+                                    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                  residual
+                          else
+                            ok
+                              (core.result.Result.Err
+                                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                        else
+                          ok
+                            (core.result.Result.Err
+                              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+                  else
+                    ok
+                      (core.result.Result.Err
+                        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame
+                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                    residual
+            | aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal a public1 =>
+              do
+              let r ← aspis_statement.pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 public1
+              let r1 ←
+                core.result.Result.map_err
+                    aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+                    r ()
+              let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+              match cf with
+                | core.ops.control_flow.ControlFlow.Continue a =>
+                  let (pool, deployment, anchor_sequence, anchor, nullifier, _) := NBN_StatementResult.parts s
+                  if pool = (NBN_StatementResult.common s).master_account then
+                    if deployment = (NBN_StatementResult.common s).lane_transition.live_snapshot.deployment_domain then
+                      if
+                          (NBN_StatementResult.common s).lane_transition.live_snapshot.pool =
+                            (NBN_StatementResult.common s).master_account then
+                        if ↑anchor_sequence = ↑(NBN_StatementResult.common s).checkpoint_sequence then
+                          if anchor = (NBN_StatementResult.common s).historical_global_anchor then do
+                            let r3 ←
+                              core.result.Result.map_err
+                                  aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                  (NED_OutputLaneCohort.mapAccount (NBN_OutputLane.result nullifier)) ()
+                            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                            match cf1 with
+                              | core.ops.control_flow.ControlFlow.Continue val =>
+                                if ↑val = ↑(NBN_StatementResult.common s).output_lane then
+                                  let (s, _) := (Array.repeat 1520#usize 0#u8).to_slice_mut
+                                  do
+                                  let (r4, _) ←
+                                    NED_LiveEncodingCohort.mapStateOuter toRawPoolV1PairLatePublicStatementErrorV1
+                                        (AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+                                          (NBN_StatementResult.common s).lane_transition s)
+                                  let r5 ←
+                                    core.result.Result.map_err
+                                        aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+                                        r4 ()
+                                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                                  match cf2 with
+                                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                                    | core.ops.control_flow.ControlFlow.Break residual =>
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        Unit
+                                        (core.convert.FromSame
+                                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                        residual
+                                else
+                                  ok
+                                    (core.result.Result.Err
+                                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                              | core.ops.control_flow.ControlFlow.Break residual =>
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                  (core.convert.FromSame
+                                    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                  residual
+                          else
+                            ok
+                              (core.result.Result.Err
+                                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                        else
+                          ok
+                            (core.result.Result.Err
+                              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                      else
+                        ok
+                          (core.result.Result.Err
+                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                    else
+                      ok
+                        (core.result.Result.Err
+                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+                  else
+                    ok
+                      (core.result.Result.Err
+                        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+                | core.ops.control_flow.ControlFlow.Break residual =>
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame
+                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                    residual) =
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+NED_generated/NED_RawValidatorCohort.lean:34:4: error: unsolved goals
+case pos
+s : Terminal
+cast :
+  core.convert.num.FromUsizeU8.from (NBN_StatementResult.common s).output_lane =
+    Usize.ofNatCore ↑(NBN_StatementResult.common s).output_lane ⋯
+zero :
+  ¬((NBN_StatementResult.common s).master_account = NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common s).checkpoint_account = NBN_StatementResult.zero ∨
+        (NBN_StatementResult.common s).selected_lane_account = NBN_StatementResult.zero)
+lane : 8 ≤ ↑(NBN_StatementResult.common s).output_lane
+large : Usize.ofNatCore ↑(NBN_StatementResult.common s).output_lane ⋯ ≥ 8#usize
+⊢ (if (NBN_StatementResult.common s).master_account = Array.repeat 32#usize 0#u8 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if (NBN_StatementResult.common s).checkpoint_account = Array.repeat 32#usize 0#u8 then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        if (NBN_StatementResult.common s).selected_lane_account = Array.repeat 32#usize 0#u8 then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)) =
+    ok
+      (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+NED_generated/NED_RawValidatorCohort.lean:43:16: error: unsolved goals
+case neg.PrivateTransfer.Err
+c : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+p : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+cast :
+  core.convert.num.FromUsizeU8.from
+      (NBN_StatementResult.common
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+            p)).output_lane =
+    Usize.ofNatCore
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).output_lane
+      ⋯
+zero :
+  ¬((NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).master_account =
+        NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).checkpoint_account =
+          NBN_StatementResult.zero ∨
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).selected_lane_account =
+          NBN_StatementResult.zero)
+lane :
+  ¬8 ≤
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).output_lane
+small :
+  ¬Usize.ofNatCore
+        ↑(NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).output_lane
+        ⋯ ≥
+      8#usize
+e : NBP_PaymentModel.E
+pay : NBP_PaymentModel.transfer_encoded p = core.result.Result.Err e
+⊢ (if
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).master_account =
+          Array.repeat 32#usize 0#u8 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if
+          (NBN_StatementResult.common
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                  c p)).checkpoint_account =
+            Array.repeat 32#usize 0#u8 then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        if
+            (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                    c p)).selected_lane_account =
+              Array.repeat 32#usize 0#u8 then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else do
+          let x ←
+            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+                () (toRawPoolV1PaymentStatementFormatError e)
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+              (core.result.Result.Err x)) =
+    ok
+      (core.result.Result.Err
+        (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment
+          (toRawPoolV1PaymentStatementFormatError e)))
+NED_generated/NED_RawValidatorCohort.lean:45:19: error: unsolved goals
+case neg.PrivateTransfer.Ok
+c : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+p : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1
+cast :
+  core.convert.num.FromUsizeU8.from
+      (NBN_StatementResult.common
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+            p)).output_lane =
+    Usize.ofNatCore
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).output_lane
+      ⋯
+zero :
+  ¬((NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).master_account =
+        NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).checkpoint_account =
+          NBN_StatementResult.zero ∨
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).selected_lane_account =
+          NBN_StatementResult.zero)
+lane :
+  ¬8 ≤
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+              p)).output_lane
+small :
+  ¬Usize.ofNatCore
+        ↑(NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).output_lane
+        ⋯ ≥
+      8#usize
+bytes : Std.Array U8 216#usize
+pay : NBP_PaymentModel.transfer_encoded p = core.result.Result.Ok bytes
+⊢ (if
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer c
+                p)).master_account =
+          Array.repeat 32#usize 0#u8 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if
+          (NBN_StatementResult.common
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                  c p)).checkpoint_account =
+            Array.repeat 32#usize 0#u8 then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        if
+            (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                    c p)).selected_lane_account =
+              Array.repeat 32#usize 0#u8 then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else
+          if
+              (NBD_TerminalProjection.parts
+                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                      c p)).1 ≠
+                (NBN_StatementResult.common
+                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                      c p)).master_account then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+          else
+            if
+                (NBD_TerminalProjection.parts
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                          c p)).2.1 ≠
+                  (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                            c p)).lane_transition.live_snapshot.deployment_domain then
+              ok
+                (core.result.Result.Err
+                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+            else
+              if
+                  (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                              c p)).lane_transition.live_snapshot.pool ≠
+                    (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                          c p)).master_account then
+                ok
+                  (core.result.Result.Err
+                    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+              else
+                if
+                    ((NBD_TerminalProjection.parts
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                  c p)).2.2.1 !=
+                        (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                              c p)).checkpoint_sequence) =
+                      true then
+                  ok
+                    (core.result.Result.Err
+                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                else
+                  if
+                      (NBD_TerminalProjection.parts
+                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                    c p)).2.2.2.1 ≠
+                        (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                              c p)).historical_global_anchor then
+                    ok
+                      (core.result.Result.Err
+                        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                  else do
+                    let r3 ←
+                      match
+                          match
+                            NBN_OutputLane.result
+                              (NBD_TerminalProjection.parts
+                                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                            c p)).2.2.2.2.1 with
+                          | core.result.Result.Ok v => core.result.Result.Ok v
+                          | core.result.Result.Err e =>
+                            core.result.Result.Err (toRawPoolV1PairForestAccountErrorV1 e) with
+                        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                        | core.result.Result.Err e => do
+                          let t ←
+                            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                () e
+                          ok (core.result.Result.Err t)
+                    let cf1 ←
+                      match r3 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val =>
+                        if
+                            (val !=
+                                (NBN_StatementResult.common
+                                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                      c p)).output_lane) =
+                              true then
+                          ok
+                            (core.result.Result.Err
+                              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                        else do
+                          let (r4, _) ←
+                            match
+                                if ↑1520#usize ≠ 1520 then
+                                  ok
+                                    (core.result.Result.Err
+                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongLength,
+                                      ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                                else
+                                  if
+                                      (NBN_StatementResult.common
+                                                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                                      c p)).lane_transition.live_snapshot.next_pair_index.checked_add
+                                          1#u64 ≠
+                                        some
+                                          (NBN_StatementResult.common
+                                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                                    c p)).lane_transition.candidate_afterstate.next_pair_index then
+                                    ok
+                                      (core.result.Result.Err
+                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch,
+                                        ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                                  else
+                                    ok
+                                      (NBN_LateTail.status
+                                          (NBN_StatementResult.common
+                                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                                c p)).lane_transition,
+                                        NBN_LateTail.value
+                                          (NBN_StatementResult.common
+                                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                                c p)).lane_transition
+                                          NBN_LateResult.header) with
+                              | ok (r, st) =>
+                                ok
+                                  (match r with
+                                    | core.result.Result.Ok x => core.result.Result.Ok x
+                                    | core.result.Result.Err e =>
+                                      core.result.Result.Err (toRawPoolV1PairLatePublicStatementErrorV1 e),
+                                    st)
+                              | fail e => fail e
+                              | div => div
+                          let r5 ←
+                            match r4 with
+                              | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                              | core.result.Result.Err e => do
+                                let t ←
+                                  aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                      () e
+                                ok (core.result.Result.Err t)
+                          let cf2 ←
+                            match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame
+                                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame
+                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                          residual) =
+    ok
+      (match
+        if
+            (NBD_TerminalProjection.parts
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                    c p)).1 ≠
+              (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                    c p)).master_account then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+        else
+          if
+              (NBD_TerminalProjection.parts
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                        c p)).2.1 ≠
+                (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                          c p)).lane_transition.live_snapshot.deployment_domain then
+            core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch
+          else
+            if
+                (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                            c p)).lane_transition.live_snapshot.pool ≠
+                  (NBN_StatementResult.common
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                        c p)).master_account then
+              core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+            else
+              if
+                  (NBD_TerminalProjection.parts
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                              c p)).2.2.1 ≠
+                    (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                          c p)).checkpoint_sequence then
+                core.result.Result.Err
+                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+              else
+                if
+                    (NBD_TerminalProjection.parts
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                  c p)).2.2.2.1 ≠
+                      (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                            c p)).historical_global_anchor then
+                  core.result.Result.Err
+                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+                else
+                  match
+                    NBN_OutputLane.result
+                      (NBD_TerminalProjection.parts
+                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                    c p)).2.2.2.2.1 with
+                  | core.result.Result.Err e =>
+                    core.result.Result.Err
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+                        e)
+                  | core.result.Result.Ok lane =>
+                    if
+                        lane ≠
+                          (NBN_StatementResult.common
+                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                c p)).output_lane then
+                      core.result.Result.Err
+                        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+                    else
+                      match
+                        if
+                            (NBN_StatementResult.common
+                                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                            c p)).lane_transition.live_snapshot.next_pair_index.checked_add
+                                1#u64 ≠
+                              some
+                                (NBN_StatementResult.common
+                                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                          c p)).lane_transition.candidate_afterstate.next_pair_index then
+                          core.result.Result.Err
+                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch
+                        else
+                          NBN_LateTail.status
+                            (NBN_StatementResult.common
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.PrivateTransfer
+                                  c p)).lane_transition with
+                      | core.result.Result.Err e =>
+                        core.result.Result.Err
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+                            e)
+                      | core.result.Result.Ok a => core.result.Result.Ok () with
+      | core.result.Result.Ok x => core.result.Result.Ok x
+      | core.result.Result.Err e =>
+        core.result.Result.Err
+          (match e with
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonCanonicalDigest =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonCanonicalDigest
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.SelectedLaneBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.SelectedLaneBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LiveSnapshotMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LiveSnapshotMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CandidateAfterstateMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CandidateAfterstateMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WithdrawalDestinationMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WithdrawalDestinationMismatch
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment
+              (toRawPoolV1PaymentStatementFormatError x)
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+              (toRawPoolV1PairLatePublicStatementErrorV1 x)
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate
+              (toRawPoolV1PairVerifierTransportErrorV1 x)
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+              (toRawPoolV1PairForestAccountErrorV1 x)))
+NED_generated/NED_RawValidatorCohort.lean:58:16: error: unsolved goals
+case neg.Withdrawal.Err
+c : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+p : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+cast :
+  core.convert.num.FromUsizeU8.from
+      (NBN_StatementResult.common
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+            p)).output_lane =
+    Usize.ofNatCore
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).output_lane
+      ⋯
+zero :
+  ¬((NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).master_account =
+        NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).checkpoint_account =
+          NBN_StatementResult.zero ∨
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).selected_lane_account =
+          NBN_StatementResult.zero)
+lane :
+  ¬8 ≤
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).output_lane
+small :
+  ¬Usize.ofNatCore
+        ↑(NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).output_lane
+        ⋯ ≥
+      8#usize
+e : NBP_PaymentModel.E
+pay : NBP_PaymentModel.withdrawal_encoded p = core.result.Result.Err e
+⊢ (if
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).master_account =
+          Array.repeat 32#usize 0#u8 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if
+          (NBN_StatementResult.common
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                  p)).checkpoint_account =
+            Array.repeat 32#usize 0#u8 then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        if
+            (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                    p)).selected_lane_account =
+              Array.repeat 32#usize 0#u8 then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else do
+          let x ←
+            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1.call_once
+                () (toRawPoolV1PaymentStatementFormatError e)
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (core.convert.FromSame aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+              (core.result.Result.Err x)) =
+    ok
+      (core.result.Result.Err
+        (aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment
+          (toRawPoolV1PaymentStatementFormatError e)))
+NED_generated/NED_RawValidatorCohort.lean:60:19: error: unsolved goals
+case neg.Withdrawal.Ok
+c : AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1
+p : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1WithdrawalPublicV1
+cast :
+  core.convert.num.FromUsizeU8.from
+      (NBN_StatementResult.common
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+            p)).output_lane =
+    Usize.ofNatCore
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).output_lane
+      ⋯
+zero :
+  ¬((NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).master_account =
+        NBN_StatementResult.zero ∨
+      (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).checkpoint_account =
+          NBN_StatementResult.zero ∨
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).selected_lane_account =
+          NBN_StatementResult.zero)
+lane :
+  ¬8 ≤
+      ↑(NBN_StatementResult.common
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+              p)).output_lane
+small :
+  ¬Usize.ofNatCore
+        ↑(NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).output_lane
+        ⋯ ≥
+      8#usize
+bytes : Std.Array U8 216#usize
+pay : NBP_PaymentModel.withdrawal_encoded p = core.result.Result.Ok bytes
+⊢ (if
+        (NBN_StatementResult.common
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                p)).master_account =
+          Array.repeat 32#usize 0#u8 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if
+          (NBN_StatementResult.common
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                  p)).checkpoint_account =
+            Array.repeat 32#usize 0#u8 then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        if
+            (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                    p)).selected_lane_account =
+              Array.repeat 32#usize 0#u8 then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else
+          if
+              (NBD_TerminalProjection.parts
+                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                      c p)).1 ≠
+                (NBN_StatementResult.common
+                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                      c p)).master_account then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+          else
+            if
+                (NBD_TerminalProjection.parts
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                          c p)).2.1 ≠
+                  (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                            c p)).lane_transition.live_snapshot.deployment_domain then
+              ok
+                (core.result.Result.Err
+                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+            else
+              if
+                  (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                              c p)).lane_transition.live_snapshot.pool ≠
+                    (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                          c p)).master_account then
+                ok
+                  (core.result.Result.Err
+                    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+              else
+                if
+                    ((NBD_TerminalProjection.parts
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                  c p)).2.2.1 !=
+                        (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                              c p)).checkpoint_sequence) =
+                      true then
+                  ok
+                    (core.result.Result.Err
+                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                else
+                  if
+                      (NBD_TerminalProjection.parts
+                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                    c p)).2.2.2.1 ≠
+                        (NBN_StatementResult.common
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                              c p)).historical_global_anchor then
+                    ok
+                      (core.result.Result.Err
+                        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                  else do
+                    let r3 ←
+                      match
+                          match
+                            NBN_OutputLane.result
+                              (NBD_TerminalProjection.parts
+                                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                            c p)).2.2.2.2.1 with
+                          | core.result.Result.Ok v => core.result.Result.Ok v
+                          | core.result.Result.Err e =>
+                            core.result.Result.Err (toRawPoolV1PairForestAccountErrorV1 e) with
+                        | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                        | core.result.Result.Err e => do
+                          let t ←
+                            aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                () e
+                          ok (core.result.Result.Err t)
+                    let cf1 ←
+                      match r3 with
+                        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                        | core.result.Result.Err e =>
+                          ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                    match cf1 with
+                      | core.ops.control_flow.ControlFlow.Continue val =>
+                        if
+                            (val !=
+                                (NBN_StatementResult.common
+                                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                      c p)).output_lane) =
+                              true then
+                          ok
+                            (core.result.Result.Err
+                              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+                        else do
+                          let (r4, _) ←
+                            match
+                                if ↑1520#usize ≠ 1520 then
+                                  ok
+                                    (core.result.Result.Err
+                                        AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.WrongLength,
+                                      ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                                else
+                                  if
+                                      (NBN_StatementResult.common
+                                                    (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                                      c p)).lane_transition.live_snapshot.next_pair_index.checked_add
+                                          1#u64 ≠
+                                        some
+                                          (NBN_StatementResult.common
+                                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                                    c p)).lane_transition.candidate_afterstate.next_pair_index then
+                                    ok
+                                      (core.result.Result.Err
+                                          AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch,
+                                        ⟨List.replicate (↑1520#usize) 0#u8, ⋯⟩)
+                                  else
+                                    ok
+                                      (NBN_LateTail.status
+                                          (NBN_StatementResult.common
+                                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                                c p)).lane_transition,
+                                        NBN_LateTail.value
+                                          (NBN_StatementResult.common
+                                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                                c p)).lane_transition
+                                          NBN_LateResult.header) with
+                              | ok (r, st) =>
+                                ok
+                                  (match r with
+                                    | core.result.Result.Ok x => core.result.Result.Ok x
+                                    | core.result.Result.Err e =>
+                                      core.result.Result.Err (toRawPoolV1PairLatePublicStatementErrorV1 e),
+                                    st)
+                              | fail e => fail e
+                              | div => div
+                          let r5 ←
+                            match r4 with
+                              | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+                              | core.result.Result.Err e => do
+                                let t ←
+                                  aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once
+                                      () e
+                                ok (core.result.Result.Err t)
+                          let cf2 ←
+                            match r5 with
+                              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                              | core.result.Result.Err e =>
+                                ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                          match cf2 with
+                            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                            | core.ops.control_flow.ControlFlow.Break residual =>
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                                (core.convert.FromSame
+                                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                                residual
+                      | core.ops.control_flow.ControlFlow.Break residual =>
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                          (core.convert.FromSame
+                            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                          residual) =
+    ok
+      (match
+        if
+            (NBD_TerminalProjection.parts
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                    p)).1 ≠
+              (NBN_StatementResult.common
+                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal c
+                    p)).master_account then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+        else
+          if
+              (NBD_TerminalProjection.parts
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                        c p)).2.1 ≠
+                (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                          c p)).lane_transition.live_snapshot.deployment_domain then
+            core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch
+          else
+            if
+                (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                            c p)).lane_transition.live_snapshot.pool ≠
+                  (NBN_StatementResult.common
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                        c p)).master_account then
+              core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+            else
+              if
+                  (NBD_TerminalProjection.parts
+                            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                              c p)).2.2.1 ≠
+                    (NBN_StatementResult.common
+                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                          c p)).checkpoint_sequence then
+                core.result.Result.Err
+                  AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+              else
+                if
+                    (NBD_TerminalProjection.parts
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                  c p)).2.2.2.1 ≠
+                      (NBN_StatementResult.common
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                            c p)).historical_global_anchor then
+                  core.result.Result.Err
+                    AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+                else
+                  match
+                    NBN_OutputLane.result
+                      (NBD_TerminalProjection.parts
+                                  (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                    c p)).2.2.2.2.1 with
+                  | core.result.Result.Err e =>
+                    core.result.Result.Err
+                      (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+                        e)
+                  | core.result.Result.Ok lane =>
+                    if
+                        lane ≠
+                          (NBN_StatementResult.common
+                              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                c p)).output_lane then
+                      core.result.Result.Err
+                        AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+                    else
+                      match
+                        if
+                            (NBN_StatementResult.common
+                                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                            c p)).lane_transition.live_snapshot.next_pair_index.checked_add
+                                1#u64 ≠
+                              some
+                                (NBN_StatementResult.common
+                                        (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                          c p)).lane_transition.candidate_afterstate.next_pair_index then
+                          core.result.Result.Err
+                            AspisR1TerminalDecoder.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch
+                        else
+                          NBN_LateTail.status
+                            (NBN_StatementResult.common
+                                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.Withdrawal
+                                  c p)).lane_transition with
+                      | core.result.Result.Err e =>
+                        core.result.Result.Err
+                          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+                            e)
+                      | core.result.Result.Ok a => core.result.Result.Ok () with
+      | core.result.Result.Ok x => core.result.Result.Ok x
+      | core.result.Result.Err e =>
+        core.result.Result.Err
+          (match e with
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongLength
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongMagic
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongVersion
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WrongDigestEncoding
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonCanonicalDigest =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonCanonicalDigest
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.SelectedLaneBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.SelectedLaneBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LiveSnapshotMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LiveSnapshotMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CandidateAfterstateMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CandidateAfterstateMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.ResultBindingMismatch
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WithdrawalDestinationMismatch =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.WithdrawalDestinationMismatch
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment
+              (toRawPoolV1PaymentStatementFormatError x)
+          |
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition
+              (toRawPoolV1PairLatePublicStatementErrorV1 x)
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate
+              (toRawPoolV1PairVerifierTransportErrorV1 x)
+          | AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account x =>
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account
+              (toRawPoolV1PairForestAccountErrorV1 x)))
+NED_generated/NED_RawValidatorCohort.lean:25:4: warning: This simp argument is unused:
+  Bool.or_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [cast, ̲lift, ̲bind_tc_ok,
+      aspis_statement.pool_v1.pair_forest_accounts.POOL_V1_PAIR_FOREST_LANE_COUNT,
+  ̵  ̵ ̵ ̵B̵o̵o̵l̵.̵o̵r̵_̵e̵q̵_̵t̵r̵u̵e̵,̵decide_eq_true_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:43:25: warning: This simp argument is unused:
+  pay
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵a̵y̵,̵N̵E̵D̵_̵C̵o̵m̵m̵o̵n̵V̵a̵l̵i̵d̵a̵t̵i̵o̵n̵.̵m̵a̵p̵P̵a̵y̵m̵e̵n̵t̵,̵N̵E̵D̵_̵L̵a̵t̵e̵V̵a̵l̵i̵d̵a̵t̵o̵r̵C̵o̵h̵o̵r̵t̵s̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵t̵o̵R̵a̵w̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵F̵o̵r̵e̵s̵t̵T̵e̵r̵m̵i̵n̵a̵l̵F̵o̵r̵m̵a̵t̵E̵r̵r̵o̵r̵V̵1̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲N̲E̲D̲_̲C̲o̲m̲m̲o̲n̲V̲a̲l̲i̲d̲a̲t̲i̲o̲n̲.̲m̲a̲p̲P̲a̲y̲m̲e̲n̲t̲,̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲V̲a̲l̲i̲d̲a̲t̲o̲r̲C̲o̲h̲o̲r̲t̲s̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲o̲R̲a̲w̲P̲o̲o̲l̲V̲1̲P̲a̲i̲r̲F̲o̲r̲e̲s̲t̲T̲e̲r̲m̲i̲n̲a̲l̲F̲o̲r̲m̲a̲t̲E̲r̲r̲o̲r̲V̲1̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:46:21: warning: This simp argument is unused:
+  pay
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵y̵,̵NED_CommonValidation.mapPayment, ̲bind_tc_ok, ̲core.result.Result.map_err,
+              core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:51:31: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [NBN_StatementResult.suffix, ̲NBN_StatementResult.lateStatus,
+              NED_OutputLaneCohort.mapAccount, ̲NED_LiveEncodingCohort.mapStateOuter,
+              NED_LateValidatorCohorts.mapResult, ̲toRawPoolV1PairForestTerminalFormatErrorV1,
+              Array.to_slice_mut,l̵i̵f̵t̵,̵ ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲NBN_LateResult.source,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵Slice.length,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Array.to_slice, ̲Array.repeat_val, ̲List.length_replicate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:51:36: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NBN_StatementResult.suffix, ̲NBN_StatementResult.lateStatus,
+              NED_OutputLaneCohort.mapAccount, ̲NED_LiveEncodingCohort.mapStateOuter,
+              NED_LateValidatorCohorts.mapResult, ̲toRawPoolV1PairForestTerminalFormatErrorV1,
+              Array.to_slice_mut, ̲lift,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Aeneas.Std.uncurry, ̲NBN_LateResult.source,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵Slice.length,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Array.to_slice, ̲Array.repeat_val, ̲List.length_replicate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:58:25: warning: This simp argument is unused:
+  pay
+
+Hint: Omit it from the simp argument list.
+  simp [̵p̵a̵y̵,̵N̵E̵D̵_̵C̵o̵m̵m̵o̵n̵V̵a̵l̵i̵d̵a̵t̵i̵o̵n̵.̵m̵a̵p̵P̵a̵y̵m̵e̵n̵t̵,̵N̵E̵D̵_̵L̵a̵t̵e̵V̵a̵l̵i̵d̵a̵t̵o̵r̵C̵o̵h̵o̵r̵t̵s̵.̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵t̵o̵R̵a̵w̵P̵o̵o̵l̵V̵1̵P̵a̵i̵r̵F̵o̵r̵e̵s̵t̵T̵e̵r̵m̵i̵n̵a̵l̵F̵o̵r̵m̵a̵t̵E̵r̵r̵o̵r̵V̵1̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵]̵[̲N̲E̲D̲_̲C̲o̲m̲m̲o̲n̲V̲a̲l̲i̲d̲a̲t̲i̲o̲n̲.̲m̲a̲p̲P̲a̲y̲m̲e̲n̲t̲,̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲V̲a̲l̲i̲d̲a̲t̲o̲r̲C̲o̲h̲o̲r̲t̲s̲.̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲t̲o̲R̲a̲w̲P̲o̲o̲l̲V̲1̲P̲a̲i̲r̲F̲o̲r̲e̲s̲t̲T̲e̲r̲m̲i̲n̲a̲l̲F̲o̲r̲m̲a̲t̲E̲r̲r̲o̲r̲V̲1̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:61:21: warning: This simp argument is unused:
+  pay
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵a̵y̵,̵NED_CommonValidation.mapPayment, ̲bind_tc_ok, ̲core.result.Result.map_err,
+              core.result.Result.Insts.CoreOpsTry.branch]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:66:31: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [NBN_StatementResult.suffix, ̲NBN_StatementResult.lateStatus,
+              NED_OutputLaneCohort.mapAccount, ̲NED_LiveEncodingCohort.mapStateOuter,
+              NED_LateValidatorCohorts.mapResult, ̲toRawPoolV1PairForestTerminalFormatErrorV1,
+              Array.to_slice_mut,l̵i̵f̵t̵,̵ ̲bind_tc_ok, ̲Aeneas.Std.uncurry, ̲NBN_LateResult.source,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵Slice.length,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Array.to_slice, ̲Array.repeat_val, ̲List.length_replicate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawValidatorCohort.lean:66:36: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NBN_StatementResult.suffix, ̲NBN_StatementResult.lateStatus,
+              NED_OutputLaneCohort.mapAccount, ̲NED_LiveEncodingCohort.mapStateOuter,
+              NED_LateValidatorCohorts.mapResult, ̲toRawPoolV1PairForestTerminalFormatErrorV1,
+              Array.to_slice_mut, ̲lift,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲Aeneas.Std.uncurry, ̲NBN_LateResult.source,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵Slice.length,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Array.to_slice, ̲Array.repeat_val, ̲List.length_replicate]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_RawValidatorCohort.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

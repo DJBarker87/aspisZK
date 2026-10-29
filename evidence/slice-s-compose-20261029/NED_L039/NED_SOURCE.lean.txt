@@ -1,0 +1,95 @@
+import NED_ExecutionComposition
+import NED_SubtreeComposition
+set_option autoImplicit false
+noncomputable section
+namespace NED_EncoderTrace
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+abbrev R := NBN_StatementEncoderSummary.BytesResult
+inductive Call where
+  | validate (s : Statement)
+  | digest (d : Array U32 8#usize)
+  | late (s : NBN_LateSummary.Statement) (out : Slice U8)
+  | payment (s : Statement)
+def enc := atomic_statement.encode_digest_canonical
+def transfer (p : NBN_ValidatorSummary.Transfer) := ok (NBP_PaymentModel.transfer_encoded p)
+def withdrawal (p : NBN_ValidatorSummary.Withdrawal) := ok (NBP_PaymentModel.withdrawal_encoded p)
+def payment (s : Statement) := NBN_ValidatorSummary.paymentWith transfer withdrawal s
+
+def payStep (s : Statement) (anchor : Array U8 32#usize) (late : Slice U8) : R × List Call :=
+  let r : R := do
+    let pay ← payment s
+    match pay with
+    | .Err e => ok (.Err (.Payment e))
+    | .Ok a => ok (.Ok ((NBN_StatementEncoderSummary.prefixBytes s anchor ++ late.val) ++ a.val))
+  (r,[.payment s])
+
+def lateStep (s : Statement) (anchor : Array U8 32#usize) : R × List Call :=
+  let arg := (common s).lane_transition
+  let out := NBN_LateResult.zero
+  match NBN_LateSummary.run enc arg out with
+  | .fail e => (.fail e,[.late arg out])
+  | .div => (.div,[.late arg out])
+  | .ok (.Err e,_) => (ok (.Err (.LaneTransition e)),[.late arg out])
+  | .ok (.Ok _,late) => ((payStep s anchor late).1,.late arg out :: (payStep s anchor late).2)
+
+def anchorStep (s : Statement) : R × List Call :=
+  let d := (common s).historical_global_anchor
+  match enc d with
+  | .fail e => (.fail e,[.digest d])
+  | .div => (.div,[.digest d])
+  | .ok anchor => ((lateStep s anchor).1,.digest d :: (lateStep s anchor).2)
+
+def run (s : Statement) : R × List Call :=
+  let validation := NED_ExecutionComposition.validatorReference s
+  match validation with
+  | .fail e => (.fail e,[.validate s])
+  | .div => (.div,[.validate s])
+  | .ok (.Err e) => (ok (.Err e),[.validate s])
+  | .ok (.Ok _) => ((anchorStep s).1,.validate s :: (anchorStep s).2)
+
+def lateRef (s : Statement) (anchor : Array U8 32#usize) : R := do
+  let (status,late) ← NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero
+  match status with
+  | .Err e => ok (.Err (.LaneTransition e))
+  | .Ok _ => (payStep s anchor late).1
+
+theorem late_erases (s : Statement) (anchor : Array U8 32#usize) :
+    (lateStep s anchor).1 = lateRef s anchor := by
+  unfold lateStep lateRef
+  dsimp only
+  cases h : NBN_LateSummary.run enc (common s).lane_transition NBN_LateResult.zero with
+  | fail e => simp only [h,bind_tc_fail]
+  | div => simp only [h,bind_tc_div]
+  | ok pair => cases pair with
+    | mk status late => cases status <;> simp only [h,bind_tc_ok,Aeneas.Std.uncurry]
+
+theorem anchor_erases (s : Statement) :
+    (anchorStep s).1 = (do let anchor ← enc (common s).historical_global_anchor; lateRef s anchor) := by
+  unfold anchorStep
+  dsimp only
+  cases h : enc (common s).historical_global_anchor with
+  | fail e => simp only [h,bind_tc_fail]
+  | div => simp only [h,bind_tc_div]
+  | ok anchor => simp only [h,bind_tc_ok]; exact late_erases s anchor
+
+theorem erases (s : Statement) : (run s).1 =
+    NBN_StatementEncoderSummary.observe (AspisS6OuterNativeInstalled.encode s) := by
+  rw [← NED_CodecComposition.encoder s]
+  change (run s).1 = NBN_StatementEncoderSummary.run enc transfer withdrawal s
+  unfold run NBN_StatementEncoderSummary.run
+  dsimp only
+  cases h : NED_ExecutionComposition.validatorReference s with
+  | fail e => change NBN_ValidatorSummary.run enc transfer withdrawal s = _ at h; simp only [h,bind_tc_fail]
+  | div => change NBN_ValidatorSummary.run enc transfer withdrawal s = _ at h; simp only [h,bind_tc_div]
+  | ok r => cases r with
+    | Err e => change NBN_ValidatorSummary.run enc transfer withdrawal s = _ at h; simp only [h,bind_tc_ok]
+    | Ok u =>
+      change NBN_ValidatorSummary.run enc transfer withdrawal s = _ at h
+      simp only [h,bind_tc_ok]
+      rw [anchor_erases]
+      rfl
+
+#print axioms late_erases
+#print axioms anchor_erases
+#print axioms erases
+end NED_EncoderTrace

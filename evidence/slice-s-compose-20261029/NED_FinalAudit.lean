@@ -1,0 +1,274 @@
+import NED_AfterBoxComposition
+import NED_AfterBoxDomain
+import NED_AfterEncodingCohort
+import NED_AfterEncodingConstants
+import NED_AfterstateReadWindows
+import NED_CallerDomains
+import NED_CodecComposition
+import NED_CommonEncodeCohort
+import NED_CommonValidation
+import NED_DigestCohorts
+import NED_EncoderCallDomains
+import NED_EncoderLoopCohorts
+import NED_EncoderTrace
+import NED_ErrorCarriers
+import NED_ExecutionComposition
+import NED_LateCarrierFields
+import NED_LateCarriers
+import NED_LateEncodingCohort
+import NED_LateEncodingConstants
+import NED_LateReadWindows
+import NED_LateValidatorCohorts
+import NED_LiveEncodingCohort
+import NED_LiveEncodingConstants
+import NED_OutputLaneCohort
+import NED_PaymentCohorts
+import NED_PaymentReadWindows
+import NED_PaymentResultTransport
+import NED_PaymentValidation
+import NED_PrimitiveResolution
+import NED_RawAfterFrontier
+import NED_RawAfterValidator
+import NED_RawCarrierInverses
+import NED_RawLateFactor
+import NED_RawLatePreflight
+import NED_RawLatePrepare
+import NED_RawLateSource
+import NED_RawLateTail
+import NED_RawLiveFrontier
+import NED_RawLiveValidator
+import NED_RawValidatorBindings
+import NED_RawValidatorControl
+import NED_RawValidatorTail
+import NED_RawWordArrayEq
+import NED_ReadDomains
+import NED_ReconstructCarriers
+import NED_RequestReadWindows
+import NED_ResultReadWindows
+import NED_ScannerCohorts
+import NED_SnapshotReadWindows
+import NED_StatementCarrierFields
+import NED_StatementReadWindows
+import NED_SubtreeComposition
+import NED_TransferEncodingCohort
+import NED_TypedEncoderObservation
+import NED_ValidatorCallDomains
+import NED_ValidatorStatus
+import NED_ValidatorTrace
+import NED_WindowExtensionality
+import NED_WithdrawalEncodingCohort
+set_option autoImplicit false
+#print axioms NED_AfterBoxComposition.result
+#print axioms NED_AfterBoxDomain.selected
+#print axioms NED_AfterBoxDomain.domains
+#print axioms NED_AfterEncodingCohort.result
+#print axioms NED_AfterEncodingConstants.magic
+#print axioms NED_AfterEncodingConstants.transport_version
+#print axioms NED_AfterEncodingConstants.storage_version
+#print axioms NED_AfterEncodingConstants.digest_version
+#print axioms NED_AfterstateReadWindows.index
+#print axioms NED_AfterstateReadWindows.root
+#print axioms NED_CallerDomains.statement_late
+#print axioms NED_CallerDomains.statement_current_root
+#print axioms NED_CallerDomains.statement_next_root
+#print axioms NED_CallerDomains.statement_live_row
+#print axioms NED_CallerDomains.statement_after_row
+#print axioms NED_CallerDomains.live_digest_calls
+#print axioms NED_CallerDomains.after_digest_calls
+#print axioms NED_CodecComposition.digest_raw
+#print axioms NED_CodecComposition.digest_canonical
+#print axioms NED_CodecComposition.transfer_law
+#print axioms NED_CodecComposition.withdrawal_law
+#print axioms NED_CodecComposition.validator
+#print axioms NED_CodecComposition.encoder
+#print axioms NED_CommonEncodeCohort.source
+#print axioms NED_CommonEncodeCohort.result
+#print axioms NED_CommonValidation.capacity
+#print axioms NED_CommonValidation.common_result
+#print axioms NED_DigestCohorts.m31_encode
+#print axioms NED_DigestCohorts.digest_encode
+#print axioms NED_DigestCohorts.first_byte
+#print axioms NED_EncoderCallDomains.late_shape
+#print axioms NED_EncoderCallDomains.anchor_shape
+#print axioms NED_EncoderCallDomains.shape
+#print axioms NED_EncoderCallDomains.validation_same
+#print axioms NED_EncoderCallDomains.payment_same
+#print axioms NED_EncoderCallDomains.digest_same
+#print axioms NED_EncoderCallDomains.late_domain
+#print axioms NED_EncoderLoopCohorts.after_body
+#print axioms NED_EncoderLoopCohorts.after_loop
+#print axioms NED_EncoderLoopCohorts.live_body
+#print axioms NED_EncoderLoopCohorts.live_loop
+#print axioms NED_EncoderTrace.late_erases
+#print axioms NED_EncoderTrace.anchor_erases
+#print axioms NED_EncoderTrace.erases
+#print axioms NED_ErrorCarriers.from_to_PoolV1PaymentStatementFormatError
+#print axioms NED_ErrorCarriers.to_from_PoolV1PaymentStatementFormatError
+#print axioms NED_ErrorCarriers.from_to_PoolV1PairLiveSnapshotErrorV1
+#print axioms NED_ErrorCarriers.to_from_PoolV1PairLiveSnapshotErrorV1
+#print axioms NED_ErrorCarriers.from_to_PoolV1PairVerifierTransportErrorV1
+#print axioms NED_ErrorCarriers.to_from_PoolV1PairVerifierTransportErrorV1
+#print axioms NED_ErrorCarriers.from_to_PoolV1PairLatePublicStatementErrorV1
+#print axioms NED_ErrorCarriers.to_from_PoolV1PairLatePublicStatementErrorV1
+#print axioms NED_ErrorCarriers.from_to_PoolV1TreeError
+#print axioms NED_ErrorCarriers.to_from_PoolV1TreeError
+#print axioms NED_ErrorCarriers.from_to_PoolV1PairForestAccountErrorV1
+#print axioms NED_ErrorCarriers.to_from_PoolV1PairForestAccountErrorV1
+#print axioms NED_ErrorCarriers.from_to_PoolV1PairForestTerminalFormatErrorV1
+#print axioms NED_ErrorCarriers.to_from_PoolV1PairForestTerminalFormatErrorV1
+#print axioms NED_ExecutionComposition.validator_observation
+#print axioms NED_ExecutionComposition.encoder_observation
+#print axioms NED_LateCarrierFields.live
+#print axioms NED_LateCarrierFields.after
+#print axioms NED_LateCarrierFields.live_index
+#print axioms NED_LateCarrierFields.after_index
+#print axioms NED_LateCarrierFields.live_frontier
+#print axioms NED_LateCarrierFields.after_frontier
+#print axioms NED_LateCarrierFields.common_late
+#print axioms NED_LateCarrierFields.common_anchor
+#print axioms NED_LateCarriers.snapshot_to_from
+#print axioms NED_LateCarriers.snapshot_from_to
+#print axioms NED_LateCarriers.after_to_from
+#print axioms NED_LateCarriers.after_from_to
+#print axioms NED_LateCarriers.late_to_from
+#print axioms NED_LateCarriers.late_from_to
+#print axioms NED_LateEncodingCohort.result
+#print axioms NED_LateEncodingConstants.magic
+#print axioms NED_LateEncodingConstants.version
+#print axioms NED_LateEncodingConstants.items
+#print axioms NED_LateEncodingConstants.header
+#print axioms NED_LateEncodingConstants.live_bytes
+#print axioms NED_LateEncodingConstants.after_bytes
+#print axioms NED_LateEncodingConstants.size_eq
+#print axioms NED_LateEncodingConstants.size
+#print axioms NED_LateReadWindows.header_width
+#print axioms NED_LateReadWindows.snapshot_width
+#print axioms NED_LateReadWindows.afterstate_width
+#print axioms NED_LateReadWindows.total_width
+#print axioms NED_LateReadWindows.snapshot
+#print axioms NED_LateReadWindows.afterstate
+#print axioms NED_LateValidatorCohorts.after
+#print axioms NED_LateValidatorCohorts.snapshot
+#print axioms NED_LiveEncodingCohort.result
+#print axioms NED_LiveEncodingConstants.magic
+#print axioms NED_LiveEncodingConstants.version
+#print axioms NED_LiveEncodingConstants.size
+#print axioms NED_LiveEncodingConstants.depth
+#print axioms NED_LiveEncodingConstants.note_depth
+#print axioms NED_LiveEncodingConstants.sentinel
+#print axioms NED_LiveEncodingConstants.format
+#print axioms NED_OutputLaneCohort.result
+#print axioms NED_PaymentCohorts.transfer_common
+#print axioms NED_PaymentCohorts.withdrawal_common
+#print axioms NED_PaymentCohorts.digest_canonical
+#print axioms NED_PaymentCohorts.canonical_result
+#print axioms NED_PaymentReadWindows.pool
+#print axioms NED_PaymentReadWindows.deployment
+#print axioms NED_PaymentReadWindows.sequence
+#print axioms NED_PaymentReadWindows.anchor
+#print axioms NED_PaymentReadWindows.nullifier
+#print axioms NED_PaymentReadWindows.asset
+#print axioms NED_PaymentReadWindows.amount
+#print axioms NED_PaymentReadWindows.recipient_destination
+#print axioms NED_PaymentReadWindows.change
+#print axioms NED_PaymentResultTransport.map_ite
+#print axioms NED_PaymentResultTransport.outer_ok
+#print axioms NED_PaymentValidation.transfer_result
+#print axioms NED_PaymentValidation.value_limit
+#print axioms NED_PaymentValidation.withdrawal_result
+#print axioms NED_PrimitiveResolution.m31
+#print axioms NED_PrimitiveResolution.raw_m31
+#print axioms NED_PrimitiveResolution.late_header
+#print axioms NED_PrimitiveResolution.sequence_width
+#print axioms NED_PrimitiveResolution.amount_width
+#print axioms NED_RawAfterFrontier.afterstate_loop
+#print axioms NED_RawAfterValidator.afterstate
+#print axioms NED_RawCarrierInverses.common
+#print axioms NED_RawCarrierInverses.transfer
+#print axioms NED_RawCarrierInverses.withdrawal
+#print axioms NED_RawCarrierInverses.statement
+#print axioms NED_RawLateFactor.raw_eq
+#print axioms NED_RawLatePreflight.option_ne
+#print axioms NED_RawLatePrepare.source
+#print axioms NED_RawLatePrepare.exact
+#print axioms NED_RawLateSource.factor
+#print axioms NED_RawLateTail.exact
+#print axioms NED_RawLiveFrontier.live_loop
+#print axioms NED_RawLiveValidator.source
+#print axioms NED_RawValidatorBindings.source_factor
+#print axioms NED_RawValidatorBindings.tail_reached
+#print axioms NED_RawValidatorControl.tail_factor
+#print axioms NED_RawValidatorTail.result
+#print axioms NED_RawWordArrayEq.ne
+#print axioms NED_RawWordArrayEq.list_eq
+#print axioms NED_RawWordArrayEq.source
+#print axioms NED_ReadDomains.converted
+#print axioms NED_ReadDomains.bytes_retained
+#print axioms NED_ReconstructCarriers.common_roundtrip
+#print axioms NED_ReconstructCarriers.statement_roundtrip
+#print axioms NED_ReconstructCarriers.common_argument
+#print axioms NED_ReconstructCarriers.parts_argument
+#print axioms NED_RequestReadWindows.profile
+#print axioms NED_RequestReadWindows.release
+#print axioms NED_RequestReadWindows.pool_program
+#print axioms NED_RequestReadWindows.payment
+#print axioms NED_ResultReadWindows.master
+#print axioms NED_ResultReadWindows.lane
+#print axioms NED_ResultReadWindows.nullifier
+#print axioms NED_ResultReadWindows.afterstate
+#print axioms NED_ScannerCohorts.account_body
+#print axioms NED_ScannerCohorts.account_loop
+#print axioms NED_ScannerCohorts.account
+#print axioms NED_ScannerCohorts.profile_body
+#print axioms NED_ScannerCohorts.profile_loop
+#print axioms NED_ScannerCohorts.profile
+#print axioms NED_ScannerCohorts.profile_result
+#print axioms NED_ScannerCohorts.account_result
+#print axioms NED_SnapshotReadWindows.pool
+#print axioms NED_SnapshotReadWindows.deployment
+#print axioms NED_SnapshotReadWindows.sequence
+#print axioms NED_SnapshotReadWindows.index
+#print axioms NED_SnapshotReadWindows.root
+#print axioms NED_StatementCarrierFields.transfer
+#print axioms NED_StatementCarrierFields.withdrawal
+#print axioms NED_StatementCarrierFields.master
+#print axioms NED_StatementCarrierFields.checkpoint
+#print axioms NED_StatementCarrierFields.selected_lane
+#print axioms NED_StatementCarrierFields.lane
+#print axioms NED_StatementCarrierFields.sequence
+#print axioms NED_StatementCarrierFields.pool
+#print axioms NED_StatementCarrierFields.deployment
+#print axioms NED_StatementReadWindows.master
+#print axioms NED_StatementReadWindows.checkpoint
+#print axioms NED_StatementReadWindows.lane
+#print axioms NED_StatementReadWindows.sequence
+#print axioms NED_StatementReadWindows.anchor
+#print axioms NED_StatementReadWindows.late
+#print axioms NED_StatementReadWindows.payment
+#print axioms NED_SubtreeComposition.digest_decode
+#print axioms NED_SubtreeComposition.after_encode
+#print axioms NED_SubtreeComposition.live_encode
+#print axioms NED_SubtreeComposition.late_encode
+#print axioms NED_SubtreeComposition.after_decode
+#print axioms NED_SubtreeComposition.first_byte
+#print axioms NED_SubtreeComposition.output_lane
+#print axioms NED_TransferEncodingCohort.result
+#print axioms NED_TypedEncoderObservation.injective
+#print axioms NED_TypedEncoderObservation.result
+#print axioms NED_TypedEncoderObservation.state_effects
+#print axioms NED_ValidatorCallDomains.tail_shape
+#print axioms NED_ValidatorCallDomains.bindings_shape
+#print axioms NED_ValidatorCallDomains.shape
+#print axioms NED_ValidatorCallDomains.late_domain
+#print axioms NED_ValidatorCallDomains.payment_same
+#print axioms NED_ValidatorStatus.payment_source
+#print axioms NED_ValidatorStatus.source
+#print axioms NED_ValidatorTrace.tail_erases
+#print axioms NED_ValidatorTrace.bindings_erases
+#print axioms NED_ValidatorTrace.erases
+#print axioms NED_ValidatorTrace.lane_same
+#print axioms NED_WindowExtensionality.array_ext
+#print axioms NED_WindowExtensionality.late_zero
+#print axioms NED_WindowExtensionality.prefix_frame
+#print axioms NED_WindowExtensionality.prefixes_frame
+#print axioms NED_WithdrawalEncodingCohort.result

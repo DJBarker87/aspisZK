@@ -1,0 +1,10 @@
+'NBP_Store.update' depends on axioms: [propext, Quot.sound]
+'NBP_Store.exact' depends on axioms: [propext, Quot.sound]
+'NBP_Store.store_then' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => fail Error.arrayOutOfBounds
+  | some val => ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Array.setSlice!.{u_1} : {α : Type u_1} → _root_.Array α → ℕ → List α → _root_.Array α :=
+fun {α} a i s => { toList := a.toList.setSlice! i s }

@@ -1,0 +1,30 @@
+import NED_PaymentValidation
+import NBP_CommonBytes
+set_option autoImplicit false
+noncomputable section
+namespace NED_CommonEncodeCohort
+open Aeneas Aeneas.Std Result NED_PaymentCohorts
+abbrev TK := AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind
+abbrev RK := AspisR1AdapterReconstruct.aspis_statement.pool_v1.historical_anchor.PoolV1TransitionKind
+
+def toRawKind : TK → RK
+  | .PrivateTransfer => .PrivateTransfer
+  | .Withdrawal => .Withdrawal
+
+/-- SAME arbitrary output prestate, magic, kind and common fields; this is
+symbolic equality between emitted bodies, not a concrete buffer evaluation. -/
+theorem source (out : Array U8 216#usize) (magic : Array U8 4#usize) (kind : TK) (c : C) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.encode_common
+      out magic (toRawKind kind) (toRawCommon c) =
+    AspisR1TerminalDecoder.pool_v1.payment_relation.encode_common out magic kind c := by
+  cases kind <;> rfl
+
+theorem result (out : Array U8 216#usize) (magic : Array U8 4#usize) (kind : TK) (c : C) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.encode_common
+      out magic (toRawKind kind) (toRawCommon c) =
+    ok (NBP_CommonBytes.encoded out magic kind c) := by
+  rw [source,NBP_CommonBytes.result]
+
+#print axioms source
+#print axioms result
+end NED_CommonEncodeCohort

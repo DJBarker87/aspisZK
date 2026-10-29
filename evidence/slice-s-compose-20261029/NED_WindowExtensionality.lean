@@ -1,0 +1,58 @@
+import NED_EncoderCallDomains
+import KMX_CopyMeaning
+set_option autoImplicit false
+noncomputable section
+namespace NED_WindowExtensionality
+open Aeneas Aeneas.Std Result
+
+theorem array_ext {α : Type} {n : Usize} (a b : Array α n)
+    (point : ∀ i : Fin n.val,
+      a.val[i.val]'(by have := a.property; omega) =
+      b.val[i.val]'(by have := b.property; omega)) : a = b := by
+  apply Subtype.ext
+  apply List.ext_getElem
+  · have := a.property; have := b.property; omega
+  · intro i hi hj
+    exact point ⟨i,by have := a.property; omega⟩
+
+theorem late_zero (out : Slice U8) (size : out.length = 1520)
+    (point : ∀ i : Fin 1520, out.val[i.val]'(by change i.val < out.length; omega) = 0#u8) :
+    out = NBN_LateResult.zero := by
+  apply Subtype.ext
+  apply List.ext_getElem
+  · simp only [NBN_LateResult.zero,Array.to_slice,Array.repeat_val,List.length_replicate]
+    change out.length = 1520
+    exact size
+  · intro i hi hj
+    have eq := point ⟨i,by change i < out.length at hi; omega⟩
+    simpa only [NBN_LateResult.zero,Array.to_slice,Array.repeat_val,List.getElem_replicate] using eq
+
+theorem prefix_frame {α : Type} (src dst : Nat → α) (start count offset : Nat)
+    (end_before_late : start + count ≤ 144) :
+    KMX_CopyMeaning.loop src dst start count (144+offset) = dst (144+offset) := by
+  apply KMX_CopyMeaning.copy_frame
+  right; omega
+
+structure Write (α : Type) where
+  source : Nat → α
+  start : Nat
+  count : Nat
+
+def applyWrites {α : Type} : List (Write α) → (Nat → α) → Nat → α
+  | [], dst => dst
+  | w::ws, dst => applyWrites ws (KMX_CopyMeaning.loop w.source dst w.start w.count)
+
+theorem prefixes_frame {α : Type} (writes : List (Write α)) (dst : Nat → α)
+    (bounded : ∀ w ∈ writes, w.start+w.count ≤ 144) (offset : Nat) :
+    applyWrites writes dst (144+offset) = dst (144+offset) := by
+  induction writes generalizing dst with
+  | nil => rfl
+  | cons w ws ih =>
+    rw [applyWrites,ih _ (by intro v hv; exact bounded v (by simp [hv]))]
+    exact prefix_frame w.source dst w.start w.count offset (bounded w (by simp))
+
+#print axioms array_ext
+#print axioms late_zero
+#print axioms prefix_frame
+#print axioms prefixes_frame
+end NED_WindowExtensionality

@@ -1,0 +1,45 @@
+NED_generated/NED_ValidatorStatus.lean:27:128: error: unsolved goals
+s : Statement
+⊢ (if
+        (common s).master_account = zero ∨
+          (common s).checkpoint_account = zero ∨ (common s).selected_lane_account = zero then
+      ok
+        (core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if 8 ≤ ↑(common s).output_lane then
+        ok
+          (core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+      else
+        match payment s with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+        | core.result.Result.Ok a => ok (suffix s)) =
+    ok
+      (if
+          (common s).master_account = zero ∨
+            (common s).checkpoint_account = zero ∨ (common s).selected_lane_account = zero then
+        core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding
+      else
+        if 8 ≤ ↑(common s).output_lane then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane
+        else
+          match payment s with
+          | core.result.Result.Err e =>
+            core.result.Result.Err
+              (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e)
+          | core.result.Result.Ok a => suffix s)
+NED_generated/NED_ValidatorStatus.lean:33:50: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp_all only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_ValidatorStatus.payment_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_ValidatorStatus.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

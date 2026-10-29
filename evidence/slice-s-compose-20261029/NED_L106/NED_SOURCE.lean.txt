@@ -1,0 +1,71 @@
+import NED_LateValidatorCohorts
+import NED_AfterEncodingConstants
+set_option autoImplicit false
+noncomputable section
+namespace NED_AfterEncodingCohort
+open Aeneas Aeneas.Std Result NED_LateCarriers NED_LateValidatorCohorts NED_ErrorCarriers
+
+def mapOuter {α E F : Type} (f : E → F) : Result (core.result.Result α E) → Result (core.result.Result α F)
+ | .ok r => .ok (mapResult f r)
+ | .fail e => .fail e
+ | .div => .div
+
+theorem mapOuter_bind {α β E F : Type} (f : E → F) (m : Result α)
+    (k : α → Result (core.result.Result β E)) :
+    mapOuter f (m >>= k) = (m >>= fun x => mapOuter f (k x)) := by
+  cases m <;> rfl
+
+theorem mapOuter_ok {α E F : Type} (f : E → F) (x : α) :
+    mapOuter f (ok (core.result.Result.Ok x)) = ok (.Ok x) := by rfl
+
+theorem mapOuter_split {α β γ E F : Type} (f : E → F) (p : α × β)
+    (k : α → β → Result (core.result.Result γ E)) :
+    mapOuter f (let (a,b) := p; k a b) = (let (a,b) := p; mapOuter f (k a b)) := by
+  cases p; rfl
+
+theorem mapOuter_bind_pair {α β γ E F : Type} (f : E → F) (m : Result (α × β))
+    (k : α → β → Result (core.result.Result γ E)) :
+    mapOuter f (do let (a,b) ← m; k a b) = (do let (a,b) ← m; mapOuter f (k a b)) := by
+  cases m with
+  | ok p => cases p; rfl
+  | fail e => rfl
+  | div => rfl
+
+theorem bind_same {α β : Type} (m : Result α) (f g : α → Result β)
+    (point : ∀ x, f x = g x) : (m >>= f) = (m >>= g) := by
+  exact congrArg (fun k => m >>= k) (funext point)
+
+-- The emitted scalar literals contain proof terms whose type checking needs
+-- default transparency for implicit arguments (Lean 4.32 elaborator option).
+-- This changes elaboration only; the kernel and axiom audit remain standard.
+set_option backward.isDefEq.respectTransparency false in
+theorem result (s : TAfter) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 (toRawAfter s) =
+    mapOuter toRawPoolV1PairVerifierTransportErrorV1
+      (AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s) := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+    AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+  rw [NED_LateValidatorCohorts.after,NBH_Validators.afterstate]
+  cases valid : NBH_Validators.afterResult s with
+  | Err e => simp [valid,mapResult,mapOuter,core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame]
+  | Ok u =>
+    cases u
+    simp only [valid,mapResult,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+    simp only [toRawAfter,AspisR1.JHf_Carrier.toPoolV1PairVerifiedAfterstateV1,
+      AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1,
+      NED_DigestCohorts.digest_encode,NED_EncoderLoopCohorts.after_loop]
+    simp only [mapOuter_bind_pair,mapOuter_bind,mapOuter_split,mapOuter_ok]
+    simp only [NED_AfterEncodingConstants.magic,NED_AfterEncodingConstants.transport_version,
+      NED_AfterEncodingConstants.storage_version,NED_AfterEncodingConstants.digest_version]
+    iterate 48 (first | (apply bind_same; intro x; first | cases x | skip) | simp only [mapOuter_bind,mapOuter_ok] | dsimp only | skip)
+    all_goals rfl
+
+#print axioms bind_same
+#print axioms mapOuter_bind_pair
+#print axioms mapOuter_split
+#print axioms mapOuter_ok
+#print axioms mapOuter_bind
+#print axioms result
+end NED_AfterEncodingCohort

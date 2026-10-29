@@ -1,0 +1,25 @@
+import NED_ErrorCarriers
+import NED_SubtreeComposition
+set_option autoImplicit false
+noncomputable section
+namespace NED_DigestCohorts
+open Aeneas Aeneas.Std Result
+
+theorem m31_encode (v : U32) :
+    AspisR1AdapterReconstruct.aspis_core.field.M31.to_le_bytes v =
+    AspisR1TerminalDecoder.aspis_core.field.M31.to_le_bytes v := by rfl
+
+/-- Symbolic loop-body correspondence on arbitrary words, without evaluating
+any concrete numeral recurrence or unfolding a buffer-length search. -/
+theorem digest_encode (d : Array U32 8#usize) :
+    AspisR1AdapterReconstruct.aspis_statement.atomic_statement.encode_digest_canonical d =
+    AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical d := by rfl
+
+theorem first_byte (d : Array U32 8#usize) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_accounts.first_canonical_byte d =
+    AspisR1TerminalDecoder.pool_v1.pair_forest_accounts.first_canonical_byte d := by rfl
+
+#print axioms m31_encode
+#print axioms digest_encode
+#print axioms first_byte
+end NED_DigestCohorts
