@@ -1,0 +1,145 @@
+START 62609 R1Z.PV_RunJoin_ClaimImage48
+DONE 62609 R1Z.PV_RunJoin_ClaimImage48 exit 1 wall 2.03 RSS 4446552064
+luate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+e : Error
+he : evaluate c = fail e
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun next => ↑next) (fail e) =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) (fail e)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:33:10: error: unsolved goals
+case cons.div
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+he : evaluate c = div
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun next => ↑next) div =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) div
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:42:34: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑(PV_RunJoin_FlatBytes35.wire v)).length
+in the target expression
+  (↑out).length + (↑(PV_RunJoin_FlatBytes35.wire v).to_slice).length = (↑out).length + 32
+
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+v : W
+he : evaluate c = ok v
+mid : alloc.vec.Vec U8
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (PV_RunJoin_FlatBytes35.wire v).to_slice = ok mid
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire v).to_slice
+⊢ (↑out).length + (↑(PV_RunJoin_FlatBytes35.wire v).to_slice).length = (↑out).length + 32
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:34:11: error: unsolved goals
+case cons.ok.ok
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+v : W
+he : evaluate c = ok v
+mid : alloc.vec.Vec U8
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (PV_RunJoin_FlatBytes35.wire v).to_slice = ok mid
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire v).to_slice
+ml : mid.length = out.length + 32
+v✝ : List W
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ (↑(PV_RunJoin_FlatBytes35.wire v).to_slice ++ bytes vs))
+      (ok v✝) =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) (ok (v :: v✝))
+
+case cons.ok.fail
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+v : W
+he : evaluate c = ok v
+mid : alloc.vec.Vec U8
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (PV_RunJoin_FlatBytes35.wire v).to_slice = ok mid
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire v).to_slice
+ml : mid.length = out.length + 32
+e✝ : Error
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ (↑(PV_RunJoin_FlatBytes35.wire v).to_slice ++ bytes vs))
+      (fail e✝) =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) (fail e✝)
+
+case cons.ok.div
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+v : W
+he : evaluate c = ok v
+mid : alloc.vec.Vec U8
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (PV_RunJoin_FlatBytes35.wire v).to_slice = ok mid
+hv : ↑mid = ↑out ++ ↑(PV_RunJoin_FlatBytes35.wire v).to_slice
+ml : mid.length = out.length + 32
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ (↑(PV_RunJoin_FlatBytes35.wire v).to_slice ++ bytes vs)) div =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) div
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:29:60: warning: This simp argument is unused:
+  bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_ClaimProducer48.run, ̲values,b̵y̵t̵e̵s̵,̵ ̲mapResult, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:29:76: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵C̵l̵a̵i̵m̵P̵r̵o̵d̵u̵c̵e̵r̵4̵8̵.̵r̵u̵n̵,̵v̵a̵l̵u̵e̵s̵,̵b̵y̵t̵e̵s̵,̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲P̲V̲_̲R̲u̲n̲J̲o̲i̲n̲_̲C̲l̲a̲i̲m̲P̲r̲o̲d̲u̲c̲e̲r̲4̲8̲.̲r̲u̲n̲,̲ ̲v̲a̲l̲u̲e̲s̲,̲ ̲b̲y̲t̲e̲s̲,̲ ̲m̲a̲p̲R̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:45:92: warning: This simp argument is unused:
+  bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵R̵e̵s̵u̵l̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵b̵y̵t̵e̵s̵,̵h̵v̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲m̲a̲p̲R̲e̲s̲u̲l̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲,̲ ̲h̲v̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_ClaimImage48.length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ClaimImage48.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

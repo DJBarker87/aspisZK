@@ -1,0 +1,59 @@
+START 62691 R1Z.PV_RunJoin_PrepareTailAssociation48
+DONE 62691 R1Z.PV_RunJoin_PrepareTailAssociation48 exit 1 wall 2.36 RSS 4485754880
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareTailAssociation48.lean:11:46: warning: Variable name `variant` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareTailAssociation48.lean:12:5: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareTailAssociation48.lean:45:94: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+transcript2 : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+y1 : alloc.vec.Vec U8
+gamma inactive kappa : W
+q w : ℕ → Raw
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+c0 : ℕ → Raw
+hc0 : prover.round (array 1024#usize q).to_slice (array 1024#usize w).to_slice = ok (array 7#usize c0)
+hmodel :
+  ProverCommitRoundScaled48.run (↑1024#usize / 4) (sourceArray 1024#usize q) (sourceArray 1024#usize w) =
+    ok (List.ofFn fun k => source (c0 ↑k))
+hcc : ∀ k < 7, canonical (c0 k)
+bytes : alloc.vec.Vec U8
+hbytes : prover.encoded_slice (PV_RunJoin_EncodedImage43.values 7#usize c0) = ok bytes
+himage : List.map PV_RunJoin_WideImage43.byte ↑bytes = ProverCommitOpeningBytes49.stream (↑7#usize) c0 hcc
+hc : prover.round (array 1024#usize q).to_slice (array 1024#usize w).to_slice = ok (array 7#usize c0)
+hb : prover.encoded_slice (array 7#usize c0).to_slice = ok bytes
+⊢ (do
+      let (alpha0, transcript3) ←
+        host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript2
+            29#u8 bytes.deref false
+      let q1 ← prover.fold (array 1024#usize q).to_slice alpha0 false
+      let w1 ← prover.fold (array 1024#usize w).to_slice alpha0 true
+      PV_RunJoin_PreparedDomain48.run backend sem transcript3 y1 gamma inactive kappa alpha0 bytes q1 w1
+          (host_commitment.EncodingDomain.evaluate
+            aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain q1.deref 0#usize)) =
+    do
+    let __x ←
+      host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript2 29#u8
+          bytes.deref false
+    let q1 ← prover.fold (array 1024#usize q).to_slice __x.1 false
+    let w1 ← prover.fold (array 1024#usize w).to_slice __x.1 true
+    PV_RunJoin_PreparedDomain48.run backend sem __x.2 y1 gamma inactive kappa __x.1 bytes q1 w1
+        (host_commitment.EncodingDomain.evaluate aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField
+          backend.domain q1.deref 0#usize)
+'R1Z.PV_RunJoin_PrepareTailAssociation48.retained' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PrepareTailAssociation48.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

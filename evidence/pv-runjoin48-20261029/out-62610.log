@@ -1,0 +1,36 @@
+START 62610 R1Z.PV_RunJoin_ClaimImage48
+DONE 62610 R1Z.PV_RunJoin_ClaimImage48 exit 1 wall 1.9 RSS 4446027776
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:35:13: error: unsolved goals
+case cons.fail
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+e : Error
+he : evaluate c = fail e
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun next => ↑next) (fail e) =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) (fail e)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ClaimImage48.lean:36:10: error: unsolved goals
+case cons.div
+evaluate : Column → Result W
+c : Column
+cs : List Column
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 32 * cs.length ≤ Usize.max →
+      mapResult (fun next => ↑next) (PV_RunJoin_ClaimProducer48.run evaluate cs out) =
+        mapResult (fun vs => ↑out ++ bytes vs) (values evaluate cs)
+out : alloc.vec.Vec U8
+room : out.length + 32 * (c :: cs).length ≤ Usize.max
+he : evaluate c = div
+⊢ PV_B2_E_OrdinaryOriginal.mapResult (fun next => ↑next) div =
+    PV_B2_E_OrdinaryOriginal.mapResult (fun vs => ↑out ++ bytes vs) div
+'R1Z.PV_RunJoin_ClaimImage48.length' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ClaimImage48.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

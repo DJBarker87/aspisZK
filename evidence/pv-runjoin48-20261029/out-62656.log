@@ -1,0 +1,77 @@
+START 62656 R1Z.PV_RunJoin_PreparePrefix48
+DONE 62656 R1Z.PV_RunJoin_PreparePrefix48 exit 1 wall 1.76 RSS 4452810752
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PreparePrefix48.lean:23:77: error: Application type mismatch: The argument
+  material
+has type
+  @weights.Weights base → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)
+but is expected to have type
+  @weights.Weights (types base) →
+    aspis_core.field.wide_exact.WideExact →
+      Result (core.result.Result (alloc.vec.Vec aspis_core.field.wide_exact.WideExact) verifier.Error)
+in the application
+  PV_RunJoin_PrepareOperations47.run transport.Variant.S2 hash backend sem (ok coefficients)
+    (do
+      request
+      ok (core.result.Result.Ok w))
+    material
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PreparePrefix48.lean:25:77: error: Application type mismatch: The argument
+  material
+has type
+  @weights.Weights base → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)
+but is expected to have type
+  @weights.Weights (types base) →
+    aspis_core.field.wide_exact.WideExact →
+      Result (core.result.Result (alloc.vec.Vec aspis_core.field.wide_exact.WideExact) verifier.Error)
+in the application
+  PV_RunJoin_PrepareClaimContext48.run transport.Variant.S2 hash backend sem (ok coefficients)
+    (do
+      request
+      ok (core.result.Result.Ok w))
+    material
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PreparePrefix48.lean:32:75: error: Application type mismatch: The argument
+  material
+has type
+  @weights.Weights base → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)
+but is expected to have type
+  @weights.Weights (types base) →
+    aspis_core.field.wide_exact.WideExact →
+      Result (core.result.Result (alloc.vec.Vec aspis_core.field.wide_exact.WideExact) verifier.Error)
+in the application
+  PV_RunJoin_PrepareClaimContext48.source transport.Variant.S2 hash backend sem (ok coefficients)
+    (do
+      request
+      ok (core.result.Result.Ok w))
+    material
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PreparePrefix48.lean:30:80: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+coefficients : alloc.vec.Vec Column
+small : coefficients.length ≤ 14336
+request : Result Unit
+w : PV_RunJoin_WeightCarrier46.W
+hs : w.variant = PV_B2_251c1.transport.Variant.S2
+material : weights.Weights → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)
+⊢ PV_RunJoin_PrepareOperations47.run transport.Variant.S2 hash backend sem (ok coefficients)
+      (do
+        request
+        ok (core.result.Result.Ok w))
+      sorry =
+    PV_RunJoin_PrepareClaimContext48.run transport.Variant.S2 hash backend sem (ok coefficients)
+      (do
+        request
+        ok (core.result.Result.Ok w))
+      sorry
+      (fun columns point =>
+        PV_RunJoin_ClaimProducer48.run (PV_RunJoin_ClaimProducerCell48.evaluate base heap box ops point) (↑columns)
+          (alloc.vec.Vec.new U8))
+      fun q x =>
+      mapResult ProverRwDictionaryTower.fromW
+        (PV_RunJoin_InactiveFinite48.run 1024 q (PV_RunJoin_WeightCarrier46.state w)
+          AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO 0#usize)
+'R1Z.PV_RunJoin_PreparePrefix48.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
