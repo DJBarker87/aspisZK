@@ -22,9 +22,9 @@ theorem same_bind {A B C : Type} (R : B → C → Prop) (m : Result A)
 
 theorem bind {A B C D : Type} (R : A → B → Prop) (S : C → D → Prop)
     (m : Result A) (n : Result B) (f : A → Result C) (g : B → Result D)
-    (prefix : Rel R m n) (step : ∀ a b,R a b → Rel S (f a) (g b)) :
+    (before : Rel R m n) (step : ∀ a b,R a b → Rel S (f a) (g b)) :
     Rel S (m >>= f) (n >>= g) := by
-  cases prefix with
+  cases before with
   | ok r => exact step _ _ r
   | fail e => exact .fail e
   | div => exact .div
