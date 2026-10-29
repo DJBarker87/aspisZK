@@ -28,8 +28,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
           (do let _ ← box .S2 s.alpha s.z;ok (.Ok (toWeight kw)))
           (fun _ x => material heap s kw x) := by
   obtain ⟨kw,hs,hctor,hmat⟩ := PV_RunJoin_SemanticMaterial50.complete base heap box ops s
+  have hnew : @weights.Weights.new (types base) (selected base heap box ops) .S2 s.alpha s.z=
+      (do let _ ← box .S2 s.alpha s.z;ok (.Ok (toWeight kw))) := hctor
   refine ⟨kw,hs,?_⟩
-  rw [@PV_RunJoin_PrepareOperations47.source (types base) (selected base heap box ops) .S2 hash backend s,hctor]
+  rw [@PV_RunJoin_PrepareOperations47.source (types base) (selected base heap box ops) .S2 hash backend s,hnew]
   apply @PV_RunJoin_PrepareMaterialContext47.complete (types base) (selected base heap box ops)
     .S2 hash backend s _ (box .S2 s.alpha s.z) (toWeight kw)
   intro x
