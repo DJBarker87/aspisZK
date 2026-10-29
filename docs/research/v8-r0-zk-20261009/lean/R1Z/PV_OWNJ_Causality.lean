@@ -6,16 +6,16 @@ open PV_OWNJ_FiatShamir
 /-- Every earlier challenge is reconstructed using only frames already
 published before the next callback. Future records do not influence it. -/
 theorem published_prefix (hash : Hash) (sample : Bytes → PV_OWNI_RawOps.Q)
- (public c1 : Bytes) (frames future : List Bytes) :
- (challenges hash sample public c1 (frames ++ future)).take frames.length =
- challenges hash sample public c1 frames := by
+ (statementBytes c1 : Bytes) (frames future : List Bytes) :
+ (challenges hash sample statementBytes c1 (frames ++ future)).take frames.length =
+ challenges hash sample statementBytes c1 frames := by
  unfold challenges
  rw [replay_append]
  simp only
- rw [← replay_length hash sample frames (seed hash public c1) 0]
+ rw [← replay_length hash sample frames (seed hash statementBytes c1) 0]
  exact List.take_left
 
-/-- A query observes only the preceding-round prefix of the challenge list. -/
+/-- A query observes only the preceding-round prior of the challenge list. -/
 theorem query_prefix (sampleValue : Nat → PV_OWNI_RawOps.Q)
  (a b : List PV_OWNI_RawOps.Q) (round index assignment : Nat)
  (h : a.take round = b.take round) :

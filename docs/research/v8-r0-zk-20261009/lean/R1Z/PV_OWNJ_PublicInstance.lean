@@ -8,7 +8,7 @@ open PV_RDB2D_CollectorTrace PV_RDB2D_SparseShape
 def calls (point : List Q) (lengths : List Nat) : List (List Q × Nat) :=
  (statement_points point).flatMap fun p => lengths.map fun n => (p,n)
 
-/-- One global failure prefix: a wrong shape or null stops all later points. -/
+/-- One global failure prior: a wrong shape or null stops all later points. -/
 def plan : List (List Q × Nat) → List Bool → List Action
  | [], _ => []
  | (p,n)::rest, failures =>
@@ -37,36 +37,36 @@ theorem first_shape_stop (point : List Q) (bad : Nat) (rest : List (List Q × Na
 /-- PublicPlan.same_public is instantiated with the computed protocol point
 and the actual column-length vector, not a fresh publicity hypothesis. -/
 theorem per_point_public (sampleValue : Nat → Q) (hash : Hash) (sample : Bytes → Q)
- (public c1 : Bytes) (left right : List Bytes) (hp : left = right)
+ (statementBytes c1 : Bytes) (left right : List Bytes) (hp : left = right)
  (round index assignment : Nat) (failures : List Bool) :
  PV_OWNI_PublicPlan.plan PV_OWNI_Scanner.boolean
-  (query sampleValue (alpha hash sample public c1 left) round index assignment)
+  (query sampleValue (alpha hash sample statementBytes c1 left) round index assignment)
   (List.replicate 29 1024) failures =
  PV_OWNI_PublicPlan.plan PV_OWNI_Scanner.boolean
-  (query sampleValue (alpha hash sample public c1 right) round index assignment)
+  (query sampleValue (alpha hash sample statementBytes c1 right) round index assignment)
   (List.replicate 29 1024) failures :=
  PV_OWNI_PublicPlan.same_public PV_OWNI_Scanner.boolean _ _
-  (query_public sampleValue hash sample public c1 left right hp round index assignment)
+  (query_public sampleValue hash sample statementBytes c1 left right hp round index assignment)
   _ _ rfl failures
 
-theorem final_public (hash : Hash) (sample : Bytes → Q) (public c1 : Bytes)
+theorem final_public (hash : Hash) (sample : Bytes → Q) (statementBytes c1 : Bytes)
  (left right : List Bytes) (hp : left = right) (failures : List Bool) :
- plan (calls (alpha hash sample public c1 left) (List.replicate 29 1024)) failures =
- plan (calls (alpha hash sample public c1 right) (List.replicate 29 1024)) failures := by
- rw [PV_OWNJ_FiatShamir.final_public hash sample public c1 left right hp]
+ plan (calls (alpha hash sample statementBytes c1 left) (List.replicate 29 1024)) failures =
+ plan (calls (alpha hash sample statementBytes c1 right) (List.replicate 29 1024)) failures := by
+ rw [PV_OWNJ_FiatShamir.final_public hash sample statementBytes c1 left right hp]
 
-/-- All three wire points, all 29 lanes and the global failure prefix. -/
+/-- All three wire points, all 29 lanes and the global failure prior. -/
 theorem callback_public (sampleValue : Nat → Q) (hash : Hash) (sample : Bytes → Q)
- (public c1 : Bytes) (left right : List Bytes) (hp : left = right)
+ (statementBytes c1 : Bytes) (left right : List Bytes) (hp : left = right)
  (round index assignment : Nat) (failures : List Bool)
  (columnsL columnsR : List (List Q))
  (hl : columnsL.map List.length = List.replicate 29 1024)
  (hr : columnsR.map List.length = List.replicate 29 1024) :
- plan (calls (query sampleValue (alpha hash sample public c1 left) round index assignment)
+ plan (calls (query sampleValue (alpha hash sample statementBytes c1 left) round index assignment)
   (columnsL.map List.length)) failures =
- plan (calls (query sampleValue (alpha hash sample public c1 right) round index assignment)
+ plan (calls (query sampleValue (alpha hash sample statementBytes c1 right) round index assignment)
   (columnsR.map List.length)) failures := by
- rw [hl,hr,query_public sampleValue hash sample public c1 left right hp round index assignment]
+ rw [hl,hr,query_public sampleValue hash sample statementBytes c1 left right hp round index assignment]
 
 #print axioms callback_public
 #print axioms one_point
