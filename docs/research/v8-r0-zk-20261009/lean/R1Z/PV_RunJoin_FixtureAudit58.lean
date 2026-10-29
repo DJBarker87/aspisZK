@@ -1,0 +1,9 @@
+import PV_2TNV_HeadlineFibre
+import PV_2TNV_WorldData
+import R1Z.PV_RunJoin_CanonicalHonest31
+#print axioms AspisR1.PV_2TNV_CanonicalWitness.witness
+#print axioms AspisR1.PV_2TNV_CanonicalWitness.public_eq
+#print axioms AspisR1.PV_2TNV_HeadlineFibre.fibre
+#print axioms AspisR1.PV_2TNV_SourceBytes.native_payment_bytes
+#print axioms AspisR1.PV_2TNV_WorldData.lane_snapshot_frontier
+#print axioms R1Z.PV_RunJoin_CanonicalHonest31.transfer
