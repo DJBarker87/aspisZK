@@ -14745,3 +14745,13 @@ All four L1 inputs of pv-rj4idb's decoder are PARTIAL, with the model-level comp
 - L1_RETAINED_SIDECHANNELS: trace composition proved; the native world, ownership and cross-channel association remain.
 
 pv-l1d (branch codex/pv-l1d-20261029; IDs 65800-65899; 100 Lean, 30 native, 0 Kani) uses the full budget and finishes one input before starting the next. Counts come first, concrete through the D163 count law, V394, the retry models and pv-diag2's Rejected exclusion, with the retry loop bound under own-1. Then the oracle prefix and the time law, with D359 named and not assumed, then the retained side channels through the pv-own interface. Rows removed: 0. Privacy target not yet established.
+
+## D460 (Stream B) 2026-10-29 04:30 UTC: pv-ownl results; V239 switched to a top-down skeleton; pv-ownm launched
+
+pv-ownl used all 100 Lean attempts (91 passed, 9 failed), one capped native scope and no Kani. All final audits passed with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits. It was merged into the candidate and pushed. It proved the following:
+- local canonicality invariants for the concrete helper model (the source-selected helper is pair_forest_semantic_oracle::build_pool_v1_pair_forest_copy_helper_v1, which calls logup::build_copy_logup_helper);
+- byte acceptance, the sampler and accepted-input assembly;
+- the row bijection, scanner-suffix decoding and prefix-fold and product transport.
+V239 remains SUSPENDED on the complete consuming-execution composition. That composition is the source-to-dense commuting theorem in full coordinates, the transcript publicness for :879 and :890 as a Lean statement, and the owned-execution-to-PublicPlan join.
+
+Lead assessment: four rounds (owni to ownl, about 400 attempts) built V239's pieces bottom-up without attempting the composition. AGENTS.md section 7 asks for end-to-end composition early. pv-ownm (IDs 65900-65999; 100 Lean, 20 native) goes top-down. First, within ten attempts, it compiles the final restoration theorem PV_OWNM_V239.restore with V239's exact consumed-law conclusion, with each missing link as an explicit named hypothesis: a standalone Prop with its exact statement, never restating the conclusion, with no sorry or axiom. That shows the composition fits, or exposes the real mismatch. It then discharges the links one at a time. Rows removed: 0. Privacy target not yet established.
