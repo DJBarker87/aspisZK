@@ -5,7 +5,7 @@ partition, not a repeated regression. Raw guards are retained without pretending
 to know that their operands are public. Generic/unlinked bodies remain candidates.
 """
 from pathlib import Path
-import collections, hashlib, json, lzma, os, re, subprocess, sys
+import collections, hashlib, json, lzma, os, re, shutil, subprocess, sys
 D = Path('/home/dombarker/project-offloads/codex-pv-diag-20261029')
 P = D.parent / 'codex-pv-rdea-20261028'
 T = P / 'client-target/release/deps'
@@ -122,13 +122,17 @@ def backtrace():
     save('anyhow-mir-capture-sites.json',snippets)
     env0=dict(os.environ)
     env0.pop('RUST_BACKTRACE',None);env0.pop('RUST_LIB_BACKTRACE',None)
+    executable=D/'client-baseline'
+    shutil.copyfile(P/'client-deployed-baseline',executable)
+    executable.chmod(0o700)
+    assert sha(executable)=='fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348'
     cases=[]
     for kind, inp in [('anyhow_public_invalid_action',json.dumps(dict(action='unknown',**{k:'11111111111111111111111111111111' for k in ['pool','mint','payer','registry','verifier']}))),('panic_public_invalid_json_shape','null')]:
         for rb,rl,expected in [(None,None,False),('1',None,True),('0','1',kind.startswith('anyhow')),('1','0',kind.startswith('panic')),('0','0',False),('full',None,True)]:
             env=dict(env0)
             if rb is not None:env['RUST_BACKTRACE']=rb
             if rl is not None:env['RUST_LIB_BACKTRACE']=rl
-            p=subprocess.run([str(P/'client-deployed-baseline')],input=inp,text=True,capture_output=True,env=env,timeout=30)
+            p=subprocess.run([str(executable)],input=inp,text=True,capture_output=True,env=env,timeout=30)
             captured='stack backtrace:' in p.stderr.lower()
             cases.append(dict(kind=kind,rust_backtrace=rb,rust_lib_backtrace=rl,exit=p.returncode,stdout=p.stdout,stderr=p.stderr,contains_stack_backtrace=captured,expected=expected))
     save('backtrace-finite-validation.json',dict(evidence_class='finite validation; invalid public-only requests, NOT honest canonical preparation',cases=cases))
@@ -170,4 +174,5 @@ if __name__=='__main__':
     print('Expected time: read-only deployed artifact/source analysis; no compilation, proof generation or elimination.',flush=True)
     if mode=='scan':
         for index in sys.argv[2:]:scan(int(index))
-    else:globals()[mode]()
+    else:
+        for action in sys.argv[1:]:globals()[action]()
