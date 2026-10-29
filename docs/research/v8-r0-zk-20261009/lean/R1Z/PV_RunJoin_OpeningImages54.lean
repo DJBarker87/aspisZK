@@ -3,7 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_OpeningImages54
 open Aeneas Aeneas.Std Result
-open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitWideOps48
+open ProverCommitPrimitive47 ProverCommitSubfieldOps47 ProverCommitWideOps48 ProverCommitMix48
 open ProverCommitValueRange47 (embed)
 open ProverCommitSuccessorPoint49 (decoded)
 open AspisR1.ExtractedCurrentQM31Exact (decode)
@@ -11,8 +11,8 @@ open AspisR1.ExtractedCurrentQM31Exact (decode)
 structure Data where
   c : Nat → Nat → Old.Q
   p : Nat → Old.Q
-  x0 y0 x1 y1 : Old.Q
-  g k a b : Raw
+  (x0 y0 x1 y1 : Old.Q)
+  (g k a b : Raw)
   ch : R0Z.HonestView.Challenges Exact
 
 def Coefficients (d : Data) : Prop := ∀ l, l<29 → ∀ j, j<1024 → Canonical (d.c l j)
