@@ -36,7 +36,7 @@ for module,pin in modules.items():
    if 'source_sha256' in old:
     assert dep in modules and old['source_sha256']==modules[dep]['source_sha256'],('launch/final import source mismatch',module,dep)
   snapshots[module]=dict(attempt=pin['attempt'],objects_checked=len(snapshot['objects']))
- records[module]=dict(**pin,object_path=str(p),object_sha256=sha(str(p)),imports=imports)
+ records[module]=dict(pin,object_path=str(p),object_sha256=sha(str(p)),imports=imports)
 library=json.load(open(D/'library-sources.json'))
 for record in library:
  assert sha(record['path'])==record['sha256'],('deployed Rust library source changed',record['path'])
