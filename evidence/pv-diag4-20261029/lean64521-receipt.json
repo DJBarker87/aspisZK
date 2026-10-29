@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "5a2df9074cba63cefb74c97d989d527a1fa48471",
+  "runner_sha256": "6fe365d6150c4740086dd3cbf0c458d3805602876afae94243b192a2816fa38a",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "R1Z.PV_RunJoin_OsWorld",
+  "attempt": 64521,
+  "source_sha256": "7400c651a6df1fe40b2302c515e39efd3cbf1bbf02388c98f8eddc55470d544c",
+  "environment_sha256": "88ce1214ba48a95647b1a1c21fe4afe62124ce87718b4df72110dddd46543071",
+  "dependency_objects": {
+    "R1Z.PV_RunJoin_CallerWorld": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_CallerWorld.olean": "01edf90509071087cc64762516a7f4681eae813150292e90ba587ec9ece5e22e"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/lean64521-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_OsWorld.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/R1Z/PV_RunJoin_OsWorld.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 2.916191816329956,
+  "peak_rss_kib": "3856964",
+  "swaps": "0",
+  "gnu_wall": "0:02.89",
+  "print_axioms": "structure R1Z.PV_RunJoin_OsWorld.Laws (E File Reply Time Worker : Type) : Type\nnumber of parameters: 5\nfields:\n  R1Z.PV_RunJoin_OsWorld.Laws.entropyDraw : World E File Reply Time Worker \u2192\n      \u2115 \u2192 PV_RunJoin_CallerWorld.RawReply E \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.open64 : World E File Reply Time Worker \u2192 List U8 \u2192 U32 \u2192 U32 \u2192 Reply \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.read : World E File Reply Time Worker \u2192 File \u2192 Usize \u2192 Reply \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.write : World E File Reply Time Worker \u2192 File \u2192 List U8 \u2192 Reply \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.sync : World E File Reply Time Worker \u2192 File \u2192 Reply \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.close : World E File Reply Time Worker \u2192 File \u2192 Reply \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.time : World E File Reply Time Worker \u2192 Time \u2192 Prop\n  R1Z.PV_RunJoin_OsWorld.Laws.worker : World E File Reply Time Worker \u2192 Worker \u2192 Prop\nconstructor:\n  R1Z.PV_RunJoin_OsWorld.Laws.mk {E File Reply Time Worker : Type}\n    (entropyDraw : World E File Reply Time Worker \u2192 \u2115 \u2192 PV_RunJoin_CallerWorld.RawReply E \u2192 Prop)\n    (open64 : World E File Reply Time Worker \u2192 List U8 \u2192 U32 \u2192 U32 \u2192 Reply \u2192 Prop)\n    (read : World E File Reply Time Worker \u2192 File \u2192 Usize \u2192 Reply \u2192 Prop)\n    (write : World E File Reply Time Worker \u2192 File \u2192 List U8 \u2192 Reply \u2192 Prop)\n    (sync close : World E File Reply Time Worker \u2192 File \u2192 Reply \u2192 Prop)\n    (time : World E File Reply Time Worker \u2192 Time \u2192 Prop) (worker : World E File Reply Time Worker \u2192 Worker \u2192 Prop) :\n    Laws E File Reply Time Worker\ndef R1Z.PV_RunJoin_OsWorld.EntropyAllowed : {E File Reply Time Worker : Type} \u2192\n  Laws E File Reply Time Worker \u2192 World E File Reply Time Worker \u2192 Fin 128 \u2192 PV_RunJoin_CallerWorld.RawReply E \u2192 Prop :=\nfun {E File Reply Time Worker} laws world i reply =>\n  world.entropyUsed = \u2191i \u2227 world.entropy i = reply \u2227 laws.entropyDraw world (\u2191i) reply\ndef R1Z.PV_RunJoin_OsWorld.FileAllowed : {E File Reply Time Worker : Type} \u2192\n  [DecidableEq File] \u2192\n    Laws E File Reply Time Worker \u2192\n      World E File Reply Time Worker \u2192 Request File \u2192 Reply \u2192 World E File Reply Time Worker \u2192 Prop :=\nfun {E File Reply Time Worker} [DecidableEq File] laws world request reply next =>\n  fileStep request world = some (reply, next) \u2227 permitted laws world request reply\ndef R1Z.PV_RunJoin_OsWorld.TimeAllowed : {E File Reply Time Worker : Type} \u2192\n  Laws E File Reply Time Worker \u2192 World E File Reply Time Worker \u2192 Time \u2192 World E File Reply Time Worker \u2192 Prop :=\nfun {E File Reply Time Worker} laws world outcome next =>\n  timeStep world = some (outcome, next) \u2227 laws.time world outcome\ndef R1Z.PV_RunJoin_OsWorld.WorkerAllowed : {E File Reply Time Worker : Type} \u2192\n  Laws E File Reply Time Worker \u2192 World E File Reply Time Worker \u2192 Worker \u2192 World E File Reply Time Worker \u2192 Prop :=\nfun {E File Reply Time Worker} laws world outcome next =>\n  workerStep world = some (outcome, next) \u2227 laws.worker world outcome\n'R1Z.PV_RunJoin_OsWorld.file_at' depends on axioms: [propext]\n'R1Z.PV_RunJoin_OsWorld.time_at' depends on axioms: [propext]\n'R1Z.PV_RunJoin_OsWorld.worker_at' depends on axioms: [propext]\n'R1Z.PV_RunJoin_OsWorld.flush_frame' does not depend on any axioms\n",
+  "object_sha256": "addf45974ecca6f387861b0f8b51aa10d5f20c9f94a688a0c20c48ec682abb52"
+}

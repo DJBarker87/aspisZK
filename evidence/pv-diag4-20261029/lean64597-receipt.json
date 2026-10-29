@@ -1,0 +1,73 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "b92d9aa056a97686a6ff3027bdbe09216d82edbc",
+  "runner_sha256": "18b5e1a81769036f1557d51b4163ceedb6c3ce323e92730bc8dce0d5cc0be057",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG4_Audit",
+  "attempt": 64597,
+  "source_sha256": "b973acc53e79dae670049f02f23508d2f926b9bf9c16871878f1782a877ff150",
+  "environment_sha256": "88ce1214ba48a95647b1a1c21fe4afe62124ce87718b4df72110dddd46543071",
+  "dependency_objects": {
+    "PV_DIAG4_LeafTrace": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_LeafTrace.olean": "86846242b040d6741418b9319aac6c8361953e310c4b81ec3c6351aa3430bcf0"
+    },
+    "PV_DIAG4_Bits": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_Bits.olean": "5746b5431148c4cf51fe3bde52f4bf95643b76c6a2ded1b115f06b2eebecfd07"
+    },
+    "PV_DIAG4_Errno": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_Errno.olean": "f180a71156dd93058a4077284c114c7468766b950b732ce1cdfaf7ae17c54b34"
+    },
+    "R1Z.PV_RunJoin_TrustItems": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_TrustItems.olean": "7999a595b4f1224f34e679cdd8ccd61664330db43d3e4361fde461eedb29b24f"
+    },
+    "R1Z.PV_RunJoin_UnifiedRetry": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_UnifiedRetry.olean": "b671e625276d072bea5b3ff1c05f07168882c946200c8c54863d5ba3e5e2905a"
+    },
+    "R1Z.PV_RunJoin_CompletedWorld": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_CompletedWorld.olean": "62b82b310cb0cadd111183a630b1146160cea5719508a13b5f5f788b5d683f2e"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/lean64597-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_Audit.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Audit.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 2.2459616661071777,
+  "peak_rss_kib": "4269596",
+  "swaps": "0",
+  "gnu_wall": "0:02.21",
+  "print_axioms": "'PV_DIAG4.os_word_nonzero' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.os_word_bound' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.os_word_high' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.signed32_range' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG4.signed32_pattern' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.stored_eintr_exact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG4.errno_location_normal' depends on axioms: [propext]\n'PV_DIAG4.last_error_normal' depends on axioms: [propext]\n'PV_DIAG4.errno_location_panics' depends on axioms: [propext]\n'PV_DIAG4.errno_location_aborts' depends on axioms: [propext]\n'PV_DIAG4.errno_location_diverges' depends on axioms: [propext]\n'PV_DIAG4.os_interrupted_exact' does not depend on any axioms\n'PV_DIAG4.os_interrupted_no_effect' does not depend on any axioms\n'PV_DIAG4.interrupted_drop_then_retry' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG4.noninterrupted_moves_error' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.interrupted_keeps_retry_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG4.concrete_leaf_exact' does not depend on any axioms\n'PV_DIAG4.concrete_leaves_exact' depends on axioms: [propext]\n'PV_DIAG4.silent_leaves_emission_joint' depends on axioms: [propext]\n'PV_DIAG4.silent_leaves_return_control_retained' depends on axioms: [propext]\n'PV_DIAG4.status_exact' does not depend on any axioms\n'PV_DIAG4.status_refines' does not depend on any axioms\n'PV_DIAG4.status_no_diagnostics' does not depend on any axioms\n'PV_DIAG4.status_preserves_state' does not depend on any axioms\n'PV_DIAG4.status_captured_ignores_payload' does not depend on any axioms\n'PV_DIAG4.raw_flush_exact' does not depend on any axioms\n'PV_DIAG4.raw_stderr_new_exact' does not depend on any axioms\n'PV_DIAG4.raw_vectored_exact' does not depend on any axioms\n'PV_DIAG4.panic_output_exact' does not depend on any axioms\n'PV_DIAG4.once_incomplete' depends on axioms: [propext]\n'PV_DIAG4.once_poisoned' depends on axioms: [propext]\n'PV_DIAG4.once_complete' depends on axioms: [propext]\n'PV_DIAG4.once_invalid' depends on axioms: [propext]\n'PV_DIAG4.poisoned_drop_exact' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.incomplete_drop_exact' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.complete_drop_exact' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.poisoned_unwind_no_extra_effect' depends on axioms: [propext, Quot.sound]\n'PV_DIAG4.raw_error_drop_no_operation' does not depend on any axioms\n'PV_DIAG4.raw_cvt_minus_one' depends on axioms: [propext]\n'PV_DIAG4.raw_cvt_other' depends on axioms: [propext]\n'PV_DIAG4.raw_write_count' does not depend on any axioms\n'PV_DIAG4.write_zero_guard_false' does not depend on any axioms\n'PV_DIAG4.raw_interrupted_retry' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG4.os_constructor_tag' depends on axioms: [propext]\n'PV_DIAG4.os_drop_exact' does not depend on any axioms\n'PV_DIAG4.simple_drop_exact' does not depend on any axioms\n'PV_DIAG4.message_drop_exact' does not depend on any axioms\n'PV_DIAG4.custom_drop_retained' does not depend on any axioms\n'PV_DIAG4.noncustom_drop_exact' depends on axioms: [propext]\n'PV_DIAG4.os_error_unwind_silent' depends on axioms: [propext]\nstructure R1Z.PV_RunJoin_TrustItems {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n  (d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation) : Prop\nnumber of parameters: 11\nfields:\n  R1Z.PV_RunJoin_TrustItems.entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law\n  R1Z.PV_RunJoin_TrustItems.entropy_kernel : \u2200 (c : Coins),\n      d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c\n  R1Z.PV_RunJoin_TrustItems.observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c\nconstructor:\n  R1Z.PV_RunJoin_TrustItems.mk {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n    {d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation}\n    (entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law)\n    (entropy_kernel : \u2200 (c : Coins), d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c)\n    (observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c) : R1Z.PV_RunJoin_TrustItems d\n'R1Z.ProverRwRetryModel.retry' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.ProverCommitRetry34.run' does not depend on any axioms\n",
+  "object_sha256": "53352b98603011aca56f4a6f344acbbb8b47ed7c01fe0d657aefcf0193a74b32"
+}
