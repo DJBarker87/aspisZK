@@ -15,7 +15,7 @@ meta=dict(attempt=n,module=m,source_revision=subprocess.check_output(['git','rev
 r=subprocess.run(['ssh',H,'python3','-'],input="from pathlib import Path\nimport base64\np=Path("+repr(D+'/lean-sources/'+m+'.lean')+");p.parent.mkdir(parents=True,exist_ok=True);Path('/home/dombarker/project-offloads/codex-pv-ownh-20261029/lean-objects/R1Z').mkdir(parents=True,exist_ok=True);p.write_bytes(base64.b64decode("+repr(__import__('base64').b64encode(b).decode())+"))\n",text=True);assert r.returncode==0
 meta['dependency_objects']={}
 for dep in meta['imports']:
- if dep.startswith('R1Z.'):
+ if True:
   q=subprocess.check_output(['ssh',H,"python3 -c \"import json,pathlib,hashlib; roots=[pathlib.Path("+repr(D+'/lean-objects')+")]+[pathlib.Path(x) for x in json.load(open("+repr(D+'/env-J.json')+"))['LEAN_PATH'].split(':')]; p=next(r/("+repr(dep.replace('.','/')+'.olean')+") for r in roots if (r/("+repr(dep.replace('.','/')+'.olean')+")).exists()); print(hashlib.sha256(p.read_bytes()).hexdigest())\""],text=True).strip()
   meta['dependency_objects'][dep]=q
 meta['deps_fingerprint']=hashlib.sha256(json.dumps(meta['dependency_objects'],sort_keys=True).encode()).hexdigest()
