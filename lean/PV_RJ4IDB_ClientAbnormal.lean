@@ -22,7 +22,7 @@ theorem panic_preserved (expose : H → List (Bytes × Bytes))
 
 /-- Model failure and divergence are handed to their explicit native handlers;
 no canonical error text, empty history or termination is imposed on them. -/
-theorem failed_handler (o : PV_DIAG3.ClientHandlers H S P) (e : Error) :
+theorem failed_handler (o : PV_DIAG3.ClientHandlers H S P) (e : Aeneas.Std.Error) :
  PV_DIAG3.clientAfter o (.fail e) = o.runtime e := rfl
 
 theorem divergent_handler (o : PV_DIAG3.ClientHandlers H S P) :
