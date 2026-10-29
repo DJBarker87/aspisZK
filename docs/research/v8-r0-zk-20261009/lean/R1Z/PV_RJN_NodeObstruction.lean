@@ -44,7 +44,7 @@ theorem incompatible {I : Type} (runs : I → Run)
 what an honest actual producer must supply; it contains no append or assembly
 law and no NodeAppend conclusion. -/
 def PV_RJN_Producer_Publication {I : Type} (runs : I → Run) : Prop :=
-  ∃ i (p : prover.Publication) (proof : alloc.vec.Vec U8),
+  ∃ (i : I) (p : prover.Publication) (proof : alloc.vec.Vec U8),
     Fields (runs i) p ∧ PV_RunJoin_PublishContext57.QueryContext (runs i) p ∧
     prover.publish_compact .S2 p=ok (.Ok proof)
 
