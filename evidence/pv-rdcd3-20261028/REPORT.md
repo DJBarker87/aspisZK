@@ -152,3 +152,13 @@ The checks bind source patterns to named owned definitions; no original checker
 is claimed recovered. Scalar/memory/codegen primitives and panic diagnostics/
 world/observer scope are explicitly retained. The root/closing proof and final
 coherent DAG remain pending, so V217 is still SUSPENDED.
+
+60684–60690 pass the source/owned reverse-statistics and Horner loops, both
+wrappers, and the root mask equality, with only standard axioms. Unused-simp
+warnings receive no semantic significance. Current root equality has all
+inputs universally quantified; no domain/success hypothesis was added.
+A read-only host-timestamp cooldown audit records99 actual launches
+(91 Lean+8 native),3 refusals, minimum credited-launch gap187.633887s and
+zero violations. The final closing theorem/source-DAG gate is still pending.
+Five additional symbolic totality drafts are prepared for the remaining focused
+attempts; parser/TryArray drafts are explicitly uncompiled and uncredited.

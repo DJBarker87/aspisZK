@@ -1,4 +1,4 @@
-"""Resolve the exact tracked V260 project dependency closure before rebuilding it."""
+"""Resolve the exact tracked V217 project closure, retaining h5 precedence."""
 from pathlib import Path
 import re,json,subprocess,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd3-20261028'
@@ -16,7 +16,7 @@ def go(m):
  for dep in deps:
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
-go('R1Z.PV_RDCD3_CB_MaskRootEq')
+go('R1Z.PV_RDCD3_V217')
 go('R1Z.PV_RDCD3_FieldTotal')
 checks={}
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json','docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json']:
