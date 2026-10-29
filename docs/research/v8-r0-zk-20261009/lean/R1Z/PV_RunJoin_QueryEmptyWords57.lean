@@ -18,14 +18,14 @@ theorem lane (tree : host_tree.BinaryTree) :
 
 theorem word (tree : host_tree.BinaryTree) :
     alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word)
-      (broken tree).words 0#usize=fail .panic := by rfl
+      (broken tree).words 0#usize=fail .arrayOutOfBounds := by rfl
 
 theorem fill (tree : host_tree.BinaryTree) (u : aspis_core.r0.domain.FibreIndex)
     (opening : aspis_core.r0.wire.FibreOpening) :
-    host_commitment.Commitment.fill_opening (broken tree) u opening=fail .panic := by
+    host_commitment.Commitment.fill_opening (broken tree) u opening=fail .arrayOutOfBounds := by
   unfold host_commitment.Commitment.fill_opening
   rw [host_commitment.fill_opening_values]
-  simp only [show (0#usize)≠alloc.vec.Vec.len (broken tree).lanes from by decide,
+  simp only [show (0#usize)≠alloc.vec.Vec.len (broken tree).lanes from by change (0#usize)≠1#usize; scalar_tac,
     if_false,lane,word,bind_tc_ok,bind_tc_fail]
 
 #print axioms broken
