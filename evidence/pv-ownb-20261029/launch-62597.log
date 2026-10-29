@@ -1,0 +1,225 @@
+(lo : q.read ≤ i) (hi : i < q.length) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_Cursor.sink q v).cell (i * 8) (q.source i)
+R1Z.PV_OWNB_SinkValid.valid (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (room : q.written < q.read) : R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_Cursor.sink q v)
+R1Z.PV_OWNB_SnapshotFold.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (enough : q.read + n ≤ q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_SnapshotFold.run keep n q)
+R1Z.PV_OWNB_SnapshotFold.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotFold.run keep n q).read = q.read + n
+R1Z.PV_OWNB_SnapshotResult.complete (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  have final := R1Z.PV_OWNB_SnapshotFold.run keep (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧
+    final.read = q.length ∧
+      R1Z.PV_OWNB_Prefix.values final =
+        R1Z.PV_OWNB_Prefix.values q ++
+          List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read))
+R1Z.PV_OWNB_SnapshotStep.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (more : q.read < q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_SnapshotStep.step keep q)
+R1Z.PV_OWNB_SnapshotStep.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).read = q.read + 1
+R1Z.PV_OWNB_SnapshotStep.length (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).length = q.length
+R1Z.PV_OWNB_SnapshotValues.step (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_SnapshotStep.step keep q) =
+    R1Z.PV_OWNB_Prefix.values q ++ if keep (q.source q.read) = true then [q.source q.read] else []
+R1Z.PV_OWNB_SnapshotValues.source (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).source = q.source
+R1Z.PV_OWNB_SnapshotValues.values (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_SnapshotFold.run keep n q) =
+    R1Z.PV_OWNB_Prefix.values q ++ R1Z.PV_OWNB_ValueFold.selected keep q.source q.read n
+R1Z.PV_OWNB_U16Agreement.unique (a b : UInt16) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (ha : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode a) raw)
+  (hb : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode b) raw) : a = b
+R1Z.PV_OWNB_ValueFold.filter (keep : R1Z.PV_OWN_Link.Link → Bool) (source : Nat → R1Z.PV_OWN_Link.Link)
+  (start n : Nat) :
+  R1Z.PV_OWNB_ValueFold.selected keep source start n = List.filter keep (R1Z.PV_OWNB_ValueFold.input source start n)
+R1Z.PV_OWNB_ValueFold.values (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_FilterFold.run keep n q) =
+    R1Z.PV_OWNB_Prefix.values q ++ R1Z.PV_OWNB_ValueFold.selected keep q.source q.read n
+R1Z.PV_OWNB_WriteConsumer.write (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) (p : UInt16)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWN_Bytes.store c (s + 2) 2 (R1Z.PV_OWN_U16.encode p)) s
+    { kind := v.kind, producer := v.producer, consumer := p }
+R1Z.PV_OWNB_WriteProducer.write (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) (p : UInt16)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWN_Bytes.store c s 2 (R1Z.PV_OWN_U16.encode p)) s
+    { kind := v.kind, producer := p, consumer := v.consumer }
+theorem R1Z.PV_OWNB_ActualResult.complete : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    (∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (bytes i v)) →
+      have final := R1Z.PV_OWNB_ActualFold.run keep bytes (q.length - q.read) q;
+      R1Z.PV_OWNB_Cursor.Valid final ∧
+        final.read = final.length ∧
+          final.token = q.token ∧
+            final.memory.generations = q.memory.generations ∧
+              R1Z.PV_OWNB_Prefix.values final =
+                R1Z.PV_OWNB_Prefix.values q ++
+                  List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)) :=
+fun q keep bytes h copy =>
+  And.casesOn (R1Z.PV_OWNB_ActualComplete.complete keep bytes q h copy) fun hv hd =>
+    And.casesOn (R1Z.PV_OWNB_ActualIdentity.generation keep bytes (q.length - q.read) q) fun ht hg =>
+      ⟨hv,
+        ⟨hd,
+          ⟨ht,
+            ⟨hg,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        R1Z.PV_OWNB_Prefix.values q ++
+                          List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+                    (R1Z.PV_OWNB_ActualValues.values keep bytes (q.length - q.read) q)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        R1Z.PV_OWNB_Prefix.values q ++ _a =
+                          R1Z.PV_OWNB_Prefix.values q ++
+                            List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+                      (R1Z.PV_OWNB_ValueFold.filter keep q.source q.read (q.length - q.read))))
+                  (Eq.refl
+                    (R1Z.PV_OWNB_Prefix.values q ++
+                      List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))))⟩⟩⟩⟩
+'R1Z.PV_OWNB_ActualResult.complete' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_SnapshotResult.complete : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    have final := R1Z.PV_OWNB_SnapshotFold.run keep (q.length - q.read) q;
+    R1Z.PV_OWNB_Cursor.Valid final ∧
+      final.read = q.length ∧
+        R1Z.PV_OWNB_Prefix.values final =
+          R1Z.PV_OWNB_Prefix.values q ++
+            List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)) :=
+fun q keep h =>
+  have hv := h;
+  ⟨R1Z.PV_OWNB_SnapshotFold.valid keep (q.length - q.read) q hv
+      (Decidable.byContradiction fun a => R1Z.PV_OWNB_SnapshotResult.complete._proof_1 q h a),
+    ⟨Eq.mpr (id (congrArg (fun _a => _a = q.length) (R1Z.PV_OWNB_SnapshotFold.advances keep (q.length - q.read) q)))
+        (have le := h.right.right.right.right.left;
+        Decidable.byContradiction fun a => R1Z.PV_OWNB_SnapshotResult.complete._proof_2 q h a),
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                R1Z.PV_OWNB_Prefix.values q ++
+                  List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+            (R1Z.PV_OWNB_SnapshotValues.values keep (q.length - q.read) q)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                R1Z.PV_OWNB_Prefix.values q ++ _a =
+                  R1Z.PV_OWNB_Prefix.values q ++
+                    List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+              (R1Z.PV_OWNB_ValueFold.filter keep q.source q.read (q.length - q.read))))
+          (Eq.refl
+            (R1Z.PV_OWNB_Prefix.values q ++
+              List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))))⟩⟩
+'R1Z.PV_OWNB_SnapshotResult.complete' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_LinkCodec.unique : ∀ (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (a b : R1Z.PV_OWN_Link.Link),
+  R1Z.PV_OWNB_LinkCodec.NativeView c s a → R1Z.PV_OWNB_LinkCodec.NativeView c s b → a = b :=
+fun c s a b ha hb => R1Z.PV_OWNB_LinkUnique.unique a b (fun i => c.contents (s + i)) ha.right hb.right
+'R1Z.PV_OWNB_LinkCodec.unique' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_CursorExit.error_success : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.ok () →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e w h =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b :=
+                    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) x
+                      (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world;
+                  { outcome := b.outcome, world := b.world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e,
+                    world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div,
+                    world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls })
+              h)
+            (congrArg
+              (R1Z.PV_W_Threading.Run.mk (R1Z.PV_W_Threading.Outcome.fail e)
+                (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world)
+              (List.append_nil (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls))))
+        { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+          calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls })
+      (eq_self
+        { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+          calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }))
+'R1Z.PV_OWNB_CursorExit.error_success' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_CursorExit.error_failure : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e f : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.fail f →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.fail f, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e f w h =>
+  R1Z.PV_W_Threading.bind_fail (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q)
+    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) w f h
+'R1Z.PV_OWNB_CursorExit.error_failure' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_CursorExit.error_divergence : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.div →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.div, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e w h =>
+  R1Z.PV_W_Threading.bind_div (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q)
+    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) w h
+'R1Z.PV_OWNB_CursorExit.error_divergence' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_NoDoubleCleanup.no_second_call : ∀ {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    ∀ (s : S) (x : X),
+      have first := R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x };
+      (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q first.world).calls = [] :=
+fun {S X E} dealloc q h s x =>
+  have consumed := R1Z.PV_OWNB_CleanupConsumed.consumed dealloc q h s x;
+  have empty := fun w hz =>
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (congrArg R1Z.PV_W_Threading.Run.calls
+              (congrArg
+                (fun x =>
+                  match x with
+                  | none =>
+                    { outcome := R1Z.PV_W_Threading.Outcome.ok (),
+                      world :=
+                        { memory := R1Z.PV_OWN_Operations.take q.owner w.memory, allocator := w.allocator,
+                          extra := w.extra },
+                      calls := [] }
+                  | some t =>
+                    (fun t => R1Z.PV_OWN_Operations.dropVecPod dealloc t q.cell) t
+                      { memory := R1Z.PV_OWN_Operations.take q.owner w.memory, allocator := w.allocator,
+                        extra := w.extra })
+                hz)))
+          [])
+        (eq_self []));
+  empty (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world consumed
+'R1Z.PV_OWNB_NoDoubleCleanup.no_second_call' depends on axioms: [propext]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62597/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62597/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_StatementsAudit.olean", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_StatementsAudit.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:00.27", "peak_rss_kib": "490420", "swap": "0", "source_revision": "a90198df909e896270b6d3802558b7ade30e5c28", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
