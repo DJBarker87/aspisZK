@@ -29,7 +29,8 @@ theorem complete {A B : Type} (R : A → B → Prop)
     | exact PV_RunJoin_NativeResult55.error R _ _
     | apply PV_RunJoin_NativeResult55.tail; exact step _
     | apply PV_RunJoin_ResultRelation55.same_bind; intro value
-    | split)
+    | split
+    | cases value)
 
 #print axioms complete
 end R1Z.PV_RunJoin_NativeParametric55

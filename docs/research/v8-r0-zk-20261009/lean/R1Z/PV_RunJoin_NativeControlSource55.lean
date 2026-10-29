@@ -25,6 +25,7 @@ theorem complete
   repeat' (simp only [PV_RunJoin_NativeControl55.source,Aeneas.Std.uncurry,lift,bind_tc_ok]; first
     | apply PV_RunJoin_ResultBindEq55.complete; intro value
     | split
+    | cases value
     | rfl)
 #print axioms complete
 end R1Z.PV_RunJoin_NativeControlSource55
