@@ -8,7 +8,7 @@ open Aeneas Aeneas.Std Result ProverRwFull
 variable [ExternalTypes]
 
 /-- Diagnostic dictionary, not a deployed dictionary or a model witness. -/
-def rejecting (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def rejecting (ops : ExternalFuns) : ExternalFuns :=
   {ops with op12 := fun _ _ _ => .div}
 
 theorem no_produced (ops : ExternalFuns) :
@@ -37,8 +37,8 @@ attribute [local irreducible] PV_RunJoin_WeightInstalled46.selected PV_B2_F_RawN
 theorem selected_preserves_rejection (base : ExternalTypes)
     (heap : PV_RunJoin_WeightInstalled46.Heap) (box : PV_RunJoin_WeightInstalled46.Box)
     (ops : @ExternalFuns (PV_RunJoin_WeightInstalled46.types base)) :
-    @ExternalFuns.op12 _ (PV_RunJoin_WeightInstalled46.selected base heap box (rejecting ops)) =
-    @ExternalFuns.op12 _ (rejecting ops) := by
+    @ExternalFuns.op12 _ (PV_RunJoin_WeightInstalled46.selected base heap box (@rejecting (PV_RunJoin_WeightInstalled46.types base) ops)) =
+    @ExternalFuns.op12 _ (@rejecting (PV_RunJoin_WeightInstalled46.types base) ops) := by
   unfold PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_12]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
