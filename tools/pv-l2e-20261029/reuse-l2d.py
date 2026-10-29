@@ -10,7 +10,9 @@ import re
 imports=re.findall(r'^import (\S+)',b.decode(),re.M)
 external=json.load(open('evidence/pv-fib-20261029/prepare-PV_FIB_Restricted.json'))['result']['external_checks']
 auth={v['module']:v for v in external}
-assert all(i in auth for i in imports),('only external-import helpers supported',imports)
+for i in imports:
+ if i.startswith('PV_L2D_'):subprocess.run([sys.executable,__file__,i],check=True)
+ else:assert i in auth,('unresolved import',i)
 code=r'''
 import json,sys,pathlib,hashlib
 x=json.load(sys.stdin);H=pathlib.Path('/home/dombarker/project-offloads/codex-pv-l2e-20261029');P=pathlib.Path('/home/dombarker/project-offloads/codex-pv-l2d-20261028/embedding')
@@ -22,6 +24,8 @@ checks=[]
 for v in x['external']:
  q=resolve(ar,v['module']);r=resolve(br,v['module']);assert sha(q)==sha(r)==v['sha256'],v['module']
  checks.append(dict(module=v['module'],loaded=str(q),previous=str(r),sha256=v['sha256']))
+for m in x['imports']:
+ if m.startswith('PV_L2D_'):assert sha(resolve(ar,m))==sha(resolve(br,m)),('cohort edge',x['module'],m)
 q=pathlib.Path(x['object']['path']);assert sha(q)==x['object']['sha256']
 # Copy/link companions that Lean 4.32 requires, while retaining read-only source.
 out=H/'objects'/(x['module']+'.olean')
