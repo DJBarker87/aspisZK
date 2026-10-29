@@ -88,7 +88,7 @@ def PV_OWNM_Link_Transcript890 (reconstruct890 : Public → List Q) (i : Input) 
 /-- The owned context retains allocator error/abort/divergence and the post-world.
 Its association uses the raw source value at every transformed wire point.
 The trace is the whole point_claims execution's projection, including its first
-shape/null stop, for every value continuation. -/
+shape/null stop, at the associated raw-source continuation. -/
 def PV_OWNM_Link_OwnedPublicPlan {K W : Type} (decode : Q → K)
  (source222 : List Q → List Q → Result (Option Q))
  (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
@@ -97,7 +97,9 @@ def PV_OWNM_Link_OwnedPublicPlan {K W : Type} (decode : Q → K)
  (failures : List Bool) (i : Input) : Prop :=
  (∀ p ∈ wirePoints i.point, ∀ lane c, i.columns[lane]? = some c →
   native i p lane = owned i p lane (do let v ← source222 p c; ok (v.map decode))) ∧
- (∀ p lane value, (owned i p lane value).trace = plan isBoolean (calls wirePoints i) failures)
+ (∀ p ∈ wirePoints i.point, ∀ lane c, i.columns[lane]? = some c →
+  (owned i p lane (do let v ← source222 p c; ok (v.map decode))).trace =
+   plan isBoolean (calls wirePoints i) failures)
 
 /-- Conditional restoration composition. Equality of Execution preserves the
 complete Result and post-world. Both the value and resource laws refer to the
@@ -149,7 +151,8 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
    rw [commute p c (inputR.2.1 p hp).1 (inputR.2.1 p hp).2
     (inputR.2.2 c (List.mem_of_getElem? hc))]
  · intro pL hpL pR hpR laneL laneR cL cR hcL hcR
-   rw [ownedL.1 pL hpL laneL cL hcL,ownedR.1 pR hpR laneR cR hcR,ownedL.2,ownedR.2]
+   rw [ownedL.1 pL hpL laneL cL hcL,ownedR.1 pR hpR laneR cR hcR,
+    ownedL.2 pL hpL laneL cL hcL,ownedR.2 pR hpR laneR cR hcR]
    have callEq : calls wirePoints left = calls wirePoints right := by
     simp only [calls]
     rw [points,sameLengths]
