@@ -15181,3 +15181,24 @@ Rows removed: 0. Privacy target not yet established.
 ## D501 (Stream B) 2026-10-29 09:29 UTC: pv-mfd results (76 credited stale records all pass on current source; 31 remain); pv-mfe launched
 
 pv-mfd used all 100 focused invocations, with no proofs, native scopes, Kani or manifest replay; its receipt validation passed. It resolved 101 of the 132 undeterminable records (55 to A, all passing; 46 to B), so the totals are now 76 A, 657 B and 31 C. V243's 31-invocation chain ran first and passes on current pinned source with the recovered cache, and focused checks of V260, V195, V219 and V246 also pass, with standard axioms only. Across D497-D501, no credited closure checked against current source has failed. The 31 remaining C records need import-cohort provenance resolution and consumer rebuilds. It was merged into the candidate and pushed. pv-mfe (IDs 70300-70399; 80 focused invocations) resolves them and produces the final A, B and C table. Rows removed: 0. Privacy target not yet established.
+
+## D502 (owner decision, recorded by Stream B) 2026-10-29 09:34 UTC: owner approves the lead's recommendations
+
+The owner wrote: "approve your recs". The lead applies this exactly to the owner-packet items that carry a recorded lead recommendation. Full text is in design/PV-OWNER-PACKET-20261027.md, under "OWNER DECISIONS 2026-10-29".
+
+Adopted:
+- D474 (C), with the getrandom direct-syscall switch;
+- D478 (1), an event-retaining headline observer; the Result-only headline is kept as a historical, weaker statement;
+- D338/D342 (A), the zero-change honest-user domain;
+- D359 (A), throttled paired timing evidence for the ratio and the 15 s bound, with unthrottled repetition as later confirmation;
+- D381/D386, V242 and other lowering-only rows credited under V370 with the compiler cohort as a named boundary;
+- the D272/D276 release recipe and constant-time private-input decoding;
+- the D272/D283/D284 N7 raw-keypair custody patch.
+Not covered, and still open: SHA-NI versus a soft backend, and client scope. DOITM was decided earlier and its implementation remains blocked.
+
+Consequences:
+(i) The deployed client changes. The D474(C) patch, the getrandom backend, insecure-spend-fixture off, constant-time private-input decoding and the N7 patch are bundled into ONE client release change. It needs the three on-chain ELFs verified byte-identical, a new client pin, the fixture and differential gates, and a timing re-run under the D359(A) evidence rule. The level-3 binary audit (V373) and the manifest (V346) must be redone on the new client binary.
+(ii) The privacy target is now stated against the event-retaining headline. pv-evhd's draft is the starting point, and the observation decoder (pv-rj4idb) is installed against the new interface.
+(iii) V242 can be credited under V370 once its other evidence holds.
+(iv) The honest-user domain is fixed as "spends the shipped client prepares".
+Privacy target not yet established.
