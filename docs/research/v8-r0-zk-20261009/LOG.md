@@ -14605,3 +14605,13 @@ pv-rj4id launched (sparse worktree from 60a288b546; IDs 64400-64499; 100 Lean, 3
 (b) the op79 and op254 dictionary installations;
 (c) V047's equality, actual = PV_2TNV_PublicEncoding.x native_handle, applied through PV_RJDec_V047Native.consume.
 Each is to be stated so that step (4) can consume it unchanged. Rows removed at the endpoint: 0. Privacy target not yet established.
+
+## D447 (Stream B) 2026-10-29 02:59 UTC: pv-diag3 results; PrivacyR1HeadlineV2 cohort mismatch recorded for the final replay; pv-diag4 launched
+
+pv-diag3 used all 100 Lean attempts, 8 native scopes and no Kani. Every admission was compliant, with no void attempt, and peak RSS was 4.29 GB with zero swap. The final audit and replay passed with standard axioms only. It refined the diagnostic write, formatter, destruction, unwind, backtrace-selection and reporting models, and added conditional joint L1 and client-observer transport theorems that reuse the existing count laws. Its native controls (rustc 1.94.1, opt3, panic unwind, the exact deployed anyhow rlib) exercise partial, zero and failed writes, error drop before retry, deferred returned-error destruction, adapter errors, spurious-fmt panic and unwind drop. These are finite validation. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits in hand-written modules; one 9.1 MB source-bytes file, under the 20 MB rule; shipped-code diff empty. Merged into the candidate as 5a2df9074c and pushed. D348 remains unresolved: the concrete native leaf laws and their honest joint distribution are open.
+
+Two cohort problems blocked the full observer composition. Neither is a leak finding, and both bear on the final coherent replay:
+(1) R1Z.PrivacyR1HeadlineV2. The EJR-selected source has SHA 432109f0, while the cached importer cohort was built against source 0bb8dc74 (object 0cf5b991). Under (h5') the EJR-selected source is the authority, so every consumer compiled against the other source must be rebuilt against it before the final replay. This is added to the final-replay checklist.
+(2) ProverRwSampler.Funs has two tracked variants with no proved generation association. This is an (h7) case.
+
+pv-diag4 (branch codex/pv-diag4-20261029 from 5a2df9074c; IDs 64500-64599; 100 Lean, 40 native, 0 Kani) resolves both first. It rebuilds the V2 importer closure fresh from the EJR source, and applies (h7) to the sampler, recovering the chain or else running step 4 regeneration. It then continues with the native leaf laws, their joint L1 distribution and the client-observer composition. Rows removed: 0. Privacy target not yet established.
