@@ -19,8 +19,7 @@ def write (self : prover.Backend) (lane row : Usize) (value : W) : Result prover
 
 theorem complete [ExternalTypes] (self : prover.Backend) (p : Nat → Nat → W)
     (hp : self.messages=matrix p) (lane row : Usize) (hl : lane.val<29) (hr : row.val<1024) (v : W) :
-    write self lane row v=ok {self with messages:=matrix
-      (Function.update p lane.val (Function.update (p lane.val) row.val v))} := by
+    write self lane row v=ok {self with messages := matrix (Function.update p lane.val (Function.update (p lane.val) row.val v))} := by
   unfold write
   rw [hp,index_mut p lane hl]
   simp only [bind_tc_ok,Aeneas.Std.uncurry]
