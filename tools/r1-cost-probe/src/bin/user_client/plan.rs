@@ -1,4 +1,4 @@
-#[path="../devnet_spend/Client64_accounts.rs"]
+#[path="accounts.rs"]
 mod client64_accounts;
 use super::diagnostics::{anyhow,ensure,Result,err};
 use serde_json::{Value,json};
@@ -34,7 +34,7 @@ fn prove(_: &Value,_:Pubkey,_:Pubkey,_:&[Pubkey],_:Pubkey,_:Pubkey,_:Pubkey,_:Pu
 #[allow(clippy::too_many_arguments)]
 fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pubkey,vault:Pubkey,authority:Pubkey,token:Pubkey,system:Pubkey)->Result<Value>{
  use aspis_r1_cost_probe::RealR1_client;
- let mut accounts=client64_accounts::Accounts::parse(q)?;
+ let accounts=client64_accounts::Accounts::parse(q)?;
  use aspis_prover::{HOST_HASH,state_only_entropy::DurableStateOnlyMaskNonceStore};
  let started=Instant::now();let secrets=super::wallet::read(q)?;
  let k=secrets.input_key;let salt=secrets.input_salt;let asset=secrets.asset;
