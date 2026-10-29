@@ -22,7 +22,6 @@ theorem owned (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
     unfold PV_RunJoin_CircleRawScalar52.field.square_n_loop
     rw [ProverRw19LoopBind.loop_bind]
     simp only [PV_RunJoin_CircleRawScalar52.field.square_n_loop.body,hn,bind_tc_ok]
-    dsimp only
     simp only [bind_assoc_eq,bind_tc_ok]
     change (do let v ← PV_RunJoin_CircleRawScalar52.field.M31.mul a a
                PV_RunJoin_CircleRawScalar52.field.square_n_loop after v) = finite (n+1) a
@@ -47,7 +46,6 @@ theorem model (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
     unfold PV_RunJoin_CircleR72Raw52.field.square_n_loop
     rw [ProverRw19LoopBind.loop_bind]
     simp only [PV_RunJoin_CircleR72Raw52.field.square_n_loop.body,hn,bind_tc_ok]
-    dsimp only
     simp only [bind_assoc_eq,bind_tc_ok]
     change (do let v ← PV_RunJoin_CircleR72Raw52.field.M31.mul a a
                PV_RunJoin_CircleR72Raw52.field.square_n_loop after v) = PV_RunJoin_CircleNeutralFinite53.model (n+1) a
