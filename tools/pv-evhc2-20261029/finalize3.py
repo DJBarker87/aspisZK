@@ -4,14 +4,22 @@ import json,hashlib,time
 B=Path(__file__).resolve().parent;E=B/'resume3'
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 plan=json.load(open(B/'plan.json'));pre=json.load(open(E/'first-root-preflight.json'))
+for name,digest in json.load(open(B/'preflight.json'))['runners'].items():assert sha(B/name)==digest,('normal runner changed',name)
 receipts=[json.load(open(p)) for p in sorted(B.glob('lean-*/receipt.json')) if p.parent.name!='lean-71000']
 success=[r for r in receipts if r['exit_status']==0]
+for r in receipts:
+ assert set(r['source_hashes'].values())=={plan['sources'][r['module']]['sha256']},('source pin mismatch',r['attempt'])
+lean_hashes=sorted({r['deps_fingerprint']['lean_binary_sha256'] for r in receipts})
+assert len(lean_hashes)<=1,('toolchain drift',lean_hashes)
 complete={r['module'] for r in success}==set(plan['rebuild']) and len(success)==510 and len(receipts)==510 and not (E/'STOP.json').exists()
 roots=list(map(Path,pre['LEAN_PATH'].split(':')))
 def resolve(m):
  top=m.split('.')[0];root=next(r for r in roots if (r/top).is_dir() or (r/(top+'.olean')).is_file())
  return root/(m.replace('.','/')+'.olean')
-summary=dict(modules_rebuilt=len(success),modules_planned=510,mechanical_attempts=len(receipts),proof_attempts=0,precompiler_guard_refusals=[71001],prior_environment_failure=71000,compile_wall_seconds=sum(r['wall_seconds'] for r in receipts),peak_rss_kib=max([int(r['peak_rss_kib']) for r in receipts]+[0]),swaps=sum(int(r['swaps']) for r in receipts),source_revision='5098cacee75c803ba0486836a94c9894afbafab4',attempts=[r['attempt'] for r in receipts],consumer_compile_run=False,consumer_axioms='not run: aggregation not authorized',print_axioms={r['module']:r['print_axioms'] for r in receipts})
+summary=dict(modules_rebuilt=len(success),modules_planned=510,mechanical_attempts=len(receipts),proof_attempts=0,precompiler_guard_refusals=[71001],lean_binary_sha256=lean_hashes[0] if lean_hashes else None,prior_environment_failure=71000,reservation_refusals=[json.load(open(p)) for p in sorted(E.glob('refusal-*.json'))],compile_wall_seconds=sum(r['wall_seconds'] for r in receipts),peak_rss_kib=max([int(r['peak_rss_kib']) for r in receipts]+[0]),swaps=sum(int(r['swaps']) for r in receipts),source_revision='5098cacee75c803ba0486836a94c9894afbafab4',attempts=[r['attempt'] for r in receipts],consumer_compile_run=False,consumer_axioms='not run: aggregation not authorized',print_axioms={r['module']:r['print_axioms'] for r in receipts})
+summary['overlay_wall_seconds']=pre['wall_seconds']
+finished=[l for l in (E/'build.log').read_text().splitlines() if l.startswith('STAGE1 BUILDS COMPLETE ')]
+summary['build_loop_wall_seconds']=float(finished[-1].split()[-1]) if finished else None
 manifest=None
 if complete:
  assert all(r['swaps']=='0' and int(r['peak_rss_kib'])<=7*1024*1024 and r['wall_seconds']<600 for r in receipts)

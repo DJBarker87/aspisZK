@@ -1,0 +1,35 @@
+sources/R0Z/D12.lean:39:0: warning: automatically included section variable(s) unused in theorem `R0Z.D12.g_zero`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+sources/R0Z/D12.lean:86:0: warning: automatically included section variable(s) unused in theorem `R0Z.D12.nonRound_roundInclusion`:
+  [Fintype K]
+  [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K]
+  [BatchedLayer K Bat]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] [BatchedLayer K Bat] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+def R0Z.D12.MaskImage : {K CommitHandle : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            {Bat : Type} → [BatchedLayer K Bat] → HonestProver K → PackBasis F → Statement K CommitHandle → Prop :=
+fun {K CommitHandle} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} {Bat}
+    [BatchedLayer K Bat] h B x =>
+  (∀ (ch : Challenges K) (w : h.Instance) (n : N K F),
+      h.public w = x.1 → roundInclusion (g h B x w ch n) ∈ (A h.transport B ch ∘ₗ inlM).range) ∧
+    ∀ (ch : Challenges K) (w w' : h.Instance),
+      h.public w = x.1 → h.public w' = x.1 → c h B x w ch - c h B x w' ch ∈ (A h.transport B ch).range
+'R0Z.D12.M_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.D12.decomposition' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.D12.g_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.D12.other_components_affine' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.D12.hvzk_perfect_of_maskImage' depends on axioms: [propext, Classical.choice, Quot.sound]

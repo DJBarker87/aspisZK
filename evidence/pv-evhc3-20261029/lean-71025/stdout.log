@@ -1,0 +1,30 @@
+def R0Z.Z4Maps.roundMask_surjectivity : {K CommitHandle : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            {Bat : Type} → [BatchedLayer K Bat] → HonestProver K → PackBasis F → Statement K CommitHandle → Prop :=
+fun {K CommitHandle} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} {Bat}
+    [BatchedLayer K Bat] h B x =>
+  ∀ (ch : Challenges K),
+    Good ch →
+      ∀ (w : h.Instance) (n : N K F),
+        h.public w = x.1 → ∃ m, (silentRoundMaskMap h.transport B ch) m = roundProjection (sRem h B x w ch n)
+def R0Z.Z4Maps.c1_surjectivity : {K CommitHandle : Type} →
+  [inst : Field K] →
+    [Fintype K] →
+      [DecidableEq K] →
+        [Algebra (ZMod AspisCircleGroupOrder.P) K] →
+          {F : Subfield K} →
+            {Bat : Type} → [BatchedLayer K Bat] → HonestProver K → PackBasis F → Statement K CommitHandle → Prop :=
+fun {K CommitHandle} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K] {F} {Bat}
+    [BatchedLayer K Bat] h B x =>
+  ∀ (ch : Challenges K),
+    Good ch →
+      ∀ (w w' : h.Instance),
+        h.public w = x.1 →
+          h.public w' = x.1 → c1Projection (c h B x w ch - c h B x w' ch) ∈ (c1Map h.transport B ch).range
+'R0Z.Z4Maps.roundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.Z4Maps.silentRoundMaskMap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.Z4Maps.c1Map' depends on axioms: [propext, Classical.choice, Quot.sound]
