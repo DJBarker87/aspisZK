@@ -12,7 +12,7 @@ theorem op32 {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) :
     @ExternalFuns.op32 (types base) (opsNative base heap box ops runtime world) =
-      (residual base ops runtime world).op32 := by
+      @ExternalFuns.op32 (types base) (residual base ops runtime world) := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_32]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -48,7 +48,7 @@ theorem op257 {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) :
     @ExternalFuns.op257 (types base) (opsNative base heap box ops runtime world) =
-      ops.op257 := by
+      @ExternalFuns.op257 (types base) ops := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_257]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
