@@ -28,7 +28,7 @@ def transport(cmd,**kw):
   if k==10:raise RuntimeError('10 transport retries exhausted')
   print('transport unavailable; 60s retry cooldown',flush=True);time.sleep(60)
 def ssh(cmd):return transport(['ssh',host,cmd],text=True,capture_output=True)
-active=ssh("systemctl --user list-units --plain --no-legend --state=running 'pv*-lean-*'")
+active=ssh("systemctl --user list-units --plain --no-legend --state=running 'pv57-lean-*'")
 assert active.returncode==0 and not active.stdout.strip(),('own scope still running; collect completion before next launch',active.stdout,active.stderr)
 prior=list(E.glob('refusal-*.json'))
 if prior:
