@@ -18,9 +18,9 @@ variable (W : R1Wire K CH Aux) (Pr : R1ProverP K CH Aux F W) (R : RomModel W)
 theorem read (hin : RAddrIn W Pr R h B outputs x w) (hc : RCausal W Pr h B outputs x w)
     (s : Fin N → AttS (F:=F) W Pr)
     (hcoll : ∀ g g' : Fin (N*n1 W Pr),g'<g →
-      addrQ W Pr R N hN h B outputs x w s (posE W Pr N g')≠
-      addrQ W Pr R N hN h B outputs x w s (posE W Pr N g))
-    (hpub : ∀ g,addrQ W Pr R N hN h B outputs x w s (posE W Pr N g)≠W.pubBytes x)
+      addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g')≠
+      addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g))
+    (hpub : ∀ g,addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g)≠W.pubBytes x)
     (k : Fin N) (j : TRead) (parts : Slice (Slice U8))
     (address : ProverRwOuterFrames.flatten parts=addrQ W Pr R N hN h B outputs x w s (k,.inl j)) :
     hash W (toRP W Pr R h B outputs x w hN s).1 parts=
