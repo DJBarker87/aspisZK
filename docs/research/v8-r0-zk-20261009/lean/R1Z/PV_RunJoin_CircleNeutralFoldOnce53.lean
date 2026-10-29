@@ -11,7 +11,7 @@ theorem stable (s : U64) (hs : s.val < 4294967294) :
   apply UScalar.eq_of_val_eq
   rw [PV_RunJoin_CircleNeutralSubtract53.value,PV_RunJoin_CircleNeutralSubtract53.value]
   have hf : (fold s).val < 4294967296 := by rw [fold_val];omega
-  rw [down_val _ hs,down_val _ hf,fold_val]
+  rw [down_val (fold s) hf,down_val s (by omega),fold_val]
   split <;> split <;> omega
 
 theorem product_fold_bound (x : U64) (hx : x.val < 4611686014132420609) :
