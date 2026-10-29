@@ -83,6 +83,7 @@ theorem continuation_composes (base : ExternalTypes) (native : SourcePorts base)
 
 section
 variable (base : ExternalTypes)
+local instance : ExternalTypes := PV_B3P_Install227.Types base
 local notation "terminal" => transported_reference base
 /-- Exact bridge conclusion, specialized to the explicit transported reference.
 This is conditional composition only: no source binding credit is asserted. -/
