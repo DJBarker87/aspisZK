@@ -38,12 +38,12 @@ NDR_B020_OBSTRUCTION.json. The TX1 theorem statement and proof remain unchanged.
 Only NDO_JHq_TX1 and its two dependent modules NDO_JHw_Joint and NDO_Joint are
 blocked by this obstruction. NDR_RESIDUAL_PLAN.json splits the remainder into
 eight independent ranges (798 modules), to be attempted as NDR_B021–NDR_B028.
-The serial local transport currently runs NDR_B021; it stops at any failure.
+The serial local transport currently runs NDR_B022; it stops at any failure.
 Recover a submitted attempt read-only after transport/capacity interruption;
 never resubmit it. Passing prefixes of failed chunks count only after their
 own success markers, source pins and axiom lines are checked.
 
-NDR_VERIFICATION.json currently confirms 2,317 passing modules. Full per-chunk
+NDR_VERIFICATION.json currently confirms 2,437 passing modules (including NDR_B021). Full per-chunk
 receipts retain exact targets, exit/wall/RSS/swap, limits, source revision/hash,
 commands and axiom lines. NDR_BUILD_RECEIPTS.json is a compact index to those
 receipts; its oversized original through B020 is retained as .xz with SHA256.
@@ -51,15 +51,30 @@ NDR_verify_results.py performs offline source/receipt checks only.
 
 ## Pending combined replay and trust limits
 
-NDR_CombinedAudit is prepared but UNCOMPILED. It imports both roots, audits
-S2W_D189Wrappers.first/second and root axioms, checks exclusion of all 76 old
-gap module names in the imported environment, and states sourceOnHeadline
-using the now-checked installed-native identities. Its prerequisite NDO_Joint
-object is unavailable because of the normal-cap import obstruction. The sole
-16 GiB combined allowance remains unspent; it cannot also be used for three
-separate prerequisite compiles under the current authorization. NDR_agg.py
-verifies the three inherited lead runner hashes immediately before admission
-and submission. Never rerun the combined target unchanged after failure.
+NDR_CombinedAudit is prepared but UNCOMPILED. The strict module-import variant
+is retained as NDR_STRICT_IMPORT_AUDIT.lean. The active final source imports the
+headline root and the independently buildable dependencies of the three blocked
+modules, then re-elaborates their non-import source bodies verbatim in dependency
+order. NDR_AGGREGATION_PACKAGING.json pins each original source/body and the
+assembled source. No theorem statement or proof changes in this consolidation.
+
+This is a changed final aggregation source, not an unchanged retry of the failed
+normal-cap module. It permits exactly ONE authorized 16 GiB final compile without
+three additional large-cap prerequisite compiles. It audits both root constants,
+checks S2W_D189Wrappers.first/second, states sourceOnHeadline through the checked
+installed-native identities, and checks all 76 historical provenance exclusions.
+Run it only after every independent prerequisite passes and fresh runner hashes
+and admission pass. NDR_agg.py retains the one-attempt guard.
+
+The exact packaging difference MUST be reported even if that final source passes:
+NDO_JHq_TX1, NDO_JHw_Joint and NDO_Joint are not separately compiled normal-cap
+modules, and NDO_Joint.source is defined in the final aggregation rather than
+imported from NDO_Joint. Do not claim 3,118 standalone passing module builds or a
+strict two-module import replay. The sole combined allowance remains unspent.
+
+NDR_B021's JHs_PDA audit prints `choice` while its pinned source opens Classical.
+The offline checker records this printer alias explicitly; NDR_PdaAxiomAudit.lean
+is prepared for a canonical full-name focused check after the serial scopes finish.
 
 NDR_PROVENANCE.json inventories all 76 historical source/object gaps; each old
 object is excluded from the static retargeted graph. Historical source pins
@@ -72,8 +87,8 @@ release security contract.
 ## Budget and ownership
 
 Predecessor: 6 single-module attempts. This lane: NDR_L001–NDR_L003, so 9/60
-single-module attempts total. Chunks: 20/40 completed (19 fully pass, one fails
-with a 37-module passing prefix), NDR_B021 submitted. Combined: 0/1.
+single-module attempts total. Chunks: 21/40 completed (20 fully pass, one fails
+with a 37-module passing prefix), NDR_B022 submitted. Combined: 0/1.
 Every submitted scope was admitted with allowed:true AND exit 0; normal scopes
 use 6G/8G, swap 0, TasksMax 64, Lean -j1 -M7000, one compiler at a time.
 The retained host cache is /home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028;

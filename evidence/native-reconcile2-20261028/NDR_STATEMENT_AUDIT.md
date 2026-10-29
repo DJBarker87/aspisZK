@@ -50,4 +50,11 @@ The three installed-native helper proofs are factored, statement-for-statement,
 into NDR_HeadlineNatives.lean for a focused normal-cap check before the sole
 combined replay. NDR_run.py accepts the authorized NDR_ source prefix as well
 as the inherited NDO_ copies; the lead-owned runner and reservation scripts
-are unchanged. The helpers are prepared, not yet compiled.
+are unchanged. The helpers pass in NDR_L003 with standard axioms only.
+
+NDR_AGGREGATION_PACKAGING.json records the active final-source consolidation.
+Three normal-cap packaging modules remain failed/blocked; their exact non-import
+source bodies are reproduced in the sole final aggregation. This can validate
+the same declarations in one headline environment, but cannot be reported as
+three successful standalone normal-cap builds or a strict import of NDO_Joint.
+The strict import source is retained, uncompiled, for comparison.
