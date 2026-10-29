@@ -1,0 +1,45 @@
+START 68506 R1Z.PV_RunJoin_QueryRangeObstruction57
+DONE 68506 R1Z.PV_RunJoin_QueryRangeObstruction57 exit 1 wall 2.01 RSS 4476825600
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryRangeObstruction57.lean:47:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.append_query_openings (PV_RunJoin_QueryNativeObstruction56.buffer (runs i).plan.offOpenings bound)
+    (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p)
+    PV_RunJoin_QueryInRangeFailure57.queries p.folded_word.deref p.folded_salts
+in the target expression
+  prover.append_query_openings (PV_RunJoin_QueryNativeObstruction56.buffer (runs i).plan.offOpenings bound)
+      (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p) (poison p).queries
+      (poison p).folded_word.deref (poison p).folded_salts =
+    ok next
+
+I : Type
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+runs : I → Run
+i : I
+p : prover.Publication
+hf✝ : Fields (runs i) p
+bound : (runs i).plan.offOpenings ≤ Usize.max
+link : PV_RunJoin_PublishSkeleton57.PV_RunJoin_Link_QueryAppend runs
+fields : Fields (runs i) (poison p)
+next : alloc.vec.Vec U8
+right✝ :
+  bytes ↑next =
+    ProverCommitPublish43.queries (runs i).plan.queries
+      (bytes ↑(PV_RunJoin_QueryNativeObstruction56.buffer (runs i).plan.offOpenings bound))
+success :
+  prover.append_query_openings (PV_RunJoin_QueryNativeObstruction56.buffer (runs i).plan.offOpenings bound)
+      (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p) (poison p).queries
+      (poison p).folded_word.deref (poison p).folded_salts =
+    ok next
+hf :
+  prover.append_query_openings (PV_RunJoin_QueryNativeObstruction56.buffer (runs i).plan.offOpenings bound)
+      (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p)
+      PV_RunJoin_QueryInRangeFailure57.queries p.folded_word.deref p.folded_salts =
+    fail Error.arrayOutOfBounds
+⊢ False
+'R1Z.PV_RunJoin_QueryRangeObstruction57.poison' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryRangeObstruction57.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryRangeObstruction57.failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryRangeObstruction57.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

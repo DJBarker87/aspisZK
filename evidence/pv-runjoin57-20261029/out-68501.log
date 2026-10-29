@@ -1,0 +1,48 @@
+START 68501 R1Z.PV_RunJoin_QueryEmptyWords57
+DONE 68501 R1Z.PV_RunJoin_QueryEmptyWords57 exit 1 wall 1.88 RSS 4480909312
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryEmptyWords57.lean:15:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_QueryEmptyWords57.lane`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryEmptyWords57.lean:21:52: error: Tactic `rfl` failed: The left-hand side
+  alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) (broken tree).words 0#usize
+is not definitionally equal to the right-hand side
+  fail Error.panic
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+tree : host_tree.BinaryTree
+⊢ alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) (broken tree).words 0#usize =
+    fail Error.panic
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryEmptyWords57.lean:28:74: error: Expected type must not contain free variables
+  0#usize ≠ (broken tree).lanes.len
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryEmptyWords57.lean:25:83: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+tree : host_tree.BinaryTree
+u : aspis_core.r0.domain.FibreIndex
+opening : aspis_core.r0.wire.FibreOpening
+⊢ (do
+      let a ← if 0#usize = (broken tree).lanes.len then ok opening.values else fail Error.panic
+      let path ← host_commitment.opening_path (broken tree).time
+      let a4 ← opening.paths.update path (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8)))
+      ok { values := a, paths := a4 }) =
+    fail Error.panic
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryEmptyWords57.lean:29:4: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [show (̵0̵#̵u̵s̵i̵z̵e̵)̵≠̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵l̵e̵n̵(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲≠̲ ̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲l̲e̲n̲ (broken tree).lanes from by decide, i̵f̵_̵f̵a̵l̵s̵e̵,̵l̵a̵n̵e̵,̵w̵o̵r̵d̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵]̵l̲a̲n̲e̲,̲ ̲w̲o̲r̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryEmptyWords57.broken' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryEmptyWords57.lane' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryEmptyWords57.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryEmptyWords57.fill' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
