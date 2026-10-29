@@ -481,3 +481,20 @@ statement and proof are unchanged; only that diagnostic marker is added.
 NDR_B027_OBSTRUCTION.json records the failed source hashes, import-union shape,
 resources and focused result. The final aggregation contains this body and
 its dependent TX2 assembly verbatim, alongside the three earlier thin joins.
+
+## Final validation
+
+NDR_A001 passes the sole final aggregation: exit 0, 5.142313743 seconds,
+8,282,464 KiB peak RSS, swap 0, source revision
+`6a157d7757046c5381438a07888844117957d997`. All 11 printed axiom lines contain
+only propext, Classical.choice, Quot.sound, including both roots,
+sourceOnHeadline and every consolidated thin theorem. The three generic tree
+binders and original joint runtime premise are checked explicitly. Both roots
+directly use the same S2W_D189Wrappers.first/second declarations; the checked
+installed-native equalities place the witness over the headline's FIp/IDa SDK.
+
+The five thin source bodies are kernel-checked in NDR_CombinedAudit, with exact
+non-import bytes preserved, rather than five successful standalone normal-cap
+module builds. Their source statements/proofs are unchanged. No new arbitrary
+non-None execution transport, runtime law, native-code refinement, import-wide
+axiom discharge or full release security conclusion is claimed.

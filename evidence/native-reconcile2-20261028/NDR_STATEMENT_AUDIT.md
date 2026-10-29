@@ -62,3 +62,11 @@ The strict import source is retained, uncompiled, for comparison.
 NDR_L004 confirms all nine JHs_PDA axiom lines with full names: the previously
 shortened `choice` is exactly Classical.choice. NDR_L005 isolates the second
 import-only memory obstruction before any proof commands; it adds no hypothesis.
+
+Final result: NDR_A001 exits 0. The two roots and sourceOnHeadline are checked
+in one kernel environment with only standard reachable axioms. The exact
+16,057-module import-name header matches NDR_FINAL_IMPORT_PLAN.json; all 76
+historical gap objects are absent. NDR_FINAL_RESULT.json records metrics and
+limits. This is the five-body aggregation mode, with the standalone/module-import
+packaging gap retained explicitly. All runtime/native/contract qualifications
+above remain; the release security target is not established by this result.
