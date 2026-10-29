@@ -1,0 +1,26 @@
+import PV_DIAG6_Prefix
+import R0Z.FsAbortBounds
+/-! Original-L1-coordinate handoff, using the existing finite law/mass
+operators. No new coins, bad event, epsilon or trust field. Native event,
+terminal and prefix-family laws remain explicit P hypotheses. -/
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG6
+open PV_DIAG3 R0Z R0Z.FsAbortBounds
+variable {S A W R P C O : Type}
+def diagnosticPieces (count : Nat) (x : Execution S A) := (count,x.events,x.exit)
+theorem pieces_of_joint_execution (rel : S → S → Prop) (a b : Execution S A)
+ (m n : Nat) (hc : m = n) (h : Coupled rel a b) :
+ diagnosticPieces m a = diagnosticPieces n b := by
+ unfold diagnosticPieces
+ rw [hc,h.1,h.2.2]
+#print axioms pieces_of_joint_execution
+theorem pieces_iff (a b : Execution S A) (m n : Nat) :
+ diagnosticPieces m a = diagnosticPieces n b ↔ m = n ∧ a.events = b.events ∧ a.exit = b.exit := by
+ constructor
+ · intro h
+   exact ⟨congrArg (fun p => p.1) h,congrArg (fun p => p.2.1) h,congrArg (fun p => p.2.2) h⟩
+ · rintro ⟨hc,he,ht⟩
+   unfold diagnosticPieces; rw [hc,he,ht]
+#print axioms pieces_iff
+end PV_DIAG6
