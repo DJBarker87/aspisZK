@@ -28,17 +28,17 @@ is not a CLOSED native root and must not be booked as one. -/
 theorem validator_observation {State Effect : Type}
     (s : NBN_StatementResult.Statement) (st : State) (events : List Effect)
     (native : Observation (Result (core.result.Result Unit NBN_StatementResult.Error)) State Effect)
-    (rootPhysicalInterpretation : native = ⟨validatorReference s,st,events⟩) :
+    (sameReferenceObservation : native = ⟨validatorReference s,st,events⟩) :
     native = ⟨pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s,st,events⟩ := by
-  rw [rootPhysicalInterpretation]
+  rw [sameReferenceObservation]
   exact congrArg (fun r => Observation.mk r st events) (NED_CodecComposition.validator s)
 
 theorem encoder_observation {State Effect : Type}
     (s : NBN_StatementResult.Statement) (st : State) (events : List Effect)
     (native : Observation NBN_StatementEncoderSummary.BytesResult State Effect)
-    (rootPhysicalInterpretation : native = ⟨encoderReference s,st,events⟩) :
+    (sameReferenceObservation : native = ⟨encoderReference s,st,events⟩) :
     native = ⟨NBN_StatementEncoderSummary.observe (AspisS6OuterNativeInstalled.encode s),st,events⟩ := by
-  rw [rootPhysicalInterpretation]
+  rw [sameReferenceObservation]
   exact congrArg (fun r => Observation.mk r st events) (NED_CodecComposition.encoder s)
 
 #print axioms validator_observation

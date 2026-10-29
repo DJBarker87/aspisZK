@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,hashlib,time,resource,sys
 E=Path(__file__).resolve().parent;R=E.parent.parent
-name,script=sys.argv[1:];assert script in ['NED_validate.py','NED_tests.py','NED_check_contract_patch.py']
+name,script=sys.argv[1:];assert script in ['NED_validate.py','NED_tests.py','NED_check_contract_patch.py','NED_validate_native_windows.py']
 start=time.monotonic();cmd=['python3',str(E/script)]
 with (E/(name+'.stdout.log')).open('w') as out,(E/(name+'.stderr.log')).open('w') as err:r=subprocess.run(cmd,stdout=out,stderr=err,cwd=R)
 u=resource.getrusage(resource.RUSAGE_CHILDREN)

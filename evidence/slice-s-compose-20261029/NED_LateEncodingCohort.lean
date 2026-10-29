@@ -1,0 +1,47 @@
+import NED_RawLateSource
+set_option autoImplicit false
+noncomputable section
+namespace NED_LateEncodingCohort
+open Aeneas Aeneas.Std Result NED_LateCarriers NED_LateValidatorCohorts NED_ErrorCarriers
+open AspisR1AdapterReconstruct
+open aspis_statement.pool_v1.pair_tree_profile
+
+theorem result (s : TLate) (out : Slice U8) :
+    encode_pool_v1_pair_late_public_statement_v1 (toRawLate s) out =
+    NED_LiveEncodingCohort.mapStateOuter toRawPoolV1PairLatePublicStatementErrorV1
+      (AspisR1TerminalDecoder.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1 s out) := by
+  rw [NBN_LateResult.source]
+  by_cases size : out.length = 1520
+  · rw [if_neg (not_not.mpr size)]
+    by_cases index : U64.checked_add s.live_snapshot.next_pair_index 1#u64 =
+        some s.candidate_afterstate.next_pair_index
+    · rw [if_neg (not_not.mpr index),NED_RawLateSource.factor s out size index]
+      have fill : core.slice.Slice.fill core.clone.CloneU8 out 0#u8 = ok NBN_LateResult.zero := by
+        rw [NBK_Fill.source]
+        congr 1
+        apply Subtype.ext
+        change List.replicate out.length 0#u8 = List.replicate 1520 0#u8
+        rw [size]
+      have zero_size : NBN_LateResult.zero.length = 1520 := by
+        simp only [NBN_LateResult.zero,Slice.length,Array.to_slice,Array.repeat_val,List.length_replicate]
+        rfl
+      rw [fill]
+      simp only [bind_tc_ok]
+      rw [NED_RawLatePrepare.exact NBN_LateResult.zero zero_size]
+      change NED_RawLateTail.run s NBN_LateResult.header = _
+      rw [NED_RawLateTail.exact s _ NBN_LateResult.header_length]
+      rfl
+    · rw [if_pos index]
+      have len : Slice.len out = 1520#usize := by scalar_tac
+      simp [encode_pool_v1_pair_late_public_statement_v1,NED_LateEncodingConstants.size,
+        NED_LateCarrierFields.live,NED_LateCarrierFields.after,NED_LateCarrierFields.live_index,
+        NED_LateCarrierFields.after_index,len,lift,NED_RawLatePreflight.option_ne,index,
+        NED_LiveEncodingCohort.mapStateOuter,mapResult,toRawPoolV1PairLatePublicStatementErrorV1]
+  · rw [if_pos size]
+    have guard : (Slice.len out != 1520#usize) = true := by scalar_tac
+    simp only [encode_pool_v1_pair_late_public_statement_v1,NED_LateEncodingConstants.size,
+      bind_tc_ok,guard,if_true,NED_LiveEncodingCohort.mapStateOuter,mapResult,
+      toRawPoolV1PairLatePublicStatementErrorV1]
+
+#print axioms result
+end NED_LateEncodingCohort

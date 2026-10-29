@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,tomllib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose-20261029';H='dombarker@100.108.41.90'
 erasure=json.loads((E/'NED_WINDOW_ERASURE.json').read_text());assert erasure['erasure_exact'] and erasure['patch_sha256']==hashlib.sha256((E/'NED_call_windows.patch').read_bytes()).hexdigest()
+binding_erasure=json.loads((E/'NED_BINDING_ERASURE.json').read_text());assert binding_erasure['erasure_exact'] and binding_erasure['patch_sha256']==hashlib.sha256((E/'NED_bindings.patch').read_bytes()).hexdigest()
+assert binding_erasure['extra_patch_sha256']==hashlib.sha256((E/'NED_binding_extra.patch').read_bytes()).hexdigest()
 a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NED_M' if kind=='metadata' else 'NED_K')
 assert not (E/a).exists();assert len(list(E.glob('NED_K*/receipt.json')))<40
 active=E/'NED_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
@@ -42,7 +44,7 @@ for n in features:visit(n)
 native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NED_src/crates/aspis-statement/Cargo.toml','--target-dir',B+'/NED_target','--lib','--features',','.join(features),'-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse']
 if kind=='metadata':native=[]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NED_tmp')
-files={'NED_call_windows.patch':(E/'NED_call_windows.patch').read_text(),'NED_kani_gate.py':(E/'NED_kani_gate.py').read_text(),'NED_contract_controls.patch':(E/'NED_contract_controls.patch').read_text(),'NED_KMX_copy_stubs.patch':(E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_text(),'NED_RUST_SOURCE_PINS.json':(E/'NED_RUST_SOURCE_PINS.json').read_text(),'NED_FROZEN_GRAPH.json':subprocess.check_output(['git','show','HEAD:evidence/leaf-p6-11-20261027/LPm_frozen_graph.json'],text=True)}
+files={'NED_binding_extra.patch':(E/'NED_binding_extra.patch').read_text(),'NED_bindings.patch':(E/'NED_bindings.patch').read_text(),'NED_call_windows.patch':(E/'NED_call_windows.patch').read_text(),'NED_kani_gate.py':(E/'NED_kani_gate.py').read_text(),'NED_contract_controls.patch':(E/'NED_contract_controls.patch').read_text(),'NED_KMX_copy_stubs.patch':(E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_text(),'NED_RUST_SOURCE_PINS.json':(E/'NED_RUST_SOURCE_PINS.json').read_text(),'NED_FROZEN_GRAPH.json':subprocess.check_output(['git','show','HEAD:evidence/leaf-p6-11-20261027/LPm_frozen_graph.json'],text=True)}
 cfg=dict(attempt=a,kind=kind,module=harness,command=['python3','NED_kani_gate.py',a+'.json'],native_command=native,sources=list(files)+['NED_RUST_SHA256.json','NED_src/Cargo.lock','NED_src/crates/aspis-statement/src/lib.rs','NED_src/crates/aspis-statement/src/NED_controls.rs'],env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(frozen_revision=rev,frozen_source_pinset='NED_RUST_SOURCE_PINS.json'),statement_features=','.join(features),required_statement_features=sorted(closure),expected_time='frozen dependency/feature validation, optimized compilation, then named call-window or interface-fidelity step; no native field arithmetic or protocol loop',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 files[a+'.json']=json.dumps(cfg,indent=1)
 code=f'''from pathlib import Path
@@ -71,6 +73,19 @@ if not (s/'crates/aspis-statement/src/pool_v1/NED_windows.rs').exists():
  subprocess.run(['git','apply',str(b/'NED_call_windows.patch')],cwd=s,check=True,capture_output=True)
  out={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
  (b/'NED_RUST_SHA256.json').write_text(json.dumps(out,indent=1)+'\\n')
+if not (s/'crates/aspis-statement/src/pool_v1/NED_bindings.rs').exists():
+ before=json.loads((b/'NED_RUST_SHA256.json').read_text())
+ assert all(hashlib.sha256((s/n).read_bytes()).hexdigest()==h for n,h in before.items()),'STOP binding pre-update source drift'
+ subprocess.run(['git','apply',str(b/'NED_bindings.patch')],cwd=s,check=True,capture_output=True)
+ out={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+ (b/'NED_RUST_SHA256.json').write_text(json.dumps(out,indent=1)+'\\n')
+if not (b/'NED_EXTRA_APPLIED').exists():
+ before=json.loads((b/'NED_RUST_SHA256.json').read_text())
+ assert all(hashlib.sha256((s/n).read_bytes()).hexdigest()==h for n,h in before.items()),'STOP extra pre-update source drift'
+ subprocess.run(['git','apply',str(b/'NED_binding_extra.patch')],cwd=s,check=True,capture_output=True)
+ out={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+ (b/'NED_RUST_SHA256.json').write_text(json.dumps(out,indent=1)+'\\n')
+ (b/'NED_EXTRA_APPLIED').write_text(hashlib.sha256((b/'NED_binding_extra.patch').read_bytes()).hexdigest())
 print((b/'NED_RUST_SHA256.json').read_text())
 '''
 r=ssh('python3',code);(E/(a+'-upload.log')).write_text(r.stderr);assert r.returncode==0,r.stderr

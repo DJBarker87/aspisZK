@@ -1,0 +1,242 @@
+NED_generated/NED_RawLateSource.lean:24:2: error: Tactic `rfl` failed: The left-hand side
+  if false = true then ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, out)
+  else do
+    let b ←
+      core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+          (some s.candidate_afterstate.next_pair_index) (some s.candidate_afterstate.next_pair_index)
+    if b = true then ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, out)
+      else do
+        let output1 ← core.slice.Slice.fill core.clone.CloneU8 out 0#u8
+        let (s, index_mut_back) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) output1
+              { «end» := 8#usize }
+        let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+        let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+        let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+        let (s3, index_mut_back1) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output4
+              { start := 10#usize, «end» := 12#usize }
+        let s5 ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+              (core.num.U16.to_le_bytes
+                  (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES)).to_slice
+        let (s6, index_mut_back2) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back1 s5)
+              { start := 12#usize, «end» := 16#usize }
+        let s8 ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+              (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES)).to_slice
+        let (s9, index_mut_back3) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back2 s8)
+              { start := 16#usize, «end» := 20#usize }
+        let i4 ← aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+        let s11 ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+              (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 i4)).to_slice
+        let (s12, index_mut_back4) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back3 s11)
+              { start := 20#usize, «end» := 24#usize }
+        let s14 ←
+          core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+              (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+        let i7 ← 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+        let (s15, index_mut_back5) ←
+          core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back4 s14)
+              { start := 32#usize, «end» := i7 }
+        let (r, s16) ← encode_pool_v1_pair_live_snapshot_v1 (toRawSnapshot s.live_snapshot) s15
+        let r1 ←
+          core.result.Result.map_err
+              encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+              r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue a => do
+            let r2 ←
+              aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+                  (toRawAfter s.candidate_afterstate)
+            let r3 ←
+              core.result.Result.map_err
+                  encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let (s17, index_mut_back6) ←
+                  core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                      (index_mut_back5 s16) { start := i7 }
+                let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 val.to_slice
+                ok (core.result.Result.Ok (), index_mut_back6 s19)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r4 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                ok (r4, index_mut_back5 s16)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r4 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+            ok (r4, index_mut_back5 s16)
+is not definitionally equal to the right-hand side
+  do
+    let filled ← core.slice.Slice.fill core.clone.CloneU8 out 0#u8
+    NED_RawLatePrepare.run filled (NED_RawLateFactor.raw s)
+
+s : TLate
+out : Slice U8
+size : out.length = 1520
+index : s.live_snapshot.next_pair_index.checked_add 1#u64 = some s.candidate_afterstate.next_pair_index
+len : out.len = 1520#usize
+tail_eq : NED_RawLateFactor.raw s = NED_RawLateTail.run s
+⊢ (if false = true then ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.WrongLength, out)
+    else do
+      let b ←
+        core.cmp.PartialEq.ne.trait_default (core.option.Option.Insts.CoreCmpPartialEqOption core.cmp.PartialEqU64)
+            (some s.candidate_afterstate.next_pair_index) (some s.candidate_afterstate.next_pair_index)
+      if b = true then ok (core.result.Result.Err PoolV1PairLatePublicStatementErrorV1.AfterstateIndexMismatch, out)
+        else do
+          let output1 ← core.slice.Slice.fill core.clone.CloneU8 out 0#u8
+          let (s, index_mut_back) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeToUsizeSlice U8) output1
+                { «end» := 8#usize }
+          let s2 ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 s POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC.to_slice
+          let output3 ← (index_mut_back s2).update 8#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION
+          let output4 ← output3.update 9#usize POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT
+          let (s3, index_mut_back1) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) output4
+                { start := 10#usize, «end» := 12#usize }
+          let s5 ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 s3
+                (core.num.U16.to_le_bytes
+                    (UScalar.cast UScalarTy.U16 POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES)).to_slice
+          let (s6, index_mut_back2) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back1 s5)
+                { start := 12#usize, «end» := 16#usize }
+          let s8 ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 s6
+                (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES)).to_slice
+          let (s9, index_mut_back3) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back2 s8)
+                { start := 16#usize, «end» := 20#usize }
+          let i4 ← aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES
+          let s11 ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 s9
+                (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 i4)).to_slice
+          let (s12, index_mut_back4) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back3 s11)
+                { start := 20#usize, «end» := 24#usize }
+          let s14 ←
+            core.slice.Slice.copy_from_slice core.marker.CopyU8 s12
+                (core.num.U32.to_le_bytes (UScalar.cast UScalarTy.U32 1520#usize)).to_slice
+          let i7 ← 32#usize + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+          let (s15, index_mut_back5) ←
+            core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) (index_mut_back4 s14)
+                { start := 32#usize, «end» := i7 }
+          let (r, s16) ← encode_pool_v1_pair_live_snapshot_v1 (toRawSnapshot s.live_snapshot) s15
+          let r1 ←
+            core.result.Result.map_err
+                encode_pool_v1_pair_late_public_statement_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLiveSnapshotErrorV1PoolV1PairLatePublicStatementErrorV1
+                r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let r2 ←
+                aspis_statement.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+                    (toRawAfter s.candidate_afterstate)
+              let r3 ←
+                core.result.Result.map_err
+                    encode_pool_v1_pair_late_public_statement_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairLatePublicStatementErrorV1
+                    r2 ()
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val => do
+                  let (s17, index_mut_back6) ←
+                    core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
+                        (index_mut_back5 s16) { start := i7 }
+                  let s19 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s17 val.to_slice
+                  ok (core.result.Result.Ok (), index_mut_back6 s19)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r4 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                        (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+                  ok (r4, index_mut_back5 s16)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r4 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                    (core.convert.FromSame PoolV1PairLatePublicStatementErrorV1) residual
+              ok (r4, index_mut_back5 s16)) =
+    do
+    let filled ← core.slice.Slice.fill core.clone.CloneU8 out 0#u8
+    NED_RawLatePrepare.run filled (NED_RawLateFactor.raw s)
+NED_generated/NED_RawLateSource.lean:17:68: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [encode_pool_v1_pair_late_public_statement_v1,
+  ̵  ̵ ̵ ̵NED_LateEncodingConstants.size,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲len, ̲bne_self_eq_false,i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live, ̲NED_LateCarrierFields.after,
+      NED_LateCarrierFields.live_index, ̲NED_LateCarrierFields.after_index,
+  ̵  ̵ ̵ ̵lift,
+  ̲ ̲ ̲ ̲ ̲NBK_LatePreflight.option_ne, ̲index, ̲ne_eq, ̲not_true_eq_false, ̲decide_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawLateSource.lean:20:9: warning: This simp argument is unused:
+  NBK_LatePreflight.option_ne
+
+Hint: Omit it from the simp argument list.
+  simp only [encode_pool_v1_pair_late_public_statement_v1, N̵E̵D̵_̵L̵a̵t̵e̵E̵n̵c̵o̵d̵i̵n̵g̵C̵o̵n̵s̵t̵a̵n̵t̵s̵.̵s̵i̵z̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵e̵n̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵D̵_̵L̵a̵t̵e̵C̵a̵r̵r̵i̵e̵r̵F̵i̵e̵l̵d̵s̵.̵l̵i̵v̵e̵,̵N̵E̵D̵_̵L̵a̵t̵e̵C̵a̵r̵r̵i̵e̵r̵F̵i̵e̵l̵d̵s̵.̵a̵f̵t̵e̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵D̵_̵L̵a̵t̵e̵C̵a̵r̵r̵i̵e̵r̵F̵i̵e̵l̵d̵s̵.̵l̵i̵v̵e̵_̵i̵n̵d̵e̵x̵,̵N̵E̵D̵_̵L̵a̵t̵e̵C̵a̵r̵r̵i̵e̵r̵F̵i̵e̵l̵d̵s̵.̵a̵f̵t̵e̵r̵_̵i̵n̵d̵e̵x̵,̵
+  ̵ ̵ ̵ ̵ ̵l̵i̵f̵t̵,̵N̵B̵K̵_̵L̵a̵t̵e̵P̵r̵e̵f̵l̵i̵g̵h̵t̵.̵o̵p̵t̵i̵o̵n̵_̵n̵e̵,̵i̵n̵d̵e̵x̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]̵N̲E̲D̲_̲L̲a̲t̲e̲E̲n̲c̲o̲d̲i̲n̲g̲C̲o̲n̲s̲t̲a̲n̲t̲s̲.̲s̲i̲z̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲e̲n̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲C̲a̲r̲r̲i̲e̲r̲F̲i̲e̲l̲d̲s̲.̲l̲i̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲C̲a̲r̲r̲i̲e̲r̲F̲i̲e̲l̲d̲s̲.̲a̲f̲t̲e̲r̲,̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲C̲a̲r̲r̲i̲e̲r̲F̲i̲e̲l̲d̲s̲.̲l̲i̲v̲e̲_̲i̲n̲d̲e̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲E̲D̲_̲L̲a̲t̲e̲C̲a̲r̲r̲i̲e̲r̲F̲i̲e̲l̲d̲s̲.̲a̲f̲t̲e̲r̲_̲i̲n̲d̲e̲x̲,̲ ̲l̲i̲f̲t̲,̲ ̲i̲n̲d̲e̲x̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawLateSource.lean:20:43: warning: This simp argument is unused:
+  ne_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [encode_pool_v1_pair_late_public_statement_v1,
+  ̵  ̵ ̵ ̵NED_LateEncodingConstants.size,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲len, ̲bne_self_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live_index,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after_index,
+  ̵  ̵ ̵ ̵lift, ̲NBK_LatePreflight.option_ne, ̲index, ̲ne̵_̵e̵q̵,̵n̵ot_true_eq_false,
+  ̲ ̲ ̲ ̲ ̲decide_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawLateSource.lean:20:49: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [encode_pool_v1_pair_late_public_statement_v1,
+  ̵  ̵ ̵ ̵NED_LateEncodingConstants.size,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲len, ̲bne_self_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live_index,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after_index,
+  ̵  ̵ ̵ ̵lift, ̲NBK_LatePreflight.option_ne, ̲index, ̲ne_eq,n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲decide_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_RawLateSource.lean:20:67: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp only [encode_pool_v1_pair_late_public_statement_v1,
+  ̵  ̵ ̵ ̵NED_LateEncodingConstants.size,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲len, ̲bne_self_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after,
+  ̵  ̵ ̵ ̵NED_LateCarrierFields.live_index,
+  ̲ ̲ ̲ ̲ ̲NED_LateCarrierFields.after_index,
+  ̵  ̵ ̵ ̵lift, ̲NBK_LatePreflight.option_ne, ̲index, ̲ne_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_RawLateSource.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

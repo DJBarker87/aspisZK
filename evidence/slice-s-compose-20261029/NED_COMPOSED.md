@@ -122,3 +122,35 @@ NED_AfterEncodingCohort is WIP: the full total result transport requires a
 symbolic continuation proof; L090–096 recursion-depth elaboration failures
 and diagnostic goals are excluded. L099 exposed a tactic syntax error after
 the first symbolic bind split. No timeout/memory-killed job was rerun.
+
+## Retired generic wrapper (stage 6 correction)
+
+NED_NativeRoots_EXCLUDED.lean.txt is NOT an active root theorem module.
+Its uninstantiated record fields assumed caller output equalities; option A
+does not instantiate them or turn them into a native source bridge. It was
+never credited and is excluded from composition certificates and the final
+active-module audit. The L041 receipt is retained as historical evidence only.
+The ordinary mathematical equality transports in NED_ExecutionComposition
+use an explicit sameReferenceObservation argument, not a claim of physical
+interpretation. They supply no caller fact or native closure by themselves.
+
+L108 and L110 instead prove total emitted afterstate/live encoding transport
+by reusing named symbolic bounded-store and frontier-fold theorems. L111
+proves the raw late-tail Result and updated slice (including both error
+paths) against the adopted cohort. All have standard axioms only.
+
+Stage 6: NED_LateEncodingCohort.result (L123) is the full total raw late
+encoder transport, preserving error tags and the updated slice on all paths.
+It uses L108 afterstate encoding, L110 live encoding, L111 raw late tail,
+L116 raw map-error factor, L118 symbolic header, L120 raw Option comparison
+and L121 source factor. Every accepted audit has standard axioms only.
+K024/K025 cover all six public tuple coordinates; K026/K027 cover M31's
+four raw-word bytes (including noncanonical words); K028/K029 cover original
+common-field address; K030/K031 cover statement variant kind. Each positive
+has a matching failing control, frozen graph/lock, exact KMX patch and scopes.
+K032 payment-kind positive is checked; its control is the next native step.
+Native caller Result/order validation and raw validator composition remain
+work in progress. No composed NDT row is promoted. Retired generic root
+wrappers are not native evidence. Full-source receipts remain individual;
+NED_ATTEMPTS.jsonl is now a compact index, with an xz -6 archival full log
+and both compressed and uncompressed SHA256 records.

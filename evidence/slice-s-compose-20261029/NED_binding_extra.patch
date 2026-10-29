@@ -1,0 +1,46 @@
+--- a/crates/aspis-statement/src/pool_v1/NED_bindings.rs
++++ b/crates/aspis-statement/src/pool_v1/NED_bindings.rs
+@@ -215,3 +215,43 @@
+ #[kani::stub(pool_v1_pair_forest_output_lane_v1,lane)]
+ #[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late)]
+ fn validator_control_negative(){validator_control(true);}
++
++fn m31_bytes(negative:bool){let word:u32=kani::any();
++ check(M31(word).to_le_bytes()==word.to_le_bytes(),negative);
++ kani::cover!(word>=P,"NED noncanonical raw words included");
++}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn m31_bytes_positive(){m31_bytes(false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn m31_bytes_negative(){m31_bytes(true);}
++
++// Address-only domain probe: no equality of copied data is asserted.
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn nullifier_pointers(){let s=NED_statement();
++ let expected=match &s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>&public.nullifier,
++ PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>&public.nullifier};
++ assert!(core::ptr::eq(s.nullifier(),expected));
++ let payment=match s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public),
++ PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>PoolV1PairForestTerminalPaymentV1::Withdrawal(public)};
++ let expected_payment=match &payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>&public.nullifier,
++ PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>&public.nullifier};
++ assert!(core::ptr::eq(payment.nullifier(),expected_payment));covers(&s);
++}

@@ -1,0 +1,28 @@
+import NED_RawLatePrepare
+import NED_RawLatePreflight
+set_option autoImplicit false
+noncomputable section
+namespace NED_RawLateSource
+open Aeneas Aeneas.Std Result NED_LateCarriers
+open AspisR1AdapterReconstruct
+open aspis_statement.pool_v1.pair_tree_profile
+
+theorem factor (s : TLate) (out : Slice U8) (size : out.length = 1520)
+    (index : U64.checked_add s.live_snapshot.next_pair_index 1#u64 =
+      some s.candidate_afterstate.next_pair_index) :
+    encode_pool_v1_pair_late_public_statement_v1 (toRawLate s) out =
+      (do let filled ← core.slice.Slice.fill core.clone.CloneU8 out 0#u8
+          NED_RawLatePrepare.run filled (NED_RawLateTail.run s)) := by
+  have len : Slice.len out = 1520#usize := by scalar_tac
+  simp only [encode_pool_v1_pair_late_public_statement_v1,
+    NED_LateEncodingConstants.size,bind_tc_ok,len,bne_self_eq_false,if_false,
+    NED_LateCarrierFields.live,NED_LateCarrierFields.after,
+    NED_LateCarrierFields.live_index,NED_LateCarrierFields.after_index,
+    lift,NED_RawLatePreflight.option_ne,index,ne_eq,not_true_eq_false,decide_false,Bool.false_eq_true]
+  have tail_eq : NED_RawLateFactor.raw s = NED_RawLateTail.run s :=
+    funext (NED_RawLateFactor.raw_eq s)
+  rw [← tail_eq]
+  rfl
+
+#print axioms factor
+end NED_RawLateSource

@@ -57,3 +57,19 @@ NED_AfterEncodingCohort is WIP: the full total result transport requires a
 symbolic continuation proof; L090–096 recursion-depth elaboration failures
 and diagnostic goals are excluded. L099 exposed a tactic syntax error after
 the first symbolic bind split. No timeout/memory-killed job was rerun.
+
+Stage 6: NED_LateEncodingCohort.result (L123) is the full total raw late
+encoder transport, preserving error tags and the updated slice on all paths.
+It uses L108 afterstate encoding, L110 live encoding, L111 raw late tail,
+L116 raw map-error factor, L118 symbolic header, L120 raw Option comparison
+and L121 source factor. Every accepted audit has standard axioms only.
+K024/K025 cover all six public tuple coordinates; K026/K027 cover M31's
+four raw-word bytes (including noncanonical words); K028/K029 cover original
+common-field address; K030/K031 cover statement variant kind. Each positive
+has a matching failing control, frozen graph/lock, exact KMX patch and scopes.
+K032 payment-kind positive is checked; its control is the next native step.
+Native caller Result/order validation and raw validator composition remain
+work in progress. No composed NDT row is promoted. Retired generic root
+wrappers are not native evidence. Full-source receipts remain individual;
+NED_ATTEMPTS.jsonl is now a compact index, with an xz -6 archival full log
+and both compressed and uncompressed SHA256 records.
