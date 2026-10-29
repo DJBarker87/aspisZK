@@ -6,3 +6,4 @@ open Aeneas Aeneas.Std
 #print Array.update
 #print core.num.U32.from_le_bytes
 #print Array.index_usize
+#print core.convert.num.FromU64U32.from
