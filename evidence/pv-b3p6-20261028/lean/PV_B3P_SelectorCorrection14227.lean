@@ -9,7 +9,7 @@ The legacy constructor chooses 49; the terminal caller chooses 57. -/
 def constructor14 (blocks : Usize) (point : Array Q 10#usize) :
     Result aspis_statement.state_only_poseidon.StateOnlyPoseidonSelectors := do
   let selectors ← reference_copy_terminal.Selectors.at_point point
-  let block ← reference_terminal.sum_interval227 selectors.high Q.ZERO 0#usize blocks
+  let block ← reference_terminal.sum_interval227 selectors.high aspis_core.field.QM31.ZERO 0#usize blocks
   .ok { block := block, «local» := selectors.low }
 /-- Corrected constructor equality requires the target layout. This condition
 is on the constructor, never a restriction on arbitrary adversarial points. -/
