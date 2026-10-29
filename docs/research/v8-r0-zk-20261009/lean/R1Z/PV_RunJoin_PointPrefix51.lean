@@ -21,6 +21,7 @@ theorem update (a : Array Q 10#usize) (n : Usize) (v : Q) (small : n.val<10)
   refine ⟨next,hr,?_⟩
   intro j hj
   simp only [hset,List.getElem_set]
+  trace_state
   by_cases same : n.val=j.val
   · simp only [same,if_true]
     exact canonical
