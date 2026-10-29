@@ -16,7 +16,7 @@ theorem read_set_other {α : Type} {n : Usize} (xs : Array α n) (index other : 
      PV_B3P_SelectIndex227.index_value xs other other_bound]
  exact congrArg Result.ok (PV_B3P_ArrayWrite227.restored_frame xs index other bound other_bound different value)
 def row_at (sums : Matrix14) (row : Usize) (bound : row.val<3) : Array U64 3#usize :=
- sums.val[row.val]'(by simpa only [sums.property] using bound)
+ sums.val[row.val]'(by have length := sums.property; scalar_tac)
 theorem complete_store (sums : Matrix14) (row column : Usize) (value : U64)
     (hr : row.val<3) (hc : column.val<3) :
     deployed_store sums row column value = .ok
@@ -24,7 +24,10 @@ theorem complete_store (sums : Matrix14) (row column : Usize) (value : U64)
  unfold deployed_store
  rw [PV_B3P_ArrayWrite227.borrow sums row hr]
  simp only [bind_tc_ok]
- rw [PV_B3P_ArrayWrite227.borrow _ column hc]
+ change (do
+   let (_,back) ← Array.index_mut_usize (row_at sums row hr) column
+   .ok (Aeneas.Std.Array.set sums row (back value))) = _
+ rw [PV_B3P_ArrayWrite227.borrow (row_at sums row hr) column hc]
  rfl
 /-- Every untouched row is retained in full, not just one observed word. -/
 theorem other_row (sums : Matrix14) (row column other : Usize) (value : U64)
