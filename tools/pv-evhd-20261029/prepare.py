@@ -32,7 +32,8 @@ for q in E.glob('receipt-*.json'):
  if sha(b)!=v['source_sha256']: continue
  obj=H+'/objects/'+m+'.olean'
  r=subprocess.check_output(['ssh','dombarker@100.108.41.90','sha256sum '+obj],text=True)
- projects[m]=dict(module=m,path=path,revision=rev,source_sha256=sha(b),object_sha256=r.split()[0],object_path=obj)
+ assert r.split()[0]==v['object_sha256'],('own object changed',m)
+ projects[m]=dict(module=m,path=path,revision=rev,source_sha256=sha(b),object_sha256=v['object_sha256'],object_path=obj)
  prep=json.load(open(E/('prepare-'+m+'.json')))['result']
  for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):
   found=next(t for t in prep['project_checks'] if t['module']==d)
