@@ -43,7 +43,8 @@ theorem cursor_increment13 (index : Usize) (bound : index.val < 4) :
     (Usize.wrapping_add index 1#usize).val = index.val+1 :=
   PV_B3P_Offset226V3.add_value index 1#usize (by
     change index.val+1 < UScalar.size .Usize
-    have h4 : (4 : Nat) < UScalar.size .Usize := by scalar_tac
+    have h4 := Usize.cMax_bound_concrete.1
+    simp only [UScalar.size, UScalar.cMax] at *
     omega)
 
 /-- Explicit empty iterator cleanup. Its two pointer fields and PhantomData
