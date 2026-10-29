@@ -20,7 +20,7 @@ theorem installed (base : ExternalTypes) (heap : Heap) (box : Box)
   change @ExternalFuns.op237 (types base) (selected base heap box ops)=_
   unfold selected
   rw [PV_B2_F_RawNative.preserved_237]
-  exact primitive ops
+  exact @primitive (types base) ops
 
 /-- Source padding capacities; no node traversal is evaluated. -/
 theorem values : ProverRwDictionaryLayoutSource.compact.SLOT_NODES.val=
