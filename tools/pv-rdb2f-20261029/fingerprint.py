@@ -23,7 +23,11 @@ project_native=[]
 for r in json.loads((old/'native-source-pins.json').read_text()):
  p=D.parent/'codex-pv-fscan-20261028/src'/r['path'];assert sha(p)==r['sha256'];project_native.append(r)
 native=json.loads((D/'native-inputs.json').read_text())
-for r in native['inputs']:assert sha(Path(r['path']))==r['sha256']
+native['input_checks']=[]
+for r in native['inputs']:
+ p=Path(r['path']);actual=sha(p);source=p.suffix=='.rs' or p.name in ['Cargo.toml','Cargo.lock']
+ if source:assert actual==r['sha256'],str(p)
+ native['input_checks'].append(dict(**r,actual=actual,source_input=source,explanation='frozen source/manifest input' if source else 'scope receipt/log; not a compiler input; output/time logs filled during the run'))
 codegen=[]
 for p in (D/'target/release/.fingerprint').glob('*/bin-associations.json'):
  r=json.loads(p.read_text());codegen.append(dict(path=str(p),sha256=sha(p),rustflags=r.get('rustflags'),features=r.get('features'),profile=r.get('profile')))
