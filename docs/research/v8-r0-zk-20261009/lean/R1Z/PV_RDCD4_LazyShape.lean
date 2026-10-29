@@ -7,6 +7,11 @@ open Aeneas Aeneas.Std Result PV_RDCD4_LazyComponents PV_RDCD4_LazyCell
 def shape {T : Type} (rows : List (List T)) : Prop :=
   rows.length=3 ∧ ∀ row ∈ rows, row.length=3
 
+/-- Concrete initialized constructor witness for every nine scalar values. -/
+theorem literal_shape {T : Type} (a b c d e f g h i : T) :
+    shape [[a,b,c],[d,e,f],[g,h,i]] := by
+  simp [shape]
+
 theorem row_bound {T : Type} (rows : List (List T)) (h : shape rows)
     (i : Nat) (hi : i < 3) : i < rows.length := by rw [h.1];exact hi
 
@@ -15,6 +20,13 @@ theorem col_bound {T : Type} (rows : List (List T)) (h : shape rows)
     j < (rows[i]'(row_bound rows h i hi)).length := by
   rw [h.2 _ (List.getElem_mem (row_bound rows h i hi))]
   exact hj
+
+theorem read_guards {T : Type} (rows : List (List T)) (h : shape rows)
+    (i j : Nat) (hi : i < 3) (hj : j < 3) :
+    ∃ row, read rows i=ok row ∧ ∃ value, read row j=ok value := by
+  refine ⟨rows[i]'(row_bound rows h i hi),PV_RDCD3_Index194.success _ _ _,?_⟩
+  exact ⟨(rows[i]'(row_bound rows h i hi))[j]'(col_bound rows h i j hi hj),
+    PV_RDCD3_Index194.success _ _ _⟩
 
 theorem all_set {T : Type} (p : T → Prop) (xs : List T) (i : Nat) (v : T)
     (hx : ∀ x ∈ xs,p x) (hv : p v) : ∀ x ∈ xs.set i v,p x := by
@@ -38,6 +50,8 @@ theorem update_shape {T : Type} (rows : List (List T)) (h : shape rows)
   · apply all_set (fun row : List T => row.length=3) rows i _ h.2
     simpa only [List.length_set] using h.2 _ (List.getElem_mem (row_bound rows h i hi))
 
+#print axioms literal_shape
+#print axioms read_guards
 #print axioms row_bound
 #print axioms col_bound
 #print axioms update_shape
