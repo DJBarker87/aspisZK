@@ -24,6 +24,7 @@ def toSnapshot (p : aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLiveSnap
   ⟨p.pool,p.deployment_domain,p.sequence,p.next_pair_index,p.current_root,p.frontier⟩
 def toAfter (p : After) : RA := ⟨p.next_pair_index,p.next_root,p.next_frontier⟩
 def toLate (base : ExternalTypes) (p : Late base) : RT :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   ⟨toSnapshot p.live_snapshot,toAfter p.candidate_afterstate⟩
 def fromSemantic (p : RSem) : SP :=
   ⟨(match p.variant with | .PrivateTransfer => .PrivateTransfer | .Withdrawal => .Withdrawal),
@@ -42,8 +43,10 @@ def withdrawal_public13 (base : ExternalTypes) (p : PW) (t : Late base) : Result
   .ok (fromSemantic r)
 
 def PV_B3P_Link_private_public (base : ExternalTypes) : Prop :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   ∀ p t, private_public13 base p t = .ok (PV_B3P_Carrier227.semantic base (.Transfer p t))
 def PV_B3P_Link_withdrawal_public (base : ExternalTypes) : Prop :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   ∀ p t, withdrawal_public13 base p t = .ok (PV_B3P_Carrier227.semantic base (.Withdrawal p t))
 
 theorem private_public_binding13 (base : ExternalTypes) : PV_B3P_Link_private_public base := by
@@ -56,6 +59,7 @@ theorem withdrawal_public_binding13 (base : ExternalTypes) : PV_B3P_Link_withdra
 /-- The two source match arms, interpreted with the exact new extracted callees.
 Loan/return correspondence is structural own-1 evidence, not an extractor output. -/
 def semantic_source13 (base : ExternalTypes) (p : Public base) : Result SP :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   match p with
   | .Transfer public1 transition => private_public13 base public1 transition
   | .Withdrawal public1 transition => withdrawal_public13 base public1 transition
@@ -67,11 +71,13 @@ theorem semantic_source_binding13 (base : ExternalTypes) (p : Public base) :
   | Withdrawal public1 transition => exact withdrawal_public_binding13 base public1 transition
 
 def transition_source13 (base : ExternalTypes) (p : Public base) : Result (Late base) :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   match p with
   | .Transfer _ t => .ok t
   | .Withdrawal _ t => .ok t
 
 def PV_B3P_Link_transition (base : ExternalTypes) : Prop :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   (∀ p t, transition_source13 base (.Transfer p t) = .ok t) ∧
   (∀ p t, transition_source13 base (.Withdrawal p t) = .ok t)
 theorem transition_source_binding13 (base : ExternalTypes) : PV_B3P_Link_transition base :=
