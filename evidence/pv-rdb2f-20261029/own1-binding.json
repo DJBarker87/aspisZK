@@ -1,6 +1,6 @@
 {
   "evidence_class": "structural (K-1 substitute), source level under own-1",
-  "source_revision": "f4e33c21118b4eb67c413ec8aa782551460d8ce1",
+  "source_revision": "e8c7212feee1f3866be0a2e8261d33a0ebfa00e7",
   "sources": [
     {
       "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
@@ -294,6 +294,101 @@
           "source": "*state = state_cpy;",
           "model": "whole final state copy, including empty-list case; all other native fields framed",
           "law": "SoftOuter.final_store; NativeShaFrame.simultaneous_restore"
+        }
+      ]
+    },
+    {
+      "source": "core-array-mod.rs",
+      "function": "from_fn",
+      "tokens_sha256": "3b8dec12611b53d6476e0c307a81ad6b240f168f5ee08a7d71be51d9e0aa775a",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0",
+          "model": "same FnMut wrapper; never short-circuits a successful scalar result",
+          "law": "FromFnGuard.complete_capture; CapturedQuotient.entire_capture"
+        }
+      ]
+    },
+    {
+      "source": "core-array-mod.rs",
+      "function": "try_from_fn_erased",
+      "tokens_sha256": "517869f5d1de6e77225a754bc1885b139b9f2403dc689928d9c5f3a4406903db",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "let mut guard = Guard { array_mut: buffer, initialized: 0 };",
+          "model": "exclusive initialized-prefix guard starts at zero, same output allocation",
+          "law": "FromFnGuard.guarded; CapturedQuotient.guardBody"
+        },
+        {
+          "source": "while guard.initialized < guard.array_mut.len() {",
+          "model": "guard count is index; element count8; actual live buffer",
+          "law": "CapturedQuotient.body_association; InitialFromFn.slice_bounds"
+        },
+        {
+          "source": "let item = generator(guard.initialized).branch()?;",
+          "model": "same captured state is supplied to every FnMut invocation; scalar NeverShortCircuit branch cannot Break",
+          "law": "CapturedQuotient.invoke; FromFnGuard.initialized_prefix"
+        },
+        {
+          "source": "unsafe { guard.push_unchecked(item) }; }",
+          "model": "write initialized slot before increment; no stale output overwritten later",
+          "law": "FromFnGuard.store_before_increment; CapturedQuotient.body_association"
+        },
+        {
+          "source": "mem::forget(guard); ControlFlow::Continue(())",
+          "model": "fully initialized; disarm drop guard and return; scalar fields have no user Drop",
+          "law": "FromFnGuard.complete_capture"
+        }
+      ]
+    },
+    {
+      "source": "core-array-mod.rs",
+      "function": "push_unchecked",
+      "tokens_sha256": "8ca41f66380ab7968afa4faf1f553712b6065ee0a09ffb317771177eb67e263e",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "unsafe { self.array_mut.get_unchecked_mut(self.initialized).write(item);",
+          "model": "current output slot is exactly initialized; native raw store, no captured snapshot",
+          "law": "RawHandles.current_array_store (u32); FromFnGuard.initialized_prefix"
+        },
+        {
+          "source": "self.initialized = self.initialized.unchecked_add(1); }",
+          "model": "increment only after store; bound0..7 makes unchecked_add valid",
+          "law": "FromFnGuard.store_before_increment; CapturedQuotient.body_association"
+        }
+      ]
+    },
+    {
+      "source": "core-array-mod.rs",
+      "function": "drop",
+      "tokens_sha256": "8b183ba96cd06ff62001295e557b0ab583c0aae940b89a6def68de123aa996ee",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "debug_assert!(self.initialized <= self.array_mut.len());",
+          "model": "inactive in deployed release; initialized bound maintained",
+          "law": "FromFnGuard.store_before_increment"
+        },
+        {
+          "source": "unsafe { self.array_mut.get_unchecked_mut(..self.initialized).assume_init_drop(); }",
+          "model": "on unwind only initialized u32 prefix is dropped; u32 has no destructor, captured quotient not rolled back",
+          "law": "source scalar drop glue; V370 compiler preservation retained"
+        }
+      ]
+    },
+    {
+      "source": "core-iter-rev.rs",
+      "function": "next",
+      "tokens_sha256": "1358cde770dbbc565143289c78447df53b6c74962476a91d1c5bc504c96faa03",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "self.iter.next_back()",
+          "model": "delegate to the same inner iterator, no copy/reset/duplicate",
+          "law": "RawCursor.back_bounds; Iterator.back_source"
         }
       ]
     }

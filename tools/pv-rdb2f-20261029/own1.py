@@ -61,6 +61,22 @@ bind('sha256-soft.rs','compress',[
  ('*o = u32::from_be_bytes(chunk.try_into().unwrap()); }','four bytes in source order; conversion cannot fail; each current word overwritten','LoadWrites.every_store; inherited ShaBytes lane0..15 exact operand bindings'),
  ('sha256_digest_block_u32(&mut state_cpy, &block_u32); }','exact bound software word-block extraction, complete returned state','FallbackBlockTotal.total; SoftOuter.compression_trace'),
  ('*state = state_cpy;','whole final state copy, including empty-list case; all other native fields framed','SoftOuter.final_store; NativeShaFrame.simultaneous_restore')])
+bind('core-array-mod.rs','from_fn',[
+ ('try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0','same FnMut wrapper; never short-circuits a successful scalar result','FromFnGuard.complete_capture; CapturedQuotient.entire_capture')])
+bind('core-array-mod.rs','try_from_fn_erased',[
+ ('let mut guard = Guard { array_mut: buffer, initialized: 0 };','exclusive initialized-prefix guard starts at zero, same output allocation','FromFnGuard.guarded; CapturedQuotient.guardBody'),
+ ('while guard.initialized < guard.array_mut.len() {','guard count is index; element count8; actual live buffer','CapturedQuotient.body_association; InitialFromFn.slice_bounds'),
+ ('let item = generator(guard.initialized).branch()?;','same captured state is supplied to every FnMut invocation; scalar NeverShortCircuit branch cannot Break','CapturedQuotient.invoke; FromFnGuard.initialized_prefix'),
+ ('unsafe { guard.push_unchecked(item) }; }','write initialized slot before increment; no stale output overwritten later','FromFnGuard.store_before_increment; CapturedQuotient.body_association'),
+ ('mem::forget(guard); ControlFlow::Continue(())','fully initialized; disarm drop guard and return; scalar fields have no user Drop','FromFnGuard.complete_capture')])
+bind('core-array-mod.rs','push_unchecked',[
+ ('unsafe { self.array_mut.get_unchecked_mut(self.initialized).write(item);','current output slot is exactly initialized; native raw store, no captured snapshot','RawHandles.current_array_store (u32); FromFnGuard.initialized_prefix'),
+ ('self.initialized = self.initialized.unchecked_add(1); }','increment only after store; bound0..7 makes unchecked_add valid','FromFnGuard.store_before_increment; CapturedQuotient.body_association')])
+bind('core-array-mod.rs','drop',[
+ ('debug_assert!(self.initialized <= self.array_mut.len());','inactive in deployed release; initialized bound maintained','FromFnGuard.store_before_increment'),
+ ('unsafe { self.array_mut.get_unchecked_mut(..self.initialized).assume_init_drop(); }','on unwind only initialized u32 prefix is dropped; u32 has no destructor, captured quotient not rolled back','source scalar drop glue; V370 compiler preservation retained')])
+bind('core-iter-rev.rs','next',[
+ ('self.iter.next_back()','delegate to the same inner iterator, no copy/reset/duplicate','RawCursor.back_bounds; Iterator.back_source')])
 # Both algorithms use exactly the same sixteen macro stages and rotation order.
 soft=(old/'source/sha256-soft.rs').read_text();hard=(old/'source/sha256-x86.rs').read_text()
 pattern=r'^\s*((?:schedule_)?rounds4!\([^;]+\);)'
