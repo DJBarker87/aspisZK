@@ -7,16 +7,17 @@ open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 abbrev Columns := Array (alloc.vec.Vec aspis_core.field.M31) 26#usize
 abbrev Q := aspis_core.field.QM31
 
-def step (columns : Columns) (lane : Usize) (out : alloc.vec.Vec Q) (row : Usize) : Result (alloc.vec.Vec Q) := do
+def step (liftCell : aspis_core.field.M31 → Result Q) (columns : Columns) (lane : Usize) (out : alloc.vec.Vec Q) (row : Usize) : Result (alloc.vec.Vec Q) := do
   let column ← Array.index_usize columns lane
   let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) column row
-  alloc.vec.Vec.push out (PV_RunJoin_LiftCell63.lifted m)
+  let q ← liftCell m
+  alloc.vec.Vec.push out q
 
-def phase (columns : Columns) (lane : Usize) : Nat → alloc.vec.Vec Q → Usize → Result (alloc.vec.Vec Q)
+def phase (liftCell : aspis_core.field.M31 → Result Q) (columns : Columns) (lane : Usize) : Nat → alloc.vec.Vec Q → Usize → Result (alloc.vec.Vec Q)
   | 0,out,_ => ok out
   | n+1,out,row => do
-      let next ← step columns lane out row
-      phase columns lane n next (Usize.wrapping_add row 1#usize)
+      let next ← step liftCell columns lane out row
+      phase liftCell columns lane n next (Usize.wrapping_add row 1#usize)
 
 attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 
@@ -24,21 +25,16 @@ theorem one_step (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (columns : Columns) (lane : Usize)
     (out : alloc.vec.Vec Q) (row : Usize) (more : row<1024#usize) :
     @host_semantic.lift_columns_loop0_loop0.body (types base) (selected base heap box ops) columns lane out row=
-      (do let next ← step columns lane out row
+      (do let next ← step (@host_semantic.lift (types base) (selected base heap box ops)) columns lane out row
           ok (.cont (next,Usize.wrapping_add row 1#usize))) := by
   simp only [host_semantic.lift_columns_loop0_loop0.body,more,if_true,step,lift,bind_tc_ok,bind_assoc_eq]
-  apply congrArg (Aeneas.Std.bind _)
-  funext column
-  apply congrArg (Aeneas.Std.bind _)
-  funext m
-  rw [PV_RunJoin_LiftCell63.complete base heap box ops m]
-  simp only [bind_tc_ok]
+  rfl
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (columns : Columns) (lane : Usize)
     (n : Nat) (out : alloc.vec.Vec Q) (row : Usize) (rank : row.val+n=1024) :
     @host_semantic.lift_columns_loop0_loop0 (types base) (selected base heap box ops) columns lane out row=
-      phase columns lane n out row := by
+      phase (@host_semantic.lift (types base) (selected base heap box ops)) columns lane n out row := by
   induction n generalizing row out with
   | zero =>
     have stop : ¬ row<1024#usize := by change ¬row.val<1024;omega
