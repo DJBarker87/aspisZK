@@ -17,7 +17,7 @@ theorem block_length (b : Nat → Nat) : (blockWords b).length=8 := by
 theorem length (blocks : List (Nat → Nat)) : (candidates blocks).length=8*blocks.length := by
   induction blocks with
   | nil => rfl
-  | cons b bs ih => simp only [candidates,List.flatMap_cons,List.length_append,block_length] at *; omega
+  | cons b bs ih => simp only [candidates,List.flatMap_cons,List.length_append,List.length_cons,block_length] at *; omega
 
 theorem small (blocks : List (Nat → Nat)) : ∀ w∈candidates blocks,w<2^18 := by
   intro w hw
