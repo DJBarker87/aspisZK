@@ -6,7 +6,8 @@ noncomputable section
 namespace R1Z.PV_RunJoin_NativeObstruction62
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual62
 
-def rejecting (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @ExternalFuns (types base) :=
+@[reducible] def rejecting (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @ExternalFuns (types base) :=
+  letI : ExternalTypes := types base
   {ops with op132 := .div}
 
 /-- All CLOSED bindings, including V265, are retained. The OPEN V228 callback
