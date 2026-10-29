@@ -13,31 +13,40 @@ theorem mask_index_value14 (index : Nat) (bound : index < 16) :
 theorem mask_read_source_index14 (values : Array aspis_core.field.QM31 16#usize)
     (index : Nat) (bound : index < 16) :
     mask_read10 values index = Array.index_usize values (mask_index14 index bound) := by
-  interval_cases index <;> rfl
+  have alternatives : index = 0 ∨ index = 1 ∨ index = 2 ∨ index = 3 ∨ index = 4 ∨ index = 5 ∨ index = 6 ∨ index = 7 ∨ index = 8 ∨ index = 9 ∨ index = 10 ∨ index = 11 ∨ index = 12 ∨ index = 13 ∨ index = 14 ∨ index = 15 := by omega
+  rcases alternatives with h | h | h | h | h | h | h | h | h | h | h | h | h | h | h | h
+  all_goals subst index; rfl
 
 theorem mask_walk_indices14 (mask : U16) (allowed : MaskAllowed mask)
     (index : Nat) (member : index ∈ PV_B3P_Mask227.walk 16 mask.val) : index < 16 := by
   rcases allowed with h|h|h|h|h|h|h
   all_goals subst mask
-  · rw [PV_B3P_Mask227.walk_1749] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 1749 at member
+    rw [PV_B3P_Mask227.walk_1749] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_2048] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 2048 at member
+    rw [PV_B3P_Mask227.walk_2048] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_2049] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 2049 at member
+    rw [PV_B3P_Mask227.walk_2049] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_4097] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 4097 at member
+    rw [PV_B3P_Mask227.walk_4097] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_6144] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 6144 at member
+    rw [PV_B3P_Mask227.walk_6144] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_6145] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 6145 at member
+    rw [PV_B3P_Mask227.walk_6145] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
-  · rw [PV_B3P_Mask227.walk_26214] at member
+  · change index ∈ PV_B3P_Mask227.walk 16 26214 at member
+    rw [PV_B3P_Mask227.walk_26214] at member
     simp only [List.mem_cons,List.not_mem_nil,or_false] at member
     omega
 #print axioms mask_index_value14
