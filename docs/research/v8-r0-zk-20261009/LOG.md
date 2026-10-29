@@ -14916,3 +14916,22 @@ runjoin54 (head fc300a706a, pushed) used all 100 Lean attempts (70 accepted, 30 
 The top-down skeleton compiled at attempt 66904, the fifth attempt. Its conclusion is exactly PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT (actual runs) (published runs), the decoder input that runjoin owes. The R24Sampler link is discharged unchanged: exact residues, canonical multiplication and the actual sampler's canonicality. Six links remain OPEN: CommonSample, BackendInput, FinishContext, QueryAppend, NodeAppend and PublishOrder. They are now step (2)'s exact remaining list. The conditional theorem covers the prove_from_semantics source slice; full native publication and the original toRP composition remain. One prohibited unchanged failed-source resubmission occurred (66939). It failed, earns no credit and is documented, and the worker added a wrapper guard that blocks previously failed source hashes. Rows removed: 0.
 
 Ruling (u) (pv-common.txt): every line's launch wrapper must refuse a previously failed source hash, and must reuse verified compiled objects from its own earlier host directories under (h6) rather than rebuilding them (pv-ownp spent 92 of 100 attempts on rebuilds). runjoin55 (IDs 67700-67799; 100 Lean, 0 Kani) discharges the six links cheapest first, then extends the theorem to the full native publication. Privacy target not yet established.
+
+## D478 (Stream B) 2026-10-29 06:21 UTC: pv-fib result, the headline's Result-only observer cannot express the D159 observation; owner decision requested; experimental pv-evhd launched
+
+pv-fib used 5 Lean attempts, with no native scopes or Kani; its final targets pass with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate and pushed. Its verdict is NOT RESOLVABLE through the current Result-only interface. It proved the following in Lean:
+- the exact charged complement (no per-attempt realBad, no adversary seed-query hit, no fixed-tape fuel failure);
+- PV_FIB_Restricted.Required, complete-observation fibres across all good common samples with equal public input and option-B signal, including different witnesses;
+- that this requirement is necessary and sufficient for a decoder on the good domain;
+- clock-obstruction lemmas;
+- finite retry termination, conditional on callback termination.
+
+The witness is in source. tools/r1-cost-probe/src/bin/devnet_spend/plan.rs reads Instant::now() at line 84 and prints started.elapsed() as prove_wall_seconds at line 129, after the prover returns and the proof files are written, and the lead read both lines. Two honest good runs that differ only by a pause before that read keep the same Output, public input, coins, charged events and option-B signal, but change the observation. The clock theorem is conditional on a good completed path, and no concrete native pair was certified. This is not a leak: timing is meant to be simulated by the L1 model (D163, D166). It means the headline, as stated, is a theorem about a Result-only observer. Removing the printed field would not help, because the process can be timed externally.
+
+The lead escalated this to the owner (owner packet D478), as a change to the headline statement:
+- (1) an event-retaining observer interface, with the model-level headline re-proved so the simulator also produces the trace; recommended, as the only option that gives the privacy target as defined;
+- (2) separate side-channel theorems plus a composition theorem; not recommended, since marginals do not give joint privacy;
+- (3) report a Result-only observer; not recommended, as it narrows D159.
+Component lines continue meanwhile, because they already produce trace-level results.
+
+pv-evhd (IDs 67800-67899; 100 Lean, 0 native, 0 Kani) is an EXPERIMENTAL, NOT ADOPTED draft in separate PV_EVHD_ modules. The headline, Runtime, simulator, observer and bound are untouched. It defines the event-retaining interface and a draft headline with the same bound plus any genuinely required, justified extra term, and attempts the proof from the existing model proofs plus named links. It reports the cost delta in COST.md for the owner's decision. Rows removed: 0. Privacy target not yet established.
