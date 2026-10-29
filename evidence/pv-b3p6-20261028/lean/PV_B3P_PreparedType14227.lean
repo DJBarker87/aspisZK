@@ -28,8 +28,14 @@ theorem map_array_index14 {α β : Type} {n : Usize} (f : α → β)
     (values : Array α n) (index : Usize) :
     Array.index_usize (map_array14 f values) index =
       (do let value ← Array.index_usize values index; .ok (f value)) := by
-  unfold Array.index_usize map_array14
-  simp only [List.getElem?_map]
+  change (match (values.val.map f)[index.val]? with
+    | none => Result.fail Error.arrayOutOfBounds
+    | some value => Result.ok value) = (do
+      let value ← (match values.val[index.val]? with
+        | none => Result.fail Error.arrayOutOfBounds
+        | some value => Result.ok value)
+      .ok (f value))
+  rw [List.getElem?_map]
   cases h : values.val[index.val]? <;> rfl
 #print axioms prepared_components14
 #print axioms prepared_roundtrip14
