@@ -16,8 +16,9 @@ theorem mul (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFun
     @aspis_core.field.wide_exact.WideExact.mul (types base) (selected base heap box ops) (fromW a) (fromW b)=
       mapResult fromW (AspisR1ProducerRelease47.field.wide_exact.WideExact.mul a b) := by
   change @ExternalFuns.op47 (types base) (selected base heap box ops) _ _=_
-  rw [PV_RunJoin_BatchFields48.mul base heap box ops,PV_RunJoin_BatchFields48.candidate_mul]
+  rw [PV_RunJoin_BatchFields48.mul base heap box ops,@PV_RunJoin_BatchFields48.candidate_mul (types base) ops]
   simp only [ProverRwDictionaryTower.wMul,ProverRwDictionaryTower.native_w_roundtrip]
+  rfl
 
 theorem add (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base)) (a b : S) :
     @aspis_core.field.wide_exact.WideExact.add (types base) (selected base heap box ops) (fromW a) (fromW b)=
@@ -25,6 +26,7 @@ theorem add (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFun
   change @ExternalFuns.op46 (types base) (selected base heap box ops) _ _=_
   rw [PV_RunJoin_InactiveFields48.add base heap box ops]
   simp only [ProverRwDictionaryTower.wAdd,ProverRwDictionaryTower.native_w_roundtrip]
+  rfl
 #print axioms mul
 #print axioms add
 end R1Z.PV_RunJoin_GammaOps50
