@@ -1,0 +1,51 @@
+{"attempt": "NDN_L077", "exit_status": 1, "wall_seconds": 2.4660194229800254, "peak_rss_kib": "5390240", "swaps": "0", "print_axioms": ["'NDN_EqualityLoop.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDN_EqualityLoop.source_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+0
+hp : Canon product
+bound : ↑i < 10
+a b : Q
+f : FIq_Native.field.QM31
+ha : left.index_usize i = ok a
+hb : right.index_usize i = ok b
+hf' : factor () (a, b) = ok f
+hcf : Canon f
+next : FIq_Native.field.QM31
+hn : FIq_Native.field.QM31.mul product f = ok next
+hcn : Canon next
+right✝ : FIv_NativeValue.decode next = FIv_NativeValue.decode product * FIv_NativeValue.decode f
+j : UScalar UScalarTy.Usize
+hj : i + 1#usize = ok j
+hjv : ↑j = ↑i + ↑1#usize
+out : FIq_Native.field.QM31
+ho : loop left right next j = ok out
+hco : Canon out
+⊢ loop left right product i = ok out
+NDN_generated/NDN_EqualityLoop.lean:47:33: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  factor () (a, b)
+in the target expression
+  (do
+      let product ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+            () (a, b)
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product 1#usize) =
+    ok out
+
+left right : Std.Array Q 10#usize
+hf : FactorDomain left right
+a b : Q
+f : FIq_Native.field.QM31
+ha : left.index_usize 0#usize = ok a
+hb : right.index_usize 0#usize = ok b
+hf' : factor () (a, b) = ok f
+hcf : Canon f
+out : FIq_Native.field.QM31
+ho : loop left right f 1#usize = ok out
+hco : Canon out
+⊢ (do
+      let product ←
+        FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value.closure.Insts.CoreOpsFunctionFnPairQM31QM31QM31.call
+            () (a, b)
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.equality_value_loop left right product 1#usize) =
+    ok out
+'NDN_EqualityLoop.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDN_EqualityLoop.source_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

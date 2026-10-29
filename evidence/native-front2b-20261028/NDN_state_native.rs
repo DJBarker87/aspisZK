@@ -17,7 +17,8 @@ fn interpolation_factors(){
 fn interpolation_sum(){
  let r:[u64;3]=kani::any();for x in r {kani::assume(x<=2147483646u64*2147483646u64);}
  unsafe{RAW=r;}
- let out=super::interpolate_three_constant_limb(0,0,0,0,0,0);
+ let w:[u32;3]=kani::any();let c:[u32;3]=kani::any();
+ let out=super::interpolate_three_constant_limb(w[0],w[1],w[2],c[0],c[1],c[2]);
  let expected=super::NDE_native::reference::reduce_ref(r[0]+r[1]+r[2]);
  assert!((out.0==expected)!=cfg!(NDN_invert));
 }

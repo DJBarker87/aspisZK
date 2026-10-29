@@ -18,11 +18,11 @@ theorem accepted (canonical : α → Bool) (bytes : α → List β) (out : List 
    simp only [run,hw,ite_true,ih _ hs,List.flatMap_cons,List.append_assoc]
 
 theorem rejected (canonical : α → Bool) (bytes : α → List β) (out : List β)
- (prefix : List α) (bad : α) (suffix : List α)
- (hp:∀ w∈prefix,canonical w=true) (hb:canonical bad=false) :
- run canonical bytes out (prefix++bad::suffix)=(false,out++prefix.flatMap bytes) := by
- induction prefix generalizing out with
- | nil => simp only [List.nil_append,run,hb,ite_false,List.flatMap_nil,List.append_nil]
+ (front : List α) (bad : α) (suffix : List α)
+ (hp:∀ w∈front,canonical w=true) (hb:canonical bad=false) :
+ run canonical bytes out (front++bad::suffix)=(false,out++front.flatMap bytes) := by
+ induction front generalizing out with
+ | nil => simp [run,hb]
  | cons w ws ih =>
    have hw : canonical w=true := hp w (by simp)
    have hs : ∀ v∈ws,canonical v=true := by intro v hv;exact hp v (by simp [hv])

@@ -18,3 +18,8 @@ pub fn range_index(start:usize,end:usize,index:usize)->usize{assert!(start<=inde
 pub fn binding_matches(kind:bool,master:bool,lane:bool,output:bool,nullifier:bool,after:bool)->bool{kind&&master&&lane&&output&&nullifier&&after}
 pub fn prefix_survives(index:usize,old_length:usize)->bool{index<old_length}
 pub fn output_header(index:usize,kind:u8,lane:u8)->u8{match index{0=>65,1=>83,2=>82,3=>56,4=>1,5=>kind,6=>1,7=>lane,_=>panic!("header index")}}
+
+// Corrected native-only candidate: E015 is intentionally retained with its wrong 0/1 tags.
+pub fn request_gate(bytes:[u8;8],length:usize)->u8{if length!=320{1}else if bytes[0]!=65||bytes[1]!=83||bytes[2]!=81||bytes[3]!=56{2}else if bytes[4]!=1{3}else if bytes[5]!=1&&bytes[5]!=2{4}else if bytes[6]!=1{5}else if bytes[7]!=0{6}else{0}}
+
+pub fn reduce_word(x:u64)->u32{let x=(x&2147483647)+(x>>31u32);let x=(x&2147483647)+(x>>31u32);let x=x as u32;if x>=2147483647{x-2147483647}else{x}}

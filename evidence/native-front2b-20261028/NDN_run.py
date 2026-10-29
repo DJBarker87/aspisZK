@@ -1,6 +1,6 @@
 """Lane-owned serial wrapper around unchanged S2W launchers."""
 from pathlib import Path
-import subprocess,json,sys,time,shlex,hashlib,os
+import subprocess,json,sys,time,shlex,hashlib,os,lzma
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-native-front2b-20261028';H='dombarker@100.108.41.90'
 a,kind,target=sys.argv[1:];limit=80
 assert int(a[-3:]) <= (20 if kind=='extract' else limit)
@@ -84,7 +84,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NDN_EXTRACTION_PINS.json','NDN_extracted1/NDN_Reference1/Types.lean','NDN_extracted1/NDN_Reference1/Funs.lean','NDN_extracted2/NDN_Reference2/Types.lean','NDN_extracted2/NDN_Reference2/Funs.lean','NDN_extracted3/NDN_Reference3/Types.lean','NDN_extracted3/NDN_Reference3/Funs.lean','NDN_extracted4/NDN_Reference4/Types.lean','NDN_extracted4/NDN_Reference4/Funs.lean','NDN_extracted5/NDN_Reference5/Types.lean','NDN_extracted5/NDN_Reference5/Funs.lean','NDN_extracted6/NDN_Reference6/Types.lean','NDN_extracted6/NDN_Reference6/Funs.lean','NDN_extracted7/NDN_Reference7/Types.lean','NDN_extracted7/NDN_Reference7/Funs.lean','NDN_extracted8/NDN_Reference8/Types.lean','NDN_extracted8/NDN_Reference8/Funs.lean','NDN_extracted9/NDN_Reference9/Types.lean','NDN_extracted9/NDN_Reference9/Funs.lean','NDN_extracted10/NDN_Reference10/Types.lean','NDN_extracted10/NDN_Reference10/Funs.lean','NDN_extracted11/NDN_Reference11/Types.lean','NDN_extracted11/NDN_Reference11/Funs.lean','NDN_extracted12/NDN_Reference12/Types.lean','NDN_extracted12/NDN_Reference12/Funs.lean','NDN_extracted13/NDN_Reference13/Types.lean','NDN_extracted13/NDN_Reference13/Funs.lean','NDN_extracted14/NDN_Reference14/Types.lean','NDN_extracted14/NDN_Reference14/Funs.lean','NDN_extracted15/NDN_Reference15/Types.lean','NDN_extracted15/NDN_Reference15/Funs.lean','NDN_extracted16/NDN_Reference16/Types.lean','NDN_extracted16/NDN_Reference16/Funs.lean','NDN_extracted17/NDN_Reference17/Types.lean','NDN_extracted17/NDN_Reference17/Funs.lean','NDN_extracted18/NDN_Reference18/Types.lean','NDN_extracted18/NDN_Reference18/Funs.lean','NDN_extracted19/NDN_Reference19/Types.lean','NDN_extracted19/NDN_Reference19/Funs.lean','NDN_extracted20/NDN_Reference20/Types.lean','NDN_extracted20/NDN_Reference20/Funs.lean']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-input-pins.json',a+'-metadata.json',a+'-graph.stderr',a+'-lock-check.json','NDN_EXTRACTION_PINS.json','NDN_extracted1/NDN_Reference1/Types.lean','NDN_extracted1/NDN_Reference1/Funs.lean','NDN_extracted2/NDN_Reference2/Types.lean','NDN_extracted2/NDN_Reference2/Funs.lean','NDN_extracted3/NDN_Reference3/Types.lean','NDN_extracted3/NDN_Reference3/Funs.lean','NDN_extracted4/NDN_Reference4/Types.lean','NDN_extracted4/NDN_Reference4/Funs.lean','NDN_extracted5/NDN_Reference5/Types.lean','NDN_extracted5/NDN_Reference5/Funs.lean','NDN_extracted6/NDN_Reference6/Types.lean','NDN_extracted6/NDN_Reference6/Funs.lean','NDN_extracted7/NDN_Reference7/Types.lean','NDN_extracted7/NDN_Reference7/Funs.lean','NDN_extracted8/NDN_Reference8/Types.lean','NDN_extracted8/NDN_Reference8/Funs.lean','NDN_extracted9/NDN_Reference9/Types.lean','NDN_extracted9/NDN_Reference9/Funs.lean','NDN_extracted10/NDN_Reference10/Types.lean','NDN_extracted10/NDN_Reference10/Funs.lean','NDN_extracted11/NDN_Reference11/Types.lean','NDN_extracted11/NDN_Reference11/Funs.lean','NDN_extracted12/NDN_Reference12/Types.lean','NDN_extracted12/NDN_Reference12/Funs.lean','NDN_extracted13/NDN_Reference13/Types.lean','NDN_extracted13/NDN_Reference13/Funs.lean','NDN_extracted14/NDN_Reference14/Types.lean','NDN_extracted14/NDN_Reference14/Funs.lean','NDN_extracted15/NDN_Reference15/Types.lean','NDN_extracted15/NDN_Reference15/Funs.lean','NDN_extracted16/NDN_Reference16/Types.lean','NDN_extracted16/NDN_Reference16/Funs.lean','NDN_extracted17/NDN_Reference17/Types.lean','NDN_extracted17/NDN_Reference17/Funs.lean','NDN_extracted18/NDN_Reference18/Types.lean','NDN_extracted18/NDN_Reference18/Funs.lean','NDN_extracted19/NDN_Reference19/Types.lean','NDN_extracted19/NDN_Reference19/Funs.lean','NDN_extracted20/NDN_Reference20/Types.lean','NDN_extracted20/NDN_Reference20/Funs.lean']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr
@@ -92,6 +92,20 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
+if a+'-input-pins.json' in out:
+ raw=out[a+'-input-pins.json'].encode();h=hashlib.sha256(raw).hexdigest()
+ assert h==rc['source_hashes']['NDN_SOURCE_PINS.json'],'archived source map differs from launcher input'
+ packed=lzma.compress(raw,preset=6);assert lzma.decompress(packed)==raw
+ (E/(a+'-input-pins.json.xz')).write_bytes(packed)
+ (E/(a+'-input-pins.json.sha256')).write_text(h+'  '+a+'-input-pins.json\n')
+ (E/(a+'-input-pins.json')).unlink()
+if a+'-metadata.json' in out:
+ raw=out[a+'-metadata.json'].encode();h=hashlib.sha256(raw).hexdigest()
+ graph=json.loads(out[a+'-graph-check.json']);assert h==graph['graph_sha256']
+ packed=lzma.compress(raw,preset=6);assert lzma.decompress(packed)==raw
+ (E/(a+'-metadata.json.xz')).write_bytes(packed)
+ (E/(a+'-metadata.json.sha256')).write_text(h+'  '+a+'-metadata.json\n')
+ (E/(a+'-metadata.json')).unlink()
 summary=json.loads(json.dumps(rc))
 selected=summary.get('deps_fingerprint',{}).pop('selected_objects',None)
 if selected:summary['deps_fingerprint']['selected_objects_summary']=dict(count=len(selected),sha256=hashlib.sha256(json.dumps(selected,sort_keys=True).encode()).hexdigest(),full_receipt=a+'/receipt.json')

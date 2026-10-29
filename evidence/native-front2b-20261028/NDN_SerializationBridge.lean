@@ -28,7 +28,7 @@ theorem rejected_word (w : U32) (hw:2147483647≤w.val) :
  have h : w≥2147483647#u32 := by scalar_tac
  simp only [NDN_Reference12.fields_word,if_pos h]
 
-theorem prefix (i n : Usize) :
+theorem preserved_prefix (i n : Usize) :
  NDN_Reference18.prefix_survives i n=ok (decide (i.val<n.val)) := rfl
 
 #print axioms canonical
@@ -36,5 +36,5 @@ theorem prefix (i n : Usize) :
 #print axioms byte_total
 #print axioms canonical_word
 #print axioms rejected_word
-#print axioms prefix
+#print axioms preserved_prefix
 end NDN_SerializationBridge

@@ -10,8 +10,16 @@ theorem product (a b : U32) (ha:a.val<2147483647) (hb:b.val<2147483647) :
  z.val=a.val*b.val := by
  let x := core.convert.num.FromU64U32.from a
  let y := core.convert.num.FromU64U32.from b
- have hx : x.val=a.val := by dsimp [x,core.convert.num.FromU64U32.from];scalar_tac
- have hy : y.val=b.val := by dsimp [y,core.convert.num.FromU64U32.from];scalar_tac
+ have hx : x.val=a.val := by
+  change (BitVec.setWidth 64 a.bv).toNat=a.val
+  rw [BitVec.toNat_setWidth]
+  change a.val % 2^64=a.val
+  exact Nat.mod_eq_of_lt (by scalar_tac)
+ have hy : y.val=b.val := by
+  change (BitVec.setWidth 64 b.bv).toNat=b.val
+  rw [BitVec.toNat_setWidth]
+  change b.val % 2^64=b.val
+  exact Nat.mod_eq_of_lt (by scalar_tac)
  have hp := NDE_StubWordBounds.product a.val b.val ha hb
  obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (UScalar.mul_spec (x:=x) (y:=y) (by scalar_tac))
  refine ⟨z,hz,?_⟩

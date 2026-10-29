@@ -1,0 +1,216 @@
+use super::*;
+#[path="NDN_reference.rs"] mod reference;
+fn canon(q:QM31)->bool {q.c0.a.0<0x7fff_ffff&&q.c0.b.0<0x7fff_ffff&&q.c1.a.0<0x7fff_ffff&&q.c1.b.0<0x7fff_ffff}
+fn words(q:QM31)->[u32;4]{[q.c0.a.0,q.c0.b.0,q.c1.a.0,q.c1.b.0]}
+pub(super) static mut PRE:[QM31;7]=[QM31::ZERO;7];
+pub(super) static mut BLOCK:usize=0;
+pub(super) static mut AFTER:[QM31;7]=[QM31::ZERO;7];
+pub(super) static mut NEXT:usize=0;
+#[cfg(NDN_active_high)]
+#[kani::proof]
+#[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn active_high_window(){
+ let selectors=Selectors{high:kani::any(),low:kani::any()};
+ let pre:[QM31;7]=kani::any();let block:usize=kani::any();let j:usize=kani::any();
+ kani::assume(block<64&&j<7);
+ let coordinate=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);
+ kani::assume(canon(pre[coordinate])&&canon(selectors.high[block]));
+ unsafe{PRE=pre;BLOCK=block;}
+ let _=selectors.active_mask_basis();
+ let expected=if j==coordinate{let a=words(pre[j]);let b=words(selectors.high[block]);core::array::from_fn(|i|reference::add_word(a[i],b[i]))}else{words(pre[j])};
+ assert!((unsafe{words(AFTER[j])==expected&&NEXT==block+1}) != cfg!(NDN_invert));
+}
+pub(super) static mut COORD:usize=0;
+pub(super) static mut LEFT:QM31=QM31::ZERO;
+pub(super) static mut RIGHT:QM31=QM31::ZERO;
+pub(super) static mut LOW_REPLY:QM31=QM31::ZERO;
+#[cfg(NDN_active_route)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn active_route_window(){
+ let selectors=Selectors{high:kani::any(),low:kani::any()};let pre:[QM31;7]=kani::any();let block:usize=kani::any();kani::assume(block<64);
+ unsafe{PRE=pre;BLOCK=block;}
+ let c=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);
+ let _=selectors.active_mask_basis();
+ assert!((unsafe{COORD==c&&LEFT==pre[c]&&RIGHT==selectors.high[block]})!=cfg!(NDN_invert));
+}
+#[cfg(NDN_active_sparse)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn active_add_window(){
+ let a:QM31=kani::any();let b:QM31=kani::any();kani::assume(canon(a)&&canon(b));
+ let selectors=Selectors{high:[b;64],low:[QM31::ZERO;16]};let block:usize=kani::any();let j:usize=kani::any();kani::assume(block<64&&j<7);
+ unsafe{PRE=[a;7];BLOCK=block;}
+ let c=reference::active_coordinate(constants::ACTIVE_ROW_MASKS[block]);let _=selectors.active_mask_basis();
+ let aw=words(a);let bw=words(b);let expected=core::array::from_fn(|i|reference::active_high_word(aw[i],bw[i],j==c));
+ assert!((unsafe{words(AFTER[j])==expected&&NEXT==block+1})!=cfg!(NDN_invert));
+}
+fn coordinate()->usize {if cfg!(NDN_coord0){0}else if cfg!(NDN_coord1){1}else if cfg!(NDN_coord2){2}else if cfg!(NDN_coord3){3}else if cfg!(NDN_coord4){4}else if cfg!(NDN_coord5){5}else{6}}
+#[cfg(NDN_active_low)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn active_low_window(){
+ let low:[QM31;16]=kani::any();for q in low {kani::assume(canon(q));}
+ let selectors=Selectors{high:[QM31::ZERO;64],low};let c=coordinate();unsafe{COORD=c;}
+ let mut expected=[0u32;4];let mut t=0usize;
+ while t<reference::low_count(c){let w=words(low[reference::low_index(c,t)]);for i in 0..4 {expected[i]=reference::add_word(expected[i],w[i]);}t+=1;}
+ let _=selectors.active_mask_basis();
+ assert!((unsafe{words(LOW_REPLY)==expected})!=cfg!(NDN_invert));
+}
+pub(super) static mut PRIORS:[QM31;9]=[QM31::ZERO;9];
+pub(super) static mut CALL:usize=0;
+pub(super) static mut SELECTED:usize=0;
+pub(super) static mut LOG_LEFT:QM31=QM31::ZERO;
+pub(super) static mut LOG_RIGHT:QM31=QM31::ZERO;
+pub(super) static mut LOG_REPLY:QM31=QM31::ZERO;
+pub(super) fn cut_mul(x:QM31,y:QM31)->QM31{
+ let n=unsafe{CALL};unsafe{CALL=n+1;}
+ if n==unsafe{SELECTED}{
+  let out=crate::NDE_field::qm31(x,y);
+  unsafe{LOG_LEFT=x;LOG_RIGHT=y;LOG_REPLY=out;}out
+ }else{unsafe{PRIORS[n]}}
+}
+#[cfg(NDN_residual_cut)]
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn residual_call_window(){
+ let v:[QM31;10]=kani::any();for q in v {kani::assume(canon(q));}
+ let prior:[QM31;9]=kani::any();for q in prior {kani::assume(canon(q));}
+ let selected=if cfg!(NDN_call0){0}else if cfg!(NDN_call1){1}else if cfg!(NDN_call2){2}else if cfg!(NDN_call3){3}else if cfg!(NDN_call4){4}else if cfg!(NDN_call5){5}else if cfg!(NDN_call6){6}else if cfg!(NDN_call7){7}else{8};
+ unsafe{PRIORS=prior;CALL=0;SELECTED=selected;}
+ let d=[v[9].sub(v[0]),v[9].sub(v[1]),v[9].sub(v[2]),v[9].sub(v[3])];
+ let (left,right)=match selected{0=>(d[0],d[1]),1=>(d[2],d[3]),2=>(v[4],d[1]),3=>(v[5],d[0]),4=>(v[6],d[3]),5=>(v[7],d[2]),6=>(v[8],prior[1]),7=>(prior[0],prior[6].add(prior[4].add(prior[5]))),_=>(prior[1],prior[2].add(prior[3]))};
+ let row=CopyRowExtension{producer_values:[v[0],v[1]],consumer_values:[v[2],v[3]],producer_weights:[v[4],v[5]],consumer_weights:[v[6],v[7]]};
+ let _=super::copy_residual(row,v[8],v[9]);
+ let good=unsafe{CALL==9&&LOG_LEFT==left&&LOG_RIGHT==right&&LOG_REPLY==crate::NDE_field::NDE_REPLY};
+ assert!(good!=cfg!(NDN_invert));
+}
+
+pub(super) trait CutMul {fn NDN_mul(self,y:Self)->Self;}
+impl CutMul for QM31 {fn NDN_mul(self,y:Self)->Self{cut_mul(self,y)}}
+pub(super) static mut PATTERN_GROUP:usize=0;
+pub(super) static mut PATTERN_COORD:usize=0;
+pub(super) static mut PATTERN_AFTER:[QM31;4]=[QM31::ZERO;4];
+pub(super) static mut PATTERN_NEXT:usize=0;
+#[cfg(NDN_pattern_step)]
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(QM31::mul,crate::NDE_field::qm31)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn pattern_step_window(){
+ let values:[QM31;4]=kani::any();let selectors:[QM31;26]=kani::any();let patterns:[QM31;POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1]=kani::any();
+ let group:usize=kani::any();let coordinate:usize=kani::any();let j:usize=kani::any();kani::assume(group<4&&j<4);
+ kani::assume(COPY_PATTERN_GROUP_OFFSETS[group]<=coordinate&&coordinate<COPY_PATTERN_GROUP_OFFSETS[group+1]);
+ let pattern=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[coordinate]);
+ kani::assume(canon(values[group])&&canon(selectors[coordinate])&&canon(patterns[pattern]));
+ unsafe{PATTERN_GROUP=group;PATTERN_COORD=coordinate;crate::NDE_field::NDE_COUNT=0;}
+ let _=super::finish_pattern_basis_values(values,selectors,&patterns);
+ let out=unsafe{PATTERN_AFTER};let product=unsafe{crate::NDE_field::NDE_REPLY};
+ let a=words(values[j]);let p=words(product);let expected=core::array::from_fn(|i|reference::pattern_word(a[i],p[i],j==group));
+ let good=unsafe{crate::NDE_field::NDE_COUNT==1&&crate::NDE_field::NDE_LEFT==patterns[pattern]&&crate::NDE_field::NDE_RIGHT==selectors[coordinate]&&PATTERN_NEXT==coordinate+1}&&words(out[j])==expected;
+ assert!(good!=cfg!(NDN_invert));
+}
+#[cfg(NDN_binary_caller)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn frozen_link_binary_domain(){
+ let i:usize=kani::any();let append:u64=kani::any();kani::assume(i<constants::COPY_LINKS.len());
+ let link=constants::COPY_LINKS[i];let variant=if kani::any(){PoolV1PairForestCompiledVariantV1::PrivateTransfer}else{PoolV1PairForestCompiledVariantV1::Withdrawal};
+ let weight=super::link_weight(link,append,variant);
+ let good=(weight.0==0||weight.0==1)&&link.weight_kind<=4&&(link.weight_kind<3||link.weight_level<64);
+ assert!(good!=cfg!(NDN_invert));
+}
+pub(super) static mut TAG_INDEX:usize=0;
+pub(super) static mut TAG_RAW:[u64;4]=[0;4];
+pub(super) static mut TAG_PRODUCTS:[u64;4]=[0;4];
+pub(super) static mut TAG_WORDS:[u32;4]=[0;4];
+pub(super) static mut TAG_TAG:u64=0;
+pub(super) static mut TAG_BLOCK:usize=0;
+pub(super) static mut TAG_END:usize=0;
+pub(super) static mut TAG_CHUNK_END:usize=0;
+pub(super) static mut TAG_AFTER:[u64;4]=[0;4];
+pub(super) static mut TAG_NEXT:usize=0;
+pub(super) static mut TAG_LIMB:usize=0;
+pub(super) static mut TAG_OUTPUT:[M31;4]=[M31::ZERO;4];
+pub(super) static mut TAG_REDUCED:[M31;4]=[M31::ZERO;4];
+fn tag_inputs()->(usize,Selectors,usize){
+ let coordinate:usize=kani::any();let index:usize=kani::any();kani::assume(coordinate<30);
+ let start=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate]);let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);kani::assume(start<=index&&index<end);
+ let selectors=Selectors{high:kani::any(),low:[QM31::ZERO;16]};unsafe{TAG_INDEX=index;}(coordinate,selectors,index)
+}
+#[cfg(NDN_tag_geometry)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn tag_geometry_window(){
+ let (coordinate,selectors,index)=tag_inputs();let _=super::copy_tag_coordinate_dot(coordinate,&selectors);
+ let end=usize::from(COPY_TAG_COORDINATE_OFFSETS[coordinate+1]);
+ let good=unsafe{TAG_END==end&&TAG_CHUNK_END==reference::chunk_end(index,end)&&index<TAG_CHUNK_END&&TAG_CHUNK_END<=end&&TAG_CHUNK_END<=index+4&&end<=272};
+ assert!(good!=cfg!(NDN_invert));
+}
+#[cfg(NDN_tag_factors)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn tag_factors_window(){
+ let (coordinate,selectors,index)=tag_inputs();let j:usize=kani::any();kani::assume(j<4);
+ let block=usize::from(COPY_TAG_TERMS.0[index]);let expected=words(selectors.high[block])[j];let tag=u64::from(COPY_TAG_TERMS.1[index]);
+ let _=super::copy_tag_coordinate_dot(coordinate,&selectors);
+ let good=unsafe{TAG_BLOCK==block&&TAG_WORDS[j]==expected&&TAG_TAG==tag&&tag<2147483647&&block<64};
+ assert!(good!=cfg!(NDN_invert));
+}
+#[cfg(NDN_tag_accumulate)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn tag_accumulate_window(){
+ let (coordinate,selectors,index)=tag_inputs();let raw:[u64;4]=kani::any();let products:[u64;4]=kani::any();let count:u64=kani::any();let j:usize=kani::any();kani::assume(count<4&&j<4);
+ for x in raw {kani::assume(x<=count*(2147483646u64*2147483646u64));}for x in products {kani::assume(x<=2147483646u64*2147483646u64);}
+ unsafe{TAG_RAW=raw;TAG_PRODUCTS=products;}
+ let _=super::copy_tag_coordinate_dot(coordinate,&selectors);
+ assert!((unsafe{TAG_AFTER[j]==reference::add_product(raw[j],products[j])&&TAG_NEXT==index+1})!=cfg!(NDN_invert));
+}
+#[cfg(NDN_tag_reduce)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn tag_reduce_window(){
+ let (coordinate,selectors,_)=tag_inputs();let raw:[u64;4]=kani::any();let old:[u32;4]=kani::any();let j:usize=kani::any();kani::assume(j<4);for x in old {kani::assume(x<2147483647);}
+ unsafe{TAG_RAW=raw;TAG_LIMB=j;TAG_OUTPUT=[M31(old[0]),M31(old[1]),M31(old[2]),M31(old[3])];}
+ let _=super::copy_tag_coordinate_dot(coordinate,&selectors);
+ let reduced=reference::reduce_word(raw[j]);
+ assert!((unsafe{TAG_REDUCED[j].0}==reference::add_word(old[j],reduced))!=cfg!(NDN_invert));
+}
+pub(super) static mut PATTERN_LEFT:QM31=QM31::ZERO;
+pub(super) static mut PATTERN_RIGHT:QM31=QM31::ZERO;
+pub(super) static mut PATTERN_BASE:QM31=QM31::ZERO;
+pub(super) static mut PATTERN_PRODUCT:QM31=QM31::ZERO;
+#[cfg(NDN_pattern_route)]
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn pattern_route_window(){
+ let values:[QM31;4]=kani::any();let selectors:[QM31;26]=kani::any();let patterns:[QM31;POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1]=kani::any();let g:usize=kani::any();let c:usize=kani::any();kani::assume(g<4&&COPY_PATTERN_GROUP_OFFSETS[g]<=c&&c<COPY_PATTERN_GROUP_OFFSETS[g+1]);
+ unsafe{PATTERN_GROUP=g;PATTERN_COORD=c;}
+ let p=usize::from(COPY_PATTERN_COORDINATE_PATTERNS[c]);let _=super::finish_pattern_basis_values(values,selectors,&patterns);
+ assert!((unsafe{PATTERN_LEFT==patterns[p]&&PATTERN_RIGHT==selectors[c]&&PATTERN_BASE==values[g]})!=cfg!(NDN_invert));
+}
+#[cfg(NDN_pattern_write)]
+#[kani::proof] #[kani::unwind(32)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn pattern_write_window(){
+ let values:[QM31;4]=kani::any();let product:QM31=kani::any();let g:usize=kani::any();let c:usize=kani::any();let j:usize=kani::any();kani::assume(g<4&&j<4&&COPY_PATTERN_GROUP_OFFSETS[g]<=c&&c<COPY_PATTERN_GROUP_OFFSETS[g+1]);kani::assume(canon(values[g])&&canon(product));
+ unsafe{PATTERN_GROUP=g;PATTERN_COORD=c;PATTERN_PRODUCT=product;}
+ let out=super::finish_pattern_basis_values(values,[QM31::ZERO;26],&[QM31::ZERO;POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1]);
+ let a=words(values[j]);let b=words(product);let expected=core::array::from_fn(|i|reference::pattern_word(a[i],b[i],j==g));
+ assert!((words(out[j])==expected&&unsafe{PATTERN_NEXT==c+1})!=cfg!(NDN_invert));
+}
+pub(super) static mut OUTER_SUM:QM31=QM31::ZERO;
+pub(super) static mut OUTER_REPLY:QM31=QM31::ZERO;
+#[cfg(NDN_active_outer)]
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(QM31::mul,crate::NDE_field::qm31)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDE_kmx::KMX_copy_nonoverlapping)]
+fn active_outer_first_window(){
+ let a:QM31=kani::any();let b:QM31=kani::any();let high:QM31=kani::any();let pre:QM31=kani::any();kani::assume(canon(a)&&canon(b)&&canon(high)&&canon(pre));
+ let mut low=[QM31::ZERO;16];low[11]=a;low[12]=b;let selectors=Selectors{high:[QM31::ZERO;64],low};
+ unsafe{PRE=[high;7];OUTER_SUM=pre;crate::NDE_field::NDE_COUNT=0;}
+ let out=selectors.active_mask_basis();let product=unsafe{crate::NDE_field::NDE_REPLY};let pw=words(pre);let q=words(product);let expected=core::array::from_fn(|i|reference::add_word(pw[i],q[i]));
+ let good=unsafe{crate::NDE_field::NDE_COUNT==1&&crate::NDE_field::NDE_LEFT==high&&crate::NDE_field::NDE_RIGHT==a.add(b)}&&words(out)==expected;
+ assert!(good!=cfg!(NDN_invert));
+}

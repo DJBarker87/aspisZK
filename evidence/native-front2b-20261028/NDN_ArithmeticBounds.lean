@@ -26,7 +26,9 @@ theorem prefix_product (raw a b count : Nat) (hr:raw≤count*(P-1)^2)
  (ha:a<P) (hb:b<P) (hc:count<4) :
  raw+a*b≤(count+1)*(P-1)^2 ∧ raw+a*b<2^64 := by
  have hp:=Nat.mul_le_mul (show a≤P-1 by omega) (show b≤P-1 by omega)
- have step : raw+a*b≤(count+1)*(P-1)^2 := by rw [Nat.add_mul];omega
+ have hp2 : a*b≤(P-1)^2 := by simpa only [pow_two] using hp
+ have step : raw+a*b≤(count+1)*(P-1)^2 := by
+  simpa only [Nat.add_mul,one_mul] using Nat.add_le_add hr hp2
  have cap : (count+1)*(P-1)^2≤4*(P-1)^2 := Nat.mul_le_mul_right _ (by omega)
  norm_num [P] at cap ⊢
  constructor

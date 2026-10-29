@@ -33,7 +33,6 @@ theorem source (w c : Array U32 3#usize) :
   FIq_Native.state_only_poseidon.interpolate_three_constant_limb,
   hw0,hw1,hw2,hc0,hc1,hc2,bind_tc_ok,bind_assoc_eq,reduce,lift,
   FIq_Native.field.M31.reduce_u64,return_bind]
- rfl
 
 #print axioms return_bind
 #print axioms reduce
