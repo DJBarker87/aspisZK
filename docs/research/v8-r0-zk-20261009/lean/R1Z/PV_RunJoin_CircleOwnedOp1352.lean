@@ -9,7 +9,6 @@ attribute [local irreducible] encCM encQ
 theorem op13  :
     PV_AL_CircleOwned.aspis_core.field.QM31.ZERO  = encQ (PV_RunJoin_CircleRawTower52.field.QM31.ZERO ) := by
   unfold PV_AL_CircleOwned.aspis_core.field.QM31.ZERO PV_RunJoin_CircleRawTower52.field.QM31.ZERO
-  simp only [bind_assoc_eq,bind_tc_ok,PV_RunJoin_CircleOwnedProjection52.cm_a,PV_RunJoin_CircleOwnedProjection52.cm_b,PV_RunJoin_CircleOwnedProjection52.q_c0,PV_RunJoin_CircleOwnedProjection52.q_c1]
 
   all_goals simp only [encCM,encQ]
   all_goals rfl

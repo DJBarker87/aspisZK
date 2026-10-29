@@ -116,6 +116,7 @@ for i,c in enumerate(c for c in chunks if c.strip()):
  stem='PV_RunJoin_CircleOwnedOp'+str(i)+'52'; prev=mods[-1] if mods else 'PV_RunJoin_CircleOwnedProjection52'
  c=re.sub(r'\bt(\d+)\b',lambda m:'op'+m[1],c)
  c=c.replace(',encCM,encQ',',PV_RunJoin_CircleOwnedProjection52.cm_a,PV_RunJoin_CircleOwnedProjection52.cm_b,PV_RunJoin_CircleOwnedProjection52.q_c0,PV_RunJoin_CircleOwnedProjection52.q_c1')
+ if i in [1,2,13,14]: c=re.sub(r'  simp only \[[^\n]+\]\n','',c)
  c+='  all_goals simp only [encCM,encQ]\n  all_goals rfl\n'
  # same shared namespace allows later modules to use the checked predecessor names
  text='\n'.join('import R1Z.'+n for n in [prev,'PV_RunJoin_CircleOwnedScalar52',rawtower])+'''\nset_option autoImplicit false
