@@ -25,6 +25,8 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
       Canonical (PV_RunJoin_SemanticScalar50.raw p.y) ∧
       (PV_RunJoin_CircleInstalledExact55.coordinates p).1^2+
         (PV_RunJoin_CircleInstalledExact55.coordinates p).2^2=1 := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops
   obtain ⟨p,hp,hx,hy,hc⟩ := PV_RunJoin_CircleInstalledTotal55.complete
     (baseTypes base) heap box (beforeCircle base ops) block row
   have nativeCall : @sampler.circle_sample (types base) (opsNative base heap box ops) block row=ok p := by
