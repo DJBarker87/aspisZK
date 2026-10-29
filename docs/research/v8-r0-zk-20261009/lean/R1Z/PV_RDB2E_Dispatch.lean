@@ -23,7 +23,7 @@ theorem cache_range (c : Cache) : encode c=255 ∨ encode c=0 ∨ encode c=1 := 
 
 theorem cold_rule (cpu : Features) :
     (get false cpu .cold).1=if all cpu then .shani else .soft := by
-  unfold get; split <;> rfl
+  cases h : all cpu <;> simp [get,h]
 
 theorem compiled_rule (cpu : Features) (cache : Cache) :
     get true cpu cache=(.shani,cache) := rfl
@@ -34,7 +34,7 @@ theorem yes_rule (cpu : Features) : get false cpu .yes=(.shani,.yes) := rfl
 
 theorem cache_initialized (cpu : Features) :
     (get false cpu .cold).2≠.cold := by
-  unfold get; split <;> decide
+  cases h : all cpu <;> simp [get,h]
 
 theorem both_reachable :
     (get false ⟨false,false,false,false⟩ .cold).1=.soft ∧
