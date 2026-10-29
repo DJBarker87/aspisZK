@@ -1,0 +1,443 @@
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:14:30: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:14:12: error: unsolved goals
+case succ.fail
+W S P : Type
+a : Attempt W S P
+n : ℕ
+ih : ∀ (k : ℕ) (s : S) (w : W), stateLog (run a n k s w) = PV_L1D_RetryFold.run (stateAttempt a) n k (w, s)
+k : ℕ
+s : S
+w : W
+e : Aeneas.Std.Error
+h : (a k s w).outcome = Outcome.fail e
+⊢ {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ← { events := List.map Prod.snd (a k s w).calls, result := Aeneas.Std.Result.fail e }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:15:27: error: Ambiguous term
+  bind
+Possible interpretations:
+  R1Z.PV_W_Threading.bind : M ?m.76 ?m.77 ?m.78 ?m.79 → (?m.79 → M ?m.76 ?m.77 ?m.78 ?m.80) → M ?m.76 ?m.77 ?m.78 ?m.80
+  
+  Bind.bind : ?m.76 ?m.78 → (?m.78 → ?m.76 ?m.79) → ?m.76 ?m.79
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:15:9: error: unsolved goals
+case succ.div
+W S P : Type
+a : Attempt W S P
+n : ℕ
+ih : ∀ (k : ℕ) (s : S) (w : W), stateLog (run a n k s w) = PV_L1D_RetryFold.run (stateAttempt a) n k (w, s)
+k : ℕ
+s : S
+w : W
+h : (a k s w).outcome = Outcome.div
+⊢ {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ← { events := List.map Prod.snd (a k s w).calls, result := Aeneas.Std.Result.div }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:19:32: error: Ambiguous term
+  bind
+Possible interpretations:
+  R1Z.PV_W_Threading.bind : M ?m.124 ?m.125 ?m.126 ?m.127 →
+    (?m.127 → M ?m.124 ?m.125 ?m.126 ?m.128) → M ?m.124 ?m.125 ?m.126 ?m.128
+  
+  Bind.bind : ?m.124 ?m.126 → (?m.126 → ?m.124 ?m.127) → ?m.124 ?m.127
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:19:14: error: unsolved goals
+case succ.ok.done
+W S P : Type
+a : Attempt W S P
+n : ℕ
+ih : ∀ (k : ℕ) (s : S) (w : W), stateLog (run a n k s w) = PV_L1D_RetryFold.run (stateAttempt a) n k (w, s)
+k : ℕ
+s : S
+w : W
+after : S
+p : P
+h : (a k s w).outcome = Outcome.ok (R1Z.ProverCommitRetry34.Step.done p, after)
+⊢ {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ←
+      { events := List.map Prod.snd (a k s w).calls,
+          result := Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.done p, (a k s w).world, after) }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:20:32: error: Ambiguous term
+  bind
+Possible interpretations:
+  R1Z.PV_W_Threading.bind : M ?m.137 ?m.138 ?m.139 ?m.140 →
+    (?m.140 → M ?m.137 ?m.138 ?m.139 ?m.141) → M ?m.137 ?m.138 ?m.139 ?m.141
+  
+  Bind.bind : ?m.137 ?m.139 → (?m.139 → ?m.137 ?m.140) → ?m.137 ?m.140
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:20:14: error: unsolved goals
+case succ.ok.stop
+W S P : Type
+a : Attempt W S P
+n : ℕ
+ih : ∀ (k : ℕ) (s : S) (w : W), stateLog (run a n k s w) = PV_L1D_RetryFold.run (stateAttempt a) n k (w, s)
+k : ℕ
+s : S
+w : W
+after : S
+e : R1Z.ProverCommitRetry34.Error
+h : (a k s w).outcome = Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, after)
+⊢ {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ←
+      { events := List.map Prod.snd (a k s w).calls,
+          result := Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.stop e, (a k s w).world, after) }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:23:22: error: Ambiguous term
+  bind
+Possible interpretations:
+  R1Z.PV_W_Threading.bind : M ?m.161 ?m.162 ?m.163 ?m.164 →
+    (?m.164 → M ?m.161 ?m.162 ?m.163 ?m.165) → M ?m.161 ?m.162 ?m.163 ?m.165
+  
+  Bind.bind : ?m.161 ?m.163 → (?m.163 → ?m.161 ?m.164) → ?m.161 ?m.164
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:27:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) ((a k s w).world, after)
+in the target expression
+  {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ←
+      { events := List.map Prod.snd (a k s w).calls,
+          result := Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.retry, (a k s w).world, after) }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+
+case succ.ok.retry.mk
+W S P : Type
+a : Attempt W S P
+n : ℕ
+ih : ∀ (k : ℕ) (s : S) (w : W), stateLog (run a n k s w) = PV_L1D_RetryFold.run (stateAttempt a) n k (w, s)
+k : ℕ
+s : S
+w : W
+after : S
+h : (a k s w).outcome = Outcome.ok (R1Z.ProverCommitRetry34.Step.retry, after)
+outcome : Outcome Aeneas.Std.Error (R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published P) × S)
+world : W
+calls : List (W × Event)
+tail : run a n (k + 1) after (a k s w).world = { outcome := outcome, world := world, calls := calls }
+rest :
+  { events := List.map Prod.snd calls,
+      result :=
+        match outcome with
+        | Outcome.ok (out, s) => Aeneas.Std.Result.ok (out, world, s)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) ((a k s w).world, after)
+⊢ {
+      events :=
+        List.map Prod.snd
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).calls,
+      result :=
+        match
+          (R1Z.PV_W_Threading.bind (a k s)
+              (fun x =>
+                match x.1 with
+                | R1Z.ProverCommitRetry34.Step.done p =>
+                  lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                | R1Z.ProverCommitRetry34.Step.stop e => lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+              w).outcome with
+        | Outcome.ok (out, s_1) =>
+          Aeneas.Std.Result.ok
+            (out,
+              (R1Z.PV_W_Threading.bind (a k s)
+                  (fun x =>
+                    match x.1 with
+                    | R1Z.ProverCommitRetry34.Step.done p =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, x.2))
+                    | R1Z.ProverCommitRetry34.Step.stop e =>
+                      lift (Outcome.ok (R1Z.ProverCommitRetry34.Step.stop e, x.2))
+                    | R1Z.ProverCommitRetry34.Step.retry => run a n (k + 1) x.2)
+                  w).world,
+              s_1)
+        | Outcome.fail e => Aeneas.Std.Result.fail e
+        | Outcome.div => Aeneas.Std.Result.div } =
+    do
+    let __x ←
+      { events := List.map Prod.snd (a k s w).calls,
+          result := Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.retry, (a k s w).world, after) }
+    match __x.1 with
+      | R1Z.ProverCommitRetry34.Step.done p =>
+        pure (R1Z.ProverCommitRetry34.Step.done { proof := p, attempts := k + 1 }, __x.2)
+      | R1Z.ProverCommitRetry34.Step.stop e => pure (R1Z.ProverCommitRetry34.Step.stop e, __x.2)
+      | R1Z.ProverCommitRetry34.Step.retry => PV_L1D_RetryFold.run (stateAttempt a) n (k + 1) __x.2
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:14:80: warning: This simp argument is unused:
+  PV_L1D_Logged.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:15:77: warning: This simp argument is unused:
+  PV_L1D_Logged.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:19:39: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲bind, ̲h,l̵i̵f̵t̵,̵ ̲stateLog, ̲PV_L1D_RetryFold.run, ̲stateAttempt,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Logged.bind, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:19:87: warning: This simp argument is unused:
+  PV_L1D_Logged.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵l̵i̵f̵t̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:19:106: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵l̵i̵f̵t̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲1̲D̲_̲L̲o̲g̲g̲e̲d̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:20:39: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [run, ̲bind, ̲h,l̵i̵f̵t̵,̵ ̲stateLog, ̲PV_L1D_RetryFold.run, ̲stateAttempt,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Logged.bind, ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:20:87: warning: This simp argument is unused:
+  PV_L1D_Logged.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵l̵i̵f̵t̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:20:106: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵l̵i̵f̵t̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲l̲i̲f̲t̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲L̲1̲D̲_̲L̲o̲g̲g̲e̲d̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:23:72: warning: This simp argument is unused:
+  PV_L1D_Logged.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵a̵p̵p̵e̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1g-20261029/sources/PV_L1G_WorldJoin.lean:23:91: warning: This simp argument is unused:
+  List.map_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵b̵i̵n̵d̵,̵h̵,̵s̵t̵a̵t̵e̵L̵o̵g̵,̵P̵V̵_̵L̵1̵D̵_̵R̵e̵t̵r̵y̵F̵o̵l̵d̵.̵r̵u̵n̵,̵s̵t̵a̵t̵e̵A̵t̵t̵e̵m̵p̵t̵,̵P̵V̵_̵L̵1̵D̵_̵L̵o̵g̵g̵e̵d̵.̵b̵i̵n̵d̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵a̵p̵p̵e̵n̵d̵]̵[̲r̲u̲n̲,̲ ̲b̲i̲n̲d̲,̲ ̲h̲,̲ ̲s̲t̲a̲t̲e̲L̲o̲g̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲R̲e̲t̲r̲y̲F̲o̲l̲d̲.̲r̲u̲n̲,̲ ̲s̲t̲a̲t̲e̲A̲t̲t̲e̲m̲p̲t̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲L̲o̲g̲g̲e̲d̲.̲b̲i̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1G_WorldRetry.logged_join' depends on axioms: [sorryAx]

@@ -1,0 +1,19 @@
+theorem PV_L1G_Statements.combined : ∀ {I A S P C : Type} (actualCount : I → List ℕ × List ℕ)
+  (native : I → NativeTrace A) (sourceWorld bodyWorld : I → Trace A)
+  (owner : I → R1Z.SideChannelL1AttemptRecord.Owner S P) (initial : I → S) (fuel index : I → ℕ)
+  (adapt : I → R1Z.SideChannelL1AttemptRecord.Run P × S → Trace A) (context : I → C)
+  (calls : I → PV_DIAG9.DiagnosticCall),
+  PV_L1E_Link_CountAcquisition actualCount sourceWorld →
+    PV_L1E_Link_BodyWrapper sourceWorld bodyWorld →
+      PV_L1E_Link_OriginalRetry bodyWorld owner initial fuel index adapt →
+        PV_L1E_Link_NativeD163 native owner initial fuel index adapt →
+          PV_DIAG10.PV_DIAG10_Link_Sites context calls →
+            OpenInputs.L1_COUNT_TRACE actualCount native ∧
+              PV_DIAG10.PV_DIAG10_Link_Sites context calls ∧
+                ∀ (i : I), nativeObservation (native i) = decoder (modelTrace (native i)) :=
+fun {I A S P C} actualCount native sourceWorld bodyWorld owner initial fuel index adapt context calls acquisition body
+    retry coupling sites =>
+  ⟨original_count_trace actualCount native sourceWorld bodyWorld owner initial fuel index adapt acquisition body retry
+      coupling,
+    ⟨sites, all_prefixes native⟩⟩
+'PV_L1G_Statements.combined' depends on axioms: [propext]

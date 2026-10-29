@@ -53,6 +53,9 @@ all frozen Link files against the candidate, including Sites. The reused
 structural retry/callback binding is hash-rechecked in `retry-source-reuse.json`;
 its leaf/Drop/unwind, entropy-failure independence and plan/main residuals remain.
 V370 remains at the owner's pending D381/D386 compiler-cohort boundary.
+V394 account selection at attempts−1 and the upload/operation count association
+remain obligations of the actual client adapter; the returned field read and
+numeric guards do not discharge them.
 
 ## Composition and premise accounting
 
@@ -74,4 +77,70 @@ secret-dependent leak or shipped-source counterexample was constructed.
 
 ## Validation and object reuse
 
-Final receipts and audit results are appended after the focused replay.
+
+**99 Lean starts: 95 pass, 4 fail. Zero native scopes; zero Kani.**
+All 100 assigned IDs are consumed: 67636 was refused before any compiler
+started, so it costs zero Lean attempts but cannot be reused. The 100-start
+budget cannot be completed inside this fixed 100-ID block. No out-of-block ID
+was used. The three reserved checks all passed:
+
+| ID | Exact target | Exit | Lean wall seconds | Peak RSS bytes | Swap | Source revision |
+|---|---|---:|---:|---:|---:|---|
+| 67697 | `PV_L1G_Statements` | 0 | 1.87 | 5110493184 | 0 | `724872bd1ce057d4478432f3bdc1efd985d13085` |
+| 67698 | `PV_L1G_Axioms` | 0 | 1.71 | 5090422784 | 0 | `724872bd1ce057d4478432f3bdc1efd985d13085` |
+| 67699 | `PV_L1G_FocusedReplay` | 0 | 1.71 | 5091393536 | 0 | `724872bd1ce057d4478432f3bdc1efd985d13085` |
+
+Aggregate compiler wall time: **182.29 seconds**. Maximum peak
+RSS: **5110493184 bytes**. All scopes used MemoryHigh=6G,
+MemoryMax=8G, MemorySwapMax=0, TasksMax=64 and Lean -M7000, one at a time.
+There was one immediate admission refusal on a vanished unrelated service
+cgroup, followed by the complete 180-second cooldown and the NEXT unused ID.
+No compiler ran on the refusal; no void launch, cap increase or resource kill.
+
+Failures were 67614 (ambiguous bind reduction), 67615 (redundant closing
+rfl), 67616 (a documentation comment before #print), and 67622 (remaining
+projection reduction). All replacements changed and committed their source
+before submission. Accepted replacements are 67617 and 67623; original logs,
+source hashes and revisions remain. Failed-elaboration sorryAx earns no credit.
+`failed-source-replacements.json` checks the changed-source replacements.
+
+The requested older host directories l1c/l1d/l1e/l1f contained **zero compiled
+objects**: their committed cleanup receipts had removed them. This absence
+is recorded, not silently counted as reuse. All **1,665 surviving compatible
+objects** were reused read-only: 1,640 from the pinned runjoin cohort, plus
+25 diagnostic/decoder objects. Their selected source hashes, every import's
+object fingerprint, toolchain and effective object prefix were checked before
+use. Only 81 missing inherited prerequisites were rebuilt, unchanged and
+privately, to connect the new rules to the actual source/retry definitions.
+
+Final read-only validation checks **1759 project/own
+objects**, **4095 dependency edges**, and all
+**5673 external objects**, with exact toolchain
+`8c9756b28d64dab099da31a4c09229a9e6a2ef35`. All match. EJR/freeze/h5 precedence remains;
+no XR import, source substitution, shared-source or shared-object overwrite.
+The effective LEAN_PATH is recorded in `final-validation.json`.
+
+All 18 new helper theorems and the combined statement are covered by the
+accepted axioms audit; every accepted axiom set is a subset of
+{propext, Classical.choice, Quot.sound}. Each receipt and modules record
+retains the exact target, command, exit, wall, peak RSS, swap, source
+revision/blob/SHA, dependency fingerprint and full axioms output. `raw/`
+contains the hash-verified original compiler/time output. This was one final
+focused replay; no unchanged frozen privacy release regression was repeated.
+
+The verified host objects are retained as a pinned reuse cache, with
+`CACHE-PIN.json` referencing this final validation, to support the user's
+explicit reuse requirement and AGENTS resource rule 6. No compiler objects,
+binaries or files over 20 MiB are committed. No cargo/extractor scratch was
+created. All sources, receipts and keys are retained.
+
+Stopped at exhaustion of the assigned ID block. The next deliverable is a
+statement-by-statement native leaf/world producer and actual earlier
+count/rejection acquisition on the SAME original experiment, followed by
+the exact joint simE/failure/site law. The conditional retry bridge does not
+manufacture those missing inputs.
+
+`COMMITS.txt` records the complete candidate-to-proof/audit-source-tip range.
+No change under crates/ or programs/, protected soundness files, another
+worktree, observer or simE; no push, merge, ELF rebuild, timing measurement,
+Kani run, wallet/key/account operation, or new trust item.
