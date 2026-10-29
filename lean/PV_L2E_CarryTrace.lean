@@ -59,7 +59,7 @@ theorem final_carry (i a : Nat) (ds : List Nat) (ha : a≤P)
     cases ds with
     | nil => exact hc
     | cons e es =>
-      exact ih (i+1) ((d+a)/P) (by have hp : 1≤P := by decide; omega)
+      exact ih (i+1) ((d+a)/P) (Nat.le_trans hc (by decide))
         (fun x hx => hd x (by simp [hx])) (by simp)
 
 #print axioms length
