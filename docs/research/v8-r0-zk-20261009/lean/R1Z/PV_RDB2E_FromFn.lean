@@ -40,7 +40,7 @@ theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s a
       | div => simp [hb] at h
       | ok result =>
         rcases result with ⟨tail,s2⟩
-        simp only [hb,bind_tc_ok] at h
+        try simp only [hb,bind_tc_ok] at h
         have e : a::tail=out := congrArg Prod.fst (Result.ok.inj h)
         rw [←e]
         exact congrArg Nat.succ (ih (i+1) s1 tail s2 hb)
