@@ -1,0 +1,296 @@
+'PV_DIAG7.answer_correct' depends on axioms: [propext]
+'PV_DIAG7.run_done' depends on axioms: [propext]
+'PV_DIAG7.run_returned' depends on axioms: [propext]
+'PV_DIAG7.run_call_is_bind' depends on axioms: [propext]
+'PV_DIAG7.run_public' depends on axioms: [propext]
+'PV_DIAG7.calls_public' depends on axioms: [propext]
+'PV_DIAG7.run_events_public' depends on axioms: [propext]
+'PV_DIAG7.run_terminal_public' depends on axioms: [propext]
+'PV_DIAG7.run_state_public' depends on axioms: [propext]
+'PV_DIAG7.run_has_value' depends on axioms: [propext]
+'PV_DIAG7.returned_order' depends on axioms: [propext]
+'PV_DIAG7.return_preserves_calls' depends on axioms: [propext]
+'PV_DIAG7.call_is_first' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Program.lean:85:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  write signal fd bs s
+in the target expression
+  prepend
+      ((match Request.write fd bs with
+          | Request.write fd bytes => write signal fd bytes
+          | Request.flush fd => status (signal.flush fd)
+          | Request.file op _path => status (signal.file op)
+          | Request.lastError => fun s =>
+            have e := signal.errno s.cursor;
+            { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+          | Request.strerror code => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+          | Request.environment name => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+          | Request.logger level => fun s =>
+            { events := [], state := advance s,
+              exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+          | Request.backtrace => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+          | Request.capture => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+          s).events
+      (run signal
+        (next
+          (match
+            ((match Request.write fd bs with
+                | Request.write fd bytes => write signal fd bytes
+                | Request.flush fd => status (signal.flush fd)
+                | Request.file op _path => status (signal.file op)
+                | Request.lastError => fun s =>
+                  have e := signal.errno s.cursor;
+                  { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                | Request.strerror code => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                | Request.environment name => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                | Request.logger level => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                | Request.backtrace => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                | Request.capture => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                s).exit with
+          | Exit.value r => r
+          | x => Reply.enabled false))
+        ((match Request.write fd bs with
+            | Request.write fd bytes => write signal fd bytes
+            | Request.flush fd => status (signal.flush fd)
+            | Request.file op _path => status (signal.file op)
+            | Request.lastError => fun s =>
+              have e := signal.errno s.cursor;
+              { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+            | Request.strerror code => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+            | Request.environment name => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+            | Request.logger level => fun s =>
+              { events := [], state := advance s,
+                exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+            | Request.backtrace => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+            | Request.capture => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+            s).state) =
+    prepend [Event.requested fd bs, Event.delivered fd (List.take n bs)]
+      ((match next (Reply.write (IoReply.ok n)) with
+        | Program.done r => PV_DIAG3.pure r
+        | Program.returned bs next => fun s => prepend [Event.returned bs] (run signal next s)
+        | Program.call q next => fun s =>
+          prepend
+            ((match q with
+                | Request.write fd bytes => write signal fd bytes
+                | Request.flush fd => status (signal.flush fd)
+                | Request.file op _path => status (signal.file op)
+                | Request.lastError => fun s =>
+                  have e := signal.errno s.cursor;
+                  { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                | Request.strerror code => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                | Request.environment name => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                | Request.logger level => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                | Request.backtrace => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                | Request.capture => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                s).events
+            (run signal
+              (next
+                (match
+                  ((match q with
+                      | Request.write fd bytes => write signal fd bytes
+                      | Request.flush fd => status (signal.flush fd)
+                      | Request.file op _path => status (signal.file op)
+                      | Request.lastError => fun s =>
+                        have e := signal.errno s.cursor;
+                        { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                      | Request.strerror code => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                      | Request.environment name => fun s =>
+                        { events := [], state := advance s,
+                          exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                      | Request.logger level => fun s =>
+                        { events := [], state := advance s,
+                          exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                      | Request.backtrace => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                      | Request.capture => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                      s).exit with
+                | Exit.value r => r
+                | x => Reply.enabled false))
+              ((match q with
+                  | Request.write fd bytes => write signal fd bytes
+                  | Request.flush fd => status (signal.flush fd)
+                  | Request.file op _path => status (signal.file op)
+                  | Request.lastError => fun s =>
+                    have e := signal.errno s.cursor;
+                    { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                  | Request.strerror code => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                  | Request.environment name => fun s =>
+                    { events := [], state := advance s,
+                      exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                  | Request.logger level => fun s =>
+                    { events := [], state := advance s,
+                      exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                  | Request.backtrace => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                  | Request.capture => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                  s).state))
+        (advance s))
+
+signal : Signal
+fd n : Nat
+bs : Bytes
+next : Reply → Program
+s : State
+h : signal.write fd s.cursor = IoReply.ok n
+⊢ prepend
+      ((match Request.write fd bs with
+          | Request.write fd bytes => write signal fd bytes
+          | Request.flush fd => status (signal.flush fd)
+          | Request.file op _path => status (signal.file op)
+          | Request.lastError => fun s =>
+            have e := signal.errno s.cursor;
+            { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+          | Request.strerror code => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+          | Request.environment name => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+          | Request.logger level => fun s =>
+            { events := [], state := advance s,
+              exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+          | Request.backtrace => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+          | Request.capture => fun s =>
+            { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+          s).events
+      (run signal
+        (next
+          (match
+            ((match Request.write fd bs with
+                | Request.write fd bytes => write signal fd bytes
+                | Request.flush fd => status (signal.flush fd)
+                | Request.file op _path => status (signal.file op)
+                | Request.lastError => fun s =>
+                  have e := signal.errno s.cursor;
+                  { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                | Request.strerror code => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                | Request.environment name => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                | Request.logger level => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                | Request.backtrace => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                | Request.capture => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                s).exit with
+          | Exit.value r => r
+          | x => Reply.enabled false))
+        ((match Request.write fd bs with
+            | Request.write fd bytes => write signal fd bytes
+            | Request.flush fd => status (signal.flush fd)
+            | Request.file op _path => status (signal.file op)
+            | Request.lastError => fun s =>
+              have e := signal.errno s.cursor;
+              { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+            | Request.strerror code => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+            | Request.environment name => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+            | Request.logger level => fun s =>
+              { events := [], state := advance s,
+                exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+            | Request.backtrace => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+            | Request.capture => fun s =>
+              { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+            s).state) =
+    prepend [Event.requested fd bs, Event.delivered fd (List.take n bs)]
+      ((match next (Reply.write (IoReply.ok n)) with
+        | Program.done r => PV_DIAG3.pure r
+        | Program.returned bs next => fun s => prepend [Event.returned bs] (run signal next s)
+        | Program.call q next => fun s =>
+          prepend
+            ((match q with
+                | Request.write fd bytes => write signal fd bytes
+                | Request.flush fd => status (signal.flush fd)
+                | Request.file op _path => status (signal.file op)
+                | Request.lastError => fun s =>
+                  have e := signal.errno s.cursor;
+                  { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                | Request.strerror code => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                | Request.environment name => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                | Request.logger level => fun s =>
+                  { events := [], state := advance s,
+                    exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                | Request.backtrace => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                | Request.capture => fun s =>
+                  { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                s).events
+            (run signal
+              (next
+                (match
+                  ((match q with
+                      | Request.write fd bytes => write signal fd bytes
+                      | Request.flush fd => status (signal.flush fd)
+                      | Request.file op _path => status (signal.file op)
+                      | Request.lastError => fun s =>
+                        have e := signal.errno s.cursor;
+                        { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                      | Request.strerror code => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                      | Request.environment name => fun s =>
+                        { events := [], state := advance s,
+                          exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                      | Request.logger level => fun s =>
+                        { events := [], state := advance s,
+                          exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                      | Request.backtrace => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                      | Request.capture => fun s =>
+                        { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                      s).exit with
+                | Exit.value r => r
+                | x => Reply.enabled false))
+              ((match q with
+                  | Request.write fd bytes => write signal fd bytes
+                  | Request.flush fd => status (signal.flush fd)
+                  | Request.file op _path => status (signal.file op)
+                  | Request.lastError => fun s =>
+                    have e := signal.errno s.cursor;
+                    { events := [], state := store s e, exit := Exit.value (Reply.error e) }
+                  | Request.strerror code => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.bytes (signal.strerror code)) }
+                  | Request.environment name => fun s =>
+                    { events := [], state := advance s,
+                      exit := Exit.value (Reply.optionalBytes (signal.environment name)) }
+                  | Request.logger level => fun s =>
+                    { events := [], state := advance s,
+                      exit := Exit.value (Reply.logger (signal.loggerEnabled level) signal.loggerRoute) }
+                  | Request.backtrace => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.backtraceEnabled) }
+                  | Request.capture => fun s =>
+                    { events := [], state := advance s, exit := Exit.value (Reply.enabled signal.captureSelected) })
+                  s).state))
+        (advance s))
+'PV_DIAG7.write_success_continuation' depends on axioms: [propext, sorryAx]

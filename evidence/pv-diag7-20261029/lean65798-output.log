@@ -1,0 +1,47 @@
+def PV_DIAG7.V400_OptionB_P : {W P C : Type} → (W → P) → (W → C) → (W → PV_DIAG7.Signal) → Prop :=
+fun {W P C} pub coins signal => ∀ (w u : W), pub w = pub u → coins w = coins u → signal w = signal u
+structure PV_DIAG7.Signal : Type
+number of parameters: 0
+fields:
+  PV_DIAG7.Signal.write : Nat → Nat → PV_DIAG7.IoReply
+  PV_DIAG7.Signal.flush : Nat → Nat → Option PV_DIAG7.OsError
+  PV_DIAG7.Signal.file : Nat → Nat → Option PV_DIAG7.OsError
+  PV_DIAG7.Signal.reserved : Nat → Nat → Bool
+  PV_DIAG7.Signal.errno : Nat → PV_DIAG7.OsError
+  PV_DIAG7.Signal.strerror : Int → PV_DIAG3.Bytes
+  PV_DIAG7.Signal.environment : PV_DIAG3.Bytes → Option PV_DIAG3.Bytes
+  PV_DIAG7.Signal.loggerEnabled : Nat → Bool
+  PV_DIAG7.Signal.loggerRoute : Nat
+  PV_DIAG7.Signal.backtraceEnabled : Bool
+  PV_DIAG7.Signal.captureSelected : Bool
+constructor:
+  PV_DIAG7.Signal.mk (write : Nat → Nat → PV_DIAG7.IoReply) (flush file : Nat → Nat → Option PV_DIAG7.OsError)
+    (reserved : Nat → Nat → Bool) (errno : Nat → PV_DIAG7.OsError) (strerror : Int → PV_DIAG3.Bytes)
+    (environment : PV_DIAG3.Bytes → Option PV_DIAG3.Bytes) (loggerEnabled : Nat → Bool) (loggerRoute : Nat)
+    (backtraceEnabled captureSelected : Bool) : PV_DIAG7.Signal
+inductive PV_DIAG7.Request : Type
+number of parameters: 0
+constructors:
+PV_DIAG7.Request.write : Nat → PV_DIAG3.Bytes → PV_DIAG7.Request
+PV_DIAG7.Request.flush : Nat → PV_DIAG7.Request
+PV_DIAG7.Request.file : Nat → PV_DIAG3.Bytes → PV_DIAG7.Request
+PV_DIAG7.Request.lastError : PV_DIAG7.Request
+PV_DIAG7.Request.strerror : Int → PV_DIAG7.Request
+PV_DIAG7.Request.environment : PV_DIAG3.Bytes → PV_DIAG7.Request
+PV_DIAG7.Request.logger : Nat → PV_DIAG7.Request
+PV_DIAG7.Request.backtrace : PV_DIAG7.Request
+PV_DIAG7.Request.capture : PV_DIAG7.Request
+inductive PV_DIAG7.Program : Type
+number of parameters: 0
+constructors:
+PV_DIAG7.Program.done : PV_DIAG7.Reply → PV_DIAG7.Program
+PV_DIAG7.Program.returned : PV_DIAG3.Bytes → PV_DIAG7.Program → PV_DIAG7.Program
+PV_DIAG7.Program.call : PV_DIAG7.Request → (PV_DIAG7.Reply → PV_DIAG7.Program) → PV_DIAG7.Program
+theorem PV_DIAG7.optionB_bound_unchanged : ∀ {O R Bound : Type} [inst : LE Bound] (distance : (R → O) → (R → O) → Bound)
+  (actual publicReal ideal : R → O) (epsilon : Bound),
+  actual = publicReal → distance publicReal ideal ≤ epsilon → distance actual ideal ≤ epsilon :=
+fun {O R Bound} [LE Bound] distance actual publicReal ideal epsilon he existingBound =>
+  Eq.mpr (id (congrArg (fun _a => distance _a ideal ≤ epsilon) he)) existingBound
+'PV_DIAG3.write_interrupted_drop' depends on axioms: [propext, Quot.sound]
+'PV_DIAG7.optionB_every_write_prefix' does not depend on any axioms
+'PV_DIAG7.DIAG_optionB_public_signal' depends on axioms: [propext]

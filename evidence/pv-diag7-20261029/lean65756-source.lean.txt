@@ -1,0 +1,38 @@
+import PV_DIAG7_Effects
+/-! Public adaptive diagnostic programs. The program carries public operands
+and continuations. It may branch on every OS reply. This does not establish
+that a witness-bearing client invocation is such a program. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+inductive Program where
+ | done (result : Reply)
+ | returned (bytes : Bytes) (next : Program)
+ | call (request : Request) (next : Reply → Program)
+/-- Total decoding of our typed effect result; the fallback is unreachable
+by effect_has_value, and is not a replacement OS outcome. -/
+def answer (signal : Signal) (q : Request) (s : State) : Reply :=
+ match (effect signal q s).exit with
+ | .value r => r
+ | _ => .enabled false
+def run (signal : Signal) : Program → Op State Reply
+ | .done r => pure r
+ | .returned bs next => fun s => prepend [.returned bs] (run signal next s)
+ | .call q next => fun s => prepend (effect signal q s).events
+     (run signal (next (answer signal q s)) (effect signal q s).state)
+def calls (signal : Signal) : Program → State → List Request
+ | .done _,_ => []
+ | .returned _ next,s => calls signal next s
+ | .call q next,s => q :: calls signal (next (answer signal q s)) (effect signal q s).state
+theorem answer_correct (signal : Signal) (q : Request) (s : State) :
+ (effect signal q s).exit = .value (answer signal q s) := by
+ obtain ⟨r,hr⟩ := effect_has_value signal q s
+ simp only [answer,hr]
+#print axioms answer_correct
+theorem run_done (signal : Signal) (r : Reply) (s : State) :
+ run signal (.done r) s = ⟨[],s,.value r⟩ := rfl
+#print axioms run_done
+theorem run_returned (signal : Signal) (bs : Bytes) (next : Program) (s : State) :
+ run signal (.returned bs next) s = prepend [.returned bs] (run signal next s) := rfl
+#print axioms run_returned
+end PV_DIAG7

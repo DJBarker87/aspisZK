@@ -1,0 +1,35 @@
+import PV_DIAG7_Write
+/-! Decoder-facing laws. Instantiating a public Program from the deployed
+client is an explicit remaining source obligation. The theorem does not
+hide that obligation in V400, T, the signal, or a weakened observer. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+variable {W P C O : Type}
+/-- One function retains all ordered diagnostic events, exposed state,
+terminal, existing public L1 count and the actual selected call history. -/
+def DIAG_inputs (count : Nat) (x : Execution State Reply) (history : List Request) :=
+ (count,x.events,x.state,x.exit,history)
+/-- reserve_fallible resets its diagnostic slot; reserve stores only a
+failure kind. This is the complete wrapper result, not filesystem contents. -/
+def reserveResult (signal : Signal) (operation cursor : Nat) : Bool × Option OsError :=
+ match signal.file operation cursor with
+ | none => (signal.reserved operation cursor,none)
+ | some e => (false,some e)
+theorem nonce_failure_retained (signal : Signal) (op n : Nat) (e : OsError)
+ (h : signal.file op n = some e) : reserveResult signal op n = (false,some e) := by
+ simp only [reserveResult,h]
+#print axioms nonce_failure_retained
+theorem nonce_success_resets_error (signal : Signal) (op n : Nat)
+ (h : signal.file op n = none) : reserveResult signal op n = (signal.reserved op n,none) := by
+ simp only [reserveResult,h]
+#print axioms nonce_success_resets_error
+theorem nonce_last_error_kind {K : Type} (kind : OsError → K) (signal : Signal)
+ (op n : Nat) (e : OsError) (h : signal.file op n = some e) :
+ ((reserveResult signal op n).2).map kind = some (kind e) := by
+ rw [nonce_failure_retained signal op n e h]; rfl
+#print axioms nonce_last_error_kind
+theorem nonce_wrapper_public (a b : Signal) (op n : Nat) (h : a = b) :
+ reserveResult a op n = reserveResult b op n := by cases h; rfl
+#print axioms nonce_wrapper_public
+end PV_DIAG7

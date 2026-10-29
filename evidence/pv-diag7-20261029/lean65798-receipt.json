@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "8ad5d8093959d80496f2cd47384c8887eaf28824",
+  "runner_sha256": "b788d5ae6a0f05f67473508f3f7327249c6fc743bbcca4d5846b618f8412df1a",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG7_CohortAudit",
+  "attempt": 65798,
+  "source_sha256": "265234a0d3dd6d5042d7cf8a6ab8d66fd3ec5b4a4d0df14730b1888dc6162767",
+  "environment_sha256": "bd8bfe1ab5669d3f35358776c6b5b00479dc404ce041f0d3b67cc789a2314554",
+  "dependency_objects": {
+    "PV_DIAG7_Audit": {
+      "/home/dombarker/project-offloads/codex-pv-diag7-20261029/objects/PV_DIAG7_Audit.olean": "95d8d90b1a17999068348636a8833fe407fbec80aabf0b10f5a3117592c5757a"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/lean65798-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/objects/PV_DIAG7_CohortAudit.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_CohortAudit.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.1876204013824463,
+  "peak_rss_kib": "478244",
+  "swaps": "0",
+  "gnu_wall": "0:00.16",
+  "print_axioms": "def PV_DIAG7.V400_OptionB_P : {W P C : Type} \u2192 (W \u2192 P) \u2192 (W \u2192 C) \u2192 (W \u2192 PV_DIAG7.Signal) \u2192 Prop :=\nfun {W P C} pub coins signal => \u2200 (w u : W), pub w = pub u \u2192 coins w = coins u \u2192 signal w = signal u\nstructure PV_DIAG7.Signal : Type\nnumber of parameters: 0\nfields:\n  PV_DIAG7.Signal.write : Nat \u2192 Nat \u2192 PV_DIAG7.IoReply\n  PV_DIAG7.Signal.flush : Nat \u2192 Nat \u2192 Option PV_DIAG7.OsError\n  PV_DIAG7.Signal.file : Nat \u2192 Nat \u2192 Option PV_DIAG7.OsError\n  PV_DIAG7.Signal.reserved : Nat \u2192 Nat \u2192 Bool\n  PV_DIAG7.Signal.errno : Nat \u2192 PV_DIAG7.OsError\n  PV_DIAG7.Signal.strerror : Int \u2192 PV_DIAG3.Bytes\n  PV_DIAG7.Signal.environment : PV_DIAG3.Bytes \u2192 Option PV_DIAG3.Bytes\n  PV_DIAG7.Signal.loggerEnabled : Nat \u2192 Bool\n  PV_DIAG7.Signal.loggerRoute : Nat\n  PV_DIAG7.Signal.backtraceEnabled : Bool\n  PV_DIAG7.Signal.captureSelected : Bool\nconstructor:\n  PV_DIAG7.Signal.mk (write : Nat \u2192 Nat \u2192 PV_DIAG7.IoReply) (flush file : Nat \u2192 Nat \u2192 Option PV_DIAG7.OsError)\n    (reserved : Nat \u2192 Nat \u2192 Bool) (errno : Nat \u2192 PV_DIAG7.OsError) (strerror : Int \u2192 PV_DIAG3.Bytes)\n    (environment : PV_DIAG3.Bytes \u2192 Option PV_DIAG3.Bytes) (loggerEnabled : Nat \u2192 Bool) (loggerRoute : Nat)\n    (backtraceEnabled captureSelected : Bool) : PV_DIAG7.Signal\ninductive PV_DIAG7.Request : Type\nnumber of parameters: 0\nconstructors:\nPV_DIAG7.Request.write : Nat \u2192 PV_DIAG3.Bytes \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.flush : Nat \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.file : Nat \u2192 PV_DIAG3.Bytes \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.lastError : PV_DIAG7.Request\nPV_DIAG7.Request.strerror : Int \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.environment : PV_DIAG3.Bytes \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.logger : Nat \u2192 PV_DIAG7.Request\nPV_DIAG7.Request.backtrace : PV_DIAG7.Request\nPV_DIAG7.Request.capture : PV_DIAG7.Request\ninductive PV_DIAG7.Program : Type\nnumber of parameters: 0\nconstructors:\nPV_DIAG7.Program.done : PV_DIAG7.Reply \u2192 PV_DIAG7.Program\nPV_DIAG7.Program.returned : PV_DIAG3.Bytes \u2192 PV_DIAG7.Program \u2192 PV_DIAG7.Program\nPV_DIAG7.Program.call : PV_DIAG7.Request \u2192 (PV_DIAG7.Reply \u2192 PV_DIAG7.Program) \u2192 PV_DIAG7.Program\ntheorem PV_DIAG7.optionB_bound_unchanged : \u2200 {O R Bound : Type} [inst : LE Bound] (distance : (R \u2192 O) \u2192 (R \u2192 O) \u2192 Bound)\n  (actual publicReal ideal : R \u2192 O) (epsilon : Bound),\n  actual = publicReal \u2192 distance publicReal ideal \u2264 epsilon \u2192 distance actual ideal \u2264 epsilon :=\nfun {O R Bound} [LE Bound] distance actual publicReal ideal epsilon he existingBound =>\n  Eq.mpr (id (congrArg (fun _a => distance _a ideal \u2264 epsilon) he)) existingBound\n'PV_DIAG3.write_interrupted_drop' depends on axioms: [propext, Quot.sound]\n'PV_DIAG7.optionB_every_write_prefix' does not depend on any axioms\n'PV_DIAG7.DIAG_optionB_public_signal' depends on axioms: [propext]\n",
+  "object_sha256": "9eee082370a20ec07972ab738739bdd03a63e56b7e8446b118608e8c4db1dfda"
+}
