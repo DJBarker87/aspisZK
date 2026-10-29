@@ -14885,3 +14885,16 @@ It proved local write, drop and error-control laws, a local check of final-write
 After eleven rounds the lead has put a decision to the owner (owner packet, D474). (A) is to complete the std I/O association, which is the current default and continues. (B) is to narrow the observer; the lead does not recommend it, because it conflicts with D159. (C) is to change the deployed client so its diagnostics cannot depend on the witness by construction: fixed messages without secret operands, no backtrace capture, and a fixed panic hook with panic = abort. That would need a reviewed client patch, the three ELFs rebuilt, an owner-approved repin and a timing-gate re-run. The lead recommends (C).
 
 Meanwhile pv-diag12 (IDs 67300-67399; 100 Lean, 30 native, 0 Kani) builds the std I/O layer once, as a reusable association at the syscall boundary (each primitive maps its arguments and option-B outcomes to exact syscall requests and results). It then discharges Step and Readout for one channel completely, JSON and stdout first. Rows removed: 0. Privacy target not yet established.
+
+## D475 (Stream B) 2026-10-29 05:58 UTC: pv-ownp results; V239 line parked; whole-privacy top-down skeleton (pv-top) launched
+
+pv-ownp used all 100 Lean attempts (98 passed, 2 failed), one native scope (2,306 exact sampler comparisons and 187,233 point observations; finite validation) and no Kani. All three audits passed with standard axioms only. Lead review: link definitions unchanged; nothing else outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate as ce0015841f and pushed. It added 14 model theorems (bounded point-array stores, query schedules, the successful builder's 29 x 1024 column shape), but discharged no deployed link.
+
+92 of its 100 attempts were spent rebuilding missing dependency objects in a fresh host directory. That is a systemic waste across lines, and later prompts require (h6)-verified reuse of earlier host directories. After seven rounds on this line, V239 is PARKED with its compiled skeleton (PV_OWNM_V239.restore; SourceDense proved; ActualInput, OwnedPublicPlan, Transcript879 and Transcript890 open), and the worktree is removed.
+
+The slot goes to the end-to-end composition that AGENTS.md section 7 calls for. The headline privacy_headline_deployed has exactly one premise, RustRealRefinement, over a free rust instance (vacuity suspect V045). pv-top (sparse worktree from ce0015841f; IDs 67400-67499; 100 Lean, 0 native, 0 Kani) is to do four things:
+- define the deployed rust instance from the client route and pv-rj4idb's observation decoder;
+- compile RustRealRefinement for it from existing results plus named links, reusing the existing named inputs as links: the nine decoder inputs, runjoin's publication and step-(4) needs, the op227 bridge, the L1 and DIAG links and the feeding suspended rows;
+- apply the headline to obtain its conclusion for the deployed instance, conditional only on those links;
+- write LINKS.md, the single authoritative map of what remains, with each link's owner and status.
+A components-do-not-fit mismatch is the most important possible result and stops the job. Rows removed: 0. Privacy target not yet established.
