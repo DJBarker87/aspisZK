@@ -14799,3 +14799,16 @@ Six rows remain SUSPENDED:
 - V233 (61);
 - V197 (Aeneas loan-validation rejection).
 pv-rdcd4 (IDs 66300-66399; 100 Lean, 40 native, 0 Kani) takes V201 first, because op79's deployed association for runjoin step (4) waits on it. The method is to shrink by reachability from eval_message at prover.rs:354, apply b3p6-1 to token-identical bodies, generate lemma applications for repeated shapes, and hand-bind only the remainder. The other five rows follow. Rows removed at the endpoint: 0. Privacy target not yet established.
+
+## D465 (Stream B) 2026-10-29 05:01 UTC: pv-ownm results (V239 composition skeleton compiles; five named links); pv-ownn launched
+
+pv-ownm used all 100 Lean attempts, with no native scopes or Kani. All three final audits passed with standard axioms only. Failed splice proofs are quarantined and uncredited. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate and pushed.
+
+The top-down direction of D460 paid off. PV_OWNM_V239.restore compiles (attempt 65928, not within the first ten as asked, because the first skeleton lacked value preservation). It proves V239's consumed law from five standalone named links: dense-value equality through explicit runtime outcomes at every wire point and lane, and equal resource traces for two inputs with the same public data, site and column lengths. The lead read every link definition, and none restates the conclusion:
+- ActualInput: point length 10 and canonicality of the wire points and columns;
+- SourceDense: a scalar source equation, with no world or resource content;
+- Transcript879 and Transcript890: the point equals a reconstruction from public data at that site;
+- OwnedPublicPlan: the native execution equals the source value, and its resource trace equals the public plan of the wire points and failures.
+The privacy conclusion follows only once the transcript links make the point public, so the skeleton is a genuine decomposition. All five links are OPEN. SourceDense is closest: its full-row and range-fold transports passed separately, and only a dependent scanner suffix-length rewrite failed.
+
+pv-ownn (IDs 66400-66499; 100 Lean, 20 native, 0 Kani) discharges the links in order, never weakening a definition: SourceDense, ActualInput, OwnedPublicPlan, then the two transcript links, consuming runjoin's transcript laws and pv-l1d's oracle-prefix input when available. It then instantiates restore. Rows removed: 0. Privacy target not yet established.
