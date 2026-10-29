@@ -14526,3 +14526,33 @@ pv-rdb2f used all 100 Lean attempts (88 passed, 12 failed), 10 capped scopes and
 V231: the software backend path (soft::compress) is proved. The SHA-NI path (x86::digest_blocks) is proved conditional on one named hypothesis, R1Z.PV_RDB2F_ShaNi.SHA_NI_IntrinsicsSemantics. The lead read its statement. It is a structure of per-instruction equations: intr.add, round, shuffleRound, msg1, align4, msg2 and load each equal a named reference function, and pack and unpack are identities. It does not contain the row's conclusion, and it is satisfiable by taking the intrinsics to be the reference functions. Its trust content is that those reference functions describe what the CPU's SHA instructions compute, which is exactly the subject of owner packet item 3. V231 is not restored until the owner decides that item. The hypothesis is never placed in T.
 
 V256 and V257: the source-law proofs and all affected unchanged R72 consumers passed against a fresh R72 closure. The worker disclosed that it renamed the leading private LEAN_PATH directory (rdb2e to rdb2f), contrary to the exact-environment requirement, while the toolchain, every external path and all source and external hashes matched. It withdrew the restoration itself (ENVIRONMENT_FINDING.md). The deviation is very probably immaterial. Still, having accepted V213 too readily in D403, the lead does not waive it. pv-rdb2g (IDs 63900-63999; 40 Lean, no new proofs, no source edits) replays the R72 closure and the V256/V257 audits in the exact original environment and compares object hashes. Rows removed: 0. Privacy target not yet established.
+
+## D442 (Stream B) 2026-10-29 02:26 UTC: correction, three log entries (D432, D437, D441) had been committed to worker branches; restored here verbatim
+
+The entries D432, D437 and D441 were committed by the lead to the worker branches codex/pv-b3p6-20261028 (0c43174f53, 9e271d32e6) and codex/pv-runjoin-20261026 (e8fb711bc5), not to research. Each was written by a command that ran right after the lead had worked inside that worktree. The commands began with a cd to the shared checkout, but the file append and the path-limited commit acted on the worktree copy of this log. The lead push check (origin/research..research empty) ran in the same worktree, so it did not catch the misplacement. Their text is restored below verbatim, out of numerical sequence. The worker branches keep those commits until the lead merges them; at that merge the duplicate log lines will be dropped in favour of research. From now on the lead writes this log only through absolute paths and git -C on the shared checkout. No row or premise is affected.
+
+## D432 (Stream B) 2026-10-29 01:15 UTC: b3p6i results (V244 nonvacuity proved); b3p6j launched
+
+b3p6i (branch codex/pv-b3p6-20261028, head 28b8dd3411, pushed) used all 100 Lean attempts (62300-62399; 90 passed, 10 rejected), with no native scopes, no Kani and no limit raised. All three reserved audits passed, covering 117 new theorems with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or limit options outside unimported Aeneas templates; no large files.
+
+With the D411 proof-shape direction, residual (a) of V244 is proved at the emitted-reference and original-carrier level. Full composition_parts success, and .ok (.Ok value) witnesses for both the reference and the installed callback, now pass, which settles the formal nonvacuity that D405 had listed as missing. Two Horner body and loop read bindings also pass. The item (e) formatting result was reused unchanged. Rust interpretation remains reclassification within Charon and Aeneas tool trust.
+
+V244 remains SUSPENDED on three residuals: (b) the exhaustive structural binding, (c) the remaining D188 checks and the direct matrix comparison, and (d) slice and standard-library coverage. Runjoin's op227 hypothesis is not discharged. b3p6j launched (IDs 63100-63199; 100 Lean, 40 native, 0 Kani) on (b) to (d), with ruling own-1 defining the structural binding target for standard-library bodies. When op227 is discharged, it must report the exact theorem runjoin's bridge consumes and check it byte for byte against the bridge's hypothesis. Rows removed: 0. Privacy target not yet established.
+
+## D437 (Stream B) 2026-10-29 01:59 UTC: runjoin49 results; runjoin50 launched
+
+runjoin49 (head 3b72078039, pushed) used all 100 Lean attempts (72 accepted, 28 rejected; 0 Kani). All three reserved axioms audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules; protected prefixes untouched; no large files. It proved the following:
+- ordered 928-byte claim production;
+- pointwise polynomial semantics;
+- the produced gamma and material arrays through the retained continuation;
+- canonical scalars at transcript tags 27 to 29;
+- the q1 and w1 fold meanings from actual tail success.
+It also placed the incoming installations as D430 asked. The hinput backend-messages association is a step (2) producer obligation. The op79 and op254 installation identifications belong to step (4), at the deployed caller. Still open in step (2): the final claim-stream polynomial aggregate, the complete prepare and common-challenge association, the hinput producer proof, FinishContext and the ordered publication bytes. Rows removed: 0.
+
+runjoin50 launched (IDs 63600-63699; 100 Lean, 0 Kani) on those items in order, aggregating the 29 columns by induction or fold. Privacy target not yet established.
+
+## D441 (Stream B) 2026-10-29 02:25 UTC: b3p6j results; b3p6k launched
+
+b3p6j (branch codex/pv-b3p6-20261028, head e5d3eda1b4, pushed) used all 100 Lean attempts (86 passed, 14 rejected), with no native scopes and no Kani. Its three reserved audits passed before an interruption and were recovered without rerunning. Verification covered 100 source snapshots against committed blobs and 121 theorem axiom reports, with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules.
+
+V244 residual (b) advanced: ordered loops, emitted reads, the public-digest continuation and nine matrix stores are accepted. The exhaustive per-body binding is incomplete, and the value-body entry factorization hit the default recursion depth; its rejected proofs are excluded. Residuals (c) and (d) are pending. Runjoin's op227 hypothesis (R1Z.PV_RunJoin_OracleBridge38.selected_callback) is not discharged. b3p6k launched (IDs 64000-64099; 100 Lean, 40 native, 0 Kani), with the D411 direction applied to the value-body factorization, then (b), (c) and (d). Rows removed: 0. Privacy target not yet established.
