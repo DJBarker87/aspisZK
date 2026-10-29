@@ -137,6 +137,7 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
         (rt.toNative e adv w) (id : R → R) (measurable_of_finite _) measurable_id
         (links.coupling e adv w).1
     · simpa only [Measure.map_id] using map_uniform_of_means
+        (Z := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape))
         (rt.toModel e adv w) (id : (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape) → _)
         (measurable_of_finite _) measurable_id (links.coupling e adv w).2
   context := links.context
