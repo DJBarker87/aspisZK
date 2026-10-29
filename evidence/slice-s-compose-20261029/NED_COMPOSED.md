@@ -55,3 +55,53 @@ only the local successful validator prefix, not whole-root acceptance.
 The lane wrapper was tightened to propagate a failed compiler exit (rather
 than merely printing it); source snapshots are retained per attempt. This is
 an own-script repair and adds a check. Host launchers are unchanged.
+
+## Stage 3: ordered call prefixes and real carrier boundaries
+
+NED_SubtreeComposition (L031) instantiates the emitted afterstate encoder,
+live-snapshot encoder, late encoder, afterstate decoder, first-byte helper and
+output-lane helper, for every typed argument and every input/output length.
+NED_ValidatorTrace (L034) and NED_EncoderTrace (L039) erase to the exact
+cohort results. NED_ValidatorCallDomains (L036) and
+NED_EncoderCallDomains (L049) prove the allowed ordered prefixes and SAME
+payment/nullifier/anchor/late/validation arguments, including rejected prefixes.
+The reached late call's actual local output is the zero buffer of length 1520.
+None assumes root acceptance. All accepted printed axioms are the three standard
+axioms. Failed elaborations L033/035/037/038/048 are retained and excluded.
+
+The `NED_ExecutionComposition` and `NED_NativeRoots` theorems are explicitly
+CONDITIONAL transports, not concrete native instances. Their full statements
+and trust-record fields are in the matching `.lean` sources (L032/L041).
+`validator_native_root` and `encoder_native_root` retain root PacketDomain,
+root PhysicalInterpretation and the explicit `NativeContractSemanticTransport`
+record. The record's source-caller/reference fields are NOT yet instantiated
+from accepted native packets. Treating its name as the owner-approved trust row
+without that scoped instance would hide a refinement obligation; no composed
+row is promoted by those generic results. State and ordered effects appear in
+the conclusion, but an uninstantiated equality premise does not prove native
+state/effect transport.
+
+NEC common constructor imported from committed revision 09175b8ffc; hashes in
+NED_IMPORT_PROVENANCE.json. NED_revalidate_common.py independently checks all
+14 native/control pairs, frozen body, KMX patch, deployed features, graph/lock,
+source snapshots and intended failures. It reports `audited 14 window pairs`.
+NED_L042 privately rebuilds the unchanged NEC_Common module against the copied
+NDM object subtree, matching the sibling's LEAN_PATH ordering. L040 was a
+preflight-only missing-path diagnostic; own wrapper now includes that already
+copied nested cache path. No shared/lead infrastructure was changed.
+
+The actual reconstruction family and TerminalDecoder family have different
+Lean data/error owners. NED_ErrorCarriers (L043) proves all seven error-type
+bijections; only propext occurs. NED_ReconstructCarriers (L045) proves full
+statement/common roundtrips and SAME common/tuple arguments.
+NED_DigestCohorts (L047) proves actual M31 serializer, full digest serializer
+and first-byte equality between those two emitted families by symbolic body
+correspondence. L044's absent raw getter and L046's absent raw decoder are
+excluded; neither name is fabricated. Reconstruction uses the tuple projection
+and has no reached decoder at that point. Cross-family validator Result and
+all native per-edge physical associations remain work in progress.
+
+NED_EDGES now classifies every edge and retains the complete conservative
+union. Genuine M31 serialization is distinguished from primitive integer
+receivers and incompatible WideExact alternatives. No alternative has yet
+been pruned and no native status is inferred from a model certificate.

@@ -1,0 +1,130 @@
+import NED_CodecComposition
+import NED_SubtreeComposition
+set_option autoImplicit false
+noncomputable section
+namespace NED_ValidatorTrace
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+attribute [local instance] Classical.propDecidable
+abbrev E := NBN_StatementResult.Error
+abbrev R := Result (core.result.Result Unit E)
+inductive Call where
+  | payment (statement : Statement)
+  | lane (nullifier : Array U32 8#usize)
+  | late (argument : NBN_LateSummary.Statement) (output : Slice U8)
+
+def enc := atomic_statement.encode_digest_canonical
+def transfer (p : NBN_ValidatorSummary.Transfer) := ok (NBP_PaymentModel.transfer_encoded p)
+def withdrawal (p : NBN_ValidatorSummary.Withdrawal) := ok (NBP_PaymentModel.withdrawal_encoded p)
+def payment (s : Statement) := NBN_ValidatorSummary.paymentWith transfer withdrawal s
+
+def tail (s : Statement) : R × List Call :=
+  let d := (parts s).2.2.2.2.1
+  match NBN_FirstByteDependency.lane enc d with
+  | .fail e => (.fail e,[.lane d])
+  | .div => (.div,[.lane d])
+  | .ok (.Err e) => (ok (.Err (.Account e)),[.lane d])
+  | .ok (.Ok l) =>
+    if l ≠ (common s).output_lane then (ok (.Err .OutputLaneMismatch),[.lane d])
+    else
+      let arg := (common s).lane_transition
+      let out := NBN_LateResult.zero
+      let r : R := do
+        let (status,_) ← NBN_LateSummary.run enc arg out
+        match status with
+        | .Err e => ok (.Err (.LaneTransition e))
+        | .Ok _ => ok (.Ok ())
+      (r,[.lane d,.late arg out])
+
+def bindings (s : Statement) : R × List Call :=
+  if (parts s).1 ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
+  else if (parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain then (ok (.Err .DeploymentBindingMismatch),[])
+  else if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
+  else if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then (ok (.Err .CheckpointBindingMismatch),[])
+  else if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then (ok (.Err .HistoricalAnchorMismatch),[])
+  else tail s
+
+def run (s : Statement) : R × List Call :=
+  if (common s).master_account = zero ∨ (common s).checkpoint_account = zero ∨
+      (common s).selected_lane_account = zero then (ok (.Err .NonZeroBinding),[])
+  else if 8 ≤ (common s).output_lane.val then (ok (.Err .InvalidOutputLane),[])
+  else match payment s with
+    | .fail e => (.fail e,[.payment s])
+    | .div => (.div,[.payment s])
+    | .ok (.Err e) => (ok (.Err (.Payment e)),[.payment s])
+    | .ok (.Ok _) => ((bindings s).1,.payment s :: (bindings s).2)
+
+theorem tail_erases (s : Statement) : (tail s).1 = NBN_ValidatorSummary.tail enc s := by
+  unfold tail NBN_ValidatorSummary.tail
+  dsimp only
+  cases h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
+  | fail e => simp only [h,bind_tc_fail]
+  | div => simp only [h,bind_tc_div]
+  | ok r =>
+    cases r with
+    | Err e => simp only [h,bind_tc_ok]
+    | Ok l =>
+      simp only [h,bind_tc_ok]
+      split <;> rfl
+
+theorem bindings_erases (s : Statement) :
+    (bindings s).1 = NBN_ValidatorSummary.chain (common s) (parts s) (NBN_ValidatorSummary.tail enc s) := by
+  unfold bindings NBN_ValidatorSummary.chain
+  repeat' first | split | rfl | exact tail_erases s
+
+theorem erases (s : Statement) : (run s).1 =
+    pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s := by
+  rw [← NED_CodecComposition.validator s]
+  change (run s).1 = NBN_ValidatorSummary.run enc transfer withdrawal s
+  unfold run NBN_ValidatorSummary.run
+  split
+  · rfl
+  · split
+    · rfl
+    · unfold payment
+      cases h : NBN_ValidatorSummary.paymentWith transfer withdrawal s with
+      | fail e => simp only [h,bind_tc_fail]
+      | div => simp only [h,bind_tc_div]
+      | ok r =>
+        cases r with
+        | Err e => simp only [h,bind_tc_ok]
+        | Ok bytes =>
+          simp only [h,bind_tc_ok]
+          exact bindings_erases s
+
+/-- Every logged lane uses this statement's exact nullifier projection. -/
+theorem lane_same (s : Statement) (d : Array U32 8#usize)
+    (reached : Call.lane d ∈ (run s).2) : d = (parts s).2.2.2.2.1 := by
+  unfold run at reached
+  split at reached
+  · cases reached
+  · split at reached
+    · cases reached
+    · cases h : payment s with
+      | fail e => simp only [h,List.mem_singleton] at reached; cases reached
+      | div => simp only [h,List.mem_singleton] at reached; cases reached
+      | ok r => cases r with
+        | Err e => simp only [h,List.mem_singleton] at reached; cases reached
+        | Ok bytes =>
+          simp only [h,List.mem_cons] at reached
+          rcases reached with bad | reached
+          · cases bad
+          · unfold bindings at reached
+            repeat' first | split at reached | cases reached
+            unfold tail at reached
+            cases h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
+            | fail e => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
+            | div => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
+            | ok r => cases r with
+              | Err e => simpa only [h,List.mem_singleton,Call.lane.injEq] using reached
+              | Ok l =>
+                simp only [h] at reached
+                split at reached
+                · simpa only [List.mem_singleton,Call.lane.injEq] using reached
+                · simp only [List.mem_cons,List.not_mem_nil,Call.lane.injEq,reduceCtorEq,or_false] at reached
+                  exact reached
+
+#print axioms tail_erases
+#print axioms bindings_erases
+#print axioms erases
+#print axioms lane_same
+end NED_ValidatorTrace

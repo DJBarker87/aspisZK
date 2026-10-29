@@ -14,3 +14,11 @@ One changed-source repair follows an excluded missing-namespace error (L029).
 NED_validate.py runs the original NDT invariants before and after its added
 certificate checks. Nine controls currently pass, including missing/wrong edge
 certificates and exclusion of model-only evidence. No composed row promoted.
+
+Stage 3: exact emitted call-prefix traces and nine edge model associations
+are checked, while native composition remains OPEN. Source/error owner
+transport is being discharged explicitly. Generic conditional native-root
+transports L041 do NOT instantiate the approved native trust row by themselves.
+NEC asq8_common at 09175b8ffc is copied/revalidated and imported unchanged;
+its Box/allocator/runtime/source-to-ELF physical qualifications remain visible.
+Current new work is the cross-family payment/validator Result association.
