@@ -6,9 +6,9 @@ open Aeneas Aeneas.Std Result ProverRwFull ProverRwDictionaryTower
 variable [ExternalTypes]
 theorem complete (ops : ExternalFuns) (N : Usize) (x : W) :
  ∃ out, PV_RJ4IDB_NativePowers.callback ops N x = ok out := by
+ letI : ExternalFuns := PV_RJ4IDB_NativePowers.primitives ops
  unfold PV_RJ4IDB_NativePowers.callback
  rw [PV_RJ4IDB_PowersControl.source]
- letI : ExternalFuns := PV_RJ4IDB_NativePowers.primitives ops
  have hz : aspis_core.field.wide_exact.WideExact.ZERO = ok
   (ProverRwP6PowersNativeFactor.zero) := rfl
  have ho : ProverRwP6PowersSource.aspis_core.field.wide_exact.WideExact.ONE = ok
