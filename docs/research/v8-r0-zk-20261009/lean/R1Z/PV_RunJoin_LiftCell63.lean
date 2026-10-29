@@ -16,14 +16,18 @@ theorem word_idempotent (m : U32) : normalizeWord (normalizeWord m)=normalizeWor
 theorem normalized (m : U32) :
     normalize (PV_RunJoin_SemanticScalar50.raw (lifted m))=
       normalize (PV_RunJoin_BackendMInput58.raw m) := by
-  simp only [normalize,PV_RunJoin_SemanticScalar50.raw,lifted,PV_RunJoin_BackendMInput58.raw,
+  simp only [ProverCommitNativeOps47.normalize,PV_RunJoin_SemanticScalar50.raw,lifted,PV_RunJoin_BackendMInput58.raw,
     word_idempotent]
 
 theorem candidate61 [ExternalTypes] (ops : ExternalFuns) (m : U32) :
-    (ProverRwP6BodyCandidate.selected ops).op61 m=ok (⟨m,0#u32⟩ : aspis_core.field.CM31) := rfl
+    (ProverRwP6BodyCandidate.selected ops).op61 m=ok (⟨m,0#u32⟩ : aspis_core.field.CM31) := by
+  unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
+  rfl
 
 theorem candidate66 [ExternalTypes] (ops : ExternalFuns) (c : aspis_core.field.CM31) :
-    (ProverRwP6BodyCandidate.selected ops).op66 c=ok (⟨c,⟨0#u32,0#u32⟩⟩ : Q) := rfl
+    (ProverRwP6BodyCandidate.selected ops).op66 c=ok (⟨c,⟨0#u32,0#u32⟩⟩ : Q) := by
+  unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
+  rfl
 
 attribute [local irreducible] PV_B2_F_ResourceFamilies.selected PV_B2_E_GammaOriginal.selected
 set_option allowUnsafeReducibility true in
