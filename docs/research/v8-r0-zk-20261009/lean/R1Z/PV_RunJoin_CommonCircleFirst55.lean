@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_CommonSemanticBlock51
 import R1Z.PV_RunJoin_CircleInstalledTotal55
+import R1Z.PV_RunJoin_CircleSourceRows55
 import R1Z.PV_RunJoin_SemanticDigest51
 import R1Z.PV_RunJoin_SemanticFrames51
 set_option autoImplicit false
@@ -55,7 +56,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       PhaseSamplerParserBin.circle,PhaseCircleBlocksBin.select,PhaseCircleBlocksBin.first,
       PV_RunJoin_OpeningSampler50.block,AspisV8R19.SqueezeOracleBridge.state_roundtrip] using hmodel
   refine ⟨q,hx,hy,model,?_⟩
-  unfold host_wire.SemanticTranscript.challenge_reference_circle_point host_wire.SemanticTranscript.sample_block
+  rw [PV_RunJoin_CircleSourceRows55.first]
+  unfold host_wire.SemanticTranscript.sample_block
   simp only [bne_self_eq_false,Bool.false_eq_true,if_false]
   cases run : @host_wire.parse_record (types base) (selected base heap box selectedOps) 25#u8 framed with
   | fail e => rfl
