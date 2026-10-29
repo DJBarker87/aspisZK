@@ -1,0 +1,81 @@
+def Aeneas.Std.core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from : Usize →
+  Result (core.result.Result U32 core.num.error.TryFromIntError) :=
+fun i => core.num.tryFromUScalar UScalarTy.U32 i
+def AspisR1PublicPreparation.r1_wire.SemanticTranscript.new : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H →
+      Slice U8 →
+        Std.Array U8 32#usize →
+          Result
+            (core.result.Result (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+              AspisR1PublicPreparation.r1_wire.Error) :=
+fun {H} aspis_coreDigest32Inst hash public_bytes c1_root =>
+  have i := public_bytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from i
+  let r1 ←
+    AspisR1PublicPreparation.core.result.Result.map_err
+        (AspisR1PublicPreparation.r1_wire.SemanticTranscript.new.closure.Insts.CoreOpsFunctionFnOnceTupleTryFromIntErrorError
+          aspis_coreDigest32Inst)
+        r ()
+  let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let s ← lift (Array.make 1#usize [0#u8] AspisR1PublicPreparation.r1_wire.SemanticTranscript.new._proof_1).to_slice
+      let a ← lift (core.num.U32.to_le_bytes val)
+      let s1 ← lift a.to_slice
+      let s2 ← lift c1_root.to_slice
+      let s3 ← lift (Array.make 5#usize [AspisR1PublicPreparation.r1_wire.DOMAIN, s, s1, public_bytes, s2] ⋯).to_slice
+      let a1 ← aspis_coreDigest32Inst.digest hash s3
+      ok (core.result.Result.Ok { state := a1, hash := hash, next_row := 0#u8 })
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+        (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+        (core.convert.FromSame AspisR1PublicPreparation.r1_wire.Error) residual
+def AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+      U8 →
+        Slice U8 →
+          Result
+            (core.result.Result (Std.Array U8 32#usize) AspisR1PublicPreparation.r1_wire.Error ×
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript H) :=
+fun {H} aspis_coreDigest32Inst self row framed =>
+  if (row != self.next_row) = true then
+    ok (core.result.Result.Err (AspisR1PublicPreparation.r1_wire.Error.RowOrder self.next_row row), self)
+  else do
+    let s ← lift self.state.to_slice
+    let i ← 160#u8 + row
+    let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+    let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+    let absorbed ← aspis_coreDigest32Inst.digest self.hash s2
+    let s3 ← lift absorbed.to_slice
+    let s4 ←
+      lift
+          (Array.make 1#usize [1#u8]
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+    let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+    let block ← aspis_coreDigest32Inst.digest self.hash s5
+    let s6 ← lift absorbed.to_slice
+    let s7 ←
+      lift
+          (Array.make 1#usize [2#u8]
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+    let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+    let a ← aspis_coreDigest32Inst.digest self.hash s8
+    let i1 ← self.next_row + 1#u8
+    ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })
+def AspisR1PublicPreparation.core.result.Result.map_err : {T E F O : Type} →
+  core.ops.function.FnOnce O E F → core.result.Result T E → O → Result (core.result.Result T F) :=
+fun {T E F O} opsfunctionFnOnceOTupleEFInst self op =>
+  match self with
+  | core.result.Result.Ok t => ok (core.result.Result.Ok t)
+  | core.result.Result.Err e => do
+    let t ← opsfunctionFnOnceOTupleEFInst.call_once op e
+    ok (core.result.Result.Err t)
+def Aeneas.Std.core.num.tryFromUScalar : {srcTy : UScalarTy} →
+  (tgtTy : UScalarTy) → UScalar srcTy → Result (core.result.Result (UScalar tgtTy) core.num.error.TryFromIntError) :=
+fun {srcTy} tgtTy i =>
+  if ↑i ≤ UScalar.max tgtTy then ok (core.result.Result.Ok (UScalar.cast tgtTy i)) else ok (core.result.Result.Err ())
+def Aeneas.Std.core.num.U32.to_le_bytes : U32 → Std.Array U8 4#usize :=
+fun x => ⟨List.map UScalar.mk x.bv.toLEBytes, ⋯⟩

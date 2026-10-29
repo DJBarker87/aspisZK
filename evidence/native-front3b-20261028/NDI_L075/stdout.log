@@ -1,0 +1,16 @@
+NDI_generated/NDI_ReaderCohort.lean:15:79: error: unsolved goals
+width : Usize
+r : verifier.Reader
+coordinate : Usize
+fit : ↑r.at + ↑width ≤ (↑r.bytes).length
+bound : ↑coordinate < ↑width
+out : Std.Array U8 width
+finish : Usize
+value : U8
+call : NDF_ReaderRef.raw_ref width r.bytes r.at = ok (out, finish)
+byte : NDI_ReaderByteRef.raw_byte_ref r.bytes r.at width coordinate = ok (value, finish)
+cell : (↑out)[↑coordinate]? = some value
+⊢ (let (out, finish) := (out, finish)
+    ok (out, { bytes := r.bytes, «at» := finish })) =
+    ok (out, { bytes := r.bytes, «at» := finish })
+'NDI_ReaderCohort.selected_byte' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

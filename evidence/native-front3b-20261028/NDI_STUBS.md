@@ -1,0 +1,9 @@
+# Native substitutions
+
+No M31/CM31/QM31/WideExact multiplication stub was used in this lane. There is no unpaired field multiplication obligation and no field multiplication Kani result. Primitive U64 key packing by the constant256 is not field multiplication.
+
+Every reached copy substitution is supplied verbatim by KMX_copy_stubs.patch (sha256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67), included from its exact KMX_stubs.rs. KMX_copy_from_slice and KMX_copy_nonoverlapping are not lane-written replacements. Library K005/K006 and program K012/K013 are the matched positive/negative copy controls. KMX_CopyMeaning loop/frame laws are reused by NDI_RawProjection; exact-size reader windows are not treated as a whole deployed reader proof.
+
+Actual SolanaDigest::digest is replaced only in initializer/sampler caller harnesses by NDI_digest::digest_reply or pure_digest_reply, which inspect exact ordered slice descriptors and forward supplied arbitrary runtime reply bytes. No SHA implementation or digest value is modeled or unwound. Ordered initializer transport K029/K031 and sampler transport K030/K032 pass/control-fail. NDI_TranscriptInit.reference and NDI_TranscriptLaw.sample/rejected associate these exact calls with the emitted cohort; runtime digest realization supplies the values as the existing approved trust item. The accepted sampler native method contract remains OPEN despite its transport constituent passing.
+
+Verified substitutions are confined to scalar/record/fixed-array fidelity controls and the demonstrated getter constituents. Exact carrier controls are recorded in the bridge matrix and ledger delta. There is no borrowed-result or Vec-return verified substitution, no XRn_Join kit, no observer/function-pointer evidence restored by renaming, and no substitution of a final-array batch_keys equation for the tested native loop step.

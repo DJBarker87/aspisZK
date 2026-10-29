@@ -1,0 +1,89 @@
+NDI_generated/NDI_BatchWord.lean:10:62: error: Type mismatch
+  UScalar.cast_val_eq
+has type
+  ∀ (tgt_ty : UScalarTy) (x : UScalar ?m.67), ↑(UScalar.cast tgt_ty x) = ↑x % 2 ^ tgt_ty.numBits
+but is expected to have type
+  ↑(UScalar.cast UScalarTy.U64 x) = ↑x
+NDI_generated/NDI_BatchWord.lean:18:4: error: unsolved goals
+case pos.refine_1
+u : U32
+tree coordinate : Usize
+bound : ↑coordinate < 16
+index : UScalar UScalarTy.U32
+div : u / 4#u32 = ok index
+indexVal : ↑index = ↑u / ↑4#u32
+convert : ∀ (x : U32), ↑(UScalar.cast UScalarTy.U64 x) = ↑x
+tag : tree = 2#usize
+b : ↑index < 2 ^ UScalarTy.U32.numBits
+product : UScalar UScalarTy.U64
+mul : UScalar.cast UScalarTy.U64 index * 256#u64 = ok product
+pval : ↑product = ↑(UScalar.cast UScalarTy.U64 index) * ↑256#u64
+out : UScalar UScalarTy.U64
+add : product + UScalar.cast UScalarTy.U64 coordinate = ok out
+oval : ↑out = ↑product + ↑(UScalar.cast UScalarTy.U64 coordinate)
+⊢ (do
+      let i1 ← BitVec.setWidth UScalarTy.U64.numBits (U32.bv index)#uscalar * 256#u64
+      i1 + UScalar.cast UScalarTy.U64 coordinate) =
+    ok out
+NDI_generated/NDI_BatchWord.lean:27:4: error: unsolved goals
+case neg.refine_1
+u : U32
+tree coordinate : Usize
+bound : ↑coordinate < 16
+index : UScalar UScalarTy.U32
+div : u / 4#u32 = ok index
+indexVal : ↑index = ↑u / ↑4#u32
+convert : ∀ (x : U32), ↑(UScalar.cast UScalarTy.U64 x) = ↑x
+tag : ¬tree = 2#usize
+b : ↑u < 2 ^ UScalarTy.U32.numBits
+product : UScalar UScalarTy.U64
+mul : UScalar.cast UScalarTy.U64 u * 256#u64 = ok product
+pval : ↑product = ↑(UScalar.cast UScalarTy.U64 u) * ↑256#u64
+out : UScalar UScalarTy.U64
+add : product + UScalar.cast UScalarTy.U64 coordinate = ok out
+oval : ↑out = ↑product + ↑(UScalar.cast UScalarTy.U64 coordinate)
+⊢ (do
+      let i1 ← BitVec.setWidth UScalarTy.U64.numBits u.bv#uscalar * 256#u64
+      i1 + UScalar.cast UScalarTy.U64 coordinate) =
+    ok out
+NDI_generated/NDI_BatchWord.lean:19:46: warning: This simp argument is unused:
+  convert
+
+Hint: Omit it from the simp argument list.
+  simp only [NDI_BatchRef.batch_word_ref, ̲if_pos tag, ̲div, ̲bind_tc_ok,
+         ̵ ̵core.convert.num.FromU64U32.from, ̲lift,c̵o̵n̵v̵e̵r̵t̵,̵ ̲mul, ̲add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_BatchWord.lean:19:54: warning: This simp argument is unused:
+  mul
+
+Hint: Omit it from the simp argument list.
+  simp only [NDI_BatchRef.batch_word_ref, ̲if_pos tag, ̲div, ̲bind_tc_ok,
+         ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲convert,m̵u̵l̵,̵ ̲add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_BatchWord.lean:19:58: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [NDI_BatchRef.batch_word_ref, ̲if_pos tag, ̲div, ̲bind_tc_ok,
+         ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲convert, ̲mul,̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_BatchWord.lean:28:46: warning: This simp argument is unused:
+  mul
+
+Hint: Omit it from the simp argument list.
+  simp only [NDI_BatchRef.batch_word_ref, ̲if_neg tag, ̲bind_tc_ok,
+         ̵ ̵core.convert.num.FromU64U32.from, ̲lift,m̵u̵l̵,̵ ̲add]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_BatchWord.lean:28:50: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [NDI_BatchRef.batch_word_ref, ̲if_neg tag, ̲bind_tc_ok,
+         ̵ ̵core.convert.num.FromU64U32.from, ̲lift, ̲mul,̵a̵d̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_BatchWord.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,55 @@
+{"attempt": "NDI_L022", "exit_status": 1, "wall_seconds": 1.1185032649664208, "peak_rss_kib": "2617672", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.convert.num.ptr_try_from_impls.TryFromU32Usize.try_from : Usize →
+  Result (core.result.Result U32 core.num.error.TryFromIntError) :=
+fun i => core.num.tryFromUScalar UScalarTy.U32 i
+def AspisR1PublicPreparation.r1_wire.SemanticTranscript.new : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    H →
+      Slice U8 →
+        Std.Array U8 32#usize →
+          Result
+            (core.result.Result (AspisR1PublicPreparation.r1_wire.SemanticTranscript H)
+              AspisR1PublicPreparation.r1_wire.Error) :=
+fun {H} aspis_coreDigest32Inst hash public_bytes c1_root =>
+  have i := public_bytes.len;
+  do
+  let r ← core.convert.num.ptr_try_from_impls.TryFromU32U
+...
+ Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.r1_wire.SemanticTranscript H →
+      U8 →
+        Slice U8 →
+          Result
+            (core.result.Result (Std.Array U8 32#usize) AspisR1PublicPreparation.r1_wire.Error ×
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript H) :=
+fun {H} aspis_coreDigest32Inst self row framed =>
+  if (row != self.next_row) = true then
+    ok (core.result.Result.Err (AspisR1PublicPreparation.r1_wire.Error.RowOrder self.next_row row), self)
+  else do
+    let s ← lift self.state.to_slice
+    let i ← 160#u8 + row
+    let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+    let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+    let absorbed ← aspis_coreDigest32Inst.digest self.hash s2
+    let s3 ← lift absorbed.to_slice
+    let s4 ←
+      lift
+          (Array.make 1#usize [1#u8]
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+    let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+    let block ← aspis_coreDigest32Inst.digest self.hash s5
+    let s6 ← lift absorbed.to_slice
+    let s7 ←
+      lift
+          (Array.make 1#usize [2#u8]
+              AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+    let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+    let a ← aspis_coreDigest32Inst.digest self.hash s8
+    let i1 ← self.next_row + 1#u8
+    ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })
+NDI_generated/NDI_TranscriptInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `core.result.Result.map_err`
+def Aeneas.Std.core.num.U32.to_le_bytes : U32 → Std.Array U8 4#usize :=
+fun x => ⟨List.map UScalar.mk x.bv.toLEBytes, ⋯⟩
+
+Running as unit: run-r42018b696c2b441081da322553f7749b.scope; invocation ID: 18782e5799b84958ad0bf1cc8bc2734a

@@ -1,0 +1,42 @@
+{"attempt": "NDI_K066", "exit_status": 1, "wall_seconds": 4.382717021042481, "peak_rss_kib": "435500", "swaps": "0", "print_axioms": "N/A: kani"}
+NDI_NATIVE_INVOCATION NDI_K066
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nu
+...
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+   Compiling aspis-r0-block-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/docs/research/v8-r0-zk-20261009/refine/blockwriters)
+   Compiling aspis-r0-poseidon-copy v0.0.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/docs/research/v8-r0-zk-20261009/refine/poseidon)
+   Compiling aspis-r0-writer-copies v0.0.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/docs/research/v8-r0-zk-20261009/refine/writers)
+   Compiling aspis-statement v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-statement)
+error: couldn't read `crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/tree.rs`: No such file or directory (os error 2)
+   --> crates/aspis-statement/src/pool_v1/incremental_merkle.rs:766:1
+    |
+766 | pub mod tree_reference;
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `aspis-statement` (lib) due to 1 previous error
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-r5ec31ac488274e7487061ed405c843e6.scope; invocation ID: 28edefc4998b4098817eaadbbac02510

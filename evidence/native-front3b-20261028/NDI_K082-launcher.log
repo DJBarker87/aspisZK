@@ -1,0 +1,48 @@
+{"attempt": "NDI_K082", "exit_status": 1, "wall_seconds": 13.464179732021876, "peak_rss_kib": "4711572", "swaps": "0", "print_axioms": "N/A: kani"}
+NDI_NATIVE_INVOCATION NDI_K082
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a
+...
+growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front3b-20261028/NDI_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 0.89s
+Checking harness verifier::NDI_verifier::raw16_isolated_window_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 253 failed (2 unreachable)
+Failed Checks: |r| NDI_verifier::raw_matches(r,self.bytes,self.at,old(self.at)) !=
+cfg!(NDI_invert_actual_raw)
+ File: "crates/aspis-r1-cost-probe/src/verifier.rs", line 348, in verifier::Reader::<'_>::raw::<16>::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 9.891839s
+
+Manual Harness Summary:
+Verification failed for - verifier::NDI_verifier::raw16_isolated_window_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf32d093f679a4043aa1c611e73cb7c5f.scope; invocation ID: f5c0b0a6592d4d9dbd7d6ce6ee1b6415

@@ -1,0 +1,239 @@
+NDI_generated/NDI_ParserBody.lean:41:26: error(lean.unknownIdentifier): Unknown identifier `ne_self`
+NDI_generated/NDI_ParserBody.lean:45:4: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ←
+      let (tag, size) := (tag, size)
+        do
+        let i1 ← 5#usize + size
+        if (total != i1) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+          else
+            if (a != tag) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Tag row))
+            else
+              if
+                  (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) !=
+                      size) =
+                    true then
+                ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+              else do
+                let r1 ← NCO_ParserRef.validate_ref row (frame.drop 5#usize)
+                let cf1 ←
+                  match r1 with
+                    | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                    | core.result.Result.Err e =>
+                      ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (frame.drop 5#usize))
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                      (core.convert.FromSame NCO_ParserRef.RefError) residual
+    ok (NCO_Framing.result r)
+is not definitionally equal to the right-hand side
+  let (tag, size) := (tag, size)
+  do
+  let i1 ← 5#usize + size
+  if (total != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+    else
+      if (a != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+      else
+        if
+            (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) != size) =
+              true then
+          ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+        else do
+          let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row (frame.drop 5#usize)
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (frame.drop 5#usize))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+
+case neg.isTrue
+row tag : U8
+size total : Usize
+frame : Slice U8
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrongLength : ¬frame.len ≠ total
+length : frame.len = total
+totalVal : ↑total = 5 + ↑size
+frameVal : (↑frame).length = 5 + ↑size
+five : 5 ≤ (↑frame).length
+bound : (↑frame).length ≤ 3717
+a : U8
+ha : frame.index_usize 0#usize = ok a
+right✝⁴ : a = (↑frame)[↑0#usize]
+b : U8
+hb : frame.index_usize 1#usize = ok b
+right✝³ : b = (↑frame)[↑1#usize]
+c : U8
+hc : frame.index_usize 2#usize = ok c
+right✝² : c = (↑frame)[↑2#usize]
+d : U8
+hd : frame.index_usize 3#usize = ok d
+right✝¹ : d = (↑frame)[↑3#usize]
+e : U8
+he : frame.index_usize 4#usize = ok e
+right✝ : e = (↑frame)[↑4#usize]
+word :
+  ok
+      (UScalar.cast UScalarTy.Usize b ||| BitVec.zeroExtend UScalarTy.Usize.numBits c.bv <<< 8#uscalar |||
+          BitVec.zeroExtend UScalarTy.Usize.numBits d.bv <<< 16#uscalar |||
+        BitVec.zeroExtend UScalarTy.Usize.numBits e.bv <<< 24#uscalar) =
+    ok (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)))
+wordVal :
+  UScalar.cast UScalarTy.Usize b ||| BitVec.zeroExtend UScalarTy.Usize.numBits c.bv <<< 8#uscalar |||
+        BitVec.zeroExtend UScalarTy.Usize.numBits d.bv <<< 16#uscalar |||
+      BitVec.zeroExtend UScalarTy.Usize.numBits e.bv <<< 24#uscalar =
+    UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯))
+h✝ : row ≥ 14#u8
+⊢ (do
+      let r ←
+        let (tag, size) := (tag, size)
+          do
+          let i1 ← 5#usize + size
+          if (total != i1) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+            else
+              if (a != tag) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Tag row))
+              else
+                if
+                    (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) !=
+                        size) =
+                      true then
+                  ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+                else do
+                  let r1 ← NCO_ParserRef.validate_ref row (frame.drop 5#usize)
+                  let cf1 ←
+                    match r1 with
+                      | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf1 with
+                    | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (frame.drop 5#usize))
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                        (core.convert.FromSame NCO_ParserRef.RefError) residual
+      ok (NCO_Framing.result r)) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (total != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+      else
+        if (a != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+        else
+          if
+              (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) != size) =
+                true then
+            ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+          else do
+            let r1 ← AspisR1PrefixAggregateParser.r1_wire.validate_record_fields row (frame.drop 5#usize)
+            let cf1 ←
+              match r1 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok (frame.drop 5#usize))
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                  (core.convert.FromSame AspisR1PrefixAggregateParser.r1_wire.Error) residual
+NDI_generated/NDI_ParserBody.lean:46:4: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case neg.isFalse
+row tag : U8
+size total : Usize
+frame : Slice U8
+shape : NCO_ParserRef.row_shape_ref row = ok (some (tag, size))
+sum : 5#usize + size = ok total
+sourceShape : AspisR1PrefixAggregateParser.r1_wire.row_shape row = ok (some (tag, size))
+wrongLength : ¬frame.len ≠ total
+length : frame.len = total
+totalVal : ↑total = 5 + ↑size
+frameVal : (↑frame).length = 5 + ↑size
+five : 5 ≤ (↑frame).length
+bound : (↑frame).length ≤ 3717
+a : U8
+ha : frame.index_usize 0#usize = ok a
+right✝⁴ : a = (↑frame)[↑0#usize]
+b : U8
+hb : frame.index_usize 1#usize = ok b
+right✝³ : b = (↑frame)[↑1#usize]
+c : U8
+hc : frame.index_usize 2#usize = ok c
+right✝² : c = (↑frame)[↑2#usize]
+d : U8
+hd : frame.index_usize 3#usize = ok d
+right✝¹ : d = (↑frame)[↑3#usize]
+e : U8
+he : frame.index_usize 4#usize = ok e
+right✝ : e = (↑frame)[↑4#usize]
+word :
+  ok
+      (UScalar.cast UScalarTy.Usize b ||| BitVec.zeroExtend UScalarTy.Usize.numBits c.bv <<< 8#uscalar |||
+          BitVec.zeroExtend UScalarTy.Usize.numBits d.bv <<< 16#uscalar |||
+        BitVec.zeroExtend UScalarTy.Usize.numBits e.bv <<< 24#uscalar) =
+    ok (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)))
+wordVal :
+  UScalar.cast UScalarTy.Usize b ||| BitVec.zeroExtend UScalarTy.Usize.numBits c.bv <<< 8#uscalar |||
+        BitVec.zeroExtend UScalarTy.Usize.numBits d.bv <<< 16#uscalar |||
+      BitVec.zeroExtend UScalarTy.Usize.numBits e.bv <<< 24#uscalar =
+    UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯))
+h✝ : ¬row ≥ 14#u8
+⊢ (do
+      let r ←
+        let (tag, size) := (tag, size)
+          do
+          let i1 ← 5#usize + size
+          if (total != i1) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+            else
+              if (a != tag) = true then ok (core.result.Result.Err (NCO_ParserRef.RefError.Tag row))
+              else
+                if
+                    (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) !=
+                        size) =
+                      true then
+                  ok (core.result.Result.Err (NCO_ParserRef.RefError.Length row))
+                else ok (core.result.Result.Ok (frame.drop 5#usize))
+      ok (NCO_Framing.result r)) =
+    let (tag, size) := (tag, size)
+    do
+    let i1 ← 5#usize + size
+    if (total != i1) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+      else
+        if (a != tag) = true then ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Tag row))
+        else
+          if
+              (UScalar.cast UScalarTy.Usize (core.num.U32.from_le_bytes (Array.make 4#usize [b, c, d, e] ⋯)) != size) =
+                true then
+            ok (core.result.Result.Err (AspisR1PrefixAggregateParser.r1_wire.Error.Length row))
+          else ok (core.result.Result.Ok (frame.drop 5#usize))
+NDI_generated/NDI_ParserBody.lean:41:15: warning: This simp argument is unused:
+  sum
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲NCO_ParserRef.core.option.Option.ok_or,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵bind_tc_ok,s̵u̵m̵,̵ ̲length, ̲ne_self, ̲if_false, ̲ha, ̲hb, ̲hc,h̵d̵,̵h̵e̵,̵l̵i̵f̵t̵,̵
+      h̲d̲,̲ ̲h̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲NDI_HeaderShifts.byte8, ̲NDI_HeaderShifts.byte16, ̲NDI_HeaderShifts.byte24, ̲wordVal,
+      NDI_ParserPayload.range frame five]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_ParserBody.lean:41:34: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [shape, ̲sourceShape, ̲NCO_ParserRef.core.option.Option.ok_or,
+      AspisR1PrefixAggregateParser.core.option.Option.ok_or,
+  ̲ ̲ ̲ ̲ ̲core.result.Result.Insts.CoreOpsTry.branch,
+  ̵  ̵ ̵ ̵bind_tc_ok, ̲sum, ̲length, ̲ne_self,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲ha, ̲hb, ̲hc, ̲hd,h̵e̵,̵l̵i̵f̵t̵,̵
+      h̲e̲,̲ ̲l̲i̲f̲t̲,̲ ̲NDI_HeaderShifts.byte8, ̲NDI_HeaderShifts.byte16, ̲NDI_HeaderShifts.byte24, ̲wordVal,
+      NDI_ParserPayload.range frame five]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_ParserBody.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,46 @@
+{"attempt": "NDI_K025", "exit_status": 1, "wall_seconds": 1.8093657260760665, "peak_rss_kib": "221376", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+k/kani/kani/library/kani/src/lib.rs:57:0
+note: required by a bound in `kani::any`
+  --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+   = note: this error originates in the macro `kani_core::generate_arbitrary` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error[E0277]: the trait bound `*const [u8; 32]: kani::Arbitrary` is not satisfied
+  --> programs/r1-cost-probe/src/NDI_digest.rs:55:244
+   |
+55 | ...kani::any(),kani::any(),kani::any(),row,&frame[..n],j);}
+   |                            ^^^^^^^^^^^ the trait `kani::Arbitrary` is not implemented for `*const [u8; 32]`
+   |
+help: the trait `kani::Arbitrary` is implemented for `[T; N]`
+  --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+note: required by a bound in `kani::any`
+  --> /home/runner/work/kani/kani/library/kani/src/lib.rs:57:0
+   = note: this error originates in the macro `kani_core::generate_arbitrary` which comes from the expansion of the macro `kani_core::kani_lib` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unnecessary `unsafe` block
+  --> programs/r1-cost-probe/src/NDI_digest.rs:33:18
+   |
+33 | #[kani::modifies(unsafe { &mut SCRIPT })]
+   | -----------------^^^^^^
+   | |                |
+   | |                unnecessary `unsafe` block
+   | because it's nested under this `unsafe` block
+   |
+   = note: `#[warn(unused_unsafe)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0277, E0308.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 10 previous errors; 10 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 10 compilation errors.
+
+Running as unit: run-r86bbf940817f43ab9fa2018cd71cdbd3.scope; invocation ID: 8d83322d268447d3b94fd30664780003

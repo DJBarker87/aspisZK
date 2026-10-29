@@ -1,0 +1,124 @@
+NDI_generated/NDI_TranscriptLaw.lean:13:14: error: unexpected token 'public'; expected '_' or identifier
+NDI_generated/NDI_TranscriptLaw.lean:13:20: error: unexpected token ':'; expected 'lemma'
+NDI_generated/NDI_TranscriptLaw.lean:16:59: error: unexpected token ','; expected 'lemma'
+NDI_generated/NDI_TranscriptLaw.lean:29:4: error: Invalid `←` modifier: `absorbParts` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `absorbParts`.
+NDI_generated/NDI_TranscriptLaw.lean:29:25: error: Invalid `←` modifier: `taggedParts` is a declaration name to be unfolded
+
+Hint: The simplifier cannot "refold" definitions by name. Use `rw` for this instead,
+                      or use the `←` simp modifier with an equational lemma for `taggedParts`.
+NDI_generated/NDI_TranscriptLaw.lean:26:67: error: unsolved goals
+H : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H
+self : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+row tag next : U8
+framed : Slice U8
+absorbed block advanced : Bytes32
+same : self.next_row = row
+addTag : 160#u8 + row = ok tag
+inc : row + 1#u8 = ok next
+absorb : D.digest self.hash (absorbParts self.state tag framed) = ok absorbed
+squeeze : D.digest self.hash (taggedParts absorbed 1#u8) = ok block
+advance : D.digest self.hash (taggedParts absorbed 2#u8) = ok advanced
+⊢ (do
+      let absorbed ←
+        D.digest self.hash
+            (Array.make 3#usize [self.state.to_slice, (Array.make 2#usize [0#u8, tag] ⋯).to_slice, framed] ⋯).to_slice
+      let block ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [1#u8]
+                      AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice]
+                ⋯).to_slice
+      let a ←
+        D.digest self.hash
+            (Array.make 2#usize
+                [absorbed.to_slice,
+                  (Array.make 1#usize [2#u8]
+                      AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice]
+                ⋯).to_slice
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := next })) =
+    ok (core.result.Result.Ok block, { state := advanced, hash := self.hash, next_row := next })
+NDI_generated/NDI_TranscriptLaw.lean:29:18: warning: This simp argument is unused:
+  absorb
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated, s̵a̵m̵e̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵d̵d̵T̵a̵g̵,̵i̵n̵c̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲d̲d̲T̲a̲g̲,̲ ̲i̲n̲c̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ← a̵b̵s̵o̵r̵b̵P̵a̵r̵t̵s̵,̵a̵b̵s̵o̵r̵b̵,̵←̵ ̵t̵a̵g̵g̵e̵d̵P̵a̵r̵t̵s̵,̵s̵q̵u̵e̵e̵z̵e̵,̵a̵d̵v̵a̵n̵c̵e̵]̵a̲b̲s̲o̲r̲b̲P̲a̲r̲t̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲←̲ ̲t̲a̲g̲g̲e̲d̲P̲a̲r̲t̲s̲,̲ ̲s̲q̲u̲e̲e̲z̲e̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_TranscriptLaw.lean:29:39: warning: This simp argument is unused:
+  squeeze
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated, s̵a̵m̵e̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵d̵d̵T̵a̵g̵,̵i̵n̵c̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲d̲d̲T̲a̲g̲,̲ ̲i̲n̲c̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ← a̵b̵s̵o̵r̵b̵P̵a̵r̵t̵s̵,̵a̵b̵s̵o̵r̵b̵,̵←̵ ̵t̵a̵g̵g̵e̵d̵P̵a̵r̵t̵s̵,̵s̵q̵u̵e̵e̵z̵e̵,̵a̵d̵v̵a̵n̵c̵e̵]̵a̲b̲s̲o̲r̲b̲P̲a̲r̲t̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲b̲s̲o̲r̲b̲,̲ ̲←̲ ̲t̲a̲g̲g̲e̲d̲P̲a̲r̲t̲s̲,̲ ̲a̲d̲v̲a̲n̲c̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_TranscriptLaw.lean:29:47: warning: This simp argument is unused:
+  advance
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated, s̵a̵m̵e̵,̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵a̵d̵d̵T̵a̵g̵,̵i̵n̵c̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̲a̲m̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲a̲d̲d̲T̲a̲g̲,̲ ̲i̲n̲c̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ← a̵b̵s̵o̵r̵b̵P̵a̵r̵t̵s̵,̵a̵b̵s̵o̵r̵b̵,̵←̵ ̵t̵a̵g̵g̵e̵d̵P̵a̵r̵t̵s̵,̵s̵q̵u̵e̵e̵z̵e̵,̵a̵d̵v̵a̵n̵c̵e̵]̵a̲b̲s̲o̲r̲b̲P̲a̲r̲t̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲b̲s̲o̲r̲b̲,̲ ̲←̲ ̲t̲a̲g̲g̲e̲d̲P̲a̲r̲t̲s̲,̲ ̲s̲q̲u̲e̲e̲z̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_TranscriptLaw.lean:35:54: error: unsolved goals
+H : Type
+D : AspisR1PublicPreparation.aspis_core.Digest32 H
+self : AspisR1PublicPreparation.r1_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+different : row ≠ self.next_row
+⊢ (if row ≠ self.next_row then
+      ok (core.result.Result.Err (AspisR1PublicPreparation.r1_wire.Error.RowOrder self.next_row row), self)
+    else do
+      let s ← lift self.state.to_slice
+      let i ← 160#u8 + row
+      let s1 ← lift (Array.make 2#usize [0#u8, i] ⋯).to_slice
+      let s2 ← lift (Array.make 3#usize [s, s1, framed] ⋯).to_slice
+      let absorbed ← D.digest self.hash s2
+      let s3 ← lift absorbed.to_slice
+      let s4 ←
+        lift
+            (Array.make 1#usize [1#u8]
+                AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_4).to_slice
+      let s5 ← lift (Array.make 2#usize [s3, s4] ⋯).to_slice
+      let block ← D.digest self.hash s5
+      let s6 ← lift absorbed.to_slice
+      let s7 ←
+        lift
+            (Array.make 1#usize [2#u8]
+                AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated._proof_7).to_slice
+      let s8 ← lift (Array.make 2#usize [s6, s7] ⋯).to_slice
+      let a ← D.digest self.hash s8
+      let i1 ← self.next_row + 1#u8
+      ok (core.result.Result.Ok block, { state := a, hash := self.hash, next_row := i1 })) =
+    ok (core.result.Result.Err (AspisR1PublicPreparation.r1_wire.Error.RowOrder self.next_row row), self)
+NDI_generated/NDI_TranscriptLaw.lean:37:15: warning: This simp argument is unused:
+  different
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated,
+  ̵  ̵ ̵ ̵bne_iff_ne,d̵
+  ̲ ̲ ̲ ̲ ̲iff̵e̵r̵e̵n̵t̵,̵i̵f̵_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDI_generated/NDI_TranscriptLaw.lean:37:25: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [AspisR1PublicPreparation.r1_wire.SemanticTranscript.sample_block_validated,
+  ̵  ̵ ̵ ̵bne_iff_ne,
+  ̲ ̲ ̲ ̲ ̲different,̵i̵f̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDI_TranscriptLaw.sample' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDI_TranscriptLaw.rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDI_TranscriptLaw.sample_domain' depends on axioms: [propext, Classical.choice, Quot.sound]
