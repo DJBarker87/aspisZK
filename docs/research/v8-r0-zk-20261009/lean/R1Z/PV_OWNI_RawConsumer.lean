@@ -20,7 +20,8 @@ theorem result (point column : List Q) (width trailing suffix : Nat)
  (split:width+trailing=10) (hs:suffix<2^trailing) :
  source point column width trailing suffix=ok (value point column width trailing suffix) := by
  by_cases h:column.length≠1024
- · simp only [source,value,h,if_true]
+ · unfold source value
+   rw [if_pos h,if_pos h]
  · have len:column.length=1024 := by omega
    unfold source value
    simp only [h,if_false,PV_OWNI_BuildTotal.result,bind_tc_ok,zero_value]
