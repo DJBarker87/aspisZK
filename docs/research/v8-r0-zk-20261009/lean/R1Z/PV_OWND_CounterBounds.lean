@@ -10,6 +10,7 @@ theorem post_bound (counts next : Counts) (row : UInt16)
  · cases h
  · cases h
    intro i
+   change (if i=row.toNat then counts i+1 else counts i)≤2
    split
    · rename_i eq
      subst i
