@@ -1,0 +1,599 @@
+{
+  "toolchain": "1.94.1",
+  "rows": [
+    {
+      "file": "core/src/array/mod.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "items": [
+        {
+          "name": "index",
+          "line": 389,
+          "text": "    fn index(&self, index: I) -> &Self::Output {\n        Index::index(self as &[T], index)\n    }",
+          "sha256": "cda28b6b36610719687743bb9177a095ed9fb8631e69b0323539751979c14d24"
+        },
+        {
+          "name": "index_mut",
+          "line": 401,
+          "text": "    fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }",
+          "sha256": "ca7b2ba3db12b8282ce1289b3205e484283c3c2b274837b9af0c94b814dae11c"
+        },
+        {
+          "name": "as_slice",
+          "line": 612,
+          "text": "    pub const fn as_slice(&self) -> &[T] {\n        self\n    }",
+          "sha256": "d3a92be53b965244989793351f610fe3c9266a5ae2c79a24077bdea6eb221e27"
+        },
+        {
+          "name": "as_mut_slice",
+          "line": 620,
+          "text": "    pub const fn as_mut_slice(&mut self) -> &mut [T] {\n        self\n    }",
+          "sha256": "3ae93f897b451b8f3ebd1322ad59f630971a2de0182955284c7ed41bbd10d563"
+        },
+        {
+          "name": "next",
+          "line": 875,
+          "text": "    fn next<T>(mut iter: impl UncheckedIterator<Item = T>) -> impl FnMut(usize) -> T {\n        move |_| {\n            // SAFETY: We know that `from_fn` will call this at most N times,\n            // and we checked to ensure that we have at least that many items.\n            unsafe { iter.next_unchecked() }\n        }\n    }",
+          "sha256": "57a72b081efa751f2421f03ed5a3da6c937df86077a89b8e65e143f0de035ca3"
+        },
+        {
+          "name": "drop",
+          "line": 958,
+          "text": "    fn drop(&mut self) {\n        debug_assert!(self.initialized <= self.array_mut.len());\n        // SAFETY: this slice will contain only initialized objects.\n        unsafe {\n            self.array_mut.get_unchecked_mut(..self.initialized).assume_init_drop();\n        }\n    }",
+          "sha256": "508d8aa1314765d3fabda3a4bc7f911a0558a49fd9b7b6d18071fda87140f89e"
+        }
+      ]
+    },
+    {
+      "file": "core/src/slice/index.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "items": [
+        {
+          "name": "index",
+          "line": 18,
+          "text": "    fn index(&self, index: I) -> &I::Output {\n        index.index(self)\n    }",
+          "sha256": "0ae9e48a67e3a070ed5ab65e4a6d0f39f94ce8336486f5004a42573544e80fb9"
+        },
+        {
+          "name": "index_mut",
+          "line": 30,
+          "text": "    fn index_mut(&mut self, index: I) -> &mut I::Output {\n        index.index_mut(self)\n    }",
+          "sha256": "1eb5e1c44b65c94d5a87458dc8c0a921a9deedb6f36d7cf7e1aa5552922a4937"
+        },
+        {
+          "name": "index",
+          "line": 270,
+          "text": "    fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }",
+          "sha256": "8da94e8c100bd59197b7be0cf4a91bf91a22f8c300e791dff60537b0c495bf31"
+        },
+        {
+          "name": "index_mut",
+          "line": 276,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }",
+          "sha256": "60f7578cd3b2a88cbf2a8dc2b743811fda4c36d9b90a8847c81beaf12532f7fe"
+        },
+        {
+          "name": "index",
+          "line": 337,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        if self.end() <= slice.len() {\n            // SAFETY: `self` is checked to be valid and in bounds above.\n            unsafe { &*get_offset_len_noubcheck(slice, self.start(), self.len()) }\n        } else {\n            slice_index_fail(self.start(), self.end(), slice.len())\n        }\n    }",
+          "sha256": "165a35ccc401d6572fd64e87dcba1410731d514ad4375ad53522b867fd53775a"
+        },
+        {
+          "name": "index_mut",
+          "line": 347,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        if self.end() <= slice.len() {\n            // SAFETY: `self` is checked to be valid and in bounds above.\n            unsafe { &mut *get_offset_len_mut_noubcheck(slice, self.start(), self.len()) }\n        } else {\n            slice_index_fail(self.start(), self.end(), slice.len())\n        }\n    }",
+          "sha256": "22b20fd1da94d1305bba79eeabfa1b437e464b6e21da59b392081f7e566d1187"
+        },
+        {
+          "name": "index",
+          "line": 435,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        // Using checked_sub is a safe way to get `SubUnchecked` in MIR\n        if let Some(new_len) = usize::checked_sub(self.end, self.start)\n            && self.end <= slice.len()\n        {\n            // SAFETY: `self` is checked to be valid and in bounds above.\n            unsafe { &*get_offset_len_noubcheck(slice, self.start, new_len) }\n        } else {\n            slice_index_fail(self.start, self.end, slice.len())\n        }\n    }",
+          "sha256": "4cad126158121be7c0110f0418956cd7e604f2206d41789473913117ac92cda1"
+        },
+        {
+          "name": "index_mut",
+          "line": 448,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        // Using checked_sub is a safe way to get `SubUnchecked` in MIR\n        if let Some(new_len) = usize::checked_sub(self.end, self.start)\n            && self.end <= slice.len()\n        {\n            // SAFETY: `self` is checked to be valid and in bounds above.\n            unsafe { &mut *get_offset_len_mut_noubcheck(slice, self.start, new_len) }\n        } else {\n            slice_index_fail(self.start, self.end, slice.len())\n        }\n    }",
+          "sha256": "8b524c3372245ab0e71f23f12a45d40249a0c9b7d7b44874eca08228cbf0c1de"
+        },
+        {
+          "name": "index",
+          "line": 489,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        ops::Range::from(self).index(slice)\n    }",
+          "sha256": "8946814763ebdb13c6662bb49446f5673cc63971e69d6dcb064c1620743bf195"
+        },
+        {
+          "name": "index_mut",
+          "line": 494,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        ops::Range::from(self).index_mut(slice)\n    }",
+          "sha256": "89c213303266a9455391ff92ab85ba5e10ea4ec5cab8b35a5fef1a07e74eb1a0"
+        },
+        {
+          "name": "index",
+          "line": 528,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        (0..self.end).index(slice)\n    }",
+          "sha256": "6816a36012d96143179ac18d3a203f4f82aabe3594ecb344f8f96d54f58a0614"
+        },
+        {
+          "name": "index_mut",
+          "line": 533,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        (0..self.end).index_mut(slice)\n    }",
+          "sha256": "10ec0aa94d301db18e78cfef2929c62e46b561f93b26ea3cf211a09646384ac4"
+        },
+        {
+          "name": "index",
+          "line": 567,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        if self.start > slice.len() {\n            slice_index_fail(self.start, slice.len(), slice.len())\n        }\n        // SAFETY: `self` is checked to be valid and in bounds above.\n        unsafe {\n            let new_len = crate::intrinsics::unchecked_sub(slice.len(), self.start);\n            &*get_offset_len_noubcheck(slice, self.start, new_len)\n        }\n    }",
+          "sha256": "3622fae15a36ba4d9f78f7fc4c2e29cf3da371ce9291b5041df1de3db2bda4d8"
+        },
+        {
+          "name": "index_mut",
+          "line": 579,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        if self.start > slice.len() {\n            slice_index_fail(self.start, slice.len(), slice.len())\n        }\n        // SAFETY: `self` is checked to be valid and in bounds above.\n        unsafe {\n            let new_len = crate::intrinsics::unchecked_sub(slice.len(), self.start);\n            &mut *get_offset_len_mut_noubcheck(slice, self.start, new_len)\n        }\n    }",
+          "sha256": "108ba55b625b46fbfed1ab4f226e8d46bf70b1116784ef5e36dd999e7b8993cc"
+        },
+        {
+          "name": "index",
+          "line": 619,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        ops::RangeFrom::from(self).index(slice)\n    }",
+          "sha256": "6852a143015587c333d2d606d871d16e90b0f3042f2e1074deb2bd9ab58ef21f"
+        },
+        {
+          "name": "index_mut",
+          "line": 624,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        ops::RangeFrom::from(self).index_mut(slice)\n    }",
+          "sha256": "322fa2a7ba562944d8b9f8e88dfd8876c82cbe40ba87eeb56b2f2be090596ffe"
+        },
+        {
+          "name": "index",
+          "line": 655,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        slice\n    }",
+          "sha256": "0564d706ef84b9a3865b3479556f53599a1e9154e1791fb60f7a8e1b07a4c2d4"
+        },
+        {
+          "name": "index_mut",
+          "line": 660,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        slice\n    }",
+          "sha256": "72b3a874a1111f9e98d0f4b382ca0889d3e87d5ceb5bdd6c0f701e56bca7748e"
+        },
+        {
+          "name": "index",
+          "line": 697,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        let Self { mut start, mut end, exhausted } = self;\n        let len = slice.len();\n        if end < len {\n            end = end + 1;\n            start = if exhausted { end } else { start };\n            if let Some(new_len) = usize::checked_sub(end, start) {\n                // SAFETY: `self` is checked to be valid and in bounds above.\n                unsafe { return &*get_offset_len_noubcheck(slice, start, new_len) }\n            }\n        }\n        slice_index_fail(start, end, slice.len())\n    }",
+          "sha256": "36291727a70926f8ddecaa4283e92e435c91e90f5f80f13d08910513f2b4f98f"
+        },
+        {
+          "name": "index_mut",
+          "line": 712,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        let Self { mut start, mut end, exhausted } = self;\n        let len = slice.len();\n        if end < len {\n            end = end + 1;\n            start = if exhausted { end } else { start };\n            if let Some(new_len) = usize::checked_sub(end, start) {\n                // SAFETY: `self` is checked to be valid and in bounds above.\n                unsafe { return &mut *get_offset_len_mut_noubcheck(slice, start, new_len) }\n            }\n        }\n        slice_index_fail(start, end, slice.len())\n    }",
+          "sha256": "4c795fe38170880a29e30301a2c641284842acd83988fa84da1aed9b44618602"
+        },
+        {
+          "name": "index",
+          "line": 755,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        ops::RangeInclusive::from(self).index(slice)\n    }",
+          "sha256": "e4f3bae8b1f74ae6d88747304c671864b9a1868d5ffee737c277b9c600493654"
+        },
+        {
+          "name": "index_mut",
+          "line": 760,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        ops::RangeInclusive::from(self).index_mut(slice)\n    }",
+          "sha256": "7ff4bf5c813004c99abb0233d357993ceb8c75cc707df2efb35f13a24cb02e81"
+        },
+        {
+          "name": "index",
+          "line": 794,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        (0..=self.end).index(slice)\n    }",
+          "sha256": "194ac3e5daf305d716707886974a2d9236e2b5673a19e03808967777e5632337"
+        },
+        {
+          "name": "index_mut",
+          "line": 799,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        (0..=self.end).index_mut(slice)\n    }",
+          "sha256": "2af91cf12b389f19fc55b54c20b2386f158178dd41da9fd340f179da56aaf4da"
+        },
+        {
+          "name": "index",
+          "line": 833,
+          "text": "    fn index(self, slice: &[T]) -> &[T] {\n        (0..=self.last).index(slice)\n    }",
+          "sha256": "f4f08d5c4287a4fe4f83ffd5f35f822e0b5a029c4aaae789fdf79d76eaa558b0"
+        },
+        {
+          "name": "index_mut",
+          "line": 838,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut [T] {\n        (0..=self.last).index_mut(slice)\n    }",
+          "sha256": "39bcdb0ae2f43041637bb94599af8b4332432a968d8c5ead0a3377113f6b5651"
+        },
+        {
+          "name": "index",
+          "line": 1095,
+          "text": "    fn index(self, slice: &[T]) -> &Self::Output {\n        into_slice_range(slice.len(), self).index(slice)\n    }",
+          "sha256": "2bb7e73fc8ae504b1d7cf37fbde6a01ef546d5ef7425270ad0e95d9d9d5dcb31"
+        },
+        {
+          "name": "index_mut",
+          "line": 1100,
+          "text": "    fn index_mut(self, slice: &mut [T]) -> &mut Self::Output {\n        into_slice_range(slice.len(), self).index_mut(slice)\n    }",
+          "sha256": "9ab0c91b4757fcede482f56638ac126925e325ab404cb04ceb54a7eb98a8e54a"
+        }
+      ]
+    },
+    {
+      "file": "core/src/slice/mod.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "items": [
+        {
+          "name": "len",
+          "line": 116,
+          "text": "    pub const fn len(&self) -> usize {\n        ptr::metadata(self)\n    }",
+          "sha256": "9dc47f615257d5ece8434b933ac98c4ed5ef023a9677a78bb0c6ac96124fd608"
+        },
+        {
+          "name": "as_slice",
+          "line": 5130,
+          "text": "    pub const fn as_slice(&self) -> &[T] {\n        self\n    }",
+          "sha256": "d3a92be53b965244989793351f610fe3c9266a5ae2c79a24077bdea6eb221e27"
+        },
+        {
+          "name": "as_mut_slice",
+          "line": 5141,
+          "text": "    pub const fn as_mut_slice(&mut self) -> &mut [T] {\n        self\n    }",
+          "sha256": "3ae93f897b451b8f3ebd1322ad59f630971a2de0182955284c7ed41bbd10d563"
+        },
+        {
+          "name": "as_slice",
+          "line": 5450,
+          "text": "    fn as_slice(&self) -> &[Self::Item] {\n        self\n    }",
+          "sha256": "5b5e02c32f607982c96a7f79c26ca4e2e3bb65951aeff9805e2305eacff8c999"
+        },
+        {
+          "name": "as_slice",
+          "line": 5460,
+          "text": "    fn as_slice(&self) -> &[Self::Item] {\n        self\n    }",
+          "sha256": "5b5e02c32f607982c96a7f79c26ca4e2e3bb65951aeff9805e2305eacff8c999"
+        }
+      ]
+    },
+    {
+      "file": "core/src/iter/adapters/enumerate.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/enumerate.rs",
+      "file_sha256": "82b139ab80c433cb095adca865ddd19db80ebdd6e0c05be95f097401877d0a3a",
+      "items": [
+        {
+          "name": "new",
+          "line": 23,
+          "text": "    pub(in crate::iter) fn new(iter: I) -> Enumerate<I> {\n        Enumerate { iter, count: 0 }\n    }",
+          "sha256": "d9882bda730b16eebf52a545ee523d52b2abbd4f67136c35cd77d0495374deba"
+        },
+        {
+          "name": "next",
+          "line": 79,
+          "text": "    fn next(&mut self) -> Option<(usize, <I as Iterator>::Item)> {\n        let a = self.iter.next()?;\n        let i = self.count;\n        self.count += 1;\n        Some((i, a))\n    }",
+          "sha256": "7c15fb65434ddb51e091dacd940272f4705c681e49ffb012dc35b8be72d77e2e"
+        },
+        {
+          "name": "len",
+          "line": 254,
+          "text": "    fn len(&self) -> usize {\n        self.iter.len()\n    }",
+          "sha256": "8a959c55f4382483f421569d57b03b812c17c56ad1a39d5084f1809eff65201e"
+        }
+      ]
+    },
+    {
+      "file": "core/src/slice/iter.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "items": [
+        {
+          "name": "new",
+          "line": 96,
+          "text": "    pub(super) const fn new(slice: &'a [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        // SAFETY: Similar to `IterMut::new`.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+          "sha256": "668b0bf89c9d67702ce3a1b0a99061804de260ddbad08500761f7c384ca7f099"
+        },
+        {
+          "name": "as_slice",
+          "line": 137,
+          "text": "    pub fn as_slice(&self) -> &'a [T] {\n        self.make_slice()\n    }",
+          "sha256": "5ad3dabb8e9ed449bacd408fffbf0a3c6febbc3b7a8df3ea3e1f9fec631afc4a"
+        },
+        {
+          "name": "new",
+          "line": 221,
+          "text": "    pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+          "sha256": "8599fdf821db700e85291e4335a14e381a87df25247381122c2e43bf96489bfa"
+        },
+        {
+          "name": "as_slice",
+          "line": 313,
+          "text": "    pub fn as_slice(&self) -> &[T] {\n        self.make_slice()\n    }",
+          "sha256": "e3e9782a26bd0402e8d5ee57c27073f15eb6a52564635a7e47c23de3c27b916f"
+        },
+        {
+          "name": "as_mut_slice",
+          "line": 348,
+          "text": "    pub fn as_mut_slice(&mut self) -> &mut [T] {\n        // SAFETY: the iterator was created from a mutable slice with pointer\n        // `self.ptr` and length `len!(self)`. This guarantees that all the prerequisites\n        // for `from_raw_parts_mut` are fulfilled.\n        unsafe { from_raw_parts_mut(self.ptr.as_ptr(), len!(self)) }\n    }",
+          "sha256": "65ef06e556d2824cc4d4452f2297935560a09e9dc3fec3982e33f109c321430c"
+        },
+        {
+          "name": "new",
+          "line": 414,
+          "text": "    pub(super) fn new(slice: &'a [T], pred: P) -> Self {\n        Self { v: slice, pred, finished: false }\n    }",
+          "sha256": "605889945defa390e559be93ed1b1840cbc9093ba01394f36fb94e84a8087738"
+        },
+        {
+          "name": "as_slice",
+          "line": 428,
+          "text": "    pub fn as_slice(&self) -> &'a [T] {\n        if self.finished { &[] } else { &self.v }\n    }",
+          "sha256": "90bd9d5cdcd20df9c8c37b04dd98b65261fb47bd5a510950fc46b8f5fc9ae2ee"
+        },
+        {
+          "name": "next",
+          "line": 462,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.finished {\n            return None;\n        }\n\n        match self.v.iter().position(|x| (self.pred)(x)) {\n            None => self.finish(),\n            Some(idx) => {\n                let (left, right) =\n                    // SAFETY: if v.iter().position returns Some(idx), that\n                    // idx is definitely a valid index for v\n                    unsafe { (self.v.get_unchecked(..idx), self.v.get_unchecked(idx + 1..)) };\n                let ret = Some(left);\n                self.v = right;\n                ret\n            }\n        }\n    }",
+          "sha256": "3517cd0d258b9848743a54071be4b1b1af185268105edc1192c0bf64e73e880e"
+        },
+        {
+          "name": "new",
+          "line": 568,
+          "text": "    pub(super) fn new(slice: &'a [T], pred: P) -> Self {\n        let finished = slice.is_empty();\n        Self { v: slice, pred, finished }\n    }",
+          "sha256": "1239a468c7b9c51fcf6057468879367c6298c977faa93df9ba992683d4b519db"
+        },
+        {
+          "name": "next",
+          "line": 606,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.finished {\n            return None;\n        }\n\n        let idx =\n            self.v.iter().position(|x| (self.pred)(x)).map(|idx| idx + 1).unwrap_or(self.v.len());\n        if idx == self.v.len() {\n            self.finished = true;\n        }\n        let ret = Some(&self.v[..idx]);\n        self.v = &self.v[idx..];\n        ret\n    }",
+          "sha256": "fa7b4bf7f15f82e83103040fce1b6cafdcf754a6812d21dcb19e3d2e18c930fa"
+        },
+        {
+          "name": "new",
+          "line": 689,
+          "text": "    pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {\n        Self { v: slice, pred, finished: false }\n    }",
+          "sha256": "995610e4d2d4d778b1992aae68c4512e460eb0c8a18e7d1601137d09a7f19fbd"
+        },
+        {
+          "name": "next",
+          "line": 727,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        if self.finished {\n            return None;\n        }\n\n        match self.v.iter().position(|x| (self.pred)(x)) {\n            None => self.finish(),\n            Some(idx) => {\n                let tmp = mem::take(&mut self.v);\n                // idx is the index of the element we are splitting on. We want to set self to the\n                // region after idx, and return the subslice before and not including idx.\n                // So first we split after idx\n                let (head, tail) = tmp.split_at_mut(idx + 1);\n                self.v = tail;\n                // Then return the subslice up to but not including the found element\n                Some(&mut head[..idx])\n            }\n        }\n    }",
+          "sha256": "9096f9703e56f74fe16c2497cfbaf8b719da345f6fd61834f8fab80d44088e11"
+        },
+        {
+          "name": "new",
+          "line": 818,
+          "text": "    pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {\n        let finished = slice.is_empty();\n        Self { v: slice, pred, finished }\n    }",
+          "sha256": "f219bffd8a75330491b62eb33757a50ee7ea13b5a5ae44eb4d32c2cdbc639d00"
+        },
+        {
+          "name": "next",
+          "line": 845,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        if self.finished {\n            return None;\n        }\n\n        let idx_opt = {\n            // work around borrowck limitations\n            let pred = &mut self.pred;\n            self.v.iter().position(|x| (*pred)(x))\n        };\n        let idx = idx_opt.map(|idx| idx + 1).unwrap_or(self.v.len());\n        if idx == self.v.len() {\n            self.finished = true;\n        }\n        let tmp = mem::take(&mut self.v);\n        let (head, tail) = tmp.split_at_mut(idx);\n        self.v = tail;\n        Some(head)\n    }",
+          "sha256": "daa4adbfffeb86266d2e886d491759ec146681e7499a43f1bfd42fabe06f4d76"
+        },
+        {
+          "name": "new",
+          "line": 943,
+          "text": "    pub(super) fn new(slice: &'a [T], pred: P) -> Self {\n        Self { inner: Split::new(slice, pred) }\n    }",
+          "sha256": "88e0fb2ab5f99dc3644de13e388bdb580ee5f41bcbe29ad0314eb1e1fc1048ad"
+        },
+        {
+          "name": "next",
+          "line": 980,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        self.inner.next_back()\n    }",
+          "sha256": "2ce93f5a2d704e2feba45b75318ea3f7042ff1b8d220899b490e1c83cc560d94"
+        },
+        {
+          "name": "new",
+          "line": 1040,
+          "text": "    pub(super) fn new(slice: &'a mut [T], pred: P) -> Self {\n        Self { inner: SplitMut::new(slice, pred) }\n    }",
+          "sha256": "63182dbfa9636664ce011553232ec37e3d812adb808e1c440b76232543948aef"
+        },
+        {
+          "name": "next",
+          "line": 1077,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        self.inner.next_back()\n    }",
+          "sha256": "3bd68cd8040cbfbb872d4b4c1839626ef641aa40adf55b0ccf127e4234c08013"
+        },
+        {
+          "name": "next",
+          "line": 1114,
+          "text": "    fn next(&mut self) -> Option<T> {\n        match self.count {\n            0 => None,\n            1 => {\n                self.count -= 1;\n                self.iter.finish()\n            }\n            _ => {\n                self.count -= 1;\n                self.iter.next()\n            }\n        }\n    }",
+          "sha256": "c8b41b00a4bf60b0aa7915756c0b754abd1798b593fdd446ae8de552b9eb1052"
+        },
+        {
+          "name": "new",
+          "line": 1166,
+          "text": "    pub(super) fn new(s: Split<'a, T, P>, n: usize) -> Self {\n        Self { inner: GenericSplitN { iter: s, count: n } }\n    }",
+          "sha256": "85fa4f23dd335e032cadb3244fc29ce5076377d52daa69af2be82f96d983f2d8"
+        },
+        {
+          "name": "new",
+          "line": 1210,
+          "text": "    pub(super) fn new(s: RSplit<'a, T, P>, n: usize) -> Self {\n        Self { inner: GenericSplitN { iter: s, count: n } }\n    }",
+          "sha256": "5494f9234d9c0d05c532346e349d6abb300608e99bf36968bfcdecc1b511716a"
+        },
+        {
+          "name": "new",
+          "line": 1250,
+          "text": "    pub(super) fn new(s: SplitMut<'a, T, P>, n: usize) -> Self {\n        Self { inner: GenericSplitN { iter: s, count: n } }\n    }",
+          "sha256": "2c72cd45ba93a091b10b8554b3979e8c291add1bda6ece3001f3586df7994b14"
+        },
+        {
+          "name": "new",
+          "line": 1291,
+          "text": "    pub(super) fn new(s: RSplitMut<'a, T, P>, n: usize) -> Self {\n        Self { inner: GenericSplitN { iter: s, count: n } }\n    }",
+          "sha256": "25257bd523e116fb6edb414a2c633dcf7a961e5186c9c0c9193ddaf051be0817"
+        },
+        {
+          "name": "new",
+          "line": 1338,
+          "text": "    pub(super) const fn new(slice: &'a [T], size: NonZero<usize>) -> Self {\n        Self { v: slice, size }\n    }",
+          "sha256": "f17e9706e1cc9bc3f109bac7fa037511a3944242349c49390302e1645468b95e"
+        },
+        {
+          "name": "next",
+          "line": 1356,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.size.get() > self.v.len() {\n            None\n        } else {\n            let ret = Some(&self.v[..self.size.get()]);\n            self.v = &self.v[1..];\n            ret\n        }\n    }",
+          "sha256": "54ace44931f91ccc6ae1157e56b0a296bd7441a176ce9bf160e33db8a6eadc15"
+        },
+        {
+          "name": "new",
+          "line": 1487,
+          "text": "    pub(super) const fn new(slice: &'a [T], size: usize) -> Self {\n        Self { v: slice, chunk_size: size }\n    }",
+          "sha256": "1aaa975197b4f70c21ecab67904ad39745cf5c27d12e1d1ed394a2fbf6c97b27"
+        },
+        {
+          "name": "next",
+          "line": 1505,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.v.is_empty() {\n            None\n        } else {\n            let chunksz = cmp::min(self.v.len(), self.chunk_size);\n            let (fst, snd) = self.v.split_at(chunksz);\n            self.v = snd;\n            Some(fst)\n        }\n    }",
+          "sha256": "154b7f168fbf507c99b77fe58ee17fe9629d3318907c3f299b790683fe8765c2"
+        },
+        {
+          "name": "new",
+          "line": 1670,
+          "text": "    pub(super) const fn new(slice: &'a mut [T], size: usize) -> Self {\n        Self { v: slice, chunk_size: size, _marker: PhantomData }\n    }",
+          "sha256": "a24fba4709c3897b13b51581d3de908ae4152eeb8bc72998744431b6616449b3"
+        },
+        {
+          "name": "next",
+          "line": 1680,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        if self.v.is_empty() {\n            None\n        } else {\n            let sz = cmp::min(self.v.len(), self.chunk_size);\n            // SAFETY: The self.v contract ensures that any split_at_mut is valid.\n            let (head, tail) = unsafe { self.v.split_at_mut(sz) };\n            self.v = tail;\n            // SAFETY: Nothing else points to or will point to the contents of this slice.\n            Some(unsafe { &mut *head })\n        }\n    }",
+          "sha256": "8e1238d7199c70466163188471c1040246c962105e12ae6fd54e5e5bb15d8484"
+        },
+        {
+          "name": "new",
+          "line": 1851,
+          "text": "    pub(super) const fn new(slice: &'a [T], chunk_size: usize) -> Self {\n        let rem = slice.len() % chunk_size;\n        let fst_len = slice.len() - rem;\n        // SAFETY: 0 <= fst_len <= slice.len() by construction above\n        let (fst, snd) = unsafe { slice.split_at_unchecked(fst_len) };\n        Self { v: fst, rem: snd, chunk_size }\n    }",
+          "sha256": "668089801041e35408664d562cf3ab334de0b752b2c2df78df66049edb3ac2a8"
+        },
+        {
+          "name": "next",
+          "line": 1896,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        self.v.split_at_checked(self.chunk_size).and_then(|(chunk, rest)| {\n            self.v = rest;\n            Some(chunk)\n        })\n    }",
+          "sha256": "2cbde6c27093d48524661068a1cf70e6401d2e17b780474bd15702a01e4896a3"
+        },
+        {
+          "name": "new",
+          "line": 2028,
+          "text": "    pub(super) const fn new(slice: &'a mut [T], chunk_size: usize) -> Self {\n        let rem = slice.len() % chunk_size;\n        let fst_len = slice.len() - rem;\n        // SAFETY: 0 <= fst_len <= slice.len() by construction above\n        let (fst, snd) = unsafe { slice.split_at_mut_unchecked(fst_len) };\n        Self { v: fst, rem: snd, chunk_size, _marker: PhantomData }\n    }",
+          "sha256": "67114035da9680b61d4ba612fd6f9d89d9989826623e3e27fc8e50aeb7fbac31"
+        },
+        {
+          "name": "next",
+          "line": 2051,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        // SAFETY: we have `&mut self`, so are allowed to temporarily materialize a mut slice\n        unsafe { &mut *self.v }.split_at_mut_checked(self.chunk_size).and_then(|(chunk, rest)| {\n            self.v = rest;\n            Some(chunk)\n        })\n    }",
+          "sha256": "b3277e779b31e01375ad8bc042dad9b17c35052c0494e24054250c76b98dcd0b"
+        },
+        {
+          "name": "new",
+          "line": 2187,
+          "text": "    pub(super) const fn new(slice: &'a [T]) -> Self {\n        Self { v: slice }\n    }",
+          "sha256": "b4269c43b2b13def5db57c67ffa9f582fb88278c38b9327e578df85100da6f5c"
+        },
+        {
+          "name": "next",
+          "line": 2205,
+          "text": "    fn next(&mut self) -> Option<Self::Item> {\n        let ret = self.v.first_chunk();\n        if ret.is_some() {\n            self.v = &self.v[1..];\n        }\n        ret\n    }",
+          "sha256": "8f07ba51c83cb6dc3cb4a925288aef0c7aaadc4d430b87483a40964b4b31c00c"
+        },
+        {
+          "name": "new",
+          "line": 2318,
+          "text": "    pub(super) const fn new(slice: &'a [T], size: usize) -> Self {\n        Self { v: slice, chunk_size: size }\n    }",
+          "sha256": "1aaa975197b4f70c21ecab67904ad39745cf5c27d12e1d1ed394a2fbf6c97b27"
+        },
+        {
+          "name": "next",
+          "line": 2336,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.v.is_empty() {\n            None\n        } else {\n            let idx = self.v.len().saturating_sub(self.chunk_size);\n            // SAFETY: self.chunk_size() > 0, so 0 <= idx < self.v.len().\n            // Thus `idx` is in-bounds for `self.v` and can be used as a valid argument for `split_at_mut_unchecked`.\n            let (rest, chunk) = unsafe { self.v.split_at_unchecked(idx) };\n            self.v = rest;\n            Some(chunk)\n        }\n    }",
+          "sha256": "1e95da63b175ae4bb26403d769ce21f12210e248d0959f434e3195272cf42b49"
+        },
+        {
+          "name": "new",
+          "line": 2485,
+          "text": "    pub(super) const fn new(slice: &'a mut [T], size: usize) -> Self {\n        Self { v: slice, chunk_size: size, _marker: PhantomData }\n    }",
+          "sha256": "a24fba4709c3897b13b51581d3de908ae4152eeb8bc72998744431b6616449b3"
+        },
+        {
+          "name": "next",
+          "line": 2495,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        if self.v.is_empty() {\n            None\n        } else {\n            let idx = self.v.len().saturating_sub(self.chunk_size);\n            // SAFETY: self.chunk_size() > 0, so 0 <= idx < self.v.len().\n            // Thus `idx` is in-bounds for `self.v` and can be used as a valid argument for `split_at_mut_unchecked`.\n            let (rest, chunk) = unsafe { self.v.split_at_mut_unchecked(idx) };\n            self.v = rest;\n            // SAFETY: Nothing else points to or will point to the contents of this slice.\n            Some(unsafe { &mut *chunk })\n        }\n    }",
+          "sha256": "3fd5142f24906753c3c419705a6efc473c6f23792585778f6277b3e39097efac"
+        },
+        {
+          "name": "new",
+          "line": 2661,
+          "text": "    pub(super) const fn new(slice: &'a [T], chunk_size: usize) -> Self {\n        let rem = slice.len() % chunk_size;\n        // SAFETY: 0 <= rem <= slice.len() by construction above\n        let (fst, snd) = unsafe { slice.split_at_unchecked(rem) };\n        Self { v: snd, rem: fst, chunk_size }\n    }",
+          "sha256": "043346d154cc6355d35df08a09351af3daa096bec76495e4c3fbf3c6e640de2a"
+        },
+        {
+          "name": "next",
+          "line": 2706,
+          "text": "    fn next(&mut self) -> Option<&'a [T]> {\n        if self.v.len() < self.chunk_size {\n            None\n        } else {\n            let (fst, snd) = self.v.split_at(self.v.len() - self.chunk_size);\n            self.v = fst;\n            Some(snd)\n        }\n    }",
+          "sha256": "368df0689c2a461187229e55fab4356fd5b5b74f72926ef0199b05907fa812ef"
+        },
+        {
+          "name": "new",
+          "line": 2844,
+          "text": "    pub(super) const fn new(slice: &'a mut [T], chunk_size: usize) -> Self {\n        let rem = slice.len() % chunk_size;\n        // SAFETY: 0 <= rem <= slice.len() by construction above\n        let (fst, snd) = unsafe { slice.split_at_mut_unchecked(rem) };\n        Self { v: snd, rem: fst, chunk_size }\n    }",
+          "sha256": "074a170341eeacdd48a4d3987b7559115182afe8dc80afc1ebd37ea55345dcb3"
+        },
+        {
+          "name": "next",
+          "line": 2867,
+          "text": "    fn next(&mut self) -> Option<&'a mut [T]> {\n        if self.v.len() < self.chunk_size {\n            None\n        } else {\n            let len = self.v.len();\n            // SAFETY: The self.v contract ensures that any split_at_mut is valid.\n            let (head, tail) = unsafe { self.v.split_at_mut(len - self.chunk_size) };\n            self.v = head;\n            // SAFETY: Nothing else points to or will point to the contents of this slice.\n            Some(unsafe { &mut *tail })\n        }\n    }",
+          "sha256": "21969be5176da50125b5602c1f3233047d0e89ab6794ee1315d12c3d5af06e19"
+        },
+        {
+          "name": "new",
+          "line": 3022,
+          "text": "    pub(super) const fn new(slice: &'a [T], predicate: P) -> Self {\n        ChunkBy { slice, predicate }\n    }",
+          "sha256": "50dc8fbf6fb206230c4977a2220e57dd5c115eac9d28d3243bef7bf7a31a53e5"
+        },
+        {
+          "name": "next",
+          "line": 3035,
+          "text": "    fn next(&mut self) -> Option<Self::Item> {\n        if self.slice.is_empty() {\n            None\n        } else {\n            let mut len = 1;\n            let mut iter = self.slice.windows(2);\n            while let Some([l, r]) = iter.next() {\n                if (self.predicate)(l, r) { len += 1 } else { break }\n            }\n            let (head, tail) = self.slice.split_at(len);\n            self.slice = tail;\n            Some(head)\n        }\n    }",
+          "sha256": "6fab687e555602f6094a11e94bf256ab11342f6183c3bca9fa0028363dbe60eb"
+        },
+        {
+          "name": "new",
+          "line": 3116,
+          "text": "    pub(super) const fn new(slice: &'a mut [T], predicate: P) -> Self {\n        ChunkByMut { slice, predicate }\n    }",
+          "sha256": "04fec10650204796e3de8a00e763ca931f97e690a2be22387a810a728dd4f9fc"
+        },
+        {
+          "name": "next",
+          "line": 3129,
+          "text": "    fn next(&mut self) -> Option<Self::Item> {\n        if self.slice.is_empty() {\n            None\n        } else {\n            let mut len = 1;\n            let mut iter = self.slice.windows(2);\n            while let Some([l, r]) = iter.next() {\n                if (self.predicate)(l, r) { len += 1 } else { break }\n            }\n            let slice = mem::take(&mut self.slice);\n            let (head, tail) = slice.split_at_mut(len);\n            self.slice = tail;\n            Some(head)\n        }\n    }",
+          "sha256": "56dd7548dfbe4b7366e67c546b57ed4338c69a1840e793dff3bff856f6bffcd4"
+        }
+      ]
+    },
+    {
+      "file": "core/src/slice/iter/macros.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "items": [
+        {
+          "name": "len",
+          "line": 142,
+          "text": "            fn len(&self) -> usize {\n                len!(self)\n            }",
+          "sha256": "ab44ad4dfb5dbd01df8a7c722ff3b0252a926176babae519d904063677537d47"
+        },
+        {
+          "name": "next",
+          "line": 157,
+          "text": "            fn next(&mut self) -> Option<$elem> {\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+          "sha256": "587d0588355f27f56af3ef61cb043863e993c787cbcbd5b52db3dea903058536"
+        },
+        {
+          "name": "next",
+          "line": 520,
+          "text": "            fn next(&mut self) -> Option<$iter_of> {\n                self.inner.next()\n            }",
+          "sha256": "ff615a5bbcdc3a5263a5ca465670d6988cea86422b58ff8a66e11c5b3e6b61d4"
+        }
+      ]
+    }
+  ]
+}
