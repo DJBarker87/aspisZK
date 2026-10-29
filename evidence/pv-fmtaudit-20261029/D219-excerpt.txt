@@ -1,0 +1,26 @@
+## D219 (Stream B, 2026-10-26 19:55): Formatter axiom blocker clear on the candidate (V269/V270 scoped); host disk full, 39 GiB of caches pruned; pv-adopt launched
+
+pv-dict11 (`codex/cx-prover-dict-20261026`, head 615d347232; 23/100 Lean, 6/10 Kani; stopped under
+local-lean rule 5 when the host filesystem hit 100%): stage 0 inventory FORMATTER-CLOSURE.md: the
+forbidden axiom is `Aeneas.Std.core.fmt.Formatter` (declared by the backend module Aeneas.Std.Core.Fmt,
+729 transitive importers); `#print axioms` over 12,920 declarations in 321 selected family modules
+(every PDict_/ProverRw*/PV_CB_/PV_CB3_ declaration reachable from ExternalFuns, the P6 body root, the
+28 type-slot projections and the deployed headline; receipts J26201 51 s / 4.4 GiB, J26203) shows ONLY
+subsets of {propext, Classical.choice, Quot.sound}; no candidate declaration depends on the axiom, so no
+avoidance rewrite is needed (the split avoidance files PDict_FmtPublicationFrame/PDict_FmtRetryComplete
+exist but are not imported). V269/V270: CLOSED-ON-CANDIDATE for the release-blocker statement only
+("every audited candidate declaration ... has axiom closure contained in the three standard axioms");
+native type-27 adequacy is NOT credited and types stay 26/28, entries 175/255. Stage 2 proved complete
+Result equality and per-coordinate correctness for the extracted owned coefficient reference; native
+coefficient-array association open (three timeouts, one solver failure). Audit scope: focused cached
+audit, not the coherent release replay.
+Host: the root volume (1.8 TiB) reached 100% (19 MiB free) about 19:40 UTC and both streams' launches
+failed. Lead action within Stream B's scope only: removed the finished client job's cargo cache (2.1
+GiB), 40 orphaned Kani/CBMC solver temp files in /tmp not open by any process and older than 30 min
+(7.3 GiB), and 65 cargo-tagged charon-target/native-target/harness target caches in the finished
+codex-cx-prover-commit* and codex-cx-adapter-rw workspaces, none open (30 GiB). Receipts, corpora and
+sources untouched; live job directories untouched. With Stream A's own pruning the volume is at 141
+GiB free (92%). Owner decision requested: the ~30 GiB of differential corpora under
+codex-cx-prover-rw-20261023 (smoke/phase/focused paired runs, corpus-1000-002) and the 6.2 GiB
+invalidated corpus under codex-pv-rebase-20261026 are evidence outputs whose receipts are committed;
+recommendation: archive off-host or delete the invalidated corpus and the superseded smoke/phase

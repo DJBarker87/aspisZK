@@ -1,0 +1,61 @@
+| Row | Closing theorem | Selected recorded output | Axioms | Exit |
+|---|---|---|---|---|
+| V164 | `R1Z.PV_Op223_V164.refinement` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/launcher.log` | propext, Classical.choice, Quot.sound | 0 |
+| V169 | `R1Z.PV_RDCD_TakeBinding.vector_m31` | `42760700cb:evidence/pv-fix-20261028/receipt-62138.json` | propext, Classical.choice, Quot.sound | 0 |
+| V170 | `R1Z.PV_FXM_DropSelected.execution` | `42760700cb:evidence/pv-world-20261028/controller-50497.log` | propext, Classical.choice, Quot.sound | 0 |
+| V177 | `R1Z.PV_CBL_AppendBundle.op25_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V179 | `R1Z.PV_CBL_AppendBundle.op28_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V180 | `R1Z.PV_CBL_AppendBundle.op29_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V182 | `R1Z.PV_CBL_AppendBundle.op31_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V183 | `R1Z.PV_FXM_ReserveSelected.complete` | `42760700cb:evidence/pv-world-20261028/controller-50497.log` | propext, Classical.choice, Quot.sound | 0 |
+| V184 | `R1Z.PV_AL_MoveClosure.complete` | `42760700cb:evidence/pv-alib-20261027/37699-output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V185 | `R1Z.PV_CBL_AppendBundle.op34_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V186 | `R1Z.PV_CBL_AppendBundle.op35_source` | `42760700cb:evidence/pv-cblib-20261027/out-52699.log` | propext, Classical.choice, Quot.sound | 0 |
+| V187 | `R1Z.PV_DL_ArrayNative.selected_native` | `42760700cb:evidence/pv-dlib-20261028/43420-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V195 | `R1Z.PV_CB3_Op51Arbitrary.op51_source` | `42760700cb:evidence/pv-relink-20261028/43799/output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V198 | `R1Z.PV_CB_Op72Exact.op72_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V199 | `R1Z.PV_CB_Op77Source.op77_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V202 | `R1Z.PV_CB_Op80Exact.op80_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V204 | `R1Z.PV_CB_Op82Source.op82_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V205 | `R1Z.PV_CB_Op83Source.op83_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V206 | `R1Z.PV_CB_Op84Exact.op84_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V208 | `R1Z.PV_CB_Op86Source.op86_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V209 | `R1Z.PV_CB_Op100Exact.op100_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V210 | `R1Z.PV_CB_Op101Exact.op101_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V211 | `R1Z.PV_CB_Op105Exact.op105_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V212 | `R1Z.PV_CB_Op107Exact.op107_source` | `42760700cb:evidence/pv-fix-20261028/receipt-62104.json` | propext, Classical.choice, Quot.sound | 0 |
+| V213 | `R1Z.PV_RDCD_Op109Audit.source` | `42760700cb:evidence/pv-fix-20261028/receipt-62113.json` | propext, Classical.choice, Quot.sound | 0 |
+| V214 | `R1Z.PV_CB_Op110Source.op110_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V215 | `R1Z.PV_CB_Op111Source.op111_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V216 | `R1Z.PV_RDCD_ContextInstall.op114_complete` | `42760700cb:evidence/pv-fix-20261028/receipt-62126.json` | propext, Classical.choice, Quot.sound | 0 |
+| V217 | `R1Z.PV_RDCD3_V217.complete` | `42760700cb:evidence/pv-rdcd3-20261028/lean-60699/output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V218 | `R1Z.PV_RDCD_Op118Audit.source` | `42760700cb:evidence/pv-rdcd-20261028/lean-41499/output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V219 | `R1Z.PV_CB3_Op120Source.op120_source` | `42760700cb:evidence/pv-join-20261026/wire/39359-launch.log` | propext, Classical.choice, Quot.sound | 0 |
+| V221 | `R1Z.PV_RDCD_Audit.v221` | `42760700cb:evidence/pv-fix-20261028/receipt-62122.json` | propext, Classical.choice, Quot.sound | 0 |
+| V222 | `R1Z.PV_RDCD_Audit.v222` | `42760700cb:evidence/pv-fix-20261028/receipt-62122.json` | propext, Classical.choice, Quot.sound | 0 |
+| V223 | `R1Z.PV_CB_Op127Source.op127_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V224 | `R1Z.PV_CB_Op128Source.op128_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V226 | `R1Z.PV_CB_Op130Source.op130_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V227 | `R1Z.PV_CB_Op131Source.op131_source` | `42760700cb:evidence/pv-integ2-20261027/lean-receipts/54597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V228 | `PV_B3P_Install132.reference` | `42760700cb:evidence/pv-b3p6-20261028/receipts-resume3/lean-51999/receipt/stdout.log` | propext, Classical.choice, Quot.sound | 0 |
+| V229 | `R1Z.PV_OWNH_Literals.v229_result` | `42760700cb:evidence/pv-ownh-20261029/launch-63898.log` | propext, Classical.choice, Quot.sound | 0 |
+| V230 | `R1Z.PV_OWNH_Literals.v230_result` | `42760700cb:evidence/pv-ownh-20261029/launch-63898.log` | propext, Classical.choice, Quot.sound | 0 |
+| V234 | `R1Z.PV_DL_DigestFinal.selected_native` | `42760700cb:evidence/pv-dlib-20261028/43450-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V235 | `R1Z.PV_DL_FixedFinal.selected_native` | `42760700cb:evidence/pv-dlib-20261028/43457-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V238 | `R1Z.PV_DL_CtSelected.selected_native` | `42760700cb:evidence/pv-dlib-20261028/43487-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V240 | `R1Z.PV_RDB2_Compress.complete` | `42760700cb:evidence/pv-rdb2-20261028/41198-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V243 | `PV_B3P_Closure226.complete_result` | `42760700cb:evidence/pv-b3p6-20261028/receipts-resume2/lean-50599/receipt/stdout.log` | propext, Classical.choice, Quot.sound | 0 |
+| V246 | `R1Z.PV_RDCD_StatementBridge.source` | `42760700cb:evidence/pv-fix-20261028/receipt-62132.json` | propext, Classical.choice, Quot.sound | 0 |
+| V247 | `R1Z.PV_RDB2_SumDeployed.installed` | `42760700cb:evidence/pv-rdb2-20261028/41198-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V254 | `R1Z.PV_CB3_Op246Source.op246_source` | `42760700cb:evidence/pv-join-20261026/wire/39359-launch.log` | propext, Classical.choice, Quot.sound | 0 |
+| V256 | `R1Z.PV_RDB2F_SamplerCalls.gamma_callback` | `42760700cb:evidence/pv-rdb2h-20261029/64399-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V257 | `R1Z.PV_RDB2F_SamplerCalls.ordinary_callback` | `42760700cb:evidence/pv-rdb2h-20261029/64399-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V258 | `R1Z.PV_RDB2C_FinalReplay.v258` | `42760700cb:evidence/pv-rdb2c-20261028/60599-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V259 | `R1Z.PV_RDB2C_FinalReplay.v259` | `42760700cb:evidence/pv-rdb2c-20261028/60599-driver.log` | propext, Classical.choice, Quot.sound | 0 |
+| V260 | `R1Z.PV_RDCD3_V260Complete.complete` | `42760700cb:evidence/pv-rdcd3-20261028/lean-60699/output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V261 | `PV_B1_Close254.selected_callback` | `42760700cb:evidence/pv-op254-20261027/lean-receipts/38597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V264 | `PV_B1_Close258.selected_callback` | `42760700cb:evidence/pv-op254-20261027/lean-receipts/38597/out.log` | propext, Classical.choice, Quot.sound | 0 |
+| V265 | `R1Z.PV_RDCD3_V265.complete` | `42760700cb:evidence/pv-rdcd3-20261028/lean-60699/output.log` | propext, Classical.choice, Quot.sound | 0 |
+| V270 | inventory audit; no closing theorem | see V270 provenance | n/a | n/a |
+
+Historical failed/nonstandard outputs are retained separately in claim-audit-dispositions.json. These are not attributed to the selected exit-zero closures. Source import presence is not proof use.
