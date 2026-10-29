@@ -1,4 +1,8 @@
-"""Generate one combined statement audit, one axioms audit, one focused replay."""
+"""Original preflight audit generator, superseded by the 64698 combined source.
+Do not rerun: failed-64697-source.lean.txt and the committed final audit sources
+retain both exact versions; proof-source-freeze.json records the correction.
+"""
+raise SystemExit("Superseded generator; final combined audit source is frozen in git")
 from pathlib import Path
 import json,re,hashlib,subprocess
 E=Path('evidence/pv-rj4idb-20261029');plan=json.loads((E/'build-plan.json').read_text());audit={'PV_RJ4IDB_Statements','PV_RJ4IDB_Axioms','PV_RJ4IDB_Replay'}
