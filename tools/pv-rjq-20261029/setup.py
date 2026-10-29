@@ -10,6 +10,9 @@ for m in x['modules']:
  if q.is_file():
   dst=p/'objects'/rel;dst.parent.mkdir(parents=True,exist_ok=True)
   if not dst.exists():dst.symlink_to(q)
+  for c in list(q.parent.glob(q.name+'.*'))+list(q.parent.glob(q.stem+'.ir')):
+   cd=dst.parent/c.name
+   if not cd.exists():cd.symlink_to(c)
 if not (p/'external').exists():(p/'external').symlink_to(old/'external',target_is_directory=True)
 env=json.load(open(old/'J.json'));env['LEAN_PATH']=str(p/'objects')+':'+str(p/'external');(p/'J.json').write_text(json.dumps(env));(p/'build-plan.json').write_text(json.dumps(x));print('read-only object links prepared; no old source copied or written')
 '''
