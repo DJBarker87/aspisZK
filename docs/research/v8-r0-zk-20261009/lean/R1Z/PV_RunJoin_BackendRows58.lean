@@ -28,6 +28,16 @@ theorem c2_g (self : prover.Backend) (g : Array Q 1024#usize) (row : Usize) :
   rcases pair with ⟨s,r⟩
   simp only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2_loop1.body,
     body,PV_RunJoin_BackendWrite58.write,bind_assoc_eq,bind_tc_ok,lift,Aeneas.Std.uncurry]
+  by_cases hit : r<1024#usize
+  · simp only [if_pos hit]
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    rintro ⟨a,back⟩
+    rfl
+  · simp only [if_neg hit]
 
 theorem c2_h (self : prover.Backend) (h : Slice Q) (row : Usize) :
     prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2_loop0 self h row=
@@ -38,6 +48,16 @@ theorem c2_h (self : prover.Backend) (h : Slice Q) (row : Usize) :
   rcases pair with ⟨s,r⟩
   simp only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2_loop0.body,
     body,PV_RunJoin_BackendWrite58.write,bind_assoc_eq,bind_tc_ok,lift,Aeneas.Std.uncurry]
+  by_cases hit : r<1024#usize
+  · simp only [if_pos hit]
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    rintro ⟨a,back⟩
+    rfl
+  · simp only [if_neg hit]
 
 theorem c1_d (self : prover.Backend) (d : Array Q 1024#usize) (row : Usize) :
     prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1 self d row=
@@ -48,6 +68,16 @@ theorem c1_d (self : prover.Backend) (d : Array Q 1024#usize) (row : Usize) :
   rcases pair with ⟨s,r⟩
   simp only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1.body,
     body,PV_RunJoin_BackendWrite58.write,bind_assoc_eq,bind_tc_ok,lift,Aeneas.Std.uncurry]
+  by_cases hit : r<1024#usize
+  · simp only [if_pos hit]
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    rintro ⟨a,back⟩
+    rfl
+  · simp only [if_neg hit]
 
 theorem c1_base (self : prover.Backend) (columns : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
     (lane row : Usize) :
@@ -62,6 +92,18 @@ theorem c1_base (self : prover.Backend) (columns : Array (alloc.vec.Vec aspis_co
   rcases pair with ⟨s,r⟩
   simp only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0_loop0.body,
     body,PV_RunJoin_BackendWrite58.write,bind_assoc_eq,bind_tc_ok,lift,Aeneas.Std.uncurry]
+  by_cases hit : r<1024#usize
+  · simp only [if_pos hit]
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    funext value
+    apply congrArg (Aeneas.Std.bind _)
+    rintro ⟨a,back⟩
+    rfl
+  · simp only [if_neg hit]
 
 #print axioms c1_base
 #print axioms c2_g
