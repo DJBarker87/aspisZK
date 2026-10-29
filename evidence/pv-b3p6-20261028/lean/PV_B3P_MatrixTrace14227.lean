@@ -24,7 +24,7 @@ theorem matrix_trace_binding14 (writes : List Write14) (sums : Matrix14)
   | nil => rfl
   | cons entry rest ih =>
     rcases entry with ⟨row,column,value⟩
-    have b := bound row column value (by simp only [List.mem_cons]; exact Or.inl rfl)
+    have b := bound row column value (by simp only [List.mem_cons]; exact Or.inl True.intro)
     have br : MatrixWritesBound14 rest := by
       intro r c v mem
       exact bound r c v (by simp only [List.mem_cons]; exact Or.inr mem)
