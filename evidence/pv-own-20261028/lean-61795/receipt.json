@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61795/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61795/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects/R1Z/PV_OWN_Reserve.olean",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.08",
+  "peak_rss_kib": "2626040",
+  "swap": "0",
+  "source_revision": "03ca75909fe642f0e2c67228b7a32c7591012574",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean:24:5: error(lean.unknownIdentifier): Unknown identifier `copied_prefix`\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean:23:90: error: unsolved goals\nrequest : Request\nmemory : \u2115 \u2192 Option \u2115\nc : Cell\ndestination : \u2115\ngrow : request.oldCapacity \u2264 request.newCapacity\nsize : c.size = request.oldCapacity * request.shape.width\nassociation : \u2200 i < c.size, memory (request.address + i) = Option.map UInt8.toNat (c.contents i)\ni : \u2115\ninside : i < c.size\n\u22a2 memoryAfter request destination memory (destination + i) = Option.map UInt8.toNat (c.contents i)\n'R1Z.PV_OWN_Reserve.complete' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWN_Reserve.initialized_prefix' depends on axioms: [sorryAx]\n'R1Z.PV_OWN_Reserve.typed_prefix' depends on axioms: [propext, sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 61795,
+  "module": "R1Z/PV_OWN_Reserve",
+  "source_blob": "f74f28a2d1a9f5df3b665cf5427cb04bdfff312f",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWN_Reserve.lean",
+  "source_sha256": "12e697159fb8ad3547efc676f0dbe42dd8b57c273a4abd466051c2c23d2e134e",
+  "imports": [
+    "R1Z.PV_RDB2C_PV_RDB1_V183",
+    "R1Z.PV_OWN_Operations"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_RDB2C_PV_RDB1_V183": "8b616b122e2d106f2f56a68bb3926df2ba2819c6744d0c9e8b3911659cfc3695",
+    "R1Z.PV_OWN_Operations": "72c6768fd3dc6c657e19736a7a07b4240fedb0cb735ef0199a5a027d6dcb1fa6"
+  },
+  "deps_fingerprint": "d9e7189c38d948c4e43e980270b3270ea79813f582d1a8d243e79f13a988d0bc"
+}

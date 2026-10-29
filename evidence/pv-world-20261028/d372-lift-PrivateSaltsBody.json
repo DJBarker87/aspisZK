@@ -1,0 +1,33 @@
+{
+  "source": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "body_sha256": "0c1b5b4cf7921e92be4f8550d21b558e249660cf3ba41f95e2b3a0877ac42dcc",
+  "name": "prover.derive_private_salts_loop.body",
+  "module": "R1Z.PV_W_R_PrivateSaltsBody",
+  "callbacks": [
+    [
+      "hash",
+      "Hash"
+    ]
+  ],
+  "recursive_imports": [
+    "PrivateSaltStep"
+  ],
+  "calls": [
+    {
+      "label": "Aeneas.Std.lift",
+      "expression": "Aeneas.Std.lift (UScalar.cast .U32 index)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "prover.derive_private_salt_step",
+      "expression": "prover.derive_private_salt_step reserved context hash tag i salts",
+      "classification": "recursive"
+    },
+    {
+      "label": "Aeneas.Std.lift",
+      "expression": "Aeneas.Std.lift (Std.Usize.wrapping_add index 1#usize)",
+      "classification": "opaque obligation"
+    }
+  ],
+  "scope": "complete-Result source translation; remaining opaque leaves and native/deployment adequacy unproved"
+}

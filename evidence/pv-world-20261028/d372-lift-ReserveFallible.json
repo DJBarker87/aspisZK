@@ -1,0 +1,149 @@
+{
+  "source": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "body_sha256": "e700e626248fb871b6e0637561489833bbc1df39d5df83ad58cf92a614042b4e",
+  "name": "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible",
+  "module": "R1Z.PV_W_R_ReserveFallible",
+  "callbacks": [],
+  "recursive_imports": [
+    "ReservationPath",
+    "SyncDirectory"
+  ],
+  "calls": [
+    {
+      "label": "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path",
+      "expression": "aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path\n{ self with last_error := none } mask_nonce",
+      "classification": "recursive"
+    },
+    {
+      "label": "std.fs.OpenOptions.new",
+      "expression": "std.fs.OpenOptions.new",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.OpenOptions.write",
+      "expression": "std.fs.OpenOptions.write options true",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.OpenOptions.create_new",
+      "expression": "std.fs.OpenOptions.create_new oo true",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode",
+      "expression": "std.fs.OpenOptions.Insts.StdOsUnixFsOpenOptionsExt.mode options1 384#u32",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.OpenOptions.open",
+      "expression": "std.fs.OpenOptions.open std.path.PathBuf.Insts.CoreConvertAsRefPath\noptions2 path",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "Aeneas.Std.lift",
+      "expression": "Aeneas.Std.lift (Array.to_slice aspis_prover.state_only_entropy.RESERVATION_MAGIC)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.File.Insts.StdIoWrite.write_all",
+      "expression": "std.fs.File.Insts.StdIoWrite.write_all file s",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r1",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "Aeneas.Std.lift",
+      "expression": "Aeneas.Std.lift (Array.to_slice statement_digest)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.File.Insts.StdIoWrite.write_all",
+      "expression": "std.fs.File.Insts.StdIoWrite.write_all file1 s1",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r2",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "Aeneas.Std.lift",
+      "expression": "Aeneas.Std.lift (Array.to_slice mask_nonce)",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.File.Insts.StdIoWrite.write_all",
+      "expression": "std.fs.File.Insts.StdIoWrite.write_all file2 s2",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r3",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.fs.File.sync_all",
+      "expression": "std.fs.File.sync_all file3",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r4",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref",
+      "expression": "std.path.PathBuf.Insts.CoreOpsDerefDerefPath.deref self.directory",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "aspis_prover.state_only_entropy.sync_directory",
+      "expression": "aspis_prover.state_only_entropy.sync_directory p",
+      "classification": "recursive"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTry.branch",
+      "expression": "core.result.Result.Insts.CoreOpsTry.branch r5",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual",
+      "expression": "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\nBool (core.convert.FromSame std.io.error.Error) residual",
+      "classification": "opaque obligation"
+    },
+    {
+      "label": "std.io.error.Error.kind",
+      "expression": "std.io.error.Error.kind error",
+      "classification": "typed primitive"
+    },
+    {
+      "label": "core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq",
+      "expression": "core.io.error.ErrorKind.Insts.CoreCmpPartialEqErrorKind.eq ek\ncore.io.error.ErrorKind.AlreadyExists",
+      "classification": "opaque obligation"
+    }
+  ],
+  "scope": "complete-Result source translation; remaining opaque leaves and native/deployment adequacy unproved"
+}

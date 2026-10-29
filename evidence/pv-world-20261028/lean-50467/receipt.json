@@ -1,0 +1,67 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50467/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50467/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_LoopInspect.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_LoopInspect.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "transport_exit": 0,
+  "wall": "0:01.08",
+  "peak_rss_kib": "2634164",
+  "swap": "0",
+  "source_revision": "16a979928fa8f1f4d5cd41daed833167c90d3e4e",
+  "expected_phase": "compilation of R1Z/PV_W_LoopInspect",
+  "print_axioms": "@[irreducible] def Aeneas.Std.loop.{u, v} : {\u03b1 : Type u} \u2192\n  {\u03b2 : Type v} \u2192 (\u03b1 \u2192 Aeneas.Std.Result (Aeneas.Std.ControlFlow \u03b1 \u03b2)) \u2192 \u03b1 \u2192 Aeneas.Std.Result \u03b2 :=\nfun {\u03b1} {\u03b2} body =>\n  Lean.Order.fix\n    (fun f x =>\n      match body x with\n      | Aeneas.Std.Result.ok r =>\n        match r with\n        | Aeneas.Std.ControlFlow.cont x => f x\n        | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x\n      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e\n      | Aeneas.Std.Result.div => Aeneas.Std.Result.div)\n    \u22ef\ninductive Aeneas.Std.ControlFlow.{u, v} : Type u \u2192 Type v \u2192 Type (max u v)\nnumber of parameters: 2\nconstructors:\nAeneas.Std.ControlFlow.cont : {\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 \u03b1 \u2192 Aeneas.Std.ControlFlow \u03b1 \u03b2\nAeneas.Std.ControlFlow.done : {\u03b1 : Type u} \u2192 {\u03b2 : Type v} \u2192 \u03b2 \u2192 Aeneas.Std.ControlFlow \u03b1 \u03b2\ntheorem Aeneas.Std.loop.eq_def.{u, v} : \u2200 {\u03b1 : Type u} {\u03b2 : Type v}\n  (body : \u03b1 \u2192 Aeneas.Std.Result (Aeneas.Std.ControlFlow \u03b1 \u03b2)) (x : \u03b1),\n  Aeneas.Std.loop body x =\n    match body x with\n    | Aeneas.Std.Result.ok r =>\n      match r with\n      | Aeneas.Std.ControlFlow.cont x => Aeneas.Std.loop body x\n      | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x\n    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e\n    | Aeneas.Std.Result.div => Aeneas.Std.Result.div :=\nfun {\u03b1} {\u03b2} body x =>\n  id\n    (Eq.trans (congrFun (Lean.Order.fix_eq (Aeneas.Std.loop._proof_1 body)) x)\n      (Eq.refl\n        (match body x with\n        | Aeneas.Std.Result.ok r =>\n          match r with\n          | Aeneas.Std.ControlFlow.cont x =>\n            Lean.Order.fix\n              (fun f x =>\n                match body x with\n                | Aeneas.Std.Result.ok r =>\n                  match r with\n                  | Aeneas.Std.ControlFlow.cont x => f x\n                  | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x\n                | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e\n                | Aeneas.Std.Result.div => Aeneas.Std.Result.div)\n              (Aeneas.Std.loop._proof_1 body) x\n          | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x\n        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e\n        | Aeneas.Std.Result.div => Aeneas.Std.Result.div)))\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 50467,
+  "module": "R1Z/PV_W_LoopInspect",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_LoopInspect.lean",
+  "source_blob": "461bda98dce94ef0ad596d09bc05a7521be8cbc0",
+  "source_sha256": "22d48d4b8a95f301b089220c4d053246ab4a6760f38dfd910900214f71551136",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_SourceSyntax"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "88909f82ceb4fdf9a3211c71d17e0de55524b143a5c74f41fae0e0473dfead35",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_SourceSyntax": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_SourceSyntax.olean",
+      "sha256": "587f41e3fe9bd0fca473a712d3e92b7a25e31a5ec853124811662dd2a8b6d799",
+      "source_sha256": "6400d991ec6e554df73015473d3a340e2563426e8a96376ed8be00f41e94bc91"
+    }
+  },
+  "transitive_cache_selection_sha256": null,
+  "external_selection_sha256": "adc40f5f1f598394e06c7c5d9d4c7cbf2821475560642fb465009285313187f3"
+}

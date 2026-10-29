@@ -1,0 +1,32 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:58: error: Ambiguous term
+  lift
+Possible interpretations:
+  Aeneas.Std.lift : ?m.48 → Result ?m.48
+  
+  PV_W_Threading.lift : Outcome ?m.50 ?m.51 → M ?m.48 ?m.49 ?m.50 ?m.51
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:13: error: unsolved goals
+W C E S A : Type
+body : S → M W C E (ControlFlow S A)
+s✝ : S
+w✝ : W
+r : Run W C E A
+s : S
+w mid : W
+cs : List (W × C)
+a : A
+first : body s w = { outcome := Outcome.ok (ControlFlow.done a), world := mid, calls := cs }
+⊢ { outcome := (PV_W_Threading.lift (Outcome.ok a) mid).outcome,
+      world := (PV_W_Threading.lift (Outcome.ok a) mid).world,
+      calls := cs ++ (PV_W_Threading.lift (Outcome.ok a) mid).calls } =
+    { outcome := Outcome.ok a, world := mid, calls := cs }
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:63: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵u̵e̵l̵,̵P̵V̵_̵W̵_̵T̵h̵r̵e̵a̵d̵i̵n̵g̵.̵b̵i̵n̵d̵,̵f̵i̵r̵s̵t̵,̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲f̲u̲e̲l̲,̲ ̲P̲V̲_̲W̲_̲T̲h̲r̲e̲a̲d̲i̲n̲g̲.̲b̲i̲n̲d̲,̲ ̲f̲i̲r̲s̲t̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_W_Loops.finite_exact' depends on axioms: [propext, sorryAx]
+'R1Z.PV_W_Loops.fuel_valid' depends on axioms: [propext]
+'R1Z.PV_W_Loops.execution_threaded' depends on axioms: [propext, sorryAx]
+'R1Z.PV_W_Loops.source_loop' depends on axioms: [propext, Classical.choice, Quot.sound]

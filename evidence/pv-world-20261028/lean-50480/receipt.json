@@ -1,0 +1,67 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50480/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-50480/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Loops.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.22",
+  "peak_rss_kib": "2643408",
+  "swap": "0",
+  "source_revision": "951733c6f41f72f37f9350661bd45cf80e073c57",
+  "expected_phase": "compilation of R1Z/PV_W_Loops",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:58: error: Ambiguous term\n  lift\nPossible interpretations:\n  Aeneas.Std.lift : ?m.48 \u2192 Result ?m.48\n  \n  PV_W_Threading.lift : Outcome ?m.50 ?m.51 \u2192 M ?m.48 ?m.49 ?m.50 ?m.51\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:13: error: unsolved goals\nW C E S A : Type\nbody : S \u2192 M W C E (ControlFlow S A)\ns\u271d : S\nw\u271d : W\nr : Run W C E A\ns : S\nw mid : W\ncs : List (W \u00d7 C)\na : A\nfirst : body s w = { outcome := Outcome.ok (ControlFlow.done a), world := mid, calls := cs }\n\u22a2 { outcome := (PV_W_Threading.lift (Outcome.ok a) mid).outcome,\n      world := (PV_W_Threading.lift (Outcome.ok a) mid).world,\n      calls := cs ++ (PV_W_Threading.lift (Outcome.ok a) mid).calls } =\n    { outcome := Outcome.ok a, world := mid, calls := cs }\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Loops.lean:33:63: warning: This simp argument is unused:\n  List.append_nil\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335f\u0335u\u0335e\u0335l\u0335,\u0335P\u0335V\u0335_\u0335W\u0335_\u0335T\u0335h\u0335r\u0335e\u0335a\u0335d\u0335i\u0335n\u0335g\u0335.\u0335b\u0335i\u0335n\u0335d\u0335,\u0335f\u0335i\u0335r\u0335s\u0335t\u0335,\u0335l\u0335i\u0335f\u0335t\u0335,\u0335L\u0335i\u0335s\u0335t\u0335.\u0335a\u0335p\u0335p\u0335e\u0335n\u0335d\u0335_\u0335n\u0335i\u0335l\u0335]\u0335[\u0332f\u0332u\u0332e\u0332l\u0332,\u0332 \u0332P\u0332V\u0332_\u0332W\u0332_\u0332T\u0332h\u0332r\u0332e\u0332a\u0332d\u0332i\u0332n\u0332g\u0332.\u0332b\u0332i\u0332n\u0332d\u0332,\u0332 \u0332f\u0332i\u0332r\u0332s\u0332t\u0332,\u0332 \u0332l\u0332i\u0332f\u0332t\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_W_Loops.finite_exact' depends on axioms: [propext, sorryAx]\n'R1Z.PV_W_Loops.fuel_valid' depends on axioms: [propext]\n'R1Z.PV_W_Loops.execution_threaded' depends on axioms: [propext, sorryAx]\n'R1Z.PV_W_Loops.source_loop' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 50480,
+  "module": "R1Z/PV_W_Loops",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Loops.lean",
+  "source_blob": "351fdf9a21b4c93feb48d1f45ef7b153a8a2c783",
+  "source_sha256": "8c1c5b59bdda32ccae90bb5d50dbd79d7bce78a4975c30488c63abeade0fc416",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_SourceSyntax"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "88909f82ceb4fdf9a3211c71d17e0de55524b143a5c74f41fae0e0473dfead35",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_SourceSyntax": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_SourceSyntax.olean",
+      "sha256": "587f41e3fe9bd0fca473a712d3e92b7a25e31a5ec853124811662dd2a8b6d799",
+      "source_sha256": "6400d991ec6e554df73015473d3a340e2563426e8a96376ed8be00f41e94bc91"
+    }
+  },
+  "transitive_cache_selection_sha256": null,
+  "external_selection_sha256": "adc40f5f1f598394e06c7c5d9d4c7cbf2821475560642fb465009285313187f3"
+}

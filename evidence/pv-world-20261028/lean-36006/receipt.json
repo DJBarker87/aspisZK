@@ -1,0 +1,65 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36006/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-36006/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Syntax.olean",
+    "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.35",
+  "peak_rss_kib": "486584",
+  "swap": "0",
+  "source_revision": "8deafaf240cadcd48a2ca0dfcc6970cd7c63c665",
+  "expected_phase": "compilation of R1Z/PV_W_Syntax",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:47:0: error: (kernel) arg #14 of 'R1Z.PV_W_Syntax.Executes.call_ok' contains a non valid occurrence of the datatypes being declared\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:64:8: warning: declaration uses `sorry`\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:66:5: warning: Variable name `h` is not explicitly referenced.\n\nThe binding can be removed (if unused) or named `_` (if used implicitly).\n\nNote: This linter can be disabled with `set_option linter.unusedVariables false`\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:116:13: error: don't know how to synthesize implicit argument `r`\n  @execution_sound (fun {B} => Op B) W C E ?m.71 (fun {B} => ops) ?m.74 ?m.75 ?m.76 h\ncontext:\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nstep : W \u2192 C \u2192 W \u2192 Prop\nleaves : \u2200 {B : Type} (op : Op B), Valid step (ops op)\np : Program Op E A\nw : W\nr : Run W C E A\nh : sorry\n\u22a2 Run W C E ?m.71\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:116:13: error: don't know how to synthesize implicit argument `w`\n  @execution_sound (fun {B} => Op B) W C E ?m.71 (fun {B} => ops) ?m.74 ?m.75 ?m.76 h\ncontext:\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nstep : W \u2192 C \u2192 W \u2192 Prop\nleaves : \u2200 {B : Type} (op : Op B), Valid step (ops op)\np : Program Op E A\nw : W\nr : Run W C E A\nh : sorry\n\u22a2 W\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:116:13: error: don't know how to synthesize implicit argument `p`\n  @execution_sound (fun {B} => Op B) W C E ?m.71 (fun {B} => ops) ?m.74 ?m.75 ?m.76 h\ncontext:\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nstep : W \u2192 C \u2192 W \u2192 Prop\nleaves : \u2200 {B : Type} (op : Op B), Valid step (ops op)\np : Program Op E A\nw : W\nr : Run W C E A\nh : sorry\n\u22a2 Program (fun {B} => Op B) E ?m.71\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:116:13: error: don't know how to synthesize implicit argument `A`\n  @execution_sound (fun {B} => Op B) W C E ?m.71 (fun {B} => ops) ?m.74 ?m.75 ?m.76 h\ncontext:\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nstep : W \u2192 C \u2192 W \u2192 Prop\nleaves : \u2200 {B : Type} (op : Op B), Valid step (ops op)\np : Program Op E A\nw : W\nr : Run W C E A\nh : sorry\n\u22a2 Type\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:116:7: error: failed to infer `have` declaration type\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:115:72: error: unsolved goals\nOp : Type \u2192 Type\nW C E A : Type\nops : Interpreter Op W C E\nstep : W \u2192 C \u2192 W \u2192 Prop\nleaves : \u2200 {B : Type} (op : Op B), Valid step (ops op)\np : Program Op E A\nw : W\nr : Run W C E A\nh : sorry\n\u22a2 (eval (fun {B} => ops) p w).outcome = r.outcome \u2227\n    (eval (fun {B} => ops) p w).calls = r.calls \u2227\n      (eval (fun {B} => ops) p w).world = r.world \u2227 Threaded step w r.calls r.world\n'R1Z.PV_W_Syntax.eval_thenDo' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_W_Syntax.execution_sound' depends on axioms: [sorryAx]\n/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:123:14: error(lean.unknownIdentifier): Unknown constant `execution_complete`\n'R1Z.PV_W_Syntax.eval_valid' depends on axioms: [propext]\n'R1Z.PV_W_Syntax.execution_exact' depends on axioms: [sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "id": 36006,
+  "module": "R1Z/PV_W_Syntax",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_W_Syntax.lean",
+  "source_blob": "fe01bc88e93035f6f6505e55d820e7763bb660c7",
+  "source_sha256": "e8d5db95fbcc82ceb1c619593005b194e6ff0421b6ae78c36189a6f059d655a4",
+  "external_manifest_sha256": "d9187c800b7479f66ec6147e3c8e91c1158d382c4aa467bf678e76901b9a8c0e",
+  "project_imports": [
+    "R1Z.PV_W_Threading"
+  ],
+  "reused_project_objects": [],
+  "deps_fingerprint": "4610e4304c3abe5c5d3d2989214b4e7a3669cb28b939e2c5768337c3ad51be6f",
+  "direct_dependency_objects": {
+    "R1Z.PV_W_Threading": {
+      "path": "/home/dombarker/project-offloads/codex-pv-world-20261028/lean-objects/R1Z/PV_W_Threading.olean",
+      "sha256": "3977b335d8d9fd736089a1eb5721f0e6d8f371387472d738d2274da3f1f60753",
+      "source_sha256": "a0c0fd9fcfad07d18597cae9106ae43d69298eea98218df4065be2e1fba0f8ea"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:97:41: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:97:13: error: unsolved goals
+case call.fail
+Op : Type → Type
+W C E A : Type
+ops : Interpreter Op W C E
+B✝ : Type
+op : Op B✝
+k : B✝ → Program Op E A
+ih : ∀ (a : B✝) (w : W), Executes (fun {B} => ops) (k a) w (eval (fun {B} => ops) (k a) w)
+w : W
+e : E
+h : (ops op w).outcome = Outcome.fail e
+⊢ PV_W_Threading.bind (ops op) (fun a => eval (fun {B} => ops) (k a)) w =
+    { outcome := Outcome.fail e, world := (ops op w).world, calls := (ops op w).calls }
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:98:38: error: Ambiguous term
+  bind
+Possible interpretations:
+  PV_W_Threading.bind : M ?m.136 ?m.137 ?m.138 ?m.139 →
+    (?m.139 → M ?m.136 ?m.137 ?m.138 ?m.140) → M ?m.136 ?m.137 ?m.138 ?m.140
+  
+  Bind.bind : ?m.136 ?m.138 → (?m.138 → ?m.136 ?m.139) → ?m.136 ?m.139
+/home/dombarker/project-offloads/codex-pv-world-20261028/lean-sources/R1Z/PV_W_Syntax.lean:98:10: error: unsolved goals
+case call.div
+Op : Type → Type
+W C E A : Type
+ops : Interpreter Op W C E
+B✝ : Type
+op : Op B✝
+k : B✝ → Program Op E A
+ih : ∀ (a : B✝) (w : W), Executes (fun {B} => ops) (k a) w (eval (fun {B} => ops) (k a) w)
+w : W
+h : (ops op w).outcome = Outcome.div
+⊢ PV_W_Threading.bind (ops op) (fun a => eval (fun {B} => ops) (k a)) w =
+    { outcome := Outcome.div, world := (ops op w).world, calls := (ops op w).calls }
+'R1Z.PV_W_Syntax.eval_thenDo' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_W_Syntax.execution_sound' depends on axioms: [propext]
+'R1Z.PV_W_Syntax.execution_complete' depends on axioms: [propext, sorryAx]
+'R1Z.PV_W_Syntax.eval_valid' depends on axioms: [propext]
+'R1Z.PV_W_Syntax.execution_exact' depends on axioms: [propext]

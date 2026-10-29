@@ -1,0 +1,51 @@
+# Shared ownership interface — final report
+
+**V229, V230, V239 and V178 remain SUSPENDED. No row restored, no checked witness-dependent native FINDING, no endpoint premise removed. Privacy target not yet established.**
+
+Exact sparse worktree `/Users/dominic/ZK/.worktrees/pv-own`, branch `codex/pv-own-20261028`, starting revision `6a2c273f22` (candidate `1a3cd3de26` plus parked world). New Lean prefix PV_OWN_; IDs 61700–61799 only, audits 61797–61799. [INTERFACE.md](INTERFACE.md) was committed in b00014f717 before any new Lean. [COMMITS.txt](COMMITS.txt) gives `git log --oneline 6a2c273f22..HEAD` through the evidence preparation; the final report commit follows.
+
+## Checked progress and its limit
+
+The 80 new interface modules prove byte-range initialization/read uniqueness, out-of-range and disjoint-write frames, heap installation with both actual allocation sizes, move/take and unique-owner preservation, shared/exclusive borrow exclusions, checked store/move/drop preconditions, allocation success/null/failure/divergence post-worlds, actual-handler continuation threading, truncate representation, and concrete POD backing-store drop equations. Allocation identity retains generations; growth invalidates stale generations, preserves initialized prefixes and exposes uninitialized spare bytes. The reserve bridge **consumes** the existing complete PV_RDB1_V183 reserve law and its byte-prefix theorem, rather than assuming successful allocation or proving a second reserve family.
+
+The world adapter retains W-CARRIER-1 process fields. Its frame equations describe the adapter, not native allocator/destructor purity. The public container relations, in PV_OWN_Reserve.lean, distinguish allocation-free zero-capacity Vec from allocated storage and require a String UTF8 encoding witness using the actual U8 codec. U16 has an injective little-endian codec. All 21 Link kind variants and payload fields are retained; the schema script checks them against frozen source. The checked non-injectivity theorem explains why endpoint-only Link values cannot be a byte-refinement carrier.
+
+These are **mathematical/model interface laws**, not a complete deployed-runtime refinement. The raw transformers are not runtime permission checks; CheckedAlloc/CheckedStore/CheckedMove/DropGate carry their preconditions. Scoped borrow release currently models a LIFO continuation. A native Link variant/padding codec and native lifetime/cursor association remain unproved. There is no universal Drop theorem. The old BoxAdequacy disjointness predicate reused the new request's size for existing allocations; the shared heap law uses each existing allocation's own size. This is an interface correction, not a counterexample to native allocation or a D159 witness pair.
+
+## Consumers, in required order
+
+**V229 — SUSPENDED.** Full Link representation/variant layout and padding abstraction; native in-place collector read/write/drop cursor, generation and scoped ownership invariant; every destructor/error/abort continuation; then compose PV_RDB2D_CollectorProgram.complete and its value law. This complete native-to-byte-world association was not proved.
+
+**V230 — SUSPENDED.** V229 association, plus actual deployed usize/u16 shift/OR/stack-array carrier association. The 544-byte POD free model and concrete MIR do not discharge those dependencies.
+
+**V239 — SUSPENDED.** Native sparse Vec initialized-length/header/byte/ownership instance; arbitrary monadic builder cardinality and raw ordered QM31 association; dense/sparse transport and public point/length at the consuming protocol call. The append draft is uncompiled and receives no credit.
+
+**V178 — SUSPENDED.** Compose the actual owned name/join source and cleanup into the shared byte/world relation, with source-complete diagnostic reachability and public provenance of every diagnostic argument/header/guard. Probe MIR moves String into Path::join<String>; its cleanup is in the callee, not an inline wrapper destructor.
+
+The inherited row laws were read but no complete native consumer law was fabricated from them. Before: logical-cell/value/resource programs with unproved native ownership association. After: one checked shared byte/ownership algebra with the exact associations above still open. Endpoint premises removed/added/changed: **0/0/0**. No witness domain, observer, simulator, dictionary or failure event changed. Unclassified diagnostic/public-point provenance is suspension, not a checked witness-dependent finding.
+
+## Source, MIR and trust
+
+Native 02 uses rustc 1.94.1, deployed dependency versions and resolved feature union, release opt3, assertions/overflow checks off, panic unwind. It passes finite lifecycle checks at 8 sizes and captures 324 MIR files. Observed Link layout is size 8/alignment 2, kind offset 4, producer 0, consumer 2; sparse tuple size 24/alignment 8. [drop-mir.json](drop-mir.json) and [drop-mir-audit.json](drop-mir-audit.json) retain exact Vec, String, Box and owned-join MIR and normal/unwind edges. Vec glue calls element-drop then RawVec cleanup; String delegates to Vec<u8>; Box drops pointee before allocator cleanup. The POD needs_drop checks pass. This is **deployed-configuration probe MIR and finite validation**, not the deployed client's complete callsite refinement or a structural K-1 substitute. Field source identity was supplemented after the native run and is explicitly labelled late; Link source was checked before it.
+
+Every step resting on Kani, Aeneas or Charon agreeing on Rust semantics is **reclassification within existing tool trust**, never premise removal. No new extraction or Kani run occurred; no copy-dependent or function-pointer Kani PASS is consumed. (x') is not bypassed with another extractor. Compiler/MIR-to-executable D381/D386 remains retained. Under rdea-1, actual allocator outcomes given prior state, fresh aligned disjoint ranges, allocation/reallocation/deallocation and actual failure handlers remain under the existing runtime/allocator primitive item. Native typed stores, ownership and concrete continuation binding are not moved there. T remains exactly **entropy_law, entropy_kernel, observation**. E1/E2, real RunJoin, proof-account client routing and L1/L2/L3 remain obligations.
+
+## Verification and resources
+
+**100/100 Lean starts: 91 pass, 9 fail; 3/60 capped native/housekeeping scopes; 0 Kani.** Native 01 failed on missing task input after a quoting error; native 02 passed the optimized build/probe; native 03 verified fingerprints and removed only own rebuildable caches. [combined-audit.json](combined-audit.json) and numbered raw receipts record exact command/target, exit, wall, peak RSS, swap, source revision/blob/SHA, dependency fingerprint and complete axioms output. Failed elaboration/recovery output, including sorryAx, earns no credit.
+
+|ID|Exact target|Exit|Wall|Peak RSS KiB|Swap|
+|---|---|---:|---|---:|---:|
+|61797|R1Z/PV_OWN_StatementsAudit|0|0:01.62|2633632|0|
+|61798|R1Z/PV_OWN_AxiomsAudit|0|0:01.34|2627836|0|
+|61799|R1Z/PV_OWN_FocusedReplay|0|0:01.77|2634116|0|
+
+All three final targets use source revision **e89db568e0ffa9436e763d528765603a5cd5685e**. 61797 checks 116 declarations and prints six complete root statements.61798's 116 named axioms queries use only subsets of propext, Classical.choice, Quot.sound.61799's composed checked-store replay and reserve/collector/container root queries pass with the same allowed axioms. This is one focused model closure replay, not a full privacy endpoint or release manifest replay. Maximum Lean RSS is 2,666,748 KiB; native build peak 540,332 KiB; all swaps0. Every scope uses MemoryHigh=6G/MemoryMax=8G/MemorySwapMax=0/TasksMax=64; Lean -M7000, one own scope at a time.
+
+All 5,673 external objects were verified before the first compile and rechecked before final audits. [final-fingerprint.json](final-fingerprint.json) verifies 89 project objects, every direct/transitive project edge and the complete external cohort. No project object from another job was reused; the two world and four reserve dependencies were privately rebuilt from h5-selected tracked sources. No library was rebuilt or shared source/object overwritten. Private external selection repaired namespace-root and matching IR availability; those environment changes justify retries of unchanged Layout source after 61789/61790. Other rejected sources were changed before retry. The final frozen manifest's SHA/blob metadata was regenerated at the committed freeze; audit source bytes were unchanged.
+
+Three reservation refusals were uncharged and retried with the same ID only after the full 180-second cooldown; combined audit checks this mechanically. No actual scope launched after allowed:false/nonzero admission or during cooldown. Own preparation errors consumed no Lean ID: a missing dependency before 61704, the audit queue's focused-ID guard, and two duplicate wrapper requests for already-successful 61797/61798. The wrapper blocked both duplicates before Lean. Original successful receipts and prevented-start logs are retained. Historical LOG D42–D68/build-integration review was completed late; it did not provide endpoint closure credit. The initial ID scan covered direct job receipt names and shared sent files; the supplementary final scan covers nested receipt trees too.
+
+[cleanup.json](cleanup.json) records 89 private object files (5721784 bytes), 21,987 own links unlinked without following targets, and 203,962,804 Cargo-target bytes removed. Sources, MIR and raw evidence remain. No wallet/account key was created, removed or modified; no other job directory was changed. No crates/programs, protected soundness file, observer, simulator or dictionary changed; no XR imports, new axioms, sorry/admit/native_decide/implemented_by or cap increases. No file over 20 MB is committed. No push or merge was performed.
+
+Stopped at the budget of 100 Lean starts. **Next deliverable:** the native V229 Link codec and in-place read/write/drop cursor and ownership refinement into this interface, preserving all variant data and continuations; only then compose the existing resource-program/value law and reconsider restoration. The uncompiled append draft is explicitly retained under unsubmitted/ and is not imported or credited.

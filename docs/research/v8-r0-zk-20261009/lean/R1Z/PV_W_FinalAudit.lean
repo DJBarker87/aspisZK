@@ -1,0 +1,19 @@
+import R1Z.PV_W_CarrierObstruction
+set_option autoImplicit false
+#print axioms R1Z.PV_W_Threading.bind_assoc
+#print axioms R1Z.PV_W_Threading.lift_frame
+#print axioms R1Z.PV_W_Threading.lift_bind
+#print axioms R1Z.PV_W_Threading.bind_ok
+#print axioms R1Z.PV_W_Threading.bind_fail
+#print axioms R1Z.PV_W_Threading.bind_div
+#print axioms R1Z.PV_W_Threading.threaded_append
+#print axioms R1Z.PV_W_Threading.valid_lift
+#print axioms R1Z.PV_W_Threading.valid_emit
+#print axioms R1Z.PV_W_Threading.valid_bind
+#print axioms R1Z.PV_W_Threading.no_lift_advancing
+#print axioms R1Z.PV_W_Threading.no_trace_decoder
+#print axioms R1Z.PV_W_CarrierObstruction.no_factor
+#print axioms R1Z.PV_W_CarrierObstruction.no_state_interpreter
+#print axioms R1Z.PV_W_CarrierObstruction.distinct
+#print axioms R1Z.PV_W_CarrierObstruction.no_forgotten_flag_interpreter
+#print axioms R1Z.PV_W_CarrierObstruction.retainedFlag_result
