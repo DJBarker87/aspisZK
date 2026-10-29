@@ -14,6 +14,7 @@ theorem values_ofFn (a : Array U32 8#usize) :
     values a=List.ofFn (fun i : Fin 8 => (limb a i).val) := by
   apply List.ext_getElem
   · simp only [values,List.length_map,a.property,List.length_ofFn]
+    rfl
   · intro i hi hk
     simp only [values,List.getElem_map,List.getElem_ofFn,limb]
 
