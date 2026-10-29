@@ -3,6 +3,7 @@ import PV_B3P_P227_10
 namespace PV_B3P_Binding11227
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
 set_option autoImplicit false
+open Result
 def sum_context11_poseidon_selectors (sum_operation : SumOperation11)
   (selectors : reference_copy_terminal.Selectors) :
   Result aspis_statement.state_only_poseidon.StateOnlyPoseidonSelectors
