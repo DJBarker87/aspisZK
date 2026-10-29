@@ -8,7 +8,7 @@ were read; no crates/programs/dictionary/simulator/observer/T changes.
 |---|---|
 | [V201](rows/V201.md) | RESTORED / B at original source/Result and CodeField boundary. |
 | [V220](rows/V220.md) | RESTORED / B at exact source/Result boundary; source_reference and coherent68-module closure pass. |
-| [V237](rows/V237.md) | SUSPENDED pending current-cohort value proof and singleton byte-default execution; source influence inspection prepared. |
+| [V237](rows/V237.md) | RESTORED / B: exact Core Result bridge, singleton byte-array default and88-object coherent closure pass. |
 | V236 | SUSPENDED: complete BlockBuffer.digest_blocks/copy/index transport remains open. |
 | V233 | SUSPENDED: raw-parts/offset/transmute and GenericArray byte-block alias/representation transport remains open. |
 | V197 | SUSPENDED: escaping-reference extraction rejection; owned structural parser binding remains open. |
