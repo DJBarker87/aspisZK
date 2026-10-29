@@ -6,6 +6,7 @@ a=int(sys.argv[1]);assert 70400<=a<=70499
 assert not (E/f'submission-{a}.json').exists()
 module=sys.argv[2] if len(sys.argv)>2 else 'PV_EVH_Interface'
 assert module.startswith('PV_EVH_')
+assert module != 'PV_EVH_FixtureConsumer', 'lead-only 16 GiB consumer; worker launch forbidden'
 source=Path('lean/'+module+'.lean').read_bytes()
 assert hashlib.sha256(source).hexdigest()==json.load(open(E/('prepare-'+module+'.json')))['result']['source_sha256']
 # Ruling (u): source-only guard, including all failures in this line.
