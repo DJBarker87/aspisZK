@@ -12,7 +12,7 @@ attribute [local irreducible] PV_B2_F_ResourceFamilies.selected PV_B2_E_GammaOri
 theorem evaluator (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @ExternalFuns.op79 (types base) (selected base heap box ops)=
-      @ExternalFuns.op79 (types base) (ProverRwP6BodyCandidate.selected ops) := by
+      @ExternalFuns.op79 (types base) (@ProverRwP6BodyCandidate.selected (types base) ops) := by
   unfold selected
   exact PV_B2_F_RawNative.preserved_79 base heap box _
 
@@ -22,7 +22,7 @@ theorem serializer (base : ExternalTypes) (heap : Heap) (box : Box)
       ok (PV_RunJoin_FlatBytes35.wire x) := by
   unfold selected
   rw [PV_B2_F_RawNative.preserved_51]
-  exact PV_RunJoin_FlatBytes35.installed ops x
+  exact @PV_RunJoin_FlatBytes35.installed (types base) ops x
 #print axioms evaluator
 #print axioms serializer
 end R1Z.PV_RunJoin_ClaimFields48
