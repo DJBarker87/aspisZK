@@ -26,9 +26,9 @@ theorem nonzero (self : U32) (hcself : Canon self) (hne : (self != 0#u32)=true) 
   obtain ⟨out,h16,h16',hcout⟩ := PV_RunJoin_CircleNeutralMul53.complete m7 self hcm7 hcself
   refine ⟨out,?_,?_,hcout⟩
   · unfold PV_RunJoin_CircleRawScalar52.field.M31.inv
-    simp only [massert,hne,bind_tc_ok,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16]
+    simp only [massert,hne,if_true,bind_tc_ok,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,h10,h11,h12,h13,h14,h15,h16]
   · unfold PV_RunJoin_CircleR72Raw52.field.M31.inv
-    simp only [massert,hne,bind_tc_ok,h0',h1',h2',h3',h4',h5',h6',h7',h8',h9',h10',h11',h12',h13',h14',h15',h16']
+    simp only [massert,hne,if_true,bind_tc_ok,h0',h1',h2',h3',h4',h5',h6',h7',h8',h9',h10',h11',h12',h13',h14',h15',h16']
 
 #print axioms nonzero
 end R1Z.PV_RunJoin_CircleNeutralInvNonzero53

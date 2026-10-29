@@ -18,5 +18,5 @@ for i,(n,op,args) in enumerate(ops):
  body+=f'  obtain ⟨{n},h{i},h{i}\',hc{n}⟩ := {call}\n'
 body+='  refine ⟨out,?_,?_,hcout⟩\n'
 for raw,suffix in [('PV_RunJoin_CircleRawScalar52',''),('PV_RunJoin_CircleR72Raw52',"'")]:
- body+='  · unfold '+raw+'.field.M31.inv\n    simp only [massert,hne,bind_tc_ok,'+','.join('h'+str(i)+suffix for i in range(len(ops)))+']\n'
+ body+='  · unfold '+raw+'.field.M31.inv\n    simp only [massert,hne,if_true,bind_tc_ok,'+','.join('h'+str(i)+suffix for i in range(len(ops)))+']\n'
 w.write('PV_RunJoin_CircleNeutralInvNonzero53',['R1Z.PV_RunJoin_CircleNeutralSquareN53'],body,['nonzero'])
