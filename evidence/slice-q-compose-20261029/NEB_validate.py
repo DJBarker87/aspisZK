@@ -85,12 +85,24 @@ def extend(baseline,edges):
   require(all(any(o['id']==e['obligation_id'] and o.get('callee')==e['callee'] for o in r['caller_domain_obligations']) for r in callers),'edge obligation mismatch')
  from NEB_certificates import expected
  approved_edges,approved_rows=expected(baseline)
+ # Additional ORIGINAL inventory self-obligations are kept explicit. They
+ # were omitted only from the slice's self-edge-free enumeration.
+ from NEB_additive_certificates import expected as additive_expected
+ _,_,approved_inventory=additive_expected(baseline)
+ inventory_edges=edges.get('inventory_edges',[])
+ require(len({e['obligation_id'] for e in inventory_edges})==len(inventory_edges),'duplicate inventory edge')
+ approved_index={e['obligation_id']:e for e in approved_inventory}
+ for e in inventory_edges:
+  require(e['obligation_id'] in approved_index,'unregistered extra inventory obligation')
+  require({k:v for k,v in e.items() if k not in ['certificate','status','obstacle']}=={k:v for k,v in approved_index[e['obligation_id']].items() if k not in ['certificate','status','obstacle']},'wrong extra inventory edge')
+  require(e['caller']==e['callee'] and e['classification']=='CONSERVATIVE_ALTERNATIVE' and e['selected_target'] is False,'extra inventory edge is not resolved self-target')
  out=copy.deepcopy(baseline);changes=[]
  rowcerts={c['row']:c for c in edges.get('row_certificates',[])}
  require(len(rowcerts)==len(edges.get('row_certificates',[])),'duplicate row certificate')
  # Never erase conservative targets or original obligations. A pruning
  # certificate closes the obligation explicitly, retaining the inventory row.
- index={e['obligation_id']:e for e in edges['edges']}
+ index={e['obligation_id']:e for e in edges['edges']+inventory_edges}
+ require(len(index)==len(edges['edges'])+len(inventory_edges),'inventory/slice obligation collision')
  for row in out['rows']:
   if row['function'] not in scope['functions']:continue
   for obligation in row['caller_domain_obligations']:
@@ -125,9 +137,17 @@ def extend(baseline,edges):
    for o in row['caller_domain_obligations']:
     if 'call' in o:
      ext=rc['external_obligations'].get(o['id'])
-     require(ext is not None and ext['kind']=='TRANSPARENT_M31_CONSTRUCTOR','external obligation unproved')
-     require(o['call'].get('expression',o['call'].get('syntax'))=='M31' and ext['syntax']=='M31','wrong external constructor')
-     o.update(status='CLOSED',discharged_by=rc['id']+':constructor')
+     require(ext is not None,'external obligation unproved')
+     if ext['kind']=='TRANSPARENT_M31_CONSTRUCTOR':
+      require(o['call'].get('expression',o['call'].get('syntax'))=='M31' and ext['syntax']=='M31','wrong external constructor')
+      o.update(status='CLOSED',discharged_by=rc['id']+':constructor')
+     elif ext['kind']=='RELEASE_CFG_INACTIVE':
+      require(o['call'].get('resolution')=='disabled release cfg','inactive cfg is not original inventory classification')
+      require(ext['cfg']==o['call']['cfg'] and ext['cfg'] and ext['selected_core_features']==['r0'],'wrong inactive feature projection')
+      require(ext['native_review']==rc['native_review'],'inactive cfg lacks same native feature review')
+      require(any(any('feature = \"'+f+'\"' in c for f in ['r0-op-count','r0-r91-audit','r0-e4-reference']) for c in ext['cfg']),'cfg inactivity not established')
+      o.update(status='CLOSED',discharged_by=rc['id']+':inactive-release-cfg')
+     else:require(False,'unregistered external obligation kind')
  # Admit rows bottom-up along actual obligations. Resolved-away alternatives
  # remain CLOSED obligations but are not active call dependencies. No real SCC
  # is closed without a separately supplied induction certificate.

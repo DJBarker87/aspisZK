@@ -60,6 +60,6 @@ assert a+'/receipt.json' in out,'submitted attempt unresolved; recover read-only
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NEB_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 active.unlink()
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True);print(out[a+'/stdout.log'][-2200:],flush=True)
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True);print('\n'.join(line for line in out[a+'/stdout.log'].splitlines() if any(t in line for t in ['Checking harness','VERIFICATION','failed (','Failed Checks:','error:','Verification Time:'])),flush=True)
 if rc['exit_status'] in [124,137] or 'timed out' in out[a+'/stdout.log'].lower():raise SystemExit('STOP timed-out shape; isolate and split, never rerun unchanged')
 sys.exit(rc['exit_status'])

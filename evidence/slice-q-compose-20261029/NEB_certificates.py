@@ -46,11 +46,16 @@ def expected(baseline):
   external={o['id']:dict(kind='TRANSPARENT_M31_CONSTRUCTOR',syntax=o['call'].get('expression',o['call'].get('syntax')),theorems=['NEB_ReducerCall.wrapper','NEB_ReducerCall.state_effects']) for o in row['caller_domain_obligations'] if 'call' in o}
   assert all(v['syntax']=='M31' for v in external.values())
   rows[row['row']]=dict(id='NEB-reducer-root:'+row['row'],row=row['row'],function=row['function'],frozen_body_sha256=row['frozen_body_sha256'],selected_claims=row['selected_claims'],named_hypotheses_discharged=names,inventory_domains_discharged=[o['unit'] for o in row['inventory_domain_obligations']],parts=['result','state','ordered_effects','native_association'],lean_evidence=[proof],remaining_inner_hypotheses=[],top_hypotheses=[row['function']+'.PacketDomain',row['function']+'.PhysicalInterpretation','NativeContractSemanticTransport'],review=rev,native_review=cert['native_review'],external_obligations=external)
- return {edge:cert},rows
+ from NEB_additive_certificates import expected as additive
+ extra_edges,extra_rows,_=additive(baseline)
+ return {edge:cert,**extra_edges},{**rows,**extra_rows}
 if __name__=='__main__':
  base=obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json');edges=obj(E/'NEB_EDGES.json');expected_edges,rows=expected(base)
  for edge in edges['edges']:
   if edge['edge'] in expected_edges:edge.update(certificate=expected_edges[edge['edge']],status='CLOSED',obstacle=None)
+ from NEB_additive_certificates import expected as additive
+ _,_,extra=additive(base)
+ edges['inventory_edges']=extra
  edges['row_certificates']=list(rows.values())
  (E/'NEB_EDGES.json').write_text(json.dumps(edges,indent=1)+'\n')
  print(json.dumps(dict(edge_certificates=len(expected_edges),root_certificates=len(rows))))
