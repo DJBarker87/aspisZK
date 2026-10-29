@@ -19,43 +19,159 @@ set_option autoImplicit false
 
 attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.QM31.sub aspis_core.field.QM31.square aspis_core.field.QM31.mul aspis_core.field.QM31.mul_m31 Array.index_usize Array.update reference_terminal.read227 reference_terminal.reconstruct_10 reference_terminal.add_preweighted reference_copy_terminal.Selectors.row
 
+def value_owned_cont10_14 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_14 packed openings selectors (selector,range_input)
+
+def value_direct_cont10_14 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_14 packed openings selectors (selector,range_input)
+
+def value_owned_cont10_13 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_13 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_14 packed openings selectors selector next.2)
+
+def value_direct_cont10_13 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_13 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_14 packed openings selectors selector next.2)
+
+def value_owned_cont10_12 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_12 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_13 packed openings selectors selector next.2)
+
+def value_direct_cont10_12 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_12 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_13 packed openings selectors selector next.2)
+
+def value_owned_cont10_11 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_11 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_12 packed openings selectors selector next.2)
+
+def value_direct_cont10_11 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_11 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_12 packed openings selectors selector next.2)
+
+def value_owned_cont10_10 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_10 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_11 packed openings selectors selector next.2)
+
+def value_direct_cont10_10 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_10 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_11 packed openings selectors selector next.2)
+
+def value_owned_cont10_09 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_09 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_10 packed openings selectors selector next.2)
+
+def value_direct_cont10_09 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_09 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_10 packed openings selectors selector next.2)
+
+def value_owned_cont10_08 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_08 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_09 packed openings selectors selector next.2)
+
+def value_direct_cont10_08 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_08 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_09 packed openings selectors selector next.2)
+
+def value_owned_cont10_07 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_07 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_08 packed openings selectors selector next.2)
+
+def value_direct_cont10_07 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_07 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_08 packed openings selectors selector next.2)
+
+def value_owned_cont10_06 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_06 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_07 packed openings selectors selector next.2)
+
+def value_direct_cont10_06 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_06 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_07 packed openings selectors selector next.2)
+
+def value_owned_cont10_05 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_05 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_06 packed openings selectors selector next.2)
+
+def value_direct_cont10_05 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_05 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_06 packed openings selectors selector next.2)
+
+def value_owned_cont10_04 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_04 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_05 packed openings selectors selector next.2)
+
+def value_direct_cont10_04 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_04 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_05 packed openings selectors selector next.2)
+
+def value_owned_cont10_03 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_03 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_04 packed openings selectors selector next.2)
+
+def value_direct_cont10_03 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_03 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_04 packed openings selectors selector next.2)
+
+def value_owned_cont10_02 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_02 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_03 packed openings selectors selector next.2)
+
+def value_direct_cont10_02 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_02 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_03 packed openings selectors selector next.2)
+
+def value_owned_cont10_01 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_owned_stage9_01 packed openings selectors (selector,range_input) >>= (fun next => value_owned_cont10_02 packed openings selectors selector next.2)
+
+def value_direct_cont10_01 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) :=
+  value_direct_stage9_01 packed openings selectors (selector,range_input) >>= (fun next => value_direct_cont10_02 packed openings selectors selector next.2)
+
 def value_owned_cps10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) : Result (Array aspis_core.field.QM31 24#usize) := do
   let selector ← value_selector10 packed openings selectors
-  let s1 ← value_owned_stage9_01 packed openings selectors (selector,Array.repeat 33#usize aspis_core.field.QM31.ZERO)
-  let s2 ← value_owned_stage9_02 packed openings selectors (selector,s1.2)
-  let s3 ← value_owned_stage9_03 packed openings selectors (selector,s2.2)
-  let s4 ← value_owned_stage9_04 packed openings selectors (selector,s3.2)
-  let s5 ← value_owned_stage9_05 packed openings selectors (selector,s4.2)
-  let s6 ← value_owned_stage9_06 packed openings selectors (selector,s5.2)
-  let s7 ← value_owned_stage9_07 packed openings selectors (selector,s6.2)
-  let s8 ← value_owned_stage9_08 packed openings selectors (selector,s7.2)
-  let s9 ← value_owned_stage9_09 packed openings selectors (selector,s8.2)
-  let s10 ← value_owned_stage9_10 packed openings selectors (selector,s9.2)
-  let s11 ← value_owned_stage9_11 packed openings selectors (selector,s10.2)
-  let s12 ← value_owned_stage9_12 packed openings selectors (selector,s11.2)
-  let s13 ← value_owned_stage9_13 packed openings selectors (selector,s12.2)
-  value_owned_stage9_14 packed openings selectors (selector,s13.2)
+  value_owned_cont10_01 packed openings selectors selector (Array.repeat 33#usize aspis_core.field.QM31.ZERO)
 
 def value_direct_cps10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) : Result (Array aspis_core.field.QM31 24#usize) := do
   let selector ← value_selector10 packed openings selectors
-  let s1 ← value_direct_stage9_01 packed openings selectors (selector,Array.repeat 33#usize aspis_core.field.QM31.ZERO)
-  let s2 ← value_direct_stage9_02 packed openings selectors (selector,s1.2)
-  let s3 ← value_direct_stage9_03 packed openings selectors (selector,s2.2)
-  let s4 ← value_direct_stage9_04 packed openings selectors (selector,s3.2)
-  let s5 ← value_direct_stage9_05 packed openings selectors (selector,s4.2)
-  let s6 ← value_direct_stage9_06 packed openings selectors (selector,s5.2)
-  let s7 ← value_direct_stage9_07 packed openings selectors (selector,s6.2)
-  let s8 ← value_direct_stage9_08 packed openings selectors (selector,s7.2)
-  let s9 ← value_direct_stage9_09 packed openings selectors (selector,s8.2)
-  let s10 ← value_direct_stage9_10 packed openings selectors (selector,s9.2)
-  let s11 ← value_direct_stage9_11 packed openings selectors (selector,s10.2)
-  let s12 ← value_direct_stage9_12 packed openings selectors (selector,s11.2)
-  let s13 ← value_direct_stage9_13 packed openings selectors (selector,s12.2)
-  value_direct_stage9_14 packed openings selectors (selector,s13.2)
+  value_direct_cont10_01 packed openings selectors selector (Array.repeat 33#usize aspis_core.field.QM31.ZERO)
+
+attribute [local irreducible] value_owned_cont10_01 value_owned_cont10_02 value_owned_cont10_03 value_owned_cont10_04 value_owned_cont10_05 value_owned_cont10_06 value_owned_cont10_07 value_owned_cont10_08 value_owned_cont10_09 value_owned_cont10_10 value_owned_cont10_11 value_owned_cont10_12 value_owned_cont10_13 value_owned_cont10_14 value_direct_cont10_01 value_direct_cont10_02 value_direct_cont10_03 value_direct_cont10_04 value_direct_cont10_05 value_direct_cont10_06 value_direct_cont10_07 value_direct_cont10_08 value_direct_cont10_09 value_direct_cont10_10 value_direct_cont10_11 value_direct_cont10_12 value_direct_cont10_13 value_direct_cont10_14
 
 theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
@@ -91,7 +207,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_0_12
   apply bind_equal9
   intro head_0_13
-  conv_rhs => rw [←value_head_cps10_01 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_01; rw [←value_head_cps10_01 packed openings selectors head_0_13 (Array.repeat 33#usize aspis_core.field.QM31.ZERO) (fun range => value_owned_cont10_02 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_1_0
   apply bind_equal9
@@ -132,7 +248,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_1_18
   apply bind_equal9
   intro head_1_19
-  conv_rhs => rw [←value_head_cps10_02 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_02; rw [←value_head_cps10_02 packed openings selectors head_0_13 head_1_19 (fun range => value_owned_cont10_03 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_2_0
   apply bind_equal9
@@ -173,7 +289,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_2_18
   apply bind_equal9
   intro head_2_19
-  conv_rhs => rw [←value_head_cps10_03 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_03; rw [←value_head_cps10_03 packed openings selectors head_0_13 head_2_19 (fun range => value_owned_cont10_04 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_3_0
   apply bind_equal9
@@ -224,7 +340,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_3_23
   apply bind_equal9
   intro head_3_24
-  conv_rhs => rw [←value_head_cps10_04 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_04; rw [←value_head_cps10_04 packed openings selectors head_0_13 head_3_24 (fun range => value_owned_cont10_05 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_4_0
   apply bind_equal9
@@ -275,7 +391,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_4_23
   apply bind_equal9
   intro head_4_24
-  conv_rhs => rw [←value_head_cps10_05 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_05; rw [←value_head_cps10_05 packed openings selectors head_0_13 head_4_24 (fun range => value_owned_cont10_06 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_5_0
   apply bind_equal9
@@ -326,7 +442,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_5_23
   apply bind_equal9
   intro head_5_24
-  conv_rhs => rw [←value_head_cps10_06 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_06; rw [←value_head_cps10_06 packed openings selectors head_0_13 head_5_24 (fun range => value_owned_cont10_07 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_6_0
   apply bind_equal9
@@ -377,7 +493,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_6_23
   apply bind_equal9
   intro head_6_24
-  conv_rhs => rw [←value_head_cps10_07 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_07; rw [←value_head_cps10_07 packed openings selectors head_0_13 head_6_24 (fun range => value_owned_cont10_08 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_7_0
   apply bind_equal9
@@ -410,7 +526,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_7_14
   apply bind_equal9
   intro head_7_15
-  conv_rhs => rw [←value_head_cps10_08 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_08; rw [←value_head_cps10_08 packed openings selectors head_0_13 head_7_15 (fun range => value_owned_cont10_09 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_8_0
   apply bind_equal9
@@ -447,7 +563,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_8_16
   apply bind_equal9
   intro head_8_17
-  conv_rhs => rw [←value_head_cps10_09 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_09; rw [←value_head_cps10_09 packed openings selectors head_0_13 head_8_17 (fun range => value_owned_cont10_10 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_9_0
   apply bind_equal9
@@ -484,7 +600,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_9_16
   apply bind_equal9
   intro head_9_17
-  conv_rhs => rw [←value_head_cps10_10 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_10; rw [←value_head_cps10_10 packed openings selectors head_0_13 head_9_17 (fun range => value_owned_cont10_11 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_10_0
   apply bind_equal9
@@ -521,7 +637,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_10_16
   apply bind_equal9
   intro head_10_17
-  conv_rhs => rw [←value_head_cps10_11 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_11; rw [←value_head_cps10_11 packed openings selectors head_0_13 head_10_17 (fun range => value_owned_cont10_12 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_11_0
   apply bind_equal9
@@ -558,7 +674,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_11_16
   apply bind_equal9
   intro head_11_17
-  conv_rhs => rw [←value_head_cps10_12 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_12; rw [←value_head_cps10_12 packed openings selectors head_0_13 head_11_17 (fun range => value_owned_cont10_13 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_12_0
   apply bind_equal9
@@ -595,7 +711,7 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_12_16
   apply bind_equal9
   intro head_12_17
-  conv_rhs => rw [←value_head_cps10_13 packed openings selectors]
+  conv_rhs => unfold value_owned_cont10_13; rw [←value_head_cps10_13 packed openings selectors head_0_13 head_12_17 (fun range => value_owned_cont10_14 packed openings selectors head_0_13 range)]
   apply bind_equal9
   intro head_13_0
   apply bind_equal9
@@ -614,17 +730,170 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   intro head_13_7
   apply bind_equal9
   intro head_13_8
-  conv_rhs => unfold value_owned_stage9_14 value_read_context9_14
+  conv_rhs => unfold value_owned_cont10_14 value_owned_stage9_14 value_read_context9_14
   rfl
 
 attribute [local irreducible] value_owned_stage9_00 value_owned_stage9_01 value_owned_stage9_02 value_owned_stage9_03 value_owned_stage9_04 value_owned_stage9_05 value_owned_stage9_06 value_owned_stage9_07 value_owned_stage9_08 value_owned_stage9_09 value_owned_stage9_10 value_owned_stage9_11 value_owned_stage9_12 value_owned_stage9_13 value_owned_stage9_14 value_direct_stage9_00 value_direct_stage9_01 value_direct_stage9_02 value_direct_stage9_03 value_direct_stage9_04 value_direct_stage9_05 value_direct_stage9_06 value_direct_stage9_07 value_direct_stage9_08 value_direct_stage9_09 value_direct_stage9_10 value_direct_stage9_11 value_direct_stage9_12 value_direct_stage9_13 value_direct_stage9_14 value_selector10
+
+theorem value_cont_read10_14 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_14 packed openings selectors selector range_input = value_direct_cont10_14 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_14 value_direct_cont10_14
+  rw [value_stage_read_binding9_14]
+#print axioms value_cont_read10_14
+
+theorem value_cont_read10_13 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_13 packed openings selectors selector range_input = value_direct_cont10_13 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_13 value_direct_cont10_13
+  rw [value_stage_read_binding9_13]
+  apply congrArg (fun next => value_direct_stage9_13 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_14 packed openings selectors selector next.2
+#print axioms value_cont_read10_13
+
+theorem value_cont_read10_12 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_12 packed openings selectors selector range_input = value_direct_cont10_12 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_12 value_direct_cont10_12
+  rw [value_stage_read_binding9_12]
+  apply congrArg (fun next => value_direct_stage9_12 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_13 packed openings selectors selector next.2
+#print axioms value_cont_read10_12
+
+theorem value_cont_read10_11 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_11 packed openings selectors selector range_input = value_direct_cont10_11 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_11 value_direct_cont10_11
+  rw [value_stage_read_binding9_11]
+  apply congrArg (fun next => value_direct_stage9_11 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_12 packed openings selectors selector next.2
+#print axioms value_cont_read10_11
+
+theorem value_cont_read10_10 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_10 packed openings selectors selector range_input = value_direct_cont10_10 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_10 value_direct_cont10_10
+  rw [value_stage_read_binding9_10]
+  apply congrArg (fun next => value_direct_stage9_10 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_11 packed openings selectors selector next.2
+#print axioms value_cont_read10_10
+
+theorem value_cont_read10_09 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_09 packed openings selectors selector range_input = value_direct_cont10_09 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_09 value_direct_cont10_09
+  rw [value_stage_read_binding9_09]
+  apply congrArg (fun next => value_direct_stage9_09 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_10 packed openings selectors selector next.2
+#print axioms value_cont_read10_09
+
+theorem value_cont_read10_08 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_08 packed openings selectors selector range_input = value_direct_cont10_08 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_08 value_direct_cont10_08
+  rw [value_stage_read_binding9_08]
+  apply congrArg (fun next => value_direct_stage9_08 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_09 packed openings selectors selector next.2
+#print axioms value_cont_read10_08
+
+theorem value_cont_read10_07 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_07 packed openings selectors selector range_input = value_direct_cont10_07 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_07 value_direct_cont10_07
+  rw [value_stage_read_binding9_07]
+  apply congrArg (fun next => value_direct_stage9_07 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_08 packed openings selectors selector next.2
+#print axioms value_cont_read10_07
+
+theorem value_cont_read10_06 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_06 packed openings selectors selector range_input = value_direct_cont10_06 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_06 value_direct_cont10_06
+  rw [value_stage_read_binding9_06]
+  apply congrArg (fun next => value_direct_stage9_06 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_07 packed openings selectors selector next.2
+#print axioms value_cont_read10_06
+
+theorem value_cont_read10_05 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_05 packed openings selectors selector range_input = value_direct_cont10_05 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_05 value_direct_cont10_05
+  rw [value_stage_read_binding9_05]
+  apply congrArg (fun next => value_direct_stage9_05 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_06 packed openings selectors selector next.2
+#print axioms value_cont_read10_05
+
+theorem value_cont_read10_04 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_04 packed openings selectors selector range_input = value_direct_cont10_04 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_04 value_direct_cont10_04
+  rw [value_stage_read_binding9_04]
+  apply congrArg (fun next => value_direct_stage9_04 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_05 packed openings selectors selector next.2
+#print axioms value_cont_read10_04
+
+theorem value_cont_read10_03 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_03 packed openings selectors selector range_input = value_direct_cont10_03 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_03 value_direct_cont10_03
+  rw [value_stage_read_binding9_03]
+  apply congrArg (fun next => value_direct_stage9_03 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_04 packed openings selectors selector next.2
+#print axioms value_cont_read10_03
+
+theorem value_cont_read10_02 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_02 packed openings selectors selector range_input = value_direct_cont10_02 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_02 value_direct_cont10_02
+  rw [value_stage_read_binding9_02]
+  apply congrArg (fun next => value_direct_stage9_02 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_03 packed openings selectors selector next.2
+#print axioms value_cont_read10_02
+
+theorem value_cont_read10_01 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_owned_cont10_01 packed openings selectors selector range_input = value_direct_cont10_01 packed openings selectors selector range_input := by
+  unfold value_owned_cont10_01 value_direct_cont10_01
+  rw [value_stage_read_binding9_01]
+  apply congrArg (fun next => value_direct_stage9_01 packed openings selectors (selector,range_input) >>= next)
+  funext next
+  exact value_cont_read10_02 packed openings selectors selector next.2
+#print axioms value_cont_read10_01
 
 theorem value_cps_read10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
     value_owned_cps10 packed openings selectors = value_direct_cps10 packed openings selectors := by
   unfold value_owned_cps10 value_direct_cps10
-  simp only [value_stage_read_binding9_01, value_stage_read_binding9_02, value_stage_read_binding9_03, value_stage_read_binding9_04, value_stage_read_binding9_05, value_stage_read_binding9_06, value_stage_read_binding9_07, value_stage_read_binding9_08, value_stage_read_binding9_09, value_stage_read_binding9_10, value_stage_read_binding9_11, value_stage_read_binding9_12, value_stage_read_binding9_13, value_stage_read_binding9_14]
+  apply bind_equal9
+  intro selector
+  exact value_cont_read10_01 packed openings selectors selector _
 
 theorem add_value_cps_read_binding10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
