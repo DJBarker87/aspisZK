@@ -26,3 +26,8 @@ set_option pp.proofs false
 
 #print PV_EVH_ClosedModel.all_links_satisfiable
 #print axioms PV_EVH_ClosedModel.all_links_satisfiable
+
+#print axioms PV_EVH_ModelData.types
+#print axioms PV_EVH_ModelData.operations
+#print axioms PV_EVH_ModelData.filled
+#print axioms PV_EVH_ModelData.semantic
