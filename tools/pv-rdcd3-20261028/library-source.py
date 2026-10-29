@@ -4,6 +4,8 @@ import json,runpy,sys
 D=Path('/home/dombarker/project-offloads/codex-pv-rdcd3-20261028')
 a=runpy.run_path(str(D/'range-source.py'));root,span,tokens,sha=(a[k] for k in ['root','span','tokens','sha'])
 checks=[
+('convert/mod.rs','impl<T> const From<T> for T','fn from(',
+ 'fn from(t:T)->T{t}','Control194.into_from; concrete error identity conversion'),
 ('array/mod.rs','const IndexMut<I> for [T; N]','fn index_mut(&mut self, index: I)',
  'fn index_mut(&mut self,index:I)->&mut Self::Output {IndexMut::index_mut(self as &mut[T],index)}','ArrayWrite194.complete/read_back/frame'),
 ('slice/index.rs','const ops::IndexMut<I> for [T]','fn index_mut(&mut self, index: I)',
@@ -35,5 +37,5 @@ for path,context,marker,expected,law in checks:
 assert sys.byteorder=='little'
 features=json.load(open(D/'deployed-client-features.json'))
 assert all(not x['profile']['debug_assertions'] and not x['profile']['overflow_checks'] for x in features)
-j=dict(records=records,toolchain='1.94.1',target='x86_64-unknown-linux-gnu, little endian',scope='Ten complete concrete library bodies only; row closure also requires full source binding, matching proof receipts, frozen DAG and same-input finite evidence',destructor_qualification='CirclePointError and captured CircleRow are concrete Copy enums with no user Drop; no claim about arbitrary destructor/world effects',primitive_boundary='Integer casts/transmute/layout and checked typed-memory reads/writes retain existing compiler/Aeneas semantics; no LLVM/world/observer theorem',composition='Reclassification within existing tool trust; zero endpoint premise removal',feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()))
-(D/'library-source-result.json').write_text(json.dumps(j,indent=2)+'\n');print('Ten complete concrete library bodies and rejecting mutation controls matched')
+j=dict(records=records,toolchain='1.94.1',target='x86_64-unknown-linux-gnu, little endian',scope='Eleven complete concrete library bodies only; row closure also requires full source binding, matching proof receipts, frozen DAG and same-input finite evidence',destructor_qualification='CirclePointError and captured CircleRow are concrete Copy enums with no user Drop; no claim about arbitrary destructor/world effects',primitive_boundary='Integer casts/transmute/layout and checked typed-memory reads/writes retain existing compiler/Aeneas semantics; no LLVM/world/observer theorem',composition='Reclassification within existing tool trust; zero endpoint premise removal',feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()))
+(D/'library-source-result.json').write_text(json.dumps(j,indent=2)+'\n');print('Eleven complete concrete library bodies and rejecting mutation controls matched')

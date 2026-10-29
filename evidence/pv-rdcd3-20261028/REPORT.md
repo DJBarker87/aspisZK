@@ -98,3 +98,8 @@ Array.update/index_usize, little-endian bytes and widening interfaces.
 60644 proves both concrete lossless widening bindings and value preservation:
 exit0, wall1.07s, peak2,634,176KiB, swap0; only standard axioms (primitive
 bindings themselves use none). No Kani, dictionary or shipped source changes.
+
+60645 proves complete Array.update backing-storage projection and indexed
+assignment readback/frame laws, including invalid-index failure:exit0,
+wall1.39s, peak2,638,764KiB, swap0; only standard axioms. This matches all
+explicit sampler writes inspected under ruling(n); no write result is dropped.
