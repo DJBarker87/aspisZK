@@ -28,7 +28,7 @@ theorem outer_failure_not_total_owner {S P : Type}
   rw [failed] at same
   cases step : owner k s with
   | mk record after =>
-    change (.fail e : Result _) = .ok (record.result,after) at same
+    simp only [PV_L1E_OwnerJoin.liftOwner,step] at same
     cases same
 #print axioms outer_failure_not_total_owner
 
