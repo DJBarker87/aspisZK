@@ -19,6 +19,13 @@ def fields_body14 (append : AppendWord13) (state : List U8 × List U32) :
       let out ← append state.1 value
       .ok (.cont (out,rest))
 
+theorem fields_body_cons14 (append : AppendWord13) (out : List U8)
+    (value : U32) (rest : List U32) :
+    fields_body14 append (out,value::rest) =
+      (if value ≥ 2147483647#u32 then .ok (.done (.Err .Public,out))
+       else do let next ← append out value; .ok (.cont (next,rest))) := rfl
+
+
 def fields_source14 (append : AppendWord13) (out : List U8) (values : List U32) :
     Result FieldState13 := loop (fields_body14 append) (out,values)
 
@@ -28,8 +35,8 @@ theorem fields_iterator_binding14 (append : AppendWord13) (out : List U8) (value
   induction values generalizing out with
   | nil => rw [loop.eq_1]; rfl
   | cons value rest ih =>
-    rw [loop.eq_1]
-    dsimp only [fields_body14,field_next14,fields_model13]
+    rw [loop.eq_1,fields_body_cons14]
+    rw [fields_model13]
     by_cases bad : value ≥ 2147483647#u32
     · simp only [bad,if_true]
       rfl
@@ -41,6 +48,7 @@ theorem fields_iterator_binding14 (append : AppendWord13) (out : List U8) (value
 
 theorem fields_source_link14 (append : AppendWord13) : PV_B3P_Link_fields append (fields_source14 append) :=
   funext fun out => funext (fields_iterator_binding14 append out)
+#print axioms fields_body_cons14
 #print axioms fields_iterator_binding14
 #print axioms fields_source_link14
 end PV_B3P_Fields14227
