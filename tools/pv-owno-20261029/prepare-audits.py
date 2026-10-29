@@ -11,7 +11,7 @@ for p in sorted(L.glob('PV_OWNO_*.lean')):
  ds=[m+'.'+x for x in re.findall(r'^theorem\s+(\w+)',b.decode(),re.M)]
  assert all('#print axioms '+d.rsplit('.',1)[1] in b.decode() for d in ds)
  decls+=ds;rows.append(dict(module=m,source_path=str(p.relative_to(R)),source_sha256=hashlib.sha256(b).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),statements=ds,accepted_attempt=accepted[-1]['attempt']))
-(E/'frozen-proof-manifest.json').write_text(json.dumps(dict(modules=rows,statement_count=len(decls),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),classification='SourceDense discharge and conditional restoration; actual-input and owned/transcript links separately audited'),indent=2)+'\n')
+(E/'frozen-proof-manifest.json').write_text(json.dumps(dict(modules=rows,statement_count=len(decls),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),classification='error-preserving helper and actual-input source-stage composition; deployed link installation remains separately audited'),indent=2)+'\n')
 imports=''.join('import '+r['module']+'\n'for r in rows)
 links=['ActualInput','SourceDense','Transcript879','Transcript890','OwnedPublicPlan']
 (L/'PV_OWNO_StatementsAudit.lean').write_text(imports+'set_option pp.proofs false\n'+''.join('#print '+d+'\n'for d in decls)+''.join('#print R1Z.PV_OWNM_V239.PV_OWNM_Link_'+n+'\n'for n in links)+'#print R1Z.PV_OWNM_V239.ResourceExit\n#print R1Z.PV_OWNM_V239.attach\n#print R1Z.PV_OWNM_V239.restore\n')

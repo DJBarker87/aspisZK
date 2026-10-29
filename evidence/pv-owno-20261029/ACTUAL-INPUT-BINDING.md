@@ -1,6 +1,6 @@
 # ActualInput binding audit, D469
 
-The accepted Link definition is unchanged. `PV_OWNO_ActualInput` is a source-stage
+The accepted Link definition is unchanged. `PV_OWNO_PointStores.of_builder_execution` is a source-stage
 composition, not an unconditional theorem about the deployed execution.
 Its `built` premise is successful evaluation of the explicit builder value
 projection. Its `writes` argument is an operational point-store sequence;
@@ -62,7 +62,7 @@ OwnedPublicPlan is OPEN: exact op222 Slice/array carriers, initialized sparse
 bytes, ownership moves, IntoIter/drop and global first-stop resource trace.
 Transcript879/890 are deferred until those prior links hold. Existing runjoin
 laws are read-only. Merged b3p6 op227 modules do not assert V239's links; their
-own resume12 report retains the actual caller/stdlib/callback obligations.
+own resume12 FINAL.md retains the actual caller/stdlib/callback obligations.
 
 T and all five Link definitions are unchanged. V370/D381/D386 and rdea-1
 remain named boundaries. No new cryptographic/runtime assumption is introduced.
