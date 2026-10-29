@@ -64,7 +64,7 @@ def sample (combine : U64 → U32 → U64) (rank : List U32) : Q :=
 
 theorem sample_canonical (combine : U64 → U32 → U64) (rank : List U32) :
  Canon (sample combine rank) := by
- have getCanon : ∀ i, PV_OWNK_ScalarOps.Canon
+ have getCanon : ∀ i : Nat, PV_OWNK_ScalarOps.Canon
    ((digits combine 8 rank)[i]?.getD (0#u32)) := by
   intro i
   cases he : (digits combine 8 rank)[i]? with
