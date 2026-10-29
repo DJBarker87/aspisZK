@@ -1,0 +1,51 @@
+use super::*;
+static mut NDM_PTR:*const u8=core::ptr::null();
+static mut NDM_LEN:usize=0;
+pub fn copy_cut(_account:&AccountInfo<'_>,data:&[u8],length1:usize,length2:usize) {
+ let good=super::super::NDM_native::reference::snapshot_select_ref(data.len(),length1,length2)
+  && unsafe{data.as_ptr()==NDM_PTR && data.len()==NDM_LEN};
+ assert_eq!(good,!cfg!(NDM_negative));
+ if !data.is_empty(){let k:usize=kani::any();kani::assume(k<data.len());
+  let same=unsafe{data[k]==*NDM_PTR.add(k)};assert_eq!(same,!cfg!(NDM_negative));}
+ // Observe the SAME to_vec receiver; allocation and the copy are separate obligations.
+ kani::assume(false);
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_copy_input(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let mut bytes:[u8;58295]=kani::any();let n:usize=kani::any();kani::assume(n<=58295);
+ let signer=kani::any();let writable=kani::any();let executable=kani::any();
+ let data=&mut bytes[..n];unsafe{NDM_PTR=data.as_ptr();NDM_LEN=n;}
+ let a=AccountInfo::new(&key,signer,writable,&mut lamports,data,&owner,executable,0);
+ let l1:usize=kani::any();let l2:usize=kani::any();kani::assume(n==l1 || n==l2);
+ let _=snapshot(&a,l1,l2);
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_deferred_error(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let mut bytes:[u8;58295]=kani::any();let n:usize=kani::any();kani::assume(n<=58295);
+ let signer=kani::any();let writable=kani::any();let executable=kani::any();
+ let a=AccountInfo::new(&key,signer,writable,&mut lamports,&mut bytes[..n],&owner,executable,0);
+ let l1:usize=kani::any();let l2:usize=kani::any();kani::assume(n!=l1 && n!=l2);
+ let r=snapshot(&a,l1,l2);
+ let length=match r.length {Ok(m)=>m==n,_=>false};
+ let good=length && matches!(r.bytes,Err(ProgramError::InvalidAccountData)) && r.key==key && r.owner==owner
+  && r.is_signer==signer && r.is_writable==writable && r.executable==executable && a.try_borrow_mut_data().is_ok();
+ assert_eq!(good,!cfg!(NDM_negative));
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn snapshot_failed_borrow(){
+ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());
+ let mut lamports:u64=kani::any();let mut bytes:[u8;58295]=kani::any();let n:usize=kani::any();kani::assume(n<=58295);
+ let a=AccountInfo::new(&key,false,false,&mut lamports,&mut bytes[..n],&owner,false,0);
+ let guard=a.data.borrow_mut();let r=snapshot(&a,kani::any(),kani::any());
+ let failed=a.try_borrow_data().is_err();drop(guard);
+ let good=matches!(r.length,Err(ProgramError::AccountBorrowFailed)) && matches!(r.bytes,Err(ProgramError::AccountBorrowFailed)) && failed && a.try_borrow_mut_data().is_ok();
+ assert_eq!(good,!cfg!(NDM_negative));
+}

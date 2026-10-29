@@ -1,0 +1,41 @@
+NDM_generated/NDM_ScanAssociation.lean:37:64: error: unsolved goals
+bytes : Slice U8
+size : (↑bytes).length ≠ 58295
+len : bytes.len ≠ 58295#usize
+checked : Usize.checked_add 688#usize 57607#usize = some 58295#usize
+⊢ (↑bytes).length = 58295 →
+    ∃ x,
+      core.slice.index.SliceIndexRangeUsizeSlice.index { start := 0#usize, «end» := 688#usize } bytes = ok x ∧
+        ∃ x_1,
+          decode_pool_v1_pair_verified_afterstate_v1 x = ok x_1 ∧
+            (match x_1 with
+              | core.result.Result.Err a =>
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+              | core.result.Result.Ok candidate => do
+                let encoded ← encode_pool_v1_pair_verified_afterstate_v1 candidate
+                match encoded with
+                  | core.result.Result.Err a =>
+                    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                  | core.result.Result.Ok encoded =>
+                    if ↑encoded = ↑x then do
+                      let tag ← bytes.index_usize 696#usize
+                      if ↑tag = 2 then
+                          ok
+                            (core.result.Result.Ok
+                              {
+                                candidate_afterstate :=
+                                  AspisS6CurrentAdapterCarrier.fromPoolV1PairVerifiedAfterstateV1 candidate,
+                                proof_length := 57607#usize })
+                        else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+                    else ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)) =
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidAccountData)
+NDM_generated/NDM_ScanAssociation.lean:42:20: warning: This simp argument is unused:
+  len
+
+Hint: Omit it from the simp argument list.
+  simp [̵l̵i̵f̵t̵,̵c̵h̵e̵c̵k̵e̵d̵,̵l̵e̵n̵]̵[̲l̲i̲f̲t̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDM_ScanAssociation.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDM_ScanAssociation.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDM_ScanAssociation.proof_tag_shift' depends on axioms: [propext]

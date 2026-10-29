@@ -1,0 +1,22 @@
+use super::*;
+fn failed_snapshot()->OwnedAccount {
+ OwnedAccount {key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),
+ is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),
+ length:Err(ProgramError::AccountBorrowFailed),bytes:Err(ProgramError::AccountBorrowFailed)}
+}
+#[kani::proof_for_contract(OwnedAccount::key)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn key_failed_snapshot(){let a=failed_snapshot();let _=a.key();}
+#[kani::proof_for_contract(OwnedAccount::owner)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn owner_failed_snapshot(){let a=failed_snapshot();let _=a.owner();}
+#[kani::proof_for_contract(OwnedAccount::data_len)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn length_failed_snapshot(){let a=failed_snapshot();let _=a.data_len();}
+#[kani::proof_for_contract(OwnedAccount::data)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn data_failed_snapshot(){let a=failed_snapshot();let _=a.data();}

@@ -1,0 +1,57 @@
+use super::*;
+#[path="NDM_reference.rs"] pub mod reference;
+static mut NDM_INDEX:usize=0;
+static mut NDM_LEVEL:usize=0;
+pub fn index()->usize {unsafe{NDM_INDEX}}
+pub fn index8()->usize {unsafe{NDM_INDEX % 8}}
+pub fn level()->usize {unsafe{NDM_LEVEL}}
+pub fn reference_tuple(a:&AuthenticatedAsq8Accounts,c:&aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1)->([u8;32],[u8;32],[u8;32],u8,u64,[M31;8],PoolV1PairLiveSnapshotV1,aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1) {
+ reference::common_ref(a.master_account,a.checkpoint_account,a.selected_lane_account,a.selected_lane.lane_id,a.checkpoint.checkpoint_sequence,a.checkpoint.global_root,*a.live_snapshot,*c)
+}
+// Every raw carrier below has only integer/array/struct fields: every bit pattern is a valid Rust value.
+fn account()->AuthenticatedAsq8Accounts {
+ let master=PoolV1PairForestMasterV1 {
+  bump:kani::any(),
+  identity:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolIdentityV1>()]>())},
+  verifier_policy:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::VerifierPolicyV1>()]>())},
+  initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
+ };
+ let checkpoint:PoolV1PairForestCheckpointV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestCheckpointV1>()]>())};
+ let selected_lane:PoolV1PairForestLaneStateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestLaneStateV1>()]>())};
+ let live_snapshot:PoolV1PairLiveSnapshotV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairLiveSnapshotV1>()]>())};
+ AuthenticatedAsq8Accounts {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(master),checkpoint:Box::new(checkpoint),selected_lane:Box::new(selected_lane),live_snapshot:Box::new(live_snapshot)}
+}
+#[kani::proof_for_contract(super::asq8_common)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn common_contract(){
+ let k:usize=kani::any();kani::assume(k<32);let l:usize=kani::any();kani::assume(l<aspis_statement::pool_v1::POOL_V1_PAIR_TREE_DEPTH);unsafe{NDM_INDEX=k;NDM_LEVEL=l;}
+ let a=account();
+ let c:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1>()]>())};
+ let _=asq8_common(&a,&c);
+}
+
+#[cfg(NDM_probe)]
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn scan_input(){
+ let bytes:[u8;58295]=kani::any();
+ aspis_statement::pool_v1::NDM_call_probe::prepare(bytes.as_ptr(),688);
+ let _=scan_proof_buffer(&bytes);
+}
+
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn reconstruct_reject(){
+ let a=account();
+ let c:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1>()]>())};
+ let public=if kani::any(){aspis_statement::pool_v1::PoolV1PairForestTerminalPaymentV1::PrivateTransfer(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1>()]>())})}else{aspis_statement::pool_v1::PoolV1PairForestTerminalPaymentV1::Withdrawal(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1WithdrawalPublicV1>()]>())})};
+ let request=aspis_statement::pool_v1::PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
+ kani::assume(a.live_snapshot.next_pair_index.checked_add(1)!=Some(c.next_pair_index));
+ let result=reconstruct_asq8_statement(&request,&a,&c);
+ let reference=reference::failed_snapshot_ref::<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>(ProgramError::InvalidAccountData);
+ let good=matches!(result,Err(ProgramError::InvalidAccountData)) && matches!(reference,Err(ProgramError::InvalidAccountData));
+ assert_eq!(good,!cfg!(NDM_prefix_negative));
+}

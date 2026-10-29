@@ -1,0 +1,14 @@
+pub static mut POINTER:*const u8=core::ptr::null();
+pub static mut LENGTH:usize=0;
+pub static mut CALLS:u8=0;
+pub static mut ARMED:bool=false;
+pub fn prepare(pointer:*const u8,length:usize){unsafe{POINTER=pointer;LENGTH=length;CALLS=0;ARMED=true;}}
+pub fn inspect(bytes:&[u8]){
+ if unsafe{ARMED}{
+  unsafe{CALLS=CALLS.wrapping_add(1);}
+  let good=unsafe{bytes.as_ptr()==POINTER && bytes.len()==LENGTH && CALLS==1};
+  assert_eq!(good,!cfg!(NDM_probe_negative));
+  // Cut at the actual callee entry, before any decoder loop/value claim.
+  kani::assume(false);
+ }
+}
