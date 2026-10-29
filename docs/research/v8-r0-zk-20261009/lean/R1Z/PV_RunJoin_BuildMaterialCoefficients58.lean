@@ -7,8 +7,8 @@ open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     {H : Type} (D : aspis_core.digest.Digest32 H)
-    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
-    (compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (public1 : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (types base))
+    (compiled : @aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1 (types base))
     (noised : aspis_statement.state_only_trace.StateOnlyTraceFoundation)
     (maskOnly : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize)
     (d g padding : Array aspis_core.field.QM31 1024#usize)
