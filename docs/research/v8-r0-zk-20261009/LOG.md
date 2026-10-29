@@ -15132,3 +15132,13 @@ Twenty structured Rust-span and model identities match exactly. The conservative
 It recorded 764 stale-association records: 284 STALE and 480 needing review. These are evidence receipts whose recorded hash of a Lean source differs from the file at the release revision because the file was edited later; 175 are referenced by recount 9's witnesses. Most are expected to be historical, and the final coherent replay (V397) recompiles from source in any case. The question that matters now is whether any CURRENTLY credited closure depends on a changed source. V346 remains OPEN, as do V397-V399.
 
 pv-mfb (IDs 69600-69699; 60 focused statement checks, no proofs, no whole-manifest replay per AGENTS.md formal-workflow item 4) classifies each stale record as consumed by a credited closure, historical only or undeterminable. For each credited case it runs one focused check of the restoring theorem against the current source; a failure would be a ledger finding. Rows removed: 0. Privacy target not yet established.
+
+## D496 (Stream B) 2026-10-29 08:22 UTC: runjoin58 results; correction to the D488 witness direction; runjoin59 launched
+
+runjoin58 (head 87d831d8cf, pushed) used all 100 Lean attempts (82 accepted, 18 rejected; 0 Kani). Its three audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits; pv-rjq-owned definitions untouched. It proved the C1/C2-to-hinput producer laws and semantic-builder record and length facts. The transfer-13 fixture witness, CommonSample and BackendInput remain open. Rows removed: 0.
+
+Correction to the lead's D488 direction: demanding that the satisfiability witness be an actual evaluated fixture run asked for a whole-prover kernel evaluation on concrete data, which AGENTS.md formal-workflow item 2 reserves as a last resort. Ruling (v) prefers a deployed-run witness but allows a concrete non-degenerate model instance, which is how the other five skeletons were verified (D490, D494). runjoin59 (IDs 69700-69799; 100 Lean, 0 Kani) is to do three things in order:
+- prove PV_RunJoin_SkeletonWitness.model, an explicit non-degenerate model instance satisfying all the corrected skeleton's links with the actual layout constants (29 columns, 1024 rows, 22 queries, six node multiproofs, opening domain 262144) and a well-formed commitment, labelled a model witness;
+- declare the actual run's data and plan families symbolically from the source (PV_RunJoin_ActualRun.data and .plans), fixing NativeCallback55.runOf's parameters, which unblocks pv-rjq and pv-rjn;
+- then CommonSample and BackendInput.
+Privacy target not yet established.
