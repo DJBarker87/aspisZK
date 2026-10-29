@@ -31,7 +31,7 @@ theorem step {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s : S
   | ok result =>
     rcases result with ⟨a,s1⟩
     simp only [build,hf,bind_tc_ok]
-    cases hb : build f n (i+1) s1 <;> rfl
+    cases hb : build f n (i+1) s1 <;> simp [hb,bind_tc_ok,bind_tc_fail,bind_tc_div]
 
 theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s after : S)
     (out : List A) (h : build f n i s=ok (out,after)) : out.length=n := by
