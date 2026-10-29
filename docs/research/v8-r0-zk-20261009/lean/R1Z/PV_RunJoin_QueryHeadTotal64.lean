@@ -40,7 +40,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨second,hsecond⟩ := PV_RunJoin_QueryFillTotal64.complete base heap box ops cc2 domain2 u bound first
   dsimp only [u,opening] at new hfirst hsecond
   refine ⟨(u,second),?_,bound⟩
-  simp only [PV_RunJoin_QueryScript63.head,read,bind_tc_ok,new,unwrapSlice,hzero,hfirst,hsecond]
+  simp only [PV_RunJoin_QueryScript63.head,read,bind_tc_ok,new,unwrapSlice,hzero,hfirst,hsecond,u]
 
 #print axioms complete
 end R1Z.PV_RunJoin_QueryHeadTotal64
