@@ -38,12 +38,12 @@ theorem source
     intro nonce
     apply PV_RunJoin_ResultBindEq55.complete
     intro context
-    simp only [lift,bind_tc_ok]
+    try simp only [lift,bind_tc_ok]
     apply PV_RunJoin_ResultBindEq55.complete
     intro tag
     apply PV_RunJoin_ResultBindEq55.complete
     intro encodedContext
-    simp only [lift,bind_tc_ok]
+    try simp only [lift,bind_tc_ok]
     apply PV_RunJoin_ResultBindEq55.complete
     intro binding
     rw [execute_literal]
@@ -76,12 +76,12 @@ theorem relation {A B : Type} (R : A → B → Prop)
     intro nonce
     apply PV_RunJoin_ResultRelation55.same_bind
     intro context
-    simp only [lift,bind_tc_ok]
+    try simp only [lift,bind_tc_ok]
     apply PV_RunJoin_ResultRelation55.same_bind
     intro tag
     apply PV_RunJoin_ResultRelation55.same_bind
     intro encodedContext
-    simp only [lift,bind_tc_ok]
+    try simp only [lift,bind_tc_ok]
     apply PV_RunJoin_ResultRelation55.same_bind
     intro binding
     exact step _
