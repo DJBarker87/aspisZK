@@ -5,6 +5,7 @@ E=Path('evidence/pv-l1g-20261029');H='/home/dombarker/project-offloads/codex-pv-
 rows={int(f.stem.split('-')[1]):json.loads(f.read_text())[0] for f in E.glob('modules-*.json')}
 assert set(rows)<=set(range(67600,67700)) and len(rows)<=100
 assert all(rows[a]['accepted'] for a in [67697,67698,67699])
+assert 67636 not in rows, 'admission refusal must not become a compiler start'
 for a,r in rows.items():
  assert len(json.loads((E/f'modules-{a}.json').read_text()))==1
  for kind,key in [('out','output'),('time','time')]:
