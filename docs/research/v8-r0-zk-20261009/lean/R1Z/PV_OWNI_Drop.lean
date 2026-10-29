@@ -9,8 +9,7 @@ theorem backing {S X E : Type}
  (w : State S X) (t : Token) (c : Cell) (positive:0<c.size) :
  dropVecPod primitive t c w=
  ⟨(primitive t.address ⟨c.size,c.alignment⟩ w.allocator).1,
-  {w with allocator:=(primitive t.address ⟨c.size,c.alignment⟩ w.allocator).2,
-   memory:=retire t c w.memory},[(w,.deallocate t.address c.size c.alignment)]⟩ := by
+  {w with allocator:=(primitive t.address ⟨c.size,c.alignment⟩ w.allocator).2, memory:=retire t c w.memory},[(w,.deallocate t.address c.size c.alignment)]⟩ := by
  rw [dropVecPod,if_neg (by omega)]
  rfl
 
