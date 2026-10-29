@@ -5,6 +5,9 @@ namespace R1Z.PV_RunJoin_ClaimProducer48
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_ClaimThread48 (Column Point W)
 open PV_RunJoin_WeightInstalled46
+set_option allowUnsafeReducibility true in
+attribute [local irreducible] ProverRwP6BoundaryInstall.selected
+attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 
 def run (evaluate : Column → Result W) : List Column → alloc.vec.Vec U8 → Result (alloc.vec.Vec U8)
   | [],out => ok out
@@ -22,7 +25,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   induction columns generalizing out with
   | nil => rfl
   | cons column tail ih =>
-    rw [PV_RunJoin_ClaimList48.run,PV_RunJoin_ClaimProducerCell48.complete]
+    simp only [PV_RunJoin_ClaimList48.run]
+    rw [PV_RunJoin_ClaimProducerCell48.complete base heap box ops point column out]
     simp only [run,bind_assoc,ih]
 
 #print axioms complete
