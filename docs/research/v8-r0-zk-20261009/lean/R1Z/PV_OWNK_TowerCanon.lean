@@ -2,7 +2,12 @@ import R1Z.PV_OWNK_ScalarOps
 set_option autoImplicit false
 namespace R1Z.PV_OWNK_TowerCanon
 open Aeneas Aeneas.Std
-open PV_OWNI_RawOps
+abbrev Q := ProverRwFull.aspis_core.field.QM31
+abbrev valueAdd := PV_B2_FieldValue.aspis_core.field.QM31.add
+abbrev valueMul := PV_B2_FieldValue.aspis_core.field.QM31.mul
+abbrev valueSub := PV_B2_FieldValue.aspis_core.field.QM31.sub
+abbrev zero := PV_B2_FieldValue.aspis_core.field.QM31.ZERO
+abbrev one := PV_B2_FieldValue.aspis_core.field.QM31.ONE
 abbrev C := ProverRwFull.aspis_core.field.CM31
 abbrev CM := PV_B2_FieldValue.aspis_core.field.CM31
 abbrev QM := PV_B2_FieldValue.aspis_core.field.QM31

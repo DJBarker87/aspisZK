@@ -2,14 +2,14 @@ import R1Z.PV_OWNK_CMDecode
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_OWNK_QMDecode
-open PV_OWNI_RawOps PV_OWNK_TowerCanon
+open PV_OWNK_TowerCanon
 abbrev K := AspisV8R15.ExactTowerBase.QM31Exact
 abbrev dc := PV_OWNK_CMDecode.decode
 def decode (x : Q) : K := ⟨dc x.c0,dc x.c1⟩
 
-theorem zero : decode PV_OWNI_RawOps.zero = 0 := by
+theorem zero : decode PV_OWNK_TowerCanon.zero = 0 := by
  apply QuadraticAlgebra.ext <;> apply QuadraticAlgebra.ext <;> rfl
-theorem one : decode PV_OWNI_RawOps.one = 1 := by
+theorem one : decode PV_OWNK_TowerCanon.one = 1 := by
  apply QuadraticAlgebra.ext <;> apply QuadraticAlgebra.ext <;> rfl
 
 theorem add (x y : Q) (hx : Canon x) (hy : Canon y) :
