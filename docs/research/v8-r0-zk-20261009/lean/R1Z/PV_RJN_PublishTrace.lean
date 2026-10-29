@@ -68,6 +68,7 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
       obtain ⟨openings,hopen,h⟩ := bind_eq_ok h
       by_cases hopenlen : alloc.vec.Vec.len h8=openings
       · simp only [massert,hopenlen,if_true,bind_tc_ok] at h
+        dsimp only [core.option.Option.take] at h
         cases hc1 : p.backend.c1 with
         | none => simp only [hc1,core.option.Option.take,core.option.Option.unwrap,ofOption,bind_tc_fail] at h; cases h
         | some cc1 =>
