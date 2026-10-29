@@ -15,6 +15,7 @@ theorem complete (a : Q) (ha : QC a) :
     PV_RunJoin_CircleRawMap52.map_parameter a=PV_RunJoin_CircleMapPrograms54.run a := by
   obtain ⟨s,hs,hs',hcs⟩ := PV_RunJoin_CircleNeutralQSquare53.complete a ha
   obtain ⟨q,hq,hq',hcq⟩ := PV_RunJoin_CircleNeutralQAdd53.complete _ s qone hcs
+  rw [PV_RunJoin_CircleNeutralBase52.cone] at hq'
   have hinv := PV_RunJoin_CircleNeutralQInv53.complete q hcq
   unfold PV_RunJoin_CircleRawMap52.map_parameter PV_RunJoin_CircleMapPrograms54.run
   simp only [hs,hs',hq,hq',bind_tc_ok]
@@ -26,22 +27,13 @@ theorem complete (a : Q) (ha : QC a) :
   | some inv =>
     have hci : QC inv := hinv.2 (some inv) hi inv rfl
     obtain ⟨num,hn,hn',hcn⟩ := PV_RunJoin_CircleNeutralQSub53.complete _ s qone hcs
+    rw [PV_RunJoin_CircleNeutralBase52.cone] at hn'
     obtain ⟨x,hx,hx',hcx⟩ := PV_RunJoin_CircleNeutralQMul54.complete num inv hcn hci
     obtain ⟨dbl,hd,hd',hcd⟩ := PV_RunJoin_CircleNeutralQAdd53.complete a a ha ha
     obtain ⟨y,hy,hy',hcy⟩ := PV_RunJoin_CircleNeutralQMul54.complete dbl inv hcd hci
     simp only [hn,hn',hx,hx',hd,hd',hy,hy',bind_tc_ok]
-    have heq : PV_RunJoin_CircleRawTower52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2
-        PV_RunJoin_CircleRawTower52.field.CM31.ZERO=
-      PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2
-        PV_RunJoin_CircleR72Raw52.field.CM31.ZERO := by
-      unfold PV_RunJoin_CircleRawTower52.field.CM31.Insts.CoreCmpPartialEqCM31.eq
-        PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq
-      rw [PV_RunJoin_CircleNeutralZeroResult53.meq]
-      apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-      intro b _
-      cases b with
-      | false => rfl
-      | true => exact PV_RunJoin_CircleNeutralZeroResult53.meq _ _
+    have heq := PV_RunJoin_CircleNeutralBase52.ceq a.2 PV_RunJoin_CircleRawTower52.field.CM31.ZERO
+    rw [PV_RunJoin_CircleNeutralBase52.cnull] at heq
     rw [heq]
 #print axioms complete
 end R1Z.PV_RunJoin_CircleMapCanonical54
