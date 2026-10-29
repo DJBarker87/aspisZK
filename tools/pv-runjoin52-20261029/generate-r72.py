@@ -227,3 +227,10 @@ for tactic in ['rw [op27]','rw [op28]','rw [op29]','rw [bind_assoc_eq]','rw [bin
  proof+=pad+'  | '+tactic+'\n'
 proof=proof.rstrip()+')\n'+pad+'all_goals simp only [Option.map_none,Option.map_some,encQ,encCM]\n'+pad+'all_goals rfl\n\n'
 s=s[:a]+proof+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3052.lean';s=p.read_text()
+for i in range(8):
+ s=s.replace(f'rw [if_pos h{i}]',f'rw [if_pos h{i},if_pos h{i}]')
+ s=s.replace(f'rw [if_neg h{i}]',f'rw [if_neg h{i},if_neg h{i}]')
+s=s.replace('| rw [op27]','| rw [op18]\n                    | rw [op27]')
+s=s.replace('all_goals simp only [Option.map_none,Option.map_some,encQ,encCM]', 'all_goals first | (apply congrArg; funext value; rfl) | simp only [Option.map_none,Option.map_some,encQ,encCM]')
+p.write_text(s)
