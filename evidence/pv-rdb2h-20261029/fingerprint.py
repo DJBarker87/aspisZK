@@ -3,6 +3,7 @@ from pathlib import Path
 import json,hashlib,lzma
 D=Path('/home/dombarker/project-offloads/codex-pv-rdb2h-20261029');p=json.loads((D/'plan.json').read_text());env=json.loads((D/'env-J.json').read_text());assert env==p['environment'];O=Path(env['LEAN_PATH'].split(':')[0]);roots=list(map(Path,env['LEAN_PATH'].split(':')));F=D.with_name('codex-pv-rdb2f-20261029')
 def sha(q):return hashlib.sha256(q.read_bytes()).hexdigest()
+pre=json.loads((D/'preflight.json').read_text());assert env==pre['environment'];assert sha(Path(env['LEAN']))==pre['lean_sha256'];assert sha(D.parent/'aspis-fs-generic-20261006/evidence/run2.py')==pre['run2_sha256']
 def obj(m):return next((root/(m.replace('.','/')+'.olean') for root in roots if(root/(m.replace('.','/')+'.olean')).exists()),None)
 rows=[];diffs=[]
 for r in p['objects']:
