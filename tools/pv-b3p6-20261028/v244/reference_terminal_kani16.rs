@@ -2616,7 +2616,7 @@ pub fn initial(p:crate::inputs16::Public16,o:&StateOnlyPoseidonOpenings,h:[QM31;
 pub fn digests(p:crate::inputs16::Public16,o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16])->[QM31;8] {public_digest_lanes(public(p),*o,selectors(h,l))}
 pub fn semantic(p:crate::inputs16::Public16,o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16])->[QM31;24] {semantic_packed(public(p),o,&selectors(h,l))}
 pub fn composition(p:crate::inputs16::Public16,c:&[QM31;84],point:&[QM31;10],a:[QM31;3])->Result<(QM31,[QM31;16],[QM31;10],QM31,QM31,QM31),u8> {composition_parts(public(p),c,point,a[0],a[1],a[2]).map_err(|e|e as u8)}
-pub fn add_path_lanes(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {add_path_lanes(packed,o,&selectors(h,l))}
-pub fn add_value_lanes(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {add_value_lanes(packed,o,&selectors(h,l))}
-pub fn add_schedule_lanes(packed:&mut[QM31;24],p:crate::inputs16::Public16,o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {add_schedule_lanes(packed,public(p),o,&selectors(h,l))}
+pub fn add_path_lanes(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {super::add_path_lanes(packed,o,&selectors(h,l))}
+pub fn add_value_lanes(packed:&mut[QM31;24],o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {super::add_value_lanes(packed,o,&selectors(h,l))}
+pub fn add_schedule_lanes(packed:&mut[QM31;24],p:crate::inputs16::Public16,o:&StateOnlyPoseidonOpenings,h:[QM31;64],l:[QM31;16]) {super::add_schedule_lanes(packed,public(p),o,&selectors(h,l))}
 }
