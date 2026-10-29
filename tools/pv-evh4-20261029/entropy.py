@@ -75,14 +75,14 @@ Path('lean/PV_EVH_Entropy.lean').write_text(header+body+footer)
 
 def proof(x,n=2):
  pad=' '*n
- if x.kind=='let':return pad+'dsimp only\n'+proof(x.next,n)
+ if x.kind=='let':return pad+'try dsimp only\n'+proof(x.next,n)
  if x.kind=='bind':
   var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
-  return pad+'dsimp only\n'+pad+'apply fixed_bind\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
+  return pad+'try dsimp only\n'+pad+'apply fixed_bind\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
  if x.kind=='if':
   return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
  if x.kind=='match':
-  out=pad+'dsimp only\n'+pad+'cases '+x.discr+' with\n'
+  out=pad+'try dsimp only\n'+pad+'cases '+x.discr+' with\n'
   for j,(pattern,child) in enumerate(x.branches):
    bits=pattern.split();ctor=bits[0].split('.')[-1];args=[('unused'+str(j)) if b=='_' else b for b in bits[1:]]
    out+=pad+'| '+ctor+(' '+' '.join(args) if args else '')+' =>\n'+proof(child,n+2)+'\n'

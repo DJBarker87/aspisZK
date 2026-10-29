@@ -125,110 +125,110 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
   unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
   by_cases condition : retry < limit
   · simp only [condition,if_true]
-    dsimp only
-    dsimp only
+    try dsimp only
+    try dsimp only
     apply fixed_bind
     ·
       exact fixed_lift _
     · intro bytes
-      dsimp only
+      try dsimp only
       apply fixed_bind
       ·
         exact fixed_lift _
       · rintro ⟨s, as_mut_back⟩
-        dsimp only
+        try dsimp only
         apply fixed_bind
         ·
           exact draw_fixed answers h _
         · rintro ⟨r, s1⟩
-          dsimp only
+          try dsimp only
           apply fixed_bind
           ·
             exact fixed_lift _
           · intro cf
-            dsimp only
+            try dsimp only
             cases cf with
             | Continue unused0 =>
-              dsimp only
-              dsimp only
-              dsimp only
+              try dsimp only
+              try dsimp only
+              try dsimp only
               apply fixed_bind
               ·
                 exact fixed_lift _
               · intro field_mask_entropy
-                dsimp only
-                dsimp only
+                try dsimp only
+                try dsimp only
                 apply fixed_bind
                 ·
                   exact fixed_lift _
                 · intro leaf_salt_seed
-                  dsimp only
+                  try dsimp only
                   apply fixed_bind
                   ·
                     exact fixed_lift _
                   · rintro ⟨a3, deref_mut_back⟩
-                    dsimp only
+                    try dsimp only
                     apply fixed_bind
                     ·
                       exact fixed_lift _
                     · rintro ⟨s2, to_slice_mut_back⟩
-                      dsimp only
+                      try dsimp only
                       apply fixed_bind
                       ·
                         exact fixed_lift _
                       · intro a4
-                        dsimp only
+                        try dsimp only
                         apply fixed_bind
                         ·
                           exact fixed_lift _
                         · intro s3
-                          dsimp only
+                          try dsimp only
                           apply fixed_bind
                           ·
                             exact fixed_lift _
                           · intro s4
-                            dsimp only
-                            dsimp only
-                            dsimp only
+                            try dsimp only
+                            try dsimp only
+                            try dsimp only
                             apply fixed_bind
                             ·
                               exact fixed_lift _
                             · rintro ⟨a6, deref_mut_back1⟩
-                              dsimp only
+                              try dsimp only
                               apply fixed_bind
                               ·
                                 exact fixed_lift _
                               · rintro ⟨s5, to_slice_mut_back1⟩
-                                dsimp only
+                                try dsimp only
                                 apply fixed_bind
                                 ·
                                   exact fixed_lift _
                                 · intro s6
-                                  dsimp only
+                                  try dsimp only
                                   apply fixed_bind
                                   ·
                                     exact fixed_lift _
                                   · intro s7
-                                    dsimp only
-                                    dsimp only
-                                    dsimp only
+                                    try dsimp only
+                                    try dsimp only
+                                    try dsimp only
                                     apply fixed_bind
                                     ·
                                       exact fixed_lift _
                                     · intro a8
-                                      dsimp only
+                                      try dsimp only
                                       apply fixed_bind
                                       ·
                                         exact fixed_lift _
                                       · intro b
                                         by_cases condition : b
                                         · simp only [condition,if_true]
-                                          dsimp only
+                                          try dsimp only
                                           apply fixed_bind
                                           ·
                                             exact fixed_lift _
                                           · intro a9
-                                            dsimp only
+                                            try dsimp only
                                             apply fixed_bind
                                             ·
                                               exact fixed_lift _
@@ -237,21 +237,21 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                               · simp only [condition,if_true]
                                                 exact fixed_lift _
                                               · simp only [condition,if_false]
-                                                dsimp only
+                                                try dsimp only
                                                 apply fixed_bind
                                                 ·
                                                   exact fixed_lift _
                                                 · intro retry1
                                                   exact fixed_lift _
                                         · simp only [condition,if_false]
-                                          dsimp only
+                                          try dsimp only
                                           apply fixed_bind
                                           ·
                                             exact fixed_lift _
                                           · intro retry1
                                             exact fixed_lift _
             | Break residual =>
-              dsimp only
+              try dsimp only
               apply fixed_bind
               ·
                 exact fixed_lift _
