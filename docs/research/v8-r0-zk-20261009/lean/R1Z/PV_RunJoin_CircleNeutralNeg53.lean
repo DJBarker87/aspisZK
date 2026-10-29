@@ -13,8 +13,9 @@ theorem complete (a : U32) (ha : Canon a) :
   · have hp : a.val ≤ (2147483647#u32).val := by change a.val ≤ 2147483647; exact Nat.le_of_lt ha
     have hv : (U32.wrapping_sub 2147483647#u32 a).val = 2147483647-a.val := sub32 _ _ hp
     refine ⟨U32.wrapping_sub 2147483647#u32 a,?_,?_,?_⟩
-    · unfold PV_RunJoin_CircleRawScalar52.field.M31.neg PV_RunJoin_CircleRawScalar52.field.ct.neg
-      simp only [ne_eq,hz,not_false_eq_true,decide_true,lift,bind_tc_ok]
+    · have hbool : (a != 0#u32) = true := by simp [hz]
+      unfold PV_RunJoin_CircleRawScalar52.field.M31.neg PV_RunJoin_CircleRawScalar52.field.ct.neg
+      simp only [hbool,lift,bind_tc_ok,PV_RunJoin_CircleRawScalar52.field.P]
       change ok (⟨(U32.wrapping_sub 2147483647#u32 a).bv &&& (-1#32)⟩ : U32) = _
       simp only [BitVec.and_neg_one]
     · unfold PV_RunJoin_CircleR72Raw52.field.M31.neg PV_RunJoin_CircleR72Raw52.field.P
