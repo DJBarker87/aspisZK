@@ -15,7 +15,7 @@ for p in sorted(L.glob('PV_OWNN_*.lean')):
 imports=''.join('import '+r['module']+'\n'for r in rows)
 links=['ActualInput','SourceDense','Transcript879','Transcript890','OwnedPublicPlan']
 (L/'PV_OWNN_StatementsAudit.lean').write_text(imports+'set_option pp.proofs false\n'+''.join('#print '+d+'\n'for d in decls)+''.join('#print R1Z.PV_OWNM_V239.PV_OWNM_Link_'+n+'\n'for n in links)+'#print R1Z.PV_OWNM_V239.ResourceExit\n#print R1Z.PV_OWNM_V239.attach\n#print R1Z.PV_OWNM_V239.restore\n')
-(L/'PV_OWNN_AxiomsAudit.lean').write_text('import R1Z.PV_OWNN_StatementsAudit\n'+''.join('#print axioms '+d+'\n'for d in decls))
+(L/'PV_OWNN_AxiomsAudit.lean').write_text('import R1Z.PV_OWNN_StatementsAudit\n'+''.join('#print axioms '+d+'\n'for d in decls)+'#print axioms R1Z.PV_OWNM_V239.restore\n')
 (L/'PV_OWNN_FocusedReplay.lean').write_text('import R1Z.PV_OWNN_AxiomsAudit\n'+''.join('#check '+d+'\n'for d in decls))
 (E/'audit-queue.txt').write_text('66497 R1Z/PV_OWNN_StatementsAudit\n66498 R1Z/PV_OWNN_AxiomsAudit\n66499 R1Z/PV_OWNN_FocusedReplay\n')
 print(len(rows),'modules',len(decls),'new statements')

@@ -26,11 +26,13 @@ implementation, dictionary, simulator, observer, keys, or other row changed.
    initialized sparse tuple ownership, move/IntoIter/drop/error/abort stages,
    resource projection and first-stop failure prior remain to be associated
    with the same native execution.
-4. Transcript879 and Transcript890: OPEN, deferred until prior links hold.
-   Runjoin/ownj laws inspected read-only. No L1_ORACLE_PREFIX or pv-l1d paths
-   in the candidate; see candidate-transcript-check.json. Terminal oracle
-   callback at round10 must reconstruct alpha itself, in addition to the
-   round<10 sample/assignment points. See link-status-working.md.
+4. Transcript879: OPEN, deferred until prior links hold. Operational replay
+   must cover round<10 sample/assignment points and the terminal round10
+   callback at alpha. See link-status-working.md.
+5. Transcript890: OPEN, deferred until prior links hold. Actual final alpha
+   still needs operational reconstruction from public bytes/frames.
+   Runjoin/ownj laws were inspected read-only. No L1_ORACLE_PREFIX or pv-l1d
+   paths are in this candidate; see candidate-transcript-check.json.
 
 ## Resource and task-input events
 
@@ -62,7 +64,55 @@ verbatim to unsubmitted/PV_OWNN_HelperResult.lean.txt; its sorryAx reports
 are never imported. Proposed repair and remaining binding gaps are in
 helper-66496-failure.md. No unchanged failed proof was resubmitted.
 
-Development budget exhausted at97 attempts; three reserved audits pending.
-Native scopes0; Kani0. V239 cannot be restored while four named links are
-open. No new cryptographic/runtime assumption, endpoint premise or T field.
+Exactly100/100 Lean attempts:97 passes and3 failures (66400,66492,66496).
+Native scopes0/20; Kani0. The final frozen manifest contains one development
+module and8 accepted new statements. All8 plus the retained skeleton audit
+use only propext, Classical.choice, Quot.sound. No failed sorryAx result
+is imported. No audit or full regression is rerun unchanged.
+V239 cannot be restored while four named links are open. No new cryptographic/runtime assumption, endpoint premise or T field.
 
+
+## Final validation
+
+| Target | Exit | Wall | Peak RSS KiB | Swaps |
+|---|---:|---:|---:|---:|
+| 66497 StatementsAudit | 0 | 0:01.36 | 3024820 | 0 |
+| 66498 AxiomsAudit | 0 | 0:01.30 | 3021408 | 0 |
+| 66499 FocusedReplay | 0 | 0:01.19 | 3024588 | 0 |
+
+Audit source revision `3392652870e09b232f3739488d3d3c4cc02acefb`. Every exact command,
+source revision/blob/SHA, dependency-object fingerprint, exit, wall, peak RSS,
+swap and full axiom output is in its per-attempt receipt and
+validation-summary.json. Maximum Lean RSS3030556KiB, all swaps0. One statement
+audit, one axioms audit and one frozen focused replay; no native suite rerun.
+
+The completed source result is exactly:
+`PV_OWNM_Link_SourceDense PV_OWNK_ConcreteDecoder.decode zero source222`.
+`source222` is the complete raw source model at scanner width/trailing/suffix.
+`concrete_restore` removes that link hypothesis from the accepted skeleton;
+it still takes both inputs' ActualInput, Transcript879, Transcript890 and
+OwnedPublicPlan hypotheses. No wrapper defines native execution to be the
+wanted answer. No Link definition was weakened.
+
+**Next deliverable:** repair the error-preserving helper bridge, then bind
+accepted base/d/g checks, selected row-builder/helper, fixed arrays/Vec and
+all core-sampler passes to one actual Input. Close ActualInput before the
+same execution's owned first-stop PublicPlan, then both operational transcript
+links. Only after all hold may restore install V239. The terminal callback
+must use alpha, not the round<10 query formula.
+
+No endpoint premise was removed, added or changed. V229/V230 retain their
+inherited dispositions. No witness-dependent allocation finding is claimed.
+All Rust/Aeneas/Charon semantic agreement remains labelled reclassification
+within existing tool trust, never a new T item. No implementation or key
+changes, push or merge. Stop: Lean budget exhausted; V239 SUSPENDED and
+privacy target not yet established. COMMITS.txt records the branch history;
+final evidence-only commits follow that list.
+
+`final-fingerprint.json` verifies5673 external objects,91 inherited ownership
+objects and97 accepted private objects, including all recorded direct/transitive
+imports and selected current source identities. Initial/final ID scans are
+clear. `final-source-check.json` confirms assigned scope, no proof escapes,
+no file over20MB and no protected source changes. After fingerprinting,
+cleanup.json records removal of rebuildable private compiled scratch only;
+source, receipts and inherited caches remain. No keys created or deleted.

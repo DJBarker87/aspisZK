@@ -1,12 +1,12 @@
 # Binding inventory after candidate inspection
 
 PV_OWNM_V239 and all five Link definitions are unchanged.
-SourceDense: pending compilation of the Fin.cast repair; no credit yet.
+SourceDense: PROVED at66493 after explicit local dimension/lookup transport; consumed by concrete_restore.
 ActualInput: accepted builder inputs are still open. The selected helper is
 pair_forest_semantic_oracle.rs:171–179: upstream row construction propagates
 its errors; build_copy_logup_helper maps errors to CopyImbalance. logup.rs:
 192–225 traverses producers before consumers, carries ActivePole row/side,
-and pushes each successful row. PV_OWNN_HelperResult is a draft preserving
+and pushes each successful row. PV_OWNN_HelperResult is an UNACCEPTED failed66496 draft preserving
 those errors while consuming ownl's vector_canonical through proved erasure.
 Its input row-list/Option inverse carriers still need binding to the selected
 actual trace registry, try_inv, and fixed arrays/Vec; no link closure claimed.
