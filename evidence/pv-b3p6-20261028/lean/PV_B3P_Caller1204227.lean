@@ -54,6 +54,6 @@ theorem caller12_preweighted_reference_terminal_semantic_packed
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors) :
     @reference_terminal.semantic_packed public1 openings selectors = @context12_preweighted_reference_terminal_semantic_packed (@source_preweighted12) public1 openings selectors :=
-  congrArg (fun operation => @context12_preweighted_reference_terminal_semantic_packed operation public1 openings selectors) preweighted_operation_binding12
+  congrArg (fun (operation : {N : Usize} → Array aspis_core.field.QM31 24#usize → Usize → Array aspis_core.field.QM31 N → Result (Array aspis_core.field.QM31 24#usize)) => @context12_preweighted_reference_terminal_semantic_packed @operation public1 openings selectors) preweighted_operation_binding12
 #print axioms caller12_preweighted_reference_terminal_semantic_packed
 end PV_B3P_Binding12227

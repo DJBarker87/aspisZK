@@ -309,6 +309,6 @@ theorem caller12_preweighted_reference_terminal_add_value_lanes
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors) :
     @reference_terminal.add_value_lanes packed openings selectors = @context12_preweighted_reference_terminal_add_value_lanes (@source_preweighted12) packed openings selectors :=
-  congrArg (fun operation => @context12_preweighted_reference_terminal_add_value_lanes operation packed openings selectors) preweighted_operation_binding12
+  congrArg (fun (operation : {N : Usize} → Array aspis_core.field.QM31 24#usize → Usize → Array aspis_core.field.QM31 N → Result (Array aspis_core.field.QM31 24#usize)) => @context12_preweighted_reference_terminal_add_value_lanes @operation packed openings selectors) preweighted_operation_binding12
 #print axioms caller12_preweighted_reference_terminal_add_value_lanes
 end PV_B3P_Binding12227

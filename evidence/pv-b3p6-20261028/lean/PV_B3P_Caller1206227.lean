@@ -309,6 +309,6 @@ theorem caller12_reconstruct_reference_terminal_add_value_lanes
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors) :
     @reference_terminal.add_value_lanes packed openings selectors = @context12_reconstruct_reference_terminal_add_value_lanes (PV_B3P_Binding9227.source_reconstruct) packed openings selectors :=
-  congrArg (fun operation => @context12_reconstruct_reference_terminal_add_value_lanes operation packed openings selectors) (funext fun view => (PV_B3P_Binding9227.reconstruct_body_binding view).symm)
+  congrArg (fun (operation : Array aspis_core.field.QM31 16#usize → Result aspis_core.field.QM31) => @context12_reconstruct_reference_terminal_add_value_lanes @operation packed openings selectors) (funext fun view => (PV_B3P_Binding9227.reconstruct_body_binding view).symm)
 #print axioms caller12_reconstruct_reference_terminal_add_value_lanes
 end PV_B3P_Binding12227

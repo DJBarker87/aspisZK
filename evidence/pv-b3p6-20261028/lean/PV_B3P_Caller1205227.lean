@@ -47,6 +47,6 @@ theorem caller12_equality_reference_terminal_terminal_parts
   (zerocheck_point : Array aspis_core.field.QM31 10#usize)
   (mu : aspis_core.field.QM31) :
     @reference_terminal.terminal_parts public1 claims point lambda chi theta zerocheck_point mu = @context12_equality_reference_terminal_terminal_parts (PV_B3P_Binding9227.source_equality_value) public1 claims point lambda chi theta zerocheck_point mu :=
-  congrArg (fun operation => @context12_equality_reference_terminal_terminal_parts operation public1 claims point lambda chi theta zerocheck_point mu) (funext fun left => funext fun right => (PV_B3P_Binding9227.equality_body_binding left right).symm)
+  congrArg (fun (operation : Array aspis_core.field.QM31 10#usize → Array aspis_core.field.QM31 10#usize → Result aspis_core.field.QM31) => @context12_equality_reference_terminal_terminal_parts @operation public1 claims point lambda chi theta zerocheck_point mu) (funext fun left => funext fun right => (PV_B3P_Binding9227.equality_body_binding left right).symm)
 #print axioms caller12_equality_reference_terminal_terminal_parts
 end PV_B3P_Binding12227

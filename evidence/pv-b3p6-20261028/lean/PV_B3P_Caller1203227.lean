@@ -26,6 +26,6 @@ theorem caller12_preweighted_reference_terminal_add_occupancy_lanes
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors) :
     @reference_terminal.add_occupancy_lanes packed public1 openings selectors = @context12_preweighted_reference_terminal_add_occupancy_lanes (@source_preweighted12) packed public1 openings selectors :=
-  congrArg (fun operation => @context12_preweighted_reference_terminal_add_occupancy_lanes operation packed public1 openings selectors) preweighted_operation_binding12
+  congrArg (fun (operation : {N : Usize} → Array aspis_core.field.QM31 24#usize → Usize → Array aspis_core.field.QM31 N → Result (Array aspis_core.field.QM31 24#usize)) => @context12_preweighted_reference_terminal_add_occupancy_lanes @operation packed public1 openings selectors) preweighted_operation_binding12
 #print axioms caller12_preweighted_reference_terminal_add_occupancy_lanes
 end PV_B3P_Binding12227
