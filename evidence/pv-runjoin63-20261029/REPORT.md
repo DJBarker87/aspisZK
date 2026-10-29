@@ -12,7 +12,8 @@ Fresh import preflight: 3928 source/object pairs and all external companions
 match. Namespace-first effective resolution: 9601 objects, all match. Ninety
 historical symlinks in this job's objects directory were replaced by hash-checked
 plain copies under h6''; object bytes and dependency fingerprints are unchanged.
-`namespace-resolution.json` records original targets, hashes and effective paths.
+`initial-namespace-resolution.json` records original targets, hashes and effective paths.
+The final namespace-resolution.json checks9671 effective objects, all matching.
 No other job directory was written.
 
 The worktree ledger predates Recount 8. The CONFIRM table was read from research
@@ -140,3 +141,71 @@ The preparation plan retains its historical staging record, while final-exclusio
 excludes it from the accepted closure. Final preflight checks current-HEAD source
 identity for the accepted closure and records this explicit abandoned target.
 LiftRow63.complete passed73495 with all callback Results retained.
+
+## Final checked results
+
+**Target not established. Rows removed: none. Endpoint premise reduction: zero.**
+No full nine-link MODEL witness, native Nonempty P, full dynamic capture-world
+interpreter, unconditional RUNJOIN_PUBLISH_COMPACT, or privacy endpoint was proved.
+The literal generic two-existential sufficiency claim was refuted, as explained
+above; this does not refute the shipped native implementation.
+
+The unchanged original QueryAppend link is OPEN: successful-append byte
+association IS CHECKED, while totality for every
+contextual publication remains open. QueryLoop63.loop retains the complete
+native Result and finite 22-cell structure by symbolic induction. Cell proofs
+produce the exact608+32+32+128+32=832 bytes, with no output length or byte
+premise in QueryCellComplete63.complete. QueryParts63 keeps all six fields.
+The source-world/effect boundary of the Result/value script is explicit: it is
+not a native event interpreter or a claim that allocation events may be reordered.
+
+The unchanged FinishContext link is OPEN. Checked source work includes the
+stored root and inactive encoding; the claim append from primitive byte-domain
+conditions (HighZero/whole-cell length, not installed as run assumptions);
+the successful finish constructor frame; and exact tag30 reconstruction and
+stored final-scalar association where the corresponding modules are accepted.
+NativeFinalFold63 IS CHECKED.
+The full c0/c1/f source-to-model opening image join remains open. The 22
+qualified restorations have not all been composed into the dynamic native
+capture; the copied CONFIRM table is not installation evidence by itself. CommonSample,
+BackendInput and NodeAppend also remain open; the new raw lift cell/row work, if
+accepted, is a local prerequisite, never full hinput credit. QueryContext,
+QueryRange, FrontRoom and PublishOrder are checked at the new world-indexed
+binding. Exactly three TrustItems remain, with no additions or transfers.
+
+Validation: 100 charged Lean attempts, 70 accepted and
+30 rejected; IDs 73400–73499; zero Kani/Rust/SBF.
+15 unlaunched refusals are uncharged, with full cooldown and same-ID
+retry. Cumulative capped host wall time 384.28s; maximum
+RSS 4524589056 bytes; swaps 0. Caps stayed at MemoryHigh6G,
+MemoryMax8G, MemorySwapMax0, TasksMax64, Lean-M7000; one scope at a time.
+No proof limits were raised. The numeral-recursion failure in query-room
+arithmetic was replaced with a generic symbolic inequality and a named small
+width comparison. No unchanged failed source was resubmitted.
+
+The three reserved audits are73497–73499. `axioms-audit.json` records exact
+expected declarations and results; `verification.tsv`, original compressed
+module logs and individual receipts retain target, exit, wall, RSS, swap,
+source revision/SHA, dependency fingerprint and printed axioms. Audit credit
+is for accepted declarations only. No complete frozen manifest or release
+claim is made while witness and links remain open. The source hash guard is
+recorded in SUMMARY.json; failed source hashes/revisions are retained.
+
+Boundary checks are in boundaries.json. No ledger, implementation, protected
+owner module, Produced, nine-link body, entropy trust list, observer, simulator,
+or bad event was changed. No merge, push, key cleanup or funds operation ran.
+Commit history from the exact entry revision is in commits.txt.
+
+Next deliverable: construct the explicit nondegenerate dictionary/world MODEL
+with nonempty Produced and all nine links; bind the native effect-world worker
+interpreter and allocator metadata transitions through capture; formulate native
+success on the reached caller domain and prove sufficiency there; close the
+original QueryAppend totality and full FinishContext source/model image join.
+
+Final verification (`final-validation.json`) confirms the exact100-ID range,
+positive same-shell admission and caps for every launch, all52 active source
+hashes accepted, all141 audit declarations using standard axioms only, and
+all evidence files below20MB. Final closure preflight:3998 projects,8917 direct
+fingerprints,5673 external objects and5438 IR companions; all match.
+The job stops because the authorized100 Lean attempts are exhausted, not
+because the requested theorem was established. Fifteen refusals were uncharged.
