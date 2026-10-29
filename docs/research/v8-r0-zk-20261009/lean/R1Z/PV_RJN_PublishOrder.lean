@@ -92,7 +92,7 @@ theorem actual {I : Type} (runs : I → Run)
     | ok b =>
       rw [hs] at model
       have hb := Option.some.inj model
-      exact congrArg Except.ok hb.symm ▸ hs
+      exact congrArg Except.ok hb.symm
   have nodeLen : (bytes h9.val).length=(runs i).plan.offNodes := by
     rw [PV_RJN_Bytes.length]
     exact offnode
@@ -100,7 +100,7 @@ theorem actual {I : Type} (runs : I → Run)
     rw [PV_RJN_Bytes.length,hpsize]
     exact congrArg UScalar.val hprooflen
   rw [ProverCommitPublish43.assemble_loop]
-  simp only [ProverCommitPublish43.assemble,Except.bind,querybytes,nodeLen,ne_eq,not_true_eq_false,if_false,
+  simp only [ProverCommitPublish43.assemble,bind,Except.bind,querybytes,nodeLen,ne_eq,not_true_eq_false,if_false,
     slots,proofLen]
 
 #print axioms actual
