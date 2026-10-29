@@ -12,10 +12,12 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
     PV_RunJoin_CircleR72Raw52.field.M31.add PV_RunJoin_CircleR72Raw52.field.P
   rw [PV_RunJoin_CircleNeutralScalar52.checked_add a b hab]
   simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralScalar52.subtract_shape]
+  simp only [core.num.U32.wrapping_add]
   by_cases h : U32.wrapping_add a b ≥ 2147483647#u32
   · simp only [h,if_pos]
     rw [PV_RunJoin_CircleNeutralScalar52.checked_sub _ _ h]
-  · simp only [h,if_neg]
+    simp only [bind_tc_ok]
+  · simp only [h,if_neg,if_false]
 
 theorem double (a : U32) (ha : Canon a) :
     PV_RunJoin_CircleRawScalar52.field.M31.double a = PV_RunJoin_CircleR72Raw52.field.M31.double a := by
