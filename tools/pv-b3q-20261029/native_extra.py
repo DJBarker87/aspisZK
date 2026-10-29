@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess,hashlib,json,sys
 from run import H,run
-mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear']
+mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear','bit-positive','bit-negative']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','+1.94.1','-vV'],text=True)
 cmd=['/home/dombarker/.cargo/bin/rustc','+1.94.1','--edition=2021','-C','opt-level=3','-C','overflow-checks=off','-C','debug-assertions=off','-A','dead_code','-C','link-arg=-Wl,--threads=4']
@@ -10,10 +10,12 @@ if mode=='matrix-linear':
  for feature in features:cmd+=['--cfg','feature="'+feature+'"']
  cmd+=[str(H/'matrix/main_linear.rs'),'-o',str(H/'matrix-linear')];inputs={str(p.relative_to(H)):sha(p)for p in(H/'matrix').rglob('*.rs')};nodes=x['validation']['nodes'];binary=H/'matrix-linear'
 else:
- cmd+=[str(H/'byte_eq_native.rs'),'-o',str(H/'byte-eq-native')];inputs={'byte_eq_native.rs':sha(H/'byte_eq_native.rs')};nodes='core/std from pinned 1.94.1; no external dependency';binary=H/'byte-eq-native'
+ name='bit_counts_native.rs' if mode.startswith('bit-') else 'byte_eq_native.rs'
+ binary=H/('bit-counts-native' if mode.startswith('bit-') else 'byte-eq-native')
+ cmd+=[str(H/name),'-o',str(binary)];inputs={name:sha(H/name)};nodes='core/std from pinned 1.94.1; no external dependency'
 record=dict(mode=mode,toolchain=toolchain,profile=dict(opt_level=3,overflow_checks=False,debug_assertions=False),input_hashes=inputs,resolved_nodes=nodes,evidence_class='finite validation; compiler/source-to-shipped-code boundary V370 retained')
 (H/(mode+'-inputs.json')).write_text(json.dumps(record,indent=2)+'\n')
-if mode=='byte-negative':cmd=[str(binary),'--negative']
+if mode.endswith('-negative'):cmd=[str(binary),'--negative']
 else:
  (H/(mode+'-command.json')).write_text(json.dumps(dict(compile=cmd,run=[str(binary)])))
  cmd=['python3',str(H/'native_extra_gate.py'),mode]
