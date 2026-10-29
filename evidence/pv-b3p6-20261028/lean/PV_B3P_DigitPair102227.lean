@@ -19,8 +19,12 @@ theorem digit_pair_loop_binding10_2
   rw [digit_loop_ten10,digit_source_stage_binding10_05]
   simp only [PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
   conv_lhs => arg 2; intro next; rw [digit_source_stage_binding10_06]
-  rw [PV_B3P_Ordered227.append (digit_source_step10 openings.xor12_z (some 20#usize))
-    [0#usize,1#usize,2#usize,3#usize,4#usize] [5#usize,6#usize,7#usize,8#usize,9#usize] range]
-  simp only [PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
+  have partition := PV_B3P_Ordered227.append (digit_source_step10 openings.xor12_z (some 20#usize))
+    [0#usize,1#usize,2#usize,3#usize,4#usize] [5#usize,6#usize,7#usize,8#usize,9#usize] range
+  have lifted := congrArg (fun result => result >>= (fun next => Result.ok (selector,next))) partition
+  exact (PV_B3P_Ordered227.bind_assoc
+    (PV_B3P_Ordered227.fold (digit_source_step10 openings.xor12_z (some 20#usize)) [0#usize,1#usize,2#usize,3#usize,4#usize] range)
+    (PV_B3P_Ordered227.fold (digit_source_step10 openings.xor12_z (some 20#usize)) [5#usize,6#usize,7#usize,8#usize,9#usize])
+    (fun next => Result.ok (selector,next))).symm.trans lifted.symm
 #print axioms digit_pair_loop_binding10_2
 end PV_B3P_Binding10227
