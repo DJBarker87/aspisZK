@@ -20,7 +20,7 @@ theorem complete (a : Q) :
   | none => rfl
   | some inv =>
     simp only [PV_RunJoin_CircleR72Raw52.core.option.Option.ok_or,bind_tc_ok,
-      core.result.Result.Insts.CoreOpsTry.branch]
+      core.result.Result.Insts.CoreOpsTry.branch,bind_assoc_eq]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro numerator _
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
