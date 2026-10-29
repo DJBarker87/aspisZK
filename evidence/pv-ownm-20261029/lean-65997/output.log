@@ -1,0 +1,166 @@
+theorem R1Z.PV_OWNM_DenseRows.high_bit : ∀ (w t : ℕ) (a : Fin (2 ^ w)) (b : Fin (2 ^ t)) (i : Fin w),
+  R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b)) (Fin.castAdd t i) =
+    R1Z.PV_OWNL_RowEnumeration.tail w a i :=
+⋯
+theorem R1Z.PV_OWNM_DenseRows.low_bit : ∀ (w t : ℕ) (a : Fin (2 ^ w)) (b : Fin (2 ^ t)) (i : Fin t),
+  R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b)) (Fin.natAdd w i) =
+    R1Z.PV_OWNL_RowEnumeration.tail t b i :=
+⋯
+theorem R1Z.PV_OWNM_DenseRows.joined_weight : ∀ {K : Type} [inst : Field K] (w t : ℕ) (p : Fin (w + t) → K)
+  (a : Fin (2 ^ w)) (b : Fin (2 ^ t)),
+  R1Z.PV_OWNI_DensePrune.weight p
+      (R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b))) =
+    R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.castAdd t i)) (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+      R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.natAdd w i)) (R1Z.PV_OWNL_RowEnumeration.tail t b) :=
+⋯
+theorem R1Z.PV_OWNM_DenseRows.full_dense_sparse : ∀ {K : Type} [inst : Field K] (w t : ℕ) (p : Fin (w + t) → K)
+  (suffix : Fin (2 ^ t)) (column : Fin (2 ^ (w + t)) → K),
+  (∀ (i : Fin t), p (Fin.natAdd w i) = if R1Z.PV_OWNL_RowEnumeration.tail t suffix i = true then 1 else 0) →
+    R1Z.PV_OWNM_DenseRows.fullDense (w + t) p column =
+      ∑ a,
+        R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.castAdd t i)) (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+          column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix)) :=
+⋯
+theorem R1Z.PV_OWNM_FoldSum.fold_sum : ∀ {K : Type} [inst : Field K] {A : Type} (xs : List A) (f : A → K) (initial : K),
+  List.foldl (fun sum x => sum + f x) initial xs = initial + (List.map f xs).sum :=
+⋯
+theorem R1Z.PV_OWNM_FoldSum.range_sum : ∀ {K : Type} [inst : Field K] (n : ℕ) (f : ℕ → K),
+  (List.map f (List.range n)).sum = ∑ i, f ↑i :=
+⋯
+theorem R1Z.PV_OWNM_FoldSum.sparse_sum : ∀ {K : Type} [inst : Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K)
+  (point column : List R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_OWNJ_ValueBridge.sparse decode point column =
+    ∑ a,
+      decode
+          (List.foldl (R1Z.PV_OWNI_WeightTotal.step (R1Z.PV_OWNI_Scanner.width point) ↑a)
+              (R1Z.PV_OWNI_RawOps.ops.one, 0) (List.take (R1Z.PV_OWNI_Scanner.width point) point)).1 *
+        decode
+          (column[R1Z.PV_RDB2D_SparseAddress.row (↑a) (R1Z.PV_OWNI_Scanner.trailing point)
+                  (R1Z.PV_OWNI_Scanner.suffix point)]?.getD
+            R1Z.PV_OWNI_RawOps.zero) :=
+⋯
+theorem R1Z.PV_OWNM_FoldSum.prefix_product : ∀ {K : Type} [inst : Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K),
+  R1Z.PV_OWNJ_DecodeFold.Decoder decode →
+    ∀ (point : List R1Z.PV_OWNI_RawOps.Q) (width pref : ℕ),
+      (∀ q ∈ point, R1Z.PV_OWNJ_DecodeFold.Canon q) →
+        decode
+            (List.foldl (R1Z.PV_OWNI_WeightTotal.step width pref) (R1Z.PV_OWNI_RawOps.ops.one, 0)
+                (List.take width point)).1 =
+          ∏ i,
+            if pref.testBit (width - 1 - ↑i) = true then (List.map decode (List.take width point)).get i
+            else 1 - (List.map decode (List.take width point)).get i :=
+⋯
+@[defeq] theorem R1Z.PV_OWNM_V239.ready_value : ∀ {K W : Type} (world : W) (trace : List R1Z.PV_OWNM_V239.Action)
+  (value : Aeneas.Std.Result (Option K)),
+  (R1Z.PV_OWNM_V239.attach (R1Z.PV_OWNM_V239.ResourceExit.ready world trace) value).result = value :=
+⋯
+theorem R1Z.PV_OWNM_V239.restore : ∀ {K W : Type} [inst : Field K] (decode : R1Z.PV_OWNM_V239.Q → K)
+  (zero : R1Z.PV_OWNM_V239.Q)
+  (source222 : List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q))
+  (wirePoints : List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) (isBoolean : R1Z.PV_OWNM_V239.Q → Bool)
+  (reconstruct879 reconstruct890 : R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q)
+  (native : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W)
+  (resource : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W)
+  (failures : List Bool) (left right : R1Z.PV_OWNM_V239.Input),
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints left →
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints right →
+      R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense decode zero source222 →
+        R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 left →
+          R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 right →
+            R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 left →
+              R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 right →
+                R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource
+                    failures left →
+                  R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource
+                      failures right →
+                    left.pubData = right.pubData →
+                      left.site = right.site →
+                        List.map List.length left.columns = List.map List.length right.columns →
+                          (∀ p ∈ wirePoints left.point,
+                              ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+                                left.columns[lane]? = some c →
+                                  native left p lane =
+                                    R1Z.PV_OWNM_V239.attach (resource left p lane)
+                                      (Aeneas.Std.Result.ok
+                                        (if c.length ≠ 1024 then none
+                                        else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+                            (∀ p ∈ wirePoints right.point,
+                                ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+                                  right.columns[lane]? = some c →
+                                    native right p lane =
+                                      R1Z.PV_OWNM_V239.attach (resource right p lane)
+                                        (Aeneas.Std.Result.ok
+                                          (if c.length ≠ 1024 then none
+                                          else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+                              ∀ pL ∈ wirePoints left.point,
+                                ∀ pR ∈ wirePoints right.point,
+                                  ∀ (laneL laneR : ℕ) (cL cR : List R1Z.PV_OWNM_V239.Q),
+                                    left.columns[laneL]? = some cL →
+                                      right.columns[laneR]? = some cR →
+                                        (native left pL laneL).trace = (native right pR laneR).trace :=
+⋯
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput : (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun wirePoints i =>
+  i.point.length = 10 ∧
+    (∀ p ∈ wirePoints i.point, p.length = 10 ∧ ∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) ∧
+      ∀ c ∈ i.columns, ∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense : {K : Type} →
+  [Field K] →
+    (R1Z.PV_OWNM_V239.Q → K) →
+      R1Z.PV_OWNM_V239.Q →
+        (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) → Prop :=
+fun {K} [Field K] decode zero source222 =>
+  ∀ (p c : List R1Z.PV_OWNM_V239.Q),
+    p.length = 10 →
+      (∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) →
+        (∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q) →
+          (do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) =
+            Aeneas.Std.Result.ok (if c.length ≠ 1024 then none else some (R1Z.PV_OWNM_V239.dense decode zero p c))
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct879 i => i.site = R1Z.PV_OWNM_V239.Site.callback879 → i.point = reconstruct879 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct890 i => i.site = R1Z.PV_OWNM_V239.Site.final890 → i.point = reconstruct890 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan : {K W : Type} →
+  (R1Z.PV_OWNM_V239.Q → K) →
+    (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) →
+      (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+        (R1Z.PV_OWNM_V239.Q → Bool) →
+          (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W) →
+            (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W) →
+              List Bool → R1Z.PV_OWNM_V239.Input → Prop :=
+fun {K W} decode source222 wirePoints isBoolean native resource failures i =>
+  (∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          native i p lane =
+            R1Z.PV_OWNM_V239.attach (resource i p lane) do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) ∧
+    ∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          (R1Z.PV_OWNM_V239.attach (resource i p lane) do
+                let v ← source222 p c
+                Aeneas.Std.Result.ok (Option.map decode v)).trace =
+            R1Z.PV_OWNM_V239.plan isBoolean (R1Z.PV_OWNM_V239.calls wirePoints i) failures
+inductive R1Z.PV_OWNM_V239.ResourceExit : Type → Type
+number of parameters: 1
+constructors:
+R1Z.PV_OWNM_V239.ResourceExit.ready : {W : Type} → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+R1Z.PV_OWNM_V239.ResourceExit.failed : {W : Type} →
+  Aeneas.Std.Error → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+R1Z.PV_OWNM_V239.ResourceExit.diverged : {W : Type} → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+def R1Z.PV_OWNM_V239.attach : {K W : Type} →
+  R1Z.PV_OWNM_V239.ResourceExit W → Aeneas.Std.Result (Option K) → R1Z.PV_OWNM_V239.Execution K W :=
+fun {K W} exit value =>
+  match exit with
+  | R1Z.PV_OWNM_V239.ResourceExit.ready world trace => { result := value, world := world, trace := trace }
+  | R1Z.PV_OWNM_V239.ResourceExit.failed error world trace =>
+    { result := Aeneas.Std.Result.fail error, world := world, trace := trace }
+  | R1Z.PV_OWNM_V239.ResourceExit.diverged world trace =>
+    { result := Aeneas.Std.Result.div, world := world, trace := trace }
