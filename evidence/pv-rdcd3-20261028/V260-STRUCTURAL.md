@@ -30,3 +30,16 @@ Any transfer relying on Aeneas and Rust agreeing on semantics is **reclassificat
 The 6,371 new native library cases are finite validation only. Historical original/copy raw-weight fixtures remain separately retained in `../pv-rdcd-20261028/native-weights/`; their Rust source/profile cohort is unchanged. No historical copy-dependent Kani result is used, and no Kani is run. No claim is made about binary/world refinement or the complete observer.
 
 T remains exactly entropy_law, entropy_kernel, observation. E1/E2, native RunJoin/carrier/world, proof-account client route, and L1/L2/L3 remain obligations.
+
+## Updated proof receipts after relaunch
+
+60630–60637 now establish the selected251-cohort row lookup, ordered folds,
+owned raw match, rejection-preserving exact reference, callback carrier bridge,
+terminal controls, all-width word primitives, and the combined complete API.
+The earlier253-cohort exact API remains unchanged and passed60625/60626.
+`v260-proof-association.json` requires a matching source hash and successful
+capped receipt for every required module. The final source/DAG association
+is still pending. No whole-row status is inferred merely from theorem counts.
+The eighteen conservative record dispositions are explicit in
+`v260-cone-disposition.json`; the stated boundary is source value/Result,
+retaining compiler primitive trust and all observer/world obligations.
