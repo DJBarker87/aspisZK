@@ -59,13 +59,13 @@ def SourceFibres {I P S W A : Type} (good : I → Prop)
 `run` the actual run at cp.toR; I includes all public-equal invocations and
 witnesses. This excludes exactly the event consumed by RunJoin.agreement. -/
 def Required {I M P S W A : Type}
-    (old : Fin 8 → M → Prop)
-    (queries : M → List ProverCommitSeedEvent19.Entry)
+    (old : I → Fin 8 → M → Prop)
+    (queries : I → M → List ProverCommitSeedEvent19.Entry)
     (modelCoins : I → (M × OracleAnswer) × ProverCommitFuelJoin22.Tape)
     (pubData : I → P) (signal : I → S)
     (run : I → R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A)
     (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes) : Prop :=
-  SourceFibres (fun i => OffCharged old queries (modelCoins i))
+  SourceFibres (fun i => OffCharged (old i) (queries i) (modelCoins i))
     pubData signal run render
 
 theorem decoder_implies_fibres {I P S R V : Type} (good : I → Prop)
