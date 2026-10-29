@@ -24,14 +24,18 @@ theorem return_result {α : Type} (r : Result α) :
     (do let value ← r; .ok value) = r := by
  cases r <;> rfl
 
+theorem add_value (i c : Usize) (bound : i.val+c.val < UScalar.size .Usize) :
+    (Usize.wrapping_add i c).val = i.val+c.val := by
+ rw [Usize.wrapping_add_val_eq,Nat.mod_eq_of_lt bound]
+
 theorem increment_of_eq (i j : Usize) (h : i.val+1=j.val) :
     Usize.wrapping_add i 1#usize = j := by
  apply UScalar.eq_of_val_eq
- rw [Usize.wrapping_add_val_eq]
- have small : i.val+1 < UScalar.size .Usize := by
-   rw [h]
-   simpa only [UScalar.size] using j.hBounds
- rw [Nat.mod_eq_of_lt small]
+ rw [add_value i 1#usize (by
+   have small : j.val < UScalar.size .Usize := by
+     simpa only [UScalar.size] using j.hBounds
+   change i.val+1 < UScalar.size .Usize
+   omega)]
  exact h
 
 /-- The actual 0..4 caller schedule, including arbitrary fail/div callback results. -/
@@ -62,6 +66,7 @@ theorem source_link : PV_B3P_Link_slice14 source := by
  have i1 : Usize.wrapping_add 1#usize 1#usize = 2#usize := increment_of_eq _ _ rfl
  have i2 : Usize.wrapping_add 2#usize 1#usize = 3#usize := increment_of_eq _ _ rfl
  simp only [PV_B3P_Binding9227.usize_plan,return_result,i0,i1,i2]
+#print axioms add_value
 #print axioms increment_of_eq
 #print axioms return_result
 #print axioms source_schedule
