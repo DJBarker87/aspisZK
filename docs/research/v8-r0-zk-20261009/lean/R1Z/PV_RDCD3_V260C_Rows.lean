@@ -15,7 +15,21 @@ def variant : V → PV_B2_253c1.transport.Variant
 theorem row (v : V) (j : Usize) :
     PV_B2_251c1.host_weights.host_row v j =
       PV_B2_253c1.host_weights.host_row (variant v) j := by
-  cases v <;> rfl
+  cases v <;> simp only [variant,
+    PV_B2_251c1.host_weights.host_row,
+    PV_B2_251c1.host_weights.host_row_loop0,
+    PV_B2_251c1.host_weights.host_row_loop1,
+    PV_B2_251c1.host_weights.host_row_loop0.body,
+    PV_B2_251c1.host_weights.host_row_loop1.body,
+    PV_B2_251c1.host_weights.HOST_COEFFICIENT_TO_ROW,
+    PV_B2_251c1.transport.TAU,
+    PV_B2_253c1.host_weights.host_row,
+    PV_B2_253c1.host_weights.host_row_loop0,
+    PV_B2_253c1.host_weights.host_row_loop1,
+    PV_B2_253c1.host_weights.host_row_loop0.body,
+    PV_B2_253c1.host_weights.host_row_loop1.body,
+    PV_B2_253c1.host_weights.HOST_COEFFICIENT_TO_ROW,
+    PV_B2_253c1.transport.TAU]
 
 theorem invalid_D (j : Usize) (invalid : 1024 ≤ j.val) :
     PV_B2_251c1.host_weights.host_row .D j = fail .arrayOutOfBounds := by
