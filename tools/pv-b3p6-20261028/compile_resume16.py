@@ -52,6 +52,13 @@ for imp in imports:
  q=next((Path(x)/(imp.replace('.','/')+'.olean') for x in search if (Path(x)/(imp.replace('.','/')+'.olean')).exists()),None)
  deps[imp]=dict(path=str(q) if q else None,sha256=hashlib.sha256(q.read_bytes()).hexdigest() if q else 'missing')
 assert all(d['path'] for d in deps.values()), ('missing dependency object; compile predecessor first',deps)
+# A bare Init import must resolve to the h4-pinned object, not a same-name
+# shadow in a private/project directory.
+if 'Init' in deps:
+ ext=json.loads((H/'external-object-manifest.json').read_text())
+ pin=next(r for r in ext if r['module']=='Init')
+ assert deps['Init']['sha256']==pin['object_sha256'],('Init external pin mismatch',deps['Init'],pin)
+
 context=dict(deps)
 if '.' in module: context['private_output_parent']={'path':str(outfile.parent),'exists':outfile.parent.is_dir(),'reason':'created nested private output directory after charged 37968 write failure'}
 fp=hashlib.sha256(json.dumps(context,sort_keys=True).encode()).hexdigest();key=srcsha+':'+fp
