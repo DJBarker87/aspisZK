@@ -1,6 +1,7 @@
 import sys
 sys.dont_write_bytecode=True
 from NDL_sources import source
+from NDL_journal import entry
 import sys
 sys.dont_write_bytecode=True
 """Lane-owned serial wrapper around unchanged S2W launchers."""
@@ -36,13 +37,13 @@ print(p.read_text());sys.exit(r.returncode)
  raise SystemExit('STOP infrastructure admission')
 files={'NDL_gate.py':(E/'NDL_gate.py').read_text()}
 if kind=='kani':
- sources=['NDL_gate.py','NDL_SOURCE_PINS.json','NDL_src/Cargo.lock','NDL_src/crates/aspis-core/src/field.rs','NDL_src/crates/aspis-core/src/field/NDD_field.rs']
+ sources=['NDL_gate.py','NDL_SOURCE_PINS.json','NDL_src/Cargo.lock','NDL_src/crates/aspis-core/src/field.rs','NDL_src/crates/aspis-core/src/field/NDD_field.rs','NDL_src/crates/aspis-core/src/field/NDL_core.rs','NDL_src/crates/aspis-core/src/field/NDL_core_reference.rs']
  native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NDL_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NDL_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
  command=['python3','NDL_gate.py',a+'.json']
  if os.environ.get('NDL_PACKAGE')=='verifier':
   native[native.index('--manifest-path')+1]=B+'/NDL_src/crates/aspis-r1-cost-probe/Cargo.toml'
   native[native.index('--features')+1]='private-leaf-salts,optimized-terminal,program-build'
-  sources+=['NDL_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_reference.rs']
+  sources+=['NDL_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_reference.rs','NDL_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_dot.rs','NDL_src/crates/aspis-core/src/field/NDL_core.rs']
 
 elif kind=='extract':
  files['NDL_extract.py']=(E/'NDL_extract.py').read_text();files['NDL_reference.rs']=source('NDL_reference.rs');sources=['NDL_extract.py','NDL_reference.rs'];native=[];command=['python3','NDL_extract.py']
@@ -50,6 +51,8 @@ else:
  files['NDL_generated/'+target+'.lean']=(E/(target+'.lean')).read_text() if (E/(target+'.lean')).exists() else Path('lean',target+'.lean').read_text();sources=['NDL_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDL_generated','-o','NDL_objects/'+target+'.olean',sources[0]]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDL_tmp',LEAN_PATH=B+'/NDL_objects:/home/dombarker/project-offloads/codex-cx-front1-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
+if os.environ.get('NDL_EXTRACT_CONFIG'):env['NDL_EXTRACT_CONFIG']=os.environ['NDL_EXTRACT_CONFIG']
+if os.environ.get('NDL_SCALAR_EXTRACT'):env['NDL_SCALAR_EXTRACT']=os.environ['NDL_SCALAR_EXTRACT']
 if os.environ.get('NDL_FIELD_EXTRACT'):env['NDL_FIELD_EXTRACT']=os.environ['NDL_FIELD_EXTRACT']
 if os.environ.get('NDL_EXTRACT_PARSER'):env['NDL_EXTRACT_PARSER']=os.environ['NDL_EXTRACT_PARSER']
 if os.environ.get('NDL_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NDL_RUST_CFG']
@@ -102,10 +105,10 @@ out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'no receipt; never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
-with (E/'NDL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+with (E/'NDL_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry(rc))+'\n')
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
-print(out[a+'/stdout.log'][-1800:],flush=True)
+print(out[a+'/stdout.log'][-700:],flush=True)
 
 # Do not treat timed-out verification as a completed proof batch.
 if 'timed out' in out[a+'/stdout.log'].lower() or rc['exit_status'] in [124,137]:

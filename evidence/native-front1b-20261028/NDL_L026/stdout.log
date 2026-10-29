@@ -1,0 +1,58 @@
+structure MultiproofConeRef.reference.Scratch : Type
+number of parameters: 0
+fields:
+  MultiproofConeRef.reference.Scratch.idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize
+  MultiproofConeRef.reference.Scratch.val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize
+  MultiproofConeRef.reference.Scratch.n : Aeneas.Std.Usize
+  MultiproofConeRef.reference.Scratch.at : Aeneas.Std.Usize
+constructor:
+  MultiproofConeRef.reference.Scratch.mk (idx : Aeneas.Std.Array Aeneas.Std.U32 16#usize)
+    (val : Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 16#usize) (n «at» : Aeneas.Std.Usize) :
+    MultiproofConeRef.reference.Scratch
+def AspisR1.MultiproofConeP6Callbacks.nodeWith : AspisR1.MultiproofConeP6Callbacks.Parent →
+  AspisR1.MultiproofConeP6Callbacks.Parent →
+    MultiproofConeRef.reference.Scratch →
+      Aeneas.Std.Slice Aeneas.Std.U8 →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Usize → AspisR1.MultiproofConePhysicalProgram.Run MultiproofConeRef.reference.Row :=
+fun occupied sibling s physical i w =>
+  AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize i) fun index =>
+    AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize i) fun value =>
+      AspisR1.MultiproofConePhysicalProgram.checked (i + 1#usize) fun ni =>
+        have supplied :=
+          AspisR1.MultiproofConePhysicalProgram.checked (physical.len - s.at) fun remaining =>
+            if remaining < 32#usize then
+              AspisV8R19.MemoizedProgramLaw.Program.done (Aeneas.Std.Result.ok (MultiproofConeRef.reference.Row.Stop s))
+            else
+              AspisR1.MultiproofConePhysicalProgram.checked (s.at + 32#usize) fun cursor =>
+                AspisR1.MultiproofConePhysicalProgram.checked
+                  (Aeneas.Std.core.slice.index.Slice.index
+                    (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice Aeneas.Std.U8) physical
+                    { start := s.at, «end» := cursor })
+                  fun chunk =>
+                  AspisR1.MultiproofConePhysicalProgram.checked (MultiproofConeRef.reference.read32 chunk)
+                    fun valueSibling =>
+                    if index &&& 1#u32 = 0#u32 then
+                      AspisR1.MultiproofConeP6Callbacks.parent sibling s value valueSibling ni cursor index w
+                    else AspisR1.MultiproofConeP6Callbacks.parent sibling s valueSibling value ni cursor index w;
+        if ni < s.n then
+          AspisR1.MultiproofConePhysicalProgram.checked (s.idx.index_usize ni) fun nextIndex =>
+            if nextIndex = index ^^^ 1#u32 then
+              AspisR1.MultiproofConePhysicalProgram.checked (s.val.index_usize ni) fun right =>
+                AspisR1.MultiproofConePhysicalProgram.checked (i + 2#usize) fun next =>
+                  AspisR1.MultiproofConeP6Callbacks.parent occupied s value right next s.at index w
+            else supplied
+        else supplied
+def AspisR1.MultiproofConeNodeDomain.RowDomain : Aeneas.Std.Slice Aeneas.Std.U8 →
+  MultiproofConeRef.reference.Scratch → Aeneas.Std.Usize → Aeneas.Std.Usize → Prop :=
+fun physical s i w => 0 < ↑s.n ∧ ↑s.n ≤ 16 ∧ ↑i ≤ ↑s.n ∧ ↑w ≤ ↑i ∧ ↑s.at ≤ (↑physical).length
+def Aeneas.Std.UScalar.shiftRight : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → ℕ → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x s =>
+  if s < ty.numBits then Aeneas.Std.Result.ok (x.bv.ushiftRight s#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.integerOverflow
+def Aeneas.Std.UScalar.div : {ty : Aeneas.Std.UScalarTy} →
+  Aeneas.Std.UScalar ty → Aeneas.Std.UScalar ty → Aeneas.Std.Result (Aeneas.Std.UScalar ty) :=
+fun {ty} x y =>
+  if (y.bv != 0) = true then Aeneas.Std.Result.ok (x.bv.udiv y.bv#uscalar)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.divisionByZero

@@ -1,0 +1,72 @@
+{"attempt": "NDL_L041", "exit_status": 1, "wall_seconds": 2.1742617780109867, "peak_rss_kib": "4408712", "swaps": "0", "print_axioms": ["'NDL_HighStep.cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NDL_HighStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDL_generated/NDL_HighStep.lean:22:88: error: unsolved goals
+partials : Std.Array NE 4#usize
+coeffs : Std.Array NQ 4#usize
+iter rest : Iter
+s : Usize
+before after : Dot
+value : NE
+scalar : NQ
+r : core.result.Result Unit Unit
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some s, rest)
+readP : partials.index_usize s = ok value
+readQ : coeffs.index_usize s = ok scalar
+push : FIo_Native.fast_pairing.EbyKDot.push before value scalar = ok (r, after)
+⊢ (let (o, iter1) := (some s, rest)
+    match o with
+    | none => do
+      let we ← FIo_Native.fast_pairing.EbyKDot.finish before
+      ok (done (core.result.Result.Ok we))
+    | some s => do
+      let we ← partials.in
+...
+`set_option linter.unusedSimpArgs false`
+NDL_generated/NDL_HighStep.lean:24:68: warning: This simp argument is unused:
+  push
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.weights.high_dot_loop.body, ̲next, ̲readP, ̲readQ,p̵u̵s̵h̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDL_generated/NDL_HighStep.lean:30:52: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.26
+of sort `Type (?u.26 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+NDL_generated/NDL_HighStep.lean:30:68: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NDL_generated/NDL_HighStep.lean:31:28: error: Application type mismatch: The argument
+  ↑before.count
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.37
+of sort `Type (?u.37 + 1)` in the application
+  @InitialSeg ↑before.count
+NDL_generated/NDL_HighStep.lean:31:46: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NDL_generated/NDL_HighStep.lean:36:38: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 4
+where
+ e := ↑↑iter.start
+NDL_generated/NDL_HighStep.lean:47:94: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 4096
+  0 ≤ e ≤ 3
+where
+ e := ↑↑iter.start
+ f := ↑↑before.count
+NDL_generated/NDL_HighStep.lean:51:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  0 ≤ e ≤ 3
+  e - f ≤ -1
+where
+ e := ↑↑iter.start
+ f := ↑↑before.count
+'NDL_HighStep.cut' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NDL_HighStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r93f34117348b4e8b92b34f2bb1e6da82.scope; invocation ID: f75746306087441a84d068d5856a7f73

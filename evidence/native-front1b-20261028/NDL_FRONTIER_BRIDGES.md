@@ -1,6 +1,6 @@
 # NDL frontier bridges — inherited baseline
 
-Frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; headline `AspisR1.RPx_Deployed.deployed`. **Target not yet established.** Nine local bridges (seven inherited), 19 OPEN representatives. No enclosing call edge is closed.
+Frozen `4bb3b3f51e16b4525f1d10336e2b0bcbbd775387`; headline `AspisR1.RPx_Deployed.deployed`. **Target not yet established.** Eight local bridges (seven inherited), 19 OPEN representatives; guard native raw-word correction pending. No enclosing call edge is closed.
 
 CLOSED-local retains the exact packet domain and P6/D188 physical/tool interpretation. Incoming callers must establish the domain on the SAME inputs. No cryptographic premise, runtime trust item, metric, privacy condition or transaction design was removed or weakened.
 
@@ -33,12 +33,8 @@ CLOSED-local retains the exact packet domain and P6/D188 physical/tool interpret
 | `crates/aspis-r1-cost-probe/src/weights.rs::high_dot` | 11 | OPEN | FIo_Native.weights.high_dot / frozen four-push loop; Need one actual EbyKDot::push iteration on arbitrary state, canonical operands, Result/error path and SAME raw accumulator carrier, followed by finish association. Raw-dot emitted law and field laws exist; whole four-push execution is not a substitute for the required iteration cut. Needs Kani. |
 | `crates/aspis-r1-cost-probe/src/weights.rs::Weights::box_from_parts` | 10 | OPEN | NDD_BoxModel.parts; The model constructor returns a record and erases Box allocation/ownership. Need native arbitrary-field window transport plus allocation/ownership/frame/cleanup interpretation; scalar/fixed-array contract permission does not automatically admit a Box return. The exact model constructor fact is proved. Needs native/allocator evidence. |
 | `crates/aspis-r1-cost-probe/src/weights.rs::double` | 10 | OPEN | NDD_DoubleModel.observed; NDD_ReferenceLinear; Correct QM31 model performs one product, frozen source performs two SAME-input products. Native opaque multiplication observations, deterministic value association and canonical domains remain missing. M31-named overloads are not this function. Checked-to-wrapping recombination and conditional reference/model theorem are proved. Needs Kani. |
-| `crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard` | 10 | CLOSED-local | Arbitrary complete records and folds; NDL_GuardAssociation.cohort/first_comparison/second_comparison (L004) derives every SAME-record comparison from emitted definitions. Reuses NDD_K039/K040 and E005; enclosing callers/physical interpretation remain OPEN. |
+| `crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard` | 10 | CLOSED-local | All raw words, variants and folds; actual contract NDL_K032, failing control NDL_K033; extracted reference NDL_E004; NDL_GuardRawModel.cohort, NDL_L058. Supersedes incomplete Boolean-cut packet. |
 
 Support callee contract: M31::reduce_u64, K062/K063, natural two-fold reference; NDD_ChannelPrimitives.reduce. It was used as a verified stub only in excluded packing attempts.
 
-No remaining row can close by spending unused Lean attempts alone: each row above states the missing native/caller/cut/allocator association. Model-only induction, constructor facts and conditional comparison/decoder cuts are explicitly partial. Kani 80/80 is exhausted; Lean-only work continued afterward.
-
-The NCZ full validator requires an explicit evidence snapshot refresh. The own ledger copy is a proposed overlay, not an accepted authoritative rewrite. See NDD_NCZ_FINAL.log and NDD_OVERLAY_VALIDATION.json.
-
-NDL continuation: no new credit at initialization. All NDD citations are imported, not re-proved.
+NDL continuation remains active. Current use: 33 Kani, 58 Lean, 4 extraction. Native contract semantic transport is P6/D188 trust reclassification. All enclosing call edges remain OPEN.

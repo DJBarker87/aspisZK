@@ -8,8 +8,14 @@ S=B/'NDL_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 (S/'src/lib.rs').write_bytes((B/'NDL_reference.rs').read_bytes())
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 roots=['crate::range_ref'] if not os.environ.get('NDL_FIELD_EXTRACT') else ['crate::decode_ref','crate::field_ref']
+if os.environ.get('NDL_SCALAR_EXTRACT'):roots=['crate::add_word_ref','crate::add8_ref']
 namespace='NDL_Reference' if not os.environ.get('NDL_FIELD_EXTRACT') else 'NDL_FieldRef'
+if os.environ.get('NDL_SCALAR_EXTRACT'):namespace='NDL_ScalarRef'
 dest=B/('NDL_extracted' if not os.environ.get('NDL_FIELD_EXTRACT') else 'NDL_field_extracted')
+if os.environ.get('NDL_SCALAR_EXTRACT'):dest=B/'NDL_scalar_extracted'
+if os.environ.get('NDL_EXTRACT_CONFIG'):
+ cfg=json.loads(os.environ['NDL_EXTRACT_CONFIG']);namespace=cfg['namespace'];assert namespace.startswith('NDL_')
+ roots=['crate::'+n for n in cfg['roots']];dest=B/(namespace+'_extracted')
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]
 cmd+=['--dest-file',str(B/'NDL_reference.llbc'),'--','--manifest-path',str(S/'Cargo.toml'),'--offline','--release','--lib','--jobs','1']
