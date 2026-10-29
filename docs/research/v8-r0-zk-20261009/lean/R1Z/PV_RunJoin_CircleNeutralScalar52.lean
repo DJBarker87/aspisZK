@@ -26,7 +26,7 @@ theorem checked_add (a b : U32) (h : a.val+b.val < 2^32) :
     a + b = ok (U32.wrapping_add a b) := by
   change a.val+b.val < 4294967296 at h
   obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U32.add_spec (x := a) (y := b)
-    (by simp only [U32.max,U32.numBits]; omega))
+    (by simp only [U32.max,U32.numBits,UScalarTy.numBits]; omega))
   have he : z = U32.wrapping_add a b := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_add_val_eq]
