@@ -102,3 +102,44 @@ fields and three TrustItems, guards, collision/public-address conditions,
 observer/simulator/coupling/events, failure independence and side-channel
 scope are retained. Frozen Rust/client source equals 82566acdfb. No key was
 accessed, destroyed or cleaned up; no shared sources/caches were overwritten.
+
+## Final validation and exact remaining failure
+
+**100 attempts exhausted: 70 accepted, 30 rejected; zero Kani.** All 67
+accepted non-audit modules and their 135 printed declarations are covered by
+three separate audit closures, all accepted under the same frozen source
+revision **b5a61a56056f727b7444a173b5c623faf8ae880f**.
+All printed axiom sets are subsets of propext, Classical.choice and Quot.sound.
+Peak RSS over all attempts: **4,514,455,552 bytes**; all swap counts zero.
+
+| ID | Exact target | Exit | Scope wall s | Peak RSS bytes | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 66997 | R1Z.PV_RunJoin_NeutralAudit54 | 0 | 1.49 | 3917062144 | 0 |
+| 66998 | R1Z.PV_RunJoin_ModelAudit54 | 0 | 1.66 | 4476469248 | 0 |
+| 66999 | R1Z.PV_RunJoin_SourceAudit54 | 0 | 1.56 | 4186587136 | 0 |
+
+`CircleParameterModel54.complete` passes at 66995: actual byte parameter,
+canonicality and the exact retained security-model parameter value.
+`CircleMapModel54.complete` at 66996 is **rejected and uncredited**. Its direct
+QC-to-native-Canonical assignment has incompatible conjunction grouping;
+the next proof must explicitly project/reassociate the four coordinates.
+No checked source counterexample was found. Two never-compiled dependent
+drafts are retained under `uncompiled-drafts/`; their sources are not active
+Lean modules. The last failed source stays retained but is excluded from
+all audits. Six old historical staged modules remain excluded too.
+
+Original per-module outputs and time logs for all 100 attempts are
+hash-verified in `original-module-logs.json.xz`; all 30 rejected sources are
+hash-verified Git blobs recorded by `retained-failed-sources.json`. The
+admission audit checks atomic allowed:true/zero-exit launch and cooldown for
+each attempt. The documented 66939 unchanged-source violation remains a
+separate workflow error; it is not concealed by the compliant resource
+admission checks. No rejected source or printed sorryAx receives credit.
+
+Final read-only cache preflight checks **3,514** source/object pairs,
+**7,778** direct dependency fingerprints, **5,673** external objects and
+**5,438** IR companions, all matching. The pinned private workspace/cache
+and toolchain are retained. `audit-closure-check.json`, SUMMARY.json,
+commits.txt, source/endpoint identity checks and OPENING-NEXT.md provide the
+handoff. The budget ends this run with one link discharged, six retained,
+**zero whole ledger rows removed**, and endpoint P/T changes **0/0/0/0**.
