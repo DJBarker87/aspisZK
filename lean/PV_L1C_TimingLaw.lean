@@ -34,7 +34,7 @@ theorem timing_law_iff_tests (real : S → NativeTrace A) (sim : T → NativeTra
  · intro h test
    exact LawTransport.mean_eq_of_equalLaws _ _ test h
  · intro h v
-   exact h (fun k => if k = v then 1 else 0)
+   simpa only [law] using h (fun k => if k = v then 1 else 0)
 
 /-- This formalizes why the required extension is joint and keeps the original
 failure coupling. It does not add a new bad-event allowance. -/

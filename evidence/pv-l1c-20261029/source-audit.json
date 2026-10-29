@@ -1,0 +1,101 @@
+{
+  "source_revision": "d049812b9d1960b512d5d8ae1307db4820508f3a",
+  "files": {
+    "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs": {
+      "revision": "d049812b9d1960b512d5d8ae1307db4820508f3a",
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "git_blob": "3db2162a8dac177da5af21b48fd60c1338578b4b",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "size": 16511
+    },
+    "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs": {
+      "revision": "d049812b9d1960b512d5d8ae1307db4820508f3a",
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "git_blob": "ca4493ae70d4dc637bee62462319db2bc4640a62",
+      "sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "size": 4995
+    },
+    "tools/r1-cost-probe/src/bin/devnet_spend.rs": {
+      "revision": "d049812b9d1960b512d5d8ae1307db4820508f3a",
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "git_blob": "c28b8ab39881fa953d4698442b6abfd424a6977a",
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "size": 2102
+    }
+  },
+  "sites": {
+    "clock_start": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 84,
+      "exact": "let started=Instant::now();"
+    },
+    "clock_finish_and_JSON": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "exact": "\"prove_wall_seconds\":started.elapsed().as_secs_f64()"
+    },
+    "same_result_count": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "exact": "\"attempts\":result.attempts"
+    },
+    "selected_account": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 117,
+      "exact": "accounts.selected(result.attempts)?"
+    },
+    "selected_index_formula": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 47,
+      "exact": "Ok((attempts - 1, self.keys[attempts - 1]))"
+    },
+    "selected_count_validation": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 46,
+      "exact": "ensure!((1..=CAP).contains(&attempts) && attempts == self.entered, \"invalid successful attempt count\");"
+    },
+    "proof_upload_count": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "exact": "\"proof_upload_count\":proof.len().div_ceil(3763)"
+    },
+    "statement_upload_count": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "exact": "\"statement_upload_count\":1"
+    },
+    "publication_same_count": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 126,
+      "exact": "accounts.publication(result.attempts,&mut a,pk(q,\"public_account\"),pk(q,\"verifier_checkpoint\"))?"
+    },
+    "proof_account_route": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 116,
+      "exact": "RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k))"
+    },
+    "stdout": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 15,
+      "exact": "println!(\"{}\",plan::run(&q)?)"
+    },
+    "durable_store": {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 115,
+      "exact": "DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?"
+    }
+  },
+  "evidence_class": "mechanically checked source spellings and ordering only; no structural binding or compiled-artifact claim",
+  "timing_dependency": "D359 owner timing-evidence decision for throttled-host measurements, pending; not assumed",
+  "runtime_boundary": "rdea-1 allocator success/failure/prefix on public request words; native argument provenance, ownership/address observations and cross-channel coupling remain open",
+  "compiler_boundary": "V370, D381/D386 pending",
+  "deployed_configuration_required_but_not_executed": {
+    "toolchain": "1.94.1",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "profile": "release",
+    "lockfile": "deployed Cargo.lock"
+  }
+}
