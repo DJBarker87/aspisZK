@@ -1,0 +1,108 @@
+START 69934 R1Z.PV_RunJoin_NodeTailModel60
+DONE 69934 R1Z.PV_RunJoin_NodeTailModel60 exit 1 wall 2.98 RSS 4474404864
+
+            (List.map (fun x => UInt8.ofNat ↑x) ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0) with
+    | Except.ok b => some b
+    | Except.error a => none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:23:45: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  c - e ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - 2*c ≥ 0
+where
+ a := ↑Usize.max
+ b := ↑out.length
+ c := ↑↑cap
+ d := ↑nodes.length
+ e := ↑(↑nodes).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:20:2: error: unsolved goals
+case neg
+out nodes : alloc.vec.Vec U8
+cap : Usize
+room : out.length + 2 * ↑cap ≤ Usize.max
+fits : ¬nodes.length ≤ ↑cap
+hnot : ¬nodes.len ≤ cap
+⊢ none =
+    match do
+      let nodes ← Except.ok (List.map (fun x => UInt8.ofNat ↑x) ↑nodes)
+      if List.length nodes > ↑cap then Except.error ProverCommitPublish43.Error.parse
+        else
+          Except.ok
+            (List.map (fun x => UInt8.ofNat ↑x) ↑out ++ nodes ++ List.replicate (↑cap - List.length nodes) 0) with
+    | Except.ok b => some b
+    | Except.error a => none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:15:6: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵s̵h̵o̵w̵ ̵¬̵n̵o̵d̵e̵s̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵>̵c̵a̵p̵.̵v̵a̵l̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲b̲y̲t̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲n̲o̲d̲e̲s̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ ̲>̲ ̲c̲a̲p̲.̲v̲a̲l̲ from (by exact Nat.not_lt.mpr fits), i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:15:24: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵s̵h̵o̵w̵ ̵¬̵n̵o̵d̵e̵s̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵>̵c̵a̵p̵.̵v̵a̵l̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲n̲o̲d̲e̲s̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ ̲>̲ ̲c̲a̲p̲.̲v̲a̲l̲ from (by exact Nat.not_lt.mpr fits), i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:15:40: warning: This simp argument is unused:
+  show ¬nodes.val.length > cap.val from (by exact Nat.not_lt.mpr fits)
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵s̵h̵o̵w̵ ̵¬̵n̵o̵d̵e̵s̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵>̵c̵a̵p̵.̵v̵a̵l̵ ̵f̵r̵o̵m̵ ̵(̵b̵y̵ ̵e̵x̵a̵c̵t̵ ̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵f̵i̵t̵s̵)̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:16:6: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵s̵h̵o̵w̵ ̵¬̵n̵o̵d̵e̵s̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵>̵c̵a̵p̵.̵v̵a̵l̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲s̲h̲o̲w̲ ̲¬̲n̲o̲d̲e̲s̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ ̲>̲ ̲c̲a̲p̲.̲v̲a̲l̲ from (by exact Nat.not_lt.mpr fits),
+        i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:22:51: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_NodeTail41.finish, ̲massert, ̲hnot, ̲if_false, ̲bind_tc_fail,
+  ̵  ̵ ̵ ̵ ̵ ̵resultBytes,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ProverCommitPublish43.appendSlot,E̵x̵c̵e̵p̵t̵.̵ ̲bi̵n̵d̵,̵b̵ytes, ̲List.length_map,
+        show nodes.val.length ̲> ̲cap.val from (by omega), ̲if_true, ̲exceptBytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:22:69: warning: This simp argument is unused:
+  List.length_map
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_NodeTail41.finish, ̲massert, ̲hnot, ̲if_false, ̲bind_tc_fail,
+  ̵  ̵ ̵ ̵ ̵ ̵resultBytes,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ProverCommitPublish43.appendSlot, ̲Except.bind, ̲bytes,L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵
+        show nodes.val.length ̲> ̲cap.val from (by omega), ̲if_true, ̲exceptBytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:23:52: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_NodeTail41.finish, ̲massert, ̲hnot, ̲if_false, ̲bind_tc_fail,
+  ̵  ̵ ̵ ̵ ̵ ̵resultBytes,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ProverCommitPublish43.appendSlot, ̲Except.bind, ̲bytes, ̲List.length_map,
+        show nodes.val.length ̲> ̲cap.val from (by omega),i̵f̵_̵t̵r̵u̵ ̲e,̵e̵xceptBytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NodeTailModel60.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

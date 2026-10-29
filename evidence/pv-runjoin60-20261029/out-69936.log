@@ -1,0 +1,40 @@
+START 69936 R1Z.PV_RunJoin_NodeTailModel60
+DONE 69936 R1Z.PV_RunJoin_NodeTailModel60 exit 1 wall 4.92 RSS 4473204736
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:21:2: error: unsolved goals
+case neg
+out nodes : alloc.vec.Vec U8
+cap : Usize
+room : (↑out).length + 2 * ↑cap ≤ Usize.max
+fits : ¬(↑nodes).length ≤ ↑cap
+hnot : ¬nodes.len ≤ cap
+⊢ (match
+      Std.bind
+        (Std.bind (fail Error.assertionFailure) fun _ =>
+          Std.bind (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out nodes.deref) fun out1 =>
+            alloc.vec.Vec.resize core.clone.CloneU8 out1 ((out1.len.wrapping_add cap).wrapping_sub nodes.len) 0#u8)
+        fun next => ok (core.result.Result.Ok next) with
+    | ok (core.result.Result.Ok v) => some (List.map (fun x => UInt8.ofNat ↑x) ↑v)
+    | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:15:15: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵p̵p̵e̵n̵d̵S̵l̵o̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵b̵y̵t̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵m̵a̵p̵,̵s̵h̵o̵w̵ ̵¬̵n̵o̵d̵e̵s̵.̵v̵a̵l̵.̵l̵e̵n̵g̵t̵h̵>̵c̵a̵p̵.̵v̵a̵l̵[̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲p̲p̲e̲n̲d̲S̲l̲o̲t̲,̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲b̲y̲t̲e̲s̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲m̲a̲p̲,̲ ̲s̲h̲o̲w̲ ̲¬̲n̲o̲d̲e̲s̲.̲v̲a̲l̲.̲l̲e̲n̲g̲t̲h̲ ̲>̲ ̲c̲a̲p̲.̲v̲a̲l̲ from (by exact Nat.not_lt.mpr fits),
+        i̵f̵_̵f̵a̵l̵s̵e̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeTailModel60.lean:22:66: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_NodeTail41.finish, ̲massert, ̲hnot, ̲if_false,b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵resultBytes,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ProverCommitPublish43.appendSlot, ̲Bind.bind, ̲Except.bind, ̲bytes, ̲List.length_map,
+        show nodes.val.length ̲> ̲cap.val from (by omega), ̲if_true, ̲exceptBytes]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NodeTailModel60.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

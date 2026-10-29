@@ -1,0 +1,142 @@
+START 69952 R1Z.PV_RunJoin_CaptureFactorRelation60
+DONE 69952 R1Z.PV_RunJoin_CaptureFactorRelation60 exit 1 wall 4.69 RSS 4485451776
+or) residual
+        ok (r1, store)
+
+case ok.Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+A T : Type
+f : Phase → Result (core.result.Result A verifier.Error)
+p : Phase
+audit : prover.MaskedFixtureAudit
+store : T
+a✝ : A
+hf : f p = ok (core.result.Result.Ok a✝)
+⊢ Rel f
+    (do
+      let r ← ok (core.result.Result.Ok a✝)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue value =>
+          ok
+            (core.result.Result.Ok
+                (value,
+                  { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                    mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                    d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                    h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+              store)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (A × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+          ok (r1, store))
+    do
+    let r ← capture p
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value =>
+        ok
+          (core.result.Result.Ok
+              (value,
+                { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                  mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                  d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                  h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+            store)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Phase × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r1, store)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CaptureFactorRelation60.lean:60:34: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r ← ok (core.result.Result.Err a✝)
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value =>
+        ok
+          (core.result.Result.Ok
+              (value,
+                { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                  mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                  d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                  h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+            store)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (A × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r1, store)
+is not definitionally equal to the right-hand side
+  do
+    let r ← capture p
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value =>
+        ok
+          (core.result.Result.Ok
+              (value,
+                { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                  mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                  d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                  h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+            store)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Phase × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r1, store)
+
+case ok.Err
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+A T : Type
+f : Phase → Result (core.result.Result A verifier.Error)
+p : Phase
+audit : prover.MaskedFixtureAudit
+store : T
+a✝ : verifier.Error
+hf : f p = ok (core.result.Result.Err a✝)
+⊢ Rel f
+    (do
+      let r ← ok (core.result.Result.Err a✝)
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue value =>
+          ok
+            (core.result.Result.Ok
+                (value,
+                  { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                    mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                    d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                    h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+              store)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (A × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+          ok (r1, store))
+    do
+    let r ← capture p
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue value =>
+        ok
+          (core.result.Result.Ok
+              (value,
+                { c1_columns_inactive_balanced := audit.c1_columns_inactive_balanced,
+                  mask_only_columns_inactive_balanced := audit.mask_only_columns_inactive_balanced,
+                  d_inactive_balanced := audit.d_inactive_balanced, g_inactive_balanced := audit.g_inactive_balanced,
+                  h1_padding_inactive_balanced := audit.h1_padding_inactive_balanced, h1_total_balanced := true }),
+            store)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Phase × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
+        ok (r1, store)
+'R1Z.PV_RunJoin_CaptureFactorRelation60.same_bind' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CaptureFactorRelation60.error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CaptureFactorRelation60.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

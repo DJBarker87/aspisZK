@@ -1,0 +1,123 @@
+START 69982 R1Z.PV_RunJoin_NodeSequence60
+DONE 69982 R1Z.PV_RunJoin_NodeSequence60 exit 1 wall 5.25 RSS 4390162432
+r/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:41:16: error: unsolved goals
+case cons.fail.error
+ss : List Input
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 2 * capacities ss ≤ Usize.max →
+      resultBytes (run ss out) = exceptBytes (ProverCommitPublish43.slots (models ss) (bytes ↑out))
+out : alloc.vec.Vec U8
+payload : Payload
+cap : Usize
+room : out.length + 2 * (↑cap + capacities ss) ≤ Usize.max
+room1 : out.length + 2 * ↑cap ≤ Usize.max
+equivalent :
+  resultBytes (PV_RunJoin_NodePayloadModel60.run out payload cap) =
+    exceptBytes (ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap))
+e✝ : Error
+hr : PV_RunJoin_NodePayloadModel60.run out payload cap = fail e✝
+e : ProverCommitPublish43.Error
+hm : ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap) = Except.error e
+⊢ (match
+      Std.bind (fail e✝) fun status =>
+        match status with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok next => run ss next with
+    | ok (core.result.Result.Ok v) => some (bytes ↑v)
+    | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:45:16: error: unsolved goals
+case cons.div.error
+ss : List Input
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 2 * capacities ss ≤ Usize.max →
+      resultBytes (run ss out) = exceptBytes (ProverCommitPublish43.slots (models ss) (bytes ↑out))
+out : alloc.vec.Vec U8
+payload : Payload
+cap : Usize
+room : out.length + 2 * (↑cap + capacities ss) ≤ Usize.max
+room1 : out.length + 2 * ↑cap ≤ Usize.max
+equivalent :
+  resultBytes (PV_RunJoin_NodePayloadModel60.run out payload cap) =
+    exceptBytes (ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap))
+hr : PV_RunJoin_NodePayloadModel60.run out payload cap = div
+e : ProverCommitPublish43.Error
+hm : ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap) = Except.error e
+⊢ (match
+      Std.bind div fun status =>
+        match status with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok next => run ss next with
+    | ok (core.result.Result.Ok v) => some (bytes ↑v)
+    | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:51:18: error: unsolved goals
+case cons.ok.Err.error
+ss : List Input
+ih :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + 2 * capacities ss ≤ Usize.max →
+      resultBytes (run ss out) = exceptBytes (ProverCommitPublish43.slots (models ss) (bytes ↑out))
+out : alloc.vec.Vec U8
+payload : Payload
+cap : Usize
+room : out.length + 2 * (↑cap + capacities ss) ≤ Usize.max
+room1 : out.length + 2 * ↑cap ≤ Usize.max
+equivalent :
+  resultBytes (PV_RunJoin_NodePayloadModel60.run out payload cap) =
+    exceptBytes (ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap))
+e✝ : verifier.Error
+hr : PV_RunJoin_NodePayloadModel60.run out payload cap = ok (core.result.Result.Err e✝)
+e : ProverCommitPublish43.Error
+hm : ProverCommitPublish43.appendSlot (bytes ↑out) (PV_RunJoin_NodePayloadModel60.model payload ↑cap) = Except.error e
+⊢ (match
+      Std.bind (ok (core.result.Result.Err e✝)) fun status =>
+        match status with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok next => run ss next with
+    | ok (core.result.Result.Ok v) => some (bytes ↑v)
+    | x => none) =
+    none
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:69:10: error: Type mismatch: After simplification, term
+  tail
+ has type
+  @Eq (Option Bytes) (resultBytes (run ss next))
+    (exceptBytes
+      (ProverCommitPublish43.slots (List.map (fun s => PV_RunJoin_NodePayloadModel60.model s.1 ↑s.2) ss) (bytes ↑next)))
+but is expected to have type
+  @Eq (Option Bytes)
+    (resultBytes
+      (Std.bind (ok (core.result.Result.Ok next)) fun status =>
+        match status with
+        | core.result.Result.Err e => ok (core.result.Result.Err e)
+        | core.result.Result.Ok next => run ss next))
+    (exceptBytes
+      (ProverCommitPublish43.slots (List.map (fun s => PV_RunJoin_NodePayloadModel60.model s.1 ↑s.2) ss) (bytes ↑next)))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:41:37: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵m̵o̵d̵e̵l̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵s̵l̵o̵t̵s̵,̵h̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵[̲r̲u̲n̲,̲ ̲h̲r̲,̲ ̲m̲o̲d̲e̲l̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲s̲l̲o̲t̲s̲,̲ ̲h̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:45:37: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵m̵o̵d̵e̵l̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵s̵l̵o̵t̵s̵,̵h̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵[̲r̲u̲n̲,̲ ̲h̲r̲,̲ ̲m̲o̲d̲e̲l̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲s̲l̲o̲t̲s̲,̲ ̲h̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NodeSequence60.lean:51:39: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵u̵n̵,̵h̵r̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵o̵d̵e̵l̵s̵,̵L̵i̵s̵t̵.̵m̵a̵p̵_̵c̵o̵n̵s̵,̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵s̵l̵o̵t̵s̵,̵h̵m̵,̵B̵i̵n̵d̵.̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵r̵e̵s̵u̵l̵t̵B̵y̵t̵e̵s̵,̵e̵x̵c̵e̵p̵t̵B̵y̵t̵e̵s̵]̵[̲r̲u̲n̲,̲ ̲h̲r̲,̲ ̲m̲o̲d̲e̲l̲s̲,̲ ̲L̲i̲s̲t̲.̲m̲a̲p̲_̲c̲o̲n̲s̲,̲ ̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲s̲l̲o̲t̲s̲,̲ ̲h̲m̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲i̲n̲d̲.̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲r̲e̲s̲u̲l̲t̲B̲y̲t̲e̲s̲,̲ ̲e̲x̲c̲e̲p̲t̲B̲y̲t̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NodeSequence60.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
