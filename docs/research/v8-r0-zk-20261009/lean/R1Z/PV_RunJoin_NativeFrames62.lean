@@ -10,7 +10,7 @@ attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 
 theorem op32 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    @ExternalFuns.op32 (types base) (opsNative base heap box ops) = ops.op32 := by
+    @ExternalFuns.op32 (types base) (opsNative base heap box ops) = @ExternalFuns.op32 (types base) ops := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_32]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -20,7 +20,7 @@ theorem op32 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
 
 theorem op78 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    @ExternalFuns.op78 (types base) (opsNative base heap box ops) = (residual base ops).op78 := by
+    @ExternalFuns.op78 (types base) (opsNative base heap box ops) = @ExternalFuns.op78 (types base) (residual base ops) := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_78]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -30,7 +30,7 @@ theorem op78 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
 
 theorem op79 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    @ExternalFuns.op79 (types base) (opsNative base heap box ops) = (residual base ops).op79 := by
+    @ExternalFuns.op79 (types base) (opsNative base heap box ops) = @ExternalFuns.op79 (types base) (residual base ops) := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_79]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -170,7 +170,7 @@ theorem op254 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
 
 theorem op257 (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    @ExternalFuns.op257 (types base) (opsNative base heap box ops) = ops.op257 := by
+    @ExternalFuns.op257 (types base) (opsNative base heap box ops) = @ExternalFuns.op257 (types base) ops := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_257]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
