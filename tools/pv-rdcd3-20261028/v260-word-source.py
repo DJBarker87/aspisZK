@@ -7,7 +7,7 @@ D=Path('/home/dombarker/project-offloads/codex-pv-rdcd3-20261028')
 a=runpy.run_path(str(D/'range-source.py'))
 span,tokens,root,sha=a['span'],a['tokens'],a['root'],a['sha']
 checks=[]
-for op,law in [('add','add32_binding/add64_binding'),('sub','sub32_binding'),('mul','mul64_binding')]:
+for op,law in [('add','add32_binding/add64_binding'),('sub','sub32_binding; WordAll194.sub_binding/sub64_binding/subUsize_binding'),('mul','mul64_binding')]:
  name='wrapping_'+op
  expected=f'pub const fn {name}(self, rhs: Self) -> Self {{ intrinsics::{name}(self, rhs) }}'
  checks.append((name,expected,'R1Z.PV_RDCD3_Word194.'+law))
