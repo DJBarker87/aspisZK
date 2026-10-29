@@ -183,3 +183,12 @@ peak2,658,004KiB,swap0). Both use only standard axioms.97/100 Lean attempts
 are charged (83 pass,14 fail); audit IDs60697–60699 remain. The optional
 Horner/whole-function totality and parser drafts are uncompiled, excluded and
 uncredited; see UNCOMPILED-DRAFTS.json.
+
+Final validation60697/60698/60699 all passes: combined491-target axiom audit,
+complete-statement focused replay of V260/V265/V217, and exactly one frozen
+manifest of this job’s accepted changed closure. All standard axioms only.
+Budget100/100 Lean(86 pass,14 fail),8 native before final coherence,0 Kani.
+Re-read appended common rulings h5-double-prime(D452) and b3p6-1(D455): no EJR
+proof-text fallback is used; no token identity alone is promoted into native
+binding or an extractor-reproduction claim. Supporting common Lean-field body
+identity is separate from the own-1 structural native association.
