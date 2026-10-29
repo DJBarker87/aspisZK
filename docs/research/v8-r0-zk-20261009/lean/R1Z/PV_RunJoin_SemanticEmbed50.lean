@@ -27,8 +27,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [field]
   unfold ProverRwDictionaryTower.wEmbed
   have hq : ProverRwDictionaryTower.toQ q=ProverCommitNativeQ48.source (PV_RunJoin_SemanticScalar50.raw q) := by
-    rw [←PV_RunJoin_SemanticScalar50.source q,ProverRwDictionaryTower.native_q_roundtrip]
-  rw [hq,(ProverCommitNativeOps47.from_qm31 (PV_RunJoin_SemanticScalar50.raw q)).1]
+    cases q with | mk a b => cases a;cases b;rfl
+  rw [hq]
+  unfold ProverCommitNativeQ48.source
+  rw [(ProverCommitNativeOps47.from_qm31 (PV_RunJoin_SemanticScalar50.raw q)).1]
   rfl
 #print axioms candidate
 #print axioms field
