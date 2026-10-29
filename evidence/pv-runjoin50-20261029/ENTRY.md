@@ -1,0 +1,1 @@
+Runjoin50: same worktree and branch. Requested base 3b72078039; actual entry e8fb711bc52fad638e0b7d85d86a9170791210e0 adds only D437 LOG. IDs 63600–63699, audits 63697–63699. 100 Lean, zero Kani. Step (4) prohibited; PV_RJDec_ and PV_OWN_ read-only. Existing focused runner copied with evidence path, unit name and ID-range substitutions only.
