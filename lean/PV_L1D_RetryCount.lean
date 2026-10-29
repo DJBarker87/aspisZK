@@ -20,15 +20,16 @@ theorem successful_callbacks (a : PV_L1D_RetryFold.Attempt S P)
     cases step : a k s with
     | mk es status =>
       have hc : callbacks es = [k] := by simpa only [step] using entries k s
+      simp only [PV_L1D_RetryFold.run,step] at h ⊢
       cases status with
-      | fail e => simp only [PV_L1D_RetryFold.run,step] at h; cases h
-      | div => simp only [PV_L1D_RetryFold.run,step] at h; cases h
+      | fail e => cases h
+      | div => cases h
       | ok pair =>
         rcases pair with ⟨out,next⟩
         cases out with
         | done proof =>
           have hp : (Published.mk proof (k+1) : Published P) = p := by
-            change (.ok (.done ⟨proof,k+1⟩,next) : Result _) = .ok (.done p,after) at h
+            change (.ok (.done ⟨proof,k+1⟩,next) : Result (R1Z.ProverCommitRetry34.Step (Published P) × S)) = .ok (.done p,after) at h
             cases h
             rfl
           cases hp
@@ -36,7 +37,7 @@ theorem successful_callbacks (a : PV_L1D_RetryFold.Attempt S P)
           rw [callbacks_append,hc]
           rfl
         | stop e =>
-          change (.ok (.stop e,next) : Result _) = .ok (.done p,after) at h
+          change (.ok (.stop e,next) : Result (R1Z.ProverCommitRetry34.Step (Published P) × S)) = .ok (.done p,after) at h
           cases h
         | retry =>
           change (PV_L1D_RetryFold.run a n (k+1) next).result = .ok (.done p,after) at h
