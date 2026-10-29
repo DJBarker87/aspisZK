@@ -4,6 +4,7 @@ import R1Z.PV_RDCD4_Option194
 import R1Z.PV_RDCD4_Wrappers194
 import R1Z.PV_RDCD4_ArrayMemory194
 import R1Z.PV_RDCD4_MemorySplit194
+import R1Z.PV_RDCD4_ChunkMemory194
 open Aeneas Aeneas.Std Result ProverRwFull
 namespace R1Z.PV_RDCD4_V201
 set_option autoImplicit false
