@@ -26,7 +26,7 @@ theorem specialized_link (n : Usize) : PV_B3P_Link_std_dependency_closure14
  | ne =>
    funext left right
    by_cases h : left.val = right.val <;>
-     simp only [source,source_ne,source_eq,raw_bytes_equal,model,h,
+     simp only [source,source_ne,source_eq,raw_bytes_equal,model,ne_eq,h,
        decide_true,decide_false,bind_tc_ok,Bool.not_true,Bool.not_false,not_true_eq_false,not_false_eq_true]
 theorem no_hidden_array_difference (n : Usize) (left right : Array U8 n)
     (same : source_eq n left right = .ok true) : left = right := by
