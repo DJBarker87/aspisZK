@@ -48,7 +48,7 @@ def plan (isBoolean : Q → Bool) : List (List Q × Nat) → List Bool → List 
   [.allocate bytes 8,.deallocate bytes 8] ++ plan isBoolean rest failures.tail
 
 def calls (wirePoints : List Q → List (List Q)) (i : Input) : List (List Q × Nat) :=
- (wirePoints i.point).flatMap fun p => i.columns.map fun c => (p,c.length)
+ (wirePoints i.point).flatMap fun p => (i.columns.map List.length).map fun n => (p,n)
 
 /-- Ordinary full-coordinate integer-row multilinear evaluation. -/
 def dense {K : Type} [Field K] (decode : Q → K) (zero : Q)
@@ -155,7 +155,7 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  intro laneL laneR cL cR hcL hcR
  rw [ownedL.1 laneL cL hcL,ownedR.1 laneR cR hcR,ownedL.2,ownedR.2]
  have callEq : calls wirePoints left = calls wirePoints right := by
-  simp only [calls,← List.map_map]
+  simp only [calls]
   rw [points,sameLengths]
  rw [callEq]
 
