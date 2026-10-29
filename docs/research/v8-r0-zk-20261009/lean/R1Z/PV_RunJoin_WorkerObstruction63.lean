@@ -8,7 +8,7 @@ namespace R1Z.PV_RunJoin_WorkerObstruction63
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_ResultPost41
 variable [ExternalTypes]
 
-def sparse (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def sparse (ops : ExternalFuns) : ExternalFuns :=
   {ops with op257 := fun {_ _} _ cost _ _ =>
     if cost=0#usize then ok ⟨[],by simp⟩ else .div}
 
@@ -16,7 +16,7 @@ theorem some_input (ops : ExternalFuns) {T F : Type}
     (inst : core.ops.function.Fn F Usize T) (f : F) :
     ∃ out, @host_work.map _ (sparse ops) T F inst 0#usize 0#usize f=ok out := by
   refine ⟨⟨[],by simp⟩,?_⟩
-  simp only [host_work.map,sparse,ite_true]
+  rfl
 
 /-- A successful request exists for every supplied callback, but the actual
 commitment caller uses 200, at which this dictionary diverges for every count. -/
@@ -35,6 +35,7 @@ theorem encode (denied : Denied) (domain : host_commitment.EncodingDomain)
     (variant : transport.Variant) (lanes : Slice Usize) :
     Post (fun status => match status with | .Err _ => True | .Ok _ => False)
       (host_commitment.encode_commitment_words domain messages variant lanes) := by
+  unfold Denied at denied
   unfold host_commitment.encode_commitment_words
   apply PV_RunJoin_ResultPost41.bind
   rintro ⟨reserved,words⟩
