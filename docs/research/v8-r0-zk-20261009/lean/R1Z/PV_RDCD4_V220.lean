@@ -34,6 +34,6 @@ theorem source_reference (poly : Array Q 28#usize) (challenge : Q) :
   unfold source reference
   simp only [PV_RDCD4_RadixLoop.binding,PV_RDCD4_RadixLoop.finite,PV_RDCD4_RadixLoop.step_binding,
     PV_RDCD4_RadixBlock.binding,bind_assoc_eq]
-  simp
+  simp only [PV_RDCD4_LazyChannels.bind_return]
 #print axioms source_reference
 end R1Z.PV_RDCD4_V220
