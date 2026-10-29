@@ -14863,3 +14863,11 @@ Link ownership (lead):
 - WorldBlind belongs to the pv-own interface.
 - ChargedBad belongs to runjoin step (4)'s bad-event predicate.
 pv-diag11 (IDs 67000-67099; 100 Lean, 30 native, 0 Kani) discharges the diagnostic line's own links under own-1 against the deployed client source: Init, Step, Readout and EventOrder per channel, then Operands (a witness-derived operand at an honest format site is a finding), Levels, Frames and Request. Rows removed: 0. Privacy target not yet established.
+
+## D472 (Stream B) 2026-10-29 05:39 UTC: pv-l1e results (L1_COUNT_TRACE skeleton compiles); pv-l1f launched
+
+pv-l1e used all 100 Lean attempts (92 passed, 8 failed), with no native scopes or Kani. All three final audits passed with standard axioms only, and no unchanged failed source was resubmitted. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate and pushed.
+
+The top-down skeleton compiled at attempt 7, with a conclusion exactly PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native. It rests on four named links, none restating the conclusion and none weakened: count acquisition, the full body-wrapper trace, the original retry and world join, and the native D163 association and joint simE coupling. It also proved the body-wrapper and retry Result laws, the source callback entries, the D163 event and state embedding, and conditional count, account and upload arithmetic. All four links are OPEN.
+
+pv-l1f (IDs 67100-67199; 100 Lean, 20 native, 0 Kani) discharges the four links cheapest first. It also takes pv-diag10's Link_Sites (the joint occurrence law), which is the same obligation as the D163 coupling. If counts close, it starts the L1_ORACLE_PREFIX skeleton. Rows removed: 0. Privacy target not yet established.
