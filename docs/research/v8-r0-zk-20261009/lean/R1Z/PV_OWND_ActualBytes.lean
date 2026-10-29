@@ -25,6 +25,7 @@ theorem valid {S X E : Type} (prim : Request → S → Outcome E (Option Nat) ×
  · exact PV_OWND_AllocationBuffer.valid _ 127 owner _ prim w p s h loans
  · change 0+PV_OWND_LegacySource.links.length≤127
    rw [PV_OWND_LegacyCount.count]
+   omega
  · exact PV_OWNB_LinkBound.bounded
  · exact agrees
 attribute [local irreducible] initialized
