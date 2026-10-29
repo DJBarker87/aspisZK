@@ -6,7 +6,7 @@ open Aeneas Aeneas.Std R0Z.FsStatement R1Z.TranscriptR1
 open PV_RunJoin_OpeningSampler50 (block)
 open ProverRwOuterFrames (flatten)
 
-def row (i : Fin 4) : U8 := UScalar.ofNatCore (27+i.val) (by omega)
+def row (i : Fin 4) : U8 := UScalar.ofNatCore (27+i.val) (by change 27+i.val<256;omega)
 
 theorem row_byte (i : Fin 4) : ProverCommitOwnerBytes42.byte (row i)=(27+i.val).toUInt8 := by
   rw [PV_RunJoin_TranscriptByteWords51.byte_salt]
@@ -19,7 +19,7 @@ theorem absorb (r : Rec) (i : Fin 4) (payload : Slice U8) (small : payload.lengt
   rw [PV_RunJoin_TranscriptFrames51.absorb _ _ _ small,
     PV_RunJoin_OpeningByteCodec51.bytes,row_byte,hp]
   have len : payload.length=(r.rest.payload i).length := by
-    rw [←hp,List.length_map];rfl
+    rw [←hp,List.length_map]
   rw [len]
   rfl
 
