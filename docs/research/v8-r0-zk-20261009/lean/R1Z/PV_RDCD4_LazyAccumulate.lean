@@ -26,8 +26,7 @@ theorem binding (sums : Sums) (left right : Q) :
   unfold source reference
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   rintro ⟨l,r⟩ _
-  dsimp only
-  rw [PV_RDCD4_LazyChannels.nine_unroll]
-  simp only [PV_RDCD4_LazyChannels.row_unroll,bind_assoc_eq]
+  simp only [Aeneas.Std.uncurry,PV_RDCD4_LazyChannels.nine_unroll,
+    PV_RDCD4_LazyChannels.row_unroll,bind_assoc_eq]
 #print axioms binding
 end R1Z.PV_RDCD4_LazyAccumulate
