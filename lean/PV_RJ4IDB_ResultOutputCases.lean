@@ -12,7 +12,7 @@ theorem output_disclosed_ok (s : S) (project : S → T)
  disclose (resultOutput (.ok (v,project s))) := by
  cases v <;> rfl
 
-theorem output_disclosed_fail (e : Error) (disclose : ReturnedOutput P → V) :
+theorem output_disclosed_fail (e : Aeneas.Std.Error) (disclose : ReturnedOutput P → V) :
  disclose (resultOutput (S := S) (.fail e)) =
  disclose (resultOutput (S := T) (.fail e)) := rfl
 
@@ -26,7 +26,7 @@ theorem output_oracle_ok (s : S) (project : S → T)
  observe (resultOutput (.ok (v,project s))) := by
  cases v <;> rfl
 
-theorem output_oracle_fail (e : Error) (observe : ReturnedOutput P → O) :
+theorem output_oracle_fail (e : Aeneas.Std.Error) (observe : ReturnedOutput P → O) :
  observe (resultOutput (S := S) (.fail e)) =
  observe (resultOutput (S := T) (.fail e)) := rfl
 
