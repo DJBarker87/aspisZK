@@ -23,7 +23,9 @@ o=H/f'N{n}';o.mkdir(exist_ok=True)
 assert not (o/'receipt.json').exists(), 'never resubmit an executed ID'
 assert sha(PIN/'charon')=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 cmd=['timeout','540','taskset','--cpu-list','0-3','env','PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin','RUSTUP_TOOLCHAIN=nightly-2026-06-01','CARGO_TARGET_DIR='+str(H/'charon-target'),'CARGO_BUILD_JOBS=4','RUSTFLAGS=-C link-arg=-Wl,--threads=4',str(PIN/'charon'),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--opaque','*','--include','crate','--start-from',entry,'--dest-file',str(o/'PV_CX_Entry.llbc'),'--','--manifest-path',str(R/'tools/r1-cost-probe/Cargo.toml'),'--release','--locked','--offline','--bin','devnet_spend','--features','r1p-check,aspis-r1-cost-probe/ct-host-prover','--jobs','4']
-if len(sys.argv)>3:cmd[cmd.index('--dest-file'):cmd.index('--dest-file')]=json.loads(sys.argv[3])
+if len(sys.argv)>3:
+ extra=json.loads(sys.argv[3])
+ cmd[cmd.index('--dest-file'):cmd.index('--dest-file')]=extra
 pins={str(p.relative_to(R)):sha(p) for p in R.rglob('*') if p.is_file()}
 (o/'command.json').write_text(json.dumps(dict(command=cmd,source_revision=rev,input_sha256=pins,tools={str(PIN/p):sha(PIN/p) for p in ['charon','charon-driver']},expected_work='Dependency compilation with release profile, followed by MIR extraction; no arithmetic gate or proof generation',profile=dict(opt_level=3,debug_assertions=False,overflow_checks=False),entry=entry),indent=2)+'\n')
 # Existing read-only admission scanner, followed immediately by launch in this process.

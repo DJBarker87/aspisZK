@@ -12,3 +12,10 @@ input, not an unchanged retry or a cap increase. Release/locked/offline/features
 source and extractor unchanged. Reuses the same job-owned target directory.
 
 All four IDs count against the 30-run ceiling conservatively. No Lean attempts.
+
+N73303 (exit 101, 171.156 s): compiler reaches aspis-statement, then discovers
+another omitted baseline file, refine/diffharness/tests/glue_gen.rs at
+pair_forest_copy_builder.rs:223. N73304 adds the entire small refine tree and
+three explicit research #[path] modules identified by a git grep over frozen
+source. These are unchanged git bytes; source-manifest verification checks all
+staged inputs, not just the executable files. The compile cache is reused.
