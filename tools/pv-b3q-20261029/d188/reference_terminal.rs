@@ -2598,3 +2598,22 @@ pub fn observe(seed:u32){
  let mut packed=core::array::from_fn(|i|crate::q(n+i as u32));let before=packed;add_value_lanes(&mut packed,&openings,&selectors);assert_ne!(packed,before);crate::emit("add_value_lanes",seed,&packed);
  let out=occupancy_lanes_literal(crate::q(seed+41),crate::q(seed+43),M31(seed+5),&state);assert_ne!(out,[QM31::ZERO;12]);crate::emit("occupancy_lanes_literal",seed,&out);
 }
+
+// D500 extra D188 observation roots. Original owned source remains a byte prefix.
+pub fn observe_more(seed:u32){
+ let n=(seed+1)*131;
+ let claims=core::array::from_fn(|r|core::array::from_fn(|c|crate::q(n+r as u32*29+c as u32)));
+ let selected=select227(claims);assert_ne!(selected,[QM31::ZERO;84]);crate::emit("select227",seed,&selected);
+ let flat=core::array::from_fn(|i|crate::q(n+i as u32));
+ let mask_only=qm31_array!(STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS,column,{selected_claim(&flat,0,POOL_V1_PAIR_FOREST_TERMINAL_C1_COLUMNS_V1+column)});
+ assert_ne!(mask_only,[QM31::ZERO;10]);crate::emit("mask_fragment",seed,&mask_only);
+ use aspis_statement::pool_v1::pair_tree_profile::{PoolV1PairLiveSnapshotV1,PoolV1PairLatePublicStatementV1};
+ use aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifiedAfterstateV1;
+ let digest=[M31(0);8];let frontier=[digest;20];
+ let transition=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:digest,frontier},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:0,next_root:digest,next_frontier:frontier}};
+ for (variant,label) in [(CompiledVariant::PrivateTransfer,"private"),(CompiledVariant::Withdrawal,"withdrawal")] {
+  let p=SemanticPublic{variant,pool:[0;32],deployment_domain:[0;32],anchor:digest,nullifier:digest,asset_id:M31(0),recipient:None,change:digest,withdrawal_amount:None,transition};
+  let (initial,absorption)=semantic_initial_and_absorption(p,&crate::openings(n),&crate::selectors(n));assert_ne!(initial,[QM31::ZERO;16]);assert_ne!(absorption,[QM31::ZERO;16]);
+  let values:Vec<QM31>=initial.into_iter().chain(absorption).collect();crate::emit(&format!("semantic_initial_{label}"),seed,&values);
+ }
+}
