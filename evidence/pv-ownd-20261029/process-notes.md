@@ -1,0 +1,1 @@
+63200: Lean started and could not create its output file because the task input wrapper had not created lean-objects/R1Z. Charged failure, no proof credit. Corrected this task-owned output-directory input, without changing shared tools or caps; 63201 recompiles the unchanged smallest source with that environment repair.

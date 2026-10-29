@@ -12,7 +12,7 @@ assert b==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
 assert not (E/f'lean-{n}/receipt.json').exists()
 meta=dict(attempt=n,module=m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_path=str(p.relative_to(R)),source_sha256=hashlib.sha256(b).hexdigest(),imports=re.findall(r'^import (\S+)',b.decode(),re.M),authority='h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild')
 # Upload is not a compiler launch. Scope admission and barrier are performed after upload.
-r=subprocess.run(['ssh',H,'python3','-'],input="from pathlib import Path\nimport base64\np=Path("+repr(D+'/lean-sources/'+m+'.lean')+");p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(base64.b64decode("+repr(__import__('base64').b64encode(b).decode())+"))\n",text=True);assert r.returncode==0
+r=subprocess.run(['ssh',H,'python3','-'],input="from pathlib import Path\nimport base64\np=Path("+repr(D+'/lean-sources/'+m+'.lean')+");p.parent.mkdir(parents=True,exist_ok=True);Path('/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z').mkdir(parents=True,exist_ok=True);p.write_bytes(base64.b64decode("+repr(__import__('base64').b64encode(b).decode())+"))\n",text=True);assert r.returncode==0
 meta['dependency_objects']={}
 for dep in meta['imports']:
  if dep.startswith('R1Z.'):
