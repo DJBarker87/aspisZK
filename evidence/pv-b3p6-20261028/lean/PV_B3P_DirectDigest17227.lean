@@ -1,5 +1,6 @@
 import PV_B3P_DirectRange17227
 import PV_B3P_NativeDigestStore15227
+import PV_B3P_DigestBranch227
 namespace PV_B3P_227
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option autoImplicit false
@@ -87,7 +88,8 @@ theorem digest_body17 (selector : aspis_core.field.QM31)
     simp only [host_terminal.add_digest_binding_loop.body,range_next_extraction17,h,
       if_true,if_false,bind_tc_ok,digest_store_cell11,reference_terminal.tweak227,
       host_terminal.lift_m31,reference_terminal.lift_m31,
-      aspis_statement.poseidon2.DIGEST_ELEMS,PV_B3P_Ordered227.bind_assoc]
+      aspis_statement.poseidon2.DIGEST_ELEMS,PV_B3P_Ordered227.bind_assoc,
+      PV_B3P_Success227.digest_if_bind]
 
 theorem digest_loop_plan17 (selector : aspis_core.field.QM31)
     (opened : Array aspis_core.field.QM31 16#usize) (start : Usize)
@@ -107,6 +109,7 @@ theorem digest_loop_plan17 (selector : aspis_core.field.QM31)
     have inside : cursor < 8#usize := by scalar_tac
     have inc := PV_B3P_Offset226V3.add_value cursor 1#usize
       (PV_B3P_Binding13227.range_increment_safe13 cursor 8#usize inside)
+    change (Usize.wrapping_add cursor 1#usize).val = cursor.val+1 at inc
     have rest : (Usize.wrapping_add cursor 1#usize).val+n=8 := by omega
     unfold host_terminal.add_digest_binding_loop
     rw [loop.eq_1]
