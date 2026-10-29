@@ -336,5 +336,127 @@
       "internal_linear_lazy input",
       "external_linear_packed input"
     ]
+  },
+  "sum_high": {
+    "domain": "exact three actual private caller range arrays, symbolic all high/low field values",
+    "callsites": [
+      [
+        250,
+        "block: sum_high(selectors, &[0..57]),"
+      ],
+      [
+        283,
+        "let nodes = sum_high(selectors, &[4..25, 33..57]);"
+      ],
+      [
+        436,
+        "let path_selector = sum_high(selectors, &[57..63]).mul("
+      ]
+    ],
+    "check": "all lexical occurrences accounted for; no escaping function value or other caller; actual caller ranges exhausted by sum_high_actual_calls",
+    "status": "DISCHARGED static caller-domain check"
+  },
+  "add_digest_binding": {
+    "domain": "symbolic output, selector, openings and digest values; start<=8; both tweak values",
+    "callsites": [
+      {
+        "line": 654,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(56 * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&public.anchor",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 662,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(26 * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&public.nullifier",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 671,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(29 * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&recipient",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 680,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(32 * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&public.change",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 694,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(block * 16)",
+          "&openings.z",
+          "RATE",
+          "&empty_root(level)",
+          "true"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 703,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(block * 16 + 12)",
+          "&openings.z",
+          "0",
+          "&source.frontier[level]",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 713,
+        "arguments": [
+          "&mut digests",
+          "selectors.row(53 * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&after.next_root",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      },
+      {
+        "line": 723,
+        "arguments": [
+          "&mut digests",
+          "selectors.row((33 + carry) * 16 + 11)",
+          "&openings.z",
+          "0",
+          "&after.next_frontier[carry]",
+          "false"
+        ],
+        "start_bound": "0 or RATE=8 <=8"
+      }
+    ],
+    "check": "every private direct call uses 0 or RATE=8; fixed Digest=8 and opening array=16; no narrowing of field limbs",
+    "status": "DISCHARGED static start-domain check"
   }
 }
