@@ -48,7 +48,7 @@ def neutral(d):
   d=re.sub(r'\.'+a+r'\b','.'+b,d)
   d=re.sub(r'\b'+a+r'\s*:=',b+' :=',d)
  return d
-body='abbrev field.CM31 := U32 × U32\nabbrev field.QM31 := field.CM31 × field.CM31\n'
+body='abbrev field.M31 := U32\nabbrev field.CM31 := U32 × U32\nabbrev field.QM31 := field.CM31 × field.CM31\n'
 body+='\n'.join('abbrev '+n.replace('aspis_core.','')+' := '+raw+'.'+n.replace('aspis_core.','') for n in scalar)+'\n'
 body+='\n\n'.join(neutral(defs[n]) for n in tower)
 write(rawtower,['R1Z.'+raw],body,[n.replace('aspis_core.','') for n in tower])

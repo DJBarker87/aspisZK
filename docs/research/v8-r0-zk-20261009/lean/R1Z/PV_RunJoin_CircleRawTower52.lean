@@ -2,6 +2,7 @@ import R1Z.PV_RunJoin_CircleRawScalar52
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_CircleRawTower52
+abbrev field.M31 := U32
 abbrev field.CM31 := U32 × U32
 abbrev field.QM31 := field.CM31 × field.CM31
 abbrev field.P := PV_RunJoin_CircleRawScalar52.field.P
