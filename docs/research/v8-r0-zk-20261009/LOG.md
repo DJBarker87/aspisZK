@@ -14846,3 +14846,20 @@ pv-ownn used all 100 Lean attempts (97 passed, 3 failed), with no native scopes 
 runjoin53 (head 1adf3ca50f, pushed) used all 100 Lean attempts (64 accepted, 36 rejected; 0 Kani). All three audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules; protected prefixes untouched. It repaired CircleInstalled52.complete with named projections, and checked the neutral scalar and tower arithmetic, the full inverse comparisons with failure branches preserved, and the r24 folded-accumulator prefix. The common-sample association, the backend hinput producer, FinishContext, the appends and the publication equation remain open. Rows removed: 0.
 
 Step (2) has run seven rounds bottom-up (runjoin47 to runjoin53). runjoin54 (IDs 66900-66999; 100 Lean, 0 Kani) uses the top-down method of D465. Within fifteen attempts it compiles a theorem whose conclusion is exactly the typed RUNJOIN_PUBLISH_COMPACT input of pv-rj4idb's decoder: the complete ordered published proof bytes of the actual successful run. It proves this from the existing step-(2) results plus one named link per remaining piece (r24 tail and sampler canonicality, common-sample association, hinput, FinishContext, query append, node append and indices, publish_compact ordering). It then discharges the links cheapest first. Privacy target not yet established.
+
+## D471 (Stream B) 2026-10-29 05:35 UTC: pv-diag10 results (D348 decomposed into fifteen named links); pv-diag11 launched on the links the diagnostic line owns
+
+pv-diag10 used all 100 Lean attempts (96 passed, 4 rejected), three capped native scopes and no Kani. All reserved audits passed with standard axioms only. Peak RSS was 4.78 GiB with zero swap, and no unchanged failed source was resubmitted. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate and pushed.
+
+All three typed DIAG skeletons, one theorem per pv-rj4idb DIAG input with exactly that input as its conclusion, compiled within six attempts. Together they decompose the client half of D348 into fifteen standalone named links, and the lead found that none restates a conclusion:
+- Init, Step, Readout and EventOrder (per channel);
+- Entropy, MaskedAttempt and ReachedAttempt;
+- Operands, Sites, Frames, Levels, Request, WorldBlind, ExecutionHistory and ChargedBad.
+It proved the source-model init and step parts, the reached-state retry criteria, scoped op227 panic exclusions, formatter, logger and frame transport, and an adaptive V400 off-bad criterion. Every link's deployed or actual producer is OPEN.
+
+Link ownership (lead):
+- Sites belongs to level 1 (pv-l1e).
+- Entropy, MaskedAttempt and ReachedAttempt belong to the runjoin and retry producers.
+- WorldBlind belongs to the pv-own interface.
+- ChargedBad belongs to runjoin step (4)'s bad-event predicate.
+pv-diag11 (IDs 67000-67099; 100 Lean, 30 native, 0 Kani) discharges the diagnostic line's own links under own-1 against the deployed client source: Init, Step, Readout and EventOrder per channel, then Operands (a witness-derived operand at an honest format site is a finding), Levels, Frames and Request. Rows removed: 0. Privacy target not yet established.
