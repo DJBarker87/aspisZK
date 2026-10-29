@@ -32,7 +32,7 @@ print(json.dumps(result))
 '''.replace('BASE', repr(B)).replace('ROWS', repr(json.dumps(rows)))
 started = time.monotonic()
 for retry in range(11):
-    process = subprocess.run(['ssh', '-o', 'ControlMaster=no', '-o', 'ConnectTimeout=15',
+    process = subprocess.run(['ssh', '-o', 'ControlMaster=no', '-o', 'ConnectTimeout=15', '-o', 'ServerAliveInterval=15', '-o', 'ServerAliveCountMax=2',
                               'dombarker@100.108.41.90', 'python3 -'], input=code,
                              capture_output=True, text=True)
     if process.returncode != 255:
