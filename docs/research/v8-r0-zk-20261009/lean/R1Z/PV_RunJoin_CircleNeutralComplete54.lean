@@ -10,7 +10,7 @@ theorem complete (block : Array U8 32#usize) (row : Bool) :
   obtain ⟨parameter,hp,hc⟩ := PV_RunJoin_SamplerCanonical54.complete block
   have hmap := PV_RunJoin_CircleMapCanonical54.complete parameter hc
   unfold PV_RunJoin_CircleRawMap52.circle_owned PV_RunJoin_CircleFallbackPrograms54.circle
-  rw [hp,bind_tc_ok,hmap]
+  simp only [hp,bind_tc_ok,hmap]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro result _
   cases result with
