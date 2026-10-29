@@ -7,7 +7,7 @@ a=runpy.run_path(str(D/'range-source.py'));span,tokens,sha=a['span'],a['tokens']
 p=S/'crates/aspis-core/src/field.rs';s=p.read_text()
 expected={
 'square_n':('fn square_n(', 'fn square_n(mut value:M31,count:usize)->M31 { for _ in 0..count {value=value.mul(value);} value }','V265Inverse.square_count'),
-'inv':('impl M31 {','''pub fn inv(self)->M31 {
+'inv':('impl M31 {\n    pub const ZERO','''pub fn inv(self)->M31 {
  #[cfg(feature="r0-op-count")] let _count=crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);
  assert!(self.0!=0,"inverse of zero");
  let t2=self.mul(self).mul(self);
@@ -20,7 +20,7 @@ expected={
  let t30=t29.mul(t29);
  t30.mul(t30).mul(self)
 }''','V265Inverse.source'),
-'CM31.inv':('impl CM31 {','pub fn inv(self)->CM31 { self.inv_with(M31::inv) }','V265Inverse.cm_source')}
+'CM31.inv':('impl CM31 {\n    pub const ZERO','pub fn inv(self)->CM31 { self.inv_with(M31::inv) }','V265Inverse.cm_source')}
 records=[]
 for key,(context,body,law) in expected.items():
  marker='fn square_n(' if key=='square_n' else 'pub fn inv('
