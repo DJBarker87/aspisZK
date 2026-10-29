@@ -20,6 +20,7 @@ end R1Z.PV_RunJoin_QueryLoop63
 namespace R1Z.PV_RunJoin_QueryLoop63
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 open PV_RunJoin_QueryScript63 (W)
+attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 
 theorem loop (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (cc1 cc2 : host_commitment.Commitment)
@@ -44,6 +45,7 @@ theorem loop (base : ExternalTypes) (heap : Heap) (box : Box)
     have nextIndex := ProverCommitPairCounter47.next_val i (by change i.val<1024;omega)
     unfold prover.append_query_openings_loop
     rw [ProverRw19LoopBind.loop_bind]
+    dsimp only
     rw [PV_RunJoin_QueryFactor63.body base heap box ops cc1 cc2 queries folded salts out i more (by
       simp only [Nat.mul_add,Nat.mul_one] at room;omega)]
     simp only [bind_assoc_eq,bind_tc_ok,series,PV_RunJoin_ByteSequence63.run]
