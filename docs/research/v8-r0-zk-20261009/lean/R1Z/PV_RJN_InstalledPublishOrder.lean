@@ -13,10 +13,10 @@ theorem actual (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (data : @Phase (types base) → PV_RunJoin_OpeningImages54.Data)
     (plans : @Phase (types base) → Plan)
-    (producer_layout : PV_RJN_Producer_PlanLayout (runOf data plans))
-    (producer_lengths : PV_RJN_Producer_FrontLengths (runOf data plans)) :
+    (producer_layout : @PV_RJN_Producer_PlanLayout _ (types base) (@runOf (types base) data plans))
+    (producer_lengths : @PV_RJN_Producer_FrontLengths _ (types base) (@runOf (types base) data plans)) :
     @PV_RunJoin_PublishContext57.PV_RunJoin_Link_PublishOrder (types base)
-      (selected base heap box ops) _ (runOf data plans) := by
+      (selected base heap box ops) _ (@runOf (types base) data plans) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   exact PV_RJN_NativePublishOrder.actual data plans
@@ -29,10 +29,10 @@ theorem contextual (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (data : @Phase (types base) → PV_RunJoin_OpeningImages54.Data)
     (plans : @Phase (types base) → Plan)
-    (producer_layout : PV_RJN_Producer_PlanLayout (runOf data plans))
-    (producer_lengths : PV_RJN_Producer_FrontLengths (runOf data plans)) :
+    (producer_layout : @PV_RJN_Producer_PlanLayout _ (types base) (@runOf (types base) data plans))
+    (producer_lengths : @PV_RJN_Producer_FrontLengths _ (types base) (@runOf (types base) data plans)) :
     @PV_RJN_NodeContext.PV_RJN_Link_PublishOrder (types base)
-      (selected base heap box ops) _ (runOf data plans) := by
+      (selected base heap box ops) _ (@runOf (types base) data plans) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   exact PV_RJN_ContextPublishOrder.native data plans

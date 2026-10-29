@@ -66,7 +66,7 @@ theorem primitive_tag [ExternalTypes] (ops : ExternalFuns) :
 
 theorem actual (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) {I : Type} (runs : I → @Run (types base))
-    (producer : PV_RJN_Producer_PlanLayout runs) :
+    (producer : @PV_RJN_Producer_PlanLayout I (types base) runs) :
     @PV_RJN_Producer_Layout (types base) (selected base heap box ops) I runs := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
