@@ -52,13 +52,13 @@ theorem at_cap (s : State) (words : List Nat) (hd : s.draws=64) :
     run s words = if s.accepted.length=22 then
       (.ok s.accepted 7,[.drawGuard true,.acceptedGuard true,.selectAdvance 7])
       else (.exhausted,[.drawGuard true,.acceptedGuard false]) := by
-  rw [run,if_pos hd]
+  rw [run.eq_def,if_pos hd]
 
 theorem complete (s : State) (words : List Nat) (hd : s.draws≠64)
     (ha : s.accepted.length=22) :
     run s words=(.ok s.accepted (s.draws/8),
       [.drawGuard false,.acceptedGuard true,.selectAdvance (s.draws/8)]) := by
-  rw [run,if_neg hd,if_pos ha]
+  rw [run.eq_def,if_neg hd,if_pos ha]
 
 theorem read_safe (s : State) (admitted : Admitted s) (live : stopped s=false) :
     s.draws/8<8 ∧ ∀ i : Nat, i<4 → 4*(s.draws%8)+i<32 := by
