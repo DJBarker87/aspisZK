@@ -23,6 +23,7 @@ theorem complete (block : Array U8 32#usize) (row : Bool) :
   simp only [hq,bind_tc_ok]
   by_cases hi : t.im≠0
   · rw [outside_map t hi] at hm
+    dsimp only [t] at hi
     simp only [hm,PV_RunJoin_CircleMapEquation55.decOutcome,encodeResult,bind_tc_ok,chosen,if_pos hi]
   · have hz : t.im=0 := not_ne_iff.mp hi
     obtain ⟨e,he⟩ : ∃ e,pureMap t=.error e := by
@@ -30,6 +31,7 @@ theorem complete (block : Array U8 32#usize) (row : Bool) :
       · exact ⟨.singular,singular_first t hd⟩
       · exact ⟨.subfield,by simp only [pureMap,if_neg hd,if_pos hz]⟩
     rw [he] at hm
+    dsimp only [t] at hi
     cases e <;> cases row <;>
       simp only [hm,encodeResult,encodeError,PV_RunJoin_CircleMapEquation55.decOutcome,bind_tc_ok,
         chosen,if_neg hi,Bool.false_eq_true,if_false,if_true,
