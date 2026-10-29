@@ -1,0 +1,51 @@
+Expected time: small optimized source harness compilation/link, then range checks and public-sized worker maps
+warning: function `ordered_map` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8
+   |
+24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {
+   |        ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `is_worker` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:15:8
+   |
+15 | pub fn is_worker() -> bool { ACTIVE.with(Cell::get) }
+   |        ^^^^^^^^^
+
+warning: struct `Active` is never constructed
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:16:8
+   |
+16 | struct Active(bool);
+   |        ^^^^^^
+
+warning: associated function `enter` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:8
+   |
+17 | impl Active {
+   | ----------- associated function in this implementation
+18 |     fn enter() -> Self { Self(ACTIVE.with(|a| a.replace(true))) }
+   |        ^^^^^
+
+warning: function `ordered_map` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8
+   |
+24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {
+   |        ^^^^^^^^^^^
+
+warning: function `ordered_families` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:27:8
+   |
+27 | pub fn ordered_families<T: Send, F: Fn(usize)->T + Sync>(n:usize,f:F)->Vec<T> {
+   |        ^^^^^^^^^^^^^^^^
+
+warning: function `ordered_map_inner` is never used
+  --> /home/dombarker/project-offloads/codex-pv-fscan-20261028/src/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:30:4
+   |
+30 | fn ordered_map_inner<T: Send,F: Fn(usize)->T+Sync>(n:usize,f:F,force:bool)->Vec<T> {
+   |    ^^^^^^^^^^^^^^^^^
+
+warning: 7 warnings emitted
+
+{"range_cases":65616,"map_cases":10,"nested_ordered":true,"source_order_panic":true,"classification":"finite validation; no universal runtime association"}
+
