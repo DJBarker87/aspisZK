@@ -42,10 +42,11 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     change middle.length=initial.length+832 at middleLength
     obtain ⟨payloadBytes,hprefix,extend⟩ := PV_RunJoin_ByteScript63.suffix _ _ _ hfirst
     have emptyRoom : PV_RunJoin_ActualPlanSources59.empty.length+payloadBytes.length≤Usize.max := by
-      have cap := middle.property
-      rw [hprefix,List.length_append] at cap
+      have payloadLe : payloadBytes.length≤middle.val.length := by
+        rw [hprefix,List.length_append]
+        exact Nat.le_add_left _ _
       change 0+payloadBytes.length≤Usize.max
-      omega
+      simpa only [Nat.zero_add] using payloadLe.trans middle.property
     obtain ⟨payload,hpayload,hpayloadBytes⟩ := extend PV_RunJoin_ActualPlanSources59.empty emptyRoom
     have hpval : payload.val=payloadBytes := by
       simpa only [PV_RunJoin_ActualPlanSources59.empty,List.nil_append] using hpayloadBytes
@@ -59,13 +60,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     rw [hpcode] at plen
     change payload.length=0+832 at plen
     have image := @PV_RunJoin_QueryParts63.actual (types base) (selected base heap box ops)
-      phase p context fi payload returned (by omega)
+      phase p context fi payload returned (by simpa only [Nat.zero_add] using plen)
     have firstBytes : bytes middle.val=bytes initial.val++
         ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase fi) := by
       rw [hprefix,PV_RJN_Bytes.append,←hpval,←image]
-    have tailRoom : middle.length+832*n≤Usize.max := by
-      simp only [Nat.mul_add,Nat.mul_one] at room
-      omega
+    have tailRoom : middle.length+832*n≤Usize.max :=
+      (PV_RunJoin_QueryRoom63.split initial.length Usize.max n 832 608
+        PV_RunJoin_QueryRoom63.widths room).2 middle.length middleLength
     have tailBytes := ih (Usize.wrapping_add i 1#usize) middle final
       (by rw [nextIndex];omega) tailRoom htail
     rw [tailBytes,firstBytes,nextIndex]
