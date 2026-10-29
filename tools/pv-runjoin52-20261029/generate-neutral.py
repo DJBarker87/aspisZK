@@ -127,3 +127,14 @@ attribute [local irreducible] encCM encQ
 '''+c+f'\n#print axioms op{i}\nend R1Z.PV_RunJoin_CircleOwnedOps52\n'
  (L/(stem+'.lean')).write_text(text);mods.append(stem)
 (E/'owned-op-sequence.json').write_text(json.dumps(mods,indent=2)+'\n')
+# Exceptional higher-order inverse argument: rewrite the function equality,
+# never reduce either addition chain to prove an apparent reflexivity goal.
+p=L/'PV_RunJoin_CircleOwnedOp1152.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold PV_AL_CircleOwned.aspis_core.field.CM31.inv PV_RunJoin_CircleRawTower52.field.CM31.inv
+  have hi : PV_AL_CircleOwned.aspis_core.field.M31.inv = PV_RunJoin_CircleRawTower52.field.M31.inv :=
+    funext PV_RunJoin_CircleOwnedScalar52.f16
+  rw [hi]
+  exact op10 self PV_RunJoin_CircleRawTower52.field.M31.inv
+
+'''+s[b:];p.write_text(s)
