@@ -1,216 +1,182 @@
-# D422 compliance repairs
+# D423 V213 compliance resume
 
-**V213 still OPEN. Replay PASSED (62002).** This is a partial compliance repair,
-not a privacy restoration or a completed final-manifest replay.
+**V213 OPEN. Focused restoring-theorem statement/axioms audit PASSED (62113).**
+The restoring theorem is freshly compiled, but the requested complete consumer
+closure remains unfinished: 17 modules require compilation after the 40-attempt
+budget was exhausted. This is partial restoration evidence, not completed V213
+restoration or a privacy-target result.
 
-Branch `codex/pv-fix-20261028`, worktree exactly
-`/Users/dominic/ZK/.worktrees/pv-fix`, base
-`1a3cd3de26c0129eaefd6913b34e03fde119bf1f`.
-Host directory `/home/dombarker/project-offloads/codex-pv-fix-20261028/`.
-Sparse checkout was extended only with `git sparse-checkout add evidence/pv-fix-20261028`.
-No new proofs, theorem-statement changes, implementation edits, native scopes,
-Kani, new trust items, or wallet/key operations.
+Worktree exactly `/Users/dominic/ZK/.worktrees/pv-fix` (sparse), branch
+`codex/pv-fix-20261028`, resumed at `9fb7df1043928e6d79a1034305ffe6ef445822d9`.
+Host workspace `/home/dombarker/project-offloads/codex-pv-fix-20261028/` retained.
+No sparse expansion, source/proof changes, new proofs, native scopes, Kani,
+implementation changes, trust items, or wallet/key operations. No push.
+D422 history and its original report remain available at the resume base.
 
-## V213: exact binding and affected objects
+## Item (1): exact result and unchanged statements
 
-Recount8 `CORRECTIONS8.md` rejects the original41466 admission. Its exact target is
-`R1Z.PV_CB_Op109CanonicalBinding.reference_equation`; module source blob
-`d8b5384c801127a367814102760d9451806f2334`, SHA256
-`1c5cb8d0a25f00080c6e9dc154acb57a4abed3e0189dc749a1aa6baf3e7d5ae9`.
-41466 launched about127 seconds after refusal, inside the180-second cooldown;
-its object remains VOID as historical evidence.41460 failed and earns no credit.
-Later imports and coherent hashes did not cure41466.
+The invalid historical binding attempt 41466 remains VOID. The compliant binding,
+Funs and Exact objects from 62012–62014 were reused after recursive verification,
+without recompiling them. The eight affected modules and original source pins
+remain exactly those in `affected-order.json`.
 
-`rows/V213.md`, `rows/V213.json`, the41466/41469 receipts,
-`resume-final-receipt-coherence.json`, and the pinned final source/object/import
-DAG identify the whole-Result restoring theorem as
-`R1Z.PV_RDCD_Op109Audit.source`, obtained from
-`R1Z.PV_CB_Op109Exact.op109_source`. The helper theorem
-`R1Z.PV_RDCD_CanonicalSource.reference` was41462, not41466.
-The reverse import closure contains exactly these eight modules:
-
-| Module (`R1Z.` prefix) | Pinned blob | Fresh outcome |
-|---|---|---|
-| `PV_CB_Op109CanonicalBinding` | `d8b5384c801127a367814102760d9451806f2334` | 62012 PASS |
-| `PV_CB_Op109Funs` | `74aa4afc6080481fe307ede08b6a34b3fe540731` | 62013 PASS |
-| `PV_CB_Op109Exact` | `0a929d2688786fb010ec4ff0b803beafce880449` | 62014 PASS |
-| `PV_RDCD_Op109Audit` | `a7065373e002744da36da2627b99b2e27f18cd6d` | OPEN — not recompiled |
-| `PV_RDCD_FinalAudit` | `59a7b410ea15a2a63460fa7fc5000a30b4913bb3` | OPEN — not recompiled |
-| `PV_RDCD_FinalReplay` | `205cda94d79681cbdf1fd3102b51d513e885a2f2` | OPEN — not recompiled |
-| `PV_RDCD_AllAxioms` | `fff70506804889ad9b78ab110280ef8ca1b8920e` | OPEN — not recompiled |
-| `PV_RDCD_FinalManifest` | `2642cda06757f4e62d95253fa45c899d51ba4523` | OPEN — not recompiled |
-
-`affected-order.json` retains each edge and source pin; `inherited-rdcd-fingerprint.json`
-retains the original complete DAG. All recompiled V213 sources byte-equal their
-original pinned blobs. They were uploaded from those git blobs, without edits.
-62004–62011 rebuild the binding's prerequisite chain;62012 freshly recompiles
-41466's binding, followed by62013 Funs and62014 Exact, in dependency order.
-Their existing axiom directives report only standard axioms. This repairs the
-binding object itself, not the entire requested restoration.
-
-The original rdcd `lean-objects` directory had been deleted. Before compilation,
-44 of69 recorded project objects were missing and15 remaining resolutions had
-different hashes. They were neither substituted nor accepted as the old cohort.
-The isolated preflight records every missing/mismatched object and every available
-source/import hash. Matching-object searches for the missing RDCD canonical and
-op107 audits found no retained copies. Rebuilding prerequisites used the remaining
-budget. The full restoring theorem and four aggregate consumers are not freshly
-compiled. No old41466-derived object is credited or imported by a new audit.
-
-The exact missing private V213 audit closure after this run is:
-
-- `R1Z.PV_CB_Op107Exact`
-- `R1Z.PV_CB_Op107Funs`
-- `R1Z.PV_CB_Op107Transport`
-- `R1Z.PV_CB_Op107Types`
-- `R1Z.PV_RDCD_CanonicalSource`
-- `R1Z.PV_RDCD_Cast194`
-- `R1Z.PV_RDCD_Op107Audit`
-- `R1Z.PV_RDCD_Op109Audit`
-- `R1Z.PV_RDCD_Option194`
-- `R1Z.PV_RDCD_OptionBinding`
-- `R1Z.PV_RDCD_ShiftBound`
-- `R1Z.PV_RDCD_ShiftLiterals`
-- `R1Z.PV_RDCD_Wrapping194`
-
-The prepared `PV_FIX_V213Audit.lean` inspection-only wrapper was **not run**.
-Therefore the requested focused statement-and-axioms audit of
-`PV_RDCD_Op109Audit.source` against fresh objects is **not established**.
-Source inspection confirms the retained complete Result/Option statement has
-no canonical-input restriction, but source inspection is not a fresh kernel audit.
-No unchanged theorem proof failure was observed; the prerequisite failure62003
-was an environment/object-resolution error quoted below. The exact reason V213
-remains OPEN is the missing coherent prerequisite/consumer closure, unperformed
-restoring-theorem audit, and exhausted15-attempt budget.
-
-## RDEAC replay: minimal name repair and result
-
-The failed61199 source is retained in the inherited evidence. Relative to that
-exact text, this repair adds only:
+62100–62111 rebuilt the missing canonical/Op107/Option/shift prerequisite chain
+in dependency order, using the exact pinned git blobs. 62112 then recompiled
+`R1Z.PV_RDCD_Op109Audit` (blob `a7065373e002744da36da2627b99b2e27f18cd6d`).
+62113 ran the pre-existing, unchanged inspection-only `PV_FIX_V213Audit.lean`.
+Its full output is `out-62113.log`. It checks and prints:
 
 ```lean
-open PV_RDEAC_EndpointInstance (endpoint)
+R1Z.PV_RDCD_Op109Audit.source :
+  ∀ [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns)
+    (x : ProverRwFull.aspis_core.field.wide_exact.WideExact),
+    ProverRwFull.ExternalFuns.op109 x = do
+      let value ←
+        PV_CB_ShippedOp109.aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField.try_inv
+          (R1Z.PV_CB_Op109Transport.encodeW x)
+      Aeneas.Std.Result.ok
+        (Option.map R1Z.PV_CB_Op109Transport.decodeW value)
 ```
 
-`replay-before-after.diff` records the one-line repair. All theorem statements and
-proofs are otherwise byte-identical to failed61199. The base already contained
-an uncompiled multi-site qualification and two stale comments; the tracked diff
-replaces that pending version with the one-line repair above.
+The statement covers the complete Result/Option, with no canonical-input
+restriction. Its ExternalTypes and ExternalFuns parameters remain. The printed
+proof is the application of `PV_CB_Op109Exact.op109_source`. All three audited
+theorems (`source`, `reference_equation`, `op109_source`) report exactly
+`[propext, Classical.choice, Quot.sound]` (universe parameters retained in raw logs).
+No theorem statement, hypothesis, proof text or source blob changed.
 
-**Replay PASSED at62002**: `physical`, `owned`, `source_tail`, and `source_factor`
-all compile and each prints exactly `[propext, Classical.choice, Quot.sound]`.
-`out-62002.log` contains the complete output. No theorem proof or statement was
-modified to obtain this result. V178/V181 remain SUSPENDED: successful focused
-replay does not discharge their diagnostic-provenance/deployment obligations.
+62114–62139 rebuilt another 26 unchanged prerequisites of the remaining aggregate
+consumers. **FinalAudit, FinalReplay, AllAxioms and FinalManifest have not been
+recompiled here.** Therefore V213 is OPEN despite the successful focused audit.
+The exact remaining dependency order is:
 
-**The requested single replay invocation was not met.** Two charged compiler
-invocations,62000 and62001, failed before elaboration because my private external
-input overlay omitted Lean companion files and then IR data. These were my input
-errors. I corrected them and restored the original RDEAC environment before62002;
-no admission failure, cooldown bypass, cap change, or proof change was involved.
-The distinct failed inputs and environment hashes are preserved, not disguised as
-successful or uncharged attempts. All three invocations count toward15.
+- `R1Z.PV_RDCD_EmptyRaw194`
+- `R1Z.PV_RDCD_ConstructorFrame`
+- `R1Z.PV_RDCD_EmptyRawRepeat`
+- `R1Z.PV_CB_Op118Types`
+- `R1Z.PV_CB_Op118Funs`
+- `R1Z.PV_CB_Op118Transport`
+- `R1Z.PV_CB_Op118Arrays`
+- `R1Z.PV_CB_Op118Exact`
+- `R1Z.PV_RDCD_Range194`
+- `R1Z.PV_RDCD_PointsStep`
+- `R1Z.PV_RDCD_Op118Audit`
+- `R1Z.PV_RDCD_RangeForward`
+- `R1Z.PV_RDCD_FinalAudit`
+- `R1Z.PV_RDCD_Replay`
+- `R1Z.PV_RDCD_FinalReplay`
+- `R1Z.PV_RDCD_AllAxioms`
+- `R1Z.PV_RDCD_FinalManifest`
 
-## Admission, input changes, and verification
+Next deliverable: retain this private cache; rebuild these 17 unchanged modules
+in order under compliant admission, ending with the pinned FinalManifest. The
+focused audit 62113 is already green and need not be repeated unchanged unless
+its inputs change. No source elaboration failure occurred in D423.
 
-Exactly15 Lean compiler attempts,62000–62014:12 PASS,3 FAIL; zero native scopes,
-zero Kani. Zero reservation refusals and zero new ruling(t) violations.
-Each invocation checks admission in the same Python command that launches its
-scope, requiring both exit0 and `allowed:true`. The existing in-scope barrier
-checks admission again and verifies the actual cgroup limits. Raw admissions,
-barriers, output and time logs are retained. No refusal occurred, so the180-second
-cooldown was never triggered; the wrapper enforces it job-wide if triggered.
-One own scope ran at a time. IDs were scanned against other privacy-job receipt
-names and shared `sent.txt`; initial overbroad matches inside hashes were false
-positives, corrected to numeric ID fields before any scope launched.
+## Admission, cache provenance, and receipts
 
-All scopes: MemoryHigh6G, MemoryMax8G, MemorySwapMax0, TasksMax64; Lean-M7000,
--j1, timeout900. Peak RSS2,842,488KiB; every reported swap count0.
-5673 external primary objects were hashed against the coherent replay authority
-before the first compiler. Original companion inputs were linked read-only;
-none was rebuilt. `preflight.json` records the complete inherited project source,
-object and direct-import fingerprints and both original environments. RDEAC reused
-its verified304-module closure plus Axioms/Statements receipts61197–61198.
+Exactly **40 Lean compiler attempts, 62100–62139: 40 PASS, 0 FAIL**; zero native
+scopes, zero Kani, zero reservation refusals, zero new ruling (t) violations.
+Each launch checks admission in the same Python invocation as the scope, requiring
+exit 0 and `allowed:true`; the in-scope barrier checks admission and actual limits
+again. The job-wide 180-second cooldown guard remained active; no refusal triggered
+it. `resume-driver.py` runs each scope to completion before the next launch.
+No ID outside 62100–62199 was used; `resume-id-scan.json` scans other privacy-job
+receipt names and shared sent records before launch.
 
-The final RDEAC environment has the original LEAN_PATH prefix. RDCD adds a verified
-read-only external-object prefix before its unchanged original environment to
-avoid a shadowing missing `Aeneas.olean`. Every prerequisite actually consumed by
-the new binding/Exact objects was rebuilt here at its pinned source, with recorded
-actual import hashes. Incomplete or mismatching cached project closures were not
-reused. `env-<ID>.json` preserves each exact effective env-J input; run2 prepends
-this job's own object directory. `companion-inputs.json` and `ir-inputs.json`
-record auxiliary input identities.
+Every scope used MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64,
+Lean -M7000, -j1, timeout 900. Maximum RSS was 3,289,628 KiB; all swaps were zero.
+Source revision for all attempts was `4d9da5e481` (full hash in
+`resume-revision.txt`), with each individual source blob and SHA256 recorded.
+The driver and final evidence scripts are retained in this evidence commit;
+this is not a claim that every wrapper file was committed at compile time.
 
-62000→62001 changed companion-file inputs;62001→62002 restored the original
-RDEAC environment and IR paths.62003→62004 added the complete verified external
-prefix, including IR companions. These are recorded environment/input changes,
-not unchanged failed-job reruns. No shared launcher, reservation script, source,
-object, other worktree, or other job directory was modified.
+`resume-external-check.json` verifies all 5,673 external primary objects against
+the inherited coherent replay authority before the first compiler. The external
+manifest itself retains its original authority chain. The unchanged toolchain
+and effective LEAN_PATH are retained in `resume-env.json` and every `env-621*.json`.
+`resume-cache-check.json` verifies the source hash, object hash, and complete
+import closure of 13 reusable project objects, including 62012–62014. For fresh
+objects each launch checks the recorded actual import hashes, recursively,
+against the objects it will load. Unverified fallback objects are rejected.
 
-All compile receipts use source revision
-`35d6cd2434` (full value in `revision.txt`), with each exact source path, git blob
-and SHA256 independently recorded. Setup scripts changed during input repairs;
-this is not a claim that every historical wrapper invocation used a clean HEAD.
-The exact compiler command, effective environment and actual dependency hashes
-are retained per attempt in `attempts.json` and the raw receipts. No full regression
-or final manifest was claimed.
+The retained-cache search found 47 candidates in other Stream B private object
+directories, including 18 byte matches to historical objects. None was reused:
+every historical byte match had a missing/differing import closure against the
+current verified cohort. The search and exact closure gaps are retained in
+`resume-retained-cache-search.json` and `resume-retained-cache-assessment.json`.
+No other job's directory or shared object was modified.
 
-| ID | Target (`R1Z.` prefix) | Exit | Wall | Peak RSS KiB | Swap | Axioms output |
+`resume-final-check.py` verified admissions, actual cgroup limits, exact sources,
+environments, output hashes, standard axiom lists and all consumed project import
+edges. `resume-final-fingerprint.json` retains the verified 51-project consumed
+closure; this is not the unfinished final-manifest closure. Exact source pin/HEAD
+checks for all 69 project sources plus the existing audit wrapper are recorded in
+`resume-local-verification.json`. Cached objects and source snapshots are retained
+on the host for the next dependent targets.
+
+Full commands, dependency fingerprints, exit, wall, RSS, swap, revision and full
+axioms output are recorded in `resume-attempts.json`, plus raw
+`receipt/admission/barrier/env/out/time-621*.{json,log}` files. “No output” below
+means the unchanged target contains no emitted axiom directive; it is not a claim
+of axiom freedom.
+
+| ID | Target (`R1Z.` prefix) | Exit | Wall | Peak RSS KiB | Swap | #print axioms |
 |---|---|---:|---:|---:|---:|---|
-|62000|`PV_RDEAC_EndpointReplay`|1|0:00.05|88920|0|not reached|
-|62001|`PV_RDEAC_EndpointReplay`|1|0:00.42|711232|0|not reached|
-|62002|`PV_RDEAC_EndpointReplay`|0|0:01.26|2675492|0|4 standard theorem output(s)|
-|62003|`PV_CB_Op109Types`|1|0:00.11|190960|0|not reached|
-|62004|`PV_CB_Op109Types`|0|0:01.16|2636480|0|none emitted by unchanged target|
-|62005|`ProverRwFullExternalTypes`|0|0:01.37|2642912|0|none emitted by unchanged target|
-|62006|`ProverRwFullTypes`|0|0:06.67|2819360|0|none emitted by unchanged target|
-|62007|`ProverRwFullExternalFuns`|0|0:05.07|2842488|0|none emitted by unchanged target|
-|62008|`PV_CB_Op109Transport`|0|0:01.14|2633860|0|none emitted by unchanged target|
-|62009|`PV_CB_Op109RefTypes`|0|0:01.09|2636692|0|none emitted by unchanged target|
-|62010|`PV_CB_Op109RefFuns`|0|0:01.14|2638236|0|none emitted by unchanged target|
-|62011|`PV_CB_Op109RefTransport`|0|0:01.15|2633880|0|none emitted by unchanged target|
-|62012|`PV_CB_Op109CanonicalBinding`|0|0:01.10|2637884|0|1 standard theorem output(s)|
-|62013|`PV_CB_Op109Funs`|0|0:01.51|2663764|0|none emitted by unchanged target|
-|62014|`PV_CB_Op109Exact`|0|0:01.18|2641664|0|1 standard theorem output(s)|
+|62100|`PV_RDCD_CanonicalSource`|0|0:03.82|2637824|0|1 standard reports|
+|62101|`PV_CB_Op107Types`|0|0:01.20|2634600|0|No output|
+|62102|`PV_CB_Op107Funs`|0|0:01.48|2652588|0|No output|
+|62103|`PV_CB_Op107Transport`|0|0:01.25|2633796|0|No output|
+|62104|`PV_CB_Op107Exact`|0|0:01.30|2640672|0|1 standard reports|
+|62105|`PV_RDCD_Option194`|0|0:01.27|2631820|0|No output|
+|62106|`PV_RDCD_OptionBinding`|0|0:01.17|2634944|0|1 standard reports|
+|62107|`PV_RDCD_Wrapping194`|0|0:01.20|2633332|0|2 standard reports|
+|62108|`PV_RDCD_ShiftLiterals`|0|0:01.18|2628024|0|4 standard reports|
+|62109|`PV_RDCD_Cast194`|0|0:01.21|2629900|0|2 standard reports|
+|62110|`PV_RDCD_Op107Audit`|0|0:01.18|2636924|0|5 standard reports|
+|62111|`PV_RDCD_ShiftBound`|0|0:01.25|2628408|0|1 standard reports|
+|62112|`PV_RDCD_Op109Audit`|0|0:01.14|2637032|0|3 standard reports|
+|62113|`PV_FIX_V213Audit`|0|0:01.18|2631248|0|3 standard reports|
+|62114|`ProverRwFullFuns`|0|0:23.52|3289628|0|No output|
+|62115|`PV_RDCD_ZeroWorld`|0|0:00.47|700048|0|2 standard reports|
+|62116|`PV_RDCD_ZeroSelected`|0|0:01.89|2659548|0|9 standard reports|
+|62117|`PV_RDCD_ZeroConsumed`|0|0:01.24|2641148|0|4 standard reports|
+|62118|`PV_RDCD_ZeroDrop`|0|0:01.36|2643612|0|2 standard reports|
+|62119|`PV_RDCD_ZeroCursor`|0|0:00.34|694660|0|3 standard reports|
+|62120|`PV_RDCD_ZeroTrace`|0|0:00.32|695136|0|3 standard reports|
+|62121|`PV_RDCD_ZeroCompatibility`|0|0:00.36|696604|0|3 standard reports|
+|62122|`PV_RDCD_Audit`|0|0:01.22|2641784|0|9 standard reports|
+|62123|`PV_RDCD_V216Raw`|0|0:01.27|2642904|0|No output|
+|62124|`PV_RDCD_ByteArray`|0|0:01.27|2630412|0|2 standard reports|
+|62125|`PV_RDCD_ContextTotal`|0|0:01.25|2631920|0|1 standard reports|
+|62126|`PV_RDCD_ContextInstall`|0|0:01.29|2644836|0|5 standard reports|
+|62127|`PV_RDCD_V246Raw`|0|0:01.29|2649600|0|No output|
+|62128|`PV_CB_Op229Types`|0|0:01.22|2638736|0|No output|
+|62129|`PV_CB_Op229Funs`|0|0:01.37|2637704|0|No output|
+|62130|`PV_RDCD_Slice194`|0|0:01.48|2644916|0|3 standard reports|
+|62131|`PV_RDCD_SliceArrayBinding`|0|0:01.40|2634120|0|2 standard reports|
+|62132|`PV_RDCD_StatementBridge`|0|0:01.94|2630204|0|3 standard reports|
+|62133|`PV_RDCD_GenericArrayEq`|0|0:01.93|2634764|0|3 standard reports|
+|62134|`PV_RDCD_Index194`|0|0:01.23|2640504|0|2 standard reports|
+|62135|`PV_RDCD_V169Raw`|0|0:01.19|2631372|0|No output|
+|62136|`PV_RDCD_Defaults194`|0|0:01.32|2637868|0|5 standard reports|
+|62137|`PV_CB_TakeRef`|0|0:01.25|2630788|0|No output|
+|62138|`PV_RDCD_TakeBinding`|0|0:01.38|2643916|0|7 standard reports|
+|62139|`PV_RDCD_CpopLiteral`|0|0:01.37|2634368|0|3 standard reports|
 
-Full #print axioms lines are in `attempts.json` (`axioms_full`), and all raw output
-is retained. An unchanged module with no audit directive is explicitly recorded
-as having no emitted audit result; this is not an axiom-freedom claim.
+## Item (2) and remaining privacy obligations
 
-Exact retained compiler failures:
+**Replay PASSED (62002), unchanged and not rerun.** D423 did not touch its source,
+objects, wrapper, receipts or prior evidence. Its historical input failures 62000
+and 62001 remain recorded in `attempts.json` and the D422 report at `9fb7df1043`.
 
-**62000**
+No headline premise was removed, added, or changed. E1/E2, real RunJoin/native
+carrier/world, proof-account client routing, L1/L2/L3, compiler/primitive adequacy,
+and T exactly `entropy_law/entropy_kernel/observation` remain. V213's complete
+restoration credit remains OPEN because its four aggregate consumers and their
+missing prerequisites have not been recompiled. The privacy target is not yet
+established. No ELF rebuild was required because no implementation changed.
 
-```text
-/home/dombarker/project-offloads/codex-pv-fix-20261028/rdeac/sources/R1Z/PV_RDEAC_EndpointReplay.lean:1:0: error: failed to open file '/home/dombarker/project-offloads/codex-pv-fix-20261028/external-objects/Init.olean.server': No such file or directory
-```
-
-**62001**
-
-```text
-/home/dombarker/project-offloads/codex-pv-fix-20261028/rdeac/sources/R1Z/PV_RDEAC_EndpointReplay.lean:1:0: error: missing IR data file for module Init.Prelude
-```
-
-**62003**
-
-```text
-/home/dombarker/project-offloads/codex-pv-fix-20261028/rdcd/sources/R1Z/PV_CB_Op109Types.lean:3:0: error: object file '/home/dombarker/project-offloads/codex-cx-prover-commit54-20261023/objects/Aeneas.olean' of module Aeneas does not exist
-```
-
-## Claims and next deliverable
-
-Before/after theorem statements and hypotheses are unchanged. No privacy-headline
-premise was removed, added or changed. E1/E2, real RunJoin/native carrier/world,
-client proof-account routing, L1/L2/L3, compiler/primitive adequacy, and T exactly
-`entropy_law/entropy_kernel/observation` remain. V213 native restoration credit
-stays suspended. No Kani result is used. No release implementation changed, so no
-ELF rebuild was performed. The privacy target is not established.
-
-Next: retain/reuse this pinned private build cache, authorize enough unchanged
-prerequisite recompilations to finish the missing Op109Audit closure, rebuild the
-five remaining affected modules in `affected-order.json` order, then run the
-focused restoring-theorem statement/axioms audit. Do not consume the old aggregate
-objects or treat62012's fresh binding alone as restoration.
-
-Commits are path-limited to this evidence directory and the replay wrapper; see
-`COMMITS.txt` and `git log --oneline 1a3cd3de26..HEAD`. No push was performed.
+Commits are path-limited to this evidence directory. `COMMITS.txt` records the
+resume preparation; obtain the final report commit with
+`git log --oneline 9fb7df1043..HEAD`. No push performed.
