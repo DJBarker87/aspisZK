@@ -22,7 +22,7 @@ theorem no_capture (base : ExternalTypes) (heap : Heap) (box : Box)
   rintro ⟨p⟩
   obtain ⟨before,middle,z0,z1,f25,f26,h25,_,_⟩ :=
     PV_RunJoin_ProducedOrigin61.circles base heap box (@rejecting (types base) ops) p.val p.property
-  obtain ⟨block,hblock⟩ := PV_RunJoin_CircleReach51.first _ _ _ _ _ h25
+  obtain ⟨block,_,hblock⟩ := PV_RunJoin_CircleReach51.first _ _ _ _ _ h25
   change @ExternalFuns.op259 _ (selected base heap box (@rejecting (types base) ops)) _ _ = _ at hblock
   rw [PV_RunJoin_CircleInstalled52.installed_projection] at hblock
   cases hblock
