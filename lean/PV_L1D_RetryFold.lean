@@ -42,7 +42,7 @@ theorem retry_events (a : Attempt S P) (n k : Nat) (s after : S)
 #print axioms retry_events
 
 theorem failure_prefix (a : Attempt S P) (n k : Nat) (s : S)
-    (es : List R1Z.SideChannelL1AttemptRecord.Event) (e : Aeneas.Error)
+    (es : List R1Z.SideChannelL1AttemptRecord.Event) (e : Aeneas.Std.Error)
     (h : a k s = ⟨es,.fail e⟩) :
     (run a (n+1) k s).events = es := by
   simp only [run,h]
