@@ -29,17 +29,17 @@ def plan (width : Nat) (wrapped : Bool) : List Event :=
 
 theorem trace_by_carry (q : Nat) (ds : List Nat) :
     (run q ds).events=plan ds.length (decide ((PV_L2E_CarryTrace.run 0 (q+1) ds).1.2≠0)) := by
-  unfold run plan
-  split_ifs <;> simp_all only [PV_L2E_CarryTrace.trace_constant,
-    PV_L2E_CarryTrace.length,decide_true,decide_false,Bool.false_eq_true,
-    ↓reduceIte,List.append_assoc]
+  by_cases h : (PV_L2E_CarryTrace.run 0 (q+1) ds).1.2=0
+  · simp [run,plan,h,PV_L2E_CarryTrace.trace_constant,PV_L2E_CarryTrace.length]
+  · simp [run,plan,h,PV_L2E_CarryTrace.trace_constant,PV_L2E_CarryTrace.length,
+      List.append_assoc]
 
 theorem output_length (q : Nat) (ds : List Nat) : (run q ds).digits.length=ds.length := by
-  unfold run
+  dsimp only [run]
   split_ifs <;> simp only [PV_L2E_CarryTrace.length]
 
 theorem output_bounds (q : Nat) (ds : List Nat) : ∀ d∈(run q ds).digits,d<P := by
-  unfold run
+  dsimp only [run]
   split_ifs <;> exact digit_bounds _ _ _
 
 /-- First-pass wrap leaves a small value; adding 1 cannot wrap again.
