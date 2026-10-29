@@ -86,5 +86,19 @@ Three reservation refusals were uncharged and retried with the same ID only afte
 
 Stopped at the100-start Lean budget. **Next deliverable:** the native V229 Link codec and in-place read/write/drop cursor and ownership refinement into this interface, preserving all variant data and continuations; only then compose the existing resource-program/value law and reconsider restoration. The uncompiled append draft is explicitly retained under unsubmitted/ and is not imported or credited.
 '''
+for old,new in {
+ 'IDs61700':'IDs 61700','audits61797':'audits 61797','The80':'The 80','All21':'All 21',
+ 'Native02':'Native 02','Native01':'Native 01','native02':'native 02','native03':'native 03',
+ 'rustc1.94.1':'rustc 1.94.1','at8 sizes':'at 8 sizes','captures324':'captures 324',
+ 'size8/alignment2':'size 8/alignment 2','offset4':'offset 4','producer0':'producer 0','consumer2':'consumer 2',
+ 'size24/alignment8':'size 24/alignment 8','starts:91':'starts: 91',',9 fail':', 9 fail',';3/60':'; 3/60',';0 Kani':'; 0 Kani',
+ '**.61797':'**. 61797','checks116':'checks 116',"61798's116":"61798's 116",'is2,666,748KiB':'is 2,666,748 KiB',
+ 'peak540332KiB':'peak 540,332 KiB','MemoryHigh6G/MemoryMax8G/MemorySwapMax0/TasksMax64':'MemoryHigh=6G/MemoryMax=8G/MemorySwapMax=0/TasksMax=64',
+ 'Lean-M7000':'Lean -M7000','All5673':'All 5,673','verifies89':'verifies 89','after61789/61790':'after 61789/61790',
+ 'full180-second':'full 180-second','before61704':'before 61704','successful61797/61798':'successful 61797/61798',
+ 'records89':'records 89','),21987':'), 21,987','and203962804':'and 203,962,804','over20MB':'over 20 MB',
+ 'at the100-start Lean budget':'at the budget of 100 Lean starts'
+ }.items(): report=report.replace(old,new)
+report=report.replace('The initial ID scan covered','Historical LOG D42–D68/build-integration review was completed late; it did not provide endpoint closure credit. The initial ID scan covered')
 (E/'REPORT.md').write_text(report)
 print('Wrote combined audit and report; all four rows SUSPENDED')
