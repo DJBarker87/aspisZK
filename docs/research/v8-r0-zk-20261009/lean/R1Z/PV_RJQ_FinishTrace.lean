@@ -12,7 +12,7 @@ def Trace (hash : Hash) (prepared : prover.PreparedOpening)
     (salts : host_commitment.PrivateSalts)
     (round : Result (Array W 7#usize))
     (fold : W → Result (alloc.vec.Vec W)) (p : prover.Publication) : Prop :=
-  ∃ (leaves : alloc.vec.Vec (Array U8 32#usize)) (tree : host_tree.BinaryTree)
+  ∃ (leaves : alloc.vec.Vec (Array U8 32#usize)) (o : Option host_tree.BinaryTree) (tree : host_tree.BinaryTree)
     (root : Array U8 32#usize) (second : Array W 7#usize)
     (cbytes payload0 payload : alloc.vec.Vec U8) (alpha : W)
     (transcript : host_transcript.Transcript aspis_core.digest.LegacyHashFn)
@@ -20,7 +20,8 @@ def Trace (hash : Hash) (prepared : prover.PreparedOpening)
     (queries : Array U32 22#usize)
     (next : host_transcript.Transcript aspis_core.digest.LegacyHashFn),
     prover.folded_leaves hash (alloc.vec.Vec.deref prepared.folded_word) salts=ok leaves ∧
-    host_tree.BinaryTree.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash leaves=ok (some tree) ∧
+    host_tree.BinaryTree.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash leaves=ok o ∧
+    core.option.Option.ok_or o verifier.Error.Allocation=ok (.Ok tree) ∧
     host_tree.BinaryTree.root tree=ok root ∧ round=ok second ∧
     prover.encoded_slice second.to_slice=ok cbytes ∧
     alloc.slice.Slice.to_vec core.clone.CloneU8 root.to_slice=ok payload0 ∧
@@ -77,12 +78,9 @@ theorem run (variant : transport.Variant)
       | Ok unit =>
         try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
         cases h
-        have ho : o=some tree := by
-          cases o <;> cases hr <;> rfl
-        refine ⟨leaves,tree,root,second,cbytes,payload,payload1,alpha,transcript,
-          final,fbytes,queries,next,hleaves,?_,hroot,hsecond,hcbytes,hpayload,hpayload1,
+        exact ⟨leaves,o,tree,root,second,cbytes,payload,payload1,alpha,transcript,
+          final,fbytes,queries,next,hleaves,htree,hr,hroot,hsecond,hcbytes,hpayload,hpayload1,
           halpha,hfinal,hfbytes,hqueries,rfl⟩
-        simpa only [ho] using htree
 
 theorem source (variant : transport.Variant) (hash : Hash)
     (prepared : prover.PreparedOpening) (salts : host_commitment.PrivateSalts)
