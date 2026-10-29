@@ -13,7 +13,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     {H T1 T2 : Type} (D : aspis_core.digest.Digest32 H)
     (helperInst : core.ops.function.FnOnce T1 (Q × Q) (core.result.Result (alloc.vec.Vec Q) r1_wire.Error))
     (commitInst : host_semantic.Commitments T2)
-    (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+    (public1 : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (types base))
     (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
     (d g padding : Array Q 1024#usize) (helper : T1) (commitments : T2) (hash : H) (variant : transport.Variant) :
     Post (fun pair => match pair.1 with | .Err _ => True | .Ok built => Prefix 10 built.alpha)
