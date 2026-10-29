@@ -1,0 +1,92 @@
+def Aeneas.Std.bind_eq_iff.{u_1} : ∀ {α β : Type u_1} (x : Aeneas.Std.Result α) (y y' : α → Aeneas.Std.Result β),
+  x >>= y = x >>= y' ↔ ∀ (v : α), x = Aeneas.Std.Result.ok v → y v = y' v :=
+fun {α β} x y y' =>
+  Aeneas.Std.Result.casesOn (motive := fun t =>
+    x = t → (x >>= y = x >>= y' ↔ ∀ (v : α), x = Aeneas.Std.Result.ok v → y v = y' v)) x
+    (fun v h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr (congrArg Iff (congr (congrArg Eq (Aeneas.Std.bind_tc_ok v y)) (Aeneas.Std.bind_tc_ok v y')))
+              (Eq.trans
+                (forall_congr fun v_1 => implies_congr (Aeneas.Std.Result.ok.injEq v v_1) (Eq.refl (y v_1 = y' v_1)))
+                forall_eq'._simp_1))
+            (iff_self (y v = y' v))))
+    (fun e h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Iff
+                (Eq.trans (congr (congrArg Eq (Aeneas.Std.bind_tc_fail e y)) (Aeneas.Std.bind_tc_fail e y'))
+                  (eq_self (Aeneas.Std.Result.fail e))))
+              (Eq.trans
+                (forall_congr fun v =>
+                  Eq.trans
+                    (implies_congr (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h))
+                      (Eq.refl (y v = y' v)))
+                    (false_implies (y v = y' v)))
+                (implies_true α)))
+            (iff_self True)))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Iff
+                (Eq.trans (congr (congrArg Eq (Aeneas.Std.bind_tc_div y)) (Aeneas.Std.bind_tc_div y'))
+                  (eq_self Aeneas.Std.Result.div)))
+              (Eq.trans
+                (forall_congr fun v =>
+                  Eq.trans
+                    (implies_congr (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h))
+                      (Eq.refl (y v = y' v)))
+                    (false_implies (y v = y' v)))
+                (implies_true α)))
+            (iff_self True)))
+    (Eq.refl x)
+inductive Aeneas.Std.Error : Type
+number of parameters: 0
+constructors:
+Aeneas.Std.Error.assertionFailure : Aeneas.Std.Error
+Aeneas.Std.Error.integerOverflow : Aeneas.Std.Error
+Aeneas.Std.Error.divisionByZero : Aeneas.Std.Error
+Aeneas.Std.Error.arrayOutOfBounds : Aeneas.Std.Error
+Aeneas.Std.Error.maximumSizeExceeded : Aeneas.Std.Error
+Aeneas.Std.Error.panic : Aeneas.Std.Error
+Aeneas.Std.Error.undef : Aeneas.Std.Error
+theorem PV_L1D_EraseControl.control : ∀ {A B C : Type} (x : Aeneas.Std.core.ops.control_flow.ControlFlow A B)
+  (f : B → PV_L1D_Logged.Logged C) (g : A → PV_L1D_Logged.Logged C),
+  PV_L1D_Logged.erase
+      (match x with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => f b
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => g a) =
+    match x with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => PV_L1D_Logged.erase (f b)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => PV_L1D_Logged.erase (g a) :=
+fun {A B C} x f g =>
+  Aeneas.Std.core.ops.control_flow.ControlFlow.casesOn (motive := fun t =>
+    x = t →
+      PV_L1D_Logged.erase
+          (match x with
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => f b
+          | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => g a) =
+        match x with
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => PV_L1D_Logged.erase (f b)
+        | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => PV_L1D_Logged.erase (g a))
+    x
+    (fun a h =>
+      Eq.symm h ▸
+        Eq.refl
+          (PV_L1D_Logged.erase
+            (match Aeneas.Std.core.ops.control_flow.ControlFlow.Continue a with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => f b
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => g a)))
+    (fun a h =>
+      Eq.symm h ▸
+        Eq.refl
+          (PV_L1D_Logged.erase
+            (match Aeneas.Std.core.ops.control_flow.ControlFlow.Break a with
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => f b
+            | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => g a)))
+    (Eq.refl x)

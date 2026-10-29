@@ -4,7 +4,9 @@ and an entry marker. A prior interpreter is composed only in direct do actions;
 loop functional arguments remain explicit uninstrumented frontier edges.
 """
 from pathlib import Path
-import re,json,hashlib
+import re,json,hashlib,sys
+check_only = "--check" in sys.argv
+check_errors = []
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l1d-20261029';D=R/'lean'
 sources=json.loads((E/'focused-project-sources.json').read_text());s=sources['R1Z.ProverRwFullFuns'];all_defs={}
 starts=list(re.finditer(r'^def (\S+)',s,re.M))
@@ -99,7 +101,14 @@ for k,n in enumerate(selected):
  path=D/(mod+'.lean')
  if mod in accepted:
   assert hashlib.sha256(path.read_bytes()).hexdigest()==accepted[mod]['source_sha256'],('accepted source changed',mod)
+ elif check_only:
+  actual=path if path.exists() else E/'drafts'/(mod+'.lean.txt')
+  if not actual.exists() or actual.read_text()!=code:check_errors.append(mod)
  else:path.write_text(code)
  rows.append(dict(module=mod,source_function=n,path=str(path.relative_to(R)),source_body_sha256=hashlib.sha256(raw.encode()).hexdigest(),source_module_sha256=hashlib.sha256(s.encode()).hexdigest(),dependencies=sorted(set(deps)),native_edges=sorted(set(re.findall(r'\b(?:prover|host_semantic|host_transcript|host_sumcheck)\.[\w.]+',body))),discarded_restoration_candidates=re.findall(r'^.*(?:let\s+\([^\n]*,\s*_\)|next_back.*_).*$' ,raw,re.M),evidence_class='emission/model complete-Result law only; native fidelity and loop payload frontier open'))
  known[n]='PV_L1D_QueryProducer' if n=='host_transcript.Transcript.queries' else mod
+if check_only:
+ print('Generator byte check:',len(rows),'modules; mismatches:',check_errors)
+ (E/'generator-check.json').write_text(json.dumps(dict(checked=len(rows),mismatches=check_errors),indent=2)+'\n')
+ raise SystemExit(bool(check_errors))
 (E/'source-frontier.json').write_text(json.dumps(rows,indent=2)+'\n');print('Generated',len(rows),'source phase modules')

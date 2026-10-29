@@ -1,0 +1,412 @@
+PV_L1D_CallbackSafe.callbacks_append (xs ys : List R1Z.SideChannelL1AttemptRecord.Event) :
+  PV_L1D_CallbackSafe.callbacks (xs ++ ys) = PV_L1D_CallbackSafe.callbacks xs ++ PV_L1D_CallbackSafe.callbacks ys
+PV_L1D_CallbackSafe.safe_bind {A B : Type} (x : PV_L1D_Logged.Logged A) (f : A → PV_L1D_Logged.Logged B)
+  (hx : PV_L1D_CallbackSafe.Safe x) (hf : ∀ (a : A), PV_L1D_CallbackSafe.Safe (f a)) :
+  PV_L1D_CallbackSafe.Safe (x >>= f)
+PV_L1D_CallbackSafe.safe_lift {A : Type} (r : Aeneas.Std.Result A) : PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.lift r)
+PV_L1D_CallbackSafe.safe_pure {A : Type} (a : A) : PV_L1D_CallbackSafe.Safe (pure a)
+PV_L1D_CallbackSafe.safe_observe {A : Type} (site : R1Z.SideChannelL1AttemptRecord.Call) (k : ℕ)
+  (r : Aeneas.Std.Result A)
+  (h : PV_L1D_CallbackSafe.callbacks [R1Z.SideChannelL1AttemptRecord.Event.call site k] = []) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.observe site k r)
+PV_L1D_CountSuccess.count_eq_entered {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (fuel index : ℕ)
+  (s : S) (p : R1Z.ProverCommitRetry34.Published P)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner fuel index s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  p.attempts = index + (R1Z.SideChannelL1AttemptRecord.run owner fuel index s).1.attempts.length
+PV_L1D_CountSuccess.count_bounds {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (s : S)
+  (p : R1Z.ProverCommitRetry34.Published P)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  1 ≤ p.attempts ∧ p.attempts ≤ 8
+PV_L1D_EraseControl.control {A B C : Type} (x : Aeneas.Std.core.ops.control_flow.ControlFlow A B)
+  (f : B → PV_L1D_Logged.Logged C) (g : A → PV_L1D_Logged.Logged C) :
+  PV_L1D_Logged.erase
+      (match x with
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => f b
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => g a) =
+    match x with
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Continue b => PV_L1D_Logged.erase (f b)
+    | Aeneas.Std.core.ops.control_flow.ControlFlow.Break a => PV_L1D_Logged.erase (g a)
+PV_L1D_EraseIf.erase_if {A : Type} (p : Prop) [Decidable p] (a b : PV_L1D_Logged.Logged A) :
+  PV_L1D_Logged.erase (if p then a else b) = if p then PV_L1D_Logged.erase a else PV_L1D_Logged.erase b
+PV_L1D_FixedBind.bind_fixed {A B : Type} (x : PV_L1D_Logged.Logged A) (f : A → PV_L1D_Logged.Logged B)
+  (xs ys : List R1Z.SideChannelL1AttemptRecord.Event) (hx : PV_L1D_FixedEvents.Fixed xs x)
+  (hf : ∀ (a : A), PV_L1D_FixedEvents.Fixed ys (f a)) : PV_L1D_FixedEvents.Fixed (xs ++ ys) (x >>= f)
+PV_L1D_FixedEvents.fixed_lift {α : Type} (r : Aeneas.Std.Result α) : PV_L1D_FixedEvents.Fixed [] (PV_L1D_Logged.lift r)
+PV_L1D_FixedEvents.fixed_pure {α : Type} (a : α) : PV_L1D_FixedEvents.Fixed [] (pure a)
+PV_L1D_FixedEvents.bind_lift {α β : Type} (r : Aeneas.Std.Result α) (f : α → PV_L1D_Logged.Logged β)
+  (events : List R1Z.SideChannelL1AttemptRecord.Event) (h : ∀ (a : α), PV_L1D_FixedEvents.Fixed events (f a)) :
+  PV_L1D_FixedEvents.Fixed events (PV_L1D_Logged.lift r >>= f)
+PV_L1D_FixedEvents.bind_observe {α β : Type} (r : Aeneas.Std.Result α) (f : α → PV_L1D_Logged.Logged β)
+  (site : R1Z.SideChannelL1AttemptRecord.Call) (index : ℕ) (events : List R1Z.SideChannelL1AttemptRecord.Event)
+  (h : ∀ (a : α), PV_L1D_FixedEvents.Fixed events (f a)) :
+  PV_L1D_FixedEvents.Fixed (R1Z.SideChannelL1AttemptRecord.Event.call site index :: events)
+    (PV_L1D_Logged.observe site index r >>= f)
+PV_L1D_Logged.erase_pure {α : Type} (a : α) : PV_L1D_Logged.erase (pure a) = Aeneas.Std.Result.ok a
+PV_L1D_Logged.erase_lift {α : Type} (r : Aeneas.Std.Result α) : PV_L1D_Logged.erase (PV_L1D_Logged.lift r) = r
+PV_L1D_Logged.erase_observe {α : Type} (site : R1Z.SideChannelL1AttemptRecord.Call) (index : ℕ)
+  (r : Aeneas.Std.Result α) : PV_L1D_Logged.erase (PV_L1D_Logged.observe site index r) = r
+PV_L1D_Logged.erase_bind {α β : Type} (x : PV_L1D_Logged.Logged α) (f : α → PV_L1D_Logged.Logged β) :
+  PV_L1D_Logged.erase (x >>= f) = do
+    let a ← PV_L1D_Logged.erase x
+    PV_L1D_Logged.erase (f a)
+PV_L1D_Projection.prod_case {A B C : Type} (p : A × B) (f : A → B → C) :
+  (match p with
+    | (a, b) => f a b) =
+    f p.1 p.2
+PV_L1D_QueryAbsorb.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_QueryAbsorb.produce aspis_coredigestDigest32Inst self row payload) =
+    ProverRwFull.host_transcript.Transcript.absorb aspis_coredigestDigest32Inst self row payload
+PV_L1D_QueryAbsorb.completed_order [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_FixedEvents.Fixed PV_L1D_QueryAbsorb.readOrder
+    (PV_L1D_QueryAbsorb.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1D_QueryProducer.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_QueryProducer.produce aspis_coredigestDigest32Inst self row payload) =
+    ProverRwFull.host_transcript.Transcript.queries aspis_coredigestDigest32Inst self row payload
+PV_L1D_QueryProducer.completed_order [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_FixedEvents.Fixed PV_L1D_QueryProducer.readOrder
+    (PV_L1D_QueryProducer.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1D_RejectionCount.success_rejections {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P)
+  (fuel index : ℕ) (s : S) (p : R1Z.ProverCommitRetry34.Published P)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner fuel index s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  (List.filter PV_L1D_RejectionCount.retrying
+          (R1Z.SideChannelL1AttemptRecord.run owner fuel index s).1.attempts).length +
+      1 =
+    (R1Z.SideChannelL1AttemptRecord.run owner fuel index s).1.attempts.length
+PV_L1D_RejectionCount.original_count_pair {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (s : S)
+  (p : R1Z.ProverCommitRetry34.Published P)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  ((R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length,
+      (List.filter PV_L1D_RejectionCount.retrying (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts).length) =
+    (p.attempts, p.attempts - 1)
+PV_L1D_Logged.erase_coe {α : Type} (r : Aeneas.Std.Result α) : PV_L1D_Logged.erase (PV_L1D_Logged.lift r) = r
+PV_L1D_RetryCount.successful_callbacks {S P : Type} (a : PV_L1D_RetryFold.Attempt S P)
+  (entries : ∀ (k : ℕ) (s : S), PV_L1D_CallbackSafe.callbacks (a k s).events = [k]) (n k : ℕ) (s after : S)
+  (p : R1Z.ProverCommitRetry34.Published P)
+  (h : (PV_L1D_RetryFold.run a n k s).result = Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.done p, after)) :
+  p.attempts = k + (PV_L1D_CallbackSafe.callbacks (PV_L1D_RetryFold.run a n k s).events).length
+PV_L1D_RetryFold.erasure {S P : Type} (a : PV_L1D_RetryFold.Attempt S P) (n k : ℕ) (s : S) :
+  PV_L1D_Logged.erase (PV_L1D_RetryFold.run a n k s) =
+    R1Z.ProverCommitRetry34.run (fun j st => PV_L1D_Logged.erase (a j st)) n k s
+PV_L1D_RetryFold.retry_events {S P : Type} (a : PV_L1D_RetryFold.Attempt S P) (n k : ℕ) (s after : S)
+  (es : List R1Z.SideChannelL1AttemptRecord.Event)
+  (h : a k s = { events := es, result := Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.retry, after) }) :
+  (PV_L1D_RetryFold.run a (n + 1) k s).events = es ++ (PV_L1D_RetryFold.run a n (k + 1) after).events
+PV_L1D_RetryFold.failure_prefix {S P : Type} (a : PV_L1D_RetryFold.Attempt S P) (n k : ℕ) (s : S)
+  (es : List R1Z.SideChannelL1AttemptRecord.Event) (e : Aeneas.Std.Error)
+  (h : a k s = { events := es, result := Aeneas.Std.Result.fail e }) : (PV_L1D_RetryFold.run a (n + 1) k s).events = es
+PV_L1D_SelectedCount.original_success {S P A : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (s : S)
+  (p : R1Z.ProverCommitRetry34.Published P) (keys : Fin 8 → A)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  ∃ k,
+    ↑k = p.attempts - 1 ∧
+      PV_L1D_SelectedCount.selected keys p.attempts (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length =
+        some (↑k, keys k)
+PV_L1D_Source_003.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (folded_word : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact)
+  (folded_salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_Logged.erase (PV_L1D_Source_003.produce out cc1 cc2 queries folded_word folded_salts) =
+    ProverRwFull.prover.append_query_openings out cc1 cc2 queries folded_word folded_salts
+PV_L1D_Source_004.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (begin1 end1 : Aeneas.Std.Usize) (folded : Bool) :
+  PV_L1D_Logged.erase (PV_L1D_Source_004.produce queries begin1 end1 folded) =
+    ProverRwFull.prover.publication_indices queries begin1 end1 folded
+PV_L1D_Source_005.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (tree : ProverRwFull.host_tree.BinaryTree) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (batch t : Aeneas.Std.Usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_005.produce out cc1 cc2 tree queries batch t) =
+    ProverRwFull.prover.append_node_slot out cc1 cc2 tree queries batch t
+PV_L1D_Source_006.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (tree : ProverRwFull.host_tree.BinaryTree) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_006.produce out cc1 cc2 tree queries) =
+    ProverRwFull.prover.append_node_slots out cc1 cc2 tree queries
+PV_L1D_Source_007.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant) (p : ProverRwFull.prover.Publication) :
+  PV_L1D_Logged.erase (PV_L1D_Source_007.produce variant p) = ProverRwFull.prover.publish_compact variant p
+PV_L1D_Source_008.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (challenges : ProverRwFull.aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)
+  (c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_008.produce variant challenges c1_root) =
+    ProverRwFull.prover.public_check variant challenges c1_root
+PV_L1D_Source_009.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (word : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact)
+  (salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_Logged.erase (PV_L1D_Source_009.produce hash word salts) = ProverRwFull.prover.folded_leaves hash word salts
+PV_L1D_Source_015.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_015.produce aspis_coredigestDigest32Inst self row payload) =
+    ProverRwFull.host_transcript.Transcript.absorb aspis_coredigestDigest32Inst self row payload
+PV_L1D_Source_017.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_017.produce aspis_coredigestDigest32Inst self row payload) =
+    ProverRwFull.host_transcript.Transcript.block aspis_coredigestDigest32Inst self row payload
+PV_L1D_Source_018.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_018.produce aspis_coredigestDigest32Inst self row payload) =
+    ProverRwFull.host_transcript.Transcript.scalar_k aspis_coredigestDigest32Inst self row payload
+PV_L1D_Source_019.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8)
+  (nonzero : Bool) :
+  PV_L1D_Logged.erase (PV_L1D_Source_019.produce aspis_coredigestDigest32Inst self row payload nonzero) =
+    ProverRwFull.host_transcript.Transcript.scalar aspis_coredigestDigest32Inst self row payload nonzero
+PV_L1D_Source_020.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (prepared : ProverRwFull.prover.PreparedOpening) (folded_salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_Logged.erase (PV_L1D_Source_020.produce variant hash prepared folded_salts) =
+    ProverRwFull.prover.finish_opening variant hash prepared folded_salts
+PV_L1D_Source_021.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (q : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact) (w : ProverRwFull.weights.Weights) :
+  PV_L1D_Logged.erase (PV_L1D_Source_021.produce q w) = ProverRwFull.prover.opening_inactive q w
+PV_L1D_Source_023.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (coefficients : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize))
+  (gamma : ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  PV_L1D_Logged.erase (PV_L1D_Source_023.produce coefficients gamma) =
+    ProverRwFull.prover.opening_batch coefficients gamma
+PV_L1D_Source_024.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (coefficients : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize))
+  (z1 : ProverRwFull.aspis_core.r0.domain.Point ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  PV_L1D_Logged.erase (PV_L1D_Source_024.produce coefficients z1) =
+    ProverRwFull.prover.opening_claim_bytes coefficients z1
+PV_L1D_Source_025.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (messages : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize)) :
+  PV_L1D_Logged.erase (PV_L1D_Source_025.produce variant messages) =
+    ProverRwFull.prover.opening_coefficients variant messages
+PV_L1D_Source_026.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H) (hash : H)
+  (semantic_state : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_Logged.erase (PV_L1D_Source_026.produce aspis_coredigestDigest32Inst hash semantic_state variant) =
+    ProverRwFull.host_transcript.Transcript.new aspis_coredigestDigest32Inst hash semantic_state variant
+PV_L1D_Source_027.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (backend : ProverRwFull.prover.Backend)
+  (sem : ProverRwFull.host_semantic.BuiltSemantics ProverRwFull.aspis_core.digest.LegacyHashFn) :
+  PV_L1D_Logged.erase (PV_L1D_Source_027.produce variant hash backend sem) =
+    ProverRwFull.prover.prepare_opening variant hash backend sem
+PV_L1D_Source_030.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (reserved : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (tag : Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_030.produce reserved context hash tag) =
+    ProverRwFull.prover.derive_private_salts reserved context hash tag
+PV_L1D_Source_031.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (backend : ProverRwFull.prover.Backend)
+  (sem : ProverRwFull.host_semantic.BuiltSemantics ProverRwFull.aspis_core.digest.LegacyHashFn)
+  (salts :
+    ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) :
+  PV_L1D_Logged.erase (PV_L1D_Source_031.produce public1 variant hash backend sem salts) =
+    ProverRwFull.prover.prove_from_semantics public1 variant hash backend sem salts
+PV_L1D_Source_033.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (values : Aeneas.Std.Slice ProverRwFull.aspis_core.field.QM31) (masks : Aeneas.Std.Array Aeneas.Std.U16 64#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_033.produce values masks) = ProverRwFull.prover.inactive_sum_k values masks
+PV_L1D_Source_037.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Slice (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31))
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize)
+  (masks : Aeneas.Std.Array Aeneas.Std.U16 64#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_037.produce c1 mask_only d g h1_padding masks) =
+    ProverRwFull.prover.audit_masks c1 mask_only d g h1_padding masks
+PV_L1D_Source_038.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (values : Aeneas.Std.Slice ProverRwFull.aspis_core.field.QM31) :
+  PV_L1D_Logged.erase (PV_L1D_Source_038.produce values) = ProverRwFull.prover.fixed_k_column values
+PV_L1D_Source_039.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (noised : Aeneas.Std.Slice (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31))
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_039.produce noised mask_only) =
+    ProverRwFull.host_semantic.clone_semantic_columns noised mask_only
+PV_L1D_Source_041.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle F) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) (running : ProverRwFull.aspis_core.field.QM31)
+  (round : Aeneas.Std.Usize) (oracle : F) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_041.produce aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle) =
+    ProverRwFull.host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point
+      running round oracle
+PV_L1D_Source_042.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle F) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) (running : ProverRwFull.aspis_core.field.QM31)
+  (round : Aeneas.Std.Usize) (oracle : F) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_042.produce aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle) =
+    ProverRwFull.host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript output point
+      running round oracle
+PV_L1D_Source_043.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle T1) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (initial_claim : ProverRwFull.aspis_core.field.QM31) (oracle : T1) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_043.produce aspis_coredigestDigest32Inst OracleInst transcript output initial_claim oracle) =
+    ProverRwFull.host_sumcheck.prove_sumcheck aspis_coredigestDigest32Inst OracleInst transcript output initial_claim
+      oracle
+PV_L1D_Source_044.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_044.produce aspis_coredigestDigest32Inst row payload transcript bytes) =
+    ProverRwFull.host_semantic.semantic_row aspis_coredigestDigest32Inst row payload transcript bytes
+PV_L1D_Source_045.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (variant : ProverRwFull.transport.Variant) (z : ProverRwFull.aspis_core.circle.SecureCirclePoint) :
+  PV_L1D_Logged.erase (PV_L1D_Source_045.produce columns variant z) =
+    ProverRwFull.host_semantic.endpoint_bytes columns variant z
+PV_L1D_Source_046.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (claims : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_046.produce bytes claims) =
+    ProverRwFull.host_semantic.append_claim_bytes bytes claims
+PV_L1D_Source_047.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize)
+  (extras : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_047.produce claims extras) = ProverRwFull.host_semantic.claim_bytes claims extras
+PV_L1D_Source_049.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (variant : ProverRwFull.transport.Variant) (a b : ProverRwFull.aspis_core.field.QM31) :
+  PV_L1D_Logged.erase (PV_L1D_Source_049.produce columns variant a b) =
+    ProverRwFull.host_semantic.extra_claims columns variant a b
+PV_L1D_Source_051.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_051.produce columns) = ProverRwFull.host_semantic.initial_mask_sum columns
+PV_L1D_Source_052.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (h1 : Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31)
+  (g d : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_052.produce c1 h1 g d) = ProverRwFull.host_semantic.lift_columns c1 h1 g d
+PV_L1D_Source_053.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (offset j : Aeneas.Std.Usize)
+  (sum : ProverRwFull.aspis_core.field.QM31) :
+  PV_L1D_Logged.erase (PV_L1D_Source_053.produce dc offset j sum) =
+    ProverRwFull.host_semantic.d_tail_sum dc offset j sum
+PV_L1D_Source_054.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (offset : Aeneas.Std.Usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_054.produce dc offset) = ProverRwFull.host_semantic.d_tail_side dc offset
+PV_L1D_Source_055.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (mask_sum : ProverRwFull.aspis_core.field.QM31)
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_055.produce mask_sum dc) = ProverRwFull.host_semantic.add_d_tail mask_sum dc
+PV_L1D_Source_056.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (transcript : ProverRwFull.host_wire.SemanticTranscript H) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :
+  PV_L1D_Logged.erase (PV_L1D_Source_056.produce aspis_coredigestDigest32Inst transcript bytes) =
+    ProverRwFull.host_semantic.zc_rows aspis_coredigestDigest32Inst transcript bytes
+PV_L1D_Source_058.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (column : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_058.produce column) = ProverRwFull.host_semantic.check_secure_column column
+PV_L1D_Source_062.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_062.produce c1) = ProverRwFull.host_semantic.check_base_columns c1
+PV_L1D_Source_063.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (d g : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_063.produce c1 d g) = ProverRwFull.host_semantic.check_semantic_columns c1 d g
+PV_L1D_Source_065.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_065.produce columns point) =
+    ProverRwFull.host_semantic.claims_at_point columns point
+PV_L1D_Source_066.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) :
+  PV_L1D_Logged.erase (PV_L1D_Source_066.produce columns point) = ProverRwFull.host_semantic.point_claims columns point
+PV_L1D_Source_067.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 T2 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst :
+    Aeneas.Std.core.ops.function.FnOnce T1 (ProverRwFull.aspis_core.field.QM31 × ProverRwFull.aspis_core.field.QM31)
+      (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31)
+        ProverRwFull.r1_wire.Error))
+  (CommitmentsInst : ProverRwFull.host_semantic.Commitments T2)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (helper : T1) (commitments : T2)
+  (hash : H) (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_067.produce aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst
+        CommitmentsInst public1 c1 d g h1_padding helper commitments hash variant) =
+    ProverRwFull.host_semantic.build_with_helper_mode aspis_coredigestDigest32Inst
+      coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst public1 c1 d g h1_padding helper
+      commitments hash variant
+PV_L1D_Source_068.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (CommitmentsInst : ProverRwFull.host_semantic.Commitments T1)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (noised_semantic_c1 : ProverRwFull.aspis_statement.state_only_trace.StateOnlyTraceFoundation)
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (commitments : T1) (hash : H)
+  (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_068.produce aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1
+        mask_only d g h1_padding commitments hash variant) =
+    ProverRwFull.host_semantic.build_with_material aspis_coredigestDigest32Inst CommitmentsInst public1 compiled
+      noised_semantic_c1 mask_only d g h1_padding commitments hash variant
+PV_L1D_Source_069.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {T0 : Type}
+  (aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst :
+    ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (nonce_store : T0) :
+  PV_L1D_Logged.erase
+      (PV_L1D_Source_069.produce aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash
+        context binding attempt nonce_store) =
+    ProverRwFull.prover.prove_masked_with_attempt aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1
+      compiled variant hash context binding attempt nonce_store
+PV_L1D_UploadCounts.ceil_formula (n : ℕ) : PV_L1D_UploadCounts.uploads n = (n + 3762) / 3763
+PV_L1D_UploadCounts.same_original_result {S Audit A : Type}
+  (owner : R1Z.SideChannelL1AttemptRecord.Owner S (PV_L1D_UploadCounts.Proof Audit)) (s : S)
+  (p : R1Z.ProverCommitRetry34.Published (PV_L1D_UploadCounts.Proof Audit)) (keys : Fin 8 → A)
+  (h : (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.result = R1Z.ProverCommitRetry34.Step.done p) :
+  ∃ k,
+    ↑k = p.attempts - 1 ∧
+      PV_L1D_SelectedCount.selected keys p.attempts (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length =
+          some (↑k, keys k) ∧
+        ((R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length,
+            (List.filter PV_L1D_RejectionCount.retrying
+                (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts).length,
+            PV_L1D_UploadCounts.uploads p.proof.1.length, 1) =
+          (p.attempts, p.attempts - 1, (p.proof.1.length + 3762) / 3763, 1)
+PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE {I A : Type} (actual : I → List ℕ × List ℕ) (native : I → PV_RJ4IDB.NativeTrace A) :
+  Prop
+PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_TIME_TRACE {I A : Type} (actual : I → List PV_RJ4IDB.Bytes)
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+'PV_L1D_UploadCounts.same_original_result' depends on axioms: [propext, Classical.choice, Quot.sound]

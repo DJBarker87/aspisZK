@@ -3,7 +3,7 @@
 Branch `codex/pv-l1d-20261029`, candidate base `1ca6ed868a`, exact sparse
 worktree `/Users/dominic/ZK/.worktrees/pv-l1c`. Work follows the requested order.
 The first concrete input remains open; later inputs have not been started.
-Final validation and budget totals are appended below after the reserved audits.
+Final validation and budget totals are recorded below.
 
 ## Target and boundaries
 
@@ -117,3 +117,77 @@ callback count theorem `PV_L1D_RetryCount.successful_callbacks` has an explicit
 per-attempt entry-log association premise; that premise has NOT been proved
 for the deployed producer. The other three inputs remain unopened under the
 requested ordering.
+
+
+## Validation and AGENTS section 6 receipts
+
+**100/100 Lean compiler starts; 78 pass, 22 fail. Zero native scopes, zero Kani.**
+Only Env-J IDs 65800–65899 were used; 65897–65899 are the reserved audits.
+The 97 focused starts were all spent before those three final checks. Per-module
+aggregate wall time was 360.08 seconds; maximum peak RSS was 4685299712 bytes; swaps zero.
+The full source revision/blob/SHA, exact one-module target, command, dependency
+fingerprint, exit, wall time, peak RSS, swap and complete #print axioms output
+are retained in every `modules-ID.json` and `receipt-ID.json`. Original compiler
+outputs and GNU time files are in `raw/`, fetched and SHA-verified against the
+host originals. Failed elaborator-generated sorryAx output earns no credit.
+
+| ID | Exact target | Exit | Wall seconds | Peak RSS bytes | Swaps | Source revision |
+|---|---|---:|---:|---:|---:|---|
+| 65897 | `PV_L1D_Statements` | 0 | 2.62 | 4370149376 | 0 | `02759634ed0663b0d295b1b15c6082dbe80be7db` |
+| 65898 | `PV_L1D_Axioms` | 0 | 1.86 | 4386652160 | 0 | `02759634ed0663b0d295b1b15c6082dbe80be7db` |
+| 65899 | `PV_L1D_FocusedReplay` | 0 | 2.12 | 4377960448 | 0 | `02759634ed0663b0d295b1b15c6082dbe80be7db` |
+
+`PV_L1D_Statements` prints the checked model signatures and the unchanged exact
+four native input types. `PV_L1D_Axioms` audits all 79 checked model theorems,
+including private renamed replays, and the named reused D163/retry/diag2/decoder
+laws. `axioms-summary.json` verifies every result is a subset of propext,
+Classical.choice and Quot.sound. `PV_L1D_FocusedReplay` imports that accepted
+closure once. These are focused model/source-proof checks, not a full frozen
+privacy release replay or proof of the deployed endpoint.
+
+The h4 preflight verified all 5,673 external objects BEFORE compiling. The h6
+reuse check verified 814 selected project objects with complete recorded
+transitive fingerprints. Twelve missing inherited D163/diag2 modules were
+compiled privately; their unchanged source pins were verified too. The final
+read-only validation rechecks 903 loaded project/own objects, 348 direct new
+compiler dependency edges and all 5,673 external objects against their pinned
+hashes, using the same Lean githash and inherited path prefix. There is no
+source, object, dependency or toolchain mismatch. No shared/other-job source or
+object was written, and no external module was rebuilt. No h5'' substitution,
+XR model, quarantined Kani PASS or altered trust item was consumed.
+
+All compiler scopes used MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0,
+TasksMax=64 and Lean -M7000, one scope at a time. The immediate admission check
+and launch were in the same fail-closed shell command, requiring BOTH
+allowed:true and exit 0. No admission refusal, cooldown violation, ruling-(t)
+slip, memory kill, unchanged compiler rerun, host fault or cap increase occurred.
+Heartbeat/simplifier/proof failures were changed before retry and are retained.
+There was no local Lean compile, cold dependency build, native Rust gate,
+release ELF rebuild, timing measurement or Kani run.
+
+`generator-check.json` verifies byte parity for all 73 generated phase models,
+using checked symbolic-proof templates for the formerly slow cases. The first
+check found only the unattempted Source072 draft's obsolete callback phase
+annotation; `generator-check-initial.json` preserves that failure. Removing that
+draft annotation restored generator parity without changing any audited source.
+
+`final-source-manifest.json` separates checked source roots from unaccepted
+text drafts. The latter are outside the importable Lean tree and have zero
+credit. `COMMITS.txt` records the exact candidate-base commit range. No push
+or merge. All evidence files are below 20 MB; no compiler object, binary,
+archive or wallet/key material is committed. Cleanup removes only this job's
+rebuildable cache objects/links, after the recorded final validation; retained
+sources, original receipts and other jobs' caches are preserved.
+
+Stopped because the fresh 100-attempt budget is exhausted. The first native
+input is still PARTIAL, and no later input was started. Next deliverable:
+compile the full-body Source070 wrapper, then check the proposed recursively
+logged source retry join, and supply the missing native leaf/world and original
+D163 joint coupling association. None of that work may be inferred from the
+now-checked Source069 erasure theorem.
+
+
+`cache-cleanup.json` records completed cleanup of only own compiled scratch
+and own symlinks. The final-validation object hashes describe the verified
+objects BEFORE that cleanup. No compiler was run afterward. All retained
+source/evidence files and all wallet/account keys are untouched.

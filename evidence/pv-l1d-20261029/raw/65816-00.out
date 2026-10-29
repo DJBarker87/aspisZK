@@ -1,0 +1,242 @@
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:76:10: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:76:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.38
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case isTrue
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+tree : host_tree.BinaryTree
+queries : Std.Array U32 22#usize
+batch t : Usize
+h✝ : batch = 0#usize
+x✝ : ?m.38
+⊢ (do
+      let a ← Pure.pure 0#usize
+      let a_1 ← Pure.pure compact.SPLIT
+      let a ← prover.publication_indices queries a a_1 (decide (t = 2#usize))
+      let a ←
+        match ↑t with
+          | 0 => cc1.multiproof a.deref
+          | 1 => cc2.multiproof a.deref
+          | x => tree.multiproof a.deref
+      let a ← core.option.Option.ok_or a verifier.Error.Allocation
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let a ← PV_L1D_Logged.lift compact.SLOT_NODES
+            let i ← PV_L1D_Logged.lift (Std.lift (Usize.wrapping_mul 3#usize batch))
+            let i1 ← PV_L1D_Logged.lift (Std.lift (i.wrapping_add t))
+            let i2 ← PV_L1D_Logged.lift (a.index_usize i1)
+            let cap ← PV_L1D_Logged.lift (Std.lift (Usize.wrapping_mul 32#usize i2))
+            PV_L1D_Logged.lift (massert (val.len ≤ cap))
+            let out1 ← PV_L1D_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref)
+            let i5 ← PV_L1D_Logged.lift (Std.lift (out1.len.wrapping_add cap))
+            let padded ← PV_L1D_Logged.lift (Std.lift (i5.wrapping_sub val.len))
+            let out2 ← PV_L1D_Logged.lift (alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8)
+            Pure.pure (core.result.Result.Ok out2)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            PV_L1D_Logged.lift
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let idx ← prover.publication_indices queries 0#usize compact.SPLIT (decide (t = 2#usize))
+    let o ←
+      match ↑t with
+        | 0 => cc1.multiproof idx.deref
+        | 1 => cc2.multiproof idx.deref
+        | x => tree.multiproof idx.deref
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a ← compact.SLOT_NODES
+        let i ← Std.lift (Usize.wrapping_mul 3#usize batch)
+        let i1 ← Std.lift (i.wrapping_add t)
+        let i2 ← a.index_usize i1
+        let cap ← Std.lift (Usize.wrapping_mul 32#usize i2)
+        massert (val.len ≤ cap)
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+        let i5 ← Std.lift (out1.len.wrapping_add cap)
+        let padded ← Std.lift (i5.wrapping_sub val.len)
+        let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:76:10: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:76:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.38
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+case isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+tree : host_tree.BinaryTree
+queries : Std.Array U32 22#usize
+batch t : Usize
+h✝ : ¬batch = 0#usize
+x✝ : ?m.38
+⊢ (do
+      let a ← Pure.pure compact.SPLIT
+      let a_1 ← Pure.pure 22#usize
+      let a ← prover.publication_indices queries a a_1 (decide (t = 2#usize))
+      let a ←
+        match ↑t with
+          | 0 => cc1.multiproof a.deref
+          | 1 => cc2.multiproof a.deref
+          | x => tree.multiproof a.deref
+      let a ← core.option.Option.ok_or a verifier.Error.Allocation
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let a ← PV_L1D_Logged.lift compact.SLOT_NODES
+            let i ← PV_L1D_Logged.lift (Std.lift (Usize.wrapping_mul 3#usize batch))
+            let i1 ← PV_L1D_Logged.lift (Std.lift (i.wrapping_add t))
+            let i2 ← PV_L1D_Logged.lift (a.index_usize i1)
+            let cap ← PV_L1D_Logged.lift (Std.lift (Usize.wrapping_mul 32#usize i2))
+            PV_L1D_Logged.lift (massert (val.len ≤ cap))
+            let out1 ← PV_L1D_Logged.lift (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref)
+            let i5 ← PV_L1D_Logged.lift (Std.lift (out1.len.wrapping_add cap))
+            let padded ← PV_L1D_Logged.lift (Std.lift (i5.wrapping_sub val.len))
+            let out2 ← PV_L1D_Logged.lift (alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8)
+            Pure.pure (core.result.Result.Ok out2)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            PV_L1D_Logged.lift
+              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual))) =
+    do
+    let idx ← prover.publication_indices queries compact.SPLIT 22#usize (decide (t = 2#usize))
+    let o ←
+      match ↑t with
+        | 0 => cc1.multiproof idx.deref
+        | 1 => cc2.multiproof idx.deref
+        | x => tree.multiproof idx.deref
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a ← compact.SLOT_NODES
+        let i ← Std.lift (Usize.wrapping_mul 3#usize batch)
+        let i1 ← Std.lift (i.wrapping_add t)
+        let i2 ← a.index_usize i1
+        let cap ← Std.lift (Usize.wrapping_mul 32#usize i2)
+        massert (val.len ≤ cap)
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+        let i5 ← Std.lift (out1.len.wrapping_add cap)
+        let padded ← Std.lift (i5.wrapping_sub val.len)
+        let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:69:13: warning: This simp argument is unused:
+  PV_L1D_EraseIf.erase_if
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵0̵4̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲S̲o̲u̲r̲c̲e̲_̲0̲0̲4̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:69:37: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵0̵4̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲S̲o̲u̲r̲c̲e̲_̲0̲0̲4̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:69:123: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure, ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:69:133: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:27: warning: This simp argument is unused:
+  PV_L1D_EraseIf.erase_if
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵0̵4̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲S̲o̲u̲r̲c̲e̲_̲0̲0̲4̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:51: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵0̵4̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲S̲o̲u̲r̲c̲e̲_̲0̲0̲4̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:101: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:112: warning: This simp argument is unused:
+  erase_observe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:126: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:137: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:147: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_004.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_005.lean:72:158: warning: This simp argument is unused:
+  PV_L1D_Source_004.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵0̵4̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲P̲r̲o̲j̲e̲c̲t̲i̲o̲n̲.̲p̲r̲o̲d̲_̲c̲a̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1D_Source_005.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
