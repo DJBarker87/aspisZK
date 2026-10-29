@@ -10,7 +10,7 @@ theorem word_window (l r : List U8) (a b width off : Nat)
  have same := congrArg (fun xs : List U8 => (xs.drop off).take 4) h
  rw [AspisR1.PV_2TNV_PublicWindows.nested _ _ _ _ _ bound,
  AspisR1.PV_2TNV_PublicWindows.nested _ _ _ _ _ bound] at same
- exact congrArg AspisR1.PV_2TNV_ByteEncoding.littleEndian same
+ exact congrArg (fun xs => (AspisR1.PV_2TNV_ByteEncoding.littleEndian xs : M)) same
 
 theorem digest_window (l r : List U8) (a b width off : Nat)
  (h : (l.drop a).take width = (r.drop b).take width)
