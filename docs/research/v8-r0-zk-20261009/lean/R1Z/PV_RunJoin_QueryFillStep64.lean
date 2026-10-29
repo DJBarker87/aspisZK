@@ -30,10 +30,17 @@ def step (c : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex)
   let x3 ← Array.index_usize row 3#usize
   put values 3#usize lane x3
 
+theorem pair_bind {A B C : Type} (r : Result (A × B)) (f : A → B → Result C) :
+    (do let (a,b) ← r;f a b)=(do let p ← r;f p.1 p.2) := by
+  apply congrArg (Aeneas.Std.bind r)
+  funext p
+  cases p
+  rfl
+
 theorem factor (c : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex)
     (values : Matrix) (j : Usize) :
     PV_RunJoin_FibreFillThread43.step c u values j=step c u values j := by
-  simp only [PV_RunJoin_FibreFillThread43.step,step,put,bind_assoc_eq,bind_tc_ok,Aeneas.Std.uncurry]
+  simp only [PV_RunJoin_FibreFillThread43.step,step,put,bind_assoc_eq,bind_tc_ok,Aeneas.Std.uncurry,pair_bind]
 
 end R1Z.PV_RunJoin_QueryFillStep64
 namespace R1Z.PV_RunJoin_QueryFillStep64
@@ -71,11 +78,13 @@ theorem total (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨v2,hv2⟩ := PV_RunJoin_QueryMatrixTotal64.total v1 2#usize lane x2 (by decide) laneBound
   obtain ⟨v3,hv3⟩ := PV_RunJoin_QueryMatrixTotal64.total v2 3#usize lane x3 (by decide) laneBound
   refine ⟨v3,?_⟩
+  dsimp only [lane,word] at hrow hv0 hv1 hv2 hv3
   rw [factor]
   simp only [step,hl,hw,bind_tc_ok,hrow,h0,h1,h2,h3,hv0,hv1,hv2,hv3]
 
 #print axioms Domain
 #print axioms step
+#print axioms pair_bind
 #print axioms factor
 #print axioms total
 end R1Z.PV_RunJoin_QueryFillStep64
