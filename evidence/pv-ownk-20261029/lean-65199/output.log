@@ -1,0 +1,948 @@
+theorem R1Z.PV_OWNK_QMDecode.mul : ∀ (x y : R1Z.PV_OWNK_TowerCanon.Q),
+  R1Z.PV_OWNK_TowerCanon.Canon x →
+    R1Z.PV_OWNK_TowerCanon.Canon y →
+      R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueMul x y) =
+        R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y :=
+fun x y hx hy =>
+  have hm0 := R1Z.PV_OWNK_TowerCanon.cm_mul x.c0 y.c0;
+  have hm1 := R1Z.PV_OWNK_TowerCanon.cm_mul x.c1 y.c1;
+  have hsx := R1Z.PV_OWNK_TowerCanon.cm_add x.c0 x.c1 hx.left hx.right;
+  have hsy := R1Z.PV_OWNK_TowerCanon.cm_add y.c0 y.c1 hy.left hy.right;
+  have hm2 :=
+    R1Z.PV_OWNK_TowerCanon.cm_mul (PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1)
+      (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1);
+  QuadraticAlgebra.ext
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).re)
+              (R1Z.PV_OWNK_CMDecode.add (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0)
+                (PV_B2_FieldValue.aspis_core.field.mul_by_r (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1)) hm0
+                (R1Z.PV_OWNK_TowerCanon.mul_by_r (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) hm1))))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) + _a =
+                    (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).re)
+                (R1Z.PV_OWNK_CMDecode.mul_by_r (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) hm1)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a +
+                        AspisV8R15.ExactTowerBase.qm31R *
+                          R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                      (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).re)
+                  (R1Z.PV_OWNK_CMDecode.mul x.c0 y.c0 hx.left hy.left)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      R1Z.PV_OWNK_CMDecode.decode x.c0 * R1Z.PV_OWNK_CMDecode.decode y.c0 +
+                          AspisV8R15.ExactTowerBase.qm31R * _a =
+                        (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).re)
+                    (R1Z.PV_OWNK_CMDecode.mul x.c1 y.c1 hx.right hy.right)))
+                (id
+                  (Mathlib.Tactic.Ring.of_eq
+                    (Mathlib.Tactic.Ring.Common.add_congr
+                      (Mathlib.Tactic.Ring.Common.mul_congr
+                        (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c0) rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c0) rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0) (Nat.rawCast 1)
+                              (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                (Nat.rawCast 1)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                              0))))
+                      (Mathlib.Tactic.Ring.Common.mul_congr
+                        (Mathlib.Tactic.Ring.Common.atom_pf AspisV8R15.ExactTowerBase.qm31R rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.mul_congr
+                          (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c1) rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                      R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c1) rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                      R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.add_mul
+                            (Mathlib.Tactic.Ring.Common.mul_add
+                              (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1) (Nat.rawCast 1)
+                                (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                  (Nat.rawCast 1)
+                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                  0)))
+                            (Mathlib.Tactic.Ring.Common.zero_mul
+                              (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                0))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left AspisV8R15.ExactTowerBase.qm31R (Nat.rawCast 1)
+                              (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                (Nat.rawCast 1)
+                                (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                  (Nat.rawCast 1)
+                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1))))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                                0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                              0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                              0))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                          (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                              (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                            0))))
+                    (Mathlib.Tactic.Ring.Common.add_congr
+                      (Mathlib.Tactic.Ring.Common.mul_congr
+                        (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c0) rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c0) rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0) (Nat.rawCast 1)
+                              (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                (Nat.rawCast 1)
+                                (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                  (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                    (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                              0))))
+                      (Mathlib.Tactic.Ring.Common.mul_congr
+                        (Mathlib.Tactic.Ring.Common.mul_congr
+                          (Mathlib.Tactic.Ring.Common.atom_pf AspisV8R15.ExactTowerBase.qm31R rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                      AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c1) rfl
+                            (Eq.mpr
+                              (id
+                                (congrArg
+                                  (fun _a =>
+                                    R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                      R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                  (Eq.symm rfl)))
+                              (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                          (Mathlib.Tactic.Ring.Common.add_mul
+                            (Mathlib.Tactic.Ring.Common.mul_add
+                              (Mathlib.Tactic.Ring.Common.mul_pf_left AspisV8R15.ExactTowerBase.qm31R (Nat.rawCast 1)
+                                (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                  (Nat.rawCast 1)
+                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                              (Mathlib.Tactic.Ring.Common.mul_zero
+                                (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 * Nat.rawCast 1))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                  0)))
+                            (Mathlib.Tactic.Ring.Common.zero_mul
+                              (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                0))))
+                        (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c1) rfl
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                    R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                (Eq.symm rfl)))
+                            (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                        (Mathlib.Tactic.Ring.Common.add_mul
+                          (Mathlib.Tactic.Ring.Common.mul_add
+                            (Mathlib.Tactic.Ring.Common.mul_pf_left AspisV8R15.ExactTowerBase.qm31R (Nat.rawCast 1)
+                              (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1) (Nat.rawCast 1)
+                                (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                  (Nat.rawCast 1)
+                                  (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                    (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                      (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1))))))
+                            (Mathlib.Tactic.Ring.Common.mul_zero
+                              (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                                0)))
+                          (Mathlib.Tactic.Ring.Common.zero_mul
+                            (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                          (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                            (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                              0))))
+                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                        (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                          (AspisV8R15.ExactTowerBase.qm31R ^ Nat.rawCast 1 *
+                              (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1)) +
+                            0))))))))))))
+    (id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg (fun _a => _a = (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+              (R1Z.PV_OWNK_CMDecode.sub
+                (((PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1).mul
+                      (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1)).sub
+                  (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0))
+                (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1)
+                (R1Z.PV_OWNK_TowerCanon.cm_sub
+                  ((PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1).mul
+                    (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1))
+                  (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) hm2 hm0)
+                hm1)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a - R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                    (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                (R1Z.PV_OWNK_CMDecode.sub
+                  ((PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1).mul
+                    (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1))
+                  (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) hm2 hm0)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    _a - R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) -
+                        R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                      (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                  (R1Z.PV_OWNK_CMDecode.mul (PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1)
+                    (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1) hsx hsy)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a * R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1) -
+                            R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) -
+                          R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                        (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                    (R1Z.PV_OWNK_CMDecode.add x.c0 x.c1 hx.left hx.right)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (R1Z.PV_OWNK_CMDecode.decode x.c0 + R1Z.PV_OWNK_CMDecode.decode x.c1) * _a -
+                              R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0) -
+                            R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                          (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                      (R1Z.PV_OWNK_CMDecode.add y.c0 y.c1 hy.left hy.right)))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (R1Z.PV_OWNK_CMDecode.decode x.c0 + R1Z.PV_OWNK_CMDecode.decode x.c1) *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c0 + R1Z.PV_OWNK_CMDecode.decode y.c1) -
+                                _a -
+                              R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1) =
+                            (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                        (R1Z.PV_OWNK_CMDecode.mul x.c0 y.c0 hx.left hy.left)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (R1Z.PV_OWNK_CMDecode.decode x.c0 + R1Z.PV_OWNK_CMDecode.decode x.c1) *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 + R1Z.PV_OWNK_CMDecode.decode y.c1) -
+                                  R1Z.PV_OWNK_CMDecode.decode x.c0 * R1Z.PV_OWNK_CMDecode.decode y.c0 -
+                                _a =
+                              (R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y).im)
+                          (R1Z.PV_OWNK_CMDecode.mul x.c1 y.c1 hx.right hy.right)))
+                      (id
+                        (Mathlib.Tactic.Ring.of_eq
+                          (Mathlib.Tactic.Ring.Common.sub_congr
+                            (Mathlib.Tactic.Ring.Common.sub_congr
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.add_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c0) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c1) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                (Mathlib.Tactic.Ring.Common.add_congr
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c0) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c1) rfl
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                              R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                          (Eq.symm rfl)))
+                                      (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                      (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                              (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_zero
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                            (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0)))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                            (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.add_mul
+                                    (Mathlib.Tactic.Ring.Common.mul_add
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                            (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                              (Eq.refl 1)))))
+                                      (Mathlib.Tactic.Ring.Common.mul_add
+                                        (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                          (Nat.rawCast 1)
+                                          (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                            (Nat.rawCast 1)
+                                            (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                              (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                                (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                                (Eq.refl 1)))))
+                                        (Mathlib.Tactic.Ring.Common.mul_zero
+                                          (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                          (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                              (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            0)))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                        (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                          (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                              (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            0))))
+                                    (Mathlib.Tactic.Ring.Common.zero_mul
+                                      (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 +
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                            (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                      (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                      (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                            (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                              (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                            0)))))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c0) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c0) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0))))
+                              (Mathlib.Tactic.Ring.Common.sub_pf
+                                (Mathlib.Tactic.Ring.Common.neg_add
+                                  (Mathlib.Tactic.Ring.Common.neg_mul (R1Z.PV_OWNK_CMDecode.decode x.c0) (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.neg_mul (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                          (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1))
+                                          (Eq.refl (Int.negOfNat 1))))))
+                                  Mathlib.Tactic.Ring.Common.neg_zero)
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                                  (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (R1Z.PV_OWNK_CMDecode.decode x.c0)
+                                    (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsInt.to_isNat
+                                        (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                                          (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1))
+                                          (Mathlib.Meta.NormNum.IsInt.of_raw R1Z.PV_OWNK_CMDecode.E (Int.negOfNat 1))
+                                          (Eq.refl (Int.ofNat 0))))))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                            (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                          0)))))))
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode x.c1) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_CMDecode.decode y.c1) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.add_mul
+                                (Mathlib.Tactic.Ring.Common.mul_add
+                                  (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                    (Nat.rawCast 1)
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                        (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                                  (Mathlib.Tactic.Ring.Common.mul_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0)))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                      (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.sub_pf
+                              (Mathlib.Tactic.Ring.Common.neg_add
+                                (Mathlib.Tactic.Ring.Common.neg_mul (R1Z.PV_OWNK_CMDecode.decode x.c1) (Nat.rawCast 1)
+                                  (Mathlib.Tactic.Ring.Common.neg_mul (R1Z.PV_OWNK_CMDecode.decode y.c1) (Nat.rawCast 1)
+                                    (Mathlib.Meta.NormNum.IsInt.to_raw_eq
+                                      (Mathlib.Meta.NormNum.isInt_neg (Eq.refl Neg.neg)
+                                        (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                          (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1))
+                                        (Eq.refl (Int.negOfNat 1))))))
+                                Mathlib.Tactic.Ring.Common.neg_zero)
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_overlap_zero
+                                    (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.add_overlap_pf_zero (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsInt.to_isNat
+                                          (Mathlib.Meta.NormNum.isInt_add (Eq.refl HAdd.hAdd)
+                                            (Mathlib.Meta.NormNum.IsNat.to_isInt
+                                              (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1))
+                                            (Mathlib.Meta.NormNum.IsInt.of_raw R1Z.PV_OWNK_CMDecode.E (Int.negOfNat 1))
+                                            (Eq.refl (Int.ofNat 0))))))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_zero_add 0))))))
+                          (Mathlib.Tactic.Ring.Common.add_congr
+                            (Mathlib.Tactic.Ring.Common.add_congr
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc x.c0) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc y.c1) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c0)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c1)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0))))
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc x.c1) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc y.c0) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.add_mul
+                                  (Mathlib.Tactic.Ring.Common.mul_add
+                                    (Mathlib.Tactic.Ring.Common.mul_pf_left (R1Z.PV_OWNK_CMDecode.decode x.c1)
+                                      (Nat.rawCast 1)
+                                      (Mathlib.Tactic.Ring.Common.mul_pf_right (R1Z.PV_OWNK_CMDecode.decode y.c0)
+                                        (Nat.rawCast 1)
+                                        (Mathlib.Meta.NormNum.IsNat.to_raw_eq
+                                          (Mathlib.Meta.NormNum.isNat_mul (Eq.refl HMul.hMul)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1)
+                                            (Mathlib.Meta.NormNum.IsNat.of_raw R1Z.PV_OWNK_CMDecode.E 1) (Eq.refl 1)))))
+                                    (Mathlib.Tactic.Ring.Common.mul_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                    (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                      (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                          (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                        0)))
+                                  (Mathlib.Tactic.Ring.Common.zero_mul
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0))
+                                  (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                                    (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                        (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                      0))))
+                              (Mathlib.Tactic.Ring.Common.add_pf_add_lt
+                                (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))
+                                (Mathlib.Tactic.Ring.Common.add_pf_zero_add
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                      (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                    0))))
+                            (Mathlib.Tactic.Ring.Common.mul_congr
+                              (Mathlib.Tactic.Ring.Common.mul_congr
+                                (Mathlib.Tactic.Ring.cast_zero
+                                  (Mathlib.Meta.NormNum.isNat_ofNat R1Z.PV_OWNK_CMDecode.E Nat.cast_zero))
+                                (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc x.c1) rfl
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                            R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * _a)
+                                        (Eq.symm rfl)))
+                                    (Eq.refl (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                                (Mathlib.Tactic.Ring.Common.zero_mul
+                                  (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))
+                              (Mathlib.Tactic.Ring.Common.atom_pf (R1Z.PV_OWNK_QMDecode.dc y.c1) rfl
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 =
+                                          R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * _a)
+                                      (Eq.symm rfl)))
+                                  (Eq.refl (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1))))
+                              (Mathlib.Tactic.Ring.Common.zero_mul
+                                (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1 + 0)))
+                            (Mathlib.Tactic.Ring.Common.add_pf_add_zero
+                              (R1Z.PV_OWNK_CMDecode.decode x.c0 ^ Nat.rawCast 1 *
+                                  (R1Z.PV_OWNK_CMDecode.decode y.c1 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                (R1Z.PV_OWNK_CMDecode.decode x.c1 ^ Nat.rawCast 1 *
+                                    (R1Z.PV_OWNK_CMDecode.decode y.c0 ^ Nat.rawCast 1 * Nat.rawCast 1) +
+                                  0)))))))))))))))
+'R1Z.PV_OWNK_QMDecode.mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_OWNK_ConcreteDecoder.decoder : R1Z.PV_OWNJ_DecodeFold.Decoder R1Z.PV_OWNK_ConcreteDecoder.decode :=
+{ zero_eq := R1Z.PV_OWNK_QMDecode.zero, one_eq := R1Z.PV_OWNK_QMDecode.one,
+  zero_canon := (R1Z.PV_OWNK_ConcreteDecoder.canon_iff R1Z.PV_OWNI_RawOps.zero).mp R1Z.PV_OWNK_TowerCanon.zero_canon,
+  one_canon := (R1Z.PV_OWNK_ConcreteDecoder.canon_iff R1Z.PV_OWNI_RawOps.one).mp R1Z.PV_OWNK_TowerCanon.one_canon,
+  add := fun x y hx hy =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueAdd x y)).mp
+        (R1Z.PV_OWNK_TowerCanon.qm_add x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)),
+      R1Z.PV_OWNK_QMDecode.add x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+        ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)⟩,
+  mul := fun x y hx hy =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueMul x y)).mp (R1Z.PV_OWNK_TowerCanon.qm_mul x y),
+      R1Z.PV_OWNK_QMDecode.mul x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+        ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)⟩,
+  sub := fun x hx =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x)).mp
+        (R1Z.PV_OWNK_TowerCanon.qm_sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)),
+      have h :=
+        R1Z.PV_OWNK_QMDecode.sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx);
+      Eq.mp
+        (congrArg
+          (fun _a =>
+            R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueSub R1Z.PV_OWNI_RawOps.one x) =
+              _a - R1Z.PV_OWNK_QMDecode.decode x)
+          R1Z.PV_OWNK_QMDecode.one)
+        h⟩ }
+'R1Z.PV_OWNK_ConcreteDecoder.decoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_OWNK_ConcreteDecoder.source_commutes : ∀ (point column : List R1Z.PV_OWNI_RawOps.Q),
+  point.length = 10 →
+    (∀ q ∈ point, R1Z.PV_OWNK_ConcreteDecoder.Canon q) →
+      (∀ q ∈ column, R1Z.PV_OWNK_ConcreteDecoder.Canon q) →
+        (do
+            let value ←
+              R1Z.PV_OWNI_RawConsumer.source point column (R1Z.PV_OWNI_Scanner.width point)
+                  (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)
+            Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode value)) =
+          Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)) :=
+fun point column hl hp hc =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let value ← _a
+              Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode value)) =
+            Aeneas.Std.Result.ok
+              (if column.length ≠ 1024 then none
+              else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))
+        (R1Z.PV_OWNI_RawConsumer.result point column (R1Z.PV_OWNI_Scanner.width point)
+          (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point) (R1Z.PV_OWNI_Scanner.split point hl)
+          (R1Z.PV_OWNI_Scanner.suffix_bound point))))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Aeneas.Std.bind_tc_ok
+              (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point)
+                (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point))
+              fun y => Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode y)))
+          (Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              Aeneas.Std.Result.ok _a =
+                Aeneas.Std.Result.ok
+                  (if column.length ≠ 1024 then none
+                  else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))
+            (R1Z.PV_OWNK_ConcreteDecoder.value_commutes point column hp hc)))
+        (Eq.refl
+          (Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column))))))
+'R1Z.PV_OWNK_ConcreteDecoder.source_commutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_OWNK_InputCanon.statement_points_canon : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  (∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) →
+    ∀ p ∈ R1Z.PV_OWNJ_Points.statement_points point, ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q :=
+fun point hp p hmem =>
+  Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+    (Eq.mp
+      (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+        (congrArg (Or (p = point))
+          (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+            (congrArg (Or (p = R1Z.PV_OWNJ_Points.successor point))
+              (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+                (Eq.trans
+                  (congrArg (Or (p = R1Z.PV_OWNJ_Points.xor12 point))
+                    R1Z.PV_OWNK_InputCanon.statement_points_canon._simp_1)
+                  (or_false (p = R1Z.PV_OWNJ_Points.xor12 point))))))))
+      hmem)
+    (fun h =>
+      Eq.ndrec (motive := fun point =>
+        (∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) → ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q) (fun hp => hp) h hp)
+    fun h =>
+    Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q) h
+      (fun h =>
+        Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun q hq =>
+            R1Z.PV_OWNK_InputCanon.successorRev_canon point.reverse R1Z.PV_OWNI_RawOps.one
+              (fun x hx => hp x (List.mem_reverse.mp hx)) R1Z.PV_OWNK_TowerCanon.one_canon q (List.mem_reverse.mp hq))
+          (Eq.symm h))
+      fun h =>
+      Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+        (fun q hq =>
+          let ⟨w✝, h✝⟩ := List.mem_map.mp hq
+          let ⟨x, i, h✝⟩ := w✝
+          let ⟨hx, right✝⟩ := h✝
+          Eq.ndrec (motive := fun q => q ∈ R1Z.PV_OWNJ_Points.xor12 point → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hq =>
+              have hc := hp x (R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem point 0 (x, i) hx);
+              id
+                (if h : i = 6 ∨ i = 7 then
+                  Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNK_InputCanon.Canon _a) (if_pos h)))
+                    (R1Z.PV_OWNK_TowerCanon.qm_sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon hc)
+                else Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNK_InputCanon.Canon _a) (if_neg h))) hc))
+            right✝ hq)
+        (Eq.symm h)
+'R1Z.PV_OWNK_InputCanon.statement_points_canon' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_OWNK_InputCanon.columns_canon : ∀ (base : List (List Aeneas.Std.U32))
+  (h1 g d : List R1Z.PV_OWNI_RawOps.Q),
+  (∀ c ∈ base, ∀ x ∈ c, ↑x < 2147483647) →
+    (∀ q ∈ h1, R1Z.PV_OWNK_InputCanon.Canon q) →
+      (∀ q ∈ g, R1Z.PV_OWNK_InputCanon.Canon q) →
+        (∀ q ∈ d, R1Z.PV_OWNK_InputCanon.Canon q) →
+          ∀ c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d],
+            ∀ q ∈ c, R1Z.PV_OWNK_InputCanon.Canon q :=
+fun base h1 g d hb hh hg hd c hc q hq =>
+  Or.casesOn (List.mem_append.mp hc)
+    (fun hc_1 =>
+      let ⟨b, h✝⟩ := List.mem_map.mp hc_1
+      let ⟨hb', right✝⟩ := h✝
+      Eq.ndrec (motive := fun c =>
+        c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] →
+          q ∈ c → c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base → R1Z.PV_OWNK_InputCanon.Canon q)
+        (fun hc hq hc_2 =>
+          let ⟨x, h✝¹⟩ := List.mem_map.mp hq
+          let ⟨hx, right✝¹⟩ := h✝¹
+          Eq.ndrec (motive := fun q => q ∈ List.map R1Z.PV_OWNK_InputCanon.lift b → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hq => R1Z.PV_OWNK_InputCanon.lift_canon x (hb b hb' x hx)) right✝¹ hq)
+        right✝ hc hq hc_1)
+    fun hc_1 =>
+    Or.casesOn
+      (Eq.mp
+        (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+          (congrArg (Or (c = h1))
+            (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+              (congrArg (Or (c = g))
+                (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+                  (Eq.trans (congrArg (Or (c = d)) R1Z.PV_OWNK_InputCanon.statement_points_canon._simp_1)
+                    (or_false (c = d))))))))
+        hc_1)
+      (fun h =>
+        Eq.ndrec (motive := fun h1 =>
+          (∀ q ∈ h1, R1Z.PV_OWNK_InputCanon.Canon q) →
+            c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun hh hc => hh q hq) h hh hc)
+      fun h =>
+      Or.casesOn h
+        (fun h =>
+          Eq.ndrec (motive := fun g =>
+            (∀ q ∈ g, R1Z.PV_OWNK_InputCanon.Canon q) →
+              c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hg hc => hg q hq) h hg hc)
+        fun h =>
+        Eq.ndrec (motive := fun d =>
+          (∀ q ∈ d, R1Z.PV_OWNK_InputCanon.Canon q) →
+            c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun hd hc => hd q hq) h hd hc
+'R1Z.PV_OWNK_InputCanon.columns_canon' depends on axioms: [propext, Classical.choice, Quot.sound]

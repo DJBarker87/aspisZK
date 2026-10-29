@@ -1,0 +1,316 @@
+R1Z.PV_OWNK_ReduceNat.first_bound (x : ℕ) (hx : x < 18446744073709551616) : R1Z.PV_OWNK_ReduceNat.fold31 x ≤ 10737418238
+R1Z.PV_OWNK_ReduceNat.second_bound (x : ℕ) (hx : x ≤ 10737418238) : R1Z.PV_OWNK_ReduceNat.fold31 x ≤ 2147483651
+R1Z.PV_OWNK_ReduceNat.canonical (x : ℕ) (hx : x < 18446744073709551616) :
+  R1Z.PV_OWNK_ReduceNat.reduce64 x < R1Z.PV_OWNK_ReduceNat.P
+R1Z.PV_OWNK_ReduceNat.fold_mod (x : ℕ) :
+  R1Z.PV_OWNK_ReduceNat.fold31 x % R1Z.PV_OWNK_ReduceNat.P = x % R1Z.PV_OWNK_ReduceNat.P
+R1Z.PV_OWNK_ReduceNat.subtract_mod (x : ℕ) :
+  R1Z.PV_OWNK_ReduceNat.subtractP x % R1Z.PV_OWNK_ReduceNat.P = x % R1Z.PV_OWNK_ReduceNat.P
+R1Z.PV_OWNK_ReduceNat.exact_mod (x : ℕ) (hx : x < 18446744073709551616) :
+  R1Z.PV_OWNK_ReduceNat.reduce64 x = x % R1Z.PV_OWNK_ReduceNat.P
+R1Z.PV_OWNK_ReduceBits.fold_val (x : BitVec 64) :
+  (R1Z.PV_OWNK_ReduceBits.fold64 x).toNat = R1Z.PV_OWNK_ReduceNat.fold31 x.toNat
+R1Z.PV_OWNK_ReduceBits.word_val (x : BitVec 64) :
+  (R1Z.PV_OWNK_ReduceBits.word x).toNat = R1Z.PV_OWNK_ReduceNat.fold31 (R1Z.PV_OWNK_ReduceNat.fold31 x.toNat)
+R1Z.PV_OWNK_ReduceBits.reduced_val (x : BitVec 64) :
+  (R1Z.PV_OWNK_ReduceBits.reduced x).toNat = R1Z.PV_OWNK_ReduceNat.reduce64 x.toNat
+R1Z.PV_OWNK_ReduceBits.decode (x : BitVec 64) : (R1Z.PV_OWNK_ReduceBits.reduced x).toNat = x.toNat % 2147483647
+R1Z.PV_OWNK_CTDecode.sub_zero (x : Aeneas.Std.U32) : x.wrapping_sub 0#u32 = x
+R1Z.PV_OWNK_CTDecode.subtract_shape (x : Aeneas.Std.U32) :
+  R1Z.PV_OWNK_CTDecode.subtract x = if x ≥ R1Z.PV_OWNK_CTDecode.P then x.wrapping_sub R1Z.PV_OWNK_CTDecode.P else x
+R1Z.PV_OWNK_CTDecode.subtract_decode (x : Aeneas.Std.U32) (hx : ↑x < 4294967294) :
+  ↑(R1Z.PV_OWNK_CTDecode.subtract x) = ↑x % 2147483647
+R1Z.PV_OWNK_CTDecode.add_decode (a b : Aeneas.Std.U32) (ha : ↑a < 2147483647) (hb : ↑b < 2147483647) :
+  ↑(R1Z.PV_OWNK_CTDecode.add a b) = (↑a + ↑b) % 2147483647
+R1Z.PV_OWNK_CTDecode.sub_decode (a b : Aeneas.Std.U32) (ha : ↑a < 2147483647) (hb : ↑b < 2147483647) :
+  ↑(R1Z.PV_OWNK_CTDecode.sub a b) = (↑a + 2147483647 - ↑b) % 2147483647
+R1Z.PV_OWNK_CTDecode.reduce_shape (x : Aeneas.Std.U64) :
+  ↑(PV_B2_FieldValue.aspis_core.field.ct.reduce64 x) = (R1Z.PV_OWNK_ReduceBits.reduced x.bv).toNat
+R1Z.PV_OWNK_CTDecode.reduce_decode (x : Aeneas.Std.U64) :
+  ↑(PV_B2_FieldValue.aspis_core.field.ct.reduce64 x) = ↑x % 2147483647
+R1Z.PV_OWNK_CTDecode.reduce_canon (x : Aeneas.Std.U64) : ↑(PV_B2_FieldValue.aspis_core.field.ct.reduce64 x) < 2147483647
+R1Z.PV_OWNK_CTDecode.add_canon (a b : Aeneas.Std.U32) (ha : ↑a < 2147483647) (hb : ↑b < 2147483647) :
+  ↑(R1Z.PV_OWNK_CTDecode.add a b) < 2147483647
+R1Z.PV_OWNK_CTDecode.sub_canon (a b : Aeneas.Std.U32) (ha : ↑a < 2147483647) (hb : ↑b < 2147483647) :
+  ↑(R1Z.PV_OWNK_CTDecode.sub a b) < 2147483647
+R1Z.PV_OWNK_ScalarOps.mul_canon (a b : Aeneas.Std.U32) :
+  R1Z.PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul a b)
+R1Z.PV_OWNK_ScalarOps.mul_decode (a b : Aeneas.Std.U32) :
+  ↑(PV_B2_FieldValue.aspis_core.field.M31.mul a b) = ↑a * ↑b % 2147483647
+R1Z.PV_OWNK_ScalarOps.reduce_canon (a : Aeneas.Std.U64) :
+  R1Z.PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 a)
+R1Z.PV_OWNK_ScalarOps.add_canon (a b : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a)
+  (hb : R1Z.PV_OWNK_ScalarOps.Canon b) : R1Z.PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.add a b)
+R1Z.PV_OWNK_ScalarOps.sub_canon (a b : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a)
+  (hb : R1Z.PV_OWNK_ScalarOps.Canon b) : R1Z.PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.sub a b)
+R1Z.PV_OWNK_ScalarOps.double_canon (a : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a) :
+  R1Z.PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.double a)
+R1Z.PV_OWNK_TowerCanon.cm_add (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) : R1Z.PV_OWNK_TowerCanon.CC (PV_B2_FieldValue.aspis_core.field.CM31.add x y)
+R1Z.PV_OWNK_TowerCanon.cm_sub (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) : R1Z.PV_OWNK_TowerCanon.CC (PV_B2_FieldValue.aspis_core.field.CM31.sub x y)
+R1Z.PV_OWNK_TowerCanon.cm_mul (x y : R1Z.PV_OWNK_TowerCanon.C) :
+  R1Z.PV_OWNK_TowerCanon.CC (PV_B2_FieldValue.aspis_core.field.CM31.mul x y)
+R1Z.PV_OWNK_TowerCanon.mul_by_r (x : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x) :
+  R1Z.PV_OWNK_TowerCanon.CC (PV_B2_FieldValue.aspis_core.field.mul_by_r x)
+R1Z.PV_OWNK_TowerCanon.zero_canon : R1Z.PV_OWNK_TowerCanon.Canon R1Z.PV_OWNK_TowerCanon.zero
+R1Z.PV_OWNK_TowerCanon.one_canon : R1Z.PV_OWNK_TowerCanon.Canon R1Z.PV_OWNK_TowerCanon.one
+R1Z.PV_OWNK_TowerCanon.qm_add (x y : R1Z.PV_OWNK_TowerCanon.Q) (hx : R1Z.PV_OWNK_TowerCanon.Canon x)
+  (hy : R1Z.PV_OWNK_TowerCanon.Canon y) : R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNK_TowerCanon.valueAdd x y)
+R1Z.PV_OWNK_TowerCanon.qm_sub (x y : R1Z.PV_OWNK_TowerCanon.Q) (hx : R1Z.PV_OWNK_TowerCanon.Canon x)
+  (hy : R1Z.PV_OWNK_TowerCanon.Canon y) : R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNK_TowerCanon.valueSub x y)
+R1Z.PV_OWNK_TowerCanon.qm_mul (x y : R1Z.PV_OWNK_TowerCanon.Q) :
+  R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNK_TowerCanon.valueMul x y)
+R1Z.PV_OWNK_FieldScalar.add (a b : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a)
+  (hb : R1Z.PV_OWNK_ScalarOps.Canon b) :
+  R1Z.PV_OWNK_FieldScalar.decode (PV_B2_FieldValue.aspis_core.field.M31.add a b) =
+    R1Z.PV_OWNK_FieldScalar.decode a + R1Z.PV_OWNK_FieldScalar.decode b
+R1Z.PV_OWNK_FieldScalar.sub (a b : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a)
+  (hb : R1Z.PV_OWNK_ScalarOps.Canon b) :
+  R1Z.PV_OWNK_FieldScalar.decode (PV_B2_FieldValue.aspis_core.field.M31.sub a b) =
+    R1Z.PV_OWNK_FieldScalar.decode a - R1Z.PV_OWNK_FieldScalar.decode b
+R1Z.PV_OWNK_FieldScalar.mul (a b : Aeneas.Std.U32) :
+  R1Z.PV_OWNK_FieldScalar.decode (PV_B2_FieldValue.aspis_core.field.M31.mul a b) =
+    R1Z.PV_OWNK_FieldScalar.decode a * R1Z.PV_OWNK_FieldScalar.decode b
+R1Z.PV_OWNK_FieldScalar.reduce (a : Aeneas.Std.U64) :
+  R1Z.PV_OWNK_FieldScalar.decode (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 a) = ↑↑a
+R1Z.PV_OWNK_FieldScalar.double (a : Aeneas.Std.U32) (ha : R1Z.PV_OWNK_ScalarOps.Canon a) :
+  R1Z.PV_OWNK_FieldScalar.decode (PV_B2_FieldValue.aspis_core.field.M31.double a) =
+    R1Z.PV_OWNK_FieldScalar.decode a + R1Z.PV_OWNK_FieldScalar.decode a
+R1Z.PV_OWNK_CMDecode.add (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) :
+  R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.add x y) =
+    R1Z.PV_OWNK_CMDecode.decode x + R1Z.PV_OWNK_CMDecode.decode y
+R1Z.PV_OWNK_CMDecode.sub (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) :
+  R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.sub x y) =
+    R1Z.PV_OWNK_CMDecode.decode x - R1Z.PV_OWNK_CMDecode.decode y
+R1Z.PV_OWNK_CMDecode.cross_val (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) : ↑(R1Z.PV_OWNK_CMDecode.cross x y) = (↑x.a + ↑x.b) * (↑y.a + ↑y.b)
+R1Z.PV_OWNK_CMDecode.mul (x y : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x)
+  (hy : R1Z.PV_OWNK_TowerCanon.CC y) :
+  R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.CM31.mul x y) =
+    R1Z.PV_OWNK_CMDecode.decode x * R1Z.PV_OWNK_CMDecode.decode y
+R1Z.PV_OWNK_CMDecode.mul_by_r (x : R1Z.PV_OWNK_TowerCanon.C) (hx : R1Z.PV_OWNK_TowerCanon.CC x) :
+  R1Z.PV_OWNK_CMDecode.decode (PV_B2_FieldValue.aspis_core.field.mul_by_r x) =
+    AspisV8R15.ExactTowerBase.qm31R * R1Z.PV_OWNK_CMDecode.decode x
+R1Z.PV_OWNK_QMDecode.zero : R1Z.PV_OWNK_QMDecode.decode R1Z.PV_OWNK_TowerCanon.zero = 0
+R1Z.PV_OWNK_QMDecode.one : R1Z.PV_OWNK_QMDecode.decode R1Z.PV_OWNK_TowerCanon.one = 1
+R1Z.PV_OWNK_QMDecode.add (x y : R1Z.PV_OWNK_TowerCanon.Q) (hx : R1Z.PV_OWNK_TowerCanon.Canon x)
+  (hy : R1Z.PV_OWNK_TowerCanon.Canon y) :
+  R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueAdd x y) =
+    R1Z.PV_OWNK_QMDecode.decode x + R1Z.PV_OWNK_QMDecode.decode y
+R1Z.PV_OWNK_QMDecode.sub (x y : R1Z.PV_OWNK_TowerCanon.Q) (hx : R1Z.PV_OWNK_TowerCanon.Canon x)
+  (hy : R1Z.PV_OWNK_TowerCanon.Canon y) :
+  R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueSub x y) =
+    R1Z.PV_OWNK_QMDecode.decode x - R1Z.PV_OWNK_QMDecode.decode y
+R1Z.PV_OWNK_QMDecode.mul (x y : R1Z.PV_OWNK_TowerCanon.Q) (hx : R1Z.PV_OWNK_TowerCanon.Canon x)
+  (hy : R1Z.PV_OWNK_TowerCanon.Canon y) :
+  R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueMul x y) =
+    R1Z.PV_OWNK_QMDecode.decode x * R1Z.PV_OWNK_QMDecode.decode y
+R1Z.PV_OWNK_ConcreteDecoder.canon_iff (q : R1Z.PV_OWNI_RawOps.Q) :
+  R1Z.PV_OWNK_ConcreteDecoder.Canon q ↔ R1Z.PV_OWNJ_DecodeFold.Canon q
+R1Z.PV_OWNK_ConcreteDecoder.decoder : R1Z.PV_OWNJ_DecodeFold.Decoder R1Z.PV_OWNK_ConcreteDecoder.decode
+R1Z.PV_OWNK_ConcreteDecoder.value_commutes (point column : List R1Z.PV_OWNI_RawOps.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_ConcreteDecoder.Canon q) (hc : ∀ q ∈ column, R1Z.PV_OWNK_ConcreteDecoder.Canon q) :
+  Option.map R1Z.PV_OWNK_ConcreteDecoder.decode
+      (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point) (R1Z.PV_OWNI_Scanner.trailing point)
+        (R1Z.PV_OWNI_Scanner.suffix point)) =
+    if column.length ≠ 1024 then none
+    else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)
+R1Z.PV_OWNK_ConcreteDecoder.source_commutes (point column : List R1Z.PV_OWNI_RawOps.Q) (hl : point.length = 10)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_ConcreteDecoder.Canon q) (hc : ∀ q ∈ column, R1Z.PV_OWNK_ConcreteDecoder.Canon q) :
+  (do
+      let value ←
+        R1Z.PV_OWNI_RawConsumer.source point column (R1Z.PV_OWNI_Scanner.width point)
+            (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)
+      Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode value)) =
+    Aeneas.Std.Result.ok
+      (if column.length ≠ 1024 then none
+      else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column))
+R1Z.PV_OWNK_InputCanon.successorRev_canon (point : List R1Z.PV_OWNI_RawOps.Q) (carry : R1Z.PV_OWNI_RawOps.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) (hc : R1Z.PV_OWNK_InputCanon.Canon carry)
+  (q : R1Z.PV_OWNI_RawOps.Q) : q ∈ R1Z.PV_OWNJ_Points.successorRev point carry → R1Z.PV_OWNK_InputCanon.Canon q
+R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem {A : Type} (xs : List A) (offset : ℕ) (e : A × ℕ) (he : e ∈ xs.zipIdx offset) :
+  e.1 ∈ xs
+R1Z.PV_OWNK_InputCanon.statement_points_canon (point : List R1Z.PV_OWNI_RawOps.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) (p : List R1Z.PV_OWNI_RawOps.Q) :
+  p ∈ R1Z.PV_OWNJ_Points.statement_points point → ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q
+R1Z.PV_OWNK_InputCanon.lift_canon (x : Aeneas.Std.U32) (hx : ↑x < 2147483647) :
+  R1Z.PV_OWNK_InputCanon.Canon (R1Z.PV_OWNK_InputCanon.lift x)
+R1Z.PV_OWNK_InputCanon.columns_canon (base : List (List Aeneas.Std.U32)) (h1 g d : List R1Z.PV_OWNI_RawOps.Q)
+  (hb : ∀ c ∈ base, ∀ x ∈ c, ↑x < 2147483647) (hh : ∀ q ∈ h1, R1Z.PV_OWNK_InputCanon.Canon q)
+  (hg : ∀ q ∈ g, R1Z.PV_OWNK_InputCanon.Canon q) (hd : ∀ q ∈ d, R1Z.PV_OWNK_InputCanon.Canon q)
+  (c : List R1Z.PV_OWNI_RawOps.Q) :
+  c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → ∀ q ∈ c, R1Z.PV_OWNK_InputCanon.Canon q
+theorem R1Z.PV_OWNK_ConcreteDecoder.decoder : R1Z.PV_OWNJ_DecodeFold.Decoder R1Z.PV_OWNK_ConcreteDecoder.decode :=
+{ zero_eq := R1Z.PV_OWNK_QMDecode.zero, one_eq := R1Z.PV_OWNK_QMDecode.one,
+  zero_canon := (R1Z.PV_OWNK_ConcreteDecoder.canon_iff R1Z.PV_OWNI_RawOps.zero).mp R1Z.PV_OWNK_TowerCanon.zero_canon,
+  one_canon := (R1Z.PV_OWNK_ConcreteDecoder.canon_iff R1Z.PV_OWNI_RawOps.one).mp R1Z.PV_OWNK_TowerCanon.one_canon,
+  add := fun x y hx hy =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueAdd x y)).mp
+        (R1Z.PV_OWNK_TowerCanon.qm_add x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)),
+      R1Z.PV_OWNK_QMDecode.add x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+        ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)⟩,
+  mul := fun x y hx hy =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueMul x y)).mp (R1Z.PV_OWNK_TowerCanon.qm_mul x y),
+      R1Z.PV_OWNK_QMDecode.mul x y ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)
+        ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff y).mpr hy)⟩,
+  sub := fun x hx =>
+    ⟨(R1Z.PV_OWNK_ConcreteDecoder.canon_iff (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x)).mp
+        (R1Z.PV_OWNK_TowerCanon.qm_sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx)),
+      have h :=
+        R1Z.PV_OWNK_QMDecode.sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon
+          ((R1Z.PV_OWNK_ConcreteDecoder.canon_iff x).mpr hx);
+      Eq.mp
+        (congrArg
+          (fun _a =>
+            R1Z.PV_OWNK_QMDecode.decode (R1Z.PV_OWNK_TowerCanon.valueSub R1Z.PV_OWNI_RawOps.one x) =
+              _a - R1Z.PV_OWNK_QMDecode.decode x)
+          R1Z.PV_OWNK_QMDecode.one)
+        h⟩ }
+theorem R1Z.PV_OWNK_ConcreteDecoder.source_commutes : ∀ (point column : List R1Z.PV_OWNI_RawOps.Q),
+  point.length = 10 →
+    (∀ q ∈ point, R1Z.PV_OWNK_ConcreteDecoder.Canon q) →
+      (∀ q ∈ column, R1Z.PV_OWNK_ConcreteDecoder.Canon q) →
+        (do
+            let value ←
+              R1Z.PV_OWNI_RawConsumer.source point column (R1Z.PV_OWNI_Scanner.width point)
+                  (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)
+            Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode value)) =
+          Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)) :=
+fun point column hl hp hc =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let value ← _a
+              Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode value)) =
+            Aeneas.Std.Result.ok
+              (if column.length ≠ 1024 then none
+              else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))
+        (R1Z.PV_OWNI_RawConsumer.result point column (R1Z.PV_OWNI_Scanner.width point)
+          (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point) (R1Z.PV_OWNI_Scanner.split point hl)
+          (R1Z.PV_OWNI_Scanner.suffix_bound point))))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Aeneas.Std.bind_tc_ok
+              (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point)
+                (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point))
+              fun y => Aeneas.Std.Result.ok (Option.map R1Z.PV_OWNK_ConcreteDecoder.decode y)))
+          (Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              Aeneas.Std.Result.ok _a =
+                Aeneas.Std.Result.ok
+                  (if column.length ≠ 1024 then none
+                  else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column)))
+            (R1Z.PV_OWNK_ConcreteDecoder.value_commutes point column hp hc)))
+        (Eq.refl
+          (Aeneas.Std.Result.ok
+            (if column.length ≠ 1024 then none
+            else some (R1Z.PV_OWNJ_ValueBridge.sparse R1Z.PV_OWNK_ConcreteDecoder.decode point column))))))
+theorem R1Z.PV_OWNK_InputCanon.columns_canon : ∀ (base : List (List Aeneas.Std.U32))
+  (h1 g d : List R1Z.PV_OWNI_RawOps.Q),
+  (∀ c ∈ base, ∀ x ∈ c, ↑x < 2147483647) →
+    (∀ q ∈ h1, R1Z.PV_OWNK_InputCanon.Canon q) →
+      (∀ q ∈ g, R1Z.PV_OWNK_InputCanon.Canon q) →
+        (∀ q ∈ d, R1Z.PV_OWNK_InputCanon.Canon q) →
+          ∀ c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d],
+            ∀ q ∈ c, R1Z.PV_OWNK_InputCanon.Canon q :=
+fun base h1 g d hb hh hg hd c hc q hq =>
+  Or.casesOn (List.mem_append.mp hc)
+    (fun hc_1 =>
+      let ⟨b, h✝⟩ := List.mem_map.mp hc_1
+      let ⟨hb', right✝⟩ := h✝
+      Eq.ndrec (motive := fun c =>
+        c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] →
+          q ∈ c → c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base → R1Z.PV_OWNK_InputCanon.Canon q)
+        (fun hc hq hc_2 =>
+          let ⟨x, h✝¹⟩ := List.mem_map.mp hq
+          let ⟨hx, right✝¹⟩ := h✝¹
+          Eq.ndrec (motive := fun q => q ∈ List.map R1Z.PV_OWNK_InputCanon.lift b → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hq => R1Z.PV_OWNK_InputCanon.lift_canon x (hb b hb' x hx)) right✝¹ hq)
+        right✝ hc hq hc_1)
+    fun hc_1 =>
+    Or.casesOn
+      (Eq.mp
+        (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+          (congrArg (Or (c = h1))
+            (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+              (congrArg (Or (c = g))
+                (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+                  (Eq.trans (congrArg (Or (c = d)) R1Z.PV_OWNK_InputCanon.statement_points_canon._simp_1)
+                    (or_false (c = d))))))))
+        hc_1)
+      (fun h =>
+        Eq.ndrec (motive := fun h1 =>
+          (∀ q ∈ h1, R1Z.PV_OWNK_InputCanon.Canon q) →
+            c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun hh hc => hh q hq) h hh hc)
+      fun h =>
+      Or.casesOn h
+        (fun h =>
+          Eq.ndrec (motive := fun g =>
+            (∀ q ∈ g, R1Z.PV_OWNK_InputCanon.Canon q) →
+              c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hg hc => hg q hq) h hg hc)
+        fun h =>
+        Eq.ndrec (motive := fun d =>
+          (∀ q ∈ d, R1Z.PV_OWNK_InputCanon.Canon q) →
+            c ∈ List.map (List.map R1Z.PV_OWNK_InputCanon.lift) base ++ [h1, g, d] → R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun hd hc => hd q hq) h hd hc
+theorem R1Z.PV_OWNK_InputCanon.statement_points_canon : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  (∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) →
+    ∀ p ∈ R1Z.PV_OWNJ_Points.statement_points point, ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q :=
+fun point hp p hmem =>
+  Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+    (Eq.mp
+      (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+        (congrArg (Or (p = point))
+          (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+            (congrArg (Or (p = R1Z.PV_OWNJ_Points.successor point))
+              (Eq.trans R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem._simp_1
+                (Eq.trans
+                  (congrArg (Or (p = R1Z.PV_OWNJ_Points.xor12 point))
+                    R1Z.PV_OWNK_InputCanon.statement_points_canon._simp_1)
+                  (or_false (p = R1Z.PV_OWNJ_Points.xor12 point))))))))
+      hmem)
+    (fun h =>
+      Eq.ndrec (motive := fun point =>
+        (∀ q ∈ point, R1Z.PV_OWNK_InputCanon.Canon q) → ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q) (fun hp => hp) h hp)
+    fun h =>
+    Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q) h
+      (fun h =>
+        Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+          (fun q hq =>
+            R1Z.PV_OWNK_InputCanon.successorRev_canon point.reverse R1Z.PV_OWNI_RawOps.one
+              (fun x hx => hp x (List.mem_reverse.mp hx)) R1Z.PV_OWNK_TowerCanon.one_canon q (List.mem_reverse.mp hq))
+          (Eq.symm h))
+      fun h =>
+      Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNK_InputCanon.Canon q)
+        (fun q hq =>
+          let ⟨w✝, h✝⟩ := List.mem_map.mp hq
+          let ⟨x, i, h✝⟩ := w✝
+          let ⟨hx, right✝⟩ := h✝
+          Eq.ndrec (motive := fun q => q ∈ R1Z.PV_OWNJ_Points.xor12 point → R1Z.PV_OWNK_InputCanon.Canon q)
+            (fun hq =>
+              have hc := hp x (R1Z.PV_OWNK_InputCanon.zipIdx_fst_mem point 0 (x, i) hx);
+              id
+                (if h : i = 6 ∨ i = 7 then
+                  Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNK_InputCanon.Canon _a) (if_pos h)))
+                    (R1Z.PV_OWNK_TowerCanon.qm_sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon hc)
+                else Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNK_InputCanon.Canon _a) (if_neg h))) hc))
+            right✝ hq)
+        (Eq.symm h)
