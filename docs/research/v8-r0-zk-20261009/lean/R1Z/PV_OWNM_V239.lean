@@ -26,7 +26,7 @@ structure Public where
  deriving DecidableEq
 
 structure Input where
- public : Public
+ pubData : Public
  site : Site
  point : List Q
  columns : List (List Q)
@@ -79,11 +79,11 @@ def PV_OWNM_Link_SourceDense {K : Type} [Field K] (decode : Q → K) (zero : Q)
 
 /-- Operational reconstruction of the callback point, including public counters. -/
 def PV_OWNM_Link_Transcript879 (reconstruct879 : Public → List Q) (i : Input) : Prop :=
- i.site = .callback879 → i.point = reconstruct879 i.public
+ i.site = .callback879 → i.point = reconstruct879 i.pubData
 
 /-- Operational reconstruction of final alpha from the published byte frames. -/
 def PV_OWNM_Link_Transcript890 (reconstruct890 : Public → List Q) (i : Input) : Prop :=
- i.site = .final890 → i.point = reconstruct890 i.public
+ i.site = .final890 → i.point = reconstruct890 i.pubData
 
 /-- The owned context retains allocator error/abort/divergence and the post-world.
 The association is to the raw source value, never to dense evaluation. The
@@ -117,7 +117,7 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  (finalR : PV_OWNM_Link_Transcript890 reconstruct890 right)
  (ownedL : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures left)
  (ownedR : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures right)
- (samePublic : left.public = right.public) (sameSite : left.site = right.site)
+ (samePublic : left.pubData = right.pubData) (sameSite : left.site = right.site)
  (sameLengths : left.columns.map List.length = right.columns.map List.length)
  (wireSelf : ∀ p, p ∈ wirePoints p) :
  (∀ lane c, left.columns[lane]? = some c →
