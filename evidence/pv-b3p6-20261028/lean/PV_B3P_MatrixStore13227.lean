@@ -25,10 +25,8 @@ theorem matrix_store_binding13 (sums : Matrix13) (row column : Usize) (value : U
   unfold source_matrix_store13 model_matrix_store13
   rw [PV_B3P_ArrayWrite227.borrow sums row hr,PV_B3P_SelectIndex227.index_value sums row hr]
   simp only [bind_tc_ok]
-  dsimp only
   rw [PV_B3P_ArrayWrite227.borrow _ column hc,PV_B3P_ArrayWrite227.update _ column hc]
   simp only [bind_tc_ok]
-  dsimp only
   rw [PV_B3P_ArrayWrite227.update _ row hr]
 
 theorem matrix_stores_link13 : PV_B3P_Link_matrix_stores source_matrix_store13 :=
