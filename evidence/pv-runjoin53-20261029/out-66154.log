@@ -1,0 +1,31 @@
+START 66154 R1Z.PV_RunJoin_CircleNeutralRange53
+DONE 66154 R1Z.PV_RunJoin_CircleNeutralRange53 exit 1 wall 1.62 RSS 2681270272
+def Aeneas.Std.core.iter.range.IteratorRange.next : {A : Type} →
+  core.iter.range.Step A → core.ops.range.Range A → Result (Option A × core.ops.range.Range A) :=
+fun {A} StepInst range => do
+  let cmp ← StepInst.partialOrdInst.lt range.start range.end
+  if cmp = true then do
+      let range' ← StepInst.cloneInst.clone range.start
+      let n ← StepInst.forward_checked range' 1#usize
+      match n with
+        | none => fail Error.panic
+        | some n => ok (some range', { start := n, «end» := range.end })
+    else ok (none, range)
+@[reducible] def Aeneas.Std.core.iter.range.StepUsize : core.iter.range.Step (UScalar UScalarTy.Usize) :=
+core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralRange53.lean:14:2: error: Tactic `rfl` failed: The left-hand side
+  core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := s, «end» := e }
+is not definitionally equal to the right-hand side
+  if s < e then do
+    let t ← s + 1#usize
+    ok (some s, { start := t, «end» := e })
+  else ok (none, { start := s, «end» := e })
+
+s e : Usize
+⊢ core.iter.range.IteratorRange.next core.iter.range.StepUsize { start := s, «end» := e } =
+    if s < e then do
+      let t ← s + 1#usize
+      ok (some s, { start := t, «end» := e })
+    else ok (none, { start := s, «end» := e })
+'R1Z.PV_RunJoin_CircleNeutralRange53.next' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

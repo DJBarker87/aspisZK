@@ -1,0 +1,60 @@
+START 66105 R1Z.PV_RunJoin_CircleNeutralScalar52
+DONE 66105 R1Z.PV_RunJoin_CircleNeutralScalar52 exit 1 wall 1.15 RSS 2689122304
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:20:30: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵n̵e̵g̵]̵[̲h̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:26:83: error: Application type mismatch: The argument
+  h
+has type
+  ↑a + ↑b < 2 ^ 32
+but is expected to have type
+  ↑a + ↑b < 2 ^ UScalarTy.numBits ?m.33
+in the application
+  UScalar.ofNatCore (↑a + ↑b) h
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:26:89: error: unsolved goals
+a b : U32
+h : ↑a + ↑b < 2 ^ 32
+⊢ (match
+      if h : decide (↑a + ↑b < 2 ^ UScalarTy.U32.numBits) = true then some (UScalar.ofNatCore (↑a + ↑b) ⋯)
+      else none with
+    | some x => ok x
+    | none => fail Error.integerOverflow) =
+    ok (UScalar.ofNatCore (↑a + ↑b) ⋯)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:27:67: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.tryMk, ̲UScalar.tryMkOpt, ̲UScalar.check_bounds,h̵,̵ ̲if_pos, ̲Result.ofOption]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:27:69: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [UScalar.tryMk, ̲UScalar.tryMkOpt, ̲UScalar.check_bounds, ̲h,i̵f̵_̵p̵o̵s̵,̵ ̲Result.ofOption]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralScalar52.lean:48:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  0 ≤ e - 4294967296*f ≤ 4294967295
+  d ≥ 0
+  d - e + 4294967296*f ≥ 1
+  d - g ≤ -1
+  0 ≤ c ≤ 4294967295
+  0 ≤ c + e ≤ 4294967295
+where
+ c := ↑↑b
+ d := ↑(↑a + (2 ^ UScalarTy.U32.numBits - ↑b)) % ↑(2 ^ UScalarTy.U32.numBits)
+ e := ↑(↑a - ↑b)
+ f := ↑(↑a - ↑b) / 4294967296
+ g := ↑2 ^ UScalarTy.U32.numBits
+'R1Z.PV_RunJoin_CircleNeutralScalar52.wrapping_sub_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleNeutralScalar52.subtract_shape' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleNeutralScalar52.checked_add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleNeutralScalar52.checked_sub' depends on axioms: [propext, sorryAx]
+

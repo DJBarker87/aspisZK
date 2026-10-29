@@ -1,0 +1,92 @@
+START 66168 R1Z.PV_RunJoin_CircleNeutralSquareLoop53
+DONE 66168 R1Z.PV_RunJoin_CircleNeutralSquareLoop53 exit 1 wall 1.21 RSS 2693218304
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralSquareLoop53.lean:25:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RunJoin_CircleRawScalar52.field.square_n_loop.body r a
+in the target expression
+  (do
+      let cf ←
+        match (r, a) with
+          | (iter1, value1) => PV_RunJoin_CircleRawScalar52.field.square_n_loop.body iter1 value1
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (iter1, value1) => PV_RunJoin_CircleRawScalar52.field.square_n_loop.body iter1 value1)
+            next
+        | done out => ok out) =
+    finite (n + 1) a
+
+case succ
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range Usize) (a : U32),
+    ↑r.end = ↑r.start + n → PV_RunJoin_CircleRawScalar52.field.square_n_loop r a = finite n a
+r : core.ops.range.Range Usize
+a : U32
+hr : ↑r.end = ↑r.start + (n + 1)
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize r = ok (some r.start, after)
+hs : ↑after.start = ↑r.start + 1
+he : after.end = r.end
+hafter : ↑after.end = ↑after.start + n
+⊢ (do
+      let cf ←
+        match (r, a) with
+          | (iter1, value1) => PV_RunJoin_CircleRawScalar52.field.square_n_loop.body iter1 value1
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (iter1, value1) => PV_RunJoin_CircleRawScalar52.field.square_n_loop.body iter1 value1)
+            next
+        | done out => ok out) =
+    finite (n + 1) a
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralSquareLoop53.lean:49:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RunJoin_CircleR72Raw52.field.square_n_loop.body r a
+in the target expression
+  (do
+      let cf ←
+        match (r, a) with
+          | (iter1, value1) => PV_RunJoin_CircleR72Raw52.field.square_n_loop.body iter1 value1
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (iter1, value1) => PV_RunJoin_CircleR72Raw52.field.square_n_loop.body iter1 value1)
+            next
+        | done out => ok out) =
+    PV_RunJoin_CircleNeutralFinite53.model (n + 1) a
+
+case succ
+n : ℕ
+ih :
+  ∀ (r : core.ops.range.Range Usize) (a : U32),
+    ↑r.end = ↑r.start + n →
+      PV_RunJoin_CircleR72Raw52.field.square_n_loop r a = PV_RunJoin_CircleNeutralFinite53.model n a
+r : core.ops.range.Range Usize
+a : U32
+hr : ↑r.end = ↑r.start + (n + 1)
+after : core.ops.range.Range (UScalar UScalarTy.Usize)
+hn : core.iter.range.IteratorRange.next core.iter.range.StepUsize r = ok (some r.start, after)
+hs : ↑after.start = ↑r.start + 1
+he : after.end = r.end
+hafter : ↑after.end = ↑after.start + n
+⊢ (do
+      let cf ←
+        match (r, a) with
+          | (iter1, value1) => PV_RunJoin_CircleR72Raw52.field.square_n_loop.body iter1 value1
+      match cf with
+        | cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (iter1, value1) => PV_RunJoin_CircleR72Raw52.field.square_n_loop.body iter1 value1)
+            next
+        | done out => ok out) =
+    PV_RunJoin_CircleNeutralFinite53.model (n + 1) a
+'R1Z.PV_RunJoin_CircleNeutralSquareLoop53.owned' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleNeutralSquareLoop53.model' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

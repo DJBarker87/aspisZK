@@ -94,3 +94,53 @@ tightening prerequisite checks, waiting the full cooldown and reusing the ID
 only after its prerequisite passed; the original unlaunched intent is kept.
 No unchanged full regression, package-wide replay or release manifest is
 claimed. Final focused/audit totals and evidence checks follow below.
+
+## Final focused and audit totals
+
+**100 attempts exhausted: 64 accepted / 36 rejected; 0 Kani.** All 61 accepted
+non-audit modules and their 169 printed names are covered by the three
+separate audit closures. Every printed axiom set is a subset of propext,
+Classical.choice and Quot.sound. `audit-closure-check.json` checks coverage
+and import separation. No new-source draft remains uncompiled or uncredited;
+six old historical staged candidates remain excluded and uncompiled.
+
+Proof-source freeze: **b93a3db80472cba58eef8ea0a7844210850f0aa1**.
+Peak RSS over all attempts: **7,340,662,784 bytes**; swap zero.
+
+| ID | Exact target | Exit | Scope wall s | Peak RSS bytes | Swap |
+| --- | --- | --- | --- | --- | --- |
+| 66197 | R1Z.PV_RunJoin_NeutralAudit53 | 0 | 1.74 | 3911933952 | 0 |
+| 66198 | R1Z.PV_RunJoin_ModelAudit53 | 0 | 1.74 | 4452503552 | 0 |
+| 66199 | R1Z.PV_RunJoin_OwnedAudit53 | 0 | 1.17 | 2686935040 | 0 |
+
+`CircleNeutralR24Prefix53.complete` now proves the actual selected neutral
+R72 r24 computation equals its original tail applied to the two explicit
+folded partial-accumulator words. `CircleNeutralMulResidue53.complete` gives
+the exact scalar product residue for both neutral sides. The tail's four
+coordinates and its equality with the owned quartic multiplication remain
+open. These partial facts do not complete the source-to-security-model
+circle bridge or the common-sample association.
+
+Original outputs/time logs for all 100 compiles are hash-verified and retained
+in `original-module-logs.json.xz`; every rejected source revision is retained
+as a hash-verified Git blob in `retained-failed-sources.json`. The atomic
+admission audit confirms zero void launches and complete cooldown compliance.
+All seven source generators pass check-only byte comparisons for their 19
+outputs. Per-attempt receipts record exact target, status, timing, RSS, swap,
+source revision, source/import hashes and original axiom lines. SUMMARY.json,
+commits.txt, source identity records and OPENING-NEXT.md provide the handoff.
+
+P before/after: the endpoint's eight fields are byte-identical; none is
+removed, added, weakened or changed. T before/after: the same three fields.
+Ledger-row count delta: zero; no row statement is changed. The original
+privacy target remains unestablished. The budget, rather than a claimed
+closure or a counterexample, ends this run.
+
+Final cache preflight: **3,433** project source/object pairs, **7,608** direct
+dependency fingerprints, **5,673** external objects and **5,438** IR companions,
+all matching. The compressed final-preflight record retains its uncompressed
+SHA sidecar. Lean 4.32.0, commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35;
+pinned LEAN_PATH unchanged. Own running scopes: zero. Recorded submission
+intervals do not overlap (`scope-sequence.json`). Protected-prefix and
+collision-authority identity checks are retained. The final evidence-only
+commit follows the generated commit list.

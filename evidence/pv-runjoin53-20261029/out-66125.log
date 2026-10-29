@@ -1,0 +1,76 @@
+START 66125 R1Z.PV_RunJoin_CircleNeutralMul53
+DONE 66125 R1Z.PV_RunJoin_CircleNeutralMul53 exit 1 wall 1.23 RSS 2689380352
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralMul53.lean:24:4: error: Type mismatch: After simplification, term
+  hy
+ has type
+  @Eq (Result U32) (PV_RunJoin_CircleRawScalar52.field.ct.reduce64 x) (ok y)
+but is expected to have type
+  @Eq (Result PV_RunJoin_CircleRawScalar52.field.M31)
+    (do
+      let i3 ←
+        PV_RunJoin_CircleRawScalar52.field.ct.reduce64
+            (U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b))
+      ok i3)
+    (ok y)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralMul53.lean:39:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if fold x ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then ?m.177 else ?m.178
+in the target expression
+  (if (low x).wrapping_add (high x) ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then do
+      let i7 ← (low x).wrapping_add (high x) - UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+      ok (UScalar.cast UScalarTy.U32 i7)
+    else ok (UScalar.cast UScalarTy.U32 ((low x).wrapping_add (high x)))) =
+    ok y
+
+case pos
+a b : U32
+ha : Canon a
+hb : Canon b
+x : U64 := U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b)
+hab : ↑a * ↑b < 4611686014132420609
+hx : ↑x = ↑a * ↑b
+y : U32
+hy : PV_RunJoin_CircleRawScalar52.field.ct.reduce64 x = ok y
+hc : Canon y
+hsource : PV_RunJoin_CircleRawScalar52.field.M31.mul a b = ok y
+ha' : a < PV_RunJoin_CircleR72Raw52.field.P
+hb' : b < PV_RunJoin_CircleR72Raw52.field.P
+hfold : ↑(fold x) < 4294967294
+hy' : ok (PV_RunJoin_CircleNeutralSubtract53.output (UScalar.cast UScalarTy.U32 (fold x))) = ok y
+h : fold x ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+⊢ (if (low x).wrapping_add (high x) ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then do
+      let i7 ← (low x).wrapping_add (high x) - UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+      ok (UScalar.cast UScalarTy.U32 i7)
+    else ok (UScalar.cast UScalarTy.U32 ((low x).wrapping_add (high x)))) =
+    ok y
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralMul53.lean:53:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if fold x ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then ?m.182 else ?m.183
+in the target expression
+  (if (low x).wrapping_add (high x) ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then do
+      let i7 ← (low x).wrapping_add (high x) - UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+      ok (UScalar.cast UScalarTy.U32 i7)
+    else ok (UScalar.cast UScalarTy.U32 ((low x).wrapping_add (high x)))) =
+    ok y
+
+case neg
+a b : U32
+ha : Canon a
+hb : Canon b
+x : U64 := U64.wrapping_mul (UScalar.cast UScalarTy.U64 a) (UScalar.cast UScalarTy.U64 b)
+hab : ↑a * ↑b < 4611686014132420609
+hx : ↑x = ↑a * ↑b
+y : U32
+hy : PV_RunJoin_CircleRawScalar52.field.ct.reduce64 x = ok y
+hc : Canon y
+hsource : PV_RunJoin_CircleRawScalar52.field.M31.mul a b = ok y
+ha' : a < PV_RunJoin_CircleR72Raw52.field.P
+hb' : b < PV_RunJoin_CircleR72Raw52.field.P
+hfold : ↑(fold x) < 4294967294
+hy' : ok (PV_RunJoin_CircleNeutralSubtract53.output (UScalar.cast UScalarTy.U32 (fold x))) = ok y
+h : ¬fold x ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+⊢ (if (low x).wrapping_add (high x) ≥ UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P then do
+      let i7 ← (low x).wrapping_add (high x) - UScalar.cast UScalarTy.U64 PV_RunJoin_CircleR72Raw52.field.P
+      ok (UScalar.cast UScalarTy.U32 i7)
+    else ok (UScalar.cast UScalarTy.U32 ((low x).wrapping_add (high x)))) =
+    ok y
+'R1Z.PV_RunJoin_CircleNeutralMul53.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

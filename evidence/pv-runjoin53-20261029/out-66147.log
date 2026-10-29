@@ -1,0 +1,69 @@
+START 66147 R1Z.PV_RunJoin_CircleNeutralCMul53
+DONE 66147 R1Z.PV_RunJoin_CircleNeutralCMul53 exit 1 wall 1.13 RSS 2688675840
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralCMul53.lean:37:2: error: unsolved goals
+case refine_2
+a b : U32 × U32
+ha : CC a
+hb : CC b
+m0 : PV_RunJoin_CircleRawScalar52.field.M31
+h0 : PV_RunJoin_CircleRawScalar52.field.M31.mul a.1 b.1 = ok m0
+h0' : PV_RunJoin_CircleR72Raw52.field.M31.mul a.1 b.1 = ok m0
+hc0 : Canon m0
+m1 : PV_RunJoin_CircleRawScalar52.field.M31
+h1 : PV_RunJoin_CircleRawScalar52.field.M31.mul a.2 b.2 = ok m1
+h1' : PV_RunJoin_CircleR72Raw52.field.M31.mul a.2 b.2 = ok m1
+hc1 : Canon m1
+prod : U64 := (sum a).wrapping_mul (sum b)
+hp : ↑(sum a) * ↑(sum b) < 18446744073709551616
+m2 : PV_RunJoin_CircleRawScalar52.field.M31
+h2 : PV_RunJoin_CircleRawScalar52.field.M31.reduce_u64 prod = ok m2
+h2' : PV_RunJoin_CircleR72Raw52.field.M31.reduce_u64 prod = ok m2
+hc2 : Canon m2
+y0 : PV_RunJoin_CircleRawScalar52.field.M31
+h3 : m0.sub m1 = ok y0
+h3' : PV_RunJoin_CircleR72Raw52.field.M31.sub m0 m1 = ok y0
+hc3 : Canon y0
+s : PV_RunJoin_CircleRawScalar52.field.M31
+h4 : m2.sub m0 = ok s
+h4' : PV_RunJoin_CircleR72Raw52.field.M31.sub m2 m0 = ok s
+hc4 : Canon s
+y1 : PV_RunJoin_CircleRawScalar52.field.M31
+h5 : s.sub m1 = ok y1
+h5' : PV_RunJoin_CircleR72Raw52.field.M31.sub s m1 = ok y1
+hc5 : Canon y1
+⊢ (do
+      let m2 ← PV_RunJoin_CircleR72Raw52.field.M31.reduce_u64 ((sum a).wrapping_mul (sum b))
+      let m3 ← m2.sub m0
+      let m4 ← m3.sub m1
+      ok (y0, m4)) =
+    ok (y0, y1)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralCMul53.lean:29:44: warning: This simp argument is unused:
+  PV_RunJoin_CircleNeutralWrappers53.add64
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵0̵,̵h̵1̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵r̵o̵m̵3̵2̵,̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵C̵i̵r̵c̵l̵e̵N̵e̵u̵t̵r̵a̵l̵W̵r̵a̵p̵p̵e̵r̵s̵5̵3̵.̵a̵d̵d̵6̵4̵]̵[̲h̲0̲,̲ ̲h̲1̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲r̲o̲m̲3̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralCMul53.lean:41:26: warning: This simp argument is unused:
+  h2'
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲h2̵'̵,̵h̵3', ̲h4', ̲h5']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralCMul53.lean:41:34: warning: This simp argument is unused:
+  h4'
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲h2', ̲h3', ̲h4̵'̵,̵h̵5']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralCMul53.lean:41:38: warning: This simp argument is unused:
+  h5'
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_tc_ok, ̲h2', ̲h3', ̲h4',̵h̵5̵'̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CircleNeutralCMul53.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,46 @@
+START 66114 R1Z.PV_RunJoin_CircleNeutralSub53
+DONE 66114 R1Z.PV_RunJoin_CircleNeutralSub53 exit 1 wall 1.77 RSS 2677800960
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralSub53.lean:32:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ?m.210 - ?m.211
+in the target expression
+  ok ((a.wrapping_add 2147483647#u32).wrapping_sub b) = ok y
+
+case isFalse
+a b : U32
+ha : Canon a
+hb : Canon b
+ha' : ↑a < 2147483647
+hb' : ↑b < 2147483647
+hv : ↑(a.wrapping_add 2147483647#u32) = ↑a + 2147483647
+y : U32
+hle : ↑b ≤ ↑a + 2147483647
+hv1 : ↑((a.wrapping_add 2147483647#u32).wrapping_sub b) < 4294967294
+hy :
+  ok
+      (if False then ((a.wrapping_add 2147483647#u32).wrapping_sub b).wrapping_sub 2147483647#u32
+      else (a.wrapping_add 2147483647#u32).wrapping_sub b) =
+    ok y
+hcanonical : Canon y
+hsource : PV_RunJoin_CircleRawScalar52.field.M31.sub a b = ok y
+h✝ : ¬(a.wrapping_add 2147483647#u32).wrapping_sub b ≥ 2147483647#u32
+⊢ ok ((a.wrapping_add 2147483647#u32).wrapping_sub b) = ok y
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (2147483647 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralSub53.lean:31:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp_all only ̵[̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CircleNeutralSub53.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

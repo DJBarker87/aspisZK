@@ -1,0 +1,42 @@
+START 66107 R1Z.PV_RunJoin_CircleNeutralAdd52
+DONE 66107 R1Z.PV_RunJoin_CircleNeutralAdd52 exit 1 wall 1.63 RSS 2675630080
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralAdd52.lean:16:2: error: unsolved goals
+case pos
+a b : U32
+ha : Canon a
+hb : Canon b
+hab : ↑a + ↑b < 2 ^ 32
+h : a.wrapping_add b ≥ 2147483647#u32
+⊢ ok
+      (if core.num.U32.wrapping_add a b ≥ 2147483647#u32 then
+        (core.num.U32.wrapping_add a b).wrapping_sub 2147483647#u32
+      else core.num.U32.wrapping_add a b) =
+    do
+    let s1 ← ok ((a.wrapping_add b).wrapping_sub 2147483647#u32)
+    ok s1
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralAdd52.lean:18:2: error: unsolved goals
+case neg
+a b : U32
+ha : Canon a
+hb : Canon b
+hab : ↑a + ↑b < 2 ^ 32
+h : ¬a.wrapping_add b ≥ 2147483647#u32
+⊢ ok
+      (if core.num.U32.wrapping_add a b ≥ 2147483647#u32 then
+        (core.num.U32.wrapping_add a b).wrapping_sub 2147483647#u32
+      else core.num.U32.wrapping_add a b) =
+    if False then do
+      let s1 ← a.wrapping_add b - 2147483647#u32
+      ok s1
+    else ok (a.wrapping_add b)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralAdd52.lean:18:17: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [h,̵i̵f̵_̵n̵e̵g̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CircleNeutralAdd52.Canon' does not depend on any axioms
+'R1Z.PV_RunJoin_CircleNeutralAdd52.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleNeutralAdd52.double' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
