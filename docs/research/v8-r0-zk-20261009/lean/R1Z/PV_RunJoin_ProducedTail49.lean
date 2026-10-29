@@ -36,17 +36,17 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
         (do let _ ← box .S2 (PV_RunJoin_MaterialInputs49.alpha p) (PV_RunJoin_MaterialInputs49.points x0 y0 x1 y1)
             ok (.Ok (toWeight kw))) ∧
       (∀ j,j<1024 → canonical (q j) ∧ canonical (w j)) ∧
-      @PV_RunJoin_MaterialContinuation49.run (types base) (selected base heap box incoming)
+      PV_RunJoin_MaterialContinuation49.run
         (@ExternalFuns.op251 (types base) (selected base heap box incoming) (toWeight kw) (current (source k)))
         (@PV_RunJoin_PrepareTail48.run (types base) (selected base heap box incoming) variant hash backend sem
           tr claimBytes (current (source g)) inactive (current (source k)) (alloc.vec.Vec.deref qout))=
         (do let event ← heap (toWeight kw) (current (source k))
             match event with
             | .denied => ok (.Err .Allocation)
-            | .supplied => @PV_RunJoin_PrepareTailAssociation48.retained (types base) (selected base heap box incoming)
+            | .supplied => (@PV_RunJoin_PrepareTailAssociation48.retained (types base) (selected base heap box incoming)
                 variant hash backend sem tr claimBytes (current (source g)) inactive (current (source k)) bytes
                 (Array.to_slice (array 1024#usize q)) (Array.to_slice (array 1024#usize w))
-                (@prover.fold (types base) (@ProverRwP6BodyCandidate.selected (types base) incoming))) ∧
+                (@prover.fold (types base) (@ProverRwP6BodyCandidate.selected (types base) incoming)))) ∧
       ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w)=
         ok (List.ofFn (fun i : Fin 7 => source (c0 i.val))) ∧
       bytes.val.map PV_RunJoin_WideImage43.byte=ProverCommitOpeningBytes49.stream 7 c0 hc0 := by

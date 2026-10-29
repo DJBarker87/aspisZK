@@ -20,17 +20,17 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (hq : ∀ j,j<1024 → canonical (q j)) (hw : ∀ j,j<1024 → canonical (w j))
     (request : Result PV_B2_F_AllocationTransport.Outcome) :
     ∃ (c0 : Nat → Raw) (bytes : alloc.vec.Vec U8) (hc0 : ∀ j,j<7 → canonical (c0 j)),
-      @PV_RunJoin_MaterialContinuation49.run (types base) (selected base heap box ops)
+      PV_RunJoin_MaterialContinuation49.run
         (PV_RunJoin_MaterialRun49.outcome request (ok (sourceArray 1024#usize w)))
         (@PV_RunJoin_PrepareTail48.run (types base) (selected base heap box ops) variant hash backend sem
           tr y1 gamma inactive kappa (Array.to_slice (array 1024#usize q)))=
         (do let event ← request
             match event with
             | .denied => ok (.Err .Allocation)
-            | .supplied => @PV_RunJoin_PrepareTailAssociation48.retained (types base) (selected base heap box ops)
+            | .supplied => (@PV_RunJoin_PrepareTailAssociation48.retained (types base) (selected base heap box ops)
                 variant hash backend sem tr y1 gamma inactive kappa bytes
                 (Array.to_slice (array 1024#usize q)) (Array.to_slice (array 1024#usize w))
-                (@prover.fold (types base) (@ProverRwP6BodyCandidate.selected (types base) ops))) ∧
+                (@prover.fold (types base) (@ProverRwP6BodyCandidate.selected (types base) ops)))) ∧
       ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w)=
         ok (List.ofFn (fun i : Fin 7 => source (c0 i.val))) ∧
       bytes.val.map PV_RunJoin_WideImage43.byte=ProverCommitOpeningBytes49.stream 7 c0 hc0 := by
