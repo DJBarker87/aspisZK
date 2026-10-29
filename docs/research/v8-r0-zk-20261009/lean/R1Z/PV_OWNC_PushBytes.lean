@@ -13,8 +13,10 @@ theorem initialized {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : By
  unfold Valid at h
  unfold Fits
  rw [h.2.1]
- exact Nat.le_trans (by omega : b.length*k.width+k.width=(b.length+1)*k.width).le
-  (Nat.mul_le_mul_right k.width (by omega))
+ have eq:b.length*k.width+k.width=(b.length+1)*k.width := by
+  simp only [Nat.add_mul,Nat.one_mul]
+ rw [eq]
+ exact Nat.mul_le_mul_right k.width (by omega)
 
 theorem prefix {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : Bytes)
  (h:Valid k b) (bounded:∀ x i z, k.encode x i=some z → i<k.width)
@@ -25,7 +27,7 @@ theorem prefix {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : Bytes)
   (i*k.width) k.width (b.length*k.width) k.width (h.2.2.2.2 i hi) (bounded _)
  left
  calc
-  i*k.width+k.width=(i+1)*k.width := by omega
+  i*k.width+k.width=(i+1)*k.width := by simp only [Nat.add_mul,Nat.one_mul]
   _≤b.length*k.width := Nat.mul_le_mul_right k.width (by omega)
 #print axioms initialized
 #print axioms prefix

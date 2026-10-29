@@ -13,7 +13,8 @@ theorem ptr (h : Header) :
  (clearPtr (clearBuf (clearCap h))).ptr=2 ∧
  (clearPtr (clearBuf (clearCap h))).endPtr=h.endPtr := ⟨rfl,rfl⟩
 theorem endPtr (h : Header) : reset h=⟨2,2,2,0⟩ := rfl
-theorem empty_remaining (h : Header) : remaining (reset h)=(2,0) := rfl
+theorem empty_remaining (h : Header) : remaining (reset h)=(2,0) := by
+ simp only [remaining,reset,clearEnd,clearPtr,clearBuf,clearCap,Nat.sub_self,Nat.zero_div]
 #print axioms cap
 #print axioms buf
 #print axioms ptr
