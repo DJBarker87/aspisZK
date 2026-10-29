@@ -1,0 +1,1 @@
+Uncompiled drafts, no theorem credit. The proposed native raw-payload joins relied on op61/op66 constructor values that the selected dictionary does not install at the tested abstraction. They were removed from active Lean source. LiftRow63 instead retains these callbacks as Result-producing operations. No native source law or missing obligation is assumed.
