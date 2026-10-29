@@ -18,9 +18,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     apply PV_RunJoin_ScalarRaw50.injective
     apply Result.ok.inj
     by_cases hi : i=0
-    · simp only [nonzero,hi,decide_true,if_true] at chosen ha
+    · simp only [nonzero,hi,decide_true,if_true] at chosen ha ⊢
       exact chosen.symm.trans ha
-    · simp only [nonzero,hi,decide_false,Bool.false_eq_true,if_false] at chosen ha
+    · simp only [nonzero,hi,decide_false,Bool.false_eq_true,if_false] at chosen ha ⊢
       exact chosen.symm.trans ha
   rw [eq]
   exact hm
