@@ -1,0 +1,11 @@
+import R1Z.ProverCommitArrayIndex25
+import PV_DIAG8_Cursor
+set_option autoImplicit false
+namespace PV_DIAG8
+open Aeneas Aeneas.Std
+/-! Existing extracted array-index theorem, specialized to reached fixed sizes.
+These are index laws, not a claim that every native caller supplies the bound. -/
+
+theorem array_no_bounds_failure {α : Type} {n : Usize} (a : Aeneas.Std.Array α n) (i : Usize) (h : i.val < n.val) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := by rw [R1Z.ProverCommitArrayIndex25.array_index_usize_ok a i h]; intro bad; cases bad
+#print axioms array_no_bounds_failure
+end PV_DIAG8
