@@ -42,6 +42,8 @@ theorem selected_preserves_rejection (base : ExternalTypes)
   unfold PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_12]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
+    ProverRwP6FlatInstall.selected ProverRwP6TransitionInstall.selected
+    ProverRwBodyNativeWideInstall.selected
   rfl
 
 #print axioms rejecting
