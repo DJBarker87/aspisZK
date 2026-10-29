@@ -55,6 +55,20 @@ theorem final_public (hash : Hash) (sample : Bytes → Q) (public c1 : Bytes)
  plan (calls (alpha hash sample public c1 right) (List.replicate 29 1024)) failures := by
  rw [PV_OWNJ_FiatShamir.final_public hash sample public c1 left right hp]
 
+/-- All three wire points, all 29 lanes and the global failure prefix. -/
+theorem callback_public (sampleValue : Nat → Q) (hash : Hash) (sample : Bytes → Q)
+ (public c1 : Bytes) (left right : List Bytes) (hp : left = right)
+ (round index assignment : Nat) (failures : List Bool)
+ (columnsL columnsR : List (List Q))
+ (hl : columnsL.map List.length = List.replicate 29 1024)
+ (hr : columnsR.map List.length = List.replicate 29 1024) :
+ plan (calls (query sampleValue (alpha hash sample public c1 left) round index assignment)
+  (columnsL.map List.length)) failures =
+ plan (calls (query sampleValue (alpha hash sample public c1 right) round index assignment)
+  (columnsR.map List.length)) failures := by
+ rw [hl,hr,query_public sampleValue hash sample public c1 left right hp round index assignment]
+
+#print axioms callback_public
 #print axioms one_point
 #print axioms first_shape_stop
 #print axioms per_point_public

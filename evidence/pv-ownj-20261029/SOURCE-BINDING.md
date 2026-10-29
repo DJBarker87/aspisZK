@@ -91,3 +91,15 @@ No unpublished influence on the callback point or final alpha was found in
 this source analysis. This does not establish witness-independent occurrence
 of an entire failed prover execution: boundary/oracle errors and resource
 failure positions must still be accounted for by the complete consumer law.
+
+## Relaunch clarification: canonical consuming domain
+
+The builder explicitly rejects c1 limbs >=P and checks d/g by canonical
+QM31 byte decoding at state_only_candidate_prefix.rs:792–808. h1 is only
+converted to a fixed array and tested by state_only_copy_helper_sum; that
+helper at crates/aspis-statement/src/state_only_semantic.rs:583–585 checks
+length and folds raw additions. It does not validate every h1 limb. Thus a
+canonical-column theorem at lane26 needs the concrete supplied helper's
+output invariant. The generic helper argument alone supplies no such proof.
+This is a value-refinement obstruction, not an allocation finding: lengths
+remain1024 and the query constructor does not read column values.
