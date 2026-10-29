@@ -3,7 +3,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RJ4IDB_PowersSafety
 open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
-open ProverRwDictionaryTower PV_RJ4IDB_PowersControl
+open PV_RJ4IDB_PowersControl
 variable [ExternalTypes]
 
 theorem increment {N : Usize} (i : Usize) (hi : i.val<N.val) :
@@ -15,7 +15,7 @@ theorem increment {N : Usize} (i : Usize) (hi : i.val<N.val) :
  omega
 
 theorem index_restore {N : Usize} (out : Array W N) (i : Usize) (hi : i.val<N.val) :
- ∃ old, Array.index_mut_usize out i = ok (old,Array.set out i) := by
+ ∃ old, Array.index_mut_usize out i = ok (old,Aeneas.Std.Array.set out i) := by
  obtain ⟨v,hv⟩ := ProverRwP6ArrayRead.read out i hi
  unfold Array.index_mut_usize
  rw [hv]
