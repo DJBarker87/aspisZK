@@ -10,6 +10,7 @@ abbrev loop := PV_RDCD3_CB_MaskSource.state_only_hiding.selected_mask_linears_lo
 abbrev complete := PV_RDCD3_CB_MaskSource.state_only_hiding.selected_mask_linears
 end S
 
+set_option backward.isDefEq.respectTransparency false in
 theorem finite_total (point : Array Q 10#usize) (fuel : Nat) (e : Usize) (s w : Q)
     (rank : e.val=fuel) (bounded : e.val≤10) : Total (S.finite point fuel e s w) := by
   induction fuel generalizing e s w with
@@ -27,11 +28,13 @@ theorem finite_total (point : Array Q 10#usize) (fuel : Nat) (e : Usize) (s w : 
       exact ih (pred e) s1 w1 next_rank next_bound
     · exact ih (pred e) s1 w next_rank next_bound
 
+set_option backward.isDefEq.respectTransparency false in
 theorem source_total (point : Array Q 10#usize) (s w : Q) :
     Total (S.loop (before 10#usize) point s w) := by
-  rw [PV_RDCD3_CB_MaskLinearsFinite.source point 10 10#usize s w rfl]
+  apply (congrArg Total (PV_RDCD3_CB_MaskLinearsFinite.source point 10 10#usize s w rfl)).mpr
   exact finite_total point 10 10#usize s w rfl (by decide)
 
+set_option backward.isDefEq.respectTransparency false in
 theorem complete (point : Array Q 10#usize) : Total (S.complete point) := by
   unfold S.complete PV_RDCD3_CB_MaskSource.state_only_hiding.selected_mask_linears
   simp only [core.iter.traits.iterator.Iterator.rev.default,
