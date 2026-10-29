@@ -25,6 +25,7 @@ theorem complete (block : Array U8 32#usize) (row : Bool) :
   · rw [outside_map t hi] at hm
     dsimp only [t] at hi
     simp only [hm,PV_RunJoin_CircleMapEquation55.decOutcome,encodeResult,bind_tc_ok,chosen,if_pos hi]
+    rfl
   · have hz : t.im=0 := not_ne_iff.mp hi
     obtain ⟨e,he⟩ : ∃ e,pureMap t=.error e := by
       by_cases hd : 1+t^2=0
