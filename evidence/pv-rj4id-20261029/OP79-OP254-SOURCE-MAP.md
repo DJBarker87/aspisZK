@@ -71,8 +71,9 @@ proof in ProverRwFull, is still required. The historical batch1 native/extractio
 receipts predate (x); body/configuration parity and a 1.94.1 deployed check must
 be established before crediting them at the deployed caller.
 
-This map records proof design and source inspection; it claims no new deployed
-installation, endpoint premise removal, native differential, or compiled theorem.
+This map records source inspection and the fresh source/model theorems listed
+below. It claims no deployed installation, endpoint premise removal or fresh
+native differential.
 
 ## Later deployed audit superseding the historical execution gap
 
@@ -89,8 +90,8 @@ if all relevant source hashes match, while the 145-record blocker remains.
 
 ## New symbolic op254 transport draft
 
-The carrier gap above is now addressed by three **uncompiled drafts**, pending
-fresh receipts: `PV_RJ4ID_PowersControl` defines the indexed deployed-copy
+The carrier gap above is now addressed by three **checked source/model laws**, with
+fresh receipts 64401–64403: `PV_RJ4ID_PowersControl` defines the indexed deployed-copy
 loop in `ProverRwFull` carriers, `PV_RJ4ID_PowersBridge.complete` proves its full
 Result equals `ProverRwP6PowersSource.weights.powers` for every Usize N and
 arbitrary original field callbacks, and `PV_RJ4ID_Op254.entry` specializes this
@@ -105,5 +106,5 @@ The named decreasing invariant is `i.val + fuel = N.val`; the final store is
 retained, no multiplication occurs after the last store, and fail/div Results
 are matched at every indexed read and multiplication. Native source/primitive
 association, source-to-machine-code V370, and observation effects remain
-separate evidence obligations. These drafts are never proof credit by source
-inspection alone.
+separate evidence obligations. The fresh Lean receipts establish model equalities only; the complete deployed
+association is not inferred from these definitions.
