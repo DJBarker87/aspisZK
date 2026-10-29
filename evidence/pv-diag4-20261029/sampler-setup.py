@@ -16,6 +16,7 @@ def visit(m):
  for dep in deps:visit(dep)
 visit('R1Z.PV_RunJoin_TrustItems')
 assert 'R1Z.PrivacyR1HeadlineV2' not in needed
+a.intersection_update(needed)
 checks=[]
 for m in needed:
  r=rows[m];assert sha(Path(r['path']))==r['sha256'],m

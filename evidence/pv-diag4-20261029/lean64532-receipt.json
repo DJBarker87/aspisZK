@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "5a2df9074cba63cefb74c97d989d527a1fa48471",
+  "runner_sha256": "6fe365d6150c4740086dd3cbf0c458d3805602876afae94243b192a2816fa38a",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG4_Interrupted",
+  "attempt": 64532,
+  "source_sha256": "b310249a3aed67bc52b9709d0bdf7acb018e9d653e51b6586e22f7f3fc2db558",
+  "environment_sha256": "88ce1214ba48a95647b1a1c21fe4afe62124ce87718b4df72110dddd46543071",
+  "dependency_objects": {
+    "PV_DIAG4_ReprDrop": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_ReprDrop.olean": "e041d7a8c8759c9ed329e4a6c1c4f88fc363beb7d5ab55de2e5413dc0109d45e"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/lean64532-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_Interrupted.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 0.2817862033843994,
+  "peak_rss_kib": "478932",
+  "swaps": "0",
+  "gnu_wall": "0:00.25",
+  "print_axioms": "'PV_DIAG4.os_interrupted_exact' does not depend on any axioms\n'PV_DIAG4.os_interrupted_no_effect' does not depend on any axioms\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:26:64: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 : Type) \u2192 Execution x_0 x_1 \u2192 (x_1 \u2192 Op x_0 x_2) \u2192 Execution x_0 x_2\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:24:46: error: unsolved goals\nS C : Type\ncode : Fin (2 ^ 32)\nh : \u2191code = 4\ndrop : C \u2192 Op S Unit\nretry : Op S (Except (Fin (2 ^ 32)) Unit)\ns : S\n\u22a2 (PV_DIAG3.bind { events := [], state := s, exit := Exit.value true } fun interrupted =>\n      if interrupted = true then sequence (PV_DIAG3.pure ()) fun x => retry else PV_DIAG3.pure (Except.error code)) =\n    retry s\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:26:83: warning: This simp argument is unused:\n  prepend\n\nHint: Omit it from the simp argument list.\n  simp [osErrorAfterWrite, \u0332osInterrupted, \u0332h, \u0332sequence, \u0332PV_DIAG3.pure, \u0332bind, \u0332errorReprDrop,\u0335p\u0335r\u0335e\u0335p\u0335e\u0335n\u0335d\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG4.interrupted_drop_then_retry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:64: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 : Type) \u2192 Execution x_0 x_1 \u2192 (x_1 \u2192 Op x_0 x_2) \u2192 Execution x_0 x_2\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:30:68: error: unsolved goals\nS C : Type\ncode : Fin (2 ^ 32)\nh : \u2191code \u2260 4\ndrop : C \u2192 Op S Unit\nretry : Op S (Except (Fin (2 ^ 32)) Unit)\ns : S\n\u22a2 (PV_DIAG3.bind { events := [], state := s, exit := Exit.value (\u2191code == 4) } fun interrupted =>\n      if interrupted = true then sequence (errorReprDrop drop (ValidErrorRepr.os code)) fun x => retry\n      else PV_DIAG3.pure (Except.error code)) =\n    { events := [], state := s, exit := Exit.value (Except.error code) }\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:39: warning: This simp argument is unused:\n  h\n\nHint: Omit it from the simp argument list.\n  simp [osErrorAfterWrite, \u0332osInterrupted,h\u0335,\u0335 \u0332sequence, \u0332PV_DIAG3.pure, \u0332bind, \u0332prepend]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:69: warning: This simp argument is unused:\n  prepend\n\nHint: Omit it from the simp argument list.\n  simp [osErrorAfterWrite, \u0332osInterrupted, \u0332h, \u0332sequence, \u0332PV_DIAG3.pure, \u0332bind,\u0335p\u0335r\u0335e\u0335p\u0335e\u0335n\u0335d\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG4.noninterrupted_moves_error' depends on axioms: [sorryAx, Quot.sound]\n'PV_DIAG4.interrupted_keeps_retry_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "object_sha256": null
+}

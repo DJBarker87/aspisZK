@@ -1,0 +1,64 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "5a2df9074cba63cefb74c97d989d527a1fa48471",
+  "runner_sha256": "6fe365d6150c4740086dd3cbf0c458d3805602876afae94243b192a2816fa38a",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "R1Z.PV_RunJoin_TrustItems",
+  "attempt": 64524,
+  "source_sha256": "da93e9d8bc4f7a567b2160ed543892471d5e64859a4628cbcf05a6d2b50e772c",
+  "environment_sha256": "88ce1214ba48a95647b1a1c21fe4afe62124ce87718b4df72110dddd46543071",
+  "dependency_objects": {
+    "R1Z.PV_RunJoin_NativeEffectTransport": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_NativeEffectTransport.olean": "07a5c93925950f9722d815d4c0200a21a4b36df488daabb17dccf88616b188fb"
+    },
+    "R1Z.PV_RunJoin_E1Joint": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_E1Joint.olean": "073a5da52ba127dd01aa61932428750f85dd20cd4e978b1cf3bcde4ef774c088"
+    },
+    "R1Z.ProverCommitPublicNonce40": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/ProverCommitPublicNonce40.olean": "fd0ac573461231214b1f2674f942e2125d9f787c5d4f082a5234dc517ae3aafb"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/lean64524-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_TrustItems.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/R1Z/PV_RunJoin_TrustItems.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 2.105618953704834,
+  "peak_rss_kib": "4295788",
+  "swaps": "0",
+  "gnu_wall": "0:02.07",
+  "print_axioms": "structure R1Z.PV_RunJoin_TrustItems {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n  (d : Data E File Reply Time Worker Context Coins Rest Observation) : Prop\nnumber of parameters: 11\nfields:\n  R1Z.PV_RunJoin_TrustItems.entropy_law : ProverCommitPublicNonce40.E1 d.law\n  R1Z.PV_RunJoin_TrustItems.entropy_kernel : \u2200 (c : Coins),\n      d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c\n  R1Z.PV_RunJoin_TrustItems.observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c\nconstructor:\n  R1Z.PV_RunJoin_TrustItems.mk {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n    {d : Data E File Reply Time Worker Context Coins Rest Observation}\n    (entropy_law : ProverCommitPublicNonce40.E1 d.law)\n    (entropy_kernel : \u2200 (c : Coins), d.nativeWeight c = PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c)\n    (observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c) : PV_RunJoin_TrustItems d\n",
+  "object_sha256": "7999a595b4f1224f34e679cdd8ccd61664330db43d3e4361fde461eedb29b24f"
+}

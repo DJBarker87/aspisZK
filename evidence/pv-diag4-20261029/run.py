@@ -26,7 +26,17 @@ if kind=='lean':
  rec.update(module=module,attempt=int(n),source_sha256=sha(src),environment_sha256=sha(D/'env-J.json'),dependency_objects=deps,Lean_M=7000)
  (D/f'{label}-source.lean.txt').write_bytes(src.read_bytes())
  args=['python3',str(D.parent/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env-J.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
-else:assert kind=='native'
+else:
+ assert kind=='native'
+ inputs={}
+ for i,arg in enumerate(args):
+  if i and args[i-1]=='-o':continue
+  path=Path(arg)
+  if path.is_file() and path.is_relative_to(D):
+   inputs[str(path)]=dict(sha256=sha(path),bytes=path.stat().st_size)
+   if path.suffix in {'.rs','.py','.lean'}:
+    snapshot=D/(label+'-input-'+path.name+'.txt');snapshot.write_bytes(path.read_bytes());inputs[str(path)]['snapshot']=str(snapshot)
+ rec['input_artifacts']=inputs
 cmd=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(D/f'{label}-time.log'),'timeout','900',*args]
 start=time.time()
 with (D/f'{label}-output.log').open('w') as f:p=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
