@@ -1,0 +1,72 @@
+warning: unused macro definition: `anyhow`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:12:14
+   |
+12 | macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
+   |              ^^^^^^
+   |
+   = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused macro definition: `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:13:14
+   |
+13 | macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
+   |              ^^^^^^
+
+warning: unused imports: `anyhow` and `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:14:17
+   |
+14 | pub(super) use {anyhow, ensure};
+   |                 ^^^^^^  ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Error` is never constructed
+ --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:5:12
+  |
+5 | pub struct Error(&'static str);
+  |            ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: type alias `Result` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:10:10
+   |
+10 | pub type Result<T> = std::result::Result<T, Error>;
+   |          ^^^^^^
+
+warning: function `err` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:11:8
+   |
+11 | pub fn err<T>(_: T) -> Error { Error("client operation failed") }
+   |        ^^^
+
+warning: associated function `literal` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:15:21
+   |
+15 | impl Error { pub fn literal(message: &'static str) -> Self { Self(message) } }
+   | ----------          ^^^^^^^
+   | |
+   | associated function in this implementation
+
+warning: function `report` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:31:8
+   |
+31 | pub fn report(_: Error) {
+   |        ^^^^^^
+
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/home/dombarker/project-offloads/codex-pv-c474-20261029/rustc7fBHS0/symbols.o" "<2 object files omitted>" "-Wl,--as-needed" "-Wl,-Bdynamic" "-linterposer" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/libpanic_abort-*.rlib" "/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/{libgetrandom-d16119ec6122d673,libcfg_if-f0a67c9f69bd6f69,libanyhow-1d89d6a582e41ef3}.rlib" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/home/dombarker/project-offloads/codex-pv-c474-20261029/rustc7fBHS0/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "/home/dombarker/project-offloads/codex-pv-c474-20261029" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-direct" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,-O1" "-nodefaultlibs" "-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: rust-lld: error: unable to find library -linterposer
+          collect2: error: ld returned 1 exit status
+          
+
+error: aborting due to 1 previous error; 8 warnings emitted
+
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-pv-c474-20261029/diagnostics-test.py", line 20, in <module>
+    subprocess.run(cmd,check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/home/dombarker/.cargo/bin/rustc', '+1.94.1', '--edition=2021', '-C', 'opt-level=3', '-C', 'panic=abort', 'probe.rs', '-L', 'dependency=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps', '--extern', 'getrandom=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libgetrandom-d16119ec6122d673.rlib', '--extern', 'anyhow=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libanyhow-1d89d6a582e41ef3.rlib', '-L', 'native=/home/dombarker/project-offloads/codex-pv-c474-20261029', '-l', 'dylib=interposer', '-C', 'link-arg=-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029', '-o', '/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-direct']' returned non-zero exit status 1.

@@ -1,0 +1,84 @@
+{
+  "client_sha256": "05673e4da06b3dbcf9890eb3737011375ce2a5a0f1a7f58e36179910f630a833",
+  "process_tests": [
+    {
+      "name": "parse",
+      "exit": 1,
+      "stderr": "client error\n",
+      "stdout_bytes": 0,
+      "passed": true
+    },
+    {
+      "name": "panic",
+      "exit": -6,
+      "stderr": "client panic\n",
+      "stdout_bytes": 0,
+      "passed": true
+    }
+  ],
+  "controls": [
+    {
+      "oom_exit": -6,
+      "oom_stderr_bytes": 0,
+      "label": "direct",
+      "command": [
+        "/home/dombarker/.cargo/bin/rustc",
+        "+1.94.1",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "panic=abort",
+        "probe.rs",
+        "-L",
+        "dependency=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps",
+        "--extern",
+        "getrandom=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libgetrandom-d16119ec6122d673.rlib",
+        "--extern",
+        "anyhow=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libanyhow-1d89d6a582e41ef3.rlib",
+        "-L",
+        "native=/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-l",
+        "dylib=interposer",
+        "-C",
+        "link-arg=-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-direct"
+      ],
+      "stdout": "ok=true counts=0\n",
+      "binary_sha256": "a7efd1ff48e886cf4e92041dccf7fff89340ba49436f7ab42dc3cab1aa8bd4c3"
+    },
+    {
+      "oom_exit": -6,
+      "oom_stderr_bytes": 0,
+      "label": "fallback-control",
+      "command": [
+        "/home/dombarker/.cargo/bin/rustc",
+        "+1.94.1",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "panic=abort",
+        "probe.rs",
+        "-L",
+        "dependency=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps",
+        "--extern",
+        "getrandom=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/libgetrandom-13427f77686b1b02.rlib",
+        "--extern",
+        "anyhow=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/libanyhow-06417ef6c7ce6f5a.rlib",
+        "-L",
+        "native=/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-l",
+        "dylib=interposer",
+        "-C",
+        "link-arg=-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-fallback-control"
+      ],
+      "stdout": "ok=false counts=4294967297\n",
+      "binary_sha256": "d2639f4fe7bef1b333010e0aa43e71a0ff687c8bbcd36f23837d492941bd2995"
+    }
+  ],
+  "scope": "Finite validation. The direct harness links the identical getrandom/anyhow rlibs used by the client; baseline is the matched interposition control. Environment starts enabled, then is re-enabled after initialize; both std and anyhow remain disabled."
+}
