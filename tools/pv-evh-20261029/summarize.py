@@ -22,6 +22,12 @@ summary=dict(lean_attempts=len(rs),accepted=sum(r['accepted'] for r in rs),
  current_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
  forbidden_worker_target='PV_EVH_FixtureConsumer',attempts=rs)
 (E/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+freeze=[]
+for p in sorted(Path('lean').glob('PV_EVH_*.lean')):
+ freeze.append(dict(module=p.stem,path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),
+  git_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p)],text=True).strip(),
+  worker_compile_forbidden=p.stem=='PV_EVH_FixtureConsumer'))
+(E/'proof-source-freeze.json').write_text(json.dumps(dict(revision=summary['current_revision'],modules=freeze),indent=2)+'\n')
 lines=['# AGENTS.md section 6 focused receipts','',
  '| ID | Exact target | Exit | Wall | Peak RSS KiB | Swap | Source revision |',
  '|---|---|---:|---|---:|---:|---|']
