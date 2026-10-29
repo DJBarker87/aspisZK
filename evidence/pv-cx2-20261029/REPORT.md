@@ -78,7 +78,23 @@ requires serialized `preset=Aeneas` metadata. Charon's Aeneas preset necessarily
 adds blanket associated-type lifting. Neither metadata editing nor modifying
 the extractor is authorized; neither was done.
 
-The final mandatory-body isolation probe is pending at this draft stage.
+N73345 was refused before launch. After cooldown, N73346 restores the accepted
+monomorphized Aeneas preset and marks only note and Accounts::parse opaque.
+It has has_errors=false; main/run/prove remain structured. N73347 then fails
+at the REQUIRED body `plan::prove`, `plan.rs:80:0–130:1`, with the same
+`Nested-loop returns require exactly one Option language item` refusal.
+This isolates the obstruction beyond optional helpers: the loop at line 92
+contains fallible calls returning through `?`. Making prove opaque would remove
+the executable path explicitly required by the task.
+
+**Stopped item:** no accepted flag/opacity-only route was found. The paired
+mandatory preset/lifting checks and monomorphized generic-Option prepass reject
+the tested frozen-source paths. Continuing by editing LLBC preset metadata,
+rewriting the loop, changing the translator, or replacing the body with a port
+would exceed this task's authorization. This is the owner/lead deliverable:
+authorized compatible handling of this mandatory source construct by the pinned
+extraction chain, with source-fidelity and translator-identity gates retained.
+The successful translator restoration itself does not require an owner waiver.
 No Types/Funs compilation, standard-axioms audit, manifest replay, or compiled
 prover declaration-identity link is claimed. No replacement prover or world was
 written. Existing V370, V371, rdea-1, V400/V396, D159/D166, and L1/L2/L3/source/
@@ -110,8 +126,27 @@ covers the timeout wrapper and undercounts descendants; use its full cgroup
 peak (3,371,724,800 bytes) for resource accounting. No cap/timeout was raised.
 
 N73333 and N73335 were refused before execution; their next actual launches
-followed the full 180-second cooldown. N73345 was also refused; its isolation
-probe will use a new unused ID after cooldown. Refusals are uncharged.
+followed the full 180-second cooldown. N73345 was also refused; N73346 followed its full cooldown. Refusals are uncharged.
 Python scripts parse and identity/source/site preservation checks pass.
 `validation.json` lists actual executions; no unexecuted Lean ID is counted.
 No key/account was created, used, removed or deleted. Nothing was pushed.
+
+
+Final usage: **14/20 native scopes, 0/40 Lean, 0 Kani**. Refused/unlaunched:
+N73333, N73335, N73345 (uncharged). Native executions:
+N73330–73332, N73334, N73337–73344, N73346–73347.
+All Lean IDs remain unused, including the audit reserve. This is a checked
+mandatory-source extraction refusal, not budget exhaustion. There is no
+new Lean statement to elaborate or theorem closure to audit. The task-specific
+ban on source ports/references and extractor changes prevents the inherited
+generic P6 fallback from bypassing this refusal. h6/h6'/h6'' object
+reconciliation was not exercised: no new Lean import closure was loaded.
+
+Cleanup preserves the accepted 49,422,424-byte translator under the new host
+resume directory's `pinned-tools/aeneas-ae1-2-fda587d2`; hash unchanged.
+Only this resume's Rust/OCaml compiled scratch was removed, after checking all
+owned native scopes are inactive. Sources, raw/compressed LLBC, receipts and
+other jobs' caches/tools are retained. `cleanup.json` records exact paths.
+
+Stage commits from resume HEAD are recorded in `commits.txt` (the final evidence
+commit may follow that snapshot). No push or branch change occurred.
