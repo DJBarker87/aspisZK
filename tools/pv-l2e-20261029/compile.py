@@ -49,6 +49,8 @@ tim=(E/f'time-{a}.log').read_text();out=(E/f'out-{a}.log').read_text()
 for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kbytes=r'Maximum resident set size \(kbytes\): (\d+)',swaps=r'Swaps: (\d+)',wall=r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)').items():
  m=re.search(pat,tim);intent[key]=m[1] if m else None
 intent['axioms']=re.findall(r"'[^']+' (?:depends on axioms: \[[\s\S]*?\]|does not depend on any axioms)",out)
+if intent['exit']=='0':
+ q=ssh('sha256sum '+shlex.quote(H+'/objects/'+module+'.olean'));assert q.returncode==0;intent['object_sha256']=q.stdout.split()[0]
 intent['wrapper_sha256']=hashlib.sha256(Path(__file__).read_bytes()).hexdigest();intent['admission']=admission;intent['accepted']=intent['exit']=='0' and 'error:' not in out and 'sorryAx' not in out
 (E/f'receipt-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 print(out);print(json.dumps({k:v for k,v in intent.items() if k not in ['admission','command']},indent=2));sys.exit(0 if intent['accepted'] else 1)
