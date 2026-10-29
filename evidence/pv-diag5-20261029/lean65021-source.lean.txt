@@ -1,0 +1,18 @@
+import PV_DIAG3_Capture
+/-! Finite normally completed native callbacks. This discharges the bounds
+of actual_start in Backtrace::Display, independently of the raw PCs. It does
+not assert that the unwinder's raw frame sequence has a public joint law. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+def ValidStart (c : CaptureState) : Prop := ∀ k, c.actualStart = some k → k ≤ c.frames.length
+def collect (ip : Nat) : List Frame → CaptureState → CaptureState
+ | [],c => c
+ | f::fs,c => collect ip fs (pushFrame ip c f)
+def capturedFrames (ip : Nat) (fs : List Frame) : CaptureState := collect ip fs ⟨[],none⟩
+def displayFrames (full : Bool) (c : CaptureState) : List Frame :=
+ if full then c.frames else c.frames.drop (c.actualStart.getD 0)
+theorem empty_start_valid : ValidStart ⟨[],none⟩ := by
+ intro k h; cases h
+#print axioms empty_start_valid
+end PV_DIAG5

@@ -1,0 +1,32 @@
+import PV_DIAG5_Frame
+/-! Deployed Backtrace::create callback order. Clone and Vec push own their
+failure cleanup. symbol_address is evaluated on the original borrowed frame,
+AFTER push; matching records the new vector length. Each callee remains an
+explicit complete native operation, with its own association obligation. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S F : Type}
+structure CallbackOps (S F : Type) where
+ cloneFrame : F → Op S Frame
+ push : Frame → Op S Unit
+ address : F → Op S Nat
+
+def callback (o : CallbackOps S F) (ip : Nat) (c : CaptureState) (raw : F) :
+ Op S (CaptureState × Bool) :=
+ sequence (o.cloneFrame raw) (fun cloned => sequence (o.push cloned) (fun _ =>
+ sequence (o.address raw) (fun address =>
+ let fs := c.frames ++ [cloned]
+ let start := if address == ip && c.actualStart.isNone then some fs.length else c.actualStart
+ PV_DIAG3.pure (⟨fs,start⟩,true))))
+theorem callback_normal (o : CallbackOps S F) (ip : Nat) (c : CaptureState) (raw : F)
+ (f : Frame) (s t u v : S) (a b d : List Event) (addr : Nat)
+ (hc : o.cloneFrame raw s = ⟨a,t,.value f⟩)
+ (hp : o.push f t = ⟨b,u,.value ()⟩)
+ (ha : o.address raw u = ⟨d,v,.value addr⟩) :
+ callback o ip c raw s = ⟨a++(b++d),v,.value
+ (⟨c.frames++[f],if addr == ip && c.actualStart.isNone then
+ some (c.frames++[f]).length else c.actualStart⟩,true)⟩ := by
+ simp [callback,sequence,hc,hp,ha,PV_DIAG3.bind,prepend,PV_DIAG3.pure]
+#print axioms callback_normal
+end PV_DIAG5

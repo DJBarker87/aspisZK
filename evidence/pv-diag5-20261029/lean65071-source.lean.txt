@@ -1,0 +1,26 @@
+import PV_DIAG5_Display
+/-! CWD owned Result cleanup around captured Backtrace formatting. Full
+formatting also executes current_dir. Failure to obtain CWD stays a Result
+value; its concrete error drop is retained. No destructor is made silent. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S C A B D : Type}
+def selectedBody (o : DisplayOps S C A B D) (full : Bool) (cwd : D)
+ (fs : List (ResolvedFrame A B)) : Op S (Except Unit Unit) :=
+ sequence (o.newFmt full cwd) (fun _ => tryThen o.context
+    (tryThen (emitEach (emitFrame o.raw o.symbol) fs) o.finish))
+theorem cwd_before_body (o : DisplayOps S C A B D) (full : Bool)
+ (fs : List (ResolvedFrame A B)) (cwd : D) (s t : S) (es : List Event)
+ (h : o.currentDir s = ⟨es,t,.value cwd⟩) :
+ displaySelected o full fs s = prepend es
+ (scope (selectedBody o full cwd fs) (o.dropCwd cwd) o.doublePanic t) := by
+ simp only [displaySelected,sequence,h,PV_DIAG3.bind,selectedBody]
+#print axioms cwd_before_body
+theorem cwd_abort_no_body (o : DisplayOps S C A B D) (full : Bool)
+ (fs : List (ResolvedFrame A B)) (s t : S) (es : List Event) (c : Crash)
+ (h : o.currentDir s = ⟨es,t,.abort c⟩) :
+ displaySelected o full fs s = ⟨es,t,.abort c⟩ := by
+ simp [displaySelected,sequence,h,PV_DIAG3.bind]
+#print axioms cwd_abort_no_body
+end PV_DIAG5
