@@ -38,10 +38,10 @@ theorem mask_nonvacuity :
 
 theorem reserve {T : Type} (Allocator : Type) (v : alloc.vec.Vec T) (n : Usize) :
     @ExternalFuns.op32 (types base) (opsNative base heap box ops runtime world) T Allocator v n =
-      ok (PV_FXM_ReserveSelected.returned runtime.encode
+      ok (@PV_FXM_ReserveSelected.returned (types base) runtime.encode
         (@PV_RunJoin_AllocatorWorld63.execute (types base) T S F runtime world v n).returned,v) := by
   rw [PV_RunJoin_NativeFrames63.op32]
-  exact PV_RunJoin_AllocatorWorld63.complete runtime _ world Allocator v n
+  exact @PV_RunJoin_AllocatorWorld63.complete (types base) T S F runtime _ world Allocator v n
 
 #print axioms mask_source
 #print axioms mask_reference
