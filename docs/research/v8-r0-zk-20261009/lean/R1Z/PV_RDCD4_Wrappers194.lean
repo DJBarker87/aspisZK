@@ -1,4 +1,5 @@
 import Aeneas
+import R1Z.PV_RDCD4_Zip194
 namespace R1Z.PV_RDCD4_Wrappers194
 set_option autoImplicit false
 
@@ -35,6 +36,17 @@ theorem through_binding {A B : Type} (f : A → B × A) (w : ManuallyDrop A)
 
 theorem project_new {A : Type} (a : A) : (project (new a)).1=a := rfl
 
+theorem identity {A : Type} (a : A) : id a=a := rfl
+
+theorem zip_new_fields {A B : Type} (a : A) (b : B) :
+    PV_RDCD4_Zip194.new a b=⟨a,b,0,0⟩ := rfl
+
+theorem through_complete {A B : Type} (f : A → B × A) (w : ManuallyDrop A) :
+    through f w=(let (r,a) := f w.value.value; (r,new a)) := rfl
+
+#print axioms identity
+#print axioms zip_new_fields
+#print axioms through_complete
 #print axioms restore
 #print axioms store
 #print axioms through_binding
