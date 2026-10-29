@@ -53,7 +53,7 @@ assert module.startswith('PV_EVH_')
 new=Path('lean/'+module+'.lean');b=new.read_bytes()
 assert subprocess.check_output(['git','show',rev+':'+str(new)])==b
 # Extend the SAME cohort with recorded runjoin61 objects; no substitutions.
-rjrev=subprocess.check_output(['git','rev-parse','codex/pv-runjoin-20261026'],text=True).strip()
+rjrev=json.load(open(E/'binding-source-pins.json'))[0]['revision']
 rjp=json.loads(subprocess.check_output(['git','show',rjrev+':evidence/pv-runjoin61-20261029/build-plan.json']))
 rjf=json.loads(subprocess.check_output(['git','show',rjrev+':evidence/pv-runjoin61-20261029/fresh-preflight.json']))
 rjo={v['module']:v for v in rjf['projects']}; rje=rjf['dependencies'];checked=set()
@@ -113,7 +113,8 @@ overlay=[]
 for m,v in visited.items():
  if m not in x['projects']:continue
  q=pathlib.Path(v['path']); dest=p/'objects'/(m.replace('.','/')+'.olean')
- if dest==q:continue
+ if dest==q and not q.is_symlink():continue
+ q=q.resolve()
  dest.parent.mkdir(parents=True,exist_ok=True)
  for suffix in ['.olean','.olean.private','.olean.server','.ilean','.ir']:
   origin=q.with_suffix(suffix);target=dest.with_suffix(suffix)
@@ -127,6 +128,10 @@ env['LEAN_PATH']=str(p/'objects')+':'+env['LEAN_PATH']+':'+x['runjoin_objects'];
 print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],shared_written=False,project_overlay=overlay)))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
+prior=E/('prepare-'+module+'.json')
+if prior.exists():
+ archive=E/'prepare-history';archive.mkdir(exist_ok=True)
+ (archive/(sha(prior.read_bytes())+'.json')).write_bytes(prior.read_bytes())
 (E/('prepare-'+module+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
 assert r.returncode==0,r.stderr+r.stdout
 print('PASS verified and staged')
