@@ -15,7 +15,7 @@ structure Runtime (S F : Type) where
   metadata : World S F → {T : Type} → (v : alloc.vec.Vec T) → PV_FXM_ReserveSelected.Metadata v
   encode : PV_FXM_ReserveWorld.Error → alloc.collections.TryReserveError
 
-def at {S F : Type} (runtime : Runtime S F) (ops : ExternalFuns) (w : World S F) : ExternalFuns :=
+def selectedAt {S F : Type} (runtime : Runtime S F) (ops : ExternalFuns) (w : World S F) : ExternalFuns :=
   PV_FXM_ReserveSelected.selected ops runtime.step Usize.max (Usize.max/2)
     runtime.shape (runtime.metadata w) runtime.encode w
 
@@ -26,7 +26,7 @@ def execute {T S F : Type} (runtime : Runtime S F) (w : World S F)
 
 theorem complete {T S F : Type} (runtime : Runtime S F) (ops : ExternalFuns)
     (w : World S F) (A : Type) (v : alloc.vec.Vec T) (n : Usize) :
-    @alloc.vec.Vec.try_reserve_exact _ (at runtime ops w) T A v n =
+    @alloc.vec.Vec.try_reserve_exact _ (selectedAt runtime ops w) T A v n =
       ok (PV_FXM_ReserveSelected.returned runtime.encode (execute runtime w v n).returned,v) :=
   PV_FXM_ReserveSelected.complete ops A runtime.step Usize.max (Usize.max/2)
     runtime.shape (runtime.metadata w) runtime.encode v n w
@@ -37,7 +37,7 @@ def resume {T S F A : Type} (runtime : Runtime S F) (ops : ExternalFuns)
     (w : World S F) (Allocator : Type) (v : alloc.vec.Vec T) (n : Usize)
     (caller : core.result.Result Unit alloc.collections.TryReserveError →
       alloc.vec.Vec T → World S F → Result A) : Result A := do
-  let (r,v') ← @alloc.vec.Vec.try_reserve_exact _ (at runtime ops w) T Allocator v n
+  let (r,v') ← @alloc.vec.Vec.try_reserve_exact _ (selectedAt runtime ops w) T Allocator v n
   caller r v' (execute runtime w v n).world
 
 theorem execution {T S F A : Type} (runtime : Runtime S F) (ops : ExternalFuns)
@@ -65,7 +65,7 @@ theorem sequential {T U S F A : Type} (runtime : Runtime S F) (ops : ExternalFun
   rw [execution,execution]
 
 #print axioms Runtime
-#print axioms at
+#print axioms selectedAt
 #print axioms execute
 #print axioms complete
 #print axioms resume

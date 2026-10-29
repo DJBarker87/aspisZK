@@ -1,6 +1,7 @@
 import R1Z.PV_RunJoin_NativeResidual62
 import R1Z.PV_RunJoin_AllocatorWorld63
 import PV_B3P_Install132
+import R1Z.PV_FXM_DropSelected
 /-! Adopted CONFIRM installations. V228 is the selected structural source/value
 packet, all3803 ordered cells, exact capacity/source predicates, original carrier
 and261 frames. V183 is world-indexed, with explicit metadata/error encoding;
@@ -16,8 +17,9 @@ abbrev Box := PV_RunJoin_WeightInstalled46.Box
 def residual {S F : Type} (base : ExternalTypes) (ops : @ExternalFuns (types base))
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) : @ExternalFuns (types base) :=
-  @PV_RunJoin_AllocatorWorld63.at (types base) S F runtime
-    (PV_B3P_Install132.selected (types base) (PV_RunJoin_NativeResidual62.residual base ops)) world
+  @PV_RunJoin_AllocatorWorld63.selectedAt (types base) S F runtime
+    (@PV_FXM_DropSelected.selected (types base)
+      (PV_B3P_Install132.selected (types base) (PV_RunJoin_NativeResidual62.residual base ops))) world
 
 def opsNative {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
