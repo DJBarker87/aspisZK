@@ -10,7 +10,6 @@ theorem op28  :
     AspisR72Sampler.field.r24_canonical_mul.PP  = PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul.PP  := by
   unfold AspisR72Sampler.field.r24_canonical_mul.PP PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul.PP
   simp only [op3,cm_a,cm_b,q_c0,q_c1,bind_assoc_eq,bind_tc_ok]
-  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op28

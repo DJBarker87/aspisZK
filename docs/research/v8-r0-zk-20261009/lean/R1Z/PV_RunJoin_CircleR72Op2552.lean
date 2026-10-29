@@ -10,7 +10,7 @@ theorem op25 (self : CM) :
     AspisR72Sampler.field.CM31.double (encCM self) = (do let x ← PV_RunJoin_CircleR72Raw52.field.CM31.double self; ok (encCM x)) := by
   unfold AspisR72Sampler.field.CM31.double PV_RunJoin_CircleR72Raw52.field.CM31.double
   simp only [op24,cm_a,cm_b,q_c0,q_c1,bind_assoc_eq,bind_tc_ok]
-  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
+  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op25

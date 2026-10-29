@@ -70,7 +70,8 @@ for i,n in enumerate(ops):
  deps=['op'+str(j) for j,m in enumerate(ops[:i]) if m in d[len('def '+n):]]
  simp=deps+['cm_a','cm_b','q_c0','q_c1','bind_assoc_eq','bind_tc_ok']
  if deps or args:stmt+='  simp only ['+','.join(simp)+']\n'
- stmt+='  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]\n  all_goals rfl\n'
+ if enc: stmt+='  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]\n'
+ stmt+='  all_goals rfl\n'
  stem='PV_RunJoin_CircleR72Op'+str(i)+'52';imports=[mods[-1] if mods else 'PV_RunJoin_CircleR72Carrier52',raw]
  text='\n'.join('import R1Z.'+m for m in imports)+'\nimport AspisR72Sampler.Funs\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result ControlFlow\nnamespace R1Z.PV_RunJoin_CircleR72Ops52\nopen PV_RunJoin_CircleR72Carrier52\nattribute [local irreducible] encCM encQ\n'+stmt+f'\n#print axioms op{i}\nend R1Z.PV_RunJoin_CircleR72Ops52\n'
  target=L/(stem+'.lean')
