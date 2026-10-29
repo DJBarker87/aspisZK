@@ -17,3 +17,16 @@
 - New sources contain no limit overrides, sorry/admit/native_decide,
   implemented_by, axioms, or XR imports. Superseded uncompiled flat-sequence
   and older rejected candidates earn no credit.
+
+- Rejected whole-factor62361 and raw-entry62364–62366 are excluded; no raised
+  recursion/heartbeat/resource limits. The successful replacement62367/62368
+  uses a named head-join lemma and named continuation stages, not traversal.
+- Rejected62390/62391 concern original-carrier record elaboration and layout;
+  explicit typed constructors replace the drafts at accepted62392.
+- Rejected62393 attempted to change existing explicitly reducible abbreviations
+  to locally irreducible. No allowUnsafeReducibility option was enabled. A new
+  semireducible dictionary name plus named identity/op227 projection is used
+  and marked locally irreducible at accepted62394. The successful witness
+  remains for the original actual callback.
+- Accepted62395/62396 bind only the two reverse-Horner read transformations;
+  they do not claim the exhaustive structural binding or std source laws.

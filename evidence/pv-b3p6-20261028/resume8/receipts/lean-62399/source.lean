@@ -1,0 +1,33 @@
+import PV_B3P_Resume8Axioms
+
+-- One frozen focused replay, not an endpoint release replay.
+#check PV_B3P_Success227.composition_success8
+#print axioms PV_B3P_Success227.composition_success8
+#check PV_B3P_Success227.read_helper_binding8
+#print axioms PV_B3P_Success227.read_helper_binding8
+#check PV_B3P_Success227.digest_helper_binding8
+#print axioms PV_B3P_Success227.digest_helper_binding8
+#check PV_B3P_Success227.horner_semantic_body_binding8
+#print axioms PV_B3P_Success227.horner_semantic_body_binding8
+#check PV_B3P_Success227.horner_poseidon_body_binding8
+#print axioms PV_B3P_Success227.horner_poseidon_body_binding8
+#check PV_B3P_Success227.horner_semantic_loop_binding8
+#print axioms PV_B3P_Success227.horner_semantic_loop_binding8
+#check PV_B3P_Success227.horner_poseidon_loop_binding8
+#print axioms PV_B3P_Success227.horner_poseidon_loop_binding8
+#check PV_B3P_Success227.installed_dictionary_same8
+#print axioms PV_B3P_Success227.installed_dictionary_same8
+#check PV_B3P_Success227.installed_op227_projection8
+#print axioms PV_B3P_Success227.installed_op227_projection8
+#check PV_B3P_Success227.installed_success8
+#print axioms PV_B3P_Success227.installed_success8
+#check PV_B3P_Success227.installed_nonvacuity8
+#print axioms PV_B3P_Success227.installed_nonvacuity8
+#check PV_B3P_Success227.semantic_success8
+#print axioms PV_B3P_Success227.semantic_success8
+#check PV_B3P_Success227.terminal_parts_success8
+#print axioms PV_B3P_Success227.terminal_parts_success8
+#check PV_B3P_Success227.reference_success8
+#print axioms PV_B3P_Success227.reference_success8
+#check PV_B3P_Success227.reference_nonvacuity8
+#print axioms PV_B3P_Success227.reference_nonvacuity8
