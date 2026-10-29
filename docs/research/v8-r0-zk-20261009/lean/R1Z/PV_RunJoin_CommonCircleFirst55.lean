@@ -52,10 +52,12 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (block ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))) .First
   have model : PV_RunJoin_CircleInstalledExact55.coordinates q=
       (PhaseSamplerParserBin.circle ⟨0,by decide⟩ ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))).1 := by
+    change PV_RunJoin_CircleInstalledExact55.coordinates q=
+      (R0P.SemSource.circleSample0 (fun j => (((s k).2.1 (.inl (.sqS ⟨25,by decide⟩))) j).toFin)).1
     simpa only [PV_RunJoin_CircleNeutralSelected52.row,Bool.false_eq_true,if_false,
-      PhaseSamplerParserBin.circle,PhaseCircleBlocksBin.select,PhaseCircleBlocksBin.first,
+      
       PV_RunJoin_OpeningSampler50.block,AspisV8R19.SqueezeOracleBridge.state_roundtrip,
-      dite_true,PhaseSamplerParserBin.state,R1J.SamplerLawSpend.stateEquiv,Equiv.coe_fn_mk] using hmodel
+      PhaseSamplerParserBin.state,R1J.SamplerLawSpend.stateEquiv,Equiv.coe_fn_mk] using hmodel
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box selectedOps
   refine ⟨q,hx,hy,model,?_⟩
@@ -70,7 +72,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     | Err e => rfl
     | Ok payload =>
       simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
-      rw [PV_RunJoin_CommonSemanticBlock51.complete W Pr R N hN h B outputs x w hin hc s hcoll hpub base heap box selectedOps k ⟨25,by decide⟩ framed hp]
+      erw [PV_RunJoin_CommonSemanticBlock51.complete W Pr R N hN h B outputs x w hin hc s hcoll hpub base heap box selectedOps k ⟨25,by decide⟩ framed hp]
       simp only [bind_tc_ok,Aeneas.Std.uncurry,core.result.Result.Insts.CoreOpsTry.branch]
       rw [hq]
       rfl
