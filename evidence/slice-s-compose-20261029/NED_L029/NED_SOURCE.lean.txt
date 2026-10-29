@@ -1,0 +1,72 @@
+import NBN_StatementDomains
+import NBN_ValidatorDomains
+import NBN_EncoderDomains
+import NBN_DigestResultDependency
+set_option autoImplicit false
+noncomputable section
+namespace NED_CallerDomains
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+open NBD_DigestInduction
+
+/-- A successful validator prefix gives the exact same late argument's
+validator domains. This does not posit a fresh successful child execution. -/
+theorem statement_late (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    NBH_LiveValidator.result (common s).lane_transition.live_snapshot = .Ok () ∧
+    NBH_Validators.afterResult (common s).lane_transition.candidate_afterstate = .Ok () := by
+  have h := NBN_StatementDomains.late_children s valid
+  exact h.2
+
+theorem statement_current_root (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    Canonical (common s).lane_transition.live_snapshot.current_root :=
+  (NBN_ValidatorDomains.live _ (statement_late s valid).1).2.2.2.2.1
+
+theorem statement_next_root (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    Canonical (common s).lane_transition.candidate_afterstate.next_root :=
+  (NBN_ValidatorDomains.afterstate _ (statement_late s valid).2).2.2.1
+
+theorem statement_live_row (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ()))
+    (j : Fin 20) :
+    Canonical ((common s).lane_transition.live_snapshot.frontier.val[j.val]'(by
+      have := (common s).lane_transition.live_snapshot.frontier.property; scalar_tac)) :=
+  NBN_ValidatorDomains.live_row _ (statement_late s valid).1 j
+
+theorem statement_after_row (s : Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ()))
+    (j : Fin 20) :
+    Canonical ((common s).lane_transition.candidate_afterstate.next_frontier.val[j.val]'(by
+      have := (common s).lane_transition.candidate_afterstate.next_frontier.property; scalar_tac)) :=
+  NBN_ValidatorDomains.after_row _ (statement_late s valid).2 j
+
+/-- A live encoder calls its root and rows only after its own validator.
+This local guard is weaker than assuming the enclosing root accepts. -/
+theorem live_digest_calls (enc : NBN_EncoderSummary.Encode)
+    (law : NBN_DigestResultDependency.NBN_Dep_DigestEncodeCanonical enc)
+    (s : NBH_LiveValidator.Snapshot) (valid : NBH_LiveValidator.result s = .Ok ()) (out : Slice U8) :
+    enc s.current_root = ok (AspisR1.S2K.DigestBytes.bytes s.current_root) ∧
+    NBN_DigestResultDependency.foldM enc
+      (fun i b (o : Slice U8) => o.setSlice! (160+32*i) b.val)
+      s.frontier.val 0 out = ok (NBK_LiveBytes.fold s.frontier.val 0 out) :=
+  NBN_DigestResultDependency.live_caller enc law s valid out
+
+theorem after_digest_calls (enc : NBN_EncoderSummary.Encode)
+    (law : NBN_DigestResultDependency.NBN_Dep_DigestEncodeCanonical enc)
+    (s : NBH_Validators.Afterstate) (valid : NBH_Validators.afterResult s = .Ok ())
+    (out : Array U8 688#usize) :
+    enc s.next_root = ok (AspisR1.S2K.DigestBytes.bytes s.next_root) ∧
+    NBN_DigestResultDependency.foldM enc
+      (fun i b (o : Array U8 688#usize) => o.setSlice! (48+32*i) b.val)
+      s.next_frontier.val 0 out = ok (AspisR1.S2K.AfterstateBytes.fold s.next_frontier.val 0 out) :=
+  NBN_DigestResultDependency.after_caller enc law s valid out
+
+#print axioms statement_late
+#print axioms statement_current_root
+#print axioms statement_next_root
+#print axioms statement_live_row
+#print axioms statement_after_row
+#print axioms live_digest_calls
+#print axioms after_digest_calls
+end NED_CallerDomains
