@@ -6,9 +6,7 @@ open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 open PV_RunJoin_PublishSkeleton54
 
 def poison [ExternalTypes] (p : prover.Publication) : prover.Publication :=
-  { p with backend := {p.backend with c1 := some (PV_RunJoin_QueryEmptyWords57.broken p.tree),
-      c2 := some (PV_RunJoin_QueryNativeObstruction56.unused p)},
-    queries := PV_RunJoin_QueryInRangeFailure57.queries }
+  { p with backend := {p.backend with c1 := some (PV_RunJoin_QueryEmptyWords57.broken p.tree), c2 := some (PV_RunJoin_QueryNativeObstruction56.unused p)}, queries := PV_RunJoin_QueryInRangeFailure57.queries }
 
 theorem accepted (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
@@ -22,6 +20,8 @@ theorem failure (base : ExternalTypes) (heap : Heap) (box : Box)
     @prover.append_query_openings (types base) (selected base heap box ops) out
       (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p)
       PV_RunJoin_QueryInRangeFailure57.queries (alloc.vec.Vec.deref p.folded_word) p.folded_salts=fail .arrayOutOfBounds := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   apply PV_RunJoin_QueryInRangeFailure57.source
     out p.tree (PV_RunJoin_QueryNativeObstruction56.unused p) _ p.folded_salts
     (ProverRwDictionaryTower.fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO)
