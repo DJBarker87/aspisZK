@@ -22,7 +22,6 @@ theorem body (left right : Q) : PV_RunJoin_CircleNeutralR24Body53.body left righ
   unfold PV_RunJoin_CircleNeutralR24Body53.body PV_RunJoin_CircleNeutralR24U53.source
     PV_RunJoin_CircleNeutralR24V53.source PV_RunJoin_CircleNeutralR24Tail53.tail
   simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralR24Leaf53.pp,bind_assoc_eq]
-  rfl
 '''
 w.write('PV_RunJoin_CircleNeutralR24Split53',['R1Z.PV_RunJoin_CircleNeutralR24Body53','R1Z.PV_RunJoin_CircleNeutralR24Tail53','R1Z.PV_RunJoin_CircleNeutralR24U53','R1Z.PV_RunJoin_CircleNeutralR24V53'],body,['body'])
 body=head+'''open PV_RunJoin_CircleNeutralShape53

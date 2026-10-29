@@ -26,7 +26,7 @@ theorem {name} (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
     funext v
     exact ih after v hafter
 '''
-w.write('PV_RunJoin_CircleNeutralSquareLoop53',['R1Z.PV_RunJoin_CircleNeutralRange53','R1Z.PV_RunJoin_CircleNeutralFinite53','R1Z.ProverRw19LoopBind','R1Z.PV_RunJoin_CircleNeutralSquareCell53','R1Z.PV_RunJoin_CircleNeutralSquareEquation53'],body,['owned','model'])
+w.write('PV_RunJoin_CircleNeutralSquareLoop53',['R1Z.PV_RunJoin_CircleNeutralRange53','R1Z.PV_RunJoin_CircleNeutralFinite53','R1Z.ProverRw19LoopBind','R1Z.PV_RunJoin_CircleNeutralSquareEquation53','R1Z.PV_RunJoin_CircleNeutralSquareCell53'],body,['owned','model'])
 w.write('PV_RunJoin_CircleNeutralSquareN53',['R1Z.PV_RunJoin_CircleNeutralSquareLoop53'],'''open PV_RunJoin_CircleNeutralShape53
 
 theorem complete (a : U32) (ha : Canon a) (count : Usize) :

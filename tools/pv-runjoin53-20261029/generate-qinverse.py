@@ -57,22 +57,9 @@ for n,raw in [('owned','PV_RunJoin_CircleRawTower52'),('model','PV_RunJoin_Circl
   rfl
 '''
 w.write('PV_RunJoin_CircleNeutralQInvEquation53',['R1Z.PV_RunJoin_CircleNeutralQInvBody53'],body,['owned','model'])
-p=L/'PV_RunJoin_CircleNeutralQInv53.lean';p.write_text('''import R1Z.PV_RunJoin_CircleNeutralQInvEquation53
-set_option autoImplicit false
-open Aeneas Aeneas.Std Result
-namespace R1Z.PV_RunJoin_CircleNeutralQInv53
-open PV_RunJoin_CircleNeutralShape53 PV_RunJoin_CircleNeutralResult53
-
-theorem complete (a : (U32 × U32) × (U32 × U32)) (ha : QC a) :
-    Aligned PV_RunJoin_CircleNeutralQInvTail53.Valid
-      (PV_RunJoin_CircleRawTower52.field.QM31.try_inv a)
-      (PV_RunJoin_CircleR72Raw52.field.QM31.try_inv a) := by
-  obtain ⟨z,hz,hz'⟩ := PV_RunJoin_CircleNeutralZeroResult53.qtotal a
-  rw [PV_RunJoin_CircleNeutralQInvEquation53.owned,PV_RunJoin_CircleNeutralQInvEquation53.model]
-  rw [hz,hz',bind_tc_ok,bind_tc_ok]
-  cases z with
-  | true => exact ⟨rfl,by intro x hx q hq;cases hx;cases hq⟩
-  | false => exact PV_RunJoin_CircleNeutralQInvBody53.complete a ha
-#print axioms complete
-end R1Z.PV_RunJoin_CircleNeutralQInv53
-''')
+p=L/'PV_RunJoin_CircleNeutralQInv53.lean'
+text="import R1Z.PV_RunJoin_CircleNeutralQInvEquation53\nimport R1Z.PV_RunJoin_CircleNeutralAlignedTransport53\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace R1Z.PV_RunJoin_CircleNeutralQInv53\nopen PV_RunJoin_CircleNeutralShape53 PV_RunJoin_CircleNeutralResult53\n\ntheorem complete (a : (U32 × U32) × (U32 × U32)) (ha : QC a) :\n    Aligned PV_RunJoin_CircleNeutralQInvTail53.Valid\n      (PV_RunJoin_CircleRawTower52.field.QM31.try_inv a)\n      (PV_RunJoin_CircleR72Raw52.field.QM31.try_inv a) := by\n  obtain ⟨z,hz,hz'⟩ := PV_RunJoin_CircleNeutralZeroResult53.qtotal a\n  apply PV_RunJoin_CircleNeutralAlignedTransport53.transport\n    (PV_RunJoin_CircleNeutralQInvEquation53.owned a)\n    (PV_RunJoin_CircleNeutralQInvEquation53.model a)\n  have hzero : Aligned (fun _ : Bool => True)\n      (PV_RunJoin_CircleRawTower52.field.QM31.is_zero a)\n      (PV_RunJoin_CircleR72Raw52.field.QM31.is_zero a) :=\n    returned _ _ _ z hz hz' True.intro\n  apply PV_RunJoin_CircleNeutralResult53.bind hzero\n  intro b _\n  cases b with\n  | true =>\n    apply returned _ _ _ none rfl rfl\n    intro q hq\n    cases hq\n  | false => exact PV_RunJoin_CircleNeutralQInvBody53.complete a ha\n#print axioms complete\nend R1Z.PV_RunJoin_CircleNeutralQInv53\n"
+if __import__('os').environ.get('PV_RUNJOIN53_CHECK'):
+ assert p.read_text()==text
+ print('matched',p.stem)
+else:p.write_text(text)
