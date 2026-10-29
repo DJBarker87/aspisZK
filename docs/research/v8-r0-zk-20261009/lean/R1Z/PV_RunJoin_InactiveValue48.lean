@@ -23,7 +23,7 @@ theorem complete (q : Nat → Raw) (hq : ∀ j,j<1024 → canonical (q j))
   | succ n ih =>
     have hr : row.val<1024 := by omega
     obtain ⟨next,hn,hcn,hdn⟩ := PV_RunJoin_InactiveValueCell48.complete q hq state s hs row hr
-    have inc := PV_RunJoin_MergeLoop35.increment row (by omega)
+    have inc := ProverCommitPairCounter47.next_val row (by omega)
     obtain ⟨z,hz,hcz,hdz⟩ := ih (Usize.wrapping_add row 1#usize) (by rw [inc];omega) next hcn
     refine ⟨z,?_,hcz,?_⟩
     · simp only [PV_RunJoin_InactiveFinite48.run,hn,bind_tc_ok,hz]
