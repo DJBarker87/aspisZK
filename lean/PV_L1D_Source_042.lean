@@ -66,19 +66,11 @@ theorem complete_result
   erase (produce (H := H) (F := F) aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle) = host_sumcheck.prove_sumcheck_rounds (H := H) (F := F) aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle := by
   unfold produce
   conv_rhs => unfold host_sumcheck.prove_sumcheck_rounds
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_041.complete_result]
+  simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_041.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_041.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
-  all_goals
-    cases value
-    repeat' first
-      | with_reducible rfl
-      | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-        intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_041.complete_result]
-    all_goals rfl
+    | split <;> simp only [Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_041.complete_result]
 #print axioms complete_result
 end PV_L1D_Source_042
