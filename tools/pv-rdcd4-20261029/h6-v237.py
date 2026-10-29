@@ -15,6 +15,8 @@ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def obj(module):return next((r/(module+'.olean') for r in roots if (r/(module+'.olean')).exists()),None)
 # Check the external cohort before considering any object from the old cache.
 external=json.load(open(D/'external-object-manifest.json'))
+old_external=json.load(open(old/'external-object-manifest.json'))
+assert {x['module']:x['object_sha256'] for x in external}=={x['module']:x['object_sha256'] for x in old_external},'external complete cohort differs'
 for pin in external:
  p=obj(pin['module']);assert p and sha(p)==pin['object_sha256'],pin['module']
 reused={};rejected={};existing={}
