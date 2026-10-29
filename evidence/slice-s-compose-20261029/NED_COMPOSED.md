@@ -1,6 +1,12 @@
 # Slice S composition
 
-Target not yet established. No composed root theorem is claimed at inventory stage.
+FINAL STATUS: **0/7 native root theorems and 0/97 composed rows CLOSED.**
+The requested root deliverable is incomplete. There is no new native root
+statement to list as proved, and no root's inner hypotheses were hidden in a
+trust record. All 40 Kani and 150 actual Lean scopes were consumed.
+`NED_REMAINING.json` lists each of the 61 members, every unresolved selected
+hypothesis, 129 internal edges, and the seven root-specific obstacles.
+`NED_LEDGER_DELTA.json` is deliberately empty. Historical stages follow.
 The target is frozen revision 4bb3b3f51e16b4525f1d10336e2b0bcbbd775387 and
 AspisR1.RPx_Deployed.deployed, using coherent SInt2 carriers.
 
@@ -69,17 +75,13 @@ The reached late call's actual local output is the zero buffer of length 1520.
 None assumes root acceptance. All accepted printed axioms are the three standard
 axioms. Failed elaborations L033/035/037/038/048 are retained and excluded.
 
-The `NED_ExecutionComposition` and `NED_NativeRoots` theorems are explicitly
-CONDITIONAL transports, not concrete native instances. Their full statements
-and trust-record fields are in the matching `.lean` sources (L032/L041).
-`validator_native_root` and `encoder_native_root` retain root PacketDomain,
-root PhysicalInterpretation and the explicit `NativeContractSemanticTransport`
-record. The record's source-caller/reference fields are NOT yet instantiated
-from accepted native packets. Treating its name as the owner-approved trust row
-without that scoped instance would hide a refinement obligation; no composed
-row is promoted by those generic results. State and ordered effects appear in
-the conclusion, but an uninstantiated equality premise does not prove native
-state/effect transport.
+The initial generic root wrapper was retired. Its source is retained only as
+`NED_NativeRoots_EXCLUDED.lean.txt`; L041 is historical excluded evidence.
+It carried uninstantiated output-equality fields and cannot serve as root
+PhysicalInterpretation or the approved composition trust row. Active
+`NED_ExecutionComposition` uses the explicit mathematical premise
+`sameReferenceObservation`; it is an ordinary equality transport, never
+native-root evidence.
 
 NEC common constructor imported from committed revision 09175b8ffc; hashes in
 NED_IMPORT_PROVENANCE.json. NED_revalidate_common.py independently checks all
@@ -188,3 +190,55 @@ NED_RawValidatorControl.tail_factor (L146) factors only the exact emitted
 tail's map-error/control-flow operations. No heartbeat or memory cap was raised.
 All accepted new theorems print only standard axioms. L131/132/144/145 are
 failed, excluded evidence. None supplies a native root certificate.
+
+
+## Final accepted statements and audit
+
+L152 retains only `NED_RawValidatorBindings.source_factor` (the exact five
+comparison prefix on the SAME tuple/common fields) and `tail_reached` (the
+matching local guards reach the SAME raw tail). The attempted `mapped_chain`
+and full raw validator model transport remain excluded. L148 and L151 hit
+200000 heartbeats and were not rerun unchanged; L149 isolated the prefix,
+and L152 removes the unfinished aggregation. No cap/heartbeat increase.
+The latest unfinished whole-root source is
+`NED_RawValidatorCohort_EXCLUDED.lean.txt`; historical snapshots remain in
+per-attempt directories. No excluded declaration is imported by the audit.
+
+The final single audit L153 imports 59 active exact-source modules and prints
+214 top theorems. It exits 0, wall 7.138782359077595 s, peak RSS 5,353,276 KiB,
+swap 0, revision c17d4c3b1971745727cf57dbd7a2f23e3cd4b69f (dirty source
+snapshots pinned in receipt). Every printed dependency is a subset of
+`propext, Classical.choice, Quot.sound`. Full statements and per-theorem
+receipt hashes are indexed by `NED_ACTIVE_PROOFS.json`; the exact audit is
+`NED_FinalAudit.lean` and `NED_L153/{receipt.json,stdout.log}`.
+These are model, domain and carrier/control theorems; **none is a composed
+frozen-native slice root**.
+
+The two new boxed composition statements are precisely:
+
+```lean
+-- NED_AfterBoxComposition.result; hypotheses: typed bytes only
+∀ bytes : Slice U8,
+  pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1 bytes =
+    (do let reply ← NBN_AfterstateDecoderDependency.run
+          (fun b => ok (NBP_DigestDecode.decoded b)) bytes
+        NEC_AfterstateBox.reference reply)
+
+-- NED_AfterBoxDomain.domains; hypotheses: typed 1520-byte parent only
+∀ bytes : Array U8 1520#usize,
+  NEC_AfterstateBox.PacketDomain
+    (NBP_Read.chunk (W:=688#usize) bytes 832 (by decide)).to_slice ∧
+  NEC_PureReplyAssociation.PacketDomain
+    (NBP_Read.chunk (W:=688#usize) bytes 832 (by decide)).to_slice
+```
+
+Their `#print axioms` are `[propext, Classical.choice, Quot.sound]` and
+`[propext, Classical.choice, Quot.sound]` respectively. They discharge model
+child equality and local window width; native Packet/Physical interpretation
+and actual enclosing call-site association are still separate obligations.
+
+P6/D188 option A remains a trust reclassification. RuntimePersistence remains
+approved runtime trust. L154 remains a statement parameter; deployed/frozen3
+remains the headline. No soundness, privacy or two-transaction premise changed.
+No shipped Rust file was edited; native harnesses exist only as scratch patches.
+The three ELFs were not rebuilt and no new reproducible-build claim is made.

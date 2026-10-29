@@ -1,0 +1,47 @@
+{"attempt": "NED_L149", "exit_status": 1, "wall_seconds": 6.898884326918051, "peak_rss_kib": "5385204", "swaps": "0", "print_axioms": ["'NED_RawValidatorBindings.source_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NED_RawValidatorBindings.mapped_chain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NED_RawValidatorBindings.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NED_generated/NED_RawValidatorBindings.lean:12:50: warning: Variable name `nullifier` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NED_generated/NED_RawValidatorBindings.lean:68:92: error: unsolved goals
+s : Statement
+⊢ (let (pool, deployment, anchor_sequence, anchor, nullifier, _) := parts s
+    if pool ≠ (common s).master_account then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+    else
+      if deployment ≠ (common s).lane_transition.live
+...
+sterBindingMismatch)
+    else
+      if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+      else
+        if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+        else ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1 t)) =
+    ok
+      (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+        (if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+        else
+          if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then
+            core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+          else
+            if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then
+              core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+            else t))
+'NED_RawValidatorBindings.source_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_RawValidatorBindings.mapped_chain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_RawValidatorBindings.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb0995212487040388eb0c3110cf115c5.scope; invocation ID: c0bde8bc035145bebc5f17e88ef6a3e8

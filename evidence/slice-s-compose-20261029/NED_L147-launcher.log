@@ -1,0 +1,48 @@
+{"attempt": "NED_L147", "exit_status": 1, "wall_seconds": 5.161620073020458, "peak_rss_kib": "5381948", "swaps": "0", "print_axioms": ["'NED_RawValidatorBindings.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NED_generated/NED_RawValidatorBindings.lean:12:50: warning: Variable name `nullifier` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NED_generated/NED_RawValidatorBindings.lean:61:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (NED_ReconstructCarriers.toRaw ?s)
+in the target expression
+  (have statement := NED_ReconstructCarriers.toRaw s;
+    have common := NED_ReconstructCarriers.toRawCommon (common s);
+    do
+    let (pool, deployment, anchor_sequence, 
+...
+ployment_domain
+        if b4 = true then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+          else do
+            let b5 ←
+              core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 common.lane_transition.live_snapshot.pool
+                  common.master_account
+            if b5 = true then
+                ok
+                  (core.result.Result.Err
+                    aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+              else
+                if (anchor_sequence != common.checkpoint_sequence) = true then
+                  ok
+                    (core.result.Result.Err
+                      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+                else do
+                  let b6 ←
+                    core.array.equality.PartialEqArray.ne aspis_core.field.M31.Insts.CoreCmpPartialEqM31 anchor
+                        common.historical_global_anchor
+                  if b6 = true then
+                      ok
+                        (core.result.Result.Err
+                          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+                    else
+                      ok
+                        (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+                          (NBN_BindingChecks.tail s))) =
+    ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1 (suffix s))
+'NED_RawValidatorBindings.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r500a3704daf34e4f8310f12e4768d1da.scope; invocation ID: f415f6222e6d4403a0bd4f76ca623547

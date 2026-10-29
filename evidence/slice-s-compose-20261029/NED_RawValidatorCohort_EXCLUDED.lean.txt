@@ -1,5 +1,5 @@
 import NED_StatementCarrierFields
-import NED_OutputLaneCohort
+import NED_RawValidatorBindings
 set_option autoImplicit false
 noncomputable section
 namespace NED_RawValidatorCohort
@@ -16,8 +16,7 @@ theorem result (s : Terminal) :
     NED_StatementCarrierFields.checkpoint,NED_StatementCarrierFields.selected_lane,NED_StatementCarrierFields.lane,
     NED_StatementCarrierFields.sequence,NED_LateCarrierFields.common_late,NED_LateCarrierFields.common_anchor,
     NED_LateCarrierFields.live,NED_StatementCarrierFields.pool,NED_StatementCarrierFields.deployment,
-    NED_ReconstructCarriers.parts_argument,NBN_ArrayNe.bytes,NED_RawWordArrayEq.ne,
-    NED_OutputLaneCohort.result,NED_LateEncodingCohort.result]
+    NBN_ArrayNe.bytes,NED_RawWordArrayEq.ne]
   have cast : core.convert.num.FromUsizeU8.from (NBN_StatementResult.common s).output_lane =
       Usize.ofNatCore (NBN_StatementResult.common s).output_lane.val (by scalar_tac) := by scalar_tac
   simp only [cast,lift,bind_tc_ok,
@@ -44,32 +43,24 @@ theorem result (s : Terminal) :
         simp only [NED_StatementCarrierFields.transfer,NED_ValidatorStatus.payment]
         rw [NED_TransferEncodingCohort.result]
         cases pay : NBP_PaymentModel.transfer_encoded p with
-        | Err e => simp [pay,NED_CommonValidation.mapPayment,NED_LateValidatorCohorts.mapResult,
-            toRawPoolV1PairForestTerminalFormatErrorV1,core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch]
+        | Err e =>
+          simp only [NED_CommonValidation.mapPayment,bind_tc_ok]
+          rfl
         | Ok bytes =>
-          simp only [pay,NED_CommonValidation.mapPayment,bind_tc_ok,core.result.Result.map_err,
-            core.result.Result.Insts.CoreOpsTry.branch]
-          simp only [NBN_StatementResult.suffix,NBN_StatementResult.lateStatus,
-            NED_OutputLaneCohort.mapAccount,NED_LiveEncodingCohort.mapStateOuter,
-            NED_LateValidatorCohorts.mapResult,toRawPoolV1PairForestTerminalFormatErrorV1,
-            Array.to_slice_mut,lift,bind_tc_ok,Aeneas.Std.uncurry,NBN_LateResult.source,
-            Slice.length,Array.to_slice,Array.repeat_val,List.length_replicate]
-          repeat' first | rfl | (split <;> try simp_all only [bind_tc_ok,decide_eq_true_eq,bne_iff_ne])
+          simp only [NED_CommonValidation.mapPayment,bind_tc_ok]
+          change NED_RawValidatorBindings.run (.PrivateTransfer c p) = _
+          exact NED_RawValidatorBindings.result (.PrivateTransfer c p)
       | Withdrawal c p =>
         simp only [NED_StatementCarrierFields.withdrawal,NED_ValidatorStatus.payment]
         rw [NED_WithdrawalEncodingCohort.result]
         cases pay : NBP_PaymentModel.withdrawal_encoded p with
-        | Err e => simp [pay,NED_CommonValidation.mapPayment,NED_LateValidatorCohorts.mapResult,
-            toRawPoolV1PairForestTerminalFormatErrorV1,core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch]
+        | Err e =>
+          simp only [NED_CommonValidation.mapPayment,bind_tc_ok]
+          rfl
         | Ok bytes =>
-          simp only [pay,NED_CommonValidation.mapPayment,bind_tc_ok,core.result.Result.map_err,
-            core.result.Result.Insts.CoreOpsTry.branch]
-          simp only [NBN_StatementResult.suffix,NBN_StatementResult.lateStatus,
-            NED_OutputLaneCohort.mapAccount,NED_LiveEncodingCohort.mapStateOuter,
-            NED_LateValidatorCohorts.mapResult,toRawPoolV1PairForestTerminalFormatErrorV1,
-            Array.to_slice_mut,lift,bind_tc_ok,Aeneas.Std.uncurry,NBN_LateResult.source,
-            Slice.length,Array.to_slice,Array.repeat_val,List.length_replicate]
-          repeat' first | rfl | (split <;> try simp_all only [bind_tc_ok,decide_eq_true_eq,bne_iff_ne])
+          simp only [NED_CommonValidation.mapPayment,bind_tc_ok]
+          change NED_RawValidatorBindings.run (.Withdrawal c p) = _
+          exact NED_RawValidatorBindings.result (.Withdrawal c p)
 
 #print axioms result
 end NED_RawValidatorCohort

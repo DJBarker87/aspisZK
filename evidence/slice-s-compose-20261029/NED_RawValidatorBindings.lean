@@ -54,20 +54,42 @@ def run (s : Statement) : Result (core.result.Result Unit NED_RawValidatorContro
           else
             NED_RawValidatorControl.tail s
 
-theorem result (s : Statement) : run s = ok
-    (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1 (suffix s)) := by
+def chain (s : Statement) (t : Result (core.result.Result Unit NED_RawValidatorControl.E)) :
+    Result (core.result.Result Unit NED_RawValidatorControl.E) :=
+  let c := common s
+  let p := parts s
+  if p.1 ≠ c.master_account then ok (.Err .MasterBindingMismatch)
+  else if p.2.1 ≠ c.lane_transition.live_snapshot.deployment_domain then ok (.Err .DeploymentBindingMismatch)
+  else if c.lane_transition.live_snapshot.pool ≠ c.master_account then ok (.Err .MasterBindingMismatch)
+  else if p.2.2.1 ≠ c.checkpoint_sequence then ok (.Err .CheckpointBindingMismatch)
+  else if p.2.2.2.1 ≠ c.historical_global_anchor then ok (.Err .HistoricalAnchorMismatch)
+  else t
+
+theorem source_factor (s : Statement) : run s = chain s (NED_RawValidatorControl.tail s) := by
   unfold run
-  rw [NED_RawValidatorControl.tail_factor,NED_RawValidatorTail.result,
-    NED_ReconstructCarriers.parts_argument]
+  dsimp (config := {zeta := true,zetaHave := true}) only
+  rw [NED_ReconstructCarriers.parts_argument]
   simp only [bind_tc_ok,NBN_ArrayNe.bytes,NED_RawWordArrayEq.ne,
     NED_StatementCarrierFields.master,NED_LateCarrierFields.common_late,
     NED_LateCarrierFields.live,NED_StatementCarrierFields.pool,NED_StatementCarrierFields.deployment,
     NED_StatementCarrierFields.sequence,NED_LateCarrierFields.common_anchor]
-  rw [NBN_BindingChecks.factor]
-  unfold NBN_BindingChecks.chain
+  unfold chain
   simp only [bne_iff_ne,decide_eq_true_eq]
-  repeat' first | rfl | (split <;> try simp_all only
-    [NED_LateValidatorCohorts.mapResult,toRawPoolV1PairForestTerminalFormatErrorV1])
+  rcases parts s with ⟨a,b,c,d,e,f⟩
+  rfl
 
-#print axioms result
+/-- Tail remains an arbitrary native computation here. This certificate is
+only the five comparison controls, not a full validator bridge. -/
+theorem tail_reached (s : Statement)
+    (master : (parts s).1 = (common s).master_account)
+    (deployment : (parts s).2.1 = (common s).lane_transition.live_snapshot.deployment_domain)
+    (pool : (common s).lane_transition.live_snapshot.pool = (common s).master_account)
+    (sequence : (parts s).2.2.1 = (common s).checkpoint_sequence)
+    (anchor : (parts s).2.2.2.1 = (common s).historical_global_anchor) :
+    run s = NED_RawValidatorControl.tail s := by
+  rw [source_factor]
+  simp only [chain,master,deployment,pool,sequence,anchor,ne_eq,not_true_eq_false,if_false]
+
+#print axioms source_factor
+#print axioms tail_reached
 end NED_RawValidatorBindings

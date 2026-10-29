@@ -1,0 +1,124 @@
+NED_generated/NED_RawValidatorBindings.lean:12:50: warning: Variable name `nullifier` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+NED_generated/NED_RawValidatorBindings.lean:68:92: error: unsolved goals
+s : Statement
+⊢ (let (pool, deployment, anchor_sequence, anchor, nullifier, _) := parts s
+    if pool ≠ (common s).master_account then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+    else
+      if deployment ≠ (common s).lane_transition.live_snapshot.deployment_domain then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+      else
+        if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+        else
+          if anchor_sequence ≠ (common s).checkpoint_sequence then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+          else
+            if anchor ≠ (common s).historical_global_anchor then
+              ok
+                (core.result.Result.Err
+                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+            else NED_RawValidatorControl.tail s) =
+    if (parts s).1 ≠ (common s).master_account then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+    else
+      if (parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch)
+      else
+        if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+        else
+          if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then
+            ok
+              (core.result.Result.Err
+                aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+          else
+            if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then
+              ok
+                (core.result.Result.Err
+                  aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+            else NED_RawValidatorControl.tail s
+NED_generated/NED_RawValidatorBindings.lean:85:12: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isTrue
+s : Statement
+t : core.result.Result Unit NBN_StatementResult.Error
+h✝ : (parts s).1 ≠ (common s).master_account
+⊢ ok
+      (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch) =
+    ok
+      (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+        (core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch))
+NED_generated/NED_RawValidatorBindings.lean:82:59: error: unsolved goals
+case isFalse.isTrue
+s : Statement
+t : core.result.Result Unit NBN_StatementResult.Error
+h✝¹ : ¬(parts s).1 ≠ (common s).master_account
+h✝ : (parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain
+⊢ ok
+      (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch) =
+    ok
+      (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+        (core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.DeploymentBindingMismatch))
+
+case isFalse.isFalse
+s : Statement
+t : core.result.Result Unit NBN_StatementResult.Error
+h✝¹ : ¬(parts s).1 ≠ (common s).master_account
+h✝ : ¬(parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain
+⊢ (if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch)
+    else
+      if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then
+        ok
+          (core.result.Result.Err
+            aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch)
+      else
+        if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch)
+        else ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1 t)) =
+    ok
+      (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+        (if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.MasterBindingMismatch
+        else
+          if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then
+            core.result.Result.Err
+              AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.CheckpointBindingMismatch
+          else
+            if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then
+              core.result.Result.Err
+                AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.HistoricalAnchorMismatch
+            else t))
+'NED_RawValidatorBindings.source_factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_RawValidatorBindings.mapped_chain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_RawValidatorBindings.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
