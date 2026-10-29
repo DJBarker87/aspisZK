@@ -19,6 +19,8 @@ theorem complete
       public1 compiled variant hash context binding attempt nonce_store=
     PV_RunJoin_NativeControl55.run PV_RunJoin_NativeControl55.source
       aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
-      public1 compiled variant hash context binding attempt nonce_store := rfl
+      public1 compiled variant hash context binding attempt nonce_store := by
+  unfold prover.prove_masked_with_attempt PV_RunJoin_NativeControl55.run
+  simp only [PV_RunJoin_NativeControl55.source]
 #print axioms complete
 end R1Z.PV_RunJoin_NativeControlSource55
