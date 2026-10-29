@@ -14588,3 +14588,20 @@ pv-owni (branch codex/pv-owni-20261029 from 4ae289aed7; IDs 64200-64299; 100 Lea
 ## D445 (Stream B) 2026-10-29 02:34 UTC: pv-rdb2g exact-environment replay (no hash differences); pv-rdb2h finishes it
 
 pv-rdb2g passed all 40 of its Lean attempts, used three capped evidence scopes and no Kani, with no new proofs and no source edits. In the exact original LEAN_PATH, the complete 30-module R72 cone passed unchanged with zero object-hash differences from rdb2f's renamed-path build. The D440 deviation was therefore immaterial. Earlier cleanup had removed 39 prerequisites, so the full replay needs 88 targets, and 48 remain: the V256 and V257 focused replay and their statement and axioms audits among them. V256 and V257 stay SUSPENDED until those pass. V231 is unchanged: its software path is proved, and its SHA-NI path is conditional pending owner item 3. The replay was merged into the candidate as 0bcd39d996 and pushed. pv-rdb2h (IDs 64300-64399; 60 Lean; no new proofs) completes the remaining 48 targets and restores V256 and V257 if they pass. Rows removed: 0. Privacy target not yet established.
+
+## D446 (Stream B) 2026-10-29 02:43 UTC: V256 and V257 restored (lead-verified); rdb2 line closed except V231; pv-rj4id launched for runjoin step-4 identifications
+
+pv-rdb2h used 48 of 60 Lean attempts, 2 capped evidence scopes and no Kani, with zero swap, no new proofs and no source edits. All 48 remaining targets passed in dependency order under compliant admission in the exact original LEAN_PATH. The completed 88-target replay has zero object-hash differences from rdb2f. Statement audit 64397, axioms audit 64398 and focused replay 64399 passed with byte-identical outputs.
+
+Lead verification:
+- no allowed:false admission;
+- every axiom report lists only propext, Classical.choice and Quot.sound, or a subset;
+- the one non-zero exit in the evidence was an scp brace-expansion error in the final evidence download, corrected with no compiler, source or Lean attempt involved (transfer-correction.json);
+- nothing outside the worker's evidence and tools.
+V256 and V257 are RESTORED, evidence class B, structural (K-1 substitute) under own-1. V370 and D381/D386 are retained. Merged into the candidate as 60a288b546 and pushed; the worktree and branch were removed. The rdb2 line is closed except V231: its software path is proved, and its SHA-NI path is conditional on R1Z.PV_RDB2F_ShaNi.SHA_NI_IntrinsicsSemantics, pending owner packet item 3.
+
+pv-rj4id launched (sparse worktree from 60a288b546; IDs 64400-64499; 100 Lean, 30 native, 0 Kani). It works in parallel with runjoin50, read-only on its branch, on three identifications at the deployed caller that runjoin's step (4) needs and that do not depend on step (2):
+(a) which disclosed and observerOracle functions the deployed client passes to the Runtime, and their six decoder clauses under own-1;
+(b) the op79 and op254 dictionary installations;
+(c) V047's equality, actual = PV_2TNV_PublicEncoding.x native_handle, applied through PV_RJDec_V047Native.consume.
+Each is to be stated so that step (4) can consume it unchanged. Rows removed at the endpoint: 0. Privacy target not yet established.
