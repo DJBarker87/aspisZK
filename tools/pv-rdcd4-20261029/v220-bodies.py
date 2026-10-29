@@ -31,5 +31,20 @@ records=[]
 for src,marker,expected,models,steps in checks:
  actual=function(src,marker);assert tokens(actual)==tokens(expected),marker
  records.append(dict(marker=marker,source_file_sha256=sha(src),body=actual,body_sha256=sha(actual),expected_body=expected,expected_sha256=sha(expected),token_sha256=sha(json.dumps(tokens(actual))),models=['R1Z.PV_RDCD4_'+x for x in models],statement_binding=steps))
-out=dict(row='V220',records=records,original_owned_reference_sha256=sha(ref),qualification='Mechanical whole-body shape checks plus own-1 hand structural associations; NOT an original checker, not a pinned extraction generation chain, zero b3p6-1 reclassifications.',primitive_boundary='Rust integer/layout/drop and compiler execution V370/D381/D386 retained; complete Result interface unchanged',pending='Compile the source/owned-reference transport; confirm fixed initialized representation invariants and final object/source closure.')
+reference_models={
+ 'fn mul_by_r(':'PV_RDCD4_FieldSource.aspis_core.field.mul_by_r (same complete Rust body as deployed shared helper)',
+ 'fn qm31_from_karatsuba_channel_sums(':'PV_RDCD4_LazyReconstruct.source/component',
+ 'fn qm31_accumulate_product_channels(':'PV_RDCD4_LazyAccumulate.reference; nine explicit row-major cell stores',
+ 'pub fn sum_products3(':'PV_RDCD4_LazyProducts.reference/referenceStep; three explicit whole-state accumulations',
+ 'fn block_value(':'PV_RDCD4_RadixBlock.reference; four ordered reads and three-product reference',
+ 'pub fn evaluate(':'PV_RDCD4_V220.reference; shared field operations, block6 then prepared steps5..0'}
+reference_bindings=[]
+for marker,model in reference_models.items():
+ body=function(ref,marker)
+ reference_bindings.append(dict(marker=marker,body=body,body_sha256=sha(body),model='R1Z.'+model,classification='own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output'))
+assert len(re.findall(r'^(?:pub )?fn ',ref,re.M))==len(reference_bindings)
+assert tokens(function(ref,'fn mul_by_r('))==tokens(function(field,'fn mul_by_r('))
+reference_path='tools/pv-cb3-20261026/reference_polynomial.rs'
+assert tracked(reference_path)==ref,'original owned reference changed'
+out=dict(row='V220',reference_bindings=reference_bindings,original_owned_reference_path=reference_path,records=records,original_owned_reference_sha256=sha(ref),qualification='Mechanical whole-body shape checks plus own-1 hand structural associations; NOT an original checker, not a pinned extraction generation chain, zero b3p6-1 reclassifications.',primitive_boundary='Rust integer/layout/drop and compiler execution V370/D381/D386 retained; complete Result interface unchanged',pending='Compile the source/owned-reference transport; confirm fixed initialized representation invariants and final object/source closure.')
 (E/'v220-body-bindings.json').write_text(json.dumps(out,indent=2)+'\n');print('Five complete lazy/root bodies match recorded literals; original reference archived; no row credit yet.')

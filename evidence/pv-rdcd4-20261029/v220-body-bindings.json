@@ -1,5 +1,50 @@
 {
   "row": "V220",
+  "reference_bindings": [
+    {
+      "marker": "fn mul_by_r(",
+      "body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "body_sha256": "0353d0a0f92eb1335a5afe92df187ad3283cd7229e3107685a8262cfdda68a25",
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.mul_by_r (same complete Rust body as deployed shared helper)",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    },
+    {
+      "marker": "fn qm31_from_karatsuba_channel_sums(",
+      "body": "fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 {\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_by_r(m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n}",
+      "body_sha256": "70438b6fadc360325d0cc60ddc275fb3cae50d1791bc13fc7ec517179da6eae6",
+      "model": "R1Z.PV_RDCD4_LazyReconstruct.source/component",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    },
+    {
+      "marker": "fn qm31_accumulate_product_channels(",
+      "body": "fn qm31_accumulate_product_channels(\n    mut sums: [[u64; 3]; 3],\n    left: QM31,\n    right: QM31,\n) -> [[u64; 3]; 3] {\n    let left_sum = left.c0.add(left.c1);\n    let right_sum = right.c0.add(right.c1);\n    let left_components = [\n        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],\n        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],\n        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],\n    ];\n    let right_components = [\n        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],\n        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],\n        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],\n    ];\n    sums[0][0] += left_components[0][0].0 as u64 * right_components[0][0].0 as u64;\n    sums[0][1] += left_components[0][1].0 as u64 * right_components[0][1].0 as u64;\n    sums[0][2] += left_components[0][2].0 as u64 * right_components[0][2].0 as u64;\n    sums[1][0] += left_components[1][0].0 as u64 * right_components[1][0].0 as u64;\n    sums[1][1] += left_components[1][1].0 as u64 * right_components[1][1].0 as u64;\n    sums[1][2] += left_components[1][2].0 as u64 * right_components[1][2].0 as u64;\n    sums[2][0] += left_components[2][0].0 as u64 * right_components[2][0].0 as u64;\n    sums[2][1] += left_components[2][1].0 as u64 * right_components[2][1].0 as u64;\n    sums[2][2] += left_components[2][2].0 as u64 * right_components[2][2].0 as u64;\n    sums\n}",
+      "body_sha256": "2e18a4d25fbffcda0d66fc0dcb42ff354c3d3317d8691ad8f0cf9803da9a4da3",
+      "model": "R1Z.PV_RDCD4_LazyAccumulate.reference; nine explicit row-major cell stores",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    },
+    {
+      "marker": "pub fn sum_products3(",
+      "body": "pub fn sum_products3(left:[QM31;3],right:[QM31;3])->QM31 {\n let s=qm31_accumulate_product_channels([[0u64;3];3],left[0],right[0]);\n let s=qm31_accumulate_product_channels(s,left[1],right[1]);\n let s=qm31_accumulate_product_channels(s,left[2],right[2]);\n qm31_from_karatsuba_channel_sums(s)\n}",
+      "body_sha256": "d1609d769c7573a562b9cab21f5dd2a297582c55bfeebae255b87d85e00f502c",
+      "model": "R1Z.PV_RDCD4_LazyProducts.reference/referenceStep; three explicit whole-state accumulations",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    },
+    {
+      "marker": "fn block_value(",
+      "body": "fn block_value(polynomial:&[QM31;28],powers:[QM31;3],block:usize)->QM31 {\n let start=4*block;\n polynomial[start].add(sum_products3(powers,[polynomial[start+1],polynomial[start+2],polynomial[start+3]]))\n}",
+      "body_sha256": "ec44fc6a43c299ad18e46f8587877d9963eab2f98d6a5d55452a1e633f8761a9",
+      "model": "R1Z.PV_RDCD4_RadixBlock.reference; four ordered reads and three-product reference",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    },
+    {
+      "marker": "pub fn evaluate(",
+      "body": "pub fn evaluate(polynomial:&[QM31;28],challenge:QM31)->QM31 {\n let x2=challenge.square();let x3=challenge.mul(x2);let x4=x2.square();\n let powers=[challenge,x2,x3];let prepared_x4=PreparedQm31Multiplier::new(x4);\n let accumulator=block_value(polynomial,powers,6);\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,5));\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,4));\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,3));\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,2));\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,1));\n let accumulator=prepared_x4.mul(accumulator).add(block_value(polynomial,powers,0));\n accumulator\n}",
+      "body_sha256": "a059d00fc4f56e37ebb3c860daa5c9e65ca70a732ae7c0bee12554479ac7f90b",
+      "model": "R1Z.PV_RDCD4_V220.reference; shared field operations, block6 then prepared steps5..0",
+      "classification": "own-1 handwritten interpretation of the exact original owned Rust reference; not extractor output"
+    }
+  ],
+  "original_owned_reference_path": "tools/pv-cb3-20261026/reference_polynomial.rs",
   "records": [
     {
       "marker": "fn qm31_from_karatsuba_channel_sums(",
