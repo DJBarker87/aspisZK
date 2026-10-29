@@ -1,0 +1,26 @@
+import PV_DIAG9_Result
+import R1Z.ProverCommitRetry34
+import R1Z.ProverCommitSemanticTransport26
+set_option autoImplicit false
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result R1Z
+open ProverCommitRetry34
+theorem retry_terminates {S P : Type} (attempt : Attempt S P)
+ (terminates : ∀ k s, ∃ v, attempt k s=.ok v) (fuel index : Nat) (s : S) :
+ ∃ v, run attempt fuel index s=.ok v := by
+ induction fuel generalizing index s with
+ | zero => exact ⟨_,rfl⟩
+ | succ n ih =>
+   obtain ⟨⟨step,after⟩,ha⟩ := terminates index s
+   rw [run,ha]
+   cases step with
+   | done p => exact ⟨_,rfl⟩
+   | stop e => exact ⟨_,rfl⟩
+   | retry => exact ih (index+1) after
+#print axioms retry_terminates
+theorem retry_no_panic {S P : Type} (attempt : Attempt S P)
+ (terminates : ∀ k s, ∃ v, attempt k s=.ok v) (fuel index : Nat) (s : S) :
+ run attempt fuel index s ≠ .fail .panic :=
+ terminating_excludes_panic (retry_terminates attempt terminates fuel index s)
+#print axioms retry_no_panic
+end PV_DIAG9

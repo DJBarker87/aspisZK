@@ -1,0 +1,127 @@
+import PV_DIAG9_Result
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Adaptive option-B criterion. Request metadata includes every fault-relevant
+field; payloads are distinct and byte blindness is an explicit P obligation.
+Policy may stop or change its next operation after every public reply. -/
+structure FaultRequest where
+ operation : Nat
+ target : List Nat
+ offset : Nat
+ size : Nat
+ alignment : Nat
+ addressClass : Nat
+ retryState : Nat
+ deriving DecidableEq
+structure FaultReply where
+ failed : Bool
+ code : Nat
+ transferred : Nat
+ deriving DecidableEq
+abbrev FaultHistory := List (FaultRequest × FaultReply)
+def adaptive {B : Type} (policy : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) : Nat → FaultHistory → FaultHistory
+ | 0,h => h
+ | n+1,h => match policy h with
+   | none => h
+   | some (q,b) => adaptive policy world n (h++[(q,world h q b)])
+def failureBits (h : FaultHistory) := h.map (fun e => e.2.failed)
+def failureEvent (h : FaultHistory) : Prop := true ∈ failureBits h
+theorem adaptive_zero {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (h : FaultHistory) :
+ adaptive p world 0 h=h := rfl
+#print axioms adaptive_zero
+theorem adaptive_stop {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (hp : p h=none) : adaptive p world (n+1) h=h := by rw [adaptive,hp]
+#print axioms adaptive_stop
+theorem adaptive_step {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (q : FaultRequest) (b : B) (hp : p h=some (q,b)) :
+ adaptive p world (n+1) h=adaptive p world n (h++[(q,world h q b)]) := by rw [adaptive,hp]
+#print axioms adaptive_step
+theorem adaptive_prefix_retained {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory) :
+ ∃ suffix, adaptive p world n h=h++suffix := by
+ induction n generalizing h with
+ | zero => exact ⟨[],(List.append_nil h).symm⟩
+ | succ n ih =>
+   cases hp : p h with
+   | none => exact ⟨[],by rw [adaptive,hp]; exact (List.append_nil h).symm⟩
+   | some pair =>
+     rcases pair with ⟨q,b⟩
+     obtain ⟨suffix,hs⟩ := ih (h++[(q,world h q b)])
+     refine ⟨(q,world h q b)::suffix,?_⟩
+     rw [adaptive_step p world n h q b hp,hs,List.append_assoc]
+     rfl
+#print axioms adaptive_prefix_retained
+theorem adaptive_count_bound {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory) :
+ (adaptive p world n h).length≤h.length+n := by
+ induction n generalizing h with
+ | zero => change h.length≤h.length+0; omega
+ | succ n ih =>
+   cases hp : p h with
+   | none => rw [adaptive_stop p world n h hp]; omega
+   | some pair =>
+     rcases pair with ⟨q,b⟩
+     rw [adaptive_step p world n h q b hp]
+     have bound := ih (h++[(q,world h q b)])
+     simp only [List.length_append,List.length_singleton] at bound
+     omega
+#print axioms adaptive_count_bound
+theorem adaptive_coupling {B C : Type}
+ (p : FaultHistory → Option (FaultRequest × B)) (q : FaultHistory → Option (FaultRequest × C))
+ (left : FaultHistory → FaultRequest → B → FaultReply)
+ (right : FaultHistory → FaultRequest → C → FaultReply)
+ (stepCoupling : ∀ h,
+   (p h=none ∧ q h=none) ∨
+   ∃ request b c, p h=some (request,b) ∧ q h=some (request,c) ∧
+     left h request b=right h request c)
+ (n : Nat) (h : FaultHistory) : adaptive p left n h=adaptive q right n h := by
+ induction n generalizing h with
+ | zero => rfl
+ | succ n ih =>
+   rcases stepCoupling h with ⟨hp,hq⟩ | ⟨request,b,c,hp,hq,hr⟩
+   · rw [adaptive_stop p left n h hp,adaptive_stop q right n h hq]
+   · rw [adaptive_step p left n h request b hp,adaptive_step q right n h request c hq,hr]
+     exact ih _
+#print axioms adaptive_coupling
+theorem byte_blind_public_replay {B : Type}
+ (p : FaultHistory → Option (FaultRequest × B))
+ (publicPolicy : FaultHistory → Option FaultRequest)
+ (world : FaultHistory → FaultRequest → B → FaultReply)
+ (publicWorld : FaultHistory → FaultRequest → FaultReply)
+ (requestLaw : ∀ h, (p h).map Prod.fst=publicPolicy h)
+ (blind : ∀ h request b, world h request b=publicWorld h request)
+ (n : Nat) (h : FaultHistory) :
+ adaptive p world n h=adaptive (fun h => (publicPolicy h).map (fun q => (q,())))
+  (fun h q _ => publicWorld h q) n h := by
+ apply adaptive_coupling
+ intro history
+ cases hp : p history with
+ | none =>
+   have hq : publicPolicy history=none := (requestLaw history).symm.trans (by rw [hp]; rfl)
+   exact Or.inl ⟨rfl,by rw [hq];rfl⟩
+ | some pair =>
+   rcases pair with ⟨request,b⟩
+   have hq : publicPolicy history=some request := (requestLaw history).symm.trans (by rw [hp];rfl)
+   exact Or.inr ⟨request,b,(),rfl,by rw [hq];rfl,blind history request b⟩
+#print axioms byte_blind_public_replay
+theorem failure_bits_transport (a b : FaultHistory) (h : a=b) : failureBits a=failureBits b :=
+ congrArg failureBits h
+#print axioms failure_bits_transport
+theorem failure_event_transport (a b : FaultHistory) (h : a=b) : failureEvent a ↔ failureEvent b := by
+ cases h; rfl
+#print axioms failure_event_transport
+theorem metadata_and_partial_delivery_retained (h : FaultHistory) (q : FaultRequest) (r : FaultReply) :
+ (h++[(q,r)]).getLast?=some (q,r) := by simp
+#print axioms metadata_and_partial_delivery_retained
+theorem reply_failure_retained (h : FaultHistory) (q : FaultRequest) (r : FaultReply) :
+ failureBits (h++[(q,r)])=failureBits h++[r.failed] := by simp [failureBits]
+#print axioms reply_failure_retained
+theorem public_history_failure_law {I P : Type} (pub : I → P) (history : I → FaultHistory)
+ (binding : ∀ i j, pub i=pub j → history i=history j) (i j : I) (h : pub i=pub j) :
+ failureEvent (history i) ↔ failureEvent (history j) := failure_event_transport _ _ (binding i j h)
+#print axioms public_history_failure_law
+end PV_DIAG9

@@ -1,0 +1,85 @@
+from pathlib import Path
+import json
+D=Path(__file__).parent;m='PV_DIAG9_Operands'
+s='''import PV_DIAG9_Frames
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Public invocation criterion for dynamic formatting and stateful logging.
+Operands, site, stack and logger state are explicit; option B supplies configuration
+and outcomes, never witness operands or captured PCs. This is not a native instance. -/
+structure DiagnosticCall where
+ site : Nat
+ operands : List String
+ frames : Stack
+ level : Nat
+ deriving DecidableEq
+structure DiagnosticReply where
+ delivered : List String
+ nextState : Nat
+ failed : Bool
+ deriving DecidableEq
+def operandLengths (c : DiagnosticCall) := c.operands.map (fun x => x.utf8ByteSize)
+def dispatchCalls {Cfg : Type} (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) : Nat → List DiagnosticCall → List DiagnosticReply × Nat
+ | state,[] => ([],state)
+ | state,c::cs =>
+   let r := dispatch cfg state c
+   let tail := dispatchCalls dispatch cfg r.nextState cs
+   (r::tail.1,tail.2)
+'''
+steps=[('format_operands_transport','''theorem format_operands_transport {O : Type} (render : List String → O)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) : render a.operands=render b.operands :=
+ congrArg render h'''),
+('format_operand_byte_lengths','''theorem format_operand_byte_lengths (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ operandLengths a=operandLengths b := congrArg (List.map (fun x : String => x.utf8ByteSize)) h'''),
+('formatter_capacity_transport','''theorem formatter_capacity_transport (capacity : List Nat → Nat)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ capacity (operandLengths a)=capacity (operandLengths b) :=
+ congrArg capacity (format_operand_byte_lengths a b h)'''),
+('formatter_effects_transport','''theorem formatter_effects_transport {Cfg O : Type}
+ (render : Cfg → DiagnosticCall → O) (cfg : Cfg) (a b : DiagnosticCall) (h : a=b) :
+ render cfg a=render cfg b := congrArg (render cfg) h'''),
+('returned_error_callsite_frames','''theorem returned_error_callsite_frames (site level : Nat) (ops : List String)
+ (a b : LivePath) (f g : Nat) (s : Stack) :
+ (DiagnosticCall.mk site ops (pathRun (.call f a) s).2 level) =
+ (DiagnosticCall.mk site ops (pathRun (.call g b) s).2 level) := by
+ rw [normal_return_restores,normal_return_restores]'''),
+('logger_same_invocation','''theorem logger_same_invocation {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) (state : Nat) (a b : DiagnosticCall) (h : a=b) :
+ dispatch cfg state a=dispatch cfg state b := congrArg (dispatch cfg state) h'''),
+('logger_same_public_state','''theorem logger_same_public_state {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) (s t : Nat) (h : s=t) (c : DiagnosticCall) :
+ dispatch cfg s c=dispatch cfg t c := by cases h; rfl'''),
+('logger_trace_transport','''theorem logger_trace_transport {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply) (cfg : Cfg)
+ (s t : Nat) (a b : List DiagnosticCall) (hs : s=t) (hc : a=b) :
+ dispatchCalls dispatch cfg s a=dispatchCalls dispatch cfg t b := by cases hs; cases hc; rfl'''),
+('logger_order_retained','''theorem logger_order_retained {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply) (cfg : Cfg)
+ (state : Nat) (calls : List DiagnosticCall) :
+ (dispatchCalls dispatch cfg state calls).1.length=calls.length := by
+ induction calls generalizing state with
+ | nil => rfl
+ | cons c cs ih =>
+   change (dispatch cfg state c :: (dispatchCalls dispatch cfg (dispatch cfg state c).nextState cs).1).length=_
+   rw [List.length_cons,ih]; rfl'''),
+('logger_failure_not_erased','''theorem logger_failure_not_erased {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply) (cfg : Cfg)
+ (state : Nat) (c : DiagnosticCall) (cs : List DiagnosticCall) :
+ (dispatchCalls dispatch cfg state (c::cs)).1.head?=some (dispatch cfg state c) := rfl'''),
+('logger_config_alone_insufficient','''theorem logger_config_alone_insufficient :
+ (fun (state : Nat) (_ : Unit) => DiagnosticReply.mk [] state false) 0 () ≠
+ (fun (state : Nat) (_ : Unit) => DiagnosticReply.mk [] state false) 1 () := by decide'''),
+('diagnostic_public_invocations','''theorem diagnostic_public_invocations {I P Cfg : Type}
+ (pub : I → P) (calls : I → List DiagnosticCall) (state : I → Nat)
+ (publicCalls : ∀ i j, pub i=pub j → calls i=calls j)
+ (publicState : ∀ i j, pub i=pub j → state i=state j)
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply) (cfg : Cfg)
+ (i j : I) (h : pub i=pub j) :
+ dispatchCalls dispatch cfg (state i) (calls i)=dispatchCalls dispatch cfg (state j) (calls j) :=
+ logger_trace_transport dispatch cfg _ _ _ _ (publicState i j h) (publicCalls i j h)''')]
+cs=[]
+for n,d in steps:s+=d+'\n#print axioms '+n+'\n';cs.append(s+'end PV_DIAG9\n')
+j=json.loads((D/'plans.json').read_text());j[m]=cs;(D/'plans.json').write_text(json.dumps(j,indent=2)+'\n');(D/(m+'.lean')).write_text(cs[-1])
