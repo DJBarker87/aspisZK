@@ -24,14 +24,14 @@ def finish (p : Phase) : Result (core.result.Result prover.Publication verifier.
 
 /-- Reconstruct exactly tag 30's payload from the returned root and round
 bytes; the scalar call is symbolic, with its original transcript and hash. -/
-def alpha1 (p : Phase) : Result aspis_core.field.wide_exact.WideExact := do
+def alpha1 (p : Phase) : Result (Option aspis_core.field.wide_exact.WideExact) := do
   let prepared ← prepare p
   match prepared with
-  | .Err _ => fail .assertionFailure
+  | .Err _ => ok none
   | .Ok prepared =>
     let publication ← finish p
     match publication with
-    | .Err _ => fail .assertionFailure
+    | .Err _ => ok none
     | .Ok publication =>
       let root ← Aeneas.Std.lift (Array.to_slice publication.root)
       let payload ← alloc.slice.Slice.to_vec core.clone.CloneU8 root
@@ -40,7 +40,7 @@ def alpha1 (p : Phase) : Result aspis_core.field.wide_exact.WideExact := do
       let (a,_) ← host_transcript.Transcript.scalar
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         prepared.transcript 30#u8 (alloc.vec.Vec.deref payload) false
-      ok a
+      ok (some a)
 
 theorem prepare_return (p : Phase) (prepared : prover.PreparedOpening)
     (success : prover.prepare_opening .S2 p.hash p.backend p.sem=ok (.Ok prepared)) :
