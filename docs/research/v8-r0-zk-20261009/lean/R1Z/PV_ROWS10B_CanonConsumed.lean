@@ -63,7 +63,7 @@ theorem update_read {n : Usize} (xs ys : Array Q n) (i : Usize) (q z : Q)
   have hz : value = z := Result.ok.inj readback
   rw [← hz, helement]
   change (xs.val.set i.val q)[i.val]'((by simpa only [List.length_set] using hx)) = q
-  exact List.getElem_set_self hx
+  simp only [List.getElem_set_self]
 
 /-- Top-down V403 consumed domain; no canonicality premise occurs in the
 native reachability link or in the computational prefix event itself. -/
