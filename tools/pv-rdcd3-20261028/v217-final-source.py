@@ -8,8 +8,16 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 reuse=json.load(open(D/'v217-native-reuse.json'));S=Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028/src')
 for name,pin in reuse['files'].items():assert sha(S/name)==pin,(name,pin)
 outputs=['v217-application-source-result.json','v217-field-source-result.json','v217-library-source-result.json','range-source-result.json','library-source-result.json','v260-word-source-result.json','v265-source-result.json']
+def check_record_files(x):
+ if isinstance(x,dict):
+  path=x.get('path');pin=x.get('source_sha256',x.get('file_sha256',x.get('sha256')))
+  if isinstance(path,str) and path.startswith('/') and pin:
+   assert sha(Path(path))==pin,('source gate file changed',path)
+  for value in x.values():check_record_files(value)
+ elif isinstance(x,list):
+  for value in x:check_record_files(value)
 for name in outputs:
- j=json.load(open(D/name))
+ j=json.load(open(D/name));check_record_files(j)
  if 'source_path' in j:assert sha(Path(j['source_path']))==j['source_sha256']
  for rec in j.get('records',[]):
   if 'path' in rec:
