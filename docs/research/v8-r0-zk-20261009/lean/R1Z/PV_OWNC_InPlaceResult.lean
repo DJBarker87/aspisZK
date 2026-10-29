@@ -22,9 +22,11 @@ theorem guarded (q : Cursor) (keep : Link → Bool) (h:PV_OWNB_Cursor.Valid q)
  have hgs:guard≠filtered.owner := by rw [hi.1];exact gs
  have hg:=PV_OWNC_GuardValid.valid filtered hf guard hge hgs
  have hrs:result≠filtered.owner := by rw [hi.1];exact rs
+ have hfe:filtered.memory.slots result=none := by rw [hi.2.2.1];exact re
  have hre:(handoff filtered guard).memory.slots result=none := by
   simp only [handoff,move,hrs,
-   rg,ite_false,hi.2.2.1,re]
+   rg,ite_false]
+  exact hfe
  exact ⟨PV_OWNC_GuardValid.valid _ hg result hre rg,hi.2.1,
   PV_OWNC_GuardTransfer.source_consumed (handoff filtered guard) result⟩
 #print axioms guarded
