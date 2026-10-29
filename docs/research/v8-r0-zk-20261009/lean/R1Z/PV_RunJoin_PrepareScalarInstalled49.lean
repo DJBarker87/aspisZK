@@ -15,12 +15,12 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   (backend : prover.Backend)
   (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
   (coefficient_result : Result (alloc.vec.Vec (Array aspis_core.field.wide_exact.WideExact 1024#usize)))
-  (constructor : Result (core.result.Result weights.Weights verifier.Error))
-  (materialize : weights.Weights → aspis_core.field.wide_exact.WideExact →
+  (constructor : Result (core.result.Result (@weights.Weights (types base)) verifier.Error))
+  (materialize : (@weights.Weights (types base)) → aspis_core.field.wide_exact.WideExact →
     Result (core.result.Result (alloc.vec.Vec aspis_core.field.wide_exact.WideExact) verifier.Error))
   (claim : Slice (Array aspis_core.field.wide_exact.WideExact 1024#usize) →
     aspis_core.r0.domain.Point aspis_core.field.wide_exact.WideExact → Result (alloc.vec.Vec U8))
-  (inactiveValue : Slice aspis_core.field.wide_exact.WideExact → weights.Weights →
+  (inactiveValue : Slice aspis_core.field.wide_exact.WideExact → (@weights.Weights (types base)) →
     Result aspis_core.field.wide_exact.WideExact)
   (tail : host_transcript.Transcript aspis_core.digest.LegacyHashFn → alloc.vec.Vec U8 →
     aspis_core.field.wide_exact.WideExact → aspis_core.field.wide_exact.WideExact →
