@@ -34,7 +34,7 @@ theorem matrix_store_binding14 (sums : Matrix14) (row column : Usize) (value : U
   rw [PV_B3P_ArrayWrite227.borrow rowValue column hc,
       PV_B3P_ArrayWrite227.update rowValue column hc]
   simp only [bind_tc_ok]
-  rw [PV_B3P_ArrayWrite227.update _ row hr]
+  exact (PV_B3P_ArrayWrite227.update sums row hr (Aeneas.Std.Array.set rowValue column value)).symm
 
 theorem matrix_stores_link14 : PV_B3P_Link_matrix_stores source_matrix_store14 :=
   matrix_store_binding14
