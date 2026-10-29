@@ -401,3 +401,7 @@ The same code shows that the shipped client is the devnet fixture harness. note(
 - (T) Patch the pinned Aeneas prepass. Not recommended: it adds a tool-trust item to D188, while (U) and (F) avoid that.
 
 **Recommendation: (U).** It is the only option under which the privacy target says something about users' witnesses, and it removes the extraction obstruction without new tool trust. **Unblocks:** the client Types/Funs extraction, the stateful event world, and with them the 19 OPEN runtime fields (L1, DIAG and D159 links). Meanwhile, Stream B continues the event world on the prover's existing extraction (nonce store, entropy, oracle prefix), which does not depend on this choice.
+
+## OWNER DECISION 2026-10-29 (LOG D524): D520 option (U) ADOPTED
+
+Owner's reply: "u". The privacy claim's client is a minimal USER client. It reads the spend witness (note key, salt, value, recipient) from a user wallet file through the N7 raw-fd pipe pattern, replacing the fixture derivation. The prover call, the publication path and the on-chain programs are unchanged. It is written extraction-first and carries the whole approved bundle (D474(C), getrandom, the item-6 recipe with constant-time decoding, and N7). Gates: the three ELFs byte-identical; a differential against the harness on the fixture notes; D359(A) timing; the constant-time check; a new client pin. This also settles item 5 (client scope): the honest-user domain of D338/D342(A) is "spends the shipped user client prepares".
