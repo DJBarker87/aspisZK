@@ -1,0 +1,5 @@
+import R1Z.PV_RunJoin_CircleInstalled52
+set_option autoImplicit false
+#print axioms R1Z.PV_RunJoin_CircleInstalled52.candidate
+#print axioms R1Z.PV_RunJoin_CircleInstalled52.complete
+#print axioms R1Z.PV_RunJoin_CircleInstalled52.installed_projection

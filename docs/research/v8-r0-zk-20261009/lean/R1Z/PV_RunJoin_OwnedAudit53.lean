@@ -1,0 +1,3 @@
+import R1Z.PV_RunJoin_CircleOwnedTower52
+set_option autoImplicit false
+#print axioms R1Z.PV_RunJoin_CircleOwnedTower52.inverse
