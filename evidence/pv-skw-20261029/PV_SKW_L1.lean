@@ -24,7 +24,7 @@ structure Instance where
  sourceWorld : I → Trace Nat
  bodyWorld : I → Trace Nat
  originalWorld : I → Trace Nat
-def instance : Instance :=
+def model : Instance :=
  ⟨fun i => let t := adapt i (runAt i); (counts t.events,rejections t.events),
   fun i => encode (runAt i),fun i => adapt i (runAt i),
   fun i => adapt i (runAt i),fun i => adapt i (runAt i)⟩
@@ -36,16 +36,16 @@ theorem satisfiable : ∃ x : Instance,
    Prod.fst Prod.snd adapt ∧
  PV_L1E_Link_NativeD163 x.native (fun _ => owner) (fun _ => 0)
    Prod.fst Prod.snd adapt := by
- exact ⟨instance,(fun _ => rfl),(fun _ => rfl),(fun _ => rfl),(fun _ => rfl)⟩
+ exact ⟨model,(fun _ => rfl),(fun _ => rfl),(fun _ => rfl),(fun _ => rfl)⟩
 /-- Also check the four links of the generic COUNT skeleton, without replacing them. -/
 theorem generic_satisfiable : ∃ x : Instance,
  PV_L1E_Link_CountAcquisition x.actual x.sourceWorld ∧
  PV_L1E_Link_BodyWrapper x.sourceWorld x.bodyWorld ∧
  PV_L1E_Link_RetryJoin x.bodyWorld x.originalWorld ∧
  PV_L1E_Link_NativeOriginal x.originalWorld x.native := by
- exact ⟨instance,(fun _ => rfl),(fun _ => rfl),(fun _ => rfl),(fun _ => rfl)⟩
-theorem nondegenerate : instance.actual (2,0) = ([2],[0]) ∧
- (runAt (2,0)).2 = 2 ∧ (instance.native (2,0)).terminal = .success 2 := by
+ exact ⟨model,(fun _ => rfl),(fun _ => rfl),(fun _ => rfl),(fun _ => rfl)⟩
+theorem nondegenerate : model.actual (2,0) = ([2],[0]) ∧
+ (runAt (2,0)).2 = 2 ∧ (model.native (2,0)).terminal = .success 2 := by
  exact ⟨rfl,rfl,rfl⟩
 #print axioms satisfiable
 #print axioms generic_satisfiable

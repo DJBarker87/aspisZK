@@ -11,17 +11,17 @@ structure Instance where
  raw : I → List NativeEvent
  state : I → List NativeEvent → X
 /-- Full trace carrier: all bytes, events, finite prefixes and terminal forms. -/
-def instance : Instance := ⟨fun i => project i.events,id,NativeTrace.events,fun _ es => project es⟩
+def model : Instance := ⟨fun i => project i.events,id,NativeTrace.events,fun _ es => project es⟩
 theorem project_step (es : List NativeEvent) (e : NativeEvent) :
  project (es++[e]) = (fun a b => (a.1++b.1,a.2++b.2)) (project es) (project [e]) := by
- simp only [project,nativeFiles,nativeJSON,nativeStdout,nativeDiag2,nativeDiag3,List.filterMap_append]
+ simp only [project,nativeFiles,nativeJSON,nativeStdout,nativeDiag2,nativeDiag3,List.filterMap_append] <;> rfl
 /-- Joint witness; no source-to-native association is asserted. -/
 theorem satisfiable : ∃ x : Instance,
  PV_DIAG10_Link_Init x.state (project []) ∧
  PV_DIAG10_Link_Step x.state (fun a b => (a.1++b.1,a.2++b.2)) (fun e => project [e]) ∧
  PV_DIAG10_Link_Readout x.actual x.state x.raw ∧
  PV_DIAG10_Link_EventOrder x.raw x.native := by
- refine ⟨instance,?_,?_,?_,?_⟩
+ refine ⟨model,?_,?_,?_,?_⟩
  · intro i; rfl
  · intro i es e; exact project_step es e
  · intro i; rfl
