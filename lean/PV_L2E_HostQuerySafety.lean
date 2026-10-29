@@ -19,7 +19,7 @@ theorem member_safe (x i : Nat) (xs : List Nat) (cap : i+xs.length≤22) :
     · simp [member,h,comparisons,Safe]
       simp only [List.length_cons] at cap
       omega
-    · have ht := ih (i+1) (by simpa only [List.length_cons] using cap)
+    · have ht := ih (i+1) (by simp only [List.length_cons] at cap; omega)
       simp only [member,if_neg h,List.flatMap_cons,comparisons,List.singleton_append,
         List.mem_cons]
       intro e he
@@ -59,9 +59,9 @@ theorem run_safe (s : State) (words : List Nat) (admitted : Admitted s)
           (next_admitted s x admitted live (small x (by simp)))
           (fun y hy => small y (by simp [hy]))
         rw [PV_L2E_HostQuery.run.eq_def,if_neg hd,if_neg ha]
-        simp only [List.mem_append,List.mem_cons,List.not_mem_nil,or_false]
+        simp only [List.mem_append,List.mem_cons,List.not_mem_nil,or_false,or_assoc]
         intro e he
-        rcases he with (rfl|rfl)|(rfl|rfl|rfl|rfl)|he|he|he
+        rcases he with rfl|rfl|rfl|rfl|rfl|rfl|he|he|he
         · trivial
         · trivial
         · exact ⟨hb.1,hb.2 0 (by decide)⟩
