@@ -17,7 +17,7 @@ theorem g (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_BackendRows58.c2_g]
-  exact PV_RunJoin_BackendFill58.complete base heap box ops _ (values q)
+  exact PV_RunJoin_BackendFillPure58.complete _ (values q)
     (read base heap box ops q) p 27#usize (by decide) 1024 0#usize rfl self
     (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
 
@@ -30,7 +30,7 @@ theorem d (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_BackendRows58.c1_d]
-  exact PV_RunJoin_BackendFill58.complete base heap box ops _ (values q)
+  exact PV_RunJoin_BackendFillPure58.complete _ (values q)
     (read base heap box ops q) p 28#usize (by decide) 1024 0#usize rfl self
     (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
 

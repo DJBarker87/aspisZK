@@ -55,7 +55,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_BackendRows58.c1_base]
-  exact PV_RunJoin_BackendFill58.complete base heap box ops _ (values columns hlen lane.val)
+  exact PV_RunJoin_BackendFillPure58.complete _ (values columns hlen lane.val)
     (fun row hr => read base heap box ops columns hlen lane row hl hr)
     p lane (by omega) 1024 0#usize rfl self
     (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
