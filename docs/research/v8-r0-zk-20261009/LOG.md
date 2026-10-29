@@ -14779,3 +14779,23 @@ runjoin52 (head d37ca7187e, pushed) used all 100 Lean attempts (81 accepted, 19 
 pv-diag8 used all 100 Lean attempts (94 accepted, 6 rejected), 6 capped native scopes and no Kani. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits. One unchanged failed source was resubmitted by mistake; it is recorded and uncredited, and the next prompt forbids it. It was merged into the candidate and pushed. It proved local cursor and index panic exclusions and fixed literal-message content. It also proved that every successful mask_audit carries counts 16 and 10 and four true flags, so those printed fields are fixed by success. No leak finding.
 
 Remaining: broader prover and checker panic exclusion, dynamic formatter and logger operands, captured frames, V400 and complete acquisition of the three DIAG_* traces. Lead direction for pv-diag9 (IDs 66200-66299; 100 Lean, 30 native, 0 Kani): in the Aeneas-extracted model a Rust panic is the explicit failure Result.fail .panic. Any theorem that an honest run's complete Result is .ok, or fails only with named non-panic errors, therefore already excludes every modelled panic on that run. Prover- and checker-wide panic exclusion is to be derived as a corollary of the existing honest-family and complete-Result theorems (runjoin's HonestInput, CanonicalHonest31 and the step-1 caller Domain; b3p6's op227 nonvacuity). The Rust-panic-to-Result.fail step is labelled reclassification within Aeneas tool trust, and any reached cone not covered by a complete-Result theorem is listed exactly. The other items continue as before. Rows removed: 0. Privacy target not yet established.
+
+## D464 (Stream B) 2026-10-29 04:57 UTC: V260, V265, V217 restored (lead-verified); pv-rdcd4 launched, V201 first
+
+pv-rdcd3 used all 100 Lean attempts (86 passed, 14 failed), nine native scopes and no Kani. The combined axioms audit, the focused replay, the frozen manifest and the final coherence checks passed. It restored V260 (both the original 253 and selected 251 complete Result APIs), V265 (static circle control and the exact M31 inverse backend including the zero assertion; the pointer-form Kani stays quarantined) and V217 (complete selected-mask source and owned Result equality). All three are class B, structural (K-1 substitute), labelled reclassification within existing tool trust. No original checker was relabelled, per rdcd3-1.
+
+Lead verification, given D403:
+- The sorryAx entries in 60 axiom reports all come from 14 failed attempts (exit 1: 60600, 60602, 60606, 60608, 60612, 60617, 60629, 60638-60640, 60652, 60654, 60693, 60694). None is credited, and the worker's history says so.
+- The final audits are clean: 60697 (868 reports), 60698 and 60699 list only standard axioms.
+- The two barrier histories showing allowed:false (60630, 60643) record a refusal, a wait of about three minutes, and then an exit-0 admission before launch, which is compliant with ruling (t).
+- Nothing outside the worker's prefix and evidence; no forbidden constructs in credited modules; shipped-code diff empty.
+Merged into the candidate as 42272bfa3d and pushed.
+
+Six rows remain SUSPENDED:
+- V201 (145 records);
+- V220 (20);
+- V237 (4);
+- V236 (BlockBuffer digest_blocks);
+- V233 (61);
+- V197 (Aeneas loan-validation rejection).
+pv-rdcd4 (IDs 66300-66399; 100 Lean, 40 native, 0 Kani) takes V201 first, because op79's deployed association for runjoin step (4) waits on it. The method is to shrink by reachability from eval_message at prover.rs:354, apply b3p6-1 to token-identical bodies, generate lemma applications for repeated shapes, and hand-bind only the remainder. The other five rows follow. Rows removed at the endpoint: 0. Privacy target not yet established.
