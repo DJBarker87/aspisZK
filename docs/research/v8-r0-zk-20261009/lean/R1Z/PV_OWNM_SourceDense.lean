@@ -89,6 +89,11 @@ theorem source_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode) 
  rw [PV_OWNJ_ValueBridge.value_commutes decode D p c hp hc]
  rw [sparse_dense decode D p c hl hp]
 
+theorem concrete_source_dense :
+ PV_OWNM_V239.PV_OWNM_Link_SourceDense PV_OWNK_ConcreteDecoder.decode zero source222 :=
+ source_dense PV_OWNK_ConcreteDecoder.decode PV_OWNK_ConcreteDecoder.decoder
+
+#print axioms concrete_source_dense
 #print axioms take_coordinates
 #print axioms prefix_weight
 #print axioms sparse_dense
