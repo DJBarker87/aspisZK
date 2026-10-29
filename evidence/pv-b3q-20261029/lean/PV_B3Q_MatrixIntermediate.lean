@@ -2,7 +2,7 @@ import PV_B3P_PreparedNative14227
 import PV_B3Q_MatrixTrace
 namespace PV_B3Q_MatrixIntermediate
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding13227 PV_B3P_Binding12227
-  PV_B3P_PreparedNative14227 PV_B3P_Groups14227 PV_B3P_Binding14227
+  PV_B3P_PreparedNative14227 PV_B3P_Binding14227
 set_option autoImplicit false
 abbrev Matrix := PV_B3P_Binding9227.Matrix3x3
 /-- Source loop observation immediately before reconstruction. It retains the
