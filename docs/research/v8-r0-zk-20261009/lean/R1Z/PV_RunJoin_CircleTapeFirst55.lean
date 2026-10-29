@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_CircleInstalledTotal55
-import R1Z.PV_RunJoin_OpeningByteCodec51
+import R1Z.PV_RunJoin_CircleSelector55
+import R1Z.PV_RunJoin_CircleTapeState55
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_CircleTapeFirst55
@@ -11,9 +12,7 @@ attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_Resour
 theorem model (b : R0Z.FsStatement.OracleAnswer) :
     (PhaseSamplerParserBin.circle ⟨0,by decide⟩ b).1=
       (R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState (PV_RunJoin_OpeningSampler50.block b))).1 := by
-  change (R0P.SemSource.circleSample0 (fun i => (b i).toFin)).1=_
-  unfold PV_RunJoin_OpeningSampler50.block
-  rw [AspisV8R19.SqueezeOracleBridge.state_roundtrip]
+  rw [PV_RunJoin_CircleSelector55.first,PV_RunJoin_CircleTapeState55.decode]
   rfl
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
@@ -28,7 +27,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   obtain ⟨q,hq,hx,hy,hm⟩ := PV_RunJoin_CircleInstalledTotal55.complete base heap box ops (PV_RunJoin_OpeningSampler50.block b) .First
   refine ⟨q,hq,hx,hy,?_⟩
   rw [model]
-  exact hm
+  simpa only [PV_RunJoin_CircleNeutralSelected52.row,Bool.false_eq_true,if_false] using hm
 #print axioms model
 #print axioms complete
 end R1Z.PV_RunJoin_CircleTapeFirst55
