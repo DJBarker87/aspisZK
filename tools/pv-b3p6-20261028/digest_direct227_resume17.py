@@ -36,16 +36,11 @@ theorem digest_body17 (selector : aspis_core.field.QM31)
       let next ← digest_store_cell11 selector opened start expected tweak output cursor
       .ok (.cont ({ start := Usize.wrapping_add cursor 1#usize, «end» := 8#usize },next))
     else .ok (.done output) := by
-  by_cases h : cursor < 8#usize
-  · have inc := PV_B3P_Offset226V3.add_value cursor 1#usize (by scalar_tac)
-    have edge : Usize.wrapping_add cursor 1#usize = 8#usize ↔ cursor = 7#usize := by scalar_tac
-    by_cases last : cursor = 7#usize <;> cases tweak <;>
-      simp only [host_terminal.add_digest_binding_loop.body,range_next_extraction17,h,
-        if_true,if_false,bind_tc_ok,digest_store_cell11,reference_terminal.tweak227,
-        host_terminal.lift_m31,reference_terminal.lift_m31,edge,last,
-        Bool.false_eq_true,Bool.true_eq_true,PV_B3P_Ordered227.bind_assoc]
-  · simp only [host_terminal.add_digest_binding_loop.body,range_next_extraction17,h,
-      if_false,bind_tc_ok]
+  by_cases h : cursor < 8#usize <;>
+    simp only [host_terminal.add_digest_binding_loop.body,range_next_extraction17,h,
+      if_true,if_false,bind_tc_ok,digest_store_cell11,reference_terminal.tweak227,
+      host_terminal.lift_m31,reference_terminal.lift_m31,
+      aspis_statement.poseidon2.DIGEST_ELEMS,PV_B3P_Ordered227.bind_assoc]
 
 theorem digest_loop_plan17 (selector : aspis_core.field.QM31)
     (opened : Array aspis_core.field.QM31 16#usize) (start : Usize)
@@ -63,7 +58,8 @@ theorem digest_loop_plan17 (selector : aspis_core.field.QM31)
     simp only [digest_body17,stop,if_false,bind_tc_ok,usize_plan]
   | succ n ih =>
     have inside : cursor < 8#usize := by scalar_tac
-    have inc := PV_B3P_Offset226V3.add_value cursor 1#usize (by scalar_tac)
+    have inc := PV_B3P_Offset226V3.add_value cursor 1#usize
+      (PV_B3P_Binding13227.range_increment_safe13 cursor 8#usize inside)
     have rest : (Usize.wrapping_add cursor 1#usize).val+n=8 := by omega
     unfold host_terminal.add_digest_binding_loop
     rw [loop.eq_1]
