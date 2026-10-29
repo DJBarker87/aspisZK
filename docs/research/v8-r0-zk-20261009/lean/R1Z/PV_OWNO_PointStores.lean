@@ -63,7 +63,7 @@ theorem fold_length (combine : U64 → U32 → U64) (writes : List Write) (point
  | nil => rfl
  | cons w ws ih =>
   rw [List.foldl_cons,ih]
-  exact List.length_set
+  simp only [store,List.length_set]
 
 theorem run_length (combine : U64 → U32 → U64) (writes : List Write) :
  (run combine writes).length = 10 := by

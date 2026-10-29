@@ -22,6 +22,7 @@ theorem successful_canonical {E : Type} (imbalance : E)
   cases hr : PV_OWNO_HelperPush.run inverse chi 0 rs [] with
   | error e => simp only [selected,hr] at h; cases h
   | ok values =>
+   simp only [selected,hr] at h
    have he : values = out := Except.ok.inj h
    cases he
    exact PV_OWNO_HelperPush.successful_canonical inverse chi 0 rs [] values

@@ -28,7 +28,8 @@ theorem successful_canonical (inverse : Q → Option Q) (chi : Q)
      rcases List.mem_append.mp hq with hq | hq
      · exact ha q hq
      · have he : q = value := by simpa only [List.mem_singleton] using hq
-       exact he ▸ row_canonical inverse chi index r value hr
+       cases he
+       exact row_canonical inverse chi index r q hr
    · simpa only [run,hr] using h
 
 theorem successful_length (inverse : Q → Option Q) (chi : Q)
