@@ -15,7 +15,7 @@ theorem column (p : Nat → Old.Q) :
       amap fromW (ProverCommitPairCounter47.sourceArray 1024#usize (fun j => p (AspisR1.rowNat j))) := by
   apply Subtype.ext
   simp only [PV_RunJoin_CoefficientsWeight46.column,ProverCommitArray49.array,
-    amap,ProverCommitPairCounter47.sourceArray,List.map_ofFn]
+    amap,ProverCommitPairCounter47.sourceArray,List.map_ofFn,Function.comp_def]
 
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
