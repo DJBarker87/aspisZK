@@ -16,7 +16,7 @@ theorem next_exact (i j : Usize) (h : i.val+1=j.val) :
 theorem previous_exact (i j : Usize) (h : i.val=j.val+1) :
     Usize.wrapping_sub i 1#usize = j := by
   apply UScalar.eq_of_val_eq
-  rw [PV_B3P_Offset226V3.sub_value i 1#usize (by change 1≤i.val; omega)]
+  rw [PV_B3P_Offset226V3.sub_value i 1#usize (by change (1 : Nat) ≤ i.val; omega)]
   change i.val-1=j.val
   omega
 
