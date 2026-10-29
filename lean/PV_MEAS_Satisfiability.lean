@@ -60,7 +60,7 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
 
 
 open PV_RJ4IDB PV_EVH_Interface PV_EVH_Core
-open MeasureTheory PV_MEAS_Uniform PV_MEAS_Deployed Aeneas Aeneas.Std ProverRwFull
+open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Deployed Aeneas Aeneas.Std ProverRwFull
 variable [ExternalTypes]
 local instance realModelSpace : MeasurableSpace (source).RealRand := ⊤
 local instance idealModelSpace : MeasurableSpace (source).IdealRand := ⊤
@@ -143,7 +143,7 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
     exact uniform_fst _ _
   · exact ⟨measurable_id,by simp only [Measure.map_id]⟩
   · intro f hf hb
-    exact integral_uniform_product f
+    exact integral_uniform_product f (fun p => (hb p).1)
   · intro adv ha
     exact ⟨fun _ => measurable_of_finite _,fun _ _ => measurable_of_finite _,
       fun _ => measurable_of_finite _,measurable_of_finite _⟩

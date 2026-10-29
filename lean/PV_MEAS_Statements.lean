@@ -1,6 +1,5 @@
 import PV_MEAS_Legacy
 import PV_MEAS_Satisfiability
-import PV_MEAS_Corollary
 set_option autoImplicit false
 #print PV_MEAS_Average.average_bound
 #print PV_MEAS_Average.expectation_eq_of_equal_laws

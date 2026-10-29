@@ -5,7 +5,7 @@ import PV_EVH_Interface
 carrier and common sample may have unbounded or continuous support. -/
 set_option autoImplicit false
 noncomputable section
-open MeasureTheory
+open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Coupling
 attribute [local instance] Classical.propDecidable
 open PV_MEAS_Average PV_MEAS_Uniform
@@ -26,14 +26,16 @@ attribute [instance] Coupling.measurableS
 theorem integral_native {R M : Type*} [MeasurableSpace R] [MeasurableSpace M]
     {μR : ProbabilityMeasure R} {μM : ProbabilityMeasure M}
     (cp : Coupling μR μM) (f : R → ℝ) (hf : Measurable f) :
-    (∫ s, f (cp.toR s) ∂(cp.law : Measure cp.S)) = ∫ r, f r ∂(μR : Measure R) := by
-  rw [← integral_map cp.measurableR.aemeasurable hf.aestronglyMeasurable, cp.marginalR]
+    (∫ₚ s, f (cp.toR s) ∂(cp.law : Measure cp.S)) = ∫ₚ r, f r ∂(μR : Measure R) := by
+  unfold expectation
+  rw [← lintegral_map hf.ennreal_ofReal cp.measurableR, cp.marginalR]
 
 theorem integral_model {R M : Type*} [MeasurableSpace R] [MeasurableSpace M]
     {μR : ProbabilityMeasure R} {μM : ProbabilityMeasure M}
     (cp : Coupling μR μM) (f : M → ℝ) (hf : Measurable f) :
-    (∫ s, f (cp.toM s) ∂(cp.law : Measure cp.S)) = ∫ r, f r ∂(μM : Measure M) := by
-  rw [← integral_map cp.measurableM.aemeasurable hf.aestronglyMeasurable, cp.marginalM]
+    (∫ₚ s, f (cp.toM s) ∂(cp.law : Measure cp.S)) = ∫ₚ r, f r ∂(μM : Measure M) := by
+  unfold expectation
+  rw [← lintegral_map hf.ennreal_ofReal cp.measurableM, cp.marginalM]
 
 /-- Bounded decisions differ only on the original bad event. No truncation,
 conditioning, or restriction on the sample carrier occurs. -/
@@ -42,12 +44,16 @@ theorem until_bad {S : Type*} [MeasurableSpace S] (μ : ProbabilityMeasure S)
     (bf : ∀ s, 0 ≤ f s ∧ f s ≤ 1) (bg : ∀ s, 0 ≤ g s ∧ g s ≤ 1)
     (bb : ∀ s, 0 ≤ b s ∧ b s ≤ 1)
     (control : ∀ s, |f s - g s| ≤ b s) :
-    |(∫ s, f s ∂(μ : Measure S)) - ∫ s, g s ∂(μ : Measure S)| ≤
-      ∫ s, b s ∂(μ : Measure S) := by
-  rw [← integral_sub (decision_integrable μ f hf bf) (decision_integrable μ g hg bg)]
-  simpa only [Real.norm_eq_abs] using norm_integral_le_of_norm_le
-    (decision_integrable μ b hb bb)
-    (ae_of_all _ (fun s => (Real.norm_eq_abs _).trans_le (control s)))
+    |(∫ₚ s, f s ∂(μ : Measure S)) - ∫ₚ s, g s ∂(μ : Measure S)| ≤
+      ∫ₚ s, b s ∂(μ : Measure S) := by
+  have h₁ := expectation_le_add μ f g b hg (fun s => (bg s).1) (fun s => (bb s).1)
+    1 1 (fun s => (bg s).2) (fun s => (bb s).2)
+    (fun s => by have h := (abs_le.mp (control s)).2; linarith)
+  have h₂ := expectation_le_add μ g f b hf (fun s => (bf s).1) (fun s => (bb s).1)
+    1 1 (fun s => (bf s).2) (fun s => (bb s).2)
+    (fun s => by have h := (abs_le.mp (control s)).1; linarith)
+  rw [abs_le]
+  constructor <;> linarith
 
 /-- Generic finite-model bridge, with arbitrary native and common laws.
 The only finite carrier here is the retained cryptographic MODEL coordinate. -/
@@ -59,8 +65,8 @@ theorem finite_model_bound {R M : Type*} [MeasurableSpace R]
     (hb : Measurable (fun m => if bad m then (1 : ℝ) else 0))
     (bf : ∀ r, 0 ≤ f r ∧ f r ≤ 1) (bg : ∀ m, 0 ≤ g m ∧ g m ≤ 1)
     (agreement : ∀ s, ¬bad (cp.toM s) → f (cp.toR s) = g (cp.toM s)) :
-    |(∫ r, f r ∂(μR : Measure R)) - ∫ m, g m ∂(uniform M : Measure M)| ≤
-      ∫ m, (if bad m then (1 : ℝ) else 0) ∂(uniform M : Measure M) := by
+    |(∫ₚ r, f r ∂(μR : Measure R)) - ∫ₚ m, g m ∂(uniform M : Measure M)| ≤
+      ∫ₚ m, (if bad m then (1 : ℝ) else 0) ∂(uniform M : Measure M) := by
   classical
   have h := until_bad cp.law (fun s => f (cp.toR s)) (fun s => g (cp.toM s))
     (fun s => if bad (cp.toM s) then (1 : ℝ) else 0)

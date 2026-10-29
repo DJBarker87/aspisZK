@@ -3,7 +3,7 @@ import PV_MEAS_Average
 /-! Explicit uniform measure for finite carriers; no computation of the carrier. -/
 set_option autoImplicit false
 noncomputable section
-open MeasureTheory
+open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Uniform
 
 variable (M : Type*) [Fintype M] [Nonempty M] [MeasurableSpace M]
@@ -20,23 +20,26 @@ instance uniform_probability : IsProbabilityMeasure (uniformMeasure M) := by
 
 def uniform : ProbabilityMeasure M := ⟨uniformMeasure M, inferInstance⟩
 
-theorem integral_uniform (f : M → ℝ) :
-    (∫ m, f m ∂(uniform M : Measure M)) =
+theorem integral_uniform (f : M → ℝ) (nonneg : ∀ m, 0 ≤ f m) :
+    (∫ₚ m, f m ∂(uniform M : Measure M)) =
       (∑ m : M, f m) / (Fintype.card M : ℝ) := by
-  change (∫ m, f m ∂uniformMeasure M) = _
-  rw [uniformMeasure, integral_smul_measure, integral_finsetSum_measure]
-  · simp only [integral_dirac, ENNReal.toReal_inv, ENNReal.toReal_natCast,
-      smul_eq_mul, div_eq_mul_inv, mul_comm]
-  · intro m _
-    exact integrable_dirac (by simp)
+  change (∫⁻ m, ENNReal.ofReal (f m) ∂uniformMeasure M).toReal = _
+  rw [uniformMeasure, lintegral_smul_measure, lintegral_finsetSum_measure]
+  simp only [lintegral_dirac, smul_eq_mul]
+  rw [ENNReal.toReal_mul, ENNReal.toReal_inv, ENNReal.toReal_natCast,
+    ENNReal.toReal_sum (by intro m _; exact ENNReal.ofReal_ne_top)]
+  simp only [ENNReal.toReal_ofReal (nonneg _), div_eq_mul_inv, mul_comm]
 
 /-- Fubini for finite uniform laws, by sums rather than carrier reduction. -/
 theorem integral_uniform_product {C R : Type*} [Fintype C] [Nonempty C]
     [Fintype R] [Nonempty R] [MeasurableSpace C] [MeasurableSingletonClass C]
-    [MeasurableSpace R] [MeasurableSingletonClass R] (f : C × R → ℝ) :
-    (∫ p, f p ∂(uniform (C × R) : Measure (C × R))) =
-      ∫ c, (∫ r, f (c,r) ∂(uniform R : Measure R)) ∂(uniform C : Measure C) := by
-  simp only [integral_uniform, Fintype.card_prod, Nat.cast_mul, Fintype.sum_prod_type]
+    [MeasurableSpace R] [MeasurableSingletonClass R] (f : C × R → ℝ)
+    (nonneg : ∀ p, 0 ≤ f p) :
+    (∫ₚ p, f p ∂(uniform (C × R) : Measure (C × R))) =
+      ∫ₚ c, (∫ₚ r, f (c,r) ∂(uniform R : Measure R)) ∂(uniform C : Measure C) := by
+  rw [integral_uniform _ nonneg, integral_uniform _ (fun _ => ENNReal.toReal_nonneg)]
+  simp_rw [integral_uniform _ (fun r => nonneg (_,r))]
+  simp only [Fintype.card_prod, Nat.cast_mul, Fintype.sum_prod_type]
   rw [← Finset.sum_div]
   ring
 

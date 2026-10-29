@@ -59,7 +59,7 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
   ProverCommitReencode16.encode
 
 
-open MeasureTheory PV_MEAS_Uniform PV_MEAS_Finite
+open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Finite
 open PV_RJ4IDB PV_EVH_Interface
 variable {Public Signal Env A R : Type} [MeasurableSpace R]
 local instance realModelSpace : MeasurableSpace (source).RealRand := ⊤
@@ -163,8 +163,8 @@ theorem privacy_headline_events_model
     (∀ (adv : Observer Signal A) (w : (h).Instance),
       Measurable (fun r => (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ)) →
       (h).public w = x.1 →
-      |(∫ r, (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ) ∂(μR : Measure R)) -
-        ∫ r, (bit (adv.decide (ideal template outputs x completion pubData env adv r)) : ℝ)
+      |(∫ₚ r, (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ) ∂(μR : Measure R)) -
+        ∫ₚ r, (bit (adv.decide (ideal template outputs x completion pubData env adv r)) : ℝ)
           ∂(uniform (source).IdealRand : Measure _)| ≤
       (bound template outputs x : ℝ)) ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
@@ -215,9 +215,9 @@ theorem privacy_headline_events_model
         (mean (idealTestS source (observer completion pubData env adv) x
           (simE (h).transport B outputs x)) : ℝ)| ≤ (modelError W Pr L₁ L₂ : ℝ) := by
       exact_mod_cast hmid
-    rw [PV_MEAS_Finite.integral_rat_mean]
+    rw [PV_MEAS_Finite.integral_bit_mean]
     have t₁ := abs_sub_le
-      (∫ r, (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ) ∂(μR : Measure R))
+      (∫ₚ r, (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ) ∂(μR : Measure R))
       (mean (realTest h B outputs source (observer completion pubData env adv) x w) : ℝ)
       (mean (idealTestS source (observer completion pubData env adv) x
         (simE (h).transport B outputs x)) : ℝ)

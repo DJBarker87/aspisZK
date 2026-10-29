@@ -61,7 +61,7 @@ local notation "source" => ProverCommitReencode16.experiment W Pr 8 eight_pos
   ProverCommitReencode16.encode
 
 
-open MeasureTheory PV_MEAS_Uniform PV_MEAS_Average
+open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Average
 open PV_RJ4IDB PV_EVH_Interface PV_EVH_Core
 open Aeneas Aeneas.Std ProverRwFull
 variable [ExternalTypes]
@@ -179,15 +179,15 @@ def PublicEnvironment : Prop :=
 
 def ConditionalLaw : Prop := ∀ f : Env × R → ℝ,
   Measurable f → (∀ p, 0 ≤ f p ∧ f p ≤ 1) →
-  (∫ p, f p ∂(rt.jointLaw : Measure (Env × R))) =
-  ∫ e, (∫ r, f (e,r) ∂(rt.nativeLaw e : Measure R)) ∂(rt.environmentLaw : Measure Env)
+  (∫ₚ p, f p ∂(rt.jointLaw : Measure (Env × R))) =
+  ∫ₚ e, (∫ₚ r, f (e,r) ∂(rt.nativeLaw e : Measure R)) ∂(rt.environmentLaw : Measure Env)
 
 def realProbability (adv : Observer Signal A) (w : (h).Instance) (e : Env) : ℝ :=
-  ∫ r, (bit (adv.decide (PV_EVH_Core.real e rt.native rt.signal adv w r)) : ℝ)
+  ∫ₚ r, (bit (adv.decide (PV_EVH_Core.real e rt.native rt.signal adv w r)) : ℝ)
     ∂(rt.nativeLaw e : Measure R)
 
 def idealProbability (adv : Observer Signal A) (e : Env) : ℝ :=
-  ∫ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
+  ∫ₚ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
     ∂(uniform (source).IdealRand : Measure _)
 
 /-- Measurable dependence, required by the pre-registered arbitrary-mixture statement. -/
@@ -271,9 +271,9 @@ All native links are ordinary P, and T has exactly its original three fields. -/
 theorem privacy_headline_deployed_events_meas (links : Links template outputs x rt) :
     (∀ (adv : Observer Signal A), Measurable adv.decide →
       ∀ (w : (h).Instance), (h).public w = x.1 →
-      |(∫ n, (bit (adv.decide (deployedReal template outputs x rt adv w n)) : ℝ)
+      |(∫ₚ n, (bit (adv.decide (deployedReal template outputs x rt adv w n)) : ℝ)
           ∂(rt.acquisitionLaw : Measure N)) -
-        ∫ e, idealProbability template outputs x rt adv e ∂(rt.environmentLaw : Measure Env)| ≤
+        ∫ₚ e, idealProbability template outputs x rt adv e ∂(rt.environmentLaw : Measure Env)| ≤
         (PV_EVH_Core.bound template outputs x : ℝ)) ∧
     (PV_EVH_Core.bound template outputs x : ℝ) < 1 / 2^100 := by
   have pointwise (e : Env) :=
@@ -294,15 +294,14 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
     have avg := average_bound rt.environmentLaw
       (realProbability template outputs x rt adv w) (idealProbability template outputs x rt adv)
       (PV_EVH_Core.bound template outputs x : ℝ)
-      (decision_integrable _ _ (hl.2.2.1 w) hr)
-      (decision_integrable _ _ hl.2.2.2 hi)
+      (hl.2.2.1 w) hl.2.2.2 hr hi
       (fun e => (pointwise e).1 adv w (hl.2.1 w e) hw)
     have trans := expectation_eq_of_equal_laws (rt.acquisitionLaw : Measure N)
       (rt.jointLaw : Measure (Env × R)) rt.acquisition id links.environment.1 measurable_id
       (by simpa using links.environment.2)
       (fun p => (bit (adv.decide (PV_EVH_Core.real p.1 rt.native rt.signal adv w p.2)) : ℝ))
       (hl.1 w)
-    change |(∫ n, (bit (adv.decide (PV_EVH_Core.real (rt.acquisition n).1 rt.native rt.signal adv w (rt.acquisition n).2)) : ℝ)
+    change |(∫ₚ n, (bit (adv.decide (PV_EVH_Core.real (rt.acquisition n).1 rt.native rt.signal adv w (rt.acquisition n).2)) : ℝ)
       ∂(rt.acquisitionLaw : Measure N)) - _| ≤ _
     rw [trans, links.conditional _ (hl.1 w) (fun _ => bounded _)]
     exact avg

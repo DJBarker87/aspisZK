@@ -3,20 +3,28 @@ import R0Z.FsAbort
 
 set_option autoImplicit false
 noncomputable section
-open MeasureTheory
+open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Finite
 attribute [local instance] Classical.propDecidable
 open PV_MEAS_Uniform
 
 /-- Exact bridge to the former rational uniform mean, with symbolic cardinality. -/
 theorem integral_rat_mean {M : Type} [Fintype M] [Nonempty M]
-    [MeasurableSpace M] [MeasurableSingletonClass M] (f : M → ℚ) :
-    (∫ m, (f m : ℝ) ∂(uniform M : Measure M)) = (R0Z.FsAbort.mean f : ℝ) := by
-  rw [integral_uniform]
+    [MeasurableSpace M] [MeasurableSingletonClass M] (f : M → ℚ)
+    (nonneg : ∀ m, 0 ≤ f m) :
+    (∫ₚ m, (f m : ℝ) ∂(uniform M : Measure M)) = (R0Z.FsAbort.mean f : ℝ) := by
+  rw [integral_uniform _ (fun m => by exact_mod_cast nonneg m)]
   unfold R0Z.FsAbort.mean
   push_cast
   rfl
 
+theorem integral_bit_mean {M : Type} [Fintype M] [Nonempty M]
+    [MeasurableSpace M] [MeasurableSingletonClass M] (f : M → Bool) :
+    (∫ₚ m, (R0Z.FsStatement.bit (f m) : ℝ) ∂(uniform M : Measure M)) =
+      (R0Z.FsAbort.mean (fun m => R0Z.FsStatement.bit (f m)) : ℝ) :=
+  integral_rat_mean _ (fun _ => R0Z.FsStatement.bit_nonneg _)
+
+#print axioms integral_bit_mean
 /-- Evaluation of a finite uniform measure, related exactly to rational mass. -/
 theorem uniform_apply_real {X : Type} [Fintype X] [Nonempty X]
     [MeasurableSpace X] [MeasurableSingletonClass X] (s : Set X) :

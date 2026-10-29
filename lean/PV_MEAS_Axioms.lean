@@ -24,4 +24,3 @@ set_option autoImplicit false
 #print axioms PV_MEAS_Satisfiability.simultaneously_satisfiable
 #print axioms PV_MEAS_Legacy.links_of_legacy
 #print axioms PV_MEAS_Legacy.finite_uniform_corollary
-#print axioms PV_MEAS_Corollary.finite_uniform_average

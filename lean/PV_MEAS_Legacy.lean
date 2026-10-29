@@ -71,7 +71,7 @@ variable {Public Signal Env A R S N : Type} [Fintype R] [Nonempty R]
   [Fintype N] [Nonempty N]
 
 
-open MeasureTheory PV_MEAS_Uniform PV_MEAS_Finite
+open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Finite
 local instance nativeSpace : MeasurableSpace R := ⊤
 local instance commonSpace : MeasurableSpace S := ⊤
 local instance environmentSpace : MeasurableSpace Env := ⊤
@@ -157,7 +157,7 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
       (fun test => R0Z.LawTransport.mean_eq_of_equalLaws _ _ test links.environment)
   conditional := by
     intro f hf hb
-    exact integral_uniform_product f
+    exact integral_uniform_product f (fun p => (hb p).1)
   decisions := by
     intro adv ha
     exact ⟨fun _ => measurable_of_finite _,fun _ _ => measurable_of_finite _,
@@ -184,12 +184,13 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
     have h := (PV_MEAS_Deployed.privacy_headline_deployed_events_meas template outputs x
       (ofLegacy template outputs x rt) (links_of_legacy template outputs x rt links)).1
       adv (by intro s hs; trivial) w hw
-    change |(∫ n, (bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n)) : ℝ)
+    change |(∫ₚ n, (bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n)) : ℝ)
         ∂(uniform N : Measure N)) -
-      (∫ e, (∫ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
+      (∫ₚ e, (∫ₚ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
         ∂(uniform (source).IdealRand : Measure _)) ∂(uniform Env : Measure Env))| ≤
         (PV_EVH_Core.bound template outputs x : ℝ) at h
-    rw [← integral_uniform_product, integral_rat_mean, integral_rat_mean] at h
+    rw [← integral_uniform_product _ (fun p => by exact_mod_cast bit_nonneg _),
+      integral_bit_mean, integral_bit_mean] at h
     exact_mod_cast h
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
