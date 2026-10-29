@@ -13,7 +13,7 @@ for prior in (R/'evidence').glob('pv-*/modules-*.json'):
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.
-round_sources={m:v for m,v in plan['modules'].items() if m.startswith('R1Z.PV_RunJoin_') and m.endswith(('52','53','54','55','56','57','58','59','60','61','62'))}
+round_sources={m:v for m,v in plan['modules'].items() if m.startswith('R1Z.PV_RunJoin_') and m.endswith(('52','53','54','55','56','57','58','59','60','61','62','63'))}
 round_accepted={v['module']:v for p in list((R/'evidence/pv-runjoin52-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin53-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin54-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin55-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin56-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin57-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin58-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin59-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin60-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin61-20261029').glob('modules-*.json'))+list((R/'evidence/pv-runjoin62-20261029').glob('modules-*.json'))+list(E.glob('modules-*.json')) for v in json.loads(p.read_text()) if v['accepted']}
 for m in mods:
  for d in plan['modules'][m]['imports']:
