@@ -2,7 +2,7 @@ import R1Z.PV_OWND_AllocationBuffer
 import R1Z.PV_OWND_PushSuffix
 import R1Z.PV_OWND_LegacyCount
 set_option autoImplicit false
-attribute [local irreducible] R1Z.PV_OWNC_PushFold.append R1Z.PV_OWND_LegacySource.links R1Z.PV_OWNB_LinkCodec.codec
+attribute [local irreducible] R1Z.PV_OWNC_PushFold.append R1Z.PV_OWND_LegacySource.links
 namespace R1Z.PV_OWND_InitialBytes
 open PV_OWN_Heap PV_OWN_Operations PV_OWNC_Vector PV_OWN_Link PV_W_Threading
 /-- Actual allocation post-world followed by the 127 source-ordered stores. -/
