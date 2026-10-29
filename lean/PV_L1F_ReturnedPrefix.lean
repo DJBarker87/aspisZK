@@ -30,5 +30,6 @@ theorem ordered_acquisition {P S : Type} (prior : List Event)
  simp only [counts,rejections,List.filterMap_append]
  change (counts prior++counts (suffix out),rejections prior++rejections (suffix out)) = _
  rw [counts_suffix,rejects_suffix,List.append_nil]
+ rfl
 #print axioms ordered_acquisition
 end PV_L1F_ReturnedPrefix
