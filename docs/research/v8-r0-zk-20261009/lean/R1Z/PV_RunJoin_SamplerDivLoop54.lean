@@ -21,7 +21,8 @@ theorem complete (n : Nat) (rank : Array U32 8#usize) (rem : U64) (j : Usize)
     obtain ⟨last,remain,htail,hremain⟩ := ih next r _ dec (by omega) hr
     refine ⟨last,remain,?_,hremain⟩
     unfold shipped_sampler.qm31_div_pass_loop
-    rw [loop,hstep,bind_tc_ok]
+    rw [loop]
+    simp only [hstep]
     exact htail
 #print axioms complete
 end R1Z.PV_RunJoin_SamplerDivLoop54
