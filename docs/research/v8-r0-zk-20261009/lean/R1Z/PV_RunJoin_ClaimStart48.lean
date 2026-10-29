@@ -11,8 +11,8 @@ theorem complete (columns : Slice Column) (point : Point) (small : columns.lengt
       PV_RunJoin_ClaimList48.run point columns.val (alloc.vec.Vec.new U8) := by
   unfold prover.opening_claim_bytes
   simp only [lift,bind_tc_ok]
-  rw [PV_RunJoin_ClaimThread48.complete columns point _ 0#usize columns.length small (by rfl)]
-  rw [PV_RunJoin_ClaimList48.complete columns point columns.length _ 0#usize small (by rfl)]
+  rw [PV_RunJoin_ClaimThread48.complete columns point _ 0#usize columns.length small (by change 0+columns.length=columns.length;omega)]
+  rw [PV_RunJoin_ClaimList48.complete columns point columns.length _ 0#usize small (by change 0+columns.length=columns.length;omega)]
   rfl
 #print axioms complete
 end R1Z.PV_RunJoin_ClaimStart48
