@@ -4,6 +4,7 @@ open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_SamplerByteIndices54
 
 theorem size : 4294967296≤UScalar.size .Usize := by
+  change 2^32≤UScalar.size .Usize
   rw [UScalar.size_def]
   exact Nat.pow_le_pow_right (by decide) System.Platform.le_numBits
 
