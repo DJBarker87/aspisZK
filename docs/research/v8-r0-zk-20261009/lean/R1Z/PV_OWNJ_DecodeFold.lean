@@ -13,8 +13,8 @@ def Canon (q : Q) : Prop :=
 
 /-- Explicit stage obligations. No theorem here supplies this instance. -/
 structure Decoder (decode : Q → K) : Prop where
- zero : decode zero = 0
- one : decode one = 1
+ zero_eq : decode zero = 0
+ one_eq : decode one = 1
  zero_canon : Canon zero
  one_canon : Canon one
  add : ∀ x y, Canon x → Canon y →
