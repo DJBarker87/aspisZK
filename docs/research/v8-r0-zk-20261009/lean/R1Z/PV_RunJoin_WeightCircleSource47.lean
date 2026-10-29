@@ -42,6 +42,15 @@ theorem row3 (fs : Factors) (z : Array PV_B2_F_ConstructorCarrier.Point 2#usize)
     ←double,PV_RunJoin_WeightFactorWriteCps47.complete,bind_assoc,bind_tc_ok,
     PV_RunJoin_WeightCounters46.add1,PV_RunJoin_WeightCounters46.add2,
     PV_RunJoin_WeightCounters46.add3,PV_RunJoin_WeightCellIndices46.add4]
-  simp only [write]
 #print axioms row3
+theorem row4 (fs : Factors) (z : Array PV_B2_F_ConstructorCarrier.Point 2#usize) :
+    PV_B2_C_ConstructorRows.row4 fs z=(do
+      let p ← Array.index_usize z 1#usize
+      run fs 4#usize p.x p.y) := by
+  simp only [PV_B2_C_ConstructorRows.row4,run,lines,
+    PV_RunJoin_WeightCircleFactor46.run,PV_RunJoin_WeightLineFactor46.run,
+    ←double,PV_RunJoin_WeightFactorWriteCps47.complete,bind_assoc,bind_tc_ok,
+    PV_RunJoin_WeightCounters46.add1,PV_RunJoin_WeightCounters46.add2,
+    PV_RunJoin_WeightCounters46.add3,PV_RunJoin_WeightCellIndices46.add4]
+#print axioms row4
 end R1Z.PV_RunJoin_WeightCircleSource47
