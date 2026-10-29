@@ -5,6 +5,7 @@ set_option autoImplicit false
 noncomputable section
 open MeasureTheory
 namespace PV_MEAS_Finite
+attribute [local instance] Classical.propDecidable
 open PV_MEAS_Uniform
 
 /-- Exact bridge to the former rational uniform mean, with symbolic cardinality. -/

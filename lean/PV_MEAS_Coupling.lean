@@ -7,6 +7,7 @@ set_option autoImplicit false
 noncomputable section
 open MeasureTheory
 namespace PV_MEAS_Coupling
+attribute [local instance] Classical.propDecidable
 open PV_MEAS_Average PV_MEAS_Uniform
 
 structure Coupling {R M : Type*} [MeasurableSpace R] [MeasurableSpace M]
