@@ -35,10 +35,10 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
   unfold prover.publish_compact at h
   obtain ⟨size,hsize,h⟩ := bind_eq_ok h
   obtain ⟨magic,hmagic,h⟩ := bind_eq_ok h
-  simp only [lift,bind_tc_ok] at h
+  try simp only [lift,bind_tc_ok] at h
   obtain ⟨h0,hh0,h⟩ := bind_eq_ok h
   obtain ⟨tag,htag,h⟩ := bind_eq_ok h
-  simp only [lift,bind_tc_ok] at h
+  try simp only [lift,bind_tc_ok] at h
   obtain ⟨h1,hh1,h⟩ := bind_eq_ok h
   obtain ⟨pair,hsem,h⟩ := bind_eq_ok h
   rcases pair with ⟨r,h2⟩
@@ -63,10 +63,10 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
       cases u
       simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
       obtain ⟨ib,hib,h⟩ := bind_eq_ok h
-      simp only [lift,bind_tc_ok] at h
+      try simp only [lift,bind_tc_ok] at h
       obtain ⟨h4,hh4,h⟩ := bind_eq_ok h
       obtain ⟨h5,hh5,h⟩ := bind_eq_ok h
-      simp only [lift,bind_tc_ok] at h
+      try simp only [lift,bind_tc_ok] at h
       obtain ⟨h6,hh6,h⟩ := bind_eq_ok h
       obtain ⟨h7,hh7,h⟩ := bind_eq_ok h
       obtain ⟨h8,hh8,h⟩ := bind_eq_ok h
