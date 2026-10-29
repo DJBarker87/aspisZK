@@ -16,6 +16,15 @@ def run : List Input → alloc.vec.Vec U8 → Payload
 def models (slots : List Input) := slots.map (fun s => PV_RunJoin_NodePayloadModel60.model s.1 s.2.val)
 def capacities (slots : List Input) := (slots.map (fun s => s.2.val)).sum
 
+theorem singleton (slot : Input) (out : alloc.vec.Vec U8) :
+    run [slot] out=PV_RunJoin_NodePayloadModel60.run out slot.1 slot.2 := by
+  unfold run
+  cases h : PV_RunJoin_NodePayloadModel60.run out slot.1 slot.2 with
+  | fail e => rfl
+  | div => rfl
+  | ok status => cases status <;> rfl
+#print axioms singleton
+
 theorem complete (slots : List Input) (out : alloc.vec.Vec U8)
     (room : out.length+2*capacities slots≤Usize.max) :
     resultBytes (run slots out)=exceptBytes (ProverCommitPublish43.slots (models slots) (bytes out.val)) := by
@@ -23,8 +32,8 @@ theorem complete (slots : List Input) (out : alloc.vec.Vec U8)
   | nil => rfl
   | cons s ss ih =>
     rcases s with ⟨payload,cap⟩
-    have room1 : out.length+2*cap.val≤Usize.max := by
-      simpa only [capacities,List.map_cons,List.sum_cons] using (show out.length+2*(cap.val+capacities ss)≤Usize.max from room) |> fun h => by omega
+    change out.length+2*(cap.val+capacities ss)≤Usize.max at room
+    have room1 : out.length+2*cap.val≤Usize.max := by omega
     have equivalent := PV_RunJoin_NodePayloadModel60.complete out payload cap room1
     cases hr : PV_RunJoin_NodePayloadModel60.run out payload cap with
     | fail e =>
