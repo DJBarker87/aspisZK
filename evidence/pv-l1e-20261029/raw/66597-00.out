@@ -1,0 +1,496 @@
+theorem PV_L1E_Statements.combined : ∀ {I A S P : Type} (actualCount : I → List ℕ × List ℕ) (native : I → NativeTrace A)
+  (sourceWorld bodyWorld : I → Trace A) (owner : I → R1Z.SideChannelL1AttemptRecord.Owner S P) (initial : I → S)
+  (fuel index : I → ℕ) (adapt : I → R1Z.SideChannelL1AttemptRecord.Run P × S → Trace A),
+  PV_L1E_Link_CountAcquisition actualCount sourceWorld →
+    PV_L1E_Link_BodyWrapper sourceWorld bodyWorld →
+      PV_L1E_Link_OriginalRetry bodyWorld owner initial fuel index adapt →
+        PV_L1E_Link_NativeD163 native owner initial fuel index adapt →
+          OpenInputs.L1_COUNT_TRACE actualCount native ∧
+            ∀ (i : I), nativeObservation (native i) = decoder (modelTrace (native i)) :=
+fun {I A S P} actualCount native sourceWorld bodyWorld owner initial fuel index adapt acquisition body retry coupling =>
+  ⟨original_count_trace actualCount native sourceWorld bodyWorld owner initial fuel index adapt acquisition body retry
+      coupling,
+    all_prefixes native⟩
+'PV_L1E_Statements.combined' depends on axioms: [propext]
+PV_L1E_CallbackSafety.safe_coe [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {α : Type}
+  (r : Aeneas.Std.Result α) : PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.lift r)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_030 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (reserved : ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (tag : Aeneas.Std.U8) : PV_L1D_CallbackSafe.Safe (PV_L1D_Source_030.produce reserved context hash tag)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_003 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (folded_word : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact)
+  (folded_salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_003.produce out cc1 cc2 queries folded_word folded_salts)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_004 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) (begin1 end1 : Aeneas.Std.Usize) (folded : Bool) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_004.produce queries begin1 end1 folded)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_005 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (tree : ProverRwFull.host_tree.BinaryTree) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize)
+  (batch t : Aeneas.Std.Usize) : PV_L1D_CallbackSafe.Safe (PV_L1D_Source_005.produce out cc1 cc2 tree queries batch t)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_006 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (cc1 cc2 : ProverRwFull.host_commitment.Commitment)
+  (tree : ProverRwFull.host_tree.BinaryTree) (queries : Aeneas.Std.Array Aeneas.Std.U32 22#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_006.produce out cc1 cc2 tree queries)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_007 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant) (p : ProverRwFull.prover.Publication) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_007.produce variant p)
+PV_L1E_CallbackSafety.safe_PV_L1D_QueryAbsorb [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_QueryAbsorb.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_CallbackSafety.safe_PV_L1D_QueryProducer [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_QueryProducer.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_008 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (challenges : ProverRwFull.aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)
+  (c1_root : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_008.produce variant challenges c1_root)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_009 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (word : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact)
+  (salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_009.produce hash word salts)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_015 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_015.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_017 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_017.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_018 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_018.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_019 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8)
+  (nonzero : Bool) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_019.produce aspis_coredigestDigest32Inst self row payload nonzero)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_020 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (prepared : ProverRwFull.prover.PreparedOpening) (folded_salts : ProverRwFull.host_commitment.PrivateSalts) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_020.produce variant hash prepared folded_salts)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_021 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (q : Aeneas.Std.Slice ProverRwFull.aspis_core.field.wide_exact.WideExact) (w : ProverRwFull.weights.Weights) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_021.produce q w)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_023 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (coefficients : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize))
+  (gamma : ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_023.produce coefficients gamma)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_024 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (coefficients : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize))
+  (z1 : ProverRwFull.aspis_core.r0.domain.Point ProverRwFull.aspis_core.field.wide_exact.WideExact) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_024.produce coefficients z1)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_025 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (messages : Aeneas.Std.Slice (Aeneas.Std.Array ProverRwFull.aspis_core.field.wide_exact.WideExact 1024#usize)) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_025.produce variant messages)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_026 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H) (hash : H)
+  (semantic_state : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_026.produce aspis_coredigestDigest32Inst hash semantic_state variant)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_027 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (backend : ProverRwFull.prover.Backend)
+  (sem : ProverRwFull.host_semantic.BuiltSemantics ProverRwFull.aspis_core.digest.LegacyHashFn) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_027.produce variant hash backend sem)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_031 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (backend : ProverRwFull.prover.Backend)
+  (sem : ProverRwFull.host_semantic.BuiltSemantics ProverRwFull.aspis_core.digest.LegacyHashFn)
+  (salts :
+    ProverRwFull.aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
+      ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_031.produce public1 variant hash backend sem salts)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_033 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (values : Aeneas.Std.Slice ProverRwFull.aspis_core.field.QM31) (masks : Aeneas.Std.Array Aeneas.Std.U16 64#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_033.produce values masks)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_037 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Slice (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31))
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize)
+  (masks : Aeneas.Std.Array Aeneas.Std.U16 64#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_037.produce c1 mask_only d g h1_padding masks)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_038 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (values : Aeneas.Std.Slice ProverRwFull.aspis_core.field.QM31) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_038.produce values)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_039 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (noised : Aeneas.Std.Slice (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31))
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_039.produce noised mask_only)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_041 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle F) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) (running : ProverRwFull.aspis_core.field.QM31)
+  (round : Aeneas.Std.Usize) (oracle : F) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_041.produce aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_042 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H F : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle F) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) (running : ProverRwFull.aspis_core.field.QM31)
+  (round : Aeneas.Std.Usize) (oracle : F) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_042.produce aspis_coredigestDigest32Inst OracleInst transcript output point running round oracle)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_043 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (OracleInst : ProverRwFull.host_sumcheck.Oracle T1) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (output : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (initial_claim : ProverRwFull.aspis_core.field.QM31) (oracle : T1) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_043.produce aspis_coredigestDigest32Inst OracleInst transcript output initial_claim oracle)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_044 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H) (row : Aeneas.Std.U8)
+  (payload : Aeneas.Std.Slice Aeneas.Std.U8) (transcript : ProverRwFull.host_wire.SemanticTranscript H)
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_044.produce aspis_coredigestDigest32Inst row payload transcript bytes)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_045 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (variant : ProverRwFull.transport.Variant) (z : ProverRwFull.aspis_core.circle.SecureCirclePoint) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_045.produce columns variant z)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_046 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (claims : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_046.produce bytes claims)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_047 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (claims : Aeneas.Std.Array (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize)
+  (extras : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_047.produce claims extras)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_049 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (variant : ProverRwFull.transport.Variant) (a b : ProverRwFull.aspis_core.field.QM31) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_049.produce columns variant a b)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_051 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_051.produce columns)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_052 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (h1 : Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31)
+  (g d : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_052.produce c1 h1 g d)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_053 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (offset j : Aeneas.Std.Usize)
+  (sum : ProverRwFull.aspis_core.field.QM31) : PV_L1D_CallbackSafe.Safe (PV_L1D_Source_053.produce dc offset j sum)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_054 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (offset : Aeneas.Std.Usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_054.produce dc offset)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_055 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (mask_sum : ProverRwFull.aspis_core.field.QM31)
+  (dc : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_055.produce mask_sum dc)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_056 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (transcript : ProverRwFull.host_wire.SemanticTranscript H) (bytes : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_056.produce aspis_coredigestDigest32Inst transcript bytes)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_058 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (column : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_058.produce column)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_062 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_062.produce c1)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_063 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (d g : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_063.produce c1 d g)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_065 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_065.produce columns point)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_066 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (columns : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31) 29#usize)
+  (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Source_066.produce columns point)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_067 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 T2 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst :
+    Aeneas.Std.core.ops.function.FnOnce T1 (ProverRwFull.aspis_core.field.QM31 × ProverRwFull.aspis_core.field.QM31)
+      (Aeneas.Std.core.result.Result (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.QM31)
+        ProverRwFull.r1_wire.Error))
+  (CommitmentsInst : ProverRwFull.host_semantic.Commitments T2)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (c1 : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 26#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (helper : T1) (commitments : T2)
+  (hash : H) (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_067.produce aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst
+      CommitmentsInst public1 c1 d g h1_padding helper commitments hash variant)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_068 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H T1 : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (CommitmentsInst : ProverRwFull.host_semantic.Commitments T1)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (noised_semantic_c1 : ProverRwFull.aspis_statement.state_only_trace.StateOnlyTraceFoundation)
+  (mask_only : Aeneas.Std.Array (Aeneas.Std.alloc.vec.Vec ProverRwFull.aspis_core.field.M31) 10#usize)
+  (d g h1_padding : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 1024#usize) (commitments : T1) (hash : H)
+  (variant : ProverRwFull.transport.Variant) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_068.produce aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1
+      mask_only d g h1_padding commitments hash variant)
+PV_L1E_CallbackSafety.safe_PV_L1D_Source_069 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {T0 : Type}
+  (aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst :
+    ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0)
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (context : ProverRwFull.aspis_core.state_only_hiding.StateOnlyHidingContext)
+  (binding : Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets) (nonce_store : T0) :
+  PV_L1D_CallbackSafe.Safe
+    (PV_L1D_Source_069.produce aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash
+      context binding attempt nonce_store)
+PV_L1E_CallbackSafety.safe_PV_L1E_Source_070 [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
+  (nonce_store : ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) :
+  PV_L1D_CallbackSafe.Safe (PV_L1E_Source_070.produce public1 compiled variant hash attempt nonce_store)
+PV_L1E_CountSkeleton.count_trace {I A : Type} (actualCount : I → List ℕ × List ℕ) (native : I → PV_RJ4IDB.NativeTrace A)
+  (sourceWorld bodyWorld originalWorld : I → PV_RJ4IDB.Trace A)
+  (acquisition : PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition actualCount sourceWorld)
+  (body : PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper sourceWorld bodyWorld)
+  (retry : PV_L1E_CountSkeleton.PV_L1E_Link_RetryJoin bodyWorld originalWorld)
+  (coupling : PV_L1E_CountSkeleton.PV_L1E_Link_NativeOriginal originalWorld native) :
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native
+PV_L1E_EntryOrder.entryRange_length (k n : ℕ) : (PV_L1E_EntryOrder.entryRange k n).length = n
+PV_L1E_EntryOrder.all_outcomes {S P : Type} (a : PV_L1D_RetryFold.Attempt S P)
+  (entries : ∀ (k : ℕ) (s : S), PV_L1D_CallbackSafe.callbacks (a k s).events = [k]) (n k : ℕ) (s : S) :
+  ∃ m ≤ n, PV_L1D_CallbackSafe.callbacks (PV_L1D_RetryFold.run a n k s).events = PV_L1E_EntryOrder.entryRange k m
+PV_L1E_ErasureObstruction.result_erasure_does_not_determine_entries :
+  ∃ x y,
+    PV_L1D_Logged.erase x = PV_L1D_Logged.erase y ∧
+      PV_L1D_CallbackSafe.callbacks x.events ≠ PV_L1D_CallbackSafe.callbacks y.events
+PV_L1E_ErasureObstruction.outer_failure_not_total_owner {S P : Type} (a : PV_L1D_RetryFold.Attempt S P) (s : S) (k : ℕ)
+  (e : Aeneas.Std.Error) (failed : (a k s).result = Aeneas.Std.Result.fail e) :
+  ¬∃ owner, PV_L1E_OwnerJoin.PV_L1E_Link_SourceOwner a owner
+PV_L1E_ErasureObstruction.native_output_does_not_determine_count :
+  ∃ x y, x.terminal = y.terminal ∧ PV_RJ4IDB.nativeCounts x.events ≠ PV_RJ4IDB.nativeCounts y.events
+PV_L1E_OriginalCountSkeleton.original_count_trace {I A S P : Type} (actualCount : I → List ℕ × List ℕ)
+  (native : I → PV_RJ4IDB.NativeTrace A) (sourceWorld bodyWorld : I → PV_RJ4IDB.Trace A)
+  (owner : I → R1Z.SideChannelL1AttemptRecord.Owner S P) (initial : I → S) (fuel index : I → ℕ)
+  (adapt : I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A)
+  (acquisition : PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition actualCount sourceWorld)
+  (body : PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper sourceWorld bodyWorld)
+  (retry : PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry bodyWorld owner initial fuel index adapt)
+  (coupling : PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 native owner initial fuel index adapt) :
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native
+PV_L1E_OriginalSourceCount.same_original_success [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C Key : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash)
+  (owner : R1Z.SideChannelL1AttemptRecord.Owner (C × R1Z.ProverRwRetryModel.Store) R1Z.ProverRwRetryModel.Proof)
+  (s after : C × R1Z.ProverRwRetryModel.Store) (keys : Fin 8 → Key)
+  (p : R1Z.ProverCommitRetry34.Published R1Z.ProverRwRetryModel.Proof)
+  (link : PV_L1E_OwnerJoin.PV_L1E_Link_SourceOwner (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) owner)
+  (success :
+    (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) 8 0 s).result =
+      Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.done p, after)) :
+  p.attempts =
+      (PV_L1D_CallbackSafe.callbacks
+          (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) 8 0 s).events).length ∧
+    ∃ k,
+      ↑k = p.attempts - 1 ∧
+        PV_L1D_SelectedCount.selected keys p.attempts
+              (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length =
+            some (↑k, keys k) ∧
+          ((R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts.length,
+              (List.filter PV_L1D_RejectionCount.retrying
+                  (R1Z.SideChannelL1AttemptRecord.run owner 8 0 s).1.attempts).length,
+              PV_L1D_UploadCounts.uploads p.proof.1.length, 1) =
+            (p.attempts, p.attempts - 1, (p.proof.1.length + 3762) / 3763, 1)
+PV_L1E_OwnerJoin.original_run {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (n k : ℕ) (s : S) :
+  PV_L1D_RetryFold.run (PV_L1E_OwnerJoin.liftOwner owner) n k s =
+    { events := R1Z.SideChannelL1AttemptRecord.events (R1Z.SideChannelL1AttemptRecord.run owner n k s).1,
+      result :=
+        Aeneas.Std.Result.ok
+          ((R1Z.SideChannelL1AttemptRecord.run owner n k s).1.result,
+            (R1Z.SideChannelL1AttemptRecord.run owner n k s).2) }
+PV_L1E_OwnerJoin.original_prefix {S P : Type} (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (n k m : ℕ) (s : S) :
+  List.take m (PV_L1D_RetryFold.run (PV_L1E_OwnerJoin.liftOwner owner) n k s).events =
+    List.take m (R1Z.SideChannelL1AttemptRecord.events (R1Z.SideChannelL1AttemptRecord.run owner n k s).1)
+PV_L1E_OwnerJoin.run_of_link {S P : Type} (a : PV_L1D_RetryFold.Attempt S P)
+  (owner : R1Z.SideChannelL1AttemptRecord.Owner S P) (link : PV_L1E_OwnerJoin.PV_L1E_Link_SourceOwner a owner) (n k : ℕ)
+  (s : S) :
+  PV_L1D_RetryFold.run a n k s =
+    { events := R1Z.SideChannelL1AttemptRecord.events (R1Z.SideChannelL1AttemptRecord.run owner n k s).1,
+      result :=
+        Aeneas.Std.Result.ok
+          ((R1Z.SideChannelL1AttemptRecord.run owner n k s).1.result,
+            (R1Z.SideChannelL1AttemptRecord.run owner n k s).2) }
+PV_L1E_QuerySafety.safe_coe [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {α : Type}
+  (r : Aeneas.Std.Result α) : PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.lift r)
+PV_L1E_QuerySafety.safe_PV_L1D_QueryAbsorb [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {H : Type}
+  (aspis_coredigestDigest32Inst : ProverRwFull.aspis_core.digest.Digest32 H)
+  (self : ProverRwFull.host_transcript.Transcript H) (row : Aeneas.Std.U8) (payload : Aeneas.Std.Slice Aeneas.Std.U8) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_QueryAbsorb.produce aspis_coredigestDigest32Inst self row payload)
+PV_L1E_RetrySource.attempt_erasure [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store) :
+  PV_L1D_Logged.erase (PV_L1E_RetrySource.attempt entropy pub compiled variant hash k s) =
+    R1Z.ProverRwRetryModel.attempt entropy pub compiled variant hash k s
+PV_L1E_RetrySource.run_erasure [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (n k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store) :
+  PV_L1D_Logged.erase (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) n k s) =
+    R1Z.ProverCommitRetry34.run (R1Z.ProverRwRetryModel.attempt entropy pub compiled variant hash) n k s
+PV_L1E_RetrySource.complete_source [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (store : R1Z.ProverRwRetryModel.Store) (callback : C) (k : Aeneas.Std.Usize)
+  (n : ℕ) (bound : ↑k + n = 8) :
+  R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.sourceOutput
+      (ProverRwFull.prover.retry_attempt entropy pub compiled variant hash store callback k) =
+    R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.drop
+      (PV_L1D_Logged.erase
+        (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) n ↑k (callback, store)))
+PV_L1E_RetrySource.client_no_final_rejected [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C E : Type}
+  (generate :
+    C → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Secret E × C))
+  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+  (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash) (n k : ℕ)
+  (s : C × R1Z.ProverRwRetryModel.Store) :
+  PV_DIAG2.RejectFree
+    (PV_L1D_Logged.erase
+      (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt (PV_DIAG2.clientEntropy generate) pub compiled variant hash) n k
+        s))
+PV_L1E_SafeObserve.query {A : Type} (k : ℕ) (r : Aeneas.Std.Result A) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.observe R1Z.SideChannelL1AttemptRecord.Call.queryScan k r)
+PV_L1E_SafeObserve.phase {A : Type} (site : R1Z.SideChannelL1AttemptRecord.Call) (k : ℕ) (r : Aeneas.Std.Result A)
+  (notCallback : site ≠ R1Z.SideChannelL1AttemptRecord.Call.callback) :
+  PV_L1D_CallbackSafe.Safe (PV_L1D_Logged.observe site k r)
+PV_L1E_SourceEntries.callback_bind [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {X Y : Type} (k : ℕ)
+  (r : Aeneas.Std.Result X) (f : X → PV_L1D_Logged.Logged Y) (safe : ∀ (x : X), PV_L1D_CallbackSafe.Safe (f x)) :
+  PV_L1D_CallbackSafe.callbacks (PV_L1D_Logged.observe R1Z.SideChannelL1AttemptRecord.Call.callback k r >>= f).events =
+    [k]
+PV_L1E_SourceEntries.attempt_entries [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store) :
+  PV_L1D_CallbackSafe.callbacks (PV_L1E_RetrySource.attempt entropy pub compiled variant hash k s).events = [k]
+PV_L1E_SourceEntries.successful_callbacks [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (n k : ℕ) (s after : C × R1Z.ProverRwRetryModel.Store)
+  (p : R1Z.ProverCommitRetry34.Published R1Z.ProverRwRetryModel.Proof)
+  (success :
+    (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) n k s).result =
+      Aeneas.Std.Result.ok (R1Z.ProverCommitRetry34.Step.done p, after)) :
+  p.attempts =
+    k +
+      (PV_L1D_CallbackSafe.callbacks
+          (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) n k s).events).length
+PV_L1E_SourceEntries.all_outcomes [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash) (n k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store) :
+  ∃ m ≤ n,
+    PV_L1D_CallbackSafe.callbacks
+        (PV_L1D_RetryFold.run (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) n k s).events =
+      PV_L1E_EntryOrder.entryRange k m
+PV_L1E_SourceOwnerLinks.source_owner [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C : Type}
+  (entropy : R1Z.ProverRwRetryModel.Entropy C) (pub : R1Z.ProverRwRetryModel.Pub)
+  (compiled : R1Z.ProverRwRetryModel.Compiled) (variant : ProverRwFull.transport.Variant)
+  (hash : R1Z.ProverRwRetryModel.Hash)
+  (owner : R1Z.SideChannelL1AttemptRecord.Owner (C × R1Z.ProverRwRetryModel.Store) R1Z.ProverRwRetryModel.Proof)
+  (control : PV_L1E_SourceOwnerLinks.PV_L1E_Link_OwnerControl entropy pub compiled variant hash owner)
+  (events : PV_L1E_SourceOwnerLinks.PV_L1E_Link_OwnerEvents entropy pub compiled variant hash owner) :
+  PV_L1E_OwnerJoin.PV_L1E_Link_SourceOwner (PV_L1E_RetrySource.attempt entropy pub compiled variant hash) owner
+PV_L1E_Source_070.complete_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (public1 : ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
+  (compiled : ProverRwFull.aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+  (variant : ProverRwFull.transport.Variant)
+  (hash :
+    Aeneas.Std.Slice (Aeneas.Std.Slice Aeneas.Std.U8) → Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U8 32#usize))
+  (attempt : ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets)
+  (nonce_store : ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) :
+  PV_L1D_Logged.erase (PV_L1E_Source_070.produce public1 compiled variant hash attempt nonce_store) =
+    ProverRwFull.prover.prove_masked_attempt public1 compiled variant hash attempt nonce_store
+def PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition : {I A : Type} →
+  (I → List ℕ × List ℕ) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} actualCount sourceWorld =>
+  ∀ (i : I), actualCount i = (PV_RJ4IDB.counts (sourceWorld i).events, PV_RJ4IDB.rejections (sourceWorld i).events)
+def PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} sourceWorld bodyWorld => ∀ (i : I), sourceWorld i = bodyWorld i
+def PV_L1E_CountSkeleton.PV_L1E_Link_RetryJoin : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} bodyWorld originalWorld => ∀ (i : I), bodyWorld i = originalWorld i
+def PV_L1E_CountSkeleton.PV_L1E_Link_NativeOriginal : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.NativeTrace A) → Prop :=
+fun {I A} originalWorld native => ∀ (i : I), originalWorld i = PV_RJ4IDB.modelTrace (native i)
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry : {I A S P : Type} →
+  (I → PV_RJ4IDB.Trace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} bodyWorld owner initial fuel index adapt =>
+  ∀ (i : I), bodyWorld i = adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i))
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 : {I A S P : Type} →
+  (I → PV_RJ4IDB.NativeTrace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} native owner initial fuel index adapt =>
+  ∀ (i : I),
+    adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i)) =
+      PV_RJ4IDB.modelTrace (native i)
+def PV_L1E_OwnerJoin.PV_L1E_Link_SourceOwner : {S P : Type} →
+  PV_L1D_RetryFold.Attempt S P → R1Z.SideChannelL1AttemptRecord.Owner S P → Prop :=
+fun {S P} a owner => ∀ (k : ℕ) (s : S), a k s = PV_L1E_OwnerJoin.liftOwner owner k s
+def PV_L1E_SourceOwnerLinks.PV_L1E_Link_OwnerControl : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    {C : Type} →
+      R1Z.ProverRwRetryModel.Entropy C →
+        R1Z.ProverRwRetryModel.Pub →
+          R1Z.ProverRwRetryModel.Compiled →
+            ProverRwFull.transport.Variant →
+              R1Z.ProverRwRetryModel.Hash →
+                R1Z.SideChannelL1AttemptRecord.Owner (C × R1Z.ProverRwRetryModel.Store) R1Z.ProverRwRetryModel.Proof →
+                  Prop :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C} entropy pub compiled variant hash owner =>
+  ∀ (k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store),
+    R1Z.ProverRwRetryModel.attempt entropy pub compiled variant hash k s =
+      R1Z.SideChannelL1AttemptRecord.eraseOwner owner k s
+def PV_L1E_SourceOwnerLinks.PV_L1E_Link_OwnerEvents : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    {C : Type} →
+      R1Z.ProverRwRetryModel.Entropy C →
+        R1Z.ProverRwRetryModel.Pub →
+          R1Z.ProverRwRetryModel.Compiled →
+            ProverRwFull.transport.Variant →
+              R1Z.ProverRwRetryModel.Hash →
+                R1Z.SideChannelL1AttemptRecord.Owner (C × R1Z.ProverRwRetryModel.Store) R1Z.ProverRwRetryModel.Proof →
+                  Prop :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C} entropy pub compiled variant hash owner =>
+  ∀ (k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store),
+    (PV_L1E_RetrySource.attempt entropy pub compiled variant hash k s).events = (owner k s).1.events
+PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE {I A : Type} (actual : I → List ℕ × List ℕ) (native : I → PV_RJ4IDB.NativeTrace A) :
+  Prop
+PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_TIME_TRACE {I A : Type} (actual : I → List PV_RJ4IDB.Bytes)
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
