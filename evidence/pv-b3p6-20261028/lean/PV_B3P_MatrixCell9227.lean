@@ -18,10 +18,10 @@ def matrix_cell (sums : Matrix3x3) (component channel : Usize)
 
 def matrix_put (sums : Matrix3x3) (component channel : Usize)
     (hc : component.val<3) (hk : channel.val<3) (left right : U32) : Matrix3x3 :=
-  let row := sums.val[component.val]'(by simpa only [sums.property] using hc)
-  let old := row.val[channel.val]'(by simpa only [row.property] using hk)
+  let row := sums.val[component.val]'(by rw [sums.property]; change component.val<3; exact hc)
+  let old := row.val[channel.val]'(by rw [row.property]; change channel.val<3; exact hk)
   let product := U64.wrapping_mul (UScalar.cast .U64 left) (UScalar.cast .U64 right)
-  Array.set sums component (Array.set row channel (U64.wrapping_add old product))
+  Aeneas.Std.Array.set sums component (Aeneas.Std.Array.set row channel (U64.wrapping_add old product))
 
 attribute [local irreducible] U64.wrapping_mul U64.wrapping_add
 
@@ -30,7 +30,7 @@ theorem matrix_cell_result (sums : Matrix3x3) (component channel : Usize)
     matrix_cell sums component channel left right =
       .ok (matrix_put sums component channel hc hk left right) := by
   have hc' : component.val<(3#usize).val := hc
-  let row := sums.val[component.val]'(by simpa only [sums.property] using hc)
+  let row := sums.val[component.val]'(by rw [sums.property]; change component.val<3; exact hc)
   have hk' : channel.val<(3#usize).val := hk
   unfold matrix_cell
   simp only [lift,bind_tc_ok]
@@ -41,6 +41,7 @@ theorem matrix_cell_result (sums : Matrix3x3) (component channel : Usize)
   rw [PV_B3P_ArrayWrite227.borrow sums component hc']
   simp only [bind_tc_ok]
   rw [PV_B3P_ArrayWrite227.update _ channel hk']
+  simp only [bind_tc_ok]
   rfl
 
 #print axioms matrix_cell_result
