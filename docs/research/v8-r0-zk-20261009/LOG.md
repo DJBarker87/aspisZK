@@ -11599,17 +11599,3 @@ undecidable hunks stop), port devnet_spend onto the proof-account route with cal
 pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
 proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
 outright: 0. Privacy target not yet established.
-
-## D432 (Stream B) 2026-10-29 01:15 UTC: b3p6i results (V244 nonvacuity proved); b3p6j launched
-
-b3p6i (branch codex/pv-b3p6-20261028, head 28b8dd3411, pushed) used all 100 Lean attempts (62300-62399; 90 passed, 10 rejected), with no native scopes, no Kani and no limit raised. All three reserved audits passed, covering 117 new theorems with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or limit options outside unimported Aeneas templates; no large files.
-
-With the D411 proof-shape direction, residual (a) of V244 is proved at the emitted-reference and original-carrier level. Full composition_parts success, and .ok (.Ok value) witnesses for both the reference and the installed callback, now pass, which settles the formal nonvacuity that D405 had listed as missing. Two Horner body and loop read bindings also pass. The item (e) formatting result was reused unchanged. Rust interpretation remains reclassification within Charon and Aeneas tool trust.
-
-V244 remains SUSPENDED on three residuals: (b) the exhaustive structural binding, (c) the remaining D188 checks and the direct matrix comparison, and (d) slice and standard-library coverage. Runjoin's op227 hypothesis is not discharged. b3p6j launched (IDs 63100-63199; 100 Lean, 40 native, 0 Kani) on (b) to (d), with ruling own-1 defining the structural binding target for standard-library bodies. When op227 is discharged, it must report the exact theorem runjoin's bridge consumes and check it byte for byte against the bridge's hypothesis. Rows removed: 0. Privacy target not yet established.
-
-## D441 (Stream B) 2026-10-29 02:25 UTC: b3p6j results; b3p6k launched
-
-b3p6j (branch codex/pv-b3p6-20261028, head e5d3eda1b4, pushed) used all 100 Lean attempts (86 passed, 14 rejected), with no native scopes and no Kani. Its three reserved audits passed before an interruption and were recovered without rerunning. Verification covered 100 source snapshots against committed blobs and 121 theorem axiom reports, with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules.
-
-V244 residual (b) advanced: ordered loops, emitted reads, the public-digest continuation and nine matrix stores are accepted. The exhaustive per-body binding is incomplete, and the value-body entry factorization hit the default recursion depth; its rejected proofs are excluded. Residuals (c) and (d) are pending. Runjoin's op227 hypothesis (R1Z.PV_RunJoin_OracleBridge38.selected_callback) is not discharged. b3p6k launched (IDs 64000-64099; 100 Lean, 40 native, 0 Kani), with the D411 direction applied to the value-body factorization, then (b), (c) and (d). Rows removed: 0. Privacy target not yet established.
