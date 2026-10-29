@@ -129,6 +129,7 @@ theorem complete_result
   unfold produce
   conv_rhs => unfold prover.prepare_opening
   simp only [PV_L1D_EraseControl.control,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
-  rfl
+  trace_state
+  done
 #print axioms complete_result
 end PV_L1D_Source_027
