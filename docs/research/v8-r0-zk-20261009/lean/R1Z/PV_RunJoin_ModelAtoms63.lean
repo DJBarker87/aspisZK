@@ -12,10 +12,10 @@ open AspisR1.ExtractedCurrentQM31Exact (decode)
 def zero : Old.Q := ⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
 def one : Old.Q := ⟨⟨1#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
 theorem zero_canonical : Canonical zero := by
-  change 0 < 2147483647 ∧ 0 < 2147483647 ∧ 0 < 2147483647 ∧ 0 < 2147483647
+  change (0 < 2147483647 ∧ 0 < 2147483647) ∧ (0 < 2147483647 ∧ 0 < 2147483647)
   decide
 theorem one_canonical : Canonical one := by
-  change 1 < 2147483647 ∧ 0 < 2147483647 ∧ 0 < 2147483647 ∧ 0 < 2147483647
+  change (1 < 2147483647 ∧ 0 < 2147483647) ∧ (0 < 2147483647 ∧ 0 < 2147483647)
   decide
 theorem zero_decode : decode zero=0 := rfl
 theorem one_decode : decode one=1 := rfl
