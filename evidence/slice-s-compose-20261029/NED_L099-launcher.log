@@ -1,0 +1,49 @@
+{"attempt": "NED_L099", "exit_status": 1, "wall_seconds": 5.879211125895381, "peak_rss_kib": "5388976", "swaps": "0", "print_axioms": ["'NED_AfterEncodingCohort.bind_same' depends on axioms: [Quot.sound]", "'NED_AfterEncodingCohort.mapOuter_bind_pair' does not depend on any axioms", "'NED_AfterEncodingCohort.mapOuter_split' does not depend on any axioms", "'NED_AfterEncodingCohort.mapOuter_ok' does not depend on any axioms", "'NED_AfterEncodingCohort.mapOuter_bind' does not depend on any axioms", "'NED_AfterEncodingCohort.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NED_generated/NED_AfterEncodingCohort.lean:64:50: error: unexpected identifier; expected ')'
+NED_generated/NED_AfterEncodingCohort.lean:49:9: error: unsolved goals
+case Ok.unit.mk
+s : TAfter
+valid : NBH_Validators.afterResult s = core.result.Result.Ok PUnit.unit
+fst✝ : Slice U8
+snd✝ : Slice U8 → Std.Array U8 688#usize
+⊢ (let (s, index_mut_back) := (fst✝, snd✝)
+    do
+    let s1 ←
+      lift
+          (Array.make 4#usize [65#u8, 83#u8, 74#u8, 65#u8]
+              AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_terminal.POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC._proof_2).to_slice
+    let s2 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1
+    let output2 ← (index_mut_back s2).upd
+...
+ut5 ← output4.update 7#usize 1#u8
+      let (s3, index_mut_back1) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            output5 { start := 8#usize, «end» := 16#usize }
+      let a ← lift (core.num.U64.to_le_bytes s.next_pair_index)
+      let s4 ← lift a.to_slice
+      let s5 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s3 s4
+      let (s6, index_mut_back2) ←
+        core.array.Array.index_mut (core.ops.index.IndexMutSlice (core.slice.index.SliceIndexRangeUsizeSlice U8))
+            (index_mut_back1 s5) { start := 16#usize, «end» := 48#usize }
+      let a1 ← AspisR1TerminalDecoder.atomic_statement.encode_digest_canonical s.next_root
+      let s7 ← lift a1.to_slice
+      let s8 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s6 s7
+      let s9 ← lift s.next_frontier.to_slice
+      let i ← core.slice.Slice.iter s9
+      let iter ←
+        core.iter.traits.iterator.Iterator.enumerate.trait_default
+            (core.iter.traits.iterator.IteratorSliceIter
+              (Std.Array AspisR1TerminalDecoder.aspis_core.field.M31 8#usize))
+            i
+      let output8 ←
+        AspisR1TerminalDecoder.pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1_loop iter
+            (index_mut_back2 s8)
+      ok (core.result.Result.Ok output8))
+'NED_AfterEncodingCohort.bind_same' depends on axioms: [Quot.sound]
+'NED_AfterEncodingCohort.mapOuter_bind_pair' does not depend on any axioms
+'NED_AfterEncodingCohort.mapOuter_split' does not depend on any axioms
+'NED_AfterEncodingCohort.mapOuter_ok' does not depend on any axioms
+'NED_AfterEncodingCohort.mapOuter_bind' does not depend on any axioms
+'NED_AfterEncodingCohort.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r66db33494e2f4060a0468ff1a4950cab.scope; invocation ID: f53dded6f6454866ade22c8bd68d1d17

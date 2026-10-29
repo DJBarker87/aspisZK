@@ -1,0 +1,25 @@
+NED_generated/NED_RawAfterValidator.lean:23:72: error: Tactic `unfold` failed to unfold `aspis_statement.pool_v1.format.POOL_V1_TREE_DEPTH` in
+  (if a.next_pair_index = 0#u64 then
+      ok
+        (core.result.Result.Err
+          aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)
+    else do
+      let i ← 1#u64 <<< 20#usize
+      if a.next_pair_index > i then
+          ok
+            (core.result.Result.Err
+              aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.InvalidAfterstateIndex)
+        else do
+          let b ← ok (decide (Canonical a.next_root))
+          if b = true then
+              ok
+                (if CanonicalFrom a.next_frontier 0 then core.result.Result.Ok ()
+                else
+                  core.result.Result.Err
+                    aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate)
+            else
+              ok
+                (core.result.Result.Err
+                  aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1.NonCanonicalAfterstate)) ⦃
+    r => r = afterResult a ⦄
+'NED_RawAfterValidator.afterstate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

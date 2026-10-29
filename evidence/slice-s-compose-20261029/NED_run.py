@@ -75,7 +75,9 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
 rc=json.loads(out[a+'/receipt.json']);
-with (E/'NED_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
+entry['full_receipt']=dict(path=str(E/a/'receipt.json'),sha256=hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest())
+with (E/'NED_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
 active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-2000:] if rc['exit_status'] else '')
 
 sys.exit(rc["exit_status"])

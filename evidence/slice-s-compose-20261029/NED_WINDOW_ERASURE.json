@@ -1,0 +1,33 @@
+{
+ "erasure_exact": true,
+ "source": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+ "original_sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+ "patch_sha256": "57d6f8a03ea0c29a7f3159820b8ad6d656c81013042ea12c12ca7cf4e3851f97",
+ "removed_cfg_lines": [
+  "            #[cfg(kani)]\n",
+  "            if NED_windows::payment(6, public as *const _ as *const (), true) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "            #[cfg(kani)]\n",
+  "            if NED_windows::payment(6, public as *const _ as *const (), false) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "    #[cfg(kani)]\n",
+  "    if NED_windows::lane(&nullifier) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "    #[cfg(kani)]\n",
+  "    if NED_windows::late(5, &common.lane_transition, &late_bytes) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "    #[cfg(kani)]\n",
+  "    if NED_windows::root(statement) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "    #[cfg(kani)]\n",
+  "    NED_windows::base(output.as_ptr());\n",
+  "    #[cfg(kani)]\n",
+  "    if NED_windows::digest(&common.historical_global_anchor) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "    #[cfg(kani)]\n",
+  "    if NED_windows::late(2, &common.lane_transition, &output[LATE_STATEMENT_OFFSET..PAYMENT_STATEMENT_OFFSET]) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "            #[cfg(kani)]\n",
+  "            if NED_windows::payment(3, public as *const _ as *const (), true) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "            #[cfg(kani)]\n",
+  "            if NED_windows::payment(3, public as *const _ as *const (), false) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }\n",
+  "#[cfg(kani)]\n",
+  "#[path=\"NED_windows.rs\"]\n",
+  "mod NED_windows;\n"
+ ],
+ "check_repair": "Preserve frozen pre-existing asq8_kani cfg module; remove only NED hooks. Earlier checker stopped on that original module, not an erasure difference.",
+ "launch_correction": "The local checker and K010 command were accidentally in one shell without fail-fast; K010 started after checker failure. The fixed checker confirmed exact erasure while K010 was running. No verdict was accepted until this confirmation; subsequent launches require its patch hash."
+}

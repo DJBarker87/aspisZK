@@ -105,3 +105,20 @@ NED_EDGES now classifies every edge and retains the complete conservative
 union. Genuine M31 serialization is distinguished from primitive integer
 receivers and incompatible WideExact alternatives. No alternative has yet
 been pruned and no native status is inferred from a model certificate.
+
+Stage 5 checkpoint (not final closure): L082/L085/L086 prove raw frontier
+induction and total raw validators; L083/L087 prove both carrier directions;
+L088 maps all validator Results to the adopted cohort; L089 associates each
+encoder loop body on arbitrary pre-state and lifts by handler equality.
+L098 proves arbitrary-position extensionality and KMX prefix/disjointness
+composition. All successful audits use standard axioms only.
+Native encoder windows K010–K017 have four passing positives (both variants
+covered) and four matched inverted assertion failures, with the identical
+KMX patch, graph, features and source patch. Earlier opaque replies are
+overapproximated for domain-only reachability, NOT verified substitutions.
+They do not assert a full native root Result or ordered effects.
+Native validator windows are next. No actual NDT composed row is CLOSED.
+NED_AfterEncodingCohort is WIP: the full total result transport requires a
+symbolic continuation proof; L090–096 recursion-depth elaboration failures
+and diagnostic goals are excluded. L099 exposed a tactic syntax error after
+the first symbolic bind split. No timeout/memory-killed job was rerun.

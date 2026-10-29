@@ -1,0 +1,333 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -253,10 +253,14 @@
+     }
+     match statement {
+         PoolV1PairForestTerminalStatementV1::PrivateTransfer { public, .. } => {
++            #[cfg(kani)]
++            if NED_windows::payment(6, public as *const _ as *const (), true) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+             encode_pool_v1_private_transfer_public_v1(public)
+                 .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Payment(error))?;
+         }
+         PoolV1PairForestTerminalStatementV1::Withdrawal { public, .. } => {
++            #[cfg(kani)]
++            if NED_windows::payment(6, public as *const _ as *const (), false) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+             encode_pool_v1_withdrawal_public_v1(public)
+                 .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Payment(error))?;
+         }
+@@ -278,12 +282,16 @@
+     if anchor != common.historical_global_anchor {
+         return Err(PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch);
+     }
++    #[cfg(kani)]
++    if NED_windows::lane(&nullifier) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     let expected_lane = pool_v1_pair_forest_output_lane_v1(&nullifier)
+         .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;
+     if expected_lane != common.output_lane {
+         return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);
+     }
+     let mut late_bytes = [0u8; POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES];
++    #[cfg(kani)]
++    if NED_windows::late(5, &common.lane_transition, &late_bytes) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     encode_pool_v1_pair_late_public_statement_v1(&common.lane_transition, &mut late_bytes)
+         .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::LaneTransition(error))?;
+     Ok(())
+@@ -293,9 +301,13 @@
+     statement: &PoolV1PairForestTerminalStatementV1,
+ ) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES], PoolV1PairForestTerminalFormatErrorV1>
+ {
++    #[cfg(kani)]
++    if NED_windows::root(statement) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     validate_pool_v1_pair_forest_terminal_statement_v1(statement)?;
+     let common = statement.common();
+     let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES];
++    #[cfg(kani)]
++    NED_windows::base(output.as_ptr());
+     output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC);
+     output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;
+     output[5] = statement.transition_kind() as u8;
+@@ -308,8 +320,12 @@
+         .copy_from_slice(&common.selected_lane_account);
+     output[CHECKPOINT_SEQUENCE_OFFSET..HISTORICAL_ANCHOR_OFFSET]
+         .copy_from_slice(&common.checkpoint_sequence.to_le_bytes());
++    #[cfg(kani)]
++    if NED_windows::digest(&common.historical_global_anchor) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     output[HISTORICAL_ANCHOR_OFFSET..LATE_STATEMENT_OFFSET]
+         .copy_from_slice(&encode_digest_canonical(&common.historical_global_anchor));
++    #[cfg(kani)]
++    if NED_windows::late(2, &common.lane_transition, &output[LATE_STATEMENT_OFFSET..PAYMENT_STATEMENT_OFFSET]) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     encode_pool_v1_pair_late_public_statement_v1(
+         &common.lane_transition,
+         &mut output[LATE_STATEMENT_OFFSET..PAYMENT_STATEMENT_OFFSET],
+@@ -317,9 +333,13 @@
+     .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::LaneTransition(error))?;
+     let payment = match statement {
+         PoolV1PairForestTerminalStatementV1::PrivateTransfer { public, .. } => {
++            #[cfg(kani)]
++            if NED_windows::payment(3, public as *const _ as *const (), true) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+             encode_pool_v1_private_transfer_public_v1(public)
+         }
+         PoolV1PairForestTerminalStatementV1::Withdrawal { public, .. } => {
++            #[cfg(kani)]
++            if NED_windows::payment(3, public as *const _ as *const (), false) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+             encode_pool_v1_withdrawal_public_v1(public)
+         }
+     }
+@@ -1563,3 +1583,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NED_windows.rs"]
++mod NED_windows;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NED_windows.rs
+@@ -0,0 +1,247 @@
++// Domain-only prefix windows over actual frozen caller bodies. Replies of earlier
++// opaque callees are overapproximated; no result-value or whole-root credit.
++#![allow(non_snake_case,unused_variables)]
++use super::*;
++fn NED_digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn NED_frontier()->[Digest;20] {[NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest(),NED_digest()]}
++fn NED_common()->PoolV1PairForestTerminalCommonV1 {PoolV1PairForestTerminalCommonV1{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:NED_digest(),lane_transition:PoolV1PairLatePublicStatementV1{live_snapshot:super::super::PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:NED_digest(),frontier:NED_frontier()},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:NED_digest(),next_frontier:NED_frontier()}}}}
++fn NED_statement()->PoolV1PairForestTerminalStatementV1 {
++ if kani::any::<bool>() {PoolV1PairForestTerminalStatementV1::PrivateTransfer{common:NED_common(),public:PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NED_digest(),nullifier:NED_digest(),asset_id:M31(kani::any()),change_commitment:NED_digest(),recipient_commitment:NED_digest()}}}
++ else {PoolV1PairForestTerminalStatementV1::Withdrawal{common:NED_common(),public:PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NED_digest(),nullifier:NED_digest(),asset_id:M31(kani::any()),change_commitment:NED_digest(),amount:kani::any(),destination_token_account:kani::any()}}}
++}
++
++static mut ROOT:*const PoolV1PairForestTerminalStatementV1=core::ptr::null();
++static mut TARGET:u8=0;
++static mut NEG:bool=false;
++static mut PROBE:usize=0;
++static mut SEEN:bool=false;
++static mut BASE:*const u8=core::ptr::null();
++fn selected(t:u8)->bool {unsafe {TARGET==t}}
++fn check(b:bool){unsafe {assert!(b!=NEG,"NED actual-call argument/domain");SEEN=true;}}
++pub(super) fn base(p:*const u8){unsafe {BASE=p;}}
++pub(super) fn root(s:&PoolV1PairForestTerminalStatementV1)->bool {
++ if !selected(0){return false} check(core::ptr::eq(s,unsafe {&*ROOT}));true
++}
++pub(super) fn payment(t:u8,p:*const (),transfer:bool)->bool {
++ if !selected(t){return false}
++ let expected=unsafe {match &*ROOT {
++ PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>{assert!(transfer);public as *const _ as *const ()},
++ PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>{assert!(!transfer);public as *const _ as *const ()},
++ }};check(p==expected);true
++}
++pub(super) fn digest(d:&Digest)->bool {
++ if !selected(1){return false} check(core::ptr::eq(d,unsafe {&(*ROOT).common().historical_global_anchor}));true
++}
++pub(super) fn lane(d:&Digest)->bool {
++ if !selected(4){return false} let j=unsafe {PROBE};kani::assume(j<8);
++ let expected=unsafe {match &*ROOT {PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>public.nullifier[j].0,
++ PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>public.nullifier[j].0}};
++ check(d[j].0==expected);true
++}
++pub(super) fn late(t:u8,l:&PoolV1PairLatePublicStatementV1,out:&[u8])->bool {
++ if !selected(t){return false} let j=unsafe {PROBE};kani::assume(j<1520);
++ check(core::ptr::eq(l,unsafe {&(*ROOT).common().lane_transition}) && out.len()==1520 && out[j]==0);
++ if t==2 {assert!(out.as_ptr()==unsafe {BASE.add(144)});}
++ true
++}
++fn payment_t(_: &PoolV1PrivateTransferPublicV1)->Result<[u8;216],PoolV1PaymentStatementFormatError>{if kani::any(){Ok([0;216])}else{Err(PoolV1PaymentStatementFormatError::WrongLength)}}
++fn payment_w(_: &PoolV1WithdrawalPublicV1)->Result<[u8;216],PoolV1PaymentStatementFormatError>{if kani::any(){Ok([0;216])}else{Err(PoolV1PaymentStatementFormatError::WrongLength)}}
++fn validation(_: &PoolV1PairForestTerminalStatementV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{if kani::any(){Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)}}
++fn late_reply(_: &PoolV1PairLatePublicStatementV1,_:&mut[u8])->Result<(),PoolV1PairLatePublicStatementErrorV1>{if kani::any(){Ok(())}else{Err(PoolV1PairLatePublicStatementErrorV1::WrongLength)}}
++fn lane_reply(_: &Digest)->Result<u8,PoolV1PairForestAccountErrorV1>{if kani::any(){Ok(kani::any())}else{Err(PoolV1PairForestAccountErrorV1::WrongLength)}}
++fn digest_reply(_: &Digest)->[u8;32]{kani::any()}
++fn run(t:u8,negative:bool){let s=NED_statement();unsafe {ROOT=&s;TARGET=t;NEG=negative;PROBE=kani::any();SEEN=false;}
++ if t<=3 {let _=encode_pool_v1_pair_forest_terminal_statement_v1(&s);}else{let _=validate_pool_v1_pair_forest_terminal_statement_v1(&s);}
++ kani::cover!(unsafe {SEEN} && matches!(s,PoolV1PairForestTerminalStatementV1::PrivateTransfer{..}),"NED transfer call reached");
++ kani::cover!(unsafe {SEEN} && matches!(s,PoolV1PairForestTerminalStatementV1::Withdrawal{..}),"NED withdrawal call reached");
++}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_0_positive(){run(0,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_0_negative(){run(0,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_1_positive(){run(1,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_1_negative(){run(1,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_2_positive(){run(2,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_2_negative(){run(2,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_3_positive(){run(3,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(validate_pool_v1_pair_forest_terminal_statement_v1,validation)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_3_negative(){run(3,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_4_positive(){run(4,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_4_negative(){run(4,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_5_positive(){run(5,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_5_negative(){run(5,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_6_positive(){run(6,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(encode_pool_v1_private_transfer_public_v1,payment_t)]
++#[kani::stub(encode_pool_v1_withdrawal_public_v1,payment_w)]
++#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late_reply)]
++#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane_reply)]
++#[kani::stub(encode_digest_canonical,digest_reply)]
++fn window_6_negative(){run(6,true);}
