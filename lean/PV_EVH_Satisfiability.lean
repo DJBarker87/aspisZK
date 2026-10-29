@@ -125,7 +125,7 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
   · intro e adv w s _; rfl
   · intro adv w _ value; rfl
   · intro value; rfl
-  · intro e v log suffix
+  · intro e v history suffix
     exact List.IsPrefix.refl _
   · intro adv i; rfl
   · intro i claims; rfl

@@ -2,6 +2,7 @@ import PV_EVH_Satisfiability
 /-! adopted by owner decision D502/D478. One combined statements and axioms
 audit of the adopted focused closure; excludes the lead-only 16 GiB consumer. -/
 set_option autoImplicit false
+set_option pp.proofs false
 #print R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events
 #print R1Z.PrivacyR1HeadlineDeployedEvents.Links
 #print PV_EVH_Satisfiability.simultaneously_satisfiable
