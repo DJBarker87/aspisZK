@@ -21,8 +21,8 @@ theorem encode (logical : Slice U8) (out : alloc.vec.Vec U8)
         simpa only [bne_iff_ne,ne_eq,not_not] using good
       exact congrArg UScalar.val h
     apply PV_RunJoin_PostBind62.bind _ _ _ _ (PV_RunJoin_SliceBound62.rangeTo logical 32#usize)
-    intro prefix prefixBound
-    apply PV_RunJoin_PostBind62.bind _ _ _ _ (PV_RunJoin_SliceBound62.append out prefix)
+    intro headBytes headBound
+    apply PV_RunJoin_PostBind62.bind _ _ _ _ (PV_RunJoin_SliceBound62.append out headBytes)
     intro mid midLength
     have rank : (0#u8).val+27=compact.SEMANTIC_ROWS.val := by
       unfold compact.SEMANTIC_ROWS
