@@ -56,6 +56,7 @@ for i,ch in enumerate(chunks):
   ls=ch.splitlines();start=next(j for j,l in enumerate(ls)if not l.startswith('  let ') and (j==0 or ls[j-1].startswith('  let ') or ls[j-1].startswith('    '))) if False else 0
   # Removing let leaves multiline RHS indented4. Lean accepts this after preceding do statements.
  if i:ch=re.sub(r'\b'+inp+r'\b','output',ch)
+ ch=re.sub(r'\bok\b','Result.ok',ch)
  definition=f'def {name} {params}'+(' (output : Digest8Q)'if i else '')+' : Result Digest8Q := do\n'+ch+'\n'
  # Stage-level successes use existing named callee laws; branch-specific totality below.
  proof=['  unfold '+name]

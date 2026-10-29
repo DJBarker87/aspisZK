@@ -6,7 +6,7 @@ def digest_stage_02 (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) (output : Digest8Q) : Result Digest8Q := do
   match public1.recipient with
-  | none => ok output
+  | none => Result.ok output
   | some recipient =>
     do
     let i4 ← lift (Std.Usize.wrapping_mul 29#usize 16#usize)

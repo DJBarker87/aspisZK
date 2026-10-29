@@ -25,7 +25,7 @@ def digest_stage_24 (public1 : reference_terminal.SemanticPublic)
         carry
     reference_terminal.add_digest_binding digests25 q4 openings.z 0#usize a
       false
-  else ok digests25
+  else Result.ok digests25
 
 attribute [local irreducible] reference_terminal.add_digest_binding reference_copy_terminal.Selectors.row reference_terminal.empty_root reference_terminal.digest227 reference_terminal.bounded_append_carry
 
