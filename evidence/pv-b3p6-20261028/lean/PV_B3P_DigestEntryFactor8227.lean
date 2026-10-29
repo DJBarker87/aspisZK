@@ -22,6 +22,7 @@ theorem digest_head_00_factor (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
     reference_terminal.public_digest_lanes public1 openings selectors = digest_head_00 public1 openings selectors := by
+  unfold reference_terminal.public_digest_lanes digest_head_00 digest_raw_01
   rfl
 
 #print axioms digest_head_00_factor
