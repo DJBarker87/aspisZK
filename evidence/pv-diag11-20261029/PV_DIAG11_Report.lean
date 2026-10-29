@@ -26,4 +26,6 @@ theorem report_debug_abort {V E A : Type} (e : E) (es : List V) (ok : A → Run 
 #print axioms report_debug_abort
 theorem report_debug_diverge {V E A : Type} (e : E) (es : List V) (ok : A → Run V IoError Nat) (d : E → Run V IoError Unit) : report (.error e) ok (fun _ => ⟨es,.diverge⟩) d=⟨es,.diverge⟩ := rfl
 #print axioms report_debug_diverge
+theorem report_error_drop_panics {V E A : Type} (e : E) (es ds : List V) (ok : A → Run V IoError Nat) : report (.error e) ok (fun _ => ⟨es,.ok ()⟩) (fun _ => ⟨ds,.panic⟩)=⟨es++ds,.panic⟩ := by simp only [report,seq,ret,pre,dropReturned,List.append_nil]
+#print axioms report_error_drop_panics
 end PV_DIAG11

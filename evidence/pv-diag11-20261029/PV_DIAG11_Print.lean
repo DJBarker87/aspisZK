@@ -18,7 +18,7 @@ def attemptStderr {V : Type} (capture : Run V IoError Bool) (global : Run V IoEr
  (dropError : IoError → Run V IoError Unit) : Run V IoError Unit :=
  seq capture (fun used => if used then ret () else ignoreIoError global dropError)
 
-theorem print_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok true⟩ g p=⟨es,.ok ()⟩ := by simp only [printTo,seq,pre,ret,List.append_nil]; rfl
+theorem print_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok true⟩ g p=⟨es,.ok ()⟩ := by simp [printTo,seq,pre,ret]
 #print axioms print_capture_returns
 theorem print_fallback {V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok false⟩ g p=pre es (printGlobal g p) := rfl
 #print axioms print_fallback
@@ -26,7 +26,7 @@ theorem print_error_invokes_hook {V : Type} (es : List V) (e : IoError) (p : IoE
 #print axioms print_error_invokes_hook
 theorem stderr_error_dropped {V : Type} (es : List V) (e : IoError) (d : IoError → Run V IoError Unit) : ignoreIoError ⟨es,.error e⟩ d=pre es (d e) := rfl
 #print axioms stderr_error_dropped
-theorem stderr_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g d=⟨es,.ok ()⟩ := by simp only [attemptStderr,seq,pre,ret,List.append_nil]; rfl
+theorem stderr_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g d=⟨es,.ok ()⟩ := by simp [attemptStderr,seq,pre,ret]
 #print axioms stderr_capture_returns
 theorem stderr_fallback {V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok false⟩ g d=pre es (ignoreIoError g d) := rfl
 #print axioms stderr_fallback
@@ -42,4 +42,6 @@ theorem stderr_formatter_abort {V : Type} (es : List V) (d : IoError → Run V I
 #print axioms stderr_formatter_abort
 theorem stderr_formatter_diverge {V : Type} (es : List V) (d : IoError → Run V IoError Unit) : ignoreIoError ⟨es,.diverge⟩ d=⟨es,.diverge⟩ := rfl
 #print axioms stderr_formatter_diverge
+theorem stderr_error_drop_panics {V : Type} (es ws ds : List V) (e : IoError) : attemptStderr (⟨es,.ok false⟩ : Run V IoError Bool) ⟨ws,.error e⟩ (fun _ => ⟨ds,.panic⟩)=⟨es++(ws++ds),.panic⟩ := rfl
+#print axioms stderr_error_drop_panics
 end PV_DIAG11

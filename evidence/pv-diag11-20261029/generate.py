@@ -46,7 +46,7 @@ def mapError {V E F A : Type} (f : E → F) (r : Run V E A) : Run V F A :=
 ('seq_diverge','{V E A B : Type} (xs : List V) (f : A → Run V E B) : seq ⟨xs,.diverge⟩ f=⟨xs,.diverge⟩','rfl'),
 ('seq_ret','{V E A B : Type} (a : A) (f : A → Run V E B) : seq (ret a) f=f a','by exact pre_empty (f a)'),
 ('seq_prefix','{V E A B : Type} (r : Run V E A) (f : A → Run V E B) : ∃ xs, (seq r f).events=r.events++xs','by cases r with | mk es ex => cases ex <;> simp only [seq,pre] <;> first | exact ⟨_,rfl⟩ | exact ⟨[],(List.append_nil _).symm⟩'),
-('seq_assoc','{V E A B C : Type} (r : Run V E A) (f : A → Run V E B) (g : B → Run V E C) : seq (seq r f) g=seq r (fun a => seq (f a) g)','by
+('seq_assoc','{V E A B C : Type} (r : Run V E A) (f : A → Run V E B) (g : B → Run V E C) : seq (seq r f) g=seq r (fun a => seq (f a) g)','''by
  cases r with
  | mk es ex =>
    cases ex with
@@ -57,7 +57,7 @@ def mapError {V E F A : Type} (f : E → F) (r : Run V E A) : Run V F A :=
    | panic => rfl
    | oom => rfl
    | abort => rfl
-   | diverge => rfl'),
+   | diverge => rfl'''),
 ('map_error_prefix','{V E F A : Type} (f : E → F) (r : Run V E A) : (mapError f r).events=r.events','rfl'),
 ])
 module('WriteAll',['PV_DIAG11_Execution'],r'''
@@ -68,7 +68,7 @@ The primitive must implement the Write contract (including count <= length).
 An invalid count exposes a panic rather than saturating the slice operation. -/
 inductive IoError where | interrupted | writeZero | other (code : Nat)
  deriving DecidableEq, Repr
-def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) :
+def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) (dropInterrupted : Run V IoError Unit) :
  Nat → List UInt8 → Run V IoError Unit
  | _,[] => ret ()
  | 0,_::_ => ⟨[],.diverge⟩
@@ -76,20 +76,20 @@ def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) :
    let r := write buf
    match r.exit with
    | .ok 0 => ⟨r.events,.error .writeZero⟩
-   | .ok (n+1) => if n+1 ≤ buf.length then pre r.events (writeAll write fuel (buf.drop (n+1))) else ⟨r.events,.panic⟩
-   | .error .interrupted => pre r.events (writeAll write fuel buf)
+   | .ok (n+1) => if n+1 ≤ buf.length then pre r.events (writeAll write dropInterrupted fuel (buf.drop (n+1))) else ⟨r.events,.panic⟩
+   | .error .interrupted => pre r.events (seq dropInterrupted (fun _ => writeAll write dropInterrupted fuel buf))
    | .error e => ⟨r.events,.error e⟩
    | .panic => ⟨r.events,.panic⟩ | .oom => ⟨r.events,.oom⟩
    | .abort => ⟨r.events,.abort⟩ | .diverge => ⟨r.events,.diverge⟩
 ''',[
-('writeAll_empty','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) : writeAll w fuel []=ret ()','by cases fuel <;> rfl'),
-('writeAll_prefix_cut','{V : Type} (w : List UInt8 → Run V IoError Nat) (b : UInt8) (bs : List UInt8) : writeAll w 0 (b::bs)=⟨[],.diverge⟩','rfl'),
-('writeAll_zero','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok 0⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.error .writeZero⟩','by simp only [writeAll,h]'),
-('writeAll_interrupted','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error .interrupted⟩) : writeAll w (fuel+1) (b::bs)=pre es (writeAll w fuel (b::bs))','by simp only [writeAll,h]'),
-('writeAll_other_error','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel code : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error (.other code)⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.error (.other code)⟩','by simp only [writeAll,h]'),
-('writeAll_oversize','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bad : ¬ n+1 ≤ (b::bs).length) : writeAll w (fuel+1) (b::bs)=⟨es,.panic⟩','by simp only [writeAll,h,if_neg bad]'),
-('writeAll_progress','{V : Type} (w : List UInt8 → Run V IoError Nat) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bound : n+1 ≤ (b::bs).length) : writeAll w (fuel+1) (b::bs)=pre es (writeAll w fuel ((b::bs).drop (n+1)))','by simp only [writeAll,h,if_pos bound]'),
-]+[(f'writeAll_{x}',f'{{V : Type}} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.{x}⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.{x}⟩','by simp only [writeAll,h]') for x in ['panic','oom','abort','diverge']])
+('writeAll_empty','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) : writeAll w d fuel []=ret ()','by cases fuel <;> rfl'),
+('writeAll_prefix_cut','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (b : UInt8) (bs : List UInt8) : writeAll w d 0 (b::bs)=⟨[],.diverge⟩','rfl'),
+('writeAll_zero','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok 0⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.error .writeZero⟩','by simp only [writeAll,h]'),
+('writeAll_interrupted','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error .interrupted⟩) : writeAll w d (fuel+1) (b::bs)=pre es (seq d (fun _ => writeAll w d fuel (b::bs)))','by simp only [writeAll,h]'),
+('writeAll_other_error','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel code : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error (.other code)⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.error (.other code)⟩','by simp only [writeAll,h]'),
+('writeAll_oversize','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bad : ¬ n+1 ≤ (b::bs).length) : writeAll w d (fuel+1) (b::bs)=⟨es,.panic⟩','by simp only [writeAll,h,if_neg bad]'),
+('writeAll_progress','{V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bound : n+1 ≤ (b::bs).length) : writeAll w d (fuel+1) (b::bs)=pre es (writeAll w d fuel ((b::bs).drop (n+1)))','by simp only [writeAll,h,if_pos bound]'),
+]+[(f'writeAll_{x}',f'{{V : Type}} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.{x}⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.{x}⟩','by simp only [writeAll,h]') for x in ['panic','oom','abort','diverge']])
 module('Cleanup',['PV_DIAG11_Execution'],r'''
 /-! Explicit cleanup on ordinary Rust Result return. Abnormal leaf traces
 already include any unwind/abort cleanup; this function never invents it.
@@ -137,11 +137,11 @@ def printTo {V : Type} (capture : Run V IoError Bool) (global : Run V IoError Un
 def attemptStderr {V : Type} (capture : Run V IoError Bool) (global : Run V IoError Unit) : Run V IoError Unit :=
  seq capture (fun used => if used then ret () else ignoreIoError global)
 ''',[
-('print_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) : printTo ⟨es,.ok true⟩ g=⟨es,.ok ()⟩','by simp only [printTo,seq,pre,ret,List.append_nil]; rfl'),
+('print_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) : printTo ⟨es,.ok true⟩ g=⟨es,.ok ()⟩','by simp [printTo,seq,pre,ret]'),
 ('print_fallback','{V : Type} (es : List V) (g : Run V IoError Unit) : printTo ⟨es,.ok false⟩ g=pre es (printGlobal g)','rfl'),
 ('print_global_error_panics','{V : Type} (es : List V) (e : IoError) : printGlobal (⟨es,.error e⟩ : Run V IoError Unit)=⟨es,.panic⟩','rfl'),
 ('stderr_global_error_ignored','{V : Type} (es : List V) (e : IoError) : ignoreIoError (⟨es,.error e⟩ : Run V IoError Unit)=⟨es,.ok ()⟩','rfl'),
-('stderr_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g=⟨es,.ok ()⟩','by simp only [attemptStderr,seq,pre,ret,List.append_nil]; rfl'),
+('stderr_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g=⟨es,.ok ()⟩','by simp [attemptStderr,seq,pre,ret]'),
 ('stderr_fallback','{V : Type} (es : List V) (g : Run V IoError Unit) : attemptStderr ⟨es,.ok false⟩ g=pre es (ignoreIoError g)','rfl'),
 ('stderr_partial_error_kept','{V : Type} (es ws : List V) (e : IoError) : attemptStderr (⟨es,.ok false⟩ : Run V IoError Bool) ⟨ws,.error e⟩=⟨es++ws,.ok ()⟩','rfl'),
 ('print_partial_error_kept','{V : Type} (es ws : List V) (e : IoError) : printTo (⟨es,.ok false⟩ : Run V IoError Bool) ⟨ws,.error e⟩=⟨es++ws,.panic⟩','rfl'),
@@ -201,11 +201,11 @@ def attemptStderr {V : Type} (capture : Run V IoError Bool) (global : Run V IoEr
  (dropError : IoError → Run V IoError Unit) : Run V IoError Unit :=
  seq capture (fun used => if used then ret () else ignoreIoError global dropError)
 ''',[
-('print_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok true⟩ g p=⟨es,.ok ()⟩','by simp only [printTo,seq,pre,ret,List.append_nil]; rfl'),
+('print_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok true⟩ g p=⟨es,.ok ()⟩','by simp [printTo,seq,pre,ret]'),
 ('print_fallback','{V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok false⟩ g p=pre es (printGlobal g p)','rfl'),
 ('print_error_invokes_hook','{V : Type} (es : List V) (e : IoError) (p : IoError → Run V IoError Unit) : printGlobal ⟨es,.error e⟩ p=pre es (p e)','rfl'),
 ('stderr_error_dropped','{V : Type} (es : List V) (e : IoError) (d : IoError → Run V IoError Unit) : ignoreIoError ⟨es,.error e⟩ d=pre es (d e)','rfl'),
-('stderr_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g d=⟨es,.ok ()⟩','by simp only [attemptStderr,seq,pre,ret,List.append_nil]; rfl'),
+('stderr_capture_returns','{V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g d=⟨es,.ok ()⟩','by simp [attemptStderr,seq,pre,ret]'),
 ('stderr_fallback','{V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok false⟩ g d=pre es (ignoreIoError g d)','rfl'),
 ('stderr_partial_error_prefix','{V : Type} (es ws ds : List V) (e : IoError) : attemptStderr (⟨es,.ok false⟩ : Run V IoError Bool) ⟨ws,.error e⟩ (fun _ => ⟨ds,.ok ()⟩)=⟨es++(ws++ds),.ok ()⟩','rfl'),
 ('print_partial_error_hook_prefix','{V : Type} (es ws hs : List V) (e : IoError) : printTo (⟨es,.ok false⟩ : Run V IoError Bool) ⟨ws,.error e⟩ (fun _ => ⟨hs,.panic⟩)=⟨es++(ws++hs),.panic⟩','rfl'),

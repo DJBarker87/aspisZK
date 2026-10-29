@@ -47,8 +47,21 @@ theorem seq_ret {V E A B : Type} (a : A) (f : A → Run V E B) : seq (ret a) f=f
 #print axioms seq_ret
 theorem seq_prefix {V E A B : Type} (r : Run V E A) (f : A → Run V E B) : ∃ xs, (seq r f).events=r.events++xs := by cases r with | mk es ex => cases ex <;> simp only [seq,pre] <;> first | exact ⟨_,rfl⟩ | exact ⟨[],(List.append_nil _).symm⟩
 #print axioms seq_prefix
-theorem seq_assoc {V E A B C : Type} (r : Run V E A) (f : A → Run V E B) (g : B → Run V E C) : seq (seq r f) g=seq r (fun a => seq (f a) g) := by cases r with | mk es ex => cases ex with | ok a => cases h : f a with | mk fs fx => cases fx <;> simp only [seq,pre,h,List.append_assoc] | error e => rfl | panic => rfl | oom => rfl | abort => rfl | diverge => rfl
+theorem seq_assoc {V E A B C : Type} (r : Run V E A) (f : A → Run V E B) (g : B → Run V E C) : seq (seq r f) g=seq r (fun a => seq (f a) g) := by
+ cases r with
+ | mk es ex =>
+   cases ex with
+   | ok a =>
+     cases h : f a with
+     | mk fs fx => cases fx <;> simp only [seq,pre,h,List.append_assoc]
+   | error e => rfl
+   | panic => rfl
+   | oom => rfl
+   | abort => rfl
+   | diverge => rfl
 #print axioms seq_assoc
 theorem map_error_prefix {V E F A : Type} (f : E → F) (r : Run V E A) : (mapError f r).events=r.events := rfl
 #print axioms map_error_prefix
+theorem map_error_normal_result {V E F A : Type} (f : E → F) (es : List V) (e : E) : mapError f (⟨es,.error e⟩ : Run V E A)=⟨es,.error (f e)⟩ := rfl
+#print axioms map_error_normal_result
 end PV_DIAG11

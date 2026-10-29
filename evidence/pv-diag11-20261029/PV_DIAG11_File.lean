@@ -30,4 +30,6 @@ theorem file_write_panic_keeps_leaf_cleanup {V F : Type} (es ws : List V) (f : F
 #print axioms file_write_panic_keeps_leaf_cleanup
 theorem file_write_prefix {V F : Type} (openFile : Run V IoError F) (w c : F → Run V IoError Unit) : ∃ xs, (fileWrite openFile w c).events=openFile.events++xs := seq_prefix openFile _
 #print axioms file_write_prefix
+theorem file_write_error_close_oom {V F : Type} (es ws ds : List V) (f : F) (e : IoError) : fileWrite (⟨es,.ok f⟩ : Run V IoError F) (fun _ => ⟨ws,.error e⟩) (fun _ => ⟨ds,.oom⟩)=⟨es++(ws++ds),.oom⟩ := rfl
+#print axioms file_write_error_close_oom
 end PV_DIAG11

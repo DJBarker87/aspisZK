@@ -31,4 +31,6 @@ theorem drop_abnormal_abort {V E A : Type} (es : List V) (d : Run V E Unit) : dr
 #print axioms drop_abnormal_abort
 theorem drop_abnormal_diverge {V E A : Type} (es : List V) (d : Run V E Unit) : dropReturned (⟨es,.diverge⟩ : Run V E A) d=⟨es,.diverge⟩ := rfl
 #print axioms drop_abnormal_diverge
+theorem drop_error_drop_oom {V E A : Type} (es ds : List V) (e : E) : dropReturned (⟨es,.error e⟩ : Run V E A) ⟨ds,.oom⟩=⟨es++ds,.oom⟩ := rfl
+#print axioms drop_error_drop_oom
 end PV_DIAG11

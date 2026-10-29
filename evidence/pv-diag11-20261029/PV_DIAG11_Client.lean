@@ -36,4 +36,6 @@ theorem client_tail_prefix {V J : Type} (p s : Run V IoError Unit) (j : Run V Io
 #print axioms client_tail_prefix
 theorem main_plan_prefix {V J : Type} (p : Run V IoError J) (f : J → Run V IoError Unit) : ∃ xs, (actionMain p f).events=p.events++xs := seq_prefix p _
 #print axioms main_plan_prefix
+theorem main_print_panics {V J : Type} (es ps : List V) (j : J) : actionMain (⟨es,.ok j⟩ : Run V IoError J) (fun _ => ⟨ps,.panic⟩)=⟨es++ps,.panic⟩ := rfl
+#print axioms main_print_panics
 end PV_DIAG11

@@ -9,7 +9,7 @@ The primitive must implement the Write contract (including count <= length).
 An invalid count exposes a panic rather than saturating the slice operation. -/
 inductive IoError where | interrupted | writeZero | other (code : Nat)
  deriving DecidableEq, Repr
-def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) :
+def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) (dropInterrupted : Run V IoError Unit) :
  Nat → List UInt8 → Run V IoError Unit
  | _,[] => ret ()
  | 0,_::_ => ⟨[],.diverge⟩
@@ -17,32 +17,34 @@ def writeAll {V : Type} (write : List UInt8 → Run V IoError Nat) :
    let r := write buf
    match r.exit with
    | .ok 0 => ⟨r.events,.error .writeZero⟩
-   | .ok (n+1) => if n+1 ≤ buf.length then pre r.events (writeAll write fuel (buf.drop (n+1))) else ⟨r.events,.panic⟩
-   | .error .interrupted => pre r.events (writeAll write fuel buf)
+   | .ok (n+1) => if n+1 ≤ buf.length then pre r.events (writeAll write dropInterrupted fuel (buf.drop (n+1))) else ⟨r.events,.panic⟩
+   | .error .interrupted => pre r.events (seq dropInterrupted (fun _ => writeAll write dropInterrupted fuel buf))
    | .error e => ⟨r.events,.error e⟩
    | .panic => ⟨r.events,.panic⟩ | .oom => ⟨r.events,.oom⟩
    | .abort => ⟨r.events,.abort⟩ | .diverge => ⟨r.events,.diverge⟩
 
-theorem writeAll_empty {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) : writeAll w fuel []=ret () := by cases fuel <;> rfl
+theorem writeAll_empty {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) : writeAll w d fuel []=ret () := by cases fuel <;> rfl
 #print axioms writeAll_empty
-theorem writeAll_prefix_cut {V : Type} (w : List UInt8 → Run V IoError Nat) (b : UInt8) (bs : List UInt8) : writeAll w 0 (b::bs)=⟨[],.diverge⟩ := rfl
+theorem writeAll_prefix_cut {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (b : UInt8) (bs : List UInt8) : writeAll w d 0 (b::bs)=⟨[],.diverge⟩ := rfl
 #print axioms writeAll_prefix_cut
-theorem writeAll_zero {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok 0⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.error .writeZero⟩ := by simp only [writeAll,h]
+theorem writeAll_zero {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok 0⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.error .writeZero⟩ := by simp only [writeAll,h]
 #print axioms writeAll_zero
-theorem writeAll_interrupted {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error .interrupted⟩) : writeAll w (fuel+1) (b::bs)=pre es (writeAll w fuel (b::bs)) := by simp only [writeAll,h]
+theorem writeAll_interrupted {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error .interrupted⟩) : writeAll w d (fuel+1) (b::bs)=pre es (seq d (fun _ => writeAll w d fuel (b::bs))) := by simp only [writeAll,h]
 #print axioms writeAll_interrupted
-theorem writeAll_other_error {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel code : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error (.other code)⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.error (.other code)⟩ := by simp only [writeAll,h]
+theorem writeAll_other_error {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel code : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.error (.other code)⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.error (.other code)⟩ := by simp only [writeAll,h]
 #print axioms writeAll_other_error
-theorem writeAll_oversize {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bad : ¬ n+1 ≤ (b::bs).length) : writeAll w (fuel+1) (b::bs)=⟨es,.panic⟩ := by simp only [writeAll,h,if_neg bad]
+theorem writeAll_oversize {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bad : ¬ n+1 ≤ (b::bs).length) : writeAll w d (fuel+1) (b::bs)=⟨es,.panic⟩ := by simp only [writeAll,h,if_neg bad]
 #print axioms writeAll_oversize
-theorem writeAll_progress {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bound : n+1 ≤ (b::bs).length) : writeAll w (fuel+1) (b::bs)=pre es (writeAll w fuel ((b::bs).drop (n+1))) := by simp only [writeAll,h,if_pos bound]
+theorem writeAll_progress {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel n : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.ok (n+1)⟩) (bound : n+1 ≤ (b::bs).length) : writeAll w d (fuel+1) (b::bs)=pre es (writeAll w d fuel ((b::bs).drop (n+1))) := by simp only [writeAll,h,if_pos bound]
 #print axioms writeAll_progress
-theorem writeAll_panic {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.panic⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.panic⟩ := by simp only [writeAll,h]
+theorem writeAll_panic {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.panic⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.panic⟩ := by simp only [writeAll,h]
 #print axioms writeAll_panic
-theorem writeAll_oom {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.oom⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.oom⟩ := by simp only [writeAll,h]
+theorem writeAll_oom {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.oom⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.oom⟩ := by simp only [writeAll,h]
 #print axioms writeAll_oom
-theorem writeAll_abort {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.abort⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.abort⟩ := by simp only [writeAll,h]
+theorem writeAll_abort {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.abort⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.abort⟩ := by simp only [writeAll,h]
 #print axioms writeAll_abort
-theorem writeAll_diverge {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.diverge⟩) : writeAll w (fuel+1) (b::bs)=⟨es,.diverge⟩ := by simp only [writeAll,h]
+theorem writeAll_diverge {V : Type} (w : List UInt8 → Run V IoError Nat) (d : Run V IoError Unit) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es : List V) (h : w (b::bs)=⟨es,.diverge⟩) : writeAll w d (fuel+1) (b::bs)=⟨es,.diverge⟩ := by simp only [writeAll,h]
 #print axioms writeAll_diverge
+theorem writeAll_interrupted_drop_panics {V : Type} (w : List UInt8 → Run V IoError Nat) (fuel : Nat) (b : UInt8) (bs : List UInt8) (es ds : List V) (h : w (b::bs)=⟨es,.error .interrupted⟩) : writeAll w ⟨ds,.panic⟩ (fuel+1) (b::bs)=⟨es++ds,.panic⟩ := by simp only [writeAll,h,seq,pre]
+#print axioms writeAll_interrupted_drop_panics
 end PV_DIAG11
