@@ -58,8 +58,30 @@ theorem final_public (hash : Hash) (sample : Bytes → Q) (public c1 : Bytes)
  (left right : List Bytes) (h : left = right) :
  alpha hash sample public c1 left = alpha hash sample public c1 right := by rw [h]
 
+/-- Appended future records do not change earlier challenge outputs. -/
+theorem replay_append (hash : Hash) (sample : Bytes → Q) (frames tail : List Bytes)
+ (state : Bytes) (row : Nat) :
+ replay hash sample state row (frames ++ tail) =
+ let prefix := replay hash sample state row frames
+ let suffix := replay hash sample prefix.2 (row+frames.length) tail
+ (prefix.1 ++ suffix.1,suffix.2) := by
+ induction frames generalizing state row with
+ | nil => simp only [List.nil_append,replay,List.length_nil,Nat.add_zero]
+ | cons f fs ih =>
+  simp only [List.cons_append,replay,ih,List.length_cons,Nat.add_succ,Nat.succ_add]
+
+theorem query_length (sampleValue : Nat → Q) (a : List Q) (round index assignment : Nat)
+ (ha : a.length = 10) (hr : round < 10) :
+ (query sampleValue a round index assignment).length = 10 := by
+ simp only [query,List.length_append,List.length_take,List.length_singleton,
+  List.length_map,List.length_range,ha,Nat.min_eq_left (Nat.le_of_lt hr)]
+ omega
+
 #print axioms replay_length
 #print axioms alpha_length
 #print axioms query_public
 #print axioms final_public
+#print axioms replay_append
+#print axioms query_length
 end R1Z.PV_OWNJ_FiatShamir
+
