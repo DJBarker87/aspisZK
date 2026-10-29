@@ -1,0 +1,32 @@
+import Init
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Source control combinators, with primitive call traces retained. This is
+not a deployed instance; primitive call bodies and unwinding are not axiomatized.
+A halted leaf carries its complete finite prefix, including cleanup effects. -/
+inductive Exit (E A : Type) where
+ | ok (value : A) | error (value : E) | panic | oom | abort | diverge
+ deriving DecidableEq, Repr
+structure Run (V E A : Type) where
+ events : List V
+ exit : Exit E A
+ deriving Repr
+def ret {V E A : Type} (a : A) : Run V E A := ⟨[],.ok a⟩
+def pre {V E A : Type} (xs : List V) (r : Run V E A) : Run V E A := ⟨xs++r.events,r.exit⟩
+def seq {V E A B : Type} (r : Run V E A) (f : A → Run V E B) : Run V E B :=
+ match r.exit with
+ | .ok a => pre r.events (f a)
+ | .error e => ⟨r.events,.error e⟩
+ | .panic => ⟨r.events,.panic⟩
+ | .oom => ⟨r.events,.oom⟩
+ | .abort => ⟨r.events,.abort⟩
+ | .diverge => ⟨r.events,.diverge⟩
+def mapError {V E F A : Type} (f : E → F) (r : Run V E A) : Run V F A :=
+ ⟨r.events,match r.exit with
+ | .ok a => .ok a | .error e => .error (f e) | .panic => .panic
+ | .oom => .oom | .abort => .abort | .diverge => .diverge⟩
+
+theorem pre_empty {V E A : Type} (r : Run V E A) : pre [] r=r := by cases r; simp only [pre,List.nil_append]
+#print axioms pre_empty
+end PV_DIAG11
