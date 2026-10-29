@@ -76,6 +76,14 @@ checks += [
 ord_macro=body('cmp.rs','macro_rules! ord_impl','macro_rules! ord_impl')
 assert not re.search(r'\bfn\s+min\s*\(',ord_macro)
 assert 'usize' in tokens(lib['cmp.rs']['text'][lib['cmp.rs']['text'].index('ord_impl! { char'):])
+checks += [
+('array/mod.rs','const Index<I> for [T; N]','fn index(&self, index: I)',"""fn index(&self,index:I)->&Self::Output{Index::index(self as &[T],index)}""",'array.Index.usize',['coerce same array storage and length to slice','dispatch concrete usize SliceIndex'], 'PV_RDCD3_Index194.array_complete; caller bounds from EncoderBounds.cells/EncoderRange.even/odd'),
+('slice/index.rs','const ops::Index<I> for [T]','fn index(&self, index: I)',"""fn index(&self,index:I)->&I::Output{index.index(self)}""",'slice.Index.usize',['forward same slice and concrete usize index'], 'PV_RDCD3_Index194.slice_complete/success/failure'),
+('slice/index.rs','const SliceIndex<[T]> for usize','fn index(self, slice: &[T])',"""fn index(self,slice:&[T])->&T{&(*slice)[self]}""",'usize.SliceIndex.index',['compiler intrinsic checked read at identical index','out-of-bounds panic arm retained in the Result projection, proved unreachable for every consumed index'], 'PV_RDCD3_Index194.slice_complete/success/failure; compiler checked-memory primitive V370'),
+('array/mod.rs','const IndexMut<I> for [T; N]','fn index_mut(&mut self, index: I)',"""fn index_mut(&mut self,index:I)->&mut Self::Output{IndexMut::index_mut(self as &mut[T],index)}""",'array.IndexMut.usize',['coerce same mutable array storage to slice','retain the write-back continuation'], 'PV_RDCD3_ArrayWrite194.complete/read_back/frame; EncoderMutation.restoration'),
+('slice/index.rs','const ops::IndexMut<I> for [T]','fn index_mut(&mut self, index: I)',"""fn index_mut(&mut self,index:I)->&mut I::Output{index.index_mut(self)}""",'slice.IndexMut.usize',['dispatch concrete usize at identical storage','retain mutable continuation'], 'PV_RDCD3_ArrayWrite194.complete/read_back/frame'),
+('slice/index.rs','const SliceIndex<[T]> for usize','fn index_mut(self, slice: &mut [T])',"""fn index_mut(self,slice:&mut[T])->&mut T{&mut(*slice)[self]}""",'usize.SliceIndex.index_mut',['return exactly the selected mutable slot','checked failure branch retained; consumed basis indices are bounded'], 'PV_RDCD3_ArrayWrite194.complete/read_back/frame; compiler checked-memory primitive V370'),
+]
 records=[]
 for path,context,marker,expected,name,steps,law in checks:
  actual=body(path,context,marker)
