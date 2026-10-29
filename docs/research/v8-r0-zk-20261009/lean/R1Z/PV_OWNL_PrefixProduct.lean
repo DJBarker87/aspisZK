@@ -1,4 +1,5 @@
 import R1Z.PV_OWNI_DensePrune
+import Mathlib.Algebra.BigOperators.Fin
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_OWNL_PrefixProduct
