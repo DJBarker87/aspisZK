@@ -168,24 +168,33 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
 /-- The full former finite deployed event inequality follows from the measured
 headline and exact integral/mean conversion. This proof never calls the former
 privacy_headline_deployed_events theorem. -/
-theorem finite_uniform_corollary
-    (links : PrivacyR1HeadlineDeployedEvents.Links template outputs x rt)
-    (adv : Observer Signal A) (w : (h).Instance) (hw : (h).public w = x.1) :
-    |mean (fun n => bit (adv.decide
-        (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n))) -
-      mean (fun p => bit (adv.decide
-        (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv p)))| ≤
-      PV_EVH_Core.bound template outputs x := by
-  have h := (PV_MEAS_Deployed.privacy_headline_deployed_events_meas template outputs x
-    (ofLegacy template outputs x rt) (links_of_legacy template outputs x rt links)).1
-    adv (by intro s hs; trivial) w hw
-  change |(∫ n, (bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n)) : ℝ)
-      ∂(uniform N : Measure N)) -
-    (∫ e, (∫ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
-      ∂(uniform (source).IdealRand : Measure _)) ∂(uniform Env : Measure Env))| ≤
-      (PV_EVH_Core.bound template outputs x : ℝ) at h
-  rw [← integral_uniform_product, integral_rat_mean, integral_rat_mean] at h
-  exact_mod_cast h
+theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links template outputs x rt) :
+    (∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
+      |mean (fun r => bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w r))) -
+        mean (fun r => bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv r)))| ≤
+        PV_EVH_Core.bound template outputs x) ∧
+    PV_EVH_Core.bound template outputs x ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 +
+        QueryScanFreshUnion.freshBudget (8 * n1 W Pr + 1) +
+        2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    PV_EVH_Core.bound template outputs x < 1 / 2^100 := by
+  constructor
+  · intro adv w hw
+    have h := (PV_MEAS_Deployed.privacy_headline_deployed_events_meas template outputs x
+      (ofLegacy template outputs x rt) (links_of_legacy template outputs x rt links)).1
+      adv (by intro s hs; trivial) w hw
+    change |(∫ n, (bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n)) : ℝ)
+        ∂(uniform N : Measure N)) -
+      (∫ e, (∫ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
+        ∂(uniform (source).IdealRand : Measure _)) ∂(uniform Env : Measure Env))| ≤
+        (PV_EVH_Core.bound template outputs x : ℝ) at h
+    rw [← integral_uniform_product, integral_rat_mean, integral_rat_mean] at h
+    exact_mod_cast h
+  · let e : Env := Classical.choice (inferInstance : Nonempty Env)
+    exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
+      (uniform R) rt.completion rt.publicInput e rt.native rt.signal
+      (fun adv w _ => PV_MEAS_Deployed.toCoreLinks template outputs x
+        (ofLegacy template outputs x rt) (links_of_legacy template outputs x rt links) e adv w)).2
 
 #print axioms links_of_legacy
 #print axioms finite_uniform_corollary
