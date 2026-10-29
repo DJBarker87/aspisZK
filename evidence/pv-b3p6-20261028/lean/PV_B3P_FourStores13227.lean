@@ -1,4 +1,5 @@
 import PV_B3P_SliceStore13227
+import PV_B3P_BindBranch12227
 namespace PV_B3P_Binding13227
 open Aeneas Aeneas.Std PV_B3P_Binding9227 Result
 set_option autoImplicit false
@@ -21,7 +22,9 @@ def four_values13 {α : Type} (compute : Usize → Result α) : Result (Array α
   .ok (Array.make 4#usize [a,b,c,d])
 
 theorem four_store_unroll13 {α : Type} (compute : Usize → Result α) (output : Array α 4#usize) :
-    usize_plan (index_store13 compute) 4 0#usize output = store_four13 compute output := rfl
+    usize_plan (index_store13 compute) 4 0#usize output = store_four13 compute output := by
+  simp only [usize_plan,index_store13,store_four13,PV_B3P_Ordered227.bind_assoc,
+    PV_B3P_Binding12227.bind_return12]
 
 theorem four_store_literal13 {α : Type} (compute : Usize → Result α) (a b c d : α) :
     store_four13 compute (Array.make 4#usize [a,b,c,d]) = four_values13 compute := by
