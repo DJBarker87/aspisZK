@@ -12,9 +12,10 @@ theorem complete {A B : Type} (f : A → B) (mul add : A → A → Result A)
     (do let p ← mapResult (pairMap f) r
         let product ← mulB (f y) p.2
         addB p.1 product)=
-      mapResult f (do let p ← r
-                     let product ← mul y p.2
-                     add p.1 product) := by
+      mapResult f (do
+        let p ← r
+        let product ← mul y p.2
+        add p.1 product) := by
   cases r with
   | fail e => rfl
   | div => rfl
