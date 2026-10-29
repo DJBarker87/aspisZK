@@ -30,6 +30,13 @@ print(json.dumps(dict(attempt=a,receipt_hits=hits,sent_hits=lines)))
 """.replace('ATTEMPT',str(a))
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 idcheck=json.loads(r.stdout);(E/f'id-audit-{a}.json').write_text(r.stdout)
+# Ruling (m'): own refused admission files do not consume an ID.
+refused=E/f'refusal-{a}.json'
+if refused.exists() and not json.loads(refused.read_text())['compiler_started']:
+ allowed={H+f'/evidence/admission-{a}.json',H+f'/evidence/admission-{a}.log'}
+ idcheck['uncharged_own_admission_files']=[p for p in idcheck['receipt_hits'] if p in allowed]
+ idcheck['receipt_hits']=[p for p in idcheck['receipt_hits'] if p not in allowed]
+ (E/f'id-audit-{a}.json').write_text(json.dumps(idcheck))
 assert not idcheck['receipt_hits'] and not idcheck['sent_hits']
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-evh-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/time-{a}.log','timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',H+'/J.json',H+'/objects',H+'/sources',H+'/objects/'+module+'.olean',H+'/sources/'+module+'.lean','7000']
 intent=dict(attempt=a,target=module,source_revision=rev,source_sha256=hashlib.sha256(source).hexdigest(),command=cmd)
