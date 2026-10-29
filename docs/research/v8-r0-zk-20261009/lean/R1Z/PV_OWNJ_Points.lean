@@ -25,7 +25,7 @@ theorem successorRev_length (point : List Q) (carry : Q) :
 
 theorem point_lengths (point : List Q) (p : List Q) (hp : p ∈ statement_points point) :
  p.length = point.length := by
- simp only [statement_points,List.mem_cons,List.mem_singleton] at hp
+ simp only [statement_points,List.mem_cons,List.not_mem_nil,or_false] at hp
  rcases hp with rfl | rfl | rfl
  · rfl
  · simp only [successor,List.length_reverse,successorRev_length]
