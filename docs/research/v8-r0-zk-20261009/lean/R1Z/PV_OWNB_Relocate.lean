@@ -14,6 +14,7 @@ theorem write (c : Cell) (s : Nat) (v : Link) (p q : UInt16) (h:NativeView c s v
 theorem pad (c : Cell) (s : Nat) (p q : UInt16) (i : Nat) (hi:4≤i) :
  (cell c s p q).contents (s+i)=c.contents (s+i) := by
  unfold cell store
+ dsimp only
  rw [outside _ _ _ _ _ (by right; omega)]
  rw [outside _ _ _ _ _ (by right; omega)]
 #print axioms write
