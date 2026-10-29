@@ -12,7 +12,7 @@ open PV_MEAS_Average PV_MEAS_Uniform
 structure Coupling {R M : Type*} [MeasurableSpace R] [MeasurableSpace M]
     (μR : ProbabilityMeasure R) (μM : ProbabilityMeasure M) where
   S : Type
-  measurableS : MeasurableSpace S
+  [measurableS : MeasurableSpace S]
   law : ProbabilityMeasure S
   toR : S → R
   toM : S → M
