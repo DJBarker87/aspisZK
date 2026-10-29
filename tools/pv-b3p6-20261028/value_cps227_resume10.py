@@ -59,7 +59,7 @@ for i in range(14):
  count=len(re.findall(r'^  let .+? ←',ch,re.M))
  for j in range(count):s+='  apply bind_equal9\n'+f'  intro head_{i}_{j}\n'
  if i:prev=f'head_{i}_{count-1}'
-s+='  conv_rhs => unfold value_owned_cont10_14 value_owned_stage9_14 value_read_context9_14\n  rfl\n'
+s+='  conv_rhs => unfold value_owned_cont10_14 value_owned_stage9_14 value_read_context9_14\n'
 s+='\nattribute [local irreducible] '+' '.join(f'value_{kind}_stage9_{i:02}'for kind in ['owned','direct']for i in range(15))+' value_selector10\n'
 for i in reversed(range(1,15)):
  s+=f'''\ntheorem value_cont_read10_{i:02} {params} (selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :

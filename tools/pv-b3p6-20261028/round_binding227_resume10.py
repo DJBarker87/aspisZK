@@ -35,14 +35,14 @@ for kind in ['q','m']:
   unfold {tail}_{n:02}
   conv_rhs => simp only [{gp}_{n:02},PV_B3P_Ordered227.fold,{step},PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
 '''
-  for j in range(sum(sum(' ←'in line for line in cell)for cell in cells[n:n+4])):
+  for j in range(0 if n==12 else sum(sum(' ←'in line for line in cell)for cell in cells[n:n+4])):
    # Pair binders from index_mut must be destructured before later heads.
    clines=[line for cell in cells[n:n+4]for line in cell if ' ←'in line]
    pair=clines[j].lstrip().startswith('let (')
    s+='  apply bind_equal9\n'+f'  intro head_{j}\n'
    if pair:s+=f'  rcases head_{j} with ⟨part_{j},back_{j}⟩\n'
   if n<12:s+=f'  unfold {tail}_{nextn:02}\n'
-  s+='  rfl\n'
+  if n<12:s+='  rfl\n'
   # Composition uses only named equations and opaque four-lane groups.
   s+=f'\ndef {folded}_{n:02} {{β : Type}} (finish : RoundState10 → Result β) {pp} (state : RoundState10) : Result β :=\n  {gp}_{n:02} constants1 state >>= '+(f'{folded}_{nextn:02} finish constants1'if n<12 else'finish')+'\n'
   s+=f'\nattribute [local irreducible] {gp}_{n:02}\n'
@@ -59,7 +59,6 @@ for kind in ['q','m']:
   s+=f'''\ntheorem {name}_entry10 (state : RoundState10) {pp} :
     reference_poseidon.{name} state constants1 =
       ({gp}_00 constants1 state >>= {tail}_04 {finish} constants1) := by
-  unfold reference_poseidon.{name}
   conv_rhs => simp only [{gp}_00,PV_B3P_Ordered227.fold,{step},PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
 '''
   for j,line in enumerate([line for cell in cells[:4]for line in cell if ' ←'in line]):

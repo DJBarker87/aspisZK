@@ -24,7 +24,7 @@ prev='sums'
 for i in range(9):
  c,k=divmod(i,3);v=f'sums_{i}';s+=f'  let {v} ← matrix_cell {prev} {c}#usize {k}#usize (get3_{k} (get3_{c} left.components)) (get3_{k} (get3_{c} channels))\n';prev=v
 s+='  .ok '+prev+'\n'
-s+='\nattribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Array.set\n'
+s+='\nattribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Aeneas.Std.Array.set\n'
 s+=f'''\ntheorem accumulate_pure_nine_cells10 {params} :
     accumulate_pure_storage10 sums right left = accumulate_nine_cells10 sums right left := by
   unfold accumulate_pure_storage10 accumulate_nine_cells10

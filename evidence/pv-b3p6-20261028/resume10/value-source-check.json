@@ -1,0 +1,101 @@
+{
+  "body": "add_value_lanes",
+  "source_body_sha256": "ad41e922a20db35e6854d9c987ae2595bde8edd5200a1147e1a78e4c5694aa3e",
+  "owned_body_sha256": "d2d1ab1149f29440747ba16900bfb9e5c6f64a8342fac47c026b09f064d297ba",
+  "loops": [
+    {
+      "loop": 0,
+      "iterations": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "body": "range[index] = openings.z[index].square().sub(openings.z[index]);"
+    },
+    {
+      "loop": 1,
+      "iterations": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "body": "range[10 + index] = openings.succ_z[index]\n            .square()\n            .sub(openings.succ_z[index]);"
+    },
+    {
+      "loop": 2,
+      "iterations": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "body": "range[20 + index] = openings.xor12_z[index]\n            .square()\n            .sub(openings.xor12_z[index]);"
+    },
+    {
+      "loop": 3,
+      "iterations": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "body": "*residual = range_selector.mul(*residual);",
+      "frame": "only selected range element is replaced, other elements retained"
+    }
+  ],
+  "read_helper_sites": 93,
+  "ordered_source_token_roundtrip": true,
+  "read_law": "PV_B3P_Binding10227.add_value_read_binding10 (when accepted)",
+  "read_CSE": "source repeats thirty immutable reads across square calls; named deterministic-read law required and separately supplied",
+  "credit": "complete source token expansion check plus emitted read binding; actual source-loop-to-emission/frame/stdlib binding still requires composition",
+  "semantic_use": "reclassification within existing Charon/Aeneas tool trust"
+}

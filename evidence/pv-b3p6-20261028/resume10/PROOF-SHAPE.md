@@ -19,3 +19,20 @@ The root will rewrite one named head, descend through bind congruence, and
 repeat; this is the D411 digest direction. Only successful current source
 snapshots will enter the three audits. The source-entry law alone does not
 supply exhaustive shipped-to-owned structural binding.
+
+64042 rejected the root's whole-body unfold, before any head composition.
+64043 avoided the unfold and consumed the complete first head, then exposed
+that rewriting could not infer a continuation through tuple projection.
+Named scalar/range continuations and explicit continuation arguments fixed it.
+64044 reached all proofs with accepted axioms but a redundant trailing rfl
+made the file fail;64045 passed the actual CPS entry/read law.
+64047 passed all thirteen selector frame laws.64048/64049 retained a final
+opaque-continuation/reflexivity error in the existing-sequence join;64050
+passed value_entry_factor10 and add_value_read_binding10. No large source
+body is unfolded in that accepted entry proof, and no limit was changed.
+
+64061 accepted the complete emitted accumulator storage binding (all96
+storage/pure steps, with the four field Results unchanged), after named pair
+and pure-let head elimination exposed each delayed restoration.64062 accepted
+its composition with all nine named cell Result laws. These are model/storage
+laws, not a native differential and not the complete terminal source binding.
