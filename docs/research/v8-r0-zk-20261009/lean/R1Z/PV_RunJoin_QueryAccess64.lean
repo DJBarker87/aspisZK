@@ -14,6 +14,13 @@ theorem vector {T : Type} (v : alloc.vec.Vec T) (i : Usize) (bound : i.val<v.len
     alloc.vec.Vec.deref]
   simp only [Slice.index_usize,List.getElem?_eq_getElem h]
 
+theorem read {T : Type} (v : alloc.vec.Vec T) (i : Usize) (bound : i.val<v.length) :
+    alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice T) v i=
+      ok (v.val[i.val]'bound) := by
+  simp only [alloc.vec.Vec.index,core.slice.index.Slice.index,
+    core.slice.index.SliceIndexUsizeSlice,core.slice.index.SliceIndexUsizeSlice.index,
+    alloc.vec.Vec.deref,Slice.index_usize,List.getElem?_eq_getElem bound]
+
 theorem salt (v : host_commitment.PrivateSalts) (i : Usize) (bound : i.val<v.length) :
     ∃ x, host_commitment.PrivateSalts.get v i=ok x := vector v i bound
 
@@ -43,6 +50,7 @@ theorem window (folded : Slice aspis_core.field.wide_exact.WideExact)
   exact ⟨values,success,PV_RunJoin_ResultPost41.success _ _ _
     (PV_RunJoin_QueryWindow63.length folded q bound) success⟩
 
+#print axioms read
 #print axioms vector
 #print axioms salt
 #print axioms window
