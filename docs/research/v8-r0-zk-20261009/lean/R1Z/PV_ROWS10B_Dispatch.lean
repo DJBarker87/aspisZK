@@ -14,7 +14,7 @@ structure Probe where
 /-- Deployed Linux/glibc cfg, with getrandom_test_linux_fallback unset.
 A negative probe falls back ONLY for ENOSYS=38 or EPERM=1. Other errors
 retain the resolved function pointer exactly. -/
-def initialize {Fn : Type} (resolved : Option Fn) (probe : Fn → Probe) : Cache Fn :=
+def initChoice {Fn : Type} (resolved : Option Fn) (probe : Fn → Probe) : Cache Fn :=
   match resolved with
   | none => .unavailable
   | some f =>
@@ -24,7 +24,7 @@ def initialize {Fn : Type} (resolved : Option Fn) (probe : Fn → Probe) : Cache
 def dispatch {Fn : Type} (cached : Cache Fn) (resolved : Option Fn)
     (probe : Fn → Probe) : Cache Fn :=
   match cached with
-  | .cold => initialize resolved probe
+  | .cold => initChoice resolved probe
   | .unavailable => .unavailable
   | .callable f => .callable f
 /-- The intended syscall wrapper's identity must be an actual loader/cache
@@ -46,7 +46,7 @@ theorem selected_origin {Fn : Type} (expected : Fn) (cached : Cache Fn)
     cases resolved with
     | none => cases hf
     | some g =>
-      simp only [dispatch, initialize] at hf
+      simp only [dispatch, initChoice] at hf
       split at hf
       · cases hf
       · cases hf; exact origin.2 g rfl
