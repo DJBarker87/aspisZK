@@ -100,3 +100,28 @@ s=s[:a]+''' := by
     all_goals rfl
 
 '''+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3052.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.field.r24_canonical_mul PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul
+  simp only [q_c0,q_c1,cm_a,cm_b,op3]
+  split_ifs <;> simp only [op27,op28,op29,bind_assoc_eq,bind_tc_ok,Option.map_none,Option.map_some]
+  all_goals simp only [encQ]
+  all_goals rfl
+
+'''+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3152.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.field.QM31.mul PV_RunJoin_CircleR72Raw52.field.QM31.mul
+  rw [op30]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro fast _
+  cases fast with
+  | some q => rfl
+  | none =>
+    simp only [Option.map_none]
+    simp only [q_c0,q_c1,op20,op24,op7,op22,bind_assoc_eq,bind_tc_ok]
+    all_goals simp only [encQ]
+    all_goals rfl
+
+'''+s[b:];p.write_text(s)
