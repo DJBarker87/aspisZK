@@ -12,11 +12,14 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F)
     (phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world)
     (prepared : prover.PreparedOpening) (salts : host_commitment.PrivateSalts) (p : prover.Publication)
-    (hp : @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
+    (hp : letI : ExternalTypes := types base
+      @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
       .S2 phase.val.hash phase.val.backend phase.val.sem=ok (.Ok prepared))
-    (hs : @prover.derive_private_salts (types base) (opsNative base heap box ops runtime world)
+    (hs : letI : ExternalTypes := types base
+      @prover.derive_private_salts (types base) (opsNative base heap box ops runtime world)
       phase.val.salts.1 phase.val.salts.2 phase.val.hash 114#u8=ok (.Ok salts))
-    (hf : @prover.finish_opening (types base) (opsNative base heap box ops runtime world)
+    (hf : letI : ExternalTypes := types base
+      @prover.finish_opening (types base) (opsNative base heap box ops runtime world)
       .S2 phase.val.hash prepared salts=ok (.Ok p)) :
     letI : ExternalTypes := types base
     letI : ExternalFuns := opsNative base heap box ops runtime world
@@ -31,7 +34,8 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops runtime world
   obtain ⟨second,alpha,next,payload0,payload,final,hsecond,hcbytes,hpayload0,hpayload,hscalar,halpha,hb,hfinal,hfbytes⟩ :=
-    PV_RunJoin_FinishArithmeticTrace63.complete phase.val prepared salts p hp hs hf
+    @PV_RunJoin_FinishArithmeticTrace63.complete (types base) (opsNative base heap box ops runtime world)
+      phase.val prepared salts p hp hs hf
   refine ⟨second,final,hsecond,hcbytes,?_,hfbytes,?_⟩
   · rw [hb];exact hfinal
   · exact (PV_RunJoin_NativeFinishCanonical63.complete base heap box ops runtime world phase.val prepared hp).2.2.2
