@@ -39,7 +39,8 @@ theorem first : PV_AL_CircleOwned.fallback 0#usize = (do
   intro r _
   cases r with
   | Ok p => rfl
-  | Err e => cases e <;> rfl
+  | Err e =>
+    cases e <;> rw [PV_RunJoin_CircleOwnedOps52.op14,PV_RunJoin_CircleOwnedOps52.op13] <;> rfl
 
 theorem second : PV_AL_CircleOwned.fallback 1#usize = (do
     let p ← PV_RunJoin_CircleRawMap52.fallback 1#usize
@@ -59,7 +60,8 @@ theorem second : PV_AL_CircleOwned.fallback 1#usize = (do
   intro r _
   cases r with
   | Ok p => rfl
-  | Err e => cases e <;> rfl
+  | Err e =>
+    cases e <;> rw [PV_RunJoin_CircleOwnedOps52.op14,PV_RunJoin_CircleOwnedOps52.op13] <;> rfl
 
 #print axioms firstParameter
 #print axioms secondParameter
