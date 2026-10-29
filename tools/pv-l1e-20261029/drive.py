@@ -8,6 +8,6 @@ for m in order:
  if m in accepted:continue
  if a>=66597:break
  r=subprocess.run(['python3','tools/pv-l1e-20261029/compile.py',str(a),'0',m])
- if r.returncode:print('STOP NEXT',a+1,flush=True);sys.exit(r.returncode)
+ if r.returncode:print('STOP RETRY SAME ID AFTER COOLDOWN' if r.returncode in (77,78) else 'STOP NEXT',a if r.returncode in (77,78) else a+1,flush=True);sys.exit(r.returncode)
  a+=1
 print('NEXT',a,flush=True)
