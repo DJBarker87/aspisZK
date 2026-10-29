@@ -86,3 +86,26 @@ claim is made. The assigned stages are complete and their committed delivery
 remains NDZ_HANDOFF.md and NDZ_DEVNET_RUNBOOK.md. Stop at lead review; the
 separate real-devnet run and read-only association remain open under L188
 obligation 5. Automatic relaunch is not authorization to execute that runbook.
+
+## Automatic relaunch 8 — delivery remains complete
+
+Resumed from clean commit 4b38567e42 on the assigned branch. The incoming
+message includes relaunch notices 4–8; the committed recovery record ends at
+relaunch 3. No additional intervening execution attempts are evidenced here,
+and no fresh budget is inferred. The original approximately 2h40 and all
+attempts enumerated above remain charged to the approximately three-hour budget.
+
+Read AGENTS.md, the NDS and NDZ handoffs/procedures/runbooks, the recovery
+policy, summary and collection audit. No build, validator, proof, transaction,
+RPC request or test-suite attempt was launched in this recovery. The existing
+receipt-integrity audit was not repeated. A read-only Git comparison confirms
+no crates/programs difference from frozen source 4bb3b3f51e.
+
+The local rehearsal and requested runbook/handoff are complete. Existing
+receipts report 1,812 finalized local workflow transactions, empty final buffers,
+12 policy tests and 31 lifecycle tests passing. These are prior results, not
+new samples. No public write, signature submission, secret-key access, key
+cleanup or push occurred in this recovery; remote key presence and backup were
+not rechecked. Stop at lead review. L188 obligation 5 still needs the separate
+real-devnet execution and read-only association; this worker must not execute
+the public runbook.
