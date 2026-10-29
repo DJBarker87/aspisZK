@@ -12,6 +12,8 @@ def digest_stage_00 (public1 : reference_terminal.SemanticPublic)
   reference_terminal.add_digest_binding digests q openings.z 0#usize
     public1.anchor false
 
+attribute [local irreducible] reference_terminal.add_digest_binding reference_copy_terminal.Selectors.row reference_terminal.empty_root reference_terminal.digest227 reference_terminal.bounded_append_carry
+
 theorem digest_stage_00_success (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
