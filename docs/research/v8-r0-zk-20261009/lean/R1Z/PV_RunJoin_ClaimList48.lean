@@ -27,6 +27,7 @@ theorem complete (messages : Slice Column) (point : Point) (n : Nat)
     (rank : lane.val+n=messages.length) :
     PV_RunJoin_ClaimThread48.phase messages point n out lane=
       run point (messages.val.drop lane.val) out := by
+  have len : messages.val.length=messages.length := rfl
   induction n generalizing out lane with
   | zero =>
     rw [List.drop_eq_nil_of_le (show messages.val.length≤lane.val by omega)]
