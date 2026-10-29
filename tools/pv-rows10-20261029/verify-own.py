@@ -13,12 +13,12 @@ code='''from pathlib import Path
 import json,hashlib
 D=Path(DIR);sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 e=json.loads((D/'env-J.json').read_text());roots=[D/'lean-objects']+[Path(x)for x in e['LEAN_PATH'].split(':')]
-rows=json.loads(ROWS)
+rows=json.loads(__PAYLOAD__)
 for r in rows:
  s=D/'lean-sources'/(r['module']+'.lean');assert sha(s)==r['source_sha256'],r['module']
  o=D/'lean-objects'/(r['module']+'.olean');r['object_path']=str(o);r['object_sha256']=sha(o)
 assert e['LEAN_GITHASH']=='8c9756b28d64dab099da31a4c09229a9e6a2ef35'
 print(json.dumps(dict(ok=True,rows=rows,environment_sha256=sha(D/'env-J.json'),toolchain=e['LEAN_GITHASH'],unchanged_LEAN_PATH=e['LEAN_PATH'],source_only_project_imports='new PV_ROWS10 modules only; all transitive imports otherwise h4 externals')))
-'''.replace('DIR',repr(D)).replace('ROWS',repr(json.dumps(rows)))
+'''.replace('DIR',repr(D)).replace('__PAYLOAD__',repr(json.dumps(rows)))
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stderr
 (E/'own-object-verification.json').write_text(r.stdout);print('verified',len(rows),'private objects')
