@@ -1,0 +1,75 @@
+plan('Ownership',['PV_DIAG3_Execution'],'''/-! Rust lexical cleanup. The actual destructor and double-panic runtime
+executions remain explicit; no destructor-silence assumption is introduced. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S A : Type}
+def unwind (p : Panic) (drop : Op S Unit)
+ (doublePanic : Panic → Panic → Op S A) : Op S A := fun s =>
+ let d := drop s
+ prepend d.events (match d.exit with
+ | .value () => ⟨[],d.state,.panic p⟩
+ | .panic q => doublePanic p q d.state
+ | .abort c => ⟨[],d.state,.abort c⟩
+ | .diverge => ⟨[],d.state,.diverge⟩)
+def scope (body : Op S A) (drop : Op S Unit)
+ (doublePanic : Panic → Panic → Op S A) : Op S A := fun s =>
+ let b := body s
+ prepend b.events (match b.exit with
+ | .value a => bind (drop b.state) (fun _ => pure a)
+ | .panic p => unwind p drop doublePanic b.state
+ | .abort c => ⟨[],b.state,.abort c⟩
+ | .diverge => ⟨[],b.state,.diverge⟩)
+''',[
+th('''theorem scope_value (es : List Event) (s t : S) (a : A)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : body s = ⟨es,t,.value a⟩) :
+ scope body drop dp s = prepend es (bind (drop t) (fun _ => pure a)) := by
+ simp only [scope,h]'''),
+th('''theorem scope_panic (es : List Event) (s t : S) (p : Panic)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : body s = ⟨es,t,.panic p⟩) :
+ scope body drop dp s = prepend es (unwind p drop dp t) := by simp only [scope,h]'''),
+th('''theorem scope_abort_no_cleanup (es : List Event) (s t : S) (c : Crash)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : body s = ⟨es,t,.abort c⟩) :
+ scope body drop dp s = ⟨es,t,.abort c⟩ := by simp [scope,h,prepend]'''),
+th('''theorem scope_diverge_no_cleanup (es : List Event) (s t : S)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : body s = ⟨es,t,.diverge⟩) :
+ scope body drop dp s = ⟨es,t,.diverge⟩ := by simp [scope,h,prepend]'''),
+th('''theorem unwind_returns_original_panic (es : List Event) (s t : S) (p : Panic)
+ (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : drop s = ⟨es,t,.value ()⟩) :
+ unwind p drop dp s = ⟨es,t,.panic p⟩ := by simp [unwind,h,prepend]'''),
+th('''theorem unwind_double_panic (es : List Event) (s t : S) (p q : Panic)
+ (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : drop s = ⟨es,t,.panic q⟩) :
+ unwind p drop dp s = prepend es (dp p q t) := by simp only [unwind,h]'''),
+th('''theorem unwind_abort_keeps_crash (es : List Event) (s t : S) (p : Panic) (c : Crash)
+ (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : drop s = ⟨es,t,.abort c⟩) :
+ unwind p drop dp s = ⟨es,t,.abort c⟩ := by simp [unwind,h,prepend]'''),
+th('''theorem unwind_divergent_prefix (es : List Event) (s t : S) (p : Panic)
+ (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (h : drop s = ⟨es,t,.diverge⟩) :
+ unwind p drop dp s = ⟨es,t,.diverge⟩ := by simp [unwind,h,prepend]'''),
+th('''theorem normal_drop_order (a : A) (s t u : S) (bs ds : List Event)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.value ()⟩) :
+ scope body drop dp s = ⟨bs++ds,u,.value a⟩ := by
+ simp [scope,hb,hd,bind,prepend,pure]'''),
+th('''theorem normal_drop_panics (a : A) (s t u : S) (bs ds : List Event) (p : Panic)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.panic p⟩) :
+ scope body drop dp s = ⟨bs++ds,u,.panic p⟩ := by
+ simp [scope,hb,hd,bind,prepend]'''),
+th('''theorem normal_drop_aborts (a : A) (s t u : S) (bs ds : List Event) (c : Crash)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.abort c⟩) :
+ scope body drop dp s = ⟨bs++ds,u,.abort c⟩ := by
+ simp [scope,hb,hd,bind,prepend]'''),
+th('''theorem normal_drop_diverges (a : A) (s t u : S) (bs ds : List Event)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.diverge⟩) :
+ scope body drop dp s = ⟨bs++ds,u,.diverge⟩ := by
+ simp [scope,hb,hd,bind,prepend]''')])

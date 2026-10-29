@@ -1,0 +1,97 @@
+import PV_DIAG3_Reporting
+import PV_DIAG3_Capture
+/-! Public-law composition over one retained L1 coupling. These are
+conditional transport theorems; no concrete native leaf law is asserted.
+The simulator coins and count function are inputs from the existing L1
+experiment. This file introduces neither an experiment nor fresh coins. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S A B P C W R : Type}
+def Coupled (rel : S → S → Prop) (x y : Execution S A) : Prop :=
+ x.events = y.events ∧ rel x.state y.state ∧ x.exit = y.exit
+/-- One joint carrier retains count and the entire ordered diagnostic trace.
+A marginal count theorem cannot supply the second component. -/
+def jointObservation (count : Nat) (events : List Event) := (count,events)
+def selectedFrames (es : List Event) : List (List Nat) := es.filterMap (fun e =>
+ match e with
+ | .capture pcs => some pcs
+ | .panic p => some p.frames
+ | .crash c => some c.frames
+ | .foreign _ pcs => some pcs
+ | _ => none)
+def deliveredBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .delivered fd bytes => some (fd,bytes) | _ => none)
+def requestedBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .requested fd bytes => some (fd,bytes) | _ => none)
+
+
+theorem coupled_prepend (rel : S → S → Prop) (es : List Event)
+ (x y : Execution S A) (h : Coupled rel x y) :
+ Coupled rel (prepend es x) (prepend es y) := by
+ exact ⟨congrArg (fun tail => es++tail) h.1,h.2.1,h.2.2⟩
+#print axioms coupled_prepend
+
+theorem coupled_pure (rel : S → S → Prop) (a : A) (s t : S) (h : rel s t) :
+ Coupled rel (pure a s) (pure a t) := ⟨rfl,h,rfl⟩
+#print axioms coupled_pure
+
+theorem coupled_bind (rel : S → S → Prop) (x y : Execution S A)
+ (f g : A → Op S B) (h : Coupled rel x y)
+ (hf : ∀ a s t, rel s t → Coupled rel (f a s) (g a t)) :
+ Coupled rel (bind x f) (bind y g) := by
+ rcases x with ⟨xe,xs,xt⟩
+ rcases y with ⟨ye,ys,yt⟩
+ rcases h with ⟨he,hs,ht⟩
+ dsimp at he hs ht
+ cases he
+ cases ht
+ cases xt with
+ | value a => exact coupled_prepend rel xe (f a xs) (g a ys) (hf a xs ys hs)
+ | panic p => exact ⟨rfl,hs,rfl⟩
+ | abort c => exact ⟨rfl,hs,rfl⟩
+ | diverge => exact ⟨rfl,hs,rfl⟩
+#print axioms coupled_bind
+
+theorem coupled_events (rel : S → S → Prop) (x y : Execution S A)
+ (h : Coupled rel x y) : x.events = y.events := h.1
+#print axioms coupled_events
+
+theorem joint_from_existing_count (actualCount simulatedCount : Nat)
+ (actual simulated : List Event)
+ (existingL1CountLaw : actualCount = simulatedCount)
+ (diagnosticLaw : actual = simulated) :
+ jointObservation actualCount actual = jointObservation simulatedCount simulated := by
+ cases existingL1CountLaw; cases diagnosticLaw; rfl
+#print axioms joint_from_existing_count
+
+theorem public_joint_function (honest : W → Prop) (pub : W → P)
+ (coins : W → R → C) (actualCount : W → R → Nat) (l1Count : P → C → Nat)
+ (actualEvents : W → R → List Event) (diagnostics : P → C → List Event)
+ (existingL1CountLaw : ∀ w r, honest w → actualCount w r = l1Count (pub w) (coins w r))
+ (leafComposedLaw : ∀ w r, honest w → actualEvents w r = diagnostics (pub w) (coins w r))
+ (w : W) (r : R) (hw : honest w) :
+ jointObservation (actualCount w r) (actualEvents w r) =
+ jointObservation (l1Count (pub w) (coins w r)) (diagnostics (pub w) (coins w r)) :=
+ joint_from_existing_count _ _ _ _ (existingL1CountLaw w r hw) (leafComposedLaw w r hw)
+#print axioms public_joint_function
+
+theorem public_occurrence (a b : List Event) (h : a = b) :
+ (a = []) ↔ (b = []) := by cases h; rfl
+#print axioms public_occurrence
+
+theorem public_emission_count (a b : List Event) (h : a = b) :
+ a.length = b.length := congrArg List.length h
+#print axioms public_emission_count
+
+theorem public_frame_selection (a b : List Event) (h : a = b) :
+ selectedFrames a = selectedFrames b := congrArg selectedFrames h
+#print axioms public_frame_selection
+
+theorem public_delivered_content (a b : List Event) (h : a = b) :
+ deliveredBytes a = deliveredBytes b := congrArg deliveredBytes h
+#print axioms public_delivered_content
+
+theorem public_requested_content (a b : List Event) (h : a = b) :
+ requestedBytes a = requestedBytes b := congrArg requestedBytes h
+#print axioms public_requested_content
+end PV_DIAG3

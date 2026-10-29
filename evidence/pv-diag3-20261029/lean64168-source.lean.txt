@@ -1,0 +1,33 @@
+import PV_DIAG3_Reporting
+import PV_DIAG3_Capture
+/-! Public-law composition over one retained L1 coupling. These are
+conditional transport theorems; no concrete native leaf law is asserted.
+The simulator coins and count function are inputs from the existing L1
+experiment. This file introduces neither an experiment nor fresh coins. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S A B P C W R : Type}
+def Coupled (rel : S → S → Prop) (x y : Execution S A) : Prop :=
+ x.events = y.events ∧ rel x.state y.state ∧ x.exit = y.exit
+/-- One joint carrier retains count and the entire ordered diagnostic trace.
+A marginal count theorem cannot supply the second component. -/
+def jointObservation (count : Nat) (events : List Event) := (count,events)
+def selectedFrames (es : List Event) : List (List Nat) := es.filterMap (fun e =>
+ match e with
+ | .capture pcs => some pcs
+ | .panic p => some p.frames
+ | .crash c => some c.frames
+ | .foreign _ pcs => some pcs
+ | _ => none)
+def deliveredBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .delivered fd bytes => some (fd,bytes) | _ => none)
+def requestedBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .requested fd bytes => some (fd,bytes) | _ => none)
+
+
+theorem coupled_prepend (rel : S → S → Prop) (es : List Event)
+ (x y : Execution S A) (h : Coupled rel x y) :
+ Coupled rel (prepend es x) (prepend es y) := by
+ exact ⟨congrArg (fun tail => es++tail) h.1,h.2.1,h.2.2⟩
+#print axioms coupled_prepend
+end PV_DIAG3

@@ -1,0 +1,74 @@
+import Init
+/-! Diagnostic execution carrier. These are specifications, not native
+instances. Unlike diag2, abort and divergent prependes do not run unwind glue.
+No effects or final state are erased by an abnormal terminal. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+abbrev Bytes := List UInt8
+structure Panic where
+ message : Bytes
+ frames : List Nat
+ thread : Bytes
+ location : Bytes
+ deriving DecidableEq, Repr
+structure Crash where
+ reason : Bytes
+ registers : Bytes
+ memory : Bytes
+ frames : List Nat
+ deriving DecidableEq, Repr
+inductive Event where
+ | requested (fd : Nat) (bytes : Bytes)
+ | delivered (fd : Nat) (bytes : Bytes)
+ | returned (bytes : Bytes)
+ | capture (frames : List Nat)
+ | panic (value : Panic)
+ | crash (value : Crash)
+ | allocation (size align : Nat)
+ | foreign (bytes : Bytes) (frames : List Nat)
+ deriving DecidableEq, Repr
+inductive Exit (A : Type) where
+ | value (a : A)
+ | panic (p : Panic)
+ | abort (c : Crash)
+ | diverge
+ deriving Repr
+structure Execution (S A : Type) where
+ events : List Event
+ state : S
+ exit : Exit A
+ deriving Repr
+abbrev Op (S A : Type) := S → Execution S A
+variable {S A B C : Type}
+def pure (a : A) : Op S A := fun s => ⟨[],s,.value a⟩
+def prepend (es : List Event) (x : Execution S A) : Execution S A :=
+ ⟨es ++ x.events,x.state,x.exit⟩
+def bind (x : Execution S A) (f : A → Op S B) : Execution S B :=
+ match x.exit with
+ | .value a => prepend x.events (f a x.state)
+ | .panic p => ⟨x.events,x.state,.panic p⟩
+ | .abort c => ⟨x.events,x.state,.abort c⟩
+ | .diverge => ⟨x.events,x.state,.diverge⟩
+def sequence (x : Op S A) (f : A → Op S B) : Op S B := fun s => bind (x s) f
+
+
+theorem prepend_nil (x : Execution S A) : prepend [] x = x := by cases x; rfl
+#print axioms prepend_nil
+
+theorem prepend_append (a b : List Event) (x : Execution S A) :
+ prepend (a++b) x = prepend a (prepend b x) := by
+ cases x; simp [prepend,List.append_assoc]
+#print axioms prepend_append
+
+theorem bind_value (es : List Event) (s : S) (a : A) (f : A → Op S B) :
+ bind ⟨es,s,.value a⟩ f = prepend es (f a s) := rfl
+#print axioms bind_value
+
+theorem bind_panic (es : List Event) (s : S) (p : Panic) (f : A → Op S B) :
+ bind ⟨es,s,.panic p⟩ f = ⟨es,s,.panic p⟩ := rfl
+#print axioms bind_panic
+
+theorem bind_abort (es : List Event) (s : S) (c : Crash) (f : A → Op S B) :
+ bind ⟨es,s,.abort c⟩ f = ⟨es,s,.abort c⟩ := rfl
+#print axioms bind_abort
+end PV_DIAG3

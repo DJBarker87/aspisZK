@@ -1,0 +1,61 @@
+import PV_DIAG3_Write
+/-! std::io::{Write::write_fmt,default_write_fmt}. The formatter leaf
+retains its mutable Adapter.error and all abnormal cleanup. Ok formatter
+return still drops the stored error; Err with no I/O error panics. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S E : Type}
+structure FmtOps (S E : Type) where
+ format : Op S (Except Unit Unit × Except E Unit)
+ dropSlot : Except E Unit → Op S Unit
+ impossibleFmt : Op S (Except E Unit)
+def defaultFmt (o : FmtOps S E) : Op S (Except E Unit) :=
+ sequence o.format (fun pair => match pair.1 with
+ | .ok () => sequence (o.dropSlot pair.2) (fun _ => pure (.ok ()))
+ | .error () => match pair.2 with
+   | .error e => pure (.error e)
+   | .ok () => o.impossibleFmt)
+def writeFmt (known : Option Bytes) (writeAll : Bytes → Op S (Except E Unit))
+ (o : FmtOps S E) : Op S (Except E Unit) :=
+ match known with | some bytes => writeAll bytes | none => defaultFmt o
+/-- Error-slot assignment includes destruction of the old slot and storage
+of the new error, with ownership cleanup if replacement panics. -/
+def adapterWrite (writeAll : Bytes → Op S (Except E Unit))
+ (replaceError : E → Op S Unit) (bytes : Bytes) : Op S (Except Unit Unit) :=
+ sequence (writeAll bytes) (fun r => match r with
+ | .ok () => pure (.ok ())
+ | .error e => sequence (replaceError e) (fun _ => pure (.error ())))
+
+
+theorem known_format_fast_path (bytes : Bytes) (w : Bytes → Op S (Except E Unit))
+ (o : FmtOps S E) : writeFmt (some bytes) w o = w bytes := rfl
+#print axioms known_format_fast_path
+
+theorem dynamic_format_path (w : Bytes → Op S (Except E Unit)) (o : FmtOps S E) :
+ writeFmt none w o = defaultFmt o := rfl
+#print axioms dynamic_format_path
+
+theorem formatter_success_drops_slot (o : FmtOps S E) (s t : S) (es : List Event)
+ (slot : Except E Unit) (h : o.format s = ⟨es,t,.value (.ok (),slot)⟩) :
+ defaultFmt o s = prepend es (bind (o.dropSlot slot t) (fun _ => pure (.ok ()))) := by
+ simp only [defaultFmt,sequence,h,bind]
+#print axioms formatter_success_drops_slot
+
+theorem formatter_io_error_moves_slot (o : FmtOps S E) (s t : S) (es : List Event)
+ (e : E) (h : o.format s = ⟨es,t,.value (.error (),.error e)⟩) :
+ defaultFmt o s = ⟨es,t,.value (.error e)⟩ := by
+ simp [defaultFmt,sequence,h,bind,prepend,pure]
+#print axioms formatter_io_error_moves_slot
+
+theorem formatter_spurious_error_panics (o : FmtOps S E) (s t : S) (es : List Event)
+ (h : o.format s = ⟨es,t,.value (.error (),.ok ())⟩) :
+ defaultFmt o s = prepend es (o.impossibleFmt t) := by simp only [defaultFmt,sequence,h,bind]
+#print axioms formatter_spurious_error_panics
+
+theorem adapter_success (w : Bytes → Op S (Except E Unit)) (store : E → Op S Unit)
+ (bytes : Bytes) (s t : S) (es : List Event)
+ (h : w bytes s = ⟨es,t,.value (.ok ())⟩) :
+ adapterWrite w store bytes s = ⟨es,t,.value (.ok ())⟩ := by
+ simp [adapterWrite,sequence,h,bind,prepend,pure]
+#print axioms adapter_success
+end PV_DIAG3
