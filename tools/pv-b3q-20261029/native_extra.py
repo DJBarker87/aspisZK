@@ -1,14 +1,15 @@
 from pathlib import Path
 import subprocess,hashlib,json,sys
 from run import H,run
-mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear','bit-positive','bit-negative']
+mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear','bit-positive','bit-negative','iterator-positive','iterator-negative']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','+1.94.1','-vV'],text=True)
 cmd=['/home/dombarker/.cargo/bin/rustc','+1.94.1','--edition=2021','-C','opt-level=3','-C','overflow-checks=off','-C','debug-assertions=off','-A','dead_code','-C','link-arg=-Wl,--threads=4']
-if mode=='matrix-linear':
+if mode=='matrix-linear' or mode.startswith('iterator-'):
  B=H.parent/'codex-pv-b3p6-20261028';x=json.loads((B/'features227-resume4.json').read_text());features=next(n['features']for n in x['validation']['nodes']if n['name']=='aspis-core')
  for feature in features:cmd+=['--cfg','feature="'+feature+'"']
- cmd+=[str(H/'matrix/main_linear.rs'),'-o',str(H/'matrix-linear')];inputs={str(p.relative_to(H)):sha(p)for p in(H/'matrix').rglob('*.rs')};nodes=x['validation']['nodes'];binary=H/'matrix-linear'
+ binary=H/('matrix-linear' if mode=='matrix-linear' else 'iterator-native')
+ cmd+=[str(H/('matrix/main_linear.rs' if mode=='matrix-linear' else 'matrix/main_iter.rs')),'-o',str(binary)];inputs={str(p.relative_to(H)):sha(p)for p in(H/'matrix').rglob('*.rs')};nodes=x['validation']['nodes']
 else:
  name='bit_counts_native.rs' if mode.startswith('bit-') else 'byte_eq_native.rs'
  binary=H/('bit-counts-native' if mode.startswith('bit-') else 'byte-eq-native')
