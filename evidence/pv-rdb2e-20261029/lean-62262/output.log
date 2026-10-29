@@ -1,0 +1,89 @@
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_FromFn.lean:34:38: error: Tactic `rfl` failed: The left-hand side
+  match ok v✝ with
+  | fail e => fail e
+  | div => div
+  | ok (tail, s2) => ok (a :: tail, s2)
+is not definitionally equal to the right-hand side
+  let (a, current) := (a, s1)
+  do
+  let (tail, after) ← build f n (i + 1) current
+  ok (a :: tail, after)
+
+case ok.ok
+S A : Type
+f : ℕ → S → Result (A × S)
+n i : ℕ
+s : S
+a : A
+s1 : S
+hf : f i s = ok (a, s1)
+v✝ : List A × S
+hb : build f n (i + 1) s1 = ok v✝
+⊢ (match ok v✝ with
+    | fail e => fail e
+    | div => div
+    | ok (tail, s2) => ok (a :: tail, s2)) =
+    let (a, current) := (a, s1)
+    do
+    let (tail, after) ← build f n (i + 1) current
+    ok (a :: tail, after)
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_FromFn.lean:34:38: error: Tactic `rfl` failed: The left-hand side
+  match fail e✝ with
+  | fail e => fail e
+  | div => div
+  | ok (tail, s2) => ok (a :: tail, s2)
+is not definitionally equal to the right-hand side
+  let (a, current) := (a, s1)
+  do
+  let (tail, after) ← build f n (i + 1) current
+  ok (a :: tail, after)
+
+case ok.fail
+S A : Type
+f : ℕ → S → Result (A × S)
+n i : ℕ
+s : S
+a : A
+s1 : S
+hf : f i s = ok (a, s1)
+e✝ : Error
+hb : build f n (i + 1) s1 = fail e✝
+⊢ (match fail e✝ with
+    | fail e => fail e
+    | div => div
+    | ok (tail, s2) => ok (a :: tail, s2)) =
+    let (a, current) := (a, s1)
+    do
+    let (tail, after) ← build f n (i + 1) current
+    ok (a :: tail, after)
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_FromFn.lean:34:38: error: Tactic `rfl` failed: The left-hand side
+  match div with
+  | fail e => fail e
+  | div => div
+  | ok (tail, s2) => ok (a :: tail, s2)
+is not definitionally equal to the right-hand side
+  let (a, current) := (a, s1)
+  do
+  let (tail, after) ← build f n (i + 1) current
+  ok (a :: tail, after)
+
+case ok.div
+S A : Type
+f : ℕ → S → Result (A × S)
+n i : ℕ
+s : S
+a : A
+s1 : S
+hf : f i s = ok (a, s1)
+hb : build f n (i + 1) s1 = div
+⊢ (match div with
+    | fail e => fail e
+    | div => div
+    | ok (tail, s2) => ok (a :: tail, s2)) =
+    let (a, current) := (a, s1)
+    do
+    let (tail, after) ← build f n (i + 1) current
+    ok (a :: tail, after)
+'R1Z.PV_RDB2E_FromFn.zero' does not depend on any axioms
+'R1Z.PV_RDB2E_FromFn.step' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RDB2E_FromFn.length' depends on axioms: [propext]

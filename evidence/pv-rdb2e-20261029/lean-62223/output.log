@@ -1,0 +1,158 @@
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_IteratorBodies.lean:47:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let item ←
+      do
+        let back ← lift (j.wrapping_sub 1#usize)
+        let word ← Array.index_usize q back
+        ok (some (word, { index := back }, { front := 0#usize, back := back }))
+    match item with
+      | none => ok (done (q, r))
+      | some (word, h, c) => do
+        let hi ← lift (r.wrapping_shl 32#u32)
+        let lo ← lift (core.convert.num.FromU64U32.from word)
+        let dividend ← lift (hi ||| lo)
+        let p ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+        let quotient ← dividend / p
+        let replacement ← lift (UScalar.cast UScalarTy.U32 quotient)
+        let q1 ← Array.update q h.index replacement
+        let p1 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+        let r1 ← dividend % p1
+        ok (cont (q1, r1, c.back))
+is not definitionally equal to the right-hand side
+  do
+    let j1 ← lift (j.wrapping_sub 1#usize)
+    let i ← lift (r.wrapping_shl 32#u32)
+    let x ← Array.index_usize q j1
+    let (i1, back) := (x, fun now value => Array.update now j1 value)
+      do
+      let i2 ← lift (core.convert.num.FromU64U32.from i1)
+      let dividend ← lift (i ||| i2)
+      let i3 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i4 ← dividend / i3
+      let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+      let quotient1 ← back q i5
+      let i6 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let remainder1 ← dividend % i6
+      ok (cont (quotient1, remainder1, j1))
+
+case isTrue
+q : Words
+r : U64
+j : Usize
+h✝ : 0#usize < j
+⊢ (do
+      let item ←
+        do
+          let back ← lift (j.wrapping_sub 1#usize)
+          let word ← Array.index_usize q back
+          ok (some (word, { index := back }, { front := 0#usize, back := back }))
+      match item with
+        | none => ok (done (q, r))
+        | some (word, h, c) => do
+          let hi ← lift (r.wrapping_shl 32#u32)
+          let lo ← lift (core.convert.num.FromU64U32.from word)
+          let dividend ← lift (hi ||| lo)
+          let p ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+          let quotient ← dividend / p
+          let replacement ← lift (UScalar.cast UScalarTy.U32 quotient)
+          let q1 ← Array.update q h.index replacement
+          let p1 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+          let r1 ← dividend % p1
+          ok (cont (q1, r1, c.back))) =
+    do
+    let j1 ← lift (j.wrapping_sub 1#usize)
+    let i ← lift (r.wrapping_shl 32#u32)
+    let x ← Array.index_usize q j1
+    let (i1, back) := (x, fun now value => Array.update now j1 value)
+      do
+      let i2 ← lift (core.convert.num.FromU64U32.from i1)
+      let dividend ← lift (i ||| i2)
+      let i3 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i4 ← dividend / i3
+      let i5 ← lift (UScalar.cast UScalarTy.U32 i4)
+      let quotient1 ← back q i5
+      let i6 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let remainder1 ← dividend % i6
+      ok (cont (quotient1, remainder1, j1))
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_IteratorBodies.lean:53:12: error: Tactic `rfl` failed: The left-hand side
+  do
+    let item ←
+      do
+        let word ← Array.index_usize q i
+        let front ← lift (i.wrapping_add 1#usize)
+        ok (some (word, { index := i }, { front := front, back := 8#usize }))
+    match item with
+      | none => ok (done (q, n))
+      | some (word, h, c) => do
+        let a ← lift (core.convert.num.FromU64U32.from word)
+        let b ← lift (core.convert.num.FromU64U32.from n)
+        let sum ← lift (a.wrapping_add b)
+        let p ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+        let digit ← sum % p
+        let replacement ← lift (UScalar.cast UScalarTy.U32 digit)
+        let q1 ← Array.update q h.index replacement
+        let p1 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+        let high ← sum / p1
+        let n1 ← lift (UScalar.cast UScalarTy.U32 high)
+        ok (cont (q1, n1, c.front))
+is not definitionally equal to the right-hand side
+  do
+    let x ← Array.index_usize q i
+    let (i1, back) := (x, fun now value => Array.update now i value)
+      do
+      let i2 ← lift (core.convert.num.FromU64U32.from i1)
+      let i3 ← lift (core.convert.num.FromU64U32.from n)
+      let sum ← lift (i2.wrapping_add i3)
+      let i4 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i5 ← sum % i4
+      let i6 ← lift (UScalar.cast UScalarTy.U32 i5)
+      let digits1 ← back q i6
+      let i7 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i8 ← sum / i7
+      let addend1 ← lift (UScalar.cast UScalarTy.U32 i8)
+      let i9 ← lift (i.wrapping_add 1#usize)
+      ok (cont (digits1, addend1, i9))
+
+case isTrue
+q : Words
+n : U32
+i : Usize
+h✝ : i < 8#usize
+⊢ (do
+      let item ←
+        do
+          let word ← Array.index_usize q i
+          let front ← lift (i.wrapping_add 1#usize)
+          ok (some (word, { index := i }, { front := front, back := 8#usize }))
+      match item with
+        | none => ok (done (q, n))
+        | some (word, h, c) => do
+          let a ← lift (core.convert.num.FromU64U32.from word)
+          let b ← lift (core.convert.num.FromU64U32.from n)
+          let sum ← lift (a.wrapping_add b)
+          let p ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+          let digit ← sum % p
+          let replacement ← lift (UScalar.cast UScalarTy.U32 digit)
+          let q1 ← Array.update q h.index replacement
+          let p1 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+          let high ← sum / p1
+          let n1 ← lift (UScalar.cast UScalarTy.U32 high)
+          ok (cont (q1, n1, c.front))) =
+    do
+    let x ← Array.index_usize q i
+    let (i1, back) := (x, fun now value => Array.update now i value)
+      do
+      let i2 ← lift (core.convert.num.FromU64U32.from i1)
+      let i3 ← lift (core.convert.num.FromU64U32.from n)
+      let sum ← lift (i2.wrapping_add i3)
+      let i4 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i5 ← sum % i4
+      let i6 ← lift (UScalar.cast UScalarTy.U32 i5)
+      let digits1 ← back q i6
+      let i7 ← lift (core.convert.num.FromU64U32.from PV_B2_C_Sampler.aspis_core.field.P)
+      let i8 ← sum / i7
+      let addend1 ← lift (UScalar.cast UScalarTy.U32 i8)
+      let i9 ← lift (i.wrapping_add 1#usize)
+      ok (cont (digits1, addend1, i9))
+'R1Z.PV_RDB2E_Iterator.division_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2E_Iterator.carry_body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
