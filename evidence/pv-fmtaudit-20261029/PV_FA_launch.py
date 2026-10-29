@@ -10,17 +10,13 @@ for base,dirs,files in os.walk(H.parent):
  for name in dirs+files:assert not re.search(r'(?<![A-Za-z0-9])'+str(id)+r'(?![A-Za-z0-9])',name),('ID collision',base,name)
  for name in files:
   if name=='sent.txt':assert not any(len(f:=l.split())>2 and f[2]==str(id)for l in(Path(base)/name).read_text().splitlines())
-if kind in ['inventory','source','claim_inventory','find_claim_objects','fmt_physical']:cmd=['python3',str(H/('PV_FA_'+kind+'.py'))]
+if kind in ['inventory','source','claim_inventory','find_claim_objects','fmt_physical','receipt_find','post']:cmd=['python3',str(H/('PV_FA_'+kind+'.py'))]
 elif kind=='pincompile':
  module=sys.argv[3];assert module.startswith(('Aeneas/','AeneasMeta/'));src=H/'pinned-source/backends/lean'/(module+'.lean');sha=hashlib.sha256(src.read_bytes()).hexdigest();cohort='pinned';
  for q in H.glob('pincompile-*/receipt/receipt.json'):
   r=json.loads(q.read_text());assert not(r['exit_status']!=0 and r.get('source_sha256')==sha),'unchanged failed source'
  env=json.loads((H/'pinned.json').read_text());os.environ.update({k:str(v)for k,v in env.items()if v is not None});
- resolution=[]
- for x in json.loads((H/'input-external-object-manifest.json').read_text()):
-  top=x['module'].split('/')[0];roots=[Path(v)for v in env['LEAN_PATH'].split(':')];root=next(r for r in roots if(r/top).exists()or(r/(top+'.olean')).exists());q=root/(x['module']+'.olean');resolution.append(dict(module=x['module'],path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest()if q.exists()else None))
- (H/('pinned-resolution-pre-'+str(id)+'.json')).write_text(json.dumps(resolution,indent=1))
- out=H/'pinned-objects'/(module+'.olean');cmd=['timeout','900',env['LEAN'],'-M7000','-j1','-DElab.async=false','-o',str(out),str(src)]
+ cmd=['timeout','900','python3',str(H/'PV_FA_pinexec.py'),str(id),module]
 elif kind=='lean':
  cohort=sys.argv[3];src=H/sys.argv[4];sha=hashlib.sha256(src.read_bytes()).hexdigest()
  for q in H.glob('lean-*/receipt/receipt.json'):
@@ -34,7 +30,7 @@ else:raise Exception(kind)
 extra={k:v for k,v in os.environ.items()if k.startswith(('LEAN','ELAN','LD_LIBRARY'))}
 rc=run(kind+'-'+str(id),cmd,'read-only object provenance inspection; no cohort outputs',extra)
 for q in H.glob(kind+'-'+str(id)+'*/receipt/receipt.json'):
- r=json.loads(q.read_text());r.update(attempt=id,kind=kind)
+ r=json.loads(q.read_text());r.update(attempt=id,kind=kind,launcher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),inspection_inputs={f:hashlib.sha256((H/f).read_bytes()).hexdigest()for f in ['object-pairs.tsv','footprint-inputs.tsv']if(H/f).exists()})
  if kind in ['lean','pincompile']:
   r.update(cohort=cohort,source_sha256=sha);log=(q.parent/'stdout.log').read_text()+'\n'+(q.parent/'stderr.log').read_text();r['print_axioms']=re.findall(r"^.*(?:depends on axioms|does not depend on any axioms).*",log,re.M)
  q.write_text(json.dumps(r,indent=2))
