@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_CommonSemanticBlock51
-import R1Z.PV_RunJoin_CircleInstalledTotal55
+import R1Z.PV_RunJoin_CircleTapeFirst55
+import R1Z.PV_RunJoin_CommonCircleBlockFirst55
 import R1Z.PV_RunJoin_CircleSourceRows55
 import R1Z.PV_RunJoin_SemanticDigest51
 import R1Z.PV_RunJoin_SemanticFrames51
@@ -23,6 +24,9 @@ variable (W : R1Wire K CH Aux) (Pr : R1ProverP K CH Aux F W) (R : RomModel W)
     addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g')≠
     addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g))
   (hpub : ∀ g,addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g)≠W.pubBytes x)
+set_option allowUnsafeReducibility true in
+attribute [local irreducible] ProverRwP6BoundaryInstall.selected
+attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 include hin hc hcoll hpub
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
@@ -48,16 +52,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
           | .Ok _ => ok (core.result.Result.Ok q,next)) := by
   dsimp only
   let selectedOps := @PV_RunJoin_CircleNeutralSelected52.selected (types base) ops
-  obtain ⟨q,hq,hx,hy,hmodel⟩ := PV_RunJoin_CircleInstalledTotal55.complete base heap box ops
-    (block ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))) .First
-  have model : PV_RunJoin_CircleInstalledExact55.coordinates q=
-      (PhaseSamplerParserBin.circle ⟨0,by decide⟩ ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))).1 := by
-    change PV_RunJoin_CircleInstalledExact55.coordinates q=
-      (R0P.SemSource.circleSample0 (fun j => (((s k).2.1 (.inl (.sqS ⟨25,by decide⟩))) j).toFin)).1
-    simpa only [PV_RunJoin_CircleNeutralSelected52.row,Bool.false_eq_true,if_false,
-      
-      PV_RunJoin_OpeningSampler50.block,AspisV8R19.SqueezeOracleBridge.state_roundtrip,
-      PhaseSamplerParserBin.state,R1J.SamplerLawSpend.stateEquiv,Equiv.coe_fn_mk] using hmodel
+  obtain ⟨q,hq,hx,hy,model⟩ := PV_RunJoin_CircleTapeFirst55.complete base heap box ops
+    ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box selectedOps
   refine ⟨q,hx,hy,model,?_⟩
@@ -72,7 +68,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     | Err e => rfl
     | Ok payload =>
       simp only [bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
-      erw [PV_RunJoin_CommonSemanticBlock51.complete W Pr R N hN h B outputs x w hin hc s hcoll hpub base heap box selectedOps k ⟨25,by decide⟩ framed hp]
+      rw [PV_RunJoin_CommonCircleBlockFirst55.complete W Pr R N hN h B outputs x w hin hc s hcoll hpub base heap box selectedOps k framed hp]
       simp only [bind_tc_ok,Aeneas.Std.uncurry,core.result.Result.Insts.CoreOpsTry.branch]
       rw [hq]
       rfl
