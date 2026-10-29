@@ -36,9 +36,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
         apply PV_RunJoin_ResultPost41.bind
         intro columns
         refine ?_
-        have h := PV_RunJoin_BackendBuildTrace60.complete base heap box ops D _ commitInst
+        have h := PV_RunJoin_BackendBuildTrace60.complete base heap box ops D (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error D commitInst) commitInst
           public1 columns d g padding (compiled,public1) commitments hash variant
-        cases hr : host_semantic.build_with_helper_mode D _ commitInst public1 columns d g padding (compiled,public1) commitments hash variant with
+        cases hr : host_semantic.build_with_helper_mode D (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error D commitInst) commitInst public1 columns d g padding (compiled,public1) commitments hash variant with
         | fail e => trivial
         | div => trivial
         | ok pair =>
