@@ -20,7 +20,6 @@ theorem first : PV_RunJoin_CircleRawMap52.fallback 0#usize=
   have hrem : (0#usize%2#usize)=ok 0#usize := rfl
   have hidx : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 0#usize=ok parameter0 := rfl
   simp only [hrem,hidx,bind_tc_ok,hm,PV_RunJoin_CircleMapEquation55.decOutcome,encodeResult]
-  rfl
 
 theorem second : PV_RunJoin_CircleRawMap52.fallback 1#usize=
     ok (decPoint (encodePoint (point R0P.SemSource.circleFallbackParameter1))) := by
@@ -30,7 +29,6 @@ theorem second : PV_RunJoin_CircleRawMap52.fallback 1#usize=
   have hrem : (1#usize%2#usize)=ok 1#usize := rfl
   have hidx : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 1#usize=ok parameter1 := rfl
   simp only [hrem,hidx,bind_tc_ok,hm,PV_RunJoin_CircleMapEquation55.decOutcome,encodeResult]
-  rfl
 #print axioms parameter0
 #print axioms parameter1
 #print axioms value0
