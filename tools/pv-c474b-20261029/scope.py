@@ -10,6 +10,7 @@ D='/home/dombarker/project-offloads/codex-pv-c474-20261029'
 H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 name,phase,*cmd=sys.argv[1:]
+source_revision_at_launch=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
 for f in E.glob('**/admission-*.json'):
  try:
   a=json.loads(f.read_text())
@@ -24,7 +25,7 @@ out=E/name;out.mkdir(exist_ok=True)
 assert not (out/'receipt.json').exists()
 def ssh(c,retry=True):
  if os.environ.get('PV_C474_QUIET_OWNER')=='1':
-  assert name=='native73507' and cmd[-1]==D+'/bundle/timing.py'
+  assert name.startswith('native735') and cmd[-1]==D+'/bundle/timing.py'
   check="import json,time; x=json.load(open('/home/dombarker/project-offloads/QUIET_WINDOW.json')); assert x['owner']=='pv-c474-20261029' and time.time()<x['until']"
   c='python3 -c '+shlex.quote(check)+' && export QUIET_WINDOW_OWNER=1 && '+c
  for attempt in range(1,11):
@@ -78,7 +79,7 @@ def field(s):
  m=re.search(s+r':\s*(.+)',tim);return m[1] if m else None
 actual_exit=field('Exit status')
 actual_exit=int(actual_exit) if actual_exit is not None else r.returncode
-receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
+receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=source_revision_at_launch,expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 # Full admission inventories stay on the host; retain decisions and a byte hash.
 for f in ['admission-before.json','admission-launch.json','admission-barrier.json']:

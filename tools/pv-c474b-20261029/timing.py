@@ -56,7 +56,9 @@ for f in requests:
   values={k:[r['seconds'] for r in rs if r['fixture']==f and r['side']==k] for k in B}
   med={k:statistics.median(v) if v else None for k,v in values.items()}
   ratio=med['draft']/med['baseline'] if med['baseline'] else None
-  groups[name]=dict(values=values,median_seconds=med,ratio=ratio,delta_percent=100*(ratio-1) if ratio else None,within_10_percent=ratio<=1.10 if ratio else None)
+  process_values={k:[r['process_wall_seconds'] for r in rs if r['fixture']==f and r['side']==k] for k in B}
+  process_med={k:statistics.median(v) if v else None for k,v in process_values.items()}
+  groups[name]=dict(process_wall_median_seconds=process_med,values=values,median_seconds=med,ratio=ratio,delta_percent=100*(ratio-1) if ratio else None,within_10_percent=ratio<=1.10 if ratio else None)
  n=len(groups['all']['values']['draft'])
  summary.append(dict(fixture=f,groups=groups,minimum_paired_samples=10,under_15_seconds=groups['all']['median_seconds']['draft']<15,verdict=('PASS' if groups['all']['within_10_percent'] and groups['all']['median_seconds']['draft']<15 else 'FAIL') if n==10 else 'INCOMPLETE'))
 write(O/'summary.json',dict(start=start,end=time.time(),pairs=10,rows=rows,summary=summary,scope='Finite actual client fixture timing; stdout field and external process duration. D359(A) owner-adopted gate evidence: measured under throttling, paired; ratio <=1.10 and candidate median <15 seconds. No universal unthrottled upper bound claimed. Timing remains observable under D478.'))

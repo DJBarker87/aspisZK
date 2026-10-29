@@ -1,0 +1,22 @@
+--- prepared-N7-key-loader
++++ D474-compatible-N7-key-loader
+@@ -1,14 +1,13 @@
+  // Public paths/count remain in JSON; private bytes arrive only on this inherited FD.
+  let count=q["keys"].as_array().unwrap().len();
+- let fd=i32::try_from(q["key_bytes_fd"].as_u64().ok_or_else(||anyhow::anyhow!("missing key byte FD"))?)?;
++ let fd=i32::try_from(q["key_bytes_fd"].as_u64().ok_or_else(||anyhow!("missing key byte FD"))?).map_err(err)?;
+  ensure!(fd>2,"key byte FD must be inherited separately from stdio");
+- // Open the inherited pipe safely; invalid descriptors become public I/O errors.
+  // Linux host client only. No retained key file is opened or parsed in Rust.
+- let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}"))?;
++ let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}")).map_err(err)?;
+  let mut keys=Vec::with_capacity(count);
+  for _ in 0..count {
+-  let mut record=[0u8;64];channel.read_exact(&mut record)?;
++  let mut record=[0u8;64];channel.read_exact(&mut record).map_err(err)?;
+   let bytes=decode_raw_key_record(&record);
+-  keys.push(Keypair::try_from(bytes.as_slice())?);
++  keys.push(Keypair::try_from(bytes.as_slice()).map_err(err)?);
+  }
+- let mut tail=[0u8;1];ensure!(channel.read(&mut tail)?==0,"extra key bytes");
++ let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra key bytes");

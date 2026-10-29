@@ -1,4 +1,4 @@
-"""Fresh 1000-case cohort, coins 8000–8999; no copy of the earlier corpus.
+"""Fresh combined-candidate execution of 1000 cases, coins 6000–6999; retained verified baseline corpus read-only.
 Same Rust harness and comparator. Bounded asynchronous process scheduling only.
 Maximum three prover processes total. Both source variants can use 16-worker
 P_R1 teams (some phases have 16 workers plus the calling thread). Three
@@ -7,8 +7,19 @@ rejections invalidate the entire cohort rather than becoming prover results.
 """
 from pathlib import Path
 import asyncio,json,hashlib,sys,time,os
-H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle/corpus-8000'
+H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle/corpus-6000'
 B={'baseline':Path('/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/bin/prover_rw_differential'), 'candidate':H/'native-target/client/pv-c474-differential'}
+# Verify each baseline file against the previous committed evidence before reuse.
+manifest=json.loads((H/'corpus-ledger-audit.json').read_text());assert manifest['passed'] and manifest['physical_ledger_pairs']==1000
+for row in manifest['rows']:
+ coin=row['coin'];p=H/'corpus-6000'/f'{coin}-baseline'/str(coin);pins=row['sides']['baseline']
+ for name,key in [('public.bin','public_sha256'),('result.json','result_sha256'),('proof.bin','proof_sha256')]:
+  assert (hashlib.sha256((p/name).read_bytes()).hexdigest() if (p/name).exists() else None)==pins[key],(coin,name)
+ # Oracle streams are also covered by prior comparison hashes, not inferred.
+ comparison=json.loads((H/'corpus-6000'/f'comparison-{coin}.json').read_text())
+ for name,entry in comparison['comparisons'][0]['files'].items():
+  assert hashlib.sha256((p/name).read_bytes()).hexdigest()==entry['baseline_sha256']
+(O.parent/'baseline-corpus-reuse.json').write_text(json.dumps(dict(verified_cases=1000,manifest_sha256=hashlib.sha256((H/'corpus-ledger-audit.json').read_bytes()).hexdigest(),reason='Unchanged shipped baseline controls reused read-only; only combined candidate re-executed. Public/proof/result/ledger/oracle bytes compared by the unchanged full-file comparator.'),indent=2)+'\n')
 assert not O.exists(), 'Never duplicate an existing corpus'
 O.mkdir()
 pin=json.loads(Path('/home/dombarker/project-offloads/codex-pv-gate6-20261028/combined/baseline/build-differential/binary-pins.json').read_text())['prover_rw_differential']
@@ -37,16 +48,17 @@ async def execute(cmd,log):
    if code:raise RuntimeError(f'{cmd[0]} exited {code}: {log}')
   finally:active.discard(p)
 async def side(coin,who):
+ if who=='baseline':return
  legacy='baseline' if who=='baseline' else 'candidate';out=O/f'{coin}-{legacy}'
  if (out/str(coin)/'result.json').exists():return
  assert not out.exists(),f'Incomplete existing case: {out}'
  async with sems[who]:
-  await execute([B[who],out,coin,1,1 if coin in {8006,8007,8010,8011} else 0],O/f'run-{coin}-{legacy}.log')
+  await execute([B[who],out,coin,1,1 if coin in {6006,6007,6010,6011} else 0],O/f'run-{coin}-{legacy}.log')
 async def pair(coin):
  comparison=O/f'comparison-{coin}.json'
  if not comparison.exists():
   await asyncio.gather(side(coin,'baseline'),side(coin,'candidate'))
-  await execute(['python3',H/'compare-corpus.py',O/f'{coin}-baseline',O/f'{coin}-candidate',comparison],O/f'compare-{coin}.log')
+  await execute(['python3',H/'compare-corpus.py',H/'corpus-6000'/f'{coin}-baseline',O/f'{coin}-candidate',comparison],O/f'compare-{coin}.log')
  r=json.loads(comparison.read_text());assert r['passed'] and r['paired_runs']==1,r
  check_resources()
  results[coin]=dict(coin=coin,**{k:v for k,v in r.items() if k!='comparisons'})
@@ -61,7 +73,7 @@ async def review():
   print('RESOURCE_REVIEW',json.dumps(row),flush=True)
 async def main():
  rev=asyncio.create_task(review())
- tasks=[asyncio.create_task(pair(c)) for c in range(8000,9000)]
+ tasks=[asyncio.create_task(pair(c)) for c in range(6000,7000)]
  try:
   await asyncio.gather(*tasks)
   s=summary();s['final_resources']=check_resources();assert s['complete'] and s['completed_pairs']==1000 and s['fully_executed_proof_pairs']==600 and s['rejected_prefix_pairs']==100 and s['oracle_logged_pairs']==4
