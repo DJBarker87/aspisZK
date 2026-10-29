@@ -6,9 +6,6 @@ namespace R1Z.PV_RunJoin_InactiveFields48
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_WeightInstalled46
 open ProverRwDictionaryTower (fromW toW toQ)
-set_option allowUnsafeReducibility true in
-attribute [local irreducible] ProverRwP6BoundaryInstall.selected
-attribute [local irreducible] PV_B2_F_ResourceFamilies.selected PV_B2_E_GammaOriginal.selected
 
 theorem candidate_zero [ExternalTypes] (ops : ExternalFuns) :
     (ProverRwP6BodyCandidate.selected ops).op42=
@@ -19,6 +16,10 @@ theorem candidate_add [ExternalTypes] (ops : ExternalFuns) :
 
 theorem candidate_mul [ExternalTypes] (ops : ExternalFuns) :
     (ProverRwP6BodyCandidate.selected ops).op48=ProverRwDictionaryWideQM.mul := rfl
+
+set_option allowUnsafeReducibility true in
+attribute [local irreducible] ProverRwP6BoundaryInstall.selected
+attribute [local irreducible] PV_B2_F_ResourceFamilies.selected PV_B2_E_GammaOriginal.selected
 
 theorem zero (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
