@@ -34,7 +34,7 @@ local instance : CharP K 2147483647 :=
   charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
     AspisCircleGroupOrder.P
 
-def input : HonestProver K := BuilderSource.prover
+abbrev input : HonestProver K := PV_EVH_Core.input
 
 variable (outputs : Statement K CommitHandle → Challenges K → Aux)
     (x : Statement K CommitHandle)

@@ -35,7 +35,7 @@ local instance : CharP K 2147483647 :=
   charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
     AspisCircleGroupOrder.P
 
-def input : HonestProver K := BuilderSource.prover
+abbrev input : HonestProver K := PV_EVH_Core.input
 
 variable (outputs : Statement K CommitHandle → Challenges K → Aux)
     (x : Statement K CommitHandle)
@@ -307,7 +307,9 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
     rw [trans, links.conditional _ (hl.1 w) (fun _ => bounded _)]
     exact avg
   · have e : Env := Classical.choice rt.environmentLaw.nonempty
-    exact_mod_cast (pointwise e).2.2
+    have hb : PV_EVH_Core.bound template outputs x < (1 : ℚ) / 2^100 :=
+      (pointwise e).2.2
+    exact_mod_cast hb
 
 #print axioms toCoreLinks
 #print axioms privacy_headline_deployed_events_meas
