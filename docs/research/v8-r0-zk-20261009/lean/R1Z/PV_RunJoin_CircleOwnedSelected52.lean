@@ -14,7 +14,11 @@ theorem source [ExternalTypes] (ops : ExternalFuns) (b : Array U8 32#usize)
     (r : aspis_core.r0_transcript.CircleRow) :
     (PV_AL_CircleSelected.selected ops).op259 b r =
       (PV_RunJoin_CircleNeutralSelected52.selected ops).op259 b r := by
-  unfold PV_AL_CircleSelected.selected PV_RunJoin_CircleNeutralSelected52.selected
+  change (do
+      let p ← PV_AL_CircleOwned.circle_owned b (PV_AL_CircleCarriers.encodeRow r)
+      ok (PV_AL_CircleCarriers.decodePoint p)) = (do
+      let p ← PV_RunJoin_CircleRawMap52.circle_owned b (PV_RunJoin_CircleNeutralSelected52.row r)
+      ok (PV_RunJoin_CircleNeutralSelected52.point p))
   have hr : PV_AL_CircleCarriers.encodeRow r =
       PV_RunJoin_CircleOwnedComplete52.encRow (PV_RunJoin_CircleNeutralSelected52.row r) := by
     cases r <;> rfl
