@@ -38,12 +38,15 @@ for p in E.rglob('*'):
 # Exercise the actual source-only guard using the recorded failed-source hash.
 code=Path('tools/pv-evhd-20261029/compile.py').read_text(); tree=ast.parse(code)
 loop=next(n for n in tree.body if isinstance(n,ast.For) and ast.unparse(n.target)=='prior')
-failed=json.loads((E/'receipt-67800.json').read_text())['source_sha256']
-try: exec(compile(ast.Module(body=[loop],type_ignores=[]),'guard-test','exec'),dict(E=E,json=json,source_sha=failed))
-except AssertionError: pass
-else: raise AssertionError('failed-source guard did not refuse')
+failures=[json.loads(q.read_text()) for q in E.glob('receipt-*.json')
+ if not json.loads(q.read_text())['accepted']]
+for failed in failures:
+ try: exec(compile(ast.Module(body=[loop],type_ignores=[]),'guard-test','exec'),
+   dict(E=E,json=json,source_sha=failed['source_sha256']))
+ except AssertionError: pass
+ else: raise AssertionError('failed-source guard did not refuse')
 result=dict(experimental=True,adopted=False,modules=rows,exact_bound_tokens=True,
- protected_files_unchanged=True,failed_source_guard_test='PASS',
+ protected_files_unchanged=True,failed_source_guard_test='PASS',failed_source_cases=len(failures),
  guard_sha256=sha(Path('tools/pv-evhd-20261029/compile.py').read_bytes()),
  source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip())
 (E/'final-manifest.json').write_text(json.dumps(result,indent=2)+'\n')
