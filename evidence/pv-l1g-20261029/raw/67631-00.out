@@ -1,0 +1,48 @@
+theorem PV_L1E_CountSkeleton.count_trace : ∀ {I A : Type} (actualCount : I → List Nat × List Nat)
+  (native : I → NativeTrace A) (sourceWorld bodyWorld originalWorld : I → Trace A),
+  PV_L1E_Link_CountAcquisition actualCount sourceWorld →
+    PV_L1E_Link_BodyWrapper sourceWorld bodyWorld →
+      PV_L1E_Link_RetryJoin bodyWorld originalWorld →
+        PV_L1E_Link_NativeOriginal originalWorld native → OpenInputs.L1_COUNT_TRACE actualCount native :=
+fun {I A} actualCount native sourceWorld bodyWorld originalWorld acquisition body retry coupling i =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = (nativeCounts (native i).events, nativeRejections (native i).events)) (acquisition i)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (counts _a.events, rejections _a.events) =
+              (nativeCounts (native i).events, nativeRejections (native i).events))
+          (body i)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (counts _a.events, rejections _a.events) =
+                (nativeCounts (native i).events, nativeRejections (native i).events))
+            (retry i)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (counts _a.events, rejections _a.events) =
+                  (nativeCounts (native i).events, nativeRejections (native i).events))
+              (coupling i)))
+          (id
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    (_a, rejections (List.map translateEvent (native i).events)) =
+                      (nativeCounts (native i).events, nativeRejections (native i).events))
+                  (nativeCounts_translation (native i).events)))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (nativeCounts (native i).events, _a) =
+                        (nativeCounts (native i).events, nativeRejections (native i).events))
+                    (nativeRejections_translation (native i).events)))
+                (Eq.refl (nativeCounts (native i).events, nativeRejections (native i).events))))))))
+'PV_L1E_CountSkeleton.count_trace' depends on axioms: [propext]
