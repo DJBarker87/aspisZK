@@ -19,6 +19,7 @@ theorem op39 (parameter1 : Q) :
   | Ok point =>
     simp only [encOutcome,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
     rw [q_c1,op36,op38]
+    rw [bind_assoc_eq]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro bad _
     cases bad <;> rfl
