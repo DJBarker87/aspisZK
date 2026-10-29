@@ -43,7 +43,6 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       (@published (types base) (selected base heap box ops) _ (@runs (types base) (selected base heap box ops))) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
-  let runs := PV_RunJoin_ActualRun.runs
   intro i
   cases hs : source (runs i) with
   | fail e => simp only [actual,published,hs,resultBytes,Option.map_none]
