@@ -1,7 +1,6 @@
 # RJN — publication ordering and NodeAppend quantifier audit
 
-Target not yet established. This report is being completed alongside the final
-focused compiles. No complete ledger row or endpoint premise is removed. No
+Target not yet established. No complete ledger row or endpoint premise is removed. No
 simultaneous-link satisfiability witness or decomposition credit is claimed.
 
 ## Boundary
@@ -62,8 +61,9 @@ bound is 262144. Rejection occurs before the index-copy or tree-walk mutation
 cone. `source-finding.json` records the frozen Rust hashes and the matching
 failure-prefix inspection; this is not a new native association proof.
 
-The final selected-dictionary obstruction and its native-family corollary
-are staged for focused validation. Their precise claim is that a successful,
+The selected-dictionary helper laws and `PV_RJN_NodeObstruction.no_successful_witness`
+are checked. The native-family corollary is undergoing focused validation.
+Their precise claim is that a successful,
 front-associated publication plus the actual node offset is incompatible
 with the **unchanged** NodeAppend link: that link equates both the successful
 node result and the substituted rejection with the SAME model slot list.
@@ -93,7 +93,9 @@ actual-run obligations. Range excludes this counterexample. Provenance
 restricts the unrelated-publication quantifier just as for QueryAppend.
 No sufficiency or satisfiability claim is made for this candidate. Existing
 `PV_RunJoin_` definitions are read-only; the correction is not installed into
-the live skeleton. The six actual multiproofs and generic publication-index
+the live skeleton. This is a malformed-publication link counterexample, not a privacy
+counterexample or a failure attributed to an honest native producer.
+The six actual multiproofs and generic publication-index
 source proof remain work for the corrected link, rather than a hidden new
 producer hypothesis.
 
@@ -102,6 +104,6 @@ producer hypothesis.
 Whole rows removed: none. Endpoint P removed/added/weakened/changed:
 **0/0/0/0**. No TrustItems field is added. The eight endpoint fields,
 V370/D381/D386 compiler boundary, observer/simulator, coupling, failure
-independence and side-channel obligations remain. QueryRange is reused from
-the held RJQ result; no extra discharge is claimed. The actual-family and
+independence and side-channel obligations remain. QueryRange remains available from
+the held RJQ result; no new QueryRange discharge is claimed. The actual-family and
 simultaneous-link fixture witness remain runjoin58's work.

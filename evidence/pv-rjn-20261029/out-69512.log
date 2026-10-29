@@ -1,0 +1,108 @@
+START 69512 R1Z.PV_RJN_PublishOrder
+DONE 69512 R1Z.PV_RJN_PublishOrder exit 1 wall 3.15 RSS 4480663552
+.plan.header + List.length (runs i).plan.semantic
+room2 : alloc.vec.Vec.length h2 + List.length (runs i).plan.claim ≤ Usize.max
+hs : host_compact.compact_values p.y1.deref h2 = ok (core.result.Result.Ok (), h3)
+hsv : bytes ↑h3 = bytes ↑h2 ++ (runs i).plan.claim
+h3bytes : bytes ↑h3 = (runs i).plan.header ++ (runs i).plan.semantic ++ (runs i).plan.claim
+hib' : p.inactive.to_le_bytes = ok ib
+hibv : bytes ↑ib = (runs i).plan.inactive
+h4bytes : bytes ↑h4 = bytes (↑h3 ++ ↑ib.to_slice)
+h5bytes : bytes ↑h5 = bytes (↑h4 ++ ↑p.c0bytes.deref)
+h6bytes : bytes ↑h6 = bytes (↑h5 ++ ↑p.root.to_slice)
+h7bytes : bytes ↑h7 = bytes (↑h6 ++ ↑p.c1bytes.deref)
+h8bytes : bytes ↑h8 = bytes (↑h7 ++ ↑p.fbytes.deref)
+frontbytes : bytes ↑h8 = front (runs i)
+offopen : alloc.vec.Vec.length h8 = (runs i).plan.offOpenings
+left✝ : (runs i).plan.queries.length = 22
+hq✝ :
+  ∀ (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment),
+    p.backend.c1 = some cc1 →
+      p.backend.c2 = some cc2 →
+        out.length = (runs i).plan.offOpenings →
+          ∃ next,
+            prover.append_query_openings out cc1 cc2 p.queries p.folded_word.deref p.folded_salts = ok next ∧
+              bytes ↑next = ProverCommitPublish43.queries (runs i).plan.queries (bytes ↑out)
+hq : prover.append_query_openings h8 cc1 cc2 p.queries p.folded_word.deref p.folded_salts = ok h9
+hqv : bytes ↑h9 = ProverCommitPublish43.queries (runs i).plan.queries (bytes ↑h8)
+querybytes : ProverCommitPublish43.queries (runs i).plan.queries (front (runs i)) = bytes ↑h9
+offnode : alloc.vec.Vec.length h9 = (runs i).plan.offNodes
+model : some (bytes ↑proof) = exceptBytes (ProverCommitPublish43.slots (runs i).plan.slots (bytes ↑h9))
+slots : ProverCommitPublish43.slots (runs i).plan.slots (bytes ↑h9) = Except.ok (bytes ↑proof)
+nodeLen : List.length (bytes ↑h9) = (runs i).plan.offNodes
+proofLen : List.length (bytes ↑proof) = (runs i).plan.proofBytes
+⊢ (do
+      let front ← Except.ok (front (runs i))
+      if ¬List.length (ProverCommitPublish43.queries (runs i).plan.queries front) = (runs i).plan.offNodes then
+          Except.error ProverCommitPublish43.Error.parse
+        else do
+          let out ←
+            ProverCommitPublish43.slots (runs i).plan.slots (ProverCommitPublish43.queries (runs i).plan.queries front)
+          if ¬List.length out = (runs i).plan.proofBytes then Except.error ProverCommitPublish43.Error.parse
+            else Except.ok out) =
+    Except.ok (bytes ↑proof)
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:49: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲b̲i̲n̲d̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:61: warning: This simp argument is unused:
+  querybytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:72: warning: This simp argument is unused:
+  nodeLen
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲bind, ̲Except.bind, ̲querybytes, ̲no̵d̵eL̵e̵n̵,̵n̵e̵_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵slots, ̲proofLen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:86: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:104: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵b̵i̵n̵d̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲b̲i̲n̲d̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:104:4: warning: This simp argument is unused:
+  slots
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲bind, ̲Except.bind, ̲querybytes, ̲nodeLen, ̲ne_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵s̵l̵o̵t̵s̵,̵proofLen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:104:10: warning: This simp argument is unused:
+  proofLen
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲bind, ̲Except.bind, ̲querybytes, ̲nodeLen, ̲ne_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵slots,̵p̵r̵o̵o̵f̵L̵e̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RJN_PublishOrder.actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

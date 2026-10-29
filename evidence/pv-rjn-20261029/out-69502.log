@@ -1,0 +1,106 @@
+START 69502 R1Z.PV_RJN_PublishTrace
+DONE 69502 R1Z.PV_RJN_PublishTrace exit 1 wall 4.09 RSS 4478312448
+olFlow.Continue val => do
+                    massert (val.len = size)
+                    Result.ok (core.result.Result.Ok val)
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+              (core.convert.FromSame verifier.Error) residual
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual) =
+    Result.ok (core.result.Result.Ok proof)
+hclaim :
+  ExternalFuns.op12 prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError
+      (core.result.Result.Ok PUnit.unit) () =
+    Result.ok (core.result.Result.Ok PUnit.unit)
+h :
+  (do
+      let cf ←
+        match core.result.Result.Ok PUnit.unit with
+          | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue a => do
+          let (r2, out4) ← host_compact.compact_values p.y1.deref h2
+          let r3 ←
+            ExternalFuns.op12 prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError r2 ()
+          let cf1 ←
+            match r3 with
+              | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e =>
+                Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let a1 ← p.inactive.to_le_bytes
+              let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 a1.to_slice
+              let out6 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out5 p.c0bytes.deref
+              let out7 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out6 p.root.to_slice
+              let out8 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out7 p.c1bytes.deref
+              let out9 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out8 p.fbytes.deref
+              let right_val ← compact.OFF_OPENINGS
+              massert (out9.len = right_val)
+              let (o, _) := core.option.Option.take p.backend.c1
+                do
+                let cc1 ← core.option.Option.unwrap o
+                let (o1, _) := core.option.Option.take p.backend.c2
+                  do
+                  let cc2 ← core.option.Option.unwrap o1
+                  let out10 ← prover.append_query_openings out9 cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+                  let right_val1 ← compact.OFF_NODES
+                  massert (out10.len = right_val1)
+                  let r4 ← prover.append_node_slots out10 cc1 cc2 p.tree p.queries
+                  let cf2 ←
+                    match r4 with
+                      | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+                      | core.result.Result.Err e =>
+                        Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val => do
+                      massert (val.len = size)
+                      Result.ok (core.result.Result.Ok val)
+                    | core.ops.control_flow.ControlFlow.Break residual =>
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (alloc.vec.Vec U8) (core.convert.FromSame verifier.Error) residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+                (core.convert.FromSame verifier.Error) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    Result.ok (core.result.Result.Ok proof)
+x✝ : ?m.278
+⊢ Trace variant p proof
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishTrace.lean:48:6: warning: This simp argument is unused:
+  prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError.call_once
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵m̵a̵p̵_̵e̵r̵r̵,̵p̵r̵o̵v̵e̵r̵.̵p̵u̵b̵l̵i̵s̵h̵_̵c̵o̵m̵p̵a̵c̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵C̵o̵d̵e̵c̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵p̵r̵o̵v̵e̵r̵.̵p̵u̵b̵l̵i̵s̵h̵_̵c̵o̵m̵p̵a̵c̵t̵.̵c̵l̵o̵s̵u̵r̵e̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵F̵u̵n̵c̵t̵i̵o̵n̵F̵n̵O̵n̵c̵e̵T̵u̵p̵l̵e̵C̵o̵d̵e̵c̵E̵r̵r̵o̵r̵E̵r̵r̵o̵r̵.̵c̵a̵l̵l̵_̵o̵n̵c̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲m̲a̲p̲_̲e̲r̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲p̲r̲o̲v̲e̲r̲.̲p̲u̲b̲l̲i̲s̲h̲_̲c̲o̲m̲p̲a̲c̲t̲.̲c̲l̲o̲s̲u̲r̲e̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲F̲u̲n̲c̲t̲i̲o̲n̲F̲n̲O̲n̲c̲e̲T̲u̲p̲l̲e̲C̲o̲d̲e̲c̲E̲r̲r̲o̲r̲E̲r̲r̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲ at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishTrace.lean:49:49: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.map_err,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError,
+        prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError.call_once,
+        core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishTrace.lean:53:85: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.map_err, ̲core.result.Result.Insts.CoreOpsTry.branch,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at h
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RJN_PublishTrace.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

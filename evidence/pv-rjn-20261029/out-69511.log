@@ -1,0 +1,83 @@
+START 69511 R1Z.PV_RJN_NodeReject
+DONE 69511 R1Z.PV_RJN_NodeReject exit 1 wall 1.91 RSS 4485697536
+t1 padded 0#u8
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Allocation)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+laws : PV_RJN_Producer_NodePrimitives
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+t : host_tree.BinaryTree
+hidx : prover.publication_indices badQueries 0#usize compact.SPLIT false = ok badIndex
+hv : List.map UScalar.val ↑badIndex = [262144]
+⊢ (do
+      let o ← cc1.tree.multiproof badIndex.deref
+      let r ← core.option.Option.ok_or o verifier.Error.Allocation
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let a ← compact.SLOT_NODES
+          let i ← lift (Usize.wrapping_mul 3#usize 0#usize)
+          let i1 ← lift (i.wrapping_add 0#usize)
+          let i2 ← a.index_usize i1
+          let cap ← lift (Usize.wrapping_mul 32#usize i2)
+          massert (val.len ≤ cap)
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+          let i5 ← lift (out1.len.wrapping_add cap)
+          let padded ← lift (i5.wrapping_sub val.len)
+          let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+          ok (core.result.Result.Ok out2)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Err verifier.Error.Allocation)
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:71:37: warning: This simp argument is unused:
+  show (0#usize) = (0#usize) from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵a̵p̵p̵e̵n̵d̵_̵n̵o̵d̵e̵_̵s̵l̵o̵t̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵0̵#̵u̵s̵i̵z̵e̵)̵[̲p̲r̲o̲v̲e̲r̲.̲a̲p̲p̲e̲n̲d̲_̲n̲o̲d̲e̲_̲s̲l̲o̲t̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲h̲o̲w̲ ̲¬̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲(̲2̲#̲u̲s̲i̲z̲e̲)̲ from r̵f̵l̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ show ¬̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵2̵#̵u̵s̵i̵z̵e̵)̵(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ from b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵h̵i̵d̵x̵,̵h̵o̵s̵t̵_̵c̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵C̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵m̵u̵l̵t̵i̵p̵r̵o̵o̵f̵,̵r̲f̲l̲,̲ ̲h̲i̲d̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲o̲s̲t̲_̲c̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲C̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲m̲u̲l̲t̲i̲p̲r̲o̲o̲f̲,̲ tree l̵a̵w̵s̵,̵l̵a̵w̵s̵.̵2̵.̵2̵.̵2̵.̵2̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵l̲a̲w̲s̲,̲ ̲l̲a̲w̲s̲.̲2̲.̲2̲.̲2̲.̲2̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:73:4: warning: This simp argument is unused:
+  tree laws
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵a̵p̵p̵e̵n̵d̵_̵n̵o̵d̵e̵_̵s̵l̵o̵t̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵0̵#̵u̵s̵i̵z̵e̵)̵[̲p̲r̲o̲v̲e̲r̲.̲a̲p̲p̲e̲n̲d̲_̲n̲o̲d̲e̲_̲s̲l̲o̲t̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ from r̵f̵l̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̲f̲l̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      show ¬̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵2̵#̵u̵s̵i̵z̵e̵)̵¬̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲(̲2̲#̲u̲s̲i̲z̲e̲)̲ from b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵h̵i̵d̵x̵,̵h̵o̵s̵t̵_̵c̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵C̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵m̵u̵l̵t̵i̵p̵r̵o̵o̵f̵,̵
+  ̵ ̵ ̵ ̵ ̵t̵r̵e̵e̵ ̵l̵a̵w̵s̵,̵l̵a̵w̵s̵.̵2̵.̵2̵.̵2̵.̵2̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲ ̲h̲i̲d̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲o̲s̲t̲_̲c̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲C̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲m̲u̲l̲t̲i̲p̲r̲o̲o̲f̲,̲ ̲l̲a̲w̲s̲.̲2̲.̲2̲.̲2̲.̲2̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:73:14: warning: This simp argument is unused:
+  laws.2.2.2.2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵o̵v̵e̵r̵.̵a̵p̵p̵e̵n̵d̵_̵n̵o̵d̵e̵_̵s̵l̵o̵t̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵0̵#̵u̵s̵i̵z̵e̵)̵[̲p̲r̲o̲v̲e̲r̲.̲a̲p̲p̲e̲n̲d̲_̲n̲o̲d̲e̲_̲s̲l̲o̲t̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ from r̵f̵l̵,̵i̵f̵_̵t̵r̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵r̲f̲l̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+      show ¬̵(̵0̵#̵u̵s̵i̵z̵e̵)̵=̵(̵2̵#̵u̵s̵i̵z̵e̵)̵¬̲(̲0̲#̲u̲s̲i̲z̲e̲)̲ ̲=̲ ̲(̲2̲#̲u̲s̲i̲z̲e̲)̲ from b̵y̵ ̵d̵e̵c̵i̵d̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵s̵h̵o̵w̵ ̵(̵0̵#̵u̵s̵i̵z̵e̵)̵.̵v̵a̵l̵=̵0̵ ̵f̵r̵o̵m̵ ̵r̵f̵l̵,̵h̵i̵d̵x̵,̵h̵o̵s̵t̵_̵c̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵C̵o̵m̵m̵i̵t̵m̵e̵n̵t̵.̵m̵u̵l̵t̵i̵p̵r̵o̵o̵f̵,̵b̲y̲ ̲d̲e̲c̲i̲d̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲h̲o̲w̲ ̲(̲0̲#̲u̲s̲i̲z̲e̲)̲.̲v̲a̲l̲ ̲=̲ ̲0̲ ̲f̲r̲o̲m̲ ̲r̲f̲l̲,̲ ̲h̲i̲d̲x̲,̲
+  ̲ ̲ ̲ ̲ ̲h̲o̲s̲t̲_̲c̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲C̲o̲m̲m̲i̲t̲m̲e̲n̲t̲.̲m̲u̲l̲t̲i̲p̲r̲o̲o̲f̲,̲ tree l̵a̵w̵s̵,̵l̵a̵w̵s̵.̵2̵.̵2̵.̵2̵.̵2̵,̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵l̲a̲w̲s̲,̲ ̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RJN_NodeReject.erase_ten' does not depend on any axioms
+'R1Z.PV_RJN_NodeReject.indices' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.check' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.first_slot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

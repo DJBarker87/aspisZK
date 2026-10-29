@@ -1,0 +1,122 @@
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:12:92: error: Tactic `rfl` failed: The left-hand side
+  PV_RunJoin_PublishSkeleton54.indices badQueries 0 10 false
+is not definitionally equal to the right-hand side
+  [262144]
+
+⊢ PV_RunJoin_PublishSkeleton54.indices badQueries 0 10 false = [262144]
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:16:8: error(lean.unknownIdentifier): Unknown constant `List.map_injective`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:17:2: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:63:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let idx ← prover.publication_indices badQueries 0#usize compact.SPLIT (decide False)
+    let o ←
+      match ↑0#usize with
+        | 0 => cc1.tree.multiproof idx.deref
+        | 1 => cc2.tree.multiproof idx.deref
+        | x => t.multiproof idx.deref
+    let r ← core.option.Option.ok_or o verifier.Error.Allocation
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let a ← compact.SLOT_NODES
+        let i ← lift (Usize.wrapping_mul 3#usize 0#usize)
+        let i1 ← lift (i.wrapping_add 0#usize)
+        let i2 ← a.index_usize i1
+        let cap ← lift (Usize.wrapping_mul 32#usize i2)
+        massert (val.len ≤ cap)
+        let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+        let i5 ← lift (out1.len.wrapping_add cap)
+        let padded ← lift (i5.wrapping_sub val.len)
+        let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+        ok (core.result.Result.Ok out2)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+          (core.convert.FromSame verifier.Error) residual
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err verifier.Error.Allocation)
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+laws : PV_RJN_Producer_NodePrimitives
+out : alloc.vec.Vec U8
+cc1 cc2 : host_commitment.Commitment
+t : host_tree.BinaryTree
+hidx : prover.publication_indices badQueries 0#usize compact.SPLIT false = ok badIndex
+hv : List.map UScalar.val ↑badIndex = [262144]
+⊢ (do
+      let idx ← prover.publication_indices badQueries 0#usize compact.SPLIT (decide False)
+      let o ←
+        match ↑0#usize with
+          | 0 => cc1.tree.multiproof idx.deref
+          | 1 => cc2.tree.multiproof idx.deref
+          | x => t.multiproof idx.deref
+      let r ← core.option.Option.ok_or o verifier.Error.Allocation
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let a ← compact.SLOT_NODES
+          let i ← lift (Usize.wrapping_mul 3#usize 0#usize)
+          let i1 ← lift (i.wrapping_add 0#usize)
+          let i2 ← a.index_usize i1
+          let cap ← lift (Usize.wrapping_mul 32#usize i2)
+          massert (val.len ≤ cap)
+          let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out val.deref
+          let i5 ← lift (out1.len.wrapping_add cap)
+          let padded ← lift (i5.wrapping_sub val.len)
+          let out2 ← alloc.vec.Vec.resize core.clone.CloneU8 out1 padded 0#u8
+          ok (core.result.Result.Ok out2)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (alloc.vec.Vec U8)
+            (core.convert.FromSame verifier.Error) residual) =
+    ok (core.result.Result.Err verifier.Error.Allocation)
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:60:37: warning: This simp argument is unused:
+  show (0#usize) = (0#usize) from rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.append_node_slot,s̵h̵o̵w̵ (̵0̵#̵u̵s̵iz̵e̵)̵=̵(̵0̵#̵u̵s̵i̵z̵e̵)̵ ̵fr̵o̵m̵ ̵r̵f̵l̵,̵i̵f̵_true, ̲bind_tc_ok,
+      show ¬(0#usize) ̲= ̲(2#usize) from by decide, ̲hidx, ̲host_commitment.Commitment.multiproof,
+      tree laws, ̲laws.2.2.2.2, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:61:45: warning: This simp argument is unused:
+  hidx
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.append_node_slot, ̲show (0#usize) ̲= ̲(0#usize) from rfl, ̲if_true, ̲bind_tc_ok,
+      show ¬(0#usize) ̲= ̲(2#usize) from by decide, ̲hi̵d̵x̵,̵h̵ost_commitment.Commitment.multiproof,
+  ̵  ̵ ̵ ̵tree laws,
+  ̲ ̲ ̲ ̲ ̲laws.2.2.2.2, ̲core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:62:4: warning: This simp argument is unused:
+  tree laws
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.append_node_slot, ̲show (0#usize) ̲= ̲(0#usize) from rfl, ̲if_true, ̲bind_tc_ok,
+      show ¬(0#usize) ̲= ̲(2#usize) from by decide, ̲hidx, ̲host_commitment.Commitment.multiproof,
+      t̵r̵e̵e̵l̲a̲w̲s̲.̲2̲.̲2̲.̲2̲.̲2̲,̲ l̵a̵w̵s̵,̵l̵a̵w̵s̵.̵2̵.̵2̵.̵2̵.̵2̵,̵core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_NodeReject.lean:62:14: warning: This simp argument is unused:
+  laws.2.2.2.2
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.append_node_slot, ̲show (0#usize) ̲= ̲(0#usize) from rfl, ̲if_true, ̲bind_tc_ok,
+      show ¬(0#usize) ̲= ̲(2#usize) from by decide, ̲hidx, ̲host_commitment.Commitment.multiproof,
+      tree laws,l̵a̵w̵s̵.̵2̵.̵2̵.̵2̵.̵2̵,̵ ̲core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RJN_NodeReject.indices' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.check' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.tree' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.first_slot' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RJN_NodeReject.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
