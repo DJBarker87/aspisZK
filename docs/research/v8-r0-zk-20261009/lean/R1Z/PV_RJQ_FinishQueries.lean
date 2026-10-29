@@ -43,7 +43,6 @@ theorem run (variant : transport.Variant)
       obtain ⟨tag32,htag32,h⟩ := bind_eq_ok h
       obtain ⟨z0,hz0,h⟩ := bind_eq_ok h
       obtain ⟨z1,hz1,h⟩ := bind_eq_ok h
-      simp only [lift,bind_tc_ok] at h
       obtain ⟨v,hv,h⟩ := bind_eq_ok h
       obtain ⟨root0,hroot0,h⟩ := bind_eq_ok h
       obtain ⟨checked,hchecked,h⟩ := bind_eq_ok h
