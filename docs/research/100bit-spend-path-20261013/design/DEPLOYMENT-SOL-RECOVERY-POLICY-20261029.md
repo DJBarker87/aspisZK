@@ -27,3 +27,7 @@ These rules govern how deployments are run. They change no proof, protocol or co
 ## Retained devnet payer (created 2026-10-29)
 
 CVZJcAv97von8njTJSyLVQ9X33NAKQYbEXFKnAYvst9t: keypair at ~/.config/solana/aspis-deploy/devnet-payer-20261029.json on the lead's Mac (directory 0700, file 0600). It is outside every workspace and offload directory, and it is the payer and buffer authority for the release-verifier devnet deployment. Its secret is never copied into the repository or printed. Back up the aspis-deploy directory before any host cleanup.
+
+## Recovery executed (owner-approved, 2026-10-29)
+
+The owner funded CVZJcAv9... with 10 SOL from the devnet faucet and approved closing the July program. The lead ran `solana program close 7Q2nGs... --authority id.json --recipient CVZJcAv9...` on devnet: "Closed Program Id 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue, 8.35320408 SOL reclaimed". The payer balance afterwards was 18.35320408 SOL. Before closing, the lead checked that 7Q2nGs... is only the legacy declare_id of programs/aspis-verifier and a test pubkey in r1-cost-probe tests; it is not part of the R1 release route (NDQ_CHAIN_ASSOCIATION.md lines 35-38).
