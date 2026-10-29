@@ -550,7 +550,7 @@ theorem reference_terminal_public_digest_lanes_read_binding9 (public1 : referenc
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors)  :
     reference_terminal.public_digest_lanes public1 openings selectors = reference_terminal_public_digest_lanes_direct_read9 public1 openings selectors :=
-  congrArg (fun (source_read : (Array (Array U32 8#usize) 20#usize → Usize → Result (Array U32 8#usize))) => reference_terminal_public_digest_lanes_read_context9 @source_read public1 openings selectors) digest_function_binding
+  congrArg (fun source_read => reference_terminal_public_digest_lanes_read_context9 source_read public1 openings selectors) digest_function_binding
 
 #print axioms reference_terminal_public_digest_lanes_read_binding9
 end PV_B3P_Binding9227

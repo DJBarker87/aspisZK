@@ -23,6 +23,11 @@ pairs=[('terminal',P/'host_terminal.rs',P/'reference_terminal.rs'),('copy',P/'ho
 rows=[];files=[]
 for family,a,b in pairs:
  src=functions(a);ref=functions(b)
+ if family=='field':
+  dependencies=functions(Path('crates/aspis-core/src/field.rs'))
+  for name in ['qm31_sum_products3_prepared#0','qm31_m31_dot#0']:
+   src[name]=dependencies[name]
+   src[name]['source_file']='crates/aspis-core/src/field.rs'
  files.append(dict(family=family,source=str(a),owned=str(b),source_sha256=hashlib.sha256(a.read_bytes()).hexdigest(),owned_sha256=hashlib.sha256(b.read_bytes()).hexdigest()))
  for key in sorted(src.keys()|ref.keys()):
   x=src.get(key);y=ref.get(key)
@@ -30,7 +35,7 @@ for family,a,b in pairs:
   row=dict(family=family,key=key,status=status,source=x,owned=y,source_binding='pending' if status!='identical' else 'token identity; reachability/configuration still checked separately')
   if x and y and status=='changed':row['token_changes']=[dict(tag=t,source=x['tokens'][i:j],owned=y['tokens'][k:l])for t,i,j,k,l in difflib.SequenceMatcher(None,x['tokens'],y['tokens'],autojunk=False).get_opcodes()if t!='equal']
   rows.append(row)
-record=dict(classification='inventory only; not a body binding or native equality theorem',semantic_use='reclassification within existing Charon/Aeneas tool trust',own_1='deployed SOURCE statement-by-statement binding; compiler preservation V370 / pending D381,D386 retained; machine-code correspondence not required',feature_authority='native227-composition-features.json; cfg reachability must be applied before closure',files=files,bodies=rows,summary={k:sum(r['status']==k for r in rows)for k in ['identical','changed','source-only','owned-only']})
+record=dict(classification='inventory only; not a body binding or native equality theorem',semantic_use='reclassification within existing Charon/Aeneas tool trust',own_1='deployed SOURCE statement-by-statement binding; compiler preservation V370 / pending D381,D386 retained; machine-code correspondence not required',feature_authority='native227-composition-features.json; cfg reachability must be applied before closure',non_function_transforms=['qm31_array fixed16/fixed4 constructors','array4 closures and maps','copied private EXTERNAL_INITIAL/EXTERNAL_FINAL/INTERNAL constants','import retargeting to owned field/copy/Poseidon helpers'],inventory_scope='all function bodies in the four owned files plus two replaced core field dependency bodies; cfg reachability and pre-inline dependency closure not yet discharged',files=files,bodies=rows,summary={k:sum(r['status']==k for r in rows)for k in ['identical','changed','source-only','owned-only']})
 p=O/'body-inventory.json'
 if '--check'in sys.argv:assert json.loads(p.read_text())==record
 else:p.write_text(json.dumps(record,indent=2)+'\n')
