@@ -5,7 +5,12 @@ import hashlib,json,subprocess,sys,time,shlex
 E=Path(__file__).resolve().parent;R=E.parent.parent
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029';COHERENT='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,harness,*flag=sys.argv[1:];assert a.startswith('NEB_K') and 1<=int(a[-3:])<=40
-assert harness in ['reduce_contract','wrapper_contract','weak_contract','real_body','unimplied','frame_control']
+old_names=['reduce_contract','wrapper_contract','weak_contract','real_body','unimplied','frame_control']
+if harness in old_names:target='field::NEB_reducer::'+harness
+else:
+ assert harness.startswith(('field::NEB_additive::','field::wide_exact::NEB_wide::'))
+ assert all(c.isalnum() or c in '_:' for c in harness)
+ target=harness
 assert not (E/a).exists();active=E/'NEB_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,target=harness)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
@@ -29,12 +34,12 @@ print(log.read_text());sys.exit(r.returncode)
  if r.returncode==0 and ad.get('allowed') is True:break
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation refused; wait three minutes',flush=True);time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
-ni=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEB_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NEB_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness','field::NEB_reducer::'+harness,'--output-format','terse']
+ni=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEB_src/crates/aspis-core/Cargo.toml','--target-dir',B+'/NEB_target','--features','r0','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEB_tmp')
 if flag:
- assert len(flag)==1 and flag[0] in ['NEB_wrong_reduce','NEB_wrong_wrapper'];env['RUSTFLAGS']+=' --cfg '+flag[0]
-sources=['NEB_TOOL_PINS.json','NEB_gate.py','NEB_graph.py','NEB_SOURCE_PINS.json','NEB_src/Cargo.lock','NEB_src/Cargo.toml','NEB_src/crates/aspis-core/src/field.rs','NEB_src/crates/aspis-core/src/field/NEB_reducer.rs']
-cfg=dict(attempt=a,kind='kani',target='field::NEB_reducer::'+harness,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=sources,command=['python3','NEB_gate.py',a+'.json'],native_command=ni,timeout=180,env=env,deps_fingerprint=dict(source_pinset='NEB_SOURCE_PINS.json',frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'),expected_time='Optimized compilation then one full-u64 scalar bit-vector contract; no multiplication, generation or elimination',copy_patch_sha256=hashlib.sha256((E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_bytes()).hexdigest(),feature_scope='core helper: reducer and wrapper have no source feature gates apart from added cfg(kani) annotations',copy_dependency='none: scalar args and replies; typed scalar references only in frame fidelity control')
+ assert len(flag)==1 and flag[0] in ['NEB_wrong_reduce','NEB_wrong_wrapper']+['NEB_wrong_'+p+'_'+o for p in ['m','c','q','e'] for o in ['add','sub','double']]+['NEB_wrong_limbs','NEB_wrong_canonical','NEB_wrong_embed'];env['RUSTFLAGS']+=' --cfg '+flag[0]
+sources=['NEB_TOOL_PINS.json','NEB_gate.py','NEB_graph.py','NEB_SOURCE_PINS.json','NEB_src/Cargo.lock','NEB_src/Cargo.toml','NEB_src/crates/aspis-core/src/field.rs','NEB_src/crates/aspis-core/src/field/NEB_reducer.rs','NEB_src/crates/aspis-core/src/lib.rs','NEB_src/crates/aspis-core/src/field/wide_exact.rs','NEB_src/crates/aspis-core/src/field/NEB_additive.rs','NEB_src/crates/aspis-core/src/field/NEB_additive_reference.rs','NEB_src/crates/aspis-core/src/field/wide_exact/NEB_wide.rs']
+cfg=dict(attempt=a,kind='kani',target=target,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=sources,command=['python3','NEB_gate.py',a+'.json'],native_command=ni,timeout=180,env=env,deps_fingerprint=dict(source_pinset='NEB_SOURCE_PINS.json',frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'),expected_time='Optimized compilation then one named scalar or fixed-record/array contract; no field multiplication, generation or elimination',copy_patch_sha256=hashlib.sha256((E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_bytes()).hexdigest(),feature_scope='core r0 helper, feature-independent frozen method bodies; cfg(kani) instrumentation only',copy_dependency='KMX-approved copy implementation applied; scalar-only reducer has no copy dependence, record/array lanes require matched KMX positive/negative controls')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 files={'NEB_TOOL_PINS.json':(E/'NEB_TOOL_PINS.json').read_text(),'NEB_gate.py':(E/'NEB_gate.py').read_text(),'NEB_graph.py':(E/'NEB_graph.py').read_text(),a+'.json':json.dumps(cfg)}
 r=ssh('python3',f'''from pathlib import Path

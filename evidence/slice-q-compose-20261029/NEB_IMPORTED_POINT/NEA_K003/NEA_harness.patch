@@ -1,0 +1,63 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -913,6 +913,8 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani,kani::requires(NEA_field::canonical(self)))]
++    #[cfg_attr(kani,kani::ensures(|r| NEA_field::neg_post(self,*r)))]
+     pub fn neg(self) -> QM31 {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KNeg);
+@@ -3266,3 +3268,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="field/NEA_field.rs"] mod NEA_field;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NEA_field.rs
+@@ -0,0 +1,10 @@
++use super::*;
++pub fn canonical(x:QM31)->bool {x.c0.a.0<P && x.c0.b.0<P && x.c1.a.0<P && x.c1.b.0<P}
++fn words(x:QM31)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn neg(x:u32)->u32 {if x==0 {0}else{P-x}}
++pub fn neg_post(x:QM31,r:QM31)->bool {
++ let a=words(x);let want=[neg(a[0]),neg(a[1]),neg(a[2]),neg(a[3])];
++ if cfg!(NEA_wrong_neg) {words(r)!=want} else {words(r)==want}
++}
++#[kani::proof_for_contract(QM31::neg)]
++fn qm_neg() {let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};kani::assume(canonical(x));let _=x.neg();}
+--- a/crates/aspis-core/src/r0/domain.rs
++++ b/crates/aspis-core/src/r0/domain.rs
+@@ -8,6 +8,7 @@
+         #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+         pub struct $name(usize);
+         impl $name {
++            #[cfg_attr(kani,kani::ensures(|r| match r {Ok(v)=>index < $bound && v.0==index,Err(e)=>index >= $bound && *e==Error::IndexOutOfRange}))]
+             pub fn new(index: usize) -> Result<Self, Error> {
+                 if index < $bound {
+                     Ok(Self(index))
+@@ -97,3 +98,8 @@
+ pub fn line_node<E: CodeField>(u: FibreIndex) -> E {
+     basis::double(exact_circle_x::<E>(u))
+ }
++
++#[cfg(kani)] mod NEA_domain { use super::*;
++#[kani::proof_for_contract(FibreIndex::new)] fn constructor(){let i:usize=kani::any();let _=FibreIndex::new(i);}
++#[kani::proof] fn reject_control(){let i:usize=kani::any();let x=FibreIndex::new(i);assert!(x.is_ok());}
++}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,5 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NEA_verifier.rs"] mod NEA_verifier;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_verifier.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof] fn index_alignment() {let u:usize=kani::any();kani::assume(u<262144);let a=domain::FibreIndex::new(u/4*4).unwrap();let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(a.get()==u/4*4 && b.get()==u/4*4+3);}
++#[kani::proof] fn index_alignment_wrong() {let u:usize=kani::any();kani::assume(u<262144);let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(b.get()==u/4*4);}

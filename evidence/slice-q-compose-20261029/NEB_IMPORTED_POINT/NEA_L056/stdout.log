@@ -1,0 +1,18 @@
+NEA_generated/NEA_LineTail.lean:46:93: error: unsolved goals
+s : U32
+canonical : ↑s < 2147483647
+d : AspisR1Qm31ArithmeticProbe.field.M31
+run : AspisR1Qm31ArithmeticProbe.field.M31.add s s = ok d
+left✝ : ↑d = (↑s + ↑s) % AspisR1.ExtractedCurrentM31AddSub.P
+cd : ↑d < AspisR1.ExtractedCurrentM31AddSub.P
+doubled : AspisR1Qm31ArithmeticProbe.field.M31.double s = ok d
+⊢ (do
+      let t ← s + s
+      let d ← if t ≥ 2147483647#u32 then t - 2147483647#u32 else ok t
+      if d ≥ 1#u32 then d - 1#u32 else 2147483647#u32 - 1#u32) =
+    do
+    let x ← s + s
+    let d ← if x ≥ 2147483647#u32 then x - 2147483647#u32 else ok x
+    if d ≥ 1#u32 then UScalar.sub d 1#u32 else 2147483647#u32.sub 1#u32
+'NEA_LineTail.sub_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEA_LineTail.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
