@@ -1,0 +1,46 @@
+START 68909 R1Z.PV_RJQ_FinishQueries
+DONE 68909 R1Z.PV_RJQ_FinishQueries exit 1 wall 1.8 RSS 4453224448
+/home/dombarker/project-offloads/codex-pv-rjq-20261029/lean/sources/R1Z/PV_RJQ_FinishQueries.lean:44:38: error: Application type mismatch: The argument
+  h
+has type
+  (match tag32 with
+    | core.ops.control_flow.ControlFlow.Continue val1 => do
+      let _ ←
+        host_transcript.Transcript.scalar_k aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 next 32#u8
+            (Std.Array.empty U8).to_slice
+      let scp ← prepared.sem.z.index_usize 0#usize
+      let scp1 ← prepared.sem.z.index_usize 1#usize
+      let v ← alloc.slice.Slice.to_vec core.clone.CloneU32 val1.to_slice
+      let a ← prepared.sem.roots.index_usize 0#usize
+      let r2 ←
+        prover.public_check variant
+            { alpha := prepared.sem.alpha,
+              z := Array.make 2#usize [Array.make 2#usize [scp.x, scp.y] ⋯, Array.make 2#usize [scp1.x, scp1.y] ⋯] ⋯,
+              gamma := prepared.gamma, kappa := prepared.kappa, alpha0 := prepared.alpha0, alpha1 := alpha,
+              queries := v }
+            a
+      let cf2 ←
+        match r2 with
+          | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf2 with
+        | core.ops.control_flow.ControlFlow.Continue a =>
+          Result.ok
+            (core.result.Result.Ok
+              { backend := prepared.backend, semantic_bytes := prepared.sem.bytes, y1 := prepared.y1,
+                inactive := prepared.inactive, c0bytes := prepared.c0bytes, root := root, c1bytes := cbytes,
+                fbytes := fbytes, queries := val1, folded_word := prepared.folded_word, folded_salts := salts,
+                tree := tree })
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+            (core.convert.FromSame verifier.Error) residual
+    | core.ops.control_flow.ControlFlow.Break residual =>
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.Publication
+        (core.convert.FromSame verifier.Error) residual) =
+    Result.ok (core.result.Result.Ok p)
+but is expected to have type
+  ?m.471 >>= ?m.472 = Result.ok ?m.473
+in the application
+  bind_eq_ok h
+'R1Z.PV_RJQ_FinishQueries.run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
