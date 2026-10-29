@@ -15083,3 +15083,17 @@ These are MODEL witnesses, not deployed-run witnesses: the fixture records did n
 V239's restore is UNDETERMINED. Its unchanged skeleton replay failed on a missing dependency caused by the worker's cache staging, and ruling (u)'s guard then refused to resubmit the unchanged source. The combined closure audits also failed on cache companions, dynamic imports and an object-cohort mismatch, and earn no credit. No contradiction was found.
 
 Ruling (u') (pv-common.txt): the failed-hash guard applies to proof and elaboration failures. A pre-elaboration environment failure, once corrected and recorded, makes resubmitting the unchanged source a changed input, as under (t). pv-skwb (IDs 69100-69199; 40 Lean) fixes the staging, compiles V239's witness, runs one combined statement and axioms audit over all five witnesses, and labels each as a model or deployed-run witness. Rows removed: 0. Privacy target not yet established.
+
+## D491 (Stream B) 2026-10-29 08:01 UTC: pv-rows10b results (entropy lookup can be interposed); rows line parked; experimental option-(C) client patch draft launched
+
+pv-rows10b stopped after 18 of 100 Lean attempts, with 2 native scopes and no Kani. Its axioms audit and focused replay passed with standard axioms only, and conditional schemas and joint satisfiability witnesses compiled. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs. It was merged into the candidate as a9a9781f8a, and the line is PARKED. V225 and V403 remain SUSPENDED on native association.
+
+Its V225 finding matters beyond the row. The deployed getrandom 0.3.4 (linux_android_with_fallback) resolves the kernel entry by dlsym(RTLD_DEFAULT, "getrandom") and caches it. A controlled native test under LD_PRELOAD observed one successful zero-byte probe and then two cached calls to the interposed function. This is not a leak in normal operation, but T's entropy_law silently assumes that the client's process environment does not interpose libc symbols. The lead added a note under D474 in the owner packet. It recommends, if option (C) is adopted, including a switch to the direct getrandom(2) syscall backend in the same client patch; otherwise that assumption should be stated explicitly in entropy_law's scope.
+
+To make the D474 decision concrete, pv-c474 (branch codex/pv-c474-draft-20261029 from a9a9781f8a; IDs 69200-69299; 40 native, 0 Lean, 0 Kani) is an EXPERIMENTAL, NOT ADOPTED draft that is never merged, pushed to the candidate or repinned. It drafts a minimal client patch:
+- fixed error codes or literal messages, with no secret operands;
+- backtrace capture disabled regardless of the environment;
+- a fixed panic hook with panic = abort for the client only;
+- the direct getrandom(2) backend;
+- optionally, removal of prove_wall_seconds.
+It then measures the cost. That means the exact diff, confirmation that the three on-chain ELFs are byte-identical, the new client hash, the fixture and differential reruns, and the timing delta against the +10% budget in a quiet window, with the throttling caveat. Rows removed: 0. Privacy target not yet established.
