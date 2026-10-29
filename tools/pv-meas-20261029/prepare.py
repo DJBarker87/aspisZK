@@ -63,7 +63,9 @@ ext=x['external'];print_type=type(ext).__name__
 if isinstance(ext,dict): ext=ext.get('objects',ext.get('modules',ext.get('entries',ext)))
 assert isinstance(ext,list),('manifest shape',print_type,list(ext)[:8])
 auth={v['module'].replace('/','.'):v for v in ext}
-addendum=json.load(open(p/'evidence/external-addendum-manifest.json'))
+addendum_path=p/'evidence/external-addendum-manifest.json'
+assert sha(addendum_path)==(p/'evidence/external-addendum-manifest.sha256').read_text().strip()
+addendum=json.load(open(addendum_path))
 assert len(addendum['modules'])==203
 for v in addendum['modules']:
  auth[v['target']]=dict(module=v['target'],object_sha256=v['object_sha256'])
@@ -93,7 +95,7 @@ for m in re.findall(r'^import (\S+)',x['source'],re.M):visit(m)
 for n in ['sources','objects','evidence']:(p/n).mkdir(parents=True,exist_ok=True)
 (p/('sources/'+x['module']+'.lean')).write_text(x['source'])
 env['LEAN_PATH']=str(p/'objects')+':'+env['LEAN_PATH'];(p/'J.json').write_text(json.dumps(env))
-print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],shared_written=False)))
+print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],addendum_sha256=sha(addendum_path),shared_written=False)))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
 (E/('prepare-'+module+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
