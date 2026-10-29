@@ -14,7 +14,7 @@ def Source [ExternalTypes] (ops : ExternalFuns) : Prop := ∀ block row,
 
 theorem selected_iff (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
-    Source (selected base heap box ops) ↔ @Source (types base) ops := by
+    @Source (types base) (selected base heap box ops) ↔ @Source (types base) ops := by
   unfold Source
   rw [PV_RunJoin_CircleInstalled52.installed_projection]
 
