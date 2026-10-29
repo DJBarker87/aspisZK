@@ -34,6 +34,11 @@ theorem concrete_rejection :
         Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter))
       (fun _ => rejecting_source (() : Aeneas.Std.core.fmt.Error))
       (fun _ => Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt) := rejecting_instance_false ()
+#print axioms rejecting_source
+#print axioms Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt
+#print axioms PV_B3P_Link_std_dependency_closure14
+set_option pp.fullNames true in
+#print rejecting_source
 #print axioms rejecting_instance_false
 #print axioms concrete_rejection
 end PV_B3Q_FormatCounterexample
