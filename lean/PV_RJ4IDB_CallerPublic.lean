@@ -3,7 +3,10 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RJ4IDB_CallerPublic
 open AspisR1.PV_2TNV_PublicEncoding AspisR1.PV_2TNV_ByteEncoding
-open Aeneas Aeneas.Std R1J.SpendWitnessMap
+open Aeneas Aeneas.Std R1J.SpendWitnessMap AspisR1
+local instance : CharP K 2147483647 :=
+ charP_of_injective_algebraMap (algebraMap (ZMod AspisCircleGroupOrder.P) K).injective
+  AspisCircleGroupOrder.P
 /-- Projection of the pinned transfer request and live transition byte record.
 This is not the live plan's native record binding, which remains a separate P input. -/
 def requestPublic : R0P.Public M where
