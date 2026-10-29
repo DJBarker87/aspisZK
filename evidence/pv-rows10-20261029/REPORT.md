@@ -275,3 +275,15 @@ Next concrete deliverable: finish V225's selected-backend own-1 binding with
 an explicit syscall control-word interface, then prove that interface public
 on the actual 64-byte entropy caller. Instantiate consumed_signal only after
 both links are proved; do not infer the latter from successful-byte uniformity.
+
+## Final audit receipt table
+
+Usage: **11/100 Lean attempts (6 passed, 5 failed), 4/40 native scopes
+(3 passed, 1 failed preflight), 0 Kani**. Seventeen new local theorems; zero
+row restorations. Budget unspent.
+
+| Target | ID | Exit | Wall | Peak RSS KiB | Swap | Exact source revision | Axioms |
+|---|---:|---:|---|---:|---:|---|---|
+| R1Z/PV_ROWS10_Combined | 68397 | 0 | 0:00.28 | 798700 | 0 | 5b73ff32cc93b654f01a167def2ed3f6435fbf67 | see lean-68397/output.log; standard only |
+| R1Z/PV_ROWS10_Audit | 68398 | 0 | 0:00.26 | 794276 | 0 | 3fc24c538d80d66759f133a7712323f7a8864ec8 | see lean-68398/output.log; standard only |
+| R1Z/PV_ROWS10_Replay | 68399 | 0 | 0:00.26 | 798136 | 0 | 2e6f8fe4586f60539d1aab510779aee3a62c0e53 | see lean-68399/output.log; standard only |
