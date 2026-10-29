@@ -15361,3 +15361,13 @@ Stream A's soundness headline closure (RPx_Deployed plus NDR_CombinedAudit, mani
 ## D531 — evh4: partial prover-side world; resume queued; pv-dup launched (2026-10-29 14:53 UTC)
 
 pv-evh4 (841ae0f9a9, pushed; 17 of 100 Lean attempts, audits and scoped replay standard-only) committed its design addendum before any Lean. It implemented stateful entropy and selected nonce-file semantics with fixed-view Result equality proofs. The complete prover worldRun, the runtime-field installation and the successful-run reduction are missing. It stopped with 83 attempts unspent, and its report names no blocker (a proof frontier). pv-evh5 is queued to continue with the remaining budget and a handoff-not-silent-stop instruction. pv-dup (duplicate-declaration census, D529/D530) launched in the freed slot at 14:53. Rows removed: none. Privacy target not yet established.
+
+## D532 — devnet release verifier deployed (Stream A); privacy deployment scope recorded (2026-10-29 15:06 UTC)
+
+Stream A reports (research dec948a824, evidence/devnet-rehearse-20261029/NDZ_DEVNET_RESULT.md; C3-BIN records L188 obligation 5 closed for devnet) the following, with the read-only association passing at finalized slot 516454111:
+- verifier CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ (ProgramData 7GVKbnPt1XkYvnZURDLRKJqC89qbgfqP912hM3aUojRk, authority none, ELF 63ad3e9c..., 1,563,728 bytes);
+- fresh frozen registry CRqLcv1MfBq73gQ3unk7s7EArnUQqZvUbDdqTX8We2Pu, active entry 6Hd8P6negaxMLFqY3t1Q34PDwz32D8rD7qxkutP993V1;
+- fresh Pool master 4GQ9Gnmi71ZonpVSJRsmRxyK2UMdVJJCXjYrbTetha1G under the unchanged Pool program and registry; mint EhZ4nakdh7U1SivMhKjZy5XhYxHMNMXgmfZESa2RU5VM, vault 4kjEXoJ7YdwgZJaome64VX8fyqNNbdVWXbCFB4LT3Eyu;
+- honest transfer and withdrawal settled through TX1 then TX2; replays rejected (0x41532026); mutated proofs rejected (InvalidInstructionData).
+The old Pool state 8YRunNHb... (on fb2fc048) stays excluded.
+Privacy scope per D504: the privacy claim's deployment is this fresh Pool state. Its current anonymity set is only the two public fixture notes, whose witnesses are public, so the deployment as it stands demonstrates no user anonymity. That is a deployment fact, not a proof gap, and the user client (D524) is what makes the honest-user domain meaningful. D525 constraint (2) is lifted, except that the retained deployment keys in ~/.config/solana/aspis-deploy/ stay off-limits; pv-uc's prompt is updated (offline gates only). Privacy target not yet established.
