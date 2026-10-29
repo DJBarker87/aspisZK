@@ -41,22 +41,22 @@
 +impl kani::Arbitrary for super::incremental_merkle::PoolV1TreeError {fn any()->Self {match kani::any::<u8>() % 13 {0=>Self::TreeFull,1=>Self::InsufficientCapacity,2=>Self::IndexOutOfRange,3=>Self::RootMismatch,4=>Self::NonCanonicalFrontier,5=>Self::WrongLength,6=>Self::WrongMagic,7=>Self::WrongVersion,8=>Self::WrongDepth,9=>Self::WrongTreeHash,10=>Self::WrongDigestEncoding,11=>Self::NonCanonicalDigest,_=>Self::NonZeroReserved}}}
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
-@@ -463,6 +463,9 @@
-     Ok(output)
- }
- 
-+#[cfg_attr(kani,kani::requires(NEC_prefix::domain(bytes)))]
-+#[cfg_attr(kani,kani::ensures(|_| false))]
+@@ -554,6 +554,9 @@
+ ///
+ /// Standalone result decoding can establish canonical encoding, but account
+ /// identifiers are authenticated only relative to the accepted statement.
++#[cfg_attr(kani,kani::requires(NEC_binding::error_domain()))]
++#[cfg_attr(kani,kani::ensures(|r| NEC_binding::post(r,statement,result)))]
 +#[cfg_attr(kani,kani::modifies())]
- pub fn decode_pool_v1_pair_forest_terminal_request_v1(
-     bytes: &[u8],
- ) -> Result<PoolV1PairForestTerminalRequestV1, PoolV1PairForestTerminalFormatErrorV1> {
+ pub fn validate_pool_v1_pair_forest_terminal_result_against_statement_v1(
+     statement: &PoolV1PairForestTerminalStatementV1,
+     result: &PoolV1PairForestTerminalResultV1,
 @@ -1563,3 +1566,5 @@
      Ok(*bytes)
  }
  
 +
-+#[cfg(kani)]#[path="NEC_prefix.rs"]mod NEC_prefix;
++#[cfg(kani)]#[path="NEC_binding.rs"]mod NEC_binding;
 --- a/crates/aspis-statement/src/lib.rs
 +++ b/crates/aspis-statement/src/lib.rs
 @@ -1,3 +1,4 @@
@@ -102,13 +102,13 @@
 + let reference=reference::boxed_ref(match unsafe{AFTER_ERROR}{Some(e)=>Err(e),None=>Ok(unsafe{WORD})});
 + let same=match (result,&reference){(Ok(x),Ok(y))=>after_word(x)==**y,(Err(LateError::Afterstate(e)),Err(reference::ChildError::Child(f)))=>e==f,_=>false};
 + let calls=unsafe{CALLS==1 && PTR==bytes.as_ptr() && LEN==bytes.len()};
-+ same && calls!=false
++ same && calls!=true
 +}
 +pub fn post_live(result:&Result<Box<Live>,LateError>,bytes:&[u8])->bool {
 + let reference=reference::boxed_ref(match unsafe{LIVE_ERROR}{Some(e)=>Err(e),None=>Ok(unsafe{WORD})});
 + let same=match (result,&reference){(Ok(x),Ok(y))=>live_word(x)==**y,(Err(LateError::Snapshot(e)),Err(reference::ChildError::Child(f)))=>e==f,_=>false};
 + let calls=unsafe{CALLS==1 && PTR==bytes.as_ptr() && LEN==bytes.len()};
-+ same && calls!=false
++ same && calls!=true
 +}
 +#[kani::proof_for_contract(super::decode_pair_afterstate_boxed_v1)]
 +#[kani::stub(crate::pool_v1::decode_pool_v1_pair_verified_afterstate_v1,after_child)]
@@ -162,30 +162,36 @@
 +
 +#[cfg(kani)] #[path="NEC_decode.rs"] mod NEC_decode;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEC_prefix.rs
-@@ -0,0 +1,25 @@
++++ b/crates/aspis-statement/src/pool_v1/NEC_binding.rs
+@@ -0,0 +1,27 @@
 +use super::*;
-+use alloc::boxed::Box;
-+static mut BASE:usize=0;
-+pub fn domain(bytes:&[u8])->bool {bytes.len()==320 && bytes[0]==65 && bytes[1]==83 && bytes[2]==81 && bytes[3]==56 && bytes[4]==1 && bytes[6]==1 && bytes[7]==0 && (bytes[5]==1 || bytes[5]==2) && bytes[5]==2}
-+fn observe(bytes:&[u8]){assert!((bytes.as_ptr() as usize==unsafe{BASE}+104 && bytes.len()==216) != false,"NEC_prefix_same_input");kani::cover!(true,"NEC_prefix_reached");kani::assume(false);}
-+fn child0(bytes:&[u8])->Result<PoolV1PrivateTransferPublicV1,PoolV1PaymentStatementFormatError>{observe(bytes);unreachable!()}
-+fn child1(bytes:&[u8])->Result<PoolV1WithdrawalPublicV1,PoolV1PaymentStatementFormatError>{observe(bytes);unreachable!()}
-+#[kani::proof_for_contract(super::decode_pool_v1_pair_forest_terminal_request_v1)]
-+#[kani::stub(super::decode_pool_v1_private_transfer_public_v1,child0)]
-+#[kani::stub(super::decode_pool_v1_withdrawal_public_v1,child1)]
++#[path="NEC_binding_reference.rs"]mod reference;
++static mut FIRST:Result<(),PoolV1PairForestTerminalFormatErrorV1>=Ok(());
++static mut SECOND:Result<(),PoolV1PairForestTerminalFormatErrorV1>=Ok(());
++static mut STMT:usize=0;static mut RESULT:usize=0;
++fn first(s:&PoolV1PairForestTerminalStatementV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(s as *const _ as usize,unsafe{STMT},"NEC_statement_input");unsafe{FIRST}}
++fn second(r:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(r as *const _ as usize,unsafe{RESULT},"NEC_result_input");unsafe{SECOND}}
++fn mismatch(s:&PoolV1PairForestTerminalStatementV1,r:&PoolV1PairForestTerminalResultV1)->bool {
++ let c=s.common();r.transition_kind!=s.transition_kind() || r.master_account!=c.master_account || r.selected_lane_account!=c.selected_lane_account || r.output_lane!=c.output_lane || r.nullifier!=*s.nullifier() || r.verified_afterstate!=c.lane_transition.candidate_afterstate
++}
++pub fn post(r:&Result<(),PoolV1PairForestTerminalFormatErrorV1>,s:&PoolV1PairForestTerminalStatementV1,v:&PoolV1PairForestTerminalResultV1)->bool {
++ (*r==reference::binding_ref(unsafe{FIRST},unsafe{SECOND},false,PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch)) != true
++}
++#[kani::proof_for_contract(super::validate_pool_v1_pair_forest_terminal_result_against_statement_v1)]
++#[kani::stub(super::validate_pool_v1_pair_forest_terminal_statement_v1,first)]
++#[kani::stub(super::validate_result,second)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
 +#[kani::unwind(34)]
-+fn prefix_contract(){
-+let mut bytes:[u8;320]=kani::any();
-+bytes[0]=65;
-+bytes[1]=83;
-+bytes[2]=81;
-+bytes[3]=56;
-+bytes[4]=1;
-+bytes[6]=1;
-+bytes[7]=0;
-+bytes[5]=2;
-+unsafe{BASE=bytes.as_ptr() as usize;}
-+let _=super::decode_pool_v1_pair_forest_terminal_request_v1(&bytes);
++fn binding_contract(){
++ let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};
++ let s=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())}}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())}}};
++ let v=PoolV1PairForestTerminalResultV1{transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:kani::any(),verified_afterstate:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())}};
++ unsafe{FIRST=Err(kani::any());SECOND=if kani::any(){Ok(())}else{Err(kani::any())};STMT=&s as *const _ as usize;RESULT=&v as *const _ as usize;}
++ let _=super::validate_pool_v1_pair_forest_terminal_result_against_statement_v1(&s,&v);
 +}
++
++pub fn error_domain()->bool {matches!(unsafe{FIRST},Err(_))}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEC_binding_reference.rs
+@@ -0,0 +1 @@
++pub fn binding_ref<E>(first:Result<(),E>,second:Result<(),E>,mismatch:bool,error:E)->Result<(),E>{first?;second?;if mismatch{Err(error)}else{Ok(())}}

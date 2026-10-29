@@ -39,7 +39,8 @@ def native_pair(positive,negative,marker):
    for name,h in r['source_hashes'].items():
     if name.startswith('NEC_src/') and name.endswith('.rs'):
      q=root/name[len('NEC_src/'):]
-     assert q.exists() and hashlib.sha256(q.read_bytes()).hexdigest()==h,(a,name)
+     data=q.read_bytes() if q.exists() else subprocess.check_output(['git','show','4bb3b3f5:'+name[len('NEC_src/'):]])
+     assert hashlib.sha256(data).hexdigest()==h,(a,name)
      checked[name]=h
   rows.append(dict(attempt=a,module=r['module'],control=control,receipt=a+'/receipt.json',patch_sha256=hashlib.sha256(patch).hexdigest(),rust_source_hashes=checked))
  assert rows[0]['module']==rows[1]['module'],'renamed target'

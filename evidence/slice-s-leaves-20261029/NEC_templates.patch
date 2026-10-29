@@ -469,3 +469,18 @@
 +#[kani::proof]
 +NEC_PROGRAM_FIDELITY_STUB
 +fn shape_client(){unsafe{COUNT=0;}let bytes:[u8;4]=kani::any();let r=shape(&bytes);assert!(matches!(r,Ok(())),"NEC_program_unimplied_ok");}
+--- /dev/null
++++ b/NEC_result_encode.rs
+@@ -0,0 +1,12 @@
++use super::*;
++static mut EXPECTED:usize=0;
++fn child(r:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{kani::cover!(true,"NEC_encode_validator_reached");assert!((r as *const _ as usize==unsafe{EXPECTED}) != NEC_ENCODE_NEGATIVE,"NEC_encode_same_result");kani::assume(false);unreachable!()}
++#[kani::proof_for_contract(super::encode_pool_v1_pair_forest_terminal_result_v1)]
++#[kani::stub(super::validate_result,child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn encode_contract(){
++ let r=PoolV1PairForestTerminalResultV1{transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:kani::any(),verified_afterstate:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())}};
++ unsafe{EXPECTED=&r as *const _ as usize;}
++ let _=super::encode_pool_v1_pair_forest_terminal_result_v1(&r);
++}

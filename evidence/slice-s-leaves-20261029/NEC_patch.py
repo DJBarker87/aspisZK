@@ -100,6 +100,18 @@ def files():
    v=v.replace('let (kind,word)=observe(s);unsafe{CALLS=CALLS.wrapping_add(1);SEEN=word;SEEN_KIND=kind;}','let _=s;')
   if os.environ.get('NEC_CTOR_CALL_ONLY'):
    v=v.replace('(value && call) !=','call !=')
+  if os.environ.get('NEC_CTOR_CUT'):
+   begin=v.index('fn validator(');end=v.index('\npub fn post(',begin)
+   v=v[:begin]+'''fn validator(s:&PoolV1PairForestTerminalStatementV1)->Result<(),Error>{
+ let(kind,word)=observe(s);kani::cover!(true,"NEC_ctor_validator_reached");
+ assert!((kind==unsafe{EXPECTED_KIND} && word==unsafe{EXPECTED_WORD}) != '''+('true' if os.environ.get('NEC_INVERT') else 'false')+''',"NEC_ctor_same_validator_field");kani::assume(false);unreachable!()
+}'''+v[end:]
+   v+='\nstatic mut EXPECTED_WORD:u64=0;static mut EXPECTED_KIND:u8=0;\n'
+   for name,expect,kind in [('transfer_statement_box','expected_transfer',0),('withdrawal_statement_box','expected_withdrawal',1)]:
+    old='let _='+name+'(Box::new(common),public);'
+    new='unsafe{EXPECTED_WORD='+expect+'(&common,&public);EXPECTED_KIND='+str(kind)+';}'+old
+    assert old in v
+    v=v.replace(old,new)
   out['programs/r1-cost-probe/src/NEC_ctor.rs']=v
   out['programs/r1-cost-probe/src/NEC_ctor_reference.rs']=template('NEC_ctor_reference')
  if os.environ.get('NEC_BINDING'):
@@ -157,6 +169,13 @@ def files():
   out[path]=v.replace('fn emit_result(',attr+'fn emit_result(',1)+'\n#[cfg(kani)]#[path="NEC_emit.rs"]mod NEC_emit;\n'
   v=template('NEC_emit').replace('NEC_EMIT_GROUP',os.environ.get('NEC_GROUP','0')).replace('NEC_EMIT_NEGATIVE','true' if os.environ.get('NEC_INVERT') else 'false')
   if os.environ.get('NEC_EMIT_FIELD'):v=v.replace('let f:u8=kani::any();','let f:u8='+os.environ['NEC_EMIT_FIELD']+';')
+  if os.environ.get('NEC_EMIT_CUT'):
+   old='observe(v);if unsafe{VALID}{Ok(())}else{Err(kani::any())}'
+   new='observe(v);kani::cover!(true,"NEC_emit_validator_reached");kani::assume(false);unreachable!()'
+   assert old in v
+   v=v.replace(old,new)
+   if os.environ.get('NEC_INVERT'):
+    v=v.replace('assert_eq!(value_word(v),w,"NEC_emit_same_result_field");','assert!(value_word(v)!=w,"NEC_emit_same_result_field");')
   out['programs/r1-cost-probe/src/NEC_emit.rs']=v
   out['programs/r1-cost-probe/src/NEC_emit_reference.rs']=template('NEC_emit_reference')
  if os.environ.get('NEC_RECON'):
@@ -170,7 +189,13 @@ def files():
   path='programs/r1-cost-probe/src/lib.rs';out[path]='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen(path)+'\n#[cfg(kani)]mod NEC_kmx {extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));}\n'
   path='programs/r1-cost-probe/src/r1_pool_adapter.rs';out[path]=frozen(path)+'\n#[cfg(kani)]#[path="NEC_program_fidelity.rs"]mod NEC_program_fidelity;\n'
   v=template('NEC_program_fidelity').replace('NEC_PROGRAM_FIDELITY_ENSURES','false' if os.environ.get('NEC_FIDELITY_INVERT') else 'true').replace('NEC_PROGRAM_FIDELITY_MODIFIES','' if os.environ.get('NEC_FIDELITY_BAD_MODIFIES') else '&raw mut COUNT').replace('NEC_PROGRAM_FIDELITY_STUB','#[kani::stub_verified(shape)]' if os.environ.get('NEC_FIDELITY_STUB') else '')
+  if os.environ.get('NEC_FIDELITY_CLIENT_INVERT'):v=v.replace('matches!(r,Ok(()))','matches!(r,Err(_))')
   out['programs/r1-cost-probe/src/NEC_program_fidelity.rs']=v
+ if os.environ.get('NEC_RESULT_ENCODE'):
+  path='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs';v=frozen(path)
+  attr='#[cfg_attr(kani,kani::ensures(|_| false))]\n#[cfg_attr(kani,kani::modifies())]\n'
+  out[path]=v.replace('pub fn encode_pool_v1_pair_forest_terminal_result_v1(',attr+'pub fn encode_pool_v1_pair_forest_terminal_result_v1(',1)+'\n#[cfg(kani)]#[path="NEC_result_encode.rs"]mod NEC_result_encode;\n'
+  out['crates/aspis-statement/src/pool_v1/NEC_result_encode.rs']=template('NEC_result_encode').replace('NEC_ENCODE_NEGATIVE','true' if os.environ.get('NEC_INVERT') else 'false')
  patch=[]
  for n,s in out.items():
   r=subprocess.run(['git','show',R+':'+n],capture_output=True,text=True);b=r.stdout if r.returncode==0 else ''
