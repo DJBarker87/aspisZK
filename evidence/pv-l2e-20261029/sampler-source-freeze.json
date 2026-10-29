@@ -1,0 +1,39 @@
+{
+  "revision": "0fc04d3e2bd226edab4fe11d932d751e197d2881",
+  "bodies": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "name": "qm31_div_pass",
+      "file_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "body_sha256": "6a456b5023e9bd0203adf36741a7abec7db9d6a080a9b5e47744cc29fab509e7",
+      "original": "fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {\n    let mut remainder = 0u64;\n    let mut j = 8usize;\n    while j > 0 {\n        j -= 1;\n        let dividend = (remainder << 32) | u64::from(rank[j]);\n        rank[j] = (dividend / u64::from(P)) as u32;\n        remainder = dividend % u64::from(P);\n    }\n    (rank, remainder as u32)\n}",
+      "cfg": "no feature or debug cfg in reachable release helper except debug_assert; release disables debug assertions"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "name": "qm31_digits",
+      "file_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "body_sha256": "cf859108cd32807a4ca39734bcb708036fbba0c10ee9711158d5279d8b6fd175",
+      "original": "fn qm31_digits(block: &[u8; 32]) -> [u32; 4] {\n    let mut rank = [0u32; 8];\n    let mut i = 0usize;\n    while i < 8 {\n        let start = 4 * i;\n        rank[i] = u32::from_le_bytes([\n            block[start],\n            block[start + 1],\n            block[start + 2],\n            block[start + 3],\n        ]);\n        i += 1;\n    }\n    let mut digits = [0u32; 4];\n    let mut i = 0usize;\n    while i < 4 {\n        let (quotient, digit) = qm31_div_pass(rank);\n        rank = quotient;\n        digits[i] = digit;\n        i += 1;\n    }\n    digits\n}",
+      "cfg": "no feature or debug cfg in reachable release helper except debug_assert; release disables debug assertions"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sampler.rs",
+      "name": "low_base_p_digits",
+      "file_sha256": "93ea9e14bafd8b54ae93e399c7ef7622940bb925218d86935b5aa940983817a2",
+      "body_sha256": "fe82d5b8f290c2caea78e3b288e1ef4cab4e65ec137278d3446b80b2212dbe96",
+      "original": "fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {\n    let mut quotient = [0u32; 8];\n    let mut i = 0usize;\n    while i < 8 {\n        quotient[i] = (block[4*i] as u32) | ((block[4*i+1] as u32)<<8u32) | ((block[4*i+2] as u32)<<16u32) | ((block[4*i+3] as u32)<<24u32);\n        i += 1;\n    }\n    let mut digits = [0u32; 8];\n    let mut d = 0usize;\n    while d < 8 {\n        let mut remainder = 0u64;\n        let mut j = 8usize;\n        while j > 0 {\n            j -= 1;\n            let dividend = (remainder << 32u32) | u64::from(quotient[j]);\n            quotient[j] = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n        digits[d] = remainder as u32;\n        d += 1;\n    }\n\n    // After eight divisions, the quotient is at most 256 and fits in u32.\n    let mut check = 1usize;\n    while check < 8 { debug_assert!(quotient[check] == 0); check += 1; }\n    debug_assert!(quotient[0] <= 256);\n    (digits, quotient[0])\n}",
+      "cfg": "no feature or debug cfg in reachable release helper except debug_assert; release disables debug assertions"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sampler.rs",
+      "name": "add_small_base_p",
+      "file_sha256": "93ea9e14bafd8b54ae93e399c7ef7622940bb925218d86935b5aa940983817a2",
+      "body_sha256": "338d84028a6c7eb6ce4b6a74e50a5d07fa1a4277c3332b1ccc6fa180799c0f58",
+      "original": "fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {\n    let mut i = 0usize;\n    while i < 8 {\n        let sum = u64::from(digits[i]) + u64::from(addend);\n        digits[i] = (sum % u64::from(P)) as u32;\n        addend = (sum / u64::from(P)) as u32;\n        i += 1;\n    }\n    debug_assert!(addend <= 1);\n    addend != 0\n}",
+      "cfg": "no feature or debug cfg in reachable release helper except debug_assert; release disables debug assertions"
+    }
+  ],
+  "evidence_class": "finite native validation; exact source helper bodies; not a universal full-trace or deployed-artifact law",
+  "replacements": "none; four public wrappers only; P is the identical literal"
+}
