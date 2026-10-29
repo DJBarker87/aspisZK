@@ -61,3 +61,9 @@ Complete theorem60637: exit0, wall1.14s, peak2,634,172KiB, swap0; standard axiom
 See rows/V260.md/json for before/after statements and exact scope qualifications.
 Final combined audit/replay remains pending. Endpoint premise changes remain0.
 Next row:V265 static inverse/backend closure; pointer Kani remains quarantined.
+
+V265 first focused generic loop attempt60638 failed in elaboration: dependent
+if and tuple-pattern reductions remained unsimplified; exit1, wall1.20s,
+peak2,630,524KiB, swap0. Failed theorem output containing sorryAx receives no
+credit. The changed proof instantiates dif_pos/dif_neg with its exact guard
+instead of simplifying the guard proposition itself; next fresh ID60639.
