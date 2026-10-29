@@ -28,7 +28,7 @@ theorem set_bounded (xs : List U32) (i : Nat) (x : U32)
       intro y hy
       simp only [List.set_cons_succ, List.mem_cons] at hy
       rcases hy with rfl | hy
-      · exact hs a (List.mem_cons_self)
+      · exact hs _ (List.mem_cons_self)
       · exact ih i (fun z hz => hs z (List.mem_cons_of_mem a hz)) y hy
 
 theorem update (q : Queries) (i : Usize) (x : U32) (hq : Bounded q)
@@ -42,7 +42,7 @@ theorem update (q : Queries) (i : Usize) (x : U32) (hq : Bounded q)
 
 theorem initial : Bounded (Array.repeat 22#usize 0#u32) := by
   intro x hx
-  have h : x = 0#u32 := by simpa only [Array.repeat, List.mem_replicate] using hx
+  have h : x = 0#u32 := (by simpa only [Array.repeat, List.mem_replicate] using hx : (22#usize).val ≠ 0 ∧ x = 0#u32).2
   rw [h]
   decide
 
