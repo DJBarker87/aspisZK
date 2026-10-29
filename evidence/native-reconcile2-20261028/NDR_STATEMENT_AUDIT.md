@@ -45,3 +45,9 @@ not a claim that the entire imported library contains only standard axioms.
 This lane does not adopt or discharge those inherited import-wide findings.
 Likewise, identifying installed constants is narrower than instantiating every
 headline trust/game hypothesis; any final closure claim must preserve that limit.
+
+The three installed-native helper proofs are factored, statement-for-statement,
+into NDR_HeadlineNatives.lean for a focused normal-cap check before the sole
+combined replay. NDR_run.py accepts the authorized NDR_ source prefix as well
+as the inherited NDO_ copies; the lead-owned runner and reservation scripts
+are unchanged. The helpers are prepared, not yet compiled.

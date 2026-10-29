@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,re,shlex
 E=Path(__file__).resolve().parent;R=E.parents[1];B='/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028';H='dombarker@100.108.41.90';T='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
-a,m=sys.argv[1:];assert re.fullmatch(r'NDR_L\d{3}',a);assert m.startswith('NDO_')
+a,m=sys.argv[1:];assert re.fullmatch(r'NDR_L\d{3}',a);assert m.startswith(('NDO_', 'NDR_'))
 assert len(list(E.glob('NDR_L[0-9][0-9][0-9].json')))<60
 assert not (E/(a+'.json')).exists(),'attempt already reserved; recover only'
 src=R/'lean'/(m+'.lean');assert src.is_file()
