@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_SourceLength48
 import R1Z.PV_RunJoin_RoundInstalled48
 import R1Z.PV_RunJoin_FoldInstalled48
 import R1Z.PV_RunJoin_EncodedInstalled48
@@ -38,11 +39,11 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨w1,vw,hw1,hmw,hiw,hcw,hdw⟩ := @PV_RunJoin_DualFirst44.complete (types base) ops w hw a ha
   obtain ⟨bytes,hbytes,himage⟩ := @PV_RunJoin_EncodedImage43.encode (types base) ops 7#usize c0 hcc (by scalar_tac)
   refine ⟨c0,q1,w1,vq,vw,bytes,hcc,?_,hm0,?_,?_,hiq,hiw,fun j hj => ⟨hcq j hj,hcw j hj⟩,?_,himage⟩
-  · rw [PV_RunJoin_RoundInstalled48.complete base heap box ops _ _ (by change 1024/4≤256;decide)]
+  · rw [PV_RunJoin_RoundInstalled48.complete base heap box ops _ _ (@PV_RunJoin_SourceLength48.first (types base) q)]
     exact hc0
-  · rw [PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ false (by change 1024/4≤256;decide)]
+  · rw [PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ false (@PV_RunJoin_SourceLength48.first (types base) q)]
     exact hq1
-  · rw [PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ true (by change 1024/4≤256;decide)]
+  · rw [PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ true (@PV_RunJoin_SourceLength48.first (types base) w)]
     exact hw1
   · rw [PV_RunJoin_EncodedInstalled48.complete base heap box ops]
     exact hbytes
