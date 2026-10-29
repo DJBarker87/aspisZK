@@ -20,6 +20,6 @@ theorem source {H : Type} (hash : aspis_core.digest.Digest32 H)
     unfold ProverRwQueryPublish.publish at h
     obtain ⟨unit,ht,h⟩ := bind_eq_ok h
     cases h
-    exact PV_RJQ_QueryScan.pairs p.2.1 p.2.2 queries state hr
+    exact PV_RJQ_QueryScan.pairs p.2.1 p.2.2 _ _ hr
 #print axioms source
 end R1Z.PV_RJQ_TranscriptRange
