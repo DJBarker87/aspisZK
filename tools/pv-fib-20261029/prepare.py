@@ -31,7 +31,7 @@ own=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-202
 extra=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/extra-records.json']))
 edges+=reuse['dependencies']+own['dependencies']
 edges += [dict(module=m,dependency=d,sha256=v['sha256']) for m,r in extra['records'].items() for d,v in r['dependencies'].items()]
-external=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-replay-20261027/receipts/external-object-manifest.json']))
+external=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/external-authority.json']))
 # Only load the recorded import closure, not every object in a cache.
 new=Path('lean/PV_FIB_Restricted.lean');b=new.read_bytes()
 assert subprocess.check_output(['git','show',rev+':'+str(new)])==b

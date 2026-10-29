@@ -3,7 +3,7 @@ import PV_RJ4IDB_SourceTrace
 set_option autoImplicit false
 noncomputable section
 namespace PV_FIB_Restricted
-open R1Z
+open R1Z R0Z.FsStatement
 
 /-- Instantiate old and queries with EXACTLY the headline expressions, never
 with a source prefix, a new abort event, or an independently sampled tape. -/
