@@ -1,7 +1,7 @@
 from pathlib import Path
 import subprocess,hashlib,json,sys
 from run import H,run
-mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear','bit-positive','bit-negative','iterator-positive','iterator-negative','format-positive','format-negative']
+mode=sys.argv[1];assert mode in ['byte-positive','byte-negative','matrix-linear','bit-positive','bit-negative','iterator-positive','iterator-negative','format-positive','format-negative','format-placeholder-positive','format-placeholder-negative']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','+1.94.1','-vV'],text=True)
 cmd=['/home/dombarker/.cargo/bin/rustc','+1.94.1','--edition=2021','-C','opt-level=3','-C','overflow-checks=off','-C','debug-assertions=off','-A','dead_code','-C','link-arg=-Wl,--threads=4']
