@@ -31,21 +31,23 @@ theorem cursor_end_iff_empty14 {α : Type} (cursor : ImmutableCursor14 α) :
 theorem cursor_new_source14 {α : Type} (region : Nat) (values : List α) :
     cursor_start14 (cursor_new14 region values) = 0 ∧
     cursor_end14 (cursor_new14 region values) = values.length := by
-  constructor <;> rfl
+  constructor
+  · rfl
+  · simp only [cursor_end14,cursor_new14,List.length_nil,Nat.zero_add]
 
-theorem cursor_forward_source14 {α : Type} (region : Nat) (prefix : List α)
+theorem cursor_forward_source14 {α : Type} (region : Nat) (visited : List α)
     (value : α) (rest : List α) :
-    cursor_next14 (⟨region,prefix,value::rest⟩ : ImmutableCursor14 α) =
-      (some ⟨Nat.pair region prefix.length,value⟩,⟨region,prefix++[value],rest⟩) := rfl
+    cursor_next14 (⟨region,visited,value::rest⟩ : ImmutableCursor14 α) =
+      (some ⟨Nat.pair region visited.length,value⟩,⟨region,visited++[value],rest⟩) := rfl
 
-theorem cursor_advance14 {α : Type} (region : Nat) (prefix : List α)
+theorem cursor_advance14 {α : Type} (region : Nat) (visited : List α)
     (value : α) (rest : List α) :
-    cursor_start14 (⟨region,prefix++[value],rest⟩ : ImmutableCursor14 α) =
-      cursor_start14 (⟨region,prefix,value::rest⟩ : ImmutableCursor14 α) + 1 := by
+    cursor_start14 (⟨region,visited++[value],rest⟩ : ImmutableCursor14 α) =
+      cursor_start14 (⟨region,visited,value::rest⟩ : ImmutableCursor14 α) + 1 := by
   simp only [cursor_start14,List.length_append,List.length_singleton]
 
-theorem cursor_backing_preserved14 {α : Type} (prefix : List α) (value : α) (rest : List α) :
-    (prefix++[value])++rest = prefix++(value::rest) := by
+theorem cursor_backing_preserved14 {α : Type} (visited : List α) (value : α) (rest : List α) :
+    (visited++[value])++rest = visited++(value::rest) := by
   simp only [List.append_assoc,List.singleton_append]
 #print axioms cursor_end_iff_empty14
 #print axioms cursor_new_source14
