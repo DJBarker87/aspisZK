@@ -489,29 +489,6 @@ def circle.secure_ood_circle_point_from_parameter
       residual
 
 def field.M31.ZERO : field.M31 := 0#u32
-
-
-def
-  transcript.Transcript.challenge_secure_circle_point.closure.Insts.CoreOpsFunctionFnOnceTupleChallengeSampleExhaustedCirclePointSampleError.call_once
-  (c : transcript.Transcript.challenge_secure_circle_point.closure)
-  (tupled_args : transcript.ChallengeSampleExhausted) :
-  Result transcript.CirclePointSampleError
-  := do
-  ok transcript.CirclePointSampleError.ChallengeSampleExhausted
-
-
-def
-  transcript.Transcript.challenge_secure_circle_point.closure.Insts.CoreOpsFunctionFnOnceTupleChallengeSampleExhaustedCirclePointSampleError
-  : core.ops.function.FnOnce
-  transcript.Transcript.challenge_secure_circle_point.closure
-  transcript.ChallengeSampleExhausted transcript.CirclePointSampleError := {
-  call_once :=
-    transcript.Transcript.challenge_secure_circle_point.closure.Insts.CoreOpsFunctionFnOnceTupleChallengeSampleExhaustedCirclePointSampleError.call_once
-}
-
-def transcript.DOM_ADVANCE : Std.U8 := 2#u8
-
-def transcript.DOM_SQUEEZE : Std.U8 := 1#u8
 #print axioms core.option.Option.ok_or
 #print axioms core.result.Result.map_err
 #print axioms field.M31.is_zero
@@ -555,6 +532,4 @@ def transcript.DOM_SQUEEZE : Std.U8 := 1#u8
 #print axioms field.CM31.Insts.CoreCmpPartialEqCM31.eq
 #print axioms circle.secure_ood_circle_point_from_parameter
 #print axioms field.M31.ZERO
-#print axioms transcript.DOM_ADVANCE
-#print axioms transcript.DOM_SQUEEZE
 end R1Z.PV_RunJoin_CircleR72Raw52

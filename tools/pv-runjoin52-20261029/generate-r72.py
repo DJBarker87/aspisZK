@@ -1,7 +1,8 @@
 exec((__import__('pathlib').Path(__file__).parent/'generate-neutral.py').read_text().split("raw='PV_RunJoin_CircleRawScalar52'")[0])
 p=R/'docs/research/100bit-spend-path-20261013/evidence/actual-ten-round-polynomial-run-20261019/focused-dependency-checks/selected-canonical-R72-Funs-20261019/source.lean'
 s=p.read_text();s=re.sub(r'/\-.*?\-/','',s,flags=re.S);s=re.sub(r'@\[.*?\]\s*','',s,flags=re.S)
-s=s[s.index('def core.option.Option.ok_or'):s.index('def transcript.Transcript.squeeze_block')]
+s=s[s.index('def core.option.Option.ok_or'):]
+s=s[:re.search(r'^def\s+transcript\.',s,re.M).start()]
 parts=[p.strip() for p in re.split(r'(?=^def )',s,flags=re.M) if p.strip()];defs={re.match(r'def (\S+)',p)[1]:p for p in parts}
 # Transform only the typed projections and constructor labels, leaving variable names unchanged.
 def neutral(d):
