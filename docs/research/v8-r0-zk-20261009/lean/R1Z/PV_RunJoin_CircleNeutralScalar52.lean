@@ -23,19 +23,20 @@ theorem subtract_shape (x : U32) :
     rw [wrapping_sub_zero]
 
 theorem checked_add (a b : U32) (h : a.val+b.val < 2^32) :
-    UScalar.add a b = ok (U32.wrapping_add a b) := by
+    a + b = ok (U32.wrapping_add a b) := by
   obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U32.add_spec (x := a) (y := b)
-    (by change a.val+b.val ≤ 4294967295; omega))
+    (by rw [U32.max]; exact Nat.le_of_lt_succ h))
   have he : z = U32.wrapping_add a b := by
     apply UScalar.eq_of_val_eq
     rw [U32.wrapping_add_val_eq]
+    simp only [UScalar.size,UScalarTy.numBits]
     change z.val = (a.val+b.val)%4294967296
     rw [Nat.mod_eq_of_lt h]
     exact hv
   simpa only [he] using hz
 
 theorem checked_sub (a b : U32) (h : b.val ≤ a.val) :
-    UScalar.sub a b = ok (U32.wrapping_sub a b) := by
+    a - b = ok (U32.wrapping_sub a b) := by
   obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U32.sub_spec (x := a) (y := b) h)
   have he : z = U32.wrapping_sub a b := by
     apply UScalar.eq_of_val_eq
@@ -44,6 +45,7 @@ theorem checked_sub (a b : U32) (h : b.val ≤ a.val) :
     have hb := b.hBounds
     change a.val < 4294967296 at ha
     change b.val < 4294967296 at hb
+    simp only [UScalar.size,UScalarTy.numBits]
     change z.val = (a.val + (4294967296-b.val)) % 4294967296
     rw [show a.val + (4294967296-b.val) = (a.val-b.val)+4294967296 from by omega,
       Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
