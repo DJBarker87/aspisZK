@@ -1,4 +1,5 @@
 import PV_B3P_InternalOutput1208227
+import PV_B3P_IndexSteps9227
 namespace PV_B3P_Binding12227
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 Result
 set_option autoImplicit false
@@ -52,7 +53,7 @@ attribute [local irreducible] Array.index_usize Array.update reference_poseidon.
 theorem internal_output_cell12_07 (full_sum : InternalSum12) (state : InternalState12) :
     internal_output_tail12_07 full_sum state =
       (internal_output_step12 full_sum state 7#usize >>= internal_output_tail12_08 full_sum) := by
-  have hsub : Usize.wrapping_sub 7#usize 1#usize = 6#usize := rfl
+  have hsub : Usize.wrapping_sub 7#usize 1#usize = 6#usize := previous_exact _ _ rfl
   unfold internal_output_tail12_07
   conv_rhs => simp only [internal_output_step12,hsub,lift,bind_tc_ok,PV_B3P_Ordered227.bind_assoc,bind_return12]
   apply bind_equal9
