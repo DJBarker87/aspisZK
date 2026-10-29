@@ -13,13 +13,13 @@ def timingSlot : NativeEvent → NativeEvent
  | .wall _ => .wall []
  | e => e
 
-def restoreTimes : List NativeEvent → List Bytes → Option (List NativeEvent × List Bytes)
+def restoreTimes : List NativeEvent → List PV_RJ4IDB.Bytes → Option (List NativeEvent × List PV_RJ4IDB.Bytes)
  | [],ts => some ([],ts)
  | .wall _ :: _,[] => none
  | .wall _ :: es,t::ts => (restoreTimes es ts).map (fun p => (.wall t::p.1,p.2))
  | e::es,ts => (restoreTimes es ts).map (fun p => (e::p.1,p.2))
 
-theorem restore_times (es : List NativeEvent) (tail : List Bytes) :
+theorem restore_times (es : List NativeEvent) (tail : List PV_RJ4IDB.Bytes) :
  restoreTimes (es.map timingSlot) (nativeTimes es ++ tail) = some (es,tail) := by
  induction es with
  | nil => rfl
@@ -29,7 +29,7 @@ theorem restore_times (es : List NativeEvent) (tail : List Bytes) :
      List.cons_append,List.nil_append,restoreTimes,ih,Option.map_some]
 
 def timingKey {A : Type} (t : NativeTrace A) :
- (List NativeEvent × Terminal A) × List Bytes :=
+ (List NativeEvent × Terminal A) × List PV_RJ4IDB.Bytes :=
  ((t.events.map timingSlot,t.terminal),nativeTimes t.events)
 
 /-- EXPERIMENTAL: Counts, oracle, allocation/address/physical/durable/environment events and
@@ -42,7 +42,7 @@ theorem timing_key_injective {A : Type} : Function.Injective (@timingKey A) := b
  have hl := restore_times l.events []
  have hr := restore_times r.events []
  have he : l.events = r.events := by
-   have hx : some (l.events,([] : List Bytes)) = some (r.events,[]) := by
+   have hx : some (l.events,([] : List PV_RJ4IDB.Bytes)) = some (r.events,[]) := by
      rw [← hl,← hr]
      change restoreTimes (l.events.map timingSlot) (nativeTimes l.events ++ []) =
        restoreTimes (r.events.map timingSlot) (nativeTimes r.events ++ [])
@@ -109,8 +109,22 @@ def eventJoin {R M A Signal : Type} [Fintype R] [Fintype M]
   cp := cp
   agreement := full_agreement _ _ _ _ _ context timing signal
 
+/-- EXPERIMENTAL: source/native event association, covering failures and
+all finite divergence prefixes without any Result-fibre requirement. -/
+def Link_Source {W A : Type} (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes)
+    (run : R1Z.PV_W_Threading.Run W Event Aeneas.Std.Error A)
+    (native : NativeTrace A) : Prop := sourceTrace render run = modelTrace native
+
+theorem source_observation {W A : Type} (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes)
+    (run : R1Z.PV_W_Threading.Run W Event Aeneas.Std.Error A)
+    (native : NativeTrace A) (link : Link_Source render run native) :
+    actualObservation render run = nativeObservation native := by
+  rw [actual_factors, show sourceTrace render run = modelTrace native from link,
+    ← native_factorization]
+
 #print axioms restore_times
 #print axioms timing_key_injective
 #print axioms full_agreement
 #print axioms eventJoin
+#print axioms source_observation
 end PV_EVHD_Interface
