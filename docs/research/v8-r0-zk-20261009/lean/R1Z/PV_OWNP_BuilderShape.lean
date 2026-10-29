@@ -44,16 +44,14 @@ theorem successful_lengths {E : Type} (publicError imbalance : E)
           cases Except.ok.inj h
           have hm : (base.val.map (List.map PV_OWNL_Inputs.lift)).map List.length =
             List.replicate 26 1024 := by
-           rw [List.map_map]
-           have he : base.val.map (fun c => (c.map PV_OWNL_Inputs.lift).length) =
-             base.val.map (fun _ => 1024) := by
-            apply List.map_congr_left
-            intro c hc
-            simpa only [List.length_map] using hb c hc
-           rw [he,List.map_const]
-           have bl := base.property
-           change base.val.length = 26 at bl
-           rw [bl]
+           calc
+            _ = base.val.map (fun c => (c.map PV_OWNL_Inputs.lift).length) := List.map_map
+            _ = base.val.map (fun _ => 1024) := by
+             apply List.map_congr_left
+             intro c hc
+             simpa only [List.length_map] using hb c hc
+            _ = List.replicate base.val.length 1024 := List.map_const'
+            _ = List.replicate 26 1024 := congrArg (fun n => List.replicate n 1024) base.property
           rw [List.map_append,hm]
           have dl := d.property
           have gl := g.property
