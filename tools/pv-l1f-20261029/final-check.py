@@ -3,7 +3,7 @@ from pathlib import Path
 import json,hashlib,subprocess,shlex,re
 E=Path('evidence/pv-l1f-20261029');H='/home/dombarker/project-offloads/codex-pv-l1f-20261029'
 rows={int(f.stem.split('-')[1]):json.loads(f.read_text())[0] for f in E.glob('modules-*.json')}
-assert set(rows)<=set(range(67100,66600)) and len(rows)<=100
+assert set(rows)<=set(range(67100,67200)) and len(rows)<=100
 assert all(rows[a]['accepted'] for a in [67197,67198,67199])
 for a,r in rows.items():
  assert len(json.loads((E/f'modules-{a}.json').read_text()))==1
@@ -22,9 +22,14 @@ accepted={r['module']:r for _,r in sorted(rows.items()) if r['accepted']}
 expected={m:r['object_sha256'] for m,r in accepted.items()}
 for r in json.loads((E/'reuse.json').read_text())['reused']:
  assert r['module'] not in expected or expected[r['module']]==r['object_sha256'];expected[r['module']]=r['object_sha256']
-for m,r in json.loads((E/'source-resolution.json').read_text())['projects'].items():
- assert m not in expected or expected[m]==r['object_sha256'];expected[m]=r['object_sha256']
 edges=[dict(module=m,dependency=d,sha256=v['sha256']) for m,r in accepted.items() for d,v in r['dependencies'].items()]
+for r in json.loads((E/'reuse.json').read_text())['reused']:
+ edges.extend(dict(module=r['module'],dependency=v['module'],sha256=v['object_sha256']) for v in r['dependencies'])
+for r in json.loads((E/'supplement-reuse.json').read_text())['accepted']:
+ m=r['module'];assert m not in expected or expected[m]==r['object_sha256'];expected[m]=r['object_sha256']
+ for d,paths in r['dependency_objects'].items():
+  hashes=set(paths.values());assert len(hashes)==1,(m,d,hashes)
+  edges.append(dict(module=m,dependency=d,sha256=next(iter(hashes))))
 external=json.loads((E/'external-authority.json').read_text())
 code=r'''import pathlib,sys,json,hashlib,subprocess
 x=json.load(sys.stdin);p=pathlib.Path(x['H']);env=json.load(open(p/'J.json'));roots=[pathlib.Path(q) for q in env['LEAN_PATH'].split(':')];sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()

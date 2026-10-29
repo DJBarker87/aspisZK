@@ -21,6 +21,4 @@ print(json.dumps(dict(removed=removed,only_own_cache=True,shared_targets_written
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)+' '+shlex.quote(H)],text=True,capture_output=True)
 assert r.returncode==0,r.stderr
 x=json.loads(r.stdout);x['final_validation_sha256']=hashlib.sha256((E/'final-validation.json').read_bytes()).hexdigest();(E/'cache-cleanup.json').write_text(json.dumps(x,indent=2)+'\n')
-p=Path('/tmp/pv-l1e-chunk-host.py')
-if p.exists():p.unlink()
 print('Removed own cache artifacts/links:',len(x['removed']))
