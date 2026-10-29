@@ -27,7 +27,7 @@ actual phases, and includes every source failure in the original observation. -/
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (links : @PV_RunJoin_PublishProduced60.Links (types base) (selected base heap box ops))
-    {T : Type} (store : @aspis_prover.state_only_hiding.StateOnlyMaskNonceStore (types base) T) :
+    {T : Type} (store : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T) :
     PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT
       (@PV_RunJoin_NativePublication55.actual (types base) (selected base heap box ops) T store)
       (@published (types base) (selected base heap box ops) T store) := by
@@ -51,16 +51,16 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       obtain ⟨p,hcapture,hcallback⟩ := PV_RunJoin_CaptureSource60.complete
         PV_RunJoin_NativeS2Source60.callback store input proof audit next hrun
       have hp : PV_RunJoin_ActualProvenance60.Produced p := ⟨T,store,input,audit,next,hcapture⟩
-      have local := typed ⟨p,hp⟩
+      have sliceEq := typed ⟨p,hp⟩
       change resultBytes (PV_RunJoin_NativeS2Source60.callback p)=_
-        at local
+        at sliceEq
       change source (PV_RunJoin_ActualRun.runs p)=ok (.Ok proof) at hcallback
       change resultBytes (source (PV_RunJoin_ActualRun.runs p))=
         Option.map PV_RJ4IDB.PublicationInput.publish_compact
-          (PV_RunJoin_PublishSkeleton54.published PV_RunJoin_ActualRun.runs p) at local
+          (PV_RunJoin_PublishSkeleton54.published PV_RunJoin_ActualRun.runs p) at sliceEq
       simpa only [PV_RunJoin_NativePublication55.actual,PV_RunJoin_NativeProjection55.observe,
         PV_RunJoin_NativeCallback55.decode,published,hs,hcapture,
-        PV_RunJoin_PublishSkeleton54.published,hcallback,resultBytes] using local
+        PV_RunJoin_PublishSkeleton54.published,hcallback,resultBytes] using sliceEq
 
 #print axioms published
 #print axioms complete
