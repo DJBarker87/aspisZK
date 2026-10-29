@@ -158,11 +158,11 @@ def bound : ℚ :=
 /-- adopted by owner decision D502/D478: the SAME bound and numeric envelope as the
 current headline, with no added timing term under exact joint timing links. -/
 theorem privacy_headline_events_model
-    (measurable_decision : ∀ (adv : Observer Signal A) (w : (h).Instance),
-      Measurable (fun r => (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ)))
     (links : ∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
       Links template outputs x μR completion pubData env native nativeSignal adv w) :
-    (∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
+    (∀ (adv : Observer Signal A) (w : (h).Instance),
+      Measurable (fun r => (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ)) →
+      (h).public w = x.1 →
       |(∫ r, (bit (adv.decide (real env native nativeSignal adv w r)) : ℝ) ∂(μR : Measure R)) -
         ∫ r, (bit (adv.decide (ideal template outputs x completion pubData env adv r)) : ℝ)
           ∂(uniform (source).IdealRand : Measure _)| ≤
@@ -178,14 +178,14 @@ theorem privacy_headline_events_model
   have hk := QueryScanFreshNumerics.lazy_budget_le_fresh hM
     (Nat.succ_le_succ (Nat.zero_le (8 * n1 W Pr)))
   constructor
-  · intro adv w hw
+  · intro adv w measurable_decision hw
     have hr₀ := PV_MEAS_Fuel.test_bound μR (links adv w hw).cp
       (real env native nativeSignal adv w)
       (modelReal template outputs x completion pubData env adv w)
       (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
       (seedQueries template outputs x completion pubData env adv w)
       (fun run => bit (adv.decide run))
-      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) (measurable_decision adv w)
+      (fun _ => ⟨bit_nonneg _, bit_le_one _⟩) measurable_decision
       (joined template outputs x μR completion pubData env native nativeSignal adv w (links adv w hw)) (2^64)
       (fun r => ProverCommitObserverQueries19.real_bound W Pr 8
         (P_R1 (h).transport B hB) (fun h' => VR1 h') h B outputs _ x w r)

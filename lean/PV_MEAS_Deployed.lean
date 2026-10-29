@@ -274,10 +274,9 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
         ∫ e, idealProbability template outputs x rt adv e ∂(rt.environmentLaw : Measure Env)| ≤
         (PV_EVH_Core.bound template outputs x : ℝ)) ∧
     (PV_EVH_Core.bound template outputs x : ℝ) < 1 / 2^100 := by
-  have pointwise (e : Env) (adv : Observer Signal A) (hmeas : Measurable adv.decide) :=
+  have pointwise (e : Env) :=
     PV_MEAS_Core.privacy_headline_events_model template outputs x
       (rt.nativeLaw e) rt.completion rt.publicInput e rt.native rt.signal
-      (fun a w => (links.decisions a (by assumption)).2.1 w e)
       (fun adv w _ => toCoreLinks template outputs x rt links e adv w)
   constructor
   · intro adv hmeas w hw
@@ -295,7 +294,7 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
       (PV_EVH_Core.bound template outputs x : ℝ)
       (decision_integrable _ _ (hl.2.2.1 w) hr)
       (decision_integrable _ _ hl.2.2.2 hi)
-      (fun e => (pointwise e).1 adv w hw)
+      (fun e => (pointwise e).1 adv w (hl.2.1 w e) hw)
     have trans := expectation_eq_of_equal_laws (rt.acquisitionLaw : Measure N)
       (rt.jointLaw : Measure (Env × R)) rt.acquisition id links.environment.1 measurable_id
       (by simpa using links.environment.2)
@@ -305,7 +304,7 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
       ∂(rt.acquisitionLaw : Measure N)) - _| ≤ _
     rw [trans, links.conditional _ (hl.1 w) (fun _ => bounded _)]
     exact avg
-  · have e : Env := Classical.choice (MeasureTheory.isProbabilityMeasure_iff_nonempty.mp inferInstance)
+  · have e : Env := Classical.choice rt.environmentLaw.nonempty
     exact_mod_cast (pointwise e).2.2
 
 #print axioms toCoreLinks
