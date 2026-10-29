@@ -1,0 +1,1 @@
+65600 failed: private ProverRwFullTypes missing; external resolution selected a nonmatching cohort. Rebuild the two source-pinned type modules first, then the dependent native types. This changes dependencies before retry; no unchanged retry.

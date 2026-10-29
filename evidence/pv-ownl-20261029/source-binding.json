@@ -1,0 +1,128 @@
+{
+  "revision": "b492a6c0b83381b38acf246a3c2c54cc4442e0d1",
+  "rows": [
+    {
+      "name": "scalar_scale",
+      "path": "crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body_sha256": "86823cc336c154644799ca0e727fbe8c30a45e04c3da19faeb41f65a6941c314",
+      "body": "pub fn mul_m31(self, rhs: M31) -> CM31 {\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+      "ordered_tokens": [
+        "a: self.a.mul(rhs)",
+        "b: self.b.mul(rhs)"
+      ],
+      "model_theorem": "Scale.cmScale"
+    },
+    {
+      "name": "tower_scale",
+      "path": "crates/aspis-core/src/field.rs",
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body_sha256": "2c6e07e883da6bcfd208adf573899f455366e99d84a1332825637a889397cc57",
+      "body": "pub fn mul_m31(self, rhs: M31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);\n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "ordered_tokens": [
+        "c0: self.c0.mul_m31(rhs)",
+        "c1: self.c1.mul_m31(rhs)"
+      ],
+      "model_theorem": "Scale.canonical"
+    },
+    {
+      "name": "helper_call",
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs",
+      "file_sha256": "930c9f2211f1bc672195802d6e5de05588a37b48f770d805a5b2d240c8bbf344",
+      "body_sha256": "f0f8332e6d0a7e2dcce01f58df000786b283f7b2e0b0d920d6352ab0a493b770",
+      "body": "pub fn build_pool_v1_pair_forest_copy_helper_v1(\n    trace: &PoolV1PairForestTraceV1,\n    append_index: u64,\n    lambda: QM31,\n    chi: QM31,\n) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {\n    let rows = pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?;\n    build_copy_logup_helper(&rows, chi).map_err(|_| PoolV1PairTraceErrorV1::CopyImbalance)\n}",
+      "ordered_tokens": [
+        "pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?",
+        "build_copy_logup_helper(&rows, chi).map_err"
+      ],
+      "model_theorem": "HelperRows.vector_canonical"
+    },
+    {
+      "name": "helper",
+      "path": "crates/aspis-statement/src/logup.rs",
+      "file_sha256": "c6e84617e6473f014fc53c704dd26b04667046211985ea6ddca8f66f496bea65",
+      "body_sha256": "22a9d871c48c5ba8dd0e7c716b962a79bd30d07e565f4c955246b910035fa769",
+      "body": "pub fn build_copy_logup_helper(rows: &[CopyLogUpRow], chi: QM31) -> Result<Vec<QM31>, LogUpError> {\n    let mut helper = Vec::with_capacity(rows.len());\n    for (row_index, row) in rows.iter().enumerate() {\n        let mut value = QM31::ZERO;\n        for (producer_value, weight) in row.producer_values.into_iter().zip(row.producer_weights) {\n            if weight != M31::ZERO {\n                value = value.add(\n                    chi.sub(producer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Producer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        for (consumer_value, weight) in row.consumer_values.into_iter().zip(row.consumer_weights) {\n            if weight != M31::ZERO {\n                value = value.sub(\n                    chi.sub(consumer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Consumer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        helper.push(value);\n    }\n    Ok(helper)\n}",
+      "ordered_tokens": [
+        "Vec::with_capacity(rows.len())",
+        "rows.iter().enumerate()",
+        "let mut value = QM31::ZERO",
+        "row.producer_values.into_iter().zip(row.producer_weights)",
+        "if weight != M31::ZERO",
+        "value = value.add(",
+        "chi.sub(producer_value)",
+        ".try_inv()",
+        "LogUpSide::Producer",
+        ".mul_m31(weight)",
+        "row.consumer_values.into_iter().zip(row.consumer_weights)",
+        "if weight != M31::ZERO",
+        "value = value.sub(",
+        "chi.sub(consumer_value)",
+        ".try_inv()",
+        "LogUpSide::Consumer",
+        ".mul_m31(weight)",
+        "helper.push(value)",
+        "Ok(helper)"
+      ],
+      "model_theorem": "HelperSlots.slots_canonical; HelperRows.vector_canonical"
+    },
+    {
+      "name": "sampler_pass",
+      "path": "crates/aspis-core/src/r0_transcript.rs",
+      "file_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "body_sha256": "aa5de3b1253a4860d936baff3b9e84b4c224faf201dd909fd921f2b4d774fdb8",
+      "body": "fn base_p_digits(mut rank: Rank) -> [u32; 8] {\n    core::array::from_fn(|_| {\n        let mut remainder = 0u64;\n        for limb in rank.iter_mut().rev() {\n            let dividend = (remainder << 32) | u64::from(*limb);\n            *limb = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n        remainder as u32\n    })\n}",
+      "ordered_tokens": [
+        "core::array::from_fn",
+        "let mut remainder = 0u64",
+        "rank.iter_mut().rev()",
+        "let dividend =",
+        "*limb = (dividend / u64::from(P)) as u32",
+        "remainder = dividend % u64::from(P)",
+        "remainder as u32"
+      ],
+      "model_theorem": "SampleWord.rem_bound; SampleCanon.pass_canonical"
+    },
+    {
+      "name": "sampler",
+      "path": "crates/aspis-core/src/r0_transcript.rs",
+      "file_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "body_sha256": "642105a53fc7df09a7b526ffa4297a86e26a0a822c60fdff0cada0658ee9909f",
+      "body": "pub fn qm31_sample(block: &[u8; 32]) -> QM31 {\n    let d = base_p_digits(reduce_rank(block_rank(block), P4));\n    decode4([d[0], d[1], d[2], d[3]])\n}",
+      "ordered_tokens": [
+        "base_p_digits(reduce_rank(block_rank(block), P4))",
+        "decode4([d[0], d[1], d[2], d[3]])"
+      ],
+      "model_theorem": "SampleCanon.sample_canonical"
+    },
+    {
+      "name": "caller",
+      "path": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "file_sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "body_sha256": "41951f298438d8b5020fecf94c8ed1d4e08adad80faa2e12ae1e1ae9fcf5c630",
+      "body": "fn build_pair_forest_mode(\n        public: Public<'_>,\n        compiled: &PoolV1PairForestMergedC1CompilationV1,\n        mask_only: &[Vec<M31>; 10],\n        d: &[QM31; 1024],\n        g: &[QM31; 1024],\n        commitments: &mut impl Commitments,\n        hash: HashFn,\n        transported_endpoints: bool,\n    ) -> Result<BuiltSemantics, Error> {\n        if compiled.semantic_c1.c1.len() != 16 || &compiled.public_statement != public.transition()\n        {\n            return Err(Error::Public);\n        }\n        let c1 = core::array::from_fn(|i| {\n            if i < 16 {\n                compiled.semantic_c1.c1[i].clone()\n            } else {\n                mask_only[i - 16].clone()\n            }\n        });\n        build_with_helper_mode(\n            public,\n            &c1,\n            d,\n            g,\n            |lambda, chi| {\n                build_pool_v1_pair_forest_copy_helper_v1(\n                    &compiled.trace,\n                    public.transition().live_snapshot.next_pair_index,\n                    lambda,\n                    chi,\n                )\n                .map_err(|_| Error::Public)\n            },\n            commitments,\n            hash,\n            transported_endpoints,\n        )\n    }",
+      "ordered_tokens": [
+        "build_with_helper_mode(",
+        "build_pool_v1_pair_forest_copy_helper_v1(",
+        "&compiled.trace",
+        "public.transition().live_snapshot.next_pair_index",
+        "lambda",
+        "chi"
+      ],
+      "model_theorem": "same helper selected by consuming source"
+    }
+  ],
+  "verified_crate_files": 300,
+  "classification": "partial structural source/invariant binding under own-1; not a full consuming execution refinement",
+  "retained": [
+    "V370/D381/D386",
+    "rdea-1"
+  ],
+  "differences": [
+    "Helper model Option forgets ActivePole row/side and outer error tags; canonicality theorem is successful-output only.",
+    "Source fixed two-slot arrays traverse their ordered List views; generic invariant admits every length.",
+    "HelperRows also proves host array-store invariant, but actual point_claims consumer selects statement logup Vec helper.",
+    "Sampler pass is high-word-first and retains every quotient. Rank reduction may be arbitrary for output canonicality.",
+    "Sampler model constructs first four digits; native computes eight then selects first four. Future-pass erasure and byte/array carrier still need source-execution composition."
+  ]
+}
