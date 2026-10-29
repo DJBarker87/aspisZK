@@ -11,7 +11,7 @@ def four_stores12 {α : Type} (zero a b c d : α) : Result (Array α 4#usize) :=
 
 theorem four_stores_value12 {α : Type} (zero a b c d : α) :
     four_stores12 zero a b c d =
-      .ok (Array.make 4#usize [a,b,c,d] (by decide)) := by
+      .ok (Array.make 4#usize [a,b,c,d] (by simp only [List.length_cons,List.length_nil]; rfl)) := by
   unfold four_stores12
   rw [PV_B3P_ArrayWrite227.update _ 0#usize (by decide)]
   simp only [bind_tc_ok]
@@ -27,7 +27,7 @@ def four_build12 {α : Type} (read : Usize → Result α) : Result (Array α 4#u
   let b ← read 1#usize
   let c ← read 2#usize
   let d ← read 3#usize
-  .ok (Array.make 4#usize [a,b,c,d] (by decide))
+  .ok (Array.make 4#usize [a,b,c,d] (by simp only [List.length_cons,List.length_nil]; rfl))
 
 theorem four_interleaved12 {α : Type} (zero : α) (read : Usize → Result α) :
     (do
