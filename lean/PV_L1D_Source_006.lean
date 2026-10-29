@@ -19,11 +19,11 @@ def produce
   Logged (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error)
   := do
   let _ ← observe .publication 0 (ok ())
-  let r ← PV_L1D_Logged.lift (prover.append_node_slot out cc1 cc2 tree queries 0#usize 0#usize)
+  let r ← PV_L1D_Source_005.produce out cc1 cc2 tree queries 0#usize 0#usize
   let cf ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue val =>
-    let r1 ← PV_L1D_Logged.lift (prover.append_node_slot val cc1 cc2 tree queries 0#usize 1#usize)
+    let r1 ← PV_L1D_Source_005.produce val cc1 cc2 tree queries 0#usize 1#usize
     let cf1 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r1)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>

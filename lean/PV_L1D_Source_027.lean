@@ -3,6 +3,10 @@ import PV_L1D_Projection
 import PV_L1D_EraseIf
 import R1Z.ProverRwFullFuns
 import PV_L1D_Source_019
+import PV_L1D_Source_021
+import PV_L1D_Source_023
+import PV_L1D_Source_024
+import PV_L1D_Source_025
 import PV_L1D_Source_026
 set_option autoImplicit false
 noncomputable section
@@ -28,12 +32,12 @@ def produce
   then Pure.pure (core.result.Result.Err verifier.Error.Semantic)
   else
     let s := alloc.vec.Vec.deref backend.messages
-    let coefficients ← PV_L1D_Logged.lift (prover.opening_coefficients variant s)
+    let coefficients ← PV_L1D_Source_025.produce variant s
     let scp ← PV_L1D_Logged.lift (Array.index_usize sem.z 1#usize)
     let we ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 scp.x)
     let we1 ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 scp.y)
     let s1 := alloc.vec.Vec.deref coefficients
-    let y1 ← PV_L1D_Logged.lift (prover.opening_claim_bytes s1 { x := we, y := we1 })
+    let y1 ← PV_L1D_Source_024.produce s1 { x := we, y := we1 }
     let a ← PV_L1D_Logged.lift (host_wire.SemanticTranscript.impl.state
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         sem.transcript)
@@ -47,13 +51,13 @@ def produce
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
         transcript 27#u8 s2 true
     let s3 := alloc.vec.Vec.deref coefficients
-    let q ← PV_L1D_Logged.lift (prover.opening_batch s3 gamma)
+    let q ← PV_L1D_Source_023.produce s3 gamma
     let r ← PV_L1D_Logged.lift (weights.Weights.new variant sem.alpha sem.z)
     let cf ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue val =>
       let s4 := alloc.vec.Vec.deref q
-      let inactive ← PV_L1D_Logged.lift (prover.opening_inactive s4 val)
+      let inactive ← PV_L1D_Source_021.produce s4 val
       let a1 ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.to_le_bytes inactive)
       let s5 ← PV_L1D_Logged.lift (Aeneas.Std.lift (Array.to_slice a1))
       let (kappa, transcript2) ←
@@ -123,10 +127,10 @@ theorem complete_result
   erase (produce variant hash backend sem) = prover.prepare_opening variant hash backend sem := by
   unfold produce
   conv_rhs => unfold prover.prepare_opening
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_026.complete_result]
+  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_026.complete_result]
+    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -135,7 +139,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_026.complete_result]
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
     all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_027

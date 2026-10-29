@@ -11,6 +11,7 @@ import PV_L1D_Source_051
 import PV_L1D_Source_052
 import PV_L1D_Source_055
 import PV_L1D_Source_056
+import PV_L1D_Source_063
 import PV_L1D_Source_066
 set_option autoImplicit false
 noncomputable section
@@ -38,7 +39,7 @@ def produce
     × T2)
   := do
   let _ ← observe .semanticCanonical 0 (ok ())
-  let r ← PV_L1D_Logged.lift (host_semantic.check_semantic_columns c1 d g)
+  let r ← PV_L1D_Source_063.produce c1 d g
   let cf ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r)
   match cf with
   | core.ops.control_flow.ControlFlow.Continue _ =>
@@ -415,10 +416,10 @@ theorem complete_result
   erase (produce (H := H) (T1 := T1) (T2 := T2) aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst public1 c1 d g h1_padding helper commitments hash variant) = host_semantic.build_with_helper_mode (H := H) (T1 := T1) (T2 := T2) aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst public1 c1 d g h1_padding helper commitments hash variant := by
   unfold produce
   conv_rhs => unfold host_semantic.build_with_helper_mode
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_066.complete_result]
+  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_063.complete_result,PV_L1D_Source_066.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_066.complete_result]
+    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_063.complete_result,PV_L1D_Source_066.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -427,7 +428,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_066.complete_result]
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_063.complete_result,PV_L1D_Source_066.complete_result]
     all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_067

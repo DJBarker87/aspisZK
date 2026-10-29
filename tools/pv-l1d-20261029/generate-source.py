@@ -56,8 +56,8 @@ for k,n in enumerate(selected):
  deps=[];body=b
  for dep,dm in sorted(known.items(),key=lambda x:-len(x[0])):
   if dep==n or dep.endswith('.body') or dep.endswith('_loop'):continue
-  if re.search(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',body):
-   body=re.sub(r'(?m)^(\s*)'+re.escape(dep)+r'(?=\s|$)',lambda m:m[1]+dm+'.produce',body);deps.append(dm)
+  if re.search(r'(?m)(^\s*|←\s*)'+re.escape(dep)+r'(?=\s|$)',body):
+   body=re.sub(r'(?m)(^\s*|←\s*)'+re.escape(dep)+r'(?=\s|$)',lambda m:m[1]+dm+'.produce',body);deps.append(dm)
  # Explicit lifts let dependent-array sizes be inferred from the source action
  # before the Logged bind elaborates its continuation.
  lines=body.splitlines()

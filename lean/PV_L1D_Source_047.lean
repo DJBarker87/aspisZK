@@ -20,11 +20,11 @@ def produce
   let _ ← observe .semanticCanonical 0 (ok ())
   let bytes := alloc.vec.Vec.with_capacity Std.U8 3712#usize
   let a ← PV_L1D_Logged.lift (Array.index_usize claims 0#usize)
-  let bytes1 ← PV_L1D_Logged.lift (host_semantic.append_claim_bytes bytes a)
+  let bytes1 ← PV_L1D_Source_046.produce bytes a
   let a1 ← PV_L1D_Logged.lift (Array.index_usize claims 1#usize)
-  let bytes2 ← PV_L1D_Logged.lift (host_semantic.append_claim_bytes bytes1 a1)
+  let bytes2 ← PV_L1D_Source_046.produce bytes1 a1
   let a2 ← PV_L1D_Logged.lift (Array.index_usize claims 2#usize)
-  let bytes3 ← PV_L1D_Logged.lift (host_semantic.append_claim_bytes bytes2 a2)
+  let bytes3 ← PV_L1D_Source_046.produce bytes2 a2
   PV_L1D_Source_046.produce bytes3 extras
 
 theorem complete_result

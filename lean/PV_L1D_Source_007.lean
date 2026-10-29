@@ -3,6 +3,7 @@ import PV_L1D_Projection
 import PV_L1D_EraseIf
 import R1Z.ProverRwFullFuns
 import PV_L1D_Source_003
+import PV_L1D_Source_006
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1D_Source_007
@@ -66,7 +67,7 @@ def produce
       let left_val1 := alloc.vec.Vec.len out10
       let right_val1 ← PV_L1D_Logged.lift (compact.OFF_NODES)
       massert (left_val1 = right_val1)
-      let r4 ← PV_L1D_Logged.lift (prover.append_node_slots out10 cc1 cc2 p.tree p.queries)
+      let r4 ← PV_L1D_Source_006.produce out10 cc1 cc2 p.tree p.queries
       let cf2 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r4)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val =>
@@ -89,10 +90,10 @@ theorem complete_result
   erase (produce variant p) = prover.publish_compact variant p := by
   unfold produce
   conv_rhs => unfold prover.publish_compact
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result]
+  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result,PV_L1D_Source_006.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result]
+    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result,PV_L1D_Source_006.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -101,7 +102,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result]
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_003.complete_result,PV_L1D_Source_006.complete_result]
     all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_007

@@ -3,6 +3,7 @@ import PV_L1D_Projection
 import PV_L1D_EraseIf
 import R1Z.ProverRwFullFuns
 import PV_L1D_Source_000
+import PV_L1D_Source_001
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1D_Source_002
@@ -18,16 +19,16 @@ def produce
   := do
   let _ ← observe .publication 0 (ok ())
   let a ← PV_L1D_Logged.lift (Array.index_usize opening.values 0#usize)
-  let out1 ← PV_L1D_Logged.lift (prover.append_opening_base_row out a)
+  let out1 ← PV_L1D_Source_001.produce out a
   let a1 ← PV_L1D_Logged.lift (Array.index_usize opening.values 1#usize)
-  let out2 ← PV_L1D_Logged.lift (prover.append_opening_base_row out1 a1)
+  let out2 ← PV_L1D_Source_001.produce out1 a1
   let a2 ← PV_L1D_Logged.lift (Array.index_usize opening.values 2#usize)
-  let out3 ← PV_L1D_Logged.lift (prover.append_opening_base_row out2 a2)
+  let out3 ← PV_L1D_Source_001.produce out2 a2
   let a3 ← PV_L1D_Logged.lift (Array.index_usize opening.values 3#usize)
-  let out4 ← PV_L1D_Logged.lift (prover.append_opening_base_row out3 a3)
-  let out5 ← PV_L1D_Logged.lift (prover.append_opening_secure_row out4 a)
-  let out6 ← PV_L1D_Logged.lift (prover.append_opening_secure_row out5 a1)
-  let out7 ← PV_L1D_Logged.lift (prover.append_opening_secure_row out6 a2)
+  let out4 ← PV_L1D_Source_001.produce out3 a3
+  let out5 ← PV_L1D_Source_000.produce out4 a
+  let out6 ← PV_L1D_Source_000.produce out5 a1
+  let out7 ← PV_L1D_Source_000.produce out6 a2
   PV_L1D_Source_000.produce out7 a3
 
 theorem complete_result
@@ -35,10 +36,10 @@ theorem complete_result
   erase (produce out opening) = prover.append_opening_values out opening := by
   unfold produce
   conv_rhs => unfold prover.append_opening_values
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result]
+  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result,PV_L1D_Source_001.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result]
+    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result,PV_L1D_Source_001.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -47,7 +48,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result]
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_000.complete_result,PV_L1D_Source_001.complete_result]
     all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_002

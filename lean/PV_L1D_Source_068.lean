@@ -2,6 +2,7 @@ import PV_L1D_ResultCoercion
 import PV_L1D_Projection
 import PV_L1D_EraseIf
 import R1Z.ProverRwFullFuns
+import PV_L1D_Source_039
 import PV_L1D_Source_067
 set_option autoImplicit false
 noncomputable section
@@ -49,7 +50,7 @@ def produce
       then Pure.pure (core.result.Result.Err r1_wire.Error.Public, commitments)
       else
         let s2 ← PV_L1D_Logged.lift (Aeneas.Std.lift (Array.to_slice noised_semantic_c1.c1))
-        let c1 ← PV_L1D_Logged.lift (host_semantic.clone_semantic_columns s2 mask_only)
+        let c1 ← PV_L1D_Source_039.produce s2 mask_only
         PV_L1D_Source_067.produce aspis_coredigestDigest32Inst
           (host_semantic.build_with_material.closure.Insts.CoreOpsFunctionFnOncePairQM31QM31ResultVecQM31Error
           aspis_coredigestDigest32Inst CommitmentsInst) CommitmentsInst public1
@@ -72,10 +73,10 @@ theorem complete_result
   erase (produce (H := H) (T1 := T1) aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant) = host_semantic.build_with_material (H := H) (T1 := T1) aspis_coredigestDigest32Inst CommitmentsInst public1 compiled noised_semantic_c1 mask_only d g h1_padding commitments hash variant := by
   unfold produce
   conv_rhs => unfold host_semantic.build_with_material
-  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_067.complete_result]
+  simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_039.complete_result,PV_L1D_Source_067.complete_result]
   repeat' first
     | with_reducible rfl
-    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_067.complete_result]
+    | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_039.complete_result,PV_L1D_Source_067.complete_result]
     | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro value called
   all_goals
@@ -84,7 +85,7 @@ theorem complete_result
       | with_reducible rfl
       | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
         intro value called
-      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_067.complete_result]
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_039.complete_result,PV_L1D_Source_067.complete_result]
     all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_068
