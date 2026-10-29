@@ -18,7 +18,8 @@ theorem tail_value (left right : List U32) (same : left.length=right.length) :
      by_cases equal : x=y
      · subst y
        simp [tail_loop,scalar_ne,ih ys lengths]
-     · simp [tail_loop,scalar_ne,equal]
+     · have different : x.val ≠ y.val := fun h => equal (UScalar.eq_of_val_eq h)
+       simp [tail_loop,scalar_ne,equal,different]
 /-- Complete value law for the source while-loop, including the initial unequal
 length return and every possible first unequal element. -/
 theorem source_value (left right : List U32) :
@@ -27,7 +28,7 @@ theorem source_value (left right : List U32) :
  · unfold PV_B3Q_SliceEqual.source
    simp only [same,bne_self_eq_false,Bool.false_eq_true,↓reduceIte]
    rw [loop_suffix_binding]
-   exact tail_value left right same
+   simpa only [List.drop_zero,same] using tail_value left right same
  · have different : left≠right := fun h => same (congrArg List.length h)
    simp [PV_B3Q_SliceEqual.source,same,different]
 /-- Concrete M31/U32 slice comparison family; primitive comparison is a
