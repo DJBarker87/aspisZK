@@ -20,7 +20,7 @@ theorem complete {I : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (runs : I → @Run (types base)) (i : I)
     (p : prover.Publication)
     (hf : @Fields (types base) (selected base heap box ops) (runs i) p)
-    (bound : (runs i).plan.offOpenings≤Usize.max) :
+    (bound : (@Run.plan (types base) (runs i)).offOpenings≤Usize.max) :
     ¬@PV_RunJoin_Link_QueryAppend (types base) (selected base heap box ops) I runs := by
   exact @PV_RunJoin_QueryLinkObstruction56.impossible (types base) (selected base heap box ops)
     I runs i p (unused p) (unused p) (buffer _ bound) hf (buffer_length _ bound)
