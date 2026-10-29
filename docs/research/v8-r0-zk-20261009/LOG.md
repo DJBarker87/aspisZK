@@ -14651,3 +14651,19 @@ pv-ownj (IDs 64700-64799; 100 Lean, 30 native, 0 Kani) proves the decoder and ro
 runjoin50 (head 908c552a4e, pushed) used all 100 Lean attempts (73 accepted, 27 rejected; 0 Kani). All three reserved audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules; protected prefixes untouched; no large files. It proved the 928-byte claim polynomial aggregate, the actual prepare gamma and material producer joins, and the tag-29 decoder, fold and byte associations. Still open in step (2): the complete original common-sample association and the actual backend hinput producer. FinishContext and publication are not started. The op79 and op254 identifications stay explicit step-(4) obligations, now being worked by pv-rj4idb on the candidate. Rows removed: 0.
 
 runjoin51 launched (IDs 64800-64899; 100 Lean, 0 Kani). It covers the common-sample association, the hinput producer, FinishContext, the query and node appends and publish_compact's proof-byte equation, stated in a stable named form so that pv-rj4idb's observation decoder can consume it. Privacy target not yet established.
+
+## D451 (Stream B) 2026-10-29 03:20 UTC: b3p6k results; b3p6l launched with a shrink-generate-prove strategy for V244's binding
+
+b3p6k (branch codex/pv-b3p6-20261028, head e8431e8e66, pushed) used all 100 Lean attempts (82 passed, 18 rejected), with no native scopes and no Kani. Its three audits passed, covering 110 theorem reports with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules. It proved the following:
+- the value-entry factorization with named stages (value_entry_factor10, add_value_read_binding10), which settles the D441 recursion failure without raising any limit;
+- complete emitted accumulator storage and the nine-cell binding;
+- four full-round group bindings;
+- three digit-loop compositions;
+- seven frozen-mask body laws.
+Attempt 64096 (a sixteen-lane fold corollary) failed at a list-flatten join and earns no credit. V244 remains open, and runjoin's op227 hypothesis is not discharged.
+
+The residual (b) inventory is 187 bodies: 92 token-identical, 39 changed, 31 source-only and 25 owned-only, before deployed reachability classification. Hand binding body by body will not finish at the current rate. b3p6l (IDs 64900-64999; 100 Lean, 40 native, 0 Kani) follows a lead strategy in three steps:
+(1) classify deployed reachability exhaustively, so that unreachable bodies need no binding;
+(2) generate named binding-lemma applications mechanically for every reachable token-identical body, compiled in small chunks, as AGENTS.md formal-workflow item 3 prescribes;
+(3) hand-prove only the reachable changed bodies, starting with the four the worker named.
+Coverage is to be reported as reachable and bound counts. Rows removed: 0. Privacy target not yet established.
