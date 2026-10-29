@@ -26,8 +26,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     simpa only [alloc.vec.Vec.with_capacity,List.nil_append] using hv
   refine ⟨out,?_,hval,?_⟩
   · unfold prover.opening_coefficients
-    rw [PV_RunJoin_CoefficientsThread45.complete .S2 messages _ 0#usize messages.length small (by rfl),
-      PV_RunJoin_CoefficientList50.complete base heap box ops messages messages.length _ 0#usize small (by rfl)]
+    rw [PV_RunJoin_CoefficientsThread45.complete .S2 messages _ 0#usize messages.length small (by change 0+messages.length=messages.length;omega),
+      PV_RunJoin_CoefficientList50.complete base heap box ops messages messages.length _ 0#usize small (by change 0+messages.length=messages.length;omega)]
     simpa only [show (0#usize).val=0 from rfl,List.drop_zero] using hout
   · change out.val.length=messages.val.length
     rw [hval,List.length_map]
