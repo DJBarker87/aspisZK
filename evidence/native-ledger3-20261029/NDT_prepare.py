@@ -78,4 +78,16 @@ for pre,packet in [('NDI','native-front3b'),('NDM','native-front4b'),('NDH','nat
    continue
   assert name in names,name
   recipes.append(dict(id=f'NDT::matrix::{pre}::{len(recipes):03}',prefix=pre,packet=packet+'-20261028',delta=path,delta_key=None,index=None,function=name,reported_function=name,admit=False,disposition='REJECT STATUS PROMOTION',domain=domain,remaining=reason,native=[],theorems=[],rule14_dependency_audit='',feature_scope='program',matrix_evidence=path))
+for spec in recipes:
+ spec['support_native']=[]
+ if not spec['admit']:continue
+ pre=spec['prefix'];pairs=[]
+ if pre=='NDE':pairs=[(8,True),(9,False)]
+ elif pre=='NDM':pairs=[(1,True),(2,False)]
+ elif pre=='NDH':pairs=[(1,True),(2,False),(27,True),(28,False)]
+ elif pre=='NDI':
+  pairs=[(12,True),(13,False)] if spec['feature_scope']=='program' else [(5,True),(6,False)]
+  if spec['function'].endswith('SemanticTranscript<H>::new'):pairs += [(29,True),(31,False),(36,False),(37,True),(38,True),(39,False),(40,False)]
+  if spec['function'].endswith('::batch_keys'):pairs += [(73,True),(74,True),(75,False),(76,False)]
+ spec['support_native']=[dict(attempt=f'{pre}_K{n:03}',positive=positive,scope='library-helper' if pre=='NDH' else spec['feature_scope'],role='Exact copy controls / ordered transport / per-shape fidelity; no enclosing caller closure') for n,positive in pairs]
 (E/'NDT_ASSOCIATIONS.json').write_text(json.dumps(recipes,indent=2)+'\n')

@@ -141,6 +141,7 @@ finally:
 
 # Current evidence kinds and exact packet/claim associations.
 newidx=next(i for i,c in enumerate(base['claims']) if c['claim_id'].startswith('NDT::local::'))
+mutate('required copy/fidelity support omitted',lambda d:d['claims'][newidx]['support_feature_checks'].pop())
 mutate('new claim dropped rule14 audit',lambda d:d['claims'][newidx].update(rule14_dependency_audit=''))
 mutate('new claim widened domain',lambda d:d['claims'][newidx]['named_hypotheses'][0].update(statement='all executions'))
 mutate('imported theorem source hash forged',lambda d:next(t for t in d['claims'][newidx]['theorem_associations'] if t['local_import_sources'])['local_import_sources'][0].update(sha256='0'*64))

@@ -210,14 +210,15 @@ def refresh_claims(s,functions,claims):
         assert spec['domain']==row['domain'] and spec['rule14_dependency_audit']
         checks=[audit.native(directory,x,spec['feature_scope']) for x in spec['native']]
         assert any(x['positive'] for x in checks) and any(not x['positive'] for x in checks)
+        support=[dict(role=x['role'],**audit.native(directory,x,x['scope'])) for x in spec['support_native']]
         th=[audit.theorem(t) for t in spec['theorems']]
-        rs=[x['receipt'] for x in checks+th]
+        rs=[x['receipt'] for x in checks+support+th]
         ev+=rs+[x['source'] for x in th]+[x['source_snapshot'] for x in th]
         cid=spec['id']
         conditions=[dict(name=cid+'.PacketDomain',statement=spec['domain'],discharged_by=None),dict(name=cid+'.PhysicalInterpretation',statement='Same live native/cohort carrier, installed dictionary and exact source-call/loop association under approved P6/D188 transport; ABI/std/allocator/compiler/source-to-ELF and all enclosing call edges retained. '+spec['remaining'],discharged_by=None)]
         if any(w in spec['function'] for w in ['digest','leaf_hash','Transcript','parent_with']):
             conditions.append(dict(name=cid+'.StaticBackend',statement='Static backend only, no LegacyHashFn/Option<fn> observation; actual digest byte/reply and RuntimeSha256Value interpretation retained.',discharged_by=None))
-        c=dict(claim_id=cid,audit_id=cid,function=spec['function'],reported_status=row.get('status',row.get('after')),medium='Controlled native local cuts + pinned safe reference/extraction + exact cohort Lean equation',feature_parity='DEPLOYED selected helper/program features; complete resolved metadata checked',profile=spec['feature_scope'],source_claim_text=row,evidence=sorted(set(ev)),receipts=sorted(set(rs)),quarantined_support=[],replaced_quarantined_support=[],stub_attributes=[],arithmetic_stubs=[],admissible_local_credit=True,limitations=[spec['remaining']],named_hypotheses=conditions,composition_trust='P6/D188 reclassification, not discharge',theorem_associations=th,native_feature_checks=checks,rule14_dependency_audit=spec['rule14_dependency_audit'],delta_row=row)
+        c=dict(claim_id=cid,audit_id=cid,function=spec['function'],reported_status=row.get('status',row.get('after')),medium='Controlled native local cuts + pinned safe reference/extraction + exact cohort Lean equation',feature_parity='DEPLOYED selected helper/program features; complete resolved metadata checked',profile=spec['feature_scope'],source_claim_text=row,evidence=sorted(set(ev)),receipts=sorted(set(rs)),quarantined_support=[],replaced_quarantined_support=[],stub_attributes=[],arithmetic_stubs=[],admissible_local_credit=True,limitations=[spec['remaining']],named_hypotheses=conditions,composition_trust='P6/D188 reclassification, not discharge',theorem_associations=th,native_feature_checks=checks,support_feature_checks=support,rule14_dependency_audit=spec['rule14_dependency_audit'],delta_row=row)
         claims.setdefault(spec['function'],[]).append(c)
     packets=legacy.review_packets(s)+review_new_packets(s,audit)
     source_associations(s,functions)
@@ -317,10 +318,11 @@ def validate_refresh(d):
                 assert dep['sha256']==d['evidence_manifest'][dep['source']]['sha256']
                 assert dep['receipt'] in d['evidence_manifest'] and dep['source_snapshot'] in d['evidence_manifest']
         checks=c['native_feature_checks'];assert [(f['attempt'],f['positive']) for f in checks]==[(f['attempt'],f['positive']) for f in spec['native']]
-        for f in checks:
+        assert [(f['attempt'],f['positive'],f['scope']) for f in c['support_feature_checks']]==[(f['attempt'],f['positive'],f['scope']) for f in spec['support_native']]
+        for f in checks+c['support_feature_checks']:
             assert set(f['statement_optimized_features'])==legacy.OPTIMIZED
             assert f['all_crates_recorded']>=400 or (f['all_crates_recorded']==6 and f['feature_record_kind']=='complete isolated deployed metadata')
-            assert f['scope']==spec['feature_scope']
+            assert f['scope']==(spec['feature_scope'] if f in checks else next(x['scope'] for x in spec['support_native'] if x['attempt']==f['attempt']))
             assert f['receipt'] in c['active_support_receipts']
             assert all(x['recovered'] for x in f['source_snapshots'] if x['source'].endswith(('.rs','.lean')))
     assert {p['prefix'] for p in d['refresh']['packet_reviews']} >= {'NDE','NDL','NDN','NDI','NDH','NDM','NDR','NCV','NCX','NDB','KNF','KNG','NCN','NCJ','NCK','NCM','NCT','NCU','NDA','NDP','NDQ','NDS'}
