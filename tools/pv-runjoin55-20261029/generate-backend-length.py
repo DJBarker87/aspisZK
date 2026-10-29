@@ -31,7 +31,7 @@ theorem complete (h1 : Slice aspis_core.field.QM31) (n : Nat) (row : Usize)
     intro we
     obtain ⟨a,back,hr,hback⟩ := PV_RunJoin_BackendStoreSafe55.index_mut self.messages 26#usize (by rw [hlen];decide)
     rw [hr]
-    simp only [bind_tc_ok,Aeneas.Std.uncurry]
+    simp only [bind_tc_ok,Aeneas.Std.uncurry,bind_assoc_eq]
     apply PV_RunJoin_ResultPost41.bind
     intro a1
     simp only [lift,bind_tc_ok]
