@@ -40,6 +40,13 @@ theorem update (q : Queries) (i : Usize) (x : U32) (hq : Bounded q)
   · cases h
     exact set_bounded q.val i.val x hx hq
 
+theorem initial : Bounded (Array.repeat 22#usize 0#u32) := by
+  intro x hx
+  have h : x = 0#u32 := by simpa only [Array.repeat, List.mem_replicate] using hx
+  rw [h]
+  decide
+
+#print axioms initial
 #print axioms mask
 #print axioms set_bounded
 #print axioms update
