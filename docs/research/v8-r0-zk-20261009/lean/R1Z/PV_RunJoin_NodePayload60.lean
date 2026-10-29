@@ -21,7 +21,7 @@ theorem actual (p : prover.Publication) (batch t : Usize)
     (cc1 cc2 : host_commitment.Commitment)
     (hc1 : p.backend.c1=some cc1) (hc2 : p.backend.c2=some cc2) :
     PV_RunJoin_ActualPlanSources59.nodeBytes p batch t=payload cc1 cc2 p.tree p.queries batch t := by
-  simp only [PV_RunJoin_ActualPlanSources59.nodeBytes,hc1,hc2,core.option.Option.unwrap,bind_tc_ok]
+  simp only [PV_RunJoin_ActualPlanSources59.nodeBytes,hc1,hc2,core.option.Option.unwrap,ofOption,bind_tc_ok]
   rfl
 
 /-- A single source slot first obtains exactly the cached model payload. -/
@@ -43,6 +43,14 @@ theorem source (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment)
   rw [PV_RunJoin_NodeSlot41.source]
   unfold PV_RunJoin_NodeSlot41.run payload
   by_cases hb : batch=0#usize <;> simp only [hb,if_true,if_false,bind_assoc_eq,bind_tc_ok,lift]
+  all_goals
+    apply PV_RunJoin_ResultBindEq55.complete
+    intro idx
+    cases ht : t.val with
+    | zero => simp only [ht,bind_assoc_eq]
+    | succ n => cases n with
+      | zero => simp only [ht,bind_assoc_eq]
+      | succ n => simp only [ht,bind_assoc_eq]
 
 #print axioms actual
 #print axioms source
