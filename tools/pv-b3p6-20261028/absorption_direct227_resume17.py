@@ -40,8 +40,11 @@ theorem absorption_body17 (low fixed two eight nodes : aspis_core.field.QM31)
     (opened output : Array aspis_core.field.QM31 16#usize) (lane : Usize) :
     host_terminal.absorption_lanes_literal_loop.body low fixed two eight nodes opened output lane =
       usize_body (absorption_source_step15 low fixed two eight nodes opened) 16#usize (output,lane) := by
-  simp only [host_terminal.absorption_lanes_literal_loop.body,usize_body,
-    absorption_source_step15,absorption_native_value15,bind_tc_ok,PV_B3P_Ordered227.bind_assoc]
+  by_cases h : lane < 16#usize <;> by_cases h2 : lane < 2#usize <;>
+    by_cases hrate : lane < aspis_statement.poseidon2.RATE <;>
+    simp only [host_terminal.absorption_lanes_literal_loop.body,usize_body,
+      absorption_source_step15,absorption_native_value15,h,h2,hrate,
+      if_true,if_false,bind_tc_ok,PV_B3P_Ordered227.bind_assoc]
 
 theorem absorption_loop17 (low fixed two eight nodes : aspis_core.field.QM31)
     (opened output : Array aspis_core.field.QM31 16#usize) (lane : Usize) :
