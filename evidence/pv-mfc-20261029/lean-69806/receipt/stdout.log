@@ -1,0 +1,19 @@
+'PV_B3P_MaskPrefix132.write_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+Aeneas.Std.loop.eq_1.{u, v} {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α) :
+  loop body x =
+    match body x with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div
+Aeneas.Std.loop.eq_def.{u, v} {α : Type u} {β : Type v} (body : α → Result (ControlFlow α β)) (x : α) :
+  loop body x =
+    match body x with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x => loop body x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div
