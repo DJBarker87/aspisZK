@@ -2,20 +2,20 @@ import R1Z.PV_RDB2E_FromFn
 namespace R1Z.PV_RDB2F_FromFnGuard
 open Aeneas Aeneas.Std Result
 set_option autoImplicit false
-/-- Initialized prefix of Guard::array_mut. The same FnMut state is passed on. -/
+/-- Initialized filled of Guard::array_mut. The same FnMut state is passed on. -/
 def guarded {S A : Type} (f : Nat → S → Result (A × S)) :
     Nat → Nat → List A → S → Result (List A × S)
-  | 0,_,prefix,s => ok (prefix,s)
-  | n+1,i,prefix,s => do
+  | 0,_,filled,s => ok (filled,s)
+  | n+1,i,filled,s => do
       let (item,current) ← f i s
-      guarded f n (i+1) (prefix++[item]) current
+      guarded f n (i+1) (filled++[item]) current
 
 theorem initialized_prefix {S A : Type} (f : Nat → S → Result (A × S))
-    (n i : Nat) (prefix : List A) (s : S) :
-    guarded f n i prefix s =
+    (n i : Nat) (filled : List A) (s : S) :
+    guarded f n i filled s =
       (do let (tail,after) ← PV_RDB2E_FromFn.build f n i s
-          ok (prefix++tail,after)) := by
-  induction n generalizing i prefix s with
+          ok (filled++tail,after)) := by
+  induction n generalizing i filled s with
   | zero => simp [guarded,PV_RDB2E_FromFn.build,bind_tc_ok]
   | succ n ih =>
     rw [guarded,PV_RDB2E_FromFn.step]
@@ -33,9 +33,9 @@ theorem complete_capture {S A : Type} (f : Nat → S → Result (A × S))
   simp only [List.nil_append]
   cases PV_RDB2E_FromFn.build f n 0 s <;> rfl
 
-theorem store_before_increment (initialized : Nat) (prefix : List U32)
-    (item : U32) (h : prefix.length=initialized) :
-    (prefix++[item]).length=initialized+1 := by simp [h]
+theorem store_before_increment (initialized : Nat) (filled : List U32)
+    (item : U32) (h : filled.length=initialized) :
+    (filled++[item]).length=initialized+1 := by simp [h]
 
 #print axioms initialized_prefix
 #print axioms complete_capture
