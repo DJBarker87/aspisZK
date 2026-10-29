@@ -26,5 +26,18 @@ theorem installed_success8 (base : ProverRwFull.ExternalTypes)
   rw [hvalue]
   exact ⟨PV_B3P_Carrier227.fromQ value,rfl⟩
 
+theorem installed_nonvacuity8 (base : ProverRwFull.ExternalTypes)
+    (ops : @ProverRwFull.ExternalFuns (PV_B3P_Install227.Types base))
+    (claims : Array (Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize)
+    (point : Array ProverRwFull.aspis_core.field.QM31 10#usize)
+    (c : ProverRwFull.aspis_core.state_only_prefix.r0.Challenges) :
+    ∃ public1 value,
+      @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+        (PV_B3P_Install227.actual base ops) public1 claims point c = .ok (.Ok value) := by
+  let recipient : Array U32 8#usize := Array.repeat 8#usize 0#u32
+  obtain ⟨value,hvalue⟩ := installed_success8 base ops seed_public recipient claims point c
+  exact ⟨installed_public8 base seed_public recipient,value,hvalue⟩
+
+#print axioms installed_nonvacuity8
 #print axioms installed_success8
 end PV_B3P_Success227
