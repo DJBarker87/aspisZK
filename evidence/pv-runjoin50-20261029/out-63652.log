@@ -1,0 +1,54 @@
+START 63652 R1Z.PV_RunJoin_PrepareCanonicalContext50
+DONE 63652 R1Z.PV_RunJoin_PrepareCanonicalContext50 exit 1 wall 1.68 RSS 4464009216
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareCanonicalContext50.lean:42:9: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ExternalFuns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareCanonicalContext50.lean:36:128: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+s : Sem
+small : backend.messages.length ≤ 14336
+incoming : ExternalFuns := PV_DL_EncoderSelected.selected (PV_RunJoin_GammaPowers44.inputs ops)
+coeff : alloc.vec.Vec Column
+kw : Weight
+hs : (toWeight kw).variant = PV_B2_251c1.transport.Variant.S2
+hv : ↑coeff = List.map permuted ↑backend.messages
+hl : coeff.length = backend.messages.length
+hr :
+  prover.prepare_opening transport.Variant.S2 hash backend s =
+    PV_RunJoin_PrepareClaimContext48.run transport.Variant.S2 hash backend s (ok coeff)
+      (do
+        box transport.Variant.S2 s.alpha s.z
+        ok (core.result.Result.Ok (toWeight kw)))
+      (fun x x_1 => PV_RunJoin_PrepareActualMaterial50.material heap s kw x_1) PV_RunJoin_ClaimActual50.run fun q x =>
+      mapResult ProverRwDictionaryTower.fromW
+        (PV_RunJoin_InactiveFinite48.run 1024 q (PV_RunJoin_WeightCarrier46.state (toWeight kw))
+          AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO 0#usize)
+⊢ (PV_RunJoin_PrepareClaimContext48.run transport.Variant.S2 hash backend s (ok coeff)
+      (do
+        box transport.Variant.S2 s.alpha s.z
+        ok (core.result.Result.Ok (toWeight kw)))
+      (fun x x_1 => PV_RunJoin_PrepareActualMaterial50.material heap s kw x_1) PV_RunJoin_ClaimActual50.run fun q x =>
+      mapResult ProverRwDictionaryTower.fromW
+        (PV_RunJoin_InactiveFinite48.run 1024 q (PV_RunJoin_WeightCarrier46.state (toWeight kw))
+          AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO 0#usize)) =
+    PV_RunJoin_PrepareScalarContext49.run transport.Variant.S2 hash backend s (ok coeff)
+      (do
+        box transport.Variant.S2 s.alpha s.z
+        ok (core.result.Result.Ok (toWeight kw)))
+      (fun x x_1 => PV_RunJoin_PrepareActualMaterial50.material heap s kw x_1) PV_RunJoin_ClaimActual50.run
+      (fun q x =>
+        mapResult ProverRwDictionaryTower.fromW
+          (PV_RunJoin_InactiveFinite48.run 1024 q (PV_RunJoin_WeightCarrier46.state (toWeight kw))
+            AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO 0#usize))
+      (PV_RunJoin_PrepareTail48.run transport.Variant.S2 hash backend s)
+      (PV_RunJoin_ScalarSource49.retained base heap box
+        (PV_DL_EncoderSelected.selected (PV_RunJoin_GammaPowers44.inputs ops))
+        aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32)
+'R1Z.PV_RunJoin_PrepareCanonicalContext50.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

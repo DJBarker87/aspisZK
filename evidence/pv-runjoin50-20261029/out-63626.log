@@ -1,0 +1,74 @@
+START 63626 R1Z.PV_RunJoin_CoefficientList50
+DONE 63626 R1Z.PV_RunJoin_CoefficientList50 exit 1 wall 1.76 RSS 4444041216
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientList50.lean:35:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ExternalFuns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientList50.lean:36:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy transport.Variant.S2 ?q
+in the target expression
+  (do
+      let next ←
+        do
+          let a ← messages.index_usize lane
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 a
+          out.push column
+      PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 messages n next (lane.wrapping_add 1#usize)) =
+    do
+    let next ← out.push (permuted (↑messages)[↑lane])
+    run (List.drop (↑lane + 1) ↑messages) next
+
+case succ
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+messages : Slice Column
+small : messages.length ≤ 14336
+len : (↑messages).length = messages.length
+n : ℕ
+ih :
+  ∀ (out : alloc.vec.Vec Column) (lane : Usize),
+    ↑lane + n = messages.length →
+      PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 messages n out lane =
+        run (List.drop ↑lane ↑messages) out
+out : alloc.vec.Vec Column
+lane : Usize
+rank : ↑lane + (n + 1) = messages.length
+hi : ↑lane < (↑messages).length
+⊢ (do
+      let next ←
+        do
+          let a ← messages.index_usize lane
+          let column ←
+            transport.Variant.coefficients aspis_core.field.wide_exact.WideExact.Insts.CoreMarkerCopy
+                transport.Variant.S2 a
+          out.push column
+      PV_RunJoin_CoefficientsThread45.phase transport.Variant.S2 messages n next (lane.wrapping_add 1#usize)) =
+    do
+    let next ← out.push (permuted (↑messages)[↑lane])
+    run (List.drop (↑lane + 1) ↑messages) next
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    messages
+  has type
+    Slice Column
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑messages
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientList50.lean:35:51: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_CoefficientsThread45.phase, ̲PV_RunJoin_CoefficientsThread45.step,
+        PV_RunJoin_ClaimList48.read messages lane hi,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲run]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CoefficientList50.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientList50.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

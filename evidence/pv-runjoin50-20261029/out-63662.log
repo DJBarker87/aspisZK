@@ -1,0 +1,33 @@
+START 63662 R1Z.PV_RunJoin_GammaCellStep50
+DONE 63662 R1Z.PV_RunJoin_GammaCellStep50 exit 1 wall 1.99 RSS 4436992000
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaCellStep50.lean:33:50: error: Application type mismatch: The argument
+  hr
+has type
+  ↑row < 1024
+but is expected to have type
+  ↑row < ↑?m.56
+in the application
+  PV_RunJoin_ArrayReadMap50.array fromW ?m.57 row hr
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaCellStep50.lean:24:84: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+c : Columns
+powers : Std.Array S 29#usize
+row lane : Usize
+hr : ↑row < 1024
+hl : ↑lane < 29
+acc : S
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+⊢ (do
+      let q ← (amap fromW (↑c)[↑lane]).index_usize row
+      let product ← aspis_core.field.wide_exact.WideExact.mul (fromW (↑powers)[↑lane]) q
+      aspis_core.field.wide_exact.WideExact.add (fromW acc) product) =
+    mapResult fromW do
+      let q ← (↑c)[↑lane].index_usize row
+      let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul (↑powers)[↑lane] q
+      AspisR1ProducerRelease47.field.wide_exact.WideExact.add acc product
+'R1Z.PV_RunJoin_GammaCellStep50.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

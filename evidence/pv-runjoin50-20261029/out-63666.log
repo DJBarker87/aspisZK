@@ -1,0 +1,41 @@
+START 63666 R1Z.PV_RunJoin_GammaRowActual50
+DONE 63666 R1Z.PV_RunJoin_GammaRowActual50 exit 1 wall 1.68 RSS 4438589440
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaRowActual50.lean:24:41: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op42
+in the target expression
+  (do
+      let zero ← aspis_core.field.wide_exact.WideExact.ZERO
+      PV_RunJoin_BatchRowThread44.phase (amap (amap fromW) c).to_slice (amap fromW powers) row 29 0#usize zero) =
+    mapResult fromW
+      (AspisR1ProducerRelease47.gamma53.cell c powers row 0#usize 29#u8
+        AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO)
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+c : Columns
+powers : Std.Array S 29#usize
+row : Usize
+hr : ↑row < 1024
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+⊢ (do
+      let zero ← aspis_core.field.wide_exact.WideExact.ZERO
+      PV_RunJoin_BatchRowThread44.phase (amap (amap fromW) c).to_slice (amap fromW powers) row 29 0#usize zero) =
+    mapResult fromW
+      (AspisR1ProducerRelease47.gamma53.cell c powers row 0#usize 29#u8
+        AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_GammaRowActual50.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

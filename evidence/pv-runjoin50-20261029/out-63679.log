@@ -1,0 +1,35 @@
+START 63679 R1Z.PV_RunJoin_GammaPowersSource50
+DONE 63679 R1Z.PV_RunJoin_GammaPowersSource50 exit 1 wall 1.85 RSS 4436701184
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_GammaPowersSource50.lean:27:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ProverRwDictionaryTower.toW (fromW ?x)
+in the target expression
+  ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (fromW g))) =
+    mapResult (amap fromW) (AspisR1ProducerRelease47.gamma g)
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+g : S
+this : ExternalTypes := types base
+source :
+  ProverRwP6PowersInstall.powers ops 29#usize (fromW g) =
+    ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (fromW g)))
+⊢ ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map ProverRwP6PowersNativeStep.fromW)
+      (AspisR1ProducerRelease47.gamma (ProverRwP6PowersNativeStep.toW (fromW g))) =
+    mapResult (amap fromW) (AspisR1ProducerRelease47.gamma g)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_GammaPowersSource50.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
