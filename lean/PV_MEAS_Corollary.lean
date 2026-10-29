@@ -1,0 +1,47 @@
+import PV_MEAS_Finite
+import PV_EVH_Average
+
+/-! Before: rational finite uniform averages. After: arbitrary probability
+mixtures. This specialization is proved from the measured bound and the exact
+integral/mean bridge, rather than by calling the former averaging theorem. -/
+set_option autoImplicit false
+noncomputable section
+open MeasureTheory
+namespace PV_MEAS_Corollary
+open PV_MEAS_Uniform PV_MEAS_Finite PV_MEAS_Average
+
+/-- The previous finite joint-mean averaging bound is a specialization of the
+arbitrary-measure averaging theorem, by exact real/rational cast transport. -/
+theorem finite_uniform_average {E R I : Type} [Fintype E] [Nonempty E]
+    [Fintype R] [Fintype I] [MeasurableSpace E] [MeasurableSingletonClass E]
+    (real : E → R → ℚ) (ideal : E → I → ℚ) (eps : ℚ)
+    (per_env : ∀ e, |R0Z.FsAbort.mean (real e) - R0Z.FsAbort.mean (ideal e)| ≤ eps) :
+    |R0Z.FsAbort.mean (fun p : E × R => real p.1 p.2) -
+      R0Z.FsAbort.mean (fun p : E × I => ideal p.1 p.2)| ≤ eps := by
+  have hp := fun e => (R0Z.FsAbort.mean (real e) : ℝ)
+  have hq := fun e => (R0Z.FsAbort.mean (ideal e) : ℝ)
+  have hbound := PV_MEAS_Average.average_bound (uniform E) hp hq (eps : ℝ)
+    (by
+      change Integrable (fun e => ((R0Z.FsAbort.mean (real e)) : ℝ)) _
+      -- A finite function is bounded by its finite sum of absolute values.
+      apply (integrable_const (∑ e : E, |hp e|)).mono' (measurable_of_finite _).aestronglyMeasurable
+      apply ae_of_all
+      intro e
+      simpa only [Real.norm_eq_abs] using
+        (Finset.single_le_sum (fun a _ => abs_nonneg (hp a)) (Finset.mem_univ e)))
+    (by
+      change Integrable (fun e => ((R0Z.FsAbort.mean (ideal e)) : ℝ)) _
+      apply (integrable_const (∑ e : E, |hq e|)).mono' (measurable_of_finite _).aestronglyMeasurable
+      apply ae_of_all
+      intro e
+      simpa only [Real.norm_eq_abs] using
+        (Finset.single_le_sum (fun a _ => abs_nonneg (hq a)) (Finset.mem_univ e)))
+    (fun e => by exact_mod_cast per_env e)
+  change |(∫ e, (R0Z.FsAbort.mean (real e) : ℝ) ∂(uniform E : Measure E)) -
+    ∫ e, (R0Z.FsAbort.mean (ideal e) : ℝ) ∂(uniform E : Measure E)| ≤ (eps : ℝ) at hbound
+  rw [integral_rat_mean, integral_rat_mean] at hbound
+  rw [R0Z.LawTransport.mean_product, R0Z.LawTransport.mean_product]
+  exact_mod_cast hbound
+
+#print axioms finite_uniform_average
+end PV_MEAS_Corollary
