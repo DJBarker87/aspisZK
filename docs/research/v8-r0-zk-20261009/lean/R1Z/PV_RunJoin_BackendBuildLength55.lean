@@ -18,7 +18,9 @@ theorem complete
         prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
         public1 compiled noised maskOnly d g padding backend hash variant) := by
   unfold host_semantic.build_with_material host_semantic.build_with_helper_mode
-  repeat' (simp only [Aeneas.Std.uncurry,lift,bind_tc_ok]; first
+  repeat' (try (simp only [Aeneas.Std.uncurry,lift,bind_tc_ok]); first
+    | exact hlen
+    | exact length
     | assumption
     | apply PV_RunJoin_RecordAppend41.bind_post (PV_RunJoin_BackendC1Length55.complete _ _ _ (by assumption)); intro value length
     | apply PV_RunJoin_RecordAppend41.bind_post (PV_RunJoin_BackendC2Length55.complete _ _ _ (by assumption)); intro value length

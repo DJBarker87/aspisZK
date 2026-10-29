@@ -24,8 +24,8 @@ theorem complete {A B : Type} (R : A → B → Prop)
       (run f aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store)
       (run g aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store) := by
   unfold run
-  repeat' (simp only [Aeneas.Std.uncurry,lift,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]; first
+  repeat' (try (simp only [Aeneas.Std.uncurry,lift,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]); first
     | exact PV_RunJoin_NativeResult55.error R _ _
     | apply PV_RunJoin_NativeResult55.tail; exact step _
     | apply PV_RunJoin_ResultRelation55.same_bind; intro value
