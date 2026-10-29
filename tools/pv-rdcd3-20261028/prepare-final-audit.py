@@ -26,6 +26,9 @@ for p in sorted(E.glob('lean-*/receipt.json')):
    if m:names.add('.'.join(stack+[m[1]]))
 imports=''.join('import '+m.replace('/','.')+'\n' for m in sorted(mods))
 checks='\n#check @R1Z.PV_RDCD3_V260Complete.complete\n#check @R1Z.PV_RDCD3_V265.complete\n'
+
+for module in ['R1Z/PV_RDCD3_V217','R1Z/PV_RDCD3_V217Total']:
+ if module in mods:checks+='\n#check @'+module.replace('/','.')+'.complete\n'
 s=imports+checks+''.join('#print axioms '+n+'\n' for n in sorted(names))
 (L/'PV_RDCD3_FinalAudit.lean').write_text(s)
 (E/'final-source-freeze.json').write_text(json.dumps(dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),modules=mods,printed_declarations=sorted(names),scope='Successful focused source cohort only; failed/uncompiled drafts excluded; source/Result row limits retained'),indent=2)+'\n')
