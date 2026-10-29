@@ -38,17 +38,17 @@ theorem complete (slots : List Input) (out : alloc.vec.Vec U8)
     cases hr : PV_RunJoin_NodePayloadModel60.run out payload cap with
     | fail e =>
       cases hm : ProverCommitPublish43.appendSlot (bytes out.val) (PV_RunJoin_NodePayloadModel60.model payload cap.val) with
-      | error e => simp only [run,hr,bind_tc_fail,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Except.bind,resultBytes,exceptBytes]
+      | error e => simp only [run,hr,bind_tc_fail,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Std.bind,Except.bind,resultBytes,exceptBytes]
       | ok b => rw [hr,hm] at equivalent;cases equivalent
     | div =>
       cases hm : ProverCommitPublish43.appendSlot (bytes out.val) (PV_RunJoin_NodePayloadModel60.model payload cap.val) with
-      | error e => simp only [run,hr,bind_tc_div,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Except.bind,resultBytes,exceptBytes]
+      | error e => simp only [run,hr,bind_tc_div,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Std.bind,Except.bind,resultBytes,exceptBytes]
       | ok b => rw [hr,hm] at equivalent;cases equivalent
     | ok status =>
       cases status with
       | Err e =>
         cases hm : ProverCommitPublish43.appendSlot (bytes out.val) (PV_RunJoin_NodePayloadModel60.model payload cap.val) with
-        | error e => simp only [run,hr,bind_tc_ok,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Except.bind,resultBytes,exceptBytes]
+        | error e => simp only [run,hr,bind_tc_ok,models,List.map_cons,ProverCommitPublish43.slots,hm,Bind.bind,Std.bind,Except.bind,resultBytes,exceptBytes]
         | ok b => rw [hr,hm] at equivalent;cases equivalent
       | Ok next =>
         cases hm : ProverCommitPublish43.appendSlot (bytes out.val) (PV_RunJoin_NodePayloadModel60.model payload cap.val) with
@@ -67,7 +67,7 @@ theorem complete (slots : List Input) (out : alloc.vec.Vec U8)
             omega
           have tail := ih next nextRoom
           simpa only [run,hr,bind_tc_ok,models,List.map_cons,ProverCommitPublish43.slots,
-            hm,Bind.bind,Except.bind,←bytesEq] using tail
+            hm,Bind.bind,Std.bind,Except.bind,←bytesEq] using tail
 
 #print axioms complete
 end R1Z.PV_RunJoin_NodeSequence60
