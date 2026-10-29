@@ -25,7 +25,7 @@ theorem absorption_fold15_15 (low fixed chunk_two chunk_eight nodes : aspis_core
       PV_B3P_Ordered227.fold (absorption_step15 low fixed chunk_two chunk_eight nodes openings) [15#usize] state := by
   rw [absorption_cell15_15]
   simp only [PV_B3P_Ordered227.fold,PV_B3P_Ordered227.bind_assoc]
-  rfl
+  all_goals rfl
 #print axioms absorption_cell15_15
 #print axioms absorption_fold15_15
 end PV_B3P_Native15227

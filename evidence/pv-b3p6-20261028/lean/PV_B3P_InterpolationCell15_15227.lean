@@ -29,7 +29,7 @@ theorem interpolation_fold15_15 (weights : Array aspis_core.field.QM31 3#usize) 
       PV_B3P_Ordered227.fold (interpolation_step15 weights column0 column1 column2) [15#usize] state := by
   rw [interpolation_cell15_15]
   simp only [PV_B3P_Ordered227.fold,PV_B3P_Ordered227.bind_assoc]
-  rfl
+  all_goals rfl
 #print axioms interpolation_cell15_15
 #print axioms interpolation_fold15_15
 end PV_B3P_Native15227
