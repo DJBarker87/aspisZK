@@ -1,0 +1,87 @@
+{
+  "attempt": "NDL_K080",
+  "kind": "kani",
+  "module": "field::NDL_core::cm_square_factors",
+  "sources": [
+    "NDL_gate.py",
+    "NDL_SOURCE_PINS.json",
+    "NDL_src/Cargo.lock",
+    "NDL_src/crates/aspis-core/src/field.rs",
+    "NDL_src/crates/aspis-core/src/field/NDD_field.rs",
+    "NDL_src/crates/aspis-core/src/field/NDL_core.rs",
+    "NDL_src/crates/aspis-core/src/field/NDL_core_reference.rs"
+  ],
+  "command": [
+    "python3",
+    "NDL_gate.py",
+    "NDL_K080.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::NDL_core::cm_square_factors",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDL_bad_cm_factor",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_objects:/home/dombarker/project-offloads/codex-cx-front1-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 180,
+  "source_revision": "14185aed9025a63f9af1997e4bc0457a0ef7cf69",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDL_SOURCE.json",
+    "library_pinset": "NDL_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 1,
+  "wall_seconds": 2.7947525149211287,
+  "peak_rss_kib": "509400",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-rdec94b8a7b6f448fb504713acb5c25e4.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "560132096",
+  "source_hashes": {
+    "NDL_gate.py": "1dcf8d6692617a136db06134cfef4a26d4cac14590994aa8ade466a7f732d54e",
+    "NDL_SOURCE_PINS.json": "97335d2e1d010df7287220cf05bd8fe7696b347392935b3fcedef8ec0294fab5",
+    "NDL_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NDL_src/crates/aspis-core/src/field.rs": "11a027f551781baf53d30ffa6ff7f7896f6aa46fee459a43d9285b61e121690d",
+    "NDL_src/crates/aspis-core/src/field/NDD_field.rs": "cee59a89fb5b23a1db86d17c9ab6effcdb95f40c8b9357fb99d0b9712dc7fa6f",
+    "NDL_src/crates/aspis-core/src/field/NDL_core.rs": "9bfe96d8561785fd2ac22f72f7b23b64ddaf07b21d7deb7a1743d30564e0f849",
+    "NDL_src/crates/aspis-core/src/field/NDL_core_reference.rs": "7108dbacf58893e5a11b4334934dee829e44fc6d4bee6d28d04449284d08b900"
+  },
+  "print_axioms": "N/A: kani"
+}

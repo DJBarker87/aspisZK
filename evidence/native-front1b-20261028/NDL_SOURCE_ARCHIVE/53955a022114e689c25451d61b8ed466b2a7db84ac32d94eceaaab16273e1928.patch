@@ -1,0 +1,30 @@
+--- /dev/null
++++ b/NDL_weights.rs
+@@ -0,0 +1,27 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="NDL_reference.rs"] mod reference;
++static mut NDL_BASE:*const u8=core::ptr::null();
++static mut NDL_INDEX:usize=0;
++static mut NDL_SEEN:bool=false;
++static mut NDL_REPLY:[u32;8]=[0;8];
++pub(super) fn field_post(r:E)->bool {unsafe{r.to_limbs()==NDL_REPLY}}
++fn decoder_log(bytes:&[u8])->Option<E>{unsafe{
++ let (lo,hi)=reference::range_ref(NDL_INDEX);
++ let right=bytes.as_ptr()==NDL_BASE.add(lo) && bytes.len()==hi-lo;
++ if cfg!(NDL_bad_range){assert!(!right);}else{assert!(right);}
++
++ E::from_limbs(NDL_REPLY)
++}}
++#[kani::proof_for_contract(field)]
++#[kani::unwind(10)]
++#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decoder_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_log_contract(){
++ let bytes:[u8;2048]=kani::any();let len:usize=kani::any();let i:usize=kani::any();
++ kani::assume(len<=2048 && i<64 && (i+1)*32<=len);
++ let reply:[u32;8]=kani::any();kani::assume(reply.iter().all(|x|*x<2147483647));
++ unsafe{NDL_BASE=bytes.as_ptr();NDL_INDEX=i;NDL_SEEN=false;NDL_REPLY=reply;}
++ let r=field(&bytes[..len],i);
++ if cfg!(NDL_bad_reply){assert_ne!(r.to_limbs(),reply);}else{assert_eq!(r.to_limbs(),reply);}
++}

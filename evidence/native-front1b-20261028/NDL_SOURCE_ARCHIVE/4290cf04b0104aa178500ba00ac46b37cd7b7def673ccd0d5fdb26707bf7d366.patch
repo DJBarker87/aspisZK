@@ -1,0 +1,208 @@
+--- /dev/null
++++ b/NDL_weights.rs
+@@ -0,0 +1,205 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="NDL_reference.rs"] mod reference;
++static mut NDL_BASE:*const u8=core::ptr::null();
++static mut NDL_INDEX:usize=0;
++static mut NDL_SEEN:bool=false;
++static mut NDL_REPLY:[u32;8]=[0;8];
++pub(super) fn field_post(r:E)->bool {unsafe{r.to_limbs()==NDL_REPLY}}
++fn decoder_log(bytes:&[u8])->Option<E>{unsafe{
++ let (lo,hi)=reference::range_ref(NDL_INDEX);
++ let right=bytes.as_ptr()==NDL_BASE.add(lo) && bytes.len()==hi-lo;
++ if cfg!(NDL_bad_range){assert!(!right);}else{assert!(right);}
++
++ E::from_limbs(NDL_REPLY)
++}}
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decoder_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_log_contract(){
++ let bytes:[u8;2048]=kani::any();let len:usize=kani::any();let i:usize=kani::any();
++ kani::assume(len<=2048 && i<64 && (i+1)*32<=len);
++ let reply:[u32;8]=kani::any();kani::assume(reply.iter().all(|x|*x<2147483647));
++ unsafe{NDL_BASE=bytes.as_ptr();NDL_INDEX=i;NDL_SEEN=false;NDL_REPLY=reply;}
++ let r=field(&bytes[..len],i);
++ if cfg!(NDL_bad_reply){assert_ne!(r.to_limbs(),reply);}else{assert_eq!(r.to_limbs(),reply);}
++}
++pub(super) fn field_domain(bytes:&[u8],i:usize)->bool{i<64 && (i+1)*32<=bytes.len() && reference::field_ref(bytes,i).iter().all(|x|*x<2147483647)}
++pub(super) fn field_exact_post(r:E,bytes:&[u8],i:usize)->bool{
++ let eq=r.to_limbs()==reference::field_ref(bytes,i);if cfg!(NDL_bad_exact){!eq}else{eq}
++}
++fn decoder_exact(bytes:&[u8])->Option<E>{E::from_limbs(reference::decode_ref(bytes))}
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(aspis_core::field::WideExact::from_le_bytes,decoder_exact)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_exact_contract(){let bytes:[u8;2048]=kani::any();let len:usize=kani::any();let i:usize=kani::any();
++ kani::assume(len<=2048 && i<64 && (i+1)*32<=len);
++ let input=&bytes[..len];kani::assume(field_domain(input,i));
++ unsafe{NDL_REPLY=reference::field_ref(input,i);}
++ field(input,i);
++}
++// Split replacement for K006: one selected window, no large-buffer value proof.
++#[kani::proof_for_contract(field)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn field_window_contract(){let bytes:[u8;32]=kani::any();
++ kani::assume(field_domain(&bytes,0));unsafe{NDL_REPLY=reference::field_ref(&bytes,0);}
++ field(&bytes,0);
++}
++fn qwords(x:K)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn fromq(x:[u32;4])->K{K{c0:aspis_core::field::CM31{a:M31(x[0]),b:M31(x[1])},c1:aspis_core::field::CM31{a:M31(x[2]),b:M31(x[3])}}}
++fn canonical8(x:[u32;8])->bool{x.iter().all(|v|*v<2147483647)}
++fn anye()->E{let x:[u32;8]=kani::any();kani::assume(canonical8(x));E::from_limbs(x).unwrap()}
++static mut NDL_SF_POWER:[u32;8]=[0;8];
++static mut NDL_SF_FACTOR:[u32;4]=[0;4];
++static mut NDL_SF_PRODUCT:[u32;8]=[0;8];
++fn scalar_mul_log(x:E,y:K)->E{unsafe{
++ let right=x.to_limbs()==NDL_SF_POWER && qwords(y)==NDL_SF_FACTOR;
++ if cfg!(NDL_bad_sf_operands){assert!(!right);}else{assert!(right);}
++ assert!(canonical8(x.to_limbs()));E::from_limbs(NDL_SF_PRODUCT).unwrap()
++}}
++fn scalar_cell_post(r:E,v:E)->bool{let right=if cfg!(NDL_scalar_log){unsafe{r.to_limbs()==NDL_SF_SUM}}else{unsafe{r.to_limbs()==reference::add8_ref(v.to_limbs(),NDL_SF_PRODUCT)}};if cfg!(NDL_bad_sf_result){!right}else{right}}
++// Verbatim frozen scalar_factor fold closure, fissioned at one arbitrary pre-state.
++#[kani::requires(s<4 && canonical8(v.to_limbs()) && p.iter().all(|x|canonical8(x.to_limbs())) && canonical8(unsafe{NDL_SF_PRODUCT}) && (!cfg!(NDL_scalar_log) || canonical8(unsafe{NDL_SF_SUM})))]
++#[kani::ensures(|r|scalar_cell_post(*r,v))]
++fn scalar_cell(v:E,s:usize,f:&[K;4],p:&[E;4])->E{v.add(p[PERM[s]].mul_qm31(f[s]))}
++#[kani::proof_for_contract(scalar_cell)] #[kani::unwind(40)]
++#[kani::stub(E::mul_qm31,scalar_mul_log)]
++#[kani::stub(E::add,scalar_add_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scalar_cell_contract(){let p=[anye(),anye(),anye(),anye()];let f=[fromq(kani::any()),fromq(kani::any()),fromq(kani::any()),fromq(kani::any())];let s:usize=kani::any();kani::assume(s<4);let v=anye();let result=anye();let sum=anye();
++ unsafe{NDL_SF_POWER=p[PERM[s]].to_limbs();NDL_SF_FACTOR=qwords(f[s]);NDL_SF_PRODUCT=result.to_limbs();NDL_SF_ACC=v.to_limbs();NDL_SF_SUM=sum.to_limbs();}
++ scalar_cell(v,s,&f,&p);
++}
++
++// K009 replacement: split both reached callees into SAME-input opaque logs.
++static mut NDL_SF_ACC:[u32;8]=[0;8];
++static mut NDL_SF_SUM:[u32;8]=[0;8];
++fn scalar_add_log(x:E,y:E)->E{unsafe{
++ let right=x.to_limbs()==NDL_SF_ACC && y.to_limbs()==NDL_SF_PRODUCT;
++ if cfg!(NDL_bad_sf_add){assert!(!right);}else{assert!(right);}
++ E::from_limbs(NDL_SF_SUM).unwrap()
++}}
++static mut NDL_SF_LANE:usize=0;
++fn eword(x:E,k:usize)->u32{match k {0=>x.c0().c0.a.0,1=>x.c0().c0.b.0,2=>x.c0().c1.a.0,3=>x.c0().c1.b.0,4=>x.c1().c0.a.0,5=>x.c1().c0.b.0,6=>x.c1().c1.a.0,_=>x.c1().c1.b.0}}
++fn qword(x:K,k:usize)->u32{match k{0=>x.c0.a.0,1=>x.c0.b.0,2=>x.c1.a.0,_=>x.c1.b.0}}
++fn selected_mul_window(x:E,y:K)->E{unsafe{let k=NDL_SF_LANE;
++ let correct=eword(x,k)==NDL_SF_POWER[k] && qword(y,k%4)==NDL_SF_FACTOR[k%4];
++ if cfg!(NDL_bad_sf_operands){assert!(!correct);}else{assert!(correct);}
++ E::from_limbs(NDL_SF_PRODUCT).unwrap()
++}}
++fn selected_add_window(x:E,y:E)->E{unsafe{let k=NDL_SF_LANE;
++ let correct=eword(x,k)==NDL_SF_ACC[k] && eword(y,k)==NDL_SF_PRODUCT[k];
++ if cfg!(NDL_bad_sf_add){assert!(!correct);}else{assert!(correct);}
++ E::from_limbs(NDL_SF_SUM).unwrap()
++}}
++fn selected_post(r:E)->bool{unsafe{let k=NDL_SF_LANE;let correct=eword(r,k)==NDL_SF_SUM[k];if cfg!(NDL_bad_sf_result){!correct}else{correct}}}
++// Selected-value subspan after the index/read cut; not a whole-loop claim.
++#[kani::requires(canonical8(v.to_limbs()) && canonical8(p.to_limbs()) && unsafe{NDL_SF_LANE<8 && canonical8(NDL_SF_PRODUCT) && canonical8(NDL_SF_SUM)})]
++#[kani::ensures(|r|selected_post(*r))]
++fn scalar_selected(v:E,p:E,f:K)->E{v.add(p.mul_qm31(f))}
++#[kani::proof_for_contract(scalar_selected)] #[kani::unwind(10)]
++#[kani::stub(E::mul_qm31,selected_mul_window)] #[kani::stub(E::add,selected_add_window)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scalar_selected_contract(){let v=anye();let p=anye();let f=fromq(kani::any());let product=anye();let sum=anye();let k:usize=kani::any();kani::assume(k<8);
++ unsafe{NDL_SF_LANE=k;NDL_SF_POWER=p.to_limbs();NDL_SF_FACTOR=qwords(f);NDL_SF_PRODUCT=product.to_limbs();NDL_SF_ACC=v.to_limbs();NDL_SF_SUM=sum.to_limbs();}
++ scalar_selected(v,p,f);
++}
++#[kani::proof]
++fn scalar_selector(){let p=[E::ZERO;4];let f=[K::ZERO;4];let s:usize=kani::any();kani::assume(s<4);
++ let (pi,fi)=reference::scalar_select_ref(s);
++ let selected_p=&p[PERM[s]];let selected_f=&f[s];
++ let correct=selected_p as *const E==unsafe{p.as_ptr().add(pi)} && selected_f as *const K==unsafe{f.as_ptr().add(fi)};
++ if cfg!(NDL_bad_selector){assert!(!correct);}else{assert!(correct);}
++}
++fn finish_scale_log(x:E,s:M31)->E{unsafe{let k=NDL_SF_LANE;let correct=eword(x,k)==NDL_SF_ACC[k]&&s.0==536870912;
++ if cfg!(NDL_bad_sf_scale){assert!(!correct);}else{assert!(correct);}
++ E::from_limbs(NDL_SF_SUM).unwrap()
++}}
++#[kani::requires(canonical8(v.to_limbs()) && unsafe{NDL_SF_LANE<8&&canonical8(NDL_SF_SUM)})]
++#[kani::ensures(|r|selected_post(*r))]
++fn scalar_finish(v:E)->E{v.mul_m31(QUARTER)}
++#[kani::proof_for_contract(scalar_finish)] #[kani::unwind(10)]
++#[kani::stub(E::mul_m31,finish_scale_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn scalar_finish_contract(){let v=anye();let sum=anye();let k:usize=kani::any();kani::assume(k<8);unsafe{NDL_SF_LANE=k;NDL_SF_ACC=v.to_limbs();NDL_SF_SUM=sum.to_limbs();}scalar_finish(v);}
++static mut NDL_DOT_PRE_PTR:*mut crate::fast_pairing::EbyKDot=core::ptr::null_mut();
++static mut NDL_DOT_POST:[u64;8]=[0;8];
++static mut NDL_DOT_COUNT:usize=0;
++static mut NDL_DOT_FAIL:bool=false;
++fn dot_push_log(dot:&mut crate::fast_pairing::EbyKDot,value:E,scalar:K)->Result<(),()>{unsafe{
++ let k=NDL_SF_LANE;let same=core::ptr::eq(dot,NDL_DOT_PRE_PTR) && eword(value,k)==NDL_SF_POWER[k]&&qword(scalar,k%4)==NDL_SF_FACTOR[k%4];
++ if cfg!(NDL_bad_high_args){assert!(!same);}else{assert!(same);}
++ *dot=crate::fast_pairing::NDL_pairing::make(NDL_DOT_POST,NDL_DOT_COUNT);
++ if NDL_DOT_FAIL{Err(())}else{Ok(())}
++}}
++// Frozen high_dot match arm, on an arbitrary pre-state and selected operands.
++fn high_iteration(high:&mut crate::fast_pairing::EbyKDot,value:E,scalar:K)->Result<(),Error>{
++ match high.push(value,scalar){Ok(())=>{},Err(_)=>return Err(Error::Parse)}
++ Ok(())
++}
++#[kani::proof] #[kani::unwind(10)]
++#[kani::stub(crate::fast_pairing::EbyKDot::push,dot_push_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn high_iteration_window(){let pre:[u64;8]=kani::any();let count:usize=kani::any();let mut high=crate::fast_pairing::NDL_pairing::make(pre,count);
++ let post:[u64;8]=kani::any();let post_count:usize=kani::any();let fail:bool=kani::any();let value=anye();let scalar=fromq(kani::any());let k:usize=kani::any();kani::assume(k<8);
++ unsafe{NDL_SF_LANE=k;NDL_DOT_PRE_PTR=&mut high;NDL_DOT_POST=post;NDL_DOT_COUNT=post_count;NDL_DOT_FAIL=fail;NDL_SF_POWER=value.to_limbs();NDL_SF_FACTOR=qwords(scalar);}
++ let r=high_iteration(&mut high,value,scalar);
++ let result=match r{Ok(())=>!fail,Err(Error::Parse)=>fail,_=>false};
++ if cfg!(NDL_bad_high_result){assert!(!result);}else{assert!(result);}
++ let state=crate::fast_pairing::NDL_pairing::word(&high,k)==post[k] && crate::fast_pairing::NDL_pairing::count(&high)==post_count;
++ if cfg!(NDL_bad_high_state){assert!(!state);}else{assert!(state);}
++}
++#[kani::proof]
++fn high_selector(){let p=[E::ZERO;4];let q=[K::ZERO;4];let s:usize=kani::any();kani::assume(s<4);
++ let same=core::ptr::eq(&p[s],unsafe{p.as_ptr().add(s)})&&core::ptr::eq(&q[s],unsafe{q.as_ptr().add(s)});
++ if cfg!(NDL_bad_high_selector){assert!(!same);}else{assert!(same);}
++}
++static mut NDL_T_X:[u32;4]=[0;4];
++static mut NDL_T_F:[[u32;4];4]=[[0;4];4];
++static mut NDL_T_P:[[u32;4];4]=[[0;4];4];
++static mut NDL_T_CALL:usize=0;
++static mut NDL_T_LIMB:usize=0;
++fn tensor_mul_log(x:K,y:K)->K{unsafe{
++ let c=NDL_T_CALL;assert!(c<4);let k=NDL_T_LIMB;
++ let same_x=qword(x,k)==NDL_T_X[k];let same_y=qword(y,k)==NDL_T_F[c][k];
++ if cfg!(NDL_bad_tensor_read){assert!(!same_x);}else{assert!(same_x);}
++ if cfg!(NDL_bad_tensor_slot){assert!(!same_y);}else{assert!(same_y);}
++ NDL_T_CALL+=1;fromq(NDL_T_P[c])
++}}
++// Exactly one frozen inner iteration, including read-before-overwrite.
++fn tensor_iteration(output:&mut[K;64],n:usize,j:usize,f:&[K;4]){
++ let x=output[j];
++ output[j+0*n]=x.mul(f[0]);output[j+1*n]=x.mul(f[1]);
++ output[j+2*n]=x.mul(f[2]);output[j+3*n]=x.mul(f[3]);
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(K::mul,tensor_mul_log)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn tensor_iteration_window(){let mut output:[K;64]=if cfg!(NDL_tensor_sparse){[K::ZERO;64]}else{kani::any()};let f:[K;4]=kani::any();let products:[[u32;4];4]=kani::any();let n:usize=if cfg!(NDL_tensor_any){kani::any()}else if cfg!(NDL_tensor_n1){1}else if cfg!(NDL_tensor_n4){4}else{16};let j:usize=kani::any();kani::assume((n==1||n==4||n==16)&&j<n);let lane:usize=kani::any();kani::assume(lane<4);let at:usize=if cfg!(NDL_tensor_written){j+lane*n}else{kani::any()};let k:usize=kani::any();
++ kani::assume((n==1||n==4||n==16)&&j<n&&at<64&&k<4);
++ if cfg!(NDL_tensor_frame){kani::assume(at!=j&&at!=j+n&&at!=j+2*n&&at!=j+3*n);}
++ if cfg!(NDL_tensor_sparse){output[j]=kani::any();if at!=j {output[at]=kani::any();}}
++ let x=output[j];let old=qword(output[at],k);
++ unsafe{NDL_T_X=qwords(x);NDL_T_F=[qwords(f[0]),qwords(f[1]),qwords(f[2]),qwords(f[3])];NDL_T_P=products;NDL_T_CALL=0;NDL_T_LIMB=k;}
++ tensor_iteration(&mut output,n,j,&f);
++ let expected=if at==j {products[0][k]}else if at==j+n{products[1][k]}else if at==j+2*n{products[2][k]}else if at==j+3*n{products[3][k]}else{old};
++ let same=qword(output[at],k)==expected;
++ if cfg!(NDL_bad_tensor_write){assert!(!same);}else{assert!(same);}
++ if at!=j&&at!=j+n&&at!=j+2*n&&at!=j+3*n {if cfg!(NDL_bad_tensor_frame){assert_ne!(qword(output[at],k),old);}else{assert_eq!(qword(output[at],k),old);}}
++ unsafe{if cfg!(NDL_bad_tensor_order){assert_ne!(NDL_T_CALL,4);}else{assert_eq!(NDL_T_CALL,4);}}
++}
++fn rawrow(a:&[K;4])->[[u32;4];4]{[qwords(a[0]),qwords(a[1]),qwords(a[2]),qwords(a[3])]}
++pub(super) fn guard_raw_post(r:bool,w:&Weights,folds:usize)->bool{
++ let variant=match w.variant{Variant::S1=>0,Variant::S2=>1,Variant::D=>2};
++ let reference=reference::guard_raw_ref(variant,folds,rawrow(&w.factors[0][2]),rawrow(&w.factors[2][2]),rawrow(&w.factors[0][3]),rawrow(&w.factors[2][3]));
++ let same=r==reference;if cfg!(NDL_bad_guard_raw){!same}else{same}
++}
++#[kani::proof_for_contract(shared_two_point_guard)] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn guard_raw_contract(){let w=Weights{variant:match kani::any::<u8>()%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D},
++ factors:core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any())))),
++ points:core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any()))),extra:core::array::from_fn(|_|fromq(kani::any()))};
++ shared_two_point_guard(&w,kani::any());}

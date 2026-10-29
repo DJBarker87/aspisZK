@@ -1,0 +1,30 @@
+--- /dev/null
++++ b/NDL_core.rs
+@@ -0,0 +1,27 @@
++use super::*;
++impl kani::Arbitrary for QM31{fn any()->Self{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}}
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[path="NDL_core_reference.rs"] mod reference;
++static mut NDL_PACK_INPUT:[[u32;4];4]=[[0;4];4];
++static mut NDL_PACK_LEN:usize=0;
++static mut NDL_PACK_CALLS:usize=0;
++static mut NDL_PACK_REPLY:[u32;4]=[0;4];
++fn words(x:QM31)->[u32;4]{[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn canonical(x:QM31)->bool{let w=words(x);w[0]<P&&w[1]<P&&w[2]<P&&w[3]<P}
++fn padded()->[[u32;4];4]{unsafe{[if NDL_PACK_LEN>0{NDL_PACK_INPUT[0]}else{[0;4]},if NDL_PACK_LEN>1{NDL_PACK_INPUT[1]}else{[0;4]},if NDL_PACK_LEN>2{NDL_PACK_INPUT[2]}else{[0;4]},if NDL_PACK_LEN>3{NDL_PACK_INPUT[3]}else{[0;4]}]}}
++fn reduce_log(raw:u64)->M31{unsafe{let c=NDL_PACK_CALLS;assert!(c<4);let expected=reference::raw_pack_ref(padded(),c);
++ if cfg!(NDL_bad_pack_arg){assert!(raw!=expected);}else{assert!(raw==expected);}
++ NDL_PACK_CALLS+=1;M31(NDL_PACK_REPLY[c])
++}}
++// Actual frozen pack function, four SAME-execution reduction argument/reply cuts.
++#[kani::proof] #[kani::unwind(7)]
++#[kani::stub(M31::reduce_u64,reduce_log)]
++#[kani::stub(<[QM31]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn pack_reduce_log(){let x:[QM31;4]=kani::any();let n:usize=kani::any();let k:usize=kani::any();kani::assume(n<=4&&k<4);kani::assume(x.iter().all(|x|canonical(*x)));
++ let reply:[u32;4]=kani::any();kani::assume(reply.iter().all(|r|*r<P));
++ unsafe{NDL_PACK_INPUT=[words(x[0]),words(x[1]),words(x[2]),words(x[3])];NDL_PACK_LEN=n;NDL_PACK_CALLS=0;NDL_PACK_REPLY=reply;}
++ let r=qm31_pack_base4(&x[..n]);let same=words(r)[k]==reply[k];
++ if cfg!(NDL_bad_pack_result){assert!(!same);}else{assert!(same);}
++ unsafe{if cfg!(NDL_bad_pack_count){assert!(NDL_PACK_CALLS!=4);}else{assert!(NDL_PACK_CALLS==4);}}
++}

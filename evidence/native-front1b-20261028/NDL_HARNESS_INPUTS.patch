@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/NDL_weights.rs
-@@ -0,0 +1,248 @@
+@@ -0,0 +1,260 @@
 +use super::*;
 +use crate::fast_pairing::EbyKDot;
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -249,6 +249,18 @@
 +#[kani::stub(K::mul,double_product_log)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +fn double_contract(){let x:[u32;4]=kani::any();let p:[u32;4]=kani::any();kani::assume(x.iter().all(|v|*v<2147483647)&&p.iter().all(|v|*v<2147483647));unsafe{NDL_DOUBLE_X=x;NDL_DOUBLE_P=p;}double(fromq(x));}
++// Box return is deliberately a window probe, not an admitted contract shape.
++#[kani::proof] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn box_field_window(){let variant=match kani::any::<u8>()%3{0=>Variant::S1,1=>Variant::S2,_=>Variant::D};
++ let factors=core::array::from_fn(|_|core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any()))));
++ let points=core::array::from_fn(|_|core::array::from_fn(|_|fromq(kani::any())));let extra=core::array::from_fn(|_|fromq(kani::any()));
++ let k:usize=kani::any();let d:usize=kani::any();let s:usize=kani::any();let a:usize=kani::any();let b:usize=kani::any();let e:usize=kani::any();let word:usize=kani::any();kani::assume(k<5&&d<5&&s<4&&a<3&&b<10&&e<2&&word<4);
++ let f=qword(factors[k][d][s],word);let p=qword(points[a][b],word);let x=qword(extra[e],word);
++ let out=Weights::box_from_parts(variant,factors,points,extra);
++ let same=qword(out.factors[k][d][s],word)==f&&qword(out.points[a][b],word)==p&&qword(out.extra[e],word)==x;
++ if cfg!(NDL_bad_box_fields){assert!(!same);}else{assert!(same);}
++ let same=out.variant==variant;if cfg!(NDL_bad_box_variant){assert!(!same);}else{assert!(same);}}
 --- /dev/null
 +++ b/NDL_reference.rs
 @@ -0,0 +1,49 @@
@@ -303,7 +315,7 @@
 +pub fn tensor_stage_ref(n:usize)->usize{n*4}
 --- /dev/null
 +++ b/NDL_core.rs
-@@ -0,0 +1,27 @@
+@@ -0,0 +1,35 @@
 +use super::*;
 +impl kani::Arbitrary for QM31{fn any()->Self{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}}
 +include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
@@ -331,9 +343,17 @@
 + if cfg!(NDL_bad_pack_result){assert!(!same);}else{assert!(same);}
 + unsafe{if cfg!(NDL_bad_pack_count){assert!(NDL_PACK_CALLS!=4);}else{assert!(NDL_PACK_CALLS==4);}}
 +}
++// Frozen CM31.square factor prefix only; the inline product is NOT evaluated.
++fn cm_square_factor_prefix(x:CM31)->(u64,u64,u32,u32){
++ (u64::from(x.a.0)+u64::from(x.b.0),u64::from(x.a.0)+u64::from(P)-u64::from(x.b.0),x.a.0,x.b.0)}
++#[kani::proof] #[kani::unwind(3)]
++fn cm_square_factors(){let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P&&b<P);let x=CM31{a:M31(a),b:M31(b)};
++ let r=cm_square_factor_prefix(x);let reference=reference::cm_square_factors_ref(a,b);
++ let same=r==reference&&r.0<2*u64::from(P)&&r.1<2*u64::from(P);
++ if cfg!(NDL_bad_cm_factor){assert!(!same);}else{assert!(same);}}
 --- /dev/null
 +++ b/NDL_core_reference.rs
-@@ -0,0 +1,7 @@
+@@ -0,0 +1,8 @@
 +pub fn raw_pack_ref(v:[[u32;4];4],which:usize)->u64{
 + let p=2147483647u64;let v0=v[0];let v1=v[1];let v2=v[2];let v3=v[3];
 + if which==0 {v0[0] as u64+(p-v1[1] as u64)+2*v2[2] as u64+(p-v2[3] as u64)+(p-v3[2] as u64)+(2*p-2*v3[3] as u64)}
@@ -341,6 +361,7 @@
 + else if which==2 {v0[2] as u64+(p-v1[3] as u64)+v2[0] as u64+(p-v3[1] as u64)}
 + else {v0[3] as u64+v1[2] as u64+v2[1] as u64+v3[0] as u64}
 +}
++pub fn cm_square_factors_ref(a:u32,b:u32)->(u64,u64,u32,u32){(a as u64+b as u64,a as u64+2147483647-b as u64,a,b)}
 --- /dev/null
 +++ b/NDL_dot.rs
 @@ -0,0 +1,3 @@

@@ -1,0 +1,372 @@
+--- /dev/null
++++ b/multiproof.rs
+@@ -0,0 +1,369 @@
++//! ADOPTED R1 PROOF FORMAT (PREREG-PROOF-SIZE-2, 2026-10-19); UNPROVED.
++//!
++//! Indexed Merkle multiproofs over the fixed 2^18-leaf commitment domain.
++//! `Arity::Eight` is the shipped tree shape (six levels of eight, node grammar
++//! `0x18 || c0..c7`); `Arity::Two` is the candidate binary tree (eighteen
++//! levels, node grammar `BINARY_NODE_TAG || left || right`). Leaf hashing is
++//! unchanged and supplied by the caller.
++//!
++//! Multiproof order: level by level from the leaves; inside a level, occupied
++//! nodes in ascending index order; inside one parent's group, the children
++//! that are not occupied, in ascending slot order. The number of supplied
++//! nodes is a function of the index set only (`node_count`), so a parser
++//! knows the exact length before reading a node.
++use alloc::vec::Vec;
++use aspis_core::{r0::merkle, Digest32};
++
++/// Leaves in every committed tree (C1, C2 and the padded folded tree).
++pub const LEAF_BITS: u32 = 18;
++/// New domain separator for binary parent nodes (leaves use 0x10, eight-way
++/// parents 0x18). UNPROVED: its disjointness is one of the obligations.
++pub const BINARY_NODE_TAG: u8 = 0x12;
++/// Largest index set one multiproof call accepts (one transaction batch).
++pub const MAX_BATCH: usize = 16;
++
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum Arity {
++    Two,
++    Eight,
++}
++impl Arity {
++    #[inline(always)]
++    #[cfg_attr(all(kani,NDD_bits),kani::ensures(|r| NDD_multiproof::verdict(*r == NDD_multiproof::reference::bits_ref(matches!(self,Self::Eight)))))]
++    pub const fn bits(self) -> u32 {
++        match self {
++            Self::Two => 1,
++            Self::Eight => 3,
++        }
++    }
++    #[inline(always)]
++    pub const fn width(self) -> usize {
++        1 << self.bits()
++    }
++    #[inline(always)]
++    pub const fn levels(self) -> u32 {
++        LEAF_BITS / self.bits()
++    }
++}
++
++#[inline(always)]
++pub fn binary_parent<H: Digest32>(hash: H, left: &[u8; 32], right: &[u8; 32]) -> [u8; 32] {
++    hash.digest(&[&[BINARY_NODE_TAG], left, right])
++}
++
++/// Strictly increasing and inside the leaf domain.
++fn well_formed(indices: &[u32]) -> bool {
++    !indices.is_empty()
++        && indices.len() <= MAX_BATCH
++        && indices.windows(2).all(|w| w[0] < w[1])
++        && indices.iter().all(|&i| i < 1 << LEAF_BITS)
++}
++
++#[inline(always)]
++#[cfg_attr(kani, kani::requires(index < MAX_BATCH))]
++#[cfg_attr(kani, kani::ensures(|r| NDD_multiproof::verdict(*r == NDD_multiproof::reference::index_ref(indices,index))))]
++fn index_at(indices: &[u32; MAX_BATCH], index: usize) -> u32 {
++    indices[index]
++}
++
++#[inline(always)]
++#[cfg_attr(kani, kani::requires(index < MAX_BATCH))]
++#[cfg_attr(kani, kani::ensures(|r| NDD_multiproof::verdict(*r == NDD_multiproof::reference::value_ref(values,index))))]
++fn value_at(values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] { values[index] }
++
++#[inline(always)]
++#[cfg_attr(kani, kani::requires(true))]
++#[cfg_attr(kani, kani::ensures(|r| NDD_multiproof::verdict(*r == NDD_multiproof::reference::root_ref(values,root))))]
++fn root_matches(values: &[[u8; 32]; MAX_BATCH], root: &[u8; 32]) -> bool { values[0] == *root }
++
++#[inline(always)]
++fn occupied_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize) -> [u8; 32] {
++    hash.digest(&[&[BINARY_NODE_TAG], &values[index], &values[index + 1]])
++}
++
++#[inline(always)]
++fn sibling_binary_parent<H: Digest32>(hash: H, values: &[[u8; 32]; MAX_BATCH], index: usize, sibling: &[u8], left: bool) -> [u8; 32] {
++    if left { hash.digest(&[&[BINARY_NODE_TAG], &values[index], sibling]) }
++    else { hash.digest(&[&[BINARY_NODE_TAG], sibling, &values[index]]) }
++}
++
++/// Number of supplied sibling nodes for a strictly increasing index set:
++/// at each level, (width x distinct parents) - occupied nodes.
++pub fn node_count(arity: Arity, indices: &[u32]) -> Option<usize> {
++    if !well_formed(indices) {
++        return None;
++    }
++    let mut level = [0u32; MAX_BATCH];
++    level[..indices.len()].copy_from_slice(indices);
++    let mut n = indices.len();
++    let mut count = 0;
++    for _ in 0..arity.levels() {
++        let mut w = 0;
++        let mut i = 0;
++        while i < n {
++            let parent = index_at(&level, i) >> arity.bits();
++            let mut j = i;
++            while j < n && index_at(&level, j) >> arity.bits() == parent {
++                j += 1;
++            }
++            count += arity.width() - (j - i);
++            level[w] = parent;
++            w += 1;
++            i = j;
++        }
++        n = w;
++    }
++    Some(count)
++}
++
++/// Verify one multiproof. `indices` strictly increasing, `leaves[i]` the leaf
++/// hash at `indices[i]`, `nodes` exactly `32 * node_count` bytes, consumed in
++/// the canonical order. Rejects on any malformed input; never panics.
++pub fn verify<H: Digest32>(
++    hash: H,
++    arity: Arity,
++    root: &[u8; 32],
++    indices: &[u32],
++    leaves: &[[u8; 32]],
++    nodes: &[u8],
++) -> bool {
++    if !well_formed(indices) || leaves.len() != indices.len() || nodes.len() % 32 != 0 {
++        return false;
++    }
++    let mut idx = [0u32; MAX_BATCH];
++    let mut val = [[0u8; 32]; MAX_BATCH];
++    let n = indices.len();
++    idx[..n].copy_from_slice(indices);
++    val[..n].copy_from_slice(leaves);
++    verify_in_place(hash, arity, root, &mut idx, &mut val, n, nodes)
++}
++
++/// `verify` over caller-owned scratch arrays (no copies): the first `n`
++/// entries of `idx`/`val` are the strictly increasing indices and their
++/// leaves; both arrays are overwritten.
++#[inline(always)]
++pub fn verify_in_place<H: Digest32>(
++    hash: H,
++    arity: Arity,
++    root: &[u8; 32],
++    idx: &mut [u32; MAX_BATCH],
++    val: &mut [[u8; 32]; MAX_BATCH],
++    mut n: usize,
++    nodes: &[u8],
++) -> bool {
++    if n == 0 || n > MAX_BATCH || !well_formed(&idx[..n]) || nodes.len() % 32 != 0 {
++        return false;
++    }
++    let mut at = 0usize;
++    for _ in 0..arity.levels() {
++        let mut w = 0;
++        let mut i = 0;
++        while i < n {
++            let parent = index_at(idx, i) >> arity.bits();
++            let digest = match arity {
++                Arity::Two => {
++                    // Hash straight from the stored slices: no sibling or
++                    // pair copies (SBF cost; same grammar and order).
++                    if i + 1 < n && index_at(idx, i + 1) == index_at(idx, i) ^ 1 {
++                        let d = occupied_binary_parent(hash, val, i);
++                        i += 2;
++                        d
++                    } else {
++                        let Some(sibling) = nodes.get(at..at + 32) else { return false };
++                        at += 32;
++                        let d = sibling_binary_parent(hash, val, i, sibling, index_at(idx, i) & 1 == 0);
++                        i += 1;
++                        d
++                    }
++                }
++                Arity::Eight => {
++                    let mut children = [[0u8; 32]; 8];
++                    for (slot, child) in children.iter_mut().enumerate() {
++                        if i < n && index_at(idx, i) >> 3 == parent && (index_at(idx, i) & 7) as usize == slot {
++                            *child = value_at(val, i);
++                            i += 1;
++                        } else {
++                            let Some(sibling) = nodes.get(at..at + 32) else { return false };
++                            child.copy_from_slice(sibling);
++                            at += 32;
++                        }
++                    }
++                    merkle::parent_with_digest(hash, &children)
++                }
++            };
++            idx[w] = parent;
++            val[w] = digest;
++            w += 1;
++        }
++        n = w;
++    }
++    n == 1 && index_at(idx, 0) == 0 && root_matches(val, root) && at == nodes.len()
++}
++
++/// Prover side: emit the canonical node sequence. `node(level, index)` returns
++/// the stored digest of node `index` at `level` (0 = leaves).
++pub fn generate(
++    arity: Arity,
++    indices: &[u32],
++    mut node: impl FnMut(u32, u32) -> [u8; 32],
++) -> Option<Vec<u8>> {
++    let count = node_count(arity, indices)?;
++    let mut out = Vec::with_capacity(32 * count);
++    let mut level: Vec<u32> = indices.to_vec();
++    for depth in 0..arity.levels() {
++        let mut next = Vec::new();
++        let mut i = 0;
++        while i < level.len() {
++            let parent = level[i] >> arity.bits();
++            for slot in 0..arity.width() as u32 {
++                let child = (parent << arity.bits()) | slot;
++                if i < level.len() && level[i] == child {
++                    i += 1;
++                } else {
++                    out.extend_from_slice(&node(depth, child));
++                }
++            }
++            next.push(parent);
++        }
++        level = next;
++    }
++    (out.len() == 32 * count).then_some(out)
++}
++
++/// Host-side complete binary tree over 2^18 leaves.
++#[cfg(feature = "prover")]
++pub struct BinaryTree {
++    levels: Vec<Vec<[u8; 32]>>,
++}
++#[cfg(feature = "prover")]
++impl BinaryTree {
++    pub fn new<H: Digest32>(hash: H, leaves: Vec<[u8; 32]>) -> Option<Self> {
++        if leaves.len() != 1 << LEAF_BITS {
++            return None;
++        }
++        let mut levels = Vec::with_capacity(LEAF_BITS as usize + 1);
++        levels.push(leaves);
++        for depth in 0..LEAF_BITS as usize {
++            let next = levels[depth].chunks_exact(2).map(|c| binary_parent(hash, &c[0], &c[1])).collect();
++            levels.push(next);
++        }
++        Some(Self { levels })
++    }
++    pub fn root(&self) -> [u8; 32] {
++        self.levels[LEAF_BITS as usize][0]
++    }
++    pub fn node(&self, level: u32, index: u32) -> [u8; 32] {
++        self.levels[level as usize][index as usize]
++    }
++    pub fn multiproof(&self, indices: &[u32]) -> Option<Vec<u8>> {
++        generate(Arity::Two, indices, |l, i| self.node(l, i))
++    }
++}
++
++/// Sort a batch of (index, leaf) pairs, merge equal indices whose leaves are
++/// identical (the folded tree's shared openings), reject equal indices with
++/// different leaves. Returns the number of distinct entries.
++pub fn sort_dedup(idx: &mut [u32], val: &mut [[u8; 32]]) -> Option<usize> {
++    let n = idx.len();
++    if n != val.len() || n == 0 || n > MAX_BATCH {
++        return None;
++    }
++    // Insertion sort: n <= 16.
++    for i in 1..n {
++        let mut j = i;
++        while j > 0 && idx[j - 1] > idx[j] {
++            idx.swap(j - 1, j);
++            val.swap(j - 1, j);
++            j -= 1;
++        }
++    }
++    let mut w = 1;
++    for i in 1..n {
++        if idx[i] == idx[w - 1] {
++            if val[i] != val[w - 1] {
++                return None;
++            }
++        } else {
++            idx[w] = idx[i];
++            val[w] = val[i];
++            w += 1;
++        }
++    }
++    Some(w)
++}
++
++#[cfg(all(test, feature = "prover"))]
++mod tests {
++    use super::*;
++    use aspis_core::digest::LegacyHashFn;
++    fn h(parts: &[&[u8]]) -> [u8; 32] {
++        use sha2::{Digest, Sha256};
++        let mut s = Sha256::new();
++        for p in parts {
++            s.update(p);
++        }
++        s.finalize().into()
++    }
++    fn tree() -> BinaryTree {
++        let leaves = (0..1u32 << LEAF_BITS).map(|i| h(&[b"leaf", &i.to_le_bytes()])).collect();
++        BinaryTree::new(LegacyHashFn(h), leaves).unwrap()
++    }
++    fn leaves(ix: &[u32]) -> Vec<[u8; 32]> {
++        ix.iter().map(|i| h(&[b"leaf", &i.to_le_bytes()])).collect()
++    }
++    #[test]
++    fn binary_roundtrip_and_teeth() {
++        let t = tree();
++        let hash = LegacyHashFn(h);
++        let mut ix: Vec<u32> = (0..12u32).map(|j| j.reverse_bits() >> (32 - LEAF_BITS)).collect();
++        ix.sort();
++        let lv = leaves(&ix);
++        let nodes = t.multiproof(&ix).unwrap();
++        assert_eq!(nodes.len(), 32 * 172);
++        assert!(verify(hash, Arity::Two, &t.root(), &ix, &lv, &nodes));
++        // wrong sibling
++        let mut bad = nodes.clone();
++        bad[100] ^= 1;
++        assert!(!verify(hash, Arity::Two, &t.root(), &ix, &lv, &bad));
++        // missing / extra node
++        assert!(!verify(hash, Arity::Two, &t.root(), &ix, &lv, &nodes[..nodes.len() - 32]));
++        let mut extra = nodes.clone();
++        extra.extend_from_slice(&[0; 32]);
++        assert!(!verify(hash, Arity::Two, &t.root(), &ix, &lv, &extra));
++        // duplicated / misordered index
++        let mut dup = ix.clone();
++        dup[1] = dup[0];
++        assert!(!verify(hash, Arity::Two, &t.root(), &dup, &lv, &nodes));
++        let mut mis = ix.clone();
++        mis.swap(0, 1);
++        assert!(!verify(hash, Arity::Two, &t.root(), &mis, &lv, &nodes));
++        // adjacent pair and single leaf
++        for set in [&[6u32, 7][..], &[0], &[(1 << LEAF_BITS) - 1], &[1, 2, 3, 4, 5]] {
++            let n = t.multiproof(set).unwrap();
++            assert_eq!(n.len(), 32 * node_count(Arity::Two, set).unwrap());
++            assert!(verify(hash, Arity::Two, &t.root(), set, &leaves(set), &n));
++        }
++    }
++    #[test]
++    fn worst_case_counts() {
++        let spread = |k: u32, bits: u32| -> Vec<u32> {
++            let mut v: Vec<u32> = (0..k).map(|j| j.reverse_bits() >> (32 - bits)).collect();
++            v.sort();
++            v
++        };
++        assert_eq!(node_count(Arity::Two, &spread(10, 18)), Some(146));
++        assert_eq!(node_count(Arity::Two, &spread(12, 18)), Some(172));
++        assert_eq!(node_count(Arity::Two, &spread(10, 16)), Some(128));
++        assert_eq!(node_count(Arity::Two, &spread(12, 16)), Some(150));
++        assert_eq!(node_count(Arity::Eight, &spread(10, 18)), Some(334));
++        assert_eq!(node_count(Arity::Eight, &spread(12, 18)), Some(388));
++        assert_eq!(node_count(Arity::Eight, &spread(10, 16)), Some(292));
++        assert_eq!(node_count(Arity::Eight, &spread(12, 16)), Some(346));
++    }
++}
++
++#[cfg(kani)]
++#[path="NDD_multiproof.rs"]
++mod NDD_multiproof;
++
++#[cfg(kani)] #[path="NDL_multiproof.rs"] mod NDL_multiproof;
