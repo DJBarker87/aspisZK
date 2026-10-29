@@ -27,6 +27,10 @@ class Policy(unittest.TestCase):
     def test_immutable_rent_is_locked(self):
         row=loader_rent('pd',account((3).to_bytes(4,'little')+bytes(41)),PAYER)
         self.assertEqual(row['recovery'],'permanently locked')
+    def test_program_stub_is_not_promised_as_refundable_before_finalization(self):
+        row=loader_rent('program',account((2).to_bytes(4,'little')+bytes(32)),PAYER)
+        self.assertEqual(row['locked_lamports'],123)
+        self.assertEqual(row['recoverable_lamports'],0)
     def test_wrong_buffer_authority_never_closes(self):
         with patch('subprocess.run') as run:
             with self.assertRaises(ValueError):close_failed_buffer(pathlib.Path('/cli'),'http://127.0.0.1:1','key',PAYER,'buffer',lambda _: {'value':account((1).to_bytes(4,'little')+b'\1'+bytes(32))},lambda *args:None)

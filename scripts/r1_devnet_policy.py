@@ -29,7 +29,7 @@ def loader_rent(address, account, payer, immutable_program=False):
         if tag == 1:
             kind, recovery = 'buffer', 'payer loader close after finalized signature reconciliation'
         elif tag == 2:
-            kind, recovery = 'program', ('permanently locked' if immutable_program else 'see linked ProgramData authority')
+            kind, recovery = 'program', ('permanently locked' if immutable_program else 'Program stub has no loader close path; budget as locked')
         elif tag == 3:
             kind = 'programdata'
             if len(raw) < 45:
@@ -41,9 +41,9 @@ def loader_rent(address, account, payer, immutable_program=False):
     return {'address': address, 'lamports': account['lamports'], 'kind': kind,
             'recovery': recovery, 'recovery_public_destination': payer,
             'authority_option': authority,
-            'locked_lamports': account['lamports'] if recovery=='permanently locked' else 0,
+            'locked_lamports': account['lamports'] if kind=='program' or recovery=='permanently locked' else 0,
             'recoverable_lamports': account['lamports'] if recoverable else 0,
-            'recoverability_requires_authority_check': recovery!='permanently locked' and not recoverable}
+            'recoverability_requires_authority_check': kind!='program' and recovery!='permanently locked' and not recoverable}
 
 
 def close_failed_buffer(cli, url, payer_key, payer, buffer, fetch, output):
