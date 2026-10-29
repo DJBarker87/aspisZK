@@ -22,7 +22,7 @@ def visit(m):
  selected[m]=dict(module=m,path=p,source_revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+p],text=True).strip(),source_sha256=srcsha,object_path=obj,object_sha256=v['object_sha256'],imports=imports,authority=authority)
  for d,r in deps.items():edges.append(dict(module=m,dependency=d,sha256=r['sha256']))
  for d in imports:visit(d)
-for m in ['PV_RJ4IDB_OpenInputs','R0Z.AbsorptionLaw']:visit(m)
+for m in ['PV_RJ4IDB_OpenInputs','R0Z.AbsorptionLaw','R0Z.LawTransport']:visit(m)
 # Recorded dependency hashes from the retained entire transitive cohort.
 for f in ['evidence/pv-rj4id-20261029/inherited-validation.json']:
  for v in json.load(open(f))['dependencies']:
@@ -42,7 +42,9 @@ assert subprocess.check_output([env['LEAN'],'--githash'],text=True).strip()==env
 loaded=lambda m:next(q/(m.replace('.','/')+'.olean') for q in roots if (q/(m.replace('.','/')+'.olean')).is_file())
 for m,v in x['projects'].items():assert sha(loaded(m))==v['object_sha256'],('object',m)
 for v in x['edges']:assert sha(loaded(v['dependency']))==v.get('expected',v.get('sha256')),('edge',v)
-for v in x['external']:assert sha(pathlib.Path(v['path']))==v['expected'],('external',v)
+for v in x['external']:
+ assert sha(pathlib.Path(v['path']))==v['expected'],('external',v)
+ assert sha(loaded(v['module'].replace('/','.')))==v['expected'],('external shadow',v)
 for n in ['sources','objects','evidence']:(p/n).mkdir(parents=True,exist_ok=True)
 # Same inherited prefix; the sole new prefix contains only this job's modules.
 original=env['LEAN_PATH'];env['LEAN_PATH']=str(p/'objects')+':'+original;(p/'J.json').write_text(json.dumps(env))
