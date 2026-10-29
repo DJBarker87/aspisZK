@@ -1,0 +1,41 @@
+START 73438 R1Z.PV_RunJoin_ReserveAdequacy63
+DONE 73438 R1Z.PV_RunJoin_ReserveAdequacy63 exit 1 wall 1.13 RSS 2638491648
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ReserveAdequacy63.lean:31:4: error: Type mismatch
+  (success_capacity runtime.step (runtime.shape T) (PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)) (↑n)
+      world address next allocation).left
+has type
+  (finish runtime.step (runtime.shape T) (PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)) (↑n)
+        world).returned =
+    Except.ok ()
+but is expected to have type
+  (if (PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)).values.length + ↑n > Usize.max then
+        { returned := Except.error Error.capacityOverflow,
+          buffer := PV_FXM_ReserveSelected.buffer v (runtime.metadata world v), world := world }
+      else
+        if
+            ((PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)).values.length + ↑n) *
+                (runtime.shape T).width >
+              Usize.max / 2 then
+          { returned := Except.error Error.capacityOverflow,
+            buffer := PV_FXM_ReserveSelected.buffer v (runtime.metadata world v), world := world }
+        else
+          finish runtime.step (runtime.shape T) (PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)) (↑n)
+            world).returned =
+    Except.ok ()
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ReserveAdequacy63.lean:30:31: warning: This simp argument is unused:
+  Nat.not_lt.mpr words
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵r̵o̵w̵E̵x̵a̵c̵t̵,̵w̵i̵d̵t̵h̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵w̵o̵r̵d̵s̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵b̵y̵t̵e̵s̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲g̲r̲o̲w̲E̲x̲a̲c̲t̲,̲ ̲w̲i̲d̲t̲h̲,̲ ̲N̲a̲t̲.̲n̲o̲t̲_̲l̲t̲.̲m̲p̲r̲ ̲b̲y̲t̲e̲s̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ReserveAdequacy63.lean:30:52: warning: This simp argument is unused:
+  Nat.not_lt.mpr bytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵r̵o̵w̵E̵x̵a̵c̵t̵,̵w̵i̵d̵t̵h̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵w̵o̵r̵d̵s̵,̵N̵a̵t̵.̵n̵o̵t̵_̵l̵t̵.̵m̵p̵r̵ ̵b̵y̵t̵e̵s̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵]̵[̲g̲r̲o̲w̲E̲x̲a̲c̲t̲,̲ ̲w̲i̲d̲t̲h̲,̲ ̲N̲a̲t̲.̲n̲o̲t̲_̲l̲t̲.̲m̲p̲r̲ ̲w̲o̲r̲d̲s̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_ReserveAdequacy63.no_growth' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_ReserveAdequacy63.growth' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

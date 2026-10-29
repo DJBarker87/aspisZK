@@ -1,0 +1,100 @@
+START 73480 R1Z.PV_RunJoin_QueryChainImage63
+DONE 73480 R1Z.PV_RunJoin_QueryChainImage63 exit 1 wall 3.51 RSS 4446601216
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryChainImage63.lean:31:14: error: unsolved goals
+case succ
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+phase : PV_RunJoin_NativeControl55.Phase
+p : prover.Publication
+cc1 cc2 : host_commitment.Commitment
+hc1 : p.backend.c1 = some cc1
+hc2 : p.backend.c2 = some cc2
+context : PV_RunJoin_PublishContext57.QueryContext (PV_RunJoin_ActualRun.runs phase) p
+range : PV_RunJoin_PublishSkeleton57.QueryRange p.queries
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+n : ℕ
+ih :
+  ∀ (i : Usize) (initial final : alloc.vec.Vec U8),
+    ↑i + n = 22 →
+      initial.length + 832 * n ≤ Usize.max →
+        PV_RunJoin_ByteScript63.run
+              (PV_RunJoin_QueryLoop63.series cc1 cc2 p.queries p.folded_word.deref p.folded_salts n i) initial =
+            ok final →
+          bytes ↑final = bytes ↑initial ++ PV_RunJoin_QueryStream63.stream (PV_RunJoin_QueryStream63.part phase) (↑i) n
+i : Usize
+initial final : alloc.vec.Vec U8
+rank : ↑i + (n + 1) = 22
+room : initial.length + 832 * (n + 1) ≤ Usize.max
+more : ↑i < 22
+fi : Fin 22 := ⟨↑i, more⟩
+index : PV_RunJoin_QueryCell63.index fi = i
+nextIndex : ↑(i.wrapping_add 1#usize) = ↑i + 1
+success :
+  (do
+      let next ←
+        PV_RunJoin_ByteScript63.run
+            (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts i) initial
+      PV_RunJoin_ByteScript63.run
+          (PV_RunJoin_QueryLoop63.series cc1 cc2 p.queries p.folded_word.deref p.folded_salts n
+            (i.wrapping_add 1#usize))
+          next) =
+    ok final
+middle : alloc.vec.Vec U8
+hfirst :
+  PV_RunJoin_ByteScript63.run (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts i)
+      initial =
+    ok middle
+htail :
+  PV_RunJoin_ByteScript63.run
+      (PV_RunJoin_QueryLoop63.series cc1 cc2 p.queries p.folded_word.deref p.folded_salts n (i.wrapping_add 1#usize))
+      middle =
+    ok final
+hsize :
+  PV_RunJoin_ResultPost41.Post (fun next => next.length = initial.length + 832)
+    (PV_RunJoin_ByteScript63.run
+      (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts i) initial)
+middleLength : middle.length = initial.length + 832
+payloadBytes : List U8
+hprefix : ↑middle = ↑initial ++ payloadBytes
+extend :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + payloadBytes.length ≤ Usize.max →
+      ∃ next,
+        PV_RunJoin_ByteScript63.run
+              (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts i) out =
+            ok next ∧
+          ↑next = ↑out ++ payloadBytes
+emptyRoom : PV_RunJoin_ActualPlanSources59.empty.length + payloadBytes.length ≤ Usize.max
+payload : alloc.vec.Vec U8
+hpayload :
+  PV_RunJoin_ByteScript63.run (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts i)
+      PV_RunJoin_ActualPlanSources59.empty =
+    ok payload
+hpayloadBytes : ↑payload = ↑PV_RunJoin_ActualPlanSources59.empty ++ payloadBytes
+hpval : ↑payload = payloadBytes
+hpcode :
+  PV_RunJoin_ByteScript63.run
+      (PV_RunJoin_QueryScript63.script cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+        (PV_RunJoin_QueryCell63.index fi))
+      PV_RunJoin_ActualPlanSources59.empty =
+    ok payload
+returned : PV_RunJoin_ActualPlanSources59.queryBytes p (PV_RunJoin_QueryCell63.index fi) = ok payload
+plen : payload.length = 0 + 832
+image : ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase fi) = bytes ↑payload
+firstBytes :
+  bytes ↑middle = bytes ↑initial ++ ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase fi)
+tailRoom : middle.length + 832 * n ≤ Usize.max
+tailBytes :
+  bytes ↑final =
+    bytes ↑middle ++ PV_RunJoin_QueryStream63.stream (PV_RunJoin_QueryStream63.part phase) (↑(i.wrapping_add 1#usize)) n
+⊢ bytes ↑initial ++
+      (ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase fi) ++
+        PV_RunJoin_QueryStream63.stream (PV_RunJoin_QueryStream63.part phase) (↑i + 1) n) =
+    bytes ↑initial ++
+      (ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase ⟨↑i, more⟩) ++
+        PV_RunJoin_QueryStream63.stream (PV_RunJoin_QueryStream63.part phase) (↑i + 1) n)
+'R1Z.PV_RunJoin_QueryChainImage63.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

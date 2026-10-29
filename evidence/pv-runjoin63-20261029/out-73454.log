@@ -1,0 +1,86 @@
+START 73454 R1Z.PV_RunJoin_QueryCell63
+DONE 73454 R1Z.PV_RunJoin_QueryCell63 exit 1 wall 4.97 RSS 4390670336
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:12:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  0 ≤ b ≤ 21
+  b - c ≥ 0
+  a ≥ 2049
+where
+ a := ↑(UScalar.size UScalarTy.Usize)
+ b := ↑↑i
+ c := ↑2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.append_query_openings_loop.body cc1 cc2 p.queries p.folded_word.deref p.folded_salts ?m.24 (index i)
+in the target expression
+  (do
+      let cc1 ← ofOption (some cc1) Error.panic
+      let cc2 ← ofOption (some cc2) Error.panic
+      let step ←
+        prover.append_query_openings_loop.body cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+            PV_RunJoin_ActualPlanSources59.empty (index i)
+      match step with
+        | ControlFlow.cont (out, snd) => ok out
+        | ControlFlow.done out => ok out) =
+    ok payload
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+p : prover.Publication
+cc1 cc2 : host_commitment.Commitment
+hc1 : p.backend.c1 = some cc1
+hc2 : p.backend.c2 = some cc2
+i : Fin 22
+payload : alloc.vec.Vec U8
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+success :
+  (do
+      let cc1 ← ofOption (some cc1) Error.panic
+      let cc2 ← ofOption (some cc2) Error.panic
+      let step ←
+        prover.append_query_openings_loop.body cc1 cc2 p.queries p.folded_word.deref p.folded_salts
+            PV_RunJoin_ActualPlanSources59.empty (index i)
+      match step with
+        | ControlFlow.cont (out, snd) => ok out
+        | ControlFlow.done out => ok out) =
+    ok payload
+⊢ PV_RunJoin_ByteScript63.run (script cc1 cc2 p.queries p.folded_word.deref p.folded_salts (index i))
+      PV_RunJoin_ActualPlanSources59.empty =
+    ok payload
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:27:47: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵c̵1̵,̵h̵c̵2̵,̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵u̵n̵w̵r̵a̵p̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲h̲c̲1̲,̲ ̲h̲c̲2̲,̲ ̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲u̲n̲w̲r̲a̲p̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:42:105: error: Application type mismatch: The argument
+  phase
+has type
+  @PV_RunJoin_NativeControl55.Phase base
+but is expected to have type
+  @PV_RunJoin_NativeControl55.Phase (types base)
+in the application
+  PV_RunJoin_ActualRun.runs phase
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:53:83: error: Application type mismatch: The argument
+  phase
+has type
+  @PV_RunJoin_NativeControl55.Phase base
+but is expected to have type
+  @PV_RunJoin_NativeControl55.Phase this✝
+in the application
+  PV_RunJoin_ActualPlanSources59.queryPart phase
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryCell63.lean:61:4: error: Application type mismatch: The argument
+  phase
+has type
+  @PV_RunJoin_NativeControl55.Phase base
+but is expected to have type
+  @PV_RunJoin_NativeControl55.Phase (types base)
+in the application
+  PV_RunJoin_QueryParts63.actual phase
+'R1Z.PV_RunJoin_QueryCell63.index' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RunJoin_QueryCell63.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryCell63.actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

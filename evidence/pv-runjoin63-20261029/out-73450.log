@@ -1,0 +1,78 @@
+START 73450 R1Z.PV_RunJoin_QueryFactor63
+DONE 73450 R1Z.PV_RunJoin_QueryFactor63 exit 1 wall 3.47 RSS 4387418112
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFactor63.lean:17:61: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+cc1 cc2 : host_commitment.Commitment
+queries : Std.Array U32 22#usize
+folded : Slice W
+salts : host_commitment.PrivateSalts
+out : alloc.vec.Vec U8
+i : Usize
+more : i < 22#usize
+room : out.length + 608 ≤ Usize.max
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+q : U32
+status : core.result.Result aspis_core.r0.domain.FibreIndex aspis_core.r0.Error
+u : aspis_core.r0.domain.FibreIndex
+zero : aspis_core.field.wide_exact.WideExact
+first opening : aspis_core.r0.wire.FibreOpening
+⊢ (do
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (openingSlice opening)
+      let o ← cc1.opening_salt u
+      let a6 ← core.option.Option.unwrap o
+      let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 a6.to_slice
+      let o1 ← cc2.opening_salt u
+      let a7 ← core.option.Option.unwrap o1
+      let out3 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 a7.to_slice
+      let i3 ← u.get
+      let i4 ← i3 / 4#usize
+      let s2 ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice aspis_core.field.wide_exact.WideExact)
+            folded
+            { start := Usize.wrapping_mul 4#usize i4, «end» := (Usize.wrapping_mul 4#usize i4).wrapping_add 4#usize }
+      let values ← prover.encoded_slice s2
+      let out4 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out3 values.deref
+      let i6 ← i3 / 4#usize
+      let a8 ← salts.get i6
+      let out5 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out4 a8.to_slice
+      ok (ControlFlow.cont (out5, i.wrapping_add 1#usize))) =
+    do
+    let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (openingSlice opening)
+    let x_1 ← cc1.opening_salt u
+    let x_2 ← core.option.Option.unwrap x_1
+    let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x x_2.to_slice
+    let x_3 ← cc2.opening_salt u
+    let x_4 ← core.option.Option.unwrap x_3
+    let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x x_4.to_slice
+    let x_5 ← u.get
+    let x_6 ← x_5 / 4#usize
+    let x_7 ←
+      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice W) folded
+          { start := Usize.wrapping_mul 4#usize x_6, «end» := (Usize.wrapping_mul 4#usize x_6).wrapping_add 4#usize }
+    let x_8 ← prover.encoded_slice x_7
+    let x ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x x_8.deref
+    let x_9 ← x_5 / 4#usize
+    let x_10 ← salts.get x_9
+    let next ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 x x_10.to_slice
+    ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFactor63.lean:21:67: warning: This simp argument is unused:
+  Aeneas.Std.uncurry
+
+Hint: Omit it from the simp argument list.
+  simp only [prover.append_query_openings_loop.body, ̲more, ̲if_true, ̲script,
+      PV_RunJoin_ByteScript63.run, ̲head, ̲lift, ̲bind_tc_ok, ̲bind_assoc_eq,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFactor63.lean:35:46: warning: This simp argument is unused:
+  lift
+
+Hint: Omit it from the simp argument list.
+  simp only [tail, ̲PV_RunJoin_ByteScript63.run,l̵i̵f̵t̵,̵ ̲bind_tc_ok, ̲bind_assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryFactor63.body' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

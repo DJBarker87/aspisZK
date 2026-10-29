@@ -1,0 +1,63 @@
+START 73469 R1Z.PV_RunJoin_QueryLoop63
+DONE 73469 R1Z.PV_RunJoin_QueryLoop63 exit 1 wall 4.43 RSS 4411908096
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLoop63.lean:47:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.append_query_openings_loop.body cc1 cc2 queries folded salts out i
+in the target expression
+  (do
+      let cf ←
+        match (out, i) with
+          | (out1, i1) => prover.append_query_openings_loop.body cc1 cc2 queries folded salts out1 i1
+      match cf with
+        | ControlFlow.cont next =>
+          Std.loop
+            (fun x =>
+              match x with
+              | (out1, i1) => prover.append_query_openings_loop.body cc1 cc2 queries folded salts out1 i1)
+            next
+        | ControlFlow.done out => ok out) =
+    PV_RunJoin_ByteScript63.run (series cc1 cc2 queries folded salts (n + 1) i) out
+
+case succ
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+cc1 cc2 : host_commitment.Commitment
+queries : Std.Array U32 22#usize
+range : PV_RunJoin_PublishSkeleton57.QueryRange queries
+folded : Slice W
+salts : host_commitment.PrivateSalts
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+n : ℕ
+ih :
+  ∀ (i : Usize) (out : alloc.vec.Vec U8),
+    ↑i + n = 22 →
+      out.length + 832 * n ≤ Usize.max →
+        prover.append_query_openings_loop out cc1 cc2 queries folded salts i =
+          PV_RunJoin_ByteScript63.run (series cc1 cc2 queries folded salts n i) out
+i : Usize
+out : alloc.vec.Vec U8
+rank : ↑i + (n + 1) = 22
+room : out.length + 832 * (n + 1) ≤ Usize.max
+more : i < 22#usize
+nextIndex : ↑(i.wrapping_add 1#usize) = ↑i + 1
+⊢ (do
+      let cf ←
+        match (out, i) with
+          | (out1, i1) => prover.append_query_openings_loop.body cc1 cc2 queries folded salts out1 i1
+      match cf with
+        | ControlFlow.cont next =>
+          Std.loop
+            (fun x =>
+              match x with
+              | (out1, i1) => prover.append_query_openings_loop.body cc1 cc2 queries folded salts out1 i1)
+            next
+        | ControlFlow.done out => ok out) =
+    PV_RunJoin_ByteScript63.run (series cc1 cc2 queries folded salts (n + 1) i) out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLoop63.lean:48:50: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.PV_RunJoin_QueryLoop63.series' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryLoop63.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

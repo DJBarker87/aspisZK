@@ -1,0 +1,54 @@
+START 73435 R1Z.PV_RunJoin_CaptureBlocked63
+DONE 73435 R1Z.PV_RunJoin_CaptureBlocked63 exit 1 wall 1.84 RSS 4402024448
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CaptureBlocked63.lean:30:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 initial columns d
+in the target expression
+  PV_RunJoin_ResultPost41.Post
+    (fun pair =>
+      match pair.1 with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok a => False)
+    (prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 initial columns d)
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+denied : PV_RunJoin_WorkerObstruction63.Denied
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+p : PV_RunJoin_NativeControl55.Phase
+hp : PV_RunJoin_ActualProvenance60.Produced p
+left✝ : p.variant = transport.Variant.S2
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+noised : aspis_statement.state_only_trace.StateOnlyTraceFoundation
+maskOnly : Std.Array (alloc.vec.Vec aspis_core.field.M31) 10#usize
+d g padding : Std.Array aspis_core.field.QM31 1024#usize
+initial : prover.Backend
+hlen : initial.messages.length = 29
+built :
+  host_semantic.build_with_material aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+      prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments p.public1 compiled noised maskOnly d g padding
+      initial p.hash transport.Variant.S2 =
+    ok (core.result.Result.Ok p.sem, p.backend)
+columns : Std.Array (alloc.vec.Vec aspis_core.field.M31) 26#usize
+first : prover.Backend
+root1 root2 : Std.Array U8 32#usize
+h : alloc.vec.Vec PV_RunJoin_BackendBuildTrace60.Q
+hfirst :
+  prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 initial columns d =
+    ok (core.result.Result.Ok root1, first)
+right✝ :
+  prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2 first h.deref g =
+      ok (core.result.Result.Ok root2, (core.result.Result.Ok p.sem, p.backend).2) ∧
+    host_semantic.lift_columns columns h g d = ok p.sem.columns
+blocked :
+  PV_RunJoin_ResultPost41.Post
+    (fun pair =>
+      match pair.1 with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok a => False)
+    (prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 initial columns d)
+⊢ False
+'R1Z.PV_RunJoin_CaptureBlocked63.no_capture' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

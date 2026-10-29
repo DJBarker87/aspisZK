@@ -1,0 +1,56 @@
+START 73484 R1Z.PV_RunJoin_FinishArithmeticTrace63
+DONE 73484 R1Z.PV_RunJoin_FinishArithmeticTrace63 exit 1 wall 5.4 RSS 4447490048
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FinishArithmeticTrace63.lean:34:78: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+phase : PV_RunJoin_NativeControl55.Phase
+prepared : prover.PreparedOpening
+salts : host_commitment.PrivateSalts
+p : prover.Publication
+hp :
+  prover.prepare_opening transport.Variant.S2 phase.hash phase.backend phase.sem = ok (core.result.Result.Ok prepared)
+hs : prover.derive_private_salts phase.salts.1 phase.salts.2 phase.hash 114#u8 = ok (core.result.Result.Ok salts)
+hf : prover.finish_opening transport.Variant.S2 phase.hash prepared salts = ok (core.result.Result.Ok p)
+leaves : alloc.vec.Vec (Std.Array U8 32#usize)
+o : Option host_tree.BinaryTree
+tree : host_tree.BinaryTree
+root : Std.Array U8 32#usize
+second : Std.Array PV_RJQ_FinishTrace.W 7#usize
+cbytes payload0 payload : alloc.vec.Vec U8
+alpha : PV_RJQ_FinishTrace.W
+next : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+final : alloc.vec.Vec PV_RJQ_FinishTrace.W
+fbytes : alloc.vec.Vec U8
+queries : Std.Array U32 22#usize
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+hleaves : prover.folded_leaves phase.hash prepared.folded_word.deref salts = ok leaves
+htree : host_tree.BinaryTree.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 phase.hash leaves = ok o
+ho : core.option.Option.ok_or o verifier.Error.Allocation = ok (core.result.Result.Ok tree)
+hroot : tree.root = ok root
+hsecond : prover.round prepared.q1.deref prepared.w1.deref = ok second
+hcbytes : prover.encoded_slice second.to_slice = ok cbytes
+hpayload0 : alloc.slice.Slice.to_vec core.clone.CloneU8 root.to_slice = ok payload0
+hpayload : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 payload0 cbytes.deref = ok payload
+hscalar :
+  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 prepared.transcript
+      30#u8 payload.deref false =
+    ok (alpha, next)
+hfinal : (fun a => prover.fold prepared.q1.deref a false) alpha = ok final
+hfbytes : prover.encoded_slice final.deref = ok fbytes
+hqueries :
+  host_transcript.Transcript.queries aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 next 31#u8
+      fbytes.deref =
+    ok (core.result.Result.Ok queries, tr)
+hpublication :
+  p =
+    { backend := prepared.backend, semantic_bytes := prepared.sem.bytes, y1 := prepared.y1,
+      inactive := prepared.inactive, c0bytes := prepared.c0bytes, root := root, c1bytes := cbytes, fbytes := fbytes,
+      queries := queries, folded_word := prepared.folded_word, folded_salts := salts, tree := tree }
+hprepare : PV_RunJoin_ActualRunSources59.prepare phase = ok (core.result.Result.Ok prepared)
+hsalts : PV_RunJoin_ActualRunSources59.salts phase = ok (core.result.Result.Ok salts)
+hfinish : PV_RunJoin_ActualRunSources59.finish phase = ok (core.result.Result.Ok p)
+⊢ (let (a, _) := (alpha, next)
+    ok (some a)) =
+    ok (some alpha)
+'R1Z.PV_RunJoin_FinishArithmeticTrace63.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

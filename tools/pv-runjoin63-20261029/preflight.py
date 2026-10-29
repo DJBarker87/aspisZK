@@ -8,6 +8,7 @@ assert set(plan['modules'])-set(accepted)<=excluded,sorted(set(plan['modules'])-
 batch=subprocess.Popen(['git','cat-file','--batch'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
 checks=[]
 for m,v in plan['modules'].items():
+ if m in excluded and m not in accepted:continue
  if not v['authority'].startswith('h5'):continue
  batch.stdin.write(('HEAD:'+v['path']+'\n').encode());batch.stdin.flush();line=batch.stdout.readline().decode().split();assert len(line)>=3,(m,line);b=batch.stdout.read(int(line[-1]));assert batch.stdout.read(1)==b'\n';h=hashlib.sha256(b).hexdigest();checks.append(dict(module=m,path=v['path'],HEAD_blob=line[0],expected=v['sha256'],actual=h,match=h==v['sha256']))
 batch.stdin.close();batch.wait();assert all(x['match'] for x in checks)

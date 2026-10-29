@@ -1,0 +1,32 @@
+START 73457 R1Z.PV_RunJoin_FinishStored63
+DONE 73457 R1Z.PV_RunJoin_FinishStored63 exit 1 wall 3.47 RSS 4399820800
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FinishStored63.lean:17:66: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+phase : PV_RunJoin_NativeControl55.Phase
+p : prover.Publication
+context : PV_RunJoin_PublishContext57.QueryContext (PV_RunJoin_ActualRun.runs phase) p
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+ib : Std.Array U8 32#usize := PV_RunJoin_FlatBytes35.wire p.inactive
+hib : p.inactive.to_le_bytes = ok ib
+out : alloc.vec.Vec U8
+ho : alloc.slice.Slice.to_vec core.clone.CloneU8 ib.to_slice = ok out
+hv : ↑out = ↑ib.to_slice
+he :
+  (do
+      let encoded ← p.inactive.to_le_bytes
+      let slice ← lift encoded.to_slice
+      alloc.slice.Slice.to_vec core.clone.CloneU8 slice) =
+    ok out
+hp :
+  (PV_RunJoin_ActualPlanSources59.publicationBytes phase fun publication => do
+      let encoded ← publication.inactive.to_le_bytes
+      let slice ← lift encoded.to_slice
+      alloc.slice.Slice.to_vec core.clone.CloneU8 slice) =
+    bytes ↑out
+⊢ bytes ↑ib = bytes ↑ib.to_slice
+'R1Z.PV_RunJoin_FinishStored63.inactive' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

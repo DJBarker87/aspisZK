@@ -118,3 +118,25 @@ dictionary obstruction; the requested implication at the fully bound native
 interpreter remains unproved. Successful query image and finish frame/fold
 association are partial source results, not closure of QueryAppend or
 FinishContext. Rows removed: none.
+
+Read-only handoff check (`native-interpreter-handoffs.json`): pv-cx retains
+error-free Charon LLBC but reports no emitted/compiled Lean runtime interface;
+pv-evh supplies a checked conditional event endpoint and MODEL satisfiability,
+while explicitly retaining the native event-producing runtime/source selection.
+Neither report supplies the missing closed native worker/world interpreter.
+No handoff branch was merged or edited.
+
+Lift-cell validation retained a narrower complete Result factorization through
+op61 then op66. Attempts73491/73492 did not establish their proposed literal
+raw constructor values. This is a failed proof, not a checked native
+counterexample or a finding that a named restoration is false. Uncompiled
+image-join drafts are retained as text under uncompiled-drafts/ and excluded
+from audit credit. No callback value law was added as an endpoint assumption.
+
+Final substantive attempt73496 rejected the payload helper on missing
+ProverRwFull namespace qualification. It earned no credit; its exact rejected
+source was moved to uncompiled-drafts/PV_RunJoin_LiftPayload63.lean.attempt73496.txt.
+The preparation plan retains its historical staging record, while final-exclusions
+excludes it from the accepted closure. Final preflight checks current-HEAD source
+identity for the accepted closure and records this explicit abandoned target.
+LiftRow63.complete passed73495 with all callback Results retained.
