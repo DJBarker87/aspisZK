@@ -64,6 +64,23 @@ structure Execution (K W : Type) where
  world : W
  trace : List Action
 
+/-- Runtime outcomes retain their post-world and trace even when no value
+continuation runs. They cannot invent a successful field value. -/
+inductive ResourceExit (W : Type) where
+ | ready (world : W) (trace : List Action)
+ | failed (error : Error) (world : W) (trace : List Action)
+ | diverged (world : W) (trace : List Action)
+
+def attach {K W : Type} (exit : ResourceExit W) (value : Result (Option K)) : Execution K W :=
+ match exit with
+ | .ready world trace => ⟨value,world,trace⟩
+ | .failed error world trace => ⟨fail error,world,trace⟩
+ | .diverged world trace => ⟨div,world,trace⟩
+
+theorem ready_value {K W : Type} (world : W) (trace : List Action) (value : Result (Option K)) :
+ (attach (.ready world trace) value).result = value := rfl
+#print axioms ready_value
+
 /-- Actual accepted builder/parser/sampler inputs, before wire transforms. -/
 def PV_OWNM_Link_ActualInput (wirePoints : List Q → List (List Q)) (i : Input) : Prop :=
  i.point.length = 10 ∧
@@ -93,23 +110,23 @@ def PV_OWNM_Link_OwnedPublicPlan {K W : Type} (decode : Q → K)
  (source222 : List Q → List Q → Result (Option Q))
  (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
  (native : Input → List Q → Nat → Execution K W)
- (owned : Input → List Q → Nat → Result (Option K) → Execution K W)
+ (resource : Input → List Q → Nat → ResourceExit W)
  (failures : List Bool) (i : Input) : Prop :=
  (∀ p ∈ wirePoints i.point, ∀ lane c, i.columns[lane]? = some c →
-  native i p lane = owned i p lane (do let v ← source222 p c; ok (v.map decode))) ∧
+  native i p lane = attach (resource i p lane) (do let v ← source222 p c; ok (v.map decode))) ∧
  (∀ p ∈ wirePoints i.point, ∀ lane c, i.columns[lane]? = some c →
-  (owned i p lane (do let v ← source222 p c; ok (v.map decode))).trace =
+  (attach (resource i p lane) (do let v ← source222 p c; ok (v.map decode))).trace =
    plan isBoolean (calls wirePoints i) failures)
 
-/-- Conditional restoration composition. Equality of Execution preserves the
-complete Result and post-world. Both the value and resource laws refer to the
+/-- Conditional restoration composition. The explicit attach continuation preserves the
+complete Result and post-world on success, failure and divergence. Both the value and resource laws refer to the
 same native execution projections at all three wire points and every lane. -/
 theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  (source222 : List Q → List Q → Result (Option Q))
  (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
  (reconstruct879 reconstruct890 : Public → List Q)
  (native : Input → List Q → Nat → Execution K W)
- (owned : Input → List Q → Nat → Result (Option K) → Execution K W)
+ (resource : Input → List Q → Nat → ResourceExit W)
  (failures : List Bool) (left right : Input)
  (inputL : PV_OWNM_Link_ActualInput wirePoints left)
  (inputR : PV_OWNM_Link_ActualInput wirePoints right)
@@ -118,15 +135,15 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  (cbR : PV_OWNM_Link_Transcript879 reconstruct879 right)
  (finalL : PV_OWNM_Link_Transcript890 reconstruct890 left)
  (finalR : PV_OWNM_Link_Transcript890 reconstruct890 right)
- (ownedL : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures left)
- (ownedR : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures right)
+ (ownedL : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures left)
+ (ownedR : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures right)
  (samePublic : left.pubData = right.pubData) (sameSite : left.site = right.site)
  (sameLengths : left.columns.map List.length = right.columns.map List.length) :
  (∀ p ∈ wirePoints left.point, ∀ lane c, left.columns[lane]? = some c →
-  native left p lane = owned left p lane
+  native left p lane = attach (resource left p lane)
    (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
  (∀ p ∈ wirePoints right.point, ∀ lane c, right.columns[lane]? = some c →
-  native right p lane = owned right p lane
+  native right p lane = attach (resource right p lane)
    (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
  (∀ pL ∈ wirePoints left.point, ∀ pR ∈ wirePoints right.point,
   ∀ laneL laneR cL cR, left.columns[laneL]? = some cL →
