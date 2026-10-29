@@ -26,6 +26,7 @@ theorem semantic (phase : Phase) (p : prover.Publication) (out : alloc.vec.Vec U
     (PV_RunJoin_ActualRun.plans phase).semantic=bytes out.val := by
   apply PV_RunJoin_ActualPublication60.projection phase p h
   simp only [PV_RunJoin_ActualPlanSources59.compactSemantic,hs,bind_tc_ok]
+  rfl
 
 theorem claim (phase : Phase) (p : prover.Publication) (out : alloc.vec.Vec U8)
     (h : PV_RunJoin_PublishContext57.QueryContext (PV_RunJoin_ActualRun.runs phase) p)
@@ -34,6 +35,7 @@ theorem claim (phase : Phase) (p : prover.Publication) (out : alloc.vec.Vec U8)
     (PV_RunJoin_ActualRun.plans phase).claim=bytes out.val := by
   apply PV_RunJoin_ActualPublication60.projection phase p h
   simp only [PV_RunJoin_ActualPlanSources59.compactClaim,hs,bind_tc_ok]
+  rfl
 
 #print axioms root
 #print axioms semantic
