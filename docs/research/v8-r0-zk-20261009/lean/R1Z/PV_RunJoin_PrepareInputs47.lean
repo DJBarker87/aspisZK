@@ -11,7 +11,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (hash : Slice (Slice U8) → Result (Array U8 32#usize))
     (backend : prover.Backend) (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
-    (p : Nat → Nat → W) (hinput : alloc.vec.Vec.deref backend.messages=messages p) :
+    (p : Nat → Nat → PV_RunJoin_CoefficientsWeight46.W) (hinput : alloc.vec.Vec.deref backend.messages=messages p) :
     ∃ coefficients : alloc.vec.Vec Column, ∃ kw : Weight, ∃ z0 z1 : Point,
       coefficients.val=payload p 0 29 ∧ coefficients.length=29 ∧
       AspisR1ProducerRelease47.weights53.new
