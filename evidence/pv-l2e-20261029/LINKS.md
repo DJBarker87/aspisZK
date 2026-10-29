@@ -20,9 +20,9 @@ instantiated top theorem or removing any endpoint premise.
 | V353 | OPEN. Bind all expander method calls and their raw seed/rejection words to the same coupled coin history, preserving failures and counters. Reuse L2D source laws, not an independent count marginal. |
 | V354 | OPEN in this schema; inherited work has not been instantiated into its machine relation. No new whole-row claim. |
 | V355 | OPEN. Uncapped simulator nonzero loop and seed/counter/history association; wrapping/overflow must retain release semantics. L2D helpers retained. |
-| V356 | OPEN. New reverse-division, digit and carry trace/value laws; native finite controls. Remaining: byte/array-to-list source binding, all index guards, circle/fallback and canonical decoder paths, transcript call order, and actual raw-block coupling on canonical honest runs. |
+| V356 | OPEN. Owned-model byte decode/store, full quotient and remainder stores, array/list value/trace correspondence, all modeled index guards, low quotient word/high zeros, carry stores, canonical decoder and gamma cyclic value laws pass. Native finite controls retained. Remaining: comprehensive script-checked source binding (including byte primitives/flat OR), circle/fallback paths, transcript call order, and actual same-cp raw-block coupling. |
 | V357 | OPEN in this schema; inherited work has not been instantiated. |
-| V358 | OPEN. Need complete eager block/advance sequence and failure-state preservation on the endpoint cp, not accepted query-set equality. |
+| V358 | OPEN. Owned-model complete eager pairs, 64 candidates, literal mask, richer nested guards/branches, Result, safe advances and failure wrapper state pass. Need complete native source/call-order and ambient-state binding on the endpoint cp, not accepted query-set equality. |
 | V359 | OPEN. Need full producer/source association, global order and same-cp call arguments in addition to inherited zero-tail/Merkle/publication helpers. |
 | V360 | OPEN in this schema; inherited work has not been instantiated. |
 | V361 | OPEN. TagEch zero skips, pivots, early returns, family/convert dimensions, and ambient transport/hook/worker association. No proof supplied. |
@@ -53,3 +53,8 @@ constitute source-step or instruction-trace binding. The finite native harness
 uses byte-identical four helper bodies, Rust 1.94.1 -O, no cfg alternatives,
 debug assertions and overflow checks off; it is not the full deployed crate or
 shipped ELF. Four wrappers expose private helpers; no helper text is rewritten.
+
+Final relaunch additions and validation are in REPORT.md and FINAL-VALIDATION.json.
+The first-15 instantiated-theorem requirement was not met. All links above
+remain OPEN; no endpoint premise was removed. The top schema is not credited
+as the requested native theorem.
