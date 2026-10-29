@@ -20,7 +20,7 @@ New client SHA-256: **`da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c551732
 | N7 signing/transport | PASS: exact Python invoke produces the same 158-byte signed transaction as current shipped client; short/extra records reject | `signing-fixture.json`, `shape-and-diagnostic-errors.json`, N73507 |
 | CT private-input decoder | PASS, evidence class **instruction-trace comparison** | `ct-decoding.json`, `decoder-disassembly.txt`, N73507 |
 | New combined-client paired timing | **BLOCKED BEFORE LAUNCH**, not measured | `timing-blocker.json` |
-| Final source/artifact/key retention binding | Pending collection | N73510 / `final-audit.json` |
+| Final source/artifact/key retention binding | Pending collection | N73511 / `final-audit.json` |
 
 The prior D474 paired medians **−1.01% transfer and −0.70% withdrawal PASS under adopted D359(A)** for both the ratio and 15 s gate, labelled **measured under throttling, paired**. They are historical first-half evidence, not a new combined-client measurement. They are not UNDECIDED. `OPTIONAL-remove-timing.diff` is not applied; stdout timing remains, and the observer still sees external wall time.
 
@@ -78,7 +78,7 @@ The full patch also supplies `diagnostics.rs`, build recipe/profile and the feat
 
 ## Resources, failures and retained obligations
 
-All scopes are sequential with MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; Rust work is optimized. `attempts.json` and per-scope receipts record exact target, exit, wall, maximum process RSS, swaps, source revision and `#print axioms` = N/A. No Lean or Kani ran. Native IDs N73500–N73508 and N73510 are used; N73509 remains reserved for new timing.
+All scopes are sequential with MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64; Rust work is optimized. `attempts.json` and per-scope receipts record exact target, exit, wall, maximum process RSS, swaps, source revision and `#print axioms` = N/A. No Lean or Kani ran. Native IDs N73500–N73508 and N73510–N73511 are used; N73509 remains reserved for new timing.
 
 N73500 failed the feature preflight before compilation. N73501 built the final client, then its separate audit manifest failed because inherited default-run named an absent target; N73502 fixes that audit input and builds only the harnesses, without repeating the client build. N73503 failed before producing a default ELF because build-script LLVM linkers exhausted the task allowance; N73504 replaces it with four-core affinity under unchanged caps. Each failure and changed input is retained. Existing SBF stack-size diagnostics were emitted; final builds exited 0 and pins match. No cap was raised.
 
@@ -87,3 +87,7 @@ N73508 completed in 1:55:24; max process RSS 819,108 KiB, cgroup memory peak 6,4
 Retain all task keys, recovery files and nonce ledgers. Runtime fixture keys are mode 0600 in a mode-0700 directory; the public RFC key is retained unchanged. No keys were deleted, no funds/authorities were cleaned up, and no transaction was broadcast. Build outputs/caches remain available for the blocked dependent timing gate in the assigned host directory.
 
 No premise of `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` or T field is removed, added or weakened. The feature and raw-input deployment recipe is repaired in this proposed bundle; shipping adoption and new timing remain. E1/E2, V370/V371, whole-client L1/L2/L3, diagnostic/native I/O association, Python/storage and event-retaining RunJoin obligations remain. **Privacy target not yet established.** Next: lead clears the expired marker; finish the single new paired timing gate; pv-cx re-extracts the pinned spans and lead reviews/adopts.
+
+The first N73510 barrier encountered a vanished foreign session cgroup (`FileNotFoundError`, session-468733.scope) before audit work started. Its refusal is preserved under `refusals/native73510-scan-race-01`; the same unlaunched ID is retried after the conservative full 180 s cooldown, under the documented transient-scan rule and unchanged caps. No proof, compile or timing run is resubmitted. Count the extra pre-work scope conservatively against the 40-scope ceiling.
+
+N73510 then caught an inherited stale expected hash for `tools/pv-c474-validation/Cargo.toml`, an audit-only input changed by the already-recorded harness-manifest repair. `audit-manifest-correction.json` reconstructs the exact expected bytes from the generation recipe and checks literal host equality. N73511 repeats only the read-only binding audit with the corrected inventory. No production source, compiled harness or successful gate is changed or replayed.
