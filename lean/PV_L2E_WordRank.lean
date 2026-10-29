@@ -29,7 +29,7 @@ theorem reconstruct (r : Nat) (xs : List Nat) :
     have hd := step_reconstruct r x
     simp only [pass,rank,pass_length,List.length_cons,pow_succ]
     dsimp only [dividend] at hd
-    nlinarith
+    linear_combination h + hd * B^xs.length
 
 #print axioms bound
 #print axioms reconstruct
