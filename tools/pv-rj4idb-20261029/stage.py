@@ -6,6 +6,7 @@ plan=json.loads((E/'build-plan.json').read_text()) if (E/'build-plan.json').exis
 payload={}
 for name in sys.argv[1:]:
  upstream={'PV_DIAG2_Effects':'evidence/pv-diag2-20261029/PV_DIAG2_Effects.lean','PV_DIAG3_Execution':'evidence/pv-diag3-20261029/PV_DIAG3_Execution.lean'}
+ upstream.update(json.loads((Path(__file__).parent/'upstream-paths.json').read_text()))
  assert name.startswith('PV_RJ4IDB_') or name in upstream
  path=upstream.get(name,'lean/'+name+'.lean');b=subprocess.check_output(['git','show',rev+':'+path]);assert not Path(path).exists() or b==Path(path).read_bytes()
  plan['modules'][name]=dict(path=path,revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),sha256=hashlib.sha256(b).hexdigest(),imports=re.findall(r'^import (\S+)',b.decode(),re.M))
