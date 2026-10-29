@@ -37,10 +37,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   · exact (PV_RunJoin_InactiveFields48.zero base heap box _).trans
       (PV_RunJoin_InactiveFields48.zero base heap box _).symm
   · exact (PV_RunJoin_BatchFields48.mul base heap box _).trans
-      (by rw [PV_RunJoin_BatchFields48.candidate_mul,PV_RunJoin_BatchFields48.candidate_mul])
+      ((@PV_RunJoin_BatchFields48.candidate_mul (types base) _).trans
+        ((@PV_RunJoin_BatchFields48.candidate_mul (types base) _).symm.trans
+          (PV_RunJoin_BatchFields48.mul base heap box _).symm))
   · exact (PV_RunJoin_InactiveFields48.add base heap box _).trans
       (PV_RunJoin_InactiveFields48.add base heap box _).symm
-  · rw [powers base heap box,powers base heap box,incoming_powers]
+  · exact (powers base heap box _).trans
+      ((@incoming_powers (types base) ops).trans (powers base heap box _).symm)
 #print axioms candidate_powers
 #print axioms incoming_powers
 #print axioms powers
