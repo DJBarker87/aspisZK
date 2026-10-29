@@ -2,6 +2,7 @@ import R1Z.ProverRwFullExternalFuns
 import R1Z.PV_RunJoin_CircleRawMap52
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
+noncomputable section
 namespace R1Z.PV_RunJoin_CircleNeutralSelected52
 open ProverRwFull
 abbrev Q := (U32 × U32) × (U32 × U32)
