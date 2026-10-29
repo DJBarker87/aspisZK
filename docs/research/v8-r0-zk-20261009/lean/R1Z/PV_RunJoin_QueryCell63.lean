@@ -8,6 +8,7 @@ open PV_RunJoin_QueryScript63
 
 def index (i : Fin 22) : Usize := UScalar.ofNatCore i.val (by
   have hs := ProverCommitPairCounter47.usize_large
+  rw [UScalar.size_def] at hs
   have := i.isLt
   omega)
 
@@ -24,7 +25,7 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   unfold PV_RunJoin_ActualPlanSources59.queryBytes at success
-  simp only [hc1,hc2,core.option.Option.unwrap,bind_tc_ok] at success
+  simp only [hc1,hc2,core.option.Option.unwrap,ofOption,bind_tc_ok] at success
   rw [PV_RunJoin_QueryFactor63.body base heap box ops cc1 cc2 p.queries
     (alloc.vec.Vec.deref p.folded_word) p.folded_salts _ (index i)
       (by change i.val<22;exact i.isLt) (by change 0+608≤Usize.max;scalar_tac)] at success
@@ -35,7 +36,7 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
   exact hn
 
 theorem actual (base : ExternalTypes) (heap : Heap) (box : Box)
-    (ops : @ExternalFuns (types base)) (phase : PV_RunJoin_NativeControl55.Phase)
+    (ops : @ExternalFuns (types base)) (phase : @PV_RunJoin_NativeControl55.Phase (types base))
     (p : prover.Publication) (cc1 cc2 : host_commitment.Commitment)
     (hc1 : p.backend.c1=some cc1) (hc2 : p.backend.c2=some cc2)
     (context : @PV_RunJoin_PublishContext57.QueryContext (types base)
