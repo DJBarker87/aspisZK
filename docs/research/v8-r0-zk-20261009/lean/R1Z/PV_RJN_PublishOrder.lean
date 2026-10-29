@@ -13,7 +13,7 @@ theorem actual {I : Type} (runs : I → Run)
     PV_RunJoin_PublishContext57.PV_RunJoin_Link_PublishOrder runs := by
   intro query node i p proof fields range context success
   obtain ⟨sz,op,nd,mg,tg,hsz,hop,hnd,hmg,htg,hpsize,hpop,hpnd,hheader⟩ := layout i
-  obtain ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,
+  obtain ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,semanticResult,valuesResult,
     hsize,hmagic,htag,hh0,hh1,hsem,hclaim,hib,hh4,hh5,hh6,hh7,hh8,hopen,hopenlen,
     hc1,hc2,hh9,hnodes,hnodelen,hn,hprooflen⟩ := PV_RJN_PublishTrace.source .S2 p proof success
   have esz := Result.ok.inj (hsz.symm.trans hsize)

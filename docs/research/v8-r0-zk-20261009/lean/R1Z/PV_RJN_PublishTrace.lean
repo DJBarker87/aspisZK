@@ -10,14 +10,15 @@ No model byte list or model assembly occurs in this trace. -/
 def Trace (variant : transport.Variant) (p : prover.Publication) (proof : V) : Prop :=
   ∃ (size openings nodes : Usize) (magic : Array U8 8#usize) (tag : U8)
     (h0 h1 h2 h3 h4 h5 h6 h7 h8 h9 : V) (ib : Array U8 32#usize)
-    (cc1 cc2 : host_commitment.Commitment),
+    (cc1 cc2 : host_commitment.Commitment)
+    (semanticResult valuesResult : core.result.Result Unit compact.CodecError),
     compact.PROOF_BYTES=ok size ∧ compact.MAGIC=ok magic ∧ transport.Variant.tag variant=ok tag ∧
     alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 size)
       magic.to_slice=ok h0 ∧
     alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h0
       (Array.make 8#usize [tag,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8]).to_slice=ok h1 ∧
-    host_compact.compact_semantic (alloc.vec.Vec.deref p.semantic_bytes) h1=ok (.Ok (),h2) ∧
-    host_compact.compact_values (alloc.vec.Vec.deref p.y1) h2=ok (.Ok (),h3) ∧
+    host_compact.compact_semantic (alloc.vec.Vec.deref p.semantic_bytes) h1=ok (semanticResult,h2) ∧
+    host_compact.compact_values (alloc.vec.Vec.deref p.y1) h2=ok (valuesResult,h3) ∧
     aspis_core.field.wide_exact.WideExact.to_le_bytes p.inactive=ok ib ∧
     alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h3 ib.to_slice=ok h4 ∧
     alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h4 (alloc.vec.Vec.deref p.c0bytes)=ok h5 ∧
@@ -42,26 +43,21 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
   obtain ⟨h1,hh1,h⟩ := bind_eq_ok h
   obtain ⟨pair,hsem,h⟩ := bind_eq_ok h
   rcases pair with ⟨r,h2⟩
+  rename r => semanticResult
+  obtain ⟨r,hmapped,h⟩ := bind_eq_ok h
   cases r with
-  | Err e =>
-    simp only [core.result.Result.map_err,prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError,
-      prover.publish_compact.closure.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError.call_once,
-      core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
-    cases h
+  | Err e => cases h
   | Ok u =>
     cases u
-    simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
     obtain ⟨pair,hclaim,h⟩ := bind_eq_ok h
-    rcases pair with ⟨r,h3⟩
+    rcases pair with ⟨valuesResult,h3⟩
+    obtain ⟨r,hmapped2,h⟩ := bind_eq_ok h
     cases r with
-    | Err e =>
-      simp only [core.result.Result.map_err,prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError,
-        prover.publish_compact.closure_1.Insts.CoreOpsFunctionFnOnceTupleCodecErrorError.call_once,
-        core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
-      cases h
+    | Err e => cases h
     | Ok u =>
       cases u
-      simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
       obtain ⟨ib,hib,h⟩ := bind_eq_ok h
       try simp only [lift,bind_tc_ok] at h
       obtain ⟨h4,hh4,h⟩ := bind_eq_ok h
@@ -93,7 +89,7 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
                 by_cases hlen : val.length=size
                 · simp only [massert,hlen,if_true,bind_tc_ok] at h
                   cases h
-                  exact ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,
+                  exact ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,semanticResult,valuesResult,
                     hsize,hmagic,htag,hh0,hh1,hsem,hclaim,hib,hh4,hh5,hh6,hh7,hh8,hopen,hopenlen,
                     hc1,hc2,hh9,hnodes,hnodelen,hn,hlen⟩
                 · simp only [massert,hlen,if_false] at h; cases h
