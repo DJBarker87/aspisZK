@@ -1,4 +1,4 @@
-"""D502 source audit: no native or release-closure claims."""
+"""adopted by owner decision D502/D478. D502 source audit: no native or release-closure claims."""
 from pathlib import Path
 import hashlib,json,re,subprocess
 E=Path('evidence/pv-evh-20261029')

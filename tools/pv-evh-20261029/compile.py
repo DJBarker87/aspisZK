@@ -1,4 +1,4 @@
-"""D502 adopted: Single-module capped invocation; admission and original receipt recovery."""
+"""adopted by owner decision D502/D478. D502 adopted: Single-module capped invocation; admission and original receipt recovery."""
 from pathlib import Path
 import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-evh-20261029'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'

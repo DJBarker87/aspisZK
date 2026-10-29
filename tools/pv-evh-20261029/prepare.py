@@ -1,4 +1,4 @@
-"""D502 adopted: Read-only source/cohort verification, followed by staging own committed source."""
+"""adopted by owner decision D502/D478. D502 adopted: Read-only source/cohort verification, followed by staging own committed source."""
 from pathlib import Path
 import json, hashlib, subprocess, shlex, sys
 E=Path('evidence/pv-evh-20261029'); O=Path('evidence/pv-rj4idb-20261029')
