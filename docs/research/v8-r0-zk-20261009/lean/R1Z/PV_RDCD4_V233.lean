@@ -58,7 +58,7 @@ theorem aliases (input : Slice U8) (origin : Nat) :
     (source input origin).tail.pointer.origin=origin ∧
     (source input origin).tail.pointer.data=input.val ∧
     (source input origin).tail.pointer.offset=(input.val.length/64)*64 :=
-  ⟨rfl,rfl,rfl,rfl,rfl⟩
+  by simp [source,sliceRawFromRawParts,ptrSliceFromRawParts,metadataFromRawParts,aggregate,advance]
 
 theorem valid_tail (input : Slice U8) (origin : Nat) :
     valid (source input origin).tail.pointer (source input origin).tail.len := by

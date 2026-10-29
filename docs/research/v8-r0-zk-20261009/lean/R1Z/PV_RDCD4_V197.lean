@@ -32,9 +32,9 @@ theorem source_reference (bytes : List U8) : qm bytes=reference bytes := by
       by_cases h16 : 16 ≤ bytes.length
       · rw [if_pos h16,PV_RDCD4_SliceRange194.success bytes 8 16 (by omega) h16,bind_tc_ok]
       · rw [if_neg h16,PV_RDCD4_SliceRange194.oversized bytes 8 16 (by omega)]
-        rfl
+        try rfl
   · rw [if_neg h8,PV_RDCD4_SliceRange194.oversized bytes 0 8 (by omega)]
-    rfl
+    try rfl
 
 theorem short_failure (bytes : List U8) (h : bytes.length < 8) :
     qm bytes=fail .arrayOutOfBounds := by
