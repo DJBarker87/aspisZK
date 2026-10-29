@@ -25,6 +25,6 @@ theorem logged_join (a : Attempt W S P) (n k : Nat) (s : S) (w : W) :
        | mk outcome world calls =>
          simp only [tail,stateLog] at rest
          rw [← rest]
-         rfl
+/-- The rewrite above also reduces the matching record projections. -/
 #print axioms logged_join
 end PV_L1G_WorldRetry
