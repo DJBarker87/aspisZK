@@ -33,6 +33,10 @@ theorem reported_source_count {C : Type} (entropy : Entropy C) (pub : Pub)
  have law := congrArg PV_L1F_ReturnedCount.read
    (PV_DIAG2.final_source_result entropy pub compiled variant hash store callback k n bound capture a resultLaw)
  rw [PV_L1F_ReturnedCount.source_read] at law
- simpa only [ProverRwRetryModel.drop,PV_L1F_ReturnedCount.read_map_state] using law
+ change PV_L1F_ReturnedCount.read
+   (mapR (fun v => (v.1,Prod.snd v.2))
+     (PV_DIAG2.finish capture (PV_DIAG2.runEffects a n k.val (callback,store))).result) = _ at law
+ rw [PV_L1F_ReturnedCount.read_map_state] at law
+ exact law
 #print axioms reported_source_count
 end PV_L1F_SourceRead
