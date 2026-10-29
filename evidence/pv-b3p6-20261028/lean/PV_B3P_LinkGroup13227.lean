@@ -124,7 +124,9 @@ instance. It does not instantiate the actual deployed source interpretation. -/
 theorem changed_bodies_satisfiable13 :
     PV_B3P_Link_changed_bodies explicit_model_bodies13 := by
   repeat' constructor
-  all_goals rfl
+  all_goals
+    repeat' intro
+    rfl
 #print axioms changed_bodies_satisfiable13
 end
 end PV_B3P_Groups13227
