@@ -22,6 +22,7 @@ theorem complete (a : U32) (ha : Canon a) :
       change (((U32.wrapping_sub 2147483647#u32 a).bv &&& BitVec.allOnes 32).toNat) =
         (U32.wrapping_sub 2147483647#u32 a).val
       rw [BitVec.and_allOnes]
+      rfl
     · unfold PV_RunJoin_CircleR72Raw52.field.M31.neg PV_RunJoin_CircleR72Raw52.field.P
       rw [if_neg hz,PV_RunJoin_CircleNeutralScalar52.checked_sub _ _ hp,bind_tc_ok]
     · unfold Canon
