@@ -22,8 +22,7 @@ theorem inclusive_body_binding12 {α : Type} (step : α → Usize → Result α)
     apply propext
     scalar_tac
   unfold inclusive_body12 usize_body
-  rw [hg]
-  simp only [lift,bind_tc_ok]
+  simp only [hg,lift,bind_tc_ok]
 
 theorem inclusive_loop_fold12 {α : Type} (step : α → Usize → Result α)
     (last i : Usize) (hl : last.val < 24) (n : Nat) (state : α)
