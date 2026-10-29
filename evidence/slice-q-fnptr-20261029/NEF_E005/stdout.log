@@ -1,0 +1,55 @@
+{"charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "rust_reference_sha256": "21aeab1a1382c41d99b5d6997f1b4a5a9492127f71e66688e5367ea301fb65b2", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::query_tail", "--start-from", "crate::mark", "--dest-file", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc", "--", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_ref/Cargo.toml", "--offline", "--release", "--lib", "--jobs", "1"], "toolchain": "nightly-2026-09-17", "aeneas_origin": "b59d5188 extended binary; imported read-only, no tool patches by NCO"}
+   Compiling nef_reference v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_ref)
+warning: unexpected `cfg` condition value: `prover`
+ --> src/lib.rs:4:11
+  |
+4 |     #[cfg(feature="prover")] Rejected,
+  |           ^^^^^^^^^^^^^^^^ help: remove the condition
+  |
+  = note: no expected values for `feature`
+  = help: consider adding `prover` as a feature in `Cargo.toml`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: unexpected `cfg` condition value: `prover`
+ --> src/lib.rs:6:11
+  |
+6 |     #[cfg(feature="prover")] AttemptsExhausted,
+  |           ^^^^^^^^^^^^^^^^ help: remove the condition
+  |
+  = note: no expected values for `feature`
+  = help: consider adding `prover` as a feature in `Cargo.toml`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `prover`
+ --> src/lib.rs:8:11
+  |
+8 |     #[cfg(feature="prover")] Entropy }
+  |           ^^^^^^^^^^^^^^^^ help: remove the condition
+  |
+  = note: no expected values for `feature`
+  = help: consider adding `prover` as a feature in `Cargo.toml`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: function `mark` is never used
+  --> src/lib.rs:11:4
+   |
+11 | fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }
+   |    ^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `query_tail` is never used
+  --> src/lib.rs:12:4
+   |
+12 | fn query_tail<A,B>(a:A,pending:B,i:usize,obs:Observer)->Result<(A,B),Error>{
+   |    ^^^^^^^^^^
+
+warning: `nef_reference` (lib) generated 5 warnings
+    Finished `release` profile [optimized] target(s) in 0.07s
+["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NEF_TailRef", "-dest", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted", "-subdir", "NEF_TailRef", "-split-files", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_TailRef
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_TailRef/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_TailRef/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.169483 seconds

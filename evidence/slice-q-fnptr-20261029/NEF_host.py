@@ -4,16 +4,15 @@ import subprocess,json,shlex,time,hashlib,zlib,base64
 E=Path(__file__).resolve().parent
 H='dombarker@100.108.41.90'
 B='/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029'
-def ssh(code,submitted=False):
+def ssh(code,submitted=False,data=None):
  for trial in range(11):
-  r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],capture_output=True,text=True)
-  with (E/'NEF_NATIVE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=trial,exit=r.returncode,submitted=submitted,command=code,stdout_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),stdout_bytes=len(r.stdout.encode()),stdout_tail=r.stdout[-1500:],stderr=r.stderr))+'\n')
+  r=subprocess.run(['ssh','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],input=data,capture_output=True,text=True)
+  with (E/'NEF_NATIVE_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(trial=trial,exit=r.returncode,submitted=submitted,command=code,input_sha256=hashlib.sha256(data.encode()).hexdigest() if data else None,input_bytes=len(data.encode()) if data else 0,stdout_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),stdout_bytes=len(r.stdout.encode()),stdout_tail=r.stdout[-1500:],stderr=r.stderr))+'\n')
   if r.returncode!=255 or submitted:return r
   if trial<10:print('transport255; waiting60s',flush=True);time.sleep(60)
  raise SystemExit('STOP persistent transport255')
-def py(code,submitted=False):
- packed=base64.b64encode(zlib.compress(code.encode())).decode()
- return ssh('python3 -c '+shlex.quote('import base64,zlib;exec(zlib.decompress(base64.b64decode('+repr(packed)+')))'),submitted)
+def py(code,submitted=False):return ssh('python3',submitted=submitted,data=code)
+
 def admit(a):
  for retry in range(11):
   r=py(f'''from pathlib import Path

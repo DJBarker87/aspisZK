@@ -1,0 +1,210 @@
+NEF_generated/NEF_ExtractedTransport.lean:18:103: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_assoc`
+NEF_generated/NEF_ExtractedTransport.lean:19:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (aa, ops1) ← s.mul x.a x.a
+    let (bb, ops2) ← ops1.mul x.b x.b
+    let (norm, ops3) ← ops2.add aa bb
+    let (inv_norm, ops4) ← ops3.inv norm
+    let (a, ops5) ← ops4.mul x.a inv_norm
+    let (nb, ops6) ← ops5.neg x.b
+    let (b, ops7) ← ops6.mul nb inv_norm
+    ok ({ a := a, b := b }, ops7)
+is not definitionally equal to the right-hand side
+  do
+    let (v, s') ←
+      (mul x.a x.a >>= fun aa => do
+            let bb ← mul x.b x.b
+            let norm ← add aa bb
+            let invNorm ← inv norm
+            let a ← mul x.a invNorm
+            let nb ← neg x.b
+            let b ← mul nb invNorm
+            pure { a := a, b := b })
+          s
+    ok ({ a := v.a, b := v.b }, s')
+
+x : NEF_CM
+s : NEF_Log
+⊢ (do
+      let (aa, ops1) ← s.mul x.a x.a
+      let (bb, ops2) ← ops1.mul x.b x.b
+      let (norm, ops3) ← ops2.add aa bb
+      let (inv_norm, ops4) ← ops3.inv norm
+      let (a, ops5) ← ops4.mul x.a inv_norm
+      let (nb, ops6) ← ops5.neg x.b
+      let (b, ops7) ← ops6.mul nb inv_norm
+      ok ({ a := a, b := b }, ops7)) =
+    do
+    let (v, s') ←
+      (mul x.a x.a >>= fun aa => do
+            let bb ← mul x.b x.b
+            let norm ← add aa bb
+            let invNorm ← inv norm
+            let a ← mul x.a invNorm
+            let nb ← neg x.b
+            let b ← mul nb invNorm
+            pure { a := a, b := b })
+          s
+    ok ({ a := v.a, b := v.b }, s')
+NEF_generated/NEF_ExtractedTransport.lean:18:44: warning: This simp argument is unused:
+  NEF.invWith
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, N̵E̵F̵.̵i̵n̵v̵W̵i̵t̵h̵,̵ ̵mul, add, neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:57: warning: This simp argument is unused:
+  mul
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, m̵u̵l̵,̵ ̵add, neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:62: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, a̵d̵d̵,̵ ̵neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:67: warning: This simp argument is unused:
+  neg
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, n̵e̵g̵,̵ ̵inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:72: warning: This simp argument is unused:
+  inv
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, i̵n̵v̵,̵ ̵StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:77: warning: This simp argument is unused:
+  StateT.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, inv, S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵ ̵StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:18:90: warning: This simp argument is unused:
+  StateT.pure
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, inv, StateT.bind,
+  ̲ S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵  ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:103: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind_assoc`
+NEF_generated/NEF_ExtractedTransport.lean:28:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (aa, ops1) ← s.mul x.a x.a
+    let (bb, ops2) ← ops1.mul x.b x.b
+    let (norm, ops3) ← ops2.add aa bb
+    let (inv_norm, ops4) ← ops3.inv norm
+    let (a, ops5) ← ops4.mul x.a inv_norm
+    let (nb, ops6) ← ops5.neg x.b
+    let (b, ops7) ← ops6.mul nb inv_norm
+    ok ({ a := a, b := b }, ops7)
+is not definitionally equal to the right-hand side
+  do
+    let (v, s') ←
+      (mul x.a x.a >>= fun aa => do
+            let bb ← mul x.b x.b
+            let norm ← add aa bb
+            let invNorm ← inv norm
+            let a ← mul x.a invNorm
+            let nb ← neg x.b
+            let b ← mul nb invNorm
+            pure { a := a, b := b })
+          s
+    ok ({ a := v.a, b := v.b }, s')
+
+x : NEF_CM
+s : NEF_Log
+⊢ (do
+      let (aa, ops1) ← s.mul x.a x.a
+      let (bb, ops2) ← ops1.mul x.b x.b
+      let (norm, ops3) ← ops2.add aa bb
+      let (inv_norm, ops4) ← ops3.inv norm
+      let (a, ops5) ← ops4.mul x.a inv_norm
+      let (nb, ops6) ← ops5.neg x.b
+      let (b, ops7) ← ops6.mul nb inv_norm
+      ok ({ a := a, b := b }, ops7)) =
+    do
+    let (v, s') ←
+      (mul x.a x.a >>= fun aa => do
+            let bb ← mul x.b x.b
+            let norm ← add aa bb
+            let invNorm ← inv norm
+            let a ← mul x.a invNorm
+            let nb ← neg x.b
+            let b ← mul nb invNorm
+            pure { a := a, b := b })
+          s
+    ok ({ a := v.a, b := v.b }, s')
+NEF_generated/NEF_ExtractedTransport.lean:27:29: warning: This simp argument is unused:
+  NEF.invStatic
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invS̵t̵a̵t̵i̵c̵,̵ ̵N̵E̵F̵.̵i̵n̵v̵With, mul, add, neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:57: warning: This simp argument is unused:
+  mul
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, m̵u̵l̵,̵ ̵add, neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:62: warning: This simp argument is unused:
+  add
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, a̵d̵d̵,̵ ̵neg, inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:67: warning: This simp argument is unused:
+  neg
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, n̵e̵g̵,̵ ̵inv, StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:72: warning: This simp argument is unused:
+  inv
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, i̵n̵v̵,̵ ̵StateT.bind, StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:77: warning: This simp argument is unused:
+  StateT.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, inv, S̵t̵a̵t̵e̵T̵.̵b̵i̵n̵d̵,̵ ̵StateT.pure,
+  ̲  ̲ ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:27:90: warning: This simp argument is unused:
+  StateT.pure
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, NEF.invWith, mul, add, neg, inv, StateT.bind,
+  ̲ S̵t̵a̵t̵e̵T̵.̵p̵u̵r̵e̵,̵  ̲ ̲Result.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEF_ExtractedTransport.extracted_static' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEF_ExtractedTransport.extracted_specialisation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

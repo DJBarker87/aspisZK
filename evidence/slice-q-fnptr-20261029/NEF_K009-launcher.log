@@ -1,0 +1,44 @@
+{"attempt": "NEF_K009", "exit_status": 0, "wall_seconds": 12.04493277403526, "peak_rss_kib": "426528", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+ore::cmp::impls::<impl core::cmp::PartialEq for u32>::eq
+
+Check 80: core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq
+
+Check 81: core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq
+
+Check 82: core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq
+
+Check 83: core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs:1865:63 in function core::cmp::impls::<impl core::cmp::PartialEq for u32>::eq
+
+
+SUMMARY:
+ ** 0 of 83 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.4113786s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r892b1fed4b0c451ebdefb1bd2005a7e5.scope; invocation ID: 76a7215d4e3643e7a7efcce3c7b142a8

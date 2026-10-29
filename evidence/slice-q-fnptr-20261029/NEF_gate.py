@@ -5,6 +5,9 @@ B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x[
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 assert sha(S/'Cargo.lock')==frozen,'STOP frozen lock mismatch before Kani'
+if x.get('copy_patch_sha256'):
+ assert x['copy_patch_sha256']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+ for n,h in {'KMX_stubs.rs':'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138','KMX_native.rs':'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880','KMX_CopyMeaning.lean':'2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}.items():assert sha(S/n)==h,('KMX patch mismatch',n)
 pins=json.loads((B/'NEF_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
@@ -48,5 +51,15 @@ assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:p['id'])]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
 status=subprocess.run(x['native_command'],cwd=B).returncode
+import shutil
+art=B/a/'NEF_artifacts';art.mkdir(exist_ok=True)
+manifest={}
+import re
+log=(B/a/'stdout.log').read_text()
+paths=re.findall(r'Reading GOTO program from file ([^\n]+\.out)',log)
+for name in paths:
+ p=Path(name);assert p.is_file(),p
+ q=art/p.name;shutil.copy2(p,q);manifest[p.name]=dict(source_path=str(p),sha256=sha(q),bytes=q.stat().st_size,used_by_this_attempt=True)
+(B/(a+'-artifacts.json')).write_text(json.dumps(manifest,indent=2)+'\n')
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)

@@ -1,0 +1,69 @@
+{"attempt": "NEF_L020", "exit_status": 1, "wall_seconds": 3.6845955760218203, "peak_rss_kib": "2580388", "swaps": "0", "print_axioms": ["'NEF_ExtractedTransport.run_bind' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEF_ExtractedTransport.run_pure' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEF_ExtractedTransport.result_bind_assoc' does not depend on any axioms", "'NEF_ExtractedTransport.extracted_static' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEF_ExtractedTransport.extracted_specialisation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEF_generated/NEF_ExtractedTransport.lean:48:24: error: unsolved goals
+case ok.ok.ok.ok.ok.ok.ok
+x : NEF_CM
+s : NEF_Log
+aa : U32
+s1 : NEF_Log
+h0 : s.mul x.a x.a = ok (aa, s1)
+bb : U32
+s2 : NEF_Log
+h1 : s1.mul x.b x.b = ok (bb, s2)
+norm : U32
+s3 : NEF_Log
+h2 : s2.add aa bb = ok (norm, s3)
+iv : U32
+s4 : NEF_Log
+h3 : s3.inv norm = ok (iv, s4)
+a : U32
+s5 : NEF_Log
+h4 : s4.mul x.a iv = ok (a, s5)
+nb : U32
+s6 : NEF_Log
+h5 : s5.neg x.b = ok (nb, s6)
+b : U32
+s7 : NEF_Log
+h6 : s6.mul nb iv = ok (b, s7)
+⊢ (let (aa, ops1) := (aa, s1)
+    do
+    let (bb, ops2) ← ops1.mul x.b x.b
+    let (norm, ops3) ← ops2.add aa bb
+    let (inv_norm, ops4) ← ops3.inv norm
+    let (a, ops5) ← ops4.mul x.a inv_norm
+    l
+...
+, add, neg, inv, run_bind, run_pure,
+  ̲  ̲ ̲ ̲h0, bind_tc_o̵k̵,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵fail, bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:63:130: warning: This simp argument is unused:
+  bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, mul, add, neg, inv, run_bind, run_pure,
+  ̲  ̲ ̲ ̲h0, bind_tc_ok, bind_tc_fail,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:64:97: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, mul, add, neg, inv, run_bind, run_pure, h0,
+  ̲ b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵  ̲ ̲bind_tc_fail, bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEF_generated/NEF_ExtractedTransport.lean:64:109: warning: This simp argument is unused:
+  bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [NEF_inv_static, NEF.invStatic, mul, add, neg, inv, run_bind, run_pure, h0,
+  ̲  ̲ ̲ ̲bind_tc_ok, bind_tc_f̵a̵i̵l̵,̵ ̵b̵i̵n̵d_̵t̵c̵_̵d̵iv]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEF_ExtractedTransport.run_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEF_ExtractedTransport.run_pure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEF_ExtractedTransport.result_bind_assoc' does not depend on any axioms
+'NEF_ExtractedTransport.extracted_static' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEF_ExtractedTransport.extracted_specialisation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rc120216a4ce24962a46c84c14264e6df.scope; invocation ID: b004c9270d5248ee89f9c3ffc97b4bc5

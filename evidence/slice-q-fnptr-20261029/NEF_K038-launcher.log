@@ -1,0 +1,42 @@
+{"attempt": "NEF_K038", "exit_status": 1, "wall_seconds": 5.182278087944724, "peak_rss_kib": "441396", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+known-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NEF_native::NEF_inv_log
+
+Check 71: verifier::candidate::NEF_native::NEF_inv_log.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NEF_native::NEF_inv_log
+
+Check 72: verifier::candidate::NEF_native::NEF_inv_log.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NEF_native::NEF_inv_log
+
+Check 73: verifier::candidate::NEF_native::NEF_inv_log.array_bounds.3
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:35 in function verifier::candidate::NEF_native::NEF_inv_log
+
+
+SUMMARY:
+ ** 1 of 73 failed
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 0.33327854s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NEF_native::NEF_inv_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r11c16a16ffd44ed3b34facd0812ea643.scope; invocation ID: 28b6084cb48547b1a1362d4cfb57c55c

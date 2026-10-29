@@ -1,0 +1,34 @@
+{"attempt": "NEF_E001", "exit_status": 0, "wall_seconds": 1.0206190900644287, "peak_rss_kib": "141740", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "rust_reference_sha256": "9da1b53c0e8f379c15c5a336f53f167eaceb27e9646acb6ee5957633cce3ba27", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::NEF_inv_static", "--dest-file", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc", "
+...
+f,a:u32,b:u32)->u32 {self.call(1,a,b)}
+   |     ^^^
+13 |  fn inv(&mut self,a:u32)->u32 {self.call(2,a,0)}
+   |     ^^^
+14 |  fn neg(&mut self,a:u32)->u32 {self.call(3,a,0)}
+   |     ^^^
+
+warning: function `NEF_inv_static` is never used
+  --> src/lib.rs:16:4
+   |
+16 | fn NEF_inv_static(x:NEF_CM,ops:&mut NEF_Log)->NEF_CM {
+   |    ^^^^^^^^^^^^^^
+
+warning: function `NEF_inv_static` should have a snake case name
+  --> src/lib.rs:16:4
+   |
+16 | fn NEF_inv_static(x:NEF_CM,ops:&mut NEF_Log)->NEF_CM {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nef_inv_static`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `nef_reference` (lib) generated 10 warnings
+    Finished `release` profile [optimized] target(s) in 0.16s
+["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NEF_Reference", "-dest", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted", "-subdir", "NEF_Reference", "-split-files", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_Reference
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_Reference/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_Reference/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.447381 seconds
+
+Running as unit: run-r35a4c407201b45768f411c30a97e8ad9.scope; invocation ID: 4333842a093b4193a5fefb6caff6e042
