@@ -1,0 +1,66 @@
+NEE_generated/NEE_ValidatorMutation.lean:46:8: error: 'change' tactic failed, pattern
+  (ignore (mutate f (late ?m.161 ?m.162)), ?m.163) = (ignore (late ?m.166 ?m.167), ?m.168)
+is not definitionally equal to target
+  (div, [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1]) = (div, [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1])
+NEE_generated/NEE_ValidatorMutation.lean:43:11: error: unsolved goals
+case h_3
+pay : Pay
+lane : Lane
+late : Late
+f : Slice U8 → Slice U8
+s : Statement
+l : U8
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+e✝ : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+heq✝ : ok (core.result.Result.Ok l) = ok (core.result.Result.Err e✝)
+⊢ (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+      [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1]) =
+    (ok (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e✝)),
+      [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1])
+
+case h_4
+pay : Pay
+lane : Lane
+late : Late
+f : Slice U8 → Slice U8
+s : Statement
+l : U8
+x✝ : Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1)
+l✝ : U8
+heq✝ : ok (core.result.Result.Ok l) = ok (core.result.Result.Ok l✝)
+⊢ (if l✝ ≠ (common s).output_lane then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1])
+    else
+      (do
+        let (status, _) ← mutate f (late (common s).lane_transition NBN_LateResult.zero)
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+        [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1,
+          NED_ValidatorTrace.Call.late (common s).lane_transition NBN_LateResult.zero])) =
+    if l✝ ≠ (common s).output_lane then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1])
+    else
+      (do
+        let (status, _) ← late (common s).lane_transition NBN_LateResult.zero
+        match status with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+        [NED_ValidatorTrace.Call.lane (parts s).2.2.2.2.1,
+          NED_ValidatorTrace.Call.late (common s).lane_transition NBN_LateResult.zero])
+'NEE_ValidatorMutation.discard' depends on axioms: [propext]
+'NEE_ValidatorMutation.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEE_ValidatorMutation.bindings' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEE_ValidatorMutation.result_and_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

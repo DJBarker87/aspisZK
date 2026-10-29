@@ -35,12 +35,13 @@ theorem tail (pay : Pay) (lane : Lane) (late : Late) (f : Slice U8 → Slice U8)
     NEE_ValidatorOracle.tail pay lane late s := by
   unfold NEE_ValidatorOracle.tail
   dsimp only
-  cases lane (parts s).2.2.2.2.1 with
-  | fail e => rfl
-  | div => rfl
+  cases h : lane (parts s).2.2.2.2.1 with
+  | fail e => simp only [h]
+  | div => simp only [h]
   | ok p => cases p with
-    | Err e => rfl
+    | Err e => simp only [h]
     | Ok l =>
+      simp only [h]
       split
       · rfl
       · change (ignore (mutate f (late _ _)),_) = (ignore (late _ _),_)

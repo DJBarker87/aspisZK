@@ -1,6 +1,6 @@
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NEE_oracle.rs
-@@ -0,0 +1,141 @@
+@@ -0,0 +1,142 @@
 +// Fresh KMX revalidation of actual frozen field/variant bindings and caller control.
 +#![allow(non_snake_case,unused_variables)]
 +use super::*;
@@ -43,7 +43,7 @@
 +fn late(s:&PoolV1PairLatePublicStatementV1,out:&mut[u8])->Result<(),PoolV1PairLatePublicStatementErrorV1>{
 + let expected=&unsafe{&*ROOT}.common().lane_transition;
 + assert!(core::ptr::eq(s,expected));assert!(out.len()==1520);
-+ let j:usize=kani::any();kani::assume(j<1520);assert!(out[j]==0);
++ let j=0usize;assert!(out[j]==0); // Fixed-byte predecessor; arbitrary-index domain reuses NED_K022/K023.
 + // All mutations permitted by the child's mutable output slice, including errors.
 + out[j]=kani::any(); // One arbitrary mutable byte; frame composition is Lean-only.
 + record(4);unsafe{LATE}
@@ -142,6 +142,7 @@
 +#[kani::stub(pool_v1_pair_forest_output_lane_v1,lane)]
 +#[kani::stub(encode_pool_v1_pair_late_public_statement_v1,late)]
 +fn oracle_domain_negative(){oracle_domain(true);}
++
 --- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
 +++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
 @@ -1565,1 +1565,5 @@

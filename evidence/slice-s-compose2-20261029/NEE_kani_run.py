@@ -41,8 +41,9 @@ for n in features:visit(n)
 native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEE_src/crates/aspis-statement/Cargo.toml','--target-dir',B+'/NEE_target','--lib','--features',','.join(features),'-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse']
 if kind=='metadata':native=[]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEE_tmp')
-files={'NEE_oracle.patch':(E/'NEE_oracle.patch').read_text(),'NEE_kani_gate.py':(E/'NEE_kani_gate.py').read_text(),'NEE_contract_controls.patch':(E/'NEE_contract_controls.patch').read_text(),'NEE_KMX_copy_stubs.patch':subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'],text=True),'NEE_RUST_SOURCE_PINS.json':(E/'NEE_RUST_SOURCE_PINS.json').read_text(),'NEE_FROZEN_GRAPH.json':subprocess.check_output(['git','show','HEAD:evidence/leaf-p6-11-20261027/LPm_frozen_graph.json'],text=True)}
+files={'NEE_native_contracts.patch':(E/'NEE_native_contracts.patch').read_text(),'NEE_oracle.patch':(E/'NEE_oracle.patch').read_text(),'NEE_kani_gate.py':(E/'NEE_kani_gate.py').read_text(),'NEE_contract_controls.patch':(E/'NEE_contract_controls.patch').read_text(),'NEE_KMX_copy_stubs.patch':subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'],text=True),'NEE_RUST_SOURCE_PINS.json':(E/'NEE_RUST_SOURCE_PINS.json').read_text(),'NEE_FROZEN_GRAPH.json':subprocess.check_output(['git','show','HEAD:evidence/leaf-p6-11-20261027/LPm_frozen_graph.json'],text=True)}
 cfg=dict(attempt=a,kind=kind,module=harness,command=['python3','NEE_kani_gate.py',a+'.json'],native_command=native,sources=list(files)+['NEE_RUST_SHA256.json','NEE_src/Cargo.lock','NEE_src/crates/aspis-statement/src/lib.rs','NEE_src/crates/aspis-statement/src/NED_controls.rs'],env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(frozen_revision=rev,frozen_source_pinset='NEE_RUST_SOURCE_PINS.json'),statement_features=','.join(features),required_statement_features=sorted(closure),expected_time='frozen dependency/feature validation, optimized compilation, then named call-window or interface-fidelity step; no native field arithmetic or protocol loop',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
+for patchname in ['NEE_oracle.patch','NEE_native_contracts.patch']:(E/(a+'-'+patchname)).write_text(files[patchname])
 files[a+'.json']=json.dumps(cfg,indent=1)
 code=f'''from pathlib import Path
 import json,subprocess,hashlib
@@ -71,6 +72,13 @@ body='\\n'.join(l[1:] for l in lines[lo+1:hi] if l.startswith('+'))+'\\n'
 q=s/'crates/aspis-statement/src/pool_v1/NEE_oracle.rs'
 before=json.loads((b/'NEE_RUST_SHA256.json').read_text());assert all(hashlib.sha256((s/n).read_bytes()).hexdigest()==h for n,h in before.items()),'STOP own revision source drift'
 q.write_text(body);before[str(q.relative_to(s))]=hashlib.sha256(q.read_bytes()).hexdigest();(b/'NEE_RUST_SHA256.json').write_text(json.dumps(before,indent=1))
+# Reversible cfg(kani)-only actual-function contract annotations.
+current=(b/'NEE_native_contracts.patch').read_text();previous=b/'NEE_contracts_applied.patch'
+if previous.exists() and previous.read_text():subprocess.run(['git','apply','--reverse',str(previous)],cwd=s,check=True,capture_output=True)
+if current:subprocess.run(['git','apply',str(b/'NEE_native_contracts.patch')],cwd=s,check=True,capture_output=True)
+previous.write_text(current)
+pins={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+(b/'NEE_RUST_SHA256.json').write_text(json.dumps(pins,indent=1))
 print((b/'NEE_RUST_SHA256.json').read_text())
 '''
 r=ssh('python3',code);(E/(a+'-upload.log')).write_text(r.stderr);assert r.returncode==0,r.stderr
