@@ -8,8 +8,9 @@ elab "l1e_safe_callee" : tactic => do
   let t ← getMainTarget
   let args := t.getAppArgs
   if args.isEmpty then throwError "not a Safe application"
-  let some name := args.back!.getAppFn.constName? | throwError "not a named callee"
-  let s := name.toString
+  let headName := args.back!.getAppFn.constName?
+  let producerName := headName.getD Name.anonymous
+  let s := producerName.toString
   unless s.endsWith ".produce" do throwError "not a logged producer"
   let m := s.dropEnd 8 |>.toString
   let lemmaName := Name.str (Name.mkSimple "PV_L1E_CallbackSafety") ("safe_" ++ m)
