@@ -21,7 +21,9 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
     (baseTypes base) heap box (beforeCircle base ops) block row
   refine ⟨p,hp,hx,hy,?_⟩
   rw [hc]
-  split <;> exact Subtype.property _
+  split
+  · exact (R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block)).property
+  · exact (R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block)).property
 
 #print axioms complete
 end R1Z.PV_RunJoin_CircleNativeLaws62
