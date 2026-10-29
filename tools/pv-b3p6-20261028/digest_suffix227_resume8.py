@@ -22,14 +22,15 @@ for i in reversed(range(25)):
  if i:ch=re.sub(r'\bdigests'+str(i)+r'\b','output',ch)
  if i<24:ch+=f'\n  digest_suffix_{i+1:02} public1 openings selectors digests{i+1}'
  ch=re.sub(r'\bok\b','Result.ok',ch)
- text=f'import PV_B3P_DigestStage{i:02}227\nimport PV_B3P_DigestAssoc227\n'+(f'import {nextmod}\n'if i<24 else '')+header
+ text=f'import PV_B3P_DigestStage{i:02}227\n'+('import PV_B3P_DigestBranch227\n'if i<24 else 'import PV_B3P_DigestAssoc227\n')+(f'import {nextmod}\n'if i<24 else '')+header
  text+=f'def {name} {params}'+(' (output : Digest8Q)'if i else '')+' : Result Digest8Q := do\n'+ch+'\n'
  # Keep callees and the next continuation opaque while checking one equation.
  opaque=['reference_terminal.add_digest_binding','reference_copy_terminal.Selectors.row','reference_terminal.empty_root','reference_terminal.digest227','reference_terminal.bounded_append_carry']+([f'digest_suffix_{i+1:02}']if i<24 else [])
  text+='\nattribute [local irreducible] '+' '.join(opaque)+'\n'
  args='public1 openings selectors'+(' output'if i else '')
  rhs=f'digest_stage_{i:02} '+args+(f' >>= digest_suffix_{i+1:02} public1 openings selectors'if i<24 else '')
- text+=f'\ntheorem {name}_equation {params}'+(' (output : Digest8Q)'if i else '')+f' :\n    {name} {args} = {rhs} := by\n  simp only [{name},digest_stage_{i:02},digest_assoc]\n\n'
+ text+=f'\ntheorem {name}_equation {params}'+(' (output : Digest8Q)'if i else '')+f' :\n    {name} {args} = {rhs} := by\n  simp only [{name},digest_stage_{i:02},digest_assoc'+(',digest_if_bind,digest_option_bind'if i<24 else '')+']\n\n'
+ if i==2:text=text.replace('  simp only [digest_suffix_02,digest_stage_02,digest_assoc,digest_if_bind,digest_option_bind]','  cases hr : public1.recipient <;>\n    simp only [digest_suffix_02,digest_stage_02,hr,digest_assoc,bind_tc_ok]')
  text+=f'theorem {name}_success {params}'+(' (output : Digest8Q)'if i else '')+f' :\n    Success ({name} {args}) := by\n  rw [{name}_equation]\n'
  if i<24:text+=f'  apply bind\n  · exact digest_stage_{i:02}_success '+args+f'\n  intro next\n  exact digest_suffix_{i+1:02}_success public1 openings selectors next\n'
  else:text+=f'  exact digest_stage_{i:02}_success '+args+'\n'
