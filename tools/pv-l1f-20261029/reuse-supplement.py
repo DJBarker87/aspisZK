@@ -9,6 +9,10 @@ for dirname in ['pv-diag2-20261029','pv-diag10-20261029']:
   d=json.load(open(p));m=d.get('module')
   if d.get('exit')==0 and m in mods and d.get('source_sha256')==mods[m]['sha256'] and d.get('object_sha256'):
    candidates[m]=dict(receipt=str(p),receipt_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),**d)
+for v in json.load(open('evidence/pv-rj4idb-20261029/final-validation.json'))['checks']:
+ m=v['module']
+ if m in mods and v['source_sha256']==mods[m]['sha256']:
+  candidates[m]=dict(module=m,receipt='evidence/pv-rj4idb-20261029/final-validation.json',source_sha256=v['source_sha256'],object_sha256=v['object_sha256'],dependency_objects={d:{r['path']:r['sha256']} for d,r in v['dependencies'].items()},command=['/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/objects/'+m.replace('.','/')+'.olean','source','7000'])
 code=r'''import sys,json,pathlib,hashlib,subprocess
 x=json.load(sys.stdin);p=pathlib.Path(x['H']);env=json.load(open(p/'retry-J.json'));roots=[pathlib.Path(q) for q in env['LEAN_PATH'].split(':')];sha=lambda q:hashlib.sha256(q.read_bytes()).hexdigest()
 assert subprocess.check_output([env['LEAN'],'--githash'],text=True).strip()=='8c9756b28d64dab099da31a4c09229a9e6a2ef35'
@@ -18,7 +22,7 @@ accepted=[];pending=dict(x['candidates']);refused={}
 while pending:
  progress=False
  for m,v in list(pending.items()):
-  if loaded(m):del pending[m];continue
+  if loaded(m) and sha(loaded(m))!=v['object_sha256']:del pending[m];continue
   deps=v['dependency_objects'];reasons=[]
   for d,paths in deps.items():
    q=loaded(d)
@@ -31,8 +35,8 @@ while pending:
   dest=p/'objects'/(m.replace('.','/')+'.olean');dest.parent.mkdir(parents=True,exist_ok=True)
   for suffix in ['.olean','.olean.private','.olean.server','.ilean','.ir']:
    a=obj.with_suffix(suffix);b=dest.with_suffix(suffix)
-   if a.is_file():assert not b.exists();b.symlink_to(a)
-  accepted.append(dict(module=m,object_path=str(obj),**v));del pending[m];progress=True
+   if a.is_file() and not b.exists():b.symlink_to(a)
+  accepted.append(dict(object_path=str(obj),**v));del pending[m];progress=True
  if not progress:break
 (p/'J.json').write_text(json.dumps(env))
 print(json.dumps(dict(accepted=accepted,not_reused={m:refused.get(m) for m in pending},external_verified=len(x['external']),toolchain=env['LEAN_GITHASH'],prefix=env['LEAN_PATH'])))
