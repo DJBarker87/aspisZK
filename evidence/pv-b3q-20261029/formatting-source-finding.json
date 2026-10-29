@@ -1,0 +1,384 @@
+{
+  "candidate": "unconditional binding of arbitrary deployed usize formatter to pinned Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt",
+  "source_rows": [
+    {
+      "name": "core::fmt::write",
+      "file": "core/src/fmt/mod.rs",
+      "source_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs",
+      "source_file_sha256": "ff56f0d7f3ce245b6171f2b742bfa07e1a7596158e43a9917a0340c7e9eb8a27",
+      "body_sha256": "96457db2b0d5904f1f535ff2e06c5e8b90dd33f4ae9d0e086d7c06b41ded15be",
+      "item": "fn write(output: &mut dyn Write, fmt: Arguments<'_>) -> Result {\n    if let Some(s) = fmt.as_str() {\n        return output.write_str(s);\n    }\n\n    let mut template = fmt.template;\n    let args = fmt.args;\n\n    let mut arg_index = 0;\n\n    // See comment on `fmt::Arguments` for the details of how the template is encoded.\n\n    // This must match the encoding from `expand_format_args` in\n    // compiler/rustc_ast_lowering/src/format.rs.\n    loop {\n        // SAFETY: We can assume the template is valid.\n        let n = unsafe {\n            let n = template.read();\n            template = template.add(1);\n            n\n        };\n\n        if n == 0 {\n            // End of template.\n            return Ok(());\n        } else if n < 0x80 {\n            // Literal string piece of length `n`.\n\n            // SAFETY: We can assume the strings in the template are valid.\n            let s = unsafe {\n                let s = crate::str::from_raw_parts(template.as_ptr(), n as usize);\n                template = template.add(n as usize);\n                s\n            };\n            output.write_str(s)?;\n        } else if n == 0x80 {\n            // Literal string piece with a 16-bit length.\n\n            // SAFETY: We can assume the strings in the template are valid.\n            let s = unsafe {\n                let len = usize::from(u16::from_le_bytes(template.cast_array().read()));\n                template = template.add(2);\n                let s = crate::str::from_raw_parts(template.as_ptr(), len);\n                template = template.add(len);\n                s\n            };\n            output.write_str(s)?;\n        } else if n == 0xC0 {\n            // Placeholder for next argument with default options.\n            //\n            // Having this as a separate case improves performance for the common case.\n\n            // SAFETY: We can assume the template only refers to arguments that exist.\n            unsafe {\n                args.add(arg_index)\n                    .as_ref()\n                    .fmt(&mut Formatter::new(output, FormattingOptions::new()))?;\n            }\n            arg_index += 1;\n        } else {\n            // SAFETY: We can assume the template is valid.\n            unsafe { assert_unchecked(n > 0xC0) };\n\n            // Placeholder with custom options.\n\n            let mut opt = FormattingOptions::new();\n\n            // SAFETY: We can assume the template is valid.\n            unsafe {\n                if n & 1 != 0 {\n                    opt.flags = u32::from_le_bytes(template.cast_array().read());\n                    template = template.add(4);\n                }\n                if n & 2 != 0 {\n                    opt.width = u16::from_le_bytes(template.cast_array().read());\n                    template = template.add(2);\n                }\n                if n & 4 != 0 {\n                    opt.precision = u16::from_le_bytes(template.cast_array().read());\n                    template = template.add(2);\n                }\n                if n & 8 != 0 {\n                    arg_index = usize::from(u16::from_le_bytes(template.cast_array().read()));\n                    template = template.add(2);\n                }\n            }\n            if n & 16 != 0 {\n                // Dynamic width from a usize argument.\n                // SAFETY: We can assume the template only refers to arguments that exist.\n                unsafe {\n                    opt.width = args.add(opt.width as usize).as_ref().as_u16().unwrap_unchecked();\n                }\n            }\n            if n & 32 != 0 {\n                // Dynamic precision from a usize argument.\n                // SAFETY: We can assume the template only refers to arguments that exist.\n                unsafe {\n                    opt.precision =\n                        args.add(opt.precision as usize).as_ref().as_u16().unwrap_unchecked();\n                }\n            }\n\n            // SAFETY: We can assume the template only refers to arguments that exist.\n            unsafe {\n                args.add(arg_index).as_ref().fmt(&mut Formatter::new(output, opt))?;\n            }\n            arg_index += 1;\n        }\n    }\n}",
+      "context": [
+        "impl fmt::UpperExp for Length "
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Ref": [
+              {
+                "Var": {
+                  "Free": 0
+                }
+              },
+              {
+                "DynTrait": {
+                  "binder": {
+                    "params": {
+                      "regions": [],
+                      "types": [
+                        {
+                          "index": 0,
+                          "name": "_dyn"
+                        }
+                      ],
+                      "const_generics": [],
+                      "trait_clauses": [
+                        {
+                          "clause_id": 0,
+                          "span": {
+                            "data": {
+                              "file_id": 1,
+                              "beg": {
+                                "line": 1,
+                                "col": 0
+                              },
+                              "end": {
+                                "line": 1,
+                                "col": 0
+                              }
+                            },
+                            "generated_from_span": null
+                          },
+                          "origin": "Dyn",
+                          "trait_": {
+                            "regions": [],
+                            "skip_binder": {
+                              "id": 8,
+                              "generics": {
+                                "regions": [],
+                                "types": [
+                                  {
+                                    "TypeVar": {
+                                      "Bound": [
+                                        1,
+                                        0
+                                      ]
+                                    }
+                                  }
+                                ],
+                                "const_generics": [],
+                                "trait_refs": []
+                              }
+                            }
+                          }
+                        }
+                      ],
+                      "regions_outlive": [],
+                      "types_outlive": [
+                        {
+                          "regions": [],
+                          "skip_binder": [
+                            {
+                              "TypeVar": {
+                                "Bound": [
+                                  1,
+                                  0
+                                ]
+                              }
+                            },
+                            {
+                              "Var": {
+                                "Free": 0
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "trait_type_constraints": []
+                    },
+                    "skip_binder": {
+                      "TypeVar": {
+                        "Bound": [
+                          0,
+                          0
+                        ]
+                      }
+                    },
+                    "kind": "Dyn"
+                  }
+                }
+              },
+              "Mut"
+            ]
+          },
+          {
+            "Adt": {
+              "id": {
+                "Adt": 26
+              },
+              "generics": {
+                "regions": [
+                  {
+                    "Var": {
+                      "Free": 1
+                    }
+                  }
+                ],
+                "types": [],
+                "const_generics": [],
+                "trait_refs": []
+              }
+            }
+          }
+        ],
+        "output": {
+          "Adt": {
+            "id": {
+              "Adt": 3
+            },
+            "generics": {
+              "regions": [],
+              "types": [
+                {
+                  "Adt": {
+                    "id": "Tuple",
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                },
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 32
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "core::fmt::num::imp::fmt",
+      "file": "core/src/fmt/num.rs",
+      "source_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+      "source_file_sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb",
+      "body_sha256": "2b1597f733cd0426cb588ee4af01972fbd03b121b789d903e43a5e8898d2471c",
+      "item": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {\n                #[cfg(not(feature = \"optimize_for_size\"))]\n                {\n                    const MAX_DEC_N: usize = $Unsigned::MAX.ilog10() as usize + 1;\n                    // Buffer decimals for self with right alignment.\n                    let mut buf = [MaybeUninit::<u8>::uninit(); MAX_DEC_N];\n\n                    // SAFETY: `buf` is always big enough to contain all the digits.\n                    unsafe { f.pad_integral(true, \"\", self._fmt(&mut buf)) }\n                }\n                #[cfg(feature = \"optimize_for_size\")]\n                {\n                    // Lossless conversion (with as) is asserted at the top of\n                    // this macro.\n                    ${concat($fmt_fn, _small)}(*self as $T, true, f)\n                }\n            }",
+      "context": [
+        "impl fmt::Display for $Unsigned "
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Ref": [
+              {
+                "Var": {
+                  "Free": 0
+                }
+              },
+              {
+                "Literal": {
+                  "UInt": "Usize"
+                }
+              },
+              "Shared"
+            ]
+          },
+          {
+            "Ref": [
+              {
+                "Var": {
+                  "Free": 1
+                }
+              },
+              {
+                "Adt": {
+                  "id": {
+                    "Adt": 31
+                  },
+                  "generics": {
+                    "regions": [
+                      {
+                        "Var": {
+                          "Free": 2
+                        }
+                      }
+                    ],
+                    "types": [],
+                    "const_generics": [],
+                    "trait_refs": []
+                  }
+                }
+              },
+              "Mut"
+            ]
+          }
+        ],
+        "output": {
+          "Adt": {
+            "id": {
+              "Adt": 3
+            },
+            "generics": {
+              "regions": [],
+              "types": [
+                {
+                  "Adt": {
+                    "id": "Tuple",
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                },
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 32
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "core::fmt::num::fmt",
+      "file": "core/src/fmt/num.rs",
+      "source_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+      "source_file_sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb",
+      "body_sha256": "a552bceee9be23dc2addc2495fd6ccf1c84bf19daf49752bea670681c47a5598",
+      "item": "fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {\n                // Check macro arguments at compile time.\n                const {\n                    assert!($Unsigned::MIN == 0, \"need unsigned\");\n                    assert!($dig_tab.is_ascii(), \"need single-byte entries\");\n                }\n\n                // ASCII digits in ascending order are used as a lookup table.\n                const DIG_TAB: &[u8] = $dig_tab;\n                const BASE: $Unsigned = DIG_TAB.len() as $Unsigned;\n                const MAX_DIG_N: usize = $Unsigned::MAX.ilog(BASE) as usize + 1;\n\n                // Buffer digits of self with right alignment.\n                let mut buf = [MaybeUninit::<u8>::uninit(); MAX_DIG_N];\n                // Count the number of bytes in buf that are not initialized.\n                let mut offset = buf.len();\n\n                // Accumulate each digit of the number from the least\n                // significant to the most significant figure.\n                let mut remain = *self;\n                loop {\n                    let digit = remain % BASE;\n                    remain /= BASE;\n\n                    offset -= 1;\n                    // SAFETY: `remain` will reach 0 and we will break before `offset` wraps\n                    unsafe { core::hint::assert_unchecked(offset < buf.len()) }\n                    buf[offset].write(DIG_TAB[digit as usize]);\n                    if remain == 0 {\n                        break;\n                    }\n                }\n\n                // SAFETY: Starting from `offset`, all elements of the slice have been set.\n                let digits = unsafe { slice_buffer_to_str(&buf, offset) };\n                f.pad_integral(true, $prefix, digits)\n            }",
+      "context": [
+        "impl fmt::$Trait for $Unsigned "
+      ],
+      "signature": {
+        "is_unsafe": false,
+        "abi": "Rust",
+        "is_variadic": false,
+        "inputs": [
+          {
+            "Ref": [
+              {
+                "Var": {
+                  "Free": 0
+                }
+              },
+              {
+                "Literal": {
+                  "UInt": "U32"
+                }
+              },
+              "Shared"
+            ]
+          },
+          {
+            "Ref": [
+              {
+                "Var": {
+                  "Free": 1
+                }
+              },
+              {
+                "Adt": {
+                  "id": {
+                    "Adt": 31
+                  },
+                  "generics": {
+                    "regions": [
+                      {
+                        "Var": {
+                          "Free": 2
+                        }
+                      }
+                    ],
+                    "types": [],
+                    "const_generics": [],
+                    "trait_refs": []
+                  }
+                }
+              },
+              "Mut"
+            ]
+          }
+        ],
+        "output": {
+          "Adt": {
+            "id": {
+              "Adt": 3
+            },
+            "generics": {
+              "regions": [],
+              "types": [
+                {
+                  "Adt": {
+                    "id": "Tuple",
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                },
+                {
+                  "Adt": {
+                    "id": {
+                      "Adt": 32
+                    },
+                    "generics": {
+                      "regions": [],
+                      "types": [],
+                      "const_generics": [],
+                      "trait_refs": []
+                    }
+                  }
+                }
+              ],
+              "const_generics": [],
+              "trait_refs": []
+            }
+          }
+        }
+      }
+    }
+  ],
+  "observation": "rejecting writer returns Err; model always returns Ok; concrete result tags differ",
+  "proof": "PV_B3Q_FormatCounterexample.concrete_rejection; must have successful matching source receipt and standard axioms before credit",
+  "native": "native-format-positive/receipt/receipt.json and matched native-format-negative control; pending until collected",
+  "scope_limit": "counterexample to this generic catalogue instance, not proof that formatting runs in op227 and not an op227 or privacy endpoint counterexample",
+  "required_next": "certify exclusion of all formatting/panic paths in the actual guarded source call cone, or provide a faithful stateful formatting model and replay its consumers",
+  "trust": "V370 / D381,D386 retained; no T field or hypothesis added"
+}

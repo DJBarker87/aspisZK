@@ -1,0 +1,9 @@
+from pathlib import Path
+import json,hashlib,lzma
+B=Path('evidence/pv-b3p6-20261028');D=Path('evidence/pv-b3q-20261029');table=json.loads((B/'std227-comparison-stdcone-resume5.json').read_text());capture=json.load(lzma.open(B/'std227-stdcone-resume5.json.xz','rt'));rows=[]
+for r in table['rows']:
+ if r['name']not in ['core::fmt::num::imp::fmt','core::fmt::num::fmt','core::fmt::write']:continue
+ f=capture['files'][r['file']]['deployed'];assert hashlib.sha256(f['text'].encode()).hexdigest()==f['sha256'];assert r['deployed']['item']in f['text']
+ rows.append(dict(name=r['name'],file=r['file'],source_path=f['path'],source_file_sha256=f['sha256'],body_sha256=hashlib.sha256(r['deployed']['body'].encode()).hexdigest(),item=r['deployed']['item'],context=r['deployed']['context'],signature=r['signature']))
+assert len(rows)==3
+(D/'formatting-source-finding.json').write_text(json.dumps(dict(candidate='unconditional binding of arbitrary deployed usize formatter to pinned Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt',source_rows=rows,observation='rejecting writer returns Err; model always returns Ok; concrete result tags differ',proof='PV_B3Q_FormatCounterexample.concrete_rejection; must have successful matching source receipt and standard axioms before credit',native='native-format-positive/receipt/receipt.json and matched native-format-negative control; pending until collected',scope_limit='counterexample to this generic catalogue instance, not proof that formatting runs in op227 and not an op227 or privacy endpoint counterexample',required_next='certify exclusion of all formatting/panic paths in the actual guarded source call cone, or provide a faithful stateful formatting model and replay its consumers',trust='V370 / D381,D386 retained; no T field or hypothesis added'),indent=2)+'\n')
