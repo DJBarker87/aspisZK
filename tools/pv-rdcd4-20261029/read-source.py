@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029'
 code='''from pathlib import Path
 import json,hashlib
 root=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src')
-names=['slice/iter.rs','slice/mod.rs','slice/index.rs','slice/raw.rs','array/iter.rs','array/iter/iter_inner.rs','array/mod.rs','iter/adapters/zip.rs','iter/traits/iterator.rs','iter/traits/collect.rs','iter/range.rs','ops/index_range.rs','mem/maybe_uninit.rs','mem/manually_drop.rs','ptr/mod.rs','ptr/const_ptr.rs','ptr/metadata.rs','option.rs','mem/maybe_dangling.rs','ub_checks.rs']
+names=['slice/iter.rs','slice/mod.rs','slice/index.rs','slice/raw.rs','array/iter.rs','array/iter/iter_inner.rs','array/mod.rs','iter/adapters/zip.rs','iter/traits/iterator.rs','iter/traits/collect.rs','iter/range.rs','ops/index_range.rs','mem/maybe_uninit.rs','mem/manually_drop.rs','ptr/mod.rs','ptr/const_ptr.rs','ptr/metadata.rs','option.rs','mem/maybe_dangling.rs','ub_checks.rs','cmp.rs','mem/mod.rs']
 rows=[]
 for name in names:
  p=root/name;b=p.read_bytes();rows.append(dict(path=str(p),relative=name,sha256=hashlib.sha256(b).hexdigest(),text=b.decode()))
