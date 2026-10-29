@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_CircleNeutralSubtract53
 import R1Z.PV_RunJoin_CircleNeutralAdd52
+import R1Z.PV_RunJoin_CircleNeutralWrappers53
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_CircleNeutralAddCanon53
@@ -15,7 +16,7 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
   obtain ⟨y,hy,hcanonical⟩ := PV_RunJoin_CircleNeutralSubtract53.total _ hv
   have hsource : PV_RunJoin_CircleRawScalar52.field.M31.add a b = ok y := by
     unfold PV_RunJoin_CircleRawScalar52.field.M31.add PV_RunJoin_CircleRawScalar52.field.ct.add
-    simp only [lift,bind_tc_ok,hy]
+    simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralWrappers53.add32,PV_RunJoin_CircleNeutralWrappers53.sub32,hy]
   refine ⟨y,hsource,?_,hcanonical⟩
   rw [← PV_RunJoin_CircleNeutralAdd52.complete a b ha hb]
   exact hsource

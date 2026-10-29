@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_CircleNeutralSubtract53
+import R1Z.PV_RunJoin_CircleNeutralWrappers53
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_CircleNeutralSub53
@@ -18,7 +19,7 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
   have hsource : PV_RunJoin_CircleRawScalar52.field.M31.sub a b = ok y := by
     unfold PV_RunJoin_CircleRawScalar52.field.M31.sub PV_RunJoin_CircleRawScalar52.field.ct.sub
       PV_RunJoin_CircleRawScalar52.field.P
-    simp only [lift,bind_tc_ok,hy]
+    simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralWrappers53.add32,PV_RunJoin_CircleNeutralWrappers53.sub32,hy]
   refine ⟨y,hsource,?_,hcanonical⟩
   unfold PV_RunJoin_CircleR72Raw52.field.M31.sub PV_RunJoin_CircleR72Raw52.field.P
   rw [PV_RunJoin_CircleNeutralScalar52.checked_add _ _ (by change a.val+2147483647 < 2^32;omega)]
