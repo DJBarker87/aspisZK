@@ -28,7 +28,7 @@ theorem complete
   apply PV_RunJoin_ResultBindEq55.complete
   intro maskStatus
   cases maskStatus with
-  | Err e => rfl
+  | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   | Ok maskPair =>
     simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
     apply PV_RunJoin_ResultBindEq55.complete
@@ -39,7 +39,7 @@ theorem complete
     apply PV_RunJoin_ResultBindEq55.complete
     intro appliedStatus
     cases appliedStatus with
-    | Err e => rfl
+    | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
     | Ok masks =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
       apply PV_RunJoin_ResultBindEq55.complete
@@ -47,7 +47,7 @@ theorem complete
       apply PV_RunJoin_ResultBindEq55.complete
       intro activeStatus
       cases activeStatus with
-      | Err e => rfl
+      | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
       | Ok active =>
         simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
         apply PV_RunJoin_ResultBindEq55.complete
@@ -55,7 +55,7 @@ theorem complete
         apply PV_RunJoin_ResultBindEq55.complete
         intro dStatus
         cases dStatus with
-        | Err e => rfl
+        | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
         | Ok dvec =>
           simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
           apply PV_RunJoin_ResultBindEq55.complete
@@ -63,7 +63,7 @@ theorem complete
           apply PV_RunJoin_ResultBindEq55.complete
           intro arrayStatus
           cases arrayStatus with
-          | Err e => rfl
+          | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
           | Ok d =>
             simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
             by_cases glen : (alloc.vec.Vec.len masks.g != 1024#usize)=true
@@ -109,7 +109,7 @@ theorem complete
                           apply PV_RunJoin_ResultBindEq55.complete
                           intro saltResult1
                           cases saltResult1 with
-                          | Err e => rfl
+                          | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                           | Ok salts1 =>
                             simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                             apply PV_RunJoin_ResultBindEq55.complete
@@ -117,7 +117,7 @@ theorem complete
                             apply PV_RunJoin_ResultBindEq55.complete
                             intro saltResult2
                             cases saltResult2 with
-                            | Err e => rfl
+                            | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                             | Ok salts2 =>
                               simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                               apply PV_RunJoin_ResultBindEq55.complete
@@ -125,7 +125,7 @@ theorem complete
                               apply PV_RunJoin_ResultBindEq55.complete
                               intro mappedDomain
                               cases mappedDomain with
-                              | Err e => rfl
+                              | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                               | Ok domain =>
                                 simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                                 apply PV_RunJoin_ResultBindEq55.complete
@@ -138,7 +138,7 @@ theorem complete
                                 apply PV_RunJoin_ResultBindEq55.complete
                                 intro builtStatus
                                 cases builtStatus with
-                                | Err e => rfl
+                                | Err e => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                                 | Ok sem =>
                                   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                                   apply PV_RunJoin_ResultBindEq55.complete
@@ -150,7 +150,7 @@ theorem complete
                                   apply PV_RunJoin_ResultBindEq55.complete
                                   intro balanced
                                   cases balanced with
-                                  | false => rfl
+                                  | false => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
                                   | true =>
                                     rw [PV_RunJoin_NativePhaseSource55.complete]
                                     all_goals rfl
