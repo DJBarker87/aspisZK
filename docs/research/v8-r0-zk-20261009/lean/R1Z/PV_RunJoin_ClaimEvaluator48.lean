@@ -26,7 +26,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
           (types base) (selected base heap box (@PV_DL_EncoderSelected.selected (types base) ops)))
         column point := by
   unfold PV_RunJoin_ClaimProducerCell48.evaluate
-  rw [candidate]
+  rw [@candidate (types base) (@PV_DL_EncoderSelected.selected (types base) ops)]
   exact @PV_DL_EncoderNative.selected_native (types base) ops _ _ column point
 #print axioms candidate
 #print axioms complete
