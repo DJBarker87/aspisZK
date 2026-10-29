@@ -109,3 +109,81 @@ source/feature hashes, projection proofs, joint witness, and affected replay.
 Do not anticipate or adopt the draft source. Names of rows removed at design
 stage: NONE. Acceptance failure must retain all 19 OPEN selections and all
 existing privacy premises, with no added trust or weakened observer/simulator.
+
+
+## D520 addendum: stateful PROVER world (PV-EVH4, registered before Lean)
+
+Resume baseline `27b582ca44`, same worktree and branch. The new scope is ONLY
+ProverRwFull's existing `RealR1_client.prove_for_proof_accounts`, its retry owner,
+and `prover.prove_masked_attempt`. No client extraction is attempted. D520's
+main/plan::prove blocker is retained, including the prohibition on a reference,
+port or opaque replacement. Receipts: `evidence/pv-evh4-20261029/`; IDs
+73600–73699 (audits 73697–73699), at most 100 Lean, zero native/Kani.
+The extraction/source pins in external-interface.json remain authoritative.
+
+### State and operation answers
+
+World state is an entropy response cursor, a file/handle table (including
+requested/delivered contents and durable contents), oracle query history,
+attempt/rejection counters, allocation budget/status, and runtime status.
+Clock/scheduler answers belong to the world as well, but no clock ExternalFuns
+field occurs in this extraction: outer client time is D520_time_OPEN.
+The writer stores a List NativeEvent separately from the Result. A bind hands
+the post-state to its continuation and concatenates prefixes even on failure
+or divergence. Finite interpreter fuel exhaustion is a separate status, never
+claimed as source divergence. Private entropy bytes stay in the state/answer;
+only request metadata is an observable side event.
+
+| ExternalFuns operation / reached source | NativeEvent; update; answer |
+| --- | --- |
+| op129 getrandom.fill, state_only_entropy.rs:220–238 | side entropy-request and entropy-delivery metadata; consume the next world answer and advance cursor, including error; return its typed Result and replacement slice |
+| op14 File.open / op22 OpenOptions.open, durable reserve/sync-directory | side open request plus otherFile create/failed where appropriate; allocate world handle / record failure; typed file/error answer |
+| op15 File.sync_all | otherFile sync, or failed; commit delivered bytes to durable state only on success; typed unit/error answer |
+| op18 File.write / op261 File.write_all / op16 Write.write_all.default / op17 flush | otherFile write with exact requested/delivered bytes, or failed; advance handle offset and file contents for delivered prefix; typed count/unit/error and updated handle |
+| op19–21, op24 options, op25–29 paths, op23 error kind | side with operation name and request/delivery metadata; update options/path/handle metadata; exact typed answer (not a filesystem success assertion) |
+| op30–36 and other allocating opaque helpers | side allocation request/outcome; update budget/heap or failure status; exact typed answer. Allocation/drop adequacy stays rdea-1/V370, never assumed as purity |
+| op4 drop, op13 fence, zeroize helpers, host_work.map | side operation/outcome and ordered subeffects; update runtime/heap; typed answer. Unexpanded callback/drop subeffects remain named adequacy obligations |
+| Result.fail panic / runtime abort | diag3 matching event and terminal, with preceding writer prefix retained; halted runtime; no successful continuation |
+| hash callback and digest operations | oracle address/answer at each actual callback invocation, retaining duplicates and rejected prefixes; append oracle history; typed answer |
+| attempt entry / retry branch | count / rejection; increment entered/rejected counters respectively; source branch result |
+
+Every one of the 262 external fields remains inventoried in EVH3. That static
+inventory is not a proof of a transitive effect closure. The mapping above is
+an acceptance specification, not a claim that a whole-helper answer is an
+implemented effect interpretation. Helpers with internal effects must be
+expanded or keep an explicit unmet source-association obligation.
+
+### Source execution and erasure acceptance
+
+Implement state-and-writer evaluation *before* Result evaluation. An unchanged
+Result call lifted afterward cannot meet this criterion. First establish the
+primitive and bind laws, then the extracted entropy iteration, nonce store,
+masked-attempt and proof-account call graphs. For each source-associated
+subprogram prove erasure under a world whose answers agree with a fixed
+dictionary on every reached operation. This compatibility domain must be
+stated, rather than asserting equality for all worlds/dictionaries.
+The retry loop has no global fixed-dictionary view on reject-zero then
+successful entropy: ProverRwEntropyIteration.no_retry_then_success proves this.
+NativeObstruction62 additionally rules out uniform successful capture for all
+remaining dictionaries (op132 can diverge); a successful world must choose and
+justify its remaining answers. Neither obstruction is repaired by arbitrary
+helper traces or a post-hoc Result decoder.
+
+### Boundary, projections and non-vacuity
+
+OS/runtime boundary = world answers, scheduling, delivered bytes and timing.
+Entropy distribution/freshness maps to existing T.entropy_law/entropy_kernel;
+native observation adequacy maps to T.observation. Existing V370, V371,
+rdea-1, V400, V396, D159/D166 and L1/L2/L3 remain P/previous obligations as
+already classified. No new T field is permitted. Opaque helper adequacy is P,
+not OS trust. NativeTrace/nativeFiles/nativeOracle/nativeCounts/
+nativeRejections remain unchanged. Prover projections must be proved from the
+world-run events, including the nonce-store subtrace. Client file/JSON/stderr/
+time/network inputs are explicitly D520_client_*_OPEN.
+
+A ruling-(v) witness must exhibit .Ok proof success of this SAME world-run
+entry, jointly with runjoin's opsNative installation and publication binding.
+A pure return, .Err value wrapped in Result.ok, or unrelated model trace does
+not qualify. A labelled MODEL world is permitted; universal success is false.
+Until that witness and the full entry source association compile, no runtime
+field or ledger row is claimed removed. At registration: rows removed NONE.
