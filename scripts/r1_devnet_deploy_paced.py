@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Paced deployment with retained buffer keys, byte readback and receipts."""
-import base64,hashlib,json,os,pathlib,subprocess,sys,time
+import base64,hashlib,json,os,pathlib,subprocess,sys,time,signal
 from r1_devnet_rpc import rpc
 from r1_devnet_release_gate import base58
 from r1_devnet_policy import require_key, loader_rent, close_failed_buffer
@@ -89,6 +89,8 @@ def deploy_role(role):
         finaldata=base64.b64decode(account(pd)['value']['data'][0]);assert finaldata[12]==0 and finaldata[45:]==elf
     write(role+'-rent-ledger',[loader_rent(program,account(program)['value'],C['payer']),loader_rent(pd,account(pd)['value'],C['payer'])]);write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
 
+def interrupted(signum,frame):raise KeyboardInterrupt(f'interrupted by signal {signum}')
+signal.signal(signal.SIGTERM,interrupted)
 for role in roles:
     try:
         deploy_role(role)
