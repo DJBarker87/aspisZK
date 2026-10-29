@@ -33,3 +33,7 @@ All result claims must be read against the receipts: the combined source is only
 prepared until NDR_A001 exits successfully and audits the two roots and helper
 lemmas with standard axioms. Frozen Rust, protocol parameters, features, wire format,
 and deployed artifacts have not been changed by this lane.
+
+The prepared combined audit also checks each of the 76 historical gap module names
+against the kernel environment import header and emits one exclusion marker per
+name. These checks remain unexecuted until the sole combined replay.
