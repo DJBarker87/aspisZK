@@ -107,9 +107,24 @@ for m,v in auth.items():
  used.append(dict(module=m,path=str(q),sha256=v['object_sha256']))
 for m in re.findall(r'^import (\S+)',x['source'],re.M):visit(m)
 for n in ['sources','objects','evidence']:(p/n).mkdir(parents=True,exist_ok=True)
+# Lean resolves a namespace at its first root. Build a private read-only
+# complete project overlay to avoid hiding newly imported R1Z modules.
+overlay=[]
+for m,v in visited.items():
+ if m not in x['projects']:continue
+ q=pathlib.Path(v['path']); dest=p/'objects'/(m.replace('.','/')+'.olean')
+ if dest==q:continue
+ dest.parent.mkdir(parents=True,exist_ok=True)
+ for suffix in ['.olean','.olean.private','.olean.server','.ilean','.ir']:
+  origin=q.with_suffix(suffix);target=dest.with_suffix(suffix)
+  if not origin.is_file():continue
+  digest=sha(origin)
+  if target.exists():assert sha(target)==digest,('overlay conflict',m,suffix)
+  else:target.symlink_to(origin)
+  overlay.append(dict(module=m,suffix=suffix,path=str(target),origin=str(origin),sha256=digest))
 (p/('sources/'+x['module']+'.lean')).write_text(x['source'])
 env['LEAN_PATH']=str(p/'objects')+':'+env['LEAN_PATH']+':'+x['runjoin_objects'];(p/'J.json').write_text(json.dumps(env))
-print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],shared_written=False)))
+print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],shared_written=False,project_overlay=overlay)))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
 (E/('prepare-'+module+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
