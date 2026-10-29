@@ -1,6 +1,6 @@
 {
   "evidence_class": "structural (K-1 substitute), source level under own-1",
-  "source_revision": "e8c7212feee1f3866be0a2e8261d33a0ebfa00e7",
+  "source_revision": "5375f2960f6adc34814caf196d9f8ea95c66c289",
   "sources": [
     {
       "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
@@ -86,6 +86,51 @@
       "path": "evidence/pv-rdb2e-20261029/source/digest-core-wrapper.rs",
       "deployed_path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
       "sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/try_trait.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/try_trait.rs",
+      "sha256": "8c3347dd45bbbae19c3bae2c6fb7b2f39e1a05a27cd15fcb4ed8f2d82be5dfd0"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/function.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs",
+      "sha256": "de71bdb131d527fae027f1eb32fc98cbff261bdc471f6786bbd59d6759814cf3"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/zip.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/non_null.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/mut_ptr.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mut_ptr.rs",
+      "sha256": "b2c91c8ecad105dd611f004d8af1b7ff621007485c1b65f011b17b747e74cdae"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/const_ptr.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/maybe_uninit.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/mod.rs",
+      "deployed_path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13"
+    },
+    {
+      "path": "evidence/pv-rdb2f-20261029/source/generic-array.rs",
+      "deployed_path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247"
     }
   ],
   "bindings": [
@@ -283,7 +328,7 @@
         {
           "source": "*o = u32::from_be_bytes(chunk.try_into().unwrap()); }",
           "model": "four bytes in source order; conversion cannot fail; each current word overwritten",
-          "law": "LoadWrites.every_store; inherited ShaBytes lane0..15 exact operand bindings"
+          "law": "WordArray.native_store; LoadWrites.every_store; inherited ShaBytes lane0..15 exact operand bindings"
         },
         {
           "source": "sha256_digest_block_u32(&mut state_cpy, &block_u32); }",
@@ -307,6 +352,34 @@
           "source": "try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0",
           "model": "same FnMut wrapper; never short-circuits a successful scalar result",
           "law": "FromFnGuard.complete_capture; CapturedQuotient.entire_capture"
+        }
+      ]
+    },
+    {
+      "source": "core-array-mod.rs",
+      "function": "try_from_fn",
+      "tokens_sha256": "62026faae2433884a4e348fc01fda5cda523fb1064a6e86638203488f24be4e6",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "let mut array = [const { MaybeUninit::uninit() }; N];",
+          "model": "uninitialized slots are not read; initialized count starts0 and advances only after write",
+          "law": "FromFnGuard.initialized_prefix; InitialFromFn.slice_bounds"
+        },
+        {
+          "source": "match try_from_fn_erased(&mut array, cb) {",
+          "model": "same output allocation and moved current FnMut closure",
+          "law": "CapturedQuotient.entire_capture"
+        },
+        {
+          "source": "ControlFlow::Break(r) => FromResidual::from_residual(r),",
+          "model": "unreachable for NeverShortCircuitResidual (empty enum); unwind guard drops scalar initialized prefix only",
+          "law": "exact NeverShortCircuit::branch binding; source residual has zero constructors"
+        },
+        {
+          "source": "ControlFlow::Continue(()) => { try { unsafe { MaybeUninit::array_assume_init(array) } } } }",
+          "model": "all8 slots initialized before converting; return array plus caller captured quotient remains current",
+          "law": "FromFnGuard.complete_capture; CapturedQuotient.final_capture_read"
         }
       ]
     },
@@ -391,6 +464,130 @@
           "law": "RawCursor.back_bounds; Iterator.back_source"
         }
       ]
+    },
+    {
+      "source": "try_trait.rs",
+      "function": "wrap_mut_1",
+      "tokens_sha256": "458d2afad98cafcf053012c8fef4119dd86948389912d3d5ac9362132f97c688",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "Wrapped { f, p: PhantomData }",
+          "model": "move SAME closure field f; PhantomData carries no storage or effects",
+          "law": "FromFnGuard.complete_capture; CapturedQuotient.invoke"
+        }
+      ]
+    },
+    {
+      "source": "try_trait.rs",
+      "function": "call_mut",
+      "tokens_sha256": "abcafede8bf434f0a25954098fd50b2293e35dd767837d69feebf03122d76437",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "NeverShortCircuit((self.f)(args))",
+          "model": "call current FnMut field, never a cloned captured quotient; wrap only returned scalar",
+          "law": "CapturedQuotient.invoke; CapturedQuotient.entire_capture"
+        }
+      ]
+    },
+    {
+      "source": "NeverShortCircuit-branch",
+      "function": "branch",
+      "tokens_sha256": "cd63214980f7866e913fa5f322c98a20f640d24505eaff75e385f038cdc21c13",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "ControlFlow::Continue(self.0)",
+          "model": "no Break branch; NeverShortCircuitResidual has zero constructors",
+          "law": "FromFnGuard.complete_capture"
+        }
+      ]
+    },
+    {
+      "source": "generic-array.rs",
+      "function": "deref",
+      "tokens_sha256": "0279248792fa669f217dc13da89922b3a763ee402c53a7bb87413e4a148bf028",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "unsafe { slice::from_raw_parts(self as *const Self as *const T, N::USIZE) }",
+          "model": "same contiguous initialized sequence, ArrayLength recursion and repr source fields; immutable loan",
+          "law": "GenericArrayStorage.storage_length; GenericArrayStorage.deref_same_bytes; V370 representation preservation retained"
+        }
+      ]
+    },
+    {
+      "source": "generic-array.rs",
+      "function": "deref_mut",
+      "tokens_sha256": "5628f80b5927897e7bc7274eed7f8649e75c5c7c95c1fc34c31700382a8afd07",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "unsafe { slice::from_raw_parts_mut(self as *mut Self as *mut T, N::USIZE) }",
+          "model": "same CURRENT contiguous sequence under exclusive mutable loan",
+          "law": "GenericArrayStorage.storage_length; ByteArray.native_byte_store; WordArray.native_store; V370 retained"
+        }
+      ]
+    },
+    {
+      "source": "core-slice-iter-macros.rs",
+      "function": "next",
+      "tokens_sha256": "7b56e7008295a57498dff9ae9764230c9aa62793234a2d4cbf923a84045a3c9d",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "let ptr = self.ptr; let end_or_len = self.end_or_len;",
+          "model": "load current cursor; keep old start for returned reference",
+          "law": "RawCursor.forward_bounds"
+        },
+        {
+          "source": "unsafe { if T::IS_ZST { let len = end_or_len.addr(); if len == 0 { return None; } self.end_or_len = without_provenance_mut(len.unchecked_sub(1)); } else {",
+          "model": "ZST branch unreachable for u32/u8; compiler primitive type/layout boundary named V370",
+          "law": "source type u32/u8 positive size; no replacement semantics for ZST claimed"
+        },
+        {
+          "source": "if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) { return None; }",
+          "model": "native empty check on same provenance addresses",
+          "law": "RawCursor.exact_empty"
+        },
+        {
+          "source": "self.ptr = ptr.add(1); }",
+          "model": "postincrement start, retain old ptr; stay inside owned allocation",
+          "law": "RawCursor.forward_pointer; RawCursor.forward_bounds"
+        },
+        {
+          "source": "Some({ptr}.$into_ref()) }",
+          "model": "reference names old start in CURRENT allocation; no memory store or drop effect at return",
+          "law": "RawHandles.current_array_store; WordArray.native_store; ByteArray.native_byte_store"
+        }
+      ]
+    },
+    {
+      "source": "core-slice-iter-macros.rs",
+      "function": "next_back",
+      "tokens_sha256": "025686001abb5fc0b0b19019a52d77d19552d8969406996d84b68672ae021a18",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "unsafe { if is_empty!(self) { None } else { Some(self.next_back_unchecked()) } }",
+          "model": "empty guard then same inner current iterator; no consumed element repeated",
+          "law": "RawCursor.exact_empty; RawCursor.back_bounds"
+        }
+      ]
+    },
+    {
+      "source": "core-slice-iter-macros.rs",
+      "function": "next_back_unchecked",
+      "tokens_sha256": "b2611702c98e278034b0c9eac4e7e17dce1f2672cc8d3ec8632ab8c8360f1b26",
+      "complete_body_accounted": true,
+      "steps": [
+        {
+          "source": "unsafe { self.pre_dec_end(1).$into_ref() }",
+          "model": "pre-decrement end, return NEW end reference; lower bound preserved",
+          "law": "RawCursor.backward_pointer; RawCursor.back_bounds; RawHandles.current_array_store"
+        }
+      ]
     }
   ],
   "hardware": {
@@ -416,7 +613,7 @@
   "sha_native_association": {
     "types": "Sha256VarCore(state8,count64); BlockBuffer<U64,Eager>(GenericArray bytes64,pos); Output GenericArray bytes32",
     "source_fields": "all source fields projected as owned initialized sequences; compiler representation/layout preservation retained V370",
-    "law": "NativeShaFrame.all_native_fields; NativeShaFrame.simultaneous_restore; NativeShaFrame.software_all_fields",
+    "law": "GenericArrayStorage.storage_length; ByteArray.native_byte_store; NativeShaFrame.all_native_fields; NativeShaFrame.simultaneous_restore; NativeShaFrame.software_all_fields",
     "padding": "inherited exact digest_pad/len64_padding_be model, position0..63, suffix8, both callbacks and pos reset",
     "serialization": "all eight state words, chunks_exact_mut(4), exact to_be_bytes copy, inherited ShaSerialize law"
   },

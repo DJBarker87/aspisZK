@@ -19,7 +19,7 @@ for r in json.loads((old/'source-paths.json').read_text()):
  p=old/r['snapshot'];assert sha(p.read_bytes())==r['sha256'];sources.append(dict(path=str(p.relative_to(R)),deployed_path=r['path'],sha256=r['sha256']))
 rows=[]
 def bind(file,fn,steps):
- s=rust[file] if file in rust else (old/'source'/file).read_text();native=body(s,fn);joined=tokens('{'+''.join(x[0]for x in steps)+'}')
+ s=rust[file] if file in rust else ((old/'source'/file)if(old/'source'/file).exists()else(E/'source'/file)).read_text();native=body(s,fn);joined=tokens('{'+''.join(x[0]for x in steps)+'}')
  assert native==joined,(file,fn,'unaccounted or changed source statement')
  rows.append(dict(source=file,function=fn,tokens_sha256=sha('\0'.join(native).encode()),complete_body_accounted=True,steps=[dict(source=src,model=mdl,law=law)for src,mdl,law in steps]))
 sampler=paths[0]
@@ -58,11 +58,16 @@ bind('sha256-soft.rs','compress',[
  ('let mut state_cpy = *state;','copy all eight initialized words from current native core state','NativeShaFrame.simultaneous_restore; SoftOuter.blocks'),
  ('for block in blocks {','same immutable block list, in order; local state_cpy threaded','SoftOuter.compression_trace'),
  ('for (o, chunk) in block_u32.iter_mut().zip(block.chunks_exact(4)) {','IterMut16 and chunks_exact64/4 both sixteen; current output handle','LoadWrites.zip_trip_count; LoadWrites.chunk_exact'),
- ('*o = u32::from_be_bytes(chunk.try_into().unwrap()); }','four bytes in source order; conversion cannot fail; each current word overwritten','LoadWrites.every_store; inherited ShaBytes lane0..15 exact operand bindings'),
+ ('*o = u32::from_be_bytes(chunk.try_into().unwrap()); }','four bytes in source order; conversion cannot fail; each current word overwritten','WordArray.native_store; LoadWrites.every_store; inherited ShaBytes lane0..15 exact operand bindings'),
  ('sha256_digest_block_u32(&mut state_cpy, &block_u32); }','exact bound software word-block extraction, complete returned state','FallbackBlockTotal.total; SoftOuter.compression_trace'),
  ('*state = state_cpy;','whole final state copy, including empty-list case; all other native fields framed','SoftOuter.final_store; NativeShaFrame.simultaneous_restore')])
 bind('core-array-mod.rs','from_fn',[
  ('try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0','same FnMut wrapper; never short-circuits a successful scalar result','FromFnGuard.complete_capture; CapturedQuotient.entire_capture')])
+bind('core-array-mod.rs','try_from_fn',[
+ ('let mut array = [const { MaybeUninit::uninit() }; N];','uninitialized slots are not read; initialized count starts0 and advances only after write','FromFnGuard.initialized_prefix; InitialFromFn.slice_bounds'),
+ ('match try_from_fn_erased(&mut array, cb) {','same output allocation and moved current FnMut closure','CapturedQuotient.entire_capture'),
+ ('ControlFlow::Break(r) => FromResidual::from_residual(r),','unreachable for NeverShortCircuitResidual (empty enum); unwind guard drops scalar initialized prefix only','exact NeverShortCircuit::branch binding; source residual has zero constructors'),
+ ('ControlFlow::Continue(()) => { try { unsafe { MaybeUninit::array_assume_init(array) } } } }','all8 slots initialized before converting; return array plus caller captured quotient remains current','FromFnGuard.complete_capture; CapturedQuotient.final_capture_read')])
 bind('core-array-mod.rs','try_from_fn_erased',[
  ('let mut guard = Guard { array_mut: buffer, initialized: 0 };','exclusive initialized-prefix guard starts at zero, same output allocation','FromFnGuard.guarded; CapturedQuotient.guardBody'),
  ('while guard.initialized < guard.array_mut.len() {','guard count is index; element count8; actual live buffer','CapturedQuotient.body_association; InitialFromFn.slice_bounds'),
@@ -77,6 +82,30 @@ bind('core-array-mod.rs','drop',[
  ('unsafe { self.array_mut.get_unchecked_mut(..self.initialized).assume_init_drop(); }','on unwind only initialized u32 prefix is dropped; u32 has no destructor, captured quotient not rolled back','source scalar drop glue; V370 compiler preservation retained')])
 bind('core-iter-rev.rs','next',[
  ('self.iter.next_back()','delegate to the same inner iterator, no copy/reset/duplicate','RawCursor.back_bounds; Iterator.back_source')])
+# Remaining native wrapper bodies, from the exact deployed sources.
+for r in json.loads((E/'extra-source-pins.json').read_text()):
+ p=E/r['snapshot'];assert sha(p.read_bytes())==r['sha256'];sources.append(dict(path=str(p.relative_to(R)),deployed_path=r['path'],sha256=r['sha256']))
+bind('try_trait.rs','wrap_mut_1',[
+ ('Wrapped { f, p: PhantomData }','move SAME closure field f; PhantomData carries no storage or effects','FromFnGuard.complete_capture; CapturedQuotient.invoke')])
+bind('try_trait.rs','call_mut',[
+ ('NeverShortCircuit((self.f)(args))','call current FnMut field, never a cloned captured quotient; wrap only returned scalar','CapturedQuotient.invoke; CapturedQuotient.entire_capture')])
+rust['NeverShortCircuit-branch']= (E/'source/try_trait.rs').read_text().split('impl<T> const Try for NeverShortCircuit<T>',1)[1]
+bind('NeverShortCircuit-branch','branch',[
+ ('ControlFlow::Continue(self.0)','no Break branch; NeverShortCircuitResidual has zero constructors','FromFnGuard.complete_capture')])
+bind('generic-array.rs','deref',[
+ ('unsafe { slice::from_raw_parts(self as *const Self as *const T, N::USIZE) }','same contiguous initialized sequence, ArrayLength recursion and repr source fields; immutable loan','GenericArrayStorage.storage_length; GenericArrayStorage.deref_same_bytes; V370 representation preservation retained')])
+bind('generic-array.rs','deref_mut',[
+ ('unsafe { slice::from_raw_parts_mut(self as *mut Self as *mut T, N::USIZE) }','same CURRENT contiguous sequence under exclusive mutable loan','GenericArrayStorage.storage_length; ByteArray.native_byte_store; WordArray.native_store; V370 retained')])
+bind('core-slice-iter-macros.rs','next',[
+ ('let ptr = self.ptr; let end_or_len = self.end_or_len;','load current cursor; keep old start for returned reference','RawCursor.forward_bounds'),
+ ('unsafe { if T::IS_ZST { let len = end_or_len.addr(); if len == 0 { return None; } self.end_or_len = without_provenance_mut(len.unchecked_sub(1)); } else {','ZST branch unreachable for u32/u8; compiler primitive type/layout boundary named V370','source type u32/u8 positive size; no replacement semantics for ZST claimed'),
+ ('if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) { return None; }','native empty check on same provenance addresses','RawCursor.exact_empty'),
+ ('self.ptr = ptr.add(1); }','postincrement start, retain old ptr; stay inside owned allocation','RawCursor.forward_pointer; RawCursor.forward_bounds'),
+ ('Some({ptr}.$into_ref()) }','reference names old start in CURRENT allocation; no memory store or drop effect at return','RawHandles.current_array_store; WordArray.native_store; ByteArray.native_byte_store')])
+bind('core-slice-iter-macros.rs','next_back',[
+ ('unsafe { if is_empty!(self) { None } else { Some(self.next_back_unchecked()) } }','empty guard then same inner current iterator; no consumed element repeated','RawCursor.exact_empty; RawCursor.back_bounds')])
+bind('core-slice-iter-macros.rs','next_back_unchecked',[
+ ('unsafe { self.pre_dec_end(1).$into_ref() }','pre-decrement end, return NEW end reference; lower bound preserved','RawCursor.backward_pointer; RawCursor.back_bounds; RawHandles.current_array_store')])
 # Both algorithms use exactly the same sixteen macro stages and rotation order.
 soft=(old/'source/sha256-soft.rs').read_text();hard=(old/'source/sha256-x86.rs').read_text()
 pattern=r'^\s*((?:schedule_)?rounds4!\([^;]+\);)'
@@ -84,5 +113,5 @@ a=[v for v in re.findall(pattern,soft,re.M)if "$"not in v];b=[v for v in re.find
 hardware=dict(source='sha256-x86.rs',conditional='SHA_NI_IntrinsicsSemantics',macro_stages=16,source_sha256=sha(hard.encode()),proof='ShaNi.word_block_semantics; ShaNi.digest_blocks_refinement; ShaNi.conditional_dispatch',instruction_groups=['add32','rnds2','shuffle0x0E followed by rnds2 (upper unused lanes differ)','msg1','alignr4','msg2','state loadu/shuffleB1/shuffle1B/alignr8/blendF0 pack','four loadu/byte-shuffle MASK inputs','final shuffle1B/shuffleB1/blendF0/alignr8/two storeu unpack'],pending='owner item3',added_to_T=False)
 # Actual finalizer copy, pad branches and type aliases were token-bound in the inherited source gate.
 prior=json.loads((old/'structural-binding.json').read_text());assert all(r.get('byte_equal',True)for r in prior['checks'])
-result=dict(evidence_class='structural (K-1 substitute), source level under own-1',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),sources=sources,bindings=rows,hardware=hardware,sha_native_association=dict(types='Sha256VarCore(state8,count64); BlockBuffer<U64,Eager>(GenericArray bytes64,pos); Output GenericArray bytes32',source_fields='all source fields projected as owned initialized sequences; compiler representation/layout preservation retained V370',law='NativeShaFrame.all_native_fields; NativeShaFrame.simultaneous_restore; NativeShaFrame.software_all_fields',padding='inherited exact digest_pad/len64_padding_be model, position0..63, suffix8, both callbacks and pos reset',serialization='all eight state words, chunks_exact_mut(4), exact to_be_bytes copy, inherited ShaSerialize law'),library_association=dict(IterMut='non-ZST ptr/end; next postincrements old ptr; next_back empty guard then predecrement end; current exclusive array address mapped by RawHandles',Rev='next -> inner.next_back exactly',FnMut='capture allocation persists; invoke returns digit,current quotient; Guard writes item then increments initialized; forget at8',drop_glue='all elements u8/u32, reference and iterator values have no user Drop; initialized-prefix guard cleanup on unwind drops only scalar words; release-active failure branches accounted by source bounds/P nonzero',compiler='V370 and D381/D386 explicitly retained; no machine-code equivalence claimed'),inherited_evidence=['../pv-rdb2e-20261029/structural-binding.json','../pv-rdb2e-20261029/fallback-source-binding.json','../pv-rdb2e-20261029/sha-stage-binding.json'],T=['entropy_law','entropy_kernel','observation'],composition_trust='reclassification within existing tool trust, never premise removal')
+result=dict(evidence_class='structural (K-1 substitute), source level under own-1',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),sources=sources,bindings=rows,hardware=hardware,sha_native_association=dict(types='Sha256VarCore(state8,count64); BlockBuffer<U64,Eager>(GenericArray bytes64,pos); Output GenericArray bytes32',source_fields='all source fields projected as owned initialized sequences; compiler representation/layout preservation retained V370',law='GenericArrayStorage.storage_length; ByteArray.native_byte_store; NativeShaFrame.all_native_fields; NativeShaFrame.simultaneous_restore; NativeShaFrame.software_all_fields',padding='inherited exact digest_pad/len64_padding_be model, position0..63, suffix8, both callbacks and pos reset',serialization='all eight state words, chunks_exact_mut(4), exact to_be_bytes copy, inherited ShaSerialize law'),library_association=dict(IterMut='non-ZST ptr/end; next postincrements old ptr; next_back empty guard then predecrement end; current exclusive array address mapped by RawHandles',Rev='next -> inner.next_back exactly',FnMut='capture allocation persists; invoke returns digit,current quotient; Guard writes item then increments initialized; forget at8',drop_glue='all elements u8/u32, reference and iterator values have no user Drop; initialized-prefix guard cleanup on unwind drops only scalar words; release-active failure branches accounted by source bounds/P nonzero',compiler='V370 and D381/D386 explicitly retained; no machine-code equivalence claimed'),inherited_evidence=['../pv-rdb2e-20261029/structural-binding.json','../pv-rdb2e-20261029/fallback-source-binding.json','../pv-rdb2e-20261029/sha-stage-binding.json'],T=['entropy_law','entropy_kernel','observation'],composition_trust='reclassification within existing tool trust, never premise removal')
 (E/'own1-binding.json').write_text(json.dumps(result,indent=2)+'\n');print('PASS source statement coverage:',len(rows),'whole source bodies;16 matched hardware macro stages. Lean laws must separately pass.')
