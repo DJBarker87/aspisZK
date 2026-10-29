@@ -30,3 +30,13 @@ Point/product cuts overapproximate all canonical replies. L059 constructs the ac
 | NEA_fold::bm / M31::mul | NEA_CurrentProducts.base (L067), current_mul_mod | Canonical scalar operands; native stub asserts both. |
 
 The memo log returns an arbitrary canonical value on the first occurrence of each operand pair and the same value thereafter. The read-only reference replay asserts that every reference product has the same recorded native operands. This overapproximates deterministic emitted products. Its Lean instantiation uses the exact natural product laws above; a missing replay entry is an assertion failure, never an assumption. Unused inverse-array cells are unrestricted; used cells alone are canonical. No inverse/nonzero relation is required by either fold.
+
+## Existing CLOSED linear callees (new native checks; draft WideLinear is unused)
+
+The smaller fold native shape replaces E::add/sub by the exact canonical eight-word operations of the already CLOSED field leaves. Native K052/K053 and K054/K055 test the proposed replacements against the ACTUAL deployed frozen methods, with matched inverted checks. The named model laws remain NBG_WideCarriers.wide_add, NBG_CheckedSub.wide_result, the coherent CurrentWide.Proof.wide_add_total_exact / wide_sub_total_exact and SAQ_RawWide.add_exact/sub_exact. Their canonical carrier / natural field interpretation is the existing lower NBG P6/D188 transport, not a new whole-fold premise. No new theorem is attributed to the failed NEA_WideLinear draft. This is not stub_verified substitution.
+
+The BM product cut now accepts all raw u32 operands: NEA_CurrentProducts.base and current_mul_mod already prove this domain. The final fold PacketDomain is ONLY canonical alpha and four canonical input E values. Every inverse-array word is unrestricted; no inverse/nonzero condition is required. Native SM still asserts its scalar input canonical, which follows from a constant quarter/half or a canonical BM reply. EM asserts both input E values canonical; linear cuts assert both input E values canonical. Final posts also expose canonical output. Final native credit still requires positive and matched failing controls plus the same-configuration official KMX control.
+
+## OPEN prefix product step
+
+NEA_prefix::mul replaces M31::mul only in K037/K038, neither credited (timeouts). Paired law: NEA_CurrentProducts.base and AspisR1.ExtractedCurrentReducer.current_mul_mod, all raw u32 operands, canonical exact natural modular product. Its native step records the SAME old product and flat[index], reply and count; the full Vec append/frame and source-loop association remain OPEN. No multiplication was evaluated in Kani.

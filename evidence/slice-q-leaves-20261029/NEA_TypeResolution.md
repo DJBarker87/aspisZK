@@ -23,3 +23,7 @@ This note is a source/type finding for the composition worker, not a checked
 per-edge certificate and not permission to hand-edit the authoritative ledger.
 No composed status is changed. NEB must instantiate the actual carrier
 resolution in its composed theorem before pruning alternatives.
+
+## Deployed accumulation correction
+
+accumulate_batched_with_node has no Observer argument and does not call mark. Its trace::value callee uses Option-free let _=(tag,index,x) when feature prover is absent. Every deployed graph receipt confirms prover is absent from aspis-r1-cost-probe. The earlier matrix's blanket Option<fn> quarantine for this helper was incorrect; it is withdrawn. The actual blockers are BatchedWeights::push/update_residue_row and native/model basis/weight iteration and frame association. Query_values/query_loop still reach mark(obs,Phase::Query(i)) and remain quarantined; mark is exactly if let Some(f)=obs {f(p)}. No literal-None specialization is used.
