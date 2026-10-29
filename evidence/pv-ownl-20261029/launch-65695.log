@@ -1,0 +1,82 @@
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:31:59: error(lean.unknownIdentifier): Unknown constant `Fin.prod_univ_zero`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:31:7: error: unsolved goals
+case nil
+K : Type
+inst✝ : Field K
+width pref index : ℕ
+⊢ 1 = ∏ x, if pref.testBit (width - 1 - (index + ↑x)) = true then [].get x else 1 - [].get x
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:33:53: error(lean.unknownIdentifier): Unknown constant `Fin.prod_univ_succ`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:37:2: error: Tactic `apply` failed: could not unify the conclusion of `Finset.prod_congr rfl`
+  Finset.prod ?m.72 ?m.69 = Finset.prod ?m.72 ?m.70
+with the goal
+  ((if pref.testBit (width - 1 - index) = true then x else 1 - x) *
+      ∏ i, if pref.testBit (width - 1 - (index + 1 + ↑i)) = true then xs.get i else 1 - xs.get i) =
+    ∏ x_1, if pref.testBit (width - 1 - (index + ↑x_1)) = true then (x :: xs).get x_1 else 1 - (x :: xs).get x_1
+
+Note: The full type of `Finset.prod_congr rfl` is
+  (∀ x ∈ ?m.72, ?m.69 x = ?m.70 x) → Finset.prod ?m.72 ?m.69 = Finset.prod ?m.72 ?m.70
+
+case cons
+K : Type
+inst✝ : Field K
+width pref : ℕ
+x : K
+xs : List K
+ih :
+  ∀ (index : ℕ),
+    (factors width pref index xs).prod =
+      ∏ i, if pref.testBit (width - 1 - (index + ↑i)) = true then xs.get i else 1 - xs.get i
+index : ℕ
+⊢ ((if pref.testBit (width - 1 - index) = true then x else 1 - x) *
+      ∏ i, if pref.testBit (width - 1 - (index + 1 + ↑i)) = true then xs.get i else 1 - xs.get i) =
+    ∏ x_1, if pref.testBit (width - 1 - (index + ↑x_1)) = true then (x :: xs).get x_1 else 1 - (x :: xs).get x_1
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:34:3: warning: This simp argument is unused:
+  List.get_cons_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵s̵,̵L̵i̵s̵t̵.̵p̵r̵o̵d̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵'̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲f̲a̲c̲t̲o̲r̲s̲,̲ ̲L̲i̲s̲t̲.̲p̲r̲o̲d̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲'̲,̲
+  ̲ ̲ ̲ ̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:34:22: warning: This simp argument is unused:
+  List.get_cons_succ'
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵s̵,̵L̵i̵s̵t̵.̵p̵r̵o̵d̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵'̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲f̲a̲c̲t̲o̲r̲s̲,̲ ̲L̲i̲s̲t̲.̲p̲r̲o̲d̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:34:42: warning: This simp argument is unused:
+  Fin.val_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵s̵,̵L̵i̵s̵t̵.̵p̵r̵o̵d̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵'̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲f̲a̲c̲t̲o̲r̲s̲,̲ ̲L̲i̲s̲t̲.̲p̲r̲o̲d̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲'̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:34:55: warning: This simp argument is unused:
+  Fin.val_succ
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵s̵,̵L̵i̵s̵t̵.̵p̵r̵o̵d̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵'̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲f̲a̲c̲t̲o̲r̲s̲,̲ ̲L̲i̲s̲t̲.̲p̲r̲o̲d̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲'̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean:34:68: warning: This simp argument is unused:
+  Nat.add_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [̵f̵a̵c̵t̵o̵r̵s̵,̵L̵i̵s̵t̵.̵p̵r̵o̵d̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵F̵i̵n̵.̵p̵r̵o̵d̵_̵u̵n̵i̵v̵_̵s̵u̵c̵c̵,̵
+  ̵ ̵ ̵ ̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵z̵e̵r̵o̵,̵L̵i̵s̵t̵.̵g̵e̵t̵_̵c̵o̵n̵s̵_̵s̵u̵c̵c̵'̵,̵F̵i̵n̵.̵v̵a̵l̵_̵z̵e̵r̵o̵,̵F̵i̵n̵.̵v̵a̵l̵_̵s̵u̵c̵c̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲f̲a̲c̲t̲o̲r̲s̲,̲ ̲L̲i̲s̲t̲.̲p̲r̲o̲d̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲F̲i̲n̲.̲p̲r̲o̲d̲_̲u̲n̲i̲v̲_̲s̲u̲c̲c̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲z̲e̲r̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲_̲c̲o̲n̲s̲_̲s̲u̲c̲c̲'̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲z̲e̲r̲o̲,̲ ̲F̲i̲n̲.̲v̲a̲l̲_̲s̲u̲c̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWNL_PrefixProduct.fold_product' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWNL_PrefixProduct.factors_product' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNL_PrefixProduct.prefix_weight' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65695/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65695/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects/R1Z/PV_OWNL_PrefixProduct.olean", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_PrefixProduct.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:00.86", "peak_rss_kib": "1706340", "swap": "0", "source_revision": "bc934459b50ceaca93c1091a935b873ed3d6d232", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

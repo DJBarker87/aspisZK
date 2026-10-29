@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65653/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65653/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects/R1Z/PV_OWNL_InputBytes.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_InputBytes.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.28",
+  "peak_rss_kib": "2631144",
+  "swap": "0",
+  "source_revision": "b6c8487cdfa9eadd85ea3bd1df7c5b86c485c010",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_InputBytes.lean:16:42: error(lean.unknownIdentifier): Unknown constant `Nat.div_div`\n/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_InputBytes.lean:17:47: error(lean.unknownIdentifier): Unknown constant `Nat.div_div`\n/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_InputBytes.lean:19:6: error(lean.unknownIdentifier): Unknown constant `Nat.div_div`\n/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_InputBytes.lean:24:1: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  g \u2265 0\n  f \u2265 0\n  e \u2265 0\n  d \u2265 0\n  0 \u2264 d \u2264 255\n  c \u2265 0\n  0 \u2264 c - 256*d \u2264 255\n  b \u2265 0\n  0 \u2264 b - 256*c \u2264 255\n  b - e - 256*f - 65536*g \u2265 1\n  0 \u2264 a \u2264 4294967295\n  0 \u2264 a - 256*b \u2264 255\n  0 \u2264 a - 65536*c \u2264 65535\n  0 \u2264 a - 16777216*d \u2264 16777215\nwhere\n a := \u2191x\n b := \u2191x / 256\n c := \u2191x / 65536\n d := \u2191x / 16777216\n e := \u2191(x % 256, x / 256 % 256, x / 65536 % 256, x / 16777216 % 256).2.1\n f := \u2191(x % 256, x / 256 % 256, x / 65536 % 256, x / 16777216 % 256).2.2.1\n g := \u2191(x % 256, x / 256 % 256, x / 65536 % 256, x / 16777216 % 256).2.2.2\n'R1Z.PV_OWNL_InputBytes.read_write' depends on axioms: [propext, sorryAx]\n'R1Z.PV_OWNL_InputBytes.checked_iff' depends on axioms: [propext, sorryAx]\n'R1Z.PV_OWNL_InputBytes.accepted_canonical' depends on axioms: [propext, sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 65653,
+  "module": "R1Z/PV_OWNL_InputBytes",
+  "source_blob": "7872c23674a5a7ab5b71340fba776b4caee7e269",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNL_InputBytes.lean",
+  "source_sha256": "aca2bf8d320d6a62cac28bb30fc96c4e9f880032f2f9a075dbe80f02f9b7b3c3",
+  "imports": [
+    "R1Z.PV_OWNK_TowerCanon"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNK_TowerCanon": "78169e8035d648fdf78384349044d34245d9cfd1577693a4ea9fe73b8ba3a2a4"
+  },
+  "deps_fingerprint": "7d42bd01d91138588a6460d6f94655bd2b85af56b46ba3a853f0657d1b749c56"
+}
