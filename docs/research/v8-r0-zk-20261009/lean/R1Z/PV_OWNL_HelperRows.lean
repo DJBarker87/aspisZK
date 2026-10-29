@@ -82,7 +82,7 @@ theorem vector_canonical (inverse : Q → Option Q) (chi : Q) (rs : List Row)
     cases Option.some.inj h
     intro q hq
     rcases List.mem_cons.mp hq with rfl | hq
-    · exact row_canonical inverse chi value r hr
+    · exact row_canonical inverse chi q r hr
     · exact ih rest ht q hq
 
 theorem vector_length (inverse : Q → Option Q) (chi : Q) (rs : List Row)
