@@ -26,7 +26,7 @@ theorem canonical_call_domain_nonvacuous16 :
   · cases third; exact positive
   rcases List.mem_cons.mp rest with fourth | rest
   · cases fourth; exact positive
-  exact False.elim (List.not_mem_nil word rest)
+  exact False.elim (List.not_mem_nil rest)
 
 #print axioms canonical_call_domain_nonvacuous16
 end PV_B3P_Domain16227
