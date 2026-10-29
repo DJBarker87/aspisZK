@@ -32,8 +32,8 @@ theorem complete (evaluate : Column → Result W) (columns : List Column)
   | nil => simp only [PV_RunJoin_ClaimProducer48.run,values,bytes,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,List.append_nil]
   | cons c cs ih =>
     cases he : evaluate c with
-    | fail e => simp only [PV_RunJoin_ClaimProducer48.run,values,he,bind_tc_fail,mapResult]
-    | div => simp only [PV_RunJoin_ClaimProducer48.run,values,he,bind_tc_div,mapResult]
+    | fail e => simp only [PV_RunJoin_ClaimProducer48.run,values,he,bind_tc_fail,mapResult,PV_B2_E_OrdinaryOriginal.mapResult]
+    | div => simp only [PV_RunJoin_ClaimProducer48.run,values,he,bind_tc_div,mapResult,PV_B2_E_OrdinaryOriginal.mapResult]
     | ok v =>
       obtain ⟨mid,hm,hv⟩ := PV_RunJoin_ByteAppend38.append out
         (Array.to_slice (PV_RunJoin_FlatBytes35.wire v)) (by
