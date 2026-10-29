@@ -13,10 +13,12 @@ for p in paths:
  rp=p/'receipt/receipt.json'
  if not rp.exists():
   if (p/'refusal.json').exists():
-   refusal=json.loads((p/'refusal.json').read_text());refusal['label']=p.name
-   # A refused admission cannot feed an audit or consume a compiler attempt.
+   refusal=json.loads((p/'refusal.json').read_text());refusal.update(label=p.name,refusal_source='refusal.json')
    refusals.append(refusal)
+  elif (p/'barrier.json').exists() and json.loads((p/'barrier.json').read_text()).get('allowed')is not True:
+   refusals.append(dict(label=p.name,exit=78,allowed=False,charged_lean_attempts=0,compiler_started=False,cgroup_scope_started=True,refusal_source='barrier.json',wait_seconds_required=180))
   continue
+
  x=json.loads(rp.read_text());log=(rp.parent/'stdout.log').read_text()+'\n'+(rp.parent/'stderr.log').read_text()
  for name in ['reservation.json','barrier.json']:
   q=p/name
@@ -37,7 +39,7 @@ refusal_timing=[]
 for r in refusals:
  p=H/r['label'];q=p/'reservation.json'
  if not q.exists():continue
- start=max(utc(q),(p/'refusal.json').stat().st_mtime);after=[]
+ start=max(utc(q),(p/r['refusal_source']).stat().st_mtime);after=[]
  for p2 in paths:
   if not (p2/'reservation.json').exists():continue
   t=utc(p2/'reservation.json')

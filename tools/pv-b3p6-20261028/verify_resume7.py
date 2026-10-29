@@ -7,6 +7,7 @@ assert sorted(t['used_ids'])==list(range(61500,61600))
 assert t['audit_ids_used']==[61597,61598,61599]
 assert len(native)<=60 and t["native_scopes"]==len(native) and t["kani_runs"]==0
 admission=json.loads((D/'admission-audit.json').read_text());assert admission['errors']==[] and admission['void_attempts']==[]
+assert len(admission['refusals'])==len(t['refusals'])==5
 allowed={'propext','Classical.choice','Quot.sound'};bad=[];latest={};peak=[]
 for row in index+native:
  p=D/row['receipt'];r=json.loads(p.read_text());log=(p.parent/'stdout.log').read_text()+'\n'+(p.parent/'stderr.log').read_text()
@@ -26,6 +27,11 @@ assert not bad,bad
 for module,row in latest.items():
  p=Path('evidence/pv-b3p6-20261028/lean')/(module+'.lean')
  assert p.exists() and hashlib.sha256(p.read_bytes()).hexdigest()==row['source_sha256'],module
+auditrow=next(r for r in index if r['attempt']==61598)
+auditlog=(D/auditrow['receipt']).parent.joinpath('stdout.log').read_text()
+audited=re.findall(r"^'([^'\n]+)' (?:depends on axioms:|does not depend on any axioms)",auditlog,re.M)
+expected=json.loads((D/'audit-theorems.json').read_text())
+assert len(audited)==83 and len(set(audited))==83 and sorted(audited)==sorted(expected)
 external=json.loads((D/'external-verification-resume7.json').read_text());assert external['checked_before_any_compile'] and not external['mismatches']
 for p in D.rglob('*.sha256'):
  target=Path(str(p)[:-7]+'.xz')

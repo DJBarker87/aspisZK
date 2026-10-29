@@ -1,8 +1,8 @@
 # D414 / V244 continuation residuals
 
-This file is finalized with the final receipt index. Until then, source candidates
-are not credited by their presence. The accepted-module list and theorem audit
-separate checked laws from uncompiled or rejected candidates.
+Status: V244 SUSPENDED at the exhausted 100-attempt budget, with the exact
+public-digest continuation blocker below. The accepted-module list and theorem
+audit separate checked laws from rejected or uncompiled candidates.
 
 ## (a) Full composition and successful reference witness
 
@@ -22,15 +22,22 @@ a premise:
 ```
 
 Then prove `.ok (.Ok value)` for `reference227`, and transport that successful
-witness through the original262-field carrier and installed callback. The missing
-callee chain includes the completed Poseidon projected evaluator success law,
-`add_preweighted` (including the actual window bounds), public-digest/scalar
-callers and `semantic_packed`. Existing reverse-fold and equality laws are
-supporting predecessors, not the missing full composition theorem.
+witness through the original262-field carrier and installed callback. The remaining callee chain is public-digest and semantic-packed composition,
+then the outer stage composition. The projected Poseidon evaluator, preweighted
+loop and scalar/semantic callers now have accepted symbolic success laws.
 
-The preweighted and Poseidon source candidates are credited only where final
-receipts have exit0 and their axioms audit is accepted. No whole reference was
-kernel-reduced. No `decide`/`native_decide` nonvacuity proof was used.
+Exact blocker: attempt61596 rejects
+`PV_B3P_PublicDigestSuccess227.lean:111`, at `simp only [bind_tc_ok]`, with the
+default maximum recursion depth reached while traversing a nested continuation.
+The candidate's three attempts61594–61596 failed; it is excluded from the
+accepted closure. `PV_B3P_SemanticPackedSuccess227` is an uncompiled draft that
+imports that rejected candidate. It earns no credit. The next focused change
+is shallow head-only bind rewrites or named suffix stages instead of simplifying
+through the entire nested continuation. Do not raise the recursion limit or
+reduce the whole reference. No `decide`/`native_decide` nonvacuity proof was used.
+
+The three reserved audits61597–61599 passed for the frozen supporting closure,
+including all83 named new supporting theorems; they are not an endpoint replay.
 
 ## (b) Universal shipped-to-owned structural binding
 

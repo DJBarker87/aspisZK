@@ -33,3 +33,22 @@
   or sorryAx report is credited by the final axioms audit.
 - Charon/Aeneas semantic uses are reclassification within existing tool trust.
   Compiler/runtime glue remains a named P boundary, never a new T field.
+
+- The last local audit command had a shell-quoting error before SSH; no scope
+  started and no ID was consumed. It was replaced with the retained Python
+  audit helper. A local receipt verifier also ran before the receipt transfer
+  finished; its missing-file failure is not a compiler attempt or proof result.
+- Final accounting is100 charged Lean attempts (IDs61500–61599),3 optimized
+  native LLVM scopes and0 Kani. All three reserved audit targets exited0.
+  The private pinned cache is retained for the unfinished V244 job under
+  AGENTS resource rule6; see cache-retention.json and private-object-manifest.json.
+  No compiled artifacts or wallet/account keys were deleted.
+- Final admission collection distinguishes three outer reservation refusals
+  and two inner barrier refusals (61536/61554). The latter started capped guard
+  scopes but no compiler/receipt. All five have full180-second cooldown evidence;
+  the collector was corrected to include inner refusals, matching TALLY. No
+  compiler artifact was produced or consumed after a refused admission.
+- `git diff --cached --check` reports trailing whitespace in exact retained
+  historical source snapshots and Lean diagnostic logs. These bytes are kept
+  unchanged for hash/provenance checks; maintained source/report changes pass
+  the whitespace check when the raw receipt directory is excluded.
