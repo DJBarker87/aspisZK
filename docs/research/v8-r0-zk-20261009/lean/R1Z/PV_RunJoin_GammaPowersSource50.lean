@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_EncoderGammaFields49
 import R1Z.ProverRwP6PowersGammaSource
+import R1Z.PV_RunJoin_ResultMap50
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_GammaPowersSource50
@@ -17,6 +18,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     @weights.powers (types base)
       (selected base heap box (@PV_DL_EncoderSelected.selected (types base) (@PV_RunJoin_GammaPowers44.inputs (types base) ops)))
       29#usize (fromW g)=mapResult (amap fromW) (AspisR1ProducerRelease47.gamma g) := by
+  letI : ExternalTypes := types base
   change @ExternalFuns.op254 (types base) (selected base heap box _) 29#usize (fromW g)=_
   rw [PV_RunJoin_EncoderGammaFields49.powers base heap box]
   change ProverRwP6PowersInstall.powers ops 29#usize (fromW g)=_
