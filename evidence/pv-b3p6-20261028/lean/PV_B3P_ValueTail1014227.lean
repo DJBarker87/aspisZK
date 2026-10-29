@@ -6,8 +6,8 @@ set_option autoImplicit false
 
 def value_source_tail10_14 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
-    (selectors : reference_copy_terminal.Selectors) (state : ValueState9) : Result (Array aspis_core.field.QM31 24#usize) := do
-  let packed1 ← reference_terminal.add_preweighted packed 49#usize state.2
+    (selectors : reference_copy_terminal.Selectors) (range_selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) := do
+  let packed1 ← reference_terminal.add_preweighted packed 49#usize range_input
   let i27 ←
     lift (Std.Usize.wrapping_mul 16#usize
       reference_terminal.VALUE_AUXILIARY_BLOCK)
@@ -31,9 +31,9 @@ attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.QM31.su
 
 theorem value_source_equation10_14 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
-    (selectors : reference_copy_terminal.Selectors) (state : ValueState9) :
-    value_source_tail10_14 packed openings selectors state =
-      value_owned_stage9_14 packed openings selectors state := by
+    (selectors : reference_copy_terminal.Selectors) (range_selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_source_tail10_14 packed openings selectors range_selector range_input =
+      value_owned_stage9_14 packed openings selectors (range_selector,range_input) := by
   unfold value_source_tail10_14 value_owned_stage9_14 value_read_context9_14
   rfl
 

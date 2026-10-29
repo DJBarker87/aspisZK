@@ -10,7 +10,7 @@ theorem value_source_equation10_00 (packed : Array aspis_core.field.QM31 24#usiz
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
     reference_terminal.add_value_lanes packed openings selectors =
-      value_owned_stage9_00 packed openings selectors >>= value_source_tail10_01 packed openings selectors := by
+      value_owned_stage9_00 packed openings selectors >>= (fun next => value_source_tail10_01 packed openings selectors next.1 next.2) := by
   unfold reference_terminal.add_value_lanes value_owned_stage9_00 value_read_context9_00
   conv_rhs => simp only [bind_assoc, bind_tc_ok]
   apply bind_equal9

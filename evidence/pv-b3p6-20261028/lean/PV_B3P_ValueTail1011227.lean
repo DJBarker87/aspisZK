@@ -7,51 +7,51 @@ set_option autoImplicit false
 
 def value_source_tail10_11 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
-    (selectors : reference_copy_terminal.Selectors) (state : ValueState9) : Result (Array aspis_core.field.QM31 24#usize) := do
-  let q144 ← reference_terminal.read227 state.2 18#usize
-  let q145 ← aspis_core.field.QM31.mul state.1 q144
-  let range52 ← Array.update state.2 18#usize q145
+    (selectors : reference_copy_terminal.Selectors) (range_selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) : Result (Array aspis_core.field.QM31 24#usize) := do
+  let q144 ← reference_terminal.read227 range_input 18#usize
+  let q145 ← aspis_core.field.QM31.mul range_selector q144
+  let range52 ← Array.update range_input 18#usize q145
   let q146 ← reference_terminal.read227 range52 19#usize
-  let q147 ← aspis_core.field.QM31.mul state.1 q146
+  let q147 ← aspis_core.field.QM31.mul range_selector q146
   let range53 ← Array.update range52 19#usize q147
   let q148 ← reference_terminal.read227 range53 20#usize
-  let q149 ← aspis_core.field.QM31.mul state.1 q148
+  let q149 ← aspis_core.field.QM31.mul range_selector q148
   let range54 ← Array.update range53 20#usize q149
   let q150 ← reference_terminal.read227 range54 21#usize
-  let q151 ← aspis_core.field.QM31.mul state.1 q150
+  let q151 ← aspis_core.field.QM31.mul range_selector q150
   let range55 ← Array.update range54 21#usize q151
   let q152 ← reference_terminal.read227 range55 22#usize
-  let q153 ← aspis_core.field.QM31.mul state.1 q152
+  let q153 ← aspis_core.field.QM31.mul range_selector q152
   let range56 ← Array.update range55 22#usize q153
   let q154 ← reference_terminal.read227 range56 23#usize
-  let q155 ← aspis_core.field.QM31.mul state.1 q154
+  let q155 ← aspis_core.field.QM31.mul range_selector q154
   let range57 ← Array.update range56 23#usize q155
   let q156 ← reference_terminal.read227 range57 24#usize
-  let q157 ← aspis_core.field.QM31.mul state.1 q156
+  let q157 ← aspis_core.field.QM31.mul range_selector q156
   let range58 ← Array.update range57 24#usize q157
   let q158 ← reference_terminal.read227 range58 25#usize
-  let q159 ← aspis_core.field.QM31.mul state.1 q158
+  let q159 ← aspis_core.field.QM31.mul range_selector q158
   let range59 ← Array.update range58 25#usize q159
   let q160 ← reference_terminal.read227 range59 26#usize
-  let q161 ← aspis_core.field.QM31.mul state.1 q160
+  let q161 ← aspis_core.field.QM31.mul range_selector q160
   let range60 ← Array.update range59 26#usize q161
   let q162 ← reference_terminal.read227 range60 27#usize
-  let q163 ← aspis_core.field.QM31.mul state.1 q162
+  let q163 ← aspis_core.field.QM31.mul range_selector q162
   let range61 ← Array.update range60 27#usize q163
   let q164 ← reference_terminal.read227 range61 28#usize
-  let q165 ← aspis_core.field.QM31.mul state.1 q164
+  let q165 ← aspis_core.field.QM31.mul range_selector q164
   let range62 ← Array.update range61 28#usize q165
   let q166 ← reference_terminal.read227 range62 29#usize
-  let q167 ← aspis_core.field.QM31.mul state.1 q166
+  let q167 ← aspis_core.field.QM31.mul range_selector q166
   let range63 ← Array.update range62 29#usize q167
   let q168 ← reference_terminal.read227 range63 30#usize
-  let q169 ← aspis_core.field.QM31.mul state.1 q168
+  let q169 ← aspis_core.field.QM31.mul range_selector q168
   let range64 ← Array.update range63 30#usize q169
   let q170 ← reference_terminal.read227 range64 31#usize
-  let q171 ← aspis_core.field.QM31.mul state.1 q170
+  let q171 ← aspis_core.field.QM31.mul range_selector q170
   let range65 ← Array.update range64 31#usize q171
   let q172 ← reference_terminal.read227 range65 32#usize
-  let q173 ← aspis_core.field.QM31.mul state.1 q172
+  let q173 ← aspis_core.field.QM31.mul range_selector q172
   let range66 ← Array.update range65 32#usize q173
   let packed1 ← reference_terminal.add_preweighted packed 49#usize range66
   let i27 ←
@@ -77,9 +77,9 @@ attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.QM31.su
 
 theorem value_source_equation10_11 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
-    (selectors : reference_copy_terminal.Selectors) (state : ValueState9) :
-    value_source_tail10_11 packed openings selectors state =
-      value_owned_stage9_11 packed openings selectors state >>= value_source_tail10_12 packed openings selectors := by
+    (selectors : reference_copy_terminal.Selectors) (range_selector : aspis_core.field.QM31) (range_input : Array aspis_core.field.QM31 33#usize) :
+    value_source_tail10_11 packed openings selectors range_selector range_input =
+      value_owned_stage9_11 packed openings selectors (range_selector,range_input) >>= (fun next => value_source_tail10_12 packed openings selectors next.1 next.2) := by
   unfold value_source_tail10_11 value_owned_stage9_11 value_read_context9_11
   conv_rhs => simp only [bind_assoc, bind_tc_ok]
   apply bind_equal9
