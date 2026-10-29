@@ -31,7 +31,8 @@ theorem trailing_index_bound (mask : U16) (nonzero : mask ≠ 0#u16) :
     (word (bits mask).ctz).val < 16 := by
  rw [word_value]
  have bound := BitVec.ctz_lt_iff_ne_zero.mpr (bits_nonzero mask nonzero)
- simpa only [BitVec.lt_def,BitVec.toNat_ofNat] using bound
+ change (bits mask).ctz.toNat < 16 at bound
+ exact bound
 
 theorem population_bound (mask : U16) : (word (bits mask).cpop).val ≤ 16 := by
  rw [word_value]
