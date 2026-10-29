@@ -16,7 +16,12 @@ for p in [L/(m+'.lean')for m in sorted(closure)if 'THIS FILE WAS AUTOMATICALLY G
   body=s[m.start():matches[j+1].start()if j+1<len(matches)else len(s)];calls=[];flags=[];updates=[]
   for k,line in enumerate(body.splitlines(),1):
    if 'Array.update' in line or 'Slice.update' in line:
-    updates.append(dict(relative_line=k,text=line.strip()))
+    a_update=re.search(r'let (\w+) ← (?:Array|Slice)\.update',line)
+    name=a_update[1]if a_update else None
+    suffix=body[body.index(line)+len(line):]
+    used=bool(re.search(r'\b'+re.escape(name)+r'\b',suffix))if name and name!='_'else name is None
+    updates.append(dict(relative_line=k,text=line.strip(),restored_state=name,used_after_store=used))
+    if not used:flags.append(dict(line=k,reason='stored state not visibly consumed',text=line))
    if 'index_mut_usize' in line:
     a=re.search(r'let \(([^)]+)\) ← Array.index_mut_usize (.+)',line)
     if not a:flags.append(dict(line=k,reason='unparsed mutable borrow',text=line));continue
