@@ -10,6 +10,6 @@ theorem digest_level_binding11_17 (public1 : reference_terminal.SemanticPublic)
     digest_direct_stage9_21 public1 openings selectors output =
       digest_level11 public1 openings selectors output 17#usize := by
   unfold digest_direct_stage9_21 digest_read_context9_21 digest_level11
-  rw [digest_shift11_17]
+  simp only [digest_shift11_17,lift,bind_tc_ok]
 #print axioms digest_level_binding11_17
 end PV_B3P_Binding11227
