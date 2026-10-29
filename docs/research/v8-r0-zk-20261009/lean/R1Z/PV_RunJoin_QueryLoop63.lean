@@ -47,7 +47,7 @@ theorem loop (base : ExternalTypes) (heap : Heap) (box : Box)
     unfold prover.append_query_openings_loop
     rw [ProverRw19LoopBind.loop_bind]
     dsimp only
-    have roomParts := PV_RunJoin_QueryRoom63.split out.length Usize.max n room
+    have roomParts := PV_RunJoin_QueryRoom63.split out.length Usize.max n 832 608 PV_RunJoin_QueryRoom63.widths room
     rw [PV_RunJoin_QueryFactor63.body base heap box ops cc1 cc2 queries folded salts out i more roomParts.1]
     simp only [bind_assoc_eq,bind_tc_ok,series,PV_RunJoin_ByteSequence63.run]
     apply PV_RunJoin_BindSuccess63.congr
