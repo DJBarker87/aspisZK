@@ -33,9 +33,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   let incoming := @PV_DL_EncoderSelected.selected (types base) ops
   obtain ⟨coeff,kw,hs,hv,hl,hr⟩ := PV_RunJoin_PrepareCoefficients50.complete base heap box incoming hash backend s small
   have hc : coeff.length≤14336 := by rw [hl];exact small
+  refine ⟨coeff,kw,hs,hv,hl,?_⟩
   rw [hr,PV_RunJoin_PreparePrefix48.complete base heap box incoming hash backend s coeff hc
     (box .S2 s.alpha s.z) (toWeight kw) hs]
-  refine ⟨coeff,kw,hs,hv,hl,?_⟩
   apply congrArg (fun claim => @PV_RunJoin_PrepareClaimContext48.run (types base) (selected base heap box incoming)
     .S2 hash backend s (ok coeff) (do let _ ← box .S2 s.alpha s.z;ok (.Ok (toWeight kw)))
     (fun _ x => PV_RunJoin_PrepareActualMaterial50.material heap s kw x) claim _)
