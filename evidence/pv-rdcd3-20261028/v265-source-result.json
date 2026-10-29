@@ -1,0 +1,46 @@
+{
+  "widening": {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/num.rs",
+    "sha256": "2c5ae5de6317835420415f88f3d0c631f4e0921a1032031532a7066658d9f6b5",
+    "body": "fn from(small: $Small) -> Self {\n                small as Self\n            }",
+    "concrete_bindings": [
+      "u32 => u64",
+      "u8 => usize"
+    ],
+    "law": "PV_RDCD3_Cast194.u32_u64/u8_usize/u32_u64_val/u8_usize_val",
+    "negative_control": "constant substitution rejected"
+  },
+  "source": {
+    "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+    "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6"
+  },
+  "bodies": [
+    {
+      "key": "square_n",
+      "source_body": "fn square_n(mut value: M31, count: usize) -> M31 {\n    for _ in 0..count {\n        value = value.mul(value);\n    }\n    value\n}",
+      "owned_pattern": "fn square_n(mut value:M31,count:usize)->M31 { for _ in 0..count {value=value.mul(value);} value }",
+      "law": "R1Z.PV_RDCD3_V265Inverse.square_count",
+      "negative_control": "changed operation/count/dispatch rejected"
+    },
+    {
+      "key": "inv",
+      "source_body": "pub fn inv(self) -> M31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);\n        assert!(self.0 != 0, \"inverse of zero\");\n\n        // Build x^(2^k - 1) at k = 2, 4, 8, 16, 24, 28, 29.\n        // The final exponent is 4*(2^29 - 1) + 1 = 2^31 - 3 = P - 2.\n        // This takes 38 M31 multiplications instead of the generic binary\n        // exponentiation's 61 for this fixed exponent.\n        let t2 = self.mul(self).mul(self);\n        let t4 = square_n(t2, 2).mul(t2);\n        let t8 = square_n(t4, 4).mul(t4);\n        let t16 = square_n(t8, 8).mul(t8);\n        let t24 = square_n(t16, 8).mul(t8);\n        let t28 = square_n(t24, 4).mul(t4);\n        let t29 = t28.mul(t28).mul(self);\n        let t30 = t29.mul(t29);\n        t30.mul(t30).mul(self)\n    }",
+      "owned_pattern": "pub fn inv(self)->M31 {\n #[cfg(feature=\"r0-op-count\")] let _count=crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);\n assert!(self.0!=0,\"inverse of zero\");\n let t2=self.mul(self).mul(self);\n let t4=square_n(t2,2).mul(t2);\n let t8=square_n(t4,4).mul(t4);\n let t16=square_n(t8,8).mul(t8);\n let t24=square_n(t16,8).mul(t8);\n let t28=square_n(t24,4).mul(t4);\n let t29=t28.mul(t28).mul(self);\n let t30=t29.mul(t29);\n t30.mul(t30).mul(self)\n}",
+      "law": "R1Z.PV_RDCD3_V265Inverse.source",
+      "negative_control": "changed operation/count/dispatch rejected"
+    },
+    {
+      "key": "CM31.inv",
+      "source_body": "pub fn inv(self) -> CM31 {\n        self.inv_with(M31::inv)\n    }",
+      "owned_pattern": "pub fn inv(self)->CM31 { self.inv_with(M31::inv) }",
+      "law": "R1Z.PV_RDCD3_V265Inverse.cm_source",
+      "negative_control": "changed operation/count/dispatch rejected"
+    }
+  ],
+  "feature_graph_sha256": "3bf8d1033e906315b76cab9576db009197c18bc8e969e62b5aae21fecfd61dad",
+  "profile": "deployed release, rust1.94.1 native; assert! is unconditional, op-count disabled",
+  "range_binding_sha256": "6f5a9447270c4fa9f4b2f5cadff870995062a225d94b20aa694aa2a13f7728e1",
+  "scope": "Static M31 backend source binding only. Complete circle law, library disposition, source cohort and native finite evidence remain required.",
+  "pointer_kani": "QUARANTINED under r-double-prime; no Kani run or credit",
+  "composition": "Reclassification within existing Aeneas/Rust/compiler trust, never endpoint premise removal"
+}
