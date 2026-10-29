@@ -16,8 +16,13 @@ theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S →
     simp only [PV_DL_EncoderFill.finite,PV_RunJoin_EncoderCell49.complete inst f hm,
       ProverCommitBasisCounter47.fillN]
     symm
-    apply PV_RunJoin_WeightMap46.map_bind (amap f) (amap f)
-    intro next
-    exact (ih next (PV_DL_EncoderRange.advance j)).symm
+    simpa only [Aeneas.Std.bind_assoc_eq] using
+      PV_RunJoin_WeightMap46.map_bind (amap f) (amap f)
+        (do let v ← Array.index_usize out j
+            let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul v factor
+            Array.update out (Usize.wrapping_add width j) product)
+        (fun next => ProverCommitBasisCounter47.fillN n next (Usize.wrapping_add j 1#usize) width factor)
+        (fun next => PV_DL_EncoderFill.finite inst width (f factor) n (PV_DL_EncoderRange.advance j) next)
+        (fun next => (ih next (PV_DL_EncoderRange.advance j)).symm)
 #print axioms complete
 end R1Z.PV_RunJoin_EncoderFill49
