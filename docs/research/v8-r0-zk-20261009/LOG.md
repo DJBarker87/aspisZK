@@ -14308,3 +14308,13 @@ pv-fix launched (sparse worktree from candidate 1a3cd3de26; IDs 62000-62099; 15 
 - recompile V213's binding modules unchanged, at their pinned blobs, under compliant admission, and re-audit V213 against the fresh objects only;
 - make a one-line name qualification in pv-rdeac's failed final replay 61199 wrapper and compile it once.
 Privacy target not yet established.
+
+## D423 (Stream B) 2026-10-29 00:02 UTC: pv-fix results (rdeac replay passes; V213 partly recompiled); pv-fixb
+
+pv-fix (head 9fb7df1043) used its 15 Lean attempts (12 pass, 3 fail), with no native scopes and no Kani.
+
+Item (2) is done: pv-rdeac's final focused replay passed at 62002, with standard axioms only, after a one-line name repair that opens PV_RDEAC_EndpointInstance (endpoint) and drops the qualified prefix. The lead read the diff, and no theorem statement or proof changed. Attempts 62000 and 62001 failed before elaboration on the worker's private environment setup, each with changed inputs, so neither was an unchanged rerun. The requested single invocation was therefore not met, and the report says so.
+
+Item (1) is partial. V213's binding was recompiled compliantly at 62012, and Funs and Exact at 62013-62014. Deleted prerequisite caches prevented finishing the remaining consumers and the restoring-theorem audit within budget. V213 stays OPEN.
+
+pv-fixb continues item (1) only in the same worktree (IDs 62100-62199; 40 Lean). It rebuilds missing unchanged prerequisites compliantly, reusing only objects whose source hash and full import closure it has verified, then recompiles the consumers and audits V213. Privacy target not yet established.
