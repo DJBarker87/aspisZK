@@ -1,0 +1,86 @@
+START 67717 R1Z.PV_RunJoin_CommonCircleFirst55
+DONE 67717 R1Z.PV_RunJoin_CommonCircleFirst55 exit 1 wall 1.74 RSS 4481662976
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommonCircleFirst55.lean:55:4: error: Type mismatch: After simplification, term
+  hmodel
+ has type
+  @Eq (ProverCommitValueRange47.E × ProverCommitValueRange47.E) (PV_RunJoin_CircleInstalledExact55.coordinates q)
+    ↑(SemSource.circleSample0 (PhaseSamplerParserBin.state ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩)))))
+but is expected to have type
+  @Eq (ProverCommitValueRange47.E × ProverCommitValueRange47.E) (PV_RunJoin_CircleInstalledExact55.coordinates q)
+    ↑(if h : True then SemSource.circleSample0 fun i => ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩)) i).toFin
+      else SemSource.circleSample1 fun i => ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩)) i).toFin)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommonCircleFirst55.lean:59:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ExternalFuns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommonCircleFirst55.lean:48:59: error: unsolved goals
+K CH Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+F : Subfield K
+W : R1Wire K CH Aux
+Pr : R1ProverP K CH Aux F W
+R : RomModel W
+N : ℕ
+hN : 0 < N
+h : ZkStatement.HonestProver K
+B : PackBasis F
+outputs : Statement K CH → Challenges K → Aux
+x : Statement K CH
+w : h.Instance
+hin : RAddrIn W Pr R h B outputs x w
+hc : RCausal W Pr h B outputs x w
+s : Fin N → AttS W Pr
+hcoll :
+  ∀ (g g' : Fin (N * n1 W Pr)),
+    g' < g →
+      addrQ W Pr R N hN h B outputs x w s ((AgreeR1PBin.posE W Pr N) g') ≠
+        addrQ W Pr R N hN h B outputs x w s ((AgreeR1PBin.posE W Pr N) g)
+hpub : ∀ (g : Fin (N * n1 W Pr)), addrQ W Pr R N hN h B outputs x w s ((AgreeR1PBin.posE W Pr N) g) ≠ W.pubBytes x
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+k : Fin N
+framed : Slice U8
+hp : List.map ProverCommitOwnerBytes42.byte ↑framed = (record W Pr h B outputs x w (s k).2.1).rest.framed ⟨25, ⋯⟩
+selectedOps : ExternalFuns := PV_RunJoin_CircleNeutralSelected52.selected ops
+q : aspis_core.circle.SecureCirclePoint
+hq :
+  sampler.circle_sample (block ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩)))) aspis_core.r0_transcript.CircleRow.First =
+    ok q
+hx : ProverCommitSubfieldOps47.Canonical (PV_RunJoin_SemanticScalar50.raw q.x)
+hy : ProverCommitSubfieldOps47.Canonical (PV_RunJoin_SemanticScalar50.raw q.y)
+hmodel :
+  PV_RunJoin_CircleInstalledExact55.coordinates q =
+    ↑(if PV_RunJoin_CircleNeutralSelected52.row aspis_core.r0_transcript.CircleRow.First = true then
+        SemSource.circleSample1
+          (AspisV8R19.SqueezeOracleBridge.decodeState (block ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩)))))
+      else
+        SemSource.circleSample0
+          (AspisV8R19.SqueezeOracleBridge.decodeState (block ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩))))))
+model :
+  PV_RunJoin_CircleInstalledExact55.coordinates q =
+    ↑(PhaseSamplerParserBin.circle ⟨0, ⋯⟩ ((s k).2.1 (Sum.inl (TRead.sqS ⟨25, ⋯⟩))))
+⊢ host_wire.SemanticTranscript.challenge_reference_circle_point
+      aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+      { state := block (fieldVal (fc (TRead.absS ⟨25, ⋯⟩)) (record W Pr h B outputs x w (s k).2.1)),
+        hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 }
+      25#u8 framed =
+    do
+    let parsed ← host_wire.parse_record 25#u8 framed
+    match parsed with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err e,
+            { state := block (fieldVal (fc (TRead.absS ⟨25, ⋯⟩)) (record W Pr h B outputs x w (s k).2.1)),
+              hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 })
+      | core.result.Result.Ok a =>
+        ok
+          (core.result.Result.Ok q,
+            { state := block ((s k).2.1 (Sum.inl (TRead.advS ⟨25, ⋯⟩))),
+              hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 26#u8 })
+'R1Z.PV_RunJoin_CommonCircleFirst55.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
