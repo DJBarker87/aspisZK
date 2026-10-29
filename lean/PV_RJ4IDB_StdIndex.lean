@@ -11,7 +11,7 @@ def indexMut {N : Usize} (a : Array A N) (i : Usize) :
  Result (A × (A → Array A N)) :=
  if h : i.val<N.val then
   .ok (a.val[i.val]'(by rw [a.property]; exact h),Aeneas.Std.Array.set a i)
- else .fail .panic
+ else .fail .arrayOutOfBounds
 
 theorem source_equal {N : Usize} (a : Array A N) (i : Usize) :
  indexMut a i = Array.index_mut_usize a i := by
@@ -30,7 +30,7 @@ theorem in_bounds {N : Usize} (a : Array A N) (i : Usize) (hi : i.val<N.val) :
  exact ⟨_,rfl⟩
 
 theorem out_of_bounds {N : Usize} (a : Array A N) (i : Usize) (hi : N.val ≤ i.val) :
- indexMut a i = fail .panic := by
+ indexMut a i = fail .arrayOutOfBounds := by
  unfold indexMut
  rw [dif_neg (by omega)]
 #print axioms source_equal
