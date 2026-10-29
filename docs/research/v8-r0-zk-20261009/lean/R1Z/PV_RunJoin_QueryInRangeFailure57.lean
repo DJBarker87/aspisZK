@@ -27,7 +27,10 @@ theorem body (out : alloc.vec.Vec U8) (tree : host_tree.BinaryTree)
     prover.append_query_openings_loop.body (broken tree) cc2 queries word1 salts out 0#usize=fail .arrayOutOfBounds := by
   simp only [prover.append_query_openings_loop.body,
     show (0#usize)<22#usize from by scalar_tac,if_true,first,lift,bind_tc_ok,
-    show UScalar.cast .Usize 0#u32=0#usize from by rfl,hi,unwrapSlice,hz,fill,bind_tc_fail]
+    show UScalar.cast .Usize 0#u32=0#usize from by
+      apply UScalar.eq_of_val_eq
+      rw [PV_B2_D_SmallScalar.cast_val]
+      simp only [show (0#u32).val=0 from rfl,Nat.zero_mod,show (0#usize).val=0 from rfl],hi,unwrapSlice,hz,fill,bind_tc_fail]
 
 theorem source (out : alloc.vec.Vec U8) (tree : host_tree.BinaryTree)
     (cc2 : host_commitment.Commitment) (word1 : Slice aspis_core.field.wide_exact.WideExact)
