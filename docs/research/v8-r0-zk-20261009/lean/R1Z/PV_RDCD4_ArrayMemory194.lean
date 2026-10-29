@@ -22,7 +22,9 @@ theorem binding {E : Type} (origin : Nat) (s : PV_RDCD4_ArrayIter194.State E)
   · have h : 0 < s.stop-s.start := by omega
     have hb : s.start < s.data.length := by obtain ⟨_,hb⟩ := hv; omega
     unfold source
-    rw [if_pos h,PV_RDCD4_Memory194.read_at _ hb,bind_tc_ok]
+    rw [if_pos h]
+    dsimp only
+    rw [PV_RDCD4_Memory194.read_at (⟨origin,s.data,s.start⟩ : PV_RDCD4_Memory194.Pointer E) hb,bind_tc_ok]
     simp only [PV_RDCD4_ArrayIter194.next,if_pos h,List.getElem?_eq_getElem hb]
   · have h : ¬0 < s.stop-s.start := by omega
     simp only [source,if_neg h,PV_RDCD4_ArrayIter194.next,if_neg h]
