@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources/R1Z/PV_RDB2F_CapturedQuotient.lean:21:70: error: unsolved goals
+q output : Words
+initialized : Usize
+⊢ (if initialized < 8#usize then do
+      let x ← division q 0#u64 8#usize
+      let (item, current) ←
+        let (current, remainder) := x
+          do
+          let digit ← lift (UScalar.cast UScalarTy.U32 remainder)
+          ok (digit, current)
+      let storage ← Array.update output initialized item
+      let count ← lift (initialized.wrapping_add 1#usize)
+      ok (cont (current, storage, count))
+    else ok (done (q, output))) =
+    if initialized < 8#usize then do
+      let (q1, r) ← division q 0#u64 8#usize
+      let value ← lift (UScalar.cast UScalarTy.U32 r)
+      let ds1 ← Array.update output initialized value
+      let j ← lift (initialized.wrapping_add 1#usize)
+      ok (cont (q1, ds1, j))
+    else ok (done (q, output))
+/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources/R1Z/PV_RDB2F_CapturedQuotient.lean:22:55: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵B̵o̵d̵y̵,̵i̵n̵v̵o̵k̵e̵,̵d̵i̵g̵i̵t̵s̵B̵o̵d̵y̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲g̲u̲a̲r̲d̲B̲o̲d̲y̲,̲ ̲i̲n̲v̲o̲k̲e̲,̲ ̲d̲i̲g̲i̲t̲s̲B̲o̲d̲y̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources/R1Z/PV_RDB2F_CapturedQuotient.lean:38:46: error: unsolved goals
+q output : Words
+⊢ (do
+      let __x ← digits q output 0#usize
+      match __x with
+        | (current, snd) => Array.index_usize current 0#usize) =
+    do
+    let (current, _) ← digits q output 0#usize
+    Array.index_usize current 0#usize
+'R1Z.PV_RDB2F_CapturedQuotient.body_association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2F_CapturedQuotient.entire_capture' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2F_CapturedQuotient.final_capture_read' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

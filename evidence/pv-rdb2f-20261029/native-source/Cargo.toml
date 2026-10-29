@@ -1,0 +1,39 @@
+[package]
+name="pv-fscan-deployed-project-fixture"
+version="0.0.0"
+edition="2021"
+[workspace]
+[dependencies]
+aspis-prover={path="/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover",features=["ct-host-prover", "insecure-spend-fixture", "prover", "r0"]}
+aspis-core={path="/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core",features=["ct-host-prover", "r0"]}
+aspis-statement={path="/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-statement",features=["r0", "pool-v1-kernel"]}
+aspis-r1-cost-probe={path="/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe",features=["ct-host-prover", "default", "private-leaf-salts", "prover", "r1p-check"]}
+zeroize={version="=1.9.0",features=["alloc","zeroize_derive"]}
+generic-array={version="=0.14.7",features=["more_lengths","zeroize"]}
+typenum={version="=1.20.1",features=["const-generics"]}
+digest={version="=0.10.7",features=["alloc","const-oid","core-api","mac","oid","std"]}
+crypto-common={version="=0.1.7",features=["getrandom","rand_core","std"]}
+subtle={version="=2.6.1",features=["i128","std"]}
+pv_cfg_0_17={package="getrandom",version="=0.2.17",default-features=false,features=["std"]}
+pv_cfg_0_18={package="getrandom",version="=0.3.4",default-features=false,features=["std"]}
+pv_cfg_0_20={package="libc",version="=0.2.189",default-features=false,features=["default", "std"]}
+pv_cfg_0_21={package="memchr",version="=2.8.3",default-features=false,features=["alloc", "std", "use_std"]}
+pv_cfg_0_26={package="rand_core",version="=0.6.4",default-features=false,features=["alloc", "getrandom", "std"]}
+pv_cfg_0_27={package="serde",version="=1.0.229",default-features=false,features=["alloc", "default", "derive", "serde_derive", "std"]}
+pv_cfg_0_28={package="serde_core",version="=1.0.229",default-features=false,features=["alloc", "result", "std"]}
+pv_cfg_0_33={package="syn",version="=2.0.119",default-features=false,features=["clone-impls", "default", "derive", "extra-traits", "full", "parsing", "printing", "proc-macro", "visit", "visit-mut"]}
+pv_cfg_0_34={package="syn",version="=3.0.4",default-features=false,features=["clone-impls", "default", "derive", "fold", "full", "parsing", "printing", "proc-macro"]}
+sha2="=0.10.9"
+cpufeatures="=0.2.17"
+block-buffer="=0.10.4"
+
+[profile.release]
+overflow-checks=false
+debug-assertions=false
+[features]
+default=["ct-host-prover"]
+ct-host-prover=[]
+
+[[bin]]
+name="associations"
+path="main.rs"
