@@ -29,7 +29,9 @@ theorem finite_of_bound {E : Type*} [MeasurableSpace E]
     (μ : ProbabilityMeasure E) (p : E → ℝ) (C : ℝ) (bound : ∀ e, p e ≤ C) :
     (∫⁻ e, ENNReal.ofReal (p e) ∂(μ : Measure E)) ≠ ∞ := by
   have h := lintegral_mono (fun e => ENNReal.ofReal_le_ofReal (bound e)) (μ := (μ : Measure E))
-  exact ne_top_of_le_ne_top (by simp only [lintegral_const, measure_univ, mul_one, ENNReal.ofReal_ne_top]) h
+  apply ne_top_of_le_ne_top _ h
+  rw [lintegral_const, measure_univ, mul_one]
+  exact ENNReal.ofReal_ne_top
 
 theorem decision_integrable {E : Type*} [MeasurableSpace E]
     (μ : ProbabilityMeasure E) (p : E → ℝ) (_hp : Measurable p)
