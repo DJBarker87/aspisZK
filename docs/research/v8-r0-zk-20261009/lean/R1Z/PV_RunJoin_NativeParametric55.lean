@@ -1,4 +1,6 @@
-import R1Z.PV_RunJoin_NativeResult55
+import R1Z.PV_RunJoin_NativeAuditRel55
+import R1Z.PV_RunJoin_NativeBuildSource55
+import R1Z.PV_RunJoin_NativeAuditSource55
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_NativeParametric55
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_ResultRelation55
@@ -23,14 +25,9 @@ theorem complete {A B : Type} (R : A → B → Prop)
     Rel (Output R)
       (run f aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store)
       (run g aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store) := by
-  unfold run
-  repeat' (try (simp only [Aeneas.Std.uncurry,lift,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch,
-      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual]); first
-    | exact PV_RunJoin_NativeResult55.error R _ _
-    | apply PV_RunJoin_NativeResult55.tail; exact step _
-    | apply PV_RunJoin_ResultRelation55.same_bind; intro value
-    | split
-    | cases value)
+  simp only [PV_RunJoin_NativeBuildSource55.complete,PV_RunJoin_NativeAuditSource55.complete]
+  exact PV_RunJoin_NativeAuditRel55.complete R f g step
+    aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst public1 compiled variant hash context binding attempt nonce_store
 
 #print axioms complete
 end R1Z.PV_RunJoin_NativeParametric55
