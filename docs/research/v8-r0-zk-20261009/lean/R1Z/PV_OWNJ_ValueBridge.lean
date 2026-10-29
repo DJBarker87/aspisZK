@@ -11,6 +11,7 @@ theorem entries_canon (decode : Q → K) (D : Decoder decode) (point : List Q)
  ∀ e ∈ PV_OWNI_BuildTotal.entries point width trailing suffix, Canon e.2 := by
  intro e he
  obtain ⟨pref,hp,rfl⟩ := List.mem_map.mp he
+ simp only [one_value]
  exact (PV_OWNJ_DecodeWeight.weight decode D width pref (point.take width) (one,0)
   D.one_canon (fun q hq => hc q (List.mem_of_mem_take hq))).1
 
