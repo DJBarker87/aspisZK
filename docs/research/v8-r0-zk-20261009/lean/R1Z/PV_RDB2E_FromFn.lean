@@ -24,7 +24,14 @@ theorem step {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s : S
     build f (n+1) i s=
       (do let (a,current) ← f i s
           let (tail,after) ← build f n (i+1) current
-          ok (a::tail,after)) := rfl
+          ok (a::tail,after)) := by
+  cases hf : f i s with
+  | fail e => simp [build,hf]
+  | div => simp [build,hf]
+  | ok result =>
+    rcases result with ⟨a,s1⟩
+    simp only [build,hf,bind_tc_ok]
+    cases hb : build f n (i+1) s1 <;> rfl
 
 theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s after : S)
     (out : List A) (h : build f n i s=ok (out,after)) : out.length=n := by
@@ -47,7 +54,7 @@ theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s a
         simp only [hb] at h
         have e : a::tail=out := congrArg Prod.fst (Result.ok.inj h)
         rw [←e]
-        exact congrArg Nat.succ (ih (i+1) s1 tail s2 hb)
+        exact congrArg Nat.succ (ih (i:=i+1) (s:=s1) (out:=tail) (after:=s2) hb)
 
 #print axioms zero
 #print axioms step
