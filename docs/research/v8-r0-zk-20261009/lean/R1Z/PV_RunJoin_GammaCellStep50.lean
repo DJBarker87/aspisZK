@@ -30,8 +30,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     ProverCommitArrayIndex25.array_index_usize_ok powers lane hl,
     ProverCommitArrayIndex25.array_index_usize_ok c lane hl]
   simp only [bind_tc_ok]
-  rw [PV_RunJoin_ArrayReadMap50.array fromW _ row hr,
-    ProverCommitArrayIndex25.array_index_usize_ok _ row hr]
+  rw [PV_RunJoin_ArrayReadMap50.array (n:=1024#usize) fromW _ row hr,
+    ProverCommitArrayIndex25.array_index_usize_ok (n:=1024#usize) _ row hr]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_GammaOps50.mul base heap box ops]
   symm
