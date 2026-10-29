@@ -14,8 +14,9 @@ theorem low_val (x : U64) : (low x).val = x.val % 2147483648 := by
   rw [Nat.and_two_pow_sub_one_eq_mod]
 
 theorem high_val (x : U64) : (high x).val = x.val / 2147483648 := by
-  unfold high U64.wrapping_shr UScalar.wrapping_shr
-  simp only [UScalar.val,BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
+  change (x.bv.ushiftRight 31).toNat = x.val / 2147483648
+  change (x.bv >>> 31).toNat = x.val / 2147483648
+  rw [BitVec.toNat_ushiftRight,Nat.shiftRight_eq_div_pow]
   rfl
 
 theorem fold_val (x : U64) : (fold x).val = x.val % 2147483648+x.val / 2147483648 := by
