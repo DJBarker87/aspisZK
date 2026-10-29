@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,hashlib,subprocess,sys
+import json,hashlib,subprocess,sys,shutil
 from run import H,run
 mode=sys.argv[1]if len(sys.argv)>1 else 'positive';assert mode in ['positive','negative']
 B=H.parent/'codex-pv-b3p6-20261028';P=H/'d188';old=json.loads((B/'features227-resume4.json').read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
@@ -11,7 +11,14 @@ x=dict(toolchain=subprocess.check_output(['/home/dombarker/.cargo/bin/rustc','+1
 (H/('native-d188-'+mode+'-inputs.json')).write_text(json.dumps(x,indent=2)+'\n')
 subprocess.run(['python3',str(H/'d188_expected.py')],check=True)
 cmd=['timeout','600','taskset','--cpu-list','0-3','python3',str(H/'native_d188_gate.py'),mode]
-r=run('native-d188-'+mode,cmd,'optimized compilation followed by 96 changed-output helper comparisons to exact emitted models; no elimination or proof generation',{'RUSTFLAGS':'-C link-arg=-Wl,--threads=4'})
+fingerprint=hashlib.sha256(json.dumps(x['input_hashes'],sort_keys=True).encode()).hexdigest()[:12]
+label='native-d188-'+mode+'-'+fingerprint
+snapshot=H/'native-snapshots'/label
+snapshot.mkdir(parents=True,exist_ok=True)
+for p in P.iterdir():
+ if p.is_file():shutil.copy2(p,snapshot/p.name)
+(snapshot/'inputs.json').write_text(json.dumps(x,indent=2)+'\n')
+r=run(label,cmd,'optimized compilation followed by 96 changed-output helper comparisons to exact emitted models; no elimination or proof generation',{'RUSTFLAGS':'-C link-arg=-Wl,--threads=4'})
 p=H/'target/release/d188-b3q'
 if p.exists():(H/('native-d188-'+mode+'-binary.json')).write_text(json.dumps(dict(sha256=sha(p),bytes=p.stat().st_size),indent=2)+'\n')
 raise SystemExit(r)

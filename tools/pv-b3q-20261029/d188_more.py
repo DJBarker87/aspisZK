@@ -78,7 +78,7 @@ pub fn observe_more(seed:u32){
  let transition=PoolV1PairLatePublicStatementV1{live_snapshot:PoolV1PairLiveSnapshotV1{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:digest,frontier},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:0,next_root:digest,next_frontier:frontier}};
  for (variant,label) in [(CompiledVariant::PrivateTransfer,"private"),(CompiledVariant::Withdrawal,"withdrawal")] {
   let p=SemanticPublic{variant,pool:[0;32],deployment_domain:[0;32],anchor:digest,nullifier:digest,asset_id:M31(0),recipient:None,change:digest,withdrawal_amount:None,transition};
-  let (initial,absorption)=semantic_initial_and_absorption(p,&crate::openings(n),&crate::selectors(n));assert_ne!(initial,[QM31::ZERO;16]);assert_ne!(absorption,[QM31::ZERO;16]);
+  let (initial,absorption)=semantic_initial_and_absorption(p,crate::openings(n),crate::selectors(n));assert_ne!(initial,[QM31::ZERO;16]);assert_ne!(absorption,[QM31::ZERO;16]);
   let values:Vec<QM31>=initial.into_iter().chain(absorption).collect();crate::emit(&format!("semantic_initial_{label}"),seed,&values);
  }
 }
