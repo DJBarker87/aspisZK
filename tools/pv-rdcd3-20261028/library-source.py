@@ -31,9 +31,9 @@ records=[]
 for path,context,marker,expected,law in checks:
  p=root/path;actual=span(p.read_text(),context,marker)
  assert tokens(actual)==tokens(expected),(path,marker,actual)
- bad=expected.replace('self','changed_receiver',1)
+ bad=expected[:expected.index('{')]+'{panic!("negative_control")}'
  assert tokens(actual)!=tokens(bad),(path,marker)
- records.append(dict(path=str(p),file_sha256=sha(p.read_bytes()),context=context,body=actual,expected_body=expected,law='PV_RDCD3_'+law,negative_control='changed receiver/dispatch rejected'))
+ records.append(dict(path=str(p),file_sha256=sha(p.read_bytes()),context=context,body=actual,expected_body=expected,law='PV_RDCD3_'+law,negative_control='whole body replaced by a well-typed terminal panic; rejected'))
 project=Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028/src')
 copy_enums=[]
 for path,name,variants in [

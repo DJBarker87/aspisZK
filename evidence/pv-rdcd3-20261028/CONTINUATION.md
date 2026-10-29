@@ -3,8 +3,8 @@
 Assigned cwd/branch unchanged. All pv-common rulings read; no local Lean;
 no crates/programs/dictionary/simulator/observer edits, no Kani or key operations.
 
-Current charged budget:47 Lean (37 PASS,10 FAIL),5 native scopes. Actual Lean
-IDs60600–60646 consumed.60630 prior barrier refusal was recovered and retried
+Current charged budget:56 Lean (44 PASS,12 FAIL),5 native scopes. Actual Lean
+IDs60600–60655 consumed. 60630 prior barrier refusal was recovered and retried
 compliantly, same ID; no compiler had launched before the refusal. No new
 cooldown violation. `scope.py` enforces180s after completion and refusal. Inspect
 predecessor results before dependent submissions. Audit IDs60697–60699 reserved.
@@ -16,14 +16,10 @@ focused replay still mandatory. Receipt60637 closes `PV_RDCD3_V260Complete`;
 Complete scope and limitations in rows/V260.md/json; zero endpoint premise
 changes, all original observer/native world obligations retained.
 
-Next row V265; concrete UsizeLoop passed60641 (failed60638–60640 retained).
-ShiftLiterals passed60642. ArrayInspect passed60643 after the full cooldown
-retry of one uncharged ENOENT cgroup race; Cast194 passed60644,
-ArrayWrite194 passed60645, Result194 passed60646. Next60647 compiles
-PV_RDCD3_Endian194, then the retained circle dependency types/funs/control/native.
-Then compile dependencies not present in own lean-objects, one target per ID:
-R1Z/PV_AL_ShiftLiterals, PV_AL_CircleOwnedTypes, PV_AL_CircleOwnedFuns,
-PV_AL_CircleControl, PV_AL_CircleNative, PV_RDCD3_V265Inverse, PV_RDCD3_V265.
+V265 inverse passes60653; complete closing theorem passes60655 (failed60652 and60654 retained). Next scope is v265-final-source (not a Lean ID), with library/source/hash scripts uploaded and latest v265-source-resolution.json. Wait180s since60655 before it. Then collect v265/library/fingerprint result JSON, run v265-cone.py and v265-proof-association.py. V265 remains suspended until that gate passes. Next Lean ID60656, then60657,60658 should compile R1Z/ProverRwFullExternalTypes, R1Z/ProverRwFullTypes, R1Z/PV_RDCD3_FieldSource, respectively, for the V217 private source route.
+
+V217 owned candidates are drafted by prepare-v217.py, with30 derived modules, plus FieldSource, Total, FieldTotal. They are UNCOMPILED and receive no row credit. Existing modules unchanged; all new prefixes PV_RDCD3_. Minimal carrier files in docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023 were added with sparse-checkout add (never full checkout). Canonical carrier and pv-b3p6 variant hashes are identical. resolve-v217.py now emits the full candidate DAG and order; field totality must be compiled before dependent mask modules. The candidate programs preserve original definition bodies apart from namespace/import rebinding. Direct FieldTotal proofs replace legacy totality imports; no source/dictionary change. Further complete native structural binding is still required before any V217 restoration, especially concrete library map/initialization/iterator cone; do not grant credit merely from copied proofs.
+
 Use tools/pv-rdcd3-20261028/lean.py ID R1Z/Module; it requires committed source
 at HEAD and records source/blob/import snapshots. All project names in the
 V265 closure were absent from EJR/freeze; resolved under h5 tracked HEAD.
