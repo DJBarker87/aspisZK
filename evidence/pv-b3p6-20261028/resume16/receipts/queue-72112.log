@@ -1,0 +1,41 @@
+512;let mut dst=Vec::with_capacity(16);dst.extend_from_slice(&src);assert_eq!(ds...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_extend_wrong`
+
+warning: function `KMX_to_vec_correct` should have a snake case name
+  --> ../v244/../kmx/KMX_stubs.rs:64:4
+   |
+64 | fn KMX_to_vec_correct(){let src:[u32;16]=kani::any();let dst=src.to_vec();let k:usize=kani::any();kani::assume(k<16);assert_eq!(dst[...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_correct`
+
+warning: function `KMX_to_vec_wrong` should have a snake case name
+  --> ../v244/../kmx/KMX_stubs.rs:67:4
+   |
+67 | fn KMX_to_vec_wrong(){let mut src=[0u32;16];src[15]=512;let dst=src.to_vec();assert_eq!(dst[15],0);}
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_to_vec_wrong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> ../v244/../kmx/KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> ../v244/../kmx/KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+Thread 0: Checking harness equivalence16::selector_mask_host_26214...
+Thread 0: 
+VERIFICATION RESULT:
+ ** 0 of 40 failed (1 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 31.963142s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+   Compiling pv-b3p6-reference227 v0.0.0 (/home/dombarker/project-offloads/codex-pv-b3p6-20261028/source/tools/pv-b3p6-20261028/v244-leaf16)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 2.08s
+

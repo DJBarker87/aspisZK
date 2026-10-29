@@ -16,21 +16,27 @@ if all(r.get('status')=='PASS'for r in maskruns)and passed('equivalence16::selec
  composed['selector_mask_sum_16']=dict(native_gates=[r['run']for r in maskruns],reference_link='PV_B3P_Correct14227.mask_direct14 / native_mask_link14',domain='seven nonzero masks; sole caller and all frozen table cells checked; total u16 equality not claimed')
 # Shared abstract-callee credit needs both controls, not just a named stub.
 if 'equality_value'in composed and not(passed('equivalence16::shared_repeat16')and by.get('equivalence16::shared_wrong16',{}).get('exit')==1):del composed['equality_value']
+candidates=dict(composed)
+backend=json.loads((R/'KANI-BACKEND.json').read_text())
+if not backend['deployed_configuration_credit']:composed={}
 for f in x['functions']:
  name=f['function'];h='remaining_equivalence16::'+name if 'remaining_'in f['harness_source']else 'equivalence16::'+name
  if name=='sum_high':h='equivalence16::sum_high_actual_calls'
  f['native_result']=by.get(h,{}).get('status','UNRUN')
  f['native_receipt']=by.get(h,{}).get('receipt')
+ f['backend_parity']='OPEN: bundled rustc1.93-nightly versus deployed1.94.1'
+ if name in candidates:f['candidate_composition']=candidates[name]
  f['reference_link']=models[name].get('model_theorem')or models[name].get('resume15_model_theorem')
  if name in composed:
   f['native_result']='PASS';f['equivalence']='PASS, admissible deployed caller domain';f['composed_binding']='RECLASSIFIED under owner fifth amendment';f['composition']=composed[name]
  else:
   f['composed_binding']='OPEN';f['equivalence']=f['native_result']
   if f['native_result']=='PASS'and name in ['add_preweighted','external_linear_lazy','external_local_packed_raw','external_linear_packed','internal_linear_lazy']:f['equivalence']='PASS on canonical domain ONLY; caller canonicality link OPEN'
+  if name=='selector_mask_sum_16'and name in candidates:f['native_result']='P6 PASS (seven masks); deployed parity OPEN';f['equivalence']=f['native_result']
   if name=='at_point':f['native_result']='UNRUN known-refuted legacy draft; corrected 57-block context remains OPEN'
-x['results']=dict(changed_functions=36,reclassified=len(composed),open=36-len(composed),model_contexts=sum(f['model_context']for f in x['functions']),reclassification_label='reclassification within existing Charon/Aeneas tool trust (owner fifth amendment); Kani P6 tool trust',baseline_reachable=79,baseline_bound=41,now_bound=41+len(composed),now_reclassification_bound=40+len(composed),own1_bound=1,exact_reachability_uncertified=True,endpoint_premises_removed=0,trust_fields_added=0,runjoin_op227_discharged=False,lean_attempts=0,kani_scopes=len(rows),other_native_scopes=0,direct_trials=0)
+x['results']=dict(changed_functions=36,reclassified=len(composed),open=36-len(composed),model_contexts=sum(f['model_context']for f in x['functions']),reclassification_label='reclassification within existing Charon/Aeneas tool trust (owner fifth amendment); Kani P6 tool trust',baseline_reachable=79,baseline_bound=41,now_bound=41+len(composed),now_reclassification_bound=40+len(composed),own1_bound=1,exact_reachability_uncertified=True,endpoint_premises_removed=0,trust_fields_added=0,runjoin_op227_discharged=False,lean_attempts=json.loads((R/'TALLY-resume16.json').read_text())['lean_attempts'],kani_scopes=len(rows),other_native_scopes=0,direct_trials=0,p6_composition_candidates=len(candidates),deployed_backend_parity='OPEN')
 (D/'CLASSIFY.json').write_text(json.dumps(x,indent=2)+'\n')
-lines=['# D511 resume16 per-function status','', '**V244 remains OPEN. Target not yet established.** No endpoint premise removed; V370 / D381,D386, T, simulator and observer unchanged.','',f"Changed-function associations: **{len(composed)}/36 reclassified**, {36-len(composed)} OPEN. Model/context instances remain 23/36. Historical inventory: 79 conservative reachable candidates; {41+len(composed)} BOUND = {40+len(composed)} reclassification + 1 own-1. No reachability pruning. The statement-copy mask gate is ancillary to this denominator.",'','These are admissible-domain source/reference + reference-link associations under owner fifth amendment and P6 tool trust, not removal or a composed privacy proof. Fresh direct-extraction acceptance/refusal remains UNKNOWN for all 36 (no dedicated extractor scope allocated).','', '| Function | Route | Native evidence | Composition / residual |','|---|---|---|---|']
+lines=['# D511 resume16 per-function status','', '**V244 remains OPEN. Target not yet established.** No endpoint premise removed; V370 / D381,D386, T, simulator and observer unchanged.','',f"Changed-function associations: **{len(composed)}/36 reclassified**, {36-len(composed)} OPEN. Model/context instances remain 23/36. Historical inventory: 79 conservative reachable candidates; {41+len(composed)} BOUND = {40+len(composed)} reclassification + 1 own-1. No reachability pruning. The statement-copy mask gate is ancillary to this denominator.",'','These are admissible-domain source/reference + reference-link associations under owner fifth amendment and P6 tool trust, not removal or a composed privacy proof. **Deployed credit is withheld for every Kani result:** pinned Kani uses bundled rustc1.93-nightly, not the recorded1.94.1 configuration query. Required reached-body/stdlib parity is OPEN. Two passing P6/reference-link candidate pairs remain useful evidence. Fresh direct-extraction acceptance/refusal remains UNKNOWN for all 36 (no dedicated extractor scope allocated).','', '| Function | Route | Native evidence | Composition / residual |','|---|---|---|---|']
 for f in x['functions']:
  detail='RECLASSIFIED; '+str(f['composition']['reference_link'])if f['function']in composed else 'OPEN; '+f['equivalence']
  if f['function']=='at_point':detail='OPEN; legacy49 direct draft retained as refuted; corrected layout57 context not verified'
@@ -50,5 +56,11 @@ for r in rows:
    if z.returncode==0 and hashlib.sha256(z.stdout).hexdigest()==want:matches[path]=rev;break
  reconciled.append(dict(run=r['run'],recorded_revision=r['source_revision'],exact_committed_source_matches=matches,note='Original receipt retained; early runner revision label was stale. Hashes, not labels, select the exact input. Unmatched intermediate files are not given an invented source revision.'))
 (D/'source-revision-reconciliation.json').write_text(json.dumps(reconciled,indent=2)+'\n')
-(D/'verification-summary.json').write_text(json.dumps(dict(results=x['results'],runs=rows,admission_check='every charged receipt admission and in-scope barrier allowed:true; exact caps checked by collector',unchanged_shipped_sources=subprocess.run(['git','diff','--quiet','95febdf539','--','crates','programs']).returncode==0,new_lean_axioms='N/A; no Lean source changes or new theorem. Reused source links retain resume13/resume14/resume15 standard-axiom audits.',source_revision_corrections='source-revision-reconciliation.json',canonical_only_results_not_promoted=True,all_direct_extraction_refusals=None),indent=2)+'\n')
+lean=[]
+for p in sorted((R/'lean-receipts').glob('*/receipt/receipt.json')):
+ r=json.loads(p.read_text());log=(p.parent/'stdout.log').read_text()+(p.parent/'stderr.log').read_text()
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ if r['exit_status']==0:assert 'sorryAx'not in log
+ lean.append({k:r.get(k)for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_sha256','lean_source_revision','print_axioms']})
+(D/'verification-summary.json').write_text(json.dumps(dict(results=x['results'],runs=rows,lean_runs=lean,axioms_audit='72097 exit0, propext only; failed72000 excluded',admission_check='every charged receipt admission and in-scope barrier allowed:true; exact caps checked by collector',unchanged_shipped_sources=subprocess.run(['git','diff','--quiet','95febdf539','--','crates','programs']).returncode==0,new_lean_axioms='New explicit canonical-call definition and nonempty model witness; actual deployed feed remains OPEN. Audit72097 uses only propext; failed72000 excluded. Existing reference-link audits reused.',source_revision_corrections='source-revision-reconciliation.json',canonical_only_results_not_promoted=True,backend=backend,p6_composition_candidates=candidates,all_kani_deployed_credit_withheld=True,all_direct_extraction_refusals=None),indent=2)+'\n')
 print(json.dumps(x['results']))

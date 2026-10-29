@@ -15,6 +15,7 @@ def invoke(cmd):
   print(json.dumps(dict(refused=cmd,retry=retry,cooldown='full180 seconds; next invocation checks current admission again')),flush=True)
  return 78
 
+if sys.argv[1]=='audit':raise SystemExit(invoke(['python3','compile_resume16.py','PV_B3P_Resume16Axioms','audit']))
 if sys.argv[1]=='llvm':raise SystemExit(invoke(['python3','llvm227_resume16_host.py']))
 order=sys.argv[2:] if sys.argv[1]=='modules' else json.loads((H/'bootstrap.json').read_text())
 for module in order:

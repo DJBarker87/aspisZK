@@ -1,10 +1,10 @@
 # V244 deployed/reference composition (D511)
 
-This is source association under existing tool trust, not removal of an endpoint premise. V370 / pending owner D381,D386 is retained. The simulator, observer, trust-list T and op227 endpoint are unchanged.
+**Correction:** Kani uses bundled rustc1.93-nightly; the rustc1.94.1 field in the original inputs was a configuration query. No passing Kani result is credited to the deployed1.94.1 configuration until reached-body/stdlib parity is checked. The following are candidate associations, not completed reclassifications. No endpoint premise is removed. V370 / pending owner D381,D386 is retained. The simulator, observer, trust-list T and op227 endpoint are unchanged.
 
-A checked Kani gate establishes equality of the deployed Rust body and the owned reference Rust body on its stated input domain. The unchanged pinned extraction provenance binds that reference body to its extracted Lean definition. The already compiled reference/context link then composes with the equality. This is the **owner fifth amendment reclassification**, with Kani as **P6 tool trust**; where used, a shared callee's separate extraction row is cited in SHARED-CALLEES.json. No distinct host/reference callee is stubbed as though it were the same function.
+A checked Kani gate establishes equality of the frozen source body and owned reference as interpreted by its bundled backend on the stated input domain. Transferring this to deployed1.94.1 requires the pending reached-body/stdlib parity gate. The unchanged pinned extraction provenance binds that reference body to its extracted Lean definition. The already compiled reference/context link then composes with the equality. After the pending backend/body-parity check, this would be an **owner fifth amendment reclassification**, with Kani as **P6 tool trust**; where used, a shared callee's separate extraction row is cited in SHARED-CALLEES.json. No distinct host/reference callee is stubbed as though it were the same function.
 
-## Completed components before the final queue
+## Passing P6 components — deployed credit withheld
 
 | Function | Native equality | Reference/context link | Domain obligation |
 |---|---|---|---|
@@ -20,4 +20,4 @@ Canonical-only gates, even if PASS, do not close their source association until 
 
 The raw-representative K72127 failure reports checked-MIR subtraction panics for noncanonical representatives. It is retained as a failed candidate; the release build has overflow checks off, so it is not reported as a deployed counterexample. Kani requires compiler overflow instrumentation. A successful gate must establish all its retained checks; a failed checked-MIR gate gives no release-equivalence credit.
 
-No new Lean declaration is added in resume16. Existing reference links and their standard-axiom audits are reused from resume13/resume14/resume15, rather than replaying unchanged Lean modules. Fresh direct Charon/Aeneas trials are not run because the prompt assigns zero non-Kani native scopes. Their acceptance/refusal status remains explicitly UNKNOWN.
+The new standalone PV_B3P_CanonicalCalls16227 defines the open caller-domain condition and proves a nonempty model witness; audit72097 reports only propext. It proves no actual deployed caller invariant. Existing reference links and their standard-axiom audits are reused from resume13/resume14/resume15, rather than replaying unchanged Lean modules. Fresh direct Charon/Aeneas trials are not run because the prompt assigns zero non-Kani native scopes. Their acceptance/refusal status remains explicitly UNKNOWN.
