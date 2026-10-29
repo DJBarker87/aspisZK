@@ -30,3 +30,23 @@ binding is recorded as open, without whole-row credit.
 Next consumer: the actual stored two-circle association at the original
 common sample, before backend hinput, FinishContext or publication. Step (4)
 remains prohibited. No change to trust, guards, games or endpoint premises.
+
+## Implementation refinement
+
+The neutral sides are `CircleRawScalar52`/`CircleRawTower52`/
+`CircleRawMap52` and `CircleR72Raw52`. They define the computations over
+standard tuples without importing either generated Types module. The two
+generated-type adapter families prove independently that these computations
+encode the actual authoritative source calls. `CircleNeutralBase52` imports
+only the neutral sides. It does not import or export source adapters.
+
+R72 has checked arithmetic and guarded r23/r24 multiplication; the owned
+side uses wrapping CT operations. Equality is required on the produced
+canonical domain, with intermediate canonicality derived rather than
+assumed as a source-caller premise. An unrestricted all-raw-input equality
+is neither proposed nor credited.
+
+Attempt 65520 reached the heartbeat limit comparing bare inverse functions.
+The replacement at 65521 uses function extensionality on the already checked
+scalar inverse transport, then the generic inv_with transport. No inversion
+chain is unfolded and no limit is raised.

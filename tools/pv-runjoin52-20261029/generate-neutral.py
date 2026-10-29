@@ -138,3 +138,22 @@ s=s[:a]+''' := by
   exact op10 self PV_RunJoin_CircleRawTower52.field.M31.inv
 
 '''+s[b:];p.write_text(s)
+# The option-valued inverse requires splitting its computed zero test before
+# transporting the success-only arithmetic; failure/divergence stay in bind.
+p=L/'PV_RunJoin_CircleOwnedOp2152.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold PV_AL_CircleOwned.aspis_core.field.QM31.try_inv PV_RunJoin_CircleRawTower52.field.QM31.try_inv
+  rw [op20]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro zero _
+  cases zero with
+  | true => rfl
+  | false =>
+    simp only [Bool.false_eq_true,if_false]
+    simp only [PV_RunJoin_CircleOwnedProjection52.q_c0,PV_RunJoin_CircleOwnedProjection52.q_c1,
+      op8,op12,op5,op11,op7,op6,bind_assoc_eq,bind_tc_ok,Option.map_some]
+    all_goals simp only [encQ]
+    all_goals rfl
+
+'''+s[b:];p.write_text(s)
