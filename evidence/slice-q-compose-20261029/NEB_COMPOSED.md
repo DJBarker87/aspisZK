@@ -1292,3 +1292,169 @@ end NEB_ActualGeometryLine
 Printed axioms (exit 0):
 
 - `'NEB_ActualGeometryLine.calls' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+## Arbitrary-range scalar square loop
+
+The total is now 62 CLOSED occurrence rows and 107/257 CLOSED internal edges. Both requested roots remain OPEN. The square loop retains its own all-raw-word/machine-count PacketDomain and PhysicalInterpretation plus approved P6/D188 semantic transport. NEB_SQUARE_ASSOCIATION.md records exact native one-step, trace induction, selected M31 operands and explicit rejected overload targets. No whole-loop/output equality premise is supplied. Native inverse panic effects and borrowed accessor shape transport remain OPEN.
+
+```lean
+import NEB_GeometryDictionaryEq
+import NEB_GeometryModel
+set_option autoImplicit false
+noncomputable section
+namespace NEB_ActualGeometryModel
+open Aeneas Aeneas.Std Result AspisR1 AspisR1Stage2
+open Port3_NativeGeometryBody
+
+/-- The actual R17 point/line dictionary, with the checked index reference and
+inverse body already selected in the adopted geometry model. This is a model
+installation, not a substitute for the missing frozen native root bridge. -/
+def install {CoreError : Type} (ops : Ops CoreError) (error : CoreError) : Ops CoreError :=
+  {NEB_GeometryModel.install ops error with
+    op15 := fun f => do
+      let p ← AspisR1QueryGeometryActual.fast_domain.fibre_point R17CurrentCM31Semantics.operations f
+      ok ⟨p.x,p.y⟩
+    op14 := R17FibrePointLineNodeActual.line_node R17CurrentCM31Semantics.operations R17CurrentM31Semantics.operations}
+
+theorem same_dictionary {CoreError : Type} (ops : Ops CoreError) (error : CoreError) :
+    install ops error = NEB_GeometryModel.install ops error := by
+  have hp : (fun f => do
+      let p ← AspisR1QueryGeometryActual.fast_domain.fibre_point R17CurrentCM31Semantics.operations f
+      ok ({x:=p.x,y:=p.y} : aspis_core.r0.domain.Point U32)) =
+    (fun f => do
+      let p ← AspisR1QueryGeometryActual.fast_domain.fibre_point NEA_FieldProduct.ops f
+      ok ({x:=p.x,y:=p.y} : aspis_core.r0.domain.Point U32)) := by
+    funext f
+    rw [NEB_GeometryDictionaryEq.point]
+  have hl := funext NEB_GeometryDictionaryEq.line
+  unfold install
+  rw [hp,hl]
+  rfl
+
+theorem primitives {CoreError : Type} (ops : Ops CoreError) (error : CoreError) :
+    Port5Q1_GeometryCanonical.SessionAPrimitives (install ops error) := by
+  rw [same_dictionary]
+  exact NEB_GeometryModel.primitives ops error
+
+/-- Every non-root canonical primitive premise is discharged for the actual
+R17 dictionary. The sole success premise is the same parent model Result. -/
+theorem for_range {CoreError : Type} (ops : Ops CoreError) (error : CoreError)
+    (queries : Array U32 22#usize) (start end1 : Usize) (out : verifier.QueryGeometry)
+    (nonempty : start.val<end1.val)
+    (accepted : Port3_GeometryStage.geometry
+      (Port5Q1_GeometryTerminal.install (install ops error)) queries start end1=ok (.Ok out)) :
+    ∃ flat inverse : alloc.vec.Vec U32,
+      out.start=start ∧ out.line_z.val.length=end1.val-start.val ∧
+      flat.val.length=5*(end1.val-start.val) ∧
+      (∀ x ∈ flat.val, Port5Q1_GeometryCanonical.Canonical x) ∧
+      (∀ x ∈ flat.val, S7JoinBasisMachine.decode x≠0) ∧
+      inverse.val.length=flat.val.length ∧
+      (∀ j, j<flat.val.length →
+        S7JoinBasisMachine.decode (Port4C_BatchInverse.cell inverse.val j)=
+          (S7JoinBasisMachine.decode (Port4C_BatchInverse.cell flat.val j))⁻¹) ∧
+      out.inverses.val=(List.range (end1.val-start.val)).map (Port4C_CollectLoop.record inverse) := by
+  rw [same_dictionary] at accepted
+  exact NEB_GeometryModel.for_range ops error queries start end1 out nonempty accepted
+
+#print axioms same_dictionary
+#print axioms primitives
+#print axioms for_range
+end NEB_ActualGeometryModel
+end
+
+```
+
+- `'NEB_ActualGeometryModel.same_dictionary' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_ActualGeometryModel.primitives' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_ActualGeometryModel.for_range' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+```lean
+import NEB_SquareDomains
+set_option autoImplicit false
+noncomputable section
+namespace NEB_SquareComposition
+open Aeneas Aeneas.Std Result AspisR1
+
+/-- Arbitrary reached scalar operands satisfy the selected all-raw multiply
+packet, with the SAME operand twice and no canonical-input strengthening. -/
+theorem cell (before : U32) : ∃ after : U32,
+    FIo_Native.aspis_core.field.M31.mul before before=ok after ∧
+    after.val=(before.val*before.val)%2147483647 ∧ after.val<2147483647 :=
+  LPf_BaseMultiply.source before before
+
+/-- The inherited actual Range.next native step is paired with the existing
+trace induction. No complete native trace or output equality is assumed here. -/
+theorem loop_frame {S Event : Type} (state : S) (count : Usize) (before : U32) :
+    ∃ after : U32,
+      NBG_SquareTrace.Trace count.val before after ∧
+      AspisR1M31Inverse.field.square_n FIo_Native.aspis_core.field.M31.mul before count=ok after ∧
+      NEB_PureFrame.run (Event:=Event) state
+        (AspisR1M31Inverse.field.square_n FIo_Native.aspis_core.field.M31.mul before count)=ok (after,state,[]) ∧
+      (0<count.val → after.val<2147483647) := by
+  obtain ⟨after,call,trace,canonical⟩ := NEB_SquareDomains.source before count
+  exact ⟨after,trace,call,by rw [call];rfl,canonical⟩
+
+/-- A SAME arbitrary-range trace, supplied one native scalar cell at a time,
+identifies the emitted Result and the complete pure frame without an extra
+successful-return premise. Range.start need not be zero. -/
+theorem trace_frame {S Event : Type} (state : S) (n : Nat) (before after : U32)
+    (iter : core.ops.range.Range Usize)
+    (length : iter.end.val-iter.start.val=n)
+    (trace : NBG_SquareTrace.Trace n before after) :
+    AspisR1M31Inverse.field.square_n_loop FIo_Native.aspis_core.field.M31.mul iter before=ok after ∧
+    NEB_PureFrame.run (Event:=Event) state
+      (AspisR1M31Inverse.field.square_n_loop FIo_Native.aspis_core.field.M31.mul iter before)=ok (after,state,[]) := by
+  have call := NBG_SquareTrace.loop_result trace iter length
+  exact ⟨call,by rw [call];rfl⟩
+
+#print axioms cell
+#print axioms loop_frame
+#print axioms trace_frame
+end NEB_SquareComposition
+end
+
+```
+
+- `'NEB_SquareComposition.cell' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_SquareComposition.loop_frame' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_SquareComposition.trace_frame' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+```lean
+import S7OwnedP6QueryRead
+import NEB_PureFrame
+set_option autoImplicit false
+namespace NEB_GeometryAccessor
+open Aeneas Aeneas.Std Result S7OwnedP6QueryRead
+
+def PacketDomain (g : QueryGeometry) (index : Usize) : Prop :=
+  g.inverses.val.length≤22 ∧ g.start.val≤ index.val ∧
+  index.val-g.start.val<g.inverses.val.length
+
+/-- Exact same selected five-word row, full Result and pure readonly frame.
+The native pointer/borrow representation remains the root physical
+interpretation, rather than an unsupported borrowed-return substitution. -/
+theorem result {S Event : Type} (state : S) (g : QueryGeometry) (index : Usize)
+    (domain : PacketDomain g index) :
+    ∃ row, QueryGeometry.for_query g index=ok row ∧
+      g.inverses.val[index.val-g.start.val]?=some row ∧
+      NEB_PureFrame.run (Event:=Event) state (QueryGeometry.for_query g index)=ok (row,state,[]) := by
+  obtain ⟨row,call,selected⟩ := selected_inverse g index domain.2.1 domain.2.2
+  exact ⟨row,call,selected,by rw [call];rfl⟩
+
+/-- The actual constructor/query ordinal establishes the complete local
+accessor packet domain. No per-row return or canonicality premise is added. -/
+theorem caller (g : QueryGeometry) (index finish : Usize)
+    (lo : g.start.val≤ index.val) (hi : index.val<finish.val)
+    (length : g.inverses.val.length=finish.val-g.start.val) (cap : finish.val≤22) :
+    PacketDomain g index := by
+  unfold PacketDomain
+  omega
+
+#print axioms result
+#print axioms caller
+end NEB_GeometryAccessor
+
+```
+
+- `'NEB_GeometryAccessor.result' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_GeometryAccessor.caller' depends on axioms: [propext, Classical.choice, Quot.sound]`.

@@ -56,7 +56,9 @@ def expected(baseline):
  scalar_edges,scalar_rows=scalar_expected(baseline)
  from NEB_leaf_certificates import expected as leaf_expected
  leaf_edges,leaf_rows=leaf_expected(baseline)
- return {edge:cert,**extra_edges,**representation_edges,**field_edges,**scalar_edges,**leaf_edges},{**rows,**extra_rows,**representation_rows,**field_rows,**scalar_rows,**leaf_rows}
+ from NEB_square_certificates import expected as square_expected
+ square_edges,square_rows=square_expected(baseline)
+ return {edge:cert,**square_edges,**extra_edges,**representation_edges,**field_edges,**scalar_edges,**leaf_edges},{**rows,**square_rows,**extra_rows,**representation_rows,**field_rows,**scalar_rows,**leaf_rows}
 if __name__=='__main__':
  from NEB_leaf_updates import apply,resolutions
  base,_=apply(obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json'));edges=obj(E/'NEB_EDGES.json')

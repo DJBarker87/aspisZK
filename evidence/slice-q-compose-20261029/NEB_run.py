@@ -43,7 +43,7 @@ source=source_file.read_text()
 # coherent path; imported-cache hashes are independently recorded at intake.
 code=f'''from pathlib import Path
 import json,hashlib
-roots={[B,CACHE,COHERENT,COHERENT+'/objects']!r};src={source!r};seen={{}}
+roots={[B,CACHE,COHERENT,COHERENT+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean']!r};src={source!r};seen={{}}
 for line in src.splitlines():
  if line.startswith('import '):
   for mod in line[7:].split():

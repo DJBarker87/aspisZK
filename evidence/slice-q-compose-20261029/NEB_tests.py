@@ -18,11 +18,11 @@ def affected_open(change):
  mutated=copy.deepcopy(edges);edge=next(e for e in mutated['edges'] if e['edge']==TARGET);change(edge)
  out,delta=v.extend(base,mutated)
  assert all(r['composed_status']=='OPEN' for r in out['rows'] if r['row'] in WRAPPERS)
- assert not(WRAPPERS & set(delta['composed_rows_closed'])) and delta['edge_closed']==102
+ assert not(WRAPPERS & set(delta['composed_rows_closed'])) and delta['edge_closed']==106
  assert all(x==['OPEN'] for x in delta['roots'].values())
 test('unchanged original NDT invariants',lambda:v.ndt.validate_invariants(base))
 out,delta=v.extend(base,edges)
-assert delta['closed_count']==60 and delta['edge_closed']==103
+assert delta['closed_count']==62 and delta['edge_closed']==107
 results.append(dict(test='registered reducer and additive certificates close 60 occurrence rows bottom-up',result='PASS'))
 test('missing certificate keeps both actual callers OPEN',lambda:affected_open(lambda e:e.update(certificate=None)))
 test('wrong edge identity keeps actual callers OPEN',lambda:affected_open(lambda e:e['certificate'].update(edge=TARGET+' wrong')))
@@ -124,5 +124,12 @@ bad=copy.deepcopy(edges);next(e for e in bad['edges'] if e['caller']==POINT and 
 test('wrong native point receiver resolution rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
 bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==POINT);r['lean_evidence']=[p for p in r['lean_evidence'] if not any(n=='NEB_GeometryFieldPorts.physical' for n in p['theorems'])]
 test('missing actual R17 dictionary instance rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+SQUARE='crates/aspis-core/src/field.rs::square_n'
+def square_open(change):
+ m=copy.deepcopy(edges);change(m);o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['function']==SQUARE)
+test('missing raw square cell domain blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and e['selected_target']).update(certificate=None)))
+test('wrong square trace-frame role blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and e['selected_target'])['certificate']['parts']['native_callsite_association'].update(theorems=['NEB_SquareComposition.cell'])))
+test('omitted scalar-loop conservative alternative blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and not e['selected_target']).update(certificate=None)))
 assert base==v.obj(v.N/'NDT_LEDGER.json');results.append(dict(test='authoritative ledger unchanged',result='PASS'))
 print(json.dumps(dict(results=results,tests=len(results),composed_closed=delta['closed_count'],slice_roots_closed=0,synthetic_evidence_credit=0),indent=1))
