@@ -1,0 +1,60 @@
+NDH_generated/NDH_RegistryPrimitives.lean:37:71: error: unsolved goals
+v : U8
+h0 : v ≠ 0#u8
+h1 : v ≠ 1#u8
+h2 : v ≠ 2#u8
+h3 : v ≠ 3#u8
+⊢ (do
+      let r ←
+        match v with
+          | 0#8#uscalar => ok (some 0#u8)
+          | 1#8#uscalar => ok (some 1#u8)
+          | 2#8#uscalar => ok (some 2#u8)
+          | 3#8#uscalar => ok (some 3#u8)
+          | x => ok none
+      ok
+          (match r with
+          | none => core.result.Result.Err PoolV1VerifierRegistryFormatError.InvalidStatus
+          | some i =>
+            if i = 0#u8 then core.result.Result.Ok VerifierEntryStatusV1.Pending
+            else
+              if i = 1#u8 then core.result.Result.Ok VerifierEntryStatusV1.Active
+              else
+                if i = 2#u8 then core.result.Result.Ok VerifierEntryStatusV1.Paused
+                else core.result.Result.Ok VerifierEntryStatusV1.Retired)) =
+    ok (core.result.Result.Err PoolV1VerifierRegistryFormatError.InvalidStatus)
+NDH_generated/NDH_RegistryPrimitives.lean:38:40: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp [status, ̲NDH_Reference.status_ref, ̲h0̵,̵h̵1, ̲h2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDH_generated/NDH_RegistryPrimitives.lean:38:43: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp [status, ̲NDH_Reference.status_ref, ̲h0, ̲h1̵,̵h̵2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDH_generated/NDH_RegistryPrimitives.lean:38:46: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp [status, ̲NDH_Reference.status_ref, ̲h0, ̲h1, ̲h2̵,̵h̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NDH_generated/NDH_RegistryPrimitives.lean:38:49: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp [status, ̲NDH_Reference.status_ref, ̲h0, ̲h1, ̲h2,̵h̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDH_RegistryPrimitives.retirement_v1' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.retirement_v2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.pending' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.active' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.paused' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.retired' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NDH_RegistryPrimitives.invalid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

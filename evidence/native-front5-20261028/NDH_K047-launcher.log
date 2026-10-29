@@ -1,0 +1,50 @@
+{"attempt": "NDH_K047", "exit_status": 1, "wall_seconds": 3.8901521019870415, "peak_rss_kib": "453796", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-r1-cost-probe/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: unused `core::result::Result` that must be used
+  --> crates/aspis-r1-cost-probe/src/NDH_public.rs:10:19
+   |
+10 | fn new_contract(){aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: this `Result` may be an `Err` variant, which should be handled
+   = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+   |
+10 | fn new_contract(){let _ = aspis_core::r0::domain::FibreIndex::new(kani::any());}
+   |                   +++++++
+
+    Finished `dev` profile [optimized] target(s) in 2.42s
+Checking harness sampler::NDH_native::decode_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 90 failed
+Failed Checks: |r| (r.to_limbs()==crate::NDH_reference::pack8_ref(digits)) !=
+cfg!(NDH_invert_decode8)
+ File: "crates/aspis-r1-cost-probe/src/sampler.rs", line 75, in sampler::decode8::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.17311783s
+
+Manual Harness Summary:
+Verification failed for - sampler::NDH_native::decode_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1badd20259e94b08885daa2c4a7f9069.scope; invocation ID: c103f2c009504711af5c1a3d3a8611f3

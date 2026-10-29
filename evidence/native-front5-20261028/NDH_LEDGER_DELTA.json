@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "baseline": "evidence/native-compledger-20261028/NCZ_LEDGER.json",
+  "baseline_sha256": "20bc92d84e49097c1a2e30b8dbb031818d1221d9c8d0998f564c0fca9f38e54c",
+  "closures": [
+    {
+      "function": "crates/aspis-r1-cost-probe/src/sampler.rs::qm31_div_pass",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K072",
+        "NDH_K073"
+      ],
+      "lean": {
+        "NDH_L041": [
+          "NDH_Qwrite.reference"
+        ],
+        "NDH_L043": [
+          "NDH_Qm31NativeJoin.native_result"
+        ],
+        "NDH_L065": [
+          "NDH_Arithmetic.relation",
+          "NDH_Arithmetic.native_pack",
+          "NDH_Arithmetic.native_cast"
+        ],
+        "NDH_L037": [
+          "NDH_Qm31Result.result"
+        ]
+      },
+      "extraction": "NDH_E003",
+      "domain": "Every initialized eight-u32 rank; initial remainder0 and j8. At each native step remainder<P, j in1..8; quotient fits u32, all writes/untouched coordinates retained; final cast uses remainder<P.",
+      "method": "one native write step + scalar-only LPk K008/K009/K020 + Lean induction/uniqueness",
+      "limits": "No old LPk array/from_fn/copy traversal credit. The native trace is built from local gates and exact source shape; it is not an assumed whole-output equality.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-core/src/r0/merkle.rs::parent_with_digest",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K029",
+        "NDH_K030"
+      ],
+      "lean": {
+        "NDH_L055": [
+          "NDH_HashBridge.parent"
+        ],
+        "NDH_L051": [
+          "NDH_MerkleGrammar.node"
+        ]
+      },
+      "extraction": "NDH_E004",
+      "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All eight children, each exactly32 bytes; initialized valid references; one digest call with 0x18 and eight child-major slices, returned32-byte reply unchanged.",
+      "method": "native exact call bytes/reply + extracted safe reference + replayed Merkle32Path.nodeInput",
+      "limits": "RuntimeSha256Value/physical interpretation retained; no SHA implementation proof or source-to-ELF claim.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-core/src/state_only_private_merkle.rs::private_leaf_hash_with_digest",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K031",
+        "NDH_K032"
+      ],
+      "lean": {
+        "NDH_L055": [
+          "NDH_HashBridge.leaf"
+        ]
+      },
+      "extraction": "NDH_E004",
+      "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All tags/salts32; every initialized value slice of length0..416; exactly [0x10,tag], value, salt slices; returned reply unchanged.",
+      "method": "native exact call bytes/reply + extracted safe reference + replayed Merkle32Leaf.leafInput",
+      "limits": "Longer value classes require native widening/window composition. No all-caller domain discharge or hash-value proof.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/compact.rs::slot_offset",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K045",
+        "NDH_K046"
+      ],
+      "lean": {
+        "NDH_L008": [
+          "NDH_Slots.reference"
+        ],
+        "NDH_L010": [
+          "NDH_SlotInduction.invariant",
+          "NDH_SlotInduction.completion"
+        ]
+      },
+      "extraction": "NDH_E001",
+      "domain": "slot<=6, including final boundary6. Step invariant i<slot<=6 and at=slotStart(i); initialized offset28359; no wrapping and exact capacities.",
+      "method": "one exact native iteration + extracted reference boundaries + six-slot Lean induction",
+      "limits": "K005/K006 cover only0..1 and are not the full-loop certificate. slot>6 remains outside the domain and panics natively.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-core/src/r0/domain.rs::FibreIndex::get",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K011",
+        "NDH_K012"
+      ],
+      "lean": {
+        "NDH_L005": [
+          "NDH_Geometry.get"
+        ]
+      },
+      "extraction": "NDH_E001",
+      "domain": "Every valid FibreIndex value<262144, from the same usize; private-field carrier identity.",
+      "method": "actual frozen getter contract + extracted scalar reference + exact coherent getter equation",
+      "limits": "",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/fast_domain.rs::table_value",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K003",
+        "NDH_K004"
+      ],
+      "lean": {
+        "NDH_L028": [
+          "NDH_TableInstalled.reference"
+        ]
+      },
+      "extraction": "NDH_E001",
+      "domain": "All u32 pairs, interpreted in the existing R17CurrentCM31Semantics.operations dictionary; constructor premise discharged by that actual instance.",
+      "method": "actual frozen contract + extracted pair reference + installed coherent CM31 constructor equation",
+      "limits": "No claim about the multiplication field of that dictionary; table_value does not call it.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::absorb",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K059",
+        "NDH_K060"
+      ],
+      "lean": {
+        "NDH_L039": [
+          "NDH_TranscriptBridge.absorb_reference"
+        ]
+      },
+      "extraction": "NDH_E004",
+      "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. row<=95; payload length0..3712; initialized state32/payload; exact state, row tag, LE u32 length and payload slices; one digest call; state replaced by unchanged reply.",
+      "method": "native call bytes/reply + extracted reference + exact adopted PublicPreparation.absorb equation",
+      "limits": "Caller domains, runtime SHA value, ABI/physical carriers retained; larger payload/row classes are not credited.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-core/src/state_only_hiding.rs::cm31_mul_r",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K074",
+        "NDH_K075"
+      ],
+      "lean": {
+        "NDH_L036": [
+          "NDH_Cmr.reference"
+        ]
+      },
+      "extraction": "NDH_E003",
+      "domain": "Canonical input limbs a,b<P; actual deployed core r0 feature set, no field multiplication; full emitted Result/value.",
+      "method": "actual frozen contract + extracted scalar if-tree + exact SelectedMaskProbe helper equation",
+      "limits": "Canonicality still must be supplied at each enclosing caller; no caller composition credit.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/sampler.rs::decode8",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K055",
+        "NDH_K056"
+      ],
+      "lean": {
+        "NDH_L018": [
+          "NDH_Decode8.reference"
+        ],
+        "NDH_L063": [
+          "NDH_NativeDomains.low_digits_decode_domain"
+        ]
+      },
+      "extraction": "NDH_E002",
+      "domain": "Eight canonical digits<P; complete WideExact limb order and constructor normalization.",
+      "method": "actual frozen contract + extracted identity reference on canonical digits + emitted full constructor equation",
+      "limits": "K047 disproved arbitrary-u32 identity. L063 is the cohort low-digits domain, not a new native low_base_p_digits byte bridge.",
+      "composed_status": "OPEN"
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/transcript.rs::Transcript<H>::new",
+      "status": "CLOSED-CONDITIONAL",
+      "local_status": "CLOSED",
+      "kani": [
+        "NDH_K061",
+        "NDH_K062"
+      ],
+      "lean": {
+        "NDH_L039": [
+          "NDH_TranscriptBridge.new_reference"
+        ]
+      },
+      "extraction": "NDH_E004",
+      "domain": "Statically selected Digest32 backend; no LegacyHashFn/function-pointer-dependent context. All three variants, every semantic state32; deployed private-leaf-salts domain29, one variant tag and state slice; one digest call/reply, hash field preserved.",
+      "method": "native exact call bytes/reply + extracted reference + adopted PublicPreparation.new equation",
+      "limits": "Runtime SHA value/physical interpretation remains; no hash implementation or global transcript-security conclusion.",
+      "composed_status": "OPEN"
+    }
+  ],
+  "open": [
+    "crates/aspis-core/src/r0/heap.rs::filled",
+    "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one",
+    "crates/aspis-statement/src/poseidon2.rs::pow5",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::required_binding_is_zero",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV1::has_no_retirement_slot",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryEntryV2::has_no_retirement_slot",
+    "crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
+    "crates/aspis-core/src/r0_transcript.rs::block_rank",
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs::semantic_value",
+    "crates/aspis-statement/src/pool_v1/format.rs::validate_verifier_policy_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_immutable",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_immutable",
+    "crates/aspis-core/src/r0_transcript.rs::QueryScan::finish",
+    "crates/aspis-core/src/state_only_hiding.rs::selected_mask_linears",
+    "crates/aspis-r1-cost-probe/src/sampler.rs::add_small_base_p",
+    "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::decode_pool_v1_pair_live_snapshot_v1",
+    "crates/aspis-core/src/state_only_prefix.rs::state_only_statement_points",
+    "crates/aspis-r1-cost-probe/src/r1_semantic.rs::mark",
+    "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::decode_pair_afterstate_boxed_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierEntryStatusV1::try_from",
+    "crates/aspis-statement/src/pool_v1/format.rs::decode_pool_identity_v1",
+    "crates/aspis-r1-cost-probe/src/compact.rs::expand_semantic",
+    "crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::decode_pool_v1_pair_forest_checkpoint_v1",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV1::is_paused",
+    "crates/aspis-statement/src/pool_v1/verifier_registry.rs::VerifierRegistryV2::is_paused",
+    "programs/r1-cost-probe/src/lib.rs::observer",
+    "programs/r1-cost-probe/src/pool_route.rs::admitted"
+  ],
+  "composed_status": "OPEN",
+  "slot_correction": "immutable26/28; paused25/27; activeV2 op29, activeV1 op30; digest/error43/44",
+  "trust": "P6/D188 native-contract semantic transport reclassification, not removal"
+}

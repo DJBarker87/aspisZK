@@ -1,0 +1,35 @@
+{"attempt": "NDH_K052", "exit_status": 1, "wall_seconds": 2.6290103460196406, "peak_rss_kib": "513236", "swaps": "0", "print_axioms": "N/A: kani"}
+ase name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-core/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front5-20261028/NDH_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+    Finished `dev` profile [optimized] target(s) in 1.19s
+Checking harness r0_transcript::NDH_native::finish_contract...
+
+VERIFICATION RESULT:
+ ** 2 of 95 failed (93 undetermined)
+Failed Checks: |r|
+(match (r,crate::NDH_reference::finish_ref(self.accepted,self.accepted_len))
+{(Ok(a),Ok(b))=>*a==b,(Err(QuerySampleError::DrawLimitExhausted{accepted,max_draws}),Err((a,b)))=>*accepted==a
+    && *max_draws==b,_=>false}) != true
+ File: "crates/aspis-core/src/r0_transcript.rs", line 216, in r0_transcript::QueryScan::finish::{closure#2}
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 0.18577752s
+
+Manual Harness Summary:
+Verification failed for - r0_transcript::NDH_native::finish_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+

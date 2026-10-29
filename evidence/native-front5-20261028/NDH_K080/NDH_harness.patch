@@ -1,0 +1,561 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,14 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)]
++mod NDH_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++
++#[cfg(kani)]
++#[path="NDH_reference.rs"]
++mod NDH_reference;
++
++#[cfg(kani)]
++#[path="NDH_public.rs"]
++mod NDH_public;
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+@@ -168,3 +169,14 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)]
++mod NDH_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++
++#[cfg(kani)]
++#[path="NDH_reference.rs"]
++mod NDH_reference;
++
++#[cfg(kani)]
++#[path="NDH_program.rs"]
++mod NDH_program;
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
+ //! M31 PCS substrate (Stage 0).
+ //!
+@@ -97,3 +98,10 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)]
++mod NDH_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++
++#[cfg(kani)]
++#[path="NDH_reference.rs"]
++mod NDH_reference;
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+@@ -207,3 +208,10 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)]
++mod NDH_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
++
++#[cfg(kani)]
++#[path="NDH_reference.rs"]
++mod NDH_reference;
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -273,6 +273,7 @@
+ ];
+ 
+ #[inline]
++#[cfg_attr(kani,kani::ensures(|r| ((r.a.0,r.b.0) == NDH_native::reference::table_ref(value)) != cfg!(NDH_invert_table)))]
+ fn table_value(value: (u32, u32)) -> CM31 {
+     CM31::new(M31(value.0), M31(value.1))
+ }
+@@ -297,3 +298,7 @@
+     let square = x.mul(x);
+     square.double().sub(M31::ONE)
+ }
++
++#[cfg(kani)]
++#[path="NDH_table.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_table.rs
+@@ -0,0 +1,4 @@
++use super::*;
++#[path="NDH_reference.rs"] pub mod reference;
++#[kani::proof_for_contract(table_value)]
++fn table_contract(){let a:u32=kani::any();let b:u32=kani::any();table_value((a,b));}
+--- a/crates/aspis-r1-cost-probe/src/compact.rs
++++ b/crates/aspis-r1-cost-probe/src/compact.rs
+@@ -53,6 +53,7 @@
+ /// Worst-case node counts per slot: [C1 A, C2 A, folded A, C1 B, C2 B, folded B].
+ pub const SLOT_NODES: [usize; 6] = [146, 146, 128, 172, 172, 150];
+ /// Byte offset of each slot inside the stored proof.
++#[cfg_attr(kani,kani::ensures(|r| (*r == NDH_native::reference::slot_ref(slot)) != cfg!(NDH_invert_slot)))]
+ pub const fn slot_offset(slot: usize) -> usize {
+     let mut at = OFF_NODES;
+     let mut i = 0;
+@@ -199,3 +200,7 @@
+         assert_eq!(check_values(&bad), Err(CodecError::NonCanonical));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_slot.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_slot.rs
+@@ -0,0 +1,13 @@
++use super::*;
++#[path="NDH_reference.rs"] pub mod reference;
++#[kani::proof_for_contract(slot_offset)] #[kani::unwind(3)]
++fn slot_contract(){let k:usize=kani::any();kani::assume(k<=1);slot_offset(k);}
++#[kani::requires(i0<6 && at0==reference::slot_ref(i0))]
++#[kani::ensures(|r| (r.1==i0+1 && r.0==reference::slot_ref(r.1)) != cfg!(NDH_bad_slot_step))]
++fn native_step(at0:usize,i0:usize)->(usize,usize){let mut at=at0;let mut i=i0;
++    at += 32 * SLOT_NODES[i];
++    i += 1;
++    (at,i)
++}
++#[kani::proof_for_contract(native_step)]
++fn slot_step(){let i:usize=kani::any();kani::assume(i<6);native_step(reference::slot_ref(i),i);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_public.rs
+@@ -0,0 +1,32 @@
++use aspis_core::{Digest32,field::{M31,CM31}};
++#[path="NDH_reference.rs"] mod reference;
++#[kani::proof] fn fibre_get(){let v:usize=kani::any();kani::assume(v<262144);let i=aspis_core::r0::domain::FibreIndex::new(v).unwrap();assert_eq!(i.get(),reference::fibre_get_ref(v));}
++#[kani::proof] fn fibre_wrong(){let v:usize=kani::any();kani::assume(v<262144);let i=aspis_core::r0::domain::FibreIndex::new(v).unwrap();assert_ne!(i.get(),v);}
++#[kani::proof] fn fibre_new(){let v:usize=kani::any();assert_eq!(aspis_core::r0::domain::FibreIndex::new(v).is_ok(),reference::fibre_valid_ref(v));}
++#[kani::proof] fn fibre_new_wrong(){let v:usize=kani::any();assert_ne!(aspis_core::r0::domain::FibreIndex::new(v).is_ok(),reference::fibre_valid_ref(v));}
++#[kani::proof_for_contract(aspis_core::r0::domain::FibreIndex::get)]
++fn get_contract(){let v:usize=kani::any();kani::assume(v<262144);aspis_core::r0::domain::FibreIndex::new(v).unwrap().get();}
++#[kani::proof_for_contract(aspis_core::r0::domain::FibreIndex::new)]
++fn new_contract(){aspis_core::r0::domain::FibreIndex::new(kani::any());}
++
++use aspis_statement::pool_v1::verifier_registry::*;
++fn verifierregistryv1()->VerifierRegistryV1{VerifierRegistryV1{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any()}}
++fn verifierregistryv2()->VerifierRegistryV2{VerifierRegistryV2{flags:kani::any(),bump:kani::any(),pool:kani::any(),authority:kani::any(),policy_binding:kani::any(),generation:kani::any(),minimum_activation_delay_slots:kani::any(),registry_program:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any()}}
++fn verifierregistryentryv1()->VerifierRegistryEntryV1{VerifierRegistryEntryV1{status:match kani::any::<u8>() {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++fn verifierregistryentryv2()->VerifierRegistryEntryV2{VerifierRegistryEntryV2{status:match kani::any::<u8>() {0=>VerifierEntryStatusV1::Pending,1=>VerifierEntryStatusV1::Active,2=>VerifierEntryStatusV1::Paused,_=>VerifierEntryStatusV1::Retired},statement_version:kani::any(),bump:kani::any(),pool:kani::any(),verifier_program:kani::any(),profile_binding:kani::any(),release_binding:kani::any(),loader_program:kani::any(),programdata_address:kani::any(),programdata_bump:kani::any(),executable_hash:kani::any(),expected_upgrade_authority:kani::any(),activation_slot:kani::any(),retirement_slot:kani::any(),policy_binding:kani::any()}}
++#[kani::proof_for_contract(VerifierRegistryV1::is_immutable)] fn verifierregistryv1_is_immutable(){let v=verifierregistryv1();v.is_immutable();}
++#[kani::proof_for_contract(VerifierRegistryV1::is_paused)] fn verifierregistryv1_is_paused(){let v=verifierregistryv1();v.is_paused();}
++#[kani::proof_for_contract(VerifierRegistryV2::is_immutable)] fn verifierregistryv2_is_immutable(){let v=verifierregistryv2();v.is_immutable();}
++#[kani::proof_for_contract(VerifierRegistryV2::is_paused)] fn verifierregistryv2_is_paused(){let v=verifierregistryv2();v.is_paused();}
++#[kani::proof_for_contract(VerifierRegistryEntryV1::has_no_retirement_slot)] fn verifierregistryentryv1_has_no_retirement_slot(){let v=verifierregistryentryv1();v.has_no_retirement_slot();}
++#[kani::proof_for_contract(VerifierRegistryEntryV2::has_no_retirement_slot)] fn verifierregistryentryv2_has_no_retirement_slot(){let v=verifierregistryentryv2();v.has_no_retirement_slot();}
++#[derive(Clone,Copy)] struct Parent<'a>{children:&'a [[u8;32];8],reply:&'a [u8;32],idx:usize}
++impl Digest32 for Parent<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{assert_eq!(p.len(),9);assert_eq!(p[0].len(),1);assert_eq!(p[0][0],0x18);assert_eq!(p[self.idx+1].len(),32);assert!(core::ptr::eq(p[self.idx+1].as_ptr(),self.children[self.idx].as_ptr()) != cfg!(NDH_bad_parent));*self.reply}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn parent_bytes(){let children:[[u8;32];8]=kani::any();let reply:[u8;32]=kani::any();let i:usize=kani::any();let k:usize=kani::any();kani::assume(i<8 && k<32);let d=Parent{children:&children,reply:&reply,idx:i};let r=aspis_core::r0::merkle::parent_with_digest(d,&children);assert_eq!(r[k],reply[k]);}
++#[derive(Clone,Copy)] struct Leaf<'a>{tag:u8,value:&'a [u8],salt:&'a [u8;32],reply:&'a [u8;32]}
++impl Digest32 for Leaf<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{assert_eq!(p.len(),3);assert_eq!(p[0].len(),2);assert_eq!(p[0][0],0x10);assert_eq!(p[0][1],self.tag);assert_eq!(p[1].len(),self.value.len());assert_eq!(p[2].len(),32);assert!(core::ptr::eq(p[1].as_ptr(),self.value.as_ptr()) != cfg!(NDH_bad_leaf));assert!(core::ptr::eq(p[2].as_ptr(),self.salt.as_ptr()));*self.reply}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn leaf_bytes(){let value:[u8;416]=kani::any();let n:usize=kani::any();kani::assume(n<=416);let salt:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let tag:u8=kani::any();let k:usize=kani::any();kani::assume(k<32);let d=Leaf{tag,value:&value[..n],salt:&salt,reply:&reply};let r=aspis_core::state_only_private_merkle::private_leaf_hash_with_digest(d,tag,&value[..n],&salt);assert_eq!(r[k],reply[k]);}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_reference.rs
+@@ -0,0 +1,21 @@
++pub fn table_ref(v:(u32,u32))->(u32,u32){(v.0,v.1)}
++pub fn fibre_get_ref(v:usize)->usize{v}
++pub fn fibre_valid_ref(v:usize)->bool{v<262144}
++pub fn slot_ref(v:usize)->usize {match v {0=>28359,1=>33031,2=>37703,3=>41799,4=>47303,5=>52807,6=>57607,_=>0}}
++pub fn flag_ref(v:u8,mask:u8)->bool {v & mask != 0}
++pub fn retirement_ref(v:u64)->bool{v==u64::MAX}
++pub fn status_ref(v:u8)->Option<u8>{match v {0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
++pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
++pub fn finish_ref(accepted:[u32;22],len:usize)->Result<[u32;22],(usize,usize)>{if len==22 {Ok(accepted)} else {Err((len,64))}}
++pub fn digit_ref(d:u32,add:u32)->(u32,u32){let n=u64::from(d)+u64::from(add);((n%2147483647) as u32,(n/2147483647) as u32)}
++pub fn pack8_ref(d:[u32;8])->[u32;8]{d}
++pub fn absorb_header_ref(row:u8,n:usize)->[u8;6]{let l=(n as u32).to_le_bytes();[0,160+row,l[0],l[1],l[2],l[3]]}
++
++pub fn eq22(a:&[u32;22],b:&[u32;22])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21]}
++pub fn qwrite_ref(mut a:[u32;8],q:u32,r:u64,j:usize)->([u32;8],u64,usize){a[j-1]=q;(a,r,j-1)}
++pub fn eq8(a:&[u32;8],b:&[u32;8])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7]}
++
++pub fn base_add_ref(a:u32,b:u32)->u32 {let s=a+b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn base_sub_ref(a:u32,b:u32)->u32 {let s=a+2147483647-b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn cmr_ref(a:u32,b:u32)->(u32,u32){(base_sub_ref(base_add_ref(a,a),b),base_add_ref(a,base_add_ref(b,b)))}
++pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NDH_reference.rs
+@@ -0,0 +1,21 @@
++pub fn table_ref(v:(u32,u32))->(u32,u32){(v.0,v.1)}
++pub fn fibre_get_ref(v:usize)->usize{v}
++pub fn fibre_valid_ref(v:usize)->bool{v<262144}
++pub fn slot_ref(v:usize)->usize {match v {0=>28359,1=>33031,2=>37703,3=>41799,4=>47303,5=>52807,6=>57607,_=>0}}
++pub fn flag_ref(v:u8,mask:u8)->bool {v & mask != 0}
++pub fn retirement_ref(v:u64)->bool{v==u64::MAX}
++pub fn status_ref(v:u8)->Option<u8>{match v {0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
++pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
++pub fn finish_ref(accepted:[u32;22],len:usize)->Result<[u32;22],(usize,usize)>{if len==22 {Ok(accepted)} else {Err((len,64))}}
++pub fn digit_ref(d:u32,add:u32)->(u32,u32){let n=u64::from(d)+u64::from(add);((n%2147483647) as u32,(n/2147483647) as u32)}
++pub fn pack8_ref(d:[u32;8])->[u32;8]{d}
++pub fn absorb_header_ref(row:u8,n:usize)->[u8;6]{let l=(n as u32).to_le_bytes();[0,160+row,l[0],l[1],l[2],l[3]]}
++
++pub fn eq22(a:&[u32;22],b:&[u32;22])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21]}
++pub fn qwrite_ref(mut a:[u32;8],q:u32,r:u64,j:usize)->([u32;8],u64,usize){a[j-1]=q;(a,r,j-1)}
++pub fn eq8(a:&[u32;8],b:&[u32;8])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7]}
++
++pub fn base_add_ref(a:u32,b:u32)->u32 {let s=a+b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn base_sub_ref(a:u32,b:u32)->u32 {let s=a+2147483647-b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn cmr_ref(a:u32,b:u32)->(u32,u32){(base_sub_ref(base_add_ref(a,a),b),base_add_ref(a,base_add_ref(b,b)))}
++pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}
+--- /dev/null
++++ b/crates/aspis-core/src/NDH_reference.rs
+@@ -0,0 +1,21 @@
++pub fn table_ref(v:(u32,u32))->(u32,u32){(v.0,v.1)}
++pub fn fibre_get_ref(v:usize)->usize{v}
++pub fn fibre_valid_ref(v:usize)->bool{v<262144}
++pub fn slot_ref(v:usize)->usize {match v {0=>28359,1=>33031,2=>37703,3=>41799,4=>47303,5=>52807,6=>57607,_=>0}}
++pub fn flag_ref(v:u8,mask:u8)->bool {v & mask != 0}
++pub fn retirement_ref(v:u64)->bool{v==u64::MAX}
++pub fn status_ref(v:u8)->Option<u8>{match v {0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
++pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
++pub fn finish_ref(accepted:[u32;22],len:usize)->Result<[u32;22],(usize,usize)>{if len==22 {Ok(accepted)} else {Err((len,64))}}
++pub fn digit_ref(d:u32,add:u32)->(u32,u32){let n=u64::from(d)+u64::from(add);((n%2147483647) as u32,(n/2147483647) as u32)}
++pub fn pack8_ref(d:[u32;8])->[u32;8]{d}
++pub fn absorb_header_ref(row:u8,n:usize)->[u8;6]{let l=(n as u32).to_le_bytes();[0,160+row,l[0],l[1],l[2],l[3]]}
++
++pub fn eq22(a:&[u32;22],b:&[u32;22])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21]}
++pub fn qwrite_ref(mut a:[u32;8],q:u32,r:u64,j:usize)->([u32;8],u64,usize){a[j-1]=q;(a,r,j-1)}
++pub fn eq8(a:&[u32;8],b:&[u32;8])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7]}
++
++pub fn base_add_ref(a:u32,b:u32)->u32 {let s=a+b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn base_sub_ref(a:u32,b:u32)->u32 {let s=a+2147483647-b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn cmr_ref(a:u32,b:u32)->(u32,u32){(base_sub_ref(base_add_ref(a,a),b),base_add_ref(a,base_add_ref(b,b)))}
++pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}
+--- /dev/null
++++ b/crates/aspis-statement/src/NDH_reference.rs
+@@ -0,0 +1,21 @@
++pub fn table_ref(v:(u32,u32))->(u32,u32){(v.0,v.1)}
++pub fn fibre_get_ref(v:usize)->usize{v}
++pub fn fibre_valid_ref(v:usize)->bool{v<262144}
++pub fn slot_ref(v:usize)->usize {match v {0=>28359,1=>33031,2=>37703,3=>41799,4=>47303,5=>52807,6=>57607,_=>0}}
++pub fn flag_ref(v:u8,mask:u8)->bool {v & mask != 0}
++pub fn retirement_ref(v:u64)->bool{v==u64::MAX}
++pub fn status_ref(v:u8)->Option<u8>{match v {0=>Some(0),1=>Some(1),2=>Some(2),3=>Some(3),_=>None}}
++pub fn admitted_ref(data:&[u8])->bool{(data.len()==2 && data[0]==3 && (data[1]==10 || data[1]==11)) || (data.len()>=4 && data[0]==65 && data[1]==83 && data[2]==81 && data[3]==56)}
++pub fn finish_ref(accepted:[u32;22],len:usize)->Result<[u32;22],(usize,usize)>{if len==22 {Ok(accepted)} else {Err((len,64))}}
++pub fn digit_ref(d:u32,add:u32)->(u32,u32){let n=u64::from(d)+u64::from(add);((n%2147483647) as u32,(n/2147483647) as u32)}
++pub fn pack8_ref(d:[u32;8])->[u32;8]{d}
++pub fn absorb_header_ref(row:u8,n:usize)->[u8;6]{let l=(n as u32).to_le_bytes();[0,160+row,l[0],l[1],l[2],l[3]]}
++
++pub fn eq22(a:&[u32;22],b:&[u32;22])->bool{a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] && a[4]==b[4] && a[5]==b[5] && a[6]==b[6] && a[7]==b[7] && a[8]==b[8] && a[9]==b[9] && a[10]==b[10] && a[11]==b[11] && a[12]==b[12] && a[13]==b[13] && a[14]==b[14] && a[15]==b[15] && a[16]==b[16] && a[17]==b[17] && a[18]==b[18] && a[19]==b[19] && a[20]==b[20] && a[21]==b[21]}
++pub fn qwrite_ref(mut a:[u32;8],q:u32,r:u64,j:usize)->([u32;8],u64,usize){a[j-1]=q;(a,r,j-1)}
++pub fn eq8(a:&[u32;8],b:&[u32;8])->bool{a[0]==b[0]&&a[1]==b[1]&&a[2]==b[2]&&a[3]==b[3]&&a[4]==b[4]&&a[5]==b[5]&&a[6]==b[6]&&a[7]==b[7]}
++
++pub fn base_add_ref(a:u32,b:u32)->u32 {let s=a+b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn base_sub_ref(a:u32,b:u32)->u32 {let s=a+2147483647-b;if s>=2147483647 {s-2147483647} else {s}}
++pub fn cmr_ref(a:u32,b:u32)->(u32,u32){(base_sub_ref(base_add_ref(a,a),b),base_add_ref(a,base_add_ref(b,b)))}
++pub fn policy_ref(flags:u8,program_zero:bool,authority_zero:bool,binding_zero:bool)->u8{if flags & !3 !=0 {1} else if program_zero||binding_zero {2} else {let immutable=flags&1!=0;let deployment=flags&2!=0;if deployment&&!immutable {3} else if immutable!=authority_zero {3} else {0}}}
+--- a/crates/aspis-core/src/r0/domain.rs
++++ b/crates/aspis-core/src/r0/domain.rs
+@@ -8,6 +8,7 @@
+         #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+         pub struct $name(usize);
+         impl $name {
++#[cfg_attr(kani,kani::ensures(|r| (match r {Ok(v)=>v.0==index && index < $bound,Err(Error::IndexOutOfRange)=>index >= $bound,_=>false}) != cfg!(NDH_invert_new)))]
+             pub fn new(index: usize) -> Result<Self, Error> {
+                 if index < $bound {
+                     Ok(Self(index))
+@@ -15,6 +16,7 @@
+                     Err(Error::IndexOutOfRange)
+                 }
+             }
++#[cfg_attr(kani,kani::ensures(|r| (*r == self.0) != cfg!(NDH_invert_get)))]
+             pub const fn get(self) -> usize {
+                 self.0
+             }
+--- a/crates/aspis-statement/src/pool_v1/verifier_registry.rs
++++ b/crates/aspis-statement/src/pool_v1/verifier_registry.rs
+@@ -88,10 +88,12 @@
+ }
+ 
+ impl VerifierRegistryV1 {
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::flag_ref(self.flags,1))) != cfg!(NDH_invert_is_paused))) ]
+     pub fn is_paused(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED != 0
+     }
+ 
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::flag_ref(self.flags,2))) != cfg!(NDH_invert_is_immutable))) ]
+     pub fn is_immutable(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0
+     }
+@@ -144,10 +146,12 @@
+ }
+ 
+ impl VerifierRegistryV2 {
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::flag_ref(self.flags,1))) != cfg!(NDH_invert_is_paused))) ]
+     pub fn is_paused(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_PAUSED != 0
+     }
+ 
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::flag_ref(self.flags,2))) != cfg!(NDH_invert_is_immutable))) ]
+     pub fn is_immutable(&self) -> bool {
+         self.flags & POOL_V1_VERIFIER_REGISTRY_FLAG_IMMUTABLE != 0
+     }
+@@ -184,6 +188,7 @@
+ }
+ 
+ impl VerifierRegistryEntryV2 {
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::retirement_ref(self.retirement_slot))) != cfg!(NDH_invert_has_no_retirement_slot))) ]
+     pub fn has_no_retirement_slot(&self) -> bool {
+         self.retirement_slot == POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT
+     }
+@@ -205,6 +210,7 @@
+ }
+ 
+ impl VerifierRegistryEntryV1 {
++    #[cfg_attr(kani,kani::ensures(|r| (*r == (crate::NDH_reference::retirement_ref(self.retirement_slot))) != cfg!(NDH_invert_has_no_retirement_slot))) ]
+     pub fn has_no_retirement_slot(&self) -> bool {
+         self.retirement_slot == POOL_V1_VERIFIER_ENTRY_NO_RETIREMENT_SLOT
+     }
+@@ -235,6 +241,7 @@
+     }
+ }
+ 
++#[cfg_attr(kani,kani::ensures(|r| (*r == value.iter().all(|b| *b==0)) != cfg!(NDH_invert_binding)))]
+ fn required_binding_is_zero(value: &[u8; 32]) -> bool {
+     *value == [0u8; 32]
+ }
+@@ -817,3 +824,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_registry.rs"]
++mod NDH_native;
+--- a/crates/aspis-core/src/r0_transcript.rs
++++ b/crates/aspis-core/src/r0_transcript.rs
+@@ -213,6 +213,7 @@
+         false
+     }
+ 
++    #[cfg_attr(kani,kani::ensures(|r| (match (r,crate::NDH_reference::finish_ref(self.accepted,self.accepted_len)) {(Ok(a),Ok(b))=>crate::NDH_reference::eq22(a,&b),(Err(QuerySampleError::DrawLimitExhausted{accepted,max_draws}),Err((a,b)))=>*accepted==a && *max_draws==b,_=>false}) != cfg!(NDH_invert_finish)))]
+     fn finish(self) -> Result<[u32; QUERY_COUNT], QuerySampleError> {
+         if self.accepted_len == QUERY_COUNT {
+             Ok(self.accepted)
+@@ -319,3 +320,7 @@
+ 
+ #[cfg(test)]
+ mod tests;
++
++#[cfg(kani)]
++#[path="NDH_coretranscript.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-core/src/NDH_coretranscript.rs
+@@ -0,0 +1,9 @@
++use super::*;
++#[kani::proof_for_contract(QueryScan::finish)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn finish_contract(){let n:usize=kani::any();let draws:usize=kani::any();kani::assume(n<=22 && draws<=64);QueryScan{accepted:kani::any(),accepted_len:n,draws}.finish();}
++// The callback window is the exact byte-expression of block_rank. No whole
++// from_fn traversal is claimed by this one-window harness.
++fn native_word(block:&[u8;32],i:usize)->u32{let j=4*i;u32::from_le_bytes([block[j],block[j+1],block[j+2],block[j+3]])}
++#[kani::proof] fn rank_word(){let b:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<8);let j=i*4;assert_eq!(native_word(&b,i),u32::from(b[j])+(u32::from(b[j+1])<<8)+(u32::from(b[j+2])<<16)+(u32::from(b[j+3])<<24));}
++#[kani::proof] fn rank_word_wrong(){let b:[u8;32]=kani::any();let i:usize=kani::any();kani::assume(i<8);let j=i*4;assert_ne!(native_word(&b,i),u32::from(b[j])+(u32::from(b[j+1])<<8)+(u32::from(b[j+2])<<16)+(u32::from(b[j+3])<<24));}
+--- a/crates/aspis-r1-cost-probe/src/sampler.rs
++++ b/crates/aspis-r1-cost-probe/src/sampler.rs
+@@ -72,6 +72,8 @@
+     (digits, quotient[0])
+ }
+ 
++#[cfg_attr(kani,kani::requires(digits[0]<P&&digits[1]<P&&digits[2]<P&&digits[3]<P&&digits[4]<P&&digits[5]<P&&digits[6]<P&&digits[7]<P))]
++#[cfg_attr(kani,kani::ensures(|r| (r.to_limbs()==crate::NDH_reference::pack8_ref(digits)) != cfg!(NDH_invert_decode8)))]
+ fn decode8(digits: [u32; 8]) -> WideExact {
+     WideExact::new(
+         QM31 {
+@@ -228,3 +230,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_sampler.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_sampler.rs
+@@ -0,0 +1,24 @@
++use super::*;
++#[kani::proof_for_contract(decode8)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn decode_contract(){let d:[u32;8]=kani::any();kani::assume(d[0]<P&&d[1]<P&&d[2]<P&&d[3]<P&&d[4]<P&&d[5]<P&&d[6]<P&&d[7]<P);decode8(d);}
++// One exact add_small_base_p loop iteration on an arbitrary pre-state.
++#[kani::requires(d<2147483647 && a<=257)]
++#[kani::ensures(|r| (*r==crate::NDH_reference::digit_ref(d,a)) != cfg!(NDH_bad_add_step))]
++fn add_step(d:u32,a:u32)->(u32,u32){let mut digit=d;let mut addend=a;
++    let sum = u64::from(digit) + u64::from(addend);
++    digit = (sum % u64::from(P)) as u32;
++    addend = (sum / u64::from(P)) as u32;
++    (digit,addend)
++}
++#[kani::proof_for_contract(add_step)] fn add_step_contract(){let d:u32=kani::any();let a:u32=kani::any();kani::assume(d<2147483647&&a<=257);add_step(d,a);}
++#[kani::requires(j0>0 && j0<=8 && r1<2147483647)]
++#[kani::ensures(|v| (crate::NDH_reference::eq8(&v.0,&crate::NDH_reference::qwrite_ref(rank,q,r1,j0).0) && v.1==r1 && v.2==j0-1) != cfg!(NDH_bad_qwrite))]
++fn qwrite(mut rank:[u32;8],q:u32,r1:u64,j0:usize)->([u32;8],u64,usize){let mut j=j0; j-=1;
++    rank[j]=q;
++    let remainder=r1;
++    (rank,remainder,j)
++}
++#[kani::proof_for_contract(qwrite)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn qwrite_contract(){let a:[u32;8]=kani::any();let q:u32=kani::any();let r:u64=kani::any();let j:usize=kani::any();kani::assume(j>0&&j<=8&&r<2147483647);qwrite(a,q,r,j);}
+--- a/crates/aspis-r1-cost-probe/src/transcript.rs
++++ b/crates/aspis-r1-cost-probe/src/transcript.rs
+@@ -78,3 +78,7 @@
+         Ok(q)
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_transcript.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NDH_transcript.rs
+@@ -0,0 +1,11 @@
++use super::*;
++#[derive(Clone,Copy)] struct Absorb<'a>{old:&'a [u8;32],payload:&'a [u8],row:u8,reply:&'a [u8;32],k:usize}
++impl Digest32 for Absorb<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{assert_eq!(p.len(),4);assert_eq!(p[0].len(),32);assert_eq!(p[0][self.k],self.old[self.k]);assert_eq!(p[1].len(),2);assert_eq!(p[1][0],0);assert_eq!(p[1][1],160+self.row);assert_eq!(p[2].len(),4);let b=(self.payload.len() as u32).to_le_bytes();let i:usize=kani::any();kani::assume(i<4);assert_eq!(p[2][i],b[i]);assert_eq!(p[3].len(),self.payload.len());assert!(core::ptr::eq(p[3].as_ptr(),self.payload.as_ptr()) != cfg!(NDH_bad_absorb));*self.reply}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn absorb_bytes(){let old:[u8;32]=kani::any();let payload:[u8;3712]=kani::any();let n:usize=kani::any();kani::assume(n<=3712);let row:u8=kani::any();kani::assume(row<=95);let reply:[u8;32]=kani::any();let k:usize=kani::any();kani::assume(k<32);let d=Absorb{old:&old,payload:&payload[..n],row,reply:&reply,k};let mut tr=Transcript{state:old,hash:d};tr.absorb(row,&payload[..n]);assert_eq!(tr.state[k],reply[k]);}
++#[derive(Clone,Copy)] struct New<'a>{old:&'a [u8;32],tag:u8,reply:&'a [u8;32],k:usize}
++impl Digest32 for New<'_>{fn digest(&self,p:&[&[u8]])->[u8;32]{assert_eq!(p.len(),3);assert_eq!(p[0].len(),29);let j:usize=kani::any();kani::assume(j<29);assert!((p[0][j]==b"UNPROVED:R1:PRIVATE-SALTED:P3"[j]) != cfg!(NDH_bad_new_transcript));assert_eq!(p[1].len(),1);assert_eq!(p[1][0],self.tag);assert_eq!(p[2].len(),32);assert_eq!(p[2][self.k],self.old[self.k]);*self.reply}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn new_bytes(){let old:[u8;32]=kani::any();let reply:[u8;32]=kani::any();let k:usize=kani::any();kani::assume(k<32);let v:u8=kani::any();kani::assume(v<3);let variant=match v {0=>Variant::S1,1=>Variant::S2,_=>Variant::D};let d=New{old:&old,tag:v+1,reply:&reply,k};let tr=Transcript::new(d,old,variant);assert_eq!(tr.state[k],reply[k]);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDH_registry.rs
+@@ -0,0 +1,6 @@
++use super::*;
++#[kani::proof_for_contract(required_binding_is_zero)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn binding_contract(){let v:[u8;32]=kani::any();required_binding_is_zero(&v);}
++#[kani::proof] fn status_all(){let x:u8=kani::any();let got=VerifierEntryStatusV1::try_from(x);let spec=crate::NDH_reference::status_ref(x);match (got,spec){(Ok(a),Some(b))=>assert_eq!(a as u8,b),(Err(PoolV1VerifierRegistryFormatError::InvalidStatus),None)=>{},_=>panic!("status")}}
++#[kani::proof] fn status_wrong(){let x:u8=kani::any();let got=VerifierEntryStatusV1::try_from(x);assert_eq!(got.is_ok(),x>=4);}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NDH_program.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof_for_contract(pool_route::admitted)] #[kani::unwind(8)]
++fn admission_contract(){let data:[u8;1232]=kani::any();let n:usize=kani::any();kani::assume(n<=1232);pool_route::admitted(&data[..n]);}
+--- a/programs/r1-cost-probe/src/pool_route.rs
++++ b/programs/r1-cost-probe/src/pool_route.rs
+@@ -1,5 +1,6 @@
+ //! The complete instruction surface admitted by the Pool release build.
+ 
++#[cfg_attr(kani,kani::ensures(|r| (*r==crate::NDH_reference::admitted_ref(data)) != cfg!(NDH_invert_admission)))]
+ pub(super) fn admitted(data: &[u8]) -> bool {
+     data == [3, 10] || data == [3, 11] || data.starts_with(b"ASQ8")
+ }
+--- a/crates/aspis-core/src/r0/heap.rs
++++ b/crates/aspis-core/src/r0/heap.rs
+@@ -19,3 +19,7 @@
+     // Exactly one element, with the same layout and allocation alignment.
+     Ok(unsafe { Box::from_raw(ptr) })
+ }
++
++#[cfg(kani)]
++#[path="NDH_heap.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-core/src/r0/NDH_heap.rs
+@@ -0,0 +1,9 @@
++use super::*;
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,crate::NDH_kmx::KMX_realloc)]
++fn fill_empty(){let v:u32=kani::any();match filled(0,v){Ok(x)=>assert_eq!(x.len(),0),Err(Error::Allocation)=>{},_=>panic!("unexpected error")}}
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,crate::NDH_kmx::KMX_realloc)]
++fn fill_one(){let v:u32=kani::any();match filled(1,v){Ok(x)=>{assert_eq!(x.len(),1);assert!((x[0]==v) != cfg!(NDH_bad_fill));},Err(Error::Allocation)=>{},_=>panic!("unexpected error")}}
+--- a/crates/aspis-core/src/state_only_hiding.rs
++++ b/crates/aspis-core/src/state_only_hiding.rs
+@@ -439,6 +439,8 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani,kani::requires(value.a.0<crate::field::P && value.b.0<crate::field::P))]
++#[cfg_attr(kani,kani::ensures(|r| ((r.a.0,r.b.0)==crate::NDH_reference::cmr_ref(value.a.0,value.b.0)) != cfg!(NDH_invert_cmr)))]
+ fn cm31_mul_r(value: CM31) -> CM31 {
+     CM31::new(value.a.double().sub(value.b), value.a.add(value.b.double()))
+ }
+@@ -1214,3 +1216,7 @@
+         mask_value(&claims[0], alpha).add(WideExact::from_qm31(eta).mul(terminal))
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_hiding.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-core/src/NDH_hiding.rs
+@@ -0,0 +1,3 @@
++use super::*;
++use crate::field::P;
++#[kani::proof_for_contract(cm31_mul_r)] fn cmr_contract(){let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<P&&b<P);cm31_mul_r(CM31::new(M31(a),M31(b)));}
+--- a/crates/aspis-statement/src/pool_v1/format.rs
++++ b/crates/aspis-statement/src/pool_v1/format.rs
+@@ -165,6 +165,7 @@
+     })
+ }
+ 
++#[cfg_attr(kani,kani::ensures(|r| (match (r,crate::NDH_reference::policy_ref(policy.flags,policy.registry_program==[0;32],policy.registry_authority==[0;32],policy.policy_binding==[0;32])) {(Ok(()),0)=>true,(Err(PoolV1FormatError::UnsupportedFlags),1)=>true,(Err(PoolV1FormatError::ZeroRequiredBinding),2)=>true,(Err(PoolV1FormatError::InvalidAuthorityMode),3)=>true,_=>false}) != cfg!(NDH_invert_policy)))]
+ pub fn validate_verifier_policy_v1(policy: &VerifierPolicyV1) -> Result<(), PoolV1FormatError> {
+     if policy.flags & !POOL_V1_VERIFIER_POLICY_FLAGS_MASK != 0 {
+         return Err(PoolV1FormatError::UnsupportedFlags);
+@@ -354,3 +355,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_format.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDH_format.rs
+@@ -0,0 +1,6 @@
++use super::*;
++#[kani::proof_for_contract(validate_verifier_policy_v1)] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDH_kmx::KMX_copy_nonoverlapping)]
++fn policy_contract(){let v=VerifierPolicyV1{flags:kani::any(),registry_program:kani::any(),registry_authority:kani::any(),policy_binding:kani::any()};validate_verifier_policy_v1(&v);}
++#[kani::proof] fn identity_wrong_length(){let b:[u8;143]=kani::any();let n:usize=kani::any();kani::assume(n<=143);assert!(matches!(decode_pool_identity_v1(&b[..n]),Err(PoolV1FormatError::WrongLength)));}
++#[kani::proof] fn short_decoders(){let b:[u8;143]=kani::any();let n:usize=kani::any();kani::assume(n<=143);let d=&b[..n];let identity=matches!(decode_pool_identity_v1(d),Err(PoolV1FormatError::WrongLength));assert!(identity != cfg!(NDH_bad_short));assert!(matches!(crate::pool_v1::pair_tree_profile::decode_pool_v1_pair_live_snapshot_v1(d),Err(crate::pool_v1::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1::WrongLength)));assert!(matches!(crate::pool_v1::pair_forest_accounts::decode_pool_v1_pair_forest_checkpoint_v1(d),Err(crate::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1::WrongLength)));}
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NDH_pairtree.rs"]
++mod NDH_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NDH_pairtree.rs
+@@ -0,0 +1,2 @@
++use super::*;
++#[kani::proof] fn afterstate_short(){let b:[u8;1]=kani::any();let n:usize=kani::any();kani::assume(n<=1);assert!(decode_pair_afterstate_boxed_v1(&b[..n]).is_err());}
