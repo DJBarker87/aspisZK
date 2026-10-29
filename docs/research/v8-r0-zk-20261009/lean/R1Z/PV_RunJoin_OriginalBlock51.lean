@@ -34,10 +34,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     ok (b,({state:=advanced,hash:=hash W x V c tab} : host_transcript.Transcript _)))=_
   rw [ha]
   simp only [bind_tc_ok]
-  rw [PV_RunJoin_OriginalHash51.read W x V c tab unique (.sqO i) _
+  erw [PV_RunJoin_OriginalHash51.read W x V c tab unique (.sqO i) _
     (PV_RunJoin_OriginalOpeningFrames51.squeeze _ i)]
   simp only [bind_tc_ok]
-  rw [PV_RunJoin_OriginalHash51.read W x V c tab unique (.advO i) _
+  erw [PV_RunJoin_OriginalHash51.read W x V c tab unique (.advO i) _
     (PV_RunJoin_OriginalOpeningFrames51.advance _ i)]
   rfl
 #print axioms complete
