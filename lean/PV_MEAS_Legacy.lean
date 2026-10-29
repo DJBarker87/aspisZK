@@ -73,6 +73,10 @@ variable {Public Signal Env A R S N : Type} [Fintype R] [Nonempty R]
 
 
 open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Finite
+-- Three tiny input aliases have the same frozen body. Expose only those aliases
+-- to elaborator instance matching; no protocol term or bound is evaluated.
+attribute [local reducible] PV_EVH_Core.input PV_EVH_Average.input
+  PrivacyR1HeadlineDeployedEvents.input
 local instance nativeSpace : MeasurableSpace R := ⊤
 local instance commonSpace : MeasurableSpace S := ⊤
 local instance environmentSpace : MeasurableSpace Env := ⊤
@@ -194,9 +198,20 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
       (∫ₚ e, (∫ₚ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
         ∂(uniform (source).IdealRand : Measure (source).IdealRand)) ∂(uniform Env : Measure Env))| ≤
         (PV_EVH_Core.bound template outputs x : ℝ) at measured
-    rw [← integral_uniform_product _ (fun p => by exact_mod_cast bit_nonneg _),
-      integral_bit_mean, integral_bit_mean] at measured
-    exact_mod_cast measured
+    have product := integral_uniform_product
+      (fun p : Env × (source).IdealRand =>
+        (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput p.1 adv p.2)) : ℝ))
+      (fun p => by exact_mod_cast bit_nonneg
+        (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput p.1 adv p.2)))
+    rw [← product, integral_bit_mean, integral_bit_mean] at measured
+    have casted :
+        ((|mean (fun n => bit (adv.decide
+          (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n))) -
+          mean (fun p => bit (adv.decide
+          (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv p)))| : ℚ) : ℝ) ≤
+          (PV_EVH_Core.bound template outputs x : ℝ) := by
+      simpa only [Rat.cast_abs, Rat.cast_sub] using measured
+    exact Rat.cast_le.mp casted
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
       (uniform R) rt.completion rt.publicInput e rt.native rt.signal
