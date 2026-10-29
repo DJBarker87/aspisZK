@@ -13,6 +13,7 @@ theorem {n}_translation (es : List NativeEvent) :
  induction es with
  | nil => rfl
  | cons e es ih =>
+   simp only [{m},{n}] at ih
    cases e <;> simp only [List.map_cons,{m},{n},List.filterMap_cons,translateEvent,ih]
 #print axioms {n}_translation
 '''
