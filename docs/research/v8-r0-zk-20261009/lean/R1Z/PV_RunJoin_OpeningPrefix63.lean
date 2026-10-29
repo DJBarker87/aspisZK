@@ -31,6 +31,7 @@ theorem append (base : ExternalTypes) (heap : Heap) (box : Box)
     (out : alloc.vec.Vec U8) (room : out.length+608≤Usize.max) :
     ∃ next, @prover.append_opening_values (types base) (selected base heap box ops) out opening=ok next ∧
       next.val=out.val++payload opening ∧ next.length=out.length+608 := by
+  letI : ExternalTypes := types base
   rw [PV_RunJoin_OpeningCongruence63.complete _ _ (PV_RunJoin_EncodedInstalled48.field base heap box ops)]
   obtain ⟨next,hn,hv⟩ := PV_RunJoin_OpeningValues41.append ops (value opening) opening (rows opening) out room
   refine ⟨next,hn,hv,?_⟩
