@@ -16,9 +16,11 @@ def scalar (bytes : Array U8 4#usize) : Option M :=
 
 def component (bytes : List U8) (start stop : Nat) : Result (Option M) := do
   let part ← PV_RDCD4_SliceRange194.index bytes start stop
-  match PV_RDCD4_TryArray194.into 4#usize part with
-  | none => .ok none
-  | some part => .ok (scalar part)
+  let converted : Option (Array U8 4#usize) :=
+    PV_RDCD4_TryArray194.into (T := U8) 4#usize part
+  match converted with
+  | Option.none => .ok Option.none
+  | Option.some value => .ok (scalar value)
 
 /-- CM31 source order: slice/try_into/decode a, short circuit on None, then b.
 No eager length-eight check is introduced. -/
