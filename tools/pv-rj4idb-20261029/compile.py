@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rj4idb-20261029';H='/home
 a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 64600<=a<=64699
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
-assert len(list(E.glob('receipt-646*.json')))<89
+assert sum(len(json.loads(p.read_text())) for p in E.glob('modules-646*.json')) < 89, '89 actual Lean launches exhausted; the documented 64600 empty scope is uncharged'
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.
 round_sources={m:v for m,v in plan['modules'].items() if m.startswith('PV_RJ4IDB_')}
