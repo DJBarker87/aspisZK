@@ -39,6 +39,31 @@ theorem integral_uniform_product {C R : Type*} [Fintype C] [Nonempty C]
   rw [← Finset.sum_div]
   ring
 
+/-- Projection of the finite uniform joint law has the finite uniform marginal. -/
+theorem uniform_fst (C R : Type*) [Fintype C] [Nonempty C] [Fintype R] [Nonempty R]
+    [MeasurableSpace C] [MeasurableSingletonClass C]
+    [MeasurableSpace R] [MeasurableSingletonClass R] :
+    Measure.map Prod.fst (uniform (C × R) : Measure (C × R)) =
+      Measure.map id (uniform C : Measure C) := by
+  classical
+  rw [Measure.map_id]
+  apply Measure.ext
+  intro s hs
+  rw [Measure.map_apply measurable_fst hs]
+  simp only [uniform, uniformMeasure, Measure.smul_apply, smul_eq_mul,
+    Measure.sum_apply _ (measurable_fst hs), Measure.sum_apply _ hs,
+    Measure.dirac_apply, Set.indicator_apply, Pi.one_apply, Set.mem_preimage,
+    Fintype.sum_prod_type, Fintype.card_prod, Nat.cast_mul,
+    Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← Finset.mul_sum]
+  rw [ENNReal.mul_inv]
+  have hr : (Fintype.card R : ℝ≥0∞) ≠ 0 := by exact_mod_cast Fintype.card_ne_zero
+  calc
+    _ = (Fintype.card C : ℝ≥0∞)⁻¹ *
+        (((Fintype.card R : ℝ≥0∞)⁻¹ * Fintype.card R) *
+          ∑ c : C, if c ∈ s then (1 : ℝ≥0∞) else 0) := by ac_rfl
+    _ = _ := by rw [ENNReal.inv_mul_cancel hr ENNReal.natCast_ne_top, one_mul]
+
+#print axioms uniform_fst
 #print axioms integral_uniform_product
 #print axioms uniform_probability
 #print axioms integral_uniform
