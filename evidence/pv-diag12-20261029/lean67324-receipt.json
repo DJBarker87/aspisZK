@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "b1aad8357fdc22e6ddfd50be727f0436ca834748",
+  "runner_sha256": "b876d54e951ce3043b5be0164b42c09a7ca9a27483b2f3d46bc372653368e9c9",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG12_WriteAll",
+  "attempt": 67324,
+  "source_sha256": "69467f2553fc7d3b341c08a40267ada59a497c21a12f3f289fd3ab63aa2ab383",
+  "environment_sha256": "055e1aba10e7776c33235e718d572af0d550ce299ca10272f02c6cc51525d98d",
+  "dependency_objects": {
+    "PV_DIAG12_Fd": {
+      "/home/dombarker/project-offloads/codex-pv-diag12-20261029/objects/PV_DIAG12_Fd.olean": "0af776f8bb77939b850d00b736a313b683057ccbea9c271bc79e9d8e49083665"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/lean67324-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/objects/PV_DIAG12_WriteAll.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag12-20261029/sources/PV_DIAG12_WriteAll.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 0.3249943256378174,
+  "peak_rss_kib": "487268",
+  "swaps": "0",
+  "gnu_wall": "0:00.29",
+  "print_axioms": "'PV_DIAG12.writeAll_cut' does not depend on any axioms\n'PV_DIAG12.writeAll_empty' depends on axioms: [propext, Quot.sound]\n/home/dombarker/project-offloads/codex-pv-diag12-20261029/sources/PV_DIAG12_WriteAll.lean:47:61: error: unsolved goals\nw : Writer\nq : Span \u2192 Request\nsig : Signal\nfuel : Nat\ns : Span\nc : Cursor\nh : List.isEmpty s.bytes = false\nes : List Exchange\ne : Int\nhr : w s (sig c.next (q s)) = { trace := es, result := Result.error e }\nhe : e \u2260 4\n\u22a2 (if false = true then { execution := pureE (), cursor := c }\n    else { execution := { trace := es, result := Result.error e }, cursor := { next := c.next + 1 } }) =\n    { execution := { trace := es, result := Result.error e }, cursor := { next := c.next + 1 } }\n/home/dombarker/project-offloads/codex-pv-diag12-20261029/sources/PV_DIAG12_WriteAll.lean:48:23: warning: This simp argument is unused:\n  if_false\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335w\u0335r\u0335i\u0335t\u0335e\u0335A\u0335l\u0335l\u0335,\u0335h\u0335,\u0335i\u0335f\u0335_\u0335f\u0335a\u0335l\u0335s\u0335e\u0335,\u0335h\u0335r\u0335,\u0335i\u0335f\u0335_\u0335n\u0335e\u0335g\u0335[\u0332w\u0332r\u0332i\u0332t\u0332e\u0332A\u0332l\u0332l\u0332,\u0332 \u0332h\u0332,\u0332 \u0332h\u0332r\u0332,\u0332 \u0332i\u0332f\u0332_\u0332n\u0332e\u0332g\u0332 he]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG12.writeAll_error' depends on axioms: [sorryAx]\n",
+  "object_sha256": "142af1682a3d6ddec0daf2412aefc7f82104d3aee4b09b0ab5de96b47a8216d8"
+}

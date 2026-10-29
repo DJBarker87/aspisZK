@@ -1,0 +1,109 @@
+import PV_DIAG12_Fd
+namespace PV_DIAG12
+set_option autoImplicit false
+
+structure Cursor where
+ next : Nat
+ deriving DecidableEq, Repr
+structure WRun (A : Type) where
+ execution : Exec A
+ cursor : Cursor
+ deriving DecidableEq, Repr
+abbrev Signal := Nat → Request → Reply
+abbrev Writer := Span → Reply → Exec Nat
+def writeAll (write : Writer) (request : Span → Request) (signal : Signal) :
+ Nat → Span → Cursor → WRun Unit
+ | 0,_,c => ⟨⟨[],.cut⟩,c⟩
+ | fuel+1,s,c =>
+  if s.bytes.isEmpty then ⟨pureE (),c⟩ else
+  let r := write s (signal c.next (request s))
+  let c' : Cursor := ⟨c.next+1⟩
+  match r.result with
+  | .cut => ⟨⟨r.trace,.cut⟩,c'⟩
+  | .error e =>
+    if e=4 then
+     let tail := writeAll write request signal fuel s c'
+     ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩
+    else ⟨⟨r.trace,.error e⟩,c'⟩
+  | .ok n =>
+    if n=0 then ⟨⟨r.trace,.error (-1)⟩,c'⟩ else
+    if n>s.bytes.length then ⟨⟨r.trace,.error (-2)⟩,c'⟩ else
+    let tail := writeAll write request signal fuel (advance s n) c'
+    ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩
+/- -1 and -2 are MODEL errors: WriteZero and invalid Write contract.
+They are not OS errno values and do not identify a native panic/hook. -/
+theorem writeAll_cut (w : Writer) (q : Span → Request) (sig : Signal) (s : Span) (c : Cursor) :
+ writeAll w q sig 0 s c=⟨⟨[],.cut⟩,c⟩ := rfl
+#print axioms writeAll_cut
+
+theorem writeAll_empty (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=true) :
+ writeAll w q sig (fuel+1) s c=⟨pureE (),c⟩ := by simp only [writeAll,h,eq_self,ite_true]
+#print axioms writeAll_empty
+
+theorem writeAll_error (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=false)
+ (es : List Exchange) (e : Int) (hr : w s (sig c.next (q s))=⟨es,.error e⟩) (he : e≠4) :
+ writeAll w q sig (fuel+1) s c=⟨⟨es,.error e⟩,⟨c.next+1⟩⟩ := by
+ simp only [writeAll,h,Bool.false_eq_true,ite_false,hr,if_neg he]
+#print axioms writeAll_error
+
+theorem writeAll_interrupted (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=false)
+ (es : List Exchange) (hr : w s (sig c.next (q s))=⟨es,.error 4⟩) :
+ writeAll w q sig (fuel+1) s c=
+ let tail := writeAll w q sig fuel s ⟨c.next+1⟩
+ ⟨⟨es++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩ := by
+ simp only [writeAll,h,Bool.false_eq_true,ite_false,hr,eq_self,ite_true]
+#print axioms writeAll_interrupted
+
+theorem writeAll_zero (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=false)
+ (es : List Exchange) (hr : w s (sig c.next (q s))=⟨es,.ok 0⟩) :
+ writeAll w q sig (fuel+1) s c=⟨⟨es,.error (-1)⟩,⟨c.next+1⟩⟩ := by
+ simp only [writeAll,h,Bool.false_eq_true,ite_false,hr,eq_self,ite_true]
+#print axioms writeAll_zero
+
+theorem writeAll_progress (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=false)
+ (es : List Exchange) (n : Nat) (hr : w s (sig c.next (q s))=⟨es,.ok n⟩)
+ (hn : n≠0) (hb : ¬ n>s.bytes.length) :
+ writeAll w q sig (fuel+1) s c=
+ let tail := writeAll w q sig fuel (advance s n) ⟨c.next+1⟩
+ ⟨⟨es++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩ := by
+ simp only [writeAll,h,Bool.false_eq_true,ite_false,hr,if_neg hn,if_neg hb]
+#print axioms writeAll_progress
+
+theorem writeAll_missing_return (w : Writer) (q : Span → Request) (sig : Signal)
+ (fuel : Nat) (s : Span) (c : Cursor) (h : s.bytes.isEmpty=false)
+ (es : List Exchange) (hr : w s (sig c.next (q s))=⟨es,.cut⟩) :
+ writeAll w q sig (fuel+1) s c=⟨⟨es,.cut⟩,⟨c.next+1⟩⟩ := by
+ simp only [writeAll,h,Bool.false_eq_true,ite_false,hr]
+#print axioms writeAll_missing_return
+
+def writeRequest (fd : Int) (s : Span) : Request := .write fd s (min s.bytes.length linuxReadLimit)
+def fdWriteAll (fd : Int) := writeAll (fdWrite fd) (writeRequest fd)
+/- The EBADF mask encloses sys::stdio::write_all ONCE; masking each write
+inside its loop would alter the request sequence after a partial write. -/
+def stdWriteAll (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (c : Cursor) : WRun Unit :=
+ let r := fdWriteAll fd sig fuel s c
+ ⟨maskBadFd () r.execution,r.cursor⟩
+theorem std_all_trace (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (c : Cursor) :
+ (stdWriteAll fd sig fuel s c).execution.trace=(fdWriteAll fd sig fuel s c).execution.trace := rfl
+#print axioms std_all_trace
+
+theorem std_all_ebadf (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (c : Cursor)
+ (h : (fdWriteAll fd sig fuel s c).execution.result=.error 9) :
+ (stdWriteAll fd sig fuel s c).execution.result=.ok () := by
+ simp only [stdWriteAll,maskBadFd,h,eq_self,ite_true]
+#print axioms std_all_ebadf
+
+theorem std_all_preserves_cursor (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (c : Cursor) :
+ (stdWriteAll fd sig fuel s c).cursor=(fdWriteAll fd sig fuel s c).cursor := rfl
+theorem std_all_error_deliveries (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (c : Cursor) :
+ delivered fd (stdWriteAll fd sig fuel s c).execution.trace=
+ delivered fd (fdWriteAll fd sig fuel s c).execution.trace := rfl
+#print axioms std_all_preserves_cursor
+#print axioms std_all_error_deliveries
+
+end PV_DIAG12
