@@ -28,7 +28,8 @@ theorem complete (phase : PV_RunJoin_NativeControl55.Phase) (p : prover.Publicat
   have planLength : (PV_RunJoin_ActualRun.plans phase).claim.length=16*n := by
     rw [plan,PV_RJN_Bytes.length]
     change zeroOut.length=16*n
-    simpa only [PV_RunJoin_ActualPlanSources59.empty,Nat.zero_add] using lzero
+    change zeroOut.length=0+16*n at lzero
+    omega
   intro out room
   rw [planLength] at room
   obtain ⟨next,hn,hv,hlen⟩ := PV_RunJoin_CompactSize39.encode
