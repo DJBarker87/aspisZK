@@ -44,8 +44,10 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
 
 theorem publishOrder (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    @PV_RunJoin_PublishProduced60.PV_RunJoin_Link_PublishOrder (types base) (opsNative base heap box ops) :=
-  PV_RunJoin_ActualFrontRoom61.specialize (baseTypes base) heap box (residual base ops)
+    @PV_RunJoin_PublishProduced60.PV_RunJoin_Link_PublishOrder (types base) (opsNative base heap box ops) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops
+  exact PV_RunJoin_ActualFrontRoom61.specialize (baseTypes base) heap box (residual base ops)
     (complete base heap box ops)
 
 #print axioms logical
