@@ -5,9 +5,9 @@ open Aeneas Aeneas.Std PV_OWNK_TowerCanon
 /-- u64 shift/OR dividend. Canonicality needs only the remainder operation,
 not correctness of the inverse, rank, or previously stored quotient. -/
 def dividend (remainder : U64) (word : U32) : U64 :=
- UScalar.ofNat .U64 (remainder.val * 4294967296 + word.val)
-def remWord (n : U64) : U32 := UScalar.ofNat .U32 (n.val % 2147483647)
-def quotient (n : U64) : U32 := UScalar.ofNat .U32 (n.val / 2147483647)
+ U64.ofNat (remainder.val * 4294967296 + word.val)
+def remWord (n : U64) : U32 := U32.ofNat (n.val % 2147483647)
+def quotient (n : U64) : U32 := U32.ofNat (n.val / 2147483647)
 
 theorem rem_canonical (n : U64) : PV_OWNK_ScalarOps.Canon (remWord n) := by
  have h : n.val % 2147483647 < 2147483647 := Nat.mod_lt _ (by omega)
@@ -21,7 +21,7 @@ def pass : List U32 → U64 → List U32 × U32
  | [],remainder => ([],remWord remainder)
  | w::ws,remainder =>
   let n := dividend remainder w
-  let rest := pass ws (UScalar.ofNat .U64 (n.val % 2147483647))
+  let rest := pass ws (U64.ofNat (n.val % 2147483647))
   (quotient n::rest.1,rest.2)
 
 theorem pass_canonical (rank : List U32) (remainder : U64) :
