@@ -44,6 +44,7 @@ theorem source_owner {C : Type} (entropy : Entropy C) (pub : Pub)
     | mk es status =>
       simp only [leaf,erase] at hr
       simp only [leaf] at he
+      simp only [PV_L1E_OwnerJoin.liftOwner,step]
       change (⟨es,status⟩ : Logged _) = ⟨record.events,.ok (record.result,after)⟩
       rw [hr,he]
 #print axioms source_owner

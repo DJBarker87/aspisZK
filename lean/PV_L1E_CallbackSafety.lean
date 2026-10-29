@@ -17,13 +17,13 @@ theorem safe_PV_L1D_Source_030
   unfold PV_L1D_Source_030.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_030
 theorem safe_PV_L1D_Source_003
   (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment)
@@ -34,13 +34,13 @@ theorem safe_PV_L1D_Source_003
   unfold PV_L1D_Source_003.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_003
 theorem safe_PV_L1D_Source_004
   (queries : Array Std.U32 22#usize) (begin1 : Std.Usize) (end1 : Std.Usize)
@@ -49,13 +49,13 @@ theorem safe_PV_L1D_Source_004
   unfold PV_L1D_Source_004.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_004
 theorem safe_PV_L1D_Source_005
   (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment)
@@ -65,14 +65,14 @@ theorem safe_PV_L1D_Source_005
   unfold PV_L1D_Source_005.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_004
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_004
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_005
 theorem safe_PV_L1D_Source_006
   (out : alloc.vec.Vec Std.U8) (cc1 : host_commitment.Commitment)
@@ -82,14 +82,14 @@ theorem safe_PV_L1D_Source_006
   unfold PV_L1D_Source_006.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_005
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_005
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_006
 theorem safe_PV_L1D_Source_007
   (variant : transport.Variant) (p : prover.Publication) :
@@ -97,15 +97,15 @@ theorem safe_PV_L1D_Source_007
   unfold PV_L1D_Source_007.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_006
-    | solve | apply safe_PV_L1D_Source_003
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_006
+    | solve | with_reducible apply safe_PV_L1D_Source_003
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_007
 theorem safe_PV_L1D_QueryAbsorb
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -114,13 +114,13 @@ theorem safe_PV_L1D_QueryAbsorb
   unfold PV_L1D_QueryAbsorb.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_QueryAbsorb
 theorem safe_PV_L1D_QueryProducer
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -129,14 +129,14 @@ theorem safe_PV_L1D_QueryProducer
   unfold PV_L1D_QueryProducer.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_QueryAbsorb
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_QueryAbsorb
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_QueryProducer
 theorem safe_PV_L1D_Source_008
   (variant : transport.Variant)
@@ -146,13 +146,13 @@ theorem safe_PV_L1D_Source_008
   unfold PV_L1D_Source_008.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_008
 theorem safe_PV_L1D_Source_009
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
@@ -162,13 +162,13 @@ theorem safe_PV_L1D_Source_009
   unfold PV_L1D_Source_009.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_009
 theorem safe_PV_L1D_Source_015
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -177,13 +177,13 @@ theorem safe_PV_L1D_Source_015
   unfold PV_L1D_Source_015.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_015
 theorem safe_PV_L1D_Source_017
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -192,14 +192,14 @@ theorem safe_PV_L1D_Source_017
   unfold PV_L1D_Source_017.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_015
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_015
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_017
 theorem safe_PV_L1D_Source_018
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -208,14 +208,14 @@ theorem safe_PV_L1D_Source_018
   unfold PV_L1D_Source_018.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_017
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_017
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_018
 theorem safe_PV_L1D_Source_019
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -225,14 +225,14 @@ theorem safe_PV_L1D_Source_019
   unfold PV_L1D_Source_019.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_017
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_017
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_019
 theorem safe_PV_L1D_Source_020
   (variant : transport.Variant)
@@ -243,18 +243,18 @@ theorem safe_PV_L1D_Source_020
   unfold PV_L1D_Source_020.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_019
-    | solve | apply safe_PV_L1D_Source_018
-    | solve | apply safe_PV_L1D_Source_009
-    | solve | apply safe_PV_L1D_Source_008
-    | solve | apply safe_PV_L1D_QueryProducer
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_019
+    | solve | with_reducible apply safe_PV_L1D_Source_018
+    | solve | with_reducible apply safe_PV_L1D_Source_009
+    | solve | with_reducible apply safe_PV_L1D_Source_008
+    | solve | with_reducible apply safe_PV_L1D_QueryProducer
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_020
 theorem safe_PV_L1D_Source_021
   (q : Slice aspis_core.field.wide_exact.WideExact) (w : weights.Weights) :
@@ -262,13 +262,13 @@ theorem safe_PV_L1D_Source_021
   unfold PV_L1D_Source_021.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_021
 theorem safe_PV_L1D_Source_023
   (coefficients : Slice (Array aspis_core.field.wide_exact.WideExact
@@ -277,13 +277,13 @@ theorem safe_PV_L1D_Source_023
   unfold PV_L1D_Source_023.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_023
 theorem safe_PV_L1D_Source_024
   (coefficients : Slice (Array aspis_core.field.wide_exact.WideExact
@@ -293,13 +293,13 @@ theorem safe_PV_L1D_Source_024
   unfold PV_L1D_Source_024.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_024
 theorem safe_PV_L1D_Source_025
   (variant : transport.Variant)
@@ -308,13 +308,13 @@ theorem safe_PV_L1D_Source_025
   unfold PV_L1D_Source_025.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_025
 theorem safe_PV_L1D_Source_026
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -324,13 +324,13 @@ theorem safe_PV_L1D_Source_026
   unfold PV_L1D_Source_026.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_026
 theorem safe_PV_L1D_Source_027
   (variant : transport.Variant)
@@ -341,19 +341,19 @@ theorem safe_PV_L1D_Source_027
   unfold PV_L1D_Source_027.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_026
-    | solve | apply safe_PV_L1D_Source_025
-    | solve | apply safe_PV_L1D_Source_024
-    | solve | apply safe_PV_L1D_Source_023
-    | solve | apply safe_PV_L1D_Source_021
-    | solve | apply safe_PV_L1D_Source_019
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_026
+    | solve | with_reducible apply safe_PV_L1D_Source_025
+    | solve | with_reducible apply safe_PV_L1D_Source_024
+    | solve | with_reducible apply safe_PV_L1D_Source_023
+    | solve | with_reducible apply safe_PV_L1D_Source_021
+    | solve | with_reducible apply safe_PV_L1D_Source_019
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_027
 theorem safe_PV_L1D_Source_031
   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
@@ -367,17 +367,17 @@ theorem safe_PV_L1D_Source_031
   unfold PV_L1D_Source_031.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_027
-    | solve | apply safe_PV_L1D_Source_020
-    | solve | apply safe_PV_L1D_Source_007
-    | solve | apply safe_PV_L1D_Source_030
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_027
+    | solve | with_reducible apply safe_PV_L1D_Source_020
+    | solve | with_reducible apply safe_PV_L1D_Source_007
+    | solve | with_reducible apply safe_PV_L1D_Source_030
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_031
 theorem safe_PV_L1D_Source_033
   (values : Slice aspis_core.field.QM31) (masks : Array Std.U16 64#usize) :
@@ -385,13 +385,13 @@ theorem safe_PV_L1D_Source_033
   unfold PV_L1D_Source_033.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_033
 theorem safe_PV_L1D_Source_037
   (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
@@ -404,14 +404,14 @@ theorem safe_PV_L1D_Source_037
   unfold PV_L1D_Source_037.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_033
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_033
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_037
 theorem safe_PV_L1D_Source_038
   (values : Slice aspis_core.field.QM31) :
@@ -419,13 +419,13 @@ theorem safe_PV_L1D_Source_038
   unfold PV_L1D_Source_038.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_038
 theorem safe_PV_L1D_Source_039
   (noised : Slice (alloc.vec.Vec aspis_core.field.M31))
@@ -434,13 +434,13 @@ theorem safe_PV_L1D_Source_039
   unfold PV_L1D_Source_039.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_039
 theorem safe_PV_L1D_Source_041
   {H : Type} {F : Type} (aspis_coredigestDigest32Inst :
@@ -452,13 +452,13 @@ theorem safe_PV_L1D_Source_041
   unfold PV_L1D_Source_041.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_041
 theorem safe_PV_L1D_Source_042
   {H : Type} {F : Type} (aspis_coredigestDigest32Inst :
@@ -470,14 +470,14 @@ theorem safe_PV_L1D_Source_042
   unfold PV_L1D_Source_042.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_041
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_041
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_042
 theorem safe_PV_L1D_Source_043
   {H : Type} {T1 : Type} (aspis_coredigestDigest32Inst :
@@ -488,14 +488,14 @@ theorem safe_PV_L1D_Source_043
   unfold PV_L1D_Source_043.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_042
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_042
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_043
 theorem safe_PV_L1D_Source_044
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -505,13 +505,13 @@ theorem safe_PV_L1D_Source_044
   unfold PV_L1D_Source_044.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_044
 theorem safe_PV_L1D_Source_045
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
@@ -520,13 +520,13 @@ theorem safe_PV_L1D_Source_045
   unfold PV_L1D_Source_045.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_045
 theorem safe_PV_L1D_Source_046
   (bytes : alloc.vec.Vec Std.U8)
@@ -535,13 +535,13 @@ theorem safe_PV_L1D_Source_046
   unfold PV_L1D_Source_046.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_046
 theorem safe_PV_L1D_Source_047
   (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
@@ -550,14 +550,14 @@ theorem safe_PV_L1D_Source_047
   unfold PV_L1D_Source_047.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_046
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_046
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_047
 theorem safe_PV_L1D_Source_049
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
@@ -567,13 +567,13 @@ theorem safe_PV_L1D_Source_049
   unfold PV_L1D_Source_049.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_049
 theorem safe_PV_L1D_Source_051
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize) :
@@ -581,13 +581,13 @@ theorem safe_PV_L1D_Source_051
   unfold PV_L1D_Source_051.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_051
 theorem safe_PV_L1D_Source_052
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
@@ -598,13 +598,13 @@ theorem safe_PV_L1D_Source_052
   unfold PV_L1D_Source_052.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_052
 theorem safe_PV_L1D_Source_053
   (dc : Array aspis_core.field.QM31 1024#usize) (offset : Std.Usize)
@@ -613,13 +613,13 @@ theorem safe_PV_L1D_Source_053
   unfold PV_L1D_Source_053.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_053
 theorem safe_PV_L1D_Source_054
   (dc : Array aspis_core.field.QM31 1024#usize) (offset : Std.Usize) :
@@ -627,14 +627,14 @@ theorem safe_PV_L1D_Source_054
   unfold PV_L1D_Source_054.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_053
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_053
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_054
 theorem safe_PV_L1D_Source_055
   (mask_sum : aspis_core.field.QM31)
@@ -643,14 +643,14 @@ theorem safe_PV_L1D_Source_055
   unfold PV_L1D_Source_055.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_054
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_054
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_055
 theorem safe_PV_L1D_Source_056
   {H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)
@@ -659,13 +659,13 @@ theorem safe_PV_L1D_Source_056
   unfold PV_L1D_Source_056.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_056
 theorem safe_PV_L1D_Source_058
   (column : Array aspis_core.field.QM31 1024#usize) :
@@ -673,13 +673,13 @@ theorem safe_PV_L1D_Source_058
   unfold PV_L1D_Source_058.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_058
 theorem safe_PV_L1D_Source_062
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize) :
@@ -687,13 +687,13 @@ theorem safe_PV_L1D_Source_062
   unfold PV_L1D_Source_062.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_062
 theorem safe_PV_L1D_Source_063
   (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
@@ -703,15 +703,15 @@ theorem safe_PV_L1D_Source_063
   unfold PV_L1D_Source_063.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_062
-    | solve | apply safe_PV_L1D_Source_058
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_062
+    | solve | with_reducible apply safe_PV_L1D_Source_058
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_063
 theorem safe_PV_L1D_Source_065
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
@@ -720,13 +720,13 @@ theorem safe_PV_L1D_Source_065
   unfold PV_L1D_Source_065.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_065
 theorem safe_PV_L1D_Source_066
   (columns : Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize)
@@ -735,14 +735,14 @@ theorem safe_PV_L1D_Source_066
   unfold PV_L1D_Source_066.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_065
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_065
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_066
 theorem safe_PV_L1D_Source_067
   {H : Type} {T1 : Type} {T2 : Type} (aspis_coredigestDigest32Inst :
@@ -761,24 +761,24 @@ theorem safe_PV_L1D_Source_067
   unfold PV_L1D_Source_067.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_066
-    | solve | apply safe_PV_L1D_Source_063
-    | solve | apply safe_PV_L1D_Source_056
-    | solve | apply safe_PV_L1D_Source_055
-    | solve | apply safe_PV_L1D_Source_052
-    | solve | apply safe_PV_L1D_Source_051
-    | solve | apply safe_PV_L1D_Source_049
-    | solve | apply safe_PV_L1D_Source_047
-    | solve | apply safe_PV_L1D_Source_045
-    | solve | apply safe_PV_L1D_Source_044
-    | solve | apply safe_PV_L1D_Source_043
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_066
+    | solve | with_reducible apply safe_PV_L1D_Source_063
+    | solve | with_reducible apply safe_PV_L1D_Source_056
+    | solve | with_reducible apply safe_PV_L1D_Source_055
+    | solve | with_reducible apply safe_PV_L1D_Source_052
+    | solve | with_reducible apply safe_PV_L1D_Source_051
+    | solve | with_reducible apply safe_PV_L1D_Source_049
+    | solve | with_reducible apply safe_PV_L1D_Source_047
+    | solve | with_reducible apply safe_PV_L1D_Source_045
+    | solve | with_reducible apply safe_PV_L1D_Source_044
+    | solve | with_reducible apply safe_PV_L1D_Source_043
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_067
 theorem safe_PV_L1D_Source_068
   {H : Type} {T1 : Type} (aspis_coredigestDigest32Inst :
@@ -798,15 +798,15 @@ theorem safe_PV_L1D_Source_068
   unfold PV_L1D_Source_068.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_067
-    | solve | apply safe_PV_L1D_Source_039
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_067
+    | solve | with_reducible apply safe_PV_L1D_Source_039
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_068
 theorem safe_PV_L1D_Source_069
   {T0 : Type} (aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst :
@@ -824,18 +824,18 @@ theorem safe_PV_L1D_Source_069
   unfold PV_L1D_Source_069.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_068
-    | solve | apply safe_PV_L1D_Source_038
-    | solve | apply safe_PV_L1D_Source_037
-    | solve | apply safe_PV_L1D_Source_031
-    | solve | apply safe_PV_L1D_Source_030
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_068
+    | solve | with_reducible apply safe_PV_L1D_Source_038
+    | solve | with_reducible apply safe_PV_L1D_Source_037
+    | solve | with_reducible apply safe_PV_L1D_Source_031
+    | solve | with_reducible apply safe_PV_L1D_Source_030
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1D_Source_069
 theorem safe_PV_L1E_Source_070
   (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
@@ -850,13 +850,13 @@ theorem safe_PV_L1E_Source_070
   unfold PV_L1E_Source_070.produce
   try simp only [PV_L1D_Projection.prod_case]
   repeat' first
-    | solve | apply safe_PV_L1D_Source_069
-    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+    | solve | with_reducible apply safe_PV_L1D_Source_069
+    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 #print axioms safe_PV_L1E_Source_070
 end PV_L1E_CallbackSafety

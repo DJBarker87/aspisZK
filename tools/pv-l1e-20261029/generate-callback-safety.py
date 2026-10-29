@@ -21,14 +21,14 @@ for m in mods:
  code+="  repeat' first\n"
  for prior in reversed([v for v in known if v+'.produce' in s[:start]]):code+='    | exact safe_'+prior+' '+('' if False else '(by assumption)')+'\n' if False else ''
  # apply the callee law with its parameters inferred from the concrete goal.
- for prior in reversed([v for v in known if v+'.produce' in s[:start]]):code+='    | solve | apply safe_'+prior+'\n'
- code+='''    | exact safe_lift _
-    | exact safe_coe _
-    | exact safe_pure _
-    | apply safe_observe; rfl
-    | apply safe_bind
+ for prior in reversed([v for v in known if v+'.produce' in s[:start]]):code+='    | solve | with_reducible apply safe_'+prior+'\n'
+ code+='''    | with_reducible exact safe_lift _
+    | with_reducible exact safe_coe _
+    | with_reducible exact safe_pure _
+    | with_reducible apply safe_observe; rfl
+    | with_reducible apply safe_bind
     | intro value
-    | split <;> simp only [PV_L1D_Projection.prod_case]
+    | split <;> try simp only [PV_L1D_Projection.prod_case]
 '''
  code+='#print axioms safe_'+m+'\n';known.append(m);manifest.append(dict(module=m,sha256=hashlib.sha256(s.encode()).hexdigest()))
 code+='end PV_L1E_CallbackSafety\n'
