@@ -23,6 +23,7 @@ theorem installed (base : ExternalTypes) (heap : Heap) (box : Box)
     @ExternalFuns.op12 (types base) (selected base heap box (@install (types base) ops))=@ProverRwOuterMapErr.map_err := by
   unfold selected
   rw [PV_B2_F_RawNative.preserved_12]
+  unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected install
   rfl
 
 #print axioms source
