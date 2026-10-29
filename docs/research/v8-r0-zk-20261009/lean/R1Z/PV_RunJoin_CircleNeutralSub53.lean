@@ -28,9 +28,12 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
   simp only [bind_tc_ok]
   rw [PV_RunJoin_CircleNeutralSubtract53.source] at hy
   unfold PV_RunJoin_CircleNeutralSubtract53.output at hy
-  split <;> simp_all only [bind_tc_ok]
-  all_goals rw [PV_RunJoin_CircleNeutralScalar52.checked_sub _ _ (by assumption)]
-  all_goals simp_all only [bind_tc_ok]
+  by_cases h : U32.wrapping_sub (U32.wrapping_add a 2147483647#u32) b ≥ 2147483647#u32
+  · rw [if_pos h] at hy ⊢
+    rw [PV_RunJoin_CircleNeutralScalar52.checked_sub _ _ h,bind_tc_ok]
+    exact hy
+  · rw [if_neg h] at hy ⊢
+    exact hy
 
 #print axioms complete
 end R1Z.PV_RunJoin_CircleNeutralSub53
